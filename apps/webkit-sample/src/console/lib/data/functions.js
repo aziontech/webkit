@@ -1,49 +1,7 @@
-// The functions the sample is seeded with — the Build → Functions module.
-//
-// A FUNCTION is the code itself, written once and instanced per application (an
-// application's Functions Instances tab binds a function with its own arguments).
-// So this list is the library, not the bindings: a row is a function, its runtime
-// and how many instances currently run it.
-//
-// `modifiedAt` is the real instant — the Last Modified filter compares it, the cell
-// renders it relative, and `lastModified` (the sortable display string) is derived
-// from it by one formatter instead of being hand-written per row.
-//
-// EVERY ROW CARRIES THE WHOLE RECORD, not just what the list column needs: the code,
-// the default arguments, the execution environment and the active flag — the six
-// properties `POST v4/workspace/functions` takes (see ./create-resources.js). That is
-// what lets the detail page (../components/FunctionDetail.vue) open a seeded function
-// and edit it, instead of showing a form with nothing in it.
-//
-// ── ONE LIBRARY, EVERY SURFACE THAT BINDS A FUNCTION ──
-//
-// The seed is not the whole story: this module is also the STORE. The module list
-// creates and deletes functions, and an application's Functions Instances tab binds
-// one — including creating a new one from inside its own create drawer. All three
-// read and write the same `functions` list, because the alternative (a page-local
-// copy per surface) is a console where a function created in the instance drawer
-// does not exist in the Functions module, and a function deleted in the module is
-// still offered by the drawer's selector.
-//
-// The contract is the one ./deployment-strategies.js already follows: the seed is a
-// fixture (deletions are session-local), what the operator authored is persisted in
-// sessionStorage so it survives a reload, and a new tab starts from the clean seed.
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 import { computed, ref } from 'vue'
 
-/**
- * The runtimes the endpoint accepts — `runtime: enum(azion_js, azion_lua)` — with how
- * each reads to a person, which grammar the editor highlights it in, and the GLYPH that
- * leads it in a list. One map, so the list's Runtime column, its filter, the create
- * page's locked field, the detail page's editor and every table that shows a function's
- * runtime all say the same thing.
- *
- * The glyph is the language's own brand mark where the icon library ships one
- * (`ai-cor ai-js` — a colored background-image glyph, sized in `em` like a font icon),
- * and the neutral code glyph where it does not: a made-up Lua mark would be worse than
- * an honest generic one.
- */
 export const RUNTIMES = {
   azion_js: {
     api: 'azion_js',
@@ -54,7 +12,6 @@ export const RUNTIMES = {
   azion_lua: { api: 'azion_lua', label: 'Lua', language: 'lua', icon: 'pi pi-code' }
 }
 
-/** The runtime a function runs on, from its API value. Defaults to JavaScript. */
 export const runtimeOf = (fn) => RUNTIMES[fn?.runtimeApi] ?? RUNTIMES.azion_js
 
 const JS_AUTH = `const SECRET = 'demo-only'
@@ -181,7 +138,6 @@ addEventListener('fetch', (event) => {
 })
 `
 
-/** The seeded functions, in list order — the request body of each, before decoration. */
 const SEED = [
   {
     id: '4021884',
@@ -204,17 +160,6 @@ const SEED = [
     modifiedAt: daysAgo(11),
     code: JS_IMAGE,
     args: { defaultFormat: 'webp', quality: 80 },
-    // THE FORM THIS FUNCTION DECLARES. `args` above are the VALUES an instance starts
-    // from; this is the schema over them, and it is what makes instancing this function
-    // ask two named questions instead of handing its reader a blank JSON editor
-    // (../../components/function/FunctionArgsFields.vue renders it).
-    //
-    // Every property here is an argument the code above actually reads — `args.defaultFormat`
-    // and `args.quality`. A field the function does not read would be a question whose
-    // answer goes nowhere.
-    // `required` LAST, matching what `serializeSchema` writes: the Form Builder round-trips
-    // this document, and a seed in a different key order would be silently rewritten the
-    // first time anyone touched a row on the function's own page.
     form: {
       type: 'object',
       properties: {
@@ -248,9 +193,6 @@ const SEED = [
     modifiedAt: daysAgo(21),
     code: JS_GEO,
     args: { defaultCountry: 'US' },
-    // One argument, one field — and the constraints the code relies on said in the
-    // schema rather than left for the instance to get wrong: the path this builds is
-    // `/' + country.toLowerCase()`, so a two-letter code is the only value that works.
     form: {
       type: 'object',
       properties: {
@@ -325,25 +267,14 @@ const SEED = [
   }
 ]
 
-/**
- * The stored shape of a function: the request body plus what a list renders of it.
- *
- * ONE decorator, used by the seed AND by what the console creates, so a function
- * authored in this session cannot read differently from one that shipped with the
- * sample — same runtime label, same author block, same date formatting.
- */
 const decorate = (fn, index = 0) => {
   const person = authorAt(index)
   const runtime = RUNTIMES[fn.runtimeApi] ?? RUNTIMES.azion_js
   return {
     ...fn,
-    // The display runtime, its grammar and its glyph are DERIVED from the API value,
-    // never typed twice: the list column, the filter chip and the editor cannot disagree.
     runtime: runtime.label,
     language: runtime.language,
     runtimeIcon: runtime.icon,
-    // `active` is the API's boolean; `status` is the three-way label the list renders
-    // (a function is Draft until it has ever been instanced).
     active: fn.status === 'Active',
     author: person.name,
     authorEmail: emailOf(person.name),
@@ -352,20 +283,10 @@ const decorate = (fn, index = 0) => {
   }
 }
 
-/** The seeded functions, decorated — the catalog the sample boots with. */
 export const FUNCTIONS = SEED.map(decorate)
 
-// ── THE STORE ────────────────────────────────────────────────────────────────
-//
-// A ref, not a constant: the module list deletes rows, and a deletion has to be
-// gone from the instance drawer's selector too — one store, or that selector would
-// keep offering a function the list says no longer exists.
 const seeded = ref([...FUNCTIONS])
 
-// Session-scoped persistence, the same contract ./deployment-strategies.js and
-// ./provisioning.js follow: a function the operator wrote has to survive a reload,
-// and a new tab starts from the clean catalog. `modifiedAt` is revived by hand —
-// JSON has no date type and the Last Modified filter compares a Date.
 const STORAGE_KEY = 'webkit-sample:functions'
 
 const loadAuthored = () => {
@@ -376,9 +297,6 @@ const loadAuthored = () => {
     return parsed.map((fn) => ({
       ...fn,
       modifiedAt: fn.modifiedAt ? new Date(fn.modifiedAt) : null,
-      // Re-derived rather than trusted from storage: a session that started before a
-      // runtime gained its glyph holds a record without one, and a list leading with a
-      // missing icon is a hole nothing would report.
       runtimeIcon: runtimeOf(fn).icon
     }))
   } catch {
@@ -386,60 +304,25 @@ const loadAuthored = () => {
   }
 }
 
-// Authored first (newest on top), then the seed — a function the operator just wrote
-// is the one they are looking for.
 const authored = ref(loadAuthored())
 
 const persist = () => {
   try {
     globalThis.sessionStorage?.setItem(STORAGE_KEY, JSON.stringify(authored.value))
-  } catch {
-    // A full or unavailable sessionStorage must not break the create flow.
-  }
+  } catch {}
 }
 
-/** Every function the workspace holds: what this session authored, then the seed. */
 export const functions = computed(() => [...authored.value, ...seeded.value])
 
-/** A function by id, or `undefined`. Reads the live library, not just the seed. */
 export const functionById = (id) => functions.value.find((fn) => fn.id === String(id))
 
-/** The seeded function at `index`, wrapping round. */
 export const functionAt = (index) => FUNCTIONS[index % FUNCTIONS.length]
 
-/**
- * Options for a function Select, narrowed to ONE execution environment.
- *
- * The narrowing is the API's, not a convenience: `execution_environment` decides
- * which request object the code receives, so a firewall function cannot be
- * instanced on an application and must not be offered there.
- *
- * @param {string} environment `application` or `firewall`.
- * @returns {Array<{value: string, label: string}>}
- */
 export const functionOptionsFor = (environment) =>
   functions.value
     .filter((fn) => fn.executionEnvironment === environment)
     .map((fn) => ({ value: fn.id, label: fn.name }))
 
-/**
- * Write a function — what the create page and the instance drawer's quick-add both do.
- *
- * A new function has never been instanced, so it lands as **Draft**: the status is
- * derived from the API's `active` flag and the instance count, exactly as the seed
- * documents it, rather than being asked for as a third value.
- *
- * @param {object} input
- * @param {string} input.name The function's name (`name` in the request body).
- * @param {string} [input.runtimeApi] `azion_js` or `azion_lua` (`runtime`).
- * @param {string} [input.executionEnvironment] `application` or `firewall`.
- * @param {string} [input.code] The function's source.
- * @param {object} [input.args] `default_args` — what an instance of it starts from.
- * @param {object} [input.form] `azion_form` — the JSON Schema the console renders as a
- *   form over those arguments. Absent when the function has no form.
- * @param {boolean} [input.active] Whether the function may run.
- * @returns {object} The stored function.
- */
 export function addFunction({
   name,
   runtimeApi = 'azion_js',
@@ -460,9 +343,6 @@ export function addFunction({
     modifiedAt,
     code,
     args: args ?? {},
-    // Only carried when there is one: `form: undefined` and no `form` at all read the
-    // same everywhere downstream, and an empty schema on a function that never had a
-    // form would open its editor on a form to remove.
     ...(form ? { form } : {})
   })
   authored.value.unshift(fn)
@@ -470,12 +350,6 @@ export function addFunction({
   return fn
 }
 
-/**
- * Drop a function from the library.
- *
- * @param {string} id
- * @returns {boolean} Whether a function was removed.
- */
 export function removeFunction(id) {
   const key = String(id)
 
@@ -488,25 +362,10 @@ export function removeFunction(id) {
 
   const seededIndex = seeded.value.findIndex((fn) => fn.id === key)
   if (seededIndex === -1) return false
-  // Seeded deletions are session-local (the seed is a fixture, not a record), which
-  // is what the list page's own copy of the array did before this store existed.
   seeded.value.splice(seededIndex, 1)
   return true
 }
 
-/**
- * Count an instance of a function up or down — the other half of the relationship an
- * application's Functions Instances tab creates. The list's Instances column is that
- * count, so instantiating a function has to be visible in the module that owns it.
- *
- * Being instanced is also what takes a function out of Draft: the seed's own rule
- * ("a function is Draft until it has ever been instanced"), applied rather than
- * merely written down.
- *
- * @param {string} id
- * @param {number} [delta]
- * @returns {object|undefined} The function, or `undefined` when the id is unknown.
- */
 export function countInstance(id, delta = 1) {
   const fn = functionById(id)
   if (!fn) return undefined

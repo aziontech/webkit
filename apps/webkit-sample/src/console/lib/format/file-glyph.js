@@ -1,9 +1,3 @@
-// File-type glyph — the mark a file gets in a listing, from its extension.
-//
-// Two listings ask for it and they ask differently: the bucket browser holds a parsed
-// extension per row (../../pages/storage/BucketBrowser.vue), the project drop holds a
-// whole filename (../../components/creation/UploadedProject.vue). One map, two doors, so
-// a `.svg` is the same glyph in both places instead of whichever map was edited last.
 const GLYPHS = {
   svg: 'pi pi-image',
   png: 'pi pi-image',
@@ -38,10 +32,8 @@ const GLYPHS = {
   ttf: 'pi pi-star'
 }
 
-/** The glyph for an already-parsed extension (`'svg'`, `'html'`). */
 export const glyphForExtension = (ext = '') => GLYPHS[ext.toLowerCase()] ?? 'pi pi-file'
 
-/** The glyph for a whole filename (`'logo.svg'`). A file with no extension is a file. */
 export const fileGlyph = (name = '') => {
   const dot = name.lastIndexOf('.')
   return glyphForExtension(dot > 0 ? name.slice(dot + 1) : '')

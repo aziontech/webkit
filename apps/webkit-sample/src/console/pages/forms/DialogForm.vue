@@ -1,9 +1,4 @@
 <script setup>
-  // Form type: DIALOG form (the `/form` skill, "Form types"). A short, blocking
-  // decision — here a destructive delete guarded by a typed confirmation. Few fields,
-  // a single confirm action (Approach B). Delete stays disabled until the exact
-  // phrase is typed (error prevention, not a toast); the async delete locks the
-  // action off one `submitting` flag and reports via toast (the /usability contract).
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
   import DialogClose from '@aziontech/webkit/dialog-close'
@@ -24,18 +19,15 @@
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
-  // The application this dialog would delete.
   const application = { name: 'webkit-storybook-dev' }
 
   const open = ref(false)
   const confirmation = ref('')
   const submitting = ref(false)
 
-  // The destructive action is gated on an exact-match confirmation.
   const canDelete = computed(() => confirmation.value.trim() === application.name)
   const confirmLabel = computed(() => `To confirm, type "${application.name}" in the box below:`)
 
-  // Reset the confirmation field whenever the dialog closes.
   watch(open, (isOpen) => {
     if (!isOpen) confirmation.value = ''
   })
@@ -46,7 +38,7 @@
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
       toastDeleted()
-      open.value = false // watch() clears the field
+      open.value = false
     } catch (error) {
       toastFailed(error)
     } finally {
@@ -54,7 +46,6 @@
     }
   }
 
-  // Split out so the template stays lean; both go through @aziontech/webkit/toast.
   const toastDeleted = () => toast.success(`Application "${application.name}" deleted.`)
   const toastFailed = (error) =>
     toast.error('Could not delete the application.', {
@@ -68,16 +59,12 @@
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Dialog form' }]"
   >
-    <!-- No `gap` on the stack: the band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex h-full flex-col">
       <PageHeading
         title="Dialog form"
         description="A short, blocking decision in a modal. This destructive delete stays disabled until the exact application name is typed."
       />
 
-      <!-- The trigger context: an outlined item with the delete action. -->
       <Item
         kind="outline"
         class="layout-section-start"
@@ -112,7 +99,6 @@
                   <DialogClose />
                 </PanelHeader>
 
-                <!-- compact modal body: blocks --spacing-md apart -->
                 <PanelContent class="flex flex-col gap-(--spacing-md)">
                   <Message
                     severity="warning"

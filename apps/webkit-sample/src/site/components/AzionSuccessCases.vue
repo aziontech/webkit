@@ -18,7 +18,8 @@
   import { useRoute } from 'vue-router'
 
   import { successCaseLink } from '../data/success-case-articles.js'
-  import { FEATURED_CASES, SUCCESS_CASES } from '../data/success-cases.js'
+  import { FEATURED_CASES, SPOTLIGHT_CASES, SUCCESS_CASES } from '../data/success-cases.js'
+  import CustomerSpotlight from '../ui/sections/CustomerSpotlight.vue'
   import MarketLeader from './MarketLeader.vue'
   import SuccessCaseClosingCta from './SuccessCaseClosingCta.vue'
 
@@ -179,6 +180,10 @@
   </Hero>
 
   <SectionContainer max-width="site">
+    <CustomerSpotlight :cards="SPOTLIGHT_CASES" />
+
+    <SectionGap hatch />
+
     <SectionModule
       :divided="false"
       :padded="false"

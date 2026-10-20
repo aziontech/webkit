@@ -1,13 +1,4 @@
 <script setup>
-  // The Forms hub — an index of the form types the `/form` skill documents, each a
-  // live example under a /forms sub-route. A form's Fields, spacing, and hierarchy
-  // (the shared Form Layout) are constant; a "type" only changes the container it
-  // lives in and its save model. This page is navigation only.
-  //
-  // Every form linked here follows `/ui-craft` (webkit components + tokens only) and
-  // `/usability` Pattern 1: the async save locks its scope off one `submitting` flag
-  // — Save shows :loading and every field is :disabled — releasing in finally, and
-  // reports request failures via toast. Multi-save forms lock per card.
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
@@ -26,11 +17,8 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // The form types, each with a live sub-route example. `save` states the save
-  // model (one unit vs. one-per-section); `surface` names the container.
   const examples = [
     {
       id: 'in-page',
@@ -154,16 +142,11 @@
     }
   ]
 
-  // The index is grouped, not one flat wall of twelve cards. A form type is chosen
-  // by the QUESTION being asked — where does this form live, and what commits it —
-  // so the groups are those questions, and each one carries its own documentation
-  // link in the Section's left column: the reference sits next to the thing it
-  // documents instead of once, at page level, for everything.
   const groups = [
     {
       id: 'page',
       title: 'On a page',
-      hint: 'A form that owns its route. The user arrived to fill it in, so it gets the whole surface and one Save at the bottom.',
+      hint: 'A form that owns its route, so it gets the whole surface and one Save at the bottom.',
       ids: ['in-page', 'fields-separated', 'itemgroup', 'cardbox', 'itemgroup-saves']
     },
     {
@@ -180,7 +163,6 @@
     }
   ]
 
-  // Each group resolved to its examples, in the order the group lists them.
   const sections = computed(() =>
     groups.map((group) => ({
       ...group,
@@ -190,9 +172,6 @@
 
   const open = (example) => router.push({ path: example.path, query: { email: userEmail.value } })
 
-  // WHERE a form lives is decided before WHICH form it is, so the rule leads the page.
-  // It is read from ../lib/surfaces.js — the same module the console's own creates are
-  // catalogued in — so the counts printed here are the routes that actually exist.
   const rules = surfaceRules
   const counts = surfaceCounts()
   const exceptions = firstLevelDrawerExceptions
@@ -203,9 +182,6 @@
     active="forms"
     :breadcrumb="[{ label: 'Forms' }]"
   >
-    <!-- No `gap` on the stack: the band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex h-full flex-col">
       <PageHeading
         size="medium"
@@ -213,14 +189,11 @@
         description="The form types on @aziontech/webkit. Every form shares the same Form Layout (spacing + hierarchy); a type only changes the container and its save model. Open an example to see it in a real flow."
       />
 
-      <!-- The surface rule, above the catalogue: which container a form goes in is
-           settled by what is being created, so it is not one of the choices below —
-           it is the question answered before them. -->
       <div class="layout-section-start flex flex-col">
         <Section
           stacked
           title="Where a create lives"
-          hint="The surface is a property of what is being created, not a choice each module makes. These three clauses decide it, in order."
+          hint="Three clauses, applied in order, decide the surface from what is being created."
         >
           <CardBox :padded="false">
             <template #content>
@@ -243,9 +216,6 @@
                   </Item.Actions>
                 </Item>
 
-                <!-- The exception is a row of the rule, not a footnote under it: it is
-                     the shape the next exception has to match, and a reader who skims
-                     the three clauses has to meet it in the same place. -->
                 <Item
                   v-for="entry in exceptions"
                   :key="entry.id"
@@ -274,10 +244,6 @@
         </Section>
       </div>
 
-      <!-- One `stacked` Section per group: the card grid needs the whole measure,
-           so the title, its hint and its documentation link sit ABOVE the cards
-           rather than in a column beside them. The rule and the band step between
-           groups come from Section itself — this page spaces nothing by hand. -->
       <div class="flex flex-col">
         <Section
           v-for="group in sections"

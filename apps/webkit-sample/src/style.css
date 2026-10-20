@@ -125,7 +125,7 @@ body {
    theme in main.js). Code (Roboto Mono), overlines & big numbers (Proto Mono),
    and icon glyphs (`.pi` / `.ai`, pinned above) keep their own faces. */
 :root {
-  --app-font: 'Sora', sans-serif;
+  --app-font: 'Rubik', sans-serif;
 }
 html {
   font-family: var(--app-font);
@@ -195,4 +195,21 @@ html {
 :root {
   --layout-split-aside: 20rem;
   --layout-split-gap: 3rem;
+}
+
+.app-sidebar [data-testid='layout-sidebar__footer'] {
+  display: flex;
+  height: 3.5rem;
+  align-items: center;
+  border-top: 1px solid var(--border-default);
+  padding-bottom: 0;
+}
+.app-sidebar [data-testid='layout-sidebar__footer'] > div {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0%;
+  align-items: center;
+  gap: var(--spacing-xs);
+  border-top: 0;
+  padding-top: 0;
 }

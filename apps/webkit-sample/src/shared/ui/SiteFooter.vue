@@ -30,6 +30,8 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { onBeforeUnmount, ref } from 'vue'
 
+  import { minWidthQuery } from '../lib/breakpoints.js'
+
   const columns = [
     {
       label: 'Products',
@@ -114,9 +116,9 @@
   //
   // `lg`, matching where the mark starts leading the social row: from `md` that band is only
   // half the footer (it shares its grid row with the status pair), which is too narrow to
-  // hold the mark and seven 40px buttons on one line — measured two icon lines from 768 to
+  // hold the mark and seven buttons on one line — measured two icon lines from 768 to
   // 895. Below `lg` the social row is icons alone, centred.
-  const wideQuery = globalThis.matchMedia?.('(min-width: 1024px)')
+  const wideQuery = minWidthQuery('lg')
   const brandLeadsSocialRow = ref(wideQuery?.matches ?? true)
   const onWideQueryChange = (event) => {
     brandLeadsSocialRow.value = event.matches
@@ -172,7 +174,7 @@
 
              `size="small"` (16px) rather than the `large` it takes in the signature band:
              here the wordmark sits on the SOCIAL GLYPHS' optical line (`IconButton` renders
-             a 16px glyph inside its 40px box), so the row reads as one line of marks instead
+             a 12px glyph inside its 28px box), so the row reads as one line of marks instead
              of a logo with icons parked beside it. The `mr-(--spacing-xs)` keeps it off the
              icons' own 4px pitch — the brand is not one of them.
 
@@ -193,6 +195,7 @@
           v-for="social in socials"
           :key="social.label"
           kind="transparent"
+          size="small"
           :icon="social.icon"
           :aria-label="social.label"
           :href="social.href"

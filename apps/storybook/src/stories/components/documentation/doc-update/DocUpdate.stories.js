@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'One entry in a changelog. The identity of the release sits in the left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the gap to the next one, so a set of entries reads as one timeline rather than a stack of boxes. The label is an `h2` and a link to its own id — slugified from the label, or taken from the `anchor` prop when two entries share a label — because every entry is a URL somebody sends: a support reply, a release note, an issue that says "fixed in the March release". Rendered inside a page that provides its scroller-aware heading navigation, the label jump goes through it; outside one it degrades to native hash navigation.'
+          'One entry in a changelog. The identity of the release sits in the left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the gap to the next one, so a set of entries reads as one timeline rather than a stack of boxes. The label is an `h2` and a link to its own id — slugified from the label, or taken from the `anchor` prop when two entries share a label — because every entry is a URL somebody sends: a support reply, a release note, an issue that says "fixed in the March release". Given a `title`, the entry reads as a release: the label becomes a plain date beside a node on the rule, and the title takes the heading, the anchor and the tags, sized above every heading in the notes. Rendered inside a page that provides its scroller-aware heading navigation, the heading jump goes through it; outside one it degrades to native hash navigation.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -27,6 +27,12 @@ const meta = {
     label: {
       control: 'text',
       description: "The entry's name — a date, a release name. Also its anchor.",
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    title: {
+      control: 'text',
+      description:
+        "The release's heading, shown above the notes. The label becomes the date beside it.",
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     description: {
@@ -51,6 +57,7 @@ const meta = {
   },
   args: {
     label: 'August 19, 2026',
+    title: '',
     description: 'v2.4.0',
     tags: ['Console', 'Edge Functions'],
     anchor: ''
@@ -132,6 +139,56 @@ export const Changelog = {
           'Three entries in a row, newest first. The rule between the columns runs through the 24px block gap, so consecutive entries read as one continuous timeline; the first entry does not extend upward, which is what keeps the line from starting above the changelog. Below `md` the layout stacks and the rule drops — a phone has no room for a second column.'
       },
       source: { code: toSfc(IMPORT, CHANGELOG_MARKUP) }
+    }
+  }
+}
+
+const RELEASES_MARKUP = `<DocProse>
+  <DocUpdate
+    label="September 2, 2026"
+    title="Terraform Provider"
+    description="Version 2.8.0"
+    :tags="['Improvements', 'Bug Fixes']"
+  >
+    <h3>Improvements</h3>
+    <ul>
+      <li>Resources now support drift detection, so out-of-band changes made in the Azion Console are reverted by <code>terraform plan</code>.</li>
+    </ul>
+    <h3>Bug Fixes</h3>
+    <ul>
+      <li>Fixed <code>terraform import</code> across multiple data sources and resources.</li>
+    </ul>
+  </DocUpdate>
+  <DocUpdate
+    label="August 26, 2026"
+    title="Azion CLI"
+    description="Version 4.23.0"
+    :tags="['Features']"
+  >
+    <p>Added a new command tree for managing DNS zones, records, and DNSSEC.</p>
+  </DocUpdate>
+  <DocUpdate
+    label="August 26, 2026"
+    title="Azion Console"
+    :tags="['Bug Fixes']"
+  >
+    <p>Fixed the pagination controls being unusable on mobile.</p>
+  </DocUpdate>
+</DocProse>`
+
+export const Releases = {
+  render: () => ({
+    components: { DocProse, DocUpdate },
+    template: RELEASES_MARKUP
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Titled entries, one per release. The date sits beside a node on the rule, centred on the first line of the title; the title carries the tags and is sized above every heading in the notes. Two entries share a date and still get distinct anchors, because a titled entry slugifies its label and title together.'
+      },
+      source: { code: toSfc(IMPORT, RELEASES_MARKUP) }
     }
   }
 }

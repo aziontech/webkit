@@ -1,15 +1,7 @@
 <script setup>
-  // Settings → Activity History. The recent account audit log.
-  //
-  // LAYOUT — a LIST band on the DATA measure (`.layout-column`). The page stack has
-  // no vertical gap: it holds the heading plus ONE band below it — the controls row
-  // over the table it narrows — which carries the band step and stacks its two parts
-  // at the group step (see src/styles/layout.css). It owns its
-  // own scroll region because the shell hands each tab a plain flex column (see
-  // AccountSettings.vue).
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { daysAgo, formatListDate, hoursAgo } from '@shared/lib/dates'
   import { ref } from 'vue'
@@ -25,17 +17,8 @@
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../../lib/behavior/table-columns'
 
-  // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
-  // account-side topics have no entry in lib/data/product-empty-states.js (that
-  // registry covers the first-level product modules), and pointing at a path we have
-  // not verified is worse than pointing at the index. Replace with the topic's own URL
-  // when there is one.
   const HELP = 'https://www.azion.com/en/documentation/'
 
-  // `at` is the real instant — the Date field compares it — and `date` (the sortable
-  // display string) is derived from it by one formatter rather than hand-written per
-  // row: parsing a display string back into a Date is engine-dependent, so a filter
-  // built on it would compare garbage on some browsers (src/lib/dates.js).
   const activity = ref(
     [
       {
@@ -89,9 +72,6 @@
     { accessorKey: 'date', header: 'Date', enableSorting: true, minWidth: FIT_COLUMN }
   ]
 
-  // Which columns are switched off, driven by the Columns button on the controls
-  // row (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
-  // recorded, so this never has to be kept in step with the column model above.
   const columnVisibility = ref({})
 
   const categorySeverity = (category) =>
@@ -103,14 +83,6 @@
       Deploy: 'success'
     })[category] ?? 'secondary'
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // The COLUMNS decide the fields: Category and User are enumerable, Date becomes
-  // relative periods plus a Custom month grid, and Event / IP Address are free text
-  // covered by the search field. An audit log is read by asking two questions — who
-  // did it, and when — so those two are the ones that earn a chip.
-  //
-  // Both option lists come from the entries themselves, so neither can offer a
-  // category or a person with nothing behind them.
   const categoryOptions = [...new Set(activity.value.map((entry) => entry.category))]
     .sort((a, b) => a.localeCompare(b))
     .map((category) => ({ value: category, label: category }))
@@ -153,9 +125,6 @@
     refresh
   } = useListFilters(filterFields, activity)
 
-  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
-  // through it (../../../components/list/ExportButton.vue), so the file honours the
-  // visible columns and the filtered rows instead of re-serialising them here.
   const tableRef = ref(null)
 </script>
 
@@ -168,22 +137,13 @@
         :documentation="HELP"
       />
 
-      <!-- The page's parent section. It holds one section here — the controls row
-           over the table it narrows, at the GROUP step — and spaces whatever sits
-           inside it at --layout-section-gap. -->
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
-               right, above the card — the same row every list in the console opens with. -->
           <ControlsHeader>
             <FilterButton
               v-model="filters"
               :fields="filterFields"
             />
-            <!-- Search drives the table's global filter from outside the card, so the field is
-                 a plain InputText (`Table.Search` is context-aware and only works inside
-                 `<Table>`). One horizontal band: it grows into the row's slack and compresses
-                 rather than wrapping (see ui/ControlsHeader.vue). -->
             <InputText
               v-model="search"
               size="medium"
@@ -199,10 +159,6 @@
               </template>
             </InputText>
             <template #actions>
-              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                   than narrow it — fetch it again, take it away as a file, choose which
-                   columns it shows. All glyphs, all `medium`, so the row shares one
-                   32px height with the field and the Filter button opposite. -->
               <RefreshButton
                 :loading="loading"
                 @refresh="refresh"
@@ -225,7 +181,7 @@
 
           <CardBox :padded="false">
             <template #content>
-              <Table
+              <TableRoot
                 ref="tableRef"
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
@@ -246,7 +202,7 @@
                     size="medium"
                   />
                 </template>
-              </Table>
+              </TableRoot>
             </template>
           </CardBox>
         </section>

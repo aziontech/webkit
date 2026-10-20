@@ -1,7 +1,3 @@
-// PostgreSQL data-type catalog shared by the table-column editors (the Create
-// Table drawer and the Add Column drawer). Each type carries a short description
-// and a monospace glyph (`#` numeric, `{}` JSON, `T` text, `B` boolean, `@`
-// date/time) for the searchable type picker.
 export const POSTGRES_TYPES = [
   { value: 'int2', label: 'int2', description: 'Signed two-byte integer', glyph: '#' },
   { value: 'int4', label: 'int4', description: 'Signed four-byte integer', glyph: '#' },
@@ -45,8 +41,6 @@ export const POSTGRES_TYPES = [
   }
 ]
 
-// Integer types — a primary-key integer column is treated as auto-incrementing
-// (its value is generated on insert rather than typed).
 export const INTEGER_TYPES = ['int2', 'int4', 'int8']
 export const isIntegerType = (value) => INTEGER_TYPES.includes(value)
 
@@ -55,7 +49,6 @@ export const typeLabel = (value) =>
 
 export const glyphOf = (value) => POSTGRES_TYPES.find((type) => type.value === value)?.glyph ?? '#'
 
-// Filter the catalog by a free-text query over label + description.
 export const filterTypes = (query) => {
   const term = (query ?? '').trim().toLowerCase()
   if (!term) return POSTGRES_TYPES

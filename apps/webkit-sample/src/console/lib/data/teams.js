@@ -1,22 +1,5 @@
-// Teams & Permissions store — a module-level singleton (like sidebar.js /
-// theme.js) so the Teams Permissions LIST and the Create/Edit Team flow share
-// one source of truth. Mutations (create / update / delete a team) persist for
-// the session, so creating a team on the form immediately shows up in the list
-// and editing one reflects back — the demo behaves like a real console.
-//
-// A permission is addressed by a stable id:
-//   - resource with capabilities → `${resource.key}.view` / `${resource.key}.edit`
-//   - single-action permission    → `${resource.key}` (the label is the action)
-//
-// The catalog groups resources by product area (mirroring the console), which
-// drives the Vercel-style selector: each group is a table section whose rows are
-// resources and whose right-hand columns are the View / Edit checkboxes.
 import { ref } from 'vue'
 
-// --- Permissions catalog -------------------------------------------------
-// Each group renders as one section of the selector. A resource with `actions`
-// exposes View / Edit checkbox columns; a `single` resource is one checkbox
-// whose label already reads as a full action (e.g. "Real-Time Purge").
 export const permissionGroups = [
   {
     label: 'Content Delivery',
@@ -96,8 +79,6 @@ export const permissionGroups = [
   }
 ]
 
-// The individual permissions a resource contributes, each with its id + the
-// human label used in the list's overflow popover.
 export const resourcePermissions = (resource) => {
   if (resource.single) return [{ id: resource.key, label: resource.label, action: 'single' }]
   return resource.actions.map((action) => ({
@@ -107,7 +88,6 @@ export const resourcePermissions = (resource) => {
   }))
 }
 
-// id → label, built once, for the list's "+N" overflow popover.
 const permissionLabels = new Map()
 for (const group of permissionGroups) {
   for (const resource of group.resources) {
@@ -119,18 +99,13 @@ for (const group of permissionGroups) {
 
 export const permissionLabel = (id) => permissionLabels.get(id) ?? id
 
-// Every permission id in the catalog (used to seed a fully-privileged team and
-// to compute "X of Y selected").
 export const allPermissionIds = [...permissionLabels.keys()]
 
-// A team's permission labels, catalog order preserved — the order the overflow
-// popover lists them in.
 export const permissionLabelsFor = (ids) => {
   const set = new Set(ids)
   return allPermissionIds.filter((id) => set.has(id)).map(permissionLabel)
 }
 
-// --- Teams store ---------------------------------------------------------
 const viewOnlyIds = allPermissionIds.filter((id) => id.endsWith('.view') || !id.includes('.'))
 
 const teams = ref([

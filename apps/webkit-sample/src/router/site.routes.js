@@ -16,6 +16,12 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
+import {
+  AKAMAI_GUIDE,
+  AWS_GUIDE,
+  CLOUDFLARE_GUIDE,
+  FASTLY_GUIDE
+} from '@site/data/alternative-guides'
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
@@ -24,7 +30,9 @@ import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
+import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
+import LandingApplications from '@site/views/LandingApplications.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
 import LandingBlog from '@site/views/LandingBlog.vue'
@@ -53,9 +61,11 @@ import LandingSolutions from '@site/views/LandingSolutions.vue'
 import LandingStreaming from '@site/views/LandingStreaming.vue'
 import LandingSuccessCasePost from '@site/views/LandingSuccessCasePost.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
+import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
+import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
 import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 
 // Every path this tree served before the pages were grouped. Kept so a link that is
@@ -110,6 +120,11 @@ export const siteRoutes = [
   // The one composed entirely from the MARKETING components rather than hand-built bricks —
   // the Products mega-menu's Our Network entry.
   { path: '/site/products/our-network', name: 'site-our-network', component: LandingOurNetwork },
+  {
+    path: '/site/products/applications',
+    name: 'site-applications',
+    component: LandingApplications
+  },
   // Every other Products mega-menu entry: one data-driven page per product (data/products.js).
   {
     path: '/site/products/:product(sql-database|object-storage|kv-store|waf|network-shield|edge-dns|load-balancer|data-stream|real-time-metrics|edge-pulse)',
@@ -155,11 +170,36 @@ export const siteRoutes = [
     name: 'site-vercel-alternative-guide',
     component: LandingVercelAlternative
   },
+  {
+    path: '/site/guides/akamai-alternative',
+    name: 'site-akamai-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: AKAMAI_GUIDE }
+  },
+  {
+    path: '/site/guides/aws-alternative',
+    name: 'site-aws-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: AWS_GUIDE }
+  },
+  {
+    path: '/site/guides/cloudflare-alternative',
+    name: 'site-cloudflare-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: CLOUDFLARE_GUIDE }
+  },
+  {
+    path: '/site/guides/fastly-alternative',
+    name: 'site-fastly-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: FASTLY_GUIDE }
+  },
 
   // ══ The rest of the site ══════════════════════════════════════════════════════════
   // The pricing page in the same shell: the three tiers, the full feature matrix, and the
   // FAQ. The website nav's `Pricing` entry points here.
   { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },
+  { path: '/site/support', name: 'site-support', component: LandingSupport },
   { path: '/site/careers', name: 'site-careers', component: LandingCareersHome },
   // The careers listing in the same shell: a page whose content is a live ATS query rather
   // than an argument, so what it demonstrates is the frame doing the work — a hero with the
@@ -206,6 +246,11 @@ export const siteRoutes = [
   // component with the props a page would pass. Not an azion.com page — it is the Site's
   // own reference for choosing an opening, so the nav does not link it.
   { path: '/site/azion-heros', name: 'site-azion-heros', component: LandingAzionHeros },
+  {
+    path: '/site/azion-website-bundle',
+    name: 'site-azion-website-bundle',
+    component: LandingWebsiteBundle
+  },
   // The compliance page in the same shell: the certifications and the privacy regulations,
   // one module of cards under a shared responsibility-model intro. Reached by direct URL only,
   // the same way Careers is — neither is a Products/Solutions mega-menu entry.

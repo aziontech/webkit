@@ -1,23 +1,4 @@
-<script setup>
-  // Create Table — the SQL Database "add table" flow, in a LARGE right Drawer.
-  //
-  // FIELDS ARE SEPARATED, the same shape the Variables drawer uses
-  // (./AddVariableDrawer.vue via ./ui/FieldStack.vue): a real `<Label for>` over a
-  // full-width control, with the field's own message under it. The band says once, in
-  // its `Section` hint, what a per-row `Item.Description` used to repeat — and the name
-  // is a label the reader can click instead of text sitting beside an `aria-label`.
-  //
-  // Only COLUMNS keeps a card, because it is not a set of fields: it is a grid whose
-  // header row names its tracks and whose rows are reorderable. Boxing that is what
-  // separates it from the fields above; boxing a single text input was not.
-  //
-  // Columns repeater: add / REMOVE / REORDER. Reordering is native drag-and-drop
-  // (no library, per dependencies.md) driven by a grip handle, mirroring
-  // CreateRuleDrawer — the grip is the only draggable element so the inputs stay
-  // interactive, the row is the drop zone, and arrow keys on a focused grip
-  // reorder without a pointer (keyboard a11y). A TransitionGroup FLIPs the rows on
-  // every add / remove / move. Validation on submit only; one `submitting` flag
-  // locks the whole scope.
+<script setup lang="ts">
   import { curve, duration } from '@aziontech/theme/animations'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -36,14 +17,13 @@
   import { filterTypes, glyphOf, typeLabel } from '../../lib/format/postgres-types'
 
   const open = defineModel('open', { type: Boolean, default: false })
-  const emit = defineEmits(['created'])
+  const emit = defineEmits<{
+    created: [value: unknown]
+  }>()
 
-  // Searchable Postgres type picker — the Select.Content #search slot filters the
-  // shared catalog (src/lib/postgres-types.js).
   const typeQuery = ref('')
   const filteredTypes = computed(() => filterTypes(typeQuery.value))
 
-  // Stable keys for repeater rows (order-independent).
   let nextId = 0
   const uid = () => (nextId += 1)
 
@@ -77,8 +57,6 @@
     submitted.value = false
   })
 
-  // Morph the repeater lines when they add / remove / reorder (same tokens as
-  // CreateRuleDrawer — timing comes from the animate tokens, never hardcoded).
   const morphStyle = {
     '--tg-move-duration': duration['slow-01'],
     '--tg-move-ease': curve['expressive-entrance'],
@@ -98,10 +76,9 @@
     leaveToClass: 'opacity-0'
   }
 
-  // ── Columns repeater: add / remove / reorder ──
   const addColumn = () => form.columns.push(newColumn())
   const removeColumn = (index) => {
-    if (form.columns.length <= 1) return // keep at least one column
+    if (form.columns.length <= 1) return
     form.columns.splice(index, 1)
   }
   const moveColumn = (index, direction) => {
@@ -111,9 +88,6 @@
     form.columns.splice(target, 0, moved)
   }
 
-  // ── Native drag-and-drop reorder (no library, per dependencies.md) ──
-  // Only the grip is draggable, so the row's inputs stay interactive; the row is
-  // the drop zone. Reordering splices the array, so the TransitionGroup morph plays.
   const dnd = reactive({ from: -1, over: -1 })
 
   const GRIP_CLASS =
@@ -156,7 +130,6 @@
     onDragEnd()
   }
 
-  // ── Foreign keys (demo affordance only) ──
   const addForeignKey = () =>
     toast.info('Add foreign key relation', { description: 'Not available in this demo.' })
   const importCsv = () =>
@@ -196,8 +169,6 @@
     }
   }
 
-  // One grid template shared by the columns header row and each column row, so
-  // their tracks line up: grip · Name · Type · Default Value · Primary · remove.
   const COLUMN_GRID =
     'grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs)'
 </script>
@@ -212,15 +183,15 @@
     :submitting="submitting"
     @submit="submit"
   >
-    <!-- Section: General -->
     <Section
       stacked
       :divided="false"
       title="General"
-      hint="Names the table inside this database. It is what every query addresses, so it cannot be changed later without rewriting them."
+      hint="Names the table inside this database."
     >
       <FieldStack
         label="Name"
+        description="Every query addresses it, so it cannot be changed later without rewriting them."
         :message="nameError ? 'Name is required.' : ''"
         message-kind="required"
       >
@@ -239,12 +210,11 @@
       </FieldStack>
     </Section>
 
-    <!-- Section: Columns (drag-and-drop repeater) -->
     <Section
       stacked
       :divided="false"
       title="Columns"
-      hint="The table's schema. Every table needs at least one column, and the order here is the order the columns are created in."
+      hint="The table's schema, with at least one column, created in this order."
     >
       <template #aside>
         <div class="flex flex-wrap items-center gap-(--spacing-xs)">
@@ -272,7 +242,6 @@
       <CardBox :padded="false">
         <template #content>
           <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
-            <!-- Column headers aligned to the row grid. -->
             <div :class="[COLUMN_GRID, 'px-(--spacing-xxs)']">
               <span
                 class="size-8"
@@ -305,8 +274,6 @@
                 @dragover.prevent
                 @drop="dropOnColumn(index)"
               >
-                <!-- Grip: hold to drag the whole row; arrow keys reorder
-                               without a pointer (keyboard a11y). -->
                 <span
                   role="button"
                   tabindex="0"
@@ -350,18 +317,9 @@
                       </span>
                     </template>
                   </Select.Trigger>
-                  <!-- z workaround: Select.Content teleports to body at
-                                 z-50, behind the Drawer panel (z-[1001]). The
-                                 trigger is a narrow grid cell, so widen the panel
-                                 (min-w overrides the trigger-matched inline width)
-                                 to fit the type descriptions, and raise the panel +
-                                 inner options-list max-heights (the list ScrollArea
-                                 defaults to max-h-60) so more types show at once. -->
                   <Select.Content
                     class="z-[1002]! min-w-(--container-md) max-h-(--container-md)! [&_[data-testid$='__list']]:max-h-(--container-sm)!"
                   >
-                    <!-- Searchable, grouped Postgres data types with a
-                                   glyph + description per option. -->
                     <template #search>
                       <InputText
                         v-model="typeQuery"
@@ -460,7 +418,6 @@
       </CardBox>
     </Section>
 
-    <!-- Section: Foreign keys (demo affordance) -->
     <Section
       stacked
       :divided="false"

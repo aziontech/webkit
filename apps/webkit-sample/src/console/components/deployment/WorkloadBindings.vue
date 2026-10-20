@@ -1,32 +1,4 @@
 <script setup>
-  // ALL WORKLOADS — the whole pairing between environments and Deployment Settings, in
-  // one disclosure.
-  //
-  // ── WHY IT IS ONE CARD AND NOT A COLUMN ON THE SETTINGS TABLE ──
-  //
-  // The question this answers is the inverse of the settings list's. That list says "what
-  // does this setting reach"; this says "what does this workload publish with" — and that
-  // is the question someone asks before they change anything, because a Deployment
-  // Setting shared by two environments means a deploy into it publishes to both.
-  //
-  // Answering it one workload at a time (open workload, read footer, go back) is how a
-  // person ends up sharing a setting without noticing. So the pairing is readable, and
-  // editable, from one place.
-  //
-  // ── WHY A DISCLOSURE ──
-  //
-  // Most accounts have far more workloads than settings, and on most days the pairing is
-  // not what the reader came for: every workload is created with a setting of its own and
-  // stays that way. So the band opens CLOSED, with the counts that say whether anything
-  // in here needs attention — if nothing is shared, the closed row is the whole answer.
-  //
-  // ── WHY EACH ROW COMMITS ON ITS OWN ──
-  //
-  // Changing which setting an environment publishes with is a discrete act on one
-  // environment, not part of the page's settings record — so it commits when it is made
-  // and says what it did, including the new reach. Queueing it behind the page's Save bar
-  // would leave the pairing on screen disagreeing with the pairing in force, which is the
-  // one thing this card cannot do.
   import Accordion from '@aziontech/webkit/accordion'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
@@ -48,9 +20,6 @@
 
   const search = ref('')
 
-  // Match on the workload's name OR on the setting any of its environments publishes
-  // with, because "which workloads are on magalu-storefront" is exactly the question this
-  // card is opened with.
   const rows = computed(() => {
     const query = search.value.trim().toLowerCase()
     if (!query) return workloadBindings.value
@@ -63,8 +32,6 @@
     )
   })
 
-  // WHAT THE CLOSED ROW SAYS. The totals are the reason to open it or not: an account
-  // where nothing is shared has nothing in here to check.
   const totals = computed(() => {
     const all = workloadBindings.value
     const shared = all.filter((workload) =>
@@ -75,12 +42,6 @@
 
   const settingName = (settingsId) => strategyById(settingsId)?.name ?? ''
 
-  // ONLY THE COMPATIBLE ONES, AND ONLY THE ONES THIS WORKLOAD MAY REACH. An environment
-  // may be pointed at a setting whose `deployment_policy` equals its own, plus whatever is
-  // bound today so the current value is never missing from its own Select — console-kit's
-  // `filterDeploymentsByPolicy`. A `Versioned` environment cannot take a `Single` setting,
-  // and no workload can take another workload's DEDICATED setting, so the picker must not
-  // offer either: an option that would be rejected is worse than no option.
   const optionsFor = (workload, environment) =>
     settingsForPolicy(environment.deploymentPolicy, environment.settingsId, workload.id).map((strategy) => ({
       value: strategy.id,
@@ -92,9 +53,6 @@
 
   const reachOf = (settingsId) => reachLabel(boundWorkloads(settingsId).length)
 
-  // THE CHANGE. It reports the new reach rather than a bare "saved", because the reach is
-  // the consequence the reader needs to see: pointing this environment at a setting
-  // another one already uses is the moment a deploy stops being local.
   const rebind = (workload, environment, settingsId) => {
     if (!settingsId || settingsId === environment.settingsId) return
     bindWorkloadSettings(workload.id, environment.name, settingsId)
@@ -115,9 +73,6 @@
 <template>
   <CardBox :padded="false">
     <template #content>
-      <!-- `--accordion-inset` puts the trigger on the card's own left margin, so the
-           closed row lines up with the rows of every other card on the page. The panel is
-           flush by contract, so all padding below lives on the blocks inside it. -->
       <Accordion
         class="[--accordion-inset:var(--spacing-md)]"
         type="single"
@@ -134,9 +89,6 @@
               <span class="text-body-sm text-(--text-muted)">
                 {{ reachLabel(totals.workloads) }}
               </span>
-              <!-- ONLY WHEN SOMETHING IS SHARED. A count of zero shared is the ordinary
-                   state, and a badge on every account would teach the reader to stop
-                   seeing it. -->
               <Tag
                 v-if="totals.shared"
                 :label="`${totals.shared} on a shared setting`"
@@ -172,10 +124,6 @@
                 No workload matches that.
               </p>
 
-              <!-- ONE ROW PER WORKLOAD, and inside it one control per ENVIRONMENT —
-                   because the environment is what publishes with a setting, not the
-                   workload. A workload with two environments answers this twice, and
-                   those two answers are allowed to differ. -->
               <ul
                 v-else
                 class="m-0 flex list-none flex-col gap-0 p-0"
@@ -206,8 +154,6 @@
                       severity="secondary"
                       size="medium"
                     />
-                    <!-- The environment's OWN deployment policy. It is not decoration:
-                         it is what decides which settings the Select beside it offers. -->
                     <Tag
                       :label="deploymentPolicyLabel(environment.deploymentPolicy)"
                       severity="info"
@@ -234,19 +180,12 @@
                         </Select.Option>
                       </Select.Content>
                     </Select>
-                    <!-- NOBODY CHOSE THIS ONE. An environment with no explicit pick is
-                         linked automatically to the first setting matching its policy, so
-                         the row says so rather than looking like a decision someone made
-                         and forgot. -->
                     <Tag
                       v-if="environment.auto"
                       label="Linked automatically"
                       severity="secondary"
                       size="medium"
                     />
-                    <!-- The consequence, beside the control that causes it: a setting
-                         already on another environment makes this deploy reach further
-                         than this row. -->
                     <Tag
                       key="tag-2"
                       v-if="isShared(environment.settingsId)"

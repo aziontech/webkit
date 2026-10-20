@@ -1,5 +1,5 @@
 import '../src/styles/preview.css'
-import '@aziontech/theme'
+import '../src/styles/tailwind.css'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
 
@@ -93,7 +93,7 @@ export const parameters = {
           'Design Tokens',
           ['Color', 'Theme', 'Typography', 'Layout', 'Motion'],
           'Assets',
-          ['Illustrations', 'Logos', 'Icons']
+          ['Illustrations', 'Logos', 'Icons', 'Product Widgets']
         ],
         'Components',
         'Documentation',
@@ -101,7 +101,6 @@ export const parameters = {
         'Templates',
         ['Marketing', ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media']],
         'Marketing',
-        ['Overview'],
         'Site'
       ]
     }

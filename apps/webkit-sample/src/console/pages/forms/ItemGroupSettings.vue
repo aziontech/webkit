@@ -1,11 +1,4 @@
 <script setup>
-  // Form type: ITEMGROUP settings (the `/form` skill, "Form types"). Account-level
-  // configuration built from Item rows (Approach A), grouped into topic SECTIONS —
-  // each section is an section title over a flush CardBox whose body is an Item.List
-  // (the Account Settings pattern; see `/form` § Section title). The whole surface is
-  // still ONE logical form saved as a single unit (one Save in the sticky footer) —
-  // that's distinct from "CardBox with independent saves", where each card owns its
-  // own Save. Every Item is size="small"; in an ItemGroup the Item.Title is the label.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -49,28 +42,22 @@
   const submitted = ref(false)
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue): dirty while the form diverges
-  // from the state it opened on. `commit` re-snapshots it on the way OUT of a successful
-  // submit — this page's own navigation must not be stopped by the guard that exists to
-  // protect the input that submit just consumed.
   const { dirty, commit } = useBaseline(form)
 
   const nameEmpty = computed(() => !form.fullName.trim())
   const emailEmpty = computed(() => !form.email.trim())
-  // emailInvalid is true for an empty value too (the regex fails on ""); the template
-  // splits the two — empty → amber `required`, filled-but-malformed → red `invalid`.
   const emailInvalid = computed(() => !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim()))
   const isValid = computed(() => !nameEmpty.value && !emailInvalid.value)
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
+    if (submitting.value) return
     submitted.value = true
     if (!isValid.value) return
 
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      commit() // the save landed — the leave guard stands down
+      commit()
       toast.success('Profile settings saved.')
     } catch (error) {
       toast.error('Could not save profile settings.', {
@@ -97,9 +84,6 @@
       novalidate
       @submit.prevent="submit"
     >
-      <!-- No `gap` on the stack: every band below owns its own top space via
-           `.layout-section-start` (= --layout-boundary-start, the same step the
-           boundary puts above the first band). -->
       <div class="layout-column-form layout-boundary flex flex-1 flex-col">
         <PageHeading
           title-id="profile-title"
@@ -107,14 +91,12 @@
           description="Define and manage personal account preferences and profile config. Topic sections of Item rows, each titled by a section heading, saved as a single unit."
         />
 
-        <!-- One flag locks every control while the request is in flight. -->
         <fieldset
           class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Profile settings</legend>
 
-          <!-- Section: General — an section title over a flush CardBox. -->
           <section class="flex flex-col gap-(--layout-group-gap)">
             <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
             <CardBox :padded="false">
@@ -126,9 +108,6 @@
                       <Item.Description>The name shown across the console.</Item.Description>
                     </Item.Content>
                     <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                      <!-- No Label in an ItemGroup: the required feedback is an
-                           amber `required` HelperText under the control (not red —
-                           an empty required field is a prompt, not an error). -->
                       <div class="flex w-full flex-col gap-(--spacing-xs)">
                         <InputText
                           v-model="form.fullName"
@@ -155,8 +134,6 @@
                       <Item.Description>Used for sign-in and notifications.</Item.Description>
                     </Item.Content>
                     <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                      <!-- Empty → amber `required`; filled but malformed → red
-                           `invalid`. The two are distinct states, never both. -->
                       <div class="flex w-full flex-col gap-(--spacing-xs)">
                         <InputText
                           v-model="form.email"
@@ -185,7 +162,6 @@
             </CardBox>
           </section>
 
-          <!-- Section: Preferences -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Preferences</p>
             <CardBox :padded="false">
@@ -257,7 +233,6 @@
             </CardBox>
           </section>
 
-          <!-- Section: Notifications -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
             <CardBox :padded="false">
@@ -285,7 +260,6 @@
         </fieldset>
       </div>
 
-      <!-- Single scoped save (one unit). -->
       <footer
         class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
       >

@@ -1,21 +1,10 @@
-<script setup>
-  // The payment card's brand mark — the Visa wordmark exported from the design,
-  // on the brand's own blue plate.
-  //
-  // The paths are the exported asset, not a redraw: a payment brand is a
-  // trademark, and an approximation of one is wrong in a way a user notices and a
-  // brand guideline forbids. Geometry is the design's: a 40x28 plate with the
-  // 22x7 wordmark centred in it, both fixed, so the mark never stretches with the
-  // row it sits in.
-  //
-  // The plate colour is the only literal colour in this app that is not a theme
-  // token, and it has to be: Visa blue is Visa's, not the theme's, and it stays
-  // the same in light and dark exactly like the client logos on the marketing
-  // pages do. Everything around it — the row, the border, the label — is tokens.
-  defineProps({
-    // Accessible name. The mark is decorative when the row already names the card
-    // ("Ended with 8888"), which is the default.
-    ariaLabel: { type: String, default: '' }
+<script setup lang="ts">
+  interface Props {
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<Props>(), {
+    ariaLabel: ''
   })
 </script>
 

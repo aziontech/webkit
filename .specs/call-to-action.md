@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 89e475edce8fe9a50e31713385b32f615a3ef1bbc7c2a3147db90f8aacc34f34
+checksum: d6fe5494436ecfa10a804cd4563b80422dfb52a809bc10a28c84204cede6c08e
 created: 2026-09-22
-last_updated: 2026-10-09
+last_updated: 2026-10-16
 ---
 
 # Call To Action — Component Spec
@@ -195,6 +195,7 @@ _none_
 | spacing (panel padding, `panel`) | `var(--spacing-xxl)` |
 | spacing (cell padding, `split`, `lead`) | `var(--spacing-xl)` |
 | copy measure (`lead`) | `var(--container-2xl)` |
+| headline measure (`split`) | `var(--container-xl)` |
 | spacing (between controls, `lead`) | `var(--spacing-sm)` |
 | spacing (copy stack) | `var(--spacing-lg)` |
 | spacing (copy to actions, `panel`, `split`) | `var(--spacing-xxl)` |

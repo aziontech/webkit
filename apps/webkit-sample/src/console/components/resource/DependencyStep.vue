@@ -1,51 +1,60 @@
-<script setup>
-  // THE FIRST STEP OF A STEPPED CREATE — the same host question the full-screen gate asks
-  // (./ApplicationGate.vue), in the same column (./HostChooser.vue), because a reader who
-  // has met one of them has met both.
-  //
-  // What this step adds is the MODULE. A reference the matrix marks `exige modules.*` is
-  // read by the host only while that module is on (../../lib/data/resource-dependencies.js),
-  // so a host that has it off is the first friction of the whole create — stated on the row
-  // that carries it, and answerable without leaving the step.
+<script setup lang="ts">
+  import SegmentedButton from '@aziontech/webkit/segmented-button'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
 
-  import { hostOptions, hostRecords } from '../../lib/behavior/application-binding'
+  import { hostOptions, hostRecords,HOSTS } from '../../lib/behavior/application-binding'
   import { hostHasModule, moduleRequirementFor } from '../../lib/data/resource-dependencies'
   import HostChooser from './HostChooser.vue'
 
-  const props = defineProps({
-    /** The `createResources` id being created. */
-    resource: { type: String, required: true },
-    /** The create page's own title, so the tile above the list names the object being made. */
-    title: { type: String, default: '' },
-    /** The glyph of the object being created. */
-    icon: { type: String, default: 'pi pi-box' },
-    /** The binding descriptor — which host, and how the reference is carried. */
-    binding: { type: Object, required: true },
-    /** The host descriptor from `HOSTS` — noun, icon, whether one can be named here. */
-    host: { type: Object, required: true },
-    /** The resource's own noun, for the copy that explains what is inert without a host. */
-    unit: { type: String, default: 'resource' },
-    /** Locks every control while the create request is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    resource: string
+    title?: string
+    icon?: string
+    binding: Record<string, unknown>
+    unit?: string
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    title: '',
+    icon: 'pi pi-box',
+    unit: 'resource',
+    disabled: false
   })
 
-  const emit = defineEmits(['empty-action', 'answer'])
+  const emit = defineEmits<{
+    'empty-action': [kind: string]
+    answer: []
+  }>()
 
-  /** The chosen host as `{ mode, name }`, or null while the reader has not answered. */
   const choice = defineModel('choice', { type: Object, default: null })
 
-  /** True when the reader has agreed to switch the missing module on with this create. */
   const enableModule = defineModel('enableModule', { type: Boolean, default: false })
 
-  const kind = computed(() => props.binding.host)
-  const requirement = computed(() => moduleRequirementFor(props.resource, kind.value))
-  const options = computed(() => hostOptions(kind.value))
-  const chosenName = computed(() => choice.value?.name ?? '')
+  const kind = defineModel<string>('kind', { default: '' })
+
+  const kinds = computed(() => props.binding.kinds ?? [props.binding.host])
+  const activeKind = computed(() =>
+    kinds.value.includes(kind.value) ? kind.value : kinds.value[0]
+  )
+  const host = computed(() => HOSTS[activeKind.value] ?? HOSTS.application)
+
+  const kindOptions = computed(() =>
+    kinds.value.map((value) => ({
+      value,
+      label: HOSTS[value]?.label ?? capitalize(HOSTS[value]?.noun ?? value)
+    }))
+  )
+
+  const requirement = computed(() => moduleRequirementFor(props.resource, activeKind.value))
+  const options = computed(() => hostOptions(activeKind.value))
+  const chosenName = computed(() =>
+    choice.value?.kind && choice.value.kind !== activeKind.value ? '' : (choice.value?.name ?? '')
+  )
 
   const readiness = computed(() => {
-    const records = hostRecords(kind.value)
+    const records = hostRecords(activeKind.value)
     const map = new Map()
     for (const option of options.value) {
       const record = records.find((item) => item.name === option.value)
@@ -54,8 +63,16 @@
     return map
   })
 
+  function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
+
+  const onKind = (next) => {
+    kind.value = next
+  }
+
   const onChoose = (next) => {
-    choice.value = next
+    choice.value = { ...next, kind: activeKind.value }
     enableModule.value = false
     emit('answer')
   }
@@ -74,7 +91,7 @@
     :noun="host.noun"
     :host-icon="host.icon"
     :options="options"
-    :can-create="host.canCreate"
+    :can-create="binding.canCreate ?? host.canCreate"
     :empty-label="host.emptyLabel"
     :selected="chosenName"
     :disabled="disabled"
@@ -82,10 +99,22 @@
     class="mx-auto"
     @choose="onChoose"
     @skip="onSkip"
-    @empty-action="emit('empty-action')"
+    @empty-action="emit('empty-action', activeKind)"
   >
-    <!-- The module a row is missing, said ON that row: the reader picks a host already
-         knowing what picking it will cost, instead of finding out underneath. -->
+    <template
+      v-if="kindOptions.length > 1"
+      #kinds
+    >
+      <SegmentedButton
+        :model-value="activeKind"
+        :options="kindOptions"
+        :aria-label="`Where the ${unit} is used`"
+        size="medium"
+        fluid
+        @update:model-value="onKind"
+      />
+    </template>
+
     <template #row="{ option }">
       <Tag
         v-if="requirement && !readiness.get(option.value)"
@@ -94,6 +123,5 @@
         size="small"
       />
     </template>
-
   </HostChooser>
 </template>

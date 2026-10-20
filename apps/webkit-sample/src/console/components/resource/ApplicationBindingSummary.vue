@@ -1,33 +1,25 @@
-<script setup>
-  // WHAT THE GATE ANSWERED, stated on the form behind it.
-  //
-  // The host question is asked once, as the create's first screen
-  // (./ApplicationGate.vue). This band is not that question a second time — it is the
-  // answer, kept visible while the reader fills in the rest, because "where does this run"
-  // is the fact that decides what Save does. `Change` reopens the gate.
-  //
-  // NOT BOUND is a state this says out loud, in the resource's own terms
-  // (../../lib/data/create-bindings.js carries the sentence): a reader who skipped should
-  // meet the consequence here, where they can still undo it, rather than in a list of
-  // resources that quietly never ran.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
 
   import Section from '../page/Section.vue'
 
-  defineProps({
-    /** The resource's entry in the binding registry — its copy and its rule. */
-    binding: { type: Object, required: true },
-    /** The host being named — `{ noun, icon }` from the host registry. */
-    host: { type: Object, required: true },
-    /** The host the gate settled on, or `''` when there is none. */
-    application: { type: String, default: '' },
-    /** The page-wide lock while the commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    binding: Record<string, unknown>
+    host: Record<string, unknown>
+    application?: string
+    disabled?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    application: '',
+    disabled: false
   })
 
-  defineEmits(['change'])
+  defineEmits<{
+    change: []
+  }>()
 </script>
 
 <template>
@@ -35,7 +27,7 @@
     stacked
     :divided="false"
     :title="host.noun.charAt(0).toUpperCase() + host.noun.slice(1)"
-    hint="Where this runs. Saving finishes on the Rules Engine that puts it to work."
+    hint="Where this runs once the Rules Engine puts it to work."
   >
     <CardBox :padded="false">
       <template #content>
@@ -47,7 +39,7 @@
               >
                 <i
                   :class="application ? 'ai ai-edge-application' : 'pi pi-minus-circle'"
-                  class="text-[1rem] leading-none"
+                  class="text-body-md leading-none"
                   :data-unbound="application ? null : true"
                   aria-hidden="true"
                 />

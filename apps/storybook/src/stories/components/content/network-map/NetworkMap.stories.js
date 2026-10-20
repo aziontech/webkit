@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A decorative, full-bleed layer that paints the dotted world map with Azion’s PoPs lit in the brand accent. Like `texture-material` it takes no content and claims no space, but the consumer tunes it — region, PoP density, landmass opacity, static or animated — to sit behind a band’s copy.'
+          'A decorative, full-bleed layer that paints the dotted world map with Azion’s PoPs lit in the brand accent. It takes no content and claims no space, but the consumer tunes it — region, PoP density, landmass opacity, static or animated — to sit behind a band’s copy.'
       },
       canvas: { sourceState: 'shown' }
     }

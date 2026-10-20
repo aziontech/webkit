@@ -1,36 +1,4 @@
-<script setup>
-  // PART 2 — THE ADDRESS, AND WHAT SERVES IT.
-  //
-  // The last part, because it is the one that binds the part before it. Part 1 settled what
-  // the workload serves; this one gives it a public address, says which environment and
-  // certificate answer on it, and picks the deployment the first release lands in.
-  //
-  // ── WHY THE DOMAIN IS A CHOICE NOW ──
-  //
-  // The old flow had no domain question at all: the first part asked for a NAME and the
-  // Azion domain fell out of it. That is true and it is also the whole story only for readers who
-  // are happy on the Azion domain. Anyone bringing their own hostname had to create the
-  // workload on a domain they did not want and add theirs afterwards from the workload's own
-  // page — a second trip for the single most common thing a workload is for.
-  //
-  // So the address is asked directly, in two branches. The Azion branch is a PREFIX and the
-  // suffix is shown, not typed. The custom branch is a full hostname — and it needs a second
-  // field, because when the address is not derived from a name there is no name.
-  //
-  // ── NAMES CASCADE FROM WHICHEVER FIELD THAT IS ──
-  //
-  // The workload's name, the deployment created for it, and the domain all come from one
-  // string (../../../lib/data/workload-flows.js → `workloadNamesFromForm`). The reader types
-  // it once and reads back every name the commit will use. That is what the address box
-  // under the field is for: the domain is a CONSEQUENCE of what they typed, and prose
-  // describing the rule would make them derive it themselves.
-  //
-  // ── THE ANATOMY IS THE ONE EVERY OTHER PART USES ──
-  //
-  // Titled CardBoxes for the groups, then the Advanced band — the same shape as part 1 here
-  // and as the application flow's last part
-  // (../../applications/wizard/ConfigureStep.vue). `Section` is reserved for the one band
-  // that is not a group of fields: the Advanced disclosure.
+<script setup lang="ts">
   import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
@@ -53,17 +21,16 @@
   import { AZION_DOMAIN_SUFFIX } from '../../../lib/data/workload-provisioning'
   import { useWorkloadForm } from './form-context'
 
-  defineProps({
-    // The flow-wide lock while the commit is in flight.
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    disabled?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    disabled: false
   })
 
   const { form, errors } = useWorkloadForm()
 
-  // Stored value → visible label, for every Select here. Without it the trigger prints the
-  // raw API value (`tls_1_2` instead of "TLS 1.2").
-  // The Custom Pages module's own rows — a binding is a REFERENCE to a record that
-  // exists, never a name invented here.
   const customPageOptions = existingCustomPageOptions()
 
   const labelFor = (options) => (value) =>
@@ -82,27 +49,17 @@
   const isAzionDomain = computed(() => form.domainType !== 'own')
   const isExistingDeployment = computed(() => form.deploymentMode === 'existing')
 
-  // The whole cascade, read through the one derivation the summary and the run also read.
   const names = computed(() => workloadNamesFromForm(form))
 </script>
 
 <template>
-  <!-- NO `gap` on this stack, deliberately — the same reason the application flow's last
-       part carries none (../../applications/wizard/ConfigureStep.vue): CardBox renders a
-       real `<section>`, so the Advanced band below is not `:first-of-type` and `Section`
-       already applies its own `--layout-section-gap` top margin. A flex gap here would be
-       added to that one and the disclosure would float a double step below the fields. -->
   <div class="flex min-w-0 flex-col">
-    <!-- THE ADDRESS. `padded="false"` with the inset on the groups inside, so the rule
-         above the derived address spans the card edge to edge. -->
     <CardBox
       :padded="false"
       title="Domain"
     >
       <template #content>
         <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
-          <!-- WHICH OF THE TWO. A segmented control and not two cards: one question with
-               two answers, and the answer decides what the rest of this card asks. -->
           <SegmentedButton
             v-model="form.domainType"
             :options="DOMAIN_TYPES"
@@ -111,16 +68,12 @@
             aria-label="Where the domain comes from"
           />
 
-          <!-- AZION — a PREFIX, not a hostname. The suffix is fixed, so it is shown on the
-               field rather than typed into it: a reader who types the whole thing would
-               produce `my-app.azion.run.azion.run`, and a field that
-               accepts that and silently fixes it is a field that lied about its format. -->
           <FieldStack
             v-if="isAzionDomain"
             label="Domain prefix"
             required
-            hint="Azion provides the domain and its certificate. The prefix is what makes it yours, and it names the workload and its deployment too."
-            description="Lowercase letters, numbers and hyphens. Anything else is folded into a hyphen."
+            hint="Azion provides the domain and its certificate."
+            description="Lowercase letters, numbers and hyphens. Anything else is folded into a hyphen. It also names the workload and its deployment."
             :message="errors.domainPrefix"
             message-kind="required"
           >
@@ -136,10 +89,6 @@
                 :required="!!errors.domainPrefix"
                 :aria-describedby="describedBy"
               >
-                <!-- The suffix rides in the field's trailing slot, muted and
-                     `aria-hidden`: it is not part of the value, and a screen reader
-                     reading it as one would report an address the input does not hold.
-                     The full address is spoken by the box below, which is the value. -->
                 <template #iconRight>
                   <span
                     class="whitespace-nowrap text-label-sm text-(--text-muted)"
@@ -152,16 +101,12 @@
             </template>
           </FieldStack>
 
-          <!-- OWN — the full hostname, and a NAME beside it. When the address is not
-               derived from a name there is no name, and the workload still needs one for
-               every list it appears in. Two fields, because they are two facts: the
-               hostname is what DNS points at, the name is what the console calls it. -->
           <template v-else>
             <FieldStack
               label="Domain"
               required
-              hint="The hostname that points at this workload. Add the DNS record after the workload exists — the run does not wait on it."
-              description="A full hostname, like www.example.com."
+              hint="The hostname that points at this workload."
+              description="A full hostname, like www.example.com. Add its DNS record once the workload exists. The run does not wait on it."
               :message="errors.domainHost"
               message-kind="required"
             >
@@ -183,8 +128,8 @@
             <FieldStack
               label="Name"
               required
-              hint="Identifies the workload in every list. It also names the deployment created for it."
-              description="Lowercase letters, numbers and hyphens."
+              hint="Identifies the workload in every list."
+              description="Lowercase letters, numbers and hyphens. It also names the deployment created for it."
               :message="errors.name"
               message-kind="required"
             >
@@ -205,11 +150,6 @@
           </template>
         </div>
 
-        <!-- THE ADDRESS THAT PRODUCES. A read-only consequence, not a field — so it is
-             framed as a value the reader can copy their eyes over, with the protocol shown
-             so it reads as the address it is rather than as a hostname fragment. The same
-             treatment part 1 of this flow used to give it, kept where the address is now
-             actually decided. -->
         <div
           class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-md)"
         >
@@ -248,30 +188,17 @@
       </template>
     </CardBox>
 
-    <!-- WHAT ANSWERS ON IT. Two answers that are properties of the workload rather than of
-         the address: which environment the binding lands on, and which certificate serves
-         the connection. The certificate used to sit in Advanced, which put the one field
-         that decides whether HTTPS works at all behind a disclosure. -->
     <CardBox
       title="Environment and certificate"
       class="mt-(--layout-section-gap)"
     >
       <template #content>
         <div class="flex flex-col gap-(--spacing-lg)">
-          <!-- THE ENVIRONMENT IS A RADIO BOX GRID, not a dropdown. There are two of them
-               and they are not interchangeable — one is live and one is a rehearsal on a
-               different hostname — so the choice is worth SEEING, with the sentence that
-               tells them apart on the card. A Select spent a click to reveal two words and
-               then hid the answer's meaning behind the trigger; the grid is the same
-               control the rest of this console reaches for when a small enumeration has to
-               be understood rather than merely picked
-               (../../../components/application/ApplicationLayer.vue → connector type).
-               `group` on the field because a radiogroup cannot be the target of a
-               `<label for>`: the name is handed to it by id instead. -->
           <FieldStack
             group
             label="Environment"
-            hint="Which environment this binding lands on. The domain answers on the environment it is bound to."
+            hint="Which environment this binding lands on."
+            description="The domain answers on the environment it is bound to."
           >
             <template #default="{ labelId, describedBy }">
               <BoxGridSelection
@@ -288,7 +215,7 @@
           <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
             <FieldStack
               label="Certificate"
-              hint="One certificate per workload. It is a property of the workload, not of a domain on it."
+              hint="One certificate per workload, not per domain on it."
             >
               <template #default="{ controlId }">
                 <Select
@@ -319,10 +246,6 @@
       </template>
     </CardBox>
 
-    <!-- WHERE THE FIRST RELEASE LANDS. The same existing-or-new question the two resource
-         parts asked, on the one resource this part owns — so the reader meets the grammar a
-         third time rather than a third grammar. "Create one" is the default because a
-         workload's first release almost never belongs in a deployment that already has one. -->
     <CardBox
       :padded="false"
       title="Deployment"
@@ -344,10 +267,6 @@
           />
         </div>
 
-        <!-- AUTO — nothing to ask, so nothing is asked. What the reader gets is stated
-             instead: the name the cascade produced, and what it will be configured with.
-             An empty branch that just said "Azion handles it" would leave them guessing at
-             a resource that shows up in their Deployments list afterwards. -->
         <div
           v-if="!isExistingDeployment"
           class="mt-(--spacing-md) border-t border-(--border-default) p-(--spacing-md)"
@@ -359,7 +278,7 @@
                   class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                 >
                   <i
-                    class="ai ai-deploy-pillar text-[1rem] leading-none text-(--text-default)"
+                    class="ai ai-deploy-pillar text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -375,7 +294,6 @@
           </Item.List>
         </div>
 
-        <!-- EXISTING — the shared list again (../../../components/resource/ResourcePicker.vue). -->
         <ResourcePicker
           v-else
           v-model="form.deployment"
@@ -389,9 +307,6 @@
       </template>
     </CardBox>
 
-    <!-- ADVANCED — the existing disclosure pattern (a collapsible Section, never an
-         Accordion), holding what the endpoint already defaults: the TLS floor, the custom
-         page binding, and the two workload flags. -->
     <Section
       stacked
       collapsible
@@ -400,10 +315,6 @@
       title="Advanced"
       hint="Every field here already carries the endpoint's own default, and all of them can be changed once the workload exists."
     >
-      <!-- ONE card, three GROUPS inside it — the same shape the application flow's Advanced
-           band uses. Three titled boxes stacked here would say the TLS floor, the custom
-           page and the two flags are three separate bands of the page; they are three
-           groups of ONE band, and the band is already titled "Advanced". -->
       <CardBox :padded="false">
         <template #content>
           <div class="p-(--spacing-md)">
@@ -437,12 +348,11 @@
             </FieldStack>
           </div>
 
-          <!-- NO group heading over this one: "Custom page" above a field labelled "Custom
-               page" is a heading for a heading. The rule above is what separates it. -->
           <div class="border-t border-(--border-default) p-(--spacing-md)">
             <FieldStack
               label="Custom page"
-              hint="What the workload serves for an error or a maintenance window. Optional. Without one, the workload falls back to Azion's own pages."
+              hint="What the workload serves for an error or a maintenance window."
+              description="Optional. Without one, the workload falls back to Azion's own pages."
             >
               <template #default="{ controlId }">
                 <Select
@@ -471,9 +381,6 @@
             </FieldStack>
           </div>
 
-          <!-- The two workload-level flags, last inside the disclosure: the fields almost
-               nobody touches at creation time. Each row is an Item — the Item.Title IS the
-               name, guidance goes in Item.Description, the switch sits in Item.Actions. -->
           <h3
             class="border-t border-(--border-default) px-(--spacing-md) pb-(--spacing-xs) pt-(--spacing-md) text-label-sm text-(--text-muted)"
           >

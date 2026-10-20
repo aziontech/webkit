@@ -1,4 +1,6 @@
 import { suppressEntranceMotion } from '@console/lib/behavior/interaction'
+import LineFigureBench from '@shared/ui/line-figure/LineFigureBench.vue'
+import NotFound from '@shared/ui/NotFound.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 // One route module per area, in the same order they were declared when this was a
@@ -17,7 +19,9 @@ const routes = [
   ...siteRoutes,
   ...hubRoutes,
   ...previewRoutes,
-  ...consoleRoutes
+  ...consoleRoutes,
+  { path: '/line-figure', name: 'line-figure-bench', component: LineFigureBench },
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
 ]
 
 export const router = createRouter({

@@ -1,17 +1,4 @@
 <script setup>
-  // FIREWALL DETAIL — the firewall's own page: what it is, and what it does.
-  //
-  // A firewall is CREATED INSIDE AN APPLICATION (../../lib/data/create-bindings.js) and
-  // kept as its own record, because what it holds is a program: the rules that run before
-  // a request reaches the application it protects. A program needs a page — a generated
-  // settings form has nowhere to put a table whose ORDER is its behaviour.
-  //
-  // The same shape the application detail uses (../applications/ApplicationDetail.vue):
-  // Overview says what the firewall is and what it protects, Rules Engine is the program,
-  // Settings is the record, and Functions Instances appears only when the Functions module
-  // is on — the way the console gates it on `edgeFunctionsEnabled`. The two tabs that
-  // commit share the strip at the bottom of the page, so the shell carries the tab guard
-  // that asks before a switch abandons pending work.
   import { computed, nextTick, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -29,12 +16,6 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The record, from the store when it holds one — a firewall created this session is in
-  // it — and from the URL when it does not, the way every other detail page in this
-  // prototype accepts what the row that opened it knew (`?name=`, `?application=`).
-  // The WHOLE record, not a synthesized `{ id, name }`: the Overview reports what the row
-  // that opened it already showed — rules, environment, who touched it last — and a
-  // partial record would make the page and the list disagree.
   const firewall = computed(() => {
     const id = String(route.params.id ?? '')
     const record = firewallById(id)
@@ -48,9 +29,6 @@
     }
   })
 
-  // Functions run INSIDE a firewall only when its Functions module is on — a rule's Run
-  // Function behaviour has nothing to call otherwise — so the tab is absent rather than
-  // empty, exactly as the console gates it on `edgeFunctionsEnabled`.
   const runsFunctions = computed(() => (firewall.value.modules ?? []).includes('functions'))
 
   const tabs = computed(() => [
@@ -76,9 +54,6 @@
           }
         ]
       : []),
-    // LAST, and named for what it is — the same position and the same word the
-    // application detail gives the record it is about. The `?tab=` key keeps its old
-    // spelling so links already in the wild still land here.
     {
       value: 'main-settings',
       label: 'Settings',

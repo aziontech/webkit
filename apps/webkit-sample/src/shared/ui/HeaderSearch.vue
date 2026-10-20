@@ -66,7 +66,7 @@
   // 256px (`--container-3xs`) and has nothing this small; `w-56` is `calc(var(--spacing) *
   // 56)` and `--spacing` is `0.25rem`, so it is a real 224px (probed, not assumed — the
   // theme does not declare `--spacing` itself, it comes from Tailwind's own `@theme`).
-  // 47rem (752px) is MEASURED, by forcing the wide shape at every width and sweeping for the
+  // 752px is MEASURED, by forcing the wide shape at every width and sweeping for the
   // point where the fuller of the two bars — the console's, carrying a breadcrumb plus
   // Create + Agent + avatar — runs its centre spacer to zero. That is 740px of bar; 752
   // clears it by 12. The docs bar's own cluster fits down to ~432, so one threshold for both
@@ -76,9 +76,9 @@
   // the square; the control is never rendered at some in-between width (a half-length search
   // bar reads as a broken field; a square reads as a button).
   //
-  // THE QUERY MEASURES THE CONTENT BOX. Both bars pad themselves by the page boundary
-  // (`--layout-boundary-inline`, 24px a side from `sm`), and a container query evaluates
-  // against the container's content box — so the number here is 48px SMALLER than the bar
+  // THE WIDTH IS THE CONTENT BOX. Both bars pad themselves by the page boundary
+  // (`--layout-boundary-inline`, 24px a side from `sm`), and the observer reports
+  // the container's content box — so the number here is 48px SMALLER than the bar
   // width you would measure in devtools. Proven rather than assumed: at a console window of
   // 1100 the bar is exactly 800px wide and a 50rem threshold did NOT match, because the
   // content box is 752. Retune this whenever the boundary token moves.
@@ -96,13 +96,9 @@
   // before it loads, and the difference is not small: the console's old 30-character label
   // measured 212px against the fallback and 240px in Sora.
   //
-  // The threshold is spelled `@min-[47rem]` rather than a named rung on purpose. Tailwind
-  // resolves `@xs`/`@sm`/… from the `--container-*` values declared inside `@theme`, and
-  // this theme declares its container ladder in `:root` instead — so `@xs` compiles to
-  // Tailwind's own default 20rem rather than the ladder's 348px. A named rung here would be
-  // a number nobody chose. Moving the ladder into `@theme` would fix the rungs system-wide,
-  // but it also moves every `@sm`/`@md` container query already in the app — not a side
-  // effect this control gets to cause.
+  // The threshold is the `--container-2xl` token (752px), read at runtime and compared with the
+  // bar's content box. A CSS container condition cannot read a custom property, and a named
+  // Tailwind rung would resolve to Tailwind's default rung, not this theme's ladder.
   //
   // `h-8` is `InputText size="medium"` and `IconButton size="medium"` at once — the same
   // 32px the console's controls row runs (SplitButton, IconButton, Avatar). A bar reads as
@@ -119,6 +115,9 @@
   // surface, because there it is a button and should look like its neighbours.
   import IconButton from '@aziontech/webkit/icon-button'
   import Kbd from '@aziontech/webkit/kbd'
+  import { ref } from 'vue'
+
+  import { useContainerAtLeast } from '../lib/use-container-at-least.ts'
 
   // Two roots, so there is no single element for a consumer's attributes to land on.
   // Both call sites pass none; anything either shape needs belongs in this file.
@@ -132,19 +131,20 @@
 
   // Event-first, like every other activation event in this app.
   defineEmits(['click'])
+
+  const field = ref(null)
+  const wide = useContainerAtLeast(() => field.value?.closest('header'), 'container-2xl')
 </script>
 
 <template>
-  <!-- Narrow: the DS control, hidden the moment the bar fits. `@min-[47rem]:hidden` beats
-       IconButton's own `inline-flex` because a variant is emitted after the plain utility
-       it fights — the same reason the bar's `@min-[47rem]:flex` beats its `hidden`. -->
+  <!-- Narrow: the DS control, shown while the bar is below the `--container-2xl` threshold. -->
   <IconButton
     icon="pi pi-search"
     kind="outlined"
     size="medium"
     :aria-label="label"
     aria-keyshortcuts="Meta+K"
-    class="@min-[47rem]:hidden"
+    v-show="!wide"
     @click="$emit('click', $event)"
   />
 
@@ -154,10 +154,12 @@
        8px gap, 150ms, and a 12px/18px `--text-muted` label beside a `--text-muted`
        glyph. -->
   <button
+    v-show="wide"
+    ref="field"
     type="button"
     :aria-label="label"
     aria-keyshortcuts="Meta+K"
-    class="hidden h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none @min-[47rem]:flex"
+    class="flex h-8 w-56 shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-(--text-default) transition-colors duration-moderate-01 ease-productive-entrance [--input-ring-offset:var(--bg-surface)] [&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] motion-reduce:transition-none"
     @click="$emit('click', $event)"
   >
     <span

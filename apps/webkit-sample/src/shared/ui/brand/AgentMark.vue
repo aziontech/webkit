@@ -15,6 +15,7 @@
   import copilotSvg from '@aziontech/webkit/assets/copilot-symbol-color.svg?raw'
   import cursorSvg from '@aziontech/webkit/assets/cursor-symbol-mono.svg?raw'
   import geminiSvg from '@aziontech/webkit/assets/gemini-symbol-color.svg?raw'
+  import openaiSvg from '@aziontech/webkit/assets/openai-symbol-mono.svg?raw'
   import opencodeSvg from '@aziontech/webkit/assets/opencode-symbol-mono.svg?raw'
   import windsurfSvg from '@aziontech/webkit/assets/windsurf-symbol-mono.svg?raw'
   import { computed, useId } from 'vue'
@@ -25,7 +26,16 @@
       type: String,
       required: true,
       validator: (value) =>
-        ['claude', 'cursor', 'windsurf', 'codex', 'opencode', 'gemini', 'copilot'].includes(value)
+        [
+          'claude',
+          'cursor',
+          'windsurf',
+          'codex',
+          'opencode',
+          'gemini',
+          'copilot',
+          'chatgpt'
+        ].includes(value)
     },
     // Flattens the mark to ONE ink: `currentColor`, whatever the surface holding it is set to.
     // For a drawing where the marks are parts of one diagram rather than a row of logos — one
@@ -55,6 +65,7 @@
    */
   const parseSvg = (raw) => ({
     viewBox: raw.match(/viewBox="([^"]+)"/)?.[1] ?? '0 0 24 24',
+    fill: raw.match(/<svg[^>]*\sfill="([^"]+)"/)?.[1],
     body: raw
       .replace(/^[\s\S]*?<svg[^>]*>/, '')
       .replace(/<\/svg>\s*$/, '')
@@ -68,7 +79,8 @@
     codex: { ...parseSvg(codexSvg), label: 'Codex' },
     opencode: { ...parseSvg(opencodeSvg), label: 'OpenCode' },
     gemini: { ...parseSvg(geminiSvg), label: 'Gemini' },
-    copilot: { ...parseSvg(copilotSvg), label: 'GitHub Copilot' }
+    copilot: { ...parseSvg(copilotSvg), label: 'GitHub Copilot' },
+    chatgpt: { ...parseSvg(openaiSvg), label: 'ChatGPT' }
   }
 
   const mark = computed(() => MARKS[props.name])
@@ -104,6 +116,7 @@
 <template>
   <svg
     :viewBox="mark.viewBox"
+    :fill="mark.fill"
     xmlns="http://www.w3.org/2000/svg"
     role="img"
     :aria-label="mark.label"

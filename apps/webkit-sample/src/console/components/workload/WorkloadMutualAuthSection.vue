@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import Item from '@aziontech/webkit/item'
@@ -11,14 +11,16 @@
   import { MTLS_MODE_OPTIONS } from '../../lib/data/workload-protocols'
   import FieldRow from '../form/FieldRow.vue'
 
-  const props = defineProps({
-    /** Whether the workload answers TLS at all. mTLS cannot be armed without it. */
-    useHttps: { type: Boolean, default: false },
-    /** Locks every control while the page's commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    useHttps?: boolean
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    useHttps: false,
+    disabled: false
   })
 
-  /** The mTLS slice of the workload's settings — `{ enabled, mode, certificate, crl }`. */
   const model = defineModel({ type: Object, required: true })
 
   const groupName = `mtls-mode-${useId()}`

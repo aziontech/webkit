@@ -1,23 +1,6 @@
-<script setup>
-  // Create Record — the Edge DNS zone "add record" flow, in a MEDIUM right Drawer
-  // opened from the zone detail's Records tab.
-  //
-  // FIELDS ARE SEPARATED (./ui/FieldStack.vue, the Variables shape): a real
-  // `<Label for>` over a full-width control, the field's own message under it, and the
-  // band's guidance said once in its `Section` hint. Value is the field that settles it
-  // — an A record takes one IP and a TXT record takes a paragraph, and a textarea capped
-  // at 256px on the right of a description could hold neither well. Two sections:
-  // Settings (the record itself) and Policy (how Edge DNS answers with it).
-  //
-  // The Name field's zone-domain suffix is an InputGroup addon (".edgeflow.com");
-  // the Value field's placeholder + guidance switch with the selected Record Type
-  // (src/lib/edge-dns.js), and the Weight field only appears for the WEIGHTED
-  // policy. Validation runs on submit only — empty required fields reveal the amber
-  // `required` state (a prompt, not the red `invalid` error), shown as a HelperText
-  // under the control. One `submitting` flag locks the whole scope (fieldset
-  // :disabled + every control :disabled + Save :loading, the /usability Pattern 1
-  // lock); on success it emits the built record and the parent appends it.
-  import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'
+<script setup lang="ts">
+  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import InputNumber from '@aziontech/webkit/input-number'
   import InputText from '@aziontech/webkit/input-text'
   import Link from '@aziontech/webkit/link'
@@ -32,13 +15,16 @@
   import { POLICY_TYPES, RECORD_TYPES, recordType } from '../../lib/data/edge-dns'
 
   const open = defineModel('open', { type: Boolean, default: false })
-  defineProps({
-    // The zone's root domain, shown as the Name field's InputGroup addon — and named
-    // in the drawer's own subtitle, because a record only means anything against the
-    // zone it belongs to and the reader opened this from that zone's page.
-    domain: { type: String, default: '' }
+  interface Props {
+    domain?: string
+  }
+
+  withDefaults(defineProps<Props>(), {
+    domain: ''
   })
-  const emit = defineEmits(['created'])
+  const emit = defineEmits<{
+    created: [value: unknown]
+  }>()
 
   const blankForm = () => ({
     name: '',
@@ -61,7 +47,6 @@
   const policyLabelOf = (value) =>
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
-  // Reset the form each time the drawer closes so the next open starts clean.
   watch(open, (isOpen) => {
     if (isOpen) return
     Object.assign(form, blankForm())
@@ -76,8 +61,8 @@
   }
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
-    if (!validate()) return // feedback is now on the fields themselves
+    if (submitting.value) return
+    if (!validate()) return
 
     submitting.value = true
     try {
@@ -101,7 +86,7 @@
         action: { label: 'Retry', onClick: () => submit() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 </script>
@@ -120,15 +105,13 @@
     :submitting="submitting"
     @submit="submit"
   >
-    <!-- Section: Settings -->
     <Section
       stacked
       :divided="false"
       title="Settings"
-      hint="Which IPs are associated with the domain and how Edge DNS should handle requests. The accepted value's format varies according to the chosen record type."
+      hint="Which IPs are associated with the domain and how Edge DNS should handle requests."
     >
       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <!-- Name: subdomain + the zone's root domain as an addon. -->
         <FieldStack
           label="Name"
           description="Use @ to create a record for the root domain."
@@ -136,7 +119,7 @@
           message-kind="required"
         >
           <template #default="{ controlId, describedBy }">
-            <InputGroup
+            <InputGroupRoot
               :disabled="submitting"
               :required="!!errors.name"
             >
@@ -153,7 +136,7 @@
                 @update:model-value="errors.name = ''"
               />
               <InputGroupAddon v-if="domain">.{{ domain }}</InputGroupAddon>
-            </InputGroup>
+            </InputGroupRoot>
           </template>
         </FieldStack>
 
@@ -208,10 +191,6 @@
           </template>
         </FieldStack>
 
-        <!-- Value: placeholder + guidance switch with the record type. It is the widest
-             thing on this form — an A record takes one IP, a TXT record takes a
-             paragraph — which is the clearest single reason these fields are separated
-             rather than capped at a 256px right-hand column. -->
         <FieldStack
           label="Value"
           :description="selectedType.valueHelper"
@@ -252,15 +231,17 @@
       </div>
     </Section>
 
-    <!-- Section: Policy -->
     <Section
       stacked
       :divided="false"
       title="Policy"
-      hint="How Edge DNS should deal with requests answered by this record. SIMPLE is standard resolution; WEIGHTED distributes answers across records by weight."
+      hint="How Edge DNS should deal with requests answered by this record."
     >
       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <FieldStack label="Policy type">
+        <FieldStack
+          label="Policy type"
+          description="Simple is standard resolution. Weighted distributes answers across records by weight."
+        >
           <template #default="{ controlId }">
             <Select
               v-model="form.policy"
@@ -286,7 +267,6 @@
           </template>
         </FieldStack>
 
-        <!-- Weight only applies to the WEIGHTED policy. -->
         <FieldStack
           v-if="isWeighted"
           label="Weight"

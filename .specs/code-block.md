@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 55f5c59821f8a8eeaa909866141867a73b4d69a0122bb91ed367db1039d4aa11
+checksum: 5f5b4b0da3b9f873e5b8bc03421de69abc199566b9ed968b6111c74a5c0705cf
 created: 2026-05-28
 last_updated: 2026-09-26
 ---
@@ -141,8 +141,8 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
 | tab change (indicator) | sliding pill via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transition-none` |
-| tab panel change | content enters **line by line**: each row slides from the direction of travel + fades, `24ms` a line, the step capped at 12 lines | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
-| tab panel height | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`) | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps) |
+| tab panel change — a tab click, a controlled `value` change, or the active tab's `code` being replaced | content enters **line by line**: each row slides from the direction of travel + fades, `24ms` a line, the step capped at 12 lines | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
+| tab panel height — on the same triggers as the panel change | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`) | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps) |
 | tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | code line hover | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`) | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:transition-none` |
 | line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `40ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |

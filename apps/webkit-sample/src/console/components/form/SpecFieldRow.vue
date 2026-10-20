@@ -1,25 +1,7 @@
-<script setup>
-  // ONE spec field, rendered as a row.
-  //
-  // The resource descriptors (../../lib/create-resources.js) describe a form as data: a
-  // field is a label, a control kind, a line of guidance and a validation rule. This is the
-  // one place that turns such a field into UI — the FieldRow that carries its name, its
-  // guidance and its message, plus the single control the `kind` asks for.
-  //
-  // ── WHY IT IS A COMPONENT ──
-  //
-  // The switch below was written inline in the create page, TWICE (once for the open bands
-  // and once for the Advanced band), and a settings page rendering the same descriptors
-  // would have made four copies of it. Every copy is a place where one control gains a
-  // `disabled`, an `aria-describedby` or an `autocomplete` the others do not — which is
-  // exactly the drift the descriptors exist to prevent. One row, one switch, every page
-  // that renders a spec.
-  //
-  // The row owns the name, the guidance and the message; each branch here is one element
-  // wired to the same three things — the model, its aria-label, and the message it is
-  // currently showing.
+<script setup lang="ts">
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import InputNumber from '@aziontech/webkit/input-number'
+  import InputPassword from '@aziontech/webkit/input-password'
   import InputText from '@aziontech/webkit/input-text'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
@@ -28,47 +10,29 @@
 
   import FieldRow from './FieldRow.vue'
 
-  const props = defineProps({
-    /** The field descriptor from `../../lib/create-resources.js`. */
-    field: { type: Object, required: true },
-    /** The message under the control. Empty = nothing rendered. */
-    message: { type: String, default: '' },
-    /** `required` (amber), `invalid` (red) or `helper` (neutral). */
-    messageKind: { type: String, default: 'helper' },
-    /** Locks the control while the page's request is in flight. */
-    disabled: { type: Boolean, default: false },
-    /**
-     * Namespaces a radio group's `name` so two pages rendering the same field on one
-     * document cannot capture each other's clicks.
-     */
-    namePrefix: { type: String, default: '' }
+  interface Props {
+    field: Record<string, unknown>
+    message?: string
+    messageKind?: string
+    disabled?: boolean
+    namePrefix?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    message: '',
+    messageKind: 'helper',
+    disabled: false,
+    namePrefix: ''
   })
 
   const model = defineModel({ default: '' })
 
-  // How much room the control needs — the one thing FieldRow asks. A textarea, a PEM
-  // block, a newline-separated list and a radio group cannot work in a 256px cell, so
-  // their rows stack; a switch is fixed-size and sits hard right; everything else is a
-  // field that fills the cell.
   const rowKind = computed(() => {
     if (props.field.kind === 'switch') return 'compact'
     if (['textarea', 'code', 'list', 'radio'].includes(props.field.kind)) return 'wide'
     return 'field'
   })
 
-  // ── A SWITCH THAT CARRIES A VALUE ──
-  //
-  // `switch-select` is one row holding two decisions in order: whether the thing is
-  // configured at all, and then how. Its model is `{ active, value }` rather than two
-  // fields, because they are one answer — a WAF threat family that is not inspected has no
-  // sensitivity, and a second row would ask for one anyway (see ../../lib/create-resources.js
-  // § WAF RULES).
-  //
-  // The switch is PINNED to the row's right edge and never moves — it is the one control
-  // every row of the group has, so a column of families reads as one line of toggles, and a
-  // toggle that slid sideways as its own select came and went would break that line on
-  // exactly the rows the reader just touched. The select opens to its left, inside the same
-  // capped cell, so it ends where every other control on the page ends.
   const active = computed({
     get: () => model.value?.active === true,
     set: (next) => {
@@ -83,13 +47,8 @@
     }
   })
 
-  // A field's standing guidance lives in the row's description, where it costs no vertical
-  // space; the message under the control is the error only.
   const guidance = computed(() => props.field.helper ?? props.field.description ?? '')
 
-  // Select formats its trigger through `displayValue`, and without one it prints the raw
-  // model value — so a select holding an API value would read `lets_encrypt` instead of the
-  // sentence its option list carries.
   const displayValue = (value) =>
     props.field.options?.find((option) => option.value === value)?.label ?? ''
 
@@ -104,6 +63,7 @@
     :kind="rowKind"
     :message="message"
     :message-kind="messageKind"
+    :level="field.level ?? (field.parent ? 1 : 0)"
   >
     <template #default="{ messageId }">
       <InputText
@@ -111,6 +71,19 @@
         v-model="model"
         size="large"
         class="w-full"
+        :aria-label="field.label"
+        :placeholder="field.placeholder"
+        autocomplete="off"
+        :required="showRequired"
+        :invalid="showInvalid"
+        :aria-describedby="messageId"
+        :readonly="field.readonly === true"
+        :disabled="disabled"
+      />
+
+      <InputPassword
+        v-else-if="field.kind === 'secret'"
+        v-model="model"
         :aria-label="field.label"
         :placeholder="field.placeholder"
         autocomplete="off"
@@ -133,9 +106,6 @@
         :disabled="disabled"
       />
 
-      <!-- `code` and `list` are both textareas; what differs is the face (a PEM block and
-           a function body are read as code) and how the value is posted (one entry per
-           line becomes an array). -->
       <Textarea
         v-else-if="['textarea', 'code', 'list'].includes(field.kind)"
         v-model="model"
@@ -176,9 +146,6 @@
         </Select.Content>
       </Select>
 
-      <!-- A radio group is a group, so it gets a real fieldset/legend of its own: the
-           row's title names the decision, and the legend is what a screen reader
-           announces before the options. -->
       <fieldset
         v-else-if="field.kind === 'radio'"
         class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
@@ -196,10 +163,6 @@
         />
       </fieldset>
 
-      <!-- The switch decides whether this is configured at all; the select is what it
-           carries, and it is absent — not disabled — while the switch is off, because there
-           is nothing to answer yet. The two are named separately ("SQL injection" and "SQL
-           injection sensitivity") so neither depends on the row's title to be understood. -->
       <div
         v-else-if="field.kind === 'switch-select'"
         class="flex w-full min-w-0 items-center justify-end gap-(--spacing-sm)"
@@ -240,7 +203,7 @@
         v-else
         v-model="model"
         :aria-label="field.label"
-        :disabled="disabled"
+        :disabled="disabled || field.readonly === true"
       />
     </template>
   </FieldRow>

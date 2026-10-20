@@ -25,35 +25,35 @@ const components = {
 const SOLUTIONS = [
   {
     art: 'quickStartWithTemplates',
-    title: 'Build and Run Applications',
+    title: 'Modern applications',
     description:
-      'Deploy applications and static sites straight from Git, and run them on a distributed network with no servers to manage.',
+      'Build static sites, develop serverless applications, or modernize your legacy systems.',
     href: '/solutions/web-apps'
   },
   {
     illustration: 'improve-application-performance-and-reliability',
-    title: 'Improve Application Performance and Reliability',
+    title: 'Optimized workloads',
     description:
-      'Cache, route and optimize every request close to your users, so applications stay fast and available under any load.',
+      'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently.',
     href: '/solutions/performance'
   },
   {
     illustration: 'ai-applications',
-    title: 'Build and Run AI Workloads',
+    title: 'AI applications',
     description:
-      'Run inference, vector search and AI agents on distributed infrastructure, close to the data and the users that need them.',
+      'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value on the market.',
     href: '/solutions/ai'
   },
   {
-    illustration: 'automate-threat-mitigation',
-    title: 'Secure Applications and Networks',
+    illustration: 'programmable-security',
+    title: 'Protected applications and APIs',
     description:
-      'Stop DDoS attacks, bots and exploits before they reach your origin, with WAF and network rules managed from one console.',
+      'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
     href: '/solutions/security'
   },
   {
     illustration: 'low-latency',
-    title: 'Deliver Media and Streaming Content',
+    title: 'Media and streaming content',
     description:
       'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
     href: '/solutions/streaming'

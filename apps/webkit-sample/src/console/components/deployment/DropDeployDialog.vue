@@ -1,15 +1,4 @@
-<script setup>
-  // THE ANSWER TO A DROP ON A RESOURCE THAT ALREADY EXISTS.
-  //
-  // A drop on an empty surface creates something, so it can go straight to a form. A drop
-  // on an application REPLACES what is serving Production, and nothing about a drag says
-  // the reader meant that one — so the gesture stops here and is confirmed by a control
-  // that names what it does.
-  //
-  // It also does the job ../creation/ProjectInitializing.vue does in the create flow: the
-  // most common thing to drop is the wrong folder, and every file is listed by path so
-  // that mistake is visible BEFORE the deploy rather than after it. That is why the two do
-  // not stack — the acknowledgement beat would show this listing, close, and show it again.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
   import DialogClose from '@aziontech/webkit/dialog-close'
@@ -26,28 +15,28 @@
 
   import { formatBytes, formatManifest } from '../../lib/format/bytes'
 
-  const props = defineProps({
-    /** The application the drop deploys — the subject, named before anything is decided. */
-    applicationName: { type: String, default: '' },
-    /** The environment it lands in. */
-    environment: { type: String, default: 'Production' },
-    /** Files read off the drop: `{ path, name, size }`. */
-    files: { type: Array, default: () => [] },
-    /** Whether the walk stopped before the project did. */
-    truncated: { type: Boolean, default: false }
+  interface Props {
+    applicationName?: string
+    environment?: string
+    files?: unknown[]
+    truncated?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    applicationName: '',
+    environment: 'Production',
+    files: () => [],
+    truncated: false
   })
 
-  const emit = defineEmits([
-    /** The reader committed: deploy these files. */
-    'deploy'
-  ])
+  const emit = defineEmits<{
+    deploy: []
+  }>()
 
   const open = defineModel('open', { type: Boolean, default: false })
 
   const summary = computed(() => formatManifest(props.files, props.truncated))
 
-  // Escape, the overlay, the X and Cancel all answer "no" — the only route to a deploy is
-  // the button that names it (../list/ConfirmDialog.vue holds the same line).
   const deploy = () => {
     open.value = false
     emit('deploy')
@@ -85,9 +74,6 @@
             </DialogDescription>
           </div>
 
-          <!-- WHAT WAS ACTUALLY DROPPED, by path. The listing scrolls rather than growing
-               the dialog: a project is any number of files, and a panel sized by its
-               contents would push its own footer off the screen. -->
           <div
             class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
           >

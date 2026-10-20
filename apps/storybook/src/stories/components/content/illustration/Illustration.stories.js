@@ -16,6 +16,10 @@ const IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
 const ASSETS = [
   'ai-applications',
   'automate-threat-mitigation',
+  'azion-to-akamai',
+  'azion-to-aws',
+  'azion-to-cloudflare',
+  'azion-to-fastly',
   'azion-to-vercel',
   'build-applications',
   'deploy-secure-mcp-server',
@@ -43,7 +47,7 @@ const ASSETS = [
 
 /** @type {import('@storybook/vue3').Meta<typeof Illustration>} */
 const meta = {
-  title: 'Components/Content/Illustration',
+  title: 'Components/Primitives/Content/Illustration',
   component: Illustration,
   tags: ['autodocs'],
   parameters: {

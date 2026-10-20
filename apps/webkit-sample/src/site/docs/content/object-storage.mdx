@@ -1,0 +1,93 @@
+---
+title: Object Storage
+description: Store files as objects in buckets, reach them through the Azion API or the S3 protocol, and serve them from an application.
+sourcePath: src/content/docs/en/pages/main-menu/reference/store/object-storage/index.mdx
+---
+
+Object storage keeps a file whole, under a name you choose, in a flat container. There are no directories and no partial writes: a file is written once, read as a unit, and replaced whole. The name is the only address it has, so everything that reads the file later reads it by that name. The model suits anything written rarely and read often, such as images, video, archives, and build output.
+
+**Object Storage** holds those files on infrastructure Azion operates, as objects inside buckets. A [Connector](/site/docs/connectors) points an application at a bucket, so a request to your domain is answered from it, and code in [Azion Runtime](https://www.azion.com/en/documentation/devtools/runtime/api-reference/storage/) reads and writes the same objects during a request. Use Object Storage to serve a static site, hold the assets an application delivers, receive uploads from your users, or collect the data a stream produces.
+
+[Quickstart](https://www.azion.com/en/documentation/platform/object-storage/quickstart/)
+
+[Object Storage guides](https://www.azion.com/en/documentation/platform/object-storage/guides/)
+
+---
+
+## The bucket and the object
+
+A bucket is created with a name and an access level. Nothing else is configured, and the bucket is ready as soon as the request returns:
+
+```bash
+curl --request POST \
+  --url https://api.azion.com/v4/workspace/storage/buckets \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Token [TOKEN VALUE]' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "site-assets-ro",
+  "workloads_access": "read_only"
+}'
+```
+
+An object is written into it by key, with its content as the body:
+
+```bash
+curl --request POST \
+  --url https://api.azion.com/v4/workspace/storage/buckets/site-assets-ro/objects/assets/logo.svg \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Token [TOKEN VALUE]' \
+  --header 'Content-Type: image/svg+xml' \
+  --data-binary '@./logo.svg'
+```
+
+- `name` is unique across every Azion account, 6 to 63 characters, and cannot be changed afterwards.
+- `workloads_access` decides what the Azion platform may do with the objects when an application serves them. It does not restrict the Azion API or the S3 protocol.
+- The object key is the whole address. The `assets/` segment is part of the key, not a folder that had to exist first.
+- The stored content type comes from the `Content-Type` header. With no header, Azion detects it.
+
+If you have used an S3-compatible service, the model transfers: the same buckets and objects answer S3 requests signed with a credential you create.
+
+---
+
+## How a request reaches an object
+
+An object answers three kinds of caller, and they authenticate differently:
+
+```mermaid
+flowchart TD
+  Client["A visitor's request for https://example.com/logo.svg"] --> App["Workload and application"]
+  App --> Rule{"Rules Engine rule with Set Connector"}
+  Rule --> Conn["Connector of type Object Storage: bucket and optional prefix"]
+  Conn --> Bucket["Bucket"]
+  Tool["Azion API, Azion CLI, the azion library, or an S3 client"] --> Bucket
+  Fn["A function using azion:storage"] --> Bucket
+  Bucket --> Object["The object, with its stored content type"]
+```
+
+Creating a bucket exposes nothing. Until a connector names the bucket and a rule sends requests to it, the objects are reachable only by a caller holding a personal token or an S3 credential. That is the step most first setups miss.
+
+The S3 endpoint is a management interface, dimensioned for creating, listing, and removing objects rather than for serving traffic. End users reach objects through an application, where [Cache](/site/docs/applications#cache) keeps a copy and the application's own rules apply.
+
+---
+
+## What Object Storage covers
+
+- **Interfaces.** Azion Console, the [Azion API v4](https://www.azion.com/en/documentation/platform/object-storage/buckets-and-objects/), the [Azion CLI](https://www.azion.com/en/documentation/devtools/cli/), [Azion Runtime](https://www.azion.com/en/documentation/devtools/runtime/api-reference/storage/), the [`azion` library](https://www.azion.com/en/documentation/devtools/azion-lib/storage/), and the [S3 protocol](https://www.azion.com/en/documentation/platform/object-storage/s3-compatibility/). All six reach the same buckets.
+- **S3 compatibility.** Sixteen S3 operations, signed with an access key and secret key you create as a credential, scoped to the buckets and capabilities you name. Existing S3 tools and SDKs connect to `s3.us-east-005.azionstorage.net`.
+- **Access levels.** `read_only`, `read_write`, and `restricted` decide what the platform may do when an application serves a bucket.
+- **Serving.** A Connector of type Object Storage, plus a Rules Engine rule, put a bucket behind a domain. A prefix on the connector decides where the application's path starts.
+- **Bounds.** Bucket names are 6 to 63 characters and unique across every Azion account; an object key is up to 1,024 characters; a list returns up to 1,000 keys per page; a bucket is deleted only when it holds no objects and none was removed from it in the last 24 hours. Storage and operations are included per plan. For every bound, refer to [Object Storage limits](https://www.azion.com/en/documentation/platform/object-storage/limits/).
+- **Region.** Objects are stored in `us-east-005`, and the region is not selectable.
+- **What it does not do.** Object Storage does not version objects: writing to a key replaces its content, and the previous version cannot be recovered. It stores unstructured files rather than records, so query it through your own code, or use [SQL Database](/site/docs/sql-database) for relational data and [KV Store](/site/docs/kv-store) for key-value pairs.
+
+---
+
+## Next steps
+
+- [Quickstart](https://www.azion.com/en/documentation/platform/object-storage/quickstart.md): Create your first bucket and store an object in it.
+- [How it works](https://www.azion.com/en/documentation/platform/object-storage/how-it-works.md): Follow an object from the write to the request that serves it.
+- [Buckets and objects](https://www.azion.com/en/documentation/platform/object-storage/buckets-and-objects.md): Look up a field, an operation, or the error a rejection returns.
+- [S3 compatibility](https://www.azion.com/en/documentation/platform/object-storage/s3-compatibility.md): Create a credential and connect an existing S3 tool or SDK.
+- [Object Storage guides](https://www.azion.com/en/documentation/platform/object-storage/guides.md): Complete a specific task, from Azion Console, the API, or the CLI.
+- [Limits](https://www.azion.com/en/documentation/platform/object-storage/limits.md): Look up a bound, what happens past it, and what each plan includes.

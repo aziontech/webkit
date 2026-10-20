@@ -1,32 +1,10 @@
 <script setup>
-  // Settings → Environments. The places a deployment lands, as records.
-  //
-  // ── WHY IT SITS BESIDE BUILD & DEPLOYMENT ──
-  //
-  // The two are one decision read from two ends. An environment declares its DEPLOYMENT
-  // POLICY — one version serving, or a URL per version — and a Deployment Setting carries
-  // the same field; matching them is what links an environment to the setting that serves
-  // it (../../../lib/state/workload-settings.js). Put the two categories anywhere but
-  // next to each other and the reader has to hold that rule in their head across a
-  // navigation.
-  //
-  // ── WHAT A ROW SAYS ──
-  //
-  // The columns are the v6 record, minus the parts that are not decisions: the policy it
-  // publishes with, how the edge answers /robots.txt for it, whether anything restricts
-  // reaching it, and what builds it. `Deployments` is the one derived column — how many
-  // workloads publish into this environment — because an environment nobody uses is the
-  // one safe to change.
-  //
-  // LAYOUT — the DATA measure (`.layout-column`), the shape every settings category that
-  // lists rows takes (./Credentials.vue). It owns its own scroll region: the shell hands
-  // each view a plain flex column (see ../AccountSettings.vue).
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Message from '@aziontech/webkit/message'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -90,8 +68,6 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Robots ships OFF: it is a per-environment answer a reader sets once and rarely scans
-  // for, and eight columns plus the actions cell is more than the width holds.
   const columnVisibility = ref({ robotsPolicy: false })
 
   const filterFields = [
@@ -125,8 +101,6 @@
     }
   ]
 
-  // How many workloads publish into each environment — derived from the one pairing the
-  // console shares, never counted a second time here.
   const usageByName = computed(() => {
     const counts = new Map()
     workloadBindings.value.forEach((workload) => {
@@ -137,9 +111,6 @@
     return counts
   })
 
-  // The two derived cells. Both say what is ON rather than listing what is off: "no
-  // protection" and "not tracking a branch" are the ordinary state, and spelling them out
-  // on every row is a caveat repeated until nobody reads any of it.
   const protectionLabel = (environment) => {
     const enabled = Object.values(environment.protection ?? {}).filter(
       (protection) => protection?.enabled
@@ -189,8 +160,6 @@
     })
   }
 
-  // Production is the environment every workload publishes into, so it is not removable
-  // — the menu does not offer it, and the store refuses it either way.
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)
 
@@ -240,13 +209,6 @@
       </PageHeading>
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-        <!-- THE LINK BETWEEN THE TWO CATEGORIES, said once. An environment's deployment
-             policy is not a preference: it decides which Deployment Settings can ever
-             serve it, which is the whole reason these two pages sit side by side.
-             It sits at the SECTION step, beside the band rather than inside it: the
-             controls, the chips and the table are one thing — a set of rows and the two
-             controls that narrow it — and a banner joined to them at the group step reads
-             as part of the narrowing. Build & Deployment places its own the same way. -->
         <Message
           severity="info"
           size="small"
@@ -298,7 +260,7 @@
 
           <CardBox :padded="false">
             <template #content>
-              <Table
+              <TableRoot
                 ref="tableRef"
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
@@ -318,10 +280,6 @@
                   </div>
                 </template>
 
-                <!-- THE FIELD THE OTHER PAGE MATCHES ON. Tagged rather than plain,
-                     because it is the environment's most consequential property and the
-                     column a reader scans when they are working out why a setting is not
-                     offered. -->
                 <template #cell-deploymentPolicy="{ value }">
                   <Tag
                     :label="deploymentPolicyLabel(value)"
@@ -343,8 +301,6 @@
                   <span class="truncate">{{ robotsPolicyLabel(value) }}</span>
                 </template>
 
-                <!-- The two derived cells read as "nothing set" when nothing is, in the
-                     disabled ink every other list uses for an absent value. -->
                 <template #cell-protectionLabel="{ value }">
                   <span
                     class="truncate"
@@ -395,7 +351,6 @@
                         </template>
                       </Dropdown.Option>
                     </Dropdown.Group>
-                    <!-- Production has no delete: every workload publishes into it. -->
                     <Dropdown.Group v-if="row.id !== 'env-production'">
                       <Dropdown.Option
                         value="delete"
@@ -411,7 +366,7 @@
                     </Dropdown.Group>
                   </Dropdown>
                 </template>
-              </Table>
+              </TableRoot>
             </template>
           </CardBox>
         </section>

@@ -169,6 +169,35 @@ describe('CodeBlock', () => {
       expect(tabs[1].getAttribute('aria-selected')).toBe('true')
       expect(tabs[0].getAttribute('aria-selected')).toBe('false')
     })
+
+    it('renders the replacement when the single tab is swapped for another', async () => {
+      const { getAllByTestId, queryByRole, rerender } = render(CodeBlock, {
+        props: { tabs: [twoTabs[0]] }
+      })
+
+      expect(getAllByTestId('data-code-block__line')).toHaveLength(3)
+
+      await rerender({ tabs: [twoTabs[1]] })
+
+      expect(queryByRole('tablist')).toBeNull()
+      const lines = getAllByTestId('data-code-block__line')
+      expect(lines).toHaveLength(2)
+      expect(lines[0].textContent?.replace(/\s+/g, ' ').trim()).toContain('let a = 10')
+    })
+
+    it('renders the new source when the active tab code is replaced in place', async () => {
+      const { getAllByTestId, rerender } = render(CodeBlock, {
+        props: { tabs: singleTab }
+      })
+
+      expect(getAllByTestId('data-code-block__line')).toHaveLength(3)
+
+      await rerender({ tabs: [{ ...singleTab[0], code: CODE_TWO }] })
+
+      const lines = getAllByTestId('data-code-block__line')
+      expect(lines).toHaveLength(2)
+      expect(lines[1].textContent?.replace(/\s+/g, ' ').trim()).toContain('let b = 20')
+    })
   })
 
   describe('keyboard navigation', () => {

@@ -1,24 +1,4 @@
-<script setup>
-  // Create Environment — the v6 create body, as a form.
-  //
-  // The bands are console-kit's own (`views/Environments/FormFields/`), because the
-  // grouping is part of the contract: what identifies the environment, how its URLs and
-  // its robots.txt behave, who may reach it, and what builds it.
-  //
-  //   General          name, description
-  //   Settings         deployment policy, robots policy
-  //   Protection       who may reach it at all
-  //   Branch tracking  what builds it
-  //
-  // DEPLOYMENT POLICY IS THE CONSEQUENTIAL FIELD, and the form says so rather than
-  // leaving it as one dropdown among four: it decides which Deployment Settings this
-  // environment may ever be linked to (../../lib/state/workload-settings.js). Picking
-  // `Versioned` here means the environment can never publish with a `Single` setting.
-  //
-  // VALIDATION mirrors the console's schema: a name is required, and the allowlist —
-  // when its switch is on — needs at least one entry and every entry has to be a legal
-  // IPv4 address or CIDR range. Both are checked in the field that typed them rather
-  // than in a toast after a round trip.
+<script setup lang="ts">
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import HelperText from '@aziontech/webkit/helper-text'
   import InputText from '@aziontech/webkit/input-text'
@@ -48,21 +28,17 @@
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  defineProps({
-    /**
-     * This drawer is the SECOND in a stack — opened over another drawer rather than over
-     * the page (../resource/AddDomainDrawer.vue), instead of standing on its own on
-     * the Environments page.
-     *
-     * One fact, two consequences, so it is one prop: it goes NARROW (`small`, 384px,
-     * against the parent's 672px) so the parent stays visible behind it and the reader can
-     * see this is a detour, and it takes the layer above the parent's panel so its own
-     * backdrop covers it.
-     */
-    stacked: { type: Boolean, default: false }
+  interface Props {
+    stacked?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    stacked: false
   })
 
-  const emit = defineEmits(['create'])
+  const emit = defineEmits<{
+    create: [environment: unknown]
+  }>()
 
   const blankForm = () => ({
     name: '',
@@ -142,9 +118,6 @@
     }
   }
 
-  // The sentence under the policy Select, which changes with the choice: the reader is
-  // picking how every URL in this environment is shaped, and the two answers are not
-  // variations of one thing.
   const policyHint = computed(
     () =>
       DEPLOYMENT_POLICY_OPTIONS.find((option) => option.value === form.deploymentPolicy)
@@ -168,7 +141,6 @@
     :submitting="submitting"
     @submit="submit"
   >
-    <!-- ── General ── -->
     <Section
       stacked
       :divided="false"
@@ -216,7 +188,6 @@
       </div>
     </Section>
 
-    <!-- ── Settings ── -->
     <Section
       stacked
       :divided="false"
@@ -253,9 +224,6 @@
           </template>
         </FieldStack>
 
-        <!-- THE CONSEQUENCE, stated where it is decided. This is the field that limits
-             which Deployment Settings the environment can ever be linked to, and it is
-             the one thing about it a reader cannot work out from the label. -->
         <HelperText
           :label="`Only Deployment Settings set to ${deploymentPolicyLabel(form.deploymentPolicy)} can serve this environment.`"
         />
@@ -291,12 +259,11 @@
       </div>
     </Section>
 
-    <!-- ── Protection ── -->
     <Section
       stacked
       :divided="false"
       title="Protection"
-      hint="Restrict who can reach this environment. Each protection is independent."
+      hint="Restrict who can reach this environment."
     >
       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <FieldSwitchBlock
@@ -332,7 +299,6 @@
       </div>
     </Section>
 
-    <!-- ── Branch tracking ── -->
     <Section
       stacked
       :divided="false"

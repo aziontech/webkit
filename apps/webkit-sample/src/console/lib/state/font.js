@@ -1,33 +1,20 @@
-// App-wide font-family state. A module-level singleton (like theme.js) so the
-// selected typeface persists across route changes and reloads (localStorage).
-//
-// This is a TEST HARNESS: it swaps only the primary *sans* face while keeping
-// 100% of the theme's type scale (sizes / weights / letter-spacing) intact. It
-// works by setting `--app-font` on <html>; src/style.css points the inherited
-// body font (and the button text tokens) at that variable. Code (Roboto Mono),
-// overlines & big numbers (Proto Mono), and icon glyphs keep their own faces.
-//
-// Non-default families load lazily from Google Fonts on first selection.
 import { ref, watch } from 'vue'
 
-const STORAGE_KEY = 'webkit-sample-font'
+const STORAGE_KEY = 'webkit-sample-font-face'
 
-// The available faces. `value` is the persisted key; `stack` is the CSS
-// font-family applied to --app-font; `href` is the Google Fonts stylesheet
-// (omitted for the default, which the app already ships from the Azion CDN).
 export const FONTS = [
-  { value: 'sora', label: 'Sora (Default)', stack: "'Sora', sans-serif" },
+  {
+    value: 'rubik',
+    label: 'Rubik (Default)',
+    stack: "'Rubik', sans-serif",
+    href: 'https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap'
+  },
+  { value: 'sora', label: 'Sora', stack: "'Sora', sans-serif" },
   {
     value: 'inter',
     label: 'Inter',
     stack: "'Inter', sans-serif",
     href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'
-  },
-  {
-    value: 'rubik',
-    label: 'Rubik',
-    stack: "'Rubik', sans-serif",
-    href: 'https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap'
   },
   {
     value: 'ibm-plex-sans',
@@ -60,7 +47,6 @@ export const FONTS = [
     href: 'https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap'
   },
   {
-    // Single-weight family (400 only) — the theme's bolder steps synthesize.
     value: 'hedvig-letters-sans',
     label: 'Hedvig Letters Sans',
     stack: "'Hedvig Letters Sans', sans-serif",
@@ -68,7 +54,7 @@ export const FONTS = [
   }
 ]
 
-const DEFAULT_FONT = 'sora'
+const DEFAULT_FONT = 'rubik'
 const VALUES = FONTS.map((f) => f.value)
 
 const readStoredFont = () => {
@@ -77,7 +63,6 @@ const readStoredFont = () => {
   return VALUES.includes(saved) ? saved : DEFAULT_FONT
 }
 
-// Inject the Google Fonts stylesheet once, on demand. Idempotent by id.
 const ensureFontLoaded = (font) => {
   if (!font?.href || typeof document === 'undefined') return
   const id = `google-font-${font.value}`
@@ -103,9 +88,9 @@ watch(
   font,
   (value) => {
     applyFont(value)
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, value)
-    }
+    if (typeof localStorage === 'undefined') return
+    if (value === DEFAULT_FONT) localStorage.removeItem(STORAGE_KEY)
+    else localStorage.setItem(STORAGE_KEY, value)
   },
   { immediate: true }
 )

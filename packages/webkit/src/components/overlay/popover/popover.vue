@@ -88,11 +88,7 @@
     isOpen: isOpenRef,
     placement: placementRef,
     offset: offsetRef,
-    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
-    // Floating-overlay tier (matches Select/Dropdown menus). Kept at this level — not a
-    // modal tier — so overlays opened from inside the panel (e.g. a Select teleported
-    // to the body later) stack above it instead of being occluded by it.
-    zIndex: 50
+    autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
   })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacement)
@@ -177,12 +173,12 @@
 
   onMounted(() => {
     globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    globalThis.document?.addEventListener('keydown', onDocumentKeydown)
+    globalThis.document?.addEventListener('keydown', onDocumentKeydown, true)
   })
 
   onBeforeUnmount(() => {
     globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-    globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
+    globalThis.document?.removeEventListener('keydown', onDocumentKeydown, true)
   })
 
   provide(PopoverInjectionKey, {

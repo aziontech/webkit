@@ -1,27 +1,26 @@
-<script setup>
+<script setup lang="ts">
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 
-  defineProps({
-    /** A `TOPOLOGY_BIND_TARGETS` entry — every label on this control comes from it. */
-    target: { type: Object, required: true },
-    /** Bindable resources, `{ value, label }`. */
-    options: { type: Array, default: () => [] },
-    /** The resource this slot holds, by id. Empty turns the pencil into a plus. */
-    boundId: { type: [String, Number], default: '' },
-    /**
-     * Whether the slot may be emptied. A resource the create provisioned is part of how
-     * the workload was made, so it can be re-pointed but not taken away.
-     */
-    removable: { type: Boolean, default: true }
+  interface Props {
+    target: Record<string, unknown>
+    options?: unknown[]
+    boundId?: string | number
+    removable?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    options: () => [],
+    boundId: '',
+    removable: true
   })
 
-  /**
-   * `bind` carries the picked resource id, `remove` empties the slot, and `create`
-   * leaves for the resource's own create page.
-   */
-  const emit = defineEmits(['bind', 'remove', 'create'])
+  const emit = defineEmits<{
+    bind: [value: unknown]
+    remove: []
+    create: []
+  }>()
 
   const CREATE = '__create__'
 
@@ -33,8 +32,6 @@
 
 <template>
   <div class="flex shrink-0 items-center gap-(--spacing-xxs)">
-    <!-- `bottom-end`: the control sits at the node's right edge and a node column is
-         ~216px, so a panel anchored by its left edge would hang off the diagram. -->
     <Dropdown
       placement="bottom-end"
       @select="onSelect"

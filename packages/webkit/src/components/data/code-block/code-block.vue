@@ -98,8 +98,10 @@
   const internalValue = ref('')
   const slideDirection = ref<CodeBlockSlideDirection>(null)
   const linesMotionReady = ref(!props.animateLines)
+  const revealedLines = ref(Number.POSITIVE_INFINITY)
   const lineMotionMode = ref<CodeBlockLineMotionMode>(props.animateLines ? 'enter' : null)
   const contentRef = ref<HTMLElement | null>(null)
+  const panelVersion = ref(0)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-block')
 
@@ -194,12 +196,12 @@
       : codeBlockLineEnterMotion.offsetClass
   )
 
-  const getLineMotionClasses = () =>
+  const getLineMotionClasses = (lineIndex: number) =>
     cn(
       lineMotionMode.value &&
         'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
       lineMotionMode.value &&
-        (linesMotionReady.value
+        (linesMotionReady.value && lineIndex < revealedLines.value
           ? 'translate-x-0 opacity-100'
           : cn(lineEnterOffsetClass.value, 'opacity-0'))
     )
@@ -285,10 +287,17 @@
   // Reading the natural height with the inline value cleared forces layout, but the
   // old value is restored in the same task, so nothing paints at auto; transitionend
   // drops the inline height so later reflows stay free to resize the shell.
+  const layoutScale = (el: HTMLElement) => {
+    const { width } = el.getBoundingClientRect()
+    return el.offsetWidth && width ? width / el.offsetWidth : 1
+  }
+
+  const layoutHeight = (el: HTMLElement) => el.getBoundingClientRect().height / layoutScale(el)
+
   const captureContentHeight = () => {
     const el = contentRef.value
 
-    return el && !prefersReducedMotion() ? el.getBoundingClientRect().height : null
+    return el && !prefersReducedMotion() ? layoutHeight(el) : null
   }
 
   const runHeightMotion = (from: number | null) => {
@@ -300,7 +309,7 @@
 
     nextTick(() => {
       el.style.height = ''
-      const to = el.getBoundingClientRect().height
+      const to = layoutHeight(el)
 
       if (Math.round(from) === Math.round(to)) {
         return
@@ -325,19 +334,7 @@
       return
     }
 
-    const currentIndex = activeIndex.value
-    const nextIndex = normalizedTabs.value.findIndex((tab) => tab.value === nextValue)
-
-    slideDirection.value = resolveSlideDirection(currentIndex, nextIndex)
-    // Read the outgoing height BEFORE the swap, but queue the animation AFTER it:
-    // `nextTick` registered before any reactive change resolves ahead of the
-    // render job it is meant to follow, so the "new" height it measured was still
-    // the old one — from === to, and the height jumped with no transition at all.
-    const heightFrom = captureContentHeight()
     activeValue.value = nextValue
-    runLinesMotion('swap')
-    runHeightMotion(heightFrom)
-    scheduleIndicatorSync()
   }
 
   const getNextTabValue = (direction: 1 | -1): string | null => {
@@ -423,9 +420,10 @@
 
     const listRect = listEl.getBoundingClientRect()
     const tabRect = activeTabEl.getBoundingClientRect()
+    const scale = layoutScale(listEl)
 
-    indicatorWidth.value = tabRect.width
-    indicatorOffsetX.value = tabRect.left - listRect.left
+    indicatorWidth.value = tabRect.width / scale
+    indicatorOffsetX.value = (tabRect.left - listRect.left) / scale
     indicatorVisible.value = true
   }
 
@@ -514,6 +512,48 @@
   watch(activeValue, scheduleIndicatorSync)
 
   watch(
+    [activeValue, () => activeTab.value?.code],
+    ([nextValue, nextCode], [previousValue, previousCode]) => {
+      if (!previousValue || !contentRef.value) {
+        return
+      }
+
+      const previousBody = (previousCode ?? '').replace(/\n$/, '')
+      const settled = previousBody.slice(0, previousBody.lastIndexOf('\n') + 1)
+
+      if (nextValue === previousValue && (nextCode ?? '').startsWith(settled)) {
+        return
+      }
+
+      slideDirection.value = resolveSlideDirection(
+        normalizedTabs.value.findIndex((tab) => tab.value === previousValue),
+        activeIndex.value
+      )
+      const heightFrom = captureContentHeight()
+      panelVersion.value += 1
+      runLinesMotion('swap')
+      runHeightMotion(heightFrom)
+    },
+    { flush: 'pre' }
+  )
+
+  watch(
+    () => highlightedLines.value.length,
+    (length, previous) => {
+      if (lineMotionMode.value !== 'enter' || !linesMotionReady.value || length <= previous) {
+        return
+      }
+
+      revealedLines.value = previous
+      nextTick(() => {
+        flushStyles()
+        revealedLines.value = Number.POSITIVE_INFINITY
+      })
+    },
+    { flush: 'pre' }
+  )
+
+  watch(
     () => props.animateLines,
     (enabled) => {
       runLinesMotion(enabled ? 'enter' : null)
@@ -590,7 +630,7 @@
         :data-testid="`${testId}__filename-icon`"
       >
         <i
-          :class="cn(activeFileIcon, 'text-label-code-sm text-(--text-default)')"
+          :class="cn('text-label-code-sm text-(--text-default)', activeFileIcon)"
           aria-hidden="true"
         />
       </span>
@@ -644,12 +684,12 @@
           >
             <div
               v-for="(lineTokens, lineIndex) in highlightedLines"
-              :key="`${activeTab.value}-${lineIndex}`"
+              :key="`${activeTab.value}-${panelVersion}-${lineIndex}`"
               :class="
                 cn(
                   'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm',
                   'data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)',
-                  getLineMotionClasses()
+                  getLineMotionClasses(lineIndex)
                 )
               "
               :style="getLineMotionStyle(lineIndex)"

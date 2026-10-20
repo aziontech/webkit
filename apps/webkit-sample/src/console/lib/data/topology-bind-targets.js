@@ -53,9 +53,6 @@ export const TOPOLOGY_BIND_TARGETS = {
     groupLabel: 'Connectors',
     createLabel: 'Create Connector',
     unboundMessage: 'A connector routes traffic from the application to its origins.',
-    // Shown on a connector the CREATE provisioned, where the remove control is absent:
-    // that connector IS the application's origin, so the flow that made this workload
-    // chose it and the application cannot be left without one.
     keptMessage: 'Provisioned with this workload. It is the application’s origin, so it can be re-pointed but not removed.',
     emptyLabel: 'No connectors yet.',
     options: () =>

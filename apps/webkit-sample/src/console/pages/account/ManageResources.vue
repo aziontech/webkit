@@ -1,17 +1,4 @@
 <script setup>
-  // Manage Resources — the console's resource manager, modeled on the cloud
-  // "Manage resources" surface. It renders the tenancy hierarchy (Organization →
-  // Group → Workspace, since "brand", "reseller" and "client" were retired — see
-  // ../../lib/state/accounts.js) as an EXPANDABLE tree table with checkbox
-  // multi-select, a toolbar of bulk actions, and a right info panel whose
-  // Permissions / Labels tabs reflect the current selection.
-  //
-  // The webkit Table has no tree engine, so the tree is laid out by the store:
-  // `expanded` holds the open node ids and `flattenTree` emits only the visible
-  // rows tagged with depth + hasChildren — the same function the switcher's own
-  // tree uses (../../components/shell/SwitchAccountDialog.vue), so the two cannot
-  // drift on indent, chevron or tier label. The Name cell renders the chevron and
-  // the indentation. Selection rides the Table's own enableRowSelection.
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -38,49 +25,16 @@
     useAccounts
   } from '../../lib/state/accounts.js'
 
-  // Where `Documentation` goes. The docs ROOT: the account hierarchy has no entry in
-  // lib/data/product-empty-states.js (that registry covers the product modules), and an
-  // unverified deep link is worse than the index. Replace when the topic URL is known.
   const HELP = 'https://www.azion.com/en/documentation/'
 
   const { accounts, currentAccountId } = useAccounts()
 
-  // This table is rendered in COMPOSITION mode (the rows animate their own height), so
-  // its chip columns cannot take the data-driven `minWidth` the other lists use — that
-  // one is MEASURED, and a measurement needs a column the table owns end to end. Here
-  // every row is its own flex container, so a content-sized column would resolve to a
-  // different width per row and drift the header away from the body. These say the
-  // width as an inline flex basis instead, hand-measured against the widest content
-  // each column ever shows. Inline so it beats the cell's own
-  // `data-[grow=1]:flex-[1_0_5rem]` without needing `!important`.
-  //
-  // They are LOCAL numbers, not the shared floors in ../../lib/behavior/table-columns.js:
-  // those are floors for the measurement to grow from, and a floor is by definition
-  // below what a column ends up at — borrowing one here clipped the `retail` / `prod`
-  // chips by 3px, with nothing to grow them back.
-  //
-  // Type is the widest: its chip carries a tier GLYPH as well as a label, so
-  // `Organization` needs 129px where a bare `Active` needs 82 and two labels need 109.
   const tagColumnStyle = { flex: '0 0 104px' }
   const tagColumnWideStyle = { flex: '0 0 136px' }
   const labelsColumnStyle = { flex: '0 0 112px' }
 
-  // Name is the one column here with no natural width — it carries up to four levels of
-  // indentation, a chevron and a tier glyph before the name — and `grow` cannot say so.
-  // The weight is `1 | 2 | 3` (a `data-[grow=N]` variant, so the 5 this column used to
-  // ask for matched NOTHING and it silently became the NARROWEST column in the table at
-  // 60px), and it sets `flex-shrink: 0`, so with eight columns and the info panel open
-  // this table has less room than the bases add up to and something has to give.
-  //
-  // `4 1 0` makes Name the column that gives: it takes four shares of what the chip
-  // columns handed back, and yields first when there is nothing to take, rather than the
-  // table growing a horizontal scrollbar that pushes the row-actions menu off screen.
-  // Not more than four shares — past that the three remaining weighted columns drop
-  // below the width their own headers need and Last accessed ellipsizes.
   const nameColumnStyle = { flex: '4 1 0' }
 
-  // --- Tree state ---------------------------------------------------------
-  // Open the path down to the current account so the tree reads on load.
   const expanded = ref(new Set([0, 1, 4471, 9032]))
   const isExpanded = (id) => expanded.value.has(id)
   const toggle = (id) => {
@@ -89,16 +43,8 @@
     else next.add(id)
     expanded.value = next
   }
-  // Reassigning `expanded` (never mutating in place) is what makes this reactive.
   const visibleRows = computed(() => flattenTree(expanded.value))
 
-  // Fluid accordion: a row animates its HEIGHT (0 ↔ natural) while fading on
-  // reveal and collapse, so the list grows/shrinks smoothly and the rows below
-  // reflow with it. Driven by <TransitionGroup> JS hooks (css:false) via the Web
-  // Animations API — height is a layout property, so siblings follow. WAAPI is
-  // used (not CSS classes) so it never conflicts with Table.Row's own
-  // transition-colors. TransitionGroup skips the initial render, so only rows
-  // added/removed by expand/collapse animate. Reduced motion opts out.
   const REVEAL_MS = 220
   const REVEAL_EASE = 'cubic-bezier(0.39, 0.57, 0.56, 1)'
   const reducedMotion = () =>
@@ -123,7 +69,6 @@
   const onRowEnter = (el, done) => animateRowHeight(el, done, false)
   const onRowLeave = (el, done) => animateRowHeight(el, done, true)
 
-  // --- Selection ----------------------------------------------------------
   const rowSelection = ref({})
   const selectedRows = computed(() =>
     accounts.value.filter((account) => rowSelection.value[String(account.id)])
@@ -133,8 +78,6 @@
   const clearSelection = () => {
     rowSelection.value = {}
   }
-  // Selection is hand-rolled (composition mode): a plain id→true map, updated
-  // immutably so the computed views react.
   const setRowSelected = (row, selected) => {
     const next = { ...rowSelection.value }
     if (selected) next[String(row.id)] = true
@@ -142,7 +85,6 @@
     rowSelection.value = next
   }
   const toggleRow = (row) => setRowSelected(row, !rowSelection.value[String(row.id)])
-  // Select-all reflects the currently VISIBLE rows (tri-state via indeterminate).
   const allVisibleSelected = computed(
     () =>
       visibleRows.value.length > 0 &&
@@ -163,7 +105,6 @@
     ({ active: 'success', suspended: 'danger', pending: 'warning' })[status] ?? 'secondary'
   const statusLabel = (status) => (status ? status[0].toUpperCase() + status.slice(1) : '')
 
-  // --- Toolbar / row actions (stubbed per scope) --------------------------
   const infoPanelOpen = ref(true)
   const toggleInfoPanel = () => {
     infoPanelOpen.value = !infoPanelOpen.value
@@ -185,7 +126,6 @@
   }
   const pendingDeletion = () => toast.info('No resources are pending deletion.')
 
-  // --- Info panel ---------------------------------------------------------
   const infoTab = ref('permissions')
   const infoTabs = [
     { value: 'permissions', label: 'Permissions' },
@@ -196,9 +136,7 @@
       ? 'No resource selected'
       : `${selectedCount.value} resource${selectedCount.value === 1 ? '' : 's'} selected`
   )
-  // A single-selection resource drives the detailed panel content.
   const focused = computed(() => (selectedCount.value === 1 ? selectedRows.value[0] : null))
-  // Example role bindings, so the Permissions tab reads like the console.
   const roleBindings = [
     { role: 'Owner', members: 2 },
     { role: 'Editor', members: 5 },
@@ -238,7 +176,6 @@
         </template>
       </PageHeading>
 
-      <!-- Action toolbar: create on the left, bulk actions gated by selection. -->
       <div class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)">
         <Button
           label="Create Project"
@@ -285,7 +222,6 @@
         />
       </div>
 
-      <!-- Split: the resource tree + the info panel. -->
       <div class="layout-group-start flex min-h-0 flex-1 gap-(--spacing-lg)">
         <section class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm)">
           <div class="flex items-center justify-between">
@@ -301,9 +237,6 @@
 
           <CardBox :padded="false">
             <template #content>
-              <!-- Composition mode: rendering the rows ourselves lets a
-                   <TransitionGroup> animate each row's HEIGHT on reveal/collapse
-                   (the data-driven Table renders rows internally, so it can't). -->
               <Table
                 max-height="calc(100dvh - 20rem)"
                 :border="false"
@@ -319,11 +252,6 @@
                         @update:model-value="toggleSelectAll"
                       />
                     </Table.HeadCell>
-                    <!-- Widest column by a distance: it carries four levels of
-                         indentation, a chevron and a glyph BEFORE the name, so at
-                         depth 3 there has to be room left to render a workspace's
-                         name at all. It takes what the chip columns give back
-                         (`nameColumnStyle` above) rather than a `grow` weight. -->
                     <Table.HeadCell
                       principal
                       :style="nameColumnStyle"
@@ -353,12 +281,6 @@
                 </Table.Header>
 
                 <Table.Body>
-                  <!-- Each row is wrapped in a single-root <div> that is the
-                       transition target: Table.Row's template leads with an HTML
-                       comment (a multi-root/fragment component), and Vue can't
-                       attach a `leave` hook to a fragment root — so the wrapper is
-                       what animates. css:false runs the JS height hooks; the
-                       wrapper animating height in flow makes siblings reflow. -->
                   <TransitionGroup
                     :css="false"
                     @enter="onRowEnter"
@@ -383,11 +305,6 @@
                           />
                         </Table.Cell>
 
-                        <!-- Name: chevron + indentation + type glyph + name.
-                             One step per level is `--spacing-md`, not `-lg`:
-                             the glyph already marks the level, and 24px a level
-                             spent a third of the column on empty space by the
-                             time the tree reached a client. -->
                         <Table.Cell
                           principal
                           :style="nameColumnStyle"
@@ -416,12 +333,6 @@
                               class="size-(--size-7) shrink-0"
                               aria-hidden="true"
                             />
-                            <!-- Groups and Workspaces get an avatar: they are the
-                                 tiers an operator acts as (a switch lands on a
-                                 Workspace), so they carry the same kind of mark as
-                                 the header pill. An Organization is structure — its
-                                 tier glyph is what it is, and that keeps the tree
-                                 scannable. -->
                             <Avatar
                               v-if="row.type === 'group' || row.type === 'workspace'"
                               :label="accountInitials(row.name)"
@@ -445,12 +356,6 @@
                           </span>
                         </Table.Cell>
 
-                        <!-- The id renders through the shared cell, so it can be
-                             copied here the way it can in every module list
-                             (../../components/list/IdCell.vue) — the id is the one
-                             thing on this row an operator pastes elsewhere. An
-                             Organization has no id of its own, and the em dash is
-                             this column's "not applicable" rather than a blank. -->
                         <Table.Cell :grow="1">
                           <span
                             v-if="row.type === 'organization'"
@@ -510,10 +415,6 @@
                         </Table.Cell>
 
                         <Table.Cell :style="labelsColumnStyle">
-                          <!-- ONE LINE, always: labels that outgrow the column go behind
-                               "+N" instead of wrapping and making this row taller than
-                               its neighbours (../../components/list/TagListCell.vue).
-                               The component renders the em dash when there are none. -->
                           <TagListCell
                             :items="row.labels ?? []"
                             noun="labels"
@@ -577,7 +478,6 @@
           </button>
         </section>
 
-        <!-- Info panel: Permissions / Labels for the current selection. -->
         <aside
           v-if="infoPanelOpen"
           class="hidden w-(--container-xs) shrink-0 lg:block"
@@ -599,14 +499,12 @@
                   </TabView.List>
                 </TabView>
 
-                <!-- Empty: nothing selected. -->
                 <Message
                   v-if="!hasSelection"
                   severity="info"
                   label="Select at least one resource."
                 />
 
-                <!-- Permissions -->
                 <template v-else-if="infoTab === 'permissions'">
                   <div
                     v-if="focused"
@@ -643,7 +541,6 @@
                   />
                 </template>
 
-                <!-- Labels -->
                 <template v-else>
                   <div
                     v-if="focused && focusedLabels.length"

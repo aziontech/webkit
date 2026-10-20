@@ -1,21 +1,4 @@
-<script setup>
-  // Create Rule — the Rules Engine create, in a LARGE Drawer.
-  //
-  // FIELDS ARE SEPARATED, the same shape the Variables drawer uses
-  // (./AddVariableDrawer.vue via ./ui/FieldStack.vue): a real `<Label for>` over a
-  // full-width control, the field's own message under it, and the band's guidance said
-  // ONCE in its `Section` hint instead of repeated under every row. A rule's name and
-  // description are typed, not scanned, so a 256px control pinned to the right of a
-  // sentence describing it was the settings shape on a create form.
-  //
-  // The three richer bands keep their cards, because none of them is a set of fields:
-  // Phase is a pair of radio blocks that carry their own descriptions, and Criteria and
-  // Behaviors are repeaters whose card is what separates them from the fields above.
-  //
-  // Repeater logic: Criteria conditions (joined And/Or, grouped) and Behaviors are
-  // each add / REMOVE / REORDER (move up/down — no drag lib, per dependencies.md).
-  // Row controls are size="large" to keep the horizontal rhythm with the large
-  // fields. Validation on submit only; one `submitting` flag locks the scope.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Divider from '@aziontech/webkit/divider'
@@ -40,26 +23,22 @@
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  const props = defineProps({
-    // The rule being EDITED, or null to create one. The same drawer does both: a
-    // rule's anatomy is the same whether it is being written or corrected, and a
-    // second read-only surface for it would be a third place the criteria repeater
-    // has to be kept in step with.
-    rule: { type: Object, default: null },
-    // A rule the CREATE opens already written — what a function create hands over so
-    // the reader only has to read it and save. It is not an edit: nothing exists yet,
-    // so the drawer keeps its create title and still emits `created`.
-    draft: { type: Object, default: null },
-    // WHICH ENGINE this rule belongs to. A rule's anatomy does not change between the
-    // application's engine and the firewall's — same criteria repeater, same conditional
-    // arguments, same commit — only the WORDS do: which phases exist, which behaviors
-    // they offer, and what each behavior is given. So the vocabulary is a prop
-    // (../../lib/data/rules-engine.js, ../../lib/data/firewall-rules.js) and this drawer
-    // is one file rather than two that drift.
-    vocabulary: { type: Object, default: () => applicationRules }
+  interface Props {
+    rule?: Record<string, unknown>
+    draft?: Record<string, unknown>
+    vocabulary?: Record<string, unknown>
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    rule: null,
+    draft: null,
+    vocabulary: () => applicationRules
   })
 
-  const emit = defineEmits(['created', 'updated'])
+  const emit = defineEmits<{
+    created: [record: unknown]
+    updated: [record: unknown]
+  }>()
 
   const editing = computed(() => Boolean(props.rule))
 
@@ -79,13 +58,12 @@
   const operatorArgument = (operator) => props.vocabulary.operatorArgument(operator)
   const variablesFor = (phase) => props.vocabulary.variablesFor?.(phase) ?? []
 
-  // Stable keys for repeater rows (order-independent).
   let nextId = 0
   const uid = () => (nextId += 1)
 
   const newCondition = (join = null) => ({
     id: uid(),
-    join, // null for the first row of a group; 'and' | 'or' otherwise
+    join,
     variable: '',
     operator: 'is-equal',
     argument: ''
@@ -102,12 +80,6 @@
     active: true
   })
 
-  /**
-   * The form a rule opens as. Deep-copied and re-keyed, never the record itself:
-   * the repeaters splice their arrays in place, so editing the seed would rewrite
-   * the row behind the drawer while the reader is still deciding — including if
-   * they cancel.
-   */
   const formFor = (rule) =>
     !rule
       ? blankForm()
@@ -131,18 +103,11 @@
   const submitted = ref(false)
   const submitting = ref(false)
 
-  // Morph the repeater lines when they add / remove / reorder — the shared timing
-  // (../lib/list-morph.js), so these repeaters and the Rules Engine table glide the
-  // same way rather than each carrying their own copy of it.
-
   const nameError = computed(() => submitted.value && !form.name.trim())
   const totalConditions = computed(() =>
     form.criteria.reduce((sum, group) => sum + group.conditions.length, 0)
   )
 
-  // Seeded on OPEN — and on mount, since a handed-over rule opens the drawer before this
-  // component exists — and reset on close, so the drawer never shows the previous rule
-  // for a frame while the new one loads in.
   watch(
     open,
     (isOpen) => {
@@ -152,41 +117,12 @@
     { immediate: true }
   )
 
-  // ── The two conditional forms ─────────────────────────────────────────────
-  //
-  // A rule is `if <criteria> then <behaviors>`, and NEITHER half has a fixed set of
-  // fields: the operator decides whether a condition has an argument, and the
-  // behavior decides what — if anything — the behavior is given. Both answers come
-  // from the vocabulary (../../lib/data/rules-engine.js) rather than from a chain of
-  // `v-if`s per behavior name, so adding a behavior is a row in the catalog.
-  //
-  // THE FIELD IS NOT RENDERED, NOT DISABLED. `exists` reads no value and `Deliver`
-  // takes none, so their inputs are gone. A control that accepts an answer nothing
-  // reads is worse than no control: it is a promise the save quietly breaks.
-  //
-  // The behaviors a phase offers differ, so changing the phase re-checks every
-  // behavior against the new list (see the watch below) instead of leaving a
-  // request-only behavior selected on a response rule.
   const behaviorsForPhase = computed(() =>
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
   )
 
-  // ── The variable is SUGGESTED, not selected ──
-  // The engine's variables are offered under the field (../../components/form/ComboboxInput.vue)
-  // and narrow as the reader types, but the field stays a text field: `${arg_}`, `${cookie_}`
-  // and `${http_}` are prefixes a rule completes with the name it reads, so the answer is
-  // routinely one the list cannot contain. Phase-aware, for the same reason the behaviors are.
   const variablesForPhase = computed(() => variablesFor(form.phase))
 
-  // ── The behavior picker is SEARCHED, not scanned ──
-  // A phase offers around twenty-five behaviors, alphabetical, and the reader arrives
-  // knowing the name of the one they want — so the panel gets its own field
-  // (`Select.Content`'s `#search` slot) and the list narrows as they type. The query is
-  // per ROW, keyed by the behavior's id rather than its index, so it travels with a
-  // reorder and never lands in the payload. Cleared when the panel closes, so the next
-  // open is never pre-filtered.
-  // The argument selects below are NOT searched: connectors, functions and cache
-  // policies are single-digit lists, where a search field is one more thing to read.
   const behaviorQuery = reactive({})
 
   const behaviorMatches = (id) => {
@@ -199,55 +135,28 @@
     if (!isOpen) behaviorQuery[id] = ''
   }
 
-  // The record a `select` argument lists — read live from the store that owns those
-  // records, so a cache policy created in the tab next door is selectable here.
   const optionsFor = (source) => behaviorOptions(source, form.phase)
   const optionLabelIn = (source, value) =>
     optionsFor(source).find((option) => option.value === value)?.label ?? ''
 
-  /**
-   * Selecting a behavior REPLACES its argument rather than merging over it: the
-   * previous type's keys are dropped, so a rule that was `Redirect (301) → //legacy`
-   * and is now `Run Function` does not carry a stale `target` into the save. The row's
-   * `id` survives, so the list morph reads it as the same row changing, not a
-   * remove-and-add.
-   */
   const setBehaviorType = (index, type) => {
     if (form.behaviors[index].type === type) return
-    // Through the height animation: the argument region grows and shrinks with the
-    // type (Capture Match Groups is three fields tall, Deliver is none), and that is
-    // the same kind of change as an add or a remove.
     animateBehaviors(() => {
       form.behaviors[index] = { id: form.behaviors[index].id, type }
     })
   }
 
-  // A behavior whose argument is still blank on submit — amber (not answered yet),
-  // the same state the required name and the condition's variable use.
   const argumentMissing = (behavior, field) =>
     submitted.value && !String(behavior[field] ?? '').trim()
 
-  /**
-   * `Add behavior` is spent once the last behavior ENDS the rule (Deliver, Deny, a
-   * redirect): nothing after it can execute, so offering to write another line is
-   * offering to write dead code. Ten is the ceiling the API enforces.
-   */
   const canAddBehavior = computed(() => {
     if (form.behaviors.length >= 10) return false
     return !isTerminalBehavior(form.behaviors[form.behaviors.length - 1]?.type)
   })
 
-  // The two ceilings the API enforces: five criteria groups per rule, ten conditions
-  // inside one. Held here rather than discovered on save.
   const canAddCriteria = computed(() => form.criteria.length < 5)
   const canAddCondition = (group) => group.conditions.length < 10
 
-  /**
-   * Changing an operator can change what its argument IS — a picked record on one, a typed
-   * value on the next — so an answer the new operator cannot read is dropped. Carrying it
-   * over would leave a network list's id sitting in a text box, or a typed string selected
-   * in a list that does not contain it.
-   */
   const setConditionOperator = (condition, operator) => {
     const before = operatorArgument(condition.operator)
     const after = operatorArgument(operator)
@@ -255,10 +164,6 @@
     if (before.kind !== after.kind || before.source !== after.source) condition.argument = ''
   }
 
-  // Changing the phase changes which behaviors exist. Any behavior the new phase does
-  // not offer falls back to Deliver — the one behavior both phases have and the only
-  // safe default — and a function chosen for the request phase is cleared when the
-  // response phase would not offer it (its runtime is not available there).
   watch(
     () => form.phase,
     (phase) => {
@@ -277,39 +182,15 @@
     }
   )
 
-  // ── The two repeater regions ease their own height ──
-  //
-  // The rows themselves are handled by MORPH_COLLAPSE: a removed row eases its own height
-  // in the first frame and its neighbours FLIP up into the space. That fixes the ROWS,
-  // and leaves the REGION — everything under the list (the And/Or buttons, the divider,
-  // Add Criteria) still jumped the full height of the removed row, in one frame, while
-  // the rows above it were still gliding. Two different answers to one edit, which is
-  // the glitch.
-  //
-  // So the section that CONTAINS the list eases its own height across the same change
-  // (../lib/animate-height.js — measure, pin, release back to `auto`), and every add and
-  // remove is routed through it. Moves are not: a reorder changes no height, and putting
-  // it through the measure would cost a `nextTick` for nothing.
-  // Criteria needs none of its own: every height change there IS a row arriving or
-  // leaving, and the rows now carry that themselves.
   const {
     region: behaviorsRegion,
     height: behaviorsHeight,
     animateHeight: animateBehaviors
   } = useAnimatedHeight()
 
-  // ── Criteria repeater: add / remove / reorder ──
-  // No `animateCriteria` around an add or a remove any more: the ROW owns that height
-  // now (MORPH_COLLAPSE), and easing the region as well pins it to a measured value while
-  // its contents are still moving inside it — the two ease against each other and the
-  // region lands before the row does. The region animation stays for the one change that
-  // is NOT a row arriving or leaving: a behavior swapping to a type of a different size.
   const addCondition = (group, join) => group.conditions.push(newCondition(join))
   const addCriteria = () => form.criteria.push(newGroup())
 
-  // Reorder whole criteria groups (move up/down — same no-drag-lib pattern as the
-  // conditions/behaviors). The first group always reads "If", the rest "Or", and
-  // that label is index-driven, so it stays correct after a move.
   const moveCriteria = (index, direction) => {
     const target = index + direction
     if (target < 0 || target >= form.criteria.length) return
@@ -318,7 +199,7 @@
   }
 
   const removeCondition = (groupIndex, condIndex) => {
-    if (totalConditions.value <= 1) return // keep at least one condition overall
+    if (totalConditions.value <= 1) return
     const group = form.criteria[groupIndex]
     group.conditions.splice(condIndex, 1)
     if (group.conditions.length === 0) form.criteria.splice(groupIndex, 1)
@@ -331,10 +212,9 @@
     if (target < 0 || target >= conditions.length) return
     const [moved] = conditions.splice(condIndex, 1)
     conditions.splice(target, 0, moved)
-    conditions[0].join = null // the first row is always the base condition
+    conditions[0].join = null
   }
 
-  // ── Behaviors repeater: add / remove / reorder ──
   const addBehavior = () => form.behaviors.push(newBehavior())
   const removeBehavior = (index) => {
     if (form.behaviors.length <= 1) return
@@ -347,34 +227,17 @@
     form.behaviors.splice(target, 0, moved)
   }
 
-  // ── Native drag-and-drop reorder (no library, per dependencies.md) ──
-  // A row/group is draggable only while its grip handle is held (mousedown), so
-  // the inputs stay interactive; the element itself is the drop zone. Reordering
-  // splices the array, so the same TransitionGroup morph plays. `scope` keeps a
-  // drag contained to its own list (a condition can't drop into another group).
-  // Pointer DnD is desktop/mouse; the move buttons remain for click/keyboard/touch.
   const dnd = reactive({ scope: null, from: -1, over: -1 })
 
-  // The grip handle IS the drag source (IconButton doesn't forward listeners or
-  // `draggable`, so the grip is a plain focusable element we control). Only the
-  // grip is draggable, so the row's inputs stay fully interactive; the row itself
-  // is the drop zone. Sized to match IconButton large (size-10). Arrow keys on a
-  // focused grip reorder without a pointer (keyboard a11y).
   const GRIP_CLASS =
     'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) ' +
     'text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) ' +
     'focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none'
 
-  // Row states, keyed off the drag: `dragging` = the lifted source row;
-  // `drop` = the row currently under the pointer (where it will land).
   const isDragging = (scope, index) => dnd.scope === scope && dnd.from === index
   const isDropTarget = (scope, index) =>
     dnd.scope === scope && dnd.over === index && dnd.from !== index
 
-  // Base + state classes shared by every draggable row/group. `dragging` = the
-  // moved item: dimmed with a DASHED accent border around the whole element (an
-  // outline, so no layout shift). `drop` = where the item can be placed: a solid
-  // accent line on TOP (a `before` pseudo, so it never shifts layout).
   const dragRowClass =
     'relative rounded-(--shape-card) transition-[opacity,transform,outline-color] ' +
     'data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) ' +
@@ -385,8 +248,7 @@
     dnd.from = index
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/plain', String(index)) // Firefox needs data
-      // Show the whole row as the drag image, not just the grip.
+      event.dataTransfer.setData('text/plain', String(index))
       const row = event.currentTarget?.closest?.('[data-drag-row]')
       if (row) event.dataTransfer.setDragImage(row, 12, 12)
     }
@@ -422,9 +284,6 @@
     onDragEnd()
   }
 
-  // Every field the form RENDERS has to be answered — which is the other half of not
-  // rendering the ones that are not read: a condition on `exists` has no argument to
-  // require, and `Deliver` has no value to be missing.
   const behaviorFilled = (behavior) => {
     const argument = behaviorArgument(behavior.type)
     if (!argument) return true
@@ -448,9 +307,6 @@
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      // The WHOLE record goes up, not just the four display fields: the row the list
-      // keeps IS what reopens this drawer, so a save that dropped the repeaters would
-      // hand the next edit the rule as it was before this one.
       const record = {
         id: props.rule?.id ?? `rule-${uid()}`,
         name: form.name.trim(),
@@ -489,12 +345,11 @@
     :submitting="submitting"
     @submit="submit"
   >
-    <!-- Section: General -->
     <Section
       stacked
       :divided="false"
       title="General"
-      hint="Names the rule in the list and in the deployment log. The description is for whoever reads this rule next. It never affects what the rule does."
+      hint="Names the rule in the list and in the deployment log."
     >
       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <FieldStack
@@ -516,7 +371,10 @@
           </template>
         </FieldStack>
 
-        <FieldStack label="Description">
+        <FieldStack
+          label="Description"
+          description="For whoever reads this rule next. It never affects what the rule does."
+        >
           <template #default="{ controlId }">
             <InputText
               :id="controlId"
@@ -531,9 +389,6 @@
       </div>
     </Section>
 
-    <!-- Section: Phase (ItemGroup with radio blocks) — only when the engine HAS more than
-         one. The firewall's has a single phase, and a radio group with one option is a
-         sentence pretending to be a control. -->
     <Section
       v-if="PHASES.length > 1"
       stacked
@@ -544,14 +399,6 @@
       <CardBox :padded="false">
         <template #content>
           <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-            <!-- THE PHASE IS FIXED ONCE THE RULE EXISTS. It is not a preference the rule
-                 carries, it is WHICH PROGRAM the rule belongs to: the two phases offer
-                 different behaviors, and the watch that guards that falls every behavior
-                 the new phase does not offer back to the first one both share. On a rule
-                 being written that is a correction the reader is making as they go; on a
-                 rule that already runs it would silently empty the thing they opened to
-                 edit. So the switch is offered on create and locked afterwards — moving a
-                 rule to the other phase is writing the rule that belongs there. -->
             <div class="flex flex-col gap-(--spacing-xs)">
               <FieldRadioBlock
                 v-for="phase in PHASES"
@@ -575,12 +422,11 @@
       </CardBox>
     </Section>
 
-    <!-- Section: Criteria (ItemGroup with condition repeater) -->
     <Section
       stacked
       :divided="false"
       title="Criteria"
-      hint="The conditions that decide whether the rule runs. Add a variable, the comparison operator and, if the operator takes one, an argument."
+      hint="The conditions that decide whether the rule runs."
     >
       <CardBox :padded="false">
         <template #content>
@@ -602,19 +448,7 @@
                   @dragover.prevent
                   @drop="dropOnCriteria(gIdx)"
                 >
-                  <!-- `min-h-8` RESERVES the tall state of this row. The grip and the
-                       two reorder buttons only exist once there is a second group, so
-                       without it the header grew 16px the instant `Add criteria` was
-                       pressed — everything under it (the conditions, the divider, the
-                       button, the whole Behaviors card) jumped that much in ONE frame
-                       while the arriving group was still easing its height open. Two
-                       answers to one edit, which is the glitch. Measured: 0
-                       interpolated frames on the header against 8 on the new group.
-                       Holding the height means the only thing that moves is the group
-                       that arrived. -->
                   <div class="flex min-h-8 items-center gap-(--spacing-xs)">
-                    <!-- Grip: hold to drag the whole criteria group; the
-                               move buttons remain for click / keyboard / touch. -->
                     <span
                       v-if="form.criteria.length > 1"
                       role="button"
@@ -636,8 +470,6 @@
                       {{ gIdx === 0 ? 'If' : 'Or' }}
                     </span>
                     <span class="h-px flex-1 bg-(--border-default)" />
-                    <!-- Group-level reorder — surfaced only when there is
-                               more than one criteria group to move. -->
                     <div
                       v-if="form.criteria.length > 1"
                       class="flex items-center gap-(--spacing-xxs)"
@@ -665,14 +497,6 @@
                     </div>
                   </div>
 
-                  <!-- Nested conditions: a left border rail + indentation
-                             segments the group's conditions from the "If"/"Or"
-                             header, marking them as nested inside the group. The
-                             rail closes with a bottom segment and a rounded
-                             bottom-left corner (`--shape-card`), so it reads as
-                             one connected bracket wrapping the group rather than a
-                             loose vertical line. Border tokens (`--border-muted`)
-                             at the default width keep the adornment theme-aware. -->
                   <div
                     class="ml-(--spacing-xs) flex flex-col gap-(--spacing-sm) rounded-bl-(--shape-card) border-b-(length:--border-width-default) border-l-(length:--border-width-default) border-(--border-muted) pb-(--spacing-md) pl-(--spacing-md)"
                   >
@@ -733,17 +557,6 @@
                             </Select.Content>
                           </Select>
 
-                          <!-- `exists` / `does not exist` test for PRESENCE: there is
-                                 no value to compare against, so the input is not
-                                 rendered rather than rendered and ignored. The cell
-                                 stays in the grid, so the row's columns do not shift
-                                 under the operator that dropped its argument. -->
-                          <!-- AND WHAT IT COMPARES AGAINST IS NOT ALWAYS TYPED. A firewall
-                                 rule can test an address against a NETWORK LIST, which is a
-                                 record the account owns — so that operator's argument is
-                                 picked from the store that holds them, exactly as a
-                                 behavior's `select` argument is. A text box there would
-                                 take a name nothing resolves. -->
                           <Select
                             v-if="
                               takesArgument(cond.operator) &&
@@ -780,8 +593,6 @@
                           />
                           <span v-else />
 
-                          <!-- Row controls at the fields' size (large) to keep the
-                                 horizontal rhythm: drag grip + reorder + remove. -->
                           <div class="flex items-center gap-(--spacing-xxs)">
                             <span
                               v-if="group.conditions.length > 1"
@@ -890,19 +701,14 @@
       </CardBox>
     </Section>
 
-    <!-- Section: Behaviors (ItemGroup with behavior repeater) -->
     <Section
       stacked
       :divided="false"
       title="Behaviors"
-      hint="What the rule does when its criteria are met. Behaviors run top to bottom, so their order is part of the rule."
+      hint="What the rule does when its criteria are met, run top to bottom in this order."
     >
       <CardBox :padded="false">
         <template #content>
-          <!-- The rows own their own height now; this region eases only the ONE change
-               that is not a row arriving or leaving — a behavior swapping to a type whose
-               argument is a different size (Capture Match Groups is three fields tall,
-               Deliver is none). -->
           <div
             ref="behaviorsRegion"
             :style="{ height: behaviorsHeight }"
@@ -945,10 +751,6 @@
                   >
                     <Select.Trigger aria-label="Behavior" />
                     <Select.Content>
-                      <!-- `#search` renders above the scrolling list, so the field
-                           stays put while the options move. `@keydown.stop` keeps the
-                           panel's Arrow/Home/End handler from pulling focus onto an
-                           option while the reader is still typing. -->
                       <template #search>
                         <InputText
                           v-model="behaviorQuery[behavior.id]"
@@ -973,8 +775,6 @@
                       >
                         {{ option.label }}
                       </Select.Option>
-                      <!-- A search that matches nothing must say so; an empty panel
-                           reads as a broken filter. -->
                       <p
                         v-if="!behaviorMatches(behavior.id).length"
                         class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
@@ -984,14 +784,6 @@
                     </Select.Content>
                   </Select>
 
-                  <!-- WHAT THE BEHAVIOR IS GIVEN — the conditional half of the row.
-                       Four shapes, all declared by the catalog: nothing at all
-                       (Deliver, Deny), one free-text value with the placeholder that
-                       states its format, one record of this application listed from
-                       the store that owns it, or a group (Capture Match Groups takes
-                       three). The cell holds its place in the grid when the behavior
-                       reads nothing, so the behavior Select keeps one width down the
-                       column instead of resizing as each row's type is chosen. -->
                   <div class="min-w-0">
                     <template v-if="behaviorArgument(behavior.type)?.kind === 'text'">
                       <InputText
@@ -1031,9 +823,6 @@
                             </Select.Option>
                           </Select.Content>
                         </Select>
-                        <!-- The one thing the reader cannot infer from the list: WHY it
-                             is short. Said under the field it narrows, not in the
-                             section hint, because it is only true in one phase. -->
                         <HelperText
                           v-if="
                             behaviorArgumentNote(behaviorArgument(behavior.type).source, form.phase)
@@ -1115,10 +904,6 @@
                 </div>
               </TransitionGroup>
 
-              <!-- Spent once the last behavior ENDS the rule, and it SAYS why: a
-                   disabled button with no reason reads as broken, and the reason
-                   ("Deliver is the end of the rule") is the thing that teaches the
-                   reader how behaviors run. -->
               <div class="flex flex-wrap items-center gap-(--spacing-sm)">
                 <Button
                   type="button"
@@ -1146,7 +931,6 @@
       </CardBox>
     </Section>
 
-    <!-- Section: Status (ItemGroup) -->
     <Section
       stacked
       :divided="false"

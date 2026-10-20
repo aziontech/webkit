@@ -1,15 +1,4 @@
 <script setup>
-  // Form type: CARDBOX WITH INDEPENDENT SAVES (the `/form` skill, "Form types"). A
-  // long configuration page split into CardBox sections where EACH CARD OWNS ITS OWN
-  // SAVE — the user commits changes in parts instead of one giant submit. Approach A
-  // inside each card. Each card locks INDEPENDENTLY off its own `submitting` flag (the
-  // /usability loading pattern, scoped to the saved block): that card's fields and its
-  // right-side controls disable and its Save shows loading, while the other cards stay
-  // live. The save reports via toast. Each card's name is the
-  // CardBox `title` (its Heading, in the header) — never a title inside the content;
-  // the card's guidance is a Message (`label` copy). A per-card Save is
-  // `secondary` (the page has no primary), and the first card keeps the Azion Toolbar
-  // layout (Save in the box footer, with a Learn-more link).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Label from '@aziontech/webkit/label'
@@ -25,7 +14,6 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useBaseline } from '../../lib/behavior/forms'
 
-  // --- Card 1: Azion Toolbar ----------------------------------------------
   const toolbarOptions = [
     { label: 'Default (controlled at the team level)', value: 'default' },
     { label: 'Enabled', value: 'enabled' },
@@ -37,7 +25,6 @@
   const savingToolbar = ref(false)
   const toolbarBaseline = useBaseline(toolbar)
 
-  // --- Card 2: Deployment Protection --------------------------------------
   const protectionOptions = [
     { label: 'Standard Protection', value: 'standard' },
     { label: 'Only Preview Deployments', value: 'preview' },
@@ -49,14 +36,11 @@
   const savingProtection = ref(false)
   const protectionBaseline = useBaseline(protection)
 
-  // Each card commits independently through the same one-flag lock.
   const saveCard = async (flag, message, commit) => {
-    if (flag.value) return // per-card re-entrancy lock
+    if (flag.value) return
     flag.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      // Only THIS band's baseline moves: the other one is still pending, and the leave
-      // guard below has to keep saying so.
       commit()
       toast.success(message)
     } catch (error) {
@@ -68,9 +52,6 @@
     }
   }
 
-  // The leave guard reads the PAGE, not a band: this screen commits in parts, so the
-  // reader can leave with one band saved and the other still pending — and that pending
-  // one is exactly what the guard exists to stop them from walking away from.
   const dirty = computed(() => toolbarBaseline.dirty.value || protectionBaseline.dirty.value)
 
   const saveToolbar = () =>
@@ -86,16 +67,12 @@
   >
     <UnsavedChangesGuard :dirty="dirty" />
 
-    <!-- No `gap` on the stack: every band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex w-full flex-col">
       <PageHeading
         title="Project Settings"
         description="A long configuration page split into cards. Each card owns its own save, so changes commit in parts."
       />
 
-      <!-- Card 1 — Azion Toolbar (title = CardBox Heading; Save in the box footer). -->
       <CardBox
         title="Azion Toolbar"
         class="layout-section-start w-full"
@@ -174,7 +151,6 @@
         </template>
       </CardBox>
 
-      <!-- Card 2 — Deployment Protection (title = CardBox Heading; its own save). -->
       <CardBox
         title="Deployment Protection"
         class="layout-section-start w-full"

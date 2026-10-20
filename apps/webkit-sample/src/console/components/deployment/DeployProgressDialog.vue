@@ -1,14 +1,4 @@
-<script setup>
-  // Deploying into SEVERAL Deployment settings at once, watched live.
-  //
-  // Each target activates INDEPENDENTLY — one failing does not roll the others back — so
-  // a single spinner would be a lie. This dialog is one row per target with its own
-  // status, and it says the thing that matters when something fails: the ones that
-  // succeeded stay live.
-  //
-  // It is NOT dismissible while the run is in flight: closing it would suggest the
-  // deploys were cancelled, and they are not. Once everything has settled, Close is
-  // real, and Retry is offered only for the rows that failed.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
@@ -24,17 +14,20 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref, watch } from 'vue'
 
-  const props = defineProps({
-    // `[{ id, name, status: 'deploying'|'done'|'failed'|'skipped', message, environments }]`
-    items: { type: Array, default: () => [] }
+  interface Props {
+    items?: unknown[]
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    items: () => []
   })
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{
+    retry: []
+  }>()
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  // The filter resets on every open: a filter kept from the last run hides rows of this
-  // one, which is the worst possible moment to hide a row.
   const filter = ref('all')
   watch(open, (isOpen) => {
     if (isOpen) filter.value = 'all'
@@ -67,11 +60,6 @@
       : props.items.filter((item) => item.status === filter.value)
   )
 
-  // The title states the OUTCOME, so a run with a failure never announces itself as a
-  // clean deploy. "Deployed 2 Deployment settings" with one row failed is the kind of
-  // heading a reader trusts and then gets burned by. A SKIPPED target is not a deploy
-  // either — a setting no workload publishes with has nothing to deploy to — so it is
-  // counted out of the headline rather than folded into it.
   const title = computed(() => {
     const { total, done, failed, settled, skipped } = counts.value
     const noun = total === 1 ? 'Deployment setting' : 'Deployment settings'
@@ -81,8 +69,6 @@
     return `Deployed ${total} ${noun}`
   })
 
-  // Skipped is only named when there is one: a tally that always lists every outcome
-  // teaches the reader to stop reading it.
   const tally = computed(() => {
     const { done, failed, skipped } = counts.value
     const parts = [`${done} succeeded`, `${failed} failed`]

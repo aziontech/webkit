@@ -23,6 +23,11 @@ Every logo in `logos/` is `<brand>-<type>-<colormode>.<ext>`, one file per combi
 
 ## Placing a logo on a theme
 
+Show the `-color` file on a theme only when it has contrast there: at least 80% of its silhouette edge
+must clear 3:1 against that canvas (`#F5F5F5` light, `#000000` dark). Measure the edge rather than
+the whole area, because a badge is separated from the page by its outline, not by the text inside its
+own fill. Where colour fails, use `-mono` on light and `-reversed` on dark.
+
 1. **Two assets.** Set `logo` to the `-reversed` file and `logoLight` to the `-color` one; the surface
    swaps by theme and no filter touches either file.
 2. **One asset + `artwork`**, which follows the colormode:
@@ -70,3 +75,29 @@ import { CLIENTS, clientSymbolFor } from '@aziontech/webkit/assets/client-regist
 
 Name the file by the rule above and add a flat `"./assets/<file>"` key to
 `packages/webkit/package.json#exports`, pointing at the file; then add its entry to the registry.
+
+## Source
+
+The Figma `Assets` file (`aerxJReCkLz3x3z29IERE9`, node `1457:45`, "list") is the source of truth: one
+row per brand, variants `Default` / `Black` / `White`. They map to `color` / `mono` / `reversed`, with
+the colormode decided by the fills each variant actually declares:
+
+- A `Default` drawn in one dark ink is the same file as `Black`, so only `-mono` ships.
+- A `Black` that is not one ink (Netshoes, Uninter, Loja Integrada) ships no `-mono`.
+- Each file is cropped to its rendered ink, like every other mark here.
+
+Export one row at a time: a whole-list export comes back scaled to 4096px tall and loses precision.
+
+Some files deliberately differ from Figma, so a re-sync must not overwrite them:
+
+- `madeiramadeira-extended-color` / `-reversed` keep the orange house; Figma's colour lettering is blue.
+- `mobiauto-extended-color` / `-reversed` and `nzn-extended-reversed` keep their brand-colour dark lockups.
+  Figma's `White` versions are greyscale.
+- `caixa-extended-mono` stays one ink. Figma's grey X drops to low contrast under the `dark` invert.
+- `arezzo-extended-color` is the Arezzo&Co lockup, which is a different mark from Figma's Arezzo.
+- The analyst marks keep their optical box: the ink is sized by eye inside a 32-unit-tall viewBox. Their
+  `-mono` files use the same box, so all three colormodes swap at the same size.
+
+Figma's second `petz-logo` row is Neon (`neon-*`), the two Radware rows are the same drawing, and Linx is
+left out because both of its variants are a PNG on an opaque grey box. Incognia, Kroton and the Petz
+colour logo exist only as rasters, so they ship as `.png`. Petz is cropped above its tagline, as in Figma.

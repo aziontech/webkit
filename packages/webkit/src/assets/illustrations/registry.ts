@@ -1,13 +1,5 @@
-// Every value `<Illustration name="…">` accepts. Each entry is an official scene from the
-// Assets library in Figma, on that file's 592x300 canvas; the SVG is the source of truth.
-// Loaders are dynamic imports, so a bundle carries only the scenes its pages name.
-// To add one: export the frame at 592x300, drop the `.svg` here under the frame's own
-// name, and add a line below.
 export type IllustrationAssetLoader = () => Promise<{ default: string }>
 
-// Loaded like every scene, never imported statically: a static asset import is inlined
-// into the entry chunk, so every consumer would pay for a frame only an unfinished screen
-// shows. Out of `illustrationAssets` on purpose — a missing scene, not one a page picks.
 /** Loads the frame shown when `name` is empty or names no registered scene. */
 export const loadIllustrationPlaceholder: IllustrationAssetLoader = () =>
   import('./placeholder.svg')
@@ -15,6 +7,10 @@ export const loadIllustrationPlaceholder: IllustrationAssetLoader = () =>
 export const illustrationAssets = {
   'ai-applications': () => import('./ai-applications.svg'),
   'automate-threat-mitigation': () => import('./automate-threat-mitigation.svg'),
+  'azion-to-akamai': () => import('./azion-to-akamai.svg'),
+  'azion-to-aws': () => import('./azion-to-aws.svg'),
+  'azion-to-cloudflare': () => import('./azion-to-cloudflare.svg'),
+  'azion-to-fastly': () => import('./azion-to-fastly.svg'),
   'azion-to-vercel': () => import('./azion-to-vercel.svg'),
   'build-applications': () => import('./build-applications.svg'),
   'deploy-secure-mcp-server': () => import('./deploy-secure-mcp-server.svg'),

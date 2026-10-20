@@ -1,45 +1,4 @@
-<script setup>
-  // ARCHIVED — superseded, and kept only as a record of a model this console no longer has.
-  // Nothing imports it.
-  //
-  // It binds a Deployment Settings bundle to an environment AND the resources that bundle
-  // carries (Application, Firewall, Custom Page) each at a chosen version. A setting no
-  // longer carries any of those: the RELEASE binds the resources, the SETTING says only how
-  // it routes, and the ENVIRONMENT says which setting it publishes with
-  // (../../../lib/data/deployment-strategies.js). The Create Workload section this opened
-  // from is gone too, and an environment's setting is now linked automatically by matching
-  // deployment policy rather than picked in a sub-drawer.
-  //
-  // What replaced it: ../WorkloadDeploymentSettingsSection.vue (per environment, on the
-  // workload) and ../../deployment/WorkloadBindings.vue (the inverse, all workloads).
-  //
-  // ── WHAT IT WAS ──
-  //
-  // Link Deployment Settings — the sub-drawer opened from an environment row in the
-  // Environments section of Create Workload. On save it emitted the linked bundle back
-  // to the parent, which flipped that environment row from "unlinked" to "linked".
-  //
-  // Same discipline as every form drawer: one `submitting` flag locks the scope,
-  // validation runs on submit only, and the drawer resets when it closes. ONE commit,
-  // alone on the right — the X, the overlay and Escape are already the dismissal.
-  //
-  // IT IS AN ITEMGROUP FORM (Approach A), not a column of stacked label+control triads.
-  // Seven controls across four decisions is a grouped, config-heavy create — the case the
-  // form standard puts in Cards + ItemGroups: overline-titled sections, each a header-less
-  // flush CardBox whose body is an Item.List of rows. The rows are `ui/FieldRow.vue`, the
-  // same row every create page and in-resource drawer in this console is built from, so
-  // this drawer and the page that opens it are one anatomy instead of two.
-  //
-  // IN AN ITEMGROUP THE ROW IS THE LABEL. There is no `<Label for>` here: `Item.Title`
-  // names the field, `Item.Description` carries its guidance, and the control takes an
-  // `aria-label` — which is why a row can hold TWO controls (a resource and its version)
-  // and still name both, something a single `<label for>` cannot do. FieldRow also owns
-  // the message column, so a HelperText appearing on a failed submit pushes nothing
-  // sideways, and points the control's `aria-describedby` at it through its slot prop.
-  //
-  // Same discipline as every form drawer: one `submitting` flag locks the scope — the
-  // native `<fieldset :disabled>` AND `:disabled` on every control, since a webkit Select
-  // draws its disabled visual from its own prop, not from an ancestor fieldset.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Drawer from '@aziontech/webkit/drawer'
@@ -59,12 +18,17 @@
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  const props = defineProps({
-    // The environment this bundle links to; drives the title and the emitted record.
-    environment: { type: String, default: 'Production' }
+  interface Props {
+    environment?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    environment: 'Production'
   })
 
-  const emit = defineEmits(['link'])
+  const emit = defineEmits<{
+    link: [value: unknown]
+  }>()
 
   const title = computed(() => `Link Deployment Settings to ${props.environment}`)
 
@@ -163,8 +127,6 @@
     }
   }
 
-  // The three resource rows share one shape, so the template renders them from a
-  // small model to avoid repeating the Select markup four times.
   const resourceRows = computed(() => [
     {
       key: 'application',
@@ -223,16 +185,12 @@
           </PanelHeader>
 
           <PanelContent>
-            <!-- Sections are --layout-section-gap apart; each title sits
-                 --layout-group-gap above its flush CardBox — the Approach A section
-                 rhythm, identical to the create page this drawer opens from. -->
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">{{ title }}</legend>
 
-              <!-- Section: which saved bundle serves this environment -->
               <section class="flex flex-col gap-(--layout-group-gap)">
                 <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                   Deployment Settings
@@ -257,9 +215,6 @@
                             :display-value="labelFor(bundleOptions)"
                             @update:model-value="errors.bundle = ''"
                           >
-                            <!-- The accessible name goes on the TRIGGER: Select's attrs
-                                 land on its wrapper div, and labelling a wrapper labels
-                                 nothing. Same for aria-describedby. -->
                             <Select.Trigger
                               aria-label="Bundle"
                               :aria-describedby="messageId"
@@ -281,11 +236,6 @@
                 </CardBox>
               </section>
 
-              <!-- Section: what the bundle carries. Each resource and its version are ONE
-                   decision, so they share a row: the row's title names the resource and
-                   each control carries its own aria-label, which is what lets a second
-                   control sit beside the first without three identical "Version" fields
-                   in the tab order. `wide` because two selects cannot work in 256px. -->
               <section class="flex flex-col gap-(--layout-group-gap)">
                 <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                   Resources
@@ -357,7 +307,6 @@
             </fieldset>
           </PanelContent>
 
-          <!-- One commit, alone on the right. See the note at the top of the file. -->
           <PanelFooter class="md:justify-end">
             <Button
               class="w-full md:w-auto"

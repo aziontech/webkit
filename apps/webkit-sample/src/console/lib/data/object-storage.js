@@ -1,21 +1,6 @@
-// The buckets the sample is seeded with — the Store → Object Storage module.
-//
-// Extracted from the page for the same reason ./variables.js was: global search indexes
-// every resource the platform holds (./search-index.js), and a seed that lives inside a
-// page component is invisible to it. The page keeps its own mutable copy
-// (`ref([...BUCKETS])`) and still leads the list with what this session's deploy
-// provisioned (./provisioning.js) — that half is session state, not seed.
-//
-// Object counts and sizes are mock figures; the file navigator inside a bucket
-// (../../pages/storage/BucketBrowser.vue) owns the actual object tree.
-//
-// `modifiedAt` is the real instant — the Last Modified field compares it — and
-// `lastModified` (the sortable display string) is derived from it by one formatter
-// rather than hand-written per row (@shared/lib/dates.js).
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 
-/** The seeded buckets, in list order. */
 export const BUCKETS = [
   {
     id: 'webkit-storybook-dev',
@@ -43,18 +28,6 @@ export const BUCKETS = [
   }
 ].map(bucketRow)
 
-/**
- * A bucket as a LIST ROW — the record itself plus the fields its table displays.
- *
- * Exported because the seed is not the only source of rows any more: a bucket created
- * in this session is stored as the answers the reader gave (../state/created-resources.js)
- * and has to arrive in the list as the SAME row, derived fields and all. Two projections
- * would be two lists that disagree about what a row is.
- *
- * @param {object} bucket The base record.
- * @param {number} [index] Position in the seed — picks the round-robin author.
- * @returns {object} The row.
- */
 export function bucketRow(bucket, index = 0) {
   const person = authorAt(index)
   return {
@@ -64,3 +37,69 @@ export function bucketRow(bucket, index = 0) {
     lastModified: formatListDate(bucket.modifiedAt)
   }
 }
+
+const file = (size, ext) => ({ size, ext, lastModified: 'Jun 22, 2026, 07:21:21 PM' })
+
+const STORYBOOK_BUILD = {
+  'assets/': { children: {} },
+  'sb-addons/': { children: {} },
+  'sb-common-assets/': { children: {} },
+  'sb-manager/': { children: {} },
+  'favicon.svg': file('1.25 KB', 'svg'),
+  'iframe.html': file('17.75 KB', 'html'),
+  'index.html': file('6.03 KB', 'html'),
+  'index.json': file('183.1 KB', 'json'),
+  'nunito-sans-bold-italic.woff2': file('49.46 KB', 'woff2'),
+  'nunito-sans-bold.woff2': file('47.14 KB', 'woff2'),
+  'nunito-sans-italic.woff2': file('49.62 KB', 'woff2'),
+  'nunito-sans-regular.woff2': file('47.07 KB', 'woff2'),
+  'project.json': file('1.01 KB', 'json')
+}
+
+const BUCKET_TREES = {
+  'webkit-storybook-dev': {
+    '20260622162046/': { children: STORYBOOK_BUILD },
+    '20260610093012/': { children: STORYBOOK_BUILD },
+    'logs/': {
+      children: {
+        'access.log': file('2.4 MB', 'log'),
+        'error.log': file('128 KB', 'log')
+      }
+    },
+    'robots.txt': file('64 B', 'txt')
+  }
+}
+
+const FALLBACK_TREE = {
+  'images/': {
+    children: {
+      'hero.png': file('842 KB', 'png'),
+      'logo.svg': file('3.2 KB', 'svg')
+    }
+  },
+  'docs/': { children: { 'readme.md': file('4.1 KB', 'md') } },
+  'config.json': file('512 B', 'json')
+}
+
+export const APPLICATION_BUILD_TREE = {
+  'assets/': {
+    children: {
+      'index-B7xq2k1d.js': file('148.2 KB', 'js'),
+      'index-Cm4r9zLp.css': file('21.6 KB', 'css'),
+      'vendor-D1f8sKqa.js': file('412.9 KB', 'js'),
+      'logo-9aW3eT0c.svg': file('3.2 KB', 'svg')
+    }
+  },
+  'images/': {
+    children: {
+      'hero.webp': file('186 KB', 'webp'),
+      'og-image.png': file('94 KB', 'png')
+    }
+  },
+  'favicon.ico': file('15 KB', 'ico'),
+  'index.html': file('2.1 KB', 'html'),
+  'manifest.json': file('412 B', 'json'),
+  'robots.txt': file('64 B', 'txt')
+}
+
+export const bucketTree = (id) => BUCKET_TREES[id] ?? FALLBACK_TREE

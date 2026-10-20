@@ -91,7 +91,7 @@ const meta = {
     default: {
       control: false,
       description:
-        'Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty.',
+        'Message copy. Inline content — plain text plus anchors, which the message region styles with the `.text-link` token — or flow content such as paragraphs and a list, which the copy region holds as a flow container. Falls back to `label` when empty.',
       table: { category: 'slots' }
     },
     action: {

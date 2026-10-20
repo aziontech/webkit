@@ -1,26 +1,4 @@
-<script setup>
-  // The one field pair of a release: WHICH resource, and WHICH version of it.
-  //
-  // Every row of the deployment topology is this component — the Application card, the
-  // Firewall card, and every dependency row under them — so a version is chosen the
-  // same way wherever it appears. The two differ only in what is already settled:
-  //
-  //   a composed singleton  both halves are a choice (the Application card lets the
-  //                         operator swap the Application itself)
-  //   a detected dependency `fixed`: the resource came with the parent's version, so it
-  //                         is REPORTED with a lock and only the version is a choice
-  //
-  // THE VERSION SELECT has two kinds of answer, and they are different commitments:
-  //
-  //   Track latest Ready  the sentinel (lib/releases.js § LATEST_READY). Resolves when
-  //                       the release deploys, so it is still correct next week.
-  //   A pinned version    this exact snapshot, forever. Grouped under its own heading
-  //                       so the choice between "newest" and "this one" is visible
-  //                       rather than something the reader infers from option order.
-  //
-  // NO READY VERSION is a blocker, not a warning: a resource with nothing deployable
-  // cannot go into traffic, so the field says what is wrong and offers the one action
-  // that fixes it (build a version), and the page's deploy gate reads the same fact.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
@@ -38,25 +16,27 @@
   } from '../../lib/data/releases'
   import { relativeTime } from '../../lib/format/relative-time'
 
-  const props = defineProps({
-    // The resource type this field composes (`application`, `function`, …).
-    type: { type: String, required: true },
-    // The chosen resource id.
-    resourceId: { type: String, default: '' },
-    // The chosen version id, or the LATEST_READY sentinel.
-    versionId: { type: String, default: '' },
-    // A detected dependency: the resource is a fact of the parent's version, so it is
-    // reported with a lock instead of offered as a Select.
-    fixed: { type: Boolean, default: false },
-    // The whole pair is inert: this resource is kept from the active release, or the
-    // release is being deployed.
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    type: string
+    resourceId?: string
+    versionId?: string
+    fixed?: boolean
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    resourceId: '',
+    versionId: '',
+    fixed: false,
+    disabled: false
   })
 
-  const emit = defineEmits(['update:resourceId', 'update:versionId', 'build'])
+  const emit = defineEmits<{
+    'update:resourceId': []
+    'update:versionId': []
+    build: []
+  }>()
 
-  // One id namespace per instance: a release renders a dozen of these at once, and each
-  // Label has to point at its own control.
   const scope = useId()
   const resourceFieldId = `${scope}-resource`
   const versionFieldId = `${scope}-version`
@@ -70,8 +50,6 @@
   const resourceDisplay = (value) =>
     options.value.find((option) => option.value === value)?.label ?? ''
 
-  // The sentinel reads as what it does, not as its raw value: the trigger says "latest
-  // Ready" so a reader scanning the composed release sees a policy, not an id.
   const versionDisplay = (value) => {
     if (value === LATEST_READY) return 'latest Ready'
     return versions.value.find((option) => option.value === value)?.label ?? value
@@ -79,8 +57,6 @@
 </script>
 
 <template>
-  <!-- The pair sits on one row from `sm` up, and stacks below it: two Selects side by
-       side at 320px are two truncated Selects. -->
   <div class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2">
     <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
       <Label
@@ -89,9 +65,6 @@
         >Resource</Label
       >
 
-      <!-- FIXED: the resource is reported. A box that looks like a field and reads as
-           one, with the lock saying why it does not open — rather than a disabled
-           Select, which invites the click that does nothing. -->
       <div
         v-if="fixed"
         class="flex min-h-9 min-w-0 items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) px-(--spacing-sm)"
@@ -127,10 +100,6 @@
     </div>
 
     <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-      <!-- No required marker: a version is always required and always answered (the
-           tracking sentinel is the default), so "(Required)" on every one of a dozen rows
-           would be a dozen repetitions that tell the reader nothing. When a version IS
-           missing, the message row below says so. -->
       <Label :for="versionFieldId">Version</Label>
 
       <Select
@@ -148,10 +117,6 @@
           :aria-describedby="`${versionFieldId}-message`"
         />
         <Select.Content>
-          <!-- The policy option leads, ungrouped: it is not one of the versions, it is
-               the choice not to pin one. Each option is ONE line — the component gives a
-               row 32px, so a second line inside it would be clipped — with the version's
-               age in the trailing slot, where the Current tag also lands. -->
           <Select.Option
             :value="LATEST_READY"
             icon="pi pi-sync"
@@ -189,11 +154,6 @@
         </Select.Content>
       </Select>
 
-      <!-- The message row appears only when there is something to say: the resource
-           cannot be deployed at all, or the version is still unanswered. At rest it is
-           silent. A release renders a dozen of these fields, and a resting helper on each
-           one ("Only Ready versions can be deployed.") is a dozen copies of a sentence
-           the reader stops seeing after the first. -->
       <HelperText
         key="helper-text-1"
         v-if="!deployable"
@@ -209,7 +169,6 @@
         label="Select the version to deploy."
       />
 
-      <!-- The action that unblocks the row, offered where the problem is stated. -->
       <Button
         v-if="!deployable"
         class="self-start"

@@ -56,14 +56,14 @@
       (function () {
         try {
           var FONTS = {
+            rubik: {
+              stack: "'Rubik', sans-serif",
+              href: "https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap",
+            },
             sora: { stack: "'Sora', sans-serif" },
             inter: {
               stack: "'Inter', sans-serif",
               href: "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
-            },
-            rubik: {
-              stack: "'Rubik', sans-serif",
-              href: "https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap",
             },
             "ibm-plex-sans": {
               stack: "'IBM Plex Sans', sans-serif",
@@ -90,8 +90,8 @@
               href: "https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&display=swap",
             },
           };
-          var saved = localStorage.getItem("webkit-sample-font");
-          var font = FONTS[saved] ? saved : "sora";
+          var saved = localStorage.getItem("webkit-sample-font-face");
+          var font = FONTS[saved] ? saved : "rubik";
           var root = document.documentElement;
           root.style.setProperty("--app-font", FONTS[font].stack);
           root.setAttribute("data-font", font);

@@ -1,0 +1,624 @@
+---
+title: Release notes
+description: Check the latest changes and release notes in the Azion Web Platform, Azion API, CLI, and other channels and products.
+lastUpdated: 2026-09-02
+toc: false
+sourcePath: src/content/docs/en/pages/main-menu/release-notes/release-notes.mdx
+---
+
+<Update label="September 2, 2026" title="Terraform Provider" description="Version 2.8.0" tags={["Improvements", "Bug Fixes"]}>
+  ### Improvements
+
+  - **Drift Detection**: Resources now support drift detection, so out-of-band changes made in the Azion Console are reverted by `terraform plan` to match your Terraform configuration.
+
+  ### Bug Fixes
+
+  - **Import**: Fixed `terraform import` across multiple data sources and resources.
+  - **Firewall Rules Engine**: Fixed an issue affecting Firewall Rules Engine arguments.
+  - **Function Instances**: Fixed an issue with function instance import.
+</Update>
+
+<Update label="August 28, 2026" title="Azion Console" tags={["Features", "Improvements", "Bug Fixes"]}>
+  ### Features
+
+  - **Azion Plans**: Added a new plans experience with onboarding and billing. Customers now pick their plan at signup, see billing screens tailored to their plan, and get a smoother checkout with reused saved cards and Terms of Service acceptance integrated into payment confirmation.
+  - **Cache Purge**: Enabled automatic cache purge when publishing changes.
+
+  ### Improvements
+
+  - **Plan and Cycle Changes**: The pending change banner now differentiates between a plan downgrade and a billing cycle downgrade, showing the correct plan name and impact for each.
+  - **Environment**: Combined Global Variables and Variables into a single section, and secret variable values are now masked and write-only after being saved.
+  - **Environment**: Variable keys are now automatically formatted as `UPPER_SNAKE_CASE`.
+  - **Deployment**: Renamed the “Routing and policy” section to “Settings” and the “Deployment version policy” field to “Version policy”; version policy options are now labeled “Single” and “Versioned” throughout the platform.
+  - **Deployment**: The “Flexible” binding policy is now the default and listed first when creating a deployment.
+
+  ### Bug Fixes
+
+  - **Object Storage Metrics**: Fixed a missing label and unit for the Object Storage “Data Stored” metric in Billing invoice details and the Home Monthly Usage card.
+  - **Payment History**: Fixed the pagination controls being unusable on mobile.
+  - **Plan Switching**: Fixed an error incorrectly shown when switching plans multiple times without an actual change taking effect.
+  - **Invoice Filter**: Removed a non-functional invoice search filter and fixed a label mismatch between the filter and the invoice list column.
+  - **Signup Plan Carousel**: Fixed plan card clicks being ignored on narrow screens during signup.
+  - **Signup Checkout**: Fixed a checkout error that could occur when quickly switching between plans or billing cycles during signup.
+  - **Onboarding**: Fixed onboarding after switching accounts overwriting the operator’s own profile information instead of the new account’s.
+  - **Checkout**: Fixed the checkout payment form not offering a previously saved card for reuse.
+  - **Billing**: Fixed the Billing screen not always refreshing subscription data when navigating to it, which could show stale billing information.
+  - **Billing**: Fixed a request loop that could occur when reading subscription data failed.
+  - **Payment Methods**: Fixed the payment method button appearing in the Bills tab’s empty state instead of the Payment Methods tab.
+  - **Address Form**: Fixed required-field errors appearing prematurely after selecting a country, before the form was submitted.
+  - **Workload**: Fixed compatible deployments not being listed when linking Deployment Settings to certain environments.
+  - **Release Details**: Fixed the release details panel not displaying fully on mobile.
+  - **azion.json**: Fixed validation of the `urls` field to correctly require each item to be a string.
+</Update>
+
+<Update label="August 26, 2026" title="Azion CLI" description="Version 4.23.0" tags={["Features", "Bug Fixes"]}>
+  ### Features
+
+  - **DNS**: Added a new command tree for managing DNS zones, records, and DNSSEC.
+  - **Custom Pages**: Added commands for managing Custom Pages.
+
+  ### Bug Fixes
+
+  - **Order By**: Fixed the `--order-by` flag not being applied correctly.
+  - **Timeout**: Fixed the `--timeout` flag being ignored.
+</Update>
+
+<Update label="July 29, 2026" title="Azion Console" tags={["Features", "Improvements", "Bug Fixes"]}>
+  ### Features
+
+  - **Real-Time Events**: Improved the Real-Time Events experience.
+
+  ### Improvements
+
+  - **Rules Engine Criteria**: Removed legacy criteria variables from the Rules Engine configuration screen.
+
+  ### Bug Fixes
+
+  - **Account Switching**: Fixed an issue where switching accounts could keep the previous account active instead of switching.
+  - **Activity History Search**: Fixed an issue where searching in Activity History could return an error.
+  - **Unsaved Changes Prompt**: Fixed an issue where the unsaved changes prompt could appear on a domain without any modifications.
+  - **Send Feedback**: Fixed an issue where submitting feedback through the console could fail with a server error.
+  - **WAF Tuning Domain Listing**: Fixed an issue where some domains could be missing from the WAF Tuning list due to a pagination issue.
+  - **SSO**: Fixed an issue where reverting from a custom SSO configuration back to Azion’s default SSO could fail with a 404 error.
+</Update>
+
+<Update label="July 10, 2026" title="Marketplace" tags={["Deprecated"]}>
+  ### Solution deprecations
+
+  The following integrations have been deprecated and removed from Azion Marketplace:
+
+  - Saffe Liveness Detection
+  - Saffe Face Detection
+  - Saffe ID Matching
+
+  These integrations are being retired because they no longer integrate with the platform as well as they used to. If you already have any of them installed, they’ll continue working as expected — only new installations are blocked.
+
+  ### Bot Manager 1.3.0 and Bot Manager Lite 0.2.0
+
+  New versions of **Bot Manager** are available for both the Lite and standard (formerly “Advanced”) plans. Highlights include:
+
+  - Nine new static rules.
+  - A new `good_fingerprint_list` argument, which allows listed fingerprints to bypass Bot Manager validation.
+  - A new `block_ai_bots` argument, which blocks known AI user agents automatically.
+
+  To get the new Lite version, launch it through the [Marketplace](https://console.azion.com/marketplace/solution/azion/bot-manager-lite). The standard version remains available on demand, upon request to the Service Delivery team.
+</Update>
+
+<Update label="June 18, 2026" title="Azion Console" tags={["Features"]}>
+  ### Features
+
+  - **Real-Time Events**: Released a new analysis interface inspired by Kibana to make it easier to view and investigate real-time events.
+  - **New View Access**: Added access to the new Real-Time Events interface through the **Switch to new view** button in the upper-right corner of the Real-Time Events page.
+</Update>
+
+<Update label="June 15, 2026" title="Terraform Provider" description="Version 2.7.0" tags={["Improvements"]}>
+  ### Improvements
+
+  - **Workloads**: Improved management of `http3` and `quic_ports`.
+  - **Retry Handling**: Improved retry functionality with retry options for `500` errors.
+</Update>
+
+<Update label="June 15, 2026" title="Azion CLI" description="Version 4.22.1" tags={["Improvements"]}>
+  ### Improvements
+
+  - Updated CLI support for the latest DevTools and integrations improvements.
+</Update>
+
+<Update label="June 15, 2026" title="DevTools & Integrations" tags={["Features"]}>
+  ### Versions shipped
+
+  - **@aziontech/unenv-preset**: 1.0.1
+  - **@aziontech/presets**: 1.1.0
+  - **@aziontech/builder**: 1.0.2
+  - **@aziontech/bundler**: 1.1.0
+
+  ### Features
+
+  - **Nitro preset**: Added a development preset for Nitro, enabling builds for applications and frameworks that run on the Nitro server.
+  - **TypeScript packages**: Published updates across multiple TypeScript packages to support the new Nitro preset.
+</Update>
+
+<Update label="June 15, 2026" title="Marketplace" description="Version 1.2.0" tags={["Improvements"]}>
+  ### Send Event function
+
+  ### Improvements
+
+  - **Asynchronous transmission**: The Send Event function now handles data transmission asynchronously, preventing slow external HTTP endpoints or S3 buckets from affecting the end-user experience.
+</Update>
+
+<Update label="June 15, 2026" title="Azion API" tags={["Features", "Bug Fixes"]}>
+  Updates deployed to `api.azion.com/v4/`:
+
+  ### Features
+
+  - **Runners dataset**: Added to `/events/graphql`.
+
+  ### Bug Fixes
+
+  - **Plans and support products filtering**: Filtered by `metric_slug` instead of `product_slug` using `/accounting/graphql` and `/billing/graphql`.
+  - **Aggregated billing queries**: Kept plans and support products rows visible using `/billing/graphql`.
+</Update>
+
+<Update label="May 28, 2026" title="Terraform Provider" description="Version 2.6.0" tags={["Features", "Improvements"]}>
+  ### Features
+
+  - **Order Resource**: Added Order resource for Application and Firewall Rules Engine, supporting API v4’s separate endpoint for ordering rules
+
+  ### Improvements
+
+  - **Labels**: Added labels to every resource
+  - **Workload Deployment**: Correctly manages Firewall and Custom Page in Workload Deployment
+  - **QUIC Port**: Added default `quic_port` value when not sent
+</Update>
+
+<Update label="May 8, 2026" title="Azion API" tags={["Bug Fixes"]}>
+  ### Bug Fixes
+
+  - **IAM-API**: Fixed issue that prevented emails from being re-used later on after deletion
+</Update>
+
+<Update label="May 8, 2026" title="Terraform Provider" tags={["Features", "Bug Fixes"]}>
+  ### Features
+
+  - **Certificates**: Added support to manage digital certificates
+  - **Object Storage**: Added support to manage buckets
+
+  ### Bug Fixes
+
+  - **Load Balancer**: Added missing schema to provider
+</Update>
+
+<Update label="May 7, 2026" title="Azion Console" tags={["Bug Fixes"]}>
+  ### Bug Fixes
+
+  - **Billing**: Solved specific case where previous invoices were not shown
+  - **Personal Tokens**: Solved an issue that shows a popup on specific cases
+  - **Object Storage**: Solved a case where the button to add new buckets may be missing.
+</Update>
+
+<Update label="May 5, 2026" title="Azion CLI" description="Version 4.21.0" tags={["Features", "Improvements"]}>
+  ### Features
+
+  - **S3 Static File Upload**: Use S3 to upload static files during deploy command, significantly improving deployment performance. In a project with 180 static files, upload time decreased from 1m35s-1m45s (using 5 workers) to 3.5s-8.5s
+  - **Workers Flag**: Added `--workers` flag to allow custom worker configuration instead of using the automatically calculated number
+  - **S3 Credentials Storage**: Created a file to store S3 credentials per profile
+  - **Deploy Report**: Added deploy report after remote deploy
+
+  ### Improvements
+
+  - **Workers Logic**: Improved workers logic with auto-detection of CPU cores, capped at a maximum of 20 workers
+  - **Stage Bundler**: Changed stage bundler
+  - **Bundler Call**: Updated bundler call to use aziontech namespace
+  - Updated project dependencies
+</Update>
+
+<Update label="April 17, 2026" title="API v4 (Preview)" tags={["Improvements"]}>
+  Updates deployed to the GraphQL API at `api.azion.com/v4/*/graphql`:
+
+  ### Improvements
+
+  - **Datasource aliases**: Added aliases for datasources. Current names continue to work: `cellsConsoleEvents` → `functionConsoleEvents`
+  - `edgeFunctionEvents` → `functionEvents`
+  - `httpEvents` → `workloadEvents`
+
+  - `edgeFunctionsInstanceIdList` → `functionsInstanceIdList`
+  - `edgeFunctionsInitiatorTypeList` → `functionsInitiatorTypeList`
+  - `edgeFunctionsList` → `functionsList`
+  - `edgeFunctionsSolutionId` → `functionsSolutionId`
+  - `edgeFunctionsTime` → `functionsTime`
+</Update>
+
+<Update label="April 16, 2026" title="Terraform Provider" description="Version 2.0.0" tags={["Features", "Improvements", "Breaking Changes"]}>
+  This major release migrates the Azion Terraform Provider to API v4, bringing improved performance, new features, and a more consistent resource management experience.
+
+  ### API Version Migration
+
+  - **Version 2.0.0+**: Supports Azion API v4 only
+  - **Version 1.41.0 and earlier**: Supports Azion API v3
+
+  If you are currently using API v3, you must remain on version 1.41.0 or earlier, or update your configurations to be compatible with API v4.
+
+  ### Removed Resources and Data Sources
+
+  Resources and data sources that no longer exist in API v4 have been removed, such as origins and domains.
+
+  ### Features
+
+  - Migrated to Azion API v4 for improved performance and reliability
+  - Added new APIs that were missing from Terraform, providing a full suite of Azion products in the provider
+
+  ### Improvements
+
+  - Updated SDK dependencies to latest versions
+  - Removed legacy API client configurations
+  - Streamlined provider configuration
+
+  ### Documentation Updates
+
+  - Added API Version Notice section to README.md
+  - Removed documentation files for deprecated resources
+  - Updated example configurations to remove deprecated resources
+</Update>
+
+<Update label="April 13, 2026" title="Azion Console" description="Version 1.57.0" tags={["Features", "Improvements", "Bug Fixes"]}>
+  ### Features
+
+  - **mTLS Filter**: Added support for inactive certificates in mTLS filter
+
+  ### Improvements
+
+  - **Table Pagination**: Changed default page size from `200` to `100`
+  - **Real-Time Metrics**: Extended date filter range from 1 to 2 years
+
+  ### Bug Fixes
+
+  - **Real-Time Metrics**: Fix the data volume units to respect the Joint Electron Device Engineering Council (JEDEC) Solid State Technology Association
+  - **Certificates**: Added domain validation for Let’s Encrypt HTTP-01 certificate
+  - **Activity History**: Added routing support for DNS zone and purge variants
+  - **Navigation**: Improved navigation performance, resolved navbar flash and workload protocol error
+  - **Tables**: Resolved table sorting not working
+  - **Home Page**: Adjusted column widths on last activities home and surface tokens on home blocks
+  - **Resource Labels**: Made resource labels domain-specific
+  - **Error Page**: Refactored error page into reusable `ErrorPage` component
+</Update>
+
+<Update label="April 10, 2026" title="API v4 (Preview)" tags={["Features"]}>
+  Updates deployed to the GraphQL API at `api.azion.com/v4/*/graphql`:
+
+  ### Features
+
+  - **activityHistoryEvents dataset**: Added two new event types: `User Login`
+  - `User Lockout Policy`
+</Update>
+
+<Update label="April 9, 2026" title="Azion Console" description="Version 1.56.0" tags={["Features", "Improvements"]}>
+  ### Features
+
+  - **New Console Home**: Redesigned home page with metrics, product listings, and resource overview Metrics section with four KPI cards: Total Data Transferred, Requests Per Second, Bandwidth Saving, and Data Transfer Offload, each with percentage change indicators
+  - Resources table listing workloads with domain, status, and last modified date
+  - Last Activities feed showing recent operations with resource type, resource name, parent info, and author email
+  - Right sidebar with Monthly Usage summary and Marketplace Trends
+  - Prominent Invite User button and team name greeting
+
+  ### Improvements
+
+  - **Server-Sent Events (SSE)**: Introduced SSE to improve data freshness and responsiveness across the platform Cache is automatically invalidated whenever updates occur
+  - Fresh data is proactively prefetched to keep the UI in sync
+</Update>
+
+<Update label="April 2, 2026" title="Azion API" tags={["Improvements"]}>
+  Updates deployed across multiple Azion APIs:
+
+  ### Improvements
+
+  - **WAF API**: Added `created_at` field to template tables, enabling filtering and ordering by creation time
+  - `created_at` is populated 5 minutes after the user adds a Set WAF rule in Rules Engine, reflecting the moment the WAF was applied. The WAF remains fully functional during this interval
+</Update>
+
+<Update label="March 30, 2026" title="Azion API" tags={["Improvements"]}>
+  Updates deployed to the Data Stream API:
+
+  ### Improvements
+
+  - **Data Stream API**: Added `created_at` column to template tables for creation-based filtering and ordering
+</Update>
+
+<Update label="March 30, 2026" title="Azion CLI" description="Version 4.19.1" tags={["Features", "Improvements"]}>
+  ### Features
+
+  - **WAF Commands**: Added command-line operations to manage WAF rules and exceptions, supporting creation of new rules, retrieval of existing configurations, updates to rule parameters, and removal of rules and exceptions
+
+  ### Improvements
+
+  - **Bundler**: Updated replacements usage for major improvement in deployment time
+  - Updated E2E tests, project dependencies, bundler version, and Go version
+</Update>
+
+<Update label="March 26, 2026" title="Data Stream" tags={["Improvements"]}>
+  ### Improvements
+
+  - **Activity History**: Added 4 new fields to Data Source Activity History: `resource_name`, `parent_resource_type`, `parent_resource_id`, and `parent_resource_name` to provide more context about resource changes.
+</Update>
+
+<Update label="March 25, 2026" title="Azion Console" description="Version 1.55.3" tags={["Bug Fixes"]}>
+  ### Bug Fixes
+
+  - Fixed issue where the code editor wasn’t being loaded when editing a function in the Console.
+</Update>
+
+<Update label="March 20, 2026" title="API v4 (Preview)" tags={["Improvements"]}>
+  Updates deployed to the GraphQL API at `api.azion.com/v4/*/graphql`:
+
+  ### Improvements
+
+  - **workloadEvents dataset**: Added `upstreamLocalAddr` field to provide information about the local address used in upstream connections.
+  - **activityHistoryEvents dataset**: Added `resourceName`, `parentResourceType`, `parentResourceId`, and `parentResourceName` fields to provide more context about resource changes.
+  - **Permissions**: Removed access to `/graphql` endpoints for Brand and Reseller accounts; access is now only allowed for Group and Client accounts.
+</Update>
+
+<Update label="March 17, 2026" title="Functions API" tags={["Improvements"]}>
+  ### Improvements
+
+  - **Functions API**: Added `reference_count` filter and `OrderingFilter` capability to enable more flexible querying and sorting of functions.
+</Update>
+
+<Update label="March 11, 2026" title="Azion API" tags={["Improvements"]}>
+  Updates deployed across multiple Azion APIs:
+
+  ### Improvements
+
+  - **Data Stream API**: Renamed resource types for clarity: `Template` to `Stream Template` and `DataStream` to `Stream`. Updated Activity History to v3 and standardized OpenAPI schema validation in CI.
+  - **Identity API**: Improved path parameters with descriptive names (`{id}` → `{user_id}`, `{group_id}`, `{grant_id}`, `{token_id}`, `{favorite_id}`). Standardized operation IDs to PascalCase format and updated DELETE endpoints with clearer operation names.
+  - **Users API**: Renamed resource type `User` to `Account User`. Updated DELETE responses from 204 to 200 to align with Azion standards.
+</Update>
+
+<Update label="March 10, 2026" title="Azion API" tags={["Improvements"]}>
+  Updates deployed across multiple Azion APIs:
+
+  ### Improvements
+
+  - **SQL Database API**: Renamed resource type from `Schema` to `SQL Database`. Updated Activity History to v3 and added automatic OpenAPI schema validation in CI.
+  - **Metrics API**: Updated DELETE endpoints to return 200 with response body, aligning with Azion standards. Added standard documentation structure across Architecture, Infrastructure, Monitoring, Runbook, Tests, and Versioning.
+  - **Edge DNS API**: Renamed resource types for consistency: `DNS Record` to `DNS Zone Record` and `DNS DNSSec` to `DNS Zone DNSSEC`. Updated Activity History to v3 and enhanced test coverage to include views.
+  - **Accounts API**: Renamed resource types: `client` to `Account` and `AccountInfo` to `Account Info`. Simplified OpenAPI schema by removing redundant responses and schemas. Added standard documentation structure.
+</Update>
+
+<Update label="March 9, 2026" title="Azion Platform" tags={["Improvements", "Bug Fixes"]}>
+  Updates deployed for the Azion platform:
+
+  ### Improvements
+
+  - Added `id` field to credentials creation response body for Object Storage API
+
+  ### Bug Fixes
+
+  - Fixed QUIC ports when HTTP/3 is disabled
+  - Updated activity-history to v3, simplified firewall behavior schemas, and fixed issues in QUIC ports, Functions, and OpenAPI docs
+  - Fixed intermittent 403 errors during Let’s Encrypt certificate generation by forcing internal cluster communication
+  - Removed `readOnly` fields from required lists in `CertificateRequest` and `CertificateSigningRequest` schemas
+</Update>
+
+<Update label="March 4, 2026" title="Azion Console" description="Version 1.54.2" tags={["Features", "Improvements"]}>
+  ### Features
+
+  - Implemented moving files across folders in Object Storage
+  - Added file rename support with inline editing in Object Storage
+
+  ### Improvements
+
+  - Prevented S3 blank field error and added null guards in data-stream adapter
+  - Corrected support plan and service plan display in Console
+  - Resolved domain parsing by matching against Edge DNS zones
+</Update>
+
+<Update label="March 4, 2026" title="Azion CLI" description="Version 4.18.0" tags={["Features", "Improvements", "Bug Fixes"]}>
+  ### Features
+
+  - **Config commands**: Added `init`, `apply`, and `delete`
+  - **IaC config apply**: You can now apply IaC configurations without requiring a full Jamstack project
+  - **Firewall Rules Engine**: Added support
+  - **Firewall Management**: Added support through IaC
+
+  ### Improvements
+
+  - Switched to a single OpenAPI SDK without patches
+  - Added new raw option to the `--out` flag
+  - Updated token validation
+  - Updated project dependencies
+
+  ### Bug Fixes
+
+  - `cascade delete` now supports `--config-dir` correctly
+
+  Read more about [Azion CLI and its commands](https://www.azion.com/en/documentation/products/azion-cli/overview/).
+</Update>
+
+<Update label="February 24, 2026" title="Azion Console" tags={["Improvements", "Bug Fixes"]}>
+  This release addresses stability and enhancements in the UI
+
+  ### Improvements
+
+  - **Team Permissions**: Team Permissions updates now follow standartized flow for navigation and notifications
+  - **Date Filters**: date selectors now give correct feedback for active focus
+
+  ### Bug Fixes
+
+  - **Applications**: Fixed error while loading applications
+  - **General**: Fixed country code dropdown not loading correct value
+</Update>
+
+<Update label="February 24, 2026" title="Azion Console" description="Version 1.54.0" tags={["Features"]}>
+  ### Features
+
+  - Enhance UX/UI for active date input field, where added a focus ring indicator.
+  - Implemented UX/UI pattern for Team Permissions capability.
+</Update>
+
+<Update label="February 23, 2026" title="Azion Console" tags={["Improvements", "Bug Fixes"]}>
+  This release adds cache hydration and prefetch optimizations across edit flows and improves overall UX and request behavior.
+
+  ### Improvements
+
+  - **Cache hydration**: Added for Teams Permissions, Custom Pages, and Connectors edit flows
+  - **WAF**: Added cache hydration for edit flow and prefetch of tab data
+  - **Certificate Manager**: Added cache hydration for edit flow
+  - **Internal pages**: Updated page copy and text consistency
+  - **Support info**: Added guidance to contact Azion Copilot and Support
+  - **Prefetch scheduling**: Implemented `requestIdleCallback` after view load
+  - **Team Permissions**: Migrated services to v2 with TanStack Query
+
+  ### Bug Fixes
+
+  - **Login flow**: Redirect to `/` when `/login` is accessed with `hasSession=true`
+  - **Object Storage**: Fixed duplicate request when accessing a folder inside a bucket
+  - **Upload cancellation**: Fixed issue where canceling upload did not abort the `POST` request
+  - **Responsive layout**: Prevented small window resize from triggering `overflow: hidden` and cutting off the delete button
+  - **DataTimeRange**: Improved absolute date selection behavior
+  - **Real-Time Metrics**: Fixed tooltip chart position
+  - **Functions page**: Removed preview button
+</Update>
+
+<Update label="February 19, 2026" title="Azion Console" description="Version 1.52.0" tags={["Improvements", "Bug Fixes"]}>
+  This release expands cache hydration to more resources and includes UI/permissions fixes.
+
+  ### Improvements
+
+  - **Cache hydration**: Expanded to Data Stream, Network Lists, Edge DNS, and Firewall resources
+  - **Cache hydration**: Added for Teams Permissions, Custom Pages, and Connectors edit flows
+  - **Server-side pagination**: Improved data handling across list views
+  - **Data prefetch**: Enhanced loading performance for edit flows
+
+  ### Bug Fixes
+
+  - UI and permissions fixes across multiple components
+  - Improved code readability in ListView and EditView components
+</Update>
+
+<Update label="February 19, 2026" title="Azion CLI" description="Version 4.17.0">
+  - Added install script for easier CLI installation
+  - Added Chocolatey package manager support for Windows users
+
+  Read more about [Azion CLI and its commands](https://www.azion.com/en/documentation/products/azion-cli/overview/).
+</Update>
+
+<Update label="February 11, 2026" title="Azion Console" tags={["Improvements"]}>
+  ### Highlights
+
+  - **Listing Cache**: Strategic micro-caching applied to product listing interfaces to improve performance and responsiveness across high-traffic list views.
+  - **Better Real-Time UX**: Filter usability improvements and better drawers for Real-Time Events.
+
+  ### Improvements
+
+  **Console performance improvement**: To increase the performance in Console listing interfaces, strategic micro-caching has been implemented for the following products:
+
+  - Functions
+  - Object Storage
+  - Edge DNS
+  - Data Stream
+  - Connectors
+  - Team Permissions
+  - WAF Rules
+  - SQL Database
+
+  **Real-Time Events & Metrics**:
+
+  - Improved filter usability for Real-Time Events and Real-Time Metrics
+  - Improved detail drawers for Real-Time Events
+
+  ### Changes / Maintenance
+
+  - Fixed system theme selector behavior
+  - Patched axios vulnerability
+  - Build tooling: webpack bump 5.103.0 → 5.105.0
+</Update>
+
+<Update label="February 11, 2026" title="DevTools & Integrations" tags={["Features"]}>
+  ### Versions shipped
+
+  - **Azion CLI**: 4.16.0
+  - **Azion Lib**: 3.1.0
+  - **Azion Bundler**: 7.1.0
+
+  ### Features
+
+  **HTTP/3 support for Workloads via IaC (azion.config)**:
+
+  - Added `http3` to default HTTP versions array
+  - Set default QUIC ports to `[443]` (instead of null)
+  - Improve the protocol configuration from all presets to use new `http3` setting.
+
+  **Build system modernization (tsup → Vite)**:
+
+  Because tsup was discontinued, the build system across packages was modernized:
+
+  - **Build tooling**: Migrated compilation/build from tsup to Vite across all packages. Added `vite` and `vite-plugin-dts` as root dev dependencies. Added per-package `vite.config.mjs` with internal aliasing and custom config.
+  - **Exports & Type improvements**: Updated `package.json` exports to include explicit `"types"`. Switched entries for better Node/TS compatibility: CommonJS `.js` → `.cjs`, ESM `.js` → `.mjs`. Fixed/standardized `.d.ts` paths and type references.
+  - **Internal consistency**: Refactored to use `import type { ... }` for type-only imports. Standardized `export type { ... }` for type exports. Improved client imports using aliased paths instead of deep relative imports.
+
+  Read more about [Azion CLI](https://www.azion.com/en/documentation/products/azion-cli/overview/), [Azion Lib](https://www.azion.com/en/documentation/products/azion-lib/overview/), and [Azion Bundler](https://www.azion.com/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).
+</Update>
+
+<Update label="January 26, 2026" title="Billing - Connectors" tags={["Bug Fixes"]}>
+  ### Bug Fixes
+
+  Fixed an issue where accounts not using the Connector product had metrics incorrectly applied to partial invoice calculations.
+</Update>
+
+<Update label="January 20, 2026" title="Azion Console">
+  Improvements to the Console interface including optimized table interactions and streamlined CSV export functionality across data views.
+</Update>
+
+<Update label="January 15, 2026" title="Azion Console">
+  New features and improvements for template configuration:
+
+  - **Product Copy**: Updated empty states and product descriptions for better clarity.
+  - **Certificate Management**: Improved certificate update behavior and responsive page titles.
+</Update>
+
+<Update label="January 13, 2026" title="Azion CLI" description="Version 4.14.0">
+  This release includes improvements to storage and workloads configuration, along with enhanced function deployment handling.
+
+  - Correctly sets function `json_args` during deployment.
+
+  Read more about [Azion CLI and its commands](https://www.azion.com/en/documentation/products/azion-cli/overview/).
+</Update>
+
+<Update label="January 12, 2026" title="Azion Console" tags={["Features", "Improvements"]}>
+  This release brings significant improvements to the Console experience:
+
+  ### Features
+
+  - **Billing**: Added Connector product metrics visibility.
+  - **SQL Database** (Preview): New User Interface for SQL Database, Enhanced table filtering capabilities, and improved table list scrolling.
+  - **Real-Time Events**: Improved date filter functionality.
+  - **Template Rendering**: Better support for JsonForm-based templates.
+
+  ### Improvements
+
+  - General UI and table navigation consistency enhancements.
+  - Object Storage: Improved text clarity and bucket configuration options.
+</Update>
+
+<Update label="January 9, 2026" title="Marketplace">
+  ### Block Fingerprint List
+
+  A new **Block Fingerprint List** function is now available in the Marketplace. This integration enables you to block requests when the server fingerprint matches entries in a user-managed block list, providing an additional layer of security for your applications.
+</Update>
+
+<Update label="January 8, 2026" title="Billing">
+  Two new metrics are now available for monitoring:
+
+  - **connector_load_balancer_data_transfer**: Track data transfer through load balancer connectors.
+  - **connector_shielded_connectors**: Monitor shielded connector usage.
+</Update>
+
+<Update label="January 5, 2026" title="Azion CLI" description="Version 4.13.1">
+  Improvements to Storage API calls for v3 commands and restored wiki documentation generation functionality.
+
+  Read more about [Azion CLI and its commands](https://www.azion.com/en/documentation/products/azion-cli/overview/).
+</Update>
+
+## Previous years
+
+Release notes from 2025 and earlier are in the
+[Azion documentation](https://www.azion.com/en/documentation/products/release-notes/).

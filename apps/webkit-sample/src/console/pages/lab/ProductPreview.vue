@@ -1,6 +1,6 @@
 <script setup>
   import CardBox from '@aziontech/webkit/card-box'
-  import Flow from '@aziontech/webkit/flow'
+  import FlowRoot from '@aziontech/webkit/flow-root'
   import IconButton from '@aziontech/webkit/icon-button'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -89,7 +89,7 @@
             class="overflow-x-auto bg-(--bg-surface-raised)"
           >
             <template #content>
-              <Flow
+              <FlowRoot
                 align="start"
                 class="[&>div]:w-full"
               >
@@ -102,7 +102,7 @@
                   :label="node.label"
                   :severity="node.severity"
                   :terminal="Boolean(node.terminal)"
-                  class="min-w-[14rem] flex-1"
+                  class="min-w-(--size-56) flex-1"
                 >
                   <template
                     v-if="node.spanId"
@@ -130,7 +130,7 @@
                     </span>
                   </div>
                 </FlowCard>
-              </Flow>
+              </FlowRoot>
             </template>
           </CardBox>
         </div>

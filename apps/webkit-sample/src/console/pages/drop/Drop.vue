@@ -1,22 +1,4 @@
 <script setup>
-  // /drop — ONE PAGE, ONE GESTURE.
-  //
-  // Vercel Drop and Cloudflare Drop are the same idea, and it is a good one: a surface with
-  // no other doors, where the shortest path from files to a live URL is a single drag.
-  // Nothing is asked before the drop — not a repository, not a template, not a name.
-  //
-  // This is NOT a second create flow. Everything after the drop is the flow that already
-  // exists: `useProjectUpload` reads the project and detects its framework, the manifest
-  // goes into ../../lib/state/dropped-project.js because `File` handles cannot ride a URL,
-  // and the reader lands on `/deploy?upload=<name>&framework=<tech>` — the same screen the
-  // Creation Center hands a drop to. What this page changes is only what the user asked it
-  // to change: it can START only with a drop.
-  //
-  // WHAT THE DROP PRODUCES: an application with no repository (`source: 'drop'`, see
-  // ../../lib/data/applications.js). That is the honest answer — a dropped folder is not a
-  // repository Azion can watch — and it is why the application's page then carries the CLI
-  // commands: drop to get live in a gesture, `azion link` to keep it moving. The page also
-  // keeps taking a drop, so the gesture that made it can also be the one that updates it.
   import Button from '@aziontech/webkit/button'
   import TextureMaterial from '@aziontech/webkit/texture-material'
   import { computed } from 'vue'
@@ -54,16 +36,6 @@
       class="animate-page-enter motion-reduce:animate-none flex min-w-0 flex-1 flex-col overflow-auto"
     >
       <div class="layout-boundary flex flex-1 flex-col justify-center">
-        <!-- THE ZONE. `relative` so the texture can sit behind it: every banner is
-             `pointer-events-none absolute inset-0`, which is exactly what a drop target
-             needs from a decoration — it is painted over and cannot swallow the drag.
-             `dot-grid` rather than `pixelate`, whose opacity and mask ellipse are fitted
-             per cell and degrade to a flat wash in a box this size.
-
-             `--texture-ink` is the override the banner documents, at 10% instead of its
-             default 22%: at full strength a dot lands in the middle of a word of the body
-             copy. It has to be BRACKETED — the paren shorthand has no form for DECLARING a
-             custom property and would emit nothing at all. -->
         <section
           class="relative isolate flex flex-col items-center justify-center gap-(--spacing-lg) overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-default) px-(--spacing-lg) py-(--spacing-xxl) text-center transition-colors duration-150 ease-out [--texture-ink:color-mix(in_srgb,var(--text-default)_10%,transparent)] motion-reduce:transition-none data-[dragging]:border-(--border-selected) data-[dragging]:bg-(--bg-surface)"
           :data-dragging="dragging || null"
@@ -74,7 +46,7 @@
             class="relative flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised)"
           >
             <i
-              class="pi pi-cloud-upload text-[1.25rem] leading-none text-(--text-default)"
+              class="pi pi-cloud-upload text-body-lg leading-none text-(--text-default)"
               aria-hidden="true"
             />
           </span>
@@ -87,8 +59,6 @@
             </p>
           </div>
 
-          <!-- The fallback, for a reader who cannot drag — a picker is the same gesture
-               with a different input device, and both land in `deployProject`. -->
           <div class="relative flex flex-wrap items-center justify-center gap-(--spacing-xs)">
             <Button
               label="Choose a folder"

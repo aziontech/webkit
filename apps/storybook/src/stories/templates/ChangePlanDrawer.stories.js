@@ -25,7 +25,7 @@ const billingOptions = [
 const planFeatureItems = [
   { icon: 'pi pi-globe', label: 'Infraestrutura global' },
   { icon: 'pi pi-code', label: 'Funções serverless' },
-  { icon: 'pi pi-image', label: 'Image optimization' },
+  { icon: 'ai ai-image-processor', label: 'Image optimization' },
   { icon: 'ai ai-store', label: 'Armazenamento e banco de dados' },
   { icon: 'pi pi-shield', label: 'Mitigação de DDoS e firewall' }
 ]

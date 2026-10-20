@@ -59,8 +59,15 @@ const SPECIALIST = {
   href: '#contact',
   trailing: true
 }
+const SPECIALIST_LOWER = { ...SPECIALIST, label: 'Talk to a specialist' }
 const SPECIALIST_PAGE = {
   label: 'Talk to a Specialist',
+  kind: 'outlined',
+  href: '/contact',
+  trailing: true
+}
+const CONTACT = {
+  label: 'Contact Us',
   kind: 'outlined',
   href: '/contact',
   trailing: true
@@ -175,19 +182,29 @@ const CENTERED_CAROUSEL_TEMPLATE = `<Hero
   texture="dots"
   texture-fade="top"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Proven on mission-critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
     centered
     max-width="xl"
-    highlight="Invisible Infrastructure"
-    title="for the Speed of AI"
+    highlight="Invisible infrastructure"
+    title="for the speed of AI"
     description="Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical."
   >
-${indent(actions([START_FREE, SPECIALIST]), 2)}
+${indent(actions([START_FREE_LOWER, SPECIALIST_LOWER]), 2)}
   </Hero.Title>
 </Hero>`
+
+const CENTERED_CAROUSEL_LONG_TEMPLATE = CENTERED_CAROUSEL_TEMPLATE.replace(
+  'max-width="xl"',
+  'max-width="3xl"'
+)
+  .replace('highlight="Invisible infrastructure"', 'eyebrow="Functions"')
+  .replace(
+    'title="for the speed of AI"',
+    'title="Funções serverless instantâneas para aplicações modernas"'
+  )
 
 const TITLE_BAND_TEMPLATE = `<Hero
   kind="band"
@@ -206,6 +223,44 @@ ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
   </Hero.Title>
 </Hero>`
 
+const TITLE_BAND_SHORT_TEMPLATE = `<Hero
+  kind="band"
+  max-width="5xl"
+  size="large"
+>
+  <Hero.Title
+    centered
+    max-width="xl"
+    eyebrow="Cache"
+    title="Accelerate content delivery globally"
+    description="Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
+  >
+${indent(actions([START_FREE, SPECIALIST]), 2)}
+  </Hero.Title>
+</Hero>`
+
+const CENTERED_BAND_TEMPLATE = `<Hero
+  kind="band"
+  size="large"
+  max-width="site"
+  texture="dots"
+  texture-fade="top"
+  carousel
+  carousel-label="Trusted by mission-critical workloads"
+  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
+>
+  <Hero.Title
+    centered
+    max-width="2xl"
+    eyebrow="Support"
+    eyebrow-prefix="//"
+    title="Technical support for every stage of your growth"
+    description="Designed to help you move independently. Backed by specialists when you need them."
+  >
+${indent(actions([START_FREE, CONTACT]), 2)}
+  </Hero.Title>
+</Hero>`
+
 const PIXEL_FLOOR_TEMPLATE = `<Hero
   kind="screen"
   floor-texture="pixelate"
@@ -215,7 +270,7 @@ const PIXEL_FLOOR_TEMPLATE = `<Hero
   carousel
   carousel-label="Trusted by mission-critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
-  class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
+  class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
     title="Build and deploy AI agents and applications in seconds"
@@ -232,7 +287,6 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
   carousel
   carousel-label="Trusted by mission-critical workloads"
   :carousel-marks="${marks(RETAIL_CLIENT_STRIP, 1)}"
-  offset="3.5rem"
 >
   <Hero.Title
     max-width="xl"
@@ -261,7 +315,6 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   texture="dots"
   texture-size="small"
   texture-fade="top"
-  class="[--banner-offset:3.5rem]"
 >
   <Hero.Title
     centered
@@ -298,7 +351,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. The home page and every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology) open on the centered band with the client strip on its floor. Learning opens on a large title band, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
+          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. Every hero that is not a band fills one screen, and only a hero with something standing on its floor is one. The home page, every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology), Products, Our Network and Success Cases open on the centered screen hero with the client strip on its floor. The pages with no strip (Solutions, Cache, Application Accelerator, Compliance, GDPR) open on the centered band, as do Support, Blog and Careers. Learning opens on a large title band, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. The screen stories fill the canvas because nothing sits above them; on the site the shell declares `--banner-offset` for the sticky nav once, and every screen hero under it subtracts it. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -320,6 +373,19 @@ export const CenteredCarousel = {
   }
 }
 
+export const CenteredCarouselLongTitle = {
+  render: () => ({ components, template: CENTERED_CAROUSEL_LONG_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The same screen hero for a headline too long for the default column. The title column widens from `xl` to `3xl`, so a headline that would break into three lines breaks into two. Short headlines keep the default column.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_LONG_TEMPLATE) }
+    }
+  }
+}
+
 export const TitleBand = {
   render: () => ({ components, template: TITLE_BAND_TEMPLATE }),
   parameters: {
@@ -329,6 +395,32 @@ export const TitleBand = {
           'The Learning Center hero: a padded band rather than a screen, at `size="large"` so it opens with twice the band’s usual rhythm above and below, the title, a one-line description and two actions centered, and the client strip on its floor. Use it where the page is a list or a catalogue and a full viewport of title would push the first entry below the fold.'
       },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
+    }
+  }
+}
+
+export const TitleBandShortTitle = {
+  render: () => ({ components, template: TITLE_BAND_SHORT_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The title band for a product page with a short headline. The title column narrows from `4xl` to `xl`, so the headline and description sit in a compact centered block instead of one wide line, and the band has no client strip, so the first section starts right under it.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_SHORT_TEMPLATE) }
+    }
+  }
+}
+
+export const CenteredBand = {
+  render: () => ({ components, template: CENTERED_BAND_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The Support page’s hero: the large title band, framed at the site width, with the dot field fading in from the top behind an eyebrowed headline, two actions, and the client strip with its overline on the floor, all centred. It is the screen hero’s composition at band height, for a page whose first section should land above the fold.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
     }
   }
 }

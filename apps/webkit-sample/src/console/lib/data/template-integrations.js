@@ -93,27 +93,11 @@ const INTEGRATIONS = {
   }
 }
 
-/**
- * How a template installs itself on an application, or `null` when it is not one that
- * does — a framework starter arrives as code and has nothing to install.
- *
- * @param {string} slug A catalog template slug.
- * @returns {object|null}
- */
 export const integrationFor = (slug) => INTEGRATIONS[slug] ?? null
 
-/** Every integration template in the catalog, as the rows a picker offers. */
 export const integrationTemplates = () =>
   Object.keys(INTEGRATIONS).map(getTemplate).filter(isIntegration)
 
-/**
- * The records an install makes, built from the template's own settings but not yet
- * stored — what the step previews before the reader commits.
- *
- * @param {string} slug
- * @param {object} settings The answers to the template's settings fields.
- * @param {string} name What the records are named after (the host application).
- */
 export const integrationPreview = (slug, settings, name) => {
   const spec = integrationFor(slug)
   if (!spec) return null
@@ -128,28 +112,11 @@ export const integrationPreview = (slug, settings, name) => {
   }
 }
 
-/**
- * The rule an install writes, once its supporting records exist and carry ids.
- *
- * @param {string} slug
- * @param {{settings: object, connector: object|null, cachePolicy: object|null}} records
- * @returns {object|null} A Rules Engine rule draft.
- */
 export const integrationRule = (slug, records) => {
   const spec = integrationFor(slug)
   return spec ? spec.rule(records) : null
 }
 
-/**
- * Stores the records the install needs and returns the rule that puts them to work. The
- * cache policy goes into the Cache Settings store; the connector is stored by the caller,
- * which differs per path.
- *
- * @param {string} slug
- * @param {object} settings
- * @param {string} name What the records are named after.
- * @param {(form: object) => {id: string}} storeConnector
- */
 export const installIntegration = (slug, settings, name, storeConnector) => {
   const spec = integrationFor(slug)
   if (!spec) return null

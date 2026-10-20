@@ -1,0 +1,54 @@
+---
+title: Use Cases
+description: Unlock the potential of Azion's solutions with our comprehensive guides. Find steps for all your processes and optimize performance effortlessly.
+---
+
+Each use case is a validated design that shows how Azion products combine to solve it: the components, the flows, and the decisions behind each one.
+
+## All use cases
+
+Every use case, grouped by the solution it serves.
+
+### Build and run applications
+
+- [Build and run marketing websites](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-and-run-marketing-websites/): Deploy a marketing site from GitHub on every push, serve it from Object Storage through Cache, and purge it after each deploy.
+- [Deploy full-stack applications globally](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/deploy-full-stack-applications-globally/): Deploy a Next.js application from GitHub so its pages render in a function that reads SQL Database, and its build assets come from a bucket.
+- [Build REST and GraphQL APIs](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-rest-and-graphql-apis/): Run an API as one function that reads SQL Database, writes through the Azion API, caches list responses, and reports latency and errors.
+- [Build event-driven APIs](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-event-driven-apis/): Verify payment webhooks in a function, filter repeated events with KV Store, and queue each event in Upstash QStash before answering.
+- [Modernize a monolithic application without a rewrite](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/modernize-a-monolithic-application-without-a-rewrite/): Put an application in front of a monolith, move one route at a time to a function on Azion, and roll a route back by turning its rule off.
+- [Build e-commerce storefronts](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-e-commerce-storefronts/): Cache the catalog pages of a store you run, keep cart and checkout dynamic, and purge product pages when the catalog changes.
+- [Deploy frontend applications](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/deploy-frontend-applications/): Serve a single-page application from Azion and send its API calls to the backend you already run, under one domain.
+- [Run multi-tenant SaaS applications](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/run-multi-tenant-saas-applications/): Serve every tenant of a SaaS product from one function that resolves the tenant from the hostname, with configuration in KV Store and data in SQL Database.
+- [Migrate an application to a new origin without downtime](https://www.azion.com/en/documentation/use-cases/build-and-run-applications/migrate-an-application-to-a-new-origin-without-downtime/): Move an application's traffic from an old origin to a new one in weighted steps, watch errors on each origin, and roll back by changing one address.
+
+### Improve application performance and reliability
+
+- [Accelerate websites and APIs with a CDN](https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/): Put an application in front of your origin to cache static files and pages with Tiered Cache, pass API calls through, and accept only Azion at the origin.
+- [Keep an application online when an origin fails](https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/keep-an-application-online-when-an-origin-fails/): Group a primary and a standby origin in one connector with Load Balancer, and answer with your own error page when neither origin can serve.
+- [Optimize images for websites and mobile apps](https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/optimize-images-for-websites-and-mobile-apps/): Resize and convert the images on your origin on request with Image Processor, cache every variant, and request a fixed set of sizes from your pages.
+- [Monitor website and API performance](https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/monitor-website-and-api-performance/): Collect page load measurements from real visitors with Edge Pulse, query them per page, and compare them with what Azion served for the same domain.
+- [Route users to regional origins](https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/route-users-to-regional-origins/): Send each request to the origin of the user's region with geolocation rules, and fall back to another region only where your rules allow it.
+
+### Build and run AI workloads
+
+- [Build and run customer support AI assistants](https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/build-and-run-customer-support-ai-assistants/): Answer customer questions from your own documentation, with passages retrieved by vector search and an answer generated by a model on Azion.
+- [Add AI features to existing applications](https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/add-ai-features-to-existing-applications/): Add a summarization API route to an application you already run, with a function that calls a catalog model on AI Inference and caches results.
+- [Build AI agents](https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/build-ai-agents/): Run a tool-calling agent loop in a function on Azion, with a third-party model, state between steps, human approval, and a history of every task.
+- [Deploy remote MCP servers](https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/deploy-remote-mcp-servers/): Expose an existing API to AI agents as MCP tools from a function on Azion, with WAF and a rate limit in front and a log line for every tool call.
+- [Govern access to multiple AI models](https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/govern-access-to-multiple-ai-models/): Put one gateway function in front of AI Inference and a third-party provider to authenticate teams, route by policy, fall back, cache, and log every call.
+
+### Secure applications and networks
+
+- [Protect web applications from OWASP Top 10 and zero-day attacks](https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-web-applications-from-owasp-top-10-and-zero-day-attacks/): Put a firewall in front of a web application, so network lists, WAF, and Bot Manager run in one policy and the origin accepts only Azion's traffic.
+- [Protect public APIs from abuse](https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-public-apis-from-abuse/): Put a firewall in front of a public API, so WAF, a token check, Bot Manager, and a rate limit per client run before any request reaches the API origin.
+- [Block account takeover on login and checkout flows](https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-account-takeover-on-login-and-checkout-flows/): Score every request to login, signup, and checkout for automation, then challenge or deny it before it reaches the identity system or the payment flow.
+- [Block attackers automatically from SIEM detections](https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-attackers-automatically-from-siem-detections/): Let a SIEM or SOAR playbook write the offending addresses to a network list that a firewall rule already denies, with an expiry on every entry.
+- [Screen file uploads for malicious content](https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/screen-file-uploads-for-malicious-content/): Run a firewall function that sends each upload to a model on AI Inference, deny the files it flags, and block their senders with a network list.
+- [Prepare regulated web applications for security audits](https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/prepare-regulated-web-applications-for-security-audits/): Enforce HTTPS, filter attacks, restrict access by country and address, and export every security event to a destination the team keeps for its audits.
+
+### Deliver media and streaming content
+
+- [Stream live events to large audiences](https://www.azion.com/en/documentation/use-cases/deliver-media-and-streaming/stream-live-events-to-large-audiences/): Push a live stream from your encoder to Live Ingest and deliver it as HLS through an application that caches playlists and segments for every viewer.
+- [Deliver an on-demand video library](https://www.azion.com/en/documentation/use-cases/deliver-media-and-streaming/deliver-an-on-demand-video-library/): Store an encoded HLS video library in Object Storage and serve its playlists and segments through an application with Cache and Tiered Cache.
+
+Also useful: [Guides](/site/docs/use-cases), [How Azion works](https://www.azion.com/en/documentation/fundamentals/how-it-works/), [use cases llms.txt](https://www.azion.com/en/documentation/use-cases/llms.txt)

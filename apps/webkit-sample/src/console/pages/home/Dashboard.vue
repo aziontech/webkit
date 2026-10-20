@@ -1,12 +1,8 @@
 <script setup>
-  // Dashboard — the console home. The app shell (single sidebar + GlobalHeader
-  // with the module breadcrumb) comes from AppLayout; this page renders only its
-  // overview content: a welcome header, a metrics strip, the Resources and Recent
-  // Activity tables, and a right rail with Monthly Usage + Marketplace Trends.
   import CardBox from '@aziontech/webkit/card-box'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -21,10 +17,8 @@
 
   const route = useRoute()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'gabriel.mendonca@azion.com')
 
-  // Account-level metrics. `value` is the big number; `unit` sits beside it.
   const metrics = [
     {
       label: 'Total Data Transferred',
@@ -52,11 +46,8 @@
     }
   ]
 
-  // The metrics window shown to the right of the strip.
   const metricsRange = 'Jul 14, 2026, 06:56:46 PM - Jul 14, 2026, 07:56:46 PM'
 
-  // Resources preview — Edge DNS zones. `status` renders a Tag; the trailing
-  // action column opens a per-row menu.
   const resources = [
     {
       id: 'zone-1',
@@ -86,7 +77,6 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Recent Activity preview. Each row carries the acting user's email.
   const activity = computed(() => [
     {
       id: 'act-1',
@@ -138,18 +128,14 @@
     { accessorKey: 'email', header: 'Author email', minWidth: FIT_COLUMN }
   ]
 
-  // Created/Deleted carry a colored Tag; neutral operations (Edited) show as
-  // plain text, so this returns null for them.
   const operationSeverity = (operation) => {
     if (operation === 'Created') return 'success'
     if (operation === 'Deleted') return 'danger'
     return null
   }
 
-  // Monthly usage rollup shown in the right rail.
   const monthlyUsage = [{ label: 'Edge DNS DNS - Zones', value: '2' }]
 
-  // The marketplace template featured in the right-rail carousel.
   const featuredTemplate = {
     name: 'JWT',
     description: 'Streamline authentication by processing and validating JSON Web Tokens (JWTs).',
@@ -169,9 +155,7 @@
     <main
       class="layout-column flex flex-col gap-(--layout-boundary-start) xl:flex-row xl:items-start xl:gap-(--layout-section-gap)"
     >
-      <!-- Primary column -->
       <div class="flex min-w-0 flex-1 flex-col">
-        <!-- Metrics -->
         <section class="flex flex-col gap-(--layout-group-gap)">
           <div class="flex items-center gap-(--spacing-xs)">
             <h2 class="text-heading-xs text-(--text-default)">Metrics</h2>
@@ -222,7 +206,6 @@
           </p>
         </section>
 
-        <!-- Resources -->
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
           <div class="flex items-center gap-(--spacing-xs)">
             <h2 class="text-heading-xs text-(--text-default)">Resources</h2>
@@ -236,16 +219,12 @@
 
           <CardBox :padded="false">
             <template #content>
-              <Table
+              <TableRoot
                 :data="resources"
                 :columns="resourceColumns"
                 row-key="id"
               >
                 <template #cell-domain="{ value }">
-                  <!-- The shared domain cell (../../components/list/DomainCell.vue): the
-                       link out, its 12px external mark and its tooltip, and the copy
-                       button pinned to the cell's right edge. This was a verbatim
-                       copy of that component until 2026-09-19. -->
                   <DomainCell :value="value" />
                 </template>
                 <template #cell-status="{ value }">
@@ -273,7 +252,7 @@
                     />
                   </Tooltip>
                 </template>
-              </Table>
+              </TableRoot>
             </template>
             <template #footer>
               <Link
@@ -286,13 +265,12 @@
           </CardBox>
         </section>
 
-        <!-- Recent Activity -->
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
           <h2 class="text-heading-xs text-(--text-default)">Recent Activity</h2>
 
           <CardBox :padded="false">
             <template #content>
-              <Table
+              <TableRoot
                 :data="activity"
                 :columns="activityColumns"
                 row-key="id"
@@ -310,7 +288,7 @@
                     >{{ value }}</span
                   >
                 </template>
-              </Table>
+              </TableRoot>
             </template>
             <template #footer>
               <Link
@@ -324,9 +302,7 @@
         </section>
       </div>
 
-      <!-- Right rail -->
       <aside class="flex w-full flex-col xl:max-w-(--container-xs) xl:shrink-0">
-        <!-- Monthly Usage -->
         <CardBox>
           <template #header>
             <h2 class="text-heading-xs text-(--text-default)">Monthly Usage</h2>
@@ -357,7 +333,6 @@
           </template>
         </CardBox>
 
-        <!-- Marketplace Trends -->
         <CardBox class="layout-section-start">
           <template #header>
             <h2 class="text-heading-xs text-(--text-default)">Marketplace Trends</h2>

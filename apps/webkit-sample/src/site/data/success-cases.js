@@ -27,10 +27,12 @@ import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 import contabilizeiColor from '@aziontech/webkit/assets/contabilizei-extended-color.svg'
 import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
 import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+import dafitiReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
 import digimais from '@aziontech/webkit/assets/digimais-extended-mono.svg'
 import fam from '@aziontech/webkit/assets/fam-extended-mono.svg'
 import getninjas from '@aziontech/webkit/assets/getninjas-extended-mono.svg'
 import ibero from '@aziontech/webkit/assets/ibero-extended-mono.svg'
+import magaluReversed from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
 import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
 import omelete from '@aziontech/webkit/assets/omelete-extended-mono.svg'
 import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
@@ -41,7 +43,39 @@ import unicesumar from '@aziontech/webkit/assets/unicesumar-extended-mono.svg'
 import uninter from '@aziontech/webkit/assets/uninter-extended-mono.svg'
 import vtex from '@aziontech/webkit/assets/vtex-extended-reversed.svg'
 
+import madeiramadeiraWhite from '../ui/marks/madeiramadeira-extended-white.svg'
+
 const byName = (name) => CLIENTS.find((client) => client.name === name)
+
+/** The three stories under the hero that open on hover (Figma `Azion.com` node 13280:204542). */
+export const SPOTLIGHT_CASES = [
+  {
+    name: 'Magalu',
+    logo: magaluReversed,
+    logoWidth: '35%',
+    href: 'https://www.azion.com/en/success-case/magalu/',
+    description:
+      "Explore how Magalu enhances cybersecurity with Azion's Firewall and WAF, improving threat intelligence and bot management in retail.",
+    brand: { base: '#00264b', glow: '#0e87fe' }
+  },
+  {
+    name: 'Dafiti',
+    logo: dafitiReversed,
+    logoWidth: '35%',
+    href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
+    description:
+      'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
+    brand: { base: 'var(--color-gray-650)', glow: 'var(--color-gray-775)' }
+  },
+  {
+    name: 'MadeiraMadeira',
+    logo: madeiramadeiraWhite,
+    logoWidth: '50.6%',
+    href: 'https://www.azion.com/en/success-case/madeiramadeira/',
+    description: 'MadeiraMadeira Cuts Cloud Costs 90% with Azion',
+    brand: { base: '#ff9014', glow: '#cc6c00' }
+  }
+]
 
 /**
  * The three stories the source features above the library, in its order. `brand` paints the

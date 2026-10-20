@@ -1,24 +1,4 @@
 <script setup>
-  // Form type: DRAWER + MULTIPLE ITEMGROUPS (the `/form` skill, "Form types"). A
-  // drawer create whose body is NOT one group (that's Variables.vue) nor stacked
-  // field-* triads (that's DrawerForm.vue), but SEVERAL section-titled ItemGroup
-  // SECTIONS — the Account Settings layout (Approach A: each section a flush CardBox
-  // wrapping an Item.List), hosted in a Drawer instead of a page. It is still ONE
-  // logical create, so it has ONE scoped save (the drawer's primary action) — the
-  // sections group the topic, not the save.
-  //
-  // Accessibility follows /form Approach A even in a drawer: the section title is an
-  // section title above a header-less flush CardBox; in an ItemGroup the Item.Title IS the
-  // label (guidance in Item.Description), and each control carries an aria-label (no
-  // <Label for>). Validation runs on submit only; with no Label (so no required tag),
-  // feedback is a HelperText under the control — amber `required` for an empty field
-  // (required is NOT an error), red `invalid` for a filled-but-malformed value — plus
-  // the control's matching state, cleared as the user edits — no error-summary, no
-  // Message callout. The
-  // scope is one native `<form novalidate @submit.prevent>` (Enter submits via the
-  // sr-only submit); one `submitting` flag locks the whole scope (fieldset :disabled +
-  // every control :disabled + Save :loading, the /usability contract). Only a
-  // request-level failure toasts (with Retry).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Drawer from '@aziontech/webkit/drawer'
@@ -56,7 +36,6 @@
   ]
   const regionLabel = (value) => regions.find((option) => option.value === value)?.label ?? ''
 
-  // The list this drawer creates into (kept in memory for the demo).
   const services = ref([
     { id: 'svc-1', name: 'checkout-api', runtime: 'node20' },
     { id: 'svc-2', name: 'image-resizer', runtime: 'go122' }
@@ -73,18 +52,14 @@
     logging: false
   })
 
-  // Per-field error messages. Empty string = valid; populated ONLY by validate().
   const errors = reactive({ name: '', runtime: '' })
 
-  // One flag locks the whole drawer scope while the request is in flight.
   const submitting = ref(false)
 
   const openCreate = () => {
     drawerOpen.value = true
   }
 
-  // Reset the form + errors whenever the drawer closes (cancel, overlay, Escape, or a
-  // successful create) so the next open is pristine.
   watch(drawerOpen, (open) => {
     if (open) return
     form.name = ''
@@ -116,8 +91,8 @@
   }
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
-    if (!validate()) return // feedback is now on the fields (:invalid)
+    if (submitting.value) return
+    if (!validate()) return
 
     submitting.value = true
     try {
@@ -127,14 +102,14 @@
         ...services.value
       ]
       toast.success(`Service "${form.name.trim()}" created.`)
-      drawerOpen.value = false // watch() resets the form
+      drawerOpen.value = false
     } catch (error) {
       toast.error('Could not create the service.', {
         description: error?.message ?? 'Check your connection and try again.',
         action: { label: 'Retry', onClick: () => submit() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 </script>
@@ -144,9 +119,6 @@
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'ItemGroups in a drawer' }]"
   >
-    <!-- No `gap` on the stack: the band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex h-full flex-col">
       <PageHeading
         title="Services"
@@ -162,7 +134,6 @@
         </template>
       </PageHeading>
 
-      <!-- The list the drawer creates into -->
       <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
         <li
           v-for="service in services"
@@ -175,8 +146,6 @@
       </ul>
     </main>
 
-    <!-- Create flow — a large Drawer whose body is several ItemGroup sections
-         (section title + flush CardBox + Item.List), all committed by one scoped save. -->
     <Drawer
       v-model:open="drawerOpen"
       size="large"
@@ -185,9 +154,6 @@
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerContent>
-          <!-- One native form owns the scope: Enter submits (via the sr-only submit,
-               since the styled Button can't be type=submit); the fieldset + per-control
-               :disabled lock every field while the request is in flight. -->
           <form
             class="flex min-h-0 flex-1 flex-col"
             aria-label="Create Service"
@@ -205,15 +171,12 @@
             </PanelHeader>
 
             <PanelContent>
-              <!-- Sections are --spacing-lg apart; each section title sits --spacing-sm
-                   above its flush CardBox (the Approach A section rhythm). -->
               <fieldset
                 class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create service</legend>
 
-                <!-- Section: General -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
                   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
                   <CardBox :padded="false">
@@ -230,11 +193,6 @@
                             </Item.Description>
                           </Item.Content>
                           <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                            <!-- No Label in an ItemGroup, so the validation message
-                                 is a HelperText under the control (--spacing-xs
-                                 apart); it appears on a failed submit and clears as
-                                 the user edits. Empty → required (amber); filled but
-                                 malformed → invalid (red). Required is NOT an error. -->
                             <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <InputText
                                 v-model="form.name"
@@ -284,7 +242,6 @@
                   </CardBox>
                 </section>
 
-                <!-- Section: Runtime -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
                   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Runtime</p>
                   <CardBox :padded="false">
@@ -300,9 +257,6 @@
                           </Item.Content>
                           <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <!-- Runtime is required-only: empty → amber required
-                                   (no red). Select has no amber border, so the amber
-                                   HelperText below carries the cue. -->
                               <Select
                                 v-model="form.runtime"
                                 size="large"
@@ -320,10 +274,6 @@
                                     errors.runtime ? 'service-runtime-error' : undefined
                                   "
                                 />
-                                <!-- TEMPORARY WORKAROUND for a webkit bug: Select.Content
-                                     teleports to <body> at z-50, so inside the Drawer panel
-                                     (z-[1001]) the dropdown renders behind it and is invisible.
-                                     Remove once webkit stacks overlay popups above Drawer/Dialog. -->
                                 <Select.Content class="z-[1002]!">
                                   <Select.Option
                                     v-for="option in runtimes"
@@ -381,7 +331,6 @@
                   </CardBox>
                 </section>
 
-                <!-- Section: Options -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
                   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Options</p>
                   <CardBox :padded="false">
@@ -435,9 +384,6 @@
                 :disabled="submitting"
                 @click="cancel"
               />
-              <!-- webkit Button hardcodes type="button" and doesn't forward a type,
-                   so drive submit from its click; the sr-only submit gives the form
-                   real Enter-to-submit. -->
               <Button
                 class="w-full md:w-auto"
                 label="Create"

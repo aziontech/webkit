@@ -1,46 +1,10 @@
 <script setup>
-  // Application detail — the resource-detail SHELL for a single application. Its
-  // identity (name) is the breadcrumb; the header's bottom is a FLUID navigation tab
-  // bar (Overview / Build / Device Groups / … / Settings), and the active sub-page
-  // renders below it.
-  //
-  // This file owns only the shell: the breadcrumb, the tab bar, the page actions
-  // that trail it, and which view is mounted. Each tab is a SELF-CONTAINED view
-  // under src/views/applications/ that owns its own content, its own state, and its
-  // own create flow — so a tab can be read and changed without scrolling past the
-  // five beside it.
-  //
-  // The primary action trails the tabs on the SAME row (WorkloadDetail /
-  // EdgeDnsZoneDetail), not inside the tab's own heading: it belongs to the page, so
-  // its position never moves as tabs change — only its label does. The tab still OWNS
-  // the flow: the shell holds a ref to the mounted view and calls what that view
-  // exposes (`defineExpose`), so the drawer, the form, and the pending state stay in
-  // the file that renders them.
-  //
-  // No Documentation button in THIS row. The reference affordance belongs to the
-  // heading of whatever page carries a list — so the tab pages that hold a table
-  // (Cache Settings, Rules Engine, Device Groups, Functions Instances) each carry
-  // their own `Documentation` on their PageHeading, pointing at the edge-application docs.
-  // This row is the shell's, and stays the action the mounted tab can perform; the
-  // reference material a single BAND needs is a SectionHeading `documentation` link
-  // next to that band.
-  //
-  // It also owns its own LAYOUT. The tab bar here is second-level navigation, which
-  // makes each tab a separate page in one route — so per layout.css the unit that
-  // picks a measure is the BAND, not the file: Settings is a stacked form on the
-  // FORM measure (1192px), while Build and the list tabs carry tables and take the
-  // DATA measure (1388px). AppLayout is therefore `:padded="false"` and each view
-  // applies `.layout-boundary` itself, because the boundary has to sit inside the
-  // scroll container, below the fixed tab bar.
-  //
-  // <KeepAlive> holds the mounted views, so work in progress in one tab (a Device
-  // Group just created, a half-typed field) survives a trip to another tab and back —
-  // which is what the single-component version gave for free.
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
-  import DropDeployDialog from '../../components/deployment/DropDeployDialog.vue'
+  import ApplicationDeployDrawer from '../../components/deployment/ApplicationDeployDrawer.vue'
+  import ApplicationEnvironmentDeployDrawer from '../../components/deployment/ApplicationEnvironmentDeployDrawer.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -48,30 +12,18 @@
   import { isTabDirty, tabCommit } from '../../lib/behavior/tab-dirty'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import { applicationById } from '../../lib/data/applications'
-  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
   import { provisionedApplications } from '../../lib/data/provisioning'
-  import { workloadById } from '../../lib/data/workloads'
-  import { startResourceDeployRun } from '../../lib/state/deploy-runs'
+  import { applicationVersions } from '../../lib/data/releases'
+  import { VERSION_STATES } from '../../lib/data/versioning'
+  import { deployFlow } from '../../lib/state/sample-preset'
   import Build from './panels/Build.vue'
-  import CacheSettings from './panels/CacheSettings.vue'
   import Deployments from './panels/Deployments.vue'
-  import DeviceGroups from './panels/DeviceGroups.vue'
-  import FunctionsInstances from './panels/FunctionsInstances.vue'
-  import MainSettings from './panels/MainSettings.vue'
   import Overview from './panels/Overview.vue'
-  import RulesEngine from './panels/RulesEngine.vue'
+  import Versions from './panels/Versions.vue'
 
   const route = useRoute()
   const router = useRouter()
 
-  // The seeded record behind the route, falling back to the reference repo
-  // gab-az/webkit-sample-vue so a deep link with no match still renders a coherent page.
-  //
-  // It resolves the WHOLE record rather than synthesizing `{ id, name }`, because `source`
-  // decides what the Build tab can honestly show: an application reached by CLI has no
-  // repository, and a Build tab that opens with "Connected repository" over an empty value
-  // is the page claiming a connection that does not exist
-  // (../../lib/data/applications.js).
   const application = computed(() => {
     const id = String(route.params.id || '1784552864')
     const seeded = applicationById(id) ?? provisionedApplications.value.find((app) => app.id === id)
@@ -83,90 +35,89 @@
     }
   })
 
-  // ── DROPPING A PROJECT ONTO AN APPLICATION THAT ALREADY EXISTS ──
-  //
-  // The gesture that creates an application also updates one: the reader who got here by
-  // dragging a folder keeps that door, and the Overview card's footer says so.
-  //
-  // THE SHELL TAKES IT, NOT THE OVERVIEW PANEL. The drop is read off window listeners
-  // (../../lib/behavior/project-upload.js) and the panels are held in <KeepAlive>, which
-  // deactivates rather than unmounts — so a panel's listener would keep firing from under
-  // whichever tab the reader had moved on to.
-  //
-  // THE DROP DOES NOT DEPLOY. It opens a confirmation naming what lands where
-  // (../../components/deployment/DropDeployDialog.vue), because this drop replaces what is
-  // serving Production and a drag is the one gesture that can be made by accident.
-  //
-  // One environment, stated once: the drop zone, the dialog and the run all read it, so
-  // the page cannot promise Production and deploy somewhere else.
-  const DROP_ENVIRONMENT = 'Production'
+  const VERSION_TABS = [
+    'main-settings',
+    'source',
+    'device-groups',
+    'cache-settings',
+    'functions-instances',
+    'rules-engine'
+  ]
+
+  const workingVersionId = () => {
+    const versions = applicationVersions(String(application.value.name))
+    return (
+      versions.find((entry) => entry.state === VERSION_STATES.DRAFT)?.id ??
+      versions.find((entry) => entry.state === VERSION_STATES.ACTIVE)?.id ??
+      versions[0]?.id
+    )
+  }
+
+  watch(
+    () => route.query.tab,
+    (tab) => {
+      if (!VERSION_TABS.includes(String(tab))) return
+      const versionId = workingVersionId()
+      if (!versionId) return
+      router.replace({
+        path: `/applications/${application.value.id}/versions/${versionId}`,
+        query: route.query
+      })
+    },
+    { immediate: true }
+  )
 
   const dropped = ref(null)
-  const dropOpen = ref(false)
+  const deployOpen = ref(false)
+  const preferredWorkload = ref(null)
+  const preferredEnvironment = ref('')
+  const pinnedVersionId = ref('')
 
   const { dragging } = useProjectUpload((project) => {
     dropped.value = project
-    dropOpen.value = true
+    pinnedVersionId.value = ''
+    deployOpen.value = true
   })
 
-  const deployDropped = () => {
-    const app = application.value
-    const latest = latestApplicationDeployment(app.id, app.name)
-    // The workload that published it last is the one publishing it now; an application
-    // with no history has none to name and falls back to its own identity and address.
-    const seededWorkload = latest ? workloadById(latest.workloadId) : undefined
-    const workload = {
-      id: latest?.workloadId ?? app.id,
-      name: latest?.workloadName ?? app.name,
-      domain: seededWorkload?.domain ?? app.domainName ?? ''
-    }
+  const deploySource = computed(() =>
+    dropped.value ? dropped.value.name || 'dropped files' : String(application.value.branch || '')
+  )
 
-    startResourceDeployRun({
-      workload,
-      application: { id: app.id, name: app.name },
-      deploymentName: dropped.value?.name ?? app.name,
-      environment: DROP_ENVIRONMENT,
-      preset: app.preset || 'javascript'
-    })
-  }
+  watch(
+    () => route.query.deploy,
+    (deploy) => {
+      if (deploy !== '1') return
+      const {
+        deploy: _deploy,
+        workloadId,
+        workloadName,
+        environment,
+        version,
+        ...rest
+      } = route.query
+      preferredWorkload.value = workloadId
+        ? { id: String(workloadId), name: String(workloadName || workloadId) }
+        : null
+      preferredEnvironment.value = environment ? String(environment) : ''
+      pinnedVersionId.value = version ? String(version) : ''
+      dropped.value = null
+      router.replace({ query: rest })
+      deployOpen.value = true
+    },
+    { immediate: true }
+  )
 
-  // The resource's sub-pages. Each tab is a navigation destination, not a filter, and
-  // names the view it mounts. `props` is per-tab on purpose: only the two tabs scoped
-  // to the record itself receive it, so the others don't take an attribute they'd
-  // leak onto their root element.
-  //
-  // NO `action` HERE ANY MORE. Each tab renders its own primary control in its own
-  // PageHeading — "Add Cache Settings" beside the Cache Settings heading, "Deploy"
-  // beside Build's — which is where every second-level list in the console puts it.
-  // The shell used to carry it on the tab row and reach into the mounted view through
-  // `defineExpose` ("its position never moves as tabs change"), and the cost was a
-  // control detached from the thing it acts on: the heading that named the list, and
-  // the Documentation beside it, sat one region below a button parked in the navigation.
-  // A tab IS a page; its action belongs on its own heading, at the same 40px step
-  // every other page heading's action takes. The label and behaviour now live in one
-  // file each, so nothing is reached through an exposed surface to be rendered
-  // somewhere else.
-  //
-  // ── THE LABEL CARRIES THE PRODUCT MODULE'S OWN NAME ──
-  //
-  // `Add ` + the module's name EXACTLY as Azion spells it: "Add Cache Settings", not
-  // "Add Cache settings" and not "Create cache setting". Two things were wrong with
-  // the sentence-cased version. It renamed the thing — a reader who has just read
-  // "Cache Settings" on the tab, and will read "Cache Settings" in the rule that
-  // references it, met a third spelling on the button between them. And it dropped
-  // the plural that is part of the name: one entry in that list IS a Cache Settings,
-  // the way one entry in Rules Engine is a Rule.
-  //
-  // So the module's name decides the label, and the object's name decides it where
-  // the module is named after the collection rather than the entry: Rules Engine
-  // creates a Rule, Functions Instances creates a Functions Instance. The drawer that
-  // opens carries the SAME words as the button that opened it (see each panel), so an
-  // action never renames itself between its trigger and its form.
   const tabs = computed(() => [
     {
       value: 'overview',
       label: 'Overview',
       component: Overview,
+      props: { application: application.value }
+    },
+    {
+      value: 'versions',
+      label: 'Versions',
+      component: Versions,
       props: { application: application.value }
     },
     {
@@ -180,63 +131,13 @@
       label: 'Deployments',
       component: Deployments,
       props: { application: application.value }
-    },
-    {
-      value: 'device-groups',
-      label: 'Device Groups',
-      component: DeviceGroups,
-      props: {}
-    },
-    {
-      value: 'cache-settings',
-      label: 'Cache Settings',
-      component: CacheSettings,
-      props: {}
-    },
-    {
-      value: 'functions-instances',
-      label: 'Functions Instances',
-      component: FunctionsInstances,
-      props: {}
-    },
-    {
-      value: 'rules-engine',
-      label: 'Rules Engine',
-      component: RulesEngine,
-      props: {}
-    },
-    // LAST, and named for what it is. The application's own record is what a reader
-    // comes back to least — the tabs before it are the work — so it takes the end of
-    // the row, where every settings destination in the console sits. The `?tab=` key
-    // keeps its old spelling so links already in the wild still land here.
-    {
-      value: 'main-settings',
-      label: 'Settings',
-      component: MainSettings,
-      props: { application: application.value }
     }
   ])
 
-  // Active tab lives in the URL (`?tab=`) so it survives reload and is linkable.
-  //
-  // ── THE TAB SWITCH IS A BOUNDARY ──
-  //
-  // Two of these tabs commit — Settings saves the application record, Rules Engine
-  // saves the order its rules run in — and their bars occupy the SAME strip at the
-  // bottom of the page. So a tab switch made with work pending is the moment the reader
-  // loses sight of it, and the Discard they meet on the next tab belongs to something
-  // else entirely.
-  //
-  // The shell therefore asks first, with the same dialog and the same wording a route
-  // leave gets (ui/UnsavedChangesGuard.vue). It holds the tab guard and the tabs hold
-  // the route guard — `route-guard="false"` on their bars — so one navigation can never
-  // raise two dialogs.
   const currentTab = computed(() =>
     tabs.value.some((t) => t.value === route.query.tab) ? route.query.tab : 'overview'
   )
 
-  // The tab being left, so the guard can name and resolve THAT tab's commit rather than
-  // whichever one happens to be active by the time the reader answers.
   const leavingTab = ref(null)
   const leavingCommit = computed(() => (leavingTab.value ? tabCommit(leavingTab.value) : null))
   const tabGuard = ref(null)
@@ -246,15 +147,11 @@
   const activeTab = computed({
     get: () => currentTab.value,
     set: async (value) => {
+      if (!value) return
       const from = currentTab.value
       if (value === from || !isTabDirty(from)) return goToTab(value)
 
       leavingTab.value = from
-      // `nextTick` is load-bearing: `leavingCommit` is a computed, so the guard does not
-      // SEE the tab it is being asked about until Vue has flushed the prop. Asking in the
-      // same tick asks a guard whose `dirty` is still false, which answers "yes, go" and
-      // switches the tab with the work still pending — the exact failure this whole path
-      // exists to prevent.
       await nextTick()
       const proceed = await tabGuard.value?.ask()
       leavingTab.value = null
@@ -262,9 +159,6 @@
     }
   })
 
-  // The tab entry (component + props) the shell mounts. Falls back to the first tab,
-  // so an unknown `?tab=` renders Overview rather than nothing.
-  // A tab switch replaces a whole screen, so it arrives like one.
   const scrollRef = ref(null)
   const enterRef = ref(null)
   useTabEnter(enterRef, activeTab, scrollRef)
@@ -281,44 +175,23 @@
     :breadcrumb="[{ label: 'Applications', href: '/applications' }, { label: application.name }]"
   >
     <main class="flex h-full flex-col">
-      <!-- Nav pattern (no PageHeading here): the tabs form the bottom of the header — a
-           fluid full-bleed bar, and NOTHING else. Each tab's own heading lives inside
-           that tab's view and carries that tab's primary action, so the button sits
-           beside the list it creates into instead of in the navigation above it. -->
       <PageTabs
         v-model:value="activeTab"
         :tabs="tabs"
       />
 
-      <!-- The region a dropped project lands in is the CONTENT, tabs excluded: the drop
-           deploys this application whichever tab is open, and a box drawn over the tab bar
-           would take away the one thing that says which page the reader is on. The wrapper
-           carries the positioning so the box is not a child of the scroller below it — an
-           absolute child of a scroll container drifts with the content. -->
       <div class="relative flex min-h-0 flex-1 flex-col">
         <ProjectDropZone
           :active="dragging"
           title="Drop your project to deploy it"
-          :description="`Azion builds it and ships it to ${application.name} in ${DROP_ENVIRONMENT}.`"
+          :description="`Azion builds a new version of ${application.name}, then you choose where it goes live.`"
           class="[--drop-zone-inset:var(--layout-boundary-inline)]"
         />
 
-        <!-- Only this region scrolls. Each view brings its own `.layout-boundary`
-             and its own measure. -->
         <section
           ref="scrollRef"
           class="min-h-0 flex-1 overflow-auto"
         >
-          <!-- A STABLE wrapper, deliberately unkeyed: `useTabEnter` replays the page
-               entrance on it by restarting the class, because keying it would re-mount
-               the <KeepAlive> inside and throw away the in-progress work it exists to
-               keep (see lib/tab-enter.js). -->
-          <!-- `flex min-h-full flex-col`: a tab whose commit bar is `sticky bottom-0`
-               needs a column that REACHES the bottom of this scroll region, or sticky has
-               nothing to stick to and the bar ends up wherever the content happens to
-               stop. Measured on Rules Engine with five rules: the bar sat 243px above the
-               fold. A tab that does not opt in (no `flex-1` on its root) is unaffected —
-               it still sizes to its content. -->
           <div
             ref="enterRef"
             class="flex min-h-full flex-col"
@@ -334,20 +207,16 @@
       </div>
     </main>
 
-    <!-- The drop's own answer, over the page it was made on. -->
-    <DropDeployDialog
-      v-model:open="dropOpen"
-      :application-name="application.name"
-      :environment="DROP_ENVIRONMENT"
-      :files="dropped?.files ?? []"
-      :truncated="dropped?.truncated ?? false"
-      @deploy="deployDropped"
+    <component
+      :is="deployFlow === 'workload' ? ApplicationDeployDrawer : ApplicationEnvironmentDeployDrawer"
+      v-model:open="deployOpen"
+      :application="application"
+      :source="deploySource"
+      :preferred-workload="preferredWorkload"
+      :preferred-environment="preferredEnvironment"
+      :pinned-version-id="pinnedVersionId"
     />
 
-    <!-- The TAB guard. `route-guard="false"`: the leaving tab's own bar already holds
-         the route, and two guards on one navigation stack two dialogs. It is `savable`
-         because every tab here edits a record that already exists, so committing is a
-         legitimate one-click way to resolve the switch. -->
     <UnsavedChangesGuard
       ref="tabGuard"
       savable

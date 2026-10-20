@@ -1,26 +1,4 @@
-<script setup>
-  // Payment Method — the card inside the upgrade drawer, in its two states.
-  //
-  // Figma node 1144:15242 ships this as ONE component with a `property1`
-  // variant, Default and Filled, and that is exactly how it behaves here:
-  //
-  //   · DEFAULT — the card on file, as a single row: the brand mark, "Ended with
-  //     8888", and a Change control. This is the resting state, because a user
-  //     who already has a card should not be shown a form they do not need to
-  //     touch.
-  //   · FILLED — the same card region replaced by the entry form, with its own
-  //     Cancel and Update. The form REPLACES the row rather than appearing under
-  //     it: they are two answers to one question, and showing both invites the
-  //     user to wonder which one will be charged.
-  //
-  // The form takes Cancel/Update of its own because it is a nested commit — the
-  // drawer's own footer commits the upgrade, and a single footer cannot mean both
-  // "save this card" and "buy this plan". Cancelling the form returns to the row
-  // with the original card untouched.
-  //
-  // No card data is validated, stored, or sent anywhere: this is a sample, and
-  // the Message states the arrangement the design specifies — a PCI-compliant
-  // partner handles the real thing.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import FieldSelect from '@aziontech/webkit/field-select'
@@ -30,24 +8,18 @@
 
   import CardBrandMark from './CardBrandMark.vue'
 
-  defineProps({
-    // Locks every control while the drawer's own submit is in flight.
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    disabled?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    disabled: false
   })
 
-  // The card on file. Only the last four digits are ever held — the rest belongs
-  // to the payment partner.
   const card = reactive({ last4: '8888' })
 
-  // Which of the two states the card region is in.
   const editing = ref(false)
 
-  // Value === label, deliberately. `FieldSelect` does not forward `Select`'s
-  // `displayValue` formatter, so its trigger renders whatever the model holds:
-  // a pre-seeded country code shows as "BR" instead of "Brazil" until the user
-  // opens the list. Storing the display name keeps the field honest without
-  // dropping to the `Select` compound for one formatter. There is no backend
-  // here for an ISO code to be correct for.
   const countryOptions = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
@@ -75,10 +47,6 @@
     editing.value = false
   }
 
-  // Takes the last four digits of whatever was typed and returns to the row. A
-  // real implementation hands the number to the payment partner and stores only
-  // what comes back; this keeps the same shape so the row is honest about which
-  // card it is describing.
   const update = () => {
     const digits = form.number.replace(/\D/g, '')
     if (digits.length >= 4) card.last4 = digits.slice(-4)
@@ -95,9 +63,6 @@
       <div
         class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
       >
-        <!-- DEFAULT — the card on file. A bordered row rather than an Item from
-             the DS, because the row carries a fixed-size brand plate and a
-             trailing control, and Item's own paddings would fight the card's. -->
         <div
           v-if="!editing"
           class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
@@ -115,9 +80,6 @@
           />
         </div>
 
-        <!-- FILLED — the entry form. Two columns on the wider drawer, one when it
-             narrows, so the expiry and security code stay side by side only while
-             there is room for both. -->
         <template v-else>
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
@@ -177,9 +139,6 @@
               />
             </div>
 
-            <!-- Why the fields above are safe to fill in. It states the
-                 arrangement rather than reassuring the reader, which is what the
-                 design asks for and what an infrastructure product owes them. -->
             <Message
               severity="info"
               size="small"
@@ -187,7 +146,6 @@
             />
           </fieldset>
 
-          <!-- The form's own commit, separate from the drawer's. -->
           <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end">
             <Button
               class="w-full sm:w-auto"

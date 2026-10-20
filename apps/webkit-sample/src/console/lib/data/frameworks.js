@@ -1,34 +1,3 @@
-// The framework catalog — the one list of things a reader can start an Application
-// from, and the one route that starts it.
-//
-// It lived inside components/CreationCenter.vue, which was fine while /create was the
-// only screen that offered a template. It is not: Applications' FIRST USE offers the
-// same thing (src/product-empty-states.js → components/ui/ProductFirstUse.vue), and
-// "start from a framework" has to mean the same four frameworks, the same marks and
-// the same destination in both places, or the console has two template catalogs that
-// drift on the first one anybody adds to.
-//
-// So the catalog is here and both surfaces read it. `TECH_TO_SLUG` + `deployQuery`
-// come with it, because a template the two screens agree on that opens two different
-// flows is the same bug one level down.
-//
-// ── WHAT A FRAMEWORK CARRIES ──
-//
-//   tech         the key. Matches `presetMeta` in lib/presets.js, so the mark on a
-//                first-use row and the mark on that application's row in the table
-//                are the same glyph for the same reason.
-//   title/description   the /create catalog card's copy.
-//   icon         the colored brand logo (`ai-cor ai-*` from @aziontech/icons).
-//   color        the framework's brand hex, for the card's soft hover glow.
-//   useCases     the /create filter's Use Cases axis.
-//   tag/hint     what a first-use ROW needs and a card does not: the one word that
-//                says how it renders (SSR / SPA / Static), and the literal it
-//                produces. Authored as parts so the copy carries no markup — see
-//                src/product-empty-states.js for why.
-//   markClass    the filter the MARK needs to survive the dark theme. DERIVED from
-//                `icon` — see `DARK_INK_MARKS` below. Empty for almost every one.
-
-/** Every framework the platform offers a template for, most common first. */
 const CATALOG = [
   {
     tech: 'next',
@@ -303,62 +272,23 @@ const CATALOG = [
   }
 ]
 
-// ── THE MARKS THAT VANISH ON DARK ──
-//
-// A brand mark is either a FONT GLYPH (`ai ai-hugo`, `pi pi-code`), which paints in
-// `currentColor` and therefore follows the theme for free, or a COLORED LOGO
-// (`ai-cor ai-*`), which is a background-image and cannot inherit anything. The icons
-// package emits a second, light-ink copy of a colored logo whose SVG draws its ink in
-// `currentColor` — Astro has one — so those follow the theme too.
-//
-// What is left is the case neither mechanism covers: a logo whose ink is a HARD-CODED
-// dark value. Next.js is the whole set — a black disc with the wedge knocked out of it
-// in white — and on the dark canvas the disc is the canvas, so the mark reads as a
-// floating white N with no logo around it.
-//
-// `invert()` is the fix and it is exact rather than approximate here, because the mark
-// is monochrome: black disc + white wedge inverts to the white disc + black wedge that
-// is Next's own dark-theme lockup. The theme is read off `[data-theme=dark]` on the
-// document root, NOT Tailwind's stock `dark:` variant — that one follows
-// `prefers-color-scheme`, which says nothing about the theme this app was toggled to
-// (same reason, same class, as the client marks in
-// @aziontech/webkit/assets/client-registry).
-//
-// A COLORED logo would be ruined by this, which is why it is a list of two marks and
-// not a blanket rule: inverting the JavaScript badge turns a yellow tile blue.
 const DARK_INK_MARKS = ['ai-next']
 
 const DARK_INK_FILTER = '[[data-theme=dark]_&]:invert'
 
-/**
- * The filter one icon class needs on dark — `''` for almost all of them.
- *
- * Exported for the same reason as the vocabulary above: ./templates.js authors marks of
- * its own (three of its templates wear the Next.js logo), and a second copy of the list
- * of dark-ink marks is a second copy that goes stale.
- */
 export const markFilterFor = (icon = '') =>
   DARK_INK_MARKS.some((mark) => icon.split(' ').includes(mark)) ? DARK_INK_FILTER : ''
 
-/** The catalog, each entry carrying whatever its mark needs to survive the dark theme. */
 export const FRAMEWORKS = CATALOG.map((framework) => ({
   ...framework,
   markClass: markFilterFor(framework.icon)
 }))
 
-/**
- * What a framework's template runs, and what the create flow starts its two command
- * fields from. The Azion CLI reads the preset out of the repository's own
- * `azion.config.js`, so the pair is the same for every framework in the catalog — the
- * preset is what varies, not the command.
- */
 export const AZION_COMMANDS = {
   buildCommand: 'azion build',
   deployCommand: 'azion deploy'
 }
 
-// A chosen framework → the deploy flow's catalog slug. Techs with no dedicated demo
-// template fall back to the closest available boilerplate.
 const TECH_TO_SLUG = {
   next: 'next-boilerplate',
   react: 'react-boilerplate',
@@ -387,31 +317,13 @@ const TECH_TO_SLUG = {
   emscripten: 'emscripten-starter'
 }
 
-/** The catalog slug a framework clones from. Falls back to the closest boilerplate. */
 export const templateSlugForTech = (tech) => TECH_TO_SLUG[tech] ?? 'nuxt-ecommerce'
 
-/**
- * Where picking a framework goes — the deploy flow, cloning that catalog template.
- * One destination for both surfaces: /create's catalog card and Applications' own
- * first-use row start the identical flow, because they are the identical choice.
- */
 export const deployTemplateRoute = (tech) => ({
   path: '/deploy',
   query: { template: templateSlugForTech(tech) }
 })
 
-/**
- * Every build preset, as options for a Select — ordered most common first, each carrying
- * its mark and whatever that mark needs on dark.
- *
- * NOT `technologyOptions` below, though the two are one `markClass` apart. That one is a
- * FILTER axis: its job is to cut a catalog down, so an entry only earns a place there
- * while a template wears it. This is a PICKER over what the builder accepts, and it has
- * to offer all 25 whether or not a template exists for one — a reader whose drop is a
- * Hugo site needs `hugo` in the list even on a day the gallery ships no Hugo template.
- * They coincide today because the catalog happens to cover the whole preset set; a list
- * that must stay complete and a list that must stay curated are still two lists.
- */
 export const presetOptions = FRAMEWORKS.map(({ tech, label, icon, markClass }) => ({
   value: tech,
   label,
@@ -419,23 +331,12 @@ export const presetOptions = FRAMEWORKS.map(({ tech, label, icon, markClass }) =
   markClass
 }))
 
-/** The /create filter's Technology axis, derived so the list and the catalog agree. */
 export const technologyOptions = FRAMEWORKS.map(({ tech, label, icon }) => ({
   value: tech,
   label,
   icon
 }))
 
-/**
- * The /create filter's Use Cases axis.
- *
- * `delivery` is the one value no framework answers for, and it is here because the
- * catalog is no longer only frameworks: the template gallery lists Azion's own
- * templates too (./templates.js → `PUBLISHED_TEMPLATES`), and the two traffic-shaped ones
- * — front an origin, cache it — are a use case the five below have no room for. A
- * template that answers none of them carries an empty `useCases` and simply does not
- * survive a use-case cut, which is the honest answer rather than a guessed tag.
- */
 export const useCaseOptions = [
   { value: 'ai', label: 'AI/Agent', icon: 'pi pi-star' },
   { value: 'ecommerce', label: 'Ecommerce', icon: 'pi pi-shopping-cart' },
@@ -445,32 +346,8 @@ export const useCaseOptions = [
   { value: 'delivery', label: 'Content delivery', icon: 'pi pi-bolt' }
 ]
 
-/**
- * The four frameworks a first-use screen shows for "start fast".
- *
- * NAMED, not `slice(0, 4)`. FRAMEWORKS is ordered for the create page's catalog — most
- * common first — and its first four happen to be Next, React, Vue and Angular. What the
- * first-use cluster needs is a different thing: four marks a reader RECOGNISES at 18px,
- * spanning the shapes the platform serves (a full-stack framework, the two dominant SPA
- * libraries, and a compiler-first one). Svelte earns the fourth slot over Angular on
- * exactly that: it is the one of the two whose mark is unmistakable at this size.
- *
- * Reordering FRAMEWORKS to get this would have moved the create page's cards too, which
- * is the wrong screen to reorder for a 104px cluster.
- */
 export const FIRST_USE_TECHS = ['next', 'react', 'vue', 'svelte']
 
-/**
- * The boilerplates a first-use screen offers under "start fast".
- *
- * Derived from FRAMEWORKS rather than listed again: a first-use row that offered "Vue"
- * and opened a different flow than the create page's "Vue" card would be two products
- * (see ../product-empty-states.js → `startFast`). Same mark, same slug, same deploy.
- *
- * FOUR, not ten: this block is an invitation, and a ten-row list is a catalog the
- * reader has to shop before they can start. The full set is one click away in the
- * create flow, which is what the block's own "Learn more" says.
- */
 export const frameworkBoilerplates = (techs = FIRST_USE_TECHS) =>
   techs
     .map((tech) => FRAMEWORKS.find((framework) => framework.tech === tech))

@@ -55,7 +55,7 @@
       role="list"
       :aria-labelledby="listLabelledBy"
       :data-testid="`${testId}__list`"
-      class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
+      class="flex flex-col p-(--spacing-lg)"
     >
       <slot />
     </ul>

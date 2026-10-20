@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import Message from '@aziontech/webkit/message'
@@ -8,34 +8,33 @@
   import { consumersOf } from '../../lib/data/resource-dependencies'
   import Section from '../page/Section.vue'
 
-  const props = defineProps({
-    /** The `createResources` id being created. */
-    resource: { type: String, required: true },
-    /** The resource's own noun. */
-    unit: { type: String, default: 'resource' },
-    /** The answered fields, as `{ field, value }` pairs in the spec's own order. */
-    answers: { type: Array, default: () => [] },
-    /** The binding descriptor, or null when this resource needs no host. */
-    binding: { type: Object, default: null },
-    /** The host descriptor — noun, icon. */
-    host: { type: Object, default: null },
-    /** The host the reader chose, by name; empty when they chose to bind later. */
-    boundTo: { type: String, default: '' },
-    /** The module the reference needs, or null when it needs none. */
-    moduleRequirement: { type: Object, default: null },
-    /** True when that module is off on the chosen host. */
-    moduleMissing: { type: Boolean, default: false },
-    /** True when the reader agreed to switch it on with this create. */
-    moduleEnabled: { type: Boolean, default: false }
+  interface Props {
+    resource: string
+    unit?: string
+    answers?: unknown[]
+    binding?: Record<string, unknown>
+    host?: Record<string, unknown>
+    boundTo?: string
+    moduleRequirement?: Record<string, unknown>
+    moduleMissing?: boolean
+    moduleEnabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    unit: 'resource',
+    answers: () => [],
+    binding: null,
+    host: null,
+    boundTo: '',
+    moduleRequirement: null,
+    moduleMissing: false,
+    moduleEnabled: false
   })
 
   const consumers = computed(() => consumersOf(props.resource))
 
-  /**
-   * What the reader actually chose, in the words they chose it by: an enum prints its
-   * option's label rather than the value posted under it.
-   */
   const printValue = (field, value) => {
+    if (field.kind === 'secret') return '••••••••'
     if (typeof value === 'boolean') return value ? 'On' : 'Off'
     if (Array.isArray(value)) return value.join(', ')
     const option = field.options?.find((entry) => entry.value === value)
@@ -94,25 +93,29 @@
       <CardBox :padded="false">
         <template #content>
           <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-            <Message key="message-1"
+            <Message
+              key="message-1"
               v-if="!boundTo"
               severity="warning"
               size="small"
               :label="`Bound to no ${host?.noun ?? 'host'}. ${binding.unboundNote}`"
             />
-            <Message key="message-2"
+            <Message
+              key="message-2"
               v-else-if="moduleMissing && !moduleEnabled"
               severity="warning"
               size="small"
               :label="`${moduleRequirement?.label} is off on ${boundTo}, so nothing reads this ${unit} until it is on.`"
             />
-            <Message key="message-3"
+            <Message
+              key="message-3"
               v-else-if="moduleMissing"
               severity="info"
               size="small"
               :label="`${moduleRequirement?.label} will be turned on for ${boundTo} when this ${unit} is created.`"
             />
-            <Message key="message-4"
+            <Message
+              key="message-4"
               v-else
               severity="success"
               size="small"
@@ -123,7 +126,8 @@
       </CardBox>
     </Section>
 
-    <Section key="section-2"
+    <Section
+      key="section-2"
       v-if="consumers.length"
       stacked
       :divided="false"

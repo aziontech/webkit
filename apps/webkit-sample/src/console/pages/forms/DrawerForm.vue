@@ -1,9 +1,4 @@
 <script setup>
-  // Form type: DRAWER form (the `/form` skill, "Form types"). In-context creation —
-  // the user stays on the list and creates a resource in a side Drawer with one
-  // scoped save (the drawer's primary action). Fields are stacked field-* triads
-  // (Approach B, a short create). Validation runs on submit; the scope locks off one
-  // `submitting` flag (the /usability contract); request errors toast.
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -33,7 +28,6 @@
   ]
   const regionLabel = (value) => regions.find((option) => option.value === value)?.label ?? ''
 
-  // The list this drawer creates into (kept in memory for the demo).
   const environments = ref([
     { id: 'env-1', name: 'production', region: 'us-east' },
     { id: 'env-2', name: 'staging', region: 'sa-east' }
@@ -48,7 +42,6 @@
   const regionEmpty = computed(() => !form.region)
   const isValid = computed(() => !nameEmpty.value && !regionEmpty.value)
 
-  // Reset to a clean slate whenever the drawer closes.
   watch(drawerOpen, (open) => {
     if (open) return
     form.name = ''
@@ -62,8 +55,8 @@
   }
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
-    submitted.value = true // reveal field feedback
+    if (submitting.value) return
+    submitted.value = true
     if (!isValid.value) return
 
     submitting.value = true
@@ -74,7 +67,7 @@
         ...environments.value
       ]
       toast.success(`Environment "${form.name.trim()}" created.`)
-      drawerOpen.value = false // watch() resets the form
+      drawerOpen.value = false
     } catch (error) {
       toast.error('Could not create the environment.', {
         description: error?.message ?? 'Check your connection and try again.',
@@ -91,9 +84,6 @@
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Drawer form' }]"
   >
-    <!-- No `gap` on the stack: the band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex h-full flex-col">
       <PageHeading
         title="Environments"
@@ -109,7 +99,6 @@
         </template>
       </PageHeading>
 
-      <!-- The list the drawer creates into -->
       <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
         <li
           v-for="env in environments"
@@ -122,7 +111,6 @@
       </ul>
     </main>
 
-    <!-- Drawer form — one scoped save. Enter submits via the sr-only button. -->
     <Drawer
       v-model:open="drawerOpen"
       size="medium"
@@ -143,16 +131,12 @@
             </PanelHeader>
 
             <PanelContent>
-              <!-- compact modal body: fields --spacing-md apart -->
               <fieldset
                 class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create environment</legend>
 
-                <!-- The Label carries the required tag ALWAYS (rendered here, so
-                     the wrapper gets no `label`); the field's amber :required only
-                     fires on an empty submit — required is a prompt, never red. -->
                 <div class="flex w-full flex-col gap-(--spacing-xs)">
                   <Label
                     for="env-name"
@@ -181,9 +165,6 @@
                     required
                     >Region</Label
                   >
-                  <!-- Label required ALWAYS; the empty-required Select uses
-                       :required (amber semantics), never :invalid (red). Select has
-                       no amber border, so the amber HelperText below carries the cue. -->
                   <Select
                     v-model="form.region"
                     size="large"
@@ -196,11 +177,6 @@
                       id="env-region"
                       :aria-describedby="submitted && regionEmpty ? 'env-region-error' : undefined"
                     />
-                    <!-- TEMPORARY WORKAROUND for a webkit bug: Select.Content
-                         teleports to <body> at z-50, so inside the Drawer panel
-                         (z-[1001]) the dropdown renders behind it and is invisible.
-                         Remove this override once webkit stacks overlay popups
-                         above Drawer/Dialog. -->
                     <Select.Content class="z-[1002]!">
                       <Select.Option
                         v-for="option in regions"

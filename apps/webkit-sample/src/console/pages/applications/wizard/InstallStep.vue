@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
@@ -10,13 +10,16 @@
   import { integrationPreview } from '../../../lib/data/template-integrations'
   import { useCreateForm } from './form-context'
 
-  const props = defineProps({
-    /** The integration template being installed. */
-    source: { type: Object, default: null },
-    /** The gate's answer — `{ mode: 'existing', name }`. */
-    target: { type: Object, default: null },
-    /** The flow-wide lock while the commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    source?: Record<string, unknown>
+    target?: Record<string, unknown>
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    source: null,
+    target: null,
+    disabled: false
   })
 
   const { form, errors } = useCreateForm()
@@ -115,7 +118,7 @@
               class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
             >
               <i
-                class="pi pi-sliders-h text-[1rem] leading-none text-(--text-default)"
+                class="pi pi-sliders-h text-body-md leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </span>

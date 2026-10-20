@@ -1,19 +1,4 @@
-<script setup>
-  // HOW YOU PUT CODE IN THIS APPLICATION — the first thing the Build tab shows.
-  //
-  // Azion has no "build settings" resource: an application is built and shipped either
-  // from the reader's own terminal (the Azion CLI) or from a workflow in the repository
-  // that runs the same CLI. So this tab opens by TEACHING those two paths instead of by
-  // presenting a form for a build service we do not have.
-  //
-  // THREE NUMBERED STEPS, side by side, each with the command it names — the shape a
-  // reader already knows from every platform's "Get started". The path selector sits on
-  // the heading row and swaps all three: one screen answers both scenarios instead of
-  // two screens each answering half.
-  //
-  // It is mounted TWICE, deliberately: on the create's success screen (the handoff, at
-  // the moment the application is made) and here, permanently. Once is not enough — a
-  // reader who reloads has lost the success screen and still has the same question.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import CodeBlock from '@aziontech/webkit/code-block'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
@@ -21,16 +6,16 @@
 
   import SectionHeading from '../page/SectionHeading.vue'
 
-  const props = defineProps({
-    /** The application the commands link against, named in the `azion link` step. */
-    name: { type: String, default: '' },
-    /** The connected repository, when there is one. It decides which path opens first. */
-    repository: { type: String, default: '' },
-    /** Where the documentation link inside the description goes. */
-    documentationHref: {
-      type: String,
-      default: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
-    }
+  interface Props {
+    name?: string
+    repository?: string
+    documentationHref?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    name: '',
+    repository: '',
+    documentationHref: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
   })
 
   const PATHS = [
@@ -38,17 +23,11 @@
     { label: 'GitHub Actions', value: 'actions' }
   ]
 
-  // A repository-backed application ships from its workflow, so that path opens; one
-  // without a repository has only the terminal.
   const path = ref(props.repository ? 'actions' : 'cli')
 
-  // Broken over two lines so the application's name is readable inside a step card
-  // rather than scrolling out of it.
   const linkCommand = props.name ? `azion link \\\n  --name ${props.name}` : 'azion link'
   const productionBranch = 'main'
 
-  // The CLI path's first step. The workflow path installs the CLI inside the job, so it
-  // does not ask the reader to install anything locally.
   const INSTALL_STEP = {
     title: 'Install the Azion CLI',
     description:
@@ -91,8 +70,6 @@
     }
   ]
 
-  // The workflow YAML is assembled line by line because `${{ secrets.… }}` cannot appear
-  // in a template literal — JavaScript reads it as an interpolation and fails to parse.
   const WORKFLOW = [
     'on:',
     '  push:',
@@ -155,10 +132,6 @@
 </script>
 
 <template>
-  <!-- A CONTAINER QUERY, not a viewport one: this block is mounted at two very different
-       widths — the create's success column and the Build tab's form measure — and the
-       viewport is the same in both. Below three columns' worth of CARD width the steps
-       stack, so a command keeps the full width instead of scrolling inside a 300px box. -->
   <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
     <SectionHeading title="Get started">
       <template #description>
@@ -187,8 +160,6 @@
         :key="step.title"
         class="relative flex min-w-0"
       >
-        <!-- The seam between two cards, drawn only where they sit side by side. It spans
-             exactly the grid gap, at the height of the number it joins. -->
         <span
           v-if="index > 0"
           aria-hidden="true"

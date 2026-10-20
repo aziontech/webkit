@@ -2,13 +2,11 @@ import Button from '@aziontech/webkit/button'
 import CardGrid from '@aziontech/webkit/card-grid'
 import CardPricing from '@aziontech/webkit/card-pricing'
 import FrameBox from '@aziontech/webkit/frame-box'
-import SectionContainer from '@aziontech/webkit/section-container'
-import SectionGap from '@aziontech/webkit/section-gap'
-import SectionModule from '@aziontech/webkit/section-module'
+import Hero from '@aziontech/webkit/hero'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
 import { ref } from 'vue'
 
-import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { each } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
 const BILLING_PERIODS = [
@@ -37,10 +35,10 @@ const PLANS = [
     },
     featuresTitle: 'All Features Included.',
     features: [
-      { icon: 'pi pi-globe', label: 'Global infrastructure' },
+      { icon: 'ai ai-edge-nodes', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'pi pi-image', label: 'Image optimization' },
+      { icon: 'ai ai-image-processor', label: 'Image optimization' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     action: { label: 'Start for free', kind: 'outlined', href: '/signup' }
@@ -123,8 +121,7 @@ const IMPORTS = [
   "import CardGrid from '@aziontech/webkit/card-grid'",
   "import CardPricing from '@aziontech/webkit/card-pricing'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
+  "import Hero from '@aziontech/webkit/hero'",
   "import SegmentedButton from '@aziontech/webkit/segmented-button'",
   "import { ref } from 'vue'",
   '',
@@ -139,9 +136,7 @@ const components = {
   CardGrid,
   CardPricing,
   FrameBox,
-  SectionContainer,
-  SectionGap,
-  SectionModule,
+  Hero,
   SegmentedButton
 }
 
@@ -202,8 +197,8 @@ ${each(
 </CardPricing>`
 }
 
-const TEMPLATE = inColumn(`<SectionModule id="plans" :divided="false" :padded="false">
-  <FrameBox flush borders="y" marks="bottom">
+const TEMPLATE = `<Hero id="plans" kind="band" max-width="full" :padded="false">
+  <FrameBox flush class="mx-auto max-w-(--layout-measure-site)" borders="x" marks="bottom">
     <div class="flex justify-center border-b border-(--border-default) p-(--spacing-md)">
       <SegmentedButton v-model="period" :options="billingPeriods" aria-label="Billing period" />
     </div>
@@ -211,7 +206,7 @@ const TEMPLATE = inColumn(`<SectionModule id="plans" :divided="false" :padded="f
 ${each(PLANS, card, 3)}
     </CardGrid>
   </FrameBox>
-</SectionModule>`)
+</Hero>`
 
 const priceState = () =>
   Object.fromEntries(
@@ -236,7 +231,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The plan picker that opens the Pricing page’s column: a billing-period toggle over the plans side by side, each with its price, what it includes and one action, and the recommended plan raised on the surface fill with its tag. Built from `SectionModule`, `FrameBox`, `SegmentedButton`, `CardGrid` (divider) and `CardPricing`, with `Button` in each card’s actions slot.'
+          'The plan picker under the Pricing page’s title band: a billing-period toggle over the plans side by side, each with its price, what it includes and one action, and the recommended plan raised on the surface fill with its tag. A `Hero` band that carries the page’s full-bleed rule under the title band and the bottom rule under the cards, with the frame held to the site measure so it lines up with the sections below at every width. Built from `Hero`, `FrameBox`, `SegmentedButton`, `CardGrid` (divider) and `CardPricing`, with `Button` in each card’s actions slot.'
       },
       canvas: { sourceState: 'shown' }
     }

@@ -47,7 +47,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Console application shell composed from `GlobalHeader`, `Sidebar`, `TabView` and `Button`: a global header, a persistent navigation sidebar, a page heading with actions, tabs, and scrollable panel content.'
+          'Console application shell composed from `GlobalHeader`, `Sidebar`, `TabView` and `Button`: a global header, a persistent navigation sidebar, a page heading with actions, tabs, and scrollable panel content. The console carries no page footer: the shell ends on its scroll region, and `Footer` belongs to the docs and site shells (Templates › Shells).'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -82,7 +82,7 @@ const SHELL_TEMPLATE = `<div class="flex h-screen min-h-0 w-full flex-col bg-(--
           <InputText placeholder="Search" size="medium" />
         </template>
         <SidebarGroup>
-          <MenuItem label="Home" icon="ai ai-home" selected href="/" />
+          <MenuItem label="Home" icon="pi pi-home" selected href="/" />
           <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
           <MenuItem label="Domains" icon="ai ai-workloads" href="/domains" />
         </SidebarGroup>
@@ -127,7 +127,7 @@ const SHELL_TEMPLATE = `<div class="flex h-screen min-h-0 w-full flex-col bg-(--
           <MenuItem label="WAF Rules" icon="ai ai-waf-rules" href="/waf" />
         </SidebarGroup>
         <SidebarGroup label="Marketplace Products">
-          <MenuItem label="Bot Manager" icon="pi pi-wrench" href="/marketplace/bot-manager" target="_blank" />
+          <MenuItem label="Bot Manager" icon="ai ai-bot-manager" href="/marketplace/bot-manager" target="_blank" />
           <MenuItem label="SIEM" icon="pi pi-chart-bar" href="/marketplace/siem" target="_blank" />
         </SidebarGroup>
       </Sidebar>

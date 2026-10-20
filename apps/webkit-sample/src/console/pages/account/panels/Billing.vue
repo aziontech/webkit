@@ -1,44 +1,4 @@
 <script setup>
-  // Settings → Billing. What the workspace pays, the card it is charged to, and
-  // the invoice history behind both.
-  //
-  // THREE BANDS, TWO SHAPES. The subscription and the payment method are FACT
-  // GRIDS — a <dl> of label-over-value cells inside a CardBox — because every
-  // value there is a readout with no action of its own; each band's single action
-  // lives on its SectionHeading, so the card stays pure data. The invoices are a
-  // data-driven Table (`:data` + `:columns`) under the house CONTROLS ROW order
-  // (Filter · Search · … · Refresh · Download CSV · Columns — narrowing left, the
-  // three that act on the listing right), every control at `medium` so the row
-  // shares one 32px height. Nothing is left inside the card's own toolbar.
-  //
-  // STATES — the view fetches, so it owns the whole surface: Skeletons reserve
-  // each fact grid while the data arrives, the Table renders its own skeleton
-  // rows off `:loading`, a failed load replaces the bands with one Message
-  // carrying Retry (a single request backs all three, so it is reported once),
-  // and an over-filtered list gets a "clear filters" EmptyState whose copy is
-  // distinct from the never-invoiced one. `fetchBilling()` stands in for the
-  // app's data layer — swap it for the real request and every state above is
-  // already wired.
-  //
-  // MONEY — amount READOUTS render through webkit's Currency, so the console
-  // spells money the same way here as in Manage Resources. The reference design
-  // mutes the cents; that flourish is not in Currency, and hand-rolling it here
-  // would leave this one screen reading differently from every other amount in
-  // the product. The seat price is a Tag LABEL, not a readout, so it stays a
-  // formatted string.
-  //
-  // LAYOUT — the invoice table earns the DATA measure (`.layout-column`), and the
-  // fact grids read fine at that width. The view owns its own scroll region because the
-  // shell hands each tab a plain flex column (see AccountSettings.vue) — so the page is a
-  // COLUMN: heading, then the tab bar, then the one region that scrolls. The heading and
-  // the bands sit on the page column; the TAB BAR does not, because it is full bleed (its
-  // border is the header's edge and runs the whole width of the content zone).
-  //
-  // HEADING SCALE — `large` on the page title, and the invoice band takes a `small`
-  // PageHeading rather than a SectionHeading: the band is this page's payload, with its
-  // own controls, filters and pagination, and a muted section label titles a card, not
-  // that. The two Payment-tab bands stay SectionHeadings — they title fact grids, and
-  // each one's single action lives on that heading so the card stays pure data.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Currency from '@aziontech/webkit/currency'
@@ -48,7 +8,7 @@
   import Message from '@aziontech/webkit/message'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -75,10 +35,6 @@
 
   const DOCS = 'https://www.azion.com/en/documentation/'
 
-  // --- The records the view reads ------------------------------------------
-  // Pricing is per seat, so the figures on this page reconcile with each other:
-  // seats × the plan's seat price IS the amount, on the subscription card and on
-  // every invoice row. Nothing on the screen can quietly disagree.
   const SEAT_PRICE = { Business: 40, Starter: 20 }
 
   const PLAN_START = 'Jan 25, 2023'
@@ -90,9 +46,6 @@
     nextInvoice: '2026-08-01'
   }
 
-  // The cards on the account. A LIST, because an account routinely has more than one
-  // (see ../../lib/data/payment-methods.js) — the band above still shows the DEFAULT,
-  // which is the one figure a reader wants without scrolling.
   const paymentMethods = ref([...PAYMENT_METHODS])
   const paymentColumns = [
     {
@@ -127,8 +80,6 @@
       toast.success(`${card.brand} •••• ${card.last4} is now the default.`)
       return
     }
-    // The default card cannot be removed: an account with invoices and no card to
-    // charge is a state the console should not be able to reach from this menu.
     if (card.default) {
       toast.error('Set another card as the default before removing this one.')
       return
@@ -145,10 +96,6 @@
     autoRenewal: true
   }
 
-  // Twelve months of history: the plan moved from Starter to Business in
-  // February and the team grew through the year, so the Plan column and the
-  // amounts both move for a reason. The amount is derived rather than typed —
-  // a hand-written total is the one number that can drift from its own row.
   const defaultCard = defaultPaymentMethod()
 
   const INVOICES = [
@@ -251,20 +198,10 @@
   ].map((invoice) => ({
     ...invoice,
     cycle: 'Monthly',
-    // The real instant beside the ISO string, so the Billing date field can compare
-    // it — `withinRange` takes a Date and a string would silently match nothing.
     billedAt: new Date(invoice.billingDate),
     amount: invoice.seats * SEAT_PRICE[invoice.plan],
-    // Derived from the account's default card rather than typed per row: an invoice
-    // charged to a card the account does not have is the kind of seed drift a reader
-    // spots instantly and cannot explain.
     paymentMethod: `${defaultCard.brand} •••• ${defaultCard.last4}`
   }))
-
-  // Each skeleton cell mirrors the fact cell it stands in for — the bar width
-  // follows the value it replaces, and a cell with a detail line (the seat price,
-  // the masked card number) reserves that second line too. Without this the card
-  // grew by the height of one line the moment the data landed.
 
   const PAYMENT_SKELETON = [
     { value: '120px', detail: '64px' },
@@ -273,7 +210,6 @@
     { value: '40px' }
   ]
 
-  // --- Formatters (app logic, not design-system concerns) -------------------
   const MONTHS = [
     'Jan',
     'Feb',
@@ -289,25 +225,19 @@
     'Dec'
   ]
 
-  // Built from the ISO parts rather than through `new Date`, which parses a bare
-  // `YYYY-MM-DD` as UTC midnight and prints the previous day west of Greenwich.
   const formatDate = (iso) => {
     const [year, month, day] = iso.split('-')
     return `${day} ${MONTHS[Number(month) - 1]}, ${year}`
   }
 
-  // Currency owns the `$` prefix; this only fixes the cents.
   const formatAmount = (value) => value.toFixed(2)
 
-  // --- Load: the state surface all three bands hang off ---------------------
   const loading = ref(true)
   const error = ref('')
   const subscription = ref(null)
   const paymentMethod = ref(null)
   const invoices = ref([])
 
-  // Stands in for the app's data layer (a query, a store, a fetch). Everything
-  // downstream reads its outcome, never the constants above.
   const fetchBilling = () =>
     new Promise((resolve) => {
       globalThis.setTimeout(
@@ -336,9 +266,6 @@
       paymentMethod.value = null
       invoices.value = []
     } finally {
-      // Released on both paths, so a failure can never leave the view stuck in
-      // its skeleton — and the controls row's Refresh (disabled while loading)
-      // unlocks.
       loading.value = false
     }
   }
@@ -353,10 +280,6 @@
       : ''
   )
 
-  // --- The invoice table ----------------------------------------------------
-  // `id` is the principal (identity) column; `billingDate` and `amount` hold RAW
-  // values (ISO date, number) so sorting and the numeric filters compare the
-  // value rather than its formatting — the cell slots do the formatting.
   const invoiceColumns = [
     { accessorKey: 'seq', header: '№', label: 'Number', enableSorting: true, minWidth: FIT_COLUMN },
     {
@@ -377,40 +300,13 @@
       minWidth: FIT_COLUMN
     },
     { accessorKey: 'amount', header: 'Amount', enableSorting: true, minWidth: FIT_COLUMN },
-    // Which card was charged. The console carries it on the invoice row because "why
-    // did THIS one fail" is answered by the card, not by the amount.
     { accessorKey: 'paymentMethod', header: 'Payment Method', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Which columns are switched off, driven by the Columns button on the controls row
-  // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded.
-  //
-  // Nine columns, the widest table on the account side — and the one most likely to be
-  // read for a single question ("which of these failed", "what did April cost"), so the
-  // ability to put six of them away is worth more here than anywhere else.
-  //
-  // `Invoice ID` is the PRINCIPAL column here, so it is locked on rather than hidden by
-  // default the way a secondary `ID` is elsewhere: it is what an invoice IS called, not
-  // a machine key beside a name.
   const columnVisibility = ref({})
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // The same bar every list in the console carries (the webkit-lists skill), not the
-  // table's own field/operator/value builder. Every one of these narrows by
-  // MEMBERSHIP — is this invoice's status one of these — so an operator column would
-  // have offered `is one of` on every row.
-  //
-  // Billing date is a real field again. It could not be one under the builder, whose
-  // date operators coerce through Number() and never match an ISO string — a filter
-  // that silently returns nothing. The bar compares `billedAt`, the instant derived
-  // beside the string above, so chronology is one click instead of a sort plus a scan.
-  //
-  // Seats and Amount are gone, and deliberately: they are magnitudes, not categories.
-  // A membership field over them offers one option per distinct value — twelve chips
-  // that each match one row — and what people actually ask ("over $500") is a
-  // comparison the search field and the sortable column already serve.
   const invoiceFilterFields = [
     {
       id: 'status',
@@ -453,8 +349,6 @@
     }
   ]
 
-  // Search and the applied filters are host-owned, so the empty state can tell
-  // "nothing matches" from "never invoiced" and clear both in one action.
   const {
     filters,
     search,
@@ -462,9 +356,6 @@
     visibleRows: visibleInvoices
   } = useListFilters(invoiceFilterFields, invoices)
 
-  // The invoice table the controls row drives — Download CSV calls its `exportCsv()`
-  // (../../../components/list/ExportButton.vue), so the file honours the visible
-  // columns and the filtered rows.
   const invoicesTableRef = ref(null)
 
   const isFiltered = computed(
@@ -482,23 +373,17 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The two questions this page answers, in the console's own order and words.
   const BILLING_TABS = [
     { value: 'bills', label: 'Bills' },
     { value: 'payment-methods', label: 'Payment Methods' }
   ]
 
-  // The active tab lives in `?tab=`, so it survives a reload and is linkable — the same
-  // contract every tabbed resource in this console keeps. `replace`, not `push`: moving
-  // between two views of one page is not a step the Back button should have to undo.
   const activeTab = computed({
     get: () =>
       BILLING_TABS.some((tab) => tab.value === route.query.tab) ? route.query.tab : 'bills',
     set: (value) => router.replace({ query: { ...route.query, tab: value } })
   })
 
-  // When the figures were last read. A real timestamp, formatted the way the design
-  // spells it, so the refresh beside it has something to change.
   const lastUpdate = ref('')
   const stampUpdate = () => {
     lastUpdate.value = new Date().toLocaleString('en-US', {
@@ -511,9 +396,6 @@
     })
   }
 
-  // The four label→value rows of the Subscription Plan card. A list rather than four
-  // hand-written rows: they render identically, and the one that differs (an unset
-  // charge shows the design's `--`) differs in its VALUE, not in its markup.
   const DASH = '--'
   const planFacts = computed(() => [
     { label: 'Plan Start Date', value: PLAN_START },
@@ -528,26 +410,10 @@
     }
   ])
 
-  // ── THE UPGRADE PATH IS THE ONBOARDING ONE ──
-  //
-  // The tier this card offers, its name, and every line of what it buys come from the
-  // plan catalog (../../../lib/data/plans.js) — the same record the entrance's plan
-  // step renders and the same one the upgrade drawer reads. This card used to carry a
-  // typed list of eight perks, which is exactly how a billing page ends up advertising
-  // a limit the rest of the console does not sell: the catalog moves, the array does
-  // not, and nothing fails.
   const upgradePlan = planFor('pro')
 
-  // `{ title, detail }`, the shape the drawer renders. The card shows the titles —
-  // it is a teaser standing next to the plan the account is on, not the contract — and
-  // the metered rate after each allowance is read in the drawer behind the button.
   const proPerks = computed(() => upgradePlan.upgrade.features)
 
-  // Both buttons open the surfaces the ENTRANCE already uses, instead of reporting
-  // that the demo cannot do this: ChangePlanDrawer answers "which tier", and
-  // PlanUpgradeDrawer — the onboarding flow's own payment step — answers "this one,
-  // and here is the card". One payment surface for the whole sample; two places a
-  // contract can be agreed to is the one thing a billing flow must not have.
   const { setPlan } = useSamplePreset()
   const changePlanOpen = ref(false)
   const upgradeOpen = ref(false)
@@ -560,9 +426,6 @@
     upgradeOpen.value = true
   }
 
-  // Paid through the tier card. The preset is what the header tag, the organization
-  // row and the switcher all read, so writing it here is what keeps the console from
-  // saying two different things about the same account.
   const onUpgradeConfirm = ({ planId }) => {
     setPlan(planId)
     toast.success(`You are now on ${planNameFor(planId)}.`, {
@@ -570,8 +433,6 @@
     })
   }
 
-  // Paid through the comparison drawer, which has already written the tier itself —
-  // all that is left is to say so.
   const onPlanChanged = (planId) => {
     toast.success(`You are now on ${planNameFor(planId)}.`, {
       description: 'The next invoice is charged on the new contract.'
@@ -583,17 +444,7 @@
 </script>
 
 <template>
-  <!-- THE PAGE IS A COLUMN, not one scroll box: the heading and the tab bar are the page's
-       header and they stay put, and only the region under them scrolls. That is what lets
-       the tab bar be FULL BLEED — its bottom border runs the whole width of the content
-       zone and reads as the edge of the header, the same shape every tabbed page in the
-       console has (../../applications/ApplicationDetail.vue). Inside a capped, inset
-       column the same bar drew a rule that stopped short of both edges and scrolled away,
-       which is a rule about nothing. -->
   <div class="flex h-full min-w-0 flex-col">
-    <!-- The heading keeps the page column: it is CONTENT, and it lines up with the bands
-         below. Only the inline half of the boundary plus the boundary's own top step —
-         the bottom step belongs to the tab bar, which brings its own. -->
     <header
       class="layout-column layout-boundary-inline flex min-w-0 shrink-0 flex-col pt-(--layout-boundary-start) pb-(--spacing-md)"
     >
@@ -603,9 +454,6 @@
         description="View and manage invoices, payments, and subscription details."
         :documentation="DOCS"
       >
-        <!-- The heading's end slot (Figma 314:13901): when the figures were last read,
-             and the way to read them again. A timestamp with no way to refresh is a
-             number the reader can only distrust. -->
         <template #actions>
           <span class="text-label-md text-(--text-default)">Last Update: {{ lastUpdate }}</span>
           <Tooltip text="Refresh">
@@ -622,34 +470,16 @@
       </PageHeading>
     </header>
 
-    <!-- THE TABS ARE TOP LEVEL and FULL BLEED: directly under the page heading, above
-         everything the page shows, and spanning the whole content zone. They name the two
-         things this page IS, so nothing may sit between them and the heading — a band
-         above the bar reads as page chrome that the tabs then contradict by swapping the
-         content under it. The BAR is the one element here that is not capped or inset —
-         it is the header's edge, and an edge stops at the edge — but its CONTENT rides
-         the page column (`column="data"`, the same measure the heading above and the
-         bands below take), so the first tab's label sits on the same left edge as
-         "Billing". Without that the two agree only below 1436px, where the column has
-         not started centring yet. -->
     <PageTabs
       v-model:value="activeTab"
       :tabs="BILLING_TABS"
       column="data"
     />
 
-    <!-- Only this region scrolls, so the heading and the bar above it stay while the
-         bands move under them. -->
     <div class="min-h-0 flex-1 overflow-auto">
-      <!-- The page's parent section: back on the page column, and it spaces the bands at
-           --layout-section-gap whichever branch renders. `layout-boundary` rather than the
-           boundary's start step, because the bar above already closed the header — this is
-           the top of a scroll region, not the top of the page. -->
       <section
         class="@container/bands layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
-        <!-- One request backs all three bands, so its failure is reported once, at
-             view level, with the recovery attached to the message itself. -->
         <Message
           v-if="error"
           severity="danger"
@@ -660,30 +490,9 @@
 
         <template v-else>
           <template v-if="activeTab === 'bills'">
-            <!-- THE PLAN, TWO CARDS SIDE BY SIDE (Figma 314:13901). The left one states
-               what you are on; the right one states what you would get by moving. They
-               are a PAIR — the upgrade only means something read against the current
-               plan — so they share a row rather than stacking, and the row wraps whole
-               when it is narrow instead of letting either card become a column of scraps.
-
-               A CONTAINER query (`@4xl/bands`, 896px), not `lg:`. The deciding width is
-               the content zone, which is the viewport MINUS the 300px nav rail — so a
-               viewport breakpoint answers the wrong question. `lg:` (viewport 1024) fired
-               at 1028px wide, where the zone is 728px, and put both cards side by side at
-               306px/358px: measured 17 clipped labels and a page heading squeezed into 4
-               lines. The bar for going side-by-side is what the CARDS have, not what the
-               window has.
-
-               `bands` measures the section's CONTENT box — the zone minus the 48px
-               boundary — so 896px here is a 944px zone. That keeps the pair side by side
-               everywhere it already rendered clean (1280px up) and stacks it below, where
-               it did not. -->
             <div
               class="flex min-w-0 flex-col items-stretch gap-(--layout-group-gap) @4xl/bands:flex-row"
             >
-              <!-- Subscription Plan. `w-[45%]` rather than an even split: the facts on
-                 the left are short label/value rows, the list on the right is eight
-                 items in two columns and needs the width. -->
               <CardBox class="min-w-0 @4xl/bands:w-[45%]">
                 <template #header>
                   <div class="flex min-w-0 items-center justify-between gap-(--spacing-md)">
@@ -718,9 +527,6 @@
                       </template>
                     </div>
 
-                    <!-- A description list, not a grid of facts: each row is one
-                       label→value pair and the value is right-aligned, so the four
-                       read as a column of answers rather than four separate cards. -->
                     <dl class="flex min-w-0 flex-col gap-(--spacing-sm)">
                       <div
                         v-for="fact in planFacts"
@@ -742,18 +548,12 @@
                   </div>
                 </template>
                 <template #footer>
-                  <!-- `w-full`: CardBox lays its footer out `justify-center`, so a child
-                       that does not fill the width is centred. The sentence is a note on
-                       the facts above it, and a note reads from the left edge they do. -->
                   <p class="w-full text-body-xs text-(--text-default)">
                     This invoice includes all consumption up to the last day of the month.
                   </p>
                 </template>
               </CardBox>
 
-              <!-- Upgrade to Pro. The limits come from the plan catalog
-                 (../../lib/data/plans.js) rather than being typed here, so the card
-                 cannot advertise a tier the rest of the console does not sell. -->
               <CardBox class="@container/plan min-w-0 flex-1">
                 <template #header>
                   <span class="text-label-lg text-(--text-default)">
@@ -762,11 +562,6 @@
                 </template>
                 <template #content>
                   <div class="flex min-w-0 flex-col justify-between gap-(--spacing-lg)">
-                    <!-- Two columns only once the CARD can hold them (`@md/plan`, 448px
-                         → ~246px a column against a 198px longest label). `sm:` asked the
-                         viewport, which says yes from 640px up and is never the width these
-                         labels actually get: inside the 358px card at a 1028px viewport each
-                         column was 134px and every label but two clipped. -->
                     <ul
                       class="grid min-w-0 grid-cols-1 gap-(--spacing-sm) @md/plan:grid-cols-2"
                       role="list"
@@ -776,11 +571,6 @@
                         :key="perk.title"
                         class="flex min-w-0 items-center gap-(--spacing-xs)"
                       >
-                        <!-- `--success-contrast`, not `--success`: the pair is a FILL and
-                             the ink that goes on it, so `text-(--success)` paints the
-                             glyph in the swatch colour — #0A2916 on a dark surface, a
-                             pale mint on a light one. Invisible in both themes, and
-                             nothing catches it: the class compiles, the var resolves. -->
                         <i
                           class="pi pi-check shrink-0 text-body-sm text-(--success-contrast)"
                           aria-hidden="true"
@@ -798,11 +588,6 @@
                   </div>
                 </template>
                 <template #footer>
-                  <!-- `w-full` for the same reason: without it this row is only as
-                       wide as its own content and `justify-between` has nothing to
-                       distribute, so the note and its button sit centred as one clump
-                       instead of the note starting at the card's left edge and the
-                       action ending at its right. -->
                   <div
                     class="flex w-full min-w-0 flex-wrap items-center justify-between gap-(--spacing-md)"
                   >
@@ -828,29 +613,17 @@
               </CardBox>
             </div>
 
-            <!-- Invoices. A PAGE HEADING at its small scale, not a section heading: the
-                 band is the page's payload — a full list with its own controls, its own
-                 filters and its own pagination — and a muted `text-heading-xxs` label
-                 titles a card, not that. It is the same treatment every band of this
-                 weight takes (../../workloads/WorkloadDetail.vue: Deployment
-                 topology). -->
             <div class="flex flex-col gap-(--layout-group-gap)">
               <PageHeading
                 title="Invoices"
                 description="Your complete invoice history, including payment details."
                 size="small"
               />
-              <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
-                   right, above the card — the same row every list in the console opens with. -->
               <ControlsHeader>
                 <FilterButton
                   v-model="filters"
                   :fields="invoiceFilterFields"
                 />
-                <!-- Search drives the table's global filter from outside the card, so the field is
-                     a plain InputText (`Table.Search` is context-aware and only works inside
-                     `<Table>`). One horizontal band: it grows into the row's slack and compresses
-                     rather than wrapping (see ui/ControlsHeader.vue). -->
                 <InputText
                   v-model="search"
                   size="medium"
@@ -866,14 +639,6 @@
                   </template>
                 </InputText>
                 <template #actions>
-                  <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                       than narrow it — fetch it again, take it away as a file, choose
-                       which columns it shows. These two used to render in the table's
-                       own `#toolbar`, as `Table.RefreshButton` / `Table.Export`; they
-                       came up to this row so the whole console shows one controls row
-                       instead of a second band of controls inside the card on this one
-                       page. Refresh here drives the page's real `loadBilling()`, which
-                       is what the toolbar's context-aware pair was signalling anyway. -->
                   <RefreshButton
                     :loading="loading"
                     @refresh="loadBilling"
@@ -896,11 +661,7 @@
 
               <CardBox :padded="false">
                 <template #content>
-                  <!-- NO `#toolbar`. Narrowing, the column picker, Refresh and Download
-                       CSV are all on the controls row above the card now, which is the
-                       shape every other list in the console has — so the card is a frame
-                       around data only, with no second row of controls inside it. -->
-                  <Table
+                  <TableRoot
                     ref="invoicesTableRef"
                     v-model:pagination="pagination"
                     v-model:globalFilter="search"
@@ -915,9 +676,6 @@
                     :loading="loading"
                     export-filename="invoices.csv"
                   >
-                    <!-- Two empties, two copies: a filter that matches nothing is
-                         recoverable in one click; a history that has not started yet
-                         is not the same problem. -->
                     <template #empty>
                       <EmptyState
                         key="empty-state-1"
@@ -956,8 +714,6 @@
                       </EmptyState>
                     </template>
 
-                    <!-- The sequence number orders the history; the Invoice ID
-                         identifies it, so only one of the two is emphasized. -->
                     <template #cell-seq="{ value }">
                       <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
                     </template>
@@ -997,14 +753,13 @@
                         />
                       </Tooltip>
                     </template>
-                  </Table>
+                  </TableRoot>
                 </template>
               </CardBox>
             </div>
           </template>
 
           <template v-else>
-            <!-- Payment information -->
             <div class="flex flex-col gap-(--layout-group-gap)">
               <SectionHeading
                 title="Payment information"
@@ -1050,8 +805,6 @@
                       />
                     </div>
                   </div>
-                  <!-- One step down the scale from the subscription grid: these are
-                       settings the user confirms, not figures they read at a glance. -->
                   <dl
                     v-else
                     class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
@@ -1077,10 +830,6 @@
               </CardBox>
             </div>
 
-            <!-- Payment methods. The band above states the DEFAULT card as a fact; this
-                 is the full set, because an account routinely has more than one and only
-                 a list can say which of them is the one being charged. Three columns, the
-                 console's own (../../lib/data/payment-methods.js). -->
             <div class="flex flex-col gap-(--layout-group-gap)">
               <SectionHeading
                 title="Payment methods"
@@ -1098,12 +847,9 @@
                   />
                 </template>
               </SectionHeading>
-              <!-- No controls row: three columns and three rows have nothing to narrow,
-                   and a band with one lone Columns button reads as a row that lost its
-                   search field. -->
               <CardBox :padded="false">
                 <template #content>
-                  <Table
+                  <TableRoot
                     :data="paymentMethods"
                     :columns="paymentColumns"
                     row-key="id"
@@ -1113,9 +859,6 @@
                     :row-actions="paymentActions"
                     @row-action="onPaymentAction"
                   >
-                    <!-- The default is marked on the holder, not in a column of its own:
-                         it is a property of ONE row, so a whole column would be empty on
-                         every other one. -->
                     <template #cell-holder="{ row, value }">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                         <span class="truncate">{{ value }}</span>
@@ -1138,7 +881,7 @@
                         <span class="sr-only">{{ row.brand }} ending in {{ row.last4 }}</span>
                       </span>
                     </template>
-                  </Table>
+                  </TableRoot>
                 </template>
               </CardBox>
             </div>
@@ -1147,14 +890,6 @@
       </section>
     </div>
 
-    <!-- ── THE ENTRANCE'S TWO PLAN SURFACES, REUSED ──
-         Neither is a page: both are drawers, so the reader keeps their place in the
-         billing history behind them. `Change Plan` compares the three tiers and is
-         handed the question it is answering, the way every other caller hands it one
-         (../../../components/shell/TenancySwitcher.vue) — this one is asked from the
-         subscription card, so the question is about the contract itself. `Upgrade to
-         <tier>` skips the comparison and goes straight to the entrance's payment
-         step, because the button already named the tier. -->
     <ChangePlanDrawer
       v-model:open="changePlanOpen"
       title="Change plan"

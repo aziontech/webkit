@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -18,16 +18,14 @@
   } from '../../lib/data/workload-protocols'
   import FieldRow from '../form/FieldRow.vue'
 
-  const props = defineProps({
-    /** Locks every control while the page's commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    disabled: false
   })
 
-  /**
-   * The protocol slice of the workload's settings — `{ httpPorts, useHttps, httpsPorts,
-   * useHttp3, http3Ports, minimumTlsVersion, cipherSuite }`. Bound with `v-model`, so
-   * the page holds one object and the save bar commits it whole.
-   */
   const model = defineModel({ type: Object, required: true })
 
   const secure = computed(() => model.value.useHttps || model.value.useHttp3)
