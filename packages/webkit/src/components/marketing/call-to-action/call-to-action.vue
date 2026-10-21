@@ -11,7 +11,7 @@
   })
 
   /** Layout of the band. */
-  export type CallToActionKind = 'panel' | 'split' | 'lead'
+  export type CallToActionKind = 'panel' | 'split' | 'lead' | 'primary'
 
   interface Props {
     /** Headline of the band, rendered as its `h2`. */
@@ -22,7 +22,7 @@
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
-    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it. */
+    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor. */
     kind?: CallToActionKind
     /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
@@ -41,8 +41,12 @@
     default?(): unknown
     /** The controls the band exists to offer; in `split`, the lead cell's primary control. */
     actions?(): unknown
-    /** The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`. */
+    /** The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`. */
     aside?(): unknown
+    /** Decoration drawn behind the copy in `primary`, such as a texture; ignored in the other registers. */
+    background?(): unknown
+    /** The strip that floors the band in `primary`, such as a ticker, under a hairline; ignored in the other registers. */
+    bottom?(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -156,6 +160,52 @@
           class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full md:flex-row md:items-center md:[&>*]:w-auto"
         >
           <slot name="actions" />
+        </div>
+      </div>
+
+      <div
+        v-else-if="kind === 'primary'"
+        class="relative isolate overflow-clip bg-(--bg-canvas)"
+      >
+        <div class="relative">
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 [--texture-pool-a:50%_140%] [--texture-pool-b:50%_140%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
+          >
+            <slot name="background" />
+          </div>
+
+          <div
+            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-xxl)*1.5)] md:py-[calc(var(--spacing-xxl)*2)]"
+          >
+            <SectionTitle
+              :framed="false"
+              kind="centered"
+              size="medium"
+              :title="title"
+              :description="description"
+            >
+              <template
+                v-if="slots.default"
+                #default
+              >
+                <slot />
+              </template>
+              <template
+                v-if="slots.actions"
+                #actions
+              >
+                <slot name="actions" />
+              </template>
+            </SectionTitle>
+          </div>
+        </div>
+
+        <div
+          v-if="slots.bottom"
+          class="relative z-10 border-t border-(--border-default) py-(--spacing-lg)"
+        >
+          <slot name="bottom" />
         </div>
       </div>
 
