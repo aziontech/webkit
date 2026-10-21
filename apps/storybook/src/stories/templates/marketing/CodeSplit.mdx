@@ -54,34 +54,6 @@ Example:
   }}
 />
 
-### Accelerator
-
-From the Application Accelerator page: a heading, a sentence and a text button on one side, a one-file code sample on the other. With one tab, the sample shows a filename bar and no tabs.
-
-<Canvas of={CodeSplitStories.Accelerator} />
-
-##### Use it on the site
-
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
-
-- `title` and `description` are the copy on the start side.
-- `codeTabs` are the files; one tab draws a filename bar instead of tabs.
-- `action` is the text button. Without a label or link it is dropped.
-
-Example:
-
-<div className="sb-site-json">
-  <Source of={CodeSplitStories.AcceleratorJson} dark />
-</div>
-
-<hr
-  style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
-    border: 0,
-    borderTop: '1px solid var(--border-default)'
-  }}
-/>
-
 ### Recipes
 
 From the Workloads page: a horizontal title opens the module, a three-file code sample sits on a faded texture, and three recipes run down the other side, one per file.
