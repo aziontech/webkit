@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: b6a14cbabd4ba26cd2a480b706d9fad171cb67d77438599d8bf399b319c31248
+checksum: 70c85ded32c0a1b7fea52b3e27e306f092a6d34cfc0f93553bce4d230a0d1c70
 created: 2026-05-28
-last_updated: 2026-10-19
+last_updated: 2026-10-20
 ---
 
 
@@ -113,7 +113,9 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 ## Slots
 
-| _none_ | — | — |
+| Slot | Scope | Notes |
+|---|---|---|
+| `tab-icon` | `{ tab: CodeBlockTab }` | Leading mark before a tab's label in the tab strip; nothing renders when it is not filled. |
 
 ## States
 
