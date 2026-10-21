@@ -2,6 +2,7 @@ import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.sv
 import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
 import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
 import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+import BigNumbers from '@aziontech/webkit/big-numbers'
 import CardGrid from '@aziontech/webkit/card-grid'
 import FrameBox from '@aziontech/webkit/frame-box'
 import NetworkMap from '@aziontech/webkit/network-map'
@@ -10,26 +11,42 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
+import Topic from '@aziontech/webkit/topic'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
-const IMPORTS = [
-  "import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'",
-  "import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'",
-  "import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'",
-  "import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'",
-  "import CardGrid from '@aziontech/webkit/card-grid'",
+const BAND_IMPORTS = [
   "import FrameBox from '@aziontech/webkit/frame-box'",
   "import NetworkMap from '@aziontech/webkit/network-map'",
-  "import Quote from '@aziontech/webkit/quote'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
 
+const QUOTES_IMPORTS = [
+  "import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'",
+  "import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'",
+  "import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'",
+  "import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'",
+  "import CardGrid from '@aziontech/webkit/card-grid'",
+  "import Quote from '@aziontech/webkit/quote'",
+  ...BAND_IMPORTS
+]
+
+const BENEFITS_IMPORTS = [
+  "import CardGrid from '@aziontech/webkit/card-grid'",
+  ...BAND_IMPORTS,
+  "import Topic from '@aziontech/webkit/topic'"
+]
+
+const quoted = (text) => `'${text.replaceAll("'", "\\'")}'`
+
+const STATS_IMPORTS = ["import BigNumbers from '@aziontech/webkit/big-numbers'", ...BAND_IMPORTS]
+
 const components = {
+  BigNumbers,
   CardGrid,
   'CardGrid.Cell': CardGrid.Cell,
   FrameBox,
@@ -38,7 +55,8 @@ const components = {
   SectionContainer,
   SectionGap,
   SectionModule,
-  SectionTitle
+  SectionTitle,
+  Topic
 }
 
 const setup = () => ({
@@ -59,6 +77,34 @@ const NETWORK_CLAIMS = [
   '100+ Tbps network capacity',
   '30 ms median latency',
   '100% availability'
+]
+
+const BENEFITS = [
+  {
+    icon: 'pi pi-globe',
+    title: 'Global resilience beyond anycast',
+    description:
+      "Azion's software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide."
+  },
+  {
+    icon: 'pi pi-stopwatch',
+    title: 'Low latency everywhere',
+    description:
+      'Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app.'
+  },
+  {
+    icon: 'pi pi-arrows-v',
+    title: 'Zero-ops autoscaling and failover',
+    description:
+      'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
+  }
+]
+
+const FIGURES = [
+  { value: '7', suffix: 'x', label: 'faster pages' },
+  { value: '90', suffix: '%', label: 'lower cloud costs' },
+  { value: '40', suffix: 'x', label: 'more simultaneous connections' },
+  { value: '100', suffix: '%', label: 'OWASP Top 10 mitigation' }
 ]
 
 const MONOCHROME = 'brightness-0 [[data-theme=dark]_&]:invert'
@@ -189,7 +235,36 @@ ${each(
 )}
 </CardGrid>`
 
-const TEMPLATE = mapBand(OUTCOME_FLOOR)
+const BENEFIT_FLOOR = `<CardGrid flush kind="frame" :columns="3" class="border-t border-(--border-default)">
+${each(
+  BENEFITS,
+  (benefit) => `<CardGrid.Cell kind="canvas">
+  <Topic
+    :heading-level="3"
+    icon="${benefit.icon}"
+    title="${benefit.title}"
+    description="${benefit.description}"
+  />
+</CardGrid.Cell>`,
+  1
+)}
+</CardGrid>`
+
+const figureLiteral = (figure) =>
+  `{ ${Object.entries(figure)
+    .map(([key, value]) => `${key}: ${quoted(value)}`)
+    .join(', ')} }`
+
+const STATS_FLOOR = `<BigNumbers
+  :items="[
+${FIGURES.map((figure) => `    ${figureLiteral(figure)}`).join(',\n')}
+  ]"
+  class="border-t border-(--border-default)"
+/>`
+
+const QUOTES_TEMPLATE = mapBand(OUTCOME_FLOOR)
+const BENEFITS_TEMPLATE = mapBand(BENEFIT_FLOOR)
+const STATS_TEMPLATE = mapBand(STATS_FLOOR)
 
 const meta = {
   title: 'Templates/Marketing/Network/NetworkSection',
@@ -206,11 +281,11 @@ const meta = {
 
 export default meta
 
-export const Default = {
-  render: () => ({ components, setup, template: TEMPLATE }),
+export const ClientQuotes = {
+  render: () => ({ components, setup, template: QUOTES_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: toSfc(IMPORTS, TEMPLATE) }
+      source: { code: toSfc(QUOTES_IMPORTS, QUOTES_TEMPLATE) }
     }
   }
 }
@@ -260,7 +335,25 @@ export const SITE_SECTION = {
   }
 }
 
-export const DefaultJson = {
+export const ClientQuotesJson = {
   tags: ['!dev'],
   ...siteJsonStory(SITE_SECTION)
+}
+
+export const Benefits = {
+  render: () => ({ components, template: BENEFITS_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(BENEFITS_IMPORTS, BENEFITS_TEMPLATE) }
+    }
+  }
+}
+
+export const Stats = {
+  render: () => ({ components, template: STATS_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(STATS_IMPORTS, STATS_TEMPLATE) }
+    }
+  }
 }

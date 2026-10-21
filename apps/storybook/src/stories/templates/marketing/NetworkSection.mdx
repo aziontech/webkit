@@ -1,19 +1,16 @@
-import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as NetworkSectionStories from './NetworkSection.stories'
 
-<Meta
-  of={NetworkSectionStories}
-  name="Documentation"
-/>
+<Meta title="Templates/Marketing/Network/NetworkSection" />
 
-<Title />
+# NetworkSection
 
-A framed section that argues for the network: a headline over an animated world map, a lead line, a few infrastructure claims as pills, and a floor of client outcomes that backs the claim up. The Home page uses it.
+A framed section that argues for the network: a headline over an animated world map, a lead line, a few infrastructure claims as pills, and a floor that backs the claim up: client quotes, network benefits or figures, one story each.
 
 The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
 
-Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and `CardGrid` with a `Quote` per client.
+Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for the figures.
 
 <p
   style={{
@@ -28,11 +25,11 @@ Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and `CardG
   Stories
 </p>
 
-### Default
+### Client quotes
 
-Four client outcomes, each a quote with its figure highlighted and signed by the client's logo. Dafiti and Fourbank are drawn in one ink that follows the theme; MadeiraMadeira and Renner keep their brand colors.
+The Home page and every solution page: four client outcomes, each a quote with its figure highlighted and signed by the client's logo. Dafiti and Fourbank are drawn in one ink that follows the theme; MadeiraMadeira and Renner keep their brand colors.
 
-<Canvas of={NetworkSectionStories.Default} />
+<Canvas of={NetworkSectionStories.ClientQuotes} />
 
 ##### Use it on the site
 
@@ -48,5 +45,37 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 <div className="sb-site-json">
-  <Source of={NetworkSectionStories.DefaultJson} dark />
+  <Source of={NetworkSectionStories.ClientQuotesJson} dark />
 </div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Benefits
+
+The AI Inference page: three network benefits on the floor, each an icon, a title and one sentence.
+
+<Canvas of={NetworkSectionStories.Benefits} />
+
+This variation has no site block yet, so it has no page-JSON entry.
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Stats
+
+The Our Network page: four figures on the floor, each a big number with its unit and a one-line caption.
+
+<Canvas of={NetworkSectionStories.Stats} />
+
+This variation has no site block yet, so it has no page-JSON entry.
