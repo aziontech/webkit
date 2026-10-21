@@ -2599,6 +2599,114 @@
       ],
       "purpose": "The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the \"A\" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the \"move to the edge technologies®\" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component."
     },
+    "browser-frame": {
+      "import": "@aziontech/webkit/browser-frame",
+      "target": "./src/components/content/browser-frame/browser-frame.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/browser-frame",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "address",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty."
+        },
+        {
+          "name": "minWidth",
+          "type": "number",
+          "default": "320",
+          "required": "false",
+          "doc": "Smallest viewport width the resize handles can reach, in pixels."
+        },
+        {
+          "name": "maxWidth",
+          "type": "number",
+          "default": "1920",
+          "required": "false",
+          "doc": "Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit."
+        },
+        {
+          "name": "minHeight",
+          "type": "number",
+          "default": "320",
+          "required": "false",
+          "doc": "Smallest viewport height the resize handles can reach, in pixels."
+        },
+        {
+          "name": "maxHeight",
+          "type": "number",
+          "default": "1440",
+          "required": "false",
+          "doc": "Largest viewport height the resize handles can reach, in pixels."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "'Copy address'",
+          "required": "false",
+          "doc": "Accessible name of the address bar's copy button."
+        },
+        {
+          "name": "widthHandleAriaLabel",
+          "type": "string",
+          "default": "'Resize preview width'",
+          "required": "false",
+          "doc": "Accessible name of the right-edge width handle."
+        },
+        {
+          "name": "heightHandleAriaLabel",
+          "type": "string",
+          "default": "'Resize preview height'",
+          "required": "false",
+          "doc": "Accessible name of the bottom-edge height handle."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only."
+        }
+      ],
+      "purpose": "A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.",
+      "useWhen": [
+        "Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.",
+        "Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.",
+        "Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.",
+        "Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`."
+      ],
+      "avoidWhen": [
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For third-party content loaded from another origin → use `embed`.",
+        "For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.",
+        "For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.",
+        "For a framed page section or grid cell → use `frame-box`."
+      ],
+      "related": [
+        "doc-frame` — the documentation figure frame for stills and clips; no live viewport.",
+        "embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.",
+        "frame-box` — the page's registration frame (hairlines + corner marks), not a window.",
+        "copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value."
+      ],
+      "bestPractices": [
+        "Compose the default slot exactly as the screen would be composed in an app — the frame mirrors the page's stylesheets and theme into its viewport, so no extra wiring or classes are needed.",
+        "Pin the device the example is about with `v-model:width` and `v-model:height` (`375 × 812` mobile, `768 × 1024` tablet, `1280 × 800` desktop); leave `width` unset to fill the container.",
+        "Give the frame an `ariaLabel` that names what is shown (`Pricing page at tablet size`); it becomes the viewport's accessible name.",
+        "Viewport-height units (`h-screen`, `min-h-dvh`) in slot content resolve against the simulated height, so a full-height shell renders as it would on the device.",
+        "Do not add controls to the chrome — the address's copy button and the resize handles are the frame's only controls. Interactive content belongs in the default slot."
+      ]
+    },
     "accordion": {
       "import": "@aziontech/webkit/accordion",
       "target": "./src/components/content/accordion/index.ts",
