@@ -125,7 +125,6 @@ export const parameters = {
             [
               'PlatformShell',
               'CreatePage',
-              'StepperCreatePage',
               'SummaryPage',
               'CodeEditor',
               'QueryEditor',
