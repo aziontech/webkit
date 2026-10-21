@@ -67,29 +67,7 @@ const GITHUB_BUTTON = `<Button
 
 const TWO_ACTIONS = `${DOCS_BUTTON}\n${GITHUB_BUTTON}`
 
-const ARCHITECTURE_TEMPLATE = band(
-  `media-href="https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/"
-align="center"
-size="large"
-media-fill="canvas"
-title="Accelerate retail application modernization with a distributed architecture"`,
-  `<Illustration
-  name="retail-application-modernization"
-  aria-label="Retail web application modernization architecture diagram"
-/>`,
-  `<Button
-  label="Docs"
-  kind="outlined"
-  size="medium"
-  href="https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/"
-  target="_blank"
-  icon="pi pi-chevron-right"
-  icon-position="trailing"
-  animated
-/>`
-)
-
-const GUIDE_TEMPLATE = band(
+const ONE_ACTION_TEMPLATE = band(
   `media-href="/docs"
 title="Move application delivery without disrupting releases"
 description="Translate Vercel projects into Azion equivalents while keeping validation workflows predictable. Rebuild CDN behavior, redirects, rewrites, image optimization, Functions, AI integrations, storage, security rules, DNS, certificates, and observability before shifting production domains."`,
@@ -98,7 +76,7 @@ description="Translate Vercel projects into Azion equivalents while keeping vali
   aria-label="Framework projects mapped through the platform to what each one serves"
 />`,
   `<Button
-  label="Complete technical guide"
+  label="See the guide"
   kind="outlined"
   size="medium"
   href="/docs"
@@ -120,7 +98,7 @@ description="A workload does not reserve a container per deployment. Azion Runti
 
 const meta = {
   title: 'Templates/Marketing/Media/MediaSplitBand',
-  excludeStories: ['SITE_SECTION_ARCHITECTURE', 'SITE_SECTION_GUIDE', 'SITE_SECTION_TWO_ACTIONS'],
+  excludeStories: ['SITE_SECTION_GUIDE', 'SITE_SECTION_TWO_ACTIONS'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -133,38 +111,11 @@ const meta = {
 
 export default meta
 
-export const Architecture = {
-  render: () => ({ components, template: ARCHITECTURE_TEMPLATE }),
+export const OneAction = {
+  render: () => ({ components, template: ONE_ACTION_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: toSfc(IMPORTS, ARCHITECTURE_TEMPLATE) }
-    }
-  }
-}
-
-export const SITE_SECTION_ARCHITECTURE = {
-  _id: 'media-split-band-architecture',
-  props: {
-    title: 'Accelerate retail application modernization with a distributed architecture',
-    illustration: 'retail-application-modernization',
-    illustrationLabel: 'Retail web application modernization architecture diagram',
-    action: {
-      label: 'Docs',
-      href: 'https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/'
-    }
-  }
-}
-
-export const ArchitectureJson = {
-  tags: ['!dev'],
-  ...siteJsonStory(SITE_SECTION_ARCHITECTURE)
-}
-
-export const Guide = {
-  render: () => ({ components, template: GUIDE_TEMPLATE }),
-  parameters: {
-    docs: {
-      source: { code: toSfc(IMPORTS, GUIDE_TEMPLATE) }
+      source: { code: toSfc(IMPORTS, ONE_ACTION_TEMPLATE) }
     }
   }
 }
@@ -184,7 +135,7 @@ export const SITE_SECTION_GUIDE = {
   }
 }
 
-export const GuideJson = {
+export const OneActionJson = {
   tags: ['!dev'],
   ...siteJsonStory(SITE_SECTION_GUIDE)
 }
