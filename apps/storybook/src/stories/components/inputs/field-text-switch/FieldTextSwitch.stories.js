@@ -7,7 +7,7 @@ const IMPORT = "import FieldTextSwitch from '@aziontech/webkit/field-text-switch
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldTextSwitch>} */
 const meta = {
-  title: 'Components/Inputs/FieldTextSwitch',
+  title: 'Components/Primitives/Inputs/FieldTextSwitch',
   component: FieldTextSwitch,
   tags: ['autodocs'],
   parameters: {

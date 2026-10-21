@@ -9,7 +9,7 @@ const IMPORT = "import ProgressBar from '@aziontech/webkit/progress-bar'"
 
 /** @type {import('@storybook/vue3').Meta<typeof ProgressBar>} */
 const meta = {
-  title: 'Components/Feedback/ProgressBar',
+  title: 'Components/Primitives/Feedback/ProgressBar',
   component: ProgressBar,
   tags: ['autodocs'],
   parameters: {

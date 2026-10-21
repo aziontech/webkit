@@ -22,7 +22,7 @@ const disabledOptions = [
 
 /** @type {import('@storybook/vue3').Meta<typeof SegmentedButton>} */
 const meta = {
-  title: 'Components/Actions/SegmentedButton',
+  title: 'Components/Primitives/Actions/SegmentedButton',
   component: SegmentedButton,
   tags: ['autodocs'],
   parameters: {
@@ -86,7 +86,7 @@ const meta = {
     size: {
       control: 'inline-radio',
       options: ['small', 'medium', 'large'],
-      description: "Size token, on the same 28 / 32 / 40 rhythm every other control uses.",
+      description: 'Size token, on the same 28 / 32 / 40 rhythm every other control uses.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium' | 'large'" },

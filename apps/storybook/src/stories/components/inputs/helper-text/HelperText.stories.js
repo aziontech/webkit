@@ -6,7 +6,7 @@ const IMPORT = "import HelperText from '@aziontech/webkit/helper-text'"
 
 /** @type {import('@storybook/vue3').Meta<typeof HelperText>} */
 const meta = {
-  title: 'Components/Inputs/HelperText',
+  title: 'Components/Primitives/Inputs/HelperText',
   component: HelperText,
   tags: ['autodocs'],
   parameters: {
