@@ -7,6 +7,8 @@ import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
 import distributedApisTile from '@aziontech/webkit/assets/distributed-apis-tile.svg'
 import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
 import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+import realTimeMetricsErrorRate from '@aziontech/webkit/assets/real-time-metrics-error-rate.svg'
+import realTimeMetricsStatusCodes from '@aziontech/webkit/assets/real-time-metrics-status-codes.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import Illustration from '@aziontech/webkit/illustration'
 
@@ -18,6 +20,7 @@ const IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
 // packages/webkit/src/assets/illustrations/registry.ts.
 const ASSETS = [
   'ai-applications',
+  'api-endpoints',
   'automate-threat-mitigation',
   'azion-to-akamai',
   'azion-to-aws',
@@ -25,29 +28,46 @@ const ASSETS = [
   'azion-to-fastly',
   'azion-to-vercel',
   'build-applications',
+  'build-databases-from-code',
   'combine-data-and-vector-search',
   'content-and-media-delivery',
   'content-and-media-delivery-globe',
+  'custom-allowed-rules',
+  'custom-rules-mitigation',
   'deploy-secure-mcp-server',
+  'detect-and-classify',
   'distributed-apis',
+  'distributed-sql-for-resilient-global-reads',
   'dns-protection',
+  'enable-owasp-protection-with-customizable-rules',
   'fastest-path-to-live-website',
   'global-network',
   'implement-api-gateway-security',
   'improve-application-performance-and-reliability',
   'infrastructure-as-code',
+  'intent-to-policy',
   'live-debugging',
   'low-latency',
+  'mitigation-actions',
   'modern-frontends',
+  'multi-format-optimization-with-automatic-detection',
+  'network-lists-rules-engine',
   'no-idle-no-waste',
   'preview',
+  'profiles-per-application',
   'programmable-security',
   'protect-financial-applications',
   'quick-start-with-templates',
+  'read-at-the-edge',
+  'replicated-reads',
+  'reputation-intelligence-for-enhanced-protection',
+  'request-inspection',
   'retail-application-modernization',
   'runtime',
   'saas-platforms',
   'stay-in-control',
+  'stream-security-events-for-investigation-and-response',
+  'url-based-transformations-without-api-complexity',
   'white-gloves-when-it-matters'
 ]
 
@@ -192,6 +212,8 @@ const FILES = [
   ['distributedApisTile', 'distributed-apis-tile.svg', distributedApisTile],
   ['personalTokens', 'personal-tokens.svg', personalTokens],
   ['quickStartWithTemplates', 'quick-start-with-templates.svg', quickStartWithTemplates],
+  ['realTimeMetricsErrorRate', 'real-time-metrics-error-rate.svg', realTimeMetricsErrorRate],
+  ['realTimeMetricsStatusCodes', 'real-time-metrics-status-codes.svg', realTimeMetricsStatusCodes],
   ['usageChart', 'usage-chart.svg', usageChart]
 ]
 

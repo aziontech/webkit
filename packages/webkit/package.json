@@ -643,6 +643,8 @@
     "./assets/rbs-extended-mono.svg": "./src/assets/logos/clients/rbs-extended-mono.svg",
     "./assets/rbs-extended-reversed.svg": "./src/assets/logos/clients/rbs-extended-reversed.svg",
     "./assets/react-symbol-mono.svg": "./src/assets/logos/frameworks/react-symbol-mono.svg",
+    "./assets/real-time-metrics-error-rate.svg": "./src/assets/illustrations/real-time-metrics-error-rate.svg",
+    "./assets/real-time-metrics-status-codes.svg": "./src/assets/illustrations/real-time-metrics-status-codes.svg",
     "./assets/redis-symbol-color.svg": "./src/assets/logos/frameworks/redis-symbol-color.svg",
     "./assets/remix-symbol-mono.svg": "./src/assets/logos/frameworks/remix-symbol-mono.svg",
     "./assets/renner-extended-color.svg": "./src/assets/logos/clients/renner-extended-color.svg",
