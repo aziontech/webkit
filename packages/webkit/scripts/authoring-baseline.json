@@ -60,7 +60,6 @@
   "packages/webkit/src/components/inputs/field-checkbox/field-checkbox.vue::token:js-class-preset",
   "packages/webkit/src/components/inputs/field-input-group/field-input-group.vue::manual-v-model",
   "packages/webkit/src/components/inputs/field-password/field-password.vue::manual-v-model",
-  "packages/webkit/src/components/inputs/field-phone-number/field-phone-number.vue::manual-v-model",
   "packages/webkit/src/components/inputs/field-radio-block/field-radio-block.vue::manual-v-model",
   "packages/webkit/src/components/inputs/field-radio-block/field-radio-block.vue::token:js-class-preset",
   "packages/webkit/src/components/inputs/field-radio/field-radio.vue::manual-v-model",

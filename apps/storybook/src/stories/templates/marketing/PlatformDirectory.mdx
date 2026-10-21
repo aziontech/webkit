@@ -1,0 +1,46 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as PlatformDirectoryStories from './PlatformDirectory.stories'
+
+<Meta title="Templates/Marketing/Content/PlatformDirectory" />
+
+# PlatformDirectory
+
+A directory of the platform's products, in four columns under a section title. Each column is a product group (Compute, AI, Data, Security), and each row is an icon, a product name and one line about it, linking to that product.
+
+Home shows it right under the hero, and the solution, product and Pricing pages repeat it.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox` and `ColumnNavigation`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Primitives
+
+The Home band: a title over the fourteen platform products, framed with corner marks. Products the site hosts link by path, the rest go to azion.com.
+
+<Canvas of={PlatformDirectoryStories.Primitives} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` heads the section, and `ariaLabel` names the directory for screen readers.
+- `groups` sets the columns: a `title` and its `items`.
+- Each item takes an `icon` class, a `title`, a `description` and an `href`. An item without a title or a link is skipped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={PlatformDirectoryStories.PrimitivesJson} dark />
+</div>

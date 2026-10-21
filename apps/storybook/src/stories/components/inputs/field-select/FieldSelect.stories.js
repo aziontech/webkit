@@ -25,7 +25,7 @@ const OPTIONS_LITERAL = `[
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldSelect>} */
 const meta = {
-  title: 'Components/Inputs/FieldSelect',
+  title: 'Components/Primitives/Inputs/FieldSelect',
   component: FieldSelect,
   tags: ['autodocs'],
   parameters: {
@@ -124,6 +124,26 @@ const meta = {
       control: 'text',
       description: 'id for the trigger. Auto-generated when empty.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    searchable: {
+      control: 'boolean',
+      description:
+        'Adds a search box that filters the `options` as you type. Focus stays in the search: the arrows move the highlight, `Enter` picks, `Esc` closes. Typing on the closed trigger opens it with the search filled.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    searchPlaceholder: {
+      control: 'text',
+      description: 'Placeholder of the search box when `searchable`.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'Search' } }
+    },
+    searchEmptyLabel: {
+      control: 'text',
+      description: 'Shown in the list when `searchable` and no option matches.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'No results found' }
+      }
     },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
@@ -340,6 +360,61 @@ export const Multiple = {
         code: toSfc(
           [VUE_IMPORT, IMPORT, '', 'const regions = ref([])', `const options = ${OPTIONS_LITERAL}`],
           MULTIPLE_MARKUP
+        )
+      }
+    }
+  }
+}
+
+const COUNTRY_OPTIONS = [
+  'Argentina',
+  'Brazil',
+  'Canada',
+  'Chile',
+  'Colombia',
+  'France',
+  'Germany',
+  'Italy',
+  'Japan',
+  'Mexico',
+  'Portugal',
+  'Spain',
+  'United Kingdom',
+  'United States',
+  'Uruguay'
+].map((label) => ({ value: label, label }))
+
+const SEARCHABLE_MARKUP = `<div class="${FIELD_WIDTH}">
+  <FieldSelect v-model="country" label="Country" placeholder="Choose a country" searchable search-placeholder="Search country" :options="countries" />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldSelect>} */
+export const Searchable = {
+  args: {
+    searchable: true,
+    label: 'Country',
+    placeholder: 'Choose a country',
+    searchPlaceholder: 'Search country',
+    helperText: 'Type to filter, then use the arrows and Enter.',
+    options: COUNTRY_OPTIONS
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Long lists — the search filters by word prefix, ignoring case and accents, while focus stays in the search box.'
+      },
+      source: {
+        code: toSfc(
+          [
+            VUE_IMPORT,
+            IMPORT,
+            '',
+            "const country = ref('')",
+            "const countries = [{ value: 'Brazil', label: 'Brazil' } /* … */]"
+          ],
+          SEARCHABLE_MARKUP
         )
       }
     }

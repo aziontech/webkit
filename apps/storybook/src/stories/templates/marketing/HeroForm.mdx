@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as HeroFormStories from './HeroForm.stories'
+
+<Meta title="Templates/Marketing/Heroes/HeroForm" />
+
+# HeroForm
+
+The opening band of a lead-capture page, where the form is the reason for the page. The hero copy sits on one side and the form on the other, above the fold. The Contact page opens this way.
+
+Built from `Hero`, `Hero.Title`, the `Field*` controls and `Button`. Validation, submit and the toast are left to the page.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Contact split
+
+The Contact page. The title stays in place while the form scrolls, the phone line is in the description, and the client strip sits on the floor. The canvas draws an empty bar where the site nav would be, so the headline lines up with the first row of the form.
+
+<Canvas of={HeroFormStories.ContactSplit} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `body` is the text under the headline. It accepts inline markdown, such as a phone link.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `fields` sets the label and placeholder of each form field. Optional fields take `required`.
+- `roleOptions` lists the choices of the role field, and `defaultCountry` picks the starting phone country.
+- `submitLabel` is the send button, and `messages` holds the required, invalid email, success and error texts.
+- `endpoint` is the form service URL. `pageName` and `hiddenFields` go with each submission.
+- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroFormStories.ContactSplitJson} dark />
+</div>
