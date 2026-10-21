@@ -26,37 +26,36 @@ const components = {
 const SOLUTIONS = [
   {
     art: 'quickStartWithTemplates',
-    title: 'Build and Run Applications',
-    description:
-      'Deploy applications and static sites straight from Git, and run them on a distributed network with no servers to manage.',
+    title: 'Modern applications',
+    description: 'Build static sites, run serverless applications, or modernize legacy systems.',
     href: '/solutions/web-apps'
   },
   {
     illustration: 'improve-application-performance-and-reliability',
-    title: 'Improve Application Performance and Reliability',
+    title: 'Optimized workloads',
     description:
-      'Cache, route and optimize every request close to your users, so applications stay fast and available under any load.',
+      'Speed up applications, deliver content through the CDN, and process images on demand.',
     href: '/solutions/performance'
   },
   {
     illustration: 'ai-applications',
-    title: 'Build and Run AI Workloads',
+    title: 'AI applications',
     description:
-      'Run inference, vector search and AI agents on distributed infrastructure, close to the data and the users that need them.',
+      'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
     href: '/solutions/ai'
   },
   {
     illustration: 'automate-threat-mitigation',
-    title: 'Secure Applications and Networks',
+    title: 'Protected applications and APIs',
     description:
-      'Stop DDoS attacks, bots and exploits before they reach your origin, with WAF and network rules managed from one console.',
+      'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
     href: '/solutions/security'
   },
   {
     illustration: 'low-latency',
-    title: 'Deliver Media and Streaming Content',
+    title: 'Media and streaming content',
     description:
-      'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
+      'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
     href: '/solutions/streaming'
   }
 ]
@@ -73,6 +72,7 @@ const SOLUTIONS_IMPORTS = [
 
 const ALTERNATING_IMPORTS = [
   "import BandStack from '@aziontech/webkit/band-stack'",
+  "import Button from '@aziontech/webkit/button'",
   "import Illustration from '@aziontech/webkit/illustration'",
   "import MediaSplit from '@aziontech/webkit/media-split'",
   ...COLUMN_IMPORTS,
@@ -138,38 +138,43 @@ const NETWORK_BANDS = [
     kind: 'media-start',
     title: 'Run closer to users',
     description:
-      'Handle requests closer to users instead of sending everything back to a few central regions. That helps cut latency, absorb spikes automatically, and reduce backhaul overhead.',
+      'Handle requests close to users instead of sending everything back to a few central regions. That cuts latency, absorbs spikes automatically, and reduces backhaul.',
     illustration: 'fastest-path-to-live-website',
-    ariaLabel: 'Requests served from the location nearest the user'
+    ariaLabel: 'Requests served from the data center nearest the user',
+    href: '/products/application-accelerator'
   },
   {
     kind: 'media-end',
     title: 'Keep delivery, logic, and data in one place',
     description:
-      'Use one platform for delivery, distributed execution, and data workflows. Support APIs and dynamic applications with real-time request handling, origin protection, and state kept close to execution with services like KV Store.',
+      'Run delivery, execution, and data on one platform. APIs and dynamic applications get real-time request handling, origin protection, and state kept next to the code with KV Store.',
     illustration: 'runtime',
-    ariaLabel: 'Delivery, execution and data served from one platform'
+    ariaLabel: 'Delivery, execution and data served from one platform',
+    href: '/products/kv-store'
   },
   {
     kind: 'media-start',
     title: 'Get better routes and more stable delivery',
     description:
-      'Place traffic entry points inside ISP last-mile networks and connect through IXPs, peering, and Tier 1 transit. Reduce hops, improve route quality, and keep delivery stable during traffic spikes, upstream issues, and regional incidents.',
+      'Traffic enters inside ISP last-mile networks and connects through IXPs, peering, and Tier 1 transit. Fewer hops mean better routes and stable delivery during traffic spikes, upstream issues, and regional incidents.',
     illustration: 'distributed-apis',
-    ariaLabel: 'Entry points inside ISP networks, connected through IXPs and transit'
+    ariaLabel: 'Entry points inside ISP networks, connected through IXPs and transit',
+    href: '/products/load-balancer'
   },
   {
     kind: 'media-end',
     title: 'Stop attack traffic earlier',
     description:
-      'Block attack traffic in the delivery path before it reaches your origin. Deploy code and policies while the platform handles scaling, execution, and traffic steering, so your team spends less time managing regions, capacity, scaling rules, and extra layers.',
+      'Block attack traffic in the delivery path, before it reaches your origin. Deploy code and policies and let the platform handle scaling, execution, and traffic steering. Your team manages fewer regions, less capacity, and fewer scaling rules.',
     illustration: 'automate-threat-mitigation',
-    ariaLabel: 'Attack traffic stopped in the delivery path, before the origin'
+    ariaLabel: 'Attack traffic stopped in the delivery path, before the origin',
+    href: '/products/ddos-protection'
   }
 ]
 
 const ALTERNATING_TEMPLATE = inColumn(`<SectionTitle
   kind="centered"
+  size="large"
   eyebrow="Managed Infrastructure"
   title="Stop managing regions and capacity by hand"
 />
@@ -180,16 +185,32 @@ ${each(
   NETWORK_BANDS,
   (band) => `<MediaSplit
   kind="${band.kind}"
+  :divided="true"
+  align="center"
+  size="large"
+  media-fill="canvas"
   texture="pixelate"
   texture-size="small"
   texture-fade="top"
   title="${band.title}"
   description="${band.description}"
+  media-href="${band.href}"
 >
   <template #media>
     <Illustration
       name="${band.illustration}"
       aria-label="${band.ariaLabel}"
+    />
+  </template>
+  <template #actions>
+    <Button
+      label="Learn more"
+      kind="outlined"
+      size="medium"
+      icon="pi pi-chevron-right"
+      icon-position="trailing"
+      animated
+      href="${band.href}"
     />
   </template>
 </MediaSplit>`,
@@ -199,7 +220,7 @@ ${each(
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/MediaSplitStack',
+  title: 'Templates/Marketing/Solutions/MediaSplitStack',
   excludeStories: ['SITE_SECTION_SOLUTIONS', 'SITE_SECTION_ALTERNATING'],
   parameters: {
     layout: 'fullscreen',
@@ -233,23 +254,23 @@ export const SITE_SECTION_SOLUTIONS = {
     bands: [
       {
         image: '/marketing-components/illustrations/quick-start-with-templates.svg',
-        title: 'Modern Applications',
+        title: 'Modern applications',
         description:
-          'Build static sites, develop serverless applications, or modernize your legacy applications',
+          'Build static sites, run serverless applications, or modernize legacy systems.',
         href: '/en/solutions/web-apps/'
       },
       {
         illustration: 'improve-application-performance-and-reliability',
         title: 'Optimized workloads',
         description:
-          'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently',
+          'Speed up applications, deliver content through the CDN, and process images on demand.',
         href: '/en/solutions/performance/'
       },
       {
         illustration: 'ai-applications',
-        title: 'Build AI applications',
+        title: 'AI applications',
         description:
-          'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value in the market',
+          'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
         href: '/en/solutions/ai/'
       }
     ]
@@ -275,9 +296,11 @@ export const SITE_SECTION_ALTERNATING = {
   props: {
     eyebrow: 'Managed Infrastructure',
     title: 'Stop managing regions and capacity by hand',
+    actionLabel: 'Learn more',
     bands: NETWORK_BANDS.slice(0, 2).map((band) => ({
       title: band.title,
       description: band.description,
+      href: `/en${band.href}/`,
       illustration: band.illustration,
       illustrationLabel: band.ariaLabel
     }))

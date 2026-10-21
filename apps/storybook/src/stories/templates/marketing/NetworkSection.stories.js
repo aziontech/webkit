@@ -2,7 +2,6 @@ import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.sv
 import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
 import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
 import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-import BigNumbers from '@aziontech/webkit/big-numbers'
 import CardGrid from '@aziontech/webkit/card-grid'
 import FrameBox from '@aziontech/webkit/frame-box'
 import NetworkMap from '@aziontech/webkit/network-map'
@@ -41,12 +40,7 @@ const BENEFITS_IMPORTS = [
   "import Topic from '@aziontech/webkit/topic'"
 ]
 
-const quoted = (text) => `'${text.replaceAll("'", "\\'")}'`
-
-const STATS_IMPORTS = ["import BigNumbers from '@aziontech/webkit/big-numbers'", ...BAND_IMPORTS]
-
 const components = {
-  BigNumbers,
   CardGrid,
   'CardGrid.Cell': CardGrid.Cell,
   FrameBox,
@@ -68,7 +62,7 @@ const setup = () => ({
 
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+  title: 'Build, secure, and scale on one distributed infrastructure',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -90,7 +84,7 @@ const BENEFITS = [
     icon: 'pi pi-stopwatch',
     title: 'Low latency everywhere',
     description:
-      'Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app.'
+      'Compute, AI, databases, and security run in every data center, close to your users. Median global latency stays under 30 ms, with a built-in CDN and tiered caching for every app.'
   },
   {
     icon: 'pi pi-arrows-v',
@@ -98,13 +92,6 @@ const BENEFITS = [
     description:
       'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
   }
-]
-
-const FIGURES = [
-  { value: '7', suffix: 'x', label: 'faster pages' },
-  { value: '90', suffix: '%', label: 'lower cloud costs' },
-  { value: '40', suffix: 'x', label: 'more simultaneous connections' },
-  { value: '100', suffix: '%', label: 'OWASP Top 10 mitigation' }
 ]
 
 const MONOCHROME = 'brightness-0 [[data-theme=dark]_&]:invert'
@@ -121,21 +108,21 @@ const OUTCOMES = [
     src: 'madeiramadeiraExtendedReversed',
     name: 'MadeiraMadeira',
     filter: '',
-    text: '90% lower cloud costs, and faster product delivery at scale.',
+    text: '90% lower cloud costs and faster applications at scale.',
     highlights: ['90% lower cloud costs']
   },
   {
     src: 'rennerExtendedColor',
     name: 'Renner',
     filter: '',
-    text: '67% saved on data transfer costs, through massive traffic spikes.',
+    text: '67% saved on data transfer, even during massive traffic spikes.',
     highlights: ['67% saved']
   },
   {
     src: 'fourbankExtendedReversed',
     name: 'Fourbank',
     filter: MONOCHROME,
-    text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+    text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
     highlights: ['DDoS mitigated']
   }
 ]
@@ -250,25 +237,12 @@ ${each(
 )}
 </CardGrid>`
 
-const figureLiteral = (figure) =>
-  `{ ${Object.entries(figure)
-    .map(([key, value]) => `${key}: ${quoted(value)}`)
-    .join(', ')} }`
-
-const STATS_FLOOR = `<BigNumbers
-  :items="[
-${FIGURES.map((figure) => `    ${figureLiteral(figure)}`).join(',\n')}
-  ]"
-  class="border-t border-(--border-default)"
-/>`
-
 const QUOTES_TEMPLATE = mapBand(OUTCOME_FLOOR)
 const BENEFITS_TEMPLATE = mapBand(BENEFIT_FLOOR)
-const STATS_TEMPLATE = mapBand(STATS_FLOOR)
 
 const meta = {
   title: 'Templates/Marketing/Network/NetworkSection',
-  excludeStories: ['SITE_SECTION'],
+  excludeStories: ['SITE_SECTION', 'BENEFITS_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -294,13 +268,13 @@ export const SITE_SECTION = {
   _id: 'network-section',
   props: {
     eyebrow: 'Region: Earth.',
-    title: 'The most reliable infrastructure',
+    title: 'Build, secure, and scale on one distributed infrastructure',
     lead: 'Built around your users. Distributed around your data.',
     claims: [
       '100+ data centers',
-      '100+ Tbps throughput',
-      'High availability',
-      '30 ms median latency'
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
     ],
     outcomes: [
       {
@@ -314,21 +288,21 @@ export const SITE_SECTION = {
         logo: '/marketing-components/clients/madeiramadeira.svg',
         logoAlt: 'MadeiraMadeira',
         logoTreatment: 'as-is',
-        text: '90% lower cloud costs, and faster product delivery at scale.',
+        text: '90% lower cloud costs and faster applications at scale.',
         highlights: ['90% lower cloud costs']
       },
       {
         logo: '/marketing-components/clients/renner-color.svg',
         logoAlt: 'Renner',
         logoTreatment: 'as-is',
-        text: '67% saved on data transfer costs, through massive traffic spikes.',
+        text: '67% saved on data transfer, even during massive traffic spikes.',
         highlights: ['67% saved']
       },
       {
         logo: '/marketing-components/clients/fourbank.svg',
         logoAlt: 'Fourbank',
         logoTreatment: 'monochrome',
-        text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+        text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
         highlights: ['DDoS mitigated']
       }
     ]
@@ -349,11 +323,19 @@ export const Benefits = {
   }
 }
 
-export const Stats = {
-  render: () => ({ components, template: STATS_TEMPLATE }),
-  parameters: {
-    docs: {
-      source: { code: toSfc(STATS_IMPORTS, STATS_TEMPLATE) }
-    }
+export const BENEFITS_SECTION = {
+  _id: 'network-section',
+  props: {
+    kind: 'benefits',
+    eyebrow: SITE_SECTION.props.eyebrow,
+    title: SITE_SECTION.props.title,
+    lead: SITE_SECTION.props.lead,
+    claims: SITE_SECTION.props.claims,
+    benefits: BENEFITS
   }
+}
+
+export const BenefitsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(BENEFITS_SECTION)
 }

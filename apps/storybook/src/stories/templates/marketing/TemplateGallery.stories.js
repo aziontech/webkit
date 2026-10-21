@@ -41,7 +41,7 @@ const DARK_INK = '[[data-theme=dark]_&]:invert'
 const TEMPLATES = [
   {
     title: 'AI Inference Starter Kit',
-    description: 'Create an application running AI models at the edge.',
+    description: 'Create an application that runs AI models close to users.',
     icon: 'ai ai-edge-functions',
     markClass: ''
   },
@@ -244,7 +244,7 @@ const RETAIL_TEMPLATE = templateGallery({
 })
 
 const meta = {
-  title: 'Templates/Marketing/Media/TemplateGallery',
+  title: 'Templates/Marketing/Solutions/TemplateGallery',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',

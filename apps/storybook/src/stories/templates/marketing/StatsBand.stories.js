@@ -27,9 +27,9 @@ const REACH = [
 ]
 
 const PARTNER_FIGURES = [
-  { prefix: '+', value: '100', label: 'Datacenters worldwide' },
-  { prefix: '+', value: '3k', label: 'ASNs directly connected to the Azion network' },
-  { value: '100', suffix: '%', label: 'availability, guaranteed by SLA' }
+  { prefix: '+', value: '100', label: 'Data centers worldwide' },
+  { prefix: '+', value: '3k', label: 'ASNs directly connected to Azion' },
+  { value: '100', suffix: '%', label: 'Availability, guaranteed by SLA' }
 ]
 
 const importsFor = (name, items) => [

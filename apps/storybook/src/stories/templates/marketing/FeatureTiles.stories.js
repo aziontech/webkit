@@ -54,7 +54,7 @@ const setup = () => ({ azionHighlight, branches, personalTokens, usageChart })
 const REASONS = [
   {
     src: 'branches',
-    title: 'Faster to publish.',
+    title: 'Build at AI speed.',
     description:
       'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
   },
@@ -62,19 +62,19 @@ const REASONS = [
     src: 'personalTokens',
     title: 'Secure by default.',
     description:
-      'Every endpoint carries its own keys, rate limits and instant revocation, managed from a single console.'
+      'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
   },
   {
     src: 'azionHighlight',
-    title: 'Simpler to operate.',
+    title: 'No ops required.',
     description:
-      'Deploys, gateways and observability sit on one platform, so there is no second console to reconcile when something breaks.'
+      "Azion's distributed infrastructure spans 100+ data centers, with no cold starts and instant scale-to-zero. Nothing to provision, nothing to manage."
   },
   {
     src: 'usageChart',
-    title: 'Faster applications.',
+    title: 'Faster and more efficient workloads.',
     description:
-      'Caching and image processing run at the edge, so every response is served from the location closest to the request.'
+      "Compute and security run in the data center closest to the request. Azion's runtime is 30x more efficient than containers."
   }
 ]
 
@@ -84,7 +84,7 @@ const PRICING_REASONS = [
     scale: 0.7,
     title: 'No idle. No waste.',
     description:
-      'Why pay for infrastructure doing nothing? Azion is built around actual consumption, so you pay for what your applications use — not infrastructure sitting idle waiting for demand.'
+      'Azion bills for actual consumption. You pay for what your applications use, not for infrastructure sitting idle waiting for demand.'
   },
   {
     illustration: 'stay-in-control',
@@ -98,7 +98,7 @@ const PRICING_REASONS = [
     scale: 0.8,
     title: 'White-glove when it matters.',
     description:
-      'Self-service when you want it. Experts when you need them. Azion specialists and partners are there to help you build, migrate, optimize, and scale with confidence.'
+      'Self-service when you want it, experts when you need them. Azion specialists and partners help you build, migrate, optimize, and scale.'
   }
 ]
 
@@ -106,8 +106,8 @@ const ARTWORK_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fals
   <template #header>
     <SectionTitle
       eyebrow="Why Azion"
-      title="From commit to observability, on one platform"
-      description="Build, ship and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
+      title="From commit to live traffic, on one platform"
+      description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     />
   </template>
 
@@ -155,7 +155,7 @@ ${each(
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/FeatureTiles',
+  title: 'Templates/Marketing/Features/FeatureTiles',
   excludeStories: ['SITE_SECTION_ARTWORK', 'SITE_SECTION_ILLUSTRATED'],
   parameters: {
     layout: 'fullscreen',
@@ -182,13 +182,13 @@ export const SITE_SECTION_ARTWORK = {
   _id: 'feature-tiles-artwork',
   props: {
     eyebrow: 'Why Azion',
-    title: 'From commit to observability, on one platform',
+    title: 'From commit to live traffic, on one platform',
     description:
-      'Build, ship and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
+      'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
     tiles: [
       {
         image: '/marketing-components/illustrations/branches.svg',
-        title: 'Faster to publish.',
+        title: 'Build at AI speed.',
         description:
           'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
       },
@@ -196,7 +196,7 @@ export const SITE_SECTION_ARTWORK = {
         image: '/marketing-components/illustrations/personal-tokens.svg',
         title: 'Secure by default.',
         description:
-          'Every endpoint carries its own keys, rate limits and instant revocation, managed from a single console.'
+          'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
       }
     ]
   }
@@ -224,7 +224,7 @@ export const SITE_SECTION_ILLUSTRATED = {
         illustration: 'no-idle-no-waste',
         title: 'No idle. No waste',
         description:
-          'Why pay for infrastructure doing nothing? Azion is built around actual consumption: you pay for what your workloads use, not for idle capacity.'
+          'Azion bills for actual consumption. You pay for what your applications use, not for infrastructure sitting idle waiting for demand.'
       },
       {
         illustration: 'stay-in-control',
@@ -236,7 +236,7 @@ export const SITE_SECTION_ILLUSTRATED = {
         illustration: 'white-gloves-when-it-matters',
         title: 'White-glove when it matters',
         description:
-          'Self-service when you want it. Experts when you need them. Azion specialists and partners help you build, migrate, optimize, and scale with confidence.'
+          'Self-service when you want it, experts when you need them. Azion specialists and partners help you build, migrate, optimize, and scale.'
       }
     ]
   }
