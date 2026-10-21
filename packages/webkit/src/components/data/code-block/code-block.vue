@@ -98,6 +98,7 @@
   const internalValue = ref('')
   const slideDirection = ref<CodeBlockSlideDirection>(null)
   const linesMotionReady = ref(!props.animateLines)
+  const revealedLines = ref(Number.POSITIVE_INFINITY)
   const lineMotionMode = ref<CodeBlockLineMotionMode>(props.animateLines ? 'enter' : null)
   const contentRef = ref<HTMLElement | null>(null)
 
@@ -194,12 +195,12 @@
       : codeBlockLineEnterMotion.offsetClass
   )
 
-  const getLineMotionClasses = () =>
+  const getLineMotionClasses = (lineIndex: number) =>
     cn(
       lineMotionMode.value &&
         'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
       lineMotionMode.value &&
-        (linesMotionReady.value
+        (linesMotionReady.value && lineIndex < revealedLines.value
           ? 'translate-x-0 opacity-100'
           : cn(lineEnterOffsetClass.value, 'opacity-0'))
     )
@@ -514,6 +515,22 @@
   watch(activeValue, scheduleIndicatorSync)
 
   watch(
+    () => highlightedLines.value.length,
+    (length, previous) => {
+      if (lineMotionMode.value !== 'enter' || !linesMotionReady.value || length <= previous) {
+        return
+      }
+
+      revealedLines.value = previous
+      nextTick(() => {
+        flushStyles()
+        revealedLines.value = Number.POSITIVE_INFINITY
+      })
+    },
+    { flush: 'pre' }
+  )
+
+  watch(
     () => props.animateLines,
     (enabled) => {
       runLinesMotion(enabled ? 'enter' : null)
@@ -649,7 +666,7 @@
                 cn(
                   'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm',
                   'data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)',
-                  getLineMotionClasses()
+                  getLineMotionClasses(lineIndex)
                 )
               "
               :style="getLineMotionStyle(lineIndex)"
