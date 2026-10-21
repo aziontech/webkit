@@ -11434,6 +11434,16 @@
           "name": "media",
           "scope": "{ item: StickyStackItem, index: number, active: boolean }",
           "notes": "The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays."
+        },
+        {
+          "name": "actions",
+          "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+          "notes": "The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty."
+        },
+        {
+          "name": "backdrop",
+          "scope": "—",
+          "notes": "Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty."
         }
       ],
       "purpose": "A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open. Each claim expands in turn while the ones already read collapse and stack above it, so the column keeps one height and the reader always sees where they are in the run. The media beside it is replaced, not dimmed: the outgoing scene leaves and the incoming one mounts, so a scene that animates plays its entrance every time it is reached.",
