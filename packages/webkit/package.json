@@ -75,7 +75,7 @@
   "devDependencies": {
     "@figma/code-connect": "^1.4.5",
     "@storybook/test": "^8.6.15",
-    "@storybook/vue3": "^8.6.15",
+    "@storybook/vue3": "^8.6.19",
     "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/browser": "^4.1.9",
