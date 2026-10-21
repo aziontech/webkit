@@ -159,13 +159,15 @@
     INNER_MOTION_CLASS
   )
 
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
+  const footerRegionClass = computed(() =>
+    props.collapsible ? 'w-full shrink-0' : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
+  )
 
   const footerBandClass = computed(() =>
     props.collapsible
       ? cn(
-          'flex items-center gap-(--spacing-xs)',
-          'border-t border-(--border-muted) pt-(--spacing-md)',
+          'flex h-14 items-center gap-(--spacing-xs)',
+          'border-t border-(--border-muted) px-(--spacing-md)',
           !slots['footer'] ? 'justify-end' : undefined
         )
       : undefined
@@ -233,7 +235,7 @@
       </nav>
       <div
         v-if="$slots['footer'] || collapsible"
-        :class="FOOTER_REGION_CLASS"
+        :class="footerRegionClass"
         :data-testid="`${testId}__footer`"
       >
         <div :class="footerBandClass">
