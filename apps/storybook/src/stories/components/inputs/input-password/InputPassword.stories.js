@@ -1,6 +1,5 @@
-import { ref, watch } from 'vue'
-
 import InputPassword from '@aziontech/webkit/input-password'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -9,7 +8,7 @@ const REF_IMPORT = "import { ref } from 'vue'"
 
 /** @type {import('@storybook/vue3').Meta<typeof InputPassword>} */
 const meta = {
-  title: 'Components/Inputs/InputPassword',
+  title: 'Components/Primitives/Inputs/InputPassword',
   component: InputPassword,
   tags: ['autodocs'],
   parameters: {

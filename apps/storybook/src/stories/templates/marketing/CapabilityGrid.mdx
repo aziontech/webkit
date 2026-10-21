@@ -1,0 +1,70 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as CapabilityGridStories from './CapabilityGrid.stories'
+
+<Meta title="Templates/Marketing/Content/CapabilityGrid" />
+
+# CapabilityGrid
+
+The band right under a solution page hero that says what the product does for the reader. It shows three or six capabilities, each an icon, a title and one sentence, on a thin frame grid.
+
+Every solution page opens its column with it. Built from `SectionModule`, `FrameBox`, `CardGrid` and `Topic`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Six capabilities
+
+Two rows of three, the Retail set. Use six when the page argues on breadth.
+
+<Canvas of={CapabilityGridStories.SixCapabilities} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items` are the capabilities in reading order. Three fill a row, so use three or six.
+- Each item takes an `icon` class, such as `pi pi-bolt`, a short `title` and a one-sentence `description`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={CapabilityGridStories.SixCapabilitiesJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Three capabilities
+
+One row of three, the Financial Services set, for a page that argues on a few strong claims.
+
+<Canvas of={CapabilityGridStories.ThreeCapabilities} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items` are the capabilities in reading order. Three fill a row, so use three or six.
+- Each item takes an `icon` class, a short `title` and a one-sentence `description`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={CapabilityGridStories.ThreeCapabilitiesJson} dark />
+</div>

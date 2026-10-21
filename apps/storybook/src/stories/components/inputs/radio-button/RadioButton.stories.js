@@ -1,6 +1,5 @@
-import { ref, watch } from 'vue'
-
 import RadioButton from '@aziontech/webkit/radio-button'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -8,7 +7,7 @@ const IMPORT = "import RadioButton from '@aziontech/webkit/radio-button'"
 
 /** @type {import('@storybook/vue3').Meta<typeof RadioButton>} */
 const meta = {
-  title: 'Components/Inputs/RadioButton',
+  title: 'Components/Primitives/Inputs/RadioButton',
   component: RadioButton,
   tags: ['autodocs'],
   parameters: {

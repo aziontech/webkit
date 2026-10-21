@@ -4,8 +4,8 @@ import LogViewContent from '@aziontech/webkit/log-view-content'
 import LogViewHeader from '@aziontech/webkit/log-view-header'
 import { ref } from 'vue'
 
-import { completeDeployLog } from '../../code/log-view/complete-deploy-log.js'
 import { toSfc } from '../../../_shared/story-source'
+import { completeDeployLog } from '../../code/log-view/complete-deploy-log.js'
 
 const IMPORT = "import Accordion from '@aziontech/webkit/accordion'"
 
@@ -21,7 +21,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Accordion>} */
 const meta = {
-  title: 'Components/Content/Accordion',
+  title: 'Components/Primitives/Content/Accordion',
   component: Accordion,
   subcomponents: {
     'Accordion.Item': Accordion.Item,

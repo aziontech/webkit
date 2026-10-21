@@ -6,7 +6,7 @@ const IMPORT = "import Kbd from '@aziontech/webkit/kbd'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Kbd>} */
 const meta = {
-  title: 'Components/Content/Kbd',
+  title: 'Components/Primitives/Content/Kbd',
   component: Kbd,
   tags: ['autodocs'],
   parameters: {
@@ -52,7 +52,8 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`).',
+      description:
+        'The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`).',
       table: { category: 'slots' }
     }
   },
@@ -116,7 +117,8 @@ export const Combinations = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'Representative shortcuts, showing single keys, modifier combinations, and OS-aware glyphs.'
+        story:
+          'Representative shortcuts, showing single keys, modifier combinations, and OS-aware glyphs.'
       },
       source: { code: toSfc(IMPORT, COMBOS_TEMPLATE) }
     }

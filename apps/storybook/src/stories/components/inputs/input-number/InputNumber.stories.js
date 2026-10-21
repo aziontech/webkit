@@ -1,5 +1,5 @@
-import { ref, watch } from 'vue'
 import InputNumber from '@aziontech/webkit/input-number'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -7,7 +7,7 @@ const IMPORT = "import InputNumber from '@aziontech/webkit/input-number'"
 
 /** @type {import('@storybook/vue3').Meta<typeof InputNumber>} */
 const meta = {
-  title: 'Components/Inputs/InputNumber',
+  title: 'Components/Primitives/Inputs/InputNumber',
   component: InputNumber,
   tags: ['autodocs'],
   parameters: {

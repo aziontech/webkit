@@ -47,7 +47,7 @@ const ASSETS = [
 
 /** @type {import('@storybook/vue3').Meta<typeof Illustration>} */
 const meta = {
-  title: 'Components/Content/Illustration',
+  title: 'Components/Primitives/Content/Illustration',
   component: Illustration,
   tags: ['autodocs'],
   parameters: {

@@ -6,7 +6,7 @@ const IMPORT = "import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 /** @type {import('@storybook/vue3').Meta<typeof ButtonHighlight>} */
 const meta = {
-  title: 'Components/Actions/ButtonHighlight',
+  title: 'Components/Primitives/Actions/ButtonHighlight',
   component: ButtonHighlight,
   tags: ['autodocs'],
   parameters: {
