@@ -34,7 +34,7 @@ import { SOLUTIONS_PAGE } from './solutions.js'
 import { SUCCESS_CASES_PAGE } from './success-cases.js'
 import { SUPPORT_PAGE } from './support.js'
 import { VERCEL_ALTERNATIVE_PAGE } from './vercel-alternative.js'
-import { WORKLOADS_PAGE } from './workloads.js'
+import { WORKLOAD_ARCHITECTURE_BAND } from './workloads.js'
 
 const ROUTING_SAMPLE = `export default {
   rules: {
@@ -429,7 +429,7 @@ export const WEBSITE_BUNDLE_PAGE = [
     copyAriaLabel: 'Copy the workload sample',
     action: { label: 'Read the docs', href: PRODUCT_DOCS }
   },
-  pick(WORKLOADS_PAGE, 'ArchitectureTabs'),
+  WORKLOAD_ARCHITECTURE_BAND,
   PLATFORM_ARCHITECTURE_BAND,
   pick(VERCEL_ALTERNATIVE_PAGE, 'MediaSplitBand'),
   {
