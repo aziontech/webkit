@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: aac77d0ee569fb38a714c57f5959802dd653b847979c1b0ae48b68e5d79f0607
+checksum: dbca05e2764d0a6c2c1e3c52cecc09f1aef52bb454a1eb66ac8859472edd9595
 created: 2026-08-10
-last_updated: 2026-09-26
+last_updated: 2026-10-13
 ---
 # Footer — Component Spec
 
@@ -27,6 +27,7 @@ The frame apparatus belongs to `site` alone, and not as a matter of taste: on a 
 
 - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px).
 - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content.
+- **Row two sizes its two bands by content** (`md:grid-cols-[auto_auto]`), not in half: each band takes what it holds and the two share the slack, so the status pair never wraps while the social band still has room, and the social band wraps only when the zone is narrower than both together. A 50/50 split gave the social band 427px of an 853px docs reading column, 13px short of the brand mark and seven large icons — a premature wrap in every zone narrower than the viewport.
 - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px.
 - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560.
 - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders.
@@ -51,9 +52,10 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 ## Best practices
 
-- Compose every band from existing DS components (`Brand`, `IconButton kind="transparent"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
+- Compose every band from existing DS components (`Brand`, `IconButton kind="transparent" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
 - Keep column titles short (one or two words) — they are group labels, not headings for prose.
 - Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.
+- Keep the social `IconButton`s at `size="small"`: a 28px box holds the brand mark and seven icons in 356px, which fits beside the status pair in the narrowest zone a shell gives the footer (the docs reading column at `lg`, 724px wide). At `large` the same row is 440px and wraps there.
 - Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.
 - Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.
 - Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.
@@ -90,7 +92,7 @@ const language = ref('en')
       <Footer.Link href="/careers">Careers</Footer.Link>
     </Footer.Column>
     <template #social>
-      <IconButton kind="transparent" icon="pi pi-github" ariaLabel="Azion on GitHub" href="https://github.com/aziontech" />
+      <IconButton kind="transparent" size="small" icon="pi pi-github" ariaLabel="Azion on GitHub" href="https://github.com/aziontech" />
     </template>
     <template #status>
       <StatusIndicator severity="success" label="All Systems Operational" />
