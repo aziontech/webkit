@@ -66,6 +66,12 @@ const SPECIALIST_PAGE = {
   href: '/contact',
   trailing: true
 }
+const CONTACT = {
+  label: 'Contact Us',
+  kind: 'outlined',
+  href: '/contact',
+  trailing: true
+}
 const SPECIALIST_PLAIN = { label: 'Talk to a Specialist', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
@@ -190,6 +196,16 @@ ${indent(actions([START_FREE, SPECIALIST]), 2)}
   </Hero.Title>
 </Hero>`
 
+const CENTERED_CAROUSEL_LONG_TEMPLATE = CENTERED_CAROUSEL_TEMPLATE.replace(
+  'max-width="xl"',
+  'max-width="3xl"'
+)
+  .replace('highlight="Invisible Infrastructure"', 'eyebrow="Functions"')
+  .replace(
+    'title="for the Speed of AI"',
+    'title="Funções serverless instantâneas para aplicações modernas"'
+  )
+
 const TITLE_BAND_TEMPLATE = `<Hero
   kind="band"
   max-width="5xl"
@@ -207,6 +223,28 @@ ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
   </Hero.Title>
 </Hero>`
 
+const CENTERED_BAND_TEMPLATE = `<Hero
+  kind="band"
+  size="large"
+  max-width="site"
+  texture="dots"
+  texture-fade="top"
+  carousel
+  carousel-label="Trusted by mission-critical workloads"
+  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
+>
+  <Hero.Title
+    centered
+    max-width="2xl"
+    eyebrow="Support"
+    eyebrow-prefix="//"
+    title="Technical support for every stage of your growth"
+    description="Designed to help you move independently. Backed by specialists when you need them."
+  >
+${indent(actions([START_FREE, CONTACT]), 2)}
+  </Hero.Title>
+</Hero>`
+
 const PIXEL_FLOOR_TEMPLATE = `<Hero
   kind="screen"
   floor-texture="pixelate"
@@ -216,7 +254,7 @@ const PIXEL_FLOOR_TEMPLATE = `<Hero
   carousel
   carousel-label="Trusted by mission-critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
-  class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
+  class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
     title="Build and deploy AI agents and applications in seconds"
@@ -233,7 +271,6 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
   carousel
   carousel-label="Trusted by mission-critical workloads"
   :carousel-marks="${marks(RETAIL_CLIENT_STRIP, 1)}"
-  offset="3.5rem"
 >
   <Hero.Title
     max-width="xl"
@@ -262,7 +299,6 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   texture="dots"
   texture-size="small"
   texture-fade="top"
-  class="[--banner-offset:3.5rem]"
 >
   <Hero.Title
     centered
@@ -356,6 +392,15 @@ export const CenteredCarouselJson = {
   ...siteJsonStory(CENTERED_CAROUSEL_SECTION)
 }
 
+export const CenteredCarouselLongTitle = {
+  render: () => ({ components, template: CENTERED_CAROUSEL_LONG_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_LONG_TEMPLATE) }
+    }
+  }
+}
+
 export const TitleBand = {
   render: () => ({ components, template: TITLE_BAND_TEMPLATE }),
   parameters: {
@@ -399,6 +444,15 @@ export const TITLE_BAND_SECTION = {
 export const TitleBandJson = {
   tags: ['!dev'],
   ...siteJsonStory(TITLE_BAND_SECTION)
+}
+
+export const CenteredBand = {
+  render: () => ({ components, template: CENTERED_BAND_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
+    }
+  }
 }
 
 export const PixelFloor = {
