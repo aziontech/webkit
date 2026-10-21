@@ -3,20 +3,20 @@ name: field-phone-number
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 80b5fff0667b3704b9fdab2ab20e2fe12eecdbecbfff17a36d67b5028d9afdd2
+checksum: 883f7bc3f65e66d9c7cd8042f8ab1e81b34603cdc1c3c54b0c46e971ddd5b608
 created: 2026-07-06
-last_updated: 2026-08-10
+last_updated: 2026-10-19
 ---
 
 # FieldPhoneNumber — Component Spec
 
 ## Purpose
 
-Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` applies a per-country mask so the user sees a formatted number as they type (e.g. `(11) 99999-9999` for BR). Emits two v-models: `modelValue` for the national digits (no dial code, no mask characters) and `country` for the selected ISO 3166-1 alpha-2 code.
+Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` follows the selected country: it applies that country's mask as the user types and accepts exactly the lengths the country allows. A country may allow more than one length — a Brazilian landline (10 digits, `(11) 9999-9999`) and mobile (11 digits, `(11) 99999-9999`) both format correctly, the mask switching as the digits grow. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form everything it would otherwise derive by hand — the full number with its dial code and whether that number is complete — so no form re-implements per-country length rules.
 
 ## Usage
 
@@ -25,47 +25,57 @@ Form field for international phone-number entry that composes `Label`, `InputGro
   import { ref } from 'vue'
   import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
 
-  const phone = ref('')
+  const digits = ref('')
   const country = ref('BR')
+  const phone = ref(null)
 </script>
 
 <template>
   <FieldPhoneNumber
-    v-model="phone"
+    v-model="digits"
     v-model:country="country"
     label="Phone"
-    placeholder="(11) 99999-9999"
     helper-text="We'll use this to send the verification code."
     required
+    @update:phone="phone = $event"
   />
+  <!-- phone.number === '+5511999999999', phone.complete === true -->
 </template>
 ```
 
 ## Props
 
-| Prop          | Type                                                                     | Default                             | Required | JSDoc                                                                                                                                                                                                                                                                                       |
-| ------------- | ------------------------------------------------------------------------ | ----------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`  | `string`                                                                 | `''`                                | false    | Two-way bound national number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Enables `v-model`.                                                                                                                                                  |
-| `country`     | `string`                                                                 | `'BR'`                              | false    | Two-way bound ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the mask applied to the input. Enables `v-model:country`.                                                                                       |
-| `countries`   | `Array<{ code: string; dialCode: string; mask: string; label: string }>` | (built-in curated list — see Notes) | false    | Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). When omitted, the component uses its built-in list. |
-| `label`       | `string`                                                                 | `''`                                | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                     |
-| `placeholder` | `string`                                                                 | `''`                                | false    | Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's mask with each `#` shown as `9` (e.g. `(99) 99999-9999`).                                                                                                                                    |
-| `helperText`  | `string`                                                                 | `''`                                | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say.    |
-| `disabled`    | `boolean`                                                                | `false`                             | false    | Disables both the dial-code `Select` and the internal `<input>`, and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                  |
-| `readonly`    | `boolean`                                                                | `false`                             | false    | Marks the internal `<input>` read-only; value is visible but not editable. The dial-code `Select` is also disabled while readonly (dial code cannot change without editing). Native pass-through on the input.                                                                              |
-| `required`    | `boolean`                                                                | `false`                             | false    | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`.                                                                                                                                              |
-| `invalid`     | `boolean`                                                                | `false`                             | false    | Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind="invalid"`. Also sets `aria-invalid` on the internal `<input>`.                                                                                                                                             |
-| `inputId`     | `string`                                                                 | `''`                                | false    | `id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty.                                                                                                                                             |
-| `name`        | `string`                                                                 | `''`                                | false    | HTML `name` for the internal `<input>` (form + vee-validate integration).                                                                                                                                                                                                                   |
+| Prop                | Type                                                                                 | Default                     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------ | --------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `countries`         | `Array<{ code: string; dialCode: string; mask: string \| string[]; label: string }>` | (built-in list — see Notes) | false    | Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). `mask` is a list when the country allows more than one length (e.g. BR `['(##) ####-####', '(##) #####-####']`). When omitted, the component uses its built-in list. |
+| `label`             | `string`                                                                             | `''`                        | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                                                                                                                      |
+| `placeholder`       | `string`                                                                             | `''`                        | false    | Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's longest mask with each `#` shown as `9` (e.g. `(99) 99999-9999`).                                                                                                                                                                                                                          |
+| `helperText`        | `string`                                                                             | `''`                        | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say.                                                                                                                     |
+| `disabled`          | `boolean`                                                                            | `false`                     | false    | Disables both the dial-code `Select` and the internal `<input>`, and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                                                                                                   |
+| `readonly`          | `boolean`                                                                            | `false`                     | false    | Marks the internal `<input>` read-only; value is visible but not editable. The dial-code `Select` is also disabled while readonly (dial code cannot change without editing). Native pass-through on the input.                                                                                                                                                                                               |
+| `required`          | `boolean`                                                                            | `false`                     | false    | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`.                                                                                                                                                                                                                                                               |
+| `invalid`           | `boolean`                                                                            | `false`                     | false    | Sets `invalid` on `InputGroup` (danger border) and switches the helper to `kind="invalid"`. Also sets `aria-invalid` on the internal `<input>`.                                                                                                                                                                                                                                                              |
+| `inputId`           | `string`                                                                             | `''`                        | false    | `id` for the internal `<input>`; consumed by `Label` via `for` and by `aria-describedby` wiring. Auto-generated via Vue's `useId()` when empty.                                                                                                                                                                                                                                                              |
+| `name`              | `string`                                                                             | `''`                        | false    | HTML `name` for the internal `<input>` (form + vee-validate integration).                                                                                                                                                                                                                                                                                                                                    |
+| `searchPlaceholder` | `string`                                                                             | `'Search country'`          | false    | Placeholder of the search box that filters the dial-code list.                                                                                                                                                                                                                                                                                                                                               |
+| `searchEmptyLabel`  | `string`                                                                             | `'No country found'`        | false    | Shown in the dial-code list when no country matches the search.                                                                                                                                                                                                                                                                                                                                              |
 
-Notes on the built-in `countries` list: the default set is a curated shortlist (BR, US, GB, PT, ES, AR, MX, CL, CO, DE, FR, IT — order preserves this priority in the Select). The full list is not shipped — consumers who need more countries pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export.
+Notes on the built-in `countries` list: the default set opens with the priority shortlist (BR, US, GB, PT, ES, AR, MX, CL, CO, DE, FR, IT — order preserved in the Select), continues with the rest of the supported countries in alphabetical order (AU, BE, BO, CA, CN, EC, IN, IE, IL, JP, NL, PY, PE, PL, SG, ZA, KR, CH, TR, AE, UY, VE), and closes with **Other** (`code: 'ZZ'`, the CLDR "unknown region" code; `dialCode: '+'`). Other is the way in for a country not on the list: the user types the country code and the number together into the input, which accepts 7–15 digits (the E.164 range) without grouping. Consumers who need a different set pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export.
+
+Masks: `#` is a digit slot and every other character is a literal. Digits are always the **national significant number** — no dial code, no trunk prefix (`0`) — so `dialCode + digits` is the E.164 number. With several masks, the field formats with the shortest mask whose slot count covers the digits typed so far, caps input at the longest mask's slot count, and treats the number as complete when its digit count equals one of the masks' slot counts. The placeholder fallback is the longest mask with every slot shown as `9`.
+
+## v-model
+
+| Model             | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                                |
+| ----------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model`         | `string` | `''`    | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
+| `v-model:country` | `string` | `'BR'`  | `update:country`    | ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`, `'ZZ'` for Other). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`.           |
 
 ## Events
 
-| Event               | Payload           | Notes                                                                                                                                                                                                              |
-| ------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `update:modelValue` | `[value: string]` | Emitted on every native `input` event of the internal `<input>` **and** whenever `country` changes (re-emitted so validators react to dial-code switches). Value is always digits-only (mask characters stripped). |
-| `update:country`    | `[code: string]`  | Emitted when the user picks a different country in the dial-code `Select`. Enables `v-model:country`.                                                                                                              |
+| Event          | Payload                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| -------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## Slots
 
@@ -77,6 +87,7 @@ _none_ — the affordance is fixed (dial-code Select on the left, phone input on
 - On the field wrapper root: `data-disabled`, `data-invalid`, `data-required` mirror the props (for test/query targeting).
 - `HelperText.kind` computed by precedence: `disabled > invalid > required > 'helper'`.
 - When `disabled` is set and `helperText` is empty, no helper row renders (parity with `FieldText`, `FieldInputGroup`) — the field substitutes no copy, so a transient lock adds no padlock line.
+- Completeness is reported, not rendered: an incomplete number sets `complete: false` on `update:phone`, and the consumer decides when to show it (typically on submit, via `invalid` + `helperText`). The field writes no "incomplete" copy of its own.
 - The dial-code `Select` is disabled whenever the wrapper is `disabled` **or** `readonly`.
 
 ## Motion & Animations
@@ -114,7 +125,7 @@ Border / focus / hover / invalid / required / disabled tokens are owned by the n
 ## Stories (Storybook)
 
 - Default — `label='Phone'`, `country='BR'`, empty value, sample `placeholder` and `helperText`.
-- Countries — composite story cycling through three countries (BR, US, GB) side by side, each with a value formatted by that country's mask, to document per-country masking.
+- Countries — composite story with BR mobile, BR landline, US and GB side by side, each with a value formatted by its mask, to document per-country masking and a country with two lengths.
 - Required — `required=true`; documents the Label's Required tag plus the input's `aria-required` wiring.
 - Invalid — `invalid=true` with a `helperText` such as `'Enter a valid phone number.'`.
 - Disabled — `disabled=true`; documents the lock-icon helper and the disabled dial-code `Select` + `<input>`.

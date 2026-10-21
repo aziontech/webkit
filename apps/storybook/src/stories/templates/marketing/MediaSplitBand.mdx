@@ -1,0 +1,74 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as MediaSplitBandStories from './MediaSplitBand.stories'
+
+<Meta title="Templates/Marketing/Media/MediaSplitBand" />
+
+# MediaSplitBand
+
+One claim beside one picture of it, in a band of its own, linked to the page that explains it. Solution pages use it for their reference architecture, and migration guides for the full guide.
+
+Every band sits on the same small pixelate texture, fading toward the top. With one action the whole band is a link to the same place. With two, the band is not a link and the reader picks a button.
+
+Built from `SectionModule`, a `framed` `MediaSplit`, `Illustration` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### One action
+
+The Vercel Alternative guide's band: title and description beside the art, with one outlined button into the full guide. The band links to the same place, so hovering anywhere on it lights the button and slides its chevron.
+
+<Canvas of={MediaSplitBandStories.OneAction} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` and `description` are the copy beside the art.
+- `illustration` with `illustrationLabel`, or `image` with `imageAlt`, is the picture.
+- `action` is the button. Without a label or link it is dropped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={MediaSplitBandStories.OneActionJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Two actions
+
+The Workloads runtime band with two actions: Docs as the secondary button and See GitHub as the outlined one, each with its own link. The band itself is not a link, so only the button under the pointer reacts.
+
+<Canvas of={MediaSplitBandStories.TwoActions} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` and `description` are the copy beside the art.
+- `illustration` names the scene and `illustrationLabel` describes it.
+- `primaryAction` and `secondaryAction` are the two buttons. The second keeps the GitHub icon and opens in a new tab. A button without a label or link is dropped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={MediaSplitBandStories.TwoActionsJson} dark />
+</div>

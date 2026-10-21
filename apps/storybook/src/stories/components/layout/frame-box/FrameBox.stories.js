@@ -6,7 +6,7 @@ const IMPORT = "import FrameBox from '@aziontech/webkit/frame-box'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FrameBox>} */
 const meta = {
-  title: 'Components/Layout/FrameBox',
+  title: 'Components/Primitives/Layout/FrameBox',
   component: FrameBox,
   tags: ['autodocs'],
   parameters: {
@@ -32,7 +32,7 @@ const meta = {
       control: 'select',
       options: ['all', 'x', 'y', 'top', 'right', 'bottom', 'left', 'none'],
       description:
-        'Which of the frame’s own rules to draw. Takes a keyword (`all`, `none`, `x`, `y`), one side, or a list of sides such as `[\'top\', \'left\']`.',
+        "Which of the frame’s own rules to draw. Takes a keyword (`all`, `none`, `x`, `y`), one side, or a list of sides such as `['top', 'left']`.",
       table: {
         category: 'props',
         type: { summary: "'all' | 'none' | 'x' | 'y' | Side | Side[]" },

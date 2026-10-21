@@ -20,7 +20,7 @@ const ACTIONS_MARKUP = `  <template #actions>
 
 /** @type {import('@storybook/vue3').Meta<typeof EmptyState>} */
 const meta = {
-  title: 'Components/Feedback/EmptyState',
+  title: 'Components/Primitives/Feedback/EmptyState',
   component: EmptyState,
   tags: ['autodocs'],
   parameters: {
@@ -120,7 +120,8 @@ export const Default = {
   parameters: {
     docs: {
       description: {
-        story: 'Default empty state: the standardized featured-icon tile, title, description, and actions.'
+        story:
+          'Default empty state: the standardized featured-icon tile, title, description, and actions.'
       },
       source: { code: toSfc(IMPORTS, DEFAULT_MARKUP) }
     }
@@ -188,7 +189,8 @@ export const NoAdornment = {
   parameters: {
     docs: {
       description: {
-        story: 'No adornment: neither the `icon` prop nor the `icon` slot is provided, so the adornment container does not render.'
+        story:
+          'No adornment: neither the `icon` prop nor the `icon` slot is provided, so the adornment container does not render.'
       },
       source: { code: toSfc(IMPORTS, NO_ADORNMENT_MARKUP) }
     }

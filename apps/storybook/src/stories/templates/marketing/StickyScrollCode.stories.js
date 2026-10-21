@@ -9,6 +9,7 @@ import StickyStack from '@aziontech/webkit/sticky-stack'
 import TextureMaterial from '@aziontech/webkit/texture-material'
 
 import { COLUMN_IMPORTS, declareTabs, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -229,16 +230,12 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
 
 const meta = {
   title: 'Templates/Marketing/Media/StickyScrollCode',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A run of capabilities that pins under the site header while the page scrolls past it, with the code that proves each one held on the right: as the reader scrolls, the open capability advances and the sample beside it changes to match, a hairline filling under the open one as its share of the scroll is spent. Below `lg` it unpins into a plain list with the sample under each capability. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `CodeBlock`, `TextureMaterial` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -254,11 +251,32 @@ export const Default = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The "Everything You Need to Build and Deploy" band built for the Web Apps page: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each paired with a one-file `CodeBlock` sample. The media cell is grounded on the same small, top-faded pixelate field as the media-split templates, and the docs button sits under the sample from `lg` up, moving to the section title below it. The `--sticky-stack-*` variables pin the band under a 3.5rem site nav and hold it to one screen, at most 40rem.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'sticky-scroll-code',
+  props: {
+    eyebrow: 'Ship It',
+    title: 'Everything You Need to Build and Deploy',
+    description:
+      'Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves.',
+    action: { label: 'Learn more', href: DOCS_HREF },
+    items: CAPABILITIES.slice(0, 3).map((capability, index) => ({
+      ...capability,
+      code: {
+        fileName: SAMPLES[index].fileName,
+        fileIcon: SAMPLES[index].fileIcon.replace(' text-(--primary)!', ''),
+        language: SAMPLES[index].language,
+        code: SAMPLES[index].code
+      }
+    }))
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

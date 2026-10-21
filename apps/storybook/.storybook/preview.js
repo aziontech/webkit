@@ -96,11 +96,28 @@ export const parameters = {
           ['Illustrations', 'Logos', 'Icons']
         ],
         'Components',
+        [
+          'Primitives',
+          [
+            'Actions',
+            'Code',
+            'Content',
+            'Data',
+            'Feedback',
+            'Inputs',
+            'Layout',
+            'Navigation',
+            'Overlay'
+          ],
+          'Marketing',
+          'Documentation'
+        ],
         'Documentation',
         ['Overview', 'Authoring', 'Example Page'],
         'Templates',
-        ['Marketing', ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media']],
         [
+          'Marketing',
+          ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media'],
           'Platform',
           [
             'Overview',
@@ -125,7 +142,6 @@ export const parameters = {
             'Account'
           ]
         ],
-        'Marketing',
         'Site'
       ]
     }
