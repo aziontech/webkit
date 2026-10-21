@@ -10,14 +10,14 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     title: guide.hero.title,
     description: guide.hero.description,
     actions: [
-      { label: 'Comece Grátis', href: '/signup', kind: 'secondary' },
+      { label: 'Comece grátis', href: '/signup', kind: 'secondary' },
       { label: 'Fale com um especialista', href: '#contact', kind: 'outlined', trailing: true }
     ],
     art: {
       name: guide.hero.art,
       alt: `A marca da Azion e a marca da ${guide.rival}, uma sobre a outra`
     },
-    carouselLabel: 'Empresas confiam',
+    carouselLabel: 'Empresas que confiam na Azion',
     carouselMarks: TRUST_MARKS
   },
   { section: 'CapabilityGrid', items: guide.reasons },
@@ -35,7 +35,7 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     ]
   },
   {
-    section: 'ComparisonTable',
+    section: 'CompareCompetitors',
     eyebrow: guide.comparison.eyebrow,
     title: guide.comparison.title,
     rival: guide.rival,
@@ -55,7 +55,7 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     illustration: 'build-applications',
     actions: [{ label: 'Ver o guia', href: '/site/docs' }]
   },
-  { section: 'FaqSection', title: 'Perguntas Frequentes', items: guide.faq },
+  { section: 'FaqSection', title: 'Perguntas frequentes', items: guide.faq },
   {
     section: 'ClosingCallToAction',
     kind: 'split',
@@ -64,7 +64,7 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     titleMuted: 'Sempre ativa.',
     description:
       'Ganhe proteção mais forte, menos exposição a ataques e menos sobrecarga operacional.',
-    actions: [{ label: 'Comece Grátis', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Fale com nosso time', href: '/site/contact' }
+    actions: [{ label: 'Comece grátis', href: '/signup', kind: 'secondary' }],
+    aside: { label: 'Fale com vendas', href: '/site/contact' }
   }
 ]

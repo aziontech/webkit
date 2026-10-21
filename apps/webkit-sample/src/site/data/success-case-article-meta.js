@@ -26,7 +26,7 @@ export const SUCCESS_CASE_ARTICLE_META = {
   'banco-de-la-nacion': {
     title: 'Banco de la Nación: 97% Faster, 75% Lower Costs',
     description:
-      'With Azion, Banco de la Nación achieved maximum performance efficiency, reducing latency and accelerating content delivery across Peru.',
+      'With Azion, Banco de la Nación reduced latency and accelerated content delivery across Peru.',
     date: 'JAN 5, 2026',
     readTime: '3 min read'
   },
@@ -129,14 +129,14 @@ export const SUCCESS_CASE_ARTICLE_META = {
     readTime: '4 min read'
   },
   fam: {
-    title: 'FAM strengthens application and network protection with Azion Firewall capabilities',
+    title: 'FAM Strengthens Application and Network Protection with Azion Firewall',
     description:
       'Discover how FAM uses the security capabilities of the Azion Platform to implement a zero-trust model and protect academic applications with Firewall, WAF, and DDoS Protection.',
     date: 'MAR 31, 2022',
     readTime: '3 min read'
   },
   crefisa: {
-    title: 'Crefisa Accelerates Digital Transformation with Azion',
+    title: 'Crefisa Modernizes Its Digital Infrastructure with Azion',
     description:
       'Discover how Crefisa modernized its digital infrastructure and reinforced application and API security using the security capabilities of Azion Platform.',
     date: 'MAR 4, 2022',
@@ -185,7 +185,7 @@ export const SUCCESS_CASE_ARTICLE_META = {
     readTime: '4 min read'
   },
   'nzn-intelligent-dns': {
-    title: 'Azion\'s Intelligent DNS helps NZN increase the performance, security and reliability of its applications and improve the experience of millions of Internet users',
+    title: 'Azion\'s Intelligent DNS Helps NZN Improve Performance, Security, and Reliability for Millions of Users',
     description:
       'Explore how NZN enhances user experiences with Azion Intelligent DNS for improved content delivery, performance, and security against DNS attacks.',
     date: 'NOV 3, 2021',
@@ -208,7 +208,7 @@ export const SUCCESS_CASE_ARTICLE_META = {
   nzn: {
     title: 'NZN Builds 100+ Apps, Cuts Load Time 50% with Azion',
     description:
-      'Discover how NZN leverages Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
+      'Discover how NZN uses Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
     date: 'AUG 10, 2021',
     readTime: '4 min read'
   },
@@ -236,7 +236,7 @@ export const SUCCESS_CASE_ARTICLE_META = {
   agi: {
     title: 'Agi Blocks Threats & Boosts Observability with Azion',
     description:
-      'Explore how Agi leverages Firewall and Data Streaming on the Azion Platform to enhance cybersecurity and ensure continuous service availability.',
+      'Explore how Agi uses Firewall and Data Stream on the Azion Platform to strengthen cybersecurity and keep services available.',
     date: 'AUG 10, 2021',
     readTime: '4 min read'
   },

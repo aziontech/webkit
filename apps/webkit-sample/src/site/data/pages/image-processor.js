@@ -22,13 +22,13 @@ const PILLARS = [
     icon: 'pi pi-arrow-right-arrow-left',
     title: 'Automatic format and size optimization',
     description:
-      'Resize, compress, and convert images to WebP, AVIF, or fallback formats on demand without building manual variant pipelines.'
+      'Resize, compress, and convert images to WebP, AVIF, or fallback formats on demand, with no manual variant pipelines.'
   },
   {
     icon: 'pi pi-database',
     title: 'No separate image storage required',
     description:
-      'Keep source assets in your existing origin and transform them by URL, avoiding upload workflows, duplicated files, and extra media infrastructure.'
+      'Keep source assets on your existing origin and transform them by URL. No upload workflows, duplicated files, or extra media infrastructure.'
   }
 ]
 
@@ -37,28 +37,28 @@ const USE_CASES = [
     icon: 'pi pi-shopping-cart',
     title: 'E-commerce product image optimization',
     description:
-      'Optimize product images for faster page loads and better conversion rates. Automatically deliver responsive images at the right size and format for each device.',
+      'Load product pages faster and convert better. Images arrive at the right size and format for each device.',
     href: '/site/solutions/retail'
   },
   {
     icon: 'pi pi-book',
     title: 'News and media site responsive images',
     description:
-      'Deliver optimized images for news articles and media content that load instantly on any device. Automatic format conversion ensures the best experience.',
+      'Deliver news and media images that load fast on any device. Automatic format conversion picks the best format for each browser.',
     href: '/site/solutions/streaming'
   },
   {
     icon: 'pi pi-upload',
     title: 'User-generated content optimization',
     description:
-      'Optimize user-uploaded images on-the-fly from your storage. Apply consistent sizing, quality, and format standards without preprocessing.',
+      'Optimize user-uploaded images on the fly from your storage. Apply consistent size, quality, and format with no preprocessing.',
     href: '/site/solutions/technology'
   },
   {
     icon: 'ai ai-edge-storage',
     title: 'Static site and Jamstack image handling',
     description:
-      'Integrate image optimization into static site builds. Transform images on demand from your static hosting without build-time preprocessing.',
+      'Add image optimization to static site builds. Transform images on demand from your static hosting, with no build-time preprocessing.',
     href: '/site/solutions/web-apps'
   }
 ]
@@ -68,13 +68,13 @@ const FAQ = [
     value: 'what-is',
     question: 'What is Image Processor?',
     answer:
-      'Azion Image Processor is a real-time image optimization service that transforms images on demand from any HTTP-accessible origin. Key features include: automatic WebP/AVIF conversion based on browser support, on-the-fly resizing and compression via URL parameters, no separate storage requirement, support for JPEG/PNG/GIF/BMP/ICO formats, and up to 80% file size reduction. It improves Core Web Vitals without storing multiple image versions.'
+      'Image Processor transforms images on demand from any HTTP-accessible origin. It converts to WebP or AVIF based on browser support, resizes and compresses through URL parameters, and needs no separate storage. It supports JPEG, PNG, GIF, BMP, and ICO formats and cuts file size by up to 80%. Core Web Vitals improve without storing multiple image versions.'
   },
   {
     value: 'vs-uploads',
     question: 'How does Image Processor differ from services that require image uploads?',
     answer:
-      'Image Processor transforms images directly from your existing origin—object storage, web server, or CDN—without requiring you to upload images to a separate service. This means you maintain control over your source images, avoid storage costs, and can work with images from multiple origins without migration.'
+      'Image Processor transforms images directly from your existing origin, such as object storage, a web server, or a CDN. You never upload images to a separate service. You keep control of your source images, avoid storage costs, and can use several origins without migration.'
   },
   {
     value: 'resize',
@@ -116,7 +116,7 @@ const FAQ = [
     value: 'caching',
     question: 'How does caching work with Image Processor?',
     answer:
-      'Transformed images are cached according to cache policies you configure via Rules Engine in Applications. This allows you to balance freshness with performance, keeping frequently-requested transformed images cached at global points of presence for faster delivery.'
+      "Transformed images are cached according to cache policies you configure via Rules Engine in Applications. This allows you to balance freshness with performance, keeping frequently requested transformed images cached in Azion's data centers for faster delivery."
   },
   {
     value: 'measure-impact',
@@ -146,12 +146,12 @@ export const IMAGE_PROCESSOR_PAGE = [
     eyebrow: 'Image Processor',
     title: 'Optimize images on demand',
     description:
-      'Transform images in real-time with automatic WebP/AVIF conversion. Reduce file sizes by up to 80% without separate storage.',
+      'Transform images in real time with automatic WebP and AVIF conversion. Cut file sizes by up to 80% with no separate storage.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Image optimization inside the application',
@@ -164,7 +164,7 @@ export const IMAGE_PROCESSOR_PAGE = [
         icon: 'ai ai-image-processor',
         title: 'From source images to optimized delivery',
         description:
-          'Image Processor transforms existing origin images into optimized variants for modern web delivery. Switch the module on in the application that serves them.',
+          'Image Processor turns existing origin images into optimized variants. Switch the module on in the application that serves them.',
         scene: { component: markRaw(ImageProcessorModuleFragment) },
         href: PRODUCT_DOCS
       },
@@ -193,19 +193,19 @@ export const IMAGE_PROCESSOR_PAGE = [
       {
         title: 'URL-based transformations without API complexity',
         description:
-          'Perform dynamic image transformations on demand via URL query parameters. Adapt dimensions, aspect ratio, quality, and format to each context—browser, screen size, or network conditions—without managing API calls or variant configurations.',
+          'Transform images on demand with URL query parameters. Adapt dimensions, aspect ratio, quality, and format to each browser, screen size, or network condition, with no API calls or variant configuration.',
         href: PRODUCT_DOCS,
-        illustration: 'content-and-media-delivery',
-        illustrationLabel: 'A page frame beside tiles for the video, image and audio it delivers',
+        illustration: 'url-based-transformations-without-api-complexity',
+        illustrationLabel: 'A website asset passing through the rules engine, tiered cache and Image Processor',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
         title: 'Multi-format optimization with automatic detection',
         description:
-          'Automatically adjust format, resolution, and quality based on browser and device while preserving visual fidelity and minimizing file size. Support for JPEG, PNG, GIF, BMP, ICO, WebP, and AVIF with intelligent format selection.',
+          'Adjust format, resolution, and quality for each browser and device while keeping visual fidelity high and file size low. Supports JPEG, PNG, GIF, BMP, ICO, WebP, and AVIF, with automatic format selection.',
         href: '/site/products/cache',
-        illustration: 'content-and-media-delivery-globe',
-        illustrationLabel: 'A globe serving video, image and audio to every region',
+        illustration: 'multi-format-optimization-with-automatic-detection',
+        illustrationLabel: 'One photo delivered as JPEG or WebP, chosen for each browser',
         actions: [{ label: 'Cache', href: '/site/products/cache' }]
       }
     ]
@@ -213,7 +213,7 @@ export const IMAGE_PROCESSOR_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'See how to use',
+    title: 'What teams use Image Processor for',
     description:
       'Put Image Processor in front of any origin and serve optimized images from Azion’s distributed infrastructure, transformed by URL. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },

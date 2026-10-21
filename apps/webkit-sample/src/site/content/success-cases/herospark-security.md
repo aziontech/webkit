@@ -45,7 +45,7 @@ With this modern, distributed architecture, HeroSpark achieved a more secure, st
 
 ## Why Azion
 
-Azion empowered HeroSpark to build, secure, and scale applications on a fully managed global infrastructure, without the complexity or high costs of traditional solutions.
+Azion helped HeroSpark build, secure, and scale applications on a fully managed global infrastructure, without the complexity or high costs of traditional solutions.
 
 With advanced protection, performance at scale, and a dedicated Security Response Team, HeroSpark gained operational peace of mind to innovate continuously while ensuring its applications remain fast, secure, and reliable everywhere.
 

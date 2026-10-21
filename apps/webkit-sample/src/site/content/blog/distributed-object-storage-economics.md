@@ -8,7 +8,7 @@ FinOps teams are good at rightsizing instances and buying commitments. Yet one o
 
 In a centralized model, a single user request commonly creates multiple billable events:
 
-- Client → CDN POP (cache miss) → Origin storage (S3/GCS/Blob) → Origin compute (transforms) → Return path.
+- Client → CDN data center (cache miss) → Origin storage (S3/GCS/Blob) → Origin compute (transforms) → Return path.
 
 Each hop can produce bandwidth charges, cross-service transfer fees, and retransmissions that multiply bytes on the network. Multiply that across millions of requests and dozens of regions and the totals grow large and unpredictable.
 
@@ -40,7 +40,7 @@ Marisa, the largest women’s fashion retail chain in Brazil, with digital sales
 - Migration to Azion, utilizing +40 Data Centers across Brazil.
 - Implementation of the Image Processor for real-time optimization, conversion, and manipulation of millions of images.
 - Configuration of Customizable Cache for both static and dynamic elements.
-- Use of Application Acceleration and Rules Engine for granular API control.
+- Use of Application Accelerator and Rules Engine for granular API control.
 
 **Key Results (Within 6 Months):**
 
@@ -123,7 +123,7 @@ In more mature distributed architectures, a single client request typically resu
 **1) Lower data transfer (egress) by design**
 
 - Remove storage → CDN origin fills and cross-region egress.
-- Objects served from POPs closest to users, converting global traffic into local delivery.
+- Objects served from data centers closest to users, converting global traffic into local delivery.
 
 **2) Massive origin offload → smaller cloud footprint**
 
@@ -195,6 +195,6 @@ In more mature distributed architectures, a single client request typically resu
 
 ## Architecture Over Optimization
 
-Many teams wring savings from centralized architectures by tuning caches, TTLs, or negotiating egress discounts. Those techniques help, but they optimize a costly topology. Storage at the edge — or more precisely, object storage on distributed infrastructure — is an architectural change that alters the economic fundamental: make requests local rather than repeatedly pay to move data across regions.
+Many teams wring savings from centralized architectures by tuning caches, TTLs, or negotiating egress discounts. Those techniques help, but they optimize a costly topology. Storage close to users — or more precisely, object storage on distributed infrastructure — is an architectural change that alters the economic fundamental: make requests local rather than repeatedly pay to move data across regions.
 
 If your business is globally distributed, read-heavy, and sensitive to variable egress costs, the decision becomes *when*, not *if*, to redesign your data topology. Early adopters aren’t just saving money today — they’re building long-term advantages in margin, performance, and speed-to-market.

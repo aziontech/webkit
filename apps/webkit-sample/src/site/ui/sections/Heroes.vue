@@ -83,7 +83,7 @@
     description: '',
     actions: () => [],
     carouselMarks: () => [],
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Trusted by teams running critical workloads',
     art: null,
     scene: null,
     scenePlacement: 'bottom'

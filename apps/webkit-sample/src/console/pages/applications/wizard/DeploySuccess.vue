@@ -251,38 +251,42 @@
 
       <section class="flex flex-col gap-(--spacing-sm)">
         <h2 class="text-label-md text-(--text-default)">{{ resourcesTitle }}</h2>
-        <Item.List>
-          <Item
-            v-for="resource in resources"
-            :key="resource.key"
-            size="small"
-          >
-            <Item.Media>
-              <span
-                class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
-              >
-                <i
-                  :class="resource.icon"
-                  class="text-body-sm leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-            </Item.Media>
-            <Item.Content>
-              <Item.Title>{{ resource.name }}</Item.Title>
-              <Item.Description>
-                {{ resource.kind }} · {{ resource.reference }}
-              </Item.Description>
-            </Item.Content>
-            <Item.Actions>
-              <Tag
-                :label="resource.state === 'bound' ? 'Bound' : 'Created'"
-                :severity="resource.state === 'bound' ? 'info' : 'success'"
+        <CardBox :padded="false">
+          <template #content>
+            <Item.List>
+              <Item
+                v-for="resource in resources"
+                :key="resource.key"
                 size="small"
-              />
-            </Item.Actions>
-          </Item>
-        </Item.List>
+              >
+                <Item.Media>
+                  <span
+                    class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+                  >
+                    <i
+                      :class="resource.icon"
+                      class="text-body-sm leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ resource.name }}</Item.Title>
+                  <Item.Description>
+                    {{ resource.kind }} · {{ resource.reference }}
+                  </Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <Tag
+                    :label="resource.state === 'bound' ? 'Bound' : 'Created'"
+                    :severity="resource.state === 'bound' ? 'info' : 'success'"
+                    size="small"
+                  />
+                </Item.Actions>
+              </Item>
+            </Item.List>
+          </template>
+        </CardBox>
       </section>
 
       <section class="flex flex-col gap-(--spacing-sm)">

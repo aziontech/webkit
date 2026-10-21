@@ -34,7 +34,7 @@ The implementation of Azion’s solutions had a profound impact at Universidad I
 
 “Managing our domains has become much easier from a technical standpoint, which has allowed us to feel calmer, go home, and sleep more peacefully, trusting the technology to do its job as intended in the implementation processes,” said Enrique Collin, Director of Information Technologies at IBERO.
 
-In conclusion, adopting edge computing solutions has successfully minimized the risks of outages in IBERO’s environments, ensuring continuous operation.
+In conclusion, adopting distributed architecture solutions has successfully minimized the risks of outages in IBERO’s environments, ensuring continuous operation.
 
 > *“Azion provided fast and efficient response times, allowing updates and changes to be made within seconds.”*
 >

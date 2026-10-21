@@ -124,7 +124,7 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
       icon: 'pi pi-dollar',
       title: 'Leia o preço antes de falar com o comercial',
       description:
-        'Preços públicos de pay-as-you-go, sem contrato mínimo, sem professional services obrigatório. Comece com US$ 300 em créditos e rode uma carga real antes de assinar qualquer coisa.'
+        'Preços públicos de pagamento por uso, sem contrato mínimo e sem professional services obrigatório. Comece com US$ 300 em créditos e rode uma carga real antes de assinar qualquer coisa.'
     },
     {
       icon: 'pi pi-comments',
@@ -150,7 +150,11 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
       azion: 'full',
       rival: 'partial'
     },
-    { capability: 'Um único console para todos os workstreams', azion: 'full', rival: 'partial' },
+    {
+      capability: 'Um único console para todos os fluxos de trabalho',
+      azion: 'full',
+      rival: 'partial'
+    },
     {
       capability: 'Mudanças de configuração e regras no ar em segundos',
       azion: 'full',
@@ -159,9 +163,13 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
     { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'full' },
     { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'partial' },
     { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'full' },
-    { capability: 'Store chave-valor distribuído', azion: 'full', rival: 'full' },
+    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
     { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
-    { capability: 'SQL database distribuído com busca vetorial', azion: 'full', rival: 'none' },
+    {
+      capability: 'Banco de dados SQL distribuído com busca vetorial',
+      azion: 'full',
+      rival: 'none'
+    },
     { capability: 'WAF gerenciado para aplicações e APIs', azion: 'full', rival: 'full' },
     { capability: 'Descoberta e proteção de APIs', azion: 'full', rival: 'full' },
     { capability: 'Gerenciamento de bots', azion: 'full', rival: 'full' },
@@ -176,11 +184,11 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
       azion: 'full',
       rival: 'full'
     },
-    { capability: 'Preço pay-as-you-go publicado', azion: 'full', rival: 'partial' },
+    { capability: 'Preço por uso publicado', azion: 'full', rival: 'partial' },
     { capability: 'Começar sem professional services obrigatório', azion: 'full', rival: 'partial' }
   ],
   mapping: {
-    title: 'Mapeie os workstreams da Akamai para a Azion',
+    title: 'Mapeie os serviços da Akamai para a Azion',
     description:
       'Propriedades de entrega da Akamai mapeiam para Applications, Application Accelerator e Cache. Cloudlets mapeiam para Rules Engine, Applications, Load Balancer e Firewall. EdgeWorkers e Akamai Functions mapeiam para Functions, EdgeKV para KV Store, DataStream para Data Stream, e DNS e tráfego mapeiam para Edge DNS e Load Balancer. As proteções WAAP da Akamai, incluindo WAF, API Security e anti-bot, mapeiam para Azion WAF, Firewall e Bot Manager.'
   },
@@ -189,7 +197,7 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
       value: 'a-azion-e-uma-boa-alternativa',
       question: 'A Azion é uma boa alternativa à Akamai?',
       answer:
-        'Sim. A Azion está entre os principais concorrentes e alternativas à Akamai, substituindo a segurança WAAP da Akamai (WAF, API Security e anti-bot), entrega, computação e object storage por uma plataforma unificada. Preços transparentes de pagamento por uso e $300 em créditos gratuitos facilitam avaliar a troca.'
+        'Sim. A Azion é uma alternativa à Akamai: substitui a segurança WAAP da Akamai (WAF, API Security e anti-bot), a entrega, a computação e o object storage por uma plataforma só. Preços transparentes de pagamento por uso e $300 em créditos gratuitos ajudam a avaliar a troca.'
     },
     {
       value: 'como-os-servicos-de-entrega-da',
@@ -290,7 +298,7 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       icon: 'pi pi-dollar',
       title: 'Cresça sem trocar de plano',
       description:
-        'Preços de pay-as-you-go publicados, sem cobrança de egress entre serviços Azion. Mais tráfego aumenta sua fatura e deixa seu plano em paz.'
+        'Preços de pagamento por uso publicados, sem cobrança de egress entre serviços Azion. Mais tráfego aumenta a fatura, mas não obriga você a trocar de plano.'
     },
     {
       icon: 'pi pi-sync',
@@ -310,7 +318,11 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       azion: 'full',
       rival: 'full'
     },
-    { capability: 'Um único console para todos os workstreams', azion: 'full', rival: 'full' },
+    {
+      capability: 'Um único console para todos os fluxos de trabalho',
+      azion: 'full',
+      rival: 'full'
+    },
     {
       capability: 'Mudanças de configuração e regras no ar em segundos',
       azion: 'full',
@@ -324,10 +336,10 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       rival: 'partial'
     },
     { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'full' },
-    { capability: 'Store chave-valor distribuído', azion: 'full', rival: 'full' },
+    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
     { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
     {
-      capability: 'SQL distribuído com ACID e busca vetorial em um só produto',
+      capability: 'Banco SQL distribuído com ACID e busca vetorial em um só produto',
       azion: 'full',
       rival: 'partial'
     },
@@ -347,7 +359,7 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       azion: 'full',
       rival: 'full'
     },
-    { capability: 'Preço pay-as-you-go publicado', azion: 'full', rival: 'full' }
+    { capability: 'Preço por uso publicado', azion: 'full', rival: 'full' }
   ],
   mapping: {
     title: 'Troque sem reescrever seu código',
@@ -359,7 +371,7 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       value: 'a-azion-e-uma-boa-alternativa',
       question: 'A Azion é uma boa alternativa à Cloudflare?',
       answer:
-        'Sim. A Azion está entre os principais concorrentes e alternativas à Cloudflare, com APIs compatíveis para Workers, KV e R2, além de WAF, proteção DDoS e gerenciamento de bots integrados em uma única plataforma. Preços transparentes e $300 em créditos gratuitos facilitam avaliar a troca.'
+        'Sim. A Azion é uma alternativa à Cloudflare, com APIs compatíveis para Workers, KV e R2, além de WAF, proteção DDoS e gerenciamento de bots integrados em uma plataforma só. Preços transparentes e $300 em créditos gratuitos ajudam a avaliar a troca.'
     },
     {
       value: 'o-kv-store-e-compativel-com',
@@ -383,25 +395,25 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       value: 'existem-cold-starts-nas-azion-functions',
       question: 'Existem cold starts nas Azion Functions?',
       answer:
-        'Não. As Azion Functions executam imediatamente na infraestrutura distribuída sem latência de cold start. Você tem performance consistente na primeira requisição sem os atrasos imprevisíveis comuns em plataformas serverless.'
+        'Não. As Azion Functions executam imediatamente na infraestrutura distribuída sem latência de cold start. Você tem performance consistente já na primeira requisição, sem os atrasos imprevisíveis comuns em plataformas serverless.'
     },
     {
       value: 'qual-latencia-posso-esperar-globalmente',
       question: 'Qual latência posso esperar globalmente?',
       answer:
-        'Latência inferior a 30 ms em mais de 120 localizações ao redor do mundo. A arquitetura distribuída da Azion garante tempos de resposta rápidos para usuários em qualquer lugar, com roteamento automático para a localização edge mais próxima.'
+        'Latência inferior a 30 ms em mais de 120 data centers ao redor do mundo. A arquitetura distribuída da Azion mantém os tempos de resposta baixos para usuários em qualquer lugar, com roteamento automático para o data center mais próximo.'
     },
     {
       value: 'como-os-precos-se-comparam-a',
       question: 'Como os preços se comparam à Cloudflare?',
       answer:
-        'A Azion oferece preços de pay-as-you-go transparentes, sem taxas ocultas, sem cobranças de egresso entre serviços e sem contratos de longo prazo obrigatórios. Você paga apenas pelo que usa, e ganha $300 em créditos gratuitos válidos por 365 dias para começar a testar.'
+        'A Azion oferece preços de pagamento por uso transparentes, sem taxas ocultas, sem cobranças de egresso entre serviços e sem contratos de longo prazo obrigatórios. Você paga apenas pelo que usa, e ganha $300 em créditos gratuitos válidos por 365 dias para começar a testar.'
     },
     {
       value: 'o-que-substitui-o-waf-e',
       question: 'O que substitui o WAF e a proteção DDoS da Cloudflare?',
       answer:
-        'As regras do WAF da Cloudflare mapeiam para o Azion Web Application Firewall, e a proteção DDoS está incluída de forma nativa na rede da Azion. Políticas de filtragem de tráfego do Cloudflare Gateway podem ser recriadas com Azion Firewall e Network Shield. Se você compara os preços do WAF da Cloudflare com concorrentes, a Azion oferece pagamento por uso sem taxas por regra nem níveis de plano.'
+        'As regras do WAF da Cloudflare mapeiam para o Azion Web Application Firewall, e a proteção DDoS já vem incluída na infraestrutura distribuída da Azion. Políticas de filtragem de tráfego do Cloudflare Gateway podem ser recriadas com Azion Firewall e Network Shield. Se você compara os preços do WAF da Cloudflare com concorrentes, a Azion oferece pagamento por uso sem taxas por regra nem níveis de plano.'
     },
     {
       value: 'como-o-cloudflare-r2-mapeia-para',
@@ -425,7 +437,7 @@ export const CLOUDFLARE_GUIDE: AlternativeGuide = {
       value: 'posso-rodar-ambas-as-plataformas-em',
       question: 'Posso rodar ambas as plataformas em paralelo?',
       answer:
-        'Sim. Você pode rodar Cloudflare e Azion simultaneamente e transferir tráfego gradualmente usando configuração DNS. Isso permite testes, validação e uma transição suave sem interrupção do serviço.'
+        'Sim. Você pode rodar Cloudflare e Azion simultaneamente e transferir tráfego gradualmente usando configuração DNS. Isso permite testar, validar e fazer a transição sem interrupção do serviço.'
     }
   ]
 }
@@ -472,7 +484,7 @@ export const FASTLY_GUIDE: AlternativeGuide = {
       icon: 'pi pi-dollar',
       title: 'Custo total de propriedade menor',
       description:
-        'Preços públicos de pay-as-you-go para entrega, computação, storage e segurança, sem compromisso mínimo e sem cobrança de egress entre serviços Azion.'
+        'Preços públicos de pagamento por uso para entrega, computação, storage e segurança, sem compromisso mínimo e sem cobrança de egress entre serviços Azion.'
     },
     {
       icon: 'pi pi-sync',
@@ -492,7 +504,11 @@ export const FASTLY_GUIDE: AlternativeGuide = {
       azion: 'full',
       rival: 'partial'
     },
-    { capability: 'Um único console para todos os workstreams', azion: 'full', rival: 'partial' },
+    {
+      capability: 'Um único console para todos os fluxos de trabalho',
+      azion: 'full',
+      rival: 'partial'
+    },
     {
       capability: 'Mudanças de configuração e regras no ar em segundos',
       azion: 'full',
@@ -506,9 +522,13 @@ export const FASTLY_GUIDE: AlternativeGuide = {
     { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'full' },
     { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'full' },
     { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'partial' },
-    { capability: 'Store chave-valor distribuído', azion: 'full', rival: 'full' },
+    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
     { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
-    { capability: 'SQL database distribuído com busca vetorial', azion: 'full', rival: 'none' },
+    {
+      capability: 'Banco de dados SQL distribuído com busca vetorial',
+      azion: 'full',
+      rival: 'none'
+    },
     { capability: 'WAF gerenciado para aplicações e APIs', azion: 'full', rival: 'full' },
     { capability: 'Descoberta e proteção de APIs', azion: 'full', rival: 'partial' },
     { capability: 'Gerenciamento de bots', azion: 'full', rival: 'full' },
@@ -525,7 +545,7 @@ export const FASTLY_GUIDE: AlternativeGuide = {
     { capability: 'Métricas em tempo real e busca de eventos', azion: 'full', rival: 'full' },
     { capability: 'Streaming de logs para ferramentas de terceiros', azion: 'full', rival: 'full' },
     { capability: 'Monitoramento de usuário real', azion: 'full', rival: 'none' },
-    { capability: 'Preço pay-as-you-go publicado', azion: 'full', rival: 'full' }
+    { capability: 'Preço por uso publicado', azion: 'full', rival: 'full' }
   ],
   mapping: {
     title: 'Troque por equivalência de serviços',
@@ -537,7 +557,7 @@ export const FASTLY_GUIDE: AlternativeGuide = {
       value: 'a-azion-e-uma-boa-alternativa',
       question: 'A Azion é uma boa alternativa à Fastly?',
       answer:
-        'Sim. A Azion está entre os principais concorrentes e alternativas à Fastly, combinando entrega CDN, computação, storage, WAF, gerenciamento de bots e proteção DDoS em uma única plataforma. Caminhos compatíveis para Compute, Edge Data Storage e Next-Gen WAF facilitam a transição, com $300 em créditos gratuitos para validar.'
+        'Sim. A Azion é uma alternativa à Fastly, e combina entrega CDN, computação, storage, WAF, gerenciamento de bots e proteção DDoS em uma plataforma só. Caminhos compatíveis para Compute, Edge Data Storage e Next-Gen WAF facilitam a transição, com $300 em créditos gratuitos para validar.'
     },
     {
       value: 'como-o-full-site-delivery-da',
@@ -618,9 +638,9 @@ export const AWS_GUIDE: AlternativeGuide = {
     },
     {
       icon: 'pi pi-bolt',
-      title: 'Lógica de borda sem cold start',
+      title: 'Lógica de requisição sem cold start',
       description:
-        'CloudFront Functions e Lambda@Edge mapeiam para Functions, que dividem a plataforma com cache e entrega. Seu JavaScript e WebAssembly rodam perto dos usuários, sem cold start, e você administra um serviço.'
+        'CloudFront Functions e Lambda@Edge mapeiam para Functions, que dividem a plataforma com cache e entrega. Seu JavaScript e WebAssembly rodam perto dos usuários, sem cold start, e você administra um serviço só.'
     },
     {
       icon: 'pi pi-shield',
@@ -632,7 +652,7 @@ export const AWS_GUIDE: AlternativeGuide = {
       icon: 'pi pi-dollar',
       title: 'Uma fatura que você lê antes do fim do mês',
       description:
-        'Preços públicos de pay-as-you-go para entrega, computação, storage e segurança, sem cobrança de egress entre serviços Azion. Comece com US$ 300 em créditos e rode uma carga real antes de assinar qualquer coisa.'
+        'Preços públicos de pagamento por uso para entrega, computação, storage e segurança, sem cobrança de egress entre serviços Azion. Comece com US$ 300 em créditos e rode uma carga real antes de assinar qualquer coisa.'
     },
     {
       icon: 'pi pi-comments',
@@ -658,19 +678,23 @@ export const AWS_GUIDE: AlternativeGuide = {
       azion: 'full',
       rival: 'partial'
     },
-    { capability: 'Um único console para todos os workstreams', azion: 'full', rival: 'partial' },
+    {
+      capability: 'Um único console para todos os fluxos de trabalho',
+      azion: 'full',
+      rival: 'partial'
+    },
     {
       capability: 'Mudanças de configuração e regras no ar em segundos',
       azion: 'full',
       rival: 'partial'
     },
-    { capability: 'Runtime JavaScript e WebAssembly na borda', azion: 'full', rival: 'partial' },
+    { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'partial' },
     { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'partial' },
     { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'full' },
-    { capability: 'Store chave-valor distribuído', azion: 'full', rival: 'full' },
+    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
     { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
     {
-      capability: 'SQL database distribuído com busca vetorial',
+      capability: 'Banco de dados SQL distribuído com busca vetorial',
       azion: 'full',
       rival: 'partial'
     },
@@ -685,7 +709,7 @@ export const AWS_GUIDE: AlternativeGuide = {
     { capability: 'Métricas em tempo real e busca de eventos', azion: 'full', rival: 'partial' },
     { capability: 'Streaming de logs para ferramentas de terceiros', azion: 'full', rival: 'full' },
     { capability: 'Monitoramento de usuário real', azion: 'full', rival: 'full' },
-    { capability: 'Preço pay-as-you-go publicado', azion: 'full', rival: 'full' }
+    { capability: 'Preço por uso publicado', azion: 'full', rival: 'full' }
   ],
   mapping: {
     title: 'Mapeie os serviços da AWS para a Azion',
@@ -697,7 +721,7 @@ export const AWS_GUIDE: AlternativeGuide = {
       value: 'a-azion-e-uma-boa-alternativa',
       question: 'A Azion é uma boa alternativa à AWS?',
       answer:
-        'Sim. A Azion substitui CloudFront, Lambda@Edge, S3, DynamoDB, Route 53, AWS WAF e Shield por uma plataforma unificada de entrega, computação, storage e segurança. Preços transparentes de pagamento por uso e $300 em créditos gratuitos facilitam avaliar a troca.'
+        'Sim. A Azion substitui CloudFront, Lambda@Edge, S3, DynamoDB, Route 53, AWS WAF e Shield por uma plataforma só de entrega, computação, storage e segurança. Preços transparentes de pagamento por uso e $300 em créditos gratuitos ajudam a avaliar a troca.'
     },
     {
       value: 'como-o-amazon-cloudfront-mapeia',

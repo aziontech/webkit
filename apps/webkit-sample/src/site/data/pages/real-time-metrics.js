@@ -1,3 +1,5 @@
+import realTimeMetricsErrorRate from '@aziontech/webkit/assets/real-time-metrics-error-rate.svg'
+import realTimeMetricsStatusCodes from '@aziontech/webkit/assets/real-time-metrics-status-codes.svg'
 import { markRaw } from 'vue'
 
 import RealTimeMetricsDashboardFragment from '../../ui/mockup/widgets/RealTimeMetricsDashboardFragment.vue'
@@ -16,19 +18,19 @@ const PILLARS = [
     icon: 'pi pi-search',
     title: 'Detect anomalies instantly',
     description:
-      'Spot traffic spikes and error surges as they happen to react before issues spread across regions.'
+      'Spot traffic spikes and error surges as they happen, and react before issues spread across regions.'
   },
   {
     icon: 'pi pi-chart-bar',
     title: 'Optimize application performance',
     description:
-      'Analyze latency and error rates across dashboards to identify bottlenecks by host or region.'
+      'Analyze latency and error rates across dashboards to find bottlenecks by host or region.'
   },
   {
     icon: 'pi pi-server',
     title: 'Predict and prevent bottlenecks',
     description:
-      'Track trends with 24 months retention to forecast capacity needs and optimize scalability.'
+      'Track trends over 24 months of retention to forecast capacity needs and plan for scale.'
   }
 ]
 
@@ -37,21 +39,21 @@ const USE_CASES = [
     icon: 'ai ai-real-time-metrics',
     title: 'Monitor application performance',
     description:
-      'Track Data Transferred, Requests, Status Codes, and Bandwidth across all your applications on distributed infrastructure. Use Average Request Time charts to identify latency bottlenecks by host, method, or region.',
+      'Track Data Transferred, Requests, Status Codes, and Bandwidth across all your applications on distributed infrastructure. Use Average Request Time charts to find latency bottlenecks by host, method, or region.',
     href: '/site/solutions/web-apps'
   },
   {
     icon: 'ai ai-waf-rules',
     title: 'Analyze security threats',
     description:
-      'View WAF Threats vs Requests, SQL Injection, XSS, RFI, and Bot Manager dashboards. Analyze threats by country, IP, host, and attack family to create targeted security policies.',
+      'View WAF Threats vs Requests, SQL Injection, XSS, RFI, and Bot Manager dashboards. Analyze threats by country, IP, host, and attack family to build targeted security policies.',
     href: '/site/solutions/security'
   },
   {
     icon: 'ai ai-tiered-cache',
     title: 'Optimize cache performance',
     description:
-      'Monitor cache offload, Saved Data, Missed Data, and Tiered Cache performance. Maximize bandwidth savings and reduce origin load by analyzing offload percentages and cache hit ratios.',
+      'Monitor cache offload, Saved Data, Missed Data, and Tiered Cache performance. Analyze offload percentages and cache hit ratios to save bandwidth and reduce origin load.',
     href: '/site/solutions/performance'
   },
   {
@@ -127,7 +129,7 @@ export const REAL_TIME_METRICS_PAGE = [
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every product’s metrics in one console',
@@ -156,7 +158,7 @@ export const REAL_TIME_METRICS_PAGE = [
         icon: 'pi pi-code',
         title: 'Build custom dashboards',
         description:
-          'Query via GraphQL API or Grafana plugin to create views tailored to your workflows.',
+          'Query the GraphQL API or the Grafana plugin to build views for your workflows.',
         scene: { component: markRaw(RealTimeMetricsPanelFragment) },
         href: PRODUCT_DOCS
       }
@@ -169,19 +171,27 @@ export const REAL_TIME_METRICS_PAGE = [
       {
         title: 'Monitor metrics from one console',
         description:
-          'Monitor up to 24 months of metrics across Applications, Functions, WAF, and other Azion products through centralized dashboards, with Real-Time Events integration for deeper investigation.',
+          'Monitor up to 24 months of metrics across Applications, Functions, WAF, and other Azion products in centralized dashboards, with Real-Time Events integration for deeper investigation.',
         href: '/signup',
-        illustration: 'live-debugging',
-        illustrationLabel: 'A console window with a time range of requests, errors and events',
-        actions: [{ label: 'Start Free', href: '/signup' }]
+        image: {
+          src: realTimeMetricsErrorRate,
+          alt: 'A Real-Time Metrics panel showing a 5xx error spike on /api/checkout, investigated with Real-Time Events',
+          width: 366,
+          height: 193
+        },
+        actions: [{ label: 'Start free', href: '/signup' }]
       },
       {
         title: 'Dashboards built for fast decisions',
         description:
-          'Filter metrics by time range, compare changes with delta indicators, and export reports to quickly identify trends and operational impact.',
+          'Filter metrics by time range, compare changes with delta indicators, and export reports to spot trends and operational impact quickly.',
         href: PRODUCT_DOCS,
-        illustration: 'stay-in-control',
-        illustrationLabel: 'A bar chart with traffic rising and cost falling',
+        image: {
+          src: realTimeMetricsStatusCodes,
+          alt: 'A Real-Time Metrics panel charting 429 status codes by host and path',
+          width: 366,
+          height: 250
+        },
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       }
     ]
@@ -189,7 +199,7 @@ export const REAL_TIME_METRICS_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'Power operational workflows',
+    title: 'What teams use Real-Time Metrics for',
     description:
       'Put Real-Time Metrics in front of every application, function and firewall you run and read their traffic as Azion’s distributed infrastructure serves it, with no sampling. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },

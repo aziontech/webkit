@@ -22,7 +22,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'api-security',
     title: 'API Security',
     description:
-      'Understand threat risks, implement a robust API Security checklist, and learn architecture best practices to protect your applications with maximum performance.',
+      'Understand threat risks, follow an API Security checklist, and learn architecture best practices to protect your applications with maximum performance.',
     articles: [
       { label: 'What is API Security?', href: 'https://www.azion.com/en/learning/api/what-is-api-security/' },
       { label: 'API Gateway vs. API Security', href: 'https://www.azion.com/en/learning/api/api-gateway-vs-api-security/' },
@@ -37,7 +37,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'ai',
     title: 'AI',
     description:
-      'Discover the transformative power of Artificial Intelligence (AI), a field at the forefront of innovation and technology.',
+      'Learn the core concepts of Artificial Intelligence (AI), from machine learning and RAG to agents and inference.',
     articles: [
       { label: 'What is Artificial Intelligence (AI)?', href: 'https://www.azion.com/en/learning/ai/what-is-artificial-intelligence/' },
       { label: 'What is Machine Learning?', href: 'https://www.azion.com/en/learning/ai/what-is-machine-learning/' },
@@ -88,7 +88,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'ddos-attacks',
     title: 'DDoS Attacks',
     description:
-      'Get precious insights into DDoS attacks: what they are, the motivation behind them, their many kinds and the protective measures available to fortify your defenses today.',
+      'Learn what DDoS attacks are, why they happen, their main types, and the protections available to harden your defenses.',
     articles: [
       { label: 'What is a DDoS Attack?', href: 'https://www.azion.com/en/learning/ddos/what-is-ddos-attack/' },
       { label: 'What is a Botnet?', href: 'https://www.azion.com/en/learning/ddos/what-is-a-ddos-botnet/' },
@@ -163,7 +163,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'performance',
     title: 'Performance',
     description:
-      'Optimizing site speed can outsize the user experience, SEO rankings, and conversion rates. Website performance provides a competitive advantage over slower sites.',
+      'Site speed shapes user experience, SEO rankings, and conversion rates. Faster websites have an advantage over slower ones.',
     articles: [
       { label: 'What is Site Speed?', href: 'https://www.azion.com/en/learning/performance/what-is-site-speed/' },
       { label: 'Why Website Performance Impact Conversion Rates?', href: 'https://www.azion.com/en/learning/performance/website-performance-and-conversion-rates/' },
@@ -175,7 +175,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'storage-and-database',
     title: 'Storage and Database',
     description:
-      'Master the complete landscape of data storage and databases for modern applications. Learn when to use SQL vs NoSQL, how Object Storage reduces costs, why vector databases power AI applications, and how distributed architectures deliver low-latency data access globally.',
+      'Learn how storage and databases work in modern applications. See when to use SQL vs NoSQL, how Object Storage reduces costs, why vector databases power AI applications, and how distributed architectures deliver low-latency data access globally.',
     articles: [
       { label: 'What is Storage and Database?', href: 'https://www.azion.com/en/learning/storage-database/what-is-storage-and-database/' },
       { label: 'What is a Relational Database?', href: 'https://www.azion.com/en/learning/storage-database/what-is-relational-database/' },
@@ -189,7 +189,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'serverless',
     title: 'Serverless',
     description:
-      'Serverless computing is transforming the way applications are developed, deployed, and scaled. Developers can abstract the underlying infrastructure and focus on write code and deliver value to their users.',
+      'Serverless computing changes how applications are developed, deployed, and scaled. Developers abstract the underlying infrastructure and focus on writing code and delivering value to users.',
     articles: [
       { label: 'What is Serverless?', href: 'https://www.azion.com/en/learning/serverless/what-is-serverless/' },
       { label: 'Serverless vs. Containers', href: 'https://www.azion.com/en/learning/serverless/serverless-vs-containers/' },
@@ -201,7 +201,7 @@ export const LEARNING_SUBJECTS = [
     slug: 'tls',
     title: 'TLS',
     description:
-      'Explore the world of TLS. Master TLS 1.3 and mTLS to strengthen machine identity with Zero Trust, eliminating handshake latencies and ensuring the cryptographic resilience of your applications at the Edge.',
+      'Learn TLS 1.3 and mTLS to strengthen machine identity with Zero Trust, eliminate handshake latencies, and keep your applications cryptographically resilient on a distributed architecture.',
     articles: [
       { label: 'What is TLS?', href: 'https://www.azion.com/en/learning/tls/what-is-tls/' },
       { label: 'TLS vs. mTLS', href: 'https://www.azion.com/en/learning/tls/mtls-vs-tls/' },

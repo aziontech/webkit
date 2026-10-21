@@ -8,20 +8,20 @@
 
   import type { SupportLevel } from '../../data/alternative-guides'
 
-  defineOptions({ name: 'ComparisonTable' })
+  defineOptions({ name: 'CompareCompetitors' })
 
-  export type ComparisonTableSupport = SupportLevel
+  export type CompareCompetitorsSupport = SupportLevel
 
-  export interface ComparisonTableRow {
+  export interface CompareCompetitorsRow {
     /** What is being compared. */
     capability: string
     /** How far Azion supports it. */
-    azion: ComparisonTableSupport
+    azion: CompareCompetitorsSupport
     /** How far the alternative supports it. */
-    rival: ComparisonTableSupport
+    rival: CompareCompetitorsSupport
   }
 
-  export interface ComparisonTableSupportLabels {
+  export interface CompareCompetitorsSupportLabels {
     /** Screen-reader text of a tick. */
     full: string
     /** Visible text of a partial cell. */
@@ -38,13 +38,13 @@
     /** Name of the alternative, as the competitor registry lists it. */
     rival: string
     /** One row per capability. */
-    rows: ComparisonTableRow[]
+    rows: CompareCompetitorsRow[]
     /** Screen-reader caption of the table. */
     caption?: string
     /** Heading of the capability column. */
     columnLabel?: string
     /** Wording of the three support levels. */
-    supportLabels?: ComparisonTableSupportLabels
+    supportLabels?: CompareCompetitorsSupportLabels
     /** Id of the band, for in-page links. */
     anchor?: string
   }

@@ -16,19 +16,19 @@ const PILLARS = [
     icon: 'pi pi-bolt',
     title: 'Low-latency reads worldwide',
     description:
-      'Serve sessions, feature flags, configuration, and lookup data close to users for fast decisions in global applications.'
+      'Serve sessions, feature flags, configuration, and lookup data close to users, so global applications decide fast.'
   },
   {
     icon: 'pi pi-database',
     title: 'Simple key-value API at scale',
     description:
-      'Store and retrieve application state with a schemaless API that supports JSON, binary data, streams, metadata, and TTLs.'
+      'Store application state with a schemaless API. It supports JSON, binary data, streams, metadata, and TTLs.'
   },
   {
     icon: 'pi pi-shield-check',
     title: 'Persistent state beyond cache',
     description:
-      'Keep durable key-value data available for read-heavy workloads, instead of relying on volatile cache entries or repeated origin lookups.'
+      'Keep durable key-value data for read-heavy workloads, with no volatile cache entries and no repeated origin lookups.'
   }
 ]
 
@@ -37,21 +37,21 @@ const USE_CASES = [
     icon: 'pi pi-users',
     title: 'Session management and authentication',
     description:
-      'Store user sessions, authentication tokens, and login states close to users for fast authentication. Fast reads enable responsive session validation without round-trips.',
+      'Store user sessions, authentication tokens, and login states close to users. Fast reads validate sessions without round-trips.',
     href: '/site/solutions/web-apps'
   },
   {
     icon: 'pi pi-sliders-h',
     title: 'Feature flags and configuration',
     description:
-      'Synchronize feature flags and application configuration globally with low latency. Safely roll out features, run A/B tests, and manage settings with TTL.',
+      'Sync feature flags and application configuration globally with low latency. Roll out features, run A/B tests, and manage settings with TTL.',
     href: '/site/solutions/technology'
   },
   {
     icon: 'pi pi-shield',
     title: 'API rate limiting and quotas',
     description:
-      'Implement sliding window rate limits, token quotas, and access rules. Track API usage per IP, user, or token with fast lookups to protect APIs.',
+      'Implement sliding window rate limits, token quotas, and access rules. Track API usage per IP, user, or token with fast lookups.',
     href: '/site/solutions/security'
   },
   {
@@ -68,19 +68,19 @@ const FAQ = [
     value: 'what-is',
     question: 'What is KV Store?',
     answer:
-      "Azion KV Store is a serverless key-value database with global read replicas. Key features include: low-latency reads across Azion's distributed network, automatic replication, native Functions integration, TTL support, and flexible data types (String, JSON, Buffer, Stream). The API is compatible with Cloudflare Workers KV for easy migration. Ideal for sessions, feature flags, rate limiting, and configuration management."
+      'Azion KV Store is a serverless key-value database with global read replicas. It offers low-latency reads across Azion’s distributed infrastructure, automatic replication, native Functions integration, TTL support, and flexible data types (String, JSON, Buffer, Stream). The API is compatible with Cloudflare Workers KV for easy migration. Use it for sessions, feature flags, rate limiting, and configuration.'
   },
   {
     value: 'data-types',
     question: 'What data types does KV Store support?',
     answer:
-      'KV Store supports 4 data types natively: String, JSON objects, binary buffers, and streams. Unlike string-only key-value stores, you can store complex objects and binary data without serialization overhead. The schemaless design allows flexible data modeling without migrations.'
+      'KV Store supports 4 data types natively: String, JSON objects, binary buffers, and streams. Unlike string-only key-value stores, you can store complex objects and binary data without serialization overhead. The schemaless design lets you model data without migrations.'
   },
   {
     value: 'replication',
     question: 'How does replication work?',
     answer:
-      "KV Store uses a primary instance for writes and global read replicas. Data synchronizes with eventual consistency, providing high availability and fast reads close to users. This architecture is ideal for reference data, sessions, and configuration that doesn't require immediate global consistency."
+      'KV Store uses a primary instance for writes and global read replicas. Data synchronizes with eventual consistency, providing high availability and fast reads close to users. This suits reference data, sessions, and configuration that do not need immediate global consistency.'
   },
   {
     value: 'expiration',
@@ -92,7 +92,7 @@ const FAQ = [
     value: 'functions',
     question: 'How do I access KV Store from Functions?',
     answer:
-      'Functions can access KV Store through a native JavaScript API in the runtime. This enables direct integration without extra network hops—your code reads and writes data within the same execution environment.'
+      'Functions access KV Store through a native JavaScript API in the runtime. There are no extra network hops: your code reads and writes data in the same execution environment.'
   },
   {
     value: 'use-cases',
@@ -104,19 +104,19 @@ const FAQ = [
     value: 'limits',
     question: 'What are the storage limits?',
     answer:
-      'KV Store supports keys up to 512 bytes and values up to 25 MB. You can attach metadata to each key-value pair for additional context. These limits accommodate most session, configuration, and feature flag use cases.'
+      'KV Store supports keys up to 512 bytes and values up to 25 MB. You can attach metadata to each key-value pair for additional context. These limits cover most session, configuration, and feature flag use cases.'
   },
   {
     value: 'workers-kv',
     question: 'Is KV Store compatible with Cloudflare Workers KV?',
     answer:
-      'Yes. KV Store provides a compatible API with Cloudflare Workers KV, making migration straightforward. Code written for Cloudflare KV requires minimal changes to run on Azion. This reduces lock-in and lets teams use familiar patterns.'
+      'Yes. KV Store provides a compatible API with Cloudflare Workers KV, making migration straightforward. Code written for Cloudflare KV requires minimal changes to run on Azion. This reduces lock-in and lets teams keep familiar patterns.'
   },
   {
     value: 'free-tier',
     question: 'Is there a free tier to test KV Store?',
     answer:
-      'Yes. You get $300 in credits valid for 365 days to test KV Store and other Azion products. Start building immediately without infrastructure provisioning—fully serverless with scale-to-zero when idle.'
+      'Yes. You get $300 in credits valid for 365 days to test KV Store and other Azion products. Start building right away: there is nothing to provision, it is fully serverless, and it scales to zero when idle.'
   },
   {
     value: 'pricing',
@@ -134,17 +134,17 @@ export const KV_STORE_PAGE = [
     eyebrow: 'KV Store',
     title: 'Fast key-value storage built for global applications',
     description:
-      'Eventually consistent key-value storage with automatic global replication. Designed for read-heavy workloads and modern applications.',
+      'Eventually consistent key-value storage with automatic global replication, for read-heavy workloads and modern applications.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Application state in one namespace',
     description:
-      'Keys, their expiration and the functions that read them live in the same namespace, replicated to every location and read where the request lands.',
+      'Keys, their expiration and the functions that read them live in the same namespace, replicated globally and read where the request lands.',
     actions: PRODUCT_HERO_ACTIONS,
     columns: 3,
     items: [
@@ -160,7 +160,7 @@ export const KV_STORE_PAGE = [
         icon: 'pi pi-ban',
         title: 'Security lists read in real time',
         description:
-          'Store IP addresses and threat signatures to block attackers in real time, and query large block lists with low-latency access.',
+          'Store IP addresses and threat signatures, block attackers in real time, and query large block lists with low latency.',
         scene: { component: markRaw(KvStoreSecurityListFragment) },
         href: PRODUCT_DOCS
       },
@@ -168,7 +168,7 @@ export const KV_STORE_PAGE = [
         icon: 'ai ai-edge-functions',
         title: 'From key-value to full application state',
         description:
-          'Read, write and count keys from Functions, next to SQL Database and Object Storage, for complete application state management.',
+          'Read, write and count keys from Functions, next to SQL Database and Object Storage, to manage complete application state.',
         scene: { component: markRaw(KvStoreFunctionFragment) },
         href: PRODUCT_DOCS
       }
@@ -181,19 +181,19 @@ export const KV_STORE_PAGE = [
       {
         title: 'Native JavaScript API for Functions',
         description:
-          'Access KV Store directly from Functions to store and retrieve sessions, flags, and counters without extra network hops. Cloudflare Workers KV API compatible for easy migration.',
+          'Access KV Store directly from Functions to store and retrieve sessions, flags, and counters with no extra network hops. The API is compatible with Cloudflare Workers KV, so migration is easy.',
         href: '/site/products/functions',
-        illustration: 'distributed-apis',
-        illustrationLabel: 'An application window sending get and post calls',
+        illustration: 'replicated-reads',
+        illustrationLabel: 'A function reading a session cache from KV Store across data centers',
         actions: [{ label: 'Functions', href: '/site/products/functions' }]
       },
       {
         title: 'Store any data type, no schema required',
         description:
-          'Store JSON objects, binary data, and streams without rigid schemas or serialization overhead. Attach metadata for additional context.',
+          'Store JSON objects, binary data, and streams with no rigid schema and no serialization overhead. Attach metadata for extra context.',
         href: PRODUCT_DOCS,
-        illustration: 'runtime',
-        illustrationLabel: 'A storage node with requests passing through it',
+        illustration: 'read-at-the-edge',
+        illustrationLabel: 'Code reading keys from KV Store, with text, JSON and blob values',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       }
     ]

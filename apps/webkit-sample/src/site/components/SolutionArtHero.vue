@@ -26,7 +26,7 @@
     kind="screen"
     media-align="end"
     :carousel="hasCarousel"
-    :carousel-label="hero.carouselLabel ?? 'Trusted by mission-critical workloads'"
+    :carousel-label="hero.carouselLabel ?? 'Trusted by teams running critical workloads'"
     :carousel-marks="hero.carouselMarks ?? []"
   >
     <Hero.Title
@@ -39,13 +39,13 @@
       <template #actions>
         <slot name="actions">
           <Button
-            label="Start Free"
+            label="Start free"
             kind="secondary"
             size="large"
             @click="goSignup"
           />
           <Button
-            label="Talk to a Specialist"
+            label="Talk to an expert"
             kind="outlined"
             size="large"
             href="#contact"

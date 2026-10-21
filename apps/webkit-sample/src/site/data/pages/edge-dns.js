@@ -16,19 +16,18 @@ const PILLARS = [
     icon: 'pi pi-globe',
     title: 'Global distributed architecture',
     description:
-      'Host authoritative DNS on globally distributed nameservers with automatic geographic redundancy, keeping domains accessible worldwide.'
+      'Host authoritative DNS on distributed nameservers with automatic geographic redundancy, so domains stay reachable worldwide.'
   },
   {
     icon: 'pi pi-lock',
     title: 'Enterprise-grade security',
     description:
-      'Native DDoS protection, DNSSEC authentication, and threat detection prevent poisoning, hijacking, and unauthorized zone access.'
+      'Built-in DDoS protection, DNSSEC, and threat detection block poisoning, hijacking, and unauthorized zone access.'
   },
   {
     icon: 'pi pi-cog',
     title: 'Manage zones your way',
-    description:
-      'Use an intuitive console or REST API to create, update, and manage DNS records programmatically.'
+    description: 'Create, update, and manage DNS records in the console or through the REST API.'
   }
 ]
 
@@ -37,7 +36,7 @@ const USE_CASES = [
     icon: 'pi pi-shopping-cart',
     title: 'E-commerce and payment platforms',
     description:
-      'Ensure zero DNS downtime during peak traffic and prevent DNS-based attacks that could compromise payment processing. Protect your payment systems with built-in DDoS protection and geographic redundancy for complete reliability.',
+      'Keep DNS available during peak traffic and block DNS-based attacks that could disrupt payment processing. Built-in DDoS protection and geographic redundancy keep payment systems reachable.',
     href: '/site/solutions/retail'
   },
   {
@@ -51,14 +50,14 @@ const USE_CASES = [
     icon: 'pi pi-cloud',
     title: 'SaaS and software platforms',
     description:
-      'Provide your customers with reliable, secure DNS through API integration. Scale to millions of queries without managing infrastructure or worrying about DNS failures.',
+      'Give your customers reliable, secure DNS through the API. Scale to millions of queries without managing infrastructure.',
     href: '/site/solutions/technology'
   },
   {
     icon: 'pi pi-video',
     title: 'Media and streaming services',
     description:
-      'Deliver content from edge locations globally with instant DNS failover. Support millions of concurrent viewers without DNS bottlenecks or service interruptions.',
+      'Deliver content globally with instant DNS failover. Support millions of concurrent viewers without DNS bottlenecks or interruptions.',
     href: '/site/solutions/streaming'
   }
 ]
@@ -68,13 +67,13 @@ const FAQ = [
     value: 'what-is',
     question: 'What is an authoritative DNS service?',
     answer:
-      'An authoritative DNS service stores the official DNS records for a domain and responds directly to DNS queries from users and applications. Unlike recursive resolvers that cache responses from other servers, authoritative DNS ensures accurate and up-to-date domain resolution. Edge DNS delivers authoritative DNS across globally distributed infrastructure, providing high availability, fast response times, and geographic redundancy.'
+      'An authoritative DNS service stores the official DNS records for a domain and responds directly to DNS queries from users and applications. Unlike recursive resolvers that cache responses from other servers, authoritative DNS ensures accurate and up-to-date domain resolution. Edge DNS delivers authoritative DNS from Azion’s distributed infrastructure, with high availability, fast response times, and geographic redundancy.'
   },
   {
     value: 'uptime',
     question: 'How does Edge DNS achieve 99.99% uptime?',
     answer:
-      'Edge DNS achieves high availability through geographic distribution, infrastructure redundancy, and automatic failover. It operates across multiple global locations and automatically routes queries to available servers if any location becomes unavailable, eliminating single points of failure and maintaining continuous DNS availability.'
+      'Edge DNS achieves high availability through geographic distribution, infrastructure redundancy, and automatic failover. It operates across multiple global data centers and automatically routes queries to available servers if any data center becomes unavailable. That removes single points of failure and keeps DNS available.'
   },
   {
     value: 'dnssec',
@@ -86,13 +85,13 @@ const FAQ = [
     value: 'vs-provider',
     question: 'How is Edge DNS different from my current DNS provider?',
     answer:
-      'Edge DNS combines authoritative DNS hosting with native security and performance built into the Azion Web Platform. Unlike traditional DNS providers, Edge DNS offers native DDoS protection, DNSSEC support, real-time threat detection, and global geographic distribution, all integrated into one platform for seamless management.'
+      'Edge DNS combines authoritative DNS hosting with security and performance built into the Azion Platform. Unlike traditional DNS providers, Edge DNS offers built-in DDoS protection, DNSSEC support, real-time threat detection, and global geographic distribution, all in one platform.'
   },
   {
     value: 'programmatic',
     question: 'Can I manage Edge DNS programmatically?',
     answer:
-      'Yes. Enterprise DNS services typically provide APIs for automation and infrastructure-as-code workflows. Edge DNS offers complete REST and GraphQL API access for zone creation, record management, DNSSEC configuration, and monitoring, allowing teams to automate DNS operations, integrate with CI/CD pipelines, and manage large-scale environments programmatically.'
+      'Yes. Edge DNS offers REST and GraphQL APIs for zone creation, record management, DNSSEC configuration, and monitoring. Use them to automate DNS operations, plug into CI/CD pipelines, and manage large environments.'
   },
   {
     value: 'ddos',
@@ -120,27 +119,27 @@ export const EDGE_DNS_PAGE = [
     kind: 'title-band',
     titleLength: 'long',
     eyebrow: 'Edge DNS',
-    title: 'Manage domains with secure, highly available authoritative DNS',
+    title: 'Secure, highly available authoritative DNS',
     description:
-      'Run your zones on Azion’s global infrastructure with DNSSEC, DDoS protection, and real-time query visibility on a single platform.',
+      'Run your zones on Azion’s global distributed infrastructure with DNSSEC, DDoS protection, and real-time query visibility.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every DNS setting in one zone',
     description:
-      'The nameservers you delegate to, the DNSSEC keys your provider needs and the records the zone answers with live together, served from every location once the zone is active.',
+      'The nameservers you delegate to, the DNSSEC keys your provider needs and the records the zone answers with live together, served from every data center once the zone is active.',
     actions: PRODUCT_HERO_ACTIONS,
     columns: 3,
     items: [
       {
         icon: 'pi pi-bolt',
-        title: 'Optimized global DNS performance',
+        title: 'Fast DNS answers worldwide',
         description:
-          'Point your domain at Azion’s nameservers, and automatic geographic routing resolves each query from the nearest location, under 10ms on average.',
+          'Point your domain at Azion’s nameservers, and automatic geographic routing resolves each query from the nearest data center, in under 10ms on average.',
         scene: { component: markRaw(EdgeDnsNameserverFragment) },
         href: PRODUCT_DOCS
       },
@@ -169,16 +168,16 @@ export const EDGE_DNS_PAGE = [
       {
         title: 'Authoritative DNS with enterprise uptime',
         description:
-          'Deploy your DNS on authoritative nameservers across the Azion Web Platform. Get 99.99% SLA uptime, automatic failover, real-time health monitoring, and instant propagation globally.',
+          'Run your DNS on authoritative nameservers across the Azion Platform. You get a 99.99% uptime SLA, automatic failover, real-time health monitoring, and instant global propagation.',
         href: PRODUCT_DOCS,
         illustration: 'global-network',
-        illustrationLabel: 'Nameservers spread across a global network of locations',
+        illustrationLabel: 'Nameservers spread across data centers worldwide',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
-        title: 'Native DDoS protection and threat detection',
+        title: 'Built-in DDoS protection and threat detection',
         description:
-          'Mitigate DNS flood attacks, amplification attempts, and malicious queries using intelligent traffic analysis, automatic rate limiting, and real-time threat detection. Every query is evaluated proactively, preventing abuse and protecting service availability without additional configuration.',
+          'Mitigate DNS floods, amplification attempts, and malicious queries with traffic analysis, automatic rate limiting, and real-time threat detection. Every query is evaluated proactively, with no additional configuration.',
         href: '/site/products/ddos-protection',
         illustration: 'dns-protection',
         illustrationLabel:

@@ -39,7 +39,7 @@
     {
       key: 'functions',
       title: 'Functions',
-      subtitle: 'Build ultra-low latency functions that run on the edge.',
+      subtitle: 'Build low-latency functions that run close to users.',
       locked: false
     },
     {

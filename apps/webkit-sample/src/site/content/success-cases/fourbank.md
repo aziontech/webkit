@@ -32,7 +32,7 @@ To ensure the best experience with the distributed infrastructure, Azion enginee
 
 “When everything started to travel through Azion, we gained a better understanding of everything that happens in the applications, enabling us to make action plans to deal with certain situations if they appear”, says Bornhausen.
 
-Another relevant impact is access control by geolocation. In just a few clicks in Real-Time Manager, FourBank engineers made security even more proactive and preventive, creating blocklists made up of countries whose traffic is unfeasible for business and poses risks to the platform.
+Another relevant impact is access control by geolocation. In just a few clicks in Console, FourBank engineers made security even more proactive and preventive, creating blocklists made up of countries whose traffic is unfeasible for business and poses risks to the platform.
 
 A key reason that led FourBank to tighten security was the ever present threat of DDoS. DDoS attacks are now mitigated by Azion’s firewall rules and DDoS Protection, which filters the most massive and sophisticated attacks without impacting good requests.
 

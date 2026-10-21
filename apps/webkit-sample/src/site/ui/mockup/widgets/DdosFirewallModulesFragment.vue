@@ -33,14 +33,14 @@
     {
       key: 'functions',
       title: 'Functions',
-      description: 'Build ultra-low latency functions that run on the edge.',
+      description: 'Build low-latency functions that run close to users.',
       locked: false
     },
     {
       key: 'network-shield',
       title: 'Network Shield',
       description:
-        'Create lists to configure a programmable security perimeter for inbound and outbound traffic at the edge.',
+        'Create lists to configure a programmable security perimeter for inbound and outbound traffic.',
       locked: false
     },
     {

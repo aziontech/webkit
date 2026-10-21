@@ -1,4 +1,6 @@
 import { FAQ, PRICING_REASONS, PRIMITIVE_GROUPS } from '../pricing.js'
+import { salesClosing } from '../product-pages.js'
+import { BUILD_CTA } from '../solutions.js'
 
 export const PRICING_PAGE = [
   {
@@ -7,7 +9,7 @@ export const PRICING_PAGE = [
     eyebrow: 'Pricing',
     title: 'Infrastructure without the waste',
     description:
-      'Azion was built differently from the ground up — distributed by design, extremely fast, and ready for the strictest compliance. No idle clusters, no capacity provisioned just in case. Scale from zero to mission-critical instantly and pay only for what you use.'
+      'Azion is distributed by design and built for strict compliance requirements. No idle clusters, no capacity provisioned just in case. Scale from zero to peak without cold starts, and pay only for what you use.'
   },
   { section: 'PricingPlans' },
   {
@@ -23,22 +25,13 @@ export const PRICING_PAGE = [
   { section: 'ComparePlans' },
   {
     section: 'PlatformDirectory',
-    eyebrow: 'Platform primitives',
-    title: 'Serverless AI-Native Primitives',
+    eyebrow: 'Platform building blocks',
+    title: 'Build, store, and secure in one platform',
     description:
-      'Enterprise-grade reliability, security and performance, without requiring specialized operational expertise.',
-    ariaLabel: 'Platform primitives',
+      'Enterprise-grade security and performance, without needing a specialized operations team.',
+    ariaLabel: 'Platform building blocks',
     groups: PRIMITIVE_GROUPS
   },
   { section: 'FaqSection', items: FAQ },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Build',
-    title: 'Build once.',
-    titleMuted: 'Run anywhere.',
-    description: 'Get a faster path to launch, less latency, and less infrastructure overhead.',
-    actions: [{ label: 'Start for free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  salesClosing(BUILD_CTA)
 ]

@@ -37,10 +37,10 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    eyebrow: 'Scale with Confidence',
-    title: 'Security and Compliance for High-Stakes Digital Experiences',
+    eyebrow: 'Compliance',
+    title: 'Meet Your Compliance Requirements',
     description:
-      "We're committed to making sure our customers and global partners can meet a wide range of compliance requirements.",
+      "Azion's certifications help customers and global partners meet a wide range of compliance requirements.",
     certifications: () => CERTIFICATIONS,
     more: () => ({ label: 'See more', href: '/site/compliance' }),
     ariaLabel: 'Compliance certifications',

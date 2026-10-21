@@ -1,3 +1,4 @@
+import { agentsClosing } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
 const TRUST_MARKS = [
@@ -96,7 +97,7 @@ const FAQ = [
     value: 'good-vercel-alternative',
     question: 'Is Azion a good Vercel alternative?',
     answer:
-      'Yes. Azion is a strong Vercel alternative for teams that want application delivery, distributed functions, object storage, key-value data, security, DNS, analytics, and observability on Azion Web Platform with cold-start-free scale.'
+      'Yes. Azion fits teams that want application delivery, distributed functions, object storage, key-value data, security, DNS, analytics, and observability on the Azion Web Platform, with cold-start-free scale.'
   },
   {
     value: 'projects-map',
@@ -164,8 +165,8 @@ export const VERCEL_ALTERNATIVE_PAGE = [
     description:
       'Map Vercel projects, preview deployments, Functions, Blob, Edge Config, Firewall, and Web Analytics to Azion. Keep your Git-based build and preview workflow, run functions without cold starts, and move one project at a time before you switch the domain.',
     actions: [
-      { label: 'Start Free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a Specialist', href: '#contact', kind: 'outlined', trailing: true }
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     art: {
       name: 'azion-to-vercel',
@@ -176,7 +177,7 @@ export const VERCEL_ALTERNATIVE_PAGE = [
   { section: 'CapabilityGrid', items: REASONS },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
   {
-    section: 'ComparisonTable',
+    section: 'CompareCompetitors',
     eyebrow: 'Comparison',
     title: 'How Azion compares with Vercel',
     rival: 'Vercel',
@@ -193,14 +194,5 @@ export const VERCEL_ALTERNATIVE_PAGE = [
     actions: [{ label: 'See the guide', href: '/site/docs' }]
   },
   { section: 'FaqSection', items: FAQ },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Secure',
-    title: 'Protected by default.',
-    titleMuted: 'Always on.',
-    description: 'Get stronger protection, less attack exposure, and less operational overhead.',
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  agentsClosing('Build once. Run everywhere.')
 ]

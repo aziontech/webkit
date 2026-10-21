@@ -15,7 +15,7 @@ const PILLARS = [
   {
     icon: 'pi pi-globe',
     title: 'Built-in reliability',
-    description: 'Distributed architecture with automatic failover keeps your AI running.'
+    description: 'Automatic failover on a distributed architecture keeps your AI running.'
   },
   {
     icon: 'pi pi-code',
@@ -63,13 +63,13 @@ const FAQ = [
     value: 'what-is',
     question: 'What is Azion AI Inference?',
     answer:
-      'Azion AI Inference is a serverless platform for deploying and running AI models on a distributed architecture. It provides an OpenAI-compatible API for easy migration, supports LLMs, VLMs, embeddings, and reranking models, and offers LoRA fine-tuning for domain customization. Scale automatically without GPU management while maintaining low-latency responses globally.'
+      'AI Inference runs AI models on Azion’s distributed infrastructure. It has an OpenAI-compatible API for easy migration, supports LLMs, VLMs, embeddings, and reranking models, and offers LoRA fine-tuning for your domain. It scales automatically, with no GPUs to manage and low-latency responses worldwide.'
   },
   {
     value: 'models',
     question: 'Which models can I run?',
     answer:
-      'Choose from a catalog of open-source models for text and code generation, vision-language tasks, embeddings, and reranking. The catalog evolves as new models become available, and you can fine-tune supported models with LoRA for your specific domain.'
+      'Choose from a catalog of open-source models for text and code generation, vision-language tasks, embeddings, and reranking. The catalog grows as new models arrive, and you can fine-tune supported models with LoRA for your domain.'
   },
   {
     value: 'openai-compatible',
@@ -81,7 +81,7 @@ const FAQ = [
     value: 'fine-tune',
     question: 'Can I fine-tune models?',
     answer:
-      'Yes. AI Inference supports LoRA (Low-Rank Adaptation) fine-tuning, allowing you to specialize models for your domain without full retraining. This reduces compute costs while improving accuracy for specific tasks like customer support, code generation, or domain-specific Q&A.'
+      'Yes. AI Inference supports LoRA (Low-Rank Adaptation) fine-tuning, so you can specialize a model for your domain without full retraining. That cuts compute costs and improves accuracy on tasks like customer support, code generation, or domain-specific Q&A.'
   },
   {
     value: 'rag',
@@ -99,13 +99,13 @@ const FAQ = [
     value: 'migrate',
     question: 'How do I migrate from Cloudflare Workers AI?',
     answer:
-      'Migration is straightforward due to OpenAI-compatible APIs on both platforms. Update your base URL to point to Azion AI Inference endpoints, migrate any LoRA adapters, and integrate with Azion Functions. If you use Cloudflare Vectorize, migrate to Azion SQL Database Vector Search for built-in vector storage.'
+      'Both platforms use OpenAI-compatible APIs, so migration is short. Update your base URL to point to Azion AI Inference endpoints, migrate any LoRA adapters, and integrate with Azion Functions. If you use Cloudflare Vectorize, migrate to Azion SQL Database Vector Search for built-in vector storage.'
   },
   {
     value: 'pricing',
     question: 'How does pricing compare to other platforms?',
     answer:
-      'AI Inference uses straightforward per-request pricing without abstract units like "neurons." You pay for inference requests based on model and token usage—no idle costs, no capacity commitments. This transparency makes cost forecasting predictable compared to neuron-based billing models.'
+      'AI Inference uses straightforward per-request pricing without abstract units like "neurons." You pay for inference requests based on model and token usage—no idle costs, no capacity commitments. That makes costs easier to forecast than neuron-based billing.'
   },
   {
     value: 'deploy',
@@ -121,19 +121,19 @@ export const AI_INFERENCE_PAGE = [
     kind: 'title-band',
     titleLength: 'long',
     eyebrow: 'AI Inference',
-    title: 'Global AI inference on managed infrastructure',
+    title: 'Run AI models close to your users',
     description:
-      'Build and deploy intelligent applications that run AI models close to your users — at any scale.',
+      'Deploy and scale AI applications on Azion’s distributed infrastructure, with an OpenAI-compatible API and no GPUs to manage.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'From a template to a running model',
     description:
-      'The starter you deploy, the model it loads and the function that calls it live in one workflow, shipped together to the same distributed infrastructure.',
+      'The starter you deploy, the model it loads and the function that calls it ship together in one workflow, to the same distributed infrastructure.',
     actions: PRODUCT_HERO_ACTIONS,
     columns: 3,
     items: [
@@ -170,7 +170,7 @@ export const AI_INFERENCE_PAGE = [
       {
         title: 'Deploy from your local environment',
         description:
-          'Build, debug, and ship AI workloads the way you already code, but with the scale of distributed infrastructure.',
+          'Build, debug, and ship AI workloads the way you already code, with the scale of Azion’s distributed infrastructure.',
         href: PRODUCT_DOCS,
         illustration: 'quick-start-with-templates',
         illustrationLabel: 'A project going from a starter template to a live deployment',
@@ -179,11 +179,10 @@ export const AI_INFERENCE_PAGE = [
       {
         title: 'Fine-tune with LoRA',
         description:
-          'Adapt model outputs to your domain using Low-Rank Adaptation (LoRA), improving accuracy for specialized tasks while reducing compute costs—without full model retraining.',
+          'Adapt model outputs to your domain with Low-Rank Adaptation (LoRA). Accuracy improves on specialized tasks and compute costs drop, with no full model retraining.',
         href: '/site/solutions/ai',
-        illustration: 'ai-applications',
-        illustrationLabel:
-          'An application calling AI models that run on distributed infrastructure',
+        illustration: 'models-and-lora',
+        illustrationLabel: 'A model adapted with LoRA, restyling an image from a few lines of code',
         actions: [{ label: 'AI solutions', href: '/site/solutions/ai' }]
       }
     ]

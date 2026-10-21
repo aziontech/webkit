@@ -1,6 +1,6 @@
 ### Introduction
 
-In a landscape of growing digital threats, security headers like HSTS and CSP are essential to protect web applications and their users. However, many domains still do not implement these protections effectively. This article aims to provide a technical and practical guide to implement HSTS and CSP at the edge using Azion **Applications**, with Rules Engine examples and a checklist to ensure a successful rollout.
+In a landscape of growing digital threats, security headers like HSTS and CSP are essential to protect web applications and their users. However, many domains still do not implement these protections effectively. This article aims to provide a technical and practical guide to implement HSTS and CSP close to users using Azion **Applications**, with Rules Engine examples and a checklist to ensure a successful rollout.
 
 ---
 
@@ -12,11 +12,11 @@ In a landscape of growing digital threats, security headers like HSTS and CSP ar
 
 ---
 
-### Benefits of applying HSTS + CSP at the edge with Azion
+### Benefits of applying HSTS + CSP close to users with Azion
 
-- **Delivery with reduced latency**: headers are applied at the first point of presence, reducing latency and protecting before requests reach the origin.
+- **Delivery with reduced latency**: headers are applied at the first data center, reducing latency and protecting before requests reach the origin.
 - **Instant deployments**: changes can be applied and rolled back quickly via Rules Engine, without the need for changes to the origin infrastructure.
-- **Continuous protection**: even if the origin is unavailable, security policies continue to be applied at the edge.
+- **Continuous protection**: even if the origin is unavailable, security policies continue to be applied close to users.
 
 ---
 
@@ -24,7 +24,7 @@ In a landscape of growing digital threats, security headers like HSTS and CSP ar
 
 - **Connections forced to HTTPS**: eliminates downgrade risks.
 - **XSS prevention**: blocking of malicious scripts with CSP.
-- **Reduced latency**: headers delivered directly at the edge, reducing the time to apply policies.
+- **Reduced latency**: headers delivered close to users, reducing the time to apply policies.
 - **Less malicious traffic**: blocking malicious requests before they reach the origin.
 - **Better compliance posture**: security headers help meet regulatory requirements and audits.
 
@@ -166,6 +166,6 @@ Do you want me to generate Azion rules ready to import in your preferred format 
 **Expected impact**:
 
 - **Before**: Without HSTS and CSP. higher exposure to downgrade, MITM and XSS attacks.
-- **After**: HTTPS enforced. HSTS and CSP applied at the edge. Lower latency, higher security and regulatory compliance.
+- **After**: HTTPS enforced. HSTS and CSP applied close to users. Lower latency, higher security and regulatory compliance.
 
 ---

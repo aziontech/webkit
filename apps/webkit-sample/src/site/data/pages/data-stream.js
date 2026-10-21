@@ -15,7 +15,7 @@ const PILLARS = [
   {
     icon: 'pi pi-bolt',
     title: 'Detect threats in seconds',
-    description: 'Feed your SIEM with near real-time data. Accelerate investigation and response.'
+    description: 'Feed your SIEM with near real-time data to investigate and respond faster.'
   },
   {
     icon: 'pi pi-shield',
@@ -36,7 +36,7 @@ const USE_CASES = [
     icon: 'pi pi-shield',
     title: 'Automate threat response',
     description:
-      'Correlate events across applications to update protection rules automatically. Reduce security team workload.',
+      'Correlate events across applications to update protection rules automatically and cut security team workload.',
     href: '/site/solutions/security'
   },
   {
@@ -50,7 +50,7 @@ const USE_CASES = [
     icon: 'pi pi-eye',
     title: 'Protect from OWASP attacks',
     description:
-      'Block OWASP Top 10 and zero-day attacks with WAAP. Simplify security without performance trade-offs.',
+      'Block OWASP Top 10 and zero-day attacks with WAAP, without trading away performance.',
     href: '/site/solutions/security'
   },
   {
@@ -67,13 +67,13 @@ const FAQ = [
     value: 'vs-cloud-logging',
     question: 'How is Data Stream different from native cloud logging services?',
     answer:
-      "Data Stream delivers data from Azion's global infrastructure directly to your existing tools—AWS Kinesis, Splunk, S3, BigQuery, Elasticsearch, and more—in near real-time. Unlike vendor-specific logging, it works across your entire stack without lock-in, with built-in filtering, sampling, and multi-destination support from a single configuration."
+      'Data Stream delivers data from Azion’s distributed infrastructure directly to your existing tools—AWS Kinesis, Splunk, S3, BigQuery, Elasticsearch, and more—in near real-time. Unlike vendor-specific logging, it works across your entire stack without lock-in, with built-in filtering, sampling, and multi-destination support from a single configuration.'
   },
   {
     value: 'delivery-speed',
     question: 'How fast is data delivery?',
     answer:
-      'Data Stream delivers logs in near real-time with a maximum interval of 60 seconds or when 2,000 records are accumulated, whichever comes first. This ensures timely data availability for security monitoring, compliance, and analytics while optimizing throughput and reducing overhead.'
+      'Data Stream delivers logs in near real time, at most every 60 seconds or once 2,000 records accumulate, whichever comes first. Data stays timely for security monitoring, compliance, and analytics, and throughput stays efficient.'
   },
   {
     value: 'connectors',
@@ -85,13 +85,13 @@ const FAQ = [
     value: 'filter-customize',
     question: 'Can I filter and customize the data before streaming?',
     answer:
-      'Yes. Data Stream allows you to select specific variables using ready-made templates or create custom configurations. You can filter by domains, apply sampling to control volume, and choose specifically, field by field the data before delivery. This helps reduce costs and ensures you stream only the data you need.'
+      'Yes. Select specific variables with ready-made templates or build a custom configuration. Filter by domain, apply sampling to control volume, and pick the data field by field before delivery. That lowers costs and streams only the data you need.'
   },
   {
     value: 'high-traffic',
     question: 'How does Data Stream handle high traffic volumes?',
     answer:
-      "Data Stream scales automatically with your traffic using Azion's distributed global architecture. You can choose 100% data capture or apply optional sampling to manage volume. The service handles traffic spikes with no configuration changes or performance degradation."
+      'Data Stream scales automatically with your traffic on Azion’s distributed architecture. Choose 100% data capture or optional sampling to manage volume. Traffic spikes need no configuration changes and cause no performance degradation.'
   },
   {
     value: 'compliance',
@@ -103,7 +103,7 @@ const FAQ = [
     value: 'siem',
     question: 'How do I integrate Data Stream with my SIEM?',
     answer:
-      "Configure a stream in Azion Console or via API, select your data source (Applications, WAF Events, etc.), choose a template or customize variables, and connect to your SIEM endpoint (Splunk, IBM QRadar, Datadog, etc.). The integration takes minutes to set up. See our SIEM integration guide for detailed steps. Want just receive raw logs in S3? No problem. Just setup the connector and you're all good."
+      'Configure a stream in Azion Console or via API, select your data source (Applications, WAF Events, etc.), choose a template or customize variables, and connect to your SIEM endpoint (Splunk, IBM QRadar, Datadog, etc.). Setup takes minutes. See our SIEM integration guide for detailed steps. Only need raw logs in S3? Set up the connector and you are done.'
   },
   {
     value: 'pricing',
@@ -132,7 +132,7 @@ export const DATA_STREAM_PAGE = [
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every stream setting in one configuration',
@@ -145,7 +145,7 @@ export const DATA_STREAM_PAGE = [
         icon: 'ai ai-variables',
         title: 'Unified data collection',
         description:
-          'Collect event data from Applications, Functions, WAF Events, and Activity History, and send only the fields you need with templates or custom mappings.',
+          'Collect event data from Applications, Functions, WAF Events, and Activity History. Send only the fields you need with templates or custom mappings.',
         scene: { component: markRaw(DataStreamSourceFragment) },
         href: PRODUCT_DOCS
       },
@@ -153,7 +153,7 @@ export const DATA_STREAM_PAGE = [
         icon: 'pi pi-filter',
         title: 'Reduce SIEM costs',
         description:
-          'Filter and sample events before delivery to reduce data volume and lower your SIEM ingestion costs.',
+          'Filter and sample events before delivery to cut data volume and lower your SIEM ingestion costs.',
         scene: { component: markRaw(DataStreamSamplingFragment) },
         href: PRODUCT_DOCS
       },
@@ -161,7 +161,7 @@ export const DATA_STREAM_PAGE = [
         icon: 'pi pi-sitemap',
         title: 'Integrate your existing stack',
         description:
-          'Stream to AWS Kinesis, Splunk, S3, Elasticsearch, Datadog, and more. No workflow changes.',
+          'Stream to AWS Kinesis, Splunk, S3, Elasticsearch, Datadog, and more, with no workflow changes.',
         scene: { component: markRaw(DataStreamConnectorFragment) },
         href: PRODUCT_DOCS
       }
@@ -174,7 +174,7 @@ export const DATA_STREAM_PAGE = [
       {
         title: 'Stream, filter, and route event data',
         description:
-          'Run continuous streaming with full capture or optional sampling. Filter and transform events before routing them to SIEM, analytics, and BI platforms.',
+          'Run continuous streaming with full capture or optional sampling. Filter and transform events, then route them to SIEM, analytics, and BI platforms.',
         href: PRODUCT_DOCS,
         illustration: 'live-debugging',
         illustrationLabel: 'A time window of streamed requests, errors and events',
@@ -185,8 +185,8 @@ export const DATA_STREAM_PAGE = [
         description:
           'Stream structured event data to SIEM, analytics, storage, and HTTP endpoints, including Splunk, Datadog, BigQuery, S3, and Azure Monitor. Customize payload format, batching, and delivery intervals to match your existing workflows.',
         href: '/site/products/web-application-firewall',
-        illustration: 'automate-threat-mitigation',
-        illustrationLabel: 'Event data passing along a line of destination tools',
+        illustration: 'stream-security-events-for-investigation-and-response',
+        illustrationLabel: 'Event data streamed in under 40 seconds to APIs, dashboards, SIEM and other interfaces',
         actions: [
           { label: 'Web Application Firewall', href: '/site/products/web-application-firewall' }
         ]
@@ -196,7 +196,7 @@ export const DATA_STREAM_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'Power critical use cases with real-time data',
+    title: 'Real-time data for security and performance',
     description:
       'Put Data Stream behind any application and send its logs and events from Azion’s distributed infrastructure to the tools you already run. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },

@@ -30,13 +30,13 @@
   const RECOMMENDED = [
     {
       title: 'Next.js Boilerplate',
-      description: 'Deploy a full-stack Next.js application to the edge in a few steps.',
+      description: 'Deploy a full-stack Next.js application in a few steps.',
       icon: 'ai-cor ai-next',
       markClass: DARK_INK
     },
     {
       title: 'React Boilerplate',
-      description: 'Automate your React.js deployment process on the edge.',
+      description: 'Automate your React.js deployments.',
       icon: 'ai-cor ai-react',
       markClass: ''
     },
@@ -52,7 +52,7 @@
     {
       key: 'ai-inference-starter',
       title: 'AI Inference Starter Kit',
-      description: 'Create an application running AI models at the edge.'
+      description: 'Create an application that runs AI models close to users.'
     },
     {
       key: 'nextjs-ai-chatbot',
@@ -70,13 +70,13 @@
     },
     {
       title: 'JavaScript Starter',
-      description: 'Run plain JavaScript at the edge — no framework, just a handler.',
+      description: 'Run plain JavaScript close to users — no framework, just a handler.',
       icon: 'ai-cor ai-js',
       markClass: ''
     },
     {
       title: 'TypeScript Starter',
-      description: 'Run a TypeScript handler at the edge, compiled on build.',
+      description: 'Run a TypeScript handler close to users, compiled on build.',
       icon: 'ai-cor ai-ts',
       markClass: ''
     }

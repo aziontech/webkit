@@ -17,7 +17,7 @@ For NZN, delivering fast access to news, videos, and other digital content is a 
 
 Beyond performance, NZN also needed to maintain high availability during traffic spikes and adverse scenarios such as DDoS attacks, which grew by 50% in the first half of 2020[3]. These are challenges that conventional architectures are not designed to handle efficiently.
 
-After evaluating leading global technology providers focused on innovation and service performance, NZN chose the **Azion Platform**, which offers more than **30 points of presence in Brazil** and the capabilities required for the country’s largest vertical content creator to keep evolving.
+After evaluating leading global technology providers focused on innovation and service performance, NZN chose the **Azion Platform**, which offers more than **30 data centers in Brazil** and the capabilities required for the country’s largest vertical content creator to keep evolving.
 
 ## Solution
 
@@ -31,7 +31,7 @@ To address these challenges, NZN’s infrastructure team decided to adopt a glob
 
 In the first week of its partnership with Azion, NZN created a deployment plan to launch more than **100 Applications** in just one month. Since then, the company has continued to expand, with approximately **200 applications** currently running on the **Azion Platform**.
 
-Azion’s **serverless distributed computing model** simplified infrastructure management and enabled NZN to handle **more than 90% of requests directly on the edge**, significantly reducing infrastructure costs.
+Azion’s **serverless distributed computing model** simplified infrastructure management and enabled NZN to handle **more than 90% of requests close to users**, significantly reducing infrastructure costs.
 
 Beyond cost optimization, distributing workloads across Azion’s infrastructure improved user experience, including a **50% reduction in content loading time** across NZN’s websites.
 

@@ -5,13 +5,13 @@ export const PARTNERS_PAGE = [
     section: 'HeroForm',
     title: 'Grow as an Azion Partner',
     description:
-      "Join Azion's global partner ecosystem and unlock new business opportunities with a platform built to accelerate, protect, and scale modern applications.",
+      "Join Azion's global partner program and offer customers a platform that speeds up, protects, and scales their applications.",
     carouselMarks: [],
     formLabel: 'Become a Partner',
     roles: PARTNER_ROLES.map((role) => ({ value: role, label: role })),
     labels: {
       email: 'E-mail:',
-      rolePlaceholder: 'Please Select',
+      rolePlaceholder: 'Select your role',
       company: 'Company name',
       phone: 'Phone number:',
       submit: "Let's talk"

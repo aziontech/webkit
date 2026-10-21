@@ -15,20 +15,19 @@ const PILLARS = [
   {
     icon: 'ai ai-edge-functions',
     title: 'Functions',
-    description:
-      'Build discrete programmable logic in your web applications on the Azion Web Platform, closer to your users and devices.'
+    description: 'Run your own code inside your web applications, close to users and devices.'
   },
   {
     icon: 'ai ai-tiered-cache',
     title: 'Cache',
     description:
-      'Enable an additional cache layer that reduces traffic to your origin, improving performance and availability.'
+      'Add a cache layer that reduces traffic to your origin and improves performance and availability.'
   },
   {
     icon: 'ai ai-load-balancer',
     title: 'Load Balancer',
     description:
-      'Distribute traffic across your origins, ensuring optimal reliability and network congestion control.'
+      'Distribute traffic across your origins for reliability and to control network congestion.'
   }
 ]
 
@@ -36,8 +35,7 @@ const USE_CASES = [
   {
     icon: 'pi pi-shield',
     title: 'Build a Zero Trust security model on a distributed architecture',
-    description:
-      'Protect your application against sophisticated attacks like BGP hijacking and DDoS.',
+    description: 'Protect your application against attacks like BGP hijacking and DDoS.',
     href: '/site/solutions/security'
   },
   {
@@ -49,15 +47,14 @@ const USE_CASES = [
   {
     icon: 'ai ai-edge-application',
     title: 'Build sites on a distributed architecture',
-    description:
-      'Process directly in our global points of presence without reaching any origin infrastructure.',
+    description: "Process requests in Azion's data centers without reaching your origin.",
     href: '/site/solutions/performance'
   },
   {
     icon: 'pi pi-video',
     title: 'Accelerate delivery',
     description:
-      'Deliver high-resolution video streaming content to your application by caching it closer to your users.',
+      'Deliver high-resolution video to your application by caching it close to your users.',
     href: '/site/solutions/streaming'
   }
 ]
@@ -67,43 +64,43 @@ const FAQ = [
     value: 'what-is',
     question: 'What is Applications?',
     answer:
-      'Applications is the Azion product for building and running web applications on the Azion Web Platform. It processes incoming requests through configurable business rules, including request rewriting, header manipulation, and cache control.'
+      'Applications is where you build and run web applications on the Azion Web Platform. It processes incoming requests through configurable business rules, including request rewriting, header changes, and cache control.'
   },
   {
     value: 'modules',
     question: 'What modules can I integrate with Applications?',
     answer:
-      'Applications serves as a foundation for integrated modules, including Functions, Load Balancer, Image Processor, and Cache. You can enable modules on demand with comprehensive application controls.'
+      'Applications is the foundation for Functions, Load Balancer, Image Processor, and Cache. You can turn modules on when you need them.'
   },
   {
     value: 'rules-engine',
     question: 'How does Rules Engine work?',
     answer:
-      'The Rules Engine evaluates conditions and applies behaviors including cache bypass, origin redirect, and generation of customized responses. You can configure no-code logic for cookie handling, response modification, and device-based behavior.'
+      'Rules Engine evaluates conditions and applies behaviors such as cache bypass, origin redirect, and custom responses. You can set up no-code logic for cookie handling, response changes, and device-based behavior.'
   },
   {
     value: 'multiple-origins',
     question: 'Can Applications connect to multiple origins?',
     answer:
-      'Yes. The platform establishes connections with multiple external services, including web servers, on-premises and cloud services, and AI model providers through flexible addressing.'
+      'Yes. Applications connects to web servers, on-premises and cloud services, and AI model providers through flexible addressing.'
   },
   {
     value: 'protocols',
     question: 'What protocols are supported?',
     answer:
-      'Applications supports HTTP/1.1, HTTP/2, and HTTP/3 with QUIC. You can configure protocol selection, custom timeouts, and persistent connections for optimal performance.'
+      'Applications supports HTTP/1.1, HTTP/2, and HTTP/3 with QUIC. You can set the protocol, custom timeouts, and persistent connections to tune performance.'
   },
   {
     value: 'ipv6',
     question: 'Does Applications support IPv6?',
     answer:
-      'Yes. Enterprise-grade features support IPv6, mandatory TLS enforcement, HMAC authentication, and compliance requirements for production workloads.'
+      'Yes. Enterprise-grade features cover IPv6, mandatory TLS, HMAC authentication, and compliance requirements for production workloads.'
   },
   {
     value: 'deploy',
     question: 'How do I deploy an application?',
     answer:
-      'You can deploy applications from Git repositories with continuous deployment, use the Azion CLI, or configure directly in the console. Marketplace solutions also accelerate development with pre-built resources.'
+      'You can deploy applications from Git repositories with continuous deployment, use the Azion CLI, or configure directly in the console. Marketplace solutions add pre-built resources to speed up development.'
   }
 ]
 
@@ -115,12 +112,12 @@ export const APPLICATIONS_PAGE = [
     eyebrow: 'Applications',
     title: 'Build and run distributed web applications',
     description:
-      'Applications lets you build your web applications to run on the Azion Web Platform.',
+      'Build web applications and run them on the Azion Web Platform, with rules that control every request.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'The logic behind every request, in one application',
@@ -160,9 +157,9 @@ export const APPLICATIONS_PAGE = [
     kind: 'solutions',
     bands: [
       {
-        title: 'Module integration and application orchestration',
+        title: 'Add modules as you need them',
         description:
-          'Applications serves as a foundation for integrated modules, including Functions, Load Balancer, Image Processor, and Cache. The system provides on-demand module management with comprehensive application controls, including custom error responses and device group adaptation. Enterprise-grade features support IPv6, mandatory TLS enforcement, HMAC authentication, and compliance requirements for production workloads.',
+          'Applications is the foundation for Functions, Load Balancer, Image Processor, and Cache. Turn modules on when you need them, with custom error responses and device group adaptation. Enterprise-grade features cover IPv6, mandatory TLS, HMAC authentication, and compliance requirements for production workloads.',
         href: '/site/products/functions',
         illustration: 'build-applications',
         illustrationLabel:
@@ -170,9 +167,9 @@ export const APPLICATIONS_PAGE = [
         actions: [{ label: 'Functions', href: '/site/products/functions' }]
       },
       {
-        title: 'Origin management and workload distribution',
+        title: 'Connect origins and distribute traffic',
         description:
-          'The platform establishes connections with multiple external services, including web servers, on-premises and cloud services, and AI model providers through flexible addressing. Workload distribution optimizes traffic routing based on origin availability, custom timeouts, and protocol selection, including HTTP/3 with QUIC. Integrated marketplace solutions accelerate development with pre-built security resources, A/B testing, and data processing for rapid application deployment.',
+          'Applications connects to web servers, on-premises and cloud services, and AI model providers through flexible addressing. Traffic routing follows origin availability, custom timeouts, and protocol selection, including HTTP/3 with QUIC. Marketplace solutions add pre-built security resources, A/B testing, and data processing.',
         href: '/site/products/load-balancer',
         illustration: 'retail-application-modernization',
         illustrationLabel:
@@ -184,7 +181,7 @@ export const APPLICATIONS_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'Use cases',
+    title: 'What teams build with Applications',
     description:
       'Put Applications in front of any origin and decide what happens to each request on Azion’s distributed infrastructure, with the rules and modules you configure. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },

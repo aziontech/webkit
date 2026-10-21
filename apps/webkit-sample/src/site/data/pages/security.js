@@ -5,47 +5,46 @@ import { solutionPage } from './solution.js'
 
 const HERO = {
   eyebrow: 'Application Security',
-  title: 'Protect your applications and APIs at the speed of AI',
+  title: 'Protect applications and APIs from AI-driven attacks',
   description:
-    'A unified, globally distributed security platform that stops DDoS attacks, exploits, malicious bots, fraud, and AI-driven threats before they reach your applications and APIs.'
+    'One security platform on Azion’s distributed infrastructure. It stops DDoS attacks, exploits, malicious bots, fraud, and AI-driven threats before they reach your applications and APIs.'
 }
 
 const CAPABILITIES = [
   {
     icon: 'pi pi-globe',
-    title: 'Planet-scale defense',
+    title: 'Defense at global scale',
     description:
-      'Battle-tested against the largest attacks. Always-on mitigation autonomously blocks multiple hyper-volumetric attacks every day across our globally distributed infrastructure.'
+      'Always-on mitigation blocks multiple hyper-volumetric attacks every day across Azion’s global distributed infrastructure.'
   },
   {
     icon: 'pi pi-shield',
     title: 'Instant hardening',
     description:
-      'Active protection by default. Deploy enterprise-grade WAF, rate limiting, mTLS, Origin Shield, and Bot Manager with a single DNS change — no agents, no appliances.'
+      'Active protection by default. Deploy enterprise-grade WAF, rate limiting, mTLS, Origin Shield, and Bot Manager with a single DNS change. No agents, no appliances.'
   },
   {
     icon: 'pi pi-microchip-ai',
-    title: 'AI-native programmability',
+    title: 'Programmable for AI agents',
     description:
-      'Real-time programmability for agentic AI. Give AI agents the security controls and telemetry they need — build your own workflows or start from pre-built configurations.'
+      'Give AI agents the security controls and telemetry they need in real time. Build your own workflows or start from pre-built configurations.'
   },
   {
     icon: 'pi pi-verified',
     title: 'No zero-day exploits in 10 years',
     description:
-      'Our unique detection and blocking engine is built to stop zero-day attacks, blocking unknown threats before they reach your code without custom rules or emergency patches.'
+      'Azion’s detection and blocking engine stops zero-day attacks. Unknown threats are blocked before they reach your code, with no custom rules or emergency patches.'
   },
   {
     icon: 'pi pi-objects-column',
     title: 'Unified control plane',
     description:
-      'Manage WAF, API security, and bot protection from the console, API, Terraform, or CLI — one policy engine, not stitched-together tools.'
+      'Manage WAF, API security, and bot protection from the console, API, Terraform, or CLI. One policy engine, not stitched-together tools.'
   },
   {
     icon: 'pi pi-bolt',
     title: 'No performance trade-off',
-    description:
-      'Inline protection that boosts application performance — applications stay highly available and run faster than any cloud.'
+    description: 'Inline protection that keeps applications highly available and fast.'
   }
 ]
 
@@ -53,34 +52,34 @@ const USE_CASES = {
   title: 'Stop Threats Before They Reach Your Applications',
   items: [
     {
-      illustration: 'implement-api-gateway-security',
+      illustration: 'request-inspection',
       title: 'Web Application and API Protection',
       description:
-        'Protect web applications and APIs with WAF, Bot Manager, and DDoS Protection working as one — consistent enforcement on every request, without tool sprawl.'
+        'Protect web applications and APIs with WAF, Bot Manager, and DDoS Protection working together. Enforcement is consistent on every request, with no tool sprawl.'
     },
     {
-      illustration: 'automate-threat-mitigation',
+      illustration: 'detect-and-classify',
       title: 'Bot Management',
       description:
-        'Detect, classify, and control automated traffic before it reaches your applications — block malicious bots while allowing real users and trusted bots through.'
+        'Detect, classify, and control automated traffic before it reaches your applications. Block malicious bots and let real users and trusted bots through.'
     },
     {
-      illustration: 'distributed-apis',
+      illustration: 'api-endpoints',
       title: 'AI and API Gateway',
       description:
-        'Secure and control AI and API traffic with Azion as your gateway — enforcing authentication, rate limiting, input validation, and consistent policies across every request.'
+        'Use Azion as the gateway for AI and API traffic. Enforce authentication, rate limiting, input validation, and consistent policies on every request.'
     },
     {
-      illustration: 'protect-financial-applications',
+      illustration: 'intent-to-policy',
       title: 'Fraud and Abuse Prevention',
       description:
-        'Stop credential stuffing, account takeover, scraping, and checkout abuse with AI-driven bot classification — blocking malicious automation while letting real users and trusted bots through.'
+        'Stop credential stuffing, account takeover, scraping, and checkout abuse with AI-driven bot classification. Malicious automation is blocked; real users and trusted bots get through.'
     },
     {
       illustration: 'dns-protection',
       title: 'DNS Protection',
       description:
-        'Keep domains online and trusted with authoritative Edge DNS — native DDoS protection at the DNS layer and DNSSEC that blocks spoofing, poisoning, and hijacking, with high availability built in.'
+        'Keep domains online and trusted with authoritative Edge DNS. DDoS protection at the DNS layer and DNSSEC block spoofing, poisoning, and hijacking, with high availability built in.'
     }
   ]
 }
@@ -127,7 +126,7 @@ const FAQ = [
     value: 'q6',
     question: 'How does AI threat detection and takedown work?',
     answer:
-      "Azion uses AI across its security products — and, beyond that, lets you build your own AI agents. Using AI models, these agents can detect phishing, abuse, and malicious content and automate takedown, running on Azion's distributed infrastructure."
+      "Azion uses AI across its security products and lets you build your own AI agents. Using AI models, these agents detect phishing, abuse, and malicious content and automate takedown, running on Azion's distributed infrastructure."
   },
   {
     value: 'q7',
@@ -141,7 +140,7 @@ const CTA = {
   eyebrow: 'Secure',
   title: 'Protected by default.',
   titleMuted: 'Always on.',
-  description: 'Get stronger protection, less attack exposure, and less operational overhead.'
+  description: 'Stronger protection, less attack exposure, less operational drag.'
 }
 
 export const SECURITY_PAGE = solutionPage({
@@ -150,7 +149,7 @@ export const SECURITY_PAGE = solutionPage({
   useCases: USE_CASES,
   stack: STACK,
   quotes: QUOTES,
-  primitivesTitle: 'All the Security Primitives You Need',
+  primitivesTitle: 'All the Security Tools You Need',
   network: EARTH_NETWORK,
   faq: FAQ,
   cta: CTA

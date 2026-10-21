@@ -4,7 +4,7 @@
 
 ## Challenge
 
-Pernambucanas is a Brazilian retailer composed of hundreds of stores that sell Casual Fashion, Bed & Bath, and Appliances, among other categories. After starting an ambitious digital transformation journey, Pernambucanas needed to further strengthen its cybersecurity posture.
+Pernambucanas is a Brazilian retailer composed of hundreds of stores that sell Casual Fashion, Bed & Bath, and Appliances, among other categories. After starting an ambitious modernization journey, Pernambucanas needed to further strengthen its cybersecurity posture.
 
 There are several cyber threats targeting e-commerce platforms that can dramatically impact a company’s reputation, potentially causing service outages, credit card fraud, loss of sales, and theft of customers’ sensitive data.
 
@@ -29,7 +29,7 @@ To build a strong defensive posture, Pernambucanas implemented **Firewall**, tog
 
 Additionally, Pernambucanas enhanced bot management practices by integrating **Radware Bot Manager** through **Functions** on the **Azion Platform**, leveraging programmable security capabilities. Radware Bot Manager uses multiple classification techniques, including machine learning, to detect and mitigate sophisticated bad bots, including human-like bots.
 
-To strengthen its cybersecurity intelligence, Pernambucanas also adopted **Data Streaming**, which provides its security team with real-time insights and event data from its **Applications**. All information is collected continuously and automatically transmitted to its infrastructure through **Connectors**.
+To strengthen its cybersecurity intelligence, Pernambucanas also adopted **Data Stream**, which provides its security team with real-time insights and event data from its **Applications**. All information is collected continuously and automatically transmitted to its infrastructure through **Connectors**.
 
 ## Results and impacts
 
@@ -37,13 +37,13 @@ In the first six months using **Firewall**, Pernambucanas automatically blocked 
 
 By using **Radware Bot Manager**, the Pernambucanas team gained automated monitoring, detection, and mitigation of malicious bots through an intelligent decision engine. All events can be monitored in real time using APIs or an out-of-path mode.
 
-Improving its cybersecurity observability, **Data Streaming** processed approximately **1.4 billion requests** and transferred about **1.6 TB of data in a single month**. These detailed application and security events are analyzed through integration with Pernambucanas’s existing analytics stack, enabling more informed decision-making.
+Improving its cybersecurity observability, **Data Stream** processed approximately **1.4 billion requests** and transferred about **1.6 TB of data in a single month**. These detailed application and security events are analyzed through integration with Pernambucanas’s existing analytics stack, enabling more informed decision-making.
 
 To maximize the value of **Firewall** and its capabilities, Pernambucanas relied on **Azion Mission Critical Support**, which helped its team design effective firewall rules, conduct onboarding and training sessions, and implement best practices.
 
 ## About Pernambucanas
 
-Established in 1908, Pernambucanas Group offers a wide range of products, including fashion, bed & bath, appliances, and electronics, to customers across Brazil. For more than 110 years, the company has continued evolving through digital transformation.
+Established in 1908, Pernambucanas Group offers a wide range of products, including fashion, bed & bath, appliances, and electronics, to customers across Brazil. For more than 110 years, the company has continued evolving through modernization.
 
 In 2020, Pernambucanas’s e-commerce platform grew **1,081%**, advancing its **Fígital** strategy — the integration of digital and physical experiences.
 

@@ -7,7 +7,7 @@ const HERO = {
   eyebrow: 'Media and Streaming Delivery',
   title: 'Stream high-quality media and scale to millions',
   description:
-    "Reach audiences worldwide through Azion's global infrastructure, with low latency, high availability, and lower streaming costs."
+    "Reach audiences worldwide from Azion's distributed infrastructure, with low latency, high availability, and lower streaming costs."
 }
 
 const CAPABILITIES = [
@@ -35,13 +35,13 @@ const USE_CASES = {
   title: 'Live Events and Video Libraries, on One Platform',
   items: [
     {
-      illustration: 'global-network',
+      illustration: 'content-and-media-delivery-globe',
       title: 'Live Streaming',
       description:
         'Azion can pull HLS or MPEG-DASH streams straight from your origin, or you can push your live signal from your encoder to Azion. Either way, origin requests stay flat as your audience grows from thousands to millions in minutes.'
     },
     {
-      illustration: 'runtime',
+      illustration: 'content-and-media-delivery',
       title: 'Video on Demand (VOD)',
       description:
         "Serve your video library stored on Azion or in your own storage. Azion's CDN caches segments near your audience so playback starts sooner, and access to paid content can be validated per request."
@@ -109,7 +109,7 @@ export const STREAMING_PAGE = solutionPage({
   useCases: USE_CASES,
   stack: STACK,
   quotes: QUOTES,
-  primitivesTitle: 'All the Platform Primitives You Need',
+  primitivesTitle: 'Everything You Need to Stream',
   network: EARTH_NETWORK,
   faq: FAQ,
   cta: CTA

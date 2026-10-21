@@ -5,9 +5,9 @@ import FirewallModulesFragment from '../../ui/mockup/widgets/FirewallModulesFrag
 import FirewallRulesOrderFragment from '../../ui/mockup/widgets/FirewallRulesOrderFragment.vue'
 import {
   PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
   PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
+  PRODUCT_HERO_ACTIONS,
+  PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
@@ -22,13 +22,13 @@ const PILLARS = [
     icon: 'pi pi-code',
     title: 'Extensible with Functions',
     description:
-      'Run custom JavaScript security code and marketplace integrations directly at global points of presence.'
+      'Run custom JavaScript security code and marketplace integrations on Azion’s distributed infrastructure.'
   },
   {
     icon: 'pi pi-sync',
     title: 'Real-time synchronization',
     description:
-      'Rules sync automatically across every point of presence, with SIEM integration for continuous threat intelligence.'
+      'Rules sync automatically across every data center. SIEM integration keeps threat intelligence flowing.'
   }
 ]
 
@@ -41,9 +41,9 @@ const USE_CASES = [
   },
   {
     icon: 'pi pi-check-circle',
-    title: 'Always deliver the best experience to customers',
+    title: 'Stay available for every customer',
     description:
-      'Keep your applications, content, and origin infrastructure always available with our 100% SLA.',
+      'Keep applications, content, and origin infrastructure available, backed by a 100% SLA.',
     href: '/site/solutions/performance'
   },
   {
@@ -56,7 +56,7 @@ const USE_CASES = [
   {
     icon: 'ai ai-security-team',
     title: 'Implement DevSecOps processes',
-    description: 'Ship secure applications at the right time.',
+    description: 'Ship secure applications on schedule.',
     href: '/site/solutions/technology'
   }
 ]
@@ -68,12 +68,13 @@ export const FIREWALL_PAGE = [
     titleLength: 'long',
     eyebrow: 'Firewall',
     title: 'Programmable firewall for distributed applications',
-    description: 'Protect your users, applications, and networks with a modern approach.',
+    description:
+      'Protect users, applications, and networks with rules you program, from layer 3 to layer 7.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every security layer in one firewall',
@@ -102,7 +103,7 @@ export const FIREWALL_PAGE = [
         icon: 'ai ai-edge-functions',
         title: 'Functions for custom security logic',
         description:
-          'Instantiate a function in the firewall for JWT validation, fingerprinting, rate limiting or payload validation, running at every point of presence.',
+          'Add a function to the firewall for JWT validation, fingerprinting, rate limiting, or payload validation. It runs in every data center.',
         scene: { component: markRaw(FirewallFunctionFragment) },
         href: PRODUCT_DOCS
       }
@@ -115,20 +116,21 @@ export const FIREWALL_PAGE = [
       {
         title: 'Programmable security modules and rule processing',
         description:
-          'The Firewall processes incoming traffic at OSI layers L3-L7 using configurable criteria and behaviors defined in the Rules Engine. The system evaluates requests against user-defined conditions including headers, cookies, query strings, and network parameters. Rules execute sequentially with conditional logic, allowing precise control over traffic before application access.',
+          'Firewall processes incoming traffic at OSI layers L3-L7 using criteria and behaviors you define in the Rules Engine. It evaluates requests against your conditions: headers, cookies, query strings, and network parameters. Rules run in sequence with conditional logic, so you control traffic precisely before it reaches the application.',
         href: PRODUCT_DOCS,
-        illustration: 'programmable-security',
+        illustration: 'profiles-per-application',
         illustrationLabel:
-          'A request checked by programmable rules before it reaches the application',
+          'Applications passing through firewall rules into WAF, Application Accelerator and Rules Engine modules',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
-        title: 'Distributed rule synchronization and SIEM integration',
+        title: 'Rule sync and SIEM integration',
         description:
-          "The platform automatically synchronizes configured security rules across all global points of presence through API-driven deployment. Data Stream connectors enable forwarding of real-time security events to the customer's SIEM platforms for correlation analysis and threat intelligence feedback. API endpoints allow dynamic adjustment of network lists and security configurations based on external threat intelligence and operational requirements.",
+          'Azion syncs your security rules across all data centers through API-driven deployment. Data Stream connectors forward real-time security events to your SIEM for correlation and threat intelligence feedback. API endpoints let you adjust network lists and security settings as external threat intelligence changes.',
         href: '/site/products/data-stream',
-        illustration: 'global-network',
-        illustrationLabel: 'A world map of the points of presence every synchronized rule reaches',
+        illustration: 'stream-security-events-for-investigation-and-response',
+        illustrationLabel:
+          'Security events streamed in under 40 seconds to APIs, dashboards, SIEM and other interfaces',
         actions: [{ label: 'Data Stream', href: '/site/products/data-stream' }]
       }
     ]
@@ -136,7 +138,7 @@ export const FIREWALL_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'Trusted by security experts in banking, e-commerce, technology, and other industries',
+    title: 'Used by security teams in banking, e-commerce, and technology',
     description:
       'Put Firewall in front of any application or API and control traffic on Azion’s distributed infrastructure, before it reaches your origin. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
@@ -144,11 +146,5 @@ export const FIREWALL_PAGE = [
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
   PLATFORM_DIRECTORY,
-  {
-    ...PRODUCT_CLOSING,
-    eyebrow: 'Protect',
-    title: 'Protected by default.',
-    titleMuted: 'Always on.',
-    description: 'Get stronger protection, less attack exposure, and less operational overhead.'
-  }
+  PRODUCT_SECURITY_CLOSING
 ]

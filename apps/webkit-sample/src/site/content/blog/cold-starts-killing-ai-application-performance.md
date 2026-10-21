@@ -58,7 +58,7 @@ A different approach uses lighter execution environments. V8 isolates — the sa
 
 This is not a performance optimization applied on top of a container architecture. It is a different execution model where the category of cold start does not exist. The function is available for the first request with no overhead that is not present for all subsequent requests.
 
-Combined with Azion’s distributed network, Functions executes in the nearest location to the user, not in a central cloud region. A first-time user in São Paulo calling a function deployed on Azion’s network does not pay the latency of a centralized origin plus a cold start. They get a response from the nearest node with no initialization penalty.
+Combined with Azion’s distributed infrastructure, Functions executes in the nearest location to the user, not in a central cloud region. A first-time user in São Paulo calling a function deployed on Azion’s network does not pay the latency of a centralized origin plus a cold start. They get a response from the nearest node with no initialization penalty.
 
 ---
 
@@ -68,13 +68,13 @@ Before addressing cold starts, measuring them matters. Standard latency percenti
 
 Pulling per-request execution traces rather than aggregate percentiles surfaces this. A trace that shows 20 ms of handler execution and 600 ms of initialization overhead is a cold start. Aggregate p99 latency that is 10x the p50 latency without a clear explanation in function complexity is usually cold start impact at scale.
 
-[Real-Time Events](https://www.azion.com/en/products/real-time-events/) in Azion’s observability layer captures per-request execution data at the edge, making it possible to identify initialization overhead before it compounds into a visible product problem.
+[Real-Time Events](https://www.azion.com/en/products/real-time-events/) in Azion’s observability layer captures per-request execution data close to users, making it possible to identify initialization overhead before it compounds into a visible product problem.
 
 ---
 
 Cold starts are not an acceptable trade-off for serverless simplicity. They are an artifact of container-based execution environments that lighter runtime models have already solved. The question is not how to minimize cold start impact — it is whether the execution environment requires cold starts at all.
 
-[Talk to an Azion specialist](https://www.azion.com/en/contact/) to see how [Azion Functions](https://www.azion.com/en/products/functions/) eliminate cold starts with V8 isolate execution on a globally distributed network.
+[Talk to an Azion specialist](https://www.azion.com/en/contact/) to see how [Azion Functions](https://www.azion.com/en/products/functions/) eliminate cold starts with V8 isolate execution on a globally distributed infrastructure.
 
 ---
 

@@ -65,13 +65,13 @@ const FAQ = [
     value: 'what-is',
     question: 'What is Application Accelerator?',
     answer:
-      'Application Accelerator is an Applications module for accelerating web applications and APIs through protocol optimizations and advanced cache rules. It enables protocol optimization for dynamic content, Advanced Cache Key processing with query strings and cookies, POST and OPTIONS request caching, and short TTL support. The module reduces latency and improves throughput for data-intensive applications on Azion Web Platform.'
+      'Application Accelerator is an Applications module that speeds up web applications and APIs with protocol optimizations and advanced cache rules. It optimizes the protocol for dynamic content, processes Advanced Cache Key with query strings and cookies, caches POST and OPTIONS requests, and supports short TTLs. The module lowers latency and raises throughput for data-intensive applications on the Azion Web Platform.'
   },
   {
     value: 'advanced-cache-key',
     question: 'What is Advanced Cache Key?',
     answer:
-      'Advanced Cache Key lets you control how content is segmented in cache beyond the URL path. You can configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control over which parameters differentiate cached objects. This supports up to 64 custom cache keys per edge application.'
+      'Advanced Cache Key lets you control how content is segmented in cache beyond the URL path. You can configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control over which parameters differentiate cached objects. This supports up to 64 custom cache keys per application.'
   },
   {
     value: 'query-string-fields',
@@ -107,7 +107,7 @@ const FAQ = [
     value: 'vs-cdn',
     question: 'How does Application Accelerator compare to traditional CDN caching?',
     answer:
-      'Traditional CDN caching typically supports only GET and HEAD requests with limited cache key customization. Application Accelerator provides protocol optimization for dynamic content, Advanced Cache Key with query string and cookie support, POST/OPTIONS caching, and short TTLs, all on a distributed architecture without cold starts. This enables caching strategies not possible with standard CDN configurations.'
+      'Traditional CDN caching usually supports only GET and HEAD requests, with limited cache key options. Application Accelerator adds protocol optimization for dynamic content, Advanced Cache Key with query string and cookie support, POST and OPTIONS caching, and short TTLs, all on a distributed architecture with no cold starts. That makes caching strategies possible that standard CDN setups cannot do.'
   },
   {
     value: 'ttl-limits',
@@ -136,7 +136,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Advanced Cache Key in every cache setting',
@@ -178,7 +178,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
       {
         title: 'Optimize dynamic delivery',
         description:
-          'Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. Azion Web Platform helps improve performance, SEO, and reliability across distributed applications.',
+          'Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. That improves performance, SEO, and reliability across distributed applications.',
         href: PRODUCT_DOCS,
         illustration: 'low-latency',
         illustrationLabel: 'A dynamic request answered close to the user, ahead of the origin',
@@ -187,7 +187,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
       {
         title: 'Advanced Cache Key for personalized content delivery',
         description:
-          'Control how content is segmented in cache beyond the URL path. Configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control for personalized experiences.',
+          'Control how content is segmented in cache beyond the URL path. Vary the cache by query string, cookie, and header to serve personalized experiences.',
         href: '/site/products/cache',
         illustration: 'distributed-apis',
         illustrationLabel: 'One request segmented into cache by query string, cookie and header',
@@ -198,7 +198,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'See how to use',
+    title: 'What teams use Application Accelerator for',
     description:
       'Put Application Accelerator in front of dynamic APIs and apps and cache what standard CDN caching cannot, with the methods, query strings and cookies you choose. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },

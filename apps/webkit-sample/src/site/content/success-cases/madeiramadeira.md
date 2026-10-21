@@ -8,7 +8,7 @@ Due to the highly competitive e-commerce landscape, abandoning a website in favo
 
 ## Solution
 
-In 2021, MadeiraMadeira started a partnership with Azion to implement essential future-proof solutions to accelerate its digital growth. Unlike its legacy solution composed of only three points of presence in the country, Azion offers a decentralized, distributed global platform composed of a wide distributed network, allowing MadeiraMadeira to deliver content close to users and manage workloads to its source infrastructure, reducing unnecessary costs with cloud providers.
+In 2021, MadeiraMadeira started a partnership with Azion to implement essential future-proof solutions to accelerate its digital growth. Unlike its legacy solution composed of only three data centers in the country, Azion offers a decentralized, distributed global platform composed of a wide distributed infrastructure, allowing MadeiraMadeira to deliver content close to users and manage workloads to its source infrastructure, reducing unnecessary costs with cloud providers.
 
 In addition, the Azion Platform includes Applications, which is designed to improve web and mobile application performance with tools, such as:
 

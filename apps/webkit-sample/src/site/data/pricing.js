@@ -51,12 +51,12 @@ export const PLANS = [
         details: 'Free forever, no card required. Included limits reset every month.'
       }
     },
-    featuresTitle: 'All Features Included.',
+    featuresTitle: 'All features included.',
     features: [
       { icon: 'ai ai-edge-nodes', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'ai ai-image-processor', label: 'Image optimization' },
+      { icon: 'ai ai-image-processor', label: 'Image Processor' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     action: { label: 'Start for free', kind: 'outlined', to: '/signup' }
@@ -130,7 +130,7 @@ export const PRICING_REASONS = [
     scale: 0.7,
     title: 'No idle. No waste.',
     description:
-      'Why pay for infrastructure doing nothing? Azion is built around actual consumption, so you pay for what your applications use — not infrastructure sitting idle waiting for demand.'
+      'Azion bills for actual consumption. You pay for what your applications use, not for infrastructure sitting idle waiting for demand.'
   },
   {
     key: 'control',
@@ -146,7 +146,7 @@ export const PRICING_REASONS = [
     scale: 0.8,
     title: 'White-glove when it matters.',
     description:
-      'Self-service when you want it. Experts when you need them. Azion specialists and partners are there to help you build, migrate, optimize, and scale with confidence.'
+      'Self-service when you want it, experts when you need them. Azion specialists and partners help you build, migrate, optimize, and scale.'
   }
 ]
 
@@ -173,7 +173,7 @@ export const COMPARISON_SECTIONS = [
   {
     eyebrow: 'Managed infrastructure',
     title: 'Azion Platform',
-    description: 'Running modern workloads on a global infrastructure.',
+    description: 'Run applications on a global distributed infrastructure.',
     rows: [
       { label: 'Global infrastructure', group: true, values: ['', '', ''] },
       { label: '100+ data centers', values: [true, true, true] },
@@ -239,7 +239,7 @@ export const COMPARISON_SECTIONS = [
   },
   {
     eyebrow: 'Build',
-    title: 'Azion Applications',
+    title: 'Applications',
     description: 'Build, run and scale applications globally.',
     rows: [
       { label: 'Applications', group: true, values: ['', '', ''] },
@@ -304,7 +304,7 @@ export const COMPARISON_SECTIONS = [
       },
       {
         label: 'AI Inference',
-        hint: 'Runs model inference on the same distributed network, close to the user.',
+        hint: 'Runs model inference on Azion’s distributed infrastructure, close to the user.',
         group: true,
         tag: 'Preview',
         values: ['', '', '']
@@ -318,7 +318,7 @@ export const COMPARISON_SECTIONS = [
   {
     eyebrow: 'Store',
     title: 'Storage and Database',
-    description: 'Reliable performance at scale.',
+    description: 'Predictable performance at scale.',
     rows: [
       {
         label: 'Object Storage',
@@ -379,9 +379,9 @@ export const COMPARISON_SECTIONS = [
     ]
   },
   {
-    eyebrow: 'Protect',
-    title: 'Azion Connectors',
-    description: 'Reliable connections to any infrastructure.',
+    eyebrow: 'Secure',
+    title: 'Connectors',
+    description: 'Connect to any origin, with load balancing.',
     rows: [
       {
         label: 'Single Origin',
@@ -413,9 +413,9 @@ export const COMPARISON_SECTIONS = [
     ]
   },
   {
-    eyebrow: 'Protect',
-    title: 'Azion Firewall',
-    description: 'Always-on defense for your applications.',
+    eyebrow: 'Secure',
+    title: 'Firewall',
+    description: 'Always-on protection for your applications.',
     rows: [
       { label: 'Firewall', group: true, values: ['', '', ''] },
       {
@@ -485,13 +485,13 @@ export const COMPARISON_SECTIONS = [
     ]
   },
   {
-    eyebrow: 'Protect',
-    title: 'Azion Edge DNS',
-    description: 'Security from the foundation of every connection.',
+    eyebrow: 'Secure',
+    title: 'Edge DNS',
+    description: 'Authoritative DNS for every connection.',
     rows: [
       {
         label: 'Edge DNS',
-        hint: 'Authoritative DNS hosting for your zones, answered from the same network as your applications.',
+        hint: 'Authoritative DNS hosting for your zones, answered from the same infrastructure as your applications.',
         group: true,
         values: ['', '', '']
       },
@@ -501,8 +501,8 @@ export const COMPARISON_SECTIONS = [
   },
   {
     eyebrow: 'Observe',
-    title: 'Real-Time Observability',
-    description: 'See everything. Turn data into insights.',
+    title: 'Real-Time Monitoring',
+    description: 'See traffic, events, and performance as they happen.',
     rows: [
       {
         label: 'Real-Time Metrics',
@@ -547,7 +547,7 @@ export const COMPARISON_SECTIONS = [
   {
     eyebrow: 'Azion Platform',
     title: 'Compliance',
-    description: 'Compliance that protects your business.',
+    description: 'Audits and certifications for regulated workloads.',
     rows: [
       {
         label: 'PCI DSS 4.0.1 Level 1 Service Provider',
@@ -597,7 +597,7 @@ export const FAQ = [
     value: 'incluido',
     question: 'How do I know what each plan includes?',
     answer:
-      "Each plan includes access to every feature checked in the table above, within that plan's included usage and resource limits. Paid add-ons are not included by default."
+      "Each plan includes every feature checked in the table above, within that plan's included usage and resource limits. Paid add-ons are not included by default."
   },
   {
     value: 'preview',
@@ -627,7 +627,7 @@ export const FAQ = [
     value: 'quando-enterprise',
     question: 'When should I choose the Enterprise plan?',
     answer:
-      'Enterprise is the right fit when you need maximum pricing flexibility — either paying entirely on-demand with no fixed commitment, or optimizing costs through a Capacity Reservation or a multi-year Savings Plan.'
+      'Choose Enterprise when you need pricing flexibility: pay entirely on demand with no fixed commitment, or lower costs with a Capacity Reservation or a multi-year Savings Plan.'
   },
   {
     value: 'on-demand',
@@ -666,12 +666,12 @@ export const FAQ = [
 // where it has one.
 export const PRIMITIVE_GROUPS = [
   {
-    label: 'Compute',
+    label: 'Build',
     items: [
       {
         icon: 'ai ai-edge-functions',
         title: 'Functions',
-        description: 'Run code globally, low latency',
+        description: 'Run code globally with low latency',
         href: '/site/products/functions'
       },
       { icon: 'ai ai-rules-engine', title: 'Rules', description: 'Control traffic routing' },
@@ -683,7 +683,7 @@ export const PRIMITIVE_GROUPS = [
       {
         icon: 'ai ai-image-processor',
         title: 'Image Processor',
-        description: 'Optimize and modify images'
+        description: 'Resize and convert images on the fly'
       }
     ]
   },
@@ -693,17 +693,17 @@ export const PRIMITIVE_GROUPS = [
       {
         icon: 'ai ai-edge-ai',
         title: 'AI Inference',
-        description: 'Low-latency distributed inference'
+        description: 'Run inference close to users'
       },
       {
         icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
-        description: 'Govern and route LLMs'
+        description: 'Route and govern model calls'
       }
     ]
   },
   {
-    label: 'Data',
+    label: 'Store',
     items: [
       {
         icon: 'ai ai-edge-storage',
@@ -718,22 +718,22 @@ export const PRIMITIVE_GROUPS = [
       {
         icon: 'ai ai-edge-kv',
         title: 'KV Store',
-        description: 'Keep state close, fast'
+        description: 'Keep state close to your code'
       },
       {
         icon: 'ai ai-tiered-cache',
         title: 'Cache',
-        description: 'Accelerate delivery, boost reliability'
+        description: 'Speed up delivery and protect your origin'
       }
     ]
   },
   {
-    label: 'Security',
+    label: 'Secure',
     items: [
       {
         icon: 'ai ai-waf-rules',
         title: 'Web Application Firewall (WAF)',
-        description: 'Smart way to block threats'
+        description: 'Block common attacks, enforce policies'
       },
       {
         icon: 'ai ai-azion-api',
@@ -742,13 +742,13 @@ export const PRIMITIVE_GROUPS = [
       },
       {
         icon: 'ai ai-bot-manager',
-        title: 'Bot Management',
-        description: 'Stop bots, prevent abuse'
+        title: 'Bot Manager',
+        description: 'Stop bots and prevent abuse'
       },
       {
         icon: 'ai ai-edge-dns',
-        title: 'DNS',
-        description: 'Resilient DNS with performance'
+        title: 'Edge DNS',
+        description: 'Fast, resilient DNS'
       }
     ]
   }

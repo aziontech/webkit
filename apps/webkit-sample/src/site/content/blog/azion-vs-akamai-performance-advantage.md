@@ -51,7 +51,7 @@ Perhaps the most audacious migration came from another Akamai stalwart—a major
 
 Yet in 15 days—not months, days—the entire portfolio migrated to Azion’s Web Platform. Zero downtime. No customer impact. The impossible had become routine.
 
-The performance gains were immediate and dramatic. Transaction processing improved by 92%. Infrastructure costs decreased by 30%, resulting in annual savings of tens of millions. But the real transformation was in capability. Applications that had been constrained by CDN limitations suddenly had access to true compute at the edge, enabling features that were previously impossible.
+The performance gains were immediate and dramatic. Transaction processing improved by 92%. Infrastructure costs decreased by 30%, resulting in annual savings of tens of millions. But the real transformation was in capability. Applications that had been constrained by CDN limitations suddenly had access to true compute close to users, enabling features that were previously impossible.
 
 ## The Architecture Gap: Why 5x Differences Exist
 
@@ -61,7 +61,7 @@ Understanding why Azion achieves 280% improvements, while Fastly manages 57%, re
 
 Traditional CDNs, whether Akamai’s first-generation or Fastly’s “modern” approach, operate on the same basic principle: cache and deliver. They’re sophisticated caching layers, optimized for static content delivery in a world that’s increasingly dynamic. When Fastly celebrates its 57% TTFB improvement, it’s essentially saying it’s built a better cache.
 
-Modern web platforms operate on entirely different physics. Instead of caching content at the edge, they compute at the edge. Instead of being sent back to the origin servers, requests are processed locally. Instead of optimizing the round trip, they eliminate it entirely.
+Modern web platforms operate on entirely different physics. Instead of caching content close to users, they compute close to users. Instead of being sent back to the origin servers, requests are processed locally. Instead of optimizing the round trip, they eliminate it entirely.
 
 ### Traditional CDN Approach
 
@@ -111,17 +111,17 @@ async function handleRequest(request) {
 // Result: 50-200ms latency globally
 ```
 
-This isn’t an incremental improvement—it’s a fundamental reimagining of how web applications work. When your application logic runs within milliseconds of your users, when your data processing happens at the edge, when your entire stack is distributed globally, the performance gains aren’t arithmetic—they’re exponential.
+This isn’t an incremental improvement—it’s a fundamental reimagining of how web applications work. When your application logic runs within milliseconds of your users, when your data processing happens close to users, when your entire stack is distributed globally, the performance gains aren’t arithmetic—they’re exponential.
 
 ## Key Architecture Differences
 
 | Feature | Traditional CDN | Azion Web Platform |
 |---|---|---|
 | **Primary Function** | Cache & Deliver | Compute & Process |
-| **Edge Capabilities** | Static content only | Full application logic |
+| **Distributed Capabilities** | Static content only | Full application logic |
 | **Origin Dependency** | Required for all dynamic content | Optional - can run entire apps |
-| **Latency** | Origin RTT + cache lookup | Edge processing only |
-| **Scalability** | Limited by origin capacity | Infinite edge scaling |
+| **Latency** | Origin RTT + cache lookup | Local processing only |
+| **Scalability** | Limited by origin capacity | Infinite distributed scaling |
 | **Innovation Speed** | Months to deploy changes | Minutes via API |
 
 ## The Business Reality Check
@@ -169,7 +169,7 @@ This isn’t about Azion versus Fastly versus Akamai. It’s about recognizing t
 
 ## The Future Has Already Arrived
 
-While Fastly and Akamai debate incremental improvements, enterprises on modern web platforms are building the impossible. Real-time personalization at a global scale. Machine learning inference at the edge. Application logic that runs within milliseconds of every user on Earth.
+While Fastly and Akamai debate incremental improvements, enterprises on modern web platforms are building the impossible. Real-time personalization at a global scale. Machine learning inference close to users. Application logic that runs within milliseconds of every user on Earth.
 
 The 280% performance improvement is just the bare minimum. The real advantage comes from capabilities that CDNs simply cannot provide. When your platform computes instead of caching, when it processes instead of proxying, when it thinks instead of just delivering, entirely new application architectures become possible.
 

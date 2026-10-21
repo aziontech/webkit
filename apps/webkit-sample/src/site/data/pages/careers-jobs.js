@@ -35,7 +35,7 @@ export const CAREERS_JOBS_PAGE = [
     kind: 'title-band',
     titleLength: 'long',
     eyebrow: 'Careers',
-    title: "We're hiring!"
+    title: "We're hiring"
   },
   {
     section: 'ListingBrowser',

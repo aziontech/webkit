@@ -47,7 +47,7 @@ Following this success, HeroSpark is now preparing to migrate **HeroPay**, its p
 
 Azion enabled HeroSpark to adopt products and solutions that, within a single platform, solved its key challenges in performance, scalability, cost reduction, and security automation—driving greater operational efficiency.
 
-With simple integration processes and personalized support, Azion empowered HeroSpark to accelerate business value delivery and scale with confidence.
+With simple integration processes and personalized support, Azion helped HeroSpark accelerate business value delivery and scale with confidence.
 
 ## About HeroSpark
 

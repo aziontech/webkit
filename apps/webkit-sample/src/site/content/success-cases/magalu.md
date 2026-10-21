@@ -13,17 +13,17 @@ Magalu is always evolving its ecosystem, and its defense posture is no different
 
 ## Solution
 
-Magalu counts on Azion’s platform to evolve its complex security posture through edge-native, real-time firewall and analytics solutions, empowering Magalu’s SOC squad with granular access control, a fine-grained bot management platform, automated threat blocking, and more.
+Magalu counts on Azion’s platform to evolve its complex security posture through distributed, real-time firewall and analytics solutions, giving Magalu’s SOC squad granular access control, a fine-grained bot management platform, automated threat blocking, and more.
 
-Azion’s Firewall is designed to help companies improve web application security, minimize costs and increase productivity. Through its Web Application Firewall, Network Shield and DDoS Protection modules, and boosted with Data Streaming, the solution provides Magalu’s security experts with:
+Azion’s Firewall is designed to help companies improve web application security, minimize costs and increase productivity. Through its Web Application Firewall, Network Shield and DDoS Protection modules, and boosted with Data Stream, the solution provides Magalu’s security experts with:
 
 - out-of-the-box protection and custom rules with threshold controls via an intuitive web console or APIs;
 - address blocking based on reputation via customizable Network Lists;
 - flexible rate-limiting rules to mitigate attacks on sensitive areas of the application like shipping and login;
 - a test-and-deploy firewall rules feature that leverages existing CI/CD pipelines;
-- collection and streaming of real-time data to their SIEM and analytic platforms for automated incident response with Data Streaming connectors.
+- collection and streaming of real-time data to their SIEM and analytic platforms for automated incident response with Data Stream connectors.
 
-Using a BYOL licensing model afforded by the Azion Web Platform, Magalu integrated Axur Leakstream with its edge applications to monitor Internet activities in search of leaked credentials, allowing its team to prevent the creation of user accounts with leaked passwords and, consequently, avoid fraud.
+Using a BYOL licensing model afforded by the Azion Web Platform, Magalu integrated Axur Leakstream with its applications to monitor Internet activities in search of leaked credentials, allowing its team to prevent the creation of user accounts with leaked passwords and, consequently, avoid fraud.
 
 In addition, Magalu’s SOC team also manages bad bot incidents more effectively using Radware Bot Manager in Azion’s platform, enabling them to manage bots in real time and stop automated attacks with less human efforts and more efficiency.
 
@@ -33,7 +33,7 @@ Through the automated features and resources provided by Azion’s platform, Mag
 
 Leveraging the scalability and flexibility of Azion’s platform, the security team from LuizaLabs built secure micro-perimeters where or close to where their data actually lives with high granularity, according to their needs and business logic. In addition, the partnership between LuizaLabs and Azion’s engineering squad allows the construction of an even more robust defense.
 
-In terms of observability, Magalu’s team receives over 20 TB of data per month on average through Azion’s Data Streaming connectors. All the data can be visualized in real-time using Magalu’s preferred analytic tools and SIEM platforms, enhancing their cyber threat intelligence.
+In terms of observability, Magalu’s team receives over 20 TB of data per month on average through Azion’s Data Stream connectors. All the data can be visualized in real-time using Magalu’s preferred analytic tools and SIEM platforms, enhancing their cyber threat intelligence.
 
 These initiatives were crucial to Magalu overcoming one of the biggest challenges: guaranteeing the highest availability of its hundreds of applications, even during campaigns like “Liquidação Fantástica,” which is always held in January, and “Black das Blacks,” in which Magalu organizes a live event on national television with today’s celebrities and influencers, attracting millions of shoppers to its e-commerce platform on Black Friday.
 

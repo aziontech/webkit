@@ -53,7 +53,7 @@
           :key="path.key"
           :d="path.d"
           :data-active="path.active || null"
-          class="stroke-(--accent) opacity-50 [stroke-dasharray:var(--spacing-1)] [stroke-width:var(--border-width-default)] data-[active]:opacity-100 motion-safe:data-[active]:animate-flow-dash motion-reduce:animate-none"
+          class="stroke-(--border-default) [stroke-width:var(--border-width-default)] data-[active]:stroke-(--accent)"
         />
       </svg>
 
@@ -69,7 +69,7 @@
         :key="port.key"
         :data-active="port.active || null"
         :data-side="port.side"
-        class="absolute size-(--size-2) rounded-(--radius-sm) border-(length:--border-width-default) border-(--border-muted) bg-(--accent) opacity-50 data-[active]:opacity-100 data-[side=bottom]:-translate-x-1/2 data-[side=left]:-translate-x-full data-[side=left]:-translate-y-1/2 data-[side=right]:-translate-y-1/2 data-[side=top]:-translate-x-1/2 data-[side=top]:-translate-y-full"
+        class="absolute size-(--size-2) rounded-(--radius-sm) border-(length:--border-width-default) border-(--border-muted) bg-(--border-default) data-[active]:bg-(--accent) data-[side=bottom]:-translate-x-1/2 data-[side=left]:-translate-x-full data-[side=left]:-translate-y-1/2 data-[side=right]:-translate-y-1/2 data-[side=top]:-translate-x-1/2 data-[side=top]:-translate-y-full"
         :style="at(port.x, port.y)"
       />
 

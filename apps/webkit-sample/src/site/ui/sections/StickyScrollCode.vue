@@ -12,6 +12,11 @@
 
   defineOptions({ name: 'StickyScrollCode' })
 
+  export interface StickyScrollCodeItem extends SiteTopic {
+    /** The capability's own action, shown under its description while it is open. */
+    action?: SiteAction | null
+  }
+
   interface Props {
     /** Id of the band, for in-page links. */
     anchor?: string
@@ -22,19 +27,16 @@
     /** One or two sentences under the headline. */
     description?: string
     /** Capabilities, opened one at a time as the page scrolls. */
-    items: SiteTopic[]
+    items: StickyScrollCodeItem[]
     /** One code file per capability, in the same order. */
     samples: CodeBlockTab[]
-    /** Action under the sample from lg up, and under the title below it. */
-    action?: SiteAction | null
   }
 
   withDefaults(defineProps<Props>(), {
     anchor: '',
     eyebrow: '',
     title: '',
-    description: '',
-    action: null
+    description: ''
   })
 </script>
 
@@ -50,17 +52,7 @@
         :title="title"
         :description="description"
         size="large"
-      >
-        <template
-          v-if="action"
-          #actions
-        >
-          <SectionAction
-            class="lg:hidden"
-            :action="{ size: 'small', trailing: true, ...action }"
-          />
-        </template>
-      </SectionTitle>
+      />
     </template>
 
     <FrameBox
@@ -70,15 +62,17 @@
       class="[--sticky-stack-top:3.5rem] [--sticky-stack-height:min(40rem,calc(100dvh-3.5rem))] [--sticky-stack-align:stretch] [--sticky-stack-frame-border:1px]"
     >
       <StickyStack :items="items">
+        <template #backdrop>
+          <TextureMaterial
+            kind="pixelate"
+            size="small"
+            fade="top"
+          />
+        </template>
         <template #media="{ index }">
-          <div class="contents max-lg:hidden">
-            <TextureMaterial
-              kind="pixelate"
-              size="small"
-              fade="top"
-            />
-          </div>
-          <div class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md)">
+          <div
+            class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md) lg:h-90"
+          >
             <div
               v-if="samples[index]"
               class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)"
@@ -90,13 +84,13 @@
                 :copy-aria-label="`Copy the ${samples[index].fileName ?? samples[index].label} sample`"
               />
             </div>
-            <div
-              v-if="action"
-              class="max-lg:hidden"
-            >
-              <SectionAction :action="{ size: 'small', trailing: true, ...action }" />
-            </div>
           </div>
+        </template>
+        <template #actions="{ index }">
+          <SectionAction
+            v-if="items[index].action"
+            :action="{ size: 'small', trailing: true, ...items[index].action }"
+          />
         </template>
       </StickyStack>
     </FrameBox>

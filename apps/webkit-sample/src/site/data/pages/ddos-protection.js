@@ -5,9 +5,9 @@ import DdosHttpEventsFragment from '../../ui/mockup/widgets/DdosHttpEventsFragme
 import DdosRequestsMetricFragment from '../../ui/mockup/widgets/DdosRequestsMetricFragment.vue'
 import {
   PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
   PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
+  PRODUCT_HERO_ACTIONS,
+  PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
@@ -16,7 +16,7 @@ const PILLARS = [
     icon: 'pi pi-verified',
     title: 'Guarantee application uptime',
     description:
-      'Maintain service availability for applications, content, and origin infrastructure with a 100% uptime SLA.'
+      'Keep applications, content, and origin infrastructure available, backed by a 100% uptime SLA.'
   },
   {
     icon: 'pi pi-shield',
@@ -26,7 +26,7 @@ const PILLARS = [
   },
   {
     icon: 'pi pi-arrow-up-right-and-arrow-down-left-from-center',
-    title: 'Scale protection limitlessly',
+    title: 'Protection that scales with the attack',
     description:
       'Handle attacks of any volume without performance impact on legitimate customer traffic.'
   }
@@ -58,7 +58,7 @@ const USE_CASES = [
     icon: 'pi pi-cloud',
     title: 'Protect SaaS platforms at scale',
     description:
-      'Apply distributed DDoS protection across multi-tenant environments with security policies that scale automatically with traffic.',
+      'Apply DDoS protection across multi-tenant environments with policies that scale automatically with traffic.',
     href: '/site/solutions/technology'
   }
 ]
@@ -74,13 +74,13 @@ const FAQ = [
     value: 'under-attack',
     question: "I'm under attack. What should I do?",
     answer:
-      "Your system is under attack right now? Get immediate expert help. What happens next: Connect with our security specialists instantly, real-time attack analysis and threat identification, custom security rules deployed to block the attack, and advanced protection activated immediately. Don't wait—every second counts during an active attack."
+      'Get immediate expert help. Our security specialists connect with you instantly, analyze the attack in real time, deploy custom security rules to block it, and activate advanced protection. Every second counts during an active attack.'
   },
   {
     value: 'existing-tools',
     question: 'Can I use DDoS Protection alongside my existing security tools?',
     answer:
-      'Yes. Azion DDoS Protection integrates with your existing security stack and operates as part of a unified security platform—combine DDoS Protection with WAF, Bot Manager, Network Shield, and custom Functions for comprehensive protection. Stream security events to your SIEM via Data Stream for centralized visibility across all security tools, reducing operational complexity while strengthening your security posture.'
+      'Yes. Azion DDoS Protection integrates with your existing security stack and operates as part of a unified security platform. Combine DDoS Protection with WAF, Bot Manager, Network Shield, and custom Functions for layered protection. Stream security events to your SIEM via Data Stream for centralized visibility across all security tools.'
   },
   {
     value: 'attack-types',
@@ -92,7 +92,7 @@ const FAQ = [
     value: 'deploy-time',
     question: 'How long does it take to deploy DDoS Protection?',
     answer:
-      "Azion DDoS Protection deploys in under 30 minutes with no hardware provisioning required. Simply configure your DNS to point to Azion's network and enable DDoS Protection in the console. Always-on protection is automatically active—no manual intervention needed during attacks. Unlike traditional DDoS mitigation services that require manual activation, Azion provides continuous protection that responds automatically within seconds."
+      'Azion DDoS Protection deploys in under 30 minutes with no hardware provisioning required. Point your DNS to Azion and enable DDoS Protection in the console. Always-on protection is automatically active—no manual intervention needed during attacks. Unlike traditional DDoS mitigation services that require manual activation, Azion provides continuous protection that responds automatically within seconds.'
   },
   {
     value: 'performance',
@@ -120,14 +120,14 @@ export const DDOS_PROTECTION_PAGE = [
     kind: 'title-band',
     titleLength: 'long',
     eyebrow: 'DDoS Protection',
-    title: 'Security that never sleeps, protection that never slows',
+    title: 'Always-on protection that never slows traffic',
     description:
-      'Automatically detect and stop DDoS attacks in real time without impacting application performance.',
+      'Detect and stop DDoS attacks automatically, in real time, without hurting application performance.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Always-on protection in every firewall',
@@ -140,7 +140,7 @@ export const DDOS_PROTECTION_PAGE = [
         icon: 'pi pi-cog',
         title: 'Reduce security complexity',
         description:
-          'Consolidate DDoS protection into a unified security platform instead of managing separate tools, with Network Shield and WAF one switch away.',
+          'Manage DDoS protection in the same platform as your other security tools. Network Shield and WAF are one switch away.',
         scene: { component: markRaw(DdosFirewallModulesFragment) },
         href: PRODUCT_DOCS
       },
@@ -148,7 +148,7 @@ export const DDOS_PROTECTION_PAGE = [
         icon: 'pi pi-bolt',
         title: 'Respond in under 3 seconds',
         description:
-          'Detect and mitigate attacks automatically with always-on protection across the global network, and read every spike in Real-Time Metrics.',
+          'Always-on protection detects and mitigates attacks automatically across Azion’s global distributed infrastructure. Read every spike in Real-Time Metrics.',
         scene: { component: markRaw(DdosRequestsMetricFragment) },
         href: PRODUCT_DOCS
       },
@@ -169,10 +169,11 @@ export const DDOS_PROTECTION_PAGE = [
       {
         title: 'Detect threats continuously across all layers',
         description:
-          'Monitor network flows at layers 3, 4, 6, and 7 using advanced pattern recognition and signature algorithms. Deep Packet Inspection (DPI) and AI-powered analysis detect abnormal traffic behavior with minimal false positives—inspecting requests in real time to identify both single-IP attacks and large-scale botnet assaults.',
+          'Monitor network flows at layers 3, 4, 6, and 7 with pattern recognition and signature algorithms. Deep Packet Inspection (DPI) and AI-powered analysis flag abnormal traffic with minimal false positives. They inspect requests in real time to catch both single-IP attacks and large-scale botnets.',
         href: PRODUCT_DOCS,
-        illustration: 'automate-threat-mitigation',
-        illustrationLabel: 'Traffic passing a line of inspection steps before the origin',
+        illustration: 'request-inspection',
+        illustrationLabel:
+          'A request inspected by Azion, with attacks stopped and clean traffic passed',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
@@ -181,7 +182,7 @@ export const DDOS_PROTECTION_PAGE = [
           'SDN algorithms divert malicious traffic through global scrubbing centers, while MANRS-compliant routing prevents BGP hijacking and IP spoofing. Automated mitigation protects across network, transport, and application layers.',
         href: '/site/products/our-network',
         illustration: 'global-network',
-        illustrationLabel: 'Traffic routed across a global network of locations',
+        illustrationLabel: 'Traffic routed across data centers worldwide',
         actions: [{ label: 'Our Network', href: '/site/products/our-network' }]
       }
     ]
@@ -198,11 +199,5 @@ export const DDOS_PROTECTION_PAGE = [
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
   PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
-  {
-    ...PRODUCT_CLOSING,
-    eyebrow: 'Protect',
-    title: 'Protected by default.',
-    titleMuted: 'Always on.',
-    description: 'Get stronger protection, less attack exposure, and less operational overhead.'
-  }
+  PRODUCT_SECURITY_CLOSING
 ]

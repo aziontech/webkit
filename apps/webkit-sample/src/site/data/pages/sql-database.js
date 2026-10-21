@@ -16,13 +16,12 @@ const PILLARS = [
     icon: 'ai ai-edge-sql',
     title: 'Data in your apps',
     description:
-      'Build applications that store and access structured data natively, without external databases.'
+      'Build applications that store and read structured data natively, with no external database.'
   },
   {
     icon: 'pi pi-bolt',
     title: 'Fast global reads',
-    description:
-      'Serve data to users worldwide with quick response times from distributed replicas.'
+    description: 'Serve data to users worldwide with quick responses from distributed replicas.'
   },
   {
     icon: 'pi pi-microchip-ai',
@@ -36,7 +35,7 @@ const USE_CASES = [
     icon: 'pi pi-microchip-ai',
     title: 'Retrieval-Augmented Generation (RAG)',
     description:
-      'Build RAG applications with built-in vector search and AI Inference integration. Query embeddings and relational data together without a separate vector database.',
+      'Build RAG applications with built-in vector search and AI Inference integration. Query embeddings and relational data together, with no separate vector database.',
     href: '/site/solutions/ai'
   },
   {
@@ -57,7 +56,7 @@ const USE_CASES = [
     icon: 'pi pi-shopping-cart',
     title: 'E-commerce product catalogs',
     description:
-      'Query inventory and product data from replicas near customers. Keep catalog experiences responsive during traffic spikes.',
+      'Query inventory and product data from replicas near customers. Keep catalogs responsive during traffic spikes.',
     href: '/site/solutions/retail'
   }
 ]
@@ -67,37 +66,37 @@ const FAQ = [
     value: 'what-is',
     question: 'What is SQL Database?',
     answer:
-      'Azion SQL Database is a serverless, distributed SQL solution on a global network. It supports SQLite-compatible queries, ACID compliance on the primary instance, read replicas, built-in vector search, and native Functions integration. Use it to build RAG applications, authentication systems, and data-driven APIs without managing separate services.'
+      'Azion SQL Database is a serverless, distributed SQL database that runs on Azion’s global distributed infrastructure. It supports SQLite-compatible queries, ACID compliance on the primary instance, read replicas, built-in vector search, and native Functions integration. Use it for RAG applications, authentication systems, and data-driven APIs, with no separate services to manage.'
   },
   {
     value: 'replication',
     question: 'How does SQL Database replicate data?',
     answer:
-      'SQL Database uses a Main/Replicas architecture. Writes go to the main instance and propagate to read replicas across the global network. This keeps read-heavy workloads closer to users while maintaining ACID guarantees on the primary.'
+      'SQL Database uses a Main/Replicas architecture. Writes go to the main instance and propagate to read replicas across Azion’s global distributed infrastructure. Read-heavy workloads stay close to users, and the primary keeps its ACID guarantees.'
   },
   {
     value: 'write-replicas',
     question: 'Can I write to replicas?',
     answer:
-      'No. Replicas are read-only. Writing data is only possible on the main instance, either via the REST API or via Functions. This architecture ensures ACID compliance while distributing reads globally.'
+      'No. Replicas are read-only. You can write only on the main instance, through the REST API or Functions. That keeps ACID compliance while reads are distributed globally.'
   },
   {
     value: 'consistency',
     question: 'Are replicas immediately consistent with the main instance?',
     answer:
-      'No. Replicas update with propagation time and eventually sync with the main instance. This model supports distributed reads for workloads that do not require immediate global consistency.'
+      'No. Replicas update after a propagation delay and eventually sync with the main instance. This model fits distributed reads for workloads that do not need immediate global consistency.'
   },
   {
     value: 'functions',
     question: 'How do I query SQL Database from Functions?',
     answer:
-      'Functions can connect to a read replica and execute SQL queries or commands. This lets application logic make request-time decisions using data stored on Azion Web Platform.'
+      'Functions can connect to a read replica and run SQL queries or commands. Your application logic can then make request-time decisions with data stored on Azion Web Platform.'
   },
   {
     value: 'api',
     question: 'Can I manage databases with an API?',
     answer:
-      "Yes. Create, list, query, and delete databases using the SQL Database REST API. Database creation may take a few minutes before it's ready to use. Automate database provisioning programmatically."
+      'Yes. Create, list, query, and delete databases with the SQL Database REST API. A new database may take a few minutes before it is ready to use. You can automate provisioning from code.'
   },
   {
     value: 'delete',
@@ -115,7 +114,7 @@ const FAQ = [
     value: 'vector-search',
     question: 'What is Vector Search in SQL Database?',
     answer:
-      'Vector Search enables semantic search using vector embeddings stored directly in SQL Database. Supports cosine distance calculations and indexing for approximate nearest neighbor queries—no separate vector database required.'
+      'Vector Search runs semantic search on vector embeddings stored directly in SQL Database. It supports cosine distance calculations and indexing for approximate nearest neighbor queries, so you need no separate vector database.'
   },
   {
     value: 'vector-dimensions',
@@ -133,17 +132,17 @@ export const SQL_DATABASE_PAGE = [
     eyebrow: 'SQL Database',
     title: 'Serverless distributed SQL with built-in vector search',
     description:
-      'Store and query relational data and embeddings from global replicas for AI-powered applications.',
+      'Store and query relational data and embeddings from global replicas, for AI applications.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every table, query and row in one database',
     description:
-      'The schema, the queries that read it and the rows your functions serve live in the same database, written on the primary and read from replicas.',
+      'The schema, the queries that read it and the rows your functions serve live in the same database. Writes go to the primary and reads come from replicas.',
     actions: PRODUCT_HERO_ACTIONS,
     columns: 3,
     items: [
@@ -180,16 +179,16 @@ export const SQL_DATABASE_PAGE = [
       {
         title: 'Distributed SQL for resilient global reads',
         description:
-          'The primary instance handles writes while distributed replicas serve read-heavy workloads closer to users, helping applications stay responsive and available.',
+          'The primary instance handles writes while distributed replicas serve read-heavy workloads close to users. Applications stay responsive and available.',
         href: PRODUCT_DOCS,
-        illustration: 'global-network',
-        illustrationLabel: 'A world map of points with the locations that serve reads highlighted',
+        illustration: 'distributed-sql-for-resilient-global-reads',
+        illustrationLabel: 'A globe of data centers reading from SQL Database through Functions',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
         title: 'Combine relational data and vector search',
         description:
-          'SQL Database stores structured records and embeddings together, so teams can build RAG applications without adding a separate vector database.',
+          'SQL Database stores structured records and embeddings together, so you can build RAG applications without adding a separate vector database.',
         href: '/site/products/ai-inference',
         illustration: 'combine-data-and-vector-search',
         illustrationLabel: 'Stored records and embeddings connected to an AI model on Azion',
@@ -200,7 +199,7 @@ export const SQL_DATABASE_PAGE = [
   {
     section: 'UseCases',
     eyebrow: 'Use Cases',
-    title: 'See how to use',
+    title: 'What teams use SQL Database for',
     description:
       'Put SQL Database behind any application and serve relational data and embeddings from replicas on Azion’s distributed infrastructure, with writes on the main instance. Teams use it to:',
     action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },

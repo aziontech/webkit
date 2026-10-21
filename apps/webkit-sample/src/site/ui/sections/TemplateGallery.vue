@@ -62,7 +62,7 @@
     eyebrow: 'Your Stack, Your Way',
     title: 'Quick Start with Templates',
     description:
-      'Build faster with pre-built applications and starter kits for common use cases. Deploy complete projects in seconds with popular frameworks.',
+      'Start from pre-built applications and starter kits for common use cases, and deploy a complete project in seconds with popular frameworks.',
     actions: () => [
       {
         label: 'Deploy now',

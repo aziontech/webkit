@@ -121,14 +121,44 @@ const reply = await client.chat.completions.create({
 
 console.log(reply.choices[0].message.content);`
 
-const CODE_FILES = [
+const COPILOT_CONFIG = `[
   {
-    label: 'client.ts',
-    value: 'client',
+    "name": "Azion AI Gateway",
+    "vendor": "customendpoint",
+    "apiKey": "\${input:chat.lm.secret.azion}",
+    "apiType": "chat-completions",
+    "models": [
+      {
+        "id": "general",
+        "name": "general",
+        "url": "https://YOUR_GATEWAY_DOMAIN/v1",
+        "toolCalling": true,
+        "streaming": true,
+        "maxInputTokens": 128000,
+        "maxOutputTokens": 16000
+      }
+    ]
+  }
+]`
+
+const CODE_AGENTS = [
+  {
+    label: 'OpenAI SDK',
+    value: 'openai-sdk',
     language: 'ts',
     code: CLIENT_SAMPLE,
     fileName: 'client.ts',
-    fileIcon: 'pi pi-code'
+    fileIcon: 'pi pi-code',
+    icon: 'ai-cor ai-open'
+  },
+  {
+    label: 'GitHub Copilot',
+    value: 'github-copilot',
+    language: 'json',
+    code: COPILOT_CONFIG,
+    fileName: 'chatLanguageModels.json',
+    fileIcon: 'ai ai-json',
+    icon: 'ai-cor ai-microsoft-copilot'
   }
 ]
 
@@ -233,11 +263,11 @@ export const AI_GATEWAY_PAGE = [
   },
   {
     section: 'CodeSplit',
-    kind: 'default',
+    kind: 'agents',
     title: 'The shortest path to a production AI gateway',
     description:
       'Keep the OpenAI SDK you already use. Point it at your gateway and send a model alias. The gateway handles keys, routing, fallback, and logs.',
-    files: CODE_FILES,
+    agents: CODE_AGENTS,
     copyAriaLabel: 'Copy the gateway client sample',
     actions: [{ label: 'Read the guide', href: PRODUCT_DOCS }]
   },

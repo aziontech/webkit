@@ -56,6 +56,8 @@
     active?: boolean
     /** Lets the viewer operate the controls inside, instead of drawing them as an inert picture. */
     interactive?: boolean
+    /** Draws every part in place from the start, with no entrance and no replay. */
+    still?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -72,7 +74,8 @@
     travel: 'slow-01',
     beat: 'fast-01',
     active: true,
-    interactive: false
+    interactive: false,
+    still: false
   })
 
   defineSlots<{
@@ -170,13 +173,13 @@
 
   const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
-  const entered = ref(reduced)
+  const entered = ref(reduced || props.still)
   const onScreen = ref(false)
 
   let intersection: globalThis.IntersectionObserver | null = null
 
   const arm = () => {
-    if (reduced || entered.value || !onScreen.value || !props.active) return
+    if (reduced || props.still || entered.value || !onScreen.value || !props.active) return
     globalThis.requestAnimationFrame(() =>
       globalThis.requestAnimationFrame(() => {
         if (onScreen.value && props.active) entered.value = true
@@ -187,7 +190,7 @@
   watch(
     () => props.active,
     (active) => {
-      if (reduced) return
+      if (reduced || props.still) return
       if (active) arm()
       else entered.value = false
     }
@@ -216,7 +219,7 @@
   })
 
   const beatStyle = (order: number) => {
-    if (reduced) return { transition: 'none' }
+    if (reduced || props.still) return { transition: 'none' }
     const enter = `${duration[props.travel]} ${curve['expressive-entrance']}`
     const delay = `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
     return { transition: `opacity ${enter} ${delay}, translate ${enter} ${delay}` }

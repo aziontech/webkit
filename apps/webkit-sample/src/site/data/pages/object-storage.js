@@ -15,18 +15,17 @@ const PILLARS = [
   {
     icon: 'pi pi-bolt',
     title: 'Fast content delivery',
-    description: 'Deliver static assets to users globally with integrated caching and performance.'
+    description: 'Deliver static assets to users globally, with caching built in.'
   },
   {
     icon: 'pi pi-dollar',
     title: 'Zero egress fees',
-    description: 'Move data between storage and Azion Applications without additional cost.'
+    description: 'Move data between storage and Azion Applications at no extra cost.'
   },
   {
     icon: 'ai ai-edge-storage',
     title: 'Widely compatible',
-    description:
-      'Use standard S3-compatible tools and workflows to store and manage assets without friction.'
+    description: 'Store and manage assets with standard S3-compatible tools and workflows.'
   }
 ]
 
@@ -35,28 +34,28 @@ const USE_CASES = [
     icon: 'pi pi-video',
     title: 'Deliver media from centralized storage',
     description:
-      'Centralize images, videos, and downloadable assets in Object Storage. Integrate with Cache and Applications for fast delivery. Process media through Functions for optimization.',
+      'Keep images, videos, and downloadable assets in Object Storage. Deliver them fast through Cache and Applications, and optimize media in Functions.',
     href: '/site/solutions/streaming'
   },
   {
     icon: 'pi pi-history',
     title: 'Automate backup and recovery',
     description:
-      'Organize backups per bucket and automate upload and restore routines via API. Use multipart upload for reliable large-file transfers. Maintain recovery workflows.',
+      'Organize backups per bucket and automate upload and restore routines through the API. Use multipart upload for reliable large-file transfers.',
     href: PRODUCT_DOCS
   },
   {
     icon: 'pi pi-microchip-ai',
     title: 'Serve AI datasets and models',
     description:
-      'Store training datasets, model weights, and inference artifacts. Access from Functions for AI workloads. Integrate with AI Inference for model serving.',
+      'Store training datasets, model weights, and inference artifacts. Read them from Functions for AI workloads, and serve models with AI Inference.',
     href: '/site/solutions/ai'
   },
   {
     icon: 'pi pi-cloud',
     title: 'Build multi-cloud storage',
     description:
-      'Use S3-compatible storage as part of a multi-cloud strategy. Standard API enables portability between providers. Avoid ecosystem lock-in with open protocols.',
+      'Use S3-compatible storage as part of a multi-cloud strategy. The standard API keeps data portable between providers and avoids lock-in.',
     href: '/site/solutions/technology'
   }
 ]
@@ -66,7 +65,7 @@ const FAQ = [
     value: 'what-to-store',
     question: 'What can I store in Object Storage?',
     answer:
-      'Azion Object Storage is S3-compatible storage for unstructured data. Key features include: zero egress fees between Azion services, 99.9% availability, bucket-as-origin for static sites, multipart upload support, and native Functions integration. Store files, media, logs, datasets, and application assets with predictable costs.'
+      'Azion Object Storage is S3-compatible storage for unstructured data. It offers zero egress fees between Azion services, 99.9% availability, bucket-as-origin for static sites, multipart upload, and native Functions integration. Store files, media, logs, datasets, and application assets with predictable costs.'
   },
   {
     value: 'vs-r2',
@@ -78,25 +77,25 @@ const FAQ = [
     value: 'migrate',
     question: 'How do I migrate from AWS S3 or Cloudflare R2?',
     answer:
-      "Create S3 credentials for your Azion bucket, then use standard S3 tools (AWS CLI, rclone, boto3) to copy objects. Point your existing applications to Azion's endpoint with the new credentials. No code changes required—Object Storage uses the same S3 API."
+      'Create S3 credentials for your Azion bucket, then copy objects with standard S3 tools (AWS CLI, rclone, boto3). Point your existing applications to Azion’s endpoint with the new credentials. Object Storage uses the same S3 API, so no code changes are required.'
   },
   {
     value: 'buckets',
     question: 'How do buckets organize my data?',
     answer:
-      'A bucket is a top-level container used to organize objects. Buckets can be configured as an origin for Applications, enabling static site hosting and asset delivery. Each bucket has configurable access permissions and S3 credentials.'
+      'A bucket is a top-level container that organizes objects. You can configure a bucket as an origin for Applications to host static sites and deliver assets. Each bucket has its own access permissions and S3 credentials.'
   },
   {
     value: 'origin',
     question: 'Can I use Object Storage as an origin for Applications?',
     answer:
-      'Yes. Configure a bucket as an origin for Applications to serve static sites, HTML, CSS, JavaScript, and other assets. Choose to serve from the bucket root or a specific prefix. Integrate with Cache for performance optimization.'
+      'Yes. Configure a bucket as an origin for Applications to serve static sites, HTML, CSS, JavaScript, and other assets. Choose to serve from the bucket root or a specific prefix. Add Cache to speed up delivery.'
   },
   {
     value: 'functions',
     question: 'Can Functions access Object Storage?',
     answer:
-      'Yes. Functions can interact with Object Storage through the Storage API, enabling you to read, write, delete, and list objects programmatically. This allows data processing, validation, and transformation without egress fees within the platform.'
+      'Yes. Functions use the Storage API to read, write, delete, and list objects. You can process, validate, and transform data with no egress fees inside the platform.'
   },
   {
     value: 's3-operations',
@@ -108,7 +107,7 @@ const FAQ = [
     value: 'egress',
     question: 'Are there egress fees for Object Storage?',
     answer:
-      'Zero egress fees between Azion services. Data transferred between Object Storage and Functions or Applications incurs no egress cost. This applies to all operations: serving static sites, processing data, or delivering media.'
+      'Zero egress fees between Azion services. Data moving between Object Storage and Functions or Applications has no egress cost, whether you serve static sites, process data, or deliver media.'
   },
   {
     value: 'limits',
@@ -120,7 +119,7 @@ const FAQ = [
     value: 'secure-access',
     question: 'How do I secure access to my buckets?',
     answer:
-      'Create S3 credentials with specific capabilities (read, write, delete) per bucket. Control who can access objects by mediating through Functions where you can enforce authentication and validation. Configure bucket-level access permissions.'
+      'Create S3 credentials with specific capabilities (read, write, delete) per bucket. To control who reads objects, route access through Functions and enforce authentication and validation there. You can also set bucket-level access permissions.'
   }
 ]
 
@@ -132,12 +131,12 @@ export const OBJECT_STORAGE_PAGE = [
     eyebrow: 'Object Storage',
     title: 'S3-compatible object storage for global workloads',
     description:
-      'Store and deliver static assets globally with S3-compatible APIs, integrated directly with your application stack.',
+      'Store and deliver static assets globally with S3-compatible APIs, integrated with your application stack.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every bucket in one console',
@@ -150,7 +149,7 @@ export const OBJECT_STORAGE_PAGE = [
         icon: 'ai ai-edge-storage',
         title: 'Store application data at scale',
         description:
-          'Store user uploads, datasets, logs, and unstructured data in buckets using the S3-compatible API. Scale storage on demand while keeping object access fast.',
+          'Store user uploads, datasets, logs, and unstructured data in buckets through the S3-compatible API. Storage scales on demand and object access stays fast.',
         scene: { component: markRaw(ObjectStorageBucketsFragment) },
         href: PRODUCT_DOCS
       },
@@ -158,7 +157,7 @@ export const OBJECT_STORAGE_PAGE = [
         icon: 'ai ai-edge-application',
         title: 'From storage to full application delivery',
         description:
-          'Object Storage integrates with Cache, Functions, and Applications for complete content delivery workflows. Set the access your workloads get to each bucket when you create it.',
+          'Object Storage works with Cache, Functions, and Applications for complete content delivery. Set the access your workloads get to each bucket when you create it.',
         scene: { component: markRaw(ObjectStorageAccessFragment) },
         href: PRODUCT_DOCS
       },
@@ -166,7 +165,7 @@ export const OBJECT_STORAGE_PAGE = [
         icon: 'pi pi-globe',
         title: 'Host static sites from buckets',
         description:
-          'Host JAMstack sites, SPAs, and static assets in a bucket and serve through Applications with high availability. Configure bucket as origin and deliver via Cache for performance.',
+          'Host JAMstack sites, SPAs, and static assets in a bucket and serve them through Applications with high availability. Set the bucket as origin and deliver through Cache for speed.',
         scene: { component: markRaw(ObjectStorageBrowserFragment) },
         href: PRODUCT_DOCS
       }
@@ -179,7 +178,7 @@ export const OBJECT_STORAGE_PAGE = [
       {
         title: 'Connect Object Storage to your stack',
         description:
-          'Manage Object Storage through Azion Console, CLI, or S3-compatible API. Use standard tools like AWS CLI, rclone, and Terraform for seamless integration.',
+          'Manage Object Storage through Azion Console, CLI, or the S3-compatible API. Standard tools like AWS CLI, rclone, and Terraform work out of the box.',
         href: PRODUCT_DOCS,
         illustration: 'infrastructure-as-code',
         illustrationLabel:
@@ -189,11 +188,11 @@ export const OBJECT_STORAGE_PAGE = [
       {
         title: 'Migrate from S3 without rewriting code',
         description:
-          'Move objects from AWS S3, Cloudflare R2, or any S3-compatible provider without code changes. Object Storage exposes a standard S3 API, so your current clients, scripts, and SDKs work immediately.',
+          'Move objects from AWS S3, Cloudflare R2, or any S3-compatible provider with no code changes. Object Storage exposes a standard S3 API, so your current clients, scripts, and SDKs keep working.',
         href: '/signup',
-        illustration: 'global-network',
-        illustrationLabel: 'Traffic routed across a global network of locations',
-        actions: [{ label: 'Start Free', href: '/signup' }]
+        illustration: 'azion-to-aws',
+        illustrationLabel: 'AWS moving to Azion',
+        actions: [{ label: 'Start free', href: '/signup' }]
       }
     ]
   },

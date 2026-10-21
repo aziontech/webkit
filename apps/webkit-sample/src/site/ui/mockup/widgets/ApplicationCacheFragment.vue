@@ -28,7 +28,7 @@
       value: 'honor',
       label: 'Honor cache policies',
       description:
-        "Honor cache policies from the origin or define a new maximum cache TTL for the edge. If a TTL isn't received from the origin, cache will be maintained at a default TTL."
+        "Honor cache policies from the origin or define a new maximum cache TTL in Azion's data centers. If a TTL isn't received from the origin, cache will be maintained at a default TTL."
     },
     {
       value: 'override',
@@ -185,7 +185,7 @@
             aria-label="Max Age"
           />
           <HelperText
-            label="Maximum time (in seconds) content is cached at the edge. Minimum of 3 seconds."
+            label="Maximum time (in seconds) content is cached in Azion's data centers. Minimum of 3 seconds."
           />
         </div>
       </MockupPart>

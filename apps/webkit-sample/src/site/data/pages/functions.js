@@ -298,20 +298,32 @@ const START_TILES = START_TABS.map(({ value, title, description }) => ({
     : { href: PRODUCT_DOCS })
 }))
 
+export const INTEGRATION_CODE_BAND = {
+  section: 'IntegrationCode',
+  title: 'Integrates with the',
+  emphasis: 'Azion Web Platform',
+  description:
+    'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
+  items: INTEGRATIONS,
+  samples: INTEGRATION_SAMPLES,
+  action: { label: 'Explore the runtime APIs', href: PRODUCT_DOCS }
+}
+
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-carousel',
     eyebrow: 'Functions',
-    title: 'Instant serverless functions for modern applications',
-    description: 'Build and scale AI-powered applications on a globally integrated platform.',
+    title: 'Run code globally, with no cold starts',
+    description:
+      'Run JavaScript and TypeScript close to users, with data and AI Inference built in.',
     actions: PRODUCT_HERO_ACTIONS,
     carouselLabel: 'Built for your framework',
     carouselMarks: FRAMEWORK_MARKS
   },
   { section: 'CapabilityGrid', items: BENEFITS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'get-started',
     eyebrow: 'Get started',
     title: 'Start where you already work',
@@ -322,14 +334,16 @@ export const FUNCTIONS_PAGE = [
     items: START_TILES
   },
   {
-    section: 'IntegrationCode',
-    title: 'Integrates with the',
-    emphasis: 'Azion Web Platform',
+    section: 'StickyScrollCode',
+    eyebrow: 'Integrations',
+    title: 'Integrates with the Azion Web Platform',
     description:
       'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
-    items: INTEGRATIONS,
-    samples: INTEGRATION_SAMPLES,
-    action: { label: 'Explore the runtime APIs', href: PRODUCT_DOCS }
+    items: INTEGRATIONS.map((item) => ({
+      ...item,
+      action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true }
+    })),
+    samples: INTEGRATION_SAMPLES
   },
   {
     section: 'UseCases',

@@ -70,86 +70,57 @@ export const MODEL_ROUTING = {
   ]
 }
 
-export const PLATFORM_REQUEST_PATH = {
+export const WORKLOAD_REQUEST_PATH = {
   nodes: [
     { key: 'user', kind: 'pill', title: 'User', icon: 'pi pi-user', active: true },
     {
       key: 'routing',
       kind: 'card',
       eyebrow: 'Routing',
-      title: 'Nearest location',
+      title: 'Nearest data center',
       icon: 'pi pi-directions',
       active: true
     },
-    { key: 'firewall', kind: 'tile', title: 'Firewall', icon: 'ai ai-edge-firewall' },
-    { key: 'applications', kind: 'tile', title: 'Applications', icon: 'ai ai-edge-application' },
-    { key: 'cache', kind: 'tile', title: 'Cache', icon: 'ai ai-tiered-cache' },
     {
-      key: 'accelerator',
-      kind: 'tile',
-      title: 'Application Accelerator',
-      icon: 'ai ai-app-accelerator'
-    },
-    { key: 'functions', kind: 'tile', title: 'Functions', icon: 'ai ai-edge-functions', lit: true },
-    { key: 'image', kind: 'tile', title: 'Image Processor', icon: 'ai ai-image-processor' },
-    {
-      key: 'delivery',
+      key: 'workload',
       kind: 'card',
-      eyebrow: 'Delivery',
-      title: 'Tiered Cache and Load Balancer',
-      icon: 'ai ai-load-balancer',
+      eyebrow: 'Workload',
+      title: 'shop.example.com',
+      icon: 'ai ai-workloads',
+      status: { label: 'Live', severity: 'success' },
+      active: true,
+      lit: true
+    },
+    {
+      key: 'cache',
+      kind: 'item',
+      eyebrow: 'Cache',
+      title: 'Served from cache',
+      icon: 'ai ai-tiered-cache',
       active: true
     },
     {
       key: 'origin',
-      kind: 'card',
+      kind: 'item',
       eyebrow: 'Origin',
       title: 'origin.example.com',
-      icon: 'pi pi-database',
-      status: { label: 'Healthy', severity: 'success' },
-      active: true
+      icon: 'pi pi-database'
     }
   ],
   layout: {
+    gap: 'wide',
     row: [
       { node: 'user' },
       { node: 'routing' },
-      {
-        group: 'platform',
-        label: 'Azion Platform',
-        kind: 'dashed',
-        fill: 'primary',
-        content: {
-          row: [
-            {
-              group: 'data-center',
-              label: 'Data center',
-              kind: 'dashed',
-              fill: 'primary',
-              content: {
-                columns: 3,
-                grid: [
-                  { node: 'firewall' },
-                  { node: 'applications' },
-                  { node: 'cache' },
-                  { node: 'accelerator' },
-                  { node: 'functions' },
-                  { node: 'image' }
-                ]
-              }
-            },
-            { node: 'delivery' }
-          ]
-        }
-      },
-      { node: 'origin' }
+      { node: 'workload' },
+      { branches: [{ node: 'cache' }, { node: 'origin' }] }
     ]
   },
   edges: [
     { from: 'user', to: 'routing', active: true },
-    { from: 'routing', to: 'data-center', active: true },
-    { from: 'data-center', to: 'delivery', active: true },
-    { from: 'delivery', to: 'origin', active: true }
+    { from: 'routing', to: 'workload', active: true },
+    { from: 'workload', to: 'cache', label: 'hit', active: true },
+    { from: 'workload', to: 'origin', label: 'miss' }
   ]
 }
 
@@ -224,5 +195,211 @@ export const LATENCY_ROUTING = {
     { from: 'app', to: 'realtime', active: true },
     { from: 'realtime', to: 'inference', label: 'true', active: true },
     { from: 'realtime', to: 'gpt', label: 'false' }
+  ]
+}
+
+export const GATEWAY_REQUEST_PATH = {
+  nodes: [
+    { key: 'app', kind: 'app', title: 'App' },
+    {
+      key: 'firewall',
+      kind: 'card',
+      eyebrow: 'Firewall',
+      title: 'WAF, rate limits, DDoS',
+      icon: 'ai ai-edge-firewall',
+      active: true
+    },
+    {
+      key: 'gateway',
+      kind: 'card',
+      eyebrow: 'Functions',
+      title: 'AI Gateway',
+      icon: 'ai ai-edge-functions',
+      status: { label: 'Key valid', severity: 'success' },
+      active: true,
+      lit: true
+    },
+    {
+      key: 'inference',
+      kind: 'item',
+      eyebrow: 'AI Inference',
+      title: 'Models on Azion',
+      icon: 'ai ai-edge-ai',
+      active: true
+    },
+    {
+      key: 'providers',
+      kind: 'item',
+      eyebrow: 'Connectors',
+      title: 'Third-party providers',
+      icon: 'ai ai-edge-connectors'
+    }
+  ],
+  layout: {
+    gap: 'wide',
+    row: [
+      { node: 'app' },
+      { node: 'firewall' },
+      { node: 'gateway' },
+      { branches: [{ node: 'inference' }, { node: 'providers' }] }
+    ]
+  },
+  edges: [
+    { from: 'app', to: 'firewall', active: true },
+    { from: 'firewall', to: 'gateway', active: true },
+    { from: 'gateway', to: 'inference', label: 'primary', active: true },
+    { from: 'gateway', to: 'providers', label: 'fallback' }
+  ]
+}
+
+export const RESPONSE_CACHE = {
+  nodes: [
+    { key: 'app', kind: 'app', title: 'App' },
+    { key: 'hit', kind: 'pill', title: 'Cached response?', active: true },
+    {
+      key: 'cache',
+      kind: 'item',
+      eyebrow: 'Cache API',
+      title: 'Stored response',
+      icon: 'ai ai-tiered-cache',
+      status: { label: 'No tokens spent', severity: 'success' },
+      active: true,
+      lit: true
+    },
+    {
+      key: 'model',
+      kind: 'item',
+      eyebrow: 'AI Inference',
+      title: 'Model call',
+      icon: 'ai ai-edge-ai'
+    }
+  ],
+  layout: {
+    gap: 'wide',
+    row: [{ node: 'app' }, { node: 'hit' }, { branches: [{ node: 'cache' }, { node: 'model' }] }]
+  },
+  edges: [
+    { from: 'app', to: 'hit', active: true },
+    { from: 'hit', to: 'cache', label: 'true', active: true },
+    { from: 'hit', to: 'model', label: 'false' }
+  ]
+}
+
+export const ISOLATE_PER_REQUEST = {
+  nodes: [
+    { key: 'requests', kind: 'pill', title: 'Requests', icon: 'pi pi-user', active: true },
+    {
+      key: 'runtime',
+      kind: 'card',
+      eyebrow: 'Azion Runtime',
+      title: 'Isolate per request',
+      icon: 'ai ai-edge-functions',
+      status: { label: 'No cold start', severity: 'success' },
+      active: true,
+      lit: true
+    },
+    { key: 'first', kind: 'item', eyebrow: 'Isolate', title: 'Request 1', active: true },
+    { key: 'second', kind: 'item', eyebrow: 'Isolate', title: 'Request 2', active: true },
+    { key: 'third', kind: 'item', eyebrow: 'Isolate', title: 'Request 3', active: true }
+  ],
+  layout: {
+    gap: 'wide',
+    row: [
+      { node: 'requests' },
+      { node: 'runtime' },
+      { branches: [{ node: 'first' }, { node: 'second' }, { node: 'third' }] }
+    ]
+  },
+  edges: [
+    { from: 'requests', to: 'runtime', active: true },
+    { from: 'runtime', to: 'first', active: true },
+    { from: 'runtime', to: 'second', active: true },
+    { from: 'runtime', to: 'third', active: true }
+  ]
+}
+
+export const GRADUAL_ROLLOUT = {
+  nodes: [
+    {
+      key: 'workload',
+      kind: 'card',
+      eyebrow: 'Workload',
+      title: 'shop-prod',
+      icon: 'ai ai-workloads',
+      status: { label: 'Live', severity: 'success' },
+      active: true
+    },
+    { key: 'split', kind: 'pill', title: 'Traffic split', active: true },
+    {
+      key: 'next',
+      kind: 'item',
+      eyebrow: 'New deployment',
+      title: 'storefront v2',
+      icon: 'ai ai-edge-application',
+      status: { label: 'Watching', severity: 'info' },
+      active: true,
+      lit: true
+    },
+    {
+      key: 'current',
+      kind: 'item',
+      eyebrow: 'Serving deployment',
+      title: 'storefront v1',
+      icon: 'ai ai-edge-application'
+    }
+  ],
+  layout: {
+    gap: 'wide',
+    row: [
+      { node: 'workload' },
+      { node: 'split' },
+      { branches: [{ node: 'next' }, { node: 'current' }] }
+    ]
+  },
+  edges: [
+    { from: 'workload', to: 'split', active: true },
+    { from: 'split', to: 'next', label: '10%', active: true },
+    { from: 'split', to: 'current', label: '90%' }
+  ]
+}
+
+export const WORKLOAD_SECURITY = {
+  nodes: [
+    { key: 'user', kind: 'pill', title: 'User', icon: 'pi pi-user', active: true },
+    {
+      key: 'workload',
+      kind: 'card',
+      eyebrow: 'Workload',
+      title: 'shop.example.com',
+      icon: 'ai ai-domains',
+      status: { label: 'TLS on', severity: 'success' },
+      active: true,
+      lit: true
+    },
+    {
+      key: 'firewall',
+      kind: 'item',
+      eyebrow: 'Firewall',
+      title: 'WAF, rate limits, network lists',
+      icon: 'ai ai-edge-firewall',
+      active: true
+    },
+    {
+      key: 'application',
+      kind: 'item',
+      eyebrow: 'Application',
+      title: 'storefront',
+      icon: 'ai ai-edge-application',
+      active: true
+    }
+  ],
+  layout: {
+    gap: 'wide',
+    row: [{ node: 'user' }, { node: 'workload' }, { node: 'firewall' }, { node: 'application' }]
+  },
+  edges: [
+    { from: 'user', to: 'workload', active: true },
+    { from: 'workload', to: 'firewall', active: true },
+    { from: 'firewall', to: 'application', label: 'allowed', active: true }
   ]
 }

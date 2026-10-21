@@ -84,7 +84,7 @@ When a security analyst identifies an abuse pattern and needs a new rule — who
 
 In models where security policy depends on configuration inside the SaaS platform, the answer usually involves a vendor, a support cycle, and a publication window outside the brand’s control. In models with a separate delivery layer, the brand operates with autonomy: creates the rule, publishes it, and the policy takes effect.
 
-On Azion Web Platform, new configurations can be propagated across the global network through instant deploys, reducing the gap between the decision and the applied policy. A rule created at 11 PM on a Friday — when the attack pattern was identified and the team is looking at the logs — goes into production without waiting for a maintenance window or a vendor release cycle.
+On Azion Web Platform, new configurations can be propagated across the global distributed infrastructure through instant deploys, reducing the gap between the decision and the applied policy. A rule created at 11 PM on a Friday — when the attack pattern was identified and the team is looking at the logs — goes into production without waiting for a maintenance window or a vendor release cycle.
 
 For brands operating on high-risk dates such as Black Friday, Cyber Monday, collection launches, and high-visibility campaigns, that autonomy has direct value. Attack behavior changes during the event, not before it. The ability to respond during the peak, without waiting for a process that wasn’t in the plan, is what separates a functional security policy from a security policy that existed on paper.
 

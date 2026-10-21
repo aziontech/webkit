@@ -101,8 +101,8 @@ export interface SiteSocial {
 export interface PageSection {
   /** Registered section name, one per marketing template. */
   section: string
-  /** False drops the hatched gap before this section. */
-  gap?: boolean
+  /** False drops the hatched gap before this section; 'small' shortens it. */
+  gap?: boolean | 'small'
   /** Props forwarded to the section. */
   [prop: string]: unknown
 }

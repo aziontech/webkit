@@ -1,5 +1,6 @@
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
+import { salesClosing } from '../product-pages.js'
 import { BUILD_CTA, EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 
 const NETWORK_FIGURES = [
@@ -13,30 +14,34 @@ const NETWORK_BANDS = [
   {
     title: 'Run closer to users',
     description:
-      'Handle requests closer to users instead of sending everything back to a few central regions. That helps cut latency, absorb spikes automatically, and reduce backhaul overhead.',
+      'Handle requests close to users instead of sending everything back to a few central regions. That cuts latency, absorbs spikes automatically, and reduces backhaul.',
     illustration: 'fastest-path-to-live-website',
-    illustrationLabel: 'Requests served from the location nearest the user'
+    illustrationLabel: 'Requests served from the data center nearest the user',
+    actions: [{ label: 'Learn more', href: '/site/products/application-accelerator' }]
   },
   {
     title: 'Keep delivery, logic, and data in one place',
     description:
-      'Use one platform for delivery, distributed execution, and data workflows. Support APIs and dynamic applications with real-time request handling, origin protection, and state kept close to execution with services like KV Store.',
+      'Run delivery, execution, and data on one platform. APIs and dynamic applications get real-time request handling, origin protection, and state kept next to the code with KV Store.',
     illustration: 'runtime',
-    illustrationLabel: 'Delivery, execution and data served from one platform'
+    illustrationLabel: 'Delivery, execution and data served from one platform',
+    actions: [{ label: 'Learn more', href: '/site/products/kv-store' }]
   },
   {
     title: 'Get better routes and more stable delivery',
     description:
-      'Place traffic entry points inside ISP last-mile networks and connect through IXPs, peering, and Tier 1 transit. Reduce hops, improve route quality, and keep delivery stable during traffic spikes, upstream issues, and regional incidents.',
+      'Traffic enters inside ISP last-mile networks and connects through IXPs, peering, and Tier 1 transit. Fewer hops mean better routes and stable delivery during traffic spikes, upstream issues, and regional incidents.',
     illustration: 'distributed-apis',
-    illustrationLabel: 'Entry points inside ISP networks, connected through IXPs and transit'
+    illustrationLabel: 'Entry points inside ISP networks, connected through IXPs and transit',
+    actions: [{ label: 'Learn more', href: '/site/products/load-balancer' }]
   },
   {
     title: 'Stop attack traffic earlier',
     description:
-      'Block attack traffic in the delivery path before it reaches your origin. Deploy code and policies while the platform handles scaling, execution, and traffic steering, so your team spends less time managing regions, capacity, scaling rules, and extra layers.',
+      'Block attack traffic in the delivery path, before it reaches your origin. Deploy code and policies and let the platform handle scaling, execution, and traffic steering. Your team manages fewer regions, less capacity, and fewer scaling rules.',
     illustration: 'automate-threat-mitigation',
-    illustrationLabel: 'Attack traffic stopped in the delivery path, before the origin'
+    illustrationLabel: 'Attack traffic stopped in the delivery path, before the origin',
+    actions: [{ label: 'Learn more', href: '/site/products/ddos-protection' }]
   }
 ]
 
@@ -50,7 +55,7 @@ export const OUR_NETWORK_PAGE = [
       'Run closer to users with low-latency delivery, stable routing, and built-in DDoS protection across 100+ data centers and 3.3k directly connected ASNs.',
     actions: [
       { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a Specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     carouselMarks: CLIENT_STRIP
   },
@@ -64,20 +69,10 @@ export const OUR_NETWORK_PAGE = [
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
 
-
   {
     section: 'PlatformDirectory',
     eyebrow: 'Platform',
     title: 'Build, run, and protect applications on one platform'
   },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: BUILD_CTA.eyebrow,
-    title: BUILD_CTA.title,
-    titleMuted: BUILD_CTA.titleMuted,
-    description: BUILD_CTA.description,
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  salesClosing(BUILD_CTA)
 ]

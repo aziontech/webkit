@@ -79,13 +79,13 @@ return data;
 
 Repeatable building blocks produce consistent performance and cost benefits:
 
-- **Cache + Storage:** store images, JS/CSS, thumbnails, and semi‑static JSON across the distributed network, close to users.
+- **Cache + Storage:** store images, JS/CSS, thumbnails, and semi‑static JSON across the distributed infrastructure, close to users.
 - **Functions:** run auth checks, input sanitation, bot filtering, A/B composition and geo‑routing.
-- **Application Acceleration:** minimize handshake and retransmit overhead for dynamic paths.
+- **Application Accelerator:** minimize handshake and retransmit overhead for dynamic paths.
 - **Firewall & Rate Limits:** block abusive traffic and globally apply simple DDoS mitigation.
 - **Observability:** ship real‑time metrics (cache hits, distributed-served responses, blocked requests, per‑endpoint egress) into FinOps dashboards for attribution.
 
-**Operational flow**  Users → Edge Locations (Firewall → Functions → Cache/Storage) → Cache miss → Application Acceleration → Origin
+**Operational flow**  Users → data centers (Firewall → Functions → Cache/Storage) → Cache miss → Application Accelerator → Origin
 
 ## KPIs FinOps and Engineering Should Track
 
@@ -184,6 +184,6 @@ Beyond headline cost reduction, the benefits compound:
 
 FinOps used to be a spreadsheet exercise. The next wave is architectural: changing where work happens. Combine FinOps rigor (audit, prioritize, attribute, govern) with a globally distributed web platform that provides caching, compute, acceleration, security and observability — and you don’t just cut costs; you change the operating model. You move from managing an ever-rising bill to engineering a predictable, lower-cost platform that supports growth.
 
-If you’re wrestling with unpredictable egress, noisy APIs, or seasonal scaling pains, the fastest, most measurable path is a focused distributed FinOps pilot: identify top egress endpoints, run a short simulation, and compare total cost of ownership. Azion’s zero-egress model for distributed-served responses, Functions, Cache, Application Acceleration and Real-Time Metrics make it straightforward to model and prove the impact on your traffic profile.
+If you’re wrestling with unpredictable egress, noisy APIs, or seasonal scaling pains, the fastest, most measurable path is a focused distributed FinOps pilot: identify top egress endpoints, run a short simulation, and compare total cost of ownership. Azion’s zero-egress model for distributed-served responses, Functions, Cache, Application Accelerator and Real-Time Metrics make it straightforward to model and prove the impact on your traffic profile.
 
 [Book a technical FinOps simulation with Azion](https://www.azion.com/pt-br/contato/) **—** get realistic egress reduction forecasts, TCO modeling and a prioritized pilot plan for your traffic.

@@ -18,7 +18,7 @@ Using Azion’s Firewall and its modules [Network Shield](https://www.azion.com/
 - mitigation of sophisticated DDoS attacks targeting network and application layers, with the ability to absorb high-volume traffic spikes;
 - scoring algorithms designed to reduce false positives while identifying emerging and sophisticated threats.
 
-As part of evolving its zero-trust security model, Dafiti also implemented Azion Data Streaming to collect WAF and security events in real time. These events are sent to analytical platforms and SIEM systems, providing deeper visibility and faster incident response.
+As part of evolving its zero-trust security model, Dafiti also implemented Azion Data Stream to collect WAF and security events in real time. These events are sent to analytical platforms and SIEM systems, providing deeper visibility and faster incident response.
 
 ## Results and Impacts
 

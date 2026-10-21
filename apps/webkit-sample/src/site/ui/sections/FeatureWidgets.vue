@@ -13,7 +13,7 @@
   import SectionAction from './SectionAction.vue'
   import type { SiteAction } from './types'
 
-  defineOptions({ name: 'WidgetGrid' })
+  defineOptions({ name: 'FeatureWidgets' })
 
   interface SiteScene {
     /** The scene component the cell presents. */
@@ -22,14 +22,14 @@
     props?: Record<string, unknown>
   }
 
-  interface WidgetGridCopy {
+  interface FeatureWidgetsCopy {
     /** Label of the button that copies the text. */
     label: string
     /** Text the button puts on the clipboard. */
     text: string
   }
 
-  export interface WidgetGridItem {
+  export interface FeatureWidgetsItem {
     /** Icon class the page data may carry; the caption does not draw it. */
     icon?: string
     /** The cell's heading. */
@@ -43,11 +43,11 @@
     /** Label of the cell's link. */
     linkLabel?: string
     /** A highlighted button that copies a text, such as a prompt. */
-    copy?: WidgetGridCopy
+    copy?: FeatureWidgetsCopy
   }
 
   /** Cells per row the grid lays out from the medium breakpoint up. */
-  export type WidgetGridColumns = 2 | 3
+  export type FeatureWidgetsColumns = 2 | 3
 
   interface Props {
     /** Id of the band, for in-page links. */
@@ -61,9 +61,9 @@
     /** Alignment of the section title over the grid. */
     titleKind?: SectionTitleKind
     /** The cells, in reading order. */
-    items: WidgetGridItem[]
+    items: FeatureWidgetsItem[]
     /** How many cells share a row from the medium breakpoint up. */
-    columns?: WidgetGridColumns
+    columns?: FeatureWidgetsColumns
     /** Buttons under the section title. */
     actions?: SiteAction[]
   }
@@ -86,7 +86,7 @@
 
   let copiedTimer: ReturnType<typeof setTimeout> | undefined
 
-  const copy = async (item: WidgetGridItem) => {
+  const copy = async (item: FeatureWidgetsItem) => {
     if (!item.copy) return
     await globalThis.navigator.clipboard?.writeText(item.copy.text)
     copied.value = item.title
