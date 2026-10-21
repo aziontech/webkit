@@ -90,7 +90,7 @@
         :data-testid="`${testId}__frame`"
         class="w-full shrink-0 group-data-[kind=site]:layout-column-site"
       >
-        <div class="grid w-full grid-cols-1 md:grid-cols-2">
+        <div class="grid w-full grid-cols-1 md:grid-cols-[auto_auto]">
           <div
             :data-testid="`${testId}__columns`"
             class="order-1 grid w-full grid-cols-2 gap-y-(--spacing-lg) md:grid-cols-4 md:gap-y-0 md:col-span-2 md:row-start-1"
