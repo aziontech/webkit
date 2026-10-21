@@ -74,7 +74,9 @@ const TOPICS_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false
   <template #header>
     <SectionTitle
       kind="left"
-      title="See how to use"
+      eyebrow="Use Cases"
+      title="What teams use Application Accelerator for"
+      description="Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose."
     />
   </template>
 
@@ -99,7 +101,7 @@ ${each(
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/UseCaseLinks',
+  title: 'Templates/Marketing/Use Cases/UseCaseLinks',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
@@ -125,7 +127,10 @@ export const Topics = {
 export const SITE_SECTION = {
   _id: 'use-case-links',
   props: {
-    title: 'See how to use',
+    eyebrow: 'Use Cases',
+    title: 'What teams use Application Accelerator for',
+    description:
+      'Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose.',
     items: [
       {
         icon: 'pi pi-code',

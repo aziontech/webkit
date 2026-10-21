@@ -36,12 +36,12 @@ const HOSTS = {
     body: 'h-96 w-full min-w-0 p-(--spacing-xl)'
   },
   grid: {
-    label: 'WidgetGrid, 2 columns',
+    label: 'FeatureWidgets, 2 columns',
     frame: 'w-full max-w-(--container-lg) bg-(--bg-surface)',
     body: 'h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]'
   },
   'grid-3': {
-    label: 'WidgetGrid, 3 columns',
+    label: 'FeatureWidgets, 3 columns',
     frame: 'w-full max-w-(--container-sm) bg-(--bg-surface)',
     body: 'h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]'
   }

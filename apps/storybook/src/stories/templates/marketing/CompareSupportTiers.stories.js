@@ -18,28 +18,28 @@ const TIERS = [
     name: 'Developer',
     description: 'Ideal for exploring the platform independently.',
     highlighted: false,
-    action: { label: 'Start Free', kind: 'outlined', href: '/signup' }
+    action: { label: 'Start free', kind: 'outlined', href: '/signup' }
   },
   {
     id: 'business',
     name: 'Business',
     description: 'Ideal for teams that need support from specialists.',
     highlighted: false,
-    action: { label: 'Contact Us', kind: 'outlined', href: '/contact' }
+    action: { label: 'Contact us', kind: 'outlined', href: '/contact' }
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     description: 'Ideal for organizations that require advanced support and ongoing services.',
     highlighted: true,
-    action: { label: 'Contact Us', kind: 'secondary', href: '/contact' }
+    action: { label: 'Contact us', kind: 'secondary', href: '/contact' }
   },
   {
     id: 'mission-critical',
     name: 'Mission-Critical',
     description: 'Ideal for mission-critical operations that need priority and proactive support.',
     highlighted: false,
-    action: { label: 'Contact Us', kind: 'outlined', href: '/contact' }
+    action: { label: 'Contact us', kind: 'outlined', href: '/contact' }
   }
 ]
 
@@ -48,8 +48,8 @@ const heading = (label) => ({ label, group: true, values: ['', '', '', ''] })
 const SECTIONS = [
   {
     eyebrow: 'Support',
-    title: 'Get assistance when it matters most',
-    link: { label: 'See Pricing', href: `${PRICING}#support` },
+    title: 'Get help when it matters most',
+    link: { label: 'See pricing', href: `${PRICING}#support` },
     rows: [
       heading('Self-service support'),
       { label: 'Learning Center', values: [true, true, true, true] },
@@ -73,7 +73,7 @@ const SECTIONS = [
   {
     eyebrow: 'Professional Services',
     title: 'Move faster with specialist guidance',
-    link: { label: 'See Pricing', href: `${PRICING}#professional-services` },
+    link: { label: 'See pricing', href: `${PRICING}#professional-services` },
     rows: [
       {
         label: 'Integration Services',
@@ -281,7 +281,7 @@ const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="f
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/CompareSupportTiers',
+  title: 'Templates/Marketing/Comparison/CompareSupportTiers',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

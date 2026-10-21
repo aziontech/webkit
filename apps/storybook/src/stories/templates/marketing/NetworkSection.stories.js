@@ -10,23 +10,34 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
+import Topic from '@aziontech/webkit/topic'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
-const IMPORTS = [
+const BAND_IMPORTS = [
+  "import FrameBox from '@aziontech/webkit/frame-box'",
+  "import NetworkMap from '@aziontech/webkit/network-map'",
+  ...COLUMN_IMPORTS,
+  "import SectionModule from '@aziontech/webkit/section-module'",
+  "import SectionTitle from '@aziontech/webkit/section-title'"
+]
+
+const QUOTES_IMPORTS = [
   "import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'",
   "import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'",
   "import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'",
   "import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'",
   "import CardGrid from '@aziontech/webkit/card-grid'",
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import NetworkMap from '@aziontech/webkit/network-map'",
   "import Quote from '@aziontech/webkit/quote'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
-  "import SectionTitle from '@aziontech/webkit/section-title'"
+  ...BAND_IMPORTS
+]
+
+const BENEFITS_IMPORTS = [
+  "import CardGrid from '@aziontech/webkit/card-grid'",
+  ...BAND_IMPORTS,
+  "import Topic from '@aziontech/webkit/topic'"
 ]
 
 const components = {
@@ -38,7 +49,8 @@ const components = {
   SectionContainer,
   SectionGap,
   SectionModule,
-  SectionTitle
+  SectionTitle,
+  Topic
 }
 
 const setup = () => ({
@@ -50,7 +62,7 @@ const setup = () => ({
 
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+  title: 'Build, secure, and scale on one distributed infrastructure',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -59,6 +71,27 @@ const NETWORK_CLAIMS = [
   '100+ Tbps network capacity',
   '30 ms median latency',
   '100% availability'
+]
+
+const BENEFITS = [
+  {
+    icon: 'pi pi-globe',
+    title: 'Global resilience beyond anycast',
+    description:
+      "Azion's software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide."
+  },
+  {
+    icon: 'pi pi-stopwatch',
+    title: 'Low latency everywhere',
+    description:
+      'Compute, AI, databases, and security run in every data center, close to your users. Median global latency stays under 30 ms, with a built-in CDN and tiered caching for every app.'
+  },
+  {
+    icon: 'pi pi-arrows-v',
+    title: 'Zero-ops autoscaling and failover',
+    description:
+      'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
+  }
 ]
 
 const MONOCHROME = 'brightness-0 [[data-theme=dark]_&]:invert'
@@ -75,21 +108,21 @@ const OUTCOMES = [
     src: 'madeiramadeiraExtendedReversed',
     name: 'MadeiraMadeira',
     filter: '',
-    text: '90% lower cloud costs, and faster product delivery at scale.',
+    text: '90% lower cloud costs and faster applications at scale.',
     highlights: ['90% lower cloud costs']
   },
   {
     src: 'rennerExtendedColor',
     name: 'Renner',
     filter: '',
-    text: '67% saved on data transfer costs, through massive traffic spikes.',
+    text: '67% saved on data transfer, even during massive traffic spikes.',
     highlights: ['67% saved']
   },
   {
     src: 'fourbankExtendedReversed',
     name: 'Fourbank',
     filter: MONOCHROME,
-    text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+    text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
     highlights: ['DDoS mitigated']
   }
 ]
@@ -189,11 +222,27 @@ ${each(
 )}
 </CardGrid>`
 
-const TEMPLATE = mapBand(OUTCOME_FLOOR)
+const BENEFIT_FLOOR = `<CardGrid flush kind="frame" :columns="3" class="border-t border-(--border-default)">
+${each(
+  BENEFITS,
+  (benefit) => `<CardGrid.Cell kind="canvas">
+  <Topic
+    :heading-level="3"
+    icon="${benefit.icon}"
+    title="${benefit.title}"
+    description="${benefit.description}"
+  />
+</CardGrid.Cell>`,
+  1
+)}
+</CardGrid>`
+
+const QUOTES_TEMPLATE = mapBand(OUTCOME_FLOOR)
+const BENEFITS_TEMPLATE = mapBand(BENEFIT_FLOOR)
 
 const meta = {
   title: 'Templates/Marketing/Network/NetworkSection',
-  excludeStories: ['SITE_SECTION'],
+  excludeStories: ['SITE_SECTION', 'BENEFITS_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -206,11 +255,11 @@ const meta = {
 
 export default meta
 
-export const Default = {
-  render: () => ({ components, setup, template: TEMPLATE }),
+export const ClientQuotes = {
+  render: () => ({ components, setup, template: QUOTES_TEMPLATE }),
   parameters: {
     docs: {
-      source: { code: toSfc(IMPORTS, TEMPLATE) }
+      source: { code: toSfc(QUOTES_IMPORTS, QUOTES_TEMPLATE) }
     }
   }
 }
@@ -219,13 +268,13 @@ export const SITE_SECTION = {
   _id: 'network-section',
   props: {
     eyebrow: 'Region: Earth.',
-    title: 'The most reliable infrastructure',
+    title: 'Build, secure, and scale on one distributed infrastructure',
     lead: 'Built around your users. Distributed around your data.',
     claims: [
       '100+ data centers',
-      '100+ Tbps throughput',
-      'High availability',
-      '30 ms median latency'
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
     ],
     outcomes: [
       {
@@ -239,28 +288,54 @@ export const SITE_SECTION = {
         logo: '/marketing-components/clients/madeiramadeira.svg',
         logoAlt: 'MadeiraMadeira',
         logoTreatment: 'as-is',
-        text: '90% lower cloud costs, and faster product delivery at scale.',
+        text: '90% lower cloud costs and faster applications at scale.',
         highlights: ['90% lower cloud costs']
       },
       {
         logo: '/marketing-components/clients/renner-color.svg',
         logoAlt: 'Renner',
         logoTreatment: 'as-is',
-        text: '67% saved on data transfer costs, through massive traffic spikes.',
+        text: '67% saved on data transfer, even during massive traffic spikes.',
         highlights: ['67% saved']
       },
       {
         logo: '/marketing-components/clients/fourbank.svg',
         logoAlt: 'Fourbank',
         logoTreatment: 'monochrome',
-        text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+        text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
         highlights: ['DDoS mitigated']
       }
     ]
   }
 }
 
-export const DefaultJson = {
+export const ClientQuotesJson = {
   tags: ['!dev'],
   ...siteJsonStory(SITE_SECTION)
+}
+
+export const Benefits = {
+  render: () => ({ components, template: BENEFITS_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(BENEFITS_IMPORTS, BENEFITS_TEMPLATE) }
+    }
+  }
+}
+
+export const BENEFITS_SECTION = {
+  _id: 'network-section',
+  props: {
+    kind: 'benefits',
+    eyebrow: SITE_SECTION.props.eyebrow,
+    title: SITE_SECTION.props.title,
+    lead: SITE_SECTION.props.lead,
+    claims: SITE_SECTION.props.claims,
+    benefits: BENEFITS
+  }
+}
+
+export const BenefitsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(BENEFITS_SECTION)
 }

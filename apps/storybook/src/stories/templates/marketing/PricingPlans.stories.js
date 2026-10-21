@@ -36,12 +36,12 @@ const PLANS = [
         details: 'Free forever, no card required. Included limits reset every month.'
       }
     },
-    featuresTitle: 'All Features Included.',
+    featuresTitle: 'All features included.',
     features: [
       { icon: 'pi pi-globe', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'pi pi-image', label: 'Image optimization' },
+      { icon: 'pi pi-image', label: 'Image Processor' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     action: { label: 'Start for free', kind: 'outlined', href: '/signup' }
@@ -228,7 +228,7 @@ const priceState = () =>
   )
 
 const meta = {
-  title: 'Templates/Marketing/Content/PricingPlans',
+  title: 'Templates/Marketing/Pricing/PricingPlans',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
@@ -384,7 +384,7 @@ export const SITE_SECTION = {
           },
           {
             icon: 'pi pi-objects-column',
-            label: 'Reserved Capacity available'
+            label: 'Capacity Reservation available'
           }
         ],
         action: {

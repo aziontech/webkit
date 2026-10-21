@@ -82,7 +82,8 @@ const SIX = {
 const THREE = {
   eyebrow: 'Firewall',
   title: 'Programmable firewall for distributed applications',
-  description: 'Protect your users, applications, and networks with a modern approach.',
+  description:
+    'Protect users, applications, and networks with rules you program, from layer 3 to layer 7.',
   arguments: [
     {
       icon: 'pi pi-shield',
@@ -94,13 +95,13 @@ const THREE = {
       icon: 'pi pi-code',
       title: 'Extensible with Functions',
       description:
-        'Run custom JavaScript security code and marketplace integrations directly at global points of presence.'
+        'Run custom JavaScript security code and marketplace integrations on Azion’s distributed infrastructure.'
     },
     {
       icon: 'pi pi-sync',
       title: 'Real-time synchronization',
       description:
-        'Rules sync automatically across every point of presence, with SIEM integration for continuous threat intelligence.'
+        'Rules sync automatically across every data center. SIEM integration keeps threat intelligence flowing.'
     }
   ]
 }

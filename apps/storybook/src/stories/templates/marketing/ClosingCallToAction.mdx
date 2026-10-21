@@ -2,15 +2,15 @@ import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as ClosingCallToActionStories from './ClosingCallToAction.stories'
 
-<Meta title="Templates/Marketing/Content/ClosingCallToAction" />
+<Meta title="Templates/Marketing/Closing CTAs/ClosingCallToAction" />
 
 # ClosingCallToAction
 
 The last ask at the end of a landing page, after a hatched gap. A closing frame follows it, with no rules of its own, because the site footer under it opens with one.
 
-Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel.
+Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on each closing frame.
+Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on each closing frame. The primary form is `CallToAction` in its `primary` register, with a `TextureMaterial` in its `background` slot and a `Ticker` in its `bottom` slot.
 
 <p
   style={{
@@ -27,7 +27,7 @@ Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `B
 
 ### Split
 
-The solution pages close. `Start Free` sits under the headline and `Talk to our team` in the side cell, then a tall closing frame. The module carries `id="contact"`, so the page contact links scroll to it.
+The solution pages close. `Start free` sits under the headline and `Talk to an expert` in the side cell, then a tall closing frame. The module carries `id="contact"`, so the page contact links scroll to it.
 
 <Canvas of={ClosingCallToActionStories.Split} />
 
@@ -72,3 +72,106 @@ Example:
 <div className="sb-site-json">
   <Source of={ClosingCallToActionStories.PanelJson} dark />
 </div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Primary
+
+The loud close. One centred ask on the canvas, under a pixelated `TextureMaterial` whose two waves keep travelling across it. A `Ticker` of benefits runs along the floor under a hairline, slowly enough to read, then the closing frame follows.
+
+<Canvas of={ClosingCallToActionStories.Primary} />
+
+##### Use it in the sample
+
+The band keeps the canvas ground and moves the pixelate's resting pools out of frame and runs its waves at triple gain and double pace; the copy and the `Ticker` take their ordinary ink. The waves stop under reduced motion.
+
+Add this entry to the page data. `section` picks the band and the rest fill it:
+
+- `kind` is `primary`.
+- `title` is the headline and `description` the sentence under it. `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
+- `actions` are the buttons under the copy. The first is the white `secondary` pill; give the second `kind: 'outlined'`.
+- `benefits` are the claims on the floor strip, each a `label` with an optional `icon` class, and `benefitsLabel` names the strip for assistive tech.
+
+```js
+{
+  section: 'ClosingCallToAction',
+  kind: 'primary',
+  title: 'Build, run, and protect applications everywhere.',
+  description: 'Get faster launches, lower latency, and less infrastructure overhead from day one.',
+  actions: [
+    { label: 'Start free', href: '/signup' },
+    { label: 'Read the docs', href: '/docs', kind: 'outlined', trailing: true }
+  ],
+  benefits: [
+    { icon: 'ai ai-edge-nodes', label: 'Deployed to 100+ data centers automatically' },
+    { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
+    { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
+    { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
+    { icon: 'pi pi-dollar', label: 'Usage-based pricing with no hidden fees' },
+    { icon: 'pi pi-gift', label: 'Start with $300 in free credits' },
+    { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
+    { icon: 'ai ai-real-time-metrics', label: 'Real-time events and metrics for every request' },
+    { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
+    { icon: 'pi pi-code', label: 'Works with Vue, React, Next.js, Astro and more' }
+  ],
+  benefitsLabel: 'Why teams choose Azion'
+}
+```
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Agents
+
+The close for a reader who may be a person or an agent. It is the `primary` register, so it shares its canvas ground and the pixelated wave rising from the top corners. One centred ask, with a small `SegmentedButton` under the title that switches the way in: For humans installs the CLI, For agents hands over a prompt that connects the Azion MCP server, which works in any client. Each way carries a copyable line and one action, then the closing frame follows.
+
+<Canvas of={ClosingCallToActionStories.Agents} />
+
+##### Use it in the sample
+
+The anatomy follows a developer-tool hero: the title, a small switch, one compact row of copyable line and action, then two lines that are the same for every audience, so the band keeps its height when the tab changes. The typed word has auto width, so the centred line grows and shrinks with the cursor; it never wraps, so the height holds. The line is a fixed-size `CopyButton` pill, 32px high, the same in both ways, and what it copies is exactly what it shows. The swapped panel sits in a polite live region and fades in, with no motion under reduced motion.
+
+Add this entry to the page data. `section` picks the band and the rest fill it:
+
+- `kind` is `agents`.
+- `title` is the headline. `eyebrow` is not drawn, as in `primary`.
+- `typedLead` and `typedWords` make the first line under the row. The lead stays put, and the words are typed, held, erased and typed again, in order, behind a blinking cursor. Screen readers get the whole sentence at once, and reduced motion shows every word at once with no cursor. `description` is the line under it.
+- `audiences` are the ways in, each a `value` and a `label` for the switch. The first one opens. `command` is a shell line to copy, drawn with a `$`; `prompt` is a line for the visitor's agent, drawn without it. `actions` are the buttons beside it.
+- `audiencesLabel` names the switch for assistive tech.
+
+```js
+{
+  section: 'ClosingCallToAction',
+  kind: 'agents',
+  title: 'Built by you, or your agents.',
+  typedLead: 'Drive one platform from the',
+  typedWords: ['Console', 'CLI', 'MCP server'],
+  description: 'A person and an agent ship the same way.',
+  audiencesLabel: 'Audience',
+  audiences: [
+    {
+      value: 'humans',
+      label: 'For humans',
+      command: 'npm install -g azion',
+      actions: [{ label: 'Start free', href: '/signup', kind: 'secondary' }]
+    },
+    {
+      value: 'agents',
+      label: 'For agents',
+      prompt: 'Connect Azion MCP: https://mcp.azion.com',
+      actions: [{ label: 'Read the agent docs', href: '/site/docs/agent-setup', kind: 'outlined', size: 'medium', trailing: true }]
+    }
+  ]
+}
+```

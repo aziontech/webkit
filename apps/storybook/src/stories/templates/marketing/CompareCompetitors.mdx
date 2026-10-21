@@ -1,10 +1,10 @@
 import { Canvas, Meta, Source } from '@storybook/blocks'
 
-import * as ComparisonTableStories from './ComparisonTable.stories'
+import * as CompareCompetitorsStories from './CompareCompetitors.stories'
 
-<Meta title="Templates/Marketing/Content/ComparisonTable" />
+<Meta title="Templates/Marketing/Comparison/CompareCompetitors" />
 
-# ComparisonTable
+# CompareCompetitors
 
 A table that compares Azion with one competitor, capability by capability. It is used on the migration guide landing pages.
 
@@ -29,7 +29,7 @@ Built from `SectionModule` and `SectionTitle`, with `Brand` for the Azion column
 
 All twenty-three rows of the Vercel comparison. The Vercel logo has two files: the reversed one for the dark theme and the mono one for light.
 
-<Canvas of={ComparisonTableStories.AzionVsVercel} />
+<Canvas of={CompareCompetitorsStories.AzionVsVercel} />
 
 ##### Use it on the site
 
@@ -43,5 +43,5 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 <div className="sb-site-json">
-  <Source of={ComparisonTableStories.AzionVsVercelJson} dark />
+  <Source of={CompareCompetitorsStories.AzionVsVercelJson} dark />
 </div>

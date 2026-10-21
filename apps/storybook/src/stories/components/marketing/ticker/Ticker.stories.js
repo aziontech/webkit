@@ -130,6 +130,16 @@ const meta = {
         defaultValue: { summary: '[]' }
       }
     },
+    items: {
+      control: 'object',
+      description:
+        'Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered.',
+      table: {
+        category: 'props',
+        type: { summary: 'TickerItem[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
     label: {
       control: 'text',
       description: 'Overline above the row, stating the claim the marks make.',
@@ -164,7 +174,7 @@ const meta = {
     duration: {
       control: { type: 'number', min: 0, step: 1 },
       description:
-        'Seconds for one full pass; left at 0 it is derived from the number of marks so every strip moves at one speed.',
+        'Seconds for one full pass; left at 0 it is derived from the number of marks, or of items, so every strip moves at one speed.',
       table: {
         category: 'props',
         type: { summary: 'number' },
@@ -281,6 +291,40 @@ export const Frameworks = {
           'The same component making a different claim: frameworks, clouds and tooling rather than customers. The registry holds both populations, so a framework mark resolves exactly as a client mark does and the two strips on one page are one component with two lists. Twenty marks derive a longer pass than eleven do, which is the point of deriving it — the row advances at the same rate either way. Marks load on demand, so a page carries only the ones it names.'
       },
       source: { code: toSfc(IMPORT, FRAMEWORKS_MARKUP) }
+    }
+  }
+}
+
+const BENEFITS = [
+  { icon: 'ai ai-edge-application', label: 'Distributed to 100+ locations automatically' },
+  { icon: 'ai ai-edge-firewall', label: 'Stop attacks before they reach your origin' },
+  { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
+  { icon: 'ai ai-edge-sql', label: 'Usage-based pricing with no hidden fees' }
+]
+
+const BENEFITS_TEMPLATE = `<div class="bg-(--bg-canvas) py-(--spacing-xl)">
+  <Ticker
+    aria-label="Why teams choose Azion"
+    :items="[
+${BENEFITS.map(({ icon, label }) => `      { icon: '${icon}', label: '${label}' }`).join(',\n')}
+    ]"
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Ticker>} */
+export const Benefits = {
+  render: () => ({
+    components: { Ticker },
+    template: BENEFITS_TEMPLATE
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The same loop carrying short claims instead of marks: `items` replaces `marks`, and each item is a label with an optional leading icon. A cell sizes to its text rather than to a fixed pitch, so the row gap is the only rhythm, and the labels rest at full ink because they are real text a reader has to read. It floors the closing band of `CallToAction`, and it is slow on purpose: a claim is read, so each item gets six seconds of the pass where a mark gets two.'
+      },
+      source: { code: toSfc(IMPORT, BENEFITS_TEMPLATE) }
     }
   }
 }

@@ -161,7 +161,7 @@ const ARTICLES_TEMPLATE = band('Related Articles', POSTS)
 const STORIES_TEMPLATE = band('Related Success Cases', STORIES)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ArticleCards',
+  title: 'Templates/Marketing/Articles/ArticleCards',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

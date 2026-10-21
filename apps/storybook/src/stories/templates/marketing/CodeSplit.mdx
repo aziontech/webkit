@@ -2,7 +2,7 @@ import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as CodeSplitStories from './CodeSplit.stories'
 
-<Meta title="Templates/Marketing/Media/CodeSplit" />
+<Meta title="Templates/Marketing/Solutions/CodeSplit" />
 
 # CodeSplit
 
@@ -10,7 +10,7 @@ A claim beside the code that makes it true: copy on one side, a code sample on t
 
 The code sits in a wrapper with its own radius, so the wrapper casts the shadow. The tabs are declared in the script, so the code stays verbatim.
 
-Built from `SectionModule`, a `framed` `MediaSplit` or a `FrameBox`, and `CodeBlock`, with buttons or a recipe list on the copy side.
+Built from `SectionModule`, a `framed` `MediaSplit` and `CodeBlock`, with buttons on the copy side.
 
 <p
   style={{
@@ -27,7 +27,7 @@ Built from `SectionModule`, a `framed` `MediaSplit` or a `FrameBox`, and `CodeBl
 
 ### Default
 
-From the Functions page: a two-tab code sample on the pixelate texture, cut off by the frame's bottom rule, with two actions. With two destinations the band is not a link itself, so the reader picks a button.
+From the Functions page: a two-tab code sample on the pixelate texture, cut off by the frame's bottom rule, with two large actions. With two destinations the band is not a link itself, so the reader picks a button.
 
 <Canvas of={CodeSplitStories.Default} />
 
@@ -56,7 +56,7 @@ Example:
 
 ### Accelerator
 
-From the Application Accelerator page: a heading, a sentence and a text button on one side, a one-file code sample on the other. With one tab, the sample shows a filename bar and no tabs.
+From the Application Accelerator page: the same band as Functions with one large button: a heading, a sentence and the button on one side, a one-file code sample on the pixelate texture on the other. With one tab, the sample shows a filename bar and no tabs.
 
 <Canvas of={CodeSplitStories.Accelerator} />
 
@@ -66,7 +66,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `title` and `description` are the copy on the start side.
 - `codeTabs` are the files; one tab draws a filename bar instead of tabs.
-- `action` is the text button. Without a label or link it is dropped.
+- `action` is the button. Without a label or link it is dropped.
 
 Example:
 
@@ -82,22 +82,24 @@ Example:
   }}
 />
 
-### Recipes
+### Agents
 
-From the Workloads page: a horizontal title opens the module, a three-file code sample sits on a faded texture, and three recipes run down the other side, one per file.
+From the AI Gateway page: the Accelerator band with one tab per coding agent. Each tab opens that agent's own file and carries the agent's mark beside its name, through the `tab-icon` slot of `CodeBlock`.
 
-<Canvas of={CodeSplitStories.Recipes} />
+<Canvas of={CodeSplitStories.Agents} />
 
 ##### Use it on the site
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `eyebrow`, `title` and `description` make the section title.
-- `codeTabs` are the files of the sample.
-- `recipes` are the steps beside the code, each a `title` and a `description`.
+- `kind` is `agents`.
+- `title` and `description` are the copy beside the code.
+- `agents` are the tabs, each a code file with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`, plus a `mark` naming the agent's logo.
+- `copyAriaLabel` names the copy button for screen readers.
+- `actions` are the buttons under the copy.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={CodeSplitStories.RecipesJson} dark />
+  <Source of={CodeSplitStories.AgentsJson} dark />
 </div>
