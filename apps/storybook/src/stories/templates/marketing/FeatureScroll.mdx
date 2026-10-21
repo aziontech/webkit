@@ -1,0 +1,47 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as FeatureScrollStories from './FeatureScroll.stories'
+
+<Meta title="Templates/Marketing/Features/FeatureScroll" />
+
+# FeatureScroll
+
+A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. On the site the media is a live console widget; here an `Illustration` stands in for it.
+
+It is the sibling of `StickyScrollCode`: the same pinned band, with media in place of a code sample. Below `lg` it turns into a FeatureTiles grid: each feature becomes a tile, its media over the title and description.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `TextureMaterial`, `Button`, `CardGrid`, `MediaTile` and `Illustration`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The Workloads band: five features, from the workloads list to gradual rollouts and rollback, each shown by its own illustration. Each feature carries its own docs button under its description, shown only while the feature is open.
+
+<Canvas of={FeatureScrollStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the section title.
+- `items[]` are the features in reading order, each a `title` and a `description`.
+- `items[].action` is the feature's own button, with `label` and `href`; it shows under the description while the feature is open.
+- `items[].scene` is the widget: the `component` and the `props` it receives.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={FeatureScrollStories.DefaultJson} dark />
+</div>
