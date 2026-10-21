@@ -176,12 +176,12 @@
           </div>
 
           <div
-            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-xxl)*1.5)] md:py-[calc(var(--spacing-xxl)*2)]"
+            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-xxl)*1.5)] md:py-[calc(var(--spacing-xxl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
           >
             <SectionTitle
               :framed="false"
               kind="centered"
-              size="medium"
+              size="large"
               :title="title"
               :description="description"
             >
