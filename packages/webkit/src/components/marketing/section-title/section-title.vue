@@ -13,6 +13,8 @@
   export type SectionTitleKind = 'centered' | 'left' | 'horizontal'
   /** Step of the headline on the heading scale. */
   export type SectionTitleSize = 'small' | 'medium' | 'large'
+  /** Vertical padding step of the framed header. */
+  export type SectionTitlePadding = 'small' | 'medium'
 
   interface Props {
     /** Headline of the section, rendered as the section's `h2`. */
@@ -27,6 +29,8 @@
     size?: SectionTitleSize
     /** Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. */
     framed?: boolean
+    /** Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. */
+    padding?: SectionTitlePadding
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -34,7 +38,8 @@
     eyebrow: '',
     kind: 'centered',
     size: 'medium',
-    framed: true
+    framed: true,
+    padding: 'medium'
   })
 
   const slots = defineSlots<{
@@ -72,10 +77,11 @@
     :data-kind="kind"
     :data-size="size"
     :data-framed="props.framed || null"
+    :data-padding="padding"
     class="group"
   >
     <div
-      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-xxl) group-data-[kind=centered]:items-center"
+      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-xxl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[kind=centered]:items-center"
     >
       <!-- Horizontal: the overline leads, then the headline and its description share a
            three-column grid — headline in the first column, description in the third, the
@@ -93,7 +99,7 @@
         >
         <div class="grid gap-(--spacing-xl) md:grid-cols-3">
           <h2
-            class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl"
+            class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl md:[grid-column:span_var(--section-title-headline-span,1)/span_var(--section-title-headline-span,1)] md:[max-width:var(--section-title-headline-max,none)]"
           >
             {{ title }}
           </h2>

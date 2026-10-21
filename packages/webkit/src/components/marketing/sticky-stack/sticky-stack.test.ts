@@ -156,6 +156,41 @@ describe('StickyStack', () => {
     expect(container.querySelector('[data-scene="0"]')?.textContent).toBe(ITEMS[0].title)
   })
 
+  it('renders each claim its own actions, with the item and index in scope', () => {
+    const { container } = render(StickyStack, {
+      props: { items: ITEMS },
+      slots: {
+        actions: ({ item, index }: { item: StickyStackItem; index: number }) =>
+          h('a', { 'data-action': index, href: '#more' }, `More on ${item.title}`)
+      }
+    })
+    const actions = [...container.querySelectorAll('[data-action]')]
+    expect(actions.map((action) => action.getAttribute('data-action'))).toEqual(['0', '1', '2'])
+    expect(actions[1].textContent).toBe(`More on ${ITEMS[1].title}`)
+    const rows = [...container.querySelectorAll('ol > li')]
+    expect(rows.every((row, index) => row.contains(actions[index]))).toBe(true)
+  })
+
+  it('renders the backdrop once, outside every claim medium', () => {
+    const { container } = render(StickyStack, {
+      props: { items: ITEMS },
+      slots: {
+        media: ({ index }: { index: number }) => h('p', { 'data-scene': index }),
+        backdrop: () => h('i', { 'data-backdrop': '' })
+      }
+    })
+    const backdrops = container.querySelectorAll('[data-backdrop]')
+    expect(backdrops).toHaveLength(1)
+    const scenes = [...container.querySelectorAll('[data-scene]')]
+    expect(scenes.some((scene) => scene.parentElement?.contains(backdrops[0]))).toBe(false)
+  })
+
+  it('adds no controls to a claim when the actions slot is empty', () => {
+    const { container } = render(StickyStack, { props: { items: ITEMS } })
+    expect(container.querySelectorAll('ol > li button')).toHaveLength(ITEMS.length)
+    expect(container.querySelector('ol a')).toBeNull()
+  })
+
   it('falls back to the item image when the media slot is empty', () => {
     const { container } = render(StickyStack, { props: { items: ITEMS } })
     const images = [...container.querySelectorAll('img')]

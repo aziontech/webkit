@@ -50,6 +50,10 @@
   defineSlots<{
     /** The claim's medium; replaces the image built from the item's own source. */
     media(props: { item: StickyStackItem; index: number; active: boolean }): unknown
+    /** The claim's own controls, under its description; shown while the claim is open. */
+    actions(props: { item: StickyStackItem; index: number; active: boolean }): unknown
+    /** Fills the media frame behind every claim's medium; mounted once, so it holds still as the claims change. */
+    backdrop(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -181,7 +185,7 @@
             :key="`${item.title}-${index}`"
             :data-active="isActive(index) || null"
             :data-complete="index < activeIndex || null"
-            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-center lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow motion-reduce:transition-none"
+            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:pt-(--spacing-xl) motion-reduce:transition-none"
           >
             <h3
               class="m-0 text-heading-md text-(--text-muted) transition-[color,opacity] duration-moderate-01 ease-out group-data-[active]:text-(--text-default) group-data-[complete]:opacity-55 motion-reduce:transition-none"
@@ -198,12 +202,26 @@
             </h3>
 
             <div
-              class="grid grid-rows-[1fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none lg:grid-rows-[0fr] lg:group-data-[active]:grid-rows-[1fr]"
+              class="grid grid-rows-[1fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none lg:min-h-0 lg:grid-rows-[0fr] lg:group-data-[active]:flex-1 lg:group-data-[active]:grid-rows-[1fr]"
             >
-              <div class="min-h-0 overflow-hidden">
-                <p class="m-0 pt-(--spacing-sm) text-body-md text-(--text-muted)">
+              <div class="min-h-0 overflow-hidden lg:flex lg:flex-col">
+                <p
+                  class="m-0 max-w-(--container-sm) pt-(--spacing-sm) text-body-md text-(--text-muted) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:translate-y-(--spacing-sm) lg:opacity-0 lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-100"
+                >
                   {{ item.description }}
                 </p>
+
+                <div
+                  v-if="$slots.actions"
+                  class="mt-(--spacing-xl) flex items-center gap-(--spacing-sm) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:invisible lg:mt-auto lg:translate-y-(--spacing-sm) lg:pt-(--spacing-xl) lg:opacity-0 lg:group-data-[active]:visible lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-200"
+                >
+                  <slot
+                    name="actions"
+                    :item="item"
+                    :index="index"
+                    :active="isActive(index)"
+                  />
+                </div>
 
                 <div class="relative mt-(--spacing-md) w-full min-w-0 lg:hidden">
                   <slot
@@ -235,6 +253,13 @@
         <div
           class="relative hidden bg-(--bg-canvas) lg:block lg:h-full lg:min-w-0 lg:border-l lg:border-(--border-default)"
         >
+          <div
+            v-if="$slots.backdrop"
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0"
+          >
+            <slot name="backdrop" />
+          </div>
           <Transition
             enter-active-class="animate-fade-in motion-reduce:animate-none"
             leave-active-class="animate-fade-out motion-reduce:animate-none"

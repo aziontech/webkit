@@ -238,6 +238,16 @@
     "limit": "3 KB"
   },
   {
+    "name": "shell-mockup-root",
+    "path": "src/components/content/shell-mockup/shell-mockup.vue",
+    "limit": "30 KB"
+  },
+  {
+    "name": "shell-mockup-part",
+    "path": "src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
+    "limit": "1 KB"
+  },
+  {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
     "limit": "4 KB",
@@ -283,6 +293,11 @@
     "name": "texture-material",
     "path": "src/components/marketing/texture-material/texture-material.vue",
     "limit": "2 KB"
+  },
+  {
+    "name": "browser-frame",
+    "path": "src/components/content/browser-frame/browser-frame.vue",
+    "limit": "11.5 KB"
   },
   {
     "name": "illustration",

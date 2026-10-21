@@ -102,6 +102,27 @@ describe('CodeBlock', () => {
       expect(getAllByRole('tab')).toHaveLength(2)
     })
 
+    it('renders the tab-icon slot inside each tab with that tab as its payload', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' },
+        slots: {
+          'tab-icon': '<template #tab-icon="{ tab }"><i :data-mark="tab.value" /></template>'
+        }
+      })
+
+      const marks = getAllByRole('tab').map((tab) => tab.querySelector('i')?.dataset.mark)
+
+      expect(marks).toEqual(twoTabs.map((tab) => tab.value))
+    })
+
+    it('renders no icon region in a tab when the tab-icon slot is empty', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      getAllByRole('tab').forEach((tab) => expect(tab.querySelector('span')).toBeNull())
+    })
+
     it('does not render a tab header when only one tab is given', () => {
       const { queryByRole } = render(CodeBlock, { props: { tabs: singleTab } })
 
