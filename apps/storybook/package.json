@@ -39,7 +39,7 @@
     "jest-image-snapshot": "^6.5.2",
     "playwright": "^1.61.1",
     "sass": "^1.86.0",
-    "storybook": "^8.6.0",
+    "storybook": "^8.6.19",
     "vite": "^8.1.6",
     "wait-on": "^8.0.5"
   },
