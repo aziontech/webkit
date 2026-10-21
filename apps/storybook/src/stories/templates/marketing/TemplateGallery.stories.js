@@ -207,11 +207,16 @@ ${each(templates, templateCard, 6)}
     </template>
     <template #actions>
       <Button
-        label="Deploy now"
+        label="Start free"
         kind="secondary"
         size="large"
-        href="https://www.azion.com/en/documentation/products/guides/#azion-templates"
-        target="_blank"
+        href="/signup"
+      />
+      <Button
+        label="Talk to a specialist"
+        kind="outlined"
+        size="large"
+        href="/contact"
         icon="pi pi-chevron-right"
         icon-position="trailing"
         animated
@@ -276,7 +281,10 @@ export const SITE_SECTION = {
     title: 'Quick Start with Templates',
     description:
       'Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks.',
-    action: { label: 'Deploy now', href: RETAIL_DOCS },
+    actions: [
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/contact', kind: 'outlined', trailing: true }
+    ],
     templates: [
       { title: 'Next.js', icon: 'ai ai-nextjs', href: RETAIL_DOCS },
       { title: 'React', icon: 'ai ai-react', href: RETAIL_DOCS },
