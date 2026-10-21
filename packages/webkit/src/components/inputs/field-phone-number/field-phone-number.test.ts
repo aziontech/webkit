@@ -5,8 +5,8 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-phone-number/FieldPhoneNumber.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
-import { defaultCountries } from './countries'
-import FieldPhoneNumber from './field-phone-number.vue'
+import { defaultCountries, OTHER_COUNTRY_CODE } from './countries'
+import FieldPhoneNumber, { type PhoneNumber } from './field-phone-number.vue'
 
 const { Default, Countries, Invalid, Disabled, Readonly } = composeStories(stories)
 
@@ -16,6 +16,11 @@ const getContent = () =>
 
 const getOptions = () =>
   Array.from(document.body.querySelectorAll('[data-testid="select-option"]')) as HTMLElement[]
+
+const lastPhone = (emitted: Record<string, unknown[]>) => {
+  const events = emitted['update:phone'] as PhoneNumber[][]
+  return events[events.length - 1][0]
+}
 
 afterEach(() => {
   // Teleported content can outlive a wrapper unmounted mid-transition; remove
@@ -75,12 +80,9 @@ describe('FieldPhoneNumber', () => {
 
     it('falls back to the first country when the country code is unknown', () => {
       const { getByRole } = render(FieldPhoneNumber, {
-        props: { label: 'Phone', country: 'ZZ' }
+        props: { label: 'Phone', country: 'QQ' }
       })
-      // defaultCountries[0] is BR — its mask becomes the placeholder.
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe(
-        defaultCountries[0].mask.replace(/#/g, '9')
-      )
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
     })
 
     it('honors a consumer-provided countries list', () => {
@@ -101,6 +103,29 @@ describe('FieldPhoneNumber', () => {
         props: { label: 'Phone', modelValue: '11999999999', country: 'BR' }
       })
       expect((getByRole('textbox') as HTMLInputElement).value).toBe('(11) 99999-9999')
+    })
+
+    it('formats a BR landline with the 10-digit mask', () => {
+      const { getByRole } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', modelValue: '1133334444', country: 'BR' }
+      })
+      expect((getByRole('textbox') as HTMLInputElement).value).toBe('(11) 3333-4444')
+    })
+
+    it('honors a consumer country with several masks', () => {
+      const { getByRole } = render(FieldPhoneNumber, {
+        props: {
+          label: 'Phone',
+          country: 'XX',
+          modelValue: '12345',
+          countries: [
+            { code: 'XX', dialCode: '+99', mask: ['##-###', '###-####'], label: 'Testland' }
+          ]
+        }
+      })
+      const input = getByRole('textbox') as HTMLInputElement
+      expect(input.value).toBe('12-345')
+      expect(input.getAttribute('placeholder')).toBe('999-9999')
     })
 
     it('renders the US mask over the bound digits', () => {
@@ -133,14 +158,25 @@ describe('FieldPhoneNumber', () => {
       expect(events[0]).toEqual(['11999999999'])
     })
 
-    it('emits an empty string when the typed value has no digits', async () => {
+    it('clears non-digit input without emitting an unchanged value', async () => {
       const { getByRole, emitted } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
       const input = getByRole('textbox') as HTMLInputElement
 
       await fireEvent.update(input, 'abc')
 
-      expect((emitted()['update:modelValue'] as string[][])[0]).toEqual([''])
+      expect(emitted()['update:modelValue']).toBeUndefined()
       expect(input.value).toBe('')
+    })
+
+    it('switches a BR number from the landline to the mobile mask as it grows', async () => {
+      const { getByRole } = render(Default)
+      const input = getByRole('textbox') as HTMLInputElement
+
+      await fireEvent.update(input, '1199998888')
+      expect(input.value).toBe('(11) 9999-8888')
+
+      await fireEvent.update(input, '11999998888')
+      expect(input.value).toBe('(11) 99999-8888')
     })
   })
 
@@ -226,6 +262,214 @@ describe('FieldPhoneNumber', () => {
 
       await fireEvent.click(trigger)
       expect(getContent()).toBeNull()
+    })
+  })
+
+  describe('update:phone — full number and completeness', () => {
+    it('reports the initial state on mount', () => {
+      const { emitted } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      expect(emitted()['update:phone']).toEqual([
+        [{ country: 'BR', dialCode: '+55', digits: '', number: '', complete: false }]
+      ])
+    })
+
+    it('reports a pre-filled number as complete with its dial code', () => {
+      const { emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', modelValue: '5555550123', country: 'US' }
+      })
+
+      expect(lastPhone(emitted())).toEqual({
+        country: 'US',
+        dialCode: '+1',
+        digits: '5555550123',
+        number: '+15555550123',
+        complete: true
+      })
+    })
+
+    it('accepts both BR lengths as complete and rejects anything in between', async () => {
+      const { getByRole, emitted } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+      const input = getByRole('textbox')
+
+      await fireEvent.update(input, '119999888')
+      expect(lastPhone(emitted())).toMatchObject({ digits: '119999888', complete: false })
+
+      await fireEvent.update(input, '1133334444')
+      expect(lastPhone(emitted())).toMatchObject({ number: '+551133334444', complete: true })
+
+      await fireEvent.update(input, '11999998888')
+      expect(lastPhone(emitted())).toMatchObject({ number: '+5511999998888', complete: true })
+    })
+
+    it('reports the new country after a pick', async () => {
+      const { getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', modelValue: '11999999999' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.click(getOptions()[1])
+
+      expect(lastPhone(emitted())).toEqual({
+        country: 'US',
+        dialCode: '+1',
+        digits: '1199999999',
+        number: '+11199999999',
+        complete: true
+      })
+    })
+  })
+
+  describe('countries', () => {
+    it('ships Other as the last option', () => {
+      const other = defaultCountries[defaultCountries.length - 1]
+      expect(other.code).toBe(OTHER_COUNTRY_CODE)
+      expect(other.dialCode).toBe('+')
+    })
+
+    it('takes the country code and number together under Other', async () => {
+      const { getByRole, getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: OTHER_COUNTRY_CODE }
+      })
+      const input = getByRole('textbox') as HTMLInputElement
+
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+')
+
+      await fireEvent.update(input, '81312345678')
+      expect(input.value).toBe('81312345678')
+      expect(lastPhone(emitted())).toMatchObject({ number: '+81312345678', complete: true })
+
+      await fireEvent.update(input, '123456')
+      expect(lastPhone(emitted())).toMatchObject({ complete: false })
+
+      await fireEvent.update(input, '1234567890123456789')
+      expect(lastPhone(emitted())).toMatchObject({ digits: '123456789012345', complete: true })
+    })
+
+    it('changes country without a v-model:country binding', async () => {
+      const { getByTestId, getByRole } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.click(getOptions()[1])
+
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+1')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
+    })
+  })
+
+  describe('dial-code search', () => {
+    const getSearch = () =>
+      document.body.querySelector(
+        '[data-testid="input-field-phone-number__search"]'
+      ) as HTMLInputElement | null
+
+    it('focuses the search box when the list opens', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+
+      expect(getSearch()).not.toBeNull()
+      expect(document.activeElement).toBe(getSearch())
+    })
+
+    it('filters by country name ignoring case and accents', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'MÉX')
+
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+52 Mexico'])
+    })
+
+    it('filters by dial code with or without the plus sign', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, '+55')
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+55 Brazil'])
+
+      await fireEvent.update(getSearch() as HTMLInputElement, '351')
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+351 Portugal'])
+    })
+
+    it('shows the empty label when nothing matches', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', searchEmptyLabel: 'Nenhum país' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'zzz')
+
+      expect(getOptions()).toHaveLength(0)
+      expect(
+        document.body.querySelector('[data-testid="input-field-phone-number__search-empty"]')
+          ?.textContent
+      ).toContain('Nenhum país')
+    })
+
+    it('picks the first match on Enter and moves focus to the number', async () => {
+      const { getByTestId, getByRole, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'US' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'bra')
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'Enter' })
+
+      expect(emitted()['update:country']).toEqual([['BR']])
+      expect(getContent()).toBeNull()
+      expect(document.activeElement).toBe(getByRole('textbox'))
+    })
+
+    it('moves the highlight with the arrows while focus stays in the search', async () => {
+      const { getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'BR' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'ArrowDown' })
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'ArrowDown' })
+
+      expect(document.activeElement).toBe(getSearch())
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'Enter' })
+      expect(emitted()['update:country']).toEqual([['GB']])
+    })
+
+    it('opens with the typed letter when typing on the closed trigger', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
+
+      expect(getSearch()?.value).toBe('p')
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual([
+        '+351 Portugal',
+        '+595 Paraguay',
+        '+51 Peru',
+        '+48 Poland'
+      ])
+    })
+
+    it('clears the search when the list closes', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'chi')
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'Escape' })
+      await fireEvent.click(getByTestId('select-trigger'))
+
+      expect(getSearch()?.value).toBe('')
+      expect(getOptions()).toHaveLength(defaultCountries.length)
+    })
+
+    it('does not open or change the country from a letter typed while readonly', async () => {
+      const { getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'BR', readonly: true }
+      })
+
+      await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
+
+      expect(getSearch()).toBeNull()
+      expect(emitted()['update:country']).toBeUndefined()
     })
   })
 
@@ -398,7 +642,7 @@ describe('FieldPhoneNumber', () => {
       const { getAllByRole } = render(Countries)
 
       const values = (getAllByRole('textbox') as HTMLInputElement[]).map((el) => el.value)
-      expect(values).toEqual(['(11) 99999-9999', '(555) 555-0123', '7911 123456'])
+      expect(values).toEqual(['(11) 99999-9999', '(11) 3333-4444', '(555) 555-0123', '7911 123456'])
     })
 
     it('renders the Invalid story with aria-invalid on the input', () => {
