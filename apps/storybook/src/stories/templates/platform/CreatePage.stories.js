@@ -92,7 +92,7 @@ const IMPORTS = [
   "    errors.name = 'This field is required.'",
   '  } else if (name.length > NAME_MAX) {',
   "    errors.nameKind = 'invalid'",
-  '    errors.name = `Use at most ${NAME_MAX} characters.`',
+  '    errors.name = `Use at most \\${NAME_MAX} characters.`',
   '  } else {',
   "    errors.name = ''",
   '  }',
