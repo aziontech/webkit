@@ -15,7 +15,7 @@ import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
 import { PLATFORM_PRIMITIVES } from '../platform-primitives.js'
-import { PLATFORM_DIRECTORY } from '../product-pages.js'
+import { agentsClosing, PLATFORM_DIRECTORY } from '../product-pages.js'
 import { EARTH_NETWORK } from '../solutions.js'
 
 export const HOME_REASONS = [
@@ -134,6 +134,14 @@ const MARKET_RECOGNITIONS = [
 
 const PRIMITIVE_GROUP_LABELS = ['Compute', 'AI', 'Data', 'Security']
 
+const PRIMITIVE_TITLES = { 'Bot Management': 'Bot Manager' }
+
+const HOME_PRIMITIVE_GROUPS = PLATFORM_PRIMITIVES.map((group, index) => ({
+  ...group,
+  label: PRIMITIVE_GROUP_LABELS[index] ?? group.label,
+  items: group.items.map((item) => ({ ...item, title: PRIMITIVE_TITLES[item.title] ?? item.title }))
+}))
+
 export const HOME_RECOGNITIONS = [
   {
     text: 'Named a Leader and Fast Mover, and the only vendor whose platform meets every key criterion the report sets for a full-stack edge deployment.',
@@ -222,13 +230,13 @@ export const HOME_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-carousel',
-    highlight: 'Build and run applications',
-    title: 'globally, with no ops',
+    highlight: 'Invisible infrastructure',
+    title: 'for the speed of AI',
     description:
-      'Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.',
+      'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
       { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '#contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     carouselLabel: 'Proven on mission-critical workloads',
     carouselMarks: CLIENT_STRIP
@@ -237,10 +245,7 @@ export const HOME_PAGE = [
     ...PLATFORM_DIRECTORY,
     title: 'Serverless AI-native primitives for autonomous workloads',
     ariaLabel: 'Platform primitives',
-    groups: PLATFORM_PRIMITIVES.map((group, index) => ({
-      ...group,
-      label: PRIMITIVE_GROUP_LABELS[index] ?? group.label
-    }))
+    groups: HOME_PRIMITIVE_GROUPS
   },
   {
     section: 'NetworkSection',
@@ -270,15 +275,5 @@ export const HOME_PAGE = [
     items: MARKET_RECOGNITIONS
   },
   { section: 'ClientMosaic', cells: HOME_CLIENT_CELLS },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Build',
-    title: 'Build, run, and protect applications.',
-    titleMuted: 'Everywhere.',
-    description:
-      'Get faster launches, lower latency, and less infrastructure overhead from day one.',
-    actions: [{ label: 'Start free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  agentsClosing('Build, run, and protect applications. Everywhere.')
 ]

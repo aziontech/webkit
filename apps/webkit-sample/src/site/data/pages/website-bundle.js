@@ -464,6 +464,5 @@ export const WEBSITE_BUNDLE_PAGE = [
   { ...CLOSING_SPLIT, anchor: '' },
   { ...CLOSING_PANEL, anchor: '' },
   { ...BLOG_CLOSING, anchor: '' },
-  { ...pick(HOME_PAGE, 'ClosingCallToAction'), anchor: '' },
   agentsClosing('Built by you, or your agents.')
 ]
