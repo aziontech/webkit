@@ -434,11 +434,9 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(VERCEL_ALTERNATIVE_PAGE, 'MediaSplitBand'),
   {
     section: 'TemplateGallery',
-    eyebrow: '',
     title: 'Quick start with templates',
     description:
       'Build faster with pre-built applications and starter kits for common use cases. Deploy complete projects in seconds with popular frameworks.',
-    actions: [{ label: 'Deploy now', href: '/signup', kind: 'secondary', trailing: true }],
     stackLabel: 'Compatible with your stack',
     stackMarks: FRAMEWORKS
   },

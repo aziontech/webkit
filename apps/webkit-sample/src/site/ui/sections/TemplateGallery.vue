@@ -64,13 +64,8 @@
     description:
       'Start from pre-built applications and starter kits for common use cases, and deploy a complete project in seconds with popular frameworks.',
     actions: () => [
-      {
-        label: 'Deploy now',
-        href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates',
-        kind: 'secondary',
-        trailing: true,
-        external: true
-      }
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     templates: () => DEPLOY_TEMPLATES,
     deployLabel: 'Deploy now',
