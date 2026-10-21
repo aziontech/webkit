@@ -151,6 +151,116 @@ const FUNCTIONS = [
   }
 ]
 
+const GDPR = [
+  {
+    value: 'what-is-gdpr',
+    question: 'What is GDPR?',
+    answer: '',
+    body: [
+      {
+        type: 'p',
+        segments: [
+          {
+            text: "The General Data Protection Regulation (GDPR) is a data privacy law implemented by the European Union. It went into effect on May 25, 2018, and is considered one of the world's leading data privacy legislations."
+          }
+        ]
+      },
+      {
+        type: 'p',
+        segments: [
+          {
+            text: 'The goal of GDPR is to honor the privacy of persons residing in the EU, by protecting their:'
+          }
+        ]
+      },
+      {
+        type: 'ul',
+        items: [
+          [{ text: 'Right to be informed' }],
+          [{ text: 'Right of access' }],
+          [{ text: 'Right to rectification' }],
+          [{ text: 'Right to erasure' }],
+          [{ text: 'Right to restriction of processing' }],
+          [{ text: 'Right to data portability' }],
+          [{ text: 'Right to object' }],
+          [{ text: 'Right to avoid automated decision-making' }]
+        ]
+      }
+    ]
+  },
+  {
+    value: 'why-is-gdpr-necessary',
+    question: 'Why is GDPR necessary?',
+    answer: '',
+    body: [
+      {
+        type: 'p',
+        segments: [
+          {
+            text: 'A majority of the businesses using Azion either reside in the EU or have customers there. We are honoring our responsibility to comply with the rights of the recipients living in the EU.'
+          }
+        ]
+      },
+      {
+        type: 'p',
+        segments: [
+          {
+            text: "GDPR compliance is not only an obligation for Azion, but also for many of the businesses using Azion. Azion's compliance allows even more businesses to build their operations on top of Azion's infrastructure without compromises to privacy or compliance."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    value: 'who-audited-azion',
+    question: 'Who audited Azion?',
+    answer: '',
+    body: [
+      {
+        type: 'p',
+        segments: [
+          {
+            text: 'Unlike SOC 2 or ISO 27001, GDPR is not a best practice standard but rather a law. Because of this, most companies self-audit to align their operations and technology with the GDPR controls. Azion followed this approach.'
+          }
+        ]
+      },
+      {
+        type: 'p',
+        segments: [
+          { text: 'Azion also uses ' },
+          { text: 'Vanta', href: 'https://vanta.com', external: true },
+          { text: ' to monitor all GDPR controls and organize evidence for compliance.' }
+        ]
+      }
+    ]
+  },
+  {
+    value: 'how-do-i-get-a-signed-dpa',
+    question: 'How do I get a signed DPA?',
+    answer: '',
+    body: [
+      {
+        type: 'p',
+        segments: [
+          {
+            text: 'A GDPR Article 28 Data Processing Addendum is in force for every Azion account. It is pre-signed by Azion and fully executed once you sign up, so there is no separate counter-signature step.'
+          }
+        ]
+      },
+      {
+        type: 'p',
+        segments: [
+          { text: 'You can download the signed copy from the ' },
+          { text: 'Documents' },
+          { text: ' page (login required). The unsigned reference version is our public ' },
+          { text: 'DPA' },
+          { text: '.' }
+        ]
+      }
+    ]
+  }
+]
+
 const quoted = (value) => `'${value.replace(/'/g, "\\'").replace(/"/g, '&quot;')}'`
 
 const faqLiteral = (item, index, list) => {
@@ -168,6 +278,80 @@ const faqLiteral = (item, index, list) => {
   return ['{', fields.join(',\n'), `}${index < list.length - 1 ? ',' : ''}`].join('\n')
 }
 
+const segmentLiteral = (segment) =>
+  `{ ${[
+    `text: ${quoted(segment.text)}`,
+    ...(segment.href ? [`href: ${quoted(segment.href)}`] : []),
+    ...(segment.external ? ['external: true'] : [])
+  ].join(', ')} }`
+
+const segmentsLiteral = (segments) => `[\n${indent(segments.map(segmentLiteral).join(',\n'))}\n]`
+
+const blockLiteral = (block) =>
+  block.type === 'p'
+    ? `{\n  type: 'p',\n  segments: ${indent(segmentsLiteral(block.segments)).trimStart()}\n}`
+    : `{\n  type: 'ul',\n  items: [\n${indent(
+        block.items.map((entry) => `[${entry.map(segmentLiteral).join(', ')}]`).join(',\n'),
+        2
+      )}\n  ]\n}`
+
+const richLiteral = (item, index, list) =>
+  [
+    '{',
+    [
+      `  value: ${quoted(item.value)}`,
+      `  question: ${quoted(item.question)}`,
+      `  answer: ''`,
+      `  body: [\n${indent(item.body.map(blockLiteral).join(',\n'), 2)}\n  ]`
+    ].join(',\n'),
+    `}${index < list.length - 1 ? ',' : ''}`
+  ].join('\n')
+
+const SEGMENTS = (list) => `<template
+  v-for="(segment, segmentIndex) in ${list}"
+  :key="segmentIndex"
+>
+  <a
+    v-if="segment.href"
+    :href="segment.href"
+    :target="segment.external ? '_blank' : undefined"
+    :rel="segment.external ? 'noopener noreferrer' : undefined"
+    class="text-link"
+    >{{ segment.text }}</a
+  >
+  <template v-else>{{ segment.text }}</template>
+</template>`
+
+const RICH_ANSWER_SLOT = `<template #answer="{ item }">
+  <span class="flex flex-col gap-(--spacing-sm)">
+    <template
+      v-for="(block, blockIndex) in item.body"
+      :key="blockIndex"
+    >
+      <span
+        v-if="block.type === 'p'"
+        class="block"
+      >
+${indent(SEGMENTS('block.segments'), 4)}
+      </span>
+      <span
+        v-else
+        role="list"
+        class="block space-y-(--spacing-xxs) pl-(--spacing-lg)"
+      >
+        <span
+          v-for="(entry, entryIndex) in block.items"
+          :key="entryIndex"
+          role="listitem"
+          class="list-item list-disc"
+        >
+${indent(SEGMENTS('entry'), 5)}
+        </span>
+      </span>
+    </template>
+  </span>
+</template>`
+
 const ANSWER_SLOT = `<template #answer="{ item }">
   {{ item.answer
   }}<a
@@ -180,17 +364,17 @@ const ANSWER_SLOT = `<template #answer="{ item }">
   >{{ item.answerAfter }}
 </template>`
 
-const faqSection = (items, { answerSlot = false } = {}) => {
+const faqSection = (items, { slot = '', literal = faqLiteral } = {}) => {
   const list = `:items="[
-${each(items, (item, index) => faqLiteral(item, index, items), 1)}
+${each(items, (item, index) => literal(item, index, items), 1)}
 ]"`
-  const faq = answerSlot
+  const faq = slot
     ? `<Faq
   framed
   title="Frequently Asked Questions"
 ${indent(list)}
 >
-${indent(ANSWER_SLOT)}
+${indent(slot)}
 </Faq>`
     : `<Faq
   framed
@@ -206,8 +390,9 @@ ${indent(faq)}
 </SectionModule>`)
 }
 
-const WITH_LINK_TEMPLATE = faqSection(RETAIL, { answerSlot: true })
+const WITH_LINK_TEMPLATE = faqSection(RETAIL, { slot: ANSWER_SLOT })
 const PLAIN_TEMPLATE = faqSection(FUNCTIONS)
+const RICH_ANSWERS_TEMPLATE = faqSection(GDPR, { slot: RICH_ANSWER_SLOT, literal: richLiteral })
 
 const meta = {
   title: 'Templates/Marketing/Content/FaqSection',
@@ -298,4 +483,13 @@ export const PLAIN_SECTION = {
 export const PlainJson = {
   tags: ['!dev'],
   ...siteJsonStory(PLAIN_SECTION)
+}
+
+export const RichAnswers = {
+  render: () => ({ components, template: RICH_ANSWERS_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(IMPORTS, RICH_ANSWERS_TEMPLATE) }
+    }
+  }
 }

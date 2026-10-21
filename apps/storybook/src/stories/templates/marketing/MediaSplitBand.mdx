@@ -1,13 +1,10 @@
-import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as MediaSplitBandStories from './MediaSplitBand.stories'
 
-<Meta
-  of={MediaSplitBandStories}
-  name="Documentation"
-/>
+<Meta title="Templates/Marketing/Media/MediaSplitBand" />
 
-<Title />
+# MediaSplitBand
 
 One claim beside one picture of it, in a band of its own, linked to the page that explains it. Solution pages use it for their reference architecture, and migration guides for the full guide.
 
@@ -28,39 +25,11 @@ Built from `SectionModule`, a `framed` `MediaSplit`, `Illustration` and `Button`
   Stories
 </p>
 
-### Architecture
+### One action
 
-The reference-architecture band of a solution page: a title only, large and centered, the diagram on the canvas fill, and an outlined Docs action. Retail's copy.
+The Vercel Alternative guide's band: title and description beside the art, with one outlined button into the full guide. The band links to the same place, so hovering anywhere on it lights the button and slides its chevron.
 
-<Canvas of={MediaSplitBandStories.Architecture} />
-
-##### Use it on the site
-
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
-
-- `title` is the band's only copy.
-- `illustration` names the diagram and `illustrationLabel` describes it.
-- `action` is the button; it opens in a new tab. Without a label or link it is dropped.
-
-Example:
-
-<div className="sb-site-json">
-  <Source of={MediaSplitBandStories.ArchitectureJson} dark />
-</div>
-
-<hr
-  style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
-    border: 0,
-    borderTop: '1px solid var(--border-default)'
-  }}
-/>
-
-### Guide
-
-The Vercel migration guide's band: title and description beside the art, with one outlined action into the full guide.
-
-<Canvas of={MediaSplitBandStories.Guide} />
+<Canvas of={MediaSplitBandStories.OneAction} />
 
 ##### Use it on the site
 
@@ -73,7 +42,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 <div className="sb-site-json">
-  <Source of={MediaSplitBandStories.GuideJson} dark />
+  <Source of={MediaSplitBandStories.OneActionJson} dark />
 </div>
 
 <hr
