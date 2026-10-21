@@ -155,6 +155,7 @@ export const Assets = {
   }),
   parameters: {
     controls: { disable: true },
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
     docs: {
       controls: { disable: true },
       description: {
