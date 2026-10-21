@@ -10421,6 +10421,13 @@
           "doc": "Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete."
         },
         {
+          "name": "items",
+          "type": "TickerItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered."
+        },
+        {
           "name": "label",
           "type": "string",
           "default": "''",
@@ -10439,7 +10446,7 @@
           "type": "number",
           "default": "0",
           "required": "false",
-          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks so every strip moves at one speed."
+          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed."
         },
         {
           "name": "ariaLabel",
@@ -10449,11 +10456,12 @@
           "doc": "Accessible name for the row of marks, announced instead of an unnamed list."
         }
       ],
-      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes.",
+      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band.",
       "useWhen": [
         "Under a hero, to name the companies a product already serves (\"Trusted by mission-critical workloads\").",
         "To state compatibility as a list of framework, cloud and tooling marks (\"Your Stack, Your Way\").",
-        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read."
+        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read.",
+        "To run a handful of short benefits (\"Deploy to 330+ cities instantly\") along the floor of a closing band, where each claim restates what the band above already argues."
       ],
       "avoidWhen": [
         "When every mark must be seen → use `logo-wall`, which wraps into a grid and never moves.",
@@ -10469,9 +10477,10 @@
       ],
       "bestPractices": [
         "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",
-        "Let `duration` derive itself. The component holds speed constant rather than duration, so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
+        "Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
         "Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.",
         "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
+        "Keep each `items` label to a short clause with no punctuation to end it, and give every item the same kind of icon; the row repeats, so a claim is read as one of a run, never on its own.",
         "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
       ]
     },
