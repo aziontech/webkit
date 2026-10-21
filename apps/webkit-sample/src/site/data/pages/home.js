@@ -275,5 +275,5 @@ export const HOME_PAGE = [
     items: MARKET_RECOGNITIONS
   },
   { section: 'ClientMosaic', cells: HOME_CLIENT_CELLS },
-  agentsClosing('Build, run, and protect applications. Everywhere.')
+  agentsClosing('Built by you, or your agents.')
 ]
