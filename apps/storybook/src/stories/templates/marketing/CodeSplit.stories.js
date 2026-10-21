@@ -25,37 +25,6 @@ const components = {
   TextureMaterial
 }
 
-const CACHE_SETTINGS = `{
-  "cache_settings": {
-    "name": "api-cache",
-    "browser_cache_settings": {
-      "ttl": 60
-    },
-    "cdn_cache_settings": {
-      "ttl": 30
-    },
-    "cache_key": {
-      "query_string": "whitelist",
-      "query_string_fields": ["user_id", "category"],
-      "cookie": "whitelist",
-      "cookie_names": ["session_id", "region"]
-    },
-    "methods": ["GET", "POST", "OPTIONS"],
-    "stale_cache": true
-  }
-}`
-
-const CACHE_TABS = [
-  {
-    label: 'cache-settings.json',
-    value: 'cache-settings',
-    language: 'json',
-    code: CACHE_SETTINGS,
-    fileName: 'cache-settings.json',
-    fileIcon: 'ai ai-json'
-  }
-]
-
 const AZION_CONFIG = `export default {
   build: { preset: 'vue' },
   rules: {
@@ -155,16 +124,6 @@ const FULL_STACK_IMPORTS = [
   declareTabs('codeTabs', FUNCTION_SAMPLE_TABS)
 ]
 
-const ACCELERATOR_IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import CodeBlock from '@aziontech/webkit/code-block'",
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
-  '',
-  declareTabs('codeTabs', CACHE_TABS)
-]
-
 const RECIPES_IMPORTS = [
   "import CodeBlock from '@aziontech/webkit/code-block'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
@@ -221,50 +180,6 @@ const FULL_STACK_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="f
   </MediaSplit>
 </SectionModule>`)
 
-const ACCELERATOR_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
-  <FrameBox flush borders="y" marks="bottom">
-    <div class="grid lg:grid-cols-[4fr_5fr]">
-      <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-        <div class="flex flex-col gap-(--spacing-lg)">
-          <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-            From basic caching to advanced acceleration
-          </h2>
-          <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-            Application Accelerator extends Cache with protocol optimizations and advanced cache
-            rules for dynamic content.
-          </p>
-        </div>
-
-        <div>
-          <Button
-            label="Learn More"
-            kind="text"
-            size="large"
-            href="/docs"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </div>
-      </div>
-
-      <div
-        class="min-w-0 border-t border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) lg:border-l lg:border-t-0"
-      >
-        <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
-          <CodeBlock
-            :tabs="codeTabs"
-            default-value="cache-settings"
-            show-line-numbers
-            animate-lines
-            copy-aria-label="Copy the cache settings sample"
-          />
-        </div>
-      </div>
-    </div>
-  </FrameBox>
-</SectionModule>`)
-
 const RECIPES_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
     <SectionTitle
@@ -317,7 +232,7 @@ ${each(
 
 const meta = {
   title: 'Templates/Marketing/Media/CodeSplit',
-  excludeStories: ['SITE_SECTION', 'SITE_SECTION_ACCELERATOR', 'SITE_SECTION_RECIPES'],
+  excludeStories: ['SITE_SECTION', 'SITE_SECTION_RECIPES'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -362,39 +277,6 @@ export const SITE_SECTION = {
 export const DefaultJson = {
   tags: ['!dev'],
   ...siteJsonStory(SITE_SECTION)
-}
-
-export const Accelerator = {
-  render: () => ({
-    components,
-    setup: () => ({ codeTabs: CACHE_TABS }),
-    template: ACCELERATOR_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      source: { code: toSfc(ACCELERATOR_IMPORTS, ACCELERATOR_TEMPLATE) }
-    }
-  }
-}
-
-export const SITE_SECTION_ACCELERATOR = {
-  _id: 'code-split-accelerator',
-  props: {
-    title: 'From basic caching to advanced acceleration',
-    description:
-      'Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.',
-    codeTabs: CACHE_TABS,
-    copyAriaLabel: 'Copy the code sample',
-    action: {
-      label: 'Learn More',
-      href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/'
-    }
-  }
-}
-
-export const AcceleratorJson = {
-  tags: ['!dev'],
-  ...siteJsonStory(SITE_SECTION_ACCELERATOR)
 }
 
 export const Recipes = {

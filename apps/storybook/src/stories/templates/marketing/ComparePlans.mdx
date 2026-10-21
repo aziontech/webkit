@@ -1,19 +1,18 @@
-import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as ComparePlansStories from './ComparePlans.stories'
 
-<Meta
-  of={ComparePlansStories}
-  name="Documentation"
-/>
+<Meta title="Templates/Marketing/Content/ComparePlans" />
 
-<Title />
+# ComparePlans
 
 A table that compares plans feature by feature, under the plan cards on Pricing. Each plan gets a column, each product gets a band, and each cell says what that plan includes.
 
 A cell shows a tick when the feature is included, a dash when it is not, or the allowance as text. Screen readers hear each value with its row and its plan. The plan header stays on screen while you scroll, and the recommended plan gets an accent bar.
 
 On small screens the table shows one plan at a time, picked from a select in the header.
+
+For the Support page's tier comparison, use CompareSupportTiers.
 
 Built from `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`.
 
