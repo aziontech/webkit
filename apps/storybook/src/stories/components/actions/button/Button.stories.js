@@ -1,4 +1,5 @@
 import Button from '@aziontech/webkit/button'
+import FieldText from '@aziontech/webkit/field-text'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -25,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Interactive control for user actions. `label` is required (use `IconButton` for icon-only controls). Supports optional icon, loading state, and link rendering when `href` is set.'
+          'Interactive control for user actions. `label` is required (use `IconButton` for icon-only controls). Supports optional icon, loading state, and link rendering when `href` is set. Set `type="submit"` to let it submit its form; `disabled` and `loading` still block the submission.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -103,6 +104,17 @@ const meta = {
         defaultValue: { summary: "'_self'" }
       }
     },
+    type: {
+      control: 'select',
+      options: ['button', 'submit', 'reset'],
+      description:
+        'Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.',
+      table: {
+        category: 'props',
+        type: { summary: "'button' | 'submit' | 'reset'" },
+        defaultValue: { summary: "'button'" }
+      }
+    },
     onClick: {
       action: 'click',
       description: 'Emitted when the button is activated.',
@@ -119,7 +131,8 @@ const meta = {
     iconPosition: 'leading',
     animated: false,
     href: '',
-    target: '_self'
+    target: '_self',
+    type: 'button'
   }
 }
 
@@ -253,6 +266,31 @@ export const Disabled = {
     docs: {
       description: { story: 'Disabled state.' },
       source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
+    }
+  }
+}
+
+const FORM_IMPORTS = [IMPORT, "import FieldText from '@aziontech/webkit/field-text'"]
+
+const FORM_SUBMIT_TEMPLATE = `<form class="flex w-80 flex-col gap-4" novalidate @submit.prevent>
+  <FieldText label="Workspace name" input-id="button-form-name" name="name" />
+  <div class="flex gap-2">
+    <Button type="reset" label="Clear" kind="outlined" size="medium" />
+    <Button type="submit" label="Create" kind="primary" size="medium" />
+  </div>
+</form>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
+export const FormSubmit = {
+  render: () => ({ components: { Button, FieldText }, template: FORM_SUBMIT_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          '`type="submit"` makes the Button its form\'s submit control, so a click or Enter inside a field submits it; `type="reset"` clears the form. The default `type="button"` never submits.'
+      },
+      source: { code: toSfc(FORM_IMPORTS, FORM_SUBMIT_TEMPLATE) }
     }
   }
 }
