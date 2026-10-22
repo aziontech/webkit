@@ -53,6 +53,15 @@ const themed = (style: string, name: string) =>
     template: `<div style="${style}"><Illustration name="${name}" /></div>`
   })
 
+const drawnFixture = async (style: string, body: string) => {
+  const markup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4">${body}</svg>`
+  const scene = await loadIllustrationScene(`data:image/svg+xml,${encodeURIComponent(markup)}`)
+  const view = render({ template: `<svg data-testid="fixture" style="${style}" />` })
+  const host = await at(view).findByTestId('fixture')
+  host.append(...scene.draw('fixture'))
+  return host
+}
+
 const UNPAINTED = 'mask, clipPath, filter'
 
 describe('Illustration', () => {
@@ -127,21 +136,23 @@ describe('Illustration', () => {
   })
 
   it('keeps a translucent ground colour as a drop shadow', async () => {
-    const view = themed('--illustration-ground: rgb(7, 8, 9)', 'low-latency')
-    await drawsScene(view, await sceneOf('low-latency'))
-    const shadows = fills(await root(view), '[fill-opacity]')
-    expect(shadows).toContain('rgb(0, 0, 0)')
-    expect(shadows).not.toContain('rgb(7, 8, 9)')
+    const host = await drawnFixture(
+      '--illustration-ground: rgb(7, 8, 9)',
+      '<rect width="4" height="4" fill="#000000" fill-opacity="0.1"/><rect width="2" height="2" fill="#000000"/>'
+    )
+    expect(fills(host, '[fill-opacity]')).toEqual(['rgb(0, 0, 0)'])
+    expect(fills(host, 'rect:not([fill-opacity])')).toEqual(['rgb(7, 8, 9)'])
   })
 
   it('paints a gradient stop that relies on the default black as ground', async () => {
-    const view = themed('--illustration-ground: rgb(7, 8, 9)', 'preview')
-    await drawsScene(view, await sceneOf('preview'))
-    const stops = [...(await root(view)).querySelectorAll('stop')].map(
+    const host = await drawnFixture(
+      '--illustration-ground: rgb(7, 8, 9)',
+      '<linearGradient id="g"><stop offset="0"/></linearGradient><rect width="4" height="4" fill="url(#g)"/>'
+    )
+    const stops = [...host.querySelectorAll('stop')].map(
       (stop) => globalThis.getComputedStyle(stop).stopColor
     )
-    expect(stops).toContain('rgb(7, 8, 9)')
-    expect(stops).not.toContain('rgb(0, 0, 0)')
+    expect(stops).toEqual(['rgb(7, 8, 9)'])
   })
 
   it('never repaints a mask', async () => {
