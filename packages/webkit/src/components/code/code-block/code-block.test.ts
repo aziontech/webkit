@@ -59,7 +59,7 @@ describe('CodeBlock', () => {
     it('renders with the default testid', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      expect(getByTestId('data-code-block')).toBeTruthy()
+      expect(getByTestId('code-code-block')).toBeTruthy()
     })
 
     it('honors a consumer-supplied data-testid', () => {
@@ -77,7 +77,7 @@ describe('CodeBlock', () => {
         attrs: { class: 'consumer-class' }
       })
 
-      expect(getByTestId('data-code-block').classList.contains('consumer-class')).toBe(true)
+      expect(getByTestId('code-code-block').classList.contains('consumer-class')).toBe(true)
     })
 
     it('renders the highlighted line content of the active tab', () => {
@@ -86,7 +86,7 @@ describe('CodeBlock', () => {
       })
 
       // Three source lines -> three line rows.
-      const content = getByTestId('data-code-block__content')
+      const content = getByTestId('code-code-block__content')
       expect(content.textContent).toContain('const one = 1')
       expect(content.textContent).toContain('const three = 3')
     })
@@ -169,6 +169,35 @@ describe('CodeBlock', () => {
       expect(tabs[1].getAttribute('aria-selected')).toBe('true')
       expect(tabs[0].getAttribute('aria-selected')).toBe('false')
     })
+
+    it('renders the replacement when the single tab is swapped for another', async () => {
+      const { getAllByTestId, queryByRole, rerender } = render(CodeBlock, {
+        props: { tabs: [twoTabs[0]] }
+      })
+
+      expect(getAllByTestId('code-code-block__line')).toHaveLength(3)
+
+      await rerender({ tabs: [twoTabs[1]] })
+
+      expect(queryByRole('tablist')).toBeNull()
+      const lines = getAllByTestId('code-code-block__line')
+      expect(lines).toHaveLength(2)
+      expect(lines[0].textContent?.replace(/\s+/g, ' ').trim()).toContain('let a = 10')
+    })
+
+    it('renders the new source when the active tab code is replaced in place', async () => {
+      const { getAllByTestId, rerender } = render(CodeBlock, {
+        props: { tabs: singleTab }
+      })
+
+      expect(getAllByTestId('code-code-block__line')).toHaveLength(3)
+
+      await rerender({ tabs: [{ ...singleTab[0], code: CODE_TWO }] })
+
+      const lines = getAllByTestId('code-code-block__line')
+      expect(lines).toHaveLength(2)
+      expect(lines[1].textContent?.replace(/\s+/g, ' ').trim()).toContain('let b = 20')
+    })
   })
 
   describe('keyboard navigation', () => {
@@ -245,7 +274,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      await fireEvent.click(within(getByTestId('data-code-block__copy')).getByRole('button'))
+      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
 
       await waitFor(() => {
         expect(emitted().copy).toBeTruthy()
@@ -263,7 +292,7 @@ describe('CodeBlock', () => {
       })
 
       await fireEvent.click(getAllByRole('tab')[1])
-      await fireEvent.click(within(getByTestId('data-code-block__copy')).getByRole('button'))
+      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
 
       await waitFor(() => {
         expect(emitted().copy).toBeTruthy()
@@ -278,6 +307,25 @@ describe('CodeBlock', () => {
 
       expect(getByRole('button', { name: 'Copy snippet' }).tagName).toBe('BUTTON')
     })
+
+    it('renders the copy anchor and marks the root copyable by default', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
+      expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
+      expect(within(getByTestId('code-code-block__copy')).getByRole('button')).toBeTruthy()
+    })
+
+    it('omits the copy anchor and the copyable marker when copyable is false', () => {
+      const { getByTestId, queryByTestId, queryByRole } = render(CodeBlock, {
+        props: { tabs: singleTab, copyable: false, copyAriaLabel: 'Copy snippet' }
+      })
+
+      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
+      expect(queryByTestId('code-code-block__copy')).toBeNull()
+      expect(queryByRole('button', { name: 'Copy snippet' })).toBeNull()
+    })
   })
 
   describe('line numbers gutter', () => {
@@ -287,7 +335,7 @@ describe('CodeBlock', () => {
       })
 
       // Three source lines -> a line-number cell per line.
-      expect(queryAllByTestId('data-code-block__line-number')).toHaveLength(3)
+      expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(3)
     })
 
     it('hides the line-number gutter when showLineNumbers is false', () => {
@@ -295,7 +343,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
       })
 
-      expect(queryAllByTestId('data-code-block__line-number')).toHaveLength(0)
+      expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
     })
   })
 
@@ -305,7 +353,7 @@ describe('CodeBlock', () => {
         props: { tabs: fileNameTab, defaultValue: 'file' }
       })
 
-      expect(getByTestId('data-code-block__filename-label').textContent?.trim()).toBe('handler.js')
+      expect(getByTestId('code-code-block__filename-label').textContent?.trim()).toBe('handler.js')
     })
 
     it('omits the filename bar when the active tab has no fileName', () => {
@@ -313,7 +361,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      expect(queryByTestId('data-code-block__filename')).toBeNull()
+      expect(queryByTestId('code-code-block__filename')).toBeNull()
     })
   })
 
@@ -323,12 +371,12 @@ describe('CodeBlock', () => {
         props: { tabs: diffTab, defaultValue: 'diff' }
       })
 
-      const markers = queryAllByTestId('data-code-block__diff-marker')
+      const markers = queryAllByTestId('code-code-block__diff-marker')
       expect(markers.length).toBeGreaterThan(0)
 
       // The added/removed lines carry the corresponding data-state.
-      const lines = getByTestId('data-code-block__lines').querySelectorAll(
-        '[data-testid="data-code-block__line"]'
+      const lines = getByTestId('code-code-block__lines').querySelectorAll(
+        '[data-testid="code-code-block__line"]'
       )
       expect(lines[0].getAttribute('data-state')).toBe('added')
       expect(lines[1].getAttribute('data-state')).toBe('removed')
@@ -339,7 +387,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      expect(queryAllByTestId('data-code-block__diff-marker')).toHaveLength(0)
+      expect(queryAllByTestId('code-code-block__diff-marker')).toHaveLength(0)
     })
   })
 
@@ -347,7 +395,7 @@ describe('CodeBlock', () => {
     it('draws the outer border by default (data-border set)', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      expect(getByTestId('data-code-block').getAttribute('data-border')).toBe('true')
+      expect(getByTestId('code-code-block').getAttribute('data-border')).toBe('true')
     })
 
     it('drops the outer border when border is false (data-border absent)', () => {
@@ -355,7 +403,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, border: false }
       })
 
-      expect(getByTestId('data-code-block').getAttribute('data-border')).toBeNull()
+      expect(getByTestId('code-code-block').getAttribute('data-border')).toBeNull()
     })
   })
 
@@ -365,7 +413,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, animateLines: true }
       })
 
-      for (const line of getAllByTestId('data-code-block__line')) {
+      for (const line of getAllByTestId('code-code-block__line')) {
         const properties = line.style.transitionProperty.split(',').map((name) => name.trim())
 
         expect(properties).toContain('translate')
@@ -376,7 +424,7 @@ describe('CodeBlock', () => {
     it('leaves lines without an entrance transition when animateLines is off', () => {
       const { getAllByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      for (const line of getAllByTestId('data-code-block__line')) {
+      for (const line of getAllByTestId('code-code-block__line')) {
         expect(line.style.transitionProperty).toBe('')
       }
     })
@@ -406,14 +454,50 @@ describe('CodeBlock', () => {
 
       await expectNoA11yViolations(container)
     })
+
+    it('non-copyable layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only', copyable: false }
+      })
+
+      await expectNoA11yViolations(container)
+    })
   })
 
   describe('story fixture', () => {
     it('renders the Default story cleanly', async () => {
       const { getByTestId, container } = render(Default())
 
-      expect(getByTestId('data-code-block')).toBeTruthy()
+      expect(getByTestId('code-code-block')).toBeTruthy()
       await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('javascript highlighting', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['javascript', 'js', 'typescript', 'ts'])(
+      'treats a full-line // as a comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '// Route every request to the origin')).toEqual([
+          { text: '// Route every request to the origin', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing comment separate from the code before it', () => {
+      const line = 'const ttl = 3600 // one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '// one hour')).toBe('comment')
+    })
+
+    it('does not read // inside a string as a comment', () => {
+      const line = "fetch('https://api.azion.com/v4')"
+
+      expect(typeOf('js', line, "'https://api.azion.com/v4'")).toBe('string')
+      expect(highlightCodeLine('js', line).some((token) => token.type === 'comment')).toBe(false)
     })
   })
 

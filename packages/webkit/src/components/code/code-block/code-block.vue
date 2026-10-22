@@ -66,6 +66,8 @@
     showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). */
     copyAriaLabel?: string
+    /** Shows the copy control; turn it off for a decorative block nobody copies from. */
+    copyable?: boolean
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
@@ -78,6 +80,7 @@
     defaultValue: undefined,
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
+    copyable: true,
     animateLines: false,
     border: true
   })
@@ -101,8 +104,9 @@
   const revealedLines = ref(Number.POSITIVE_INFINITY)
   const lineMotionMode = ref<CodeBlockLineMotionMode>(props.animateLines ? 'enter' : null)
   const contentRef = ref<HTMLElement | null>(null)
+  const panelVersion = ref(0)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-block')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-code-block')
 
   const normalizedTabs = computed(() =>
     props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
@@ -286,10 +290,17 @@
   // Reading the natural height with the inline value cleared forces layout, but the
   // old value is restored in the same task, so nothing paints at auto; transitionend
   // drops the inline height so later reflows stay free to resize the shell.
+  const layoutScale = (el: HTMLElement) => {
+    const { width } = el.getBoundingClientRect()
+    return el.offsetWidth && width ? width / el.offsetWidth : 1
+  }
+
+  const layoutHeight = (el: HTMLElement) => el.getBoundingClientRect().height / layoutScale(el)
+
   const captureContentHeight = () => {
     const el = contentRef.value
 
-    return el && !prefersReducedMotion() ? el.getBoundingClientRect().height : null
+    return el && !prefersReducedMotion() ? layoutHeight(el) : null
   }
 
   const runHeightMotion = (from: number | null) => {
@@ -301,7 +312,7 @@
 
     nextTick(() => {
       el.style.height = ''
-      const to = el.getBoundingClientRect().height
+      const to = layoutHeight(el)
 
       if (Math.round(from) === Math.round(to)) {
         return
@@ -326,19 +337,7 @@
       return
     }
 
-    const currentIndex = activeIndex.value
-    const nextIndex = normalizedTabs.value.findIndex((tab) => tab.value === nextValue)
-
-    slideDirection.value = resolveSlideDirection(currentIndex, nextIndex)
-    // Read the outgoing height BEFORE the swap, but queue the animation AFTER it:
-    // `nextTick` registered before any reactive change resolves ahead of the
-    // render job it is meant to follow, so the "new" height it measured was still
-    // the old one — from === to, and the height jumped with no transition at all.
-    const heightFrom = captureContentHeight()
     activeValue.value = nextValue
-    runLinesMotion('swap')
-    runHeightMotion(heightFrom)
-    scheduleIndicatorSync()
   }
 
   const getNextTabValue = (direction: 1 | -1): string | null => {
@@ -424,9 +423,10 @@
 
     const listRect = listEl.getBoundingClientRect()
     const tabRect = activeTabEl.getBoundingClientRect()
+    const scale = layoutScale(listEl)
 
-    indicatorWidth.value = tabRect.width
-    indicatorOffsetX.value = tabRect.left - listRect.left
+    indicatorWidth.value = tabRect.width / scale
+    indicatorOffsetX.value = (tabRect.left - listRect.left) / scale
     indicatorVisible.value = true
   }
 
@@ -515,6 +515,32 @@
   watch(activeValue, scheduleIndicatorSync)
 
   watch(
+    [activeValue, () => activeTab.value?.code],
+    ([nextValue, nextCode], [previousValue, previousCode]) => {
+      if (!previousValue || !contentRef.value) {
+        return
+      }
+
+      const previousBody = (previousCode ?? '').replace(/\n$/, '')
+      const settled = previousBody.slice(0, previousBody.lastIndexOf('\n') + 1)
+
+      if (nextValue === previousValue && (nextCode ?? '').startsWith(settled)) {
+        return
+      }
+
+      slideDirection.value = resolveSlideDirection(
+        normalizedTabs.value.findIndex((tab) => tab.value === previousValue),
+        activeIndex.value
+      )
+      const heightFrom = captureContentHeight()
+      panelVersion.value += 1
+      runLinesMotion('swap')
+      runHeightMotion(heightFrom)
+    },
+    { flush: 'pre' }
+  )
+
+  watch(
     () => highlightedLines.value.length,
     (length, previous) => {
       if (lineMotionMode.value !== 'enter' || !linesMotionReady.value || length <= previous) {
@@ -542,11 +568,12 @@
   <div
     :class="
       cn(
-        'flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'group/code-block flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
     :data-border="border || null"
+    :data-copyable="copyable || null"
     :data-testid="testId"
   >
     <div
@@ -607,7 +634,7 @@
         :data-testid="`${testId}__filename-icon`"
       >
         <i
-          :class="cn(activeFileIcon, 'text-label-code-sm text-(--text-default)')"
+          :class="cn('text-label-code-sm text-(--text-default)', activeFileIcon)"
           aria-hidden="true"
         />
       </span>
@@ -626,6 +653,7 @@
       @transitionend="onContentTransitionEnd"
     >
       <div
+        v-if="copyable"
         class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
@@ -661,7 +689,7 @@
           >
             <div
               v-for="(lineTokens, lineIndex) in highlightedLines"
-              :key="`${activeTab.value}-${lineIndex}`"
+              :key="`${activeTab.value}-${panelVersion}-${lineIndex}`"
               :class="
                 cn(
                   'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm',
@@ -693,7 +721,7 @@
                 {{ formatLineNumber(lineIndex + 1) }}
               </span>
               <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-11"
+                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-sm) group-data-[copyable]/code-block:pr-11"
                 :data-testid="`${testId}__line-content`"
               >
                 <span
