@@ -11,6 +11,7 @@ import realTimeMetricsErrorRate from '@aziontech/webkit/assets/real-time-metrics
 import realTimeMetricsStatusCodes from '@aziontech/webkit/assets/real-time-metrics-status-codes.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import Illustration from '@aziontech/webkit/illustration'
+import { expect, waitFor, within } from '@storybook/test'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -172,6 +173,12 @@ const PLACEHOLDER_MARKUP = '<Illustration />'
 export const Placeholder = {
   render: Template,
   args: { name: '', ariaLabel: '' },
+  play: async ({ canvasElement }) => {
+    // The placeholder scene loads lazily; hold the snapshot until it is drawn.
+    await waitFor(() =>
+      expect(within(canvasElement).getByTestId('content-illustration')).toBeInTheDocument()
+    )
+  },
   parameters: {
     docs: {
       description: {
