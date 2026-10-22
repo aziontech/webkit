@@ -114,7 +114,7 @@ const pushToken = (
 const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
   const keywordRegex = new RegExp(
-    `\\b(?:${JS_KEYWORDS.join('|')})\\b|[{}\\[\\]().,:;=<>]|'(?:\\\\'|[^'])*'|"(?:\\\\"|[^"])*"|\\b[A-Z][A-Za-z0-9_]*\\b|\\b[a-zA-Z_$][\\w$]*\\b|\\s+|[^\\s]+`,
+    `\\/\\/.*$|\\b(?:${JS_KEYWORDS.join('|')})\\b|[{}\\[\\]().,:;=<>]|'(?:\\\\'|[^'])*'|"(?:\\\\"|[^"])*"|\\b[A-Z][A-Za-z0-9_]*\\b|\\b[a-zA-Z_$][\\w$]*\\b|\\s+|[^\\s]+`,
     'g'
   )
 
@@ -123,6 +123,12 @@ const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
 
   while ((match = keywordRegex.exec(line)) !== null) {
     const chunk = match[0]
+
+    if (chunk.startsWith('//')) {
+      pushToken(tokens, chunk, 'comment')
+      previousChunk = chunk
+      continue
+    }
 
     if (/^\s+$/.test(chunk)) {
       pushToken(tokens, chunk, 'identifier')
