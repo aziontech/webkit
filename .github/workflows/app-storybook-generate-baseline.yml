@@ -23,6 +23,9 @@ jobs:
   visual:
     name: Storybook Generate Baseline
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble # keep in sync with `playwright` in pnpm-lock.yaml
+      options: --ipc=host
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -39,15 +42,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Ensure Chromium matches the Playwright package
+        # The image ships Chromium for its tag. This is a no-op when the tag and
+        # the lockfile agree; on drift it downloads only the browser (no apt).
+        run: pnpm exec playwright install chromium
         working-directory: apps/storybook
 
       - name: Build Storybook
