@@ -46,11 +46,13 @@ jobs:
             tests:
               - 'packages/webkit/**'
               - 'apps/storybook/**'
+              - '.github/workflows/governance.yml'
             visual:
               - 'packages/webkit/**'
               - 'packages/theme/**'
               - 'packages/icons/**'
               - 'apps/storybook/**'
+              - '.github/workflows/governance.yml'
             canary:
               - 'packages/webkit/**'
               - 'lint-canaries/**'
