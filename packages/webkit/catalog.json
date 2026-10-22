@@ -11988,7 +11988,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
@@ -12057,7 +12057,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
