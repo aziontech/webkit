@@ -46,7 +46,7 @@
   useFocusTrap(contentRef, isOpen)
 
   useEventListener(document, 'keydown', (event) => {
-    if (!isOpen.value || event.key !== 'Escape') return
+    if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
     if (!ctx?.dismissible) return
     event.preventDefault()
     ctx.close()
