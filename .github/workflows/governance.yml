@@ -294,8 +294,12 @@ jobs:
   tests:
     name: Vitest browser (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble # keep in sync with `playwright` in pnpm-lock.yaml
+      options: --ipc=host
     needs: [changes, lint, types]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.tests == 'true' }}
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -315,15 +319,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Ensure Chromium matches the Playwright package
+        # The image ships Chromium for its tag. This is a no-op when the tag and
+        # the lockfile agree; on drift it downloads only the browser (no apt).
+        run: pnpm exec playwright install chromium
         working-directory: packages/webkit
 
       - name: Run tests (shard ${{ matrix.shard }})
@@ -333,9 +332,12 @@ jobs:
   visual:
     name: Storybook visual tests (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble # keep in sync with `playwright` in pnpm-lock.yaml
+      options: --ipc=host
     needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
-    timeout-minutes: 30
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -355,15 +357,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Ensure Chromium matches the Playwright package
+        # The image ships Chromium for its tag. This is a no-op when the tag and
+        # the lockfile agree; on drift it downloads only the browser (no apt).
+        run: pnpm exec playwright install chromium
         working-directory: apps/storybook
 
       - name: Build Storybook
