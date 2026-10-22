@@ -3554,10 +3554,10 @@
     },
     "code-block": {
       "import": "@aziontech/webkit/code-block",
-      "target": "./src/components/data/code-block/code-block.vue",
+      "target": "./src/components/code/code-block/code-block.vue",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/code-block",
-      "category": "data",
+      "category": "code",
       "structure": "monolithic",
       "status": "implemented",
       "props": [
@@ -3595,6 +3595,13 @@
           "default": "'Copy code'",
           "required": "false",
           "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
         },
         {
           "name": "animateLines",
@@ -13459,6 +13466,12 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-reversed.svg"
     },
+    "assets/ai-gateway.svg": {
+      "import": "@aziontech/webkit/assets/ai-gateway.svg",
+      "target": "./src/assets/illustrations/ai-gateway.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ai-gateway.svg"
+    },
     "assets/akamai-extended-color.svg": {
       "import": "@aziontech/webkit/assets/akamai-extended-color.svg",
       "target": "./src/assets/logos/competitors/akamai-extended-color.svg",
@@ -13620,6 +13633,12 @@
       "target": "./src/assets/illustrations/azion-highlight.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/azion-highlight.svg"
+    },
+    "assets/azion-rest-api.svg": {
+      "import": "@aziontech/webkit/assets/azion-rest-api.svg",
+      "target": "./src/assets/illustrations/azion-rest-api.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azion-rest-api.svg"
     },
     "assets/azure-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/azure-symbol-mono.svg",
@@ -13926,6 +13945,12 @@
       "target": "./src/assets/logos/clients/digiplus-extended-reversed.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/digiplus-extended-reversed.svg"
+    },
+    "assets/distributed-apis-tile.svg": {
+      "import": "@aziontech/webkit/assets/distributed-apis-tile.svg",
+      "target": "./src/assets/illustrations/distributed-apis-tile.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/distributed-apis-tile.svg"
     },
     "assets/docusaurus-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg",
@@ -15072,6 +15097,18 @@
       "target": "./src/assets/logos/frameworks/react-symbol-mono.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/react-symbol-mono.svg"
+    },
+    "assets/real-time-metrics-error-rate.svg": {
+      "import": "@aziontech/webkit/assets/real-time-metrics-error-rate.svg",
+      "target": "./src/assets/illustrations/real-time-metrics-error-rate.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/real-time-metrics-error-rate.svg"
+    },
+    "assets/real-time-metrics-status-codes.svg": {
+      "import": "@aziontech/webkit/assets/real-time-metrics-status-codes.svg",
+      "target": "./src/assets/illustrations/real-time-metrics-status-codes.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/real-time-metrics-status-codes.svg"
     },
     "assets/redis-symbol-color.svg": {
       "import": "@aziontech/webkit/assets/redis-symbol-color.svg",
