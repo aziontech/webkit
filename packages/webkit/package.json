@@ -288,6 +288,7 @@
     "./bento-grid-root": "./src/components/marketing/bento-grid/bento-grid.vue",
     "./bento-grid-cell": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",
     "./call-to-action": "./src/components/marketing/call-to-action/call-to-action.vue",
+    "./diagram": "./src/components/marketing/diagram/diagram.vue",
     "./big-numbers": "./src/components/marketing/big-numbers/big-numbers.vue",
     "./carousel": "./src/components/marketing/carousel/index.ts",
     "./carousel-root": "./src/components/marketing/carousel/carousel.vue",
