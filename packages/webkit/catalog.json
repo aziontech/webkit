@@ -2801,6 +2801,11 @@
           "notes": "Replaces the default header layout (title + header-action)."
         },
         {
+          "name": "header-action",
+          "scope": "—",
+          "notes": "Actions aligned to the end of the default header; visible on header hover."
+        },
+        {
           "name": "content",
           "scope": "—",
           "notes": "Main card body."
