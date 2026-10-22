@@ -255,6 +255,15 @@ const meta = {
         defaultValue: { summary: "'Copy code'" }
       }
     },
+    copyable: {
+      control: 'boolean',
+      description: 'Shows the copy control; turn it off for a decorative block nobody copies from.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
     animateLines: {
       control: 'boolean',
       description:
@@ -291,6 +300,7 @@ const meta = {
     defaultValue: 'js',
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
+    copyable: true,
     animateLines: false,
     border: true
   }
@@ -348,6 +358,28 @@ export const WithoutLineNumbers = {
       description: { story: 'Same language switcher with the line-number gutter hidden.' },
       source: {
         code: snippet(languageSwitcherTabs, 'default-value="js" :show-line-numbers="false"')
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const WithoutCopy = {
+  args: {
+    copyable: false
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Same language switcher with the copy control removed via `:copyable="false"`, for a decorative block nobody copies from.'
+      },
+      source: {
+        code: snippet(
+          languageSwitcherTabs,
+          'default-value="js" show-line-numbers :copyable="false"'
+        )
       }
     }
   }
