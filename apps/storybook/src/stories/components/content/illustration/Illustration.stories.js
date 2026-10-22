@@ -1,11 +1,17 @@
+import aiGateway from '@aziontech/webkit/assets/ai-gateway.svg'
 import azionHighlight from '@aziontech/webkit/assets/azion-highlight.svg'
+import azionRestApi from '@aziontech/webkit/assets/azion-rest-api.svg'
 import branches from '@aziontech/webkit/assets/branches.svg'
 import combineDataAndVectorSearch from '@aziontech/webkit/assets/combine-data-and-vector-search.svg'
 import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
+import distributedApisTile from '@aziontech/webkit/assets/distributed-apis-tile.svg'
 import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
 import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+import realTimeMetricsErrorRate from '@aziontech/webkit/assets/real-time-metrics-error-rate.svg'
+import realTimeMetricsStatusCodes from '@aziontech/webkit/assets/real-time-metrics-status-codes.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import Illustration from '@aziontech/webkit/illustration'
+import { expect, waitFor, within } from '@storybook/test'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -15,6 +21,7 @@ const IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
 // packages/webkit/src/assets/illustrations/registry.ts.
 const ASSETS = [
   'ai-applications',
+  'api-endpoints',
   'automate-threat-mitigation',
   'azion-to-akamai',
   'azion-to-aws',
@@ -22,32 +29,52 @@ const ASSETS = [
   'azion-to-fastly',
   'azion-to-vercel',
   'build-applications',
+  'build-databases-from-code',
+  'combine-data-and-vector-search',
+  'content-and-media-delivery',
+  'content-and-media-delivery-globe',
+  'custom-allowed-rules',
+  'custom-rules-mitigation',
   'deploy-secure-mcp-server',
+  'detect-and-classify',
   'distributed-apis',
+  'distributed-sql-for-resilient-global-reads',
   'dns-protection',
+  'enable-owasp-protection-with-customizable-rules',
   'fastest-path-to-live-website',
   'global-network',
   'implement-api-gateway-security',
   'improve-application-performance-and-reliability',
   'infrastructure-as-code',
+  'intent-to-policy',
   'live-debugging',
   'low-latency',
+  'mitigation-actions',
   'modern-frontends',
+  'multi-format-optimization-with-automatic-detection',
+  'network-lists-rules-engine',
   'no-idle-no-waste',
   'preview',
+  'profiles-per-application',
   'programmable-security',
   'protect-financial-applications',
   'quick-start-with-templates',
+  'read-at-the-edge',
+  'replicated-reads',
+  'reputation-intelligence-for-enhanced-protection',
+  'request-inspection',
   'retail-application-modernization',
   'runtime',
   'saas-platforms',
   'stay-in-control',
+  'stream-security-events-for-investigation-and-response',
+  'url-based-transformations-without-api-complexity',
   'white-gloves-when-it-matters'
 ]
 
 /** @type {import('@storybook/vue3').Meta<typeof Illustration>} */
 const meta = {
-  title: 'Components/Content/Illustration',
+  title: 'Components/Primitives/Content/Illustration',
   component: Illustration,
   tags: ['autodocs'],
   parameters: {
@@ -129,6 +156,7 @@ export const Assets = {
   }),
   parameters: {
     controls: { disable: true },
+    visual: false,
     docs: {
       controls: { disable: true },
       description: {
@@ -145,6 +173,12 @@ const PLACEHOLDER_MARKUP = '<Illustration />'
 export const Placeholder = {
   render: Template,
   args: { name: '', ariaLabel: '' },
+  play: async ({ canvasElement }) => {
+    // The placeholder scene loads lazily; hold the snapshot until it is drawn.
+    await waitFor(() =>
+      expect(within(canvasElement).getByTestId('content-illustration')).toBeInTheDocument()
+    )
+  },
   parameters: {
     docs: {
       description: {
@@ -177,12 +211,17 @@ export const Labeled = {
 }
 
 const FILES = [
+  ['aiGateway', 'ai-gateway.svg', aiGateway],
   ['azionHighlight', 'azion-highlight.svg', azionHighlight],
+  ['azionRestApi', 'azion-rest-api.svg', azionRestApi],
   ['branches', 'branches.svg', branches],
   ['combineDataAndVectorSearch', 'combine-data-and-vector-search.svg', combineDataAndVectorSearch],
   ['ddosProtection', 'ddos-protection.svg', ddosProtection],
+  ['distributedApisTile', 'distributed-apis-tile.svg', distributedApisTile],
   ['personalTokens', 'personal-tokens.svg', personalTokens],
   ['quickStartWithTemplates', 'quick-start-with-templates.svg', quickStartWithTemplates],
+  ['realTimeMetricsErrorRate', 'real-time-metrics-error-rate.svg', realTimeMetricsErrorRate],
+  ['realTimeMetricsStatusCodes', 'real-time-metrics-status-codes.svg', realTimeMetricsStatusCodes],
   ['usageChart', 'usage-chart.svg', usageChart]
 ]
 

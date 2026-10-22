@@ -1,5 +1,5 @@
-import Ticker from '@aziontech/webkit/ticker'
 import TextureMaterial from '@aziontech/webkit/texture-material'
+import Ticker from '@aziontech/webkit/ticker'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -248,6 +248,7 @@ export const Sizes = {
   }),
   parameters: {
     controls: { disable: true },
+    visual: { modes: ['dark-desktop', 'dark-tablet', 'dark-mobile'] },
     docs: {
       description: {
         story:

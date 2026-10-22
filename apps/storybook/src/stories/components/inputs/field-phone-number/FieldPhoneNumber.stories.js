@@ -7,7 +7,7 @@ const IMPORT = "import FieldPhoneNumber from '@aziontech/webkit/field-phone-numb
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPhoneNumber>} */
 const meta = {
-  title: 'Components/Inputs/FieldPhoneNumber',
+  title: 'Components/Primitives/Inputs/FieldPhoneNumber',
   component: FieldPhoneNumber,
   tags: ['autodocs'],
   parameters: {
@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading dial-code `Select` and a middle masked `<input>`), and `HelperText` into a single vertical stack. Emits two v-models: `modelValue` (national digits only) and `country` (ISO 3166-1 alpha-2 code) that drives the mask and dial code shown.'
+          'Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading dial-code `Select` and a middle masked `<input>`), and `HelperText` into a single vertical stack. The number field follows the selected country: its mask, and the lengths it accepts — a country may allow several, like a Brazilian landline (10 digits) and mobile (11). Two v-models carry `modelValue` (national digits only) and `country` (ISO 3166-1 alpha-2 code); `update:phone` reports the full E.164 number and whether it is complete.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -34,7 +34,8 @@ const meta = {
     },
     countries: {
       control: false,
-      description: 'Countries offered by the dial-code Select. Falls back to the built-in list.',
+      description:
+        'Countries offered by the dial-code Select. `mask` is a list when a country allows several lengths. Falls back to the built-in list, which ends with Other.',
       table: { category: 'props', type: { summary: 'Country[]' } }
     },
     label: {
@@ -87,15 +88,46 @@ const meta = {
       description: 'HTML name for the internal input (form + vee-validate integration).',
       table: { category: 'props', type: { summary: 'string' } }
     },
+    searchPlaceholder: {
+      control: 'text',
+      description:
+        'Placeholder of the search box that filters the dial-code list. Typing on the closed trigger opens the list with the search already filled.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Search country' }
+      }
+    },
+    searchEmptyLabel: {
+      control: 'text',
+      description: 'Shown in the dial-code list when no country matches the search.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'No country found' }
+      }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
-      description: 'Emitted on every input event; value is digits-only.',
+      description: 'Emitted when the typed digits change; value is digits-only.',
       table: { category: 'events', type: { summary: 'string' } }
     },
     'onUpdate:country': {
       action: 'update:country',
       description: 'Emitted when the user picks a different country.',
       table: { category: 'events', type: { summary: 'string' } }
+    },
+    'onUpdate:phone': {
+      action: 'update:phone',
+      description:
+        'Emitted on mount and whenever the digits or country change, with the full E.164 `number` and whether it is `complete`.',
+      table: {
+        category: 'events',
+        type: {
+          summary:
+            '{ country: string; dialCode: string; digits: string; number: string; complete: boolean }'
+        }
+      }
     }
   },
   args: {
@@ -153,9 +185,10 @@ export const Default = {
 }
 
 const COUNTRIES_MARKUP = `<div class="flex flex-col gap-4 w-[360px]">
-  <FieldPhoneNumber label="BR phone" model-value="11999999999" :country="'BR'" />
-  <FieldPhoneNumber label="US phone" model-value="5555550123" :country="'US'" />
-  <FieldPhoneNumber label="UK phone" model-value="7911123456" :country="'GB'" />
+  <FieldPhoneNumber label="BR mobile" model-value="11999999999" country="BR" />
+  <FieldPhoneNumber label="BR landline" model-value="1133334444" country="BR" />
+  <FieldPhoneNumber label="US phone" model-value="5555550123" country="US" />
+  <FieldPhoneNumber label="UK phone" model-value="7911123456" country="GB" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FieldPhoneNumber>} */
@@ -164,9 +197,10 @@ export const Countries = {
     components: { FieldPhoneNumber },
     template: `
       <div class="flex flex-col gap-4 w-[360px]">
-        <FieldPhoneNumber label="BR phone" model-value="11999999999" country="BR" helper-text="" />
-        <FieldPhoneNumber label="US phone" model-value="5555550123" country="US" helper-text="" />
-        <FieldPhoneNumber label="UK phone" model-value="7911123456" country="GB" helper-text="" />
+        <FieldPhoneNumber label="BR mobile" model-value="11999999999" country="BR" />
+        <FieldPhoneNumber label="BR landline" model-value="1133334444" country="BR" />
+        <FieldPhoneNumber label="US phone" model-value="5555550123" country="US" />
+        <FieldPhoneNumber label="UK phone" model-value="7911123456" country="GB" />
       </div>
     `
   }),
@@ -175,7 +209,7 @@ export const Countries = {
       controls: { disable: true },
       description: {
         story:
-          'Three countries side-by-side (BR / US / GB) with the same value shape. The mask switches per country: `(##) #####-####`, `(###) ###-####`, `#### ######`.'
+          'Brazil allows two lengths, so its mask follows the digits: 11 read as a mobile `(##) #####-####`, 10 as a landline `(##) ####-####`. US and UK each allow one: `(###) ###-####`, `#### ######`.'
       },
       source: { code: toSfc(IMPORT, COUNTRIES_MARKUP) }
     }

@@ -246,7 +246,7 @@
       width: '356px',
       maxWidth: 'calc(100vw - 2 * var(--spacing-md))',
       top: top ? 'var(--spacing-md)' : 'auto',
-      bottom: top ? 'auto' : 'calc(var(--spacing-md) + var(--toast-offset-bottom, 0rem))',
+      bottom: top ? 'auto' : 'calc(var(--spacing-md) + var(--toast-offset-bottom, 0%))',
       left: center ? '50%' : pos.endsWith('left') ? 'var(--spacing-md)' : 'auto',
       right: pos.endsWith('right') ? 'var(--spacing-md)' : 'auto',
       transform: center ? 'translateX(-50%)' : 'none',

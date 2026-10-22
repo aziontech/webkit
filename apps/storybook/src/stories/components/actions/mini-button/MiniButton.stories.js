@@ -6,7 +6,7 @@ const IMPORT = "import MiniButton from '@aziontech/webkit/mini-button'"
 
 /** @type {import('@storybook/vue3').Meta<typeof MiniButton>} */
 const meta = {
-  title: 'Components/Actions/MiniButton',
+  title: 'Components/Primitives/Actions/MiniButton',
   component: MiniButton,
   tags: ['autodocs'],
   parameters: {

@@ -18,7 +18,7 @@ Follow the steps in order and do not skip the report.
    husky hook through the "prepare" script).
 
    It wires: @aziontech/webkit, @aziontech/theme and @aziontech/icons; Tailwind v4 via
-   @tailwindcss/postcss (postcss.config.mjs); src/webkit.css imported from src/main.*;
+   @tailwindcss/postcss (postcss.config.mjs); src/webkit.css imported from src/main.\*;
    the webkit ESLint preset + eslint-plugin-vuejs-accessibility (eslint.config.mjs);
    the webkit Stylelint config; a husky pre-commit that runs both linters; the "webkit"
    MCP server in .mcp.json; and the Claude Code bundle (.claude/ + a CLAUDE.md fragment).
@@ -27,7 +27,7 @@ Follow the steps in order and do not skip the report.
 
    Every line init printed as advice is a manual step: merge the ESLint / Stylelint /
    PostCSS snippets into the existing configs, chain husky into an existing "prepare"
-   script, and add the entry imports by hand if the entry is not src/main.*.
+   script, and add the entry imports by hand if the entry is not src/main.\*.
    Requirements: Vue 3.5+ and Tailwind v4. If the project is on Tailwind v3, stop and
    report instead of upgrading on your own.
 
@@ -105,7 +105,12 @@ export const mountCopyPrompt = (el) => {
   }).mount(el)
 }
 
-export const CopySetupButton = () => <div ref={mountCopyPrompt} aria-live="polite" />
+export const CopySetupButton = () => (
+  <div
+    ref={mountCopyPrompt}
+    aria-live="polite"
+  />
+)
 
 # Get Started
 
@@ -128,7 +133,11 @@ verify it all.
 <details>
   <summary>View the prompt</summary>
 
-<Source code={SETUP_PROMPT} language="markdown" dark />
+<Source
+  code={SETUP_PROMPT}
+  language="markdown"
+  dark
+/>
 
 </details>
 
@@ -181,13 +190,21 @@ Every component is a flat, tree-shakeable import — `@aziontech/webkit/<name>`:
 
 ```html
 <script setup>
-import Button from '@aziontech/webkit/button'
-import FieldText from '@aziontech/webkit/field-text'
+  import Button from '@aziontech/webkit/button'
+  import FieldText from '@aziontech/webkit/field-text'
 </script>
 
 <template>
-  <FieldText name="email" label="Email" />
-  <Button kind="primary" @click="submit">Create account</Button>
+  <FieldText
+    name="email"
+    label="Email"
+  />
+  <button
+    kind="primary"
+    @click="submit"
+  >
+    Create account
+  </button>
 </template>
 ```
 

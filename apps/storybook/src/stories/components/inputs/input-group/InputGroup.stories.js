@@ -31,7 +31,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof InputGroup>} */
 const meta = {
-  title: 'Components/Inputs/InputGroup',
+  title: 'Components/Primitives/Inputs/InputGroup',
   component: InputGroup,
   tags: ['autodocs'],
   parameters: {

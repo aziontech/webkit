@@ -8,6 +8,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -96,16 +97,12 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
 
 const meta = {
   title: 'Templates/Marketing/Media/FeatureTabs',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A band that walks through the features behind one claim, one at a time: a stack of up to three tabs on one side, the active tab’s media on the other, advancing on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion. The Functions page uses it for its Observability section, with a `MiniButton` into the console under the frame. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs` and `MiniButton`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -117,11 +114,46 @@ export const Default = {
   render: () => ({ components, template: TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Functions page’s Observability band: the Trace, Logs and Request path tabs, each held for 5.2 seconds. The sample site draws each tab’s media with its own animated console scene, which is not a webkit component; here the `#media` slot shows one `Illustration` scene per tab instead, picked by the slot’s `index`.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'feature-tabs',
+  props: {
+    eyebrow: 'Observability',
+    title: 'Inspect every run end-to-end',
+    description:
+      'Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach. Pick a document to open it.',
+    tabs: [
+      {
+        title: 'Trace',
+        description:
+          'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.',
+        illustration: 'live-debugging',
+        illustrationLabel: 'A trace waterfall of one invocation'
+      },
+      {
+        title: 'Logs',
+        description:
+          'Structured output on the same clock as the trace, filtered by level, searchable in place.',
+        illustration: 'stay-in-control',
+        illustrationLabel: 'Structured logs filtered by level'
+      },
+      {
+        title: 'Request path',
+        description:
+          'The workload, application, function and connector it travelled, each captioned with the time spent there.',
+        illustration: 'distributed-apis',
+        illustrationLabel: 'The path a request took through the platform'
+      }
+    ],
+    link: { label: 'Open an invocation', href: '/product-preview' }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

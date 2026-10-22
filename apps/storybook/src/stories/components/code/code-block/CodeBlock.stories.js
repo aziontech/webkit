@@ -179,7 +179,7 @@ const snippet = (tabs, attrs) =>
 
 /** @type {import('@storybook/vue3').Meta<typeof CodeBlock>} */
 const meta = {
-  title: 'Components/Code/CodeBlock',
+  title: 'Components/Primitives/Code/CodeBlock',
   component: CodeBlock,
   tags: ['autodocs'],
   parameters: {

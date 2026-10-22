@@ -1,5 +1,5 @@
-import SemanticSwatchGroup from '../../foundations/components/SemanticSwatchGroup.vue'
 import { PageContainer, PageHeader } from '../../foundations/components/layout/index.js'
+import SemanticSwatchGroup from '../../foundations/components/SemanticSwatchGroup.vue'
 import { themeColorGroups } from '../../foundations/data/theme.js'
 
 export default {
