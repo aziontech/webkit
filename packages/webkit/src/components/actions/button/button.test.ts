@@ -1,3 +1,4 @@
+import { userEvent } from '@storybook/test'
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
@@ -70,6 +71,64 @@ describe('Button', () => {
       expect(getByTestId('actions-button-loading')).toBeTruthy()
       await fireEvent.click(node)
       expect(emitted().click).toBeUndefined()
+    })
+  })
+
+  describe('form submission', () => {
+    const renderInForm = (props: Record<string, unknown>) => {
+      const form = document.createElement('form')
+      const field = document.createElement('input')
+      form.appendChild(field)
+      document.body.appendChild(form)
+      let submits = 0
+      form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        submits += 1
+      })
+      const utils = render(Button, { props: { label: 'Send', ...props }, container: form })
+      return { ...utils, field, submitCount: () => submits }
+    }
+
+    it('defaults to type button and never submits its form', async () => {
+      const { getByRole, submitCount } = renderInForm({})
+      const node = getByRole('button', { name: 'Send' })
+      expect(node.getAttribute('type')).toBe('button')
+      await fireEvent.click(node)
+      expect(submitCount()).toBe(0)
+    })
+
+    it('submits its form on click when type is submit, and still emits click', async () => {
+      const { getByRole, emitted, submitCount } = renderInForm({ type: 'submit' })
+      const node = getByRole('button', { name: 'Send' })
+      expect(node.getAttribute('type')).toBe('submit')
+      await fireEvent.click(node)
+      expect(submitCount()).toBe(1)
+      expect(emitted().click).toHaveLength(1)
+    })
+
+    it('submits its form on Enter inside a field when type is submit', async () => {
+      const { field, submitCount } = renderInForm({ type: 'submit' })
+      field.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(submitCount()).toBe(1)
+    })
+
+    it.each([
+      ['disabled', { disabled: true }],
+      ['loading', { loading: true }]
+    ])('does not submit while %s, by click or by Enter', async (_, state) => {
+      const { getByRole, field, submitCount } = renderInForm({ type: 'submit', ...state })
+      await fireEvent.click(getByRole('button', { name: 'Send' }))
+      field.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(submitCount()).toBe(0)
+    })
+
+    it('leaves the type off the anchor when href is set', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Docs', href: '/docs', type: 'submit' }
+      })
+      expect(getByRole('link', { name: 'Docs' }).hasAttribute('type')).toBe(false)
     })
   })
 
