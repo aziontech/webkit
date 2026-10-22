@@ -78,11 +78,6 @@ const PRODUCTS: SiteNavMenu = {
             href: '/site/products/workloads'
           },
           {
-            label: 'Applications',
-            description: 'Deliver and configure web applications',
-            href: '/site/products/applications'
-          },
-          {
             label: 'Functions',
             description: 'Run code globally with low latency and no cold starts',
             href: '/site/products/functions'
@@ -106,11 +101,6 @@ const PRODUCTS: SiteNavMenu = {
             label: 'AI Inference',
             description: 'Run AI inference close to users',
             href: '/site/products/ai-inference'
-          },
-          {
-            label: 'AI Gateway',
-            description: 'Route, secure and log every model call',
-            href: '/site/products/ai-gateway'
           },
           { label: 'Durable Objects', description: 'Run stateful code worldwide' },
           { label: 'Orchestrator', description: 'Deploy, manage, monitor and automate workloads' }
@@ -151,16 +141,6 @@ const PRODUCTS: SiteNavMenu = {
             href: '/site/products/web-application-firewall'
           },
           {
-            label: 'Firewall',
-            description: 'Filter every request before it reaches your code',
-            href: '/site/products/firewall'
-          },
-          {
-            label: 'DDoS Protection',
-            description: 'Stop volumetric attacks automatically',
-            href: '/site/products/ddos-protection'
-          },
-          {
             label: 'Bot Manager',
             description: 'Block bots and protect traffic',
             href: '/site/products/bot-manager'
@@ -179,6 +159,12 @@ const PRODUCTS: SiteNavMenu = {
             label: 'Load Balancer',
             description: 'Spread traffic across origins and drop unhealthy ones',
             href: '/site/products/load-balancer'
+          },
+          { label: 'Secure Internet Access', description: 'Protect user access to the web' },
+          {
+            label: 'AI Gateway',
+            description: 'Secure, manage, and optimize AI traffic',
+            href: '/site/products/ai-gateway'
           }
         ]
       }
@@ -197,11 +183,6 @@ const PRODUCTS: SiteNavMenu = {
             label: 'Real-Time Events',
             description: 'Query request-level logs in real time',
             href: '/site/products/real-time-events'
-          },
-          {
-            label: 'Real-Time Metrics',
-            description: 'See traffic and performance as they happen',
-            href: '/site/products/real-time-metrics'
           },
           { label: 'Edge Pulse', description: 'Measure real user performance in the browser' }
         ]
