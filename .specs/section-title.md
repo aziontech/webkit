@@ -4,12 +4,12 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 3
-checksum: 3d3a1e4ec59dd948f5f2f4d236ce30ec39428bc5dd991f0903478658c5e3c7f9
+checksum: 42fc2f4b716ad2f18d8fa5a1bd69c7d432bcf8465616360aed96708ac472f289
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
 created: 2026-08-11
-last_updated: 2026-09-25
+last_updated: 2026-10-19
 ---
 
 # Section Title — Component Spec
@@ -45,6 +45,7 @@ The framed header row that opens a page section: an optional overline, the secti
 - Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.
 - Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.
 - Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.
+- In `horizontal`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.
 - Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.
 - The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component.
 
@@ -79,6 +80,7 @@ import Button from '@aziontech/webkit/button'
 | `kind` | `'centered' \| 'left' \| 'horizontal'` | `'centered'` | false | Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. |
 | `framed` | `boolean` | `true` | false | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. |
+| `padding` | `'small' \| 'medium'` | `'medium'` | false | Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. |
 
 ## Events
 
@@ -97,6 +99,7 @@ import Button from '@aziontech/webkit/button'
 - `data-kind` mirrors the `kind` prop: `centered` | `left` | `horizontal`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-framed` present when the header draws its own frame and padding
+- `data-padding` mirrors the `padding` prop: `small` | `medium`
 
 ## Motion & Animations
 
@@ -116,6 +119,7 @@ _none_
 | spacing (copy → actions) | `var(--spacing-xl)` |
 | spacing (actions gap) | `var(--spacing-md)` |
 | spacing (padding) | `var(--spacing-xl)` / `var(--spacing-xxl)` |
+| spacing (padding, `padding="small"`) | `var(--spacing-xl)` |
 | copy max width | `var(--container-2xl)` |
 
 ## Theme gaps

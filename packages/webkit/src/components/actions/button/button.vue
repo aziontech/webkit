@@ -7,6 +7,7 @@
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
   export type ButtonIconPosition = 'leading' | 'trailing'
+  export type ButtonType = 'button' | 'submit' | 'reset'
 
   defineOptions({
     name: 'Button',
@@ -34,6 +35,8 @@
     href?: string
     /** Link target when `href` is set. */
     target?: ButtonTarget
+    /** Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. */
+    type?: ButtonType
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -45,7 +48,8 @@
     iconPosition: 'leading',
     animated: false,
     href: '',
-    target: '_self'
+    target: '_self',
+    type: 'button'
   })
 
   const emit = defineEmits<{
@@ -178,7 +182,7 @@
 
   <button
     v-else
-    type="button"
+    :type="type"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
