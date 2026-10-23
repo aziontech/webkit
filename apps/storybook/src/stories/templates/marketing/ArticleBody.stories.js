@@ -180,6 +180,8 @@ const TEMPLATE = `<SectionContainer max-width="site">
             :items="${arrayLiteral(TRAIL, 6)}"
           />
           <HeroTitle
+            eyebrow="Blog"
+            eyebrow-prefix="//"
             size="medium"
             max-width="2xl"
             title="${ARTICLE.title}"

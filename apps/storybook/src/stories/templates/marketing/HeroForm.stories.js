@@ -110,7 +110,9 @@ const CONTACT_TEMPLATE = `<Hero
 >
   <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
     <Hero.Title
-      title="Talk to an expert"
+      eyebrow="Contact"
+      eyebrow-prefix="//"
+      title="Talk to a specialist"
       max-width="lg"
       class="min-w-0"
       sticky
@@ -202,8 +204,9 @@ export const ContactSplit = {
 export const CONTACT_SECTION = {
   _id: 'hero-form',
   props: {
+    eyebrow: 'Contact',
     highlight: '',
-    title: 'Talk to an expert',
+    title: 'Talk to a specialist',
     body: 'Get help with performance, security, and AI workloads. Call us at [+1 833-332-9466](tel:+18333329466), use live chat, or send your question through the form.',
     primaryAction: {
       label: 'Talk to support',
