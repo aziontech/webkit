@@ -1,5 +1,4 @@
-import { salesClosing } from '../product-pages.js'
-import { BUILD_CTA } from '../solutions.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 import { successCaseLink } from '../success-case-articles.js'
 import { FEATURED_CASES, SUCCESS_CASES } from '../success-cases.js'
 import { HOME_RECOGNITIONS } from './home.js'
@@ -34,7 +33,7 @@ const STORY_ITEMS = SUCCESS_CASES.map((story) => {
   }
 })
 
-export const SUCCESS_CASES_CLOSING = salesClosing(BUILD_CTA)
+export const SUCCESS_CASES_CLOSING = COMPANY_CLOSING
 
 export const SUCCESS_CASES_PAGE = [
   {

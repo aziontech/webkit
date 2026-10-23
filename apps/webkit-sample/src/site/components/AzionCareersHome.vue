@@ -1,6 +1,5 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
   import Item from '@aziontech/webkit/item'
@@ -15,11 +14,12 @@
   import {
     CAREERS_HOME_HERO,
     CAREERS_JOBS_PATH,
-    CAREERS_JOIN,
     CAREERS_PHOTOS,
     CAREERS_ROLES,
     CAREERS_WORK
   } from '../data/careers-home.js'
+  import { COMPANY_CLOSING } from '../data/product-pages.js'
+  import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
 
   const router = useRouter()
   const openRole = (id) => router.push(`/site/careers/${id}`)
@@ -33,6 +33,7 @@
       type: `${arrangement} · ${contract}`
     }
   })
+  const { section: _section, ...CLOSING } = COMPANY_CLOSING
 </script>
 
 <template>
@@ -259,27 +260,6 @@
 
     <SectionGap hatch />
 
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <CallToAction
-        framed
-        kind="split"
-        :title="CAREERS_JOIN.title"
-        :description="CAREERS_JOIN.description"
-      >
-        <template #actions>
-          <Button
-            :label="CAREERS_JOIN.action"
-            kind="secondary"
-            size="large"
-            :href="CAREERS_JOBS_PATH"
-          />
-        </template>
-      </CallToAction>
-    </SectionModule>
-
-    <SectionGap hatch />
+    <ClosingCallToAction v-bind="CLOSING" />
   </SectionContainer>
 </template>

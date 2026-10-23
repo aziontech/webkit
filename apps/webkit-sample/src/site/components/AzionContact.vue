@@ -1,6 +1,5 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
@@ -8,13 +7,13 @@
   import Hero from '@aziontech/webkit/hero'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { CLIENT_STRIP } from '../../shared/ui/brand/strips.js'
   import { CONTACT_ROLES } from '../data/contact.js'
+  import { COMPANY_CLOSING } from '../data/product-pages.js'
+  import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
 
   const form = reactive({
     firstname: '',
@@ -86,8 +85,7 @@
     }
   }
 
-  const router = useRouter()
-  const goSignup = () => router.push('/signup')
+  const { section: _section, ...CLOSING } = COMPANY_CLOSING
 </script>
 
 <template>
@@ -263,42 +261,6 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <SectionModule
-      id="contact"
-      :divided="false"
-      :padded="false"
-      class="scroll-mt-(--spacing-xxl)"
-    >
-      <CallToAction
-        framed
-        kind="split"
-        eyebrow="Build"
-        title="Build once."
-        title-muted="Run everywhere."
-        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
-      >
-        <template #actions>
-          <Button
-            label="Start Free"
-            kind="secondary"
-            size="large"
-            @click="goSignup"
-          />
-        </template>
-        <template #aside>
-          <Button
-            label="Talk to our team"
-            kind="outlined"
-            size="large"
-            href="#"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </CallToAction>
-    </SectionModule>
-
-    <SectionGap hatch />
+    <ClosingCallToAction v-bind="CLOSING" />
   </SectionContainer>
 </template>

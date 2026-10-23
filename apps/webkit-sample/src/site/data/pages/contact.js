@@ -1,4 +1,4 @@
-import { agentsClosing } from '../product-pages.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 
 export const CONTACT_PAGE = [
   {
@@ -18,5 +18,5 @@ export const CONTACT_PAGE = [
       }
     ]
   },
-  agentsClosing('Build once. Run everywhere.')
+  COMPANY_CLOSING
 ]
