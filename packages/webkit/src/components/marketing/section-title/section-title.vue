@@ -15,6 +15,8 @@
   export type SectionTitleSize = 'small' | 'medium' | 'large'
   /** Vertical padding step of the framed header. */
   export type SectionTitlePadding = 'small' | 'medium'
+  /** Column span of the description in the horizontal layout. */
+  export type SectionTitleDescriptionWidth = 'narrow' | 'wide'
 
   interface Props {
     /** Headline of the section, rendered as the section's `h2`. */
@@ -31,6 +33,8 @@
     framed?: boolean
     /** Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. */
     padding?: SectionTitlePadding
+    /** Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too. */
+    descriptionWidth?: SectionTitleDescriptionWidth
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -39,7 +43,8 @@
     kind: 'centered',
     size: 'medium',
     framed: true,
-    padding: 'medium'
+    padding: 'medium',
+    descriptionWidth: 'narrow'
   })
 
   const slots = defineSlots<{
@@ -78,6 +83,7 @@
     :data-size="size"
     :data-framed="props.framed || null"
     :data-padding="padding"
+    :data-description-width="descriptionWidth"
     class="group"
   >
     <div
@@ -105,7 +111,7 @@
           </h2>
           <p
             v-if="hasDescription"
-            class="m-0 self-start text-pretty text-heading-sm text-(--text-muted) md:col-start-3"
+            class="m-0 self-start text-pretty text-heading-sm text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
           >
             <slot>{{ description }}</slot>
           </p>
