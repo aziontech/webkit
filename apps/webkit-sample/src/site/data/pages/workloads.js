@@ -1,6 +1,7 @@
 import { markRaw } from 'vue'
 
 import DiagramSet from '../../ui/diagram/DiagramSet.vue'
+import WorkloadTopologyFlow from '../../ui/WorkloadTopologyFlow.vue'
 import WorkloadDeployFragment from '../../ui/mockup/widgets/WorkloadDeployFragment.vue'
 import WorkloadDomainFragment from '../../ui/mockup/widgets/WorkloadDomainFragment.vue'
 import WorkloadRolloutRowsWidget from '../../ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
@@ -206,13 +207,13 @@ export const WORKLOAD_ARCHITECTURE_BAND = {
 export const WORKLOADS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'title-band',
-    titleLength: 'long',
+    kind: 'copy-on-top-art',
     eyebrow: 'Workloads',
     title: 'Put your application close to users in seconds',
     description:
-      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center.',
-    actions: PRODUCT_HERO_ACTIONS
+      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
+    actions: PRODUCT_HERO_ACTIONS,
+    scene: { component: markRaw(WorkloadTopologyFlow) }
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {

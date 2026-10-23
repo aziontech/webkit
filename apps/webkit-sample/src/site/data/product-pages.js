@@ -105,6 +105,9 @@ export const PRODUCT_CLOSING = primaryClosing({
   ]
 })
 
+// The closing every Company page (the footer's Company column) ends on.
+export const COMPANY_CLOSING = PRODUCT_CLOSING
+
 export const PRODUCT_SECURITY_CLOSING = primaryClosing({
   title: 'Protect applications and APIs everywhere.',
   description:

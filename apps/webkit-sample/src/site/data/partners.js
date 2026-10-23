@@ -1,9 +1,8 @@
 // THE PARTNERS PAGE'S REPEATING COPY, read off the live page rather than retyped from it.
 //
 // Every string below is verbatim from https://www.azion.com/en/partners/ as that page rendered
-// it on 2026-09-23 — the three figures of its proof band, the three reasons under its section
-// heading, and the forty roles and fifty-eight countries its two selects offer, each in the
-// source's own order.
+// it on 2026-09-23 — the forty roles and fifty-eight countries its two selects offer, each in
+// the source's own order.
 //
 // It is a FILE rather than a const in the page for the reason every repeating band on this
 // site is: this is the half a reviewer diffs against the extractor's `blocks.md`, and it should
@@ -29,26 +28,29 @@
  * qualifier-and-unit anatomy.
  */
 export const PARTNER_FIGURES = [
-  { prefix: '+', value: '100', label: 'Data centers worldwide' },
-  { prefix: '+', value: '3k', label: 'ASNs directly connected to Azion' },
+  { value: '100', suffix: '+', label: 'Data centers worldwide' },
+  { value: '3,000', suffix: '+', label: 'ASNs directly connected to Azion' },
   { value: '100', suffix: '%', label: 'Availability, guaranteed by SLA' }
 ]
 
-/** The three reasons under `Why you should be a partner of the Azion Marketplace?`. */
+/** The three reasons under `Why partner on Azion Marketplace`. */
 export const PARTNER_REASONS = [
   {
-    title: 'Agile',
+    icon: 'pi pi-bolt',
+    title: 'Deploy in minutes',
     description:
       'Run code and deploy in minutes. Go from prototype to enterprise scale without managing infrastructure.'
   },
   {
-    title: 'Diverse Use Cases',
+    icon: 'ai ai-marketplace',
+    title: 'Build for many use cases',
     description:
       'Build fraud detection, authentication and authorization, bot mitigation, and facial recognition with visual computing and AI that run close to users.'
   },
   {
-    title: 'Cost-Effective',
-    description: 'Pricing is based on the resources and private data centers in use.'
+    icon: 'pi pi-dollar',
+    title: 'Pay for what you use',
+    description: 'Pricing follows the resources and private data centers you use.'
   }
 ]
 

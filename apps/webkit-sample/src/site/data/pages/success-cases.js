@@ -1,5 +1,4 @@
-import { salesClosing } from '../product-pages.js'
-import { BUILD_CTA } from '../solutions.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 import { successCaseLink } from '../success-case-articles.js'
 import { FEATURED_CASES, SUCCESS_CASES } from '../success-cases.js'
 import { HOME_RECOGNITIONS } from './home.js'
@@ -34,7 +33,7 @@ const STORY_ITEMS = SUCCESS_CASES.map((story) => {
   }
 })
 
-export const SUCCESS_CASES_CLOSING = salesClosing(BUILD_CTA)
+export const SUCCESS_CASES_CLOSING = COMPANY_CLOSING
 
 export const SUCCESS_CASES_PAGE = [
   {
@@ -43,7 +42,7 @@ export const SUCCESS_CASES_PAGE = [
     kind: 'title-band',
     title: 'Trusted by leading companies',
     actions: [
-      { label: 'See cases', href: '#cases', kind: 'secondary' },
+      { label: 'See customer stories', href: '#cases', kind: 'secondary' },
       { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
@@ -86,13 +85,13 @@ export const SUCCESS_CASES_PAGE = [
       label: 'Search success stories'
     },
     empty: {
-      title: 'No stories match these filters.',
+      title: 'No stories match these filters',
       action: 'View all success stories'
     }
   },
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a Market Leader',
+    title: 'Recognized as a market leader',
     items: HOME_RECOGNITIONS
   },
   SUCCESS_CASES_CLOSING

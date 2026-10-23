@@ -17,8 +17,8 @@ export const BLOG_FEATURED = {
 }
 
 // The source's category tabs, in its order; `All Articles` is the reset.
-export const BLOG_ALL = 'All Articles'
-export const BLOG_CATEGORIES = ['Developers', 'Security', 'Company News', 'Market Trends', 'Serverless', 'Caching', 'Observability', 'Routing & Networking']
+export const BLOG_ALL = 'All articles'
+export const BLOG_CATEGORIES = ['Developers', 'Security', 'Company news', 'Market trends', 'Serverless', 'Caching', 'Observability', 'Routing and networking']
 
 export const BLOG_LABELS = {
   search: 'Search articles',
@@ -62,7 +62,8 @@ export const BLOG_POSTS = [
     title: 'How I Shipped My Portfolio in Just Two Commands',
     description: 'See how a portfolio site went from template to live URL with just azion init and azion deploy, running free on Azion\'s Hobby plan.',
     href: 'https://www.azion.com/en/blog/ship-portfolio-two-commands-azion-cli/',
-    image: 'https://www.azion.com/assets/screenshot-2026-09-25-at-10-47-14.png',
+    image: '/blog/ship-portfolio-two-commands.png',
+    highlightImage: '/blog/ship-portfolio-two-commands-highlight.png',
     categories: ['Developers'],
     date: 'SEP 25, 2026',
     readTime: '9 min read'
@@ -72,7 +73,8 @@ export const BLOG_POSTS = [
     title: 'How Do You Reduce AI Agent Latency?',
     description: 'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
     href: 'https://www.azion.com/en/blog/how-to-reduce-ai-agent-latency/',
-    image: 'https://www.azion.com/assets/content/blog/uploads/Programmingdark.jpg',
+    image: '/blog/reduce-ai-agent-latency.png',
+    highlightImage: '/blog/reduce-ai-agent-latency-highlight.png',
     categories: ['Serverless'],
     date: 'SEP 23, 2026',
     readTime: '8 min read'
@@ -82,7 +84,8 @@ export const BLOG_POSTS = [
     title: 'Best Cloudflare Alternatives and Competitors',
     description: 'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
     href: 'https://www.azion.com/en/blog/cloudflare-alternatives-and-competitors/',
-    image: 'https://www.azion.com/assets/content/blog/uploads/best-cloudflare-alternatives/best-cloudflare-alternatives.png',
+    image: '/blog/best-cloudflare-alternatives.png',
+    highlightImage: '/blog/best-cloudflare-alternatives-highlight.png',
     categories: ['Security'],
     date: 'SEP 22, 2026',
     readTime: '13 min read'
@@ -92,8 +95,9 @@ export const BLOG_POSTS = [
     title: 'Which Azion Plan Is Right for Your Project?',
     description: 'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
     href: 'https://www.azion.com/en/blog/which-azion-plan-is-right-for-your-project/',
-    image: 'https://www.azion.com/assets/content/blog/uploads/thumblinkedin-4templatesimproveexperience-1280x720px.png',
-    categories: ['Company News'],
+    image: '/blog/which-azion-plan.png',
+    highlightImage: '/blog/which-azion-plan-highlight.png',
+    categories: ['Company news'],
     date: 'SEP 22, 2026',
     readTime: '7 min read'
   },
@@ -163,7 +167,7 @@ export const BLOG_POSTS = [
     description: 'AI agents can access data, recommend decisions, and execute actions across financial systems. Learn how to structure identity, authorization, enforcement, observability, and API protection controls for production environments.',
     href: 'https://www.azion.com/en/blog/ai-agents-financial-services/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbblogzerotrustjourney-planning.png',
-    categories: ['Market Trends'],
+    categories: ['Market trends'],
     date: 'AUG 24, 2026',
     readTime: '11 min read'
   },
@@ -173,7 +177,7 @@ export const BLOG_POSTS = [
     description: 'Learn why fragmented security and delivery vendors drive up the real cost of running banking infrastructure — and how to consolidate WAF, Bot Manager, DDoS Protection, and AI Inference on a single platform.',
     href: 'https://www.azion.com/en/blog/how-many-vendors-does-a-bank-need-secure-infrastructure/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-4templatesimproveexperience-440x343px-1.png',
-    categories: ['Market Trends'],
+    categories: ['Market trends'],
     date: 'AUG 24, 2026',
     readTime: '9 min read'
   },
@@ -223,7 +227,7 @@ export const BLOG_POSTS = [
     description: 'LLM inference cost is a model problem and an architecture problem. Centralized inference adds 100–180ms of network latency per request and forces over-provisioning to maintain p95. Learn how distributed execution cuts inference origin load by up to 60% and global p50 latency by 75%.',
     href: 'https://www.azion.com/en/blog/llm-inference-cost-distributed-architecture-2026/',
     image: 'https://www.azion.com/assets/edge-computing.png',
-    categories: ['Developers', 'Routing & Networking', 'Serverless'],
+    categories: ['Developers', 'Routing and networking', 'Serverless'],
     date: 'AUG 3, 2026',
     readTime: '11 min read'
   },
@@ -253,7 +257,7 @@ export const BLOG_POSTS = [
     description: 'Serverless cold starts add 200ms to over 1 second of latency to affected requests and compound inside AI inference pipelines that chain multiple function calls. Learn what causes cold starts, why they are especially damaging for AI workloads, and what architectures eliminate them entirely.',
     href: 'https://www.azion.com/en/blog/cold-starts-killing-ai-application-performance/',
     image: 'https://www.azion.com/assets/100-uptimedark.png',
-    categories: ['Serverless', 'Market Trends'],
+    categories: ['Serverless', 'Market trends'],
     date: 'JUL 28, 2026',
     readTime: '11 min read'
   },
@@ -263,7 +267,7 @@ export const BLOG_POSTS = [
     description: 'Discover why inference location is a strategic architectural decision for AI applications. Learn how to reduce provider dependency, strengthen governance, meet regulatory requirements, and build resilient AI workloads with distributed inference.',
     href: 'https://www.azion.com/en/blog/digital-sovereignty-ai-inference/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_440x343px_livemap.png',
-    categories: ['Market Trends'],
+    categories: ['Market trends'],
     date: 'JUL 24, 2026',
     readTime: '12 min read'
   },
@@ -333,7 +337,7 @@ export const BLOG_POSTS = [
     description: 'Cloud egress costs are compounding for most teams even though per-GB prices haven\'t changed. Learn how to calculate your egress cost per user, identify the stateless/stateful split, and reduce cloud bandwidth spend by 60–80% without rebuilding your architecture.',
     href: 'https://www.azion.com/en/blog/cloud-egress-costs-2026-why-the-math-stopped-working/',
     image: 'https://www.azion.com/assets/cloud-test-1.png',
-    categories: ['Market Trends', 'Serverless'],
+    categories: ['Market trends', 'Serverless'],
     date: 'JUL 6, 2026',
     readTime: '10 min read'
   },
@@ -403,7 +407,7 @@ export const BLOG_POSTS = [
     description: 'Azion earned recognition across nine categories in the G2 Summer 2026 Reports, including Leader in Content Delivery Network (CDN) and High Performer in Web Security, Cloud Security, Load Balancing, DDoS Protection, Bot Detection and Mitigation, WAF, SSL & TLS Certificate Tools, and API Security Tools.',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-summer-reports-2026/',
     image: 'https://www.azion.com/assets/g2-leaders-badget-linkedin-formato-1-91-1-horizontal-3.png',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'MAY 26, 2026',
     readTime: '5 min read'
   },
@@ -423,7 +427,7 @@ export const BLOG_POSTS = [
     description: 'Learn how Azion accelerated application deploys across the Console and CLI with S3-based uploads and dynamic parallelism, reducing static file upload times by 73% in the Console and up to 90% in CLI 4.21+.',
     href: 'https://www.azion.com/en/blog/azion-cli-static-uploads-90-percent-faster/',
     image: 'https://www.azion.com/assets/cli-keyillustration3-1.png',
-    categories: ['Developers', 'Company News'],
+    categories: ['Developers', 'Company news'],
     date: 'MAY 6, 2026',
     readTime: '6 min read'
   },
@@ -463,7 +467,7 @@ export const BLOG_POSTS = [
     description: 'In the G2 Spring 2026 Reports, Azion earned Leader rankings in Content Delivery Network (CDN), Web Security, and DDoS Protection, along with High Performer recognition in Cloud Security, API Security Tools, SSL & TLS Certificate Tools, and top placements for WAF and Bot Detection across Enterprise and Product grids.',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-spring-reports-2026/',
     image: 'https://www.azion.com/assets/content/blog/uploads/g2spring/G2spring.jpg',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'MAR 17, 2026',
     readTime: '5 min read'
   },
@@ -473,7 +477,7 @@ export const BLOG_POSTS = [
     description: 'DDoS attacks now routinely combine volumetric floods (L3/L4) with application-layer attacks (L7) and DNS disruption. The “best” DDoS protection isn’t a universal winner—it’s the provider whose documented capabilities and commercial terms match your risk profile, architecture, and uptime requirements.',
     href: 'https://www.azion.com/en/blog/best-ddos-protection-2026-azion-vs-cloudflare-akamai-aws-fastly-imperva/',
     image: 'https://www.azion.com/assets/content/blog/uploads/ddos-compare/Screenshot%202026-03-10%20at%2011.51.09.png',
-    categories: ['Developers', 'Market Trends', 'Security'],
+    categories: ['Developers', 'Market trends', 'Security'],
     date: 'MAR 10, 2026',
     readTime: '6 min read'
   },
@@ -533,7 +537,7 @@ export const BLOG_POSTS = [
     description: 'Centralized cloud inference breaks down for generative AI: latency spikes, inconsistent UX, and fragile failover. This article explains how LoRA enables lightweight adaptation and how serverless GPU on a distributed architecture (Azion) delivers global-scale, low-latency inference with automation, standardization, and real-time observability.',
     href: 'https://www.azion.com/en/blog/from-cloud-training-to-global-scale-ai-inference-lora-serverless/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloud-to-lora/cloudtolora.png',
-    categories: ['Developers', 'Serverless', 'Market Trends'],
+    categories: ['Developers', 'Serverless', 'Market trends'],
     date: 'JAN 22, 2026',
     readTime: '5 min read'
   },
@@ -543,7 +547,7 @@ export const BLOG_POSTS = [
     description: 'OWASP Top 10:2025 shifts AppSec from code-level mistakes to architectural and supply-chain risks. Learn why legacy WAFs fall short and how a programmable infrastructure approach (WAF + Functions + bot and rate controls) mitigates modern threats from access control to zero-days.',
     href: 'https://www.azion.com/en/blog/owasp-top-10-2025-programmable/',
     image: 'https://www.azion.com/assets/content/blog/uploads/owasp-2025/owasp2025.png',
-    categories: ['Developers', 'Routing & Networking', 'Security'],
+    categories: ['Developers', 'Routing and networking', 'Security'],
     date: 'JAN 21, 2026',
     readTime: '14 min read'
   },
@@ -573,7 +577,7 @@ export const BLOG_POSTS = [
     description: 'Azion is a Leader in CDN & High Performer in 6 security categories in the G2 Winter 2026 Reports. With 100% user satisfaction, see how our web platform delivers ultra-fast performance & enterprise-grade security. Try free.',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-winter-reports-2026/',
     image: 'https://www.azion.com/assets/content/blog/uploads/g2award/G2Leaders.png',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'DEC 8, 2025',
     readTime: '5 min read'
   },
@@ -583,7 +587,7 @@ export const BLOG_POSTS = [
     description: 'Go beyond the traditional cloud. This guide details how to deploy secure, high-performance MCP servers for real-time AI applications.',
     href: 'https://www.azion.com/en/blog/mcp-security-high-performance/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloudvsedge/edgecloud.png',
-    categories: ['Developers', 'Serverless', 'Market Trends'],
+    categories: ['Developers', 'Serverless', 'Market trends'],
     date: 'DEC 1, 2025',
     readTime: '21 min read'
   },
@@ -593,7 +597,7 @@ export const BLOG_POSTS = [
     description: 'Learn how distributed architectures dramatically reduce egress, latency, and observability costs by moving compute, caching, and compression closer to users. This article combines benchmarks, real-world transformations, and practical patterns to show how Azion helps teams optimize traffic, lower TCO, and build faster, more efficient applications.',
     href: 'https://www.azion.com/en/blog/cloud-cost-reduction-with-distributed-architecture/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_wasm.png',
-    categories: ['Routing & Networking', 'Caching', 'Serverless', 'Security', 'Observability'],
+    categories: ['Routing and networking', 'Caching', 'Serverless', 'Security', 'Observability'],
     date: 'NOV 17, 2025',
     readTime: '10 min read'
   },
@@ -623,7 +627,7 @@ export const BLOG_POSTS = [
     description: 'Bridge Latin America\'s Digital Divide with Decentralized Infrastructure. Learn how it cuts latency, costs, and enables vital digital services.',
     href: 'https://www.azion.com/en/blog/descentralized-evolution-latin-america/',
     image: 'https://www.azion.com/assets/content/blog/uploads/bridge-gap-latin-america/bridge-gap-latin-america.png',
-    categories: ['Developers', 'Routing & Networking'],
+    categories: ['Developers', 'Routing and networking'],
     date: 'NOV 3, 2025',
     readTime: '10 min read'
   },
@@ -643,7 +647,7 @@ export const BLOG_POSTS = [
     description: 'Discover Azion\'s latest releases: Workloads, Connectors, and Custom Pages, along with API v4, a platform change in how you develop and scale applications on a distributed architecture.',
     href: 'https://www.azion.com/en/blog/introducing-api-v4/',
     image: 'https://www.azion.com/assets/content/blog/og-images/api-v4-og-image.svg',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'AUG 5, 2025',
     readTime: '4 min read'
   },
@@ -673,7 +677,7 @@ export const BLOG_POSTS = [
     description: 'Azion announces a series of product launches and enhancements to its web platform.',
     href: 'https://www.azion.com/en/blog/product-launch-h1-2025/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloudtoedge.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'MAY 7, 2025',
     readTime: '10 min read'
   },
@@ -703,7 +707,7 @@ export const BLOG_POSTS = [
     description: 'AI Inference runs AI models directly on Azion\'s distributed infrastructure, close to data sources and users, rather than in distant cloud data centers.',
     href: 'https://www.azion.com/en/blog/introducing-edge-ai/',
     image: 'https://www.azion.com/assets/content/blog/uploads/launch-week-edge-ai/edge-ai-blogpost-dark.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'MAY 5, 2025',
     readTime: '5 min read'
   },
@@ -773,7 +777,7 @@ export const BLOG_POSTS = [
     description: 'Discover Azion\'s new templates to speed up web app development, streamline deployment, and optimize performance with tools like MongoDB, Hexo, and Fauna.',
     href: 'https://www.azion.com/en/blog/azion-new-set-templates-dev/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-4templatesimproveexperience-440x343px-1.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'JAN 29, 2024',
     readTime: '5 min read'
   },
@@ -783,7 +787,7 @@ export const BLOG_POSTS = [
     description: 'Discover how Azion\'s accolades like the Frost & Sullivan Award and Great Place to Work recognition recognize Azion\'s work on distributed architecture in 2023.',
     href: 'https://www.azion.com/en/blog/azion-celebrates-achievements-2023/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-2023-conquistas-440x343px.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'DEC 21, 2023',
     readTime: '6 min read'
   },
@@ -793,7 +797,7 @@ export const BLOG_POSTS = [
     description: 'Discover why Azion is a strong performer in The Forrester Wave™ for Edge Development Platforms in Q4 2023.',
     href: 'https://www.azion.com/en/blog/azion-recognized-strong-performer-forrester-wave-2023/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-forrester-wave2023-440x343px.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'DEC 1, 2023',
     readTime: '3 min read'
   },
@@ -803,7 +807,7 @@ export const BLOG_POSTS = [
     description: 'Azion wins at Santander X Global Challenge for cybersecurity solutions, building global security capabilities and industry connections.',
     href: 'https://www.azion.com/en/blog/azion-awarded-at-santander-x-global-challenge/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-premio-santander-440x343px.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 29, 2023',
     readTime: '2 min read'
   },
@@ -823,7 +827,7 @@ export const BLOG_POSTS = [
     description: 'Discover Azion\'s award-winning serverless platform, helping developers build fast, resilient applications with high performance and global scalability.',
     href: 'https://www.azion.com/en/blog/azion-frost-sullivan-award/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-f-s-440x343px-1.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'OCT 25, 2023',
     readTime: '3 min read'
   },
@@ -853,7 +857,7 @@ export const BLOG_POSTS = [
     description: 'Azion hailed as a Leader and Fast Mover in the GigaOm Radar for Edge Platforms, with strong security and a distributed architecture.',
     href: 'https://www.azion.com/en/blog/azion-named-leader-fast-mover-gigaom-report/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-gigaom-440x343px-1.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'AUG 29, 2023',
     readTime: '2 min read'
   },
@@ -913,7 +917,7 @@ export const BLOG_POSTS = [
     description: 'Explore how Justa enhances payment security and simplifies compliance using Azion\'s solutions, improving performance and customer experience in Brazil.',
     href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_justa_440x343px.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'JAN 17, 2023',
     readTime: '4 min read'
   },
@@ -943,7 +947,7 @@ export const BLOG_POSTS = [
     description: 'Explore Azion\'s GraphQL API for real-time metrics and enhanced data observability, featuring improved performance and cost savings. Learn to access advanced security data and performance insights.',
     href: 'https://www.azion.com/en/blog/announcing-graphql-for-increased-observability/',
     image: 'https://www.azion.com/assets/content/blog/uploads/graphql_metrics_api_thumblinkedin_440x343px.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 29, 2022',
     readTime: '5 min read'
   },
@@ -953,7 +957,7 @@ export const BLOG_POSTS = [
     description: 'Explore Azion\'s SOC 3 compliance, ensuring the Azion Platform secures web applications and sites with top-tier data security and availability controls.',
     href: 'https://www.azion.com/en/blog/azion-achieves-soc-3-compliance/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnail-soc-2.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 14, 2022',
     readTime: '2 min read'
   },
@@ -963,7 +967,7 @@ export const BLOG_POSTS = [
     description: 'Explore Azion Build for application development with tools like Functions, WebAssembly, and support for React frameworks.',
     href: 'https://www.azion.com/en/blog/azion-introduces-product-suite-for-comprehensive-edge-development/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblogpr_440x343px.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 9, 2022',
     readTime: '4 min read'
   },
@@ -1063,7 +1067,7 @@ export const BLOG_POSTS = [
     description: 'Explore Azion Functions: serverless, event-driven JavaScript solutions for low-latency, high-performance applications with enhanced security and monitoring.',
     href: 'https://www.azion.com/en/blog/azion-introduces-edge-functions/',
     image: 'https://www.azion.com/assets/content/blog/uploads/azion-introduces-edge-functions-thumb.png',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'JAN 15, 2021',
     readTime: '4 min read'
   },

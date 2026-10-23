@@ -2,14 +2,14 @@ export const CAREERS_HOME_HERO = {
   eyebrow: 'Careers',
   title: "Let's build together",
   description:
-    'Azion values innovation, reliability, and transparent decisions, made and carried out with agility. Our success depends on the success of our customers.',
+    'Join the team that builds and runs the Azion Platform. We value ownership, transparent decisions, and moving fast.',
   action: 'See roles'
 }
 
 export const CAREERS_WORK = {
   title: 'Work at Azion',
   description:
-    "At Azion, culture is how we live and work every day. The Azion Way of Life is built on the belief that high performance goes hand in hand with autonomy, authenticity, and enjoyment. We trust people to manage their own routines with balance and accountability, focusing on outcomes. We collaborate across countries and cultures to build solutions for the world. And we value originality, bold ideas, and the courage to challenge convention. That's why there's no dress code: what matters is what each person brings to the table, their ideas, energy, and integrity."
+    "The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
 }
 
 // Served from public/careers; width and height are the files' own, so each slide reserves its box.
@@ -57,12 +57,6 @@ export const CAREERS_ROLES = {
   previewCount: 6,
   columns: { role: 'Role', team: 'Team and location', type: 'Work type' },
   action: (total) => `See all ${total} roles`
-}
-
-export const CAREERS_JOIN = {
-  title: 'Ready to join us?',
-  description: 'See our open positions and find the right fit.',
-  action: 'See open roles'
 }
 
 export const CAREERS_JOBS_PATH = '/site/careers/jobs'

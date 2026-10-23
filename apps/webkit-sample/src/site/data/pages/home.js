@@ -105,7 +105,7 @@ const FIRMS = {
   g2: { name: 'G2', logo: g2, logoLight: g2 }
 }
 
-const MARKET_RECOGNITIONS = [
+export const MARKET_RECOGNITIONS = [
   {
     text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
     name: 'G2 Spring 2026 Reports',
@@ -119,7 +119,7 @@ const MARKET_RECOGNITIONS = [
     firm: FIRMS.g2
   },
   {
-    text: 'Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report.',
+    text: 'Named a Leader, and the only vendor whose capabilities meet every key criterion in the report.',
     name: 'GigaOm Radar for Edge Platforms',
     jobTitle: '',
     firm: FIRMS.gigaom
@@ -251,7 +251,6 @@ export const HOME_PAGE = [
     section: 'NetworkSection',
     ...EARTH_NETWORK,
     title: 'Distributed infrastructure that stays up when others go down',
-    titleTail: '',
     claims: [
       '100+ data centers',
       '100+ Tbps throughput',

@@ -1,13 +1,12 @@
-import { agentsClosing } from '../product-pages.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 
 export const CONTACT_PAGE = [
   {
     section: 'HeroForm',
     eyebrow: 'Contact',
     title: 'Talk to a specialist',
-    description: 'Get help with performance, security, and AI workloads. Call us at',
-    link: { label: '+1 833-332-9466', href: 'tel:+18333329466' },
-    descriptionAfter: ', use live chat, or send your question through the form.',
+    description:
+      'Get help with performance, security, and AI workloads. Use live chat or send your question through the form.',
     actions: [
       { label: 'Talk to support', href: '/site/support', kind: 'secondary' },
       {
@@ -19,5 +18,5 @@ export const CONTACT_PAGE = [
       }
     ]
   },
-  agentsClosing('Build once. Run everywhere.')
+  COMPANY_CLOSING
 ]

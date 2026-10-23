@@ -91,7 +91,6 @@ export function solutionPage(data) {
       section: 'NetworkSection',
       eyebrow: network.eyebrow,
       title: network.title,
-      titleTail: network.titleTail,
       lead: network.lead,
       claims: network.claims,
       outcomes: NETWORK_OUTCOMES

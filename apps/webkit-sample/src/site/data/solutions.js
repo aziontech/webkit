@@ -113,7 +113,6 @@ export const NETWORK_OUTCOMES = [
 export const EARTH_NETWORK = {
   eyebrow: 'Region: Earth.',
   title: 'Build, secure, and scale on one distributed infrastructure',
-  titleTail: '— without managing capacity or regions.',
   lead: 'Built around your users. Distributed around your data.',
   claims: [
     '100+ data centers',

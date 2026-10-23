@@ -298,17 +298,6 @@ const START_TILES = START_TABS.map(({ value, title, description }) => ({
     : { href: PRODUCT_DOCS })
 }))
 
-export const INTEGRATION_CODE_BAND = {
-  section: 'IntegrationCode',
-  title: 'Integrates with the',
-  emphasis: 'Azion Web Platform',
-  description:
-    'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
-  items: INTEGRATIONS,
-  samples: INTEGRATION_SAMPLES,
-  action: { label: 'Explore the runtime APIs', href: PRODUCT_DOCS }
-}
-
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
