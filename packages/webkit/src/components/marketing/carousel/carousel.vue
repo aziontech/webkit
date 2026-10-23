@@ -37,10 +37,8 @@
   let dragScrollLeft = 0
   let dragDistance = 0
 
-  // Past this, the pointer was dragging the track rather than pressing what is under it.
   const dragThreshold = 4
 
-  // Sub-pixel rounding leaves a fraction of a pixel at either end of a scroll.
   const roundingTolerance = 1
 
   const testId = computed(
@@ -87,8 +85,6 @@
     step(1)
   }
 
-  // Touch and pen already scroll the track natively, with momentum; only a mouse has no
-  // way to drag it, so only a mouse is taken over here.
   function startDrag(event: globalThis.PointerEvent) {
     const element = track.value
     if (!element || event.pointerType !== 'mouse' || event.button !== 0) return
@@ -99,8 +95,6 @@
     dragDistance = 0
   }
 
-  // The move and release are watched on the window, not the track: a drag that leaves the
-  // row still has to move it, and still has to end when the button comes up out there.
   function moveDrag(event: globalThis.PointerEvent) {
     const element = track.value
     if (!dragging.value || !element) return
@@ -115,8 +109,6 @@
     dragging.value = false
   }
 
-  // A drag that ends over a link would otherwise activate it; the press only counts as a
-  // click when the pointer stayed put.
   function suppressClickAfterDrag(event: globalThis.MouseEvent) {
     if (dragDistance <= dragThreshold) return
     event.preventDefault()

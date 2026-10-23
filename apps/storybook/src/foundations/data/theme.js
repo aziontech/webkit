@@ -3,4 +3,4 @@
  * token resolvers (see ../utils/theme-tokens.js), so the page always reflects
  * every color that ships in globals.css.
  */
-export { buildThemeColorGroups, themeColorGroups } from '../utils/theme-tokens.js'
+export { buildThemeColorGroups,themeColorGroups } from '../utils/theme-tokens.js'

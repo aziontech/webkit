@@ -50,7 +50,9 @@
   }>()
 
   const slots = defineSlots<{
+    /** Message copy: inline prose, or flow content such as paragraphs and a list. Falls back to label when empty. */
     default(): unknown
+    /** Custom action control; replaces the built-in Button when provided. */
     action(): unknown
   }>()
 
@@ -185,14 +187,18 @@
             aria-hidden="true"
           />
         </span>
-        <p
+        <!-- The copy region is a flow container, not a paragraph: a p cannot hold a list
+             or a nested paragraph, and when the copy arrives as server-rendered markup the
+             HTML parser closes the p at the first block, which then lands beside the copy
+             in this flex row and squeezes the text to zero width. -->
+        <div
           :data-size="size"
           class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
           :data-testid="`${testId}__content`"
         >
           <slot v-if="$slots['default']" />
           <template v-else>{{ label }}</template>
-        </p>
+        </div>
       </div>
       <slot name="action">
         <Button

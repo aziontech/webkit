@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 940ad8a90783d998abc1b2c587367a50d90643b549c4e6c41692604ba4a40440
+checksum: e522891c6e0e0186fed8aff36e5189c3bf4034f8134ef01a0ed9115d44c42525
 created: 2026-05-26
 last_updated: 2026-10-20
 ---
@@ -114,8 +114,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (header label) | `.text-label-sm` |
-| typography (log lines) | `.text-label-sm` |
+| typography (header label) | `.text-label-code-sm` |
+| typography (log lines) | `.text-label-code-sm` |
 | surface (header/footer) | `var(--bg-surface)` |
 | surface (log canvas) | `var(--bg-canvas)` |
 | surface (line hover) | `var(--bg-surface-raised)` |
@@ -141,7 +141,7 @@ the height of a single row the moment the root stopped stretching.
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | `font-code` on log rows | — |
+| _none_ | — | — |
 
 ## Accessibility (WCAG 2.1 AA)
 

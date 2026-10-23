@@ -55,6 +55,22 @@ Example:
   }}
 />
 
+### Centered carousel, long title
+
+The same screen hero for a headline too long for the default column. The title column widens from `xl` to `3xl`, so a headline that would break into three lines breaks into two. Short headlines keep the default column.
+
+<Canvas of={HeroesStories.CenteredCarouselLongTitle} />
+
+This variation has no site block yet, so it has no page-JSON entry.
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
 ### Title band
 
 The Learning Center hero. A padded band instead of a full screen, with the title, one line of description and two actions centered, and the client strip below. Use it on list and catalogue pages, where a full screen of title would push the first entry below the fold.
@@ -75,6 +91,22 @@ Example:
 <div className="sb-site-json">
   <Source of={HeroesStories.TitleBandJson} dark />
 </div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Centered band
+
+The Support page's hero: the large title band at the site width, the dot field fading in from the top behind an eyebrowed headline, two actions, and the client strip on the floor, all centered. It is the screen hero's composition at band height, for a page whose first section should land above the fold.
+
+<Canvas of={HeroesStories.CenteredBand} />
+
+This variation has no site block yet, so it has no page-JSON entry.
 
 <hr
   style={{

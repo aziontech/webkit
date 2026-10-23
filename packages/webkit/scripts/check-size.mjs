@@ -30,17 +30,6 @@ function limitToBytes(limit) {
   return Math.round(parseFloat(m[1]) * mult)
 }
 
-/**
- * Gzipped bytes for one entry.
- *
- * By default this sums EVERY emitted chunk — the honest measure for a component whose
- * whole cost lands in the initial payload. An entry that deliberately code-splits (a
- * registry of `() => import(...)` behind a name prop) is different: its async chunks are
- * fetched only when the consumer names one, so summing them measures the size of the
- * whole library rather than what any consumer pays. Such an entry sets `entryOnly: true`
- * and is budgeted on its initial chunk, which is the number that must not regress — a
- * static import that collapses the code-splitting shows up immediately.
- */
 async function gzippedSize(entryPath, { entryOnly = false } = {}) {
   const result = await build({
     root: PKG,
@@ -74,7 +63,6 @@ for (const e of entries) {
   const { bytes: size, split } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
   const over = size > limit
   if (over) failures.push(e.name)
-  // Name the excluded chunks so an entryOnly budget can never quietly hide growth.
   const note = e.entryOnly ? `  · initial chunk only, ${split} async chunk(s) excluded` : ''
   console.log(
     `${over ? '✖' : '✓'} ${e.name.padEnd(18)} ${kb(size).padStart(10)}  (budget ${e.limit})${over ? '  OVER' : ''}${note}`

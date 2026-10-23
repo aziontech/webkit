@@ -4,6 +4,120 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.5.0...@aziontech/webkit@5.6.0) (2026-10-23)
+
+
+### Features
+
+* **webkit:** [ENG-49133] let Button submit its form with a type prop ([#1081](https://github.com/aziontech/webkit/issues/1081)) ([e89284a](https://github.com/aziontech/webkit/commit/e89284a8122448d83c2103e24fcca8347c6c861a))
+* **webkit:** add a copyable prop to code-block and replay its panel motion when the active tab's code changes ([#1077](https://github.com/aziontech/webkit/issues/1077)) ([471c797](https://github.com/aziontech/webkit/commit/471c797e74d30307afcd63afcb40b3370dc79082))
+* **webkit:** add a primary call-to-action register lit by a waving texture ([#1094](https://github.com/aziontech/webkit/issues/1094)) ([558433d](https://github.com/aziontech/webkit/commit/558433d58d0cc88f2c649612f28c891da92c9ad9))
+* **webkit:** add a small padding step and a headline-span hatch to section-title ([#1091](https://github.com/aziontech/webkit/issues/1091)) ([9c3ca25](https://github.com/aziontech/webkit/commit/9c3ca25314211458186dd15c3ca796cf10a22179))
+* **webkit:** add BrowserFrame, a resizable browser window with a live viewport ([#1095](https://github.com/aziontech/webkit/issues/1095)) ([1489e8c](https://github.com/aziontech/webkit/commit/1489e8c683611f0e059b9a5f7bf0473c057502b3))
+* **webkit:** add Diagram, a measured node-and-connector figure for marketing bands ([#1098](https://github.com/aziontech/webkit/issues/1098)) ([275f4e4](https://github.com/aziontech/webkit/commit/275f4e4842f80940afa0e83a0227bf788fa2c25d))
+* **webkit:** fade ScrollArea edges that still have content to scroll ([#1086](https://github.com/aziontech/webkit/issues/1086)) ([d741420](https://github.com/aziontech/webkit/commit/d741420b440d4eb950721fef8efaff38de122ce6))
+* **webkit:** give sticky-stack per-claim actions and a held backdrop slot ([#1092](https://github.com/aziontech/webkit/issues/1092)) ([94d4603](https://github.com/aziontech/webkit/commit/94d46031565d7dba6a002655ada13e0b95c9c5df))
+* **webkit:** let a band tune the pixelate texture's wave gain and pace ([#1090](https://github.com/aziontech/webkit/issues/1090)) ([b959788](https://github.com/aziontech/webkit/commit/b9597889424e3b61ec21a8b08ac05637916be9a9))
+* **webkit:** let media-tabs place its tabs on any side of the media ([#1093](https://github.com/aziontech/webkit/issues/1093)) ([1f0830c](https://github.com/aziontech/webkit/commit/1f0830c5dd97d45788f5ad65bbecee9ecb1715e1))
+* **webkit:** let ticker run a strip of short claims through an items prop ([#1089](https://github.com/aziontech/webkit/issues/1089)) ([07468fa](https://github.com/aziontech/webkit/commit/07468fae110263b899834c42a58039ce6bedba2f))
+* **webkit:** re-export the illustration scenes from Figma ([#1075](https://github.com/aziontech/webkit/issues/1075)) ([89dc391](https://github.com/aziontech/webkit/commit/89dc39109487283490ff1f65da5d40178bd0789c))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-49232] highlight both # and // line comments in code-block ([#1085](https://github.com/aziontech/webkit/issues/1085)) ([fc4d4e6](https://github.com/aziontech/webkit/commit/fc4d4e6b9561f9603d4c9d9e3f7b1d319a963664))
+* **webkit:** cap the call-to-action split headline at the xl container ([#1061](https://github.com/aziontech/webkit/issues/1061)) ([b76a7c9](https://github.com/aziontech/webkit/commit/b76a7c94c03d5149d1b2a3f00d2d0a3d69af2aba))
+* **webkit:** cap the media-split copy column at the container measure ([#1076](https://github.com/aziontech/webkit/issues/1076)) ([61a1064](https://github.com/aziontech/webkit/commit/61a10648ba64bfa3ff1086e323e663706ecc0fcb))
+* **webkit:** forward ScrollArea attributes to the viewport ([#1087](https://github.com/aziontech/webkit/issues/1087)) ([56102a7](https://github.com/aziontech/webkit/commit/56102a743960131a89b170bb274969b4d71022f9))
+* **webkit:** let the topmost overlay take Escape and refine sidebar, toast and code-block ([#1071](https://github.com/aziontech/webkit/issues/1071)) ([6e6126a](https://github.com/aziontech/webkit/commit/6e6126a5a7ed68e6ba38cef655cbe067c5fbf19d))
+* **webkit:** rework column navigation rows on a token box model and set topic body to 16px ([#1078](https://github.com/aziontech/webkit/issues/1078)) ([75e944a](https://github.com/aziontech/webkit/commit/75e944a2aa417502009e6fad01ef806db6af83a0))
+* **webkit:** size the footer's second row by content so the social icons stay on one line ([#1064](https://github.com/aziontech/webkit/issues/1064)) ([3ec09fd](https://github.com/aziontech/webkit/commit/3ec09fd4c28a37286475631712a3397a4e011034))
+
+
+### Documentation
+
+* **webkit:** [ENG-49133] submit webkit forms with Button type="submit" ([#1082](https://github.com/aziontech/webkit/issues/1082)) ([d6f6bf7](https://github.com/aziontech/webkit/commit/d6f6bf78ad328c346ed261814be4d246816ec154))
+
+
+### Tests
+
+* **storybook:** snapshot ticker Sizes in the dark theme only ([#1104](https://github.com/aziontech/webkit/issues/1104)) ([002ae91](https://github.com/aziontech/webkit/commit/002ae917d2d1e111b40d12172fc59273f0d60421))
+
+## [5.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.4.0...@aziontech/webkit@5.5.0) (2026-10-20)
+
+
+### Features
+
+* **webkit:** [ENG-49132] make field-phone-number follow the selected country ([#1083](https://github.com/aziontech/webkit/issues/1083)) ([88304e5](https://github.com/aziontech/webkit/commit/88304e5ee4683c6e3c39176cdc2990cfa5fb7f51))
+* **webkit:** add AWS, Akamai, Cloudflare and Fastly marks and their migration scenes ([#1060](https://github.com/aziontech/webkit/issues/1060)) ([b219e82](https://github.com/aziontech/webkit/commit/b219e82594d49b98a4101238d1054bf3946e56ca))
+* **webkit:** add keyboard search to FieldSelect and the phone dial code ([#1084](https://github.com/aziontech/webkit/issues/1084)) ([483ebec](https://github.com/aziontech/webkit/commit/483ebec9a0bdab21f47abe5c07cf647902dff964))
+
+
+### Documentation
+
+* **storybook:** reorganize templates and show the site JSON for marketing blocks ([#1073](https://github.com/aziontech/webkit/issues/1073)) ([d8beead](https://github.com/aziontech/webkit/commit/d8beead1ba3f2f17526c5ebf18d88e0d6ccac1bc))
+
+## [5.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.3.0...@aziontech/webkit@5.4.0) (2026-10-06)
+
+
+### Features
+
+* **theme:** add a text-heading-3xl rung above the heading ladder ([#1045](https://github.com/aziontech/webkit/issues/1045)) ([00798a5](https://github.com/aziontech/webkit/commit/00798a5781259e37181cc47cef02141015060e80))
+* **webkit:** add a title to DocUpdate for release-style entries ([#1056](https://github.com/aziontech/webkit/issues/1056)) ([b42158c](https://github.com/aziontech/webkit/commit/b42158cdee065eff68f582bb9bde02bd746e11cd))
+* **webkit:** add NetworkMap, a decorative dotted world map with lit PoPs ([#1033](https://github.com/aziontech/webkit/issues/1033)) ([9d94010](https://github.com/aziontech/webkit/commit/9d94010fa137d6b25a8f6fd4fc502da060ec476d))
+* **webkit:** add the marketing component category ([#1034](https://github.com/aziontech/webkit/issues/1034)) ([17b75f7](https://github.com/aziontech/webkit/commit/17b75f7c2348c0fc7b183cfed4057089375af8e3))
+* **webkit:** frame the site footer's column and close it on a full-bleed rule ([#1029](https://github.com/aziontech/webkit/issues/1029)) ([b12b255](https://github.com/aziontech/webkit/commit/b12b2556e03b09aa1b18232cfcfe9d3224e03558))
+* **webkit:** highlight hcl/terraform and graphql snippets in code-block ([#1026](https://github.com/aziontech/webkit/issues/1026)) ([5c47566](https://github.com/aziontech/webkit/commit/5c475663dc0bc2c107714aba096b341e7041d2d7))
+* **webkit:** let a chip toggle a selected state in a selectable mode ([#1038](https://github.com/aziontech/webkit/issues/1038)) ([d7f5ead](https://github.com/aziontech/webkit/commit/d7f5ead9be886e640cf8158095d7a184d88562da))
+* **webkit:** let Button place its icon after the label and take a prefix mark ([#1025](https://github.com/aziontech/webkit/issues/1025)) ([31c085f](https://github.com/aziontech/webkit/commit/31c085fc6fe8dedd5ca0905ba3ad9800ab1f4665))
+
+
+### Bug Fixes
+
+* **theme:** [ENG-48341] add gray.275/gray.650 and re-step the light canvas, border and muted text ([#1051](https://github.com/aziontech/webkit/issues/1051)) ([e24b303](https://github.com/aziontech/webkit/commit/e24b303e7c01946d9e0da4ac856109acb85a1d76))
+* **webkit:** animate code-block line entrance on the translate property ([#1027](https://github.com/aziontech/webkit/issues/1027)) ([b98fa13](https://github.com/aziontech/webkit/commit/b98fa13db7635e51c88bfeeeb84c815f83d20688))
+* **webkit:** centre a toast's leading glyph on its first title line ([#1031](https://github.com/aziontech/webkit/issues/1031)) ([981aed9](https://github.com/aziontech/webkit/commit/981aed9afdf445b9b81381f41bfccebd116cb6d5))
+* **webkit:** clear the 10 open pnpm audit advisories ([#1058](https://github.com/aziontech/webkit/issues/1058)) ([d135b94](https://github.com/aziontech/webkit/commit/d135b9473ef106141c13767ba74288543e997135))
+* **webkit:** keep a consumer-set data-hatch on the frame box root ([#1028](https://github.com/aziontech/webkit/issues/1028)) ([bc8bd47](https://github.com/aziontech/webkit/commit/bc8bd4778d7b94bf161d41ad3ce3022f27326b9e))
+* **webkit:** paint the overline cursor with the accent token ([#1044](https://github.com/aziontech/webkit/issues/1044)) ([16590a5](https://github.com/aziontech/webkit/commit/16590a504f6af24829b4957288cc1103fe557f7d))
+* **webkit:** render field-textarea's helper text through HelperText ([#1043](https://github.com/aziontech/webkit/issues/1043)) ([d8d7fba](https://github.com/aziontech/webkit/commit/d8d7fbaa2f67bcab8e714cf6b364e4fe441b16a1))
+* **webkit:** set log-view text in the monospace code label ([#1030](https://github.com/aziontech/webkit/issues/1030)) ([5fb0cad](https://github.com/aziontech/webkit/commit/5fb0cadfd508fb7fd29a702e09743ffce73be8f0))
+* **webkit:** show digit placeholders in the phone field's default placeholder ([#1032](https://github.com/aziontech/webkit/issues/1032)) ([b96707c](https://github.com/aziontech/webkit/commit/b96707cc4829c7fa7dbcf997f5a128bcfc6fcdf8))
+
+
+### Documentation
+
+* **webkit:** update PROCESS.md CI jobs, base branch and standard counts ([#1023](https://github.com/aziontech/webkit/issues/1023)) ([d0840a5](https://github.com/aziontech/webkit/commit/d0840a5091f86d2c45a442ac5691011d8a43f4e8))
+
+## [5.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.2.0...@aziontech/webkit@5.3.0) (2026-10-01)
+
+
+### Features
+
+* **webkit:** [ENG-48323] make Menu and Sidebar SSR-safe and expose Menu pop() ([#1048](https://github.com/aziontech/webkit/issues/1048)) ([715735c](https://github.com/aziontech/webkit/commit/715735c59d7f211994ce1f80fab87e147a44b8ef))
+
+## [5.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.1.0...@aziontech/webkit@5.2.0) (2026-09-23)
+
+
+### Features
+
+* **theme:** tighten the type ladder, antialias text, and gate measure comments ([#982](https://github.com/aziontech/webkit/issues/982)) ([3de1f3b](https://github.com/aziontech/webkit/commit/3de1f3b3d666b632ef81fbe29d7def0a9adfa641))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47063] inset a floating panel's collision padding per axis ([#988](https://github.com/aziontech/webkit/issues/988)) ([3b90fbf](https://github.com/aziontech/webkit/commit/3b90fbf47341f23a379e57a3180d9940d7f79e2e))
+* **webkit:** [ENG-47884] make the sidebar rail's drag follow the pointer and carry its content ([#985](https://github.com/aziontech/webkit/issues/985)) ([0be8ba9](https://github.com/aziontech/webkit/commit/0be8ba9d201264231544fc904b31b4c0b2465a7d))
+* **webkit:** [ENG-48120] keep a chrome block's padding when it opens the prose ([#981](https://github.com/aziontech/webkit/issues/981)) ([264428d](https://github.com/aziontech/webkit/commit/264428d1ba13e8830e6d48bb6ea5ff3ae947b07e))
+* **webkit:** render Message copy in a flow container so block content stays inside the box ([#979](https://github.com/aziontech/webkit/issues/979)) ([f867fa1](https://github.com/aziontech/webkit/commit/f867fa1672ac77c0bf536dc739aa214b636f58e1))
+* **webkit:** stop no-hardcoded-color flagging URL fragments as hex colors ([#980](https://github.com/aziontech/webkit/issues/980)) ([0386389](https://github.com/aziontech/webkit/commit/03863890470c7e8cd016a275da51ad49e658112f))
+* **webkit:** stop no-hardcoded-color flagging UUID and URL fragments as hex colors ([#978](https://github.com/aziontech/webkit/issues/978)) ([ec2b806](https://github.com/aziontech/webkit/commit/ec2b80636d7eb5bfd70a1fe246ae675fd6a238bd))
+
+
+### Documentation
+
+* **webkit:** ship the webkit-layout skill and refresh the consumer skill bundle ([#984](https://github.com/aziontech/webkit/issues/984)) ([261828c](https://github.com/aziontech/webkit/commit/261828cf93a59a92245b6fa4044c2b859f901587))
+
 ## [5.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.0.0...@aziontech/webkit@5.1.0) (2026-09-18)
 
 

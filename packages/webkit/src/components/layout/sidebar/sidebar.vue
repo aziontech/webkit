@@ -17,23 +17,16 @@
   export type SidebarSide = 'start' | 'end'
 
   interface Props {
-    /** Accessible name for the navigation landmark. */
     ariaLabel?: string
     /** Which edge of the layout the rail is anchored to; `end` mirrors the border, the drag handle, the collapse glyphs and the edge affordance. */
     side?: SidebarSide
     /** Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail. */
     resizable?: boolean
-    /** Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. */
     collapsible?: boolean
-    /** Theme container token the sized width is clamped up to, read off the document at runtime. */
     minWidthToken?: string
-    /** Theme container token the sized width is clamped down to, read off the document at runtime. */
     maxWidthToken?: string
-    /** Accessible name for the collapse trigger. */
     collapseAriaLabel?: string
-    /** Accessible name for the control and the grab bar that bring a collapsed rail back. */
     expandAriaLabel?: string
-    /** Accessible name for the drag handle separator. */
     resizeAriaLabel?: string
   }
 
@@ -54,10 +47,8 @@
     'update:width': [value: number | null]
   }>()
 
-  /** Whether the rail is out of the layout. */
   const collapsed = defineModel<boolean>('collapsed', { default: false })
 
-  /** Sized width in px; `null` until the rail measures itself on mount. */
   const width = defineModel<number | null>('width', { default: null })
 
   defineSlots<{
@@ -129,8 +120,20 @@
 
   const hydrated = ref(false)
 
+  const settled = ref(false)
+
   onMounted(() => {
     hydrated.value = true
+    const raf = globalThis.requestAnimationFrame
+    if (typeof raf !== 'function') {
+      settled.value = true
+      return
+    }
+    raf(() =>
+      raf(() => {
+        settled.value = true
+      })
+    )
   })
 
   const setRailEl = (el: unknown) => {
@@ -149,7 +152,7 @@
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
 
   const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-[>div>input:checked]:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none'
+    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-[>div>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
@@ -177,11 +180,11 @@
   const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
 
   const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
   const INNER_CLASS = cn(
     'flex h-full min-h-0 w-full flex-col',
-    'w-(--sidebar-width) translate-x-0 opacity-100 has-[>input:checked]:opacity-20',
+    'w-[calc(var(--sidebar-width)-1px)] translate-x-0 opacity-100 has-[>input:checked]:opacity-20',
     'data-[side=start]:has-[>input:checked]:-translate-x-full data-[side=end]:has-[>input:checked]:translate-x-full',
     INNER_MOTION_CLASS
   )
@@ -221,6 +224,7 @@
     :data-collapsed="isOut ? '' : undefined"
     :data-resizing="resizing ? '' : undefined"
     :data-hydrated="hydrated ? '' : undefined"
+    :data-settled="settled ? '' : undefined"
     :inert="isOut ? true : undefined"
     :aria-hidden="isOut ? 'true' : undefined"
   >
@@ -229,6 +233,7 @@
       :style="innerStyle"
       :data-side="side"
       :data-resizing="resizing ? '' : undefined"
+      :data-settled="settled ? '' : undefined"
       :data-testid="`${testId}__panel`"
     >
       <input

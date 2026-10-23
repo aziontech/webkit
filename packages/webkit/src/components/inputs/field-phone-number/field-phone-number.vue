@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId, watch } from 'vue'
 
+  import { useSelectSearch } from '../../../composables/use-select-search'
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
   import InputGroup from '../input-group/input-group.vue'
+  import InputText from '../input-text/input-text.vue'
   import Label from '../label/label.vue'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
@@ -58,6 +60,10 @@
     inputId?: string
     /** HTML name for the internal input (form + vee-validate integration). */
     name?: string
+    /** Placeholder of the search box that filters the dial-code list. */
+    searchPlaceholder?: string
+    /** Shown in the dial-code list when no country matches the search. */
+    searchEmptyLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -70,7 +76,9 @@
     required: false,
     invalid: false,
     inputId: '',
-    name: ''
+    name: '',
+    searchPlaceholder: 'Search country',
+    searchEmptyLabel: 'No country found'
   })
 
   const emit = defineEmits<{
@@ -89,6 +97,7 @@
 
   const resolvedInputId = computed(() => props.inputId || generatedId)
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
+  const triggerId = `${generatedId}-trigger`
 
   const selectedCountry = computed<Country>(
     () => props.countries.find((c) => c.code === country.value) ?? props.countries[0]
@@ -144,6 +153,38 @@
     const next = props.countries.find((c) => c.code === value) ?? selectedCountry.value
     model.value = model.value.slice(0, maxDigits(next))
   }
+
+  const {
+    open,
+    query,
+    filtered,
+    activeKey,
+    activeIndex,
+    searchId,
+    optionId,
+    setActive,
+    onTriggerKeydown,
+    onContentKeydown,
+    onSearchKeydown
+  } = useSelectSearch({
+    items: () =>
+      props.countries.map((c) => ({
+        key: c.code,
+        text: c.label,
+        keywords: [c.code, c.dialCode, stripToDigits(c.dialCode)]
+      })),
+    selectedKeys: () => [country.value],
+    idPrefix: generatedId,
+    triggerId,
+    locked: () => props.disabled || props.readonly,
+    onPick: onCountryChange,
+    onCommit: () => document.getElementById(resolvedInputId.value)?.focus()
+  })
+
+  const filteredCountries = computed(() => {
+    const keys = new Set(filtered.value.map((item) => item.key))
+    return props.countries.filter((c) => keys.has(c.code))
+  })
 </script>
 
 <template>
@@ -169,21 +210,57 @@
       :data-testid="`${testId}__group`"
     >
       <Select
+        v-model:open="open"
         :model-value="country"
         :disabled="disabled || readonly"
         :display-value="() => selectedCountry.dialCode"
         :data-testid="`${testId}__country`"
         @update:model-value="onCountryChange"
       >
-        <SelectTrigger aria-label="Country dial code" />
-        <SelectContent class="min-w-max">
+        <SelectTrigger
+          :id="triggerId"
+          aria-label="Country dial code"
+          @keydown="onTriggerKeydown"
+        />
+        <SelectContent
+          class="min-w-max"
+          @keydown="onContentKeydown"
+        >
+          <template #search>
+            <InputText
+              :id="searchId"
+              v-model="query"
+              :placeholder="searchPlaceholder"
+              :aria-label="searchPlaceholder || 'Search country'"
+              :aria-activedescendant="activeKey ? optionId(activeKey) : undefined"
+              autocomplete="off"
+              :data-testid="`${testId}__search`"
+              @keydown="onSearchKeydown"
+            >
+              <template #iconLeft>
+                <i class="pi pi-search" />
+              </template>
+            </InputText>
+          </template>
           <SelectOption
-            v-for="c in countries"
+            v-for="(c, index) in filteredCountries"
+            :id="optionId(c.code)"
             :key="c.code"
             :value="c.code"
+            :data-active="index === activeIndex || null"
+            class="data-[active]:bg-(--bg-hover)"
+            @mousemove="setActive(index)"
           >
             {{ c.dialCode }} {{ c.label }}
           </SelectOption>
+          <p
+            v-if="filteredCountries.length === 0"
+            role="status"
+            :data-testid="`${testId}__search-empty`"
+            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+          >
+            {{ searchEmptyLabel }}
+          </p>
         </SelectContent>
       </Select>
       <input

@@ -258,6 +258,7 @@ export const Sizes = {
   }),
   parameters: {
     controls: { disable: true },
+    visual: { modes: ['dark-desktop', 'dark-tablet', 'dark-mobile'] },
     docs: {
       description: {
         story:

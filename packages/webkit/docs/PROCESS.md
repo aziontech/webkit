@@ -7,7 +7,7 @@ This document is the **map of the whole system**, in two parts:
 - **[Part 2 — Implementation](#part-2--implementation)**: how a product team _adopts and
   uses_ webkit — one `init`, then guided (MCP + docs) and enforced (lint + CI) usage.
 
-Both parts run on the same **rule system**: 25 standards, each one a rule document paired
+Both parts run on the same **rule system**: 27 standards, each one a rule document paired
 with a blocking gate. Rules are scoped **`general`** (they apply to any Vue codebase and
 ship to consumer projects) or **`webkit`** (internal to authoring the design system). The
 [roadmap](#roadmap--the-standards-pack) is to extract the `general` set into a standalone
@@ -44,7 +44,7 @@ exists so the standard is applied _by construction_, not remembered by disciplin
 | 2   | Approve          | `spec-validate`               | `status: approved` + body checksum      | schema/Constraints invalid                        |
 | 3   | Generate         | `/component-create <name>`    | `.vue` + exports + story + Code Connect | spec missing/tampered, any phase fails            |
 | 4   | Write-time gates | every `Write`/`Edit`          | approved or `exit 2`                    | off-token, off-spec, phantom import, broken story |
-| 5   | PR + CI          | `/create-branch` + `/open-pr` | PR to `dev`                             | any governance job fails                          |
+| 5   | PR + CI          | `/create-branch` + `/open-pr` | PR to `main`                            | any governance job fails                          |
 | 6   | Review           | PR                            | 2 approvals (technical + design)        | review-only surfaces off-pattern                  |
 | 7   | Release          | merge to `main`               | release-please Release PR per package   | commit type ⇄ bump divergence                     |
 
@@ -184,7 +184,7 @@ CI by the [invariant test](#the-invariant).
 
 ### Stage 5 — Pull request + CI
 
-Branches and PRs go through `/create-branch` and `/open-pr` (base `dev`, Conventional
+Branches and PRs go through `/create-branch` and `/open-pr` (base `main`, Conventional
 Commits, no attribution footers). CI is the **Governance Pipeline** — the same engines the
 hooks ran, re-run over the whole repo, so an editor push that never ran a hook cannot merge
 an off-pattern change either.
@@ -195,15 +195,19 @@ an off-pattern change either.
 [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) — jobs
 gated by a `changes` path filter and summarized by a required `governance-check` gate:
 
-| Job                | Runs                                                                                | Fails the PR when                                                                            |
-| ------------------ | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `security`         | `pnpm audit` + depcheck                                                             | high-severity advisory or ghost dependency                                                   |
-| `lint`             | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit` | any warning or format drift                                                                  |
-| `types`            | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                  | type error or coverage below 95%                                                             |
-| `build`            | `pnpm pack:dry` + size-limit                                                        | package doesn't pack or exceeds its [bundle budget](../../../.claude/rules/bundle-budget.md) |
-| `storybook`        | full `storybook:build`                                                              | any story fails to compile                                                                   |
-| `toolkit`          | `catalog:check` + `test:toolkit` + `authoring`                                      | catalog drift, toolkit test failure, or a **new** authoring violation                        |
-| `governance-check` | summary gate                                                                        | any upstream job failed (skips count as pass)                                                |
+| Job                | Runs                                                                                                 | Fails the PR when                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `security`         | `pnpm audit` + TruffleHog + depcheck                                                                 | high-severity advisory, a leaked secret, or a ghost dependency                                                      |
+| `lint-canary`      | `node lint-canaries/index.js`                                                                        | a deliberately broken fixture stops failing its rule (a lint was weakened)                                          |
+| `lint`             | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit`                  | any warning or format drift                                                                                         |
+| `types`            | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                                   | type error or coverage below 95%                                                                                    |
+| `build`            | `pack:check` + `size` (after `lint` + `types`)                                                       | a test file leaks into the tarball or an entry exceeds its [bundle budget](../../../.claude/rules/bundle-budget.md) |
+| `storybook`        | full `storybook:build` (after `lint` + `types`)                                                      | any story fails to compile                                                                                          |
+| `toolkit`          | `catalog:check` + `test:toolkit` + `authoring` + `test:gate` + `doc-standards`                       | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test             |
+| `smoke`            | `smoke:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button` | the published packages don't install, wire, render styled, or build for a real consumer                             |
+| `tests`            | Vitest browser mode (Playwright Chromium), 4 shards (after `lint` + `types`)                         | any functional or axe assertion fails                                                                               |
+| `visual`           | `storybook:build` + visual regression, 4 shards (after every job above except `toolkit`/`smoke`)     | a story's render drifts from its committed baseline                                                                 |
+| `governance-check` | summary gate over every job                                                                          | any upstream job failed (skips count as pass)                                                                       |
 
 **The ratchet** ([`check-authoring.mjs`](../scripts/check-authoring.mjs)) re-runs the
 construction, token, spec-compliance, and story-source engines over every source file and
@@ -458,7 +462,7 @@ and the [invariant test](#the-invariant) fails CI if a rule and its gate ever dr
 | `ci`         | fails the PR                                  | governance jobs / ratchet / commitlint / size-limit / branch protection |
 | `review`     | cannot merge without the 2 required approvals | humans                                                                  |
 
-### `scope: general` — 14 standards (ship to consumer projects)
+### `scope: general` — 15 standards (ship to consumer projects)
 
 Construction patterns for **any** Vue component, anywhere. These are the future
 [standards pack](#roadmap--the-standards-pack).
@@ -479,24 +483,26 @@ Construction patterns for **any** Vue component, anywhere. These are the future
 | [accessibility](../../../.claude/rules/accessibility.md)             | semantics, keyboard, `focus-visible`, `motion-reduce`, `useId`                             |
 | [testid](../../../.claude/rules/testid.md)                           | overridable `data-testid` derived `<category>-<name>`                                      |
 | [deprecation](../../../.claude/rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                 |
+| [comments](../../../.claude/rules/comments.md)                       | comments rare and objective; blocks of 5 lines at most, files at most 20% prose            |
 
-### `scope: webkit` — 11 standards (internal to the design system)
+### `scope: webkit` — 12 standards (internal to the design system)
 
 How **this repo** authors, documents, and releases; they never ship to consumers.
 
-| Standard                                                       | One line                                                                           |
-| -------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [no-invention](../../../.claude/rules/no-invention.md)         | the spec is a sealed contract; anything missing → `BLOCKED`, not invented          |
-| [naming](../../../.claude/rules/naming.md)                     | one kebab name across spec, folder, export, `defineOptions`, testid, story binding |
-| [imports](../../../.claude/rules/imports.md)                   | flat public export (`@aziontech/webkit/<name>`); category only in the folder       |
-| [compound-api](../../../.claude/rules/compound-api.md)         | composition = compound `index.ts` + tree-shakeable `-root` export                  |
-| [dependencies](../../../.claude/rules/dependencies.md)         | CSS-only positioning/animation; granted exceptions listed in the rule              |
-| [migration](../../../.claude/rules/migration.md)               | external artifacts are rewritten to our conventions, never inherited               |
-| [storybook-source](../../../.claude/rules/storybook-source.md) | "Show code" is an explicit, runnable, PascalCase SFC via `toSfc`                   |
-| [release-types](../../../.claude/rules/release-types.md)       | commit type ⇄ version bump identical across 4 sources                              |
-| [git-workflow](../../../.claude/rules/git-workflow.md)         | branches/PRs only via `/create-branch` + `/open-pr`, base `dev`                    |
-| [bundle-budget](../../../.claude/rules/bundle-budget.md)       | size-limit per entry; tree-shaking preserved                                       |
-| [testing](../../../.claude/rules/testing.md)                   | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe       |
+| Standard                                                       | One line                                                                                 |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [no-invention](../../../.claude/rules/no-invention.md)         | the spec is a sealed contract; anything missing → `BLOCKED`, not invented                |
+| [naming](../../../.claude/rules/naming.md)                     | one kebab name across spec, folder, export, `defineOptions`, testid, story binding       |
+| [imports](../../../.claude/rules/imports.md)                   | flat public export (`@aziontech/webkit/<name>`); category only in the folder             |
+| [compound-api](../../../.claude/rules/compound-api.md)         | composition = compound `index.ts` + tree-shakeable `-root` export                        |
+| [dependencies](../../../.claude/rules/dependencies.md)         | CSS-only positioning/animation; granted exceptions listed in the rule                    |
+| [migration](../../../.claude/rules/migration.md)               | external artifacts are rewritten to our conventions, never inherited                     |
+| [storybook-source](../../../.claude/rules/storybook-source.md) | "Show code" is an explicit, runnable, PascalCase SFC via `toSfc`                         |
+| [release-types](../../../.claude/rules/release-types.md)       | commit type ⇄ version bump identical across 4 sources                                    |
+| [git-workflow](../../../.claude/rules/git-workflow.md)         | branches/PRs only via `/create-branch` + `/open-pr`, base `main`                         |
+| [bundle-budget](../../../.claude/rules/bundle-budget.md)       | size-limit per entry; tree-shaking preserved                                             |
+| [testing](../../../.claude/rules/testing.md)                   | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe             |
+| [authoring-docs](../../../.claude/rules/authoring-docs.md)     | skills/agents carry conforming frontmatter + `enforced_by`; no source file as an example |
 
 ---
 

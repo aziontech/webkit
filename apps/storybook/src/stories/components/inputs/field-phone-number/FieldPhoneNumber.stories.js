@@ -88,6 +88,25 @@ const meta = {
       description: 'HTML name for the internal input (form + vee-validate integration).',
       table: { category: 'props', type: { summary: 'string' } }
     },
+    searchPlaceholder: {
+      control: 'text',
+      description:
+        'Placeholder of the search box that filters the dial-code list. Typing on the closed trigger opens the list with the search already filled.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Search country' }
+      }
+    },
+    searchEmptyLabel: {
+      control: 'text',
+      description: 'Shown in the dial-code list when no country matches the search.',
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'No country found' }
+      }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Emitted when the typed digits change; value is digits-only.',

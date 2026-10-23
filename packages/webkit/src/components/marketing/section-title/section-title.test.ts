@@ -24,8 +24,6 @@ describe('SectionTitle', () => {
     const { getByTestId } = render(SectionTitle, { props })
     const root = getByTestId(TESTID)
 
-    // flush="top" is subtracted from borders="y", so the header keeps only its bottom rule —
-    // the divider between the header and the section body.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
   })
@@ -57,6 +55,18 @@ describe('SectionTitle', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'medium')
   })
 
+  it.each(['small', 'medium'] as const)('reflects padding="%s" on data-padding', (padding) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, padding } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-padding', padding)
+  })
+
+  it('defaults to the medium padding', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-padding', 'medium')
+  })
+
   it.each(['small', 'medium', 'large'] as const)(
     'keeps the headline an h2 at size="%s"',
     (size) => {
@@ -78,8 +88,6 @@ describe('SectionTitle', () => {
 
       expect(heading).toHaveTextContent('Everything runs at the edge')
       expect(paragraph).toHaveTextContent('One platform.')
-      // Node.DOCUMENT_POSITION_FOLLOWING === 4: the description follows the headline, so the
-      // reading order matches the visual one in every layout — including the two-column one.
       expect(heading.compareDocumentPosition(paragraph) & 4).toBe(4)
     }
   )
@@ -195,7 +203,6 @@ describe('SectionTitle', () => {
       const root = getByTestId(TESTID)
 
       expect(root).toHaveAttribute('data-framed')
-      // the frame resolves to FrameBox, which carries the resolved side list
       expect(root).toHaveAttribute('data-borders')
     })
 

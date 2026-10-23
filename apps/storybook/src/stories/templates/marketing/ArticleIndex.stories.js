@@ -54,7 +54,7 @@ const ROWS = [
     title: 'Which Azion Plan Is Right for Your Project?',
     authors: ['Marilia Bafutto Costa'],
     byline: 'Marilia Bafutto Costa · 7 min read'
-  },
+  }
 ]
 
 const quoted = (text) => `'${text.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
