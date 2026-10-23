@@ -15,6 +15,7 @@
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import { useOptionSearch } from '../../composables/use-option-search'
   import { useSiteLink } from '../../composables/use-site-link'
 
   defineOptions({ name: 'StoryLibrary' })
@@ -106,6 +107,7 @@
 
   const route = useRoute()
   const { follow } = useSiteLink()
+  const { searchable, query, setQuery, narrow } = useOptionSearch()
 
   const seeded = (facet: StoryLibraryFacet) => {
     const requested = route.query[facet.key]
@@ -147,6 +149,9 @@
     value === ALL
       ? facet.allLabel
       : (facet.options.find((option) => option.value === value)?.label ?? value)
+
+  const matching = (facet: StoryLibraryFacet) =>
+    narrow(facet.key, facet.options, (option) => option.label)
 
   const matches = computed(() => {
     const query = selection.query.trim().toLowerCase()
@@ -224,17 +229,44 @@
             v-model="selection.facets[facet.key]"
             size="large"
             :display-value="facetLabel(facet)"
+            @update:open="setQuery(facet.key, '')"
           >
             <SelectTrigger :aria-label="facet.label" />
             <SelectContent>
+              <template
+                v-if="searchable(facet.options)"
+                #search
+              >
+                <InputText
+                  :model-value="query(facet.key)"
+                  size="small"
+                  placeholder="Search"
+                  :aria-label="`Search ${facet.label.toLowerCase()}`"
+                  @update:model-value="setQuery(facet.key, $event)"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
+              </template>
               <SelectOption :value="ALL">{{ facet.allLabel }}</SelectOption>
               <SelectOption
-                v-for="option in facet.options"
+                v-for="option in matching(facet)"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
               </SelectOption>
+              <p
+                v-if="!matching(facet).length"
+                role="status"
+                class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+              >
+                No results found
+              </p>
             </SelectContent>
           </Select>
         </div>

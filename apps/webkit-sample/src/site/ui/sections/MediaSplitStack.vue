@@ -63,6 +63,8 @@
     eyebrow?: string
     /** Section title over the stack; empty renders the stack alone. */
     title?: string
+    /** Sentence under the section title. */
+    description?: string
     /** The stacked bands, top to bottom. */
     bands: StackBand[]
   }
@@ -71,7 +73,8 @@
     kind: 'solutions',
     anchor: '',
     eyebrow: '',
-    title: ''
+    title: '',
+    description: ''
   })
 
   const { follow } = useSiteLink()
@@ -109,6 +112,7 @@
         size="large"
         :eyebrow="eyebrow"
         :title="title"
+        :description="description"
       />
     </template>
 

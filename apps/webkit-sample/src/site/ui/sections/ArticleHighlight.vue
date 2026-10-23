@@ -17,6 +17,8 @@
     href: string
     /** Cover image URL. */
     image: string
+    /** Cover drawn for the highlight panel; falls back to the cover image. */
+    highlightImage?: string
     /** Overline above the title: category and date. */
     meta: string
     /** The article's headline. */
@@ -38,10 +40,13 @@
     ariaLabel?: string
     /** Milliseconds each article is held before the band advances. */
     interval?: number
+    /** From lg up, the band fills the first viewport under the sticky nav. */
+    fill?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     anchor: '',
+    fill: false,
     actionLabel: 'Read article',
     ariaLabel: 'Highlight articles',
     interval: 6000
@@ -159,7 +164,8 @@
       <div
         v-if="current"
         :data-autoplay="running || null"
-        class="flex flex-col"
+        :data-fill="fill || null"
+        class="group/highlight flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--banner-offset)-var(--spacing-xxl)*2-0.25rem)]"
         @pointerenter="pointerInside = true"
         @pointerleave="pointerInside = false"
         @focusin="onFocusIn"
@@ -172,9 +178,9 @@
           role="tabpanel"
           :aria-labelledby="tabId(selected)"
           :data-direction="direction"
-          class="group/panel relative bg-(--bg-canvas)"
+          class="group/panel relative bg-(--bg-canvas) lg:min-h-0 lg:flex-1"
         >
-          <div class="grid *:col-start-1 *:row-start-1">
+          <div class="grid *:col-start-1 *:row-start-1 lg:h-full">
             <div
               aria-hidden="true"
               inert
@@ -185,11 +191,11 @@
                 :key="item.key"
                 class="grid lg:grid-cols-2"
               >
-                <span class="block aspect-video lg:aspect-4/3" />
-                <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl)">
+                <span class="block aspect-video lg:aspect-4/3 group-data-[fill]/highlight:aspect-39/35 lg:group-data-[fill]/highlight:aspect-auto" />
+                <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)">
                   <span class="text-overline-sm">{{ item.meta }}</span>
                   <span class="text-heading-lg">{{ item.title }}</span>
-                  <span class="line-clamp-3 text-body-md">{{ item.description }}</span>
+                  <span class="line-clamp-3 text-body-md lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:hidden">{{ item.description }}</span>
                   <span class="text-body-sm">{{ item.readTime }}</span>
                   <span class="h-10" />
                 </div>
@@ -208,17 +214,17 @@
                 class="group/article relative grid min-w-0 lg:grid-cols-2"
               >
                 <div
-                  class="block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:aspect-4/3 lg:border-r lg:border-b-0"
+                  class="relative block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-canvas) lg:aspect-4/3 group-data-[fill]/highlight:aspect-39/35 lg:group-data-[fill]/highlight:aspect-auto lg:border-r lg:border-b-0"
                 >
                   <img
-                    :src="current.image"
+                    :src="current.highlightImage || current.image"
                     alt=""
                     decoding="async"
-                    class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
+                    class="absolute inset-0 size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
                   />
                 </div>
                 <div
-                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-xxl)"
+                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-xxl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
                 >
                   <span class="text-overline-sm text-(--text-muted)">{{ current.meta }}</span>
                   <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
@@ -230,7 +236,7 @@
                       {{ current.title }}
                     </a>
                   </h2>
-                  <p class="m-0 line-clamp-3 text-pretty text-body-md text-(--text-muted)">
+                  <p class="m-0 line-clamp-3 text-pretty text-body-md text-(--text-muted) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:hidden">
                     {{ current.description }}
                   </p>
                   <span class="text-body-sm text-(--text-muted)">{{ current.readTime }}</span>
@@ -254,7 +260,7 @@
         <CardGrid
           kind="frame"
           flush
-          :columns="3"
+          :columns="items.length >= 4 ? 4 : 3"
           :mobile-columns="1"
           role="tablist"
           :aria-label="ariaLabel"

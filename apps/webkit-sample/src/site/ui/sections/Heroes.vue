@@ -101,9 +101,7 @@
     'centered-band': {
       kind: 'band',
       size: 'large',
-      maxWidth: 'site',
-      texture: 'dots',
-      textureFade: 'top'
+      maxWidth: 'site'
     },
     'pixel-floor': {
       kind: 'screen',
@@ -118,10 +116,7 @@
       kind: 'screen',
       align: 'center',
       maxWidth: 'site',
-      padded: false,
-      texture: 'dots',
-      textureSize: 'small',
-      textureFade: 'top'
+      padded: false
     }
   } as const
 
@@ -131,7 +126,7 @@
     'centered-band': { centered: true, maxWidth: '2xl' },
     'pixel-floor': {},
     'copy-beside-art': { maxWidth: 'xl', mobileCentered: true },
-    'copy-on-top-art': { centered: true }
+    'copy-on-top-art': { centered: true, maxWidth: 'xl' }
   } as const
 
   const LONG_TITLE_WIDTH = {

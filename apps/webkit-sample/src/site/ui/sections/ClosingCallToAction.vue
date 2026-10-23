@@ -1,24 +1,20 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
-  import FieldText from '@aziontech/webkit/field-text'
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import TextureMaterial from '@aziontech/webkit/texture-material'
-  import type { TickerItem } from '@aziontech/webkit/ticker'
-  import Ticker from '@aziontech/webkit/ticker'
-  import { toast } from '@aziontech/webkit/toast'
   import { computed, ref } from 'vue'
 
   import { useTypedWords } from '../../composables/use-typed-words'
+  import NewsletterBand from '../NewsletterBand.vue'
   import SectionAction from './SectionAction.vue'
   import SectionCommand from './SectionCommand.vue'
   import type { SiteAction } from './types'
 
   defineOptions({ name: 'ClosingCallToAction' })
 
-  /** split: the lead and aside actions side by side; panel: one centred ask; newsletter: the split band with a subscribe form; primary: a centred ask on the canvas lit by a pixelated primary wave, with a benefits strip; agents: the primary layout with a switch between the human and the agent way in, a copyable line and a typed sentence; frame: the closing frame alone. */
+  /** split: the lead and aside actions side by side; panel: one centred ask; newsletter: the ask beside a subscribe form over a wave strip with the Azion mark; primary: a centred ask on the canvas lit by a pixelated primary wave; agents: the primary layout with a switch between the human and the agent way in, a copyable line and a typed sentence; frame: the closing frame alone. */
   export type ClosingCallToActionKind =
     'split' | 'panel' | 'newsletter' | 'primary' | 'agents' | 'frame'
 
@@ -73,10 +69,6 @@
     aside?: SiteAction | null
     /** Copy of the subscribe form, for the newsletter layout. */
     form?: ClosingCallToActionForm | null
-    /** Claims the primary layout runs along its floor, each with an optional leading icon class. */
-    benefits?: TickerItem[]
-    /** Accessible name of the benefits strip. */
-    benefitsLabel?: string
     /** The ways in the agents layout switches between; the first one opens. */
     audiences?: ClosingCallToActionAudience[]
     /** Accessible name of the audience switch. */
@@ -99,8 +91,6 @@
     command: '',
     aside: null,
     form: null,
-    benefits: () => [],
-    benefitsLabel: '',
     audiences: () => [],
     audiencesLabel: 'Audience',
     typedLead: '',
@@ -128,25 +118,6 @@
   const { text: typedText } = useTypedWords(() => props.typedWords)
 
   const typedChars = computed(() => Array.from(typedText.value))
-
-  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-  const email = ref('')
-  const error = ref('')
-  const sending = ref(false)
-
-  async function subscribe() {
-    if (sending.value || !props.form) return
-    const value = email.value.trim()
-    if (!value) return (error.value = props.form.required)
-    if (!EMAIL.test(value)) return (error.value = props.form.invalid)
-    error.value = ''
-    sending.value = true
-    await new Promise((resolve) => globalThis.setTimeout(resolve, 600))
-    sending.value = false
-    email.value = ''
-    toast.success(props.form.success)
-  }
 </script>
 
 <template>
@@ -157,7 +128,15 @@
     :padded="false"
     class="scroll-mt-(--spacing-xxl)"
   >
+    <NewsletterBand
+      v-if="kind === 'newsletter' && form"
+      :eyebrow="eyebrow"
+      :title="title"
+      :description="description"
+      :form="form"
+    />
     <CallToAction
+      v-else
       framed
       :kind="callToActionKind"
       :eyebrow="eyebrow"
@@ -233,35 +212,6 @@
             >
           </p>
         </div>
-        <div v-else-if="kind === 'newsletter' && form">
-          <form
-            novalidate
-            class="flex w-full flex-col gap-(--spacing-sm) sm:w-(--container-md) sm:max-w-full sm:flex-row sm:items-start"
-            @submit.prevent="subscribe"
-          >
-            <FieldText
-              v-model="email"
-              :label="form.label"
-              size="large"
-              type="email"
-              autocomplete="email"
-              :placeholder="form.placeholder"
-              :invalid="Boolean(error)"
-              :helper-text="error"
-              :disabled="sending"
-              class="min-w-0 flex-1"
-              @update:model-value="error = ''"
-            />
-            <Button
-              :label="form.submit"
-              kind="secondary"
-              size="large"
-              :loading="sending"
-              class="sm:mt-(--spacing-lg)"
-              @click="subscribe"
-            />
-          </form>
-        </div>
         <template v-else>
           <SectionCommand
             v-if="command"
@@ -282,15 +232,6 @@
           kind="pixelate"
           size="small"
           fade="bottom"
-        />
-      </template>
-      <template
-        v-if="kind === 'primary' && benefits.length"
-        #bottom
-      >
-        <Ticker
-          :items="benefits"
-          :aria-label="benefitsLabel"
         />
       </template>
       <template

@@ -18,7 +18,7 @@
 
   const METHODS = [
     {
-      icon: 'pi pi-github',
+      icon: 'ai ai-github',
       title: 'Import from Git',
       description:
         'Deploy from a repository you already have. Connect the Git account that owns it and select the repository to import.'

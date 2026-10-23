@@ -8,7 +8,6 @@
   import NetworkMap from '@aziontech/webkit/network-map'
   import Quote from '@aziontech/webkit/quote'
   import SectionModule from '@aziontech/webkit/section-module'
-  import type { SectionTitleSize } from '@aziontech/webkit/section-title'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Topic from '@aziontech/webkit/topic'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
@@ -48,10 +47,6 @@
     eyebrow?: string
     /** The network claim. */
     title: string
-    /** Headline size; small sets the claim in a compact headline type. */
-    titleSize?: SectionTitleSize
-    /** Closing clause of the claim, set in the headline's type on its own line under it. */
-    titleTail?: string
     /** Muted line above the claim chips. */
     lead?: string
     /** Infrastructure claims, one chip each; a string, or a claim that can sit out the mobile band. */
@@ -68,8 +63,6 @@
     kind: 'quotes',
     anchor: '',
     eyebrow: '',
-    titleSize: 'small',
-    titleTail: '',
     lead: '',
     claims: () => [],
     outcomes: () => [],
@@ -123,17 +116,13 @@
         <div
           class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
         >
-          <div
-            :data-title-size="titleSize"
-            class="relative [&_h2]:max-w-[27em] data-[title-size=small]:[&_h2]:text-heading-md! max-sm:data-[title-size=small]:[&_h2]:text-heading-xl! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] data-[title-size=small]:[&_h2+p]:text-heading-md max-sm:data-[title-size=small]:[&_h2+p]:text-heading-xl [&_h2+p]:text-(--text-default)"
-          >
+          <div class="relative [&_h2]:max-w-[27em]">
             <SectionTitle
               :framed="false"
               kind="left"
-              :size="titleSize"
+              size="medium"
               :eyebrow="eyebrow"
               :title="title"
-              :description="titleTail"
             />
           </div>
 
@@ -162,7 +151,7 @@
 
             <ul
               v-if="chips.length"
-              class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
+              class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0"
             >
               <li
                 v-for="claim in chips"

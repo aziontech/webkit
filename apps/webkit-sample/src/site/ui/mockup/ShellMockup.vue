@@ -115,7 +115,7 @@
         { key: 'waf-rules', icon: 'ai ai-waf-rules', label: 'WAF Rules' },
         {
           key: 'certificate-manager',
-          icon: 'ai ai-digital-certificates',
+          icon: 'ai ai-certificate-manager',
           label: 'Certificate Manager'
         }
       ]
