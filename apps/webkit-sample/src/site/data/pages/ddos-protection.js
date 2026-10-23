@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import DdosFirewallModulesFragment from '../../ui/mockup/widgets/DdosFirewallModulesFragment.vue'
-import DdosHttpEventsFragment from '../../ui/mockup/widgets/DdosHttpEventsFragment.vue'
-import DdosRequestsMetricFragment from '../../ui/mockup/widgets/DdosRequestsMetricFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const DdosFirewallModulesFragment = productWidget('ddos-firewall-modules')
+const DdosHttpEventsFragment = productWidget('ddos-http-events')
+const DdosRequestsMetricFragment = productWidget('ddos-requests-metric')
 
 const PILLARS = [
   {

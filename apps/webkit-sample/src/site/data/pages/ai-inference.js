@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import AiInferenceFunctionFragment from '../../ui/mockup/widgets/AiInferenceFunctionFragment.vue'
-import AiInferenceModelFragment from '../../ui/mockup/widgets/AiInferenceModelFragment.vue'
-import AiInferenceTemplateFragment from '../../ui/mockup/widgets/AiInferenceTemplateFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const AiInferenceFunctionFragment = productWidget('ai-inference-function')
+const AiInferenceModelFragment = productWidget('ai-inference-model')
+const AiInferenceTemplateFragment = productWidget('ai-inference-template')
 
 const PILLARS = [
   {

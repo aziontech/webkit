@@ -2,9 +2,7 @@ import realTimeMetricsErrorRate from '@aziontech/webkit/assets/real-time-metrics
 import realTimeMetricsStatusCodes from '@aziontech/webkit/assets/real-time-metrics-status-codes.svg'
 import { markRaw } from 'vue'
 
-import RealTimeMetricsDashboardFragment from '../../ui/mockup/widgets/RealTimeMetricsDashboardFragment.vue'
-import RealTimeMetricsFilterFragment from '../../ui/mockup/widgets/RealTimeMetricsFilterFragment.vue'
-import RealTimeMetricsPanelFragment from '../../ui/mockup/widgets/RealTimeMetricsPanelFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -12,6 +10,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const RealTimeMetricsDashboardFragment = productWidget('real-time-metrics-dashboard')
+const RealTimeMetricsFilterFragment = productWidget('real-time-metrics-filter')
+const RealTimeMetricsPanelFragment = productWidget('real-time-metrics-panel')
 
 const PILLARS = [
   {

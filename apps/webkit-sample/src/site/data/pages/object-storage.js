@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import ObjectStorageAccessFragment from '../../ui/mockup/widgets/ObjectStorageAccessFragment.vue'
-import ObjectStorageBrowserFragment from '../../ui/mockup/widgets/ObjectStorageBrowserFragment.vue'
-import ObjectStorageBucketsFragment from '../../ui/mockup/widgets/ObjectStorageBucketsFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ObjectStorageAccessFragment = productWidget('object-storage-access')
+const ObjectStorageBrowserFragment = productWidget('object-storage-browser')
+const ObjectStorageBucketsFragment = productWidget('object-storage-buckets')
 
 const PILLARS = [
   {

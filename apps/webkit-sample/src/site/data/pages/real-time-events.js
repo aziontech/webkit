@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import RealTimeEventsFilterFragment from '../../ui/mockup/widgets/RealTimeEventsFilterFragment.vue'
-import RealTimeEventsLogFragment from '../../ui/mockup/widgets/RealTimeEventsLogFragment.vue'
-import RealTimeEventsVolumeFragment from '../../ui/mockup/widgets/RealTimeEventsVolumeFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const RealTimeEventsFilterFragment = productWidget('real-time-events-filter')
+const RealTimeEventsLogFragment = productWidget('real-time-events-log')
+const RealTimeEventsVolumeFragment = productWidget('real-time-events-volume')
 
 const REAL_TIME_METRICS = '/site/docs/real-time-metrics'
 

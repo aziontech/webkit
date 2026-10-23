@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import EdgeDnsDnssecFragment from '../../ui/mockup/widgets/EdgeDnsDnssecFragment.vue'
-import EdgeDnsNameserverFragment from '../../ui/mockup/widgets/EdgeDnsNameserverFragment.vue'
-import EdgeDnsRecordFragment from '../../ui/mockup/widgets/EdgeDnsRecordFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const EdgeDnsDnssecFragment = productWidget('edge-dns-dnssec')
+const EdgeDnsNameserverFragment = productWidget('edge-dns-nameserver')
+const EdgeDnsRecordFragment = productWidget('edge-dns-record')
 
 const PILLARS = [
   {

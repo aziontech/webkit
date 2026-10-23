@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import WafAllowedRuleFragment from '../../ui/mockup/widgets/WafAllowedRuleFragment.vue'
-import WafFirewallRuleFragment from '../../ui/mockup/widgets/WafFirewallRuleFragment.vue'
-import WafThreatFragment from '../../ui/mockup/widgets/WafThreatFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const WafAllowedRuleFragment = productWidget('waf-allowed-rule')
+const WafFirewallRuleFragment = productWidget('waf-firewall-rule')
+const WafThreatFragment = productWidget('waf-threat')
 
 const PILLARS = [
   {

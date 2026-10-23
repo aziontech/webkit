@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import BotManagerMetricsFragment from '../../ui/mockup/widgets/BotManagerMetricsFragment.vue'
-import BotManagerRuleFragment from '../../ui/mockup/widgets/BotManagerRuleFragment.vue'
-import BotManagerTrafficFragment from '../../ui/mockup/widgets/BotManagerTrafficFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const BotManagerMetricsFragment = productWidget('bot-manager-metrics')
+const BotManagerRuleFragment = productWidget('bot-manager-rule')
+const BotManagerTrafficFragment = productWidget('bot-manager-traffic')
 
 const PILLARS = [
   {

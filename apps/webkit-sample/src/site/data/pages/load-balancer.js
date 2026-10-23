@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import LoadBalancerAddressFragment from '../../ui/mockup/widgets/LoadBalancerAddressFragment.vue'
-import LoadBalancerMethodFragment from '../../ui/mockup/widgets/LoadBalancerMethodFragment.vue'
-import LoadBalancerOriginsFragment from '../../ui/mockup/widgets/LoadBalancerOriginsFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const LoadBalancerAddressFragment = productWidget('load-balancer-address')
+const LoadBalancerMethodFragment = productWidget('load-balancer-method')
+const LoadBalancerOriginsFragment = productWidget('load-balancer-origins')
 
 const PILLARS = [
   {

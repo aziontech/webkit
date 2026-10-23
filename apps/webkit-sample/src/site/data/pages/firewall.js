@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import FirewallFunctionFragment from '../../ui/mockup/widgets/FirewallFunctionFragment.vue'
-import FirewallModulesFragment from '../../ui/mockup/widgets/FirewallModulesFragment.vue'
-import FirewallRulesOrderFragment from '../../ui/mockup/widgets/FirewallRulesOrderFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const FirewallFunctionFragment = productWidget('firewall-function')
+const FirewallModulesFragment = productWidget('firewall-modules')
+const FirewallRulesOrderFragment = productWidget('firewall-rules-order')
 
 const PILLARS = [
   {

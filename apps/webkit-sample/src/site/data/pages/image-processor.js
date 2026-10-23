@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import ImageProcessorEventsFragment from '../../ui/mockup/widgets/ImageProcessorEventsFragment.vue'
-import ImageProcessorModuleFragment from '../../ui/mockup/widgets/ImageProcessorModuleFragment.vue'
-import ImageProcessorRuleFragment from '../../ui/mockup/widgets/ImageProcessorRuleFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ImageProcessorEventsFragment = productWidget('image-processor-events')
+const ImageProcessorModuleFragment = productWidget('image-processor-module')
+const ImageProcessorRuleFragment = productWidget('image-processor-rule')
 
 const PILLARS = [
   {
@@ -196,7 +198,8 @@ export const IMAGE_PROCESSOR_PAGE = [
           'Transform images on demand with URL query parameters. Adapt dimensions, aspect ratio, quality, and format to each browser, screen size, or network condition, with no API calls or variant configuration.',
         href: PRODUCT_DOCS,
         illustration: 'url-based-transformations-without-api-complexity',
-        illustrationLabel: 'A website asset passing through the rules engine, tiered cache and Image Processor',
+        illustrationLabel:
+          'A website asset passing through the rules engine, tiered cache and Image Processor',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {

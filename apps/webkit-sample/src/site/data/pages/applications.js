@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import ApplicationsCreateMethodFragment from '../../ui/mockup/widgets/ApplicationsCreateMethodFragment.vue'
-import ApplicationsDeviceGroupFragment from '../../ui/mockup/widgets/ApplicationsDeviceGroupFragment.vue'
-import ApplicationsRulePhasesFragment from '../../ui/mockup/widgets/ApplicationsRulePhasesFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ApplicationsCreateMethodFragment = productWidget('applications-create-method')
+const ApplicationsDeviceGroupFragment = productWidget('applications-device-group')
+const ApplicationsRulePhasesFragment = productWidget('applications-rule-phases')
 
 const PILLARS = [
   {

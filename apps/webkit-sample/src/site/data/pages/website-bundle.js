@@ -1,11 +1,7 @@
 import { RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 import { markRaw } from 'vue'
 
-import WorkloadDeployLogsWidget from '../../ui/mockup/widgets/WorkloadDeployLogsWidget.vue'
-import WorkloadDomainsWidget from '../../ui/mockup/widgets/WorkloadDomainsWidget.vue'
-import WorkloadRolloutRowsWidget from '../../ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
-import WorkloadsListWidget from '../../ui/mockup/widgets/WorkloadsListWidget.vue'
-import WorkloadTopologyChainWidget from '../../ui/mockup/widgets/WorkloadTopologyChainWidget.vue'
+import { productWidget } from '../../ui/product-widget'
 import { BLOG_FEATURED } from '../blog.js'
 import { PLATFORM_ARCHITECTURE_BAND } from '../product-architectures.js'
 import {
@@ -15,7 +11,7 @@ import {
   PRODUCT_SECURITY_CLOSING,
   salesClosing
 } from '../product-pages.js'
-import { NETWORK_TOPICS, quotesLedBy } from '../solutions.js'
+import { NETWORK_TOPICS } from '../solutions.js'
 import { WORKLOAD_RECIPE_TABS } from '../workload-recipes.js'
 import { ABOUT_PAGE } from './about.js'
 import { AI_GATEWAY_PAGE } from './ai-gateway.js'
@@ -31,7 +27,6 @@ import { HOME_PAGE, HOME_SOLUTIONS_BAND } from './home.js'
 import { LEARNING_PAGE } from './learning.js'
 import { HERO as PERFORMANCE_HERO } from './performance.js'
 import { PRICING_PAGE } from './pricing.js'
-import { PRODUCTS_PAGE } from './products.js'
 import { RECOGNITIONS_PAGE } from './recognitions.js'
 import { RESOURCE_HUB_PAGE } from './resource-hub.js'
 import { SOLUTIONS_PAGE } from './solutions.js'
@@ -40,6 +35,12 @@ import { SUPPORT_PAGE } from './support.js'
 import { TECHNOLOGY_PAGE } from './technology.js'
 import { VERCEL_ALTERNATIVE_PAGE } from './vercel-alternative.js'
 import { WORKLOAD_ARCHITECTURE_BAND } from './workloads.js'
+
+const WorkloadDeployLogsWidget = productWidget('workload-deploy-logs')
+const WorkloadDomainsWidget = productWidget('workload-domains')
+const WorkloadRolloutRowsWidget = productWidget('workload-rollout-rows')
+const WorkloadsListWidget = productWidget('workloads-list')
+const WorkloadTopologyChainWidget = productWidget('workload-topology-chain')
 
 const ROUTING_SAMPLE = `export default {
   rules: {
@@ -366,17 +367,6 @@ const CLOSING_SPLIT = salesClosing({
   description: 'Stronger protection, less attack exposure, less operational drag.'
 })
 
-const [AXUR_QUOTE] = quotesLedBy('axur')
-
-const quoteBand = (kind) => ({
-  section: 'QuoteBand',
-  kind,
-  text: AXUR_QUOTE.text,
-  name: AXUR_QUOTE.name,
-  jobTitle: AXUR_QUOTE.jobTitle,
-  client: AXUR_QUOTE.mark
-})
-
 const BLOG_POST_PAGE = blogPostPage(BLOG_FEATURED.key)
 
 const FINANCIAL_RESOURCES = pick(FINANCIAL_SERVICES_PAGE, 'ResourceGrid')
@@ -416,13 +406,9 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(HOME_PAGE, 'ClientMosaic'),
   pick(FINANCIAL_SERVICES_PAGE, 'ComplianceBadges'),
   pick(ABOUT_PAGE, 'InvestorMarks'),
-  quoteBand('highlight'),
-  quoteBand('signed'),
 
   pick(HOME_PAGE, 'NetworkSection'),
   { ...pick(HOME_PAGE, 'NetworkSection'), kind: 'benefits', benefits: NETWORK_TOPICS },
-  pick(PRODUCTS_PAGE, 'StatsBand'),
-  pick(PRODUCTS_PAGE, 'CapabilityGrid'),
 
   HOME_SOLUTIONS_BAND,
   pick(CAREERS_HOME_PAGE, 'PhotoMarquee'),
@@ -436,7 +422,6 @@ export const WEBSITE_BUNDLE_PAGE = [
     items: WORKLOAD_FEATURES
   },
   pick(CACHE_PAGE, 'FeatureWidgets'),
-  pick(AI_GATEWAY_PAGE, 'ConsolePanel'),
   {
     section: 'StickyScrollCode',
     eyebrow: 'Anatomy',

@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import NetworkShieldIpListFragment from '../../ui/mockup/widgets/NetworkShieldIpListFragment.vue'
-import NetworkShieldListsFragment from '../../ui/mockup/widgets/NetworkShieldListsFragment.vue'
-import NetworkShieldRuleFragment from '../../ui/mockup/widgets/NetworkShieldRuleFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const NetworkShieldIpListFragment = productWidget('network-shield-ip-list')
+const NetworkShieldListsFragment = productWidget('network-shield-lists')
+const NetworkShieldRuleFragment = productWidget('network-shield-rule')
 
 const PILLARS = [
   {

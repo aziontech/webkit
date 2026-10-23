@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import ApplicationCacheFragment from '../../ui/mockup/widgets/ApplicationCacheFragment.vue'
-import ApplicationFunctionFragment from '../../ui/mockup/widgets/ApplicationFunctionFragment.vue'
-import ApplicationRuleFragment from '../../ui/mockup/widgets/ApplicationRuleFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   foldList,
   PLATFORM_DIRECTORY,
@@ -11,6 +9,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ApplicationCacheFragment = productWidget('application-cache')
+const ApplicationFunctionFragment = productWidget('application-function')
+const ApplicationRuleFragment = productWidget('application-rule')
 
 const PILLARS = [
   {

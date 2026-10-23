@@ -2,22 +2,24 @@ import SegmentedButton from '@aziontech/webkit/segmented-button'
 import { markRaw, reactive, ref } from 'vue'
 
 import FunctionsStartScene from '../../../../webkit-sample/src/site/ui/FunctionsStartScene.vue'
-import ApplicationCacheFragment from '../../../../webkit-sample/src/site/ui/mockup/widgets/ApplicationCacheFragment.vue'
-import ApplicationFunctionFragment from '../../../../webkit-sample/src/site/ui/mockup/widgets/ApplicationFunctionFragment.vue'
-import ApplicationRuleFragment from '../../../../webkit-sample/src/site/ui/mockup/widgets/ApplicationRuleFragment.vue'
-import ApplicationVersionWidget from '../../../../webkit-sample/src/site/ui/mockup/widgets/ApplicationVersionWidget.vue'
-import WorkloadDeployFragment from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadDeployFragment.vue'
-import WorkloadDeploymentsWidget from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadDeploymentsWidget.vue'
-import WorkloadDomainFragment from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadDomainFragment.vue'
-import WorkloadDomainsWidget from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadDomainsWidget.vue'
-import WorkloadOverviewWidget from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadOverviewWidget.vue'
-import WorkloadsListWidget from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadsListWidget.vue'
-import WorkloadTopologyWidget from '../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadTopologyWidget.vue'
+import { productWidget } from '../../../../webkit-sample/src/site/ui/product-widget'
 import {
   PageContainer,
   PageHeader,
   PageSection
 } from '../../foundations/components/layout/index.js'
+
+const ApplicationCacheFragment = productWidget('application-cache')
+const ApplicationFunctionFragment = productWidget('application-function')
+const ApplicationRuleFragment = productWidget('application-rule')
+const ApplicationVersionWidget = productWidget('application-version')
+const WorkloadDeployFragment = productWidget('workload-deploy')
+const WorkloadDeploymentsWidget = productWidget('workload-deployments')
+const WorkloadDomainFragment = productWidget('workload-domain')
+const WorkloadDomainsWidget = productWidget('workload-domains')
+const WorkloadOverviewWidget = productWidget('workload-overview')
+const WorkloadsListWidget = productWidget('workloads-list')
+const WorkloadTopologyWidget = productWidget('workload-topology')
 
 const HOSTS = {
   panel: {
@@ -321,7 +323,7 @@ export default {
     docs: {
       description: {
         component:
-          'Console mockups the Site draws its product bands with. Each widget is a ShellMockup frame composed of staggered MockupPart beats, scaled to fit whatever cell hosts it. They live in the sample app under site/ui/mockup and are not package exports.'
+          'Console mockups the Site draws its product bands with. Each widget is a ShellMockup frame composed of staggered ShellMockup.Part beats, scaled to fit whatever cell hosts it. They ship in webkit as ProductWidget, picked by name.'
       },
       canvas: { sourceState: 'none' }
     }
@@ -355,7 +357,7 @@ export const Library = {
       <PageContainer>
         <PageHeader title="Product Widgets">
           {{ total }} console mockups the Site uses to show the product. Each one is a ShellMockup
-          frame of staggered MockupPart beats that scales to its host, replays its entrance when it
+          frame of staggered ShellMockup.Part beats that scales to its host, replays its entrance when it
           becomes active, and fades into the band behind it. Every widget below is drawn in the
           cell that hosts it on the page. Hover the grid fragments to play their beat.
         </PageHeader>

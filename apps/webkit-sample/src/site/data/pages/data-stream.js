@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import DataStreamConnectorFragment from '../../ui/mockup/widgets/DataStreamConnectorFragment.vue'
-import DataStreamSamplingFragment from '../../ui/mockup/widgets/DataStreamSamplingFragment.vue'
-import DataStreamSourceFragment from '../../ui/mockup/widgets/DataStreamSourceFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const DataStreamConnectorFragment = productWidget('data-stream-connector')
+const DataStreamSamplingFragment = productWidget('data-stream-sampling')
+const DataStreamSourceFragment = productWidget('data-stream-source')
 
 const PILLARS = [
   {
@@ -186,7 +188,8 @@ export const DATA_STREAM_PAGE = [
           'Stream structured event data to SIEM, analytics, storage, and HTTP endpoints, including Splunk, Datadog, BigQuery, S3, and Azure Monitor. Customize payload format, batching, and delivery intervals to match your existing workflows.',
         href: '/site/products/web-application-firewall',
         illustration: 'stream-security-events-for-investigation-and-response',
-        illustrationLabel: 'Event data streamed in under 40 seconds to APIs, dashboards, SIEM and other interfaces',
+        illustrationLabel:
+          'Event data streamed in under 40 seconds to APIs, dashboards, SIEM and other interfaces',
         actions: [
           { label: 'Web Application Firewall', href: '/site/products/web-application-firewall' }
         ]

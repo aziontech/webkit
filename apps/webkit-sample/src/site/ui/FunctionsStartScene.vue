@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ShellMockup from '@aziontech/webkit/shell-mockup-root'
   import { ref } from 'vue'
 
   import { AGENT_CLIENTS } from '../data/functions-start.js'
   import FunctionsAgentScene from './FunctionsAgentScene.vue'
   import FunctionsTerminalScene from './FunctionsTerminalScene.vue'
-  import ShellMockup from './mockup/ShellMockup.vue'
-  import FunctionCodeFragment from './mockup/widgets/FunctionCodeFragment.vue'
+  import { productWidget } from './product-widget'
+
+  const FunctionCodeFragment = productWidget('function-code')
 
   interface Props {
     /** Which start path is drawn — a `value` of `START_TABS`. */

@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import ApplicationAcceleratorCookieFragment from '../../ui/mockup/widgets/ApplicationAcceleratorCookieFragment.vue'
-import ApplicationAcceleratorMethodFragment from '../../ui/mockup/widgets/ApplicationAcceleratorMethodFragment.vue'
-import ApplicationAcceleratorQueryStringFragment from '../../ui/mockup/widgets/ApplicationAcceleratorQueryStringFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,12 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ApplicationAcceleratorCookieFragment = productWidget('application-accelerator-cookie')
+const ApplicationAcceleratorMethodFragment = productWidget('application-accelerator-method')
+const ApplicationAcceleratorQueryStringFragment = productWidget(
+  'application-accelerator-query-string'
+)
 
 const PILLARS = [
   {

@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import KvStoreFunctionFragment from '../../ui/mockup/widgets/KvStoreFunctionFragment.vue'
-import KvStoreKeyFragment from '../../ui/mockup/widgets/KvStoreKeyFragment.vue'
-import KvStoreSecurityListFragment from '../../ui/mockup/widgets/KvStoreSecurityListFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const KvStoreFunctionFragment = productWidget('kv-store-function')
+const KvStoreKeyFragment = productWidget('kv-store-key')
+const KvStoreSecurityListFragment = productWidget('kv-store-security-list')
 
 const PILLARS = [
   {

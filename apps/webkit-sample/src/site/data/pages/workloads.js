@@ -1,10 +1,8 @@
 import { markRaw } from 'vue'
 
 import DiagramSet from '../../ui/diagram/DiagramSet.vue'
+import { productWidget } from '../../ui/product-widget'
 import WorkloadTopologyFlow from '../../ui/WorkloadTopologyFlow.vue'
-import WorkloadDeployFragment from '../../ui/mockup/widgets/WorkloadDeployFragment.vue'
-import WorkloadDomainFragment from '../../ui/mockup/widgets/WorkloadDomainFragment.vue'
-import WorkloadRolloutRowsWidget from '../../ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
 import {
   GRADUAL_ROLLOUT,
   ISOLATE_PER_REQUEST,
@@ -19,6 +17,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const WorkloadDeployFragment = productWidget('workload-deploy')
+const WorkloadDomainFragment = productWidget('workload-domain')
+const WorkloadRolloutRowsWidget = productWidget('workload-rollout-rows')
 
 const PILLARS = [
   {

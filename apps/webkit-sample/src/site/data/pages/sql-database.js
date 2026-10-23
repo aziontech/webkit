@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import SqlDatabaseQueryFragment from '../../ui/mockup/widgets/SqlDatabaseQueryFragment.vue'
-import SqlDatabaseRowFragment from '../../ui/mockup/widgets/SqlDatabaseRowFragment.vue'
-import SqlDatabaseTableFragment from '../../ui/mockup/widgets/SqlDatabaseTableFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const SqlDatabaseQueryFragment = productWidget('sql-database-query')
+const SqlDatabaseRowFragment = productWidget('sql-database-row')
+const SqlDatabaseTableFragment = productWidget('sql-database-table')
 
 const PILLARS = [
   {
