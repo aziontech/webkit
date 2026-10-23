@@ -1,193 +1,185 @@
 <script setup>
+  // The success-case library — a translation of https://www.azion.com/en/success-case/ into
+  // this site's own page language, produced with the /site-design-translate flow (the live
+  // page read mechanically into a band inventory, then rebuilt band by band). The source is
+  // the specification for WHAT the page says; CONTAINERS.md is the specification for HOW it
+  // is drawn. Every line of copy below is the source's, verbatim; none of its grid, spacing,
+  // borders, colours or radii came across.
+  //
+  // A LIBRARY page — the first /site page whose body is a filtered index rather than an
+  // argument. So the register comes from AzionLearning.vue (the other index page) and the
+  // bricks from AzionRetail.vue, the page whose success-story grid this one enlarges.
+  //
+  // The source's 9 bands, in order, and what each becomes here:
+  //
+  //   0  hero (h1 + one action)                          Hero kind="screen" + Hero.Title
+  //   1  three featured stories, as a carousel           CardGrid divider, 3 columns
+  //   2  spacer                                          SectionGap hatch
+  //   3  the library: title, three filters, 12 cards     SectionTitle + the filter row +
+  //      and Load more                                   CardGrid divider, 3 columns
+  //   4  spacer                                          SectionGap hatch
+  //   5  three analyst recognitions                      SectionTitle + CardGrid divider
+  //   6  spacer                                          SectionGap hatch
+  //   7  closing CTA                                     CallToAction kind="split"
+  //   8  spacer                                          the closing hatch frame
+  //
+  // Nothing is added and nothing is dropped: no extra band, string, list item or link label.
+  // The source places four rhythm bands and so does this page: three are `SectionGap hatch`
+  // and the fourth is the closing frame at band 8, which draws no rules because the footer
+  // under it opens with one. Band 8 is half the height of the other three on the source, so
+  // it takes SectionGap's own `small` step.
+  //
+  // WHERE OUR FORM DEPARTS FROM THE SOURCE, on purpose:
+  //   • Band 1 is a PrimeVue carousel on the source — three slides, three page dots. This
+  //     language has no carousel (.claude/rules/dependencies.md), and three cards fit one
+  //     row, so they are a hairline grid and the dots go away with the mechanism.
+  //   • BAND 1'S PHOTOGRAPHS ARE NOT OURS TO TAKE. The source stands each featured card on
+  //     a photograph of that client's premises. We hold none of those files and do not
+  //     fetch a third party's asset, so the plate is our own: the dot texture with the
+  //     client's mark on it, the sector tag pinned where the source pins it.
+  //   • On the source the whole featured card is one anchor with a `Read story` button
+  //     nested inside it — invalid, and two stops on one destination. Here the control IS
+  //     the link, which is what the library cards below already do.
+  //   • Band 3's `//` before `MARKET RECOGNITION` and `BUILD` is SectionTitle's and
+  //     CallToAction's own overline anatomy, not a string from the source.
+  //   • THE FILTERS ARE REAL. The source renders three pickers, an applied-filter row and a
+  //     `Load more`; a translation that drew them dead would be drawing a picture of a page.
+  //     They are `Select`s over this page's own data, and every label in them — `Industry`,
+  //     `Solutions`, `Products`, `All`, `Filtered by`, `Load more`, and the empty state's
+  //     sentence — is the source's own string, read out of its filter-block payload.
+  //   • The option lists are alphabetical. The source builds its own from the same values
+  //     but renders them only on open, so there is no order in the inventory to honour.
+  //   • The source renders 12 of its 35 stories and reveals the rest through `Load more`.
+  //     This page renders the same 12 in the same order, and its `Load more` reveals the
+  //     same rest — the extra copy is the source's own, shipped in its own page payload.
+  //
+  // ASSET GAPS — marks the source draws that this repo has no file for. Each one keeps its
+  // cell and falls back to ClientMark's typographic wordmark (the client's name in our own
+  // type, never a facsimile of its lockup): Ibero and Todo Cartões among the twelve the page
+  // opens on, and Mobiauto, Quero-Quero, Digi+, FAM, B2W, GetNinjas, Uninter, UniCesumar and
+  // Omelete behind `Load more`.
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
-  import InputText from '@aziontech/webkit/input-text'
-  import LogoWall from '@aziontech/webkit/logo-wall'
+  import MiniButton from '@aziontech/webkit/mini-button'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Select from '@aziontech/webkit/select'
+  import Tag from '@aziontech/webkit/tag'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
-  import FilterButton from '@shared/ui/filter/FilterButton.vue'
-  import FilterChips from '@shared/ui/filter/FilterChips.vue'
-  import { computed, reactive, ref, watch } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { computed, ref, watch } from 'vue'
+  import { useRouter } from 'vue-router'
 
-  import { successCaseLink } from '../data/success-case-articles.js'
-  import { FEATURED_CASES, SUCCESS_CASES } from '../data/success-cases.js'
-  import MarketLeader from './MarketLeader.vue'
-  import SuccessCaseClosingCta from './SuccessCaseClosingCta.vue'
+  import { ANALYST_RECOGNITIONS, FEATURED_CASES, SUCCESS_CASES } from '../data/success-cases.js'
 
+  const router = useRouter()
+  const goSignup = () => router.push('/signup')
+
+  // The source's own labels, kept in one place so the pickers, the applied row, the control
+  // and the empty state cannot drift from each other or from the page they came off.
   const LABEL = {
+    all: 'All',
     industry: 'Industry',
-    solution: 'Solution',
-    product: 'Product',
-    search: 'Search by company or story',
-    searchShort: 'Search stories',
-    searchLabel: 'Search success stories',
+    products: 'Products',
+    solutions: 'Solutions',
+    filteredBy: 'Filtered by',
     loadMore: 'Load more',
-    notFound: 'No results found for these applied filters.',
-    reset: 'View all success stories'
+    notFound: 'No results found for these applied filters.'
   }
 
+  // How many stories the source shows before its control, and therefore how many this page
+  // opens on and how many each press reveals.
   const PAGE_SIZE = 12
 
-  // Their dark-surface files are already coloured lockups; their colour files set the
-  // wordmark in black, which vanishes on this canvas.
+  // A picker holds '' while it narrows nothing, which is what puts its own name on the
+  // trigger — the source's pickers read `Industry` / `Solutions` / `Products` until one is
+  // chosen, and `All` is the option that returns to that state.
+  const industry = ref('')
+  const solution = ref('')
+  const product = ref('')
+  const shown = ref(PAGE_SIZE)
 
-  // The careers listing's filter model: one value per field, `ALL` as the reset.
-  const ALL = 'All'
-
-  const optionsOf = (allLabel, values) => [
-    { label: allLabel, value: ALL },
+  const options = (values) => [
+    { label: LABEL.all, value: '' },
     ...[...new Set(values)].sort((a, b) => a.localeCompare(b)).map((v) => ({ label: v, value: v }))
   ]
 
-  const FILTERS = [
-    {
-      key: 'industry',
-      label: LABEL.industry,
-      options: optionsOf(
-        'All industries',
-        SUCCESS_CASES.map((story) => story.industry)
-      )
-    },
-    {
-      key: 'solution',
-      label: LABEL.solution,
-      options: optionsOf(
-        'All solutions',
-        SUCCESS_CASES.flatMap((story) => story.solutions)
-      )
-    },
-    {
-      key: 'product',
-      label: LABEL.product,
-      options: optionsOf(
-        'All products',
-        SUCCESS_CASES.flatMap((story) => story.products)
-      )
-    }
-  ]
+  const industryOptions = computed(() => options(SUCCESS_CASES.map((story) => story.industry)))
+  const solutionOptions = computed(() => options(SUCCESS_CASES.flatMap((story) => story.solutions)))
+  const productOptions = computed(() => options(SUCCESS_CASES.flatMap((story) => story.products)))
 
-  // An article's industry crumb links here as `?industry=<name>`: open on that industry.
-  const route = useRoute()
-  const requested = FILTERS[0].options.some((option) => option.value === route.query.industry)
-    ? route.query.industry
-    : ALL
-  const selection = reactive({ industry: requested, solution: ALL, product: ALL, query: '' })
-  const labelOf = (options, value) => options.find((option) => option.value === value)?.label ?? ''
-
-  // Below `lg` the same selection drives the console's Filter button and its chips. `range`
-  // holds one value per field, as the desktop selects do; a chip's × is the `ALL` reset.
-  // One array instance: FilterButton and FilterChips key their shared channel off it.
-  const fields = FILTERS.map((filter) => ({
-    id: filter.key,
-    label: filter.label,
-    kind: 'range',
-    options: filter.options.filter((option) => option.value !== ALL)
-  }))
-  const applied = computed({
-    get: () =>
-      Object.fromEntries(
-        FILTERS.filter((filter) => selection[filter.key] !== ALL).map((filter) => [
-          filter.key,
-          [selection[filter.key]]
-        ])
-      ),
-    set: (state) => {
-      FILTERS.forEach((filter) => {
-        selection[filter.key] = state[filter.key]?.[0] ?? ALL
-      })
-    }
-  })
-  const shown = ref(PAGE_SIZE)
-
-  const filtered = computed(() => {
-    const query = selection.query.trim().toLowerCase()
-    return SUCCESS_CASES.filter(
+  const filtered = computed(() =>
+    SUCCESS_CASES.filter(
       (story) =>
-        (selection.industry === ALL || story.industry === selection.industry) &&
-        (selection.solution === ALL || story.solutions.includes(selection.solution)) &&
-        (selection.product === ALL || story.products.includes(selection.product)) &&
-        (!query || `${story.client.name} ${story.description}`.toLowerCase().includes(query))
+        (industry.value === '' || story.industry === industry.value) &&
+        (solution.value === '' || story.solutions.includes(solution.value)) &&
+        (product.value === '' || story.products.includes(product.value))
     )
-  })
+  )
+
   const visible = computed(() => filtered.value.slice(0, shown.value))
-  // The grid's last row draws no bottom rule; the frame below already closes it.
-  const inLastRow = (index, columns) =>
-    index >= visible.value.length - (((visible.value.length - 1) % columns) + 1)
   const hasMore = computed(() => shown.value < filtered.value.length)
 
-  watch(selection, () => {
+  // The chips the source prints after `Filtered by:` — the applied values, or its own `All`
+  // when nothing narrows the list.
+  const applied = computed(() => {
+    const picked = [industry.value, solution.value, product.value].filter(Boolean)
+    return picked.length > 0 ? picked : [LABEL.all]
+  })
+
+  watch([industry, solution, product], () => {
     shown.value = PAGE_SIZE
   })
 
-  function showAllStories() {
-    Object.assign(selection, { industry: ALL, solution: ALL, product: ALL, query: '' })
-  }
-
-  // Each featured story is one framed column: its logo tile in the client's brand face,
-  // then the story's description below it.
-  const featured = FEATURED_CASES.map((story) => ({
-    key: story.key,
-    description: story.description,
-    item: {
-      src: story.client.logo,
-      alt: story.client.name,
-      href: successCaseLink(story).href,
-      client: story.client,
-      ink: story.brand.ink
-    },
-    face: {
-      '--wall-face': [
-        `radial-gradient(354px 354px at -15% -15%, ${story.brand.glow}, transparent 70%)`,
-        `radial-gradient(354px 354px at 45% 115%, ${story.brand.glow}, transparent 70%)`,
-        story.brand.base
-      ].join(', '),
-      '--wall-ink':
-        story.brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
-    }
-  }))
+  // A divider grid places its cells in source order, so an incomplete last row would leave
+  // the seam under it open. One filled cell per empty track closes the rectangle.
+  const grid = (count, columns) => Array.from({ length: (columns - (count % columns)) % columns })
 </script>
 
 <template>
+  <!-- ══ Band 0 — the hero ══════════════════════════════════════════════════════
+       Hero owns the full-bleed band and the page's top rule. `--banner-offset` is the
+       sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
+       screen with the nav above it. -->
   <Hero
     kind="band"
-    max-width="5xl"
     size="large"
+    max-width="site"
+    texture="dots"
+    texture-fade="top"
   >
-    <!-- Narrowed on phones only, so the headline breaks into two lines there. -->
-    <div class="mx-auto w-full max-md:max-w-76">
-      <Hero.Title
-        centered
-        title="Trusted by Leading Companies"
-      >
-        <template #actions>
-          <Button
-            label="See cases"
-            kind="secondary"
-            size="large"
-            href="#cases"
-          />
-          <Button
-            label="Talk to a Specialist"
-            kind="outlined"
-            size="large"
-            href="/site/contact"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </Hero.Title>
-    </div>
+    <Hero.Title
+      centered
+      title="Trusted by leading companies"
+    >
+      <template #actions>
+        <Button
+          label="Start free"
+          kind="secondary"
+          size="large"
+          @click="goSignup"
+        />
+      </template>
+    </Hero.Title>
   </Hero>
 
+  <!-- ══ The framed column ══════════════════════════════════════════════════════
+       Every band below the hero is a brick inside one centered column. The column carries
+       only `border-x`; its top edge is the hero's `border-b` and its bottom edge the
+       SiteFooter's `border-t`. Each brick is `flush` with `borders="y"`, which lands its
+       top rule ON the one above and hands the vertical rules back to the column — so no
+       line on this page is drawn twice. -->
   <SectionContainer max-width="site">
+    <!-- ── Band 1 — the three featured stories ──────────────────────────────────
+         First brick in the column, so `:divided="false"` — its top edge is the hero's own
+         full-bleed rule. The rules between the cells are the grid's `gap-px`, so each cell
+         draws no border and fills `--bg-canvas`. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -195,108 +187,130 @@
       <FrameBox
         flush
         borders="y"
-        marks="none"
+        marks="bottom"
       >
-        <div class="grid gap-px bg-(--border-default) lg:grid-cols-3">
-          <FrameBox
-            v-for="column in featured"
-            :key="column.key"
-            borders="none"
-            marks="all"
+        <CardGrid
+          kind="divider"
+          :columns="3"
+        >
+          <div
+            v-for="story in FEATURED_CASES"
+            :key="story.key"
+            class="flex flex-col gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
           >
-            <!-- The whole column is the hover target: hovering the description plays the
-                 tile's own lift, wash and "Read story" reveal, not only hovering the tile. -->
-            <div class="group/card flex h-full flex-col gap-px bg-(--border-default)">
-              <!-- One mark per wall, so the wall holds one column and paints its own face. -->
-              <LogoWall
-                kind="rectangle"
-                :aria-label="column.item.alt"
-                :items="[column.item]"
-                :style="column.face"
-                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--wall-face)] [&_a]:[--text-default:var(--wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
+            <!-- Our plate, not the source's photograph: the mark on the dot field, with
+                 the sector tag pinned to the corner the source pins it to. -->
+            <div
+              class="relative flex aspect-video items-center justify-center overflow-hidden bg-(--bg-surface)"
+            >
+              <TextureMaterial
+                kind="dots"
+                size="large"
+                fade="vignette"
+              />
+              <ClientMark
+                :client="story.client"
+                monochrome
+                mark="relative z-10 h-8 w-auto max-w-40 object-contain"
+              />
+              <Tag
+                severity="secondary"
+                size="small"
+                class="absolute right-(--spacing-md) top-(--spacing-md) z-10"
+                >{{ story.tag }}</Tag
               >
-                <template #mark="{ item }">
-                  <ClientMark
-                    :client="item.client"
-                    monochrome
-                    :knockout="item.ink === 'dark'"
-                    mark="h-7 w-auto max-w-full object-contain sm:max-w-40"
-                  />
-                </template>
-              </LogoWall>
-
-              <!-- A pointer target only: the tile above is the one focusable link and carries
-                   the accessible name, so this copy is not announced or tabbed twice. -->
-              <a
-                :href="column.item.href"
-                tabindex="-1"
-                aria-hidden="true"
-                class="relative isolate flex-1 bg-(--bg-canvas) p-(--spacing-lg) before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance group-hover/card:before:opacity-100 motion-reduce:before:transition-none"
-              >
-                <p class="m-0 text-balance text-heading-sm text-(--text-default)">
-                  {{ column.description }}
-                </p>
-              </a>
             </div>
-          </FrameBox>
-        </div>
+
+            <h2 class="m-0 flex-1 text-pretty text-heading-sm text-(--text-default)">
+              {{ story.description }}
+            </h2>
+
+            <MiniButton
+              label="Read story"
+              show-icon
+              icon="pi pi-arrow-right"
+              :href="story.href"
+              target="_blank"
+            />
+          </div>
+        </CardGrid>
       </FrameBox>
     </SectionModule>
 
+    <!-- Band 2 — spacer. -->
     <SectionGap hatch />
 
-    <!-- The hero's "See cases" fragment link lands here, under the sticky bar. -->
+    <!-- ── Band 3 — the library ─────────────────────────────────────────────────
+         Three source regions, one module: the title in the `#header` slot, the filter row
+         in the first frame, the grid `flush` under it. The filter frame draws its own floor
+         and the grid takes it as its top rule, so the two meet on one hairline. -->
     <SectionModule
-      id="cases"
       :divided="false"
       :padded="false"
-      class="scroll-mt-(--spacing-xxl)"
     >
       <template #header>
         <SectionTitle
           kind="left"
-          title="Organizations shaping the future of the web with us"
+          title="Companies building on Azion"
         />
       </template>
 
-      <!-- From `lg` up, the careers listing's toolbar: search + one select per field. Below
-           it, the console's Filter button beside the search, its chips on the row under. -->
       <FrameBox
         flush
         borders="y"
       >
         <div
-          role="search"
-          class="hidden grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] items-center gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:grid"
+          class="flex flex-col gap-(--spacing-lg) p-(--spacing-xl)"
+          role="group"
+          aria-label="Filter the success-case library"
         >
-          <div class="min-w-0">
-            <InputText
-              v-model="selection.query"
-              size="large"
-              type="text"
-              :placeholder="LABEL.search"
-              :aria-label="LABEL.searchLabel"
-            >
-              <template #iconLeft>
-                <i class="pi pi-search text-(--text-muted)" />
-              </template>
-            </InputText>
-          </div>
-
-          <div
-            v-for="filter in FILTERS"
-            :key="filter.key"
-            class="min-w-0"
-          >
+          <div class="flex flex-wrap gap-(--spacing-md)">
             <Select
-              v-model="selection[filter.key]"
-              size="large"
-              :display-value="(value) => labelOf(filter.options, value)"
+              v-model="industry"
+              :placeholder="LABEL.industry"
+              size="medium"
+              class="w-full sm:w-56"
             >
-              <Select.Trigger :aria-label="filter.label" />
+              <Select.Trigger :aria-label="LABEL.industry" />
               <Select.Content>
                 <Select.Option
-                  v-for="option in filter.options"
+                  v-for="option in industryOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+
+            <Select
+              v-model="solution"
+              :placeholder="LABEL.solutions"
+              size="medium"
+              class="w-full sm:w-56"
+            >
+              <Select.Trigger :aria-label="LABEL.solutions" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in solutionOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+
+            <Select
+              v-model="product"
+              :placeholder="LABEL.products"
+              size="medium"
+              class="w-full sm:w-56"
+            >
+              <Select.Trigger :aria-label="LABEL.products" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in productOptions"
                   :key="option.value"
                   :value="option.value"
                 >
@@ -305,37 +319,20 @@
               </Select.Content>
             </Select>
           </div>
-        </div>
 
-        <div
-          role="search"
-          class="flex flex-col gap-(--spacing-sm) px-(--spacing-xl) py-(--spacing-lg) lg:hidden"
-        >
-          <div class="flex items-center gap-(--spacing-sm)">
-            <FilterButton
-              v-model="applied"
-              :fields="fields"
-              size="large"
-            />
-            <div class="min-w-0 flex-1">
-              <InputText
-                v-model="selection.query"
-                size="large"
-                type="text"
-                :placeholder="LABEL.searchShort"
-                :aria-label="LABEL.searchLabel"
-              >
-                <template #iconLeft>
-                  <i class="pi pi-search text-(--text-muted)" />
-                </template>
-              </InputText>
-            </div>
-          </div>
-
-          <FilterChips
-            v-model="applied"
-            :fields="fields"
-          />
+          <p
+            aria-live="polite"
+            class="m-0 flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
+          >
+            {{ LABEL.filteredBy }}:
+            <Tag
+              v-for="value in applied"
+              :key="value"
+              severity="secondary"
+              size="small"
+              >{{ value }}</Tag
+            >
+          </p>
         </div>
       </FrameBox>
 
@@ -344,69 +341,69 @@
         borders="y"
         marks="bottom"
       >
-        <ul
+        <CardGrid
           v-if="visible.length > 0"
-          class="m-0 grid list-none grid-cols-1 p-0 sm:grid-cols-2 lg:grid-cols-3"
-          aria-label="Success stories"
+          kind="divider"
+          :columns="3"
         >
-          <li
-            v-for="(story, index) in visible"
+          <!-- The card is NOT the anchor, as it is not on the source: the pills and the
+               summary would become link text, and `Read story` is the control the source
+               gives each story. -->
+          <div
+            v-for="story in visible"
             :key="story.key"
-            :data-last-row-sm="inLastRow(index, 2) || null"
-            :data-last-row-lg="inLastRow(index, 3) || null"
-            class="border-b border-(--border-default) last:border-b-0 sm:border-r sm:max-lg:even:border-r-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-r-0 lg:data-last-row-lg:border-b-0"
+            class="flex flex-col gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
           >
-            <a
-              :href="successCaseLink(story).href"
-              :target="successCaseLink(story).external ? '_blank' : undefined"
-              :rel="successCaseLink(story).external ? 'noopener' : undefined"
-              :aria-label="`Read story: ${story.client.name}${successCaseLink(story).external ? ' (opens in a new tab)' : ''}`"
-              class="group/card flex h-full flex-col gap-(--spacing-lg) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-            >
-              <span class="flex h-8 items-center">
-                <ClientMark
-                  :client="story.client"
-                  monochrome
-                  mark="h-full w-auto max-w-36 object-contain object-left"
-                />
-              </span>
+            <div class="flex h-6 items-center text-(--text-default)">
+              <ClientMark
+                :client="story.client"
+                monochrome
+                mark="h-full w-auto max-w-40 object-contain"
+              />
+            </div>
 
-              <span class="text-overline-sm text-(--text-muted)">
-                {{ story.industry }}
-              </span>
-
-              <span class="text-pretty text-body-sm text-(--text-muted)">
-                {{ story.description }}
-              </span>
-
-              <span
-                aria-hidden="true"
-                class="mt-auto flex items-center gap-(--spacing-xxs) pt-(--spacing-sm) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/card:text-(--text-default) motion-reduce:transition-none"
+            <ul class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0">
+              <li
+                v-for="tag in story.tags"
+                :key="tag"
               >
-                Read story
-                <i
-                  class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 motion-reduce:transition-none"
-                />
-              </span>
-            </a>
-          </li>
-        </ul>
+                <Tag
+                  severity="secondary"
+                  size="small"
+                  >{{ tag }}</Tag
+                >
+              </li>
+            </ul>
 
+            <p class="m-0 flex-1 text-pretty text-body-sm text-(--text-muted)">
+              {{ story.description }}
+            </p>
+
+            <MiniButton
+              label="Read story"
+              show-icon
+              icon="pi pi-arrow-right"
+              :href="story.href"
+              target="_blank"
+              :aria-label="`Read story: ${story.client.name} (opens in a new tab)`"
+            />
+          </div>
+
+          <div
+            v-for="(_, index) in grid(visible.length, 3)"
+            :key="`filler-${index}`"
+            class="bg-(--bg-canvas)"
+            aria-hidden="true"
+          />
+        </CardGrid>
+
+        <!-- The source's own sentence for a combination that matches nothing. -->
         <EmptyState
           v-else
           :title="LABEL.notFound"
           icon="pi pi-search"
           class="p-(--spacing-xxl)"
-        >
-          <template #actions>
-            <Button
-              :label="LABEL.reset"
-              kind="secondary"
-              size="large"
-              @click="showAllStories"
-            />
-          </template>
-        </EmptyState>
+        />
       </FrameBox>
 
       <FrameBox
@@ -426,19 +423,120 @@
       </FrameBox>
     </SectionModule>
 
+    <!-- Band 4 — spacer. -->
     <SectionGap hatch />
 
-    <MarketLeader />
-
-    <SectionGap hatch />
-
+    <!-- ── Band 5 — what the analysts say ───────────────────────────────────────
+         Two source bands, one module: the title in the `#header` slot, the three
+         recognitions on the grid's own seams. `justify-between` floors the mark, its source
+         line and the control, so the row shares one baseline whatever length each quote
+         runs to. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <SuccessCaseClosingCta />
+      <template #header>
+        <SectionTitle
+          eyebrow="MARKET RECOGNITION"
+          title="What analysts say about Azion"
+        />
+      </template>
+
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
+      >
+        <CardGrid
+          kind="divider"
+          :columns="3"
+        >
+          <figure
+            v-for="award in ANALYST_RECOGNITIONS"
+            :key="award.key"
+            class="m-0 flex flex-col gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
+          >
+            <!-- The source's own tag, down to its star. -->
+            <Tag
+              severity="primary"
+              size="small"
+              icon="pi pi-star-fill"
+              class="self-start"
+              >Award</Tag
+            >
+
+            <p class="m-0 flex-1 text-pretty text-heading-xs text-(--text-default)">
+              {{ award.text }}
+            </p>
+
+            <figcaption class="flex flex-col gap-(--spacing-sm)">
+              <ClientMark
+                :client="award.client"
+                mark="h-8 w-auto self-start"
+              />
+              <p class="m-0 text-body-sm text-(--text-muted)">{{ award.source }}</p>
+            </figcaption>
+
+            <MiniButton
+              label="Read article"
+              show-icon
+              icon="pi pi-arrow-right"
+              :href="award.href"
+              target="_blank"
+            />
+          </figure>
+        </CardGrid>
+      </FrameBox>
     </SectionModule>
 
+    <!-- Band 6 — spacer. -->
     <SectionGap hatch />
+
+    <!-- ── Band 7 — the closing CTA ─────────────────────────────────────────────
+         The Site's own closing band, with this page's strings passed in. Its defaults are
+         the homepage's copy, so every string the source states here is explicit. -->
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
+      <CallToAction
+        framed
+        kind="split"
+        eyebrow="Build"
+        title="Build once."
+        title-muted="Run everywhere."
+        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
+      >
+        <template #actions>
+          <Button
+            label="Start free"
+            kind="secondary"
+            size="large"
+            @click="goSignup"
+          />
+        </template>
+        <template #aside>
+          <Button
+            label="Talk to an expert"
+            kind="outlined"
+            size="large"
+            href="/site/contact"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </CallToAction>
+    </SectionModule>
+
+    <FrameBox
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
+  <!-- ══ End framed column ══════════════════════════════════════════════════════ -->
 </template>

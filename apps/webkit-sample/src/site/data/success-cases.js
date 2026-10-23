@@ -20,68 +20,42 @@
 // All 35 are here for the same reason: the control is the source's, and a control that does
 // nothing would be the invention. The initial render is the source's twelve, in its order.
 
-import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-import b2w from '@aziontech/webkit/assets/b2w-extended-mono.svg'
-import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
 import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-import contabilizeiColor from '@aziontech/webkit/assets/contabilizei-extended-color.svg'
-import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
-import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
-import dafitiReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
-import digimais from '@aziontech/webkit/assets/digimais-extended-mono.svg'
-import fam from '@aziontech/webkit/assets/fam-extended-mono.svg'
-import getninjas from '@aziontech/webkit/assets/getninjas-extended-mono.svg'
-import ibero from '@aziontech/webkit/assets/ibero-extended-mono.svg'
-import magaluReversed from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
-import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
-import omelete from '@aziontech/webkit/assets/omelete-extended-mono.svg'
-import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
+import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
+import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
+import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
+import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
+import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
+import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
+import madeiramadeira from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
 import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-reversed.svg'
 import queroQuero from '@aziontech/webkit/assets/queroquero-extended-reversed.svg'
-import todoCartoes from '@aziontech/webkit/assets/todo-cartoes-extended-mono.svg'
-import unicesumar from '@aziontech/webkit/assets/unicesumar-extended-mono.svg'
-import uninter from '@aziontech/webkit/assets/uninter-extended-mono.svg'
-import vtex from '@aziontech/webkit/assets/vtex-extended-reversed.svg'
 
-import madeiramadeiraWhite from '../ui/marks/madeiramadeira-extended-white.svg'
+import {
+  AXUR,
+  B2W,
+  BANCO_DE_LA_NACION,
+  CONTABILIZEI,
+  CREFISA,
+  DIGIPLUS,
+  FAM,
+  GETNINJAS,
+  IBERO,
+  MARISA,
+  OMELETE,
+  PANVEL,
+  TODO_CARTOES,
+  UNICESUMAR,
+  UNINTER,
+  VTEX
+} from './clients.js'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
 
-/** The three stories under the hero that open on hover (Figma `Azion.com` node 13280:204542). */
-export const SPOTLIGHT_CASES = [
-  {
-    name: 'Magalu',
-    logo: magaluReversed,
-    logoWidth: '35%',
-    href: 'https://www.azion.com/en/success-case/magalu/',
-    description:
-      "Explore how Magalu enhances cybersecurity with Azion's Firewall and WAF, improving threat intelligence and bot management in retail.",
-    brand: { base: '#00264b', glow: '#0e87fe' }
-  },
-  {
-    name: 'Dafiti',
-    logo: dafitiReversed,
-    logoWidth: '35%',
-    href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
-    description:
-      'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
-    brand: { base: 'var(--color-gray-650)', glow: 'var(--color-gray-775)' }
-  },
-  {
-    name: 'MadeiraMadeira',
-    logo: madeiramadeiraWhite,
-    logoWidth: '50.6%',
-    href: 'https://www.azion.com/en/success-case/madeiramadeira/',
-    description: 'MadeiraMadeira Cuts Cloud Costs 90% with Azion',
-    brand: { base: '#ff9014', glow: '#cc6c00' }
-  }
-]
+const PERNAMBUCANAS = { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' }
+const QUERO_QUERO = { name: 'Quero-Quero', logo: queroQuero, artwork: 'light' }
 
-/**
- * The three stories the source features above the library, in its order. `brand` paints the
- * card; glow equal to base is a flat fill, and `ink: 'dark'` sets the mark and text black
- * for a light fill.
- */
+/** The three stories the source features above the library, in its order. */
 export const FEATURED_CASES = [
   {
     key: 'case-magalu',
@@ -103,7 +77,7 @@ export const FEATURED_CASES = [
   },
   {
     key: 'case-madeiramadeira',
-    client: { name: 'MadeiraMadeira', logo: madeiramadeiraWhite, artwork: 'light' },
+    client: { name: 'MadeiraMadeira', logo: madeiramadeira, artwork: 'light' },
     brand: { base: '#ff9014', glow: '#ff9014' },
     tag: 'Retail',
     description:
@@ -120,7 +94,7 @@ export const FEATURED_CASES = [
 export const SUCCESS_CASES = [
   {
     key: 'case-banco-de-la-nacion',
-    client: { name: 'Banco de la Nación', logo: bancoDeLaNacion, artwork: 'dark' },
+    client: BANCO_DE_LA_NACION,
     industry: 'Government Financial Services',
     solutions: [],
     products: [
@@ -141,7 +115,7 @@ export const SUCCESS_CASES = [
       'DDoS Protection'
     ],
     description:
-      'With Azion, Banco de la Nación achieved maximum performance efficiency, reducing latency and accelerating content delivery across Peru.',
+      'With Azion, Banco de la Nación reduced latency and accelerated content delivery across Peru.',
     href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/'
   },
   {
@@ -205,7 +179,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-axur',
-    client: { name: 'Axur', logo: axur, artwork: 'light' },
+    client: AXUR,
     industry: 'Tech',
     solutions: ['Build', 'Secure'],
     products: ['AI Inference'],
@@ -216,7 +190,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-ibero',
-    client: { name: 'Ibero', logo: ibero, artwork: 'dark' },
+    client: IBERO,
     industry: 'Education',
     solutions: ['Build', 'Secure'],
     products: ['Edge DNS', 'Firewall', 'Applications'],
@@ -256,7 +230,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-todo',
-    client: { name: 'Todo Cartões', logo: todoCartoes, artwork: 'dark' },
+    client: TODO_CARTOES,
     industry: 'Tech',
     solutions: [],
     products: ['Firewall'],
@@ -267,7 +241,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-panvel',
-    client: { name: 'Panvel', logo: panvel, artwork: 'color' },
+    client: PANVEL,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Applications'],
@@ -278,7 +252,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-contabilizei',
-    client: { name: 'Contabilizei', logo: contabilizei, logoLight: contabilizeiColor },
+    client: CONTABILIZEI,
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications', 'Functions'],
@@ -300,7 +274,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-quero-quero',
-    client: { name: 'Quero-Quero', logo: queroQuero, artwork: 'light' },
+    client: QUERO_QUERO,
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall'],
@@ -311,7 +285,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-digimais',
-    client: { name: 'Digi+', logo: digimais, artwork: 'dark' },
+    client: DIGIPLUS,
     industry: 'Financial',
     solutions: ['Secure'],
     products: ['Firewall'],
@@ -322,7 +296,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-marisa',
-    client: { name: 'Marisa', logo: marisa, artwork: 'color' },
+    client: MARISA,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Application Accelerator', 'Cache', 'Image Processor'],
@@ -333,7 +307,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-fam',
-    client: { name: 'FAM', logo: fam, artwork: 'dark' },
+    client: FAM,
     industry: 'Education',
     solutions: ['Secure'],
     products: ['Web Application Firewall'],
@@ -344,7 +318,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-crefisa',
-    client: { name: 'Crefisa', logo: crefisa, artwork: 'light' },
+    client: CREFISA,
     industry: 'Financial',
     solutions: ['Build', 'Secure'],
     products: ['Firewall'],
@@ -355,7 +329,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-pernambucanas-performance',
-    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' },
+    client: PERNAMBUCANAS,
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Applications'],
@@ -366,18 +340,18 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-pernambucanas-security',
-    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' },
+    client: PERNAMBUCANAS,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
-    products: ['Edge Firewall', 'Data Stream'],
-    tags: ['Retail', 'Edge Firewall', 'Data Stream'],
+    products: ['Firewall', 'Data Stream'],
+    tags: ['Retail', 'Firewall', 'Data Stream'],
     description:
       'Pernambucanas increased visibility into security events and strengthened e-commerce protection with automated mitigation and observability capabilities.',
     href: 'https://www.azion.com/en/success-case/pernambucanas-built-a-robust-zero-trust-security-model-with-azions-platform/'
   },
   {
     key: 'case-madeiramadeira',
-    client: { ...byName('MadeiraMadeira'), logo: madeiramadeiraWhite },
+    client: byName('MadeiraMadeira'),
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Applications'],
@@ -388,7 +362,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-b2w',
-    client: { name: 'B2W', logo: b2w, artwork: 'dark' },
+    client: B2W,
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall', 'Data Stream'],
@@ -406,7 +380,7 @@ export const SUCCESS_CASES = [
       'Applications',
       'Functions',
       'Image Processor',
-      'Application Acceleration',
+      'Application Accelerator',
       'Tiered Cache',
       'Cache'
     ],
@@ -415,7 +389,7 @@ export const SUCCESS_CASES = [
       'Applications',
       'Functions',
       'Image Processor',
-      'Application Acceleration',
+      'Application Accelerator',
       'Tiered Cache',
       'Cache'
     ],
@@ -484,7 +458,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-vtex',
-    client: { name: 'VTEX', logo: vtex, artwork: 'light' },
+    client: VTEX,
     industry: 'Tech',
     solutions: ['Build'],
     products: ['Application'],
@@ -495,7 +469,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-getninjas',
-    client: { name: 'GetNinjas', logo: getninjas, artwork: 'dark' },
+    client: GETNINJAS,
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy', 'Observe'],
     products: ['Applications', 'Firewall', 'Data Stream', 'Functions'],
@@ -512,7 +486,7 @@ export const SUCCESS_CASES = [
     products: ['Applications', 'Intelligent DNS'],
     tags: ['Media', 'Applications', 'Intelligent DNS'],
     description:
-      'Discover how NZN leverages Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
+      'Discover how NZN uses Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
     href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/'
   },
   {
@@ -528,7 +502,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-uninter',
-    client: { name: 'Uninter', logo: uninter, artwork: 'dark' },
+    client: UNINTER,
     industry: 'Education',
     solutions: ['Deploy'],
     products: ['Applications'],
@@ -539,7 +513,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-unicesumar',
-    client: { name: 'UniCesumar', logo: unicesumar, artwork: 'dark' },
+    client: UNICESUMAR,
     industry: 'Education',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications', 'Firewall', 'Functions'],
@@ -553,15 +527,15 @@ export const SUCCESS_CASES = [
     client: byName('Agibank'),
     industry: 'Financial',
     solutions: ['Build', 'Secure', 'Observe'],
-    products: ['Firewall', 'Data Streaming'],
-    tags: ['Financial', 'Firewall', 'Data Streaming'],
+    products: ['Firewall', 'Data Stream'],
+    tags: ['Financial', 'Firewall', 'Data Stream'],
     description:
-      'Explore how Agi leverages Firewall and Data Streaming on the Azion Platform to enhance cybersecurity and ensure continuous service availability.',
+      'Explore how Agi uses Firewall and Data Stream on the Azion Platform to strengthen cybersecurity and keep services available.',
     href: 'https://www.azion.com/en/success-case/agibank/'
   },
   {
     key: 'case-omelete',
-    client: { name: 'Omelete', logo: omelete, artwork: 'dark' },
+    client: OMELETE,
     industry: 'Media',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications'],
@@ -569,5 +543,34 @@ export const SUCCESS_CASES = [
     description:
       'High-traffic media experiences became faster and more reliable as Omelete scaled its entertainment platform to millions of users.',
     href: 'https://www.azion.com/en/success-case/omelete/'
+  }
+]
+
+/**
+ * The three analyst recognitions the source states, in its order. Each mark is the design
+ * system's logo asset pair: the brand-colour file for the light theme, the reversed one for
+ * the dark.
+ */
+export const ANALYST_RECOGNITIONS = [
+  {
+    key: 'gigaom',
+    client: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
+    text: 'Azion was named a Leader and identified as the only purpose-built edge platform whose capabilities meet all of the key criteria outlined in the report.',
+    source: 'GigaOms Radar for Edge Platforms.',
+    href: 'https://www.azion.com/en/blog/azion-named-leader-fast-mover-gigaom-report/'
+  },
+  {
+    key: 'gartner',
+    client: { name: 'Gartner', logo: gartnerReversed, logoLight: gartner },
+    text: 'Gartner clients note that Azion excels at providing a consultative approach to orchestration and serverless edge application environments.',
+    source: 'Gartner Competitive Landscape for CDN and Edge Services.',
+    href: 'https://www.azion.com/en/blog/azion-celebrates-achievements-2023/'
+  },
+  {
+    key: 'frost-and-sullivan',
+    client: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost },
+    text: "Frost & Sullivan pointed that Azion's serverless edge platform increases business agility by empowering developers to build and scale their applications.",
+    source: 'Frost & Sullivan Best Practices Award, North.',
+    href: 'https://www.azion.com/en/blog/azion-frost-sullivan-award/'
   }
 ]

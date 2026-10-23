@@ -1,8 +1,7 @@
 <script setup>
-  // The success-case library with no SiteNav and no SiteFooter, for sharing the page on its own.
-  // It keeps the scrolling column SiteLayout provides, since the shell locks the document scroll.
-  import AzionSuccessCases from '../components/AzionSuccessCases.vue'
   import { useForceDarkTheme } from '../composables/useForceDarkTheme'
+  import { SUCCESS_CASES_PAGE } from '../data/pages/success-cases.js'
+  import SitePage from '../ui/SitePage.vue'
 
   useForceDarkTheme()
 </script>
@@ -11,6 +10,6 @@
   <div
     class="h-dvh overflow-y-auto scroll-smooth bg-(--bg-canvas) text-(--text-default) motion-reduce:scroll-auto"
   >
-    <AzionSuccessCases />
+    <SitePage :sections="SUCCESS_CASES_PAGE" />
   </div>
 </template>
