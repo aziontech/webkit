@@ -1,6 +1,6 @@
-Serverless computing has changed how developers build and deploy applications, prioritizing scalability and ease of use. However, the ever-increasing demand for faster performance, robust security, and optimized resource utilization calls for innovative approaches to runtime environments. These environments must handle workloads with precision and ensure seamless integration with the requirements of edge computing.
+Serverless computing has changed how developers build and deploy applications, prioritizing scalability and ease of use. However, the ever-increasing demand for faster performance, robust security, and optimized resource utilization calls for innovative approaches to runtime environments. These environments must handle workloads with precision and ensure seamless integration with the requirements of distributed architecture.
 
-By combining [Rust’s](https://www.rust-lang.org/) safety features with the versatility of the [V8 engine](http://v8.dev/), modern runtime architectures are creating efficient and secure execution environments suitable for edge computing.
+By combining [Rust’s](https://www.rust-lang.org/) safety features with the versatility of the [V8 engine](http://v8.dev/), modern runtime architectures are creating efficient and secure execution environments suitable for distributed architecture.
 
 ## Core runtime environment
 
@@ -33,7 +33,7 @@ The security layer is crucial in maintaining the integrity and safety of the ser
 - **Process-level isolation through V8 isolates**: V8 isolates provide lightweight isolation by running code in separate instances, enabling rapid context switching and efficient handling of concurrent functions.
 - **Memory space separation between executions**: each V8 isolate maintains its own memory space, preventing functions from accessing each other’s memory and maintaining data privacy in multi-tenant environments.
 
-By integrating these features, the runtime architecture balances performance and security, providing a solid foundation for [executing serverless functions at the edge](https://www.azion.com/en/documentation/architectures/edge-application/serverless-applications/).
+By integrating these features, the runtime architecture balances performance and security, providing a solid foundation for [executing serverless functions close to users](https://www.azion.com/en/documentation/architectures/edge-application/serverless-applications/).
 
 ## Performance benefits
 
@@ -59,13 +59,13 @@ In contrast, V8 isolates offer a much lighter approach. Instead of spinning up s
 
 ## Real-world impact
 
-[Azion Cells](https://www.azion.com/en/documentation/runtime/overview/) is a runtime that demonstrates the benefits of modern edge runtime environments built with Rust. Unlike AWS Lambda’s centralized container-based approach, Azion Cells eliminates container initialization overhead, significantly reducing cold starts, memory consumption, and costs. [Running in the best edge location to the user](https://www.azion.com/pt-br/live-map/) and executing functions from NVMe storage ensures minimal latency for modern applications.
+[Azion Cells](https://www.azion.com/en/documentation/runtime/overview/) is a runtime that demonstrates the benefits of modern edge runtime environments built with Rust. Unlike AWS Lambda’s centralized container-based approach, Azion Cells eliminates container initialization overhead, significantly reducing cold starts, memory consumption, and costs. [Running in the best data center to the user](https://www.azion.com/pt-br/live-map/) and executing functions from NVMe storage ensures minimal latency for modern applications.
 
 ### Key features of Azion’s runtime architecture
 
 - Secure multi-tenant isolation: Azion Cells isolate functions in sandboxed environments, ensuring secure execution without the overhead of full containers. This approach enhances both performance and security, making it ideal for multi-tenant applications.
-- Rapid startup times: [edge functions](https://www.azion.com/en/products/edge-functions/) execute significantly faster due to their lightweight runtime architecture. This effectively minimizes cold starts and ensures reliable performance even during sudden traffic surges.
+- Rapid startup times: [functions](https://www.azion.com/en/products/edge-functions/) execute significantly faster due to their lightweight runtime architecture. This effectively minimizes cold starts and ensures reliable performance even during sudden traffic surges.
 - Efficient resource utilization: by leveraging Rust’s memory safety and low-overhead abstractions, Azion optimizes resource use, reducing costs and improving scalability.
-- Latency reduction: Azion Cells operate directly at the [network’s edge](https://www.azion.com/en/products/our-network/), which means processing the request at the best available edge location closer to the end user.
+- Latency reduction: Azion Cells operate directly in [Azion’s data centers](https://www.azion.com/en/products/our-network/), which means processing the request at the best available data center closer to the end user.
 
-This approach challenges the traditional serverless model, making edge computing a more viable and cost-effective solution for modern applications. By combining the efficiency of Rust and the native-like execution speeds of V8 integration, edge computing can achieve the performance and scalability required for modern serverless applications. To simplify the adoption process, Azion created a [bundler](https://www.azion.com/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/) that automates [polyfills](/site/blog/polyfills-for-edge-compatibility).
+This approach challenges the traditional serverless model, making distributed architecture a more viable and cost-effective solution for modern applications. By combining the efficiency of Rust and the native-like execution speeds of V8 integration, distributed architecture can achieve the performance and scalability required for modern serverless applications. To simplify the adoption process, Azion created a [bundler](https://www.azion.com/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/) that automates [polyfills](/site/blog/polyfills-for-edge-compatibility).

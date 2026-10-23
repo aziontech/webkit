@@ -1,0 +1,72 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as FaqSectionStories from './FaqSection.stories'
+
+<Meta title="Templates/Marketing/Content/FaqSection" />
+
+# FaqSection
+
+The frequently asked questions band near the end of a landing page. The heading sits on the left and the questions on the right, each answer closed until the reader opens it, one at a time.
+
+The section has the `faq` id, so a page can link straight to it. Built from `SectionModule` and `Faq`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### With link
+
+The Retail page questions. An answer can carry a link inside its sentence, like the frameworks list in the second question. Answers without a link render as plain text.
+
+<Canvas of={FaqSectionStories.WithLink} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the heading in the left column.
+- `items` are the questions in display order, each with a `question` and an `answer`.
+- `answer` accepts inline markdown, such as bold, italic and links.
+- Use one FAQ section per page.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={FaqSectionStories.WithLinkJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Plain
+
+The Functions page questions, every answer plain text.
+
+<Canvas of={FaqSectionStories.Plain} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the heading in the left column.
+- `items` are the questions in display order, each with a `question` and an `answer`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={FaqSectionStories.PlainJson} dark />
+</div>

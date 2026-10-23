@@ -470,10 +470,27 @@
       "--line-height-8",
       "--line-height-9",
       "--line-height-none",
+      "--opacity-0",
+      "--opacity-10",
       "--opacity-100",
+      "--opacity-15",
+      "--opacity-20",
       "--opacity-25",
+      "--opacity-30",
+      "--opacity-35",
+      "--opacity-40",
+      "--opacity-45",
+      "--opacity-5",
       "--opacity-50",
+      "--opacity-55",
+      "--opacity-60",
+      "--opacity-65",
+      "--opacity-70",
       "--opacity-75",
+      "--opacity-80",
+      "--opacity-85",
+      "--opacity-90",
+      "--opacity-95",
       "--perspective-distant",
       "--perspective-dramatic",
       "--perspective-midrange",
@@ -1331,10 +1348,27 @@
         "--line-height-none"
       ],
       "opacity": [
+        "--opacity-0",
+        "--opacity-10",
         "--opacity-100",
+        "--opacity-15",
+        "--opacity-20",
         "--opacity-25",
+        "--opacity-30",
+        "--opacity-35",
+        "--opacity-40",
+        "--opacity-45",
+        "--opacity-5",
         "--opacity-50",
-        "--opacity-75"
+        "--opacity-55",
+        "--opacity-60",
+        "--opacity-65",
+        "--opacity-70",
+        "--opacity-75",
+        "--opacity-80",
+        "--opacity-85",
+        "--opacity-90",
+        "--opacity-95"
       ],
       "perspective": [
         "--perspective-distant",
@@ -2053,6 +2087,13 @@
           "default": "'_self'",
           "required": "false",
           "doc": "Link target when `href` is set."
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "default": "'button'",
+          "required": "false",
+          "doc": "Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set."
         }
       ],
       "events": [
@@ -2650,6 +2691,114 @@
       ],
       "purpose": "The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the \"A\" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the \"move to the edge technologies®\" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component."
     },
+    "browser-frame": {
+      "import": "@aziontech/webkit/browser-frame",
+      "target": "./src/components/content/browser-frame/browser-frame.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/browser-frame",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "address",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty."
+        },
+        {
+          "name": "minWidth",
+          "type": "number",
+          "default": "320",
+          "required": "false",
+          "doc": "Smallest viewport width the resize handles can reach, in pixels."
+        },
+        {
+          "name": "maxWidth",
+          "type": "number",
+          "default": "1920",
+          "required": "false",
+          "doc": "Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit."
+        },
+        {
+          "name": "minHeight",
+          "type": "number",
+          "default": "320",
+          "required": "false",
+          "doc": "Smallest viewport height the resize handles can reach, in pixels."
+        },
+        {
+          "name": "maxHeight",
+          "type": "number",
+          "default": "1440",
+          "required": "false",
+          "doc": "Largest viewport height the resize handles can reach, in pixels."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "'Copy address'",
+          "required": "false",
+          "doc": "Accessible name of the address bar's copy button."
+        },
+        {
+          "name": "widthHandleAriaLabel",
+          "type": "string",
+          "default": "'Resize preview width'",
+          "required": "false",
+          "doc": "Accessible name of the right-edge width handle."
+        },
+        {
+          "name": "heightHandleAriaLabel",
+          "type": "string",
+          "default": "'Resize preview height'",
+          "required": "false",
+          "doc": "Accessible name of the bottom-edge height handle."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only."
+        }
+      ],
+      "purpose": "A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.",
+      "useWhen": [
+        "Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.",
+        "Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.",
+        "Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.",
+        "Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`."
+      ],
+      "avoidWhen": [
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For third-party content loaded from another origin → use `embed`.",
+        "For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.",
+        "For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.",
+        "For a framed page section or grid cell → use `frame-box`."
+      ],
+      "related": [
+        "doc-frame` — the documentation figure frame for stills and clips; no live viewport.",
+        "embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.",
+        "frame-box` — the page's registration frame (hairlines + corner marks), not a window.",
+        "copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value."
+      ],
+      "bestPractices": [
+        "Compose the default slot exactly as the screen would be composed in an app — the frame mirrors the page's stylesheets and theme into its viewport, so no extra wiring or classes are needed.",
+        "Pin the device the example is about with `v-model:width` and `v-model:height` (`375 × 812` mobile, `768 × 1024` tablet, `1280 × 800` desktop); leave `width` unset to fill the container.",
+        "Give the frame an `ariaLabel` that names what is shown (`Pricing page at tablet size`); it becomes the viewport's accessible name.",
+        "Viewport-height units (`h-screen`, `min-h-dvh`) in slot content resolve against the simulated height, so a full-height shell renders as it would on the device.",
+        "Do not add controls to the chrome — the address's copy button and the resize handles are the frame's only controls. Interactive content belongs in the default slot."
+      ]
+    },
     "ticker": {
       "import": "@aziontech/webkit/ticker",
       "target": "./src/components/marketing/ticker/ticker.vue",
@@ -2674,6 +2823,13 @@
           "doc": "Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete."
         },
         {
+          "name": "items",
+          "type": "TickerItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered."
+        },
+        {
           "name": "label",
           "type": "string",
           "default": "''",
@@ -2692,7 +2848,7 @@
           "type": "number",
           "default": "0",
           "required": "false",
-          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks so every strip moves at one speed."
+          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed."
         },
         {
           "name": "ariaLabel",
@@ -2702,11 +2858,12 @@
           "doc": "Accessible name for the row of marks, announced instead of an unnamed list."
         }
       ],
-      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes.",
+      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band.",
       "useWhen": [
         "Under a hero, to name the companies a product already serves (\"Trusted by mission-critical workloads\").",
         "To state compatibility as a list of framework, cloud and tooling marks (\"Your Stack, Your Way\").",
-        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read."
+        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read.",
+        "To run a handful of short benefits (\"Deploy to 330+ cities instantly\") along the floor of a closing band, where each claim restates what the band above already argues."
       ],
       "avoidWhen": [
         "When every mark must be seen → use `logo-wall`, which wraps into a grid and never moves.",
@@ -2722,9 +2879,10 @@
       ],
       "bestPractices": [
         "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",
-        "Let `duration` derive itself. The component holds speed constant rather than duration, so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
+        "Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
         "Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.",
         "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
+        "Keep each `items` label to a short clause with no punctuation to end it, and give every item the same kind of icon; the row repeats, so a claim is read as one of a run, never on its own.",
         "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
       ]
     },
@@ -3114,6 +3272,13 @@
           "default": "true",
           "required": "false",
           "doc": "Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both."
+        },
+        {
+          "name": "padding",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band."
         }
       ],
       "slots": [
@@ -3151,6 +3316,7 @@
         "Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.",
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
+        "In `horizontal`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.",
         "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
         "The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component."
       ]
@@ -3584,6 +3750,324 @@
         "asia` and `oceania` hold no PoPs — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone."
       ]
     },
+    "shell-mockup": {
+      "import": "@aziontech/webkit/shell-mockup",
+      "target": "./src/components/content/shell-mockup/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
+      "subcomponents": [
+        "@aziontech/webkit/shell-mockup-part"
+      ],
+      "category": "content",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'window' | 'bare'",
+          "default": "'window'",
+          "required": "false",
+          "doc": "How the mockup is plated: a bordered console window, or bare parts floating on the host's surface."
+        },
+        {
+          "name": "shell",
+          "type": "'console' | 'legacy'",
+          "default": "'console'",
+          "required": "false",
+          "doc": "Console generation the shell draws: the current one, or the previous one with its top bar."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "default": "860",
+          "required": "false",
+          "doc": "Design width of the frame from `md` up; the frame scales to fit its host."
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "default": "390",
+          "required": "false",
+          "doc": "Design width of the frame below `md`."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Edge the mockup fades out along; `y` fades top and bottom."
+        },
+        {
+          "name": "chrome",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draws the console bar over the body."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Module label on the console bar; with a rail, `›` splits it into breadcrumbs."
+        },
+        {
+          "name": "rail",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Active entry of the console's side rail; empty renders no rail."
+        },
+        {
+          "name": "texture",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the frame is grounded with, behind the body."
+        },
+        {
+          "name": "textureFade",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the frame's texture fades out before its edges."
+        },
+        {
+          "name": "travel",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'slow-01'",
+          "required": "false",
+          "doc": "Duration token of each part's travel."
+        },
+        {
+          "name": "beat",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'fast-01'",
+          "required": "false",
+          "doc": "Duration token of the gap between one part's beat and the next."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Whether this mockup is the one showing; parts replay their entrance each time it becomes active."
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Lets the viewer operate the controls inside instead of drawing them as an inert picture."
+        },
+        {
+          "name": "still",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draws every part in place from the start, with no entrance and no replay."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The mockup's body, composed of `ShellMockup.Part` beats."
+        },
+        {
+          "name": "overlay",
+          "scope": "—",
+          "notes": "A layer over the whole frame, bar and rail included, such as a drawer."
+        }
+      ],
+      "purpose": "A scaled, inert picture of an Azion Console screen, for marketing bands that show the product. The consumer composes the screen's body from real webkit components at a fixed design width; the frame draws the console shell around it (the slim console bar, the side rail with breadcrumbs and actions, or the previous console's top bar) and scales the whole drawing to fit its host. Each piece of the body is a `ShellMockup.Part` that travels in on its own beat once the mockup scrolls into view, so the screen assembles itself instead of appearing all at once.",
+      "useWhen": [
+        "Showing a console screen or fragment on a marketing band: a hero, a media split, a feature tab, a widget grid cell.",
+        "Depicting a product workflow with real webkit controls instead of a screenshot, so the drawing follows the theme and stays sharp at any size.",
+        "Staggering the parts of a mock so they arrive in reading order when the band scrolls into view, and replaying that entrance each time a tab makes the mock active.",
+        "Drawing only a fragment of a screen (a list, a form row) floating on the band's own surface, with `kind=\"bare\"` and `chrome` off."
+      ],
+      "avoidWhen": [
+        "To show a real, working screen at a device size → use `browser-frame`; it renders live content in a true viewport, not a scaled picture.",
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For an illustration scene → use `illustration`."
+      ],
+      "related": [
+        "browser-frame` — a live, resizable viewport for real screens; `shell-mockup` is an inert, scaled drawing of the console.",
+        "texture-material` — the texture the frame grounds itself with when `texture` is set.",
+        "frame-box` — the page's registration frame a mockup band is often placed inside."
+      ],
+      "bestPractices": [
+        "Compose the body at the design width (`width`, `mobileWidth`), not at the host's width; the frame scales the drawing, so sizes inside are design pixels.",
+        "Give the host a height (or an aspect ratio); the frame fills its host and derives its design height from it.",
+        "Number parts in reading order with `order`, starting at `0`; parts on the same beat land together.",
+        "Keep the mockup decorative: it is hidden from assistive technology unless `interactive` is set, so the band's own copy must say what the picture shows.",
+        "Set `active` from the host when several mockups share one slot (tabs), so only the visible one plays and it replays when it returns.",
+        "Tune a fade with the consumer-side custom properties `--mockup-fade-start` / `--mockup-fade-end` (or `--mockup-fade-edge` for `y`) and match its color to the host surface with `--mockup-fade-color`."
+      ]
+    },
+    "shell-mockup-root": {
+      "import": "@aziontech/webkit/shell-mockup-root",
+      "target": "./src/components/content/shell-mockup/shell-mockup.vue",
+      "kind": "root",
+      "rootOf": "shell-mockup",
+      "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
+      "category": "content",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'window' | 'bare'",
+          "default": "'window'",
+          "required": "false",
+          "doc": "How the mockup is plated: a bordered console window, or bare parts floating on the host's surface."
+        },
+        {
+          "name": "shell",
+          "type": "'console' | 'legacy'",
+          "default": "'console'",
+          "required": "false",
+          "doc": "Console generation the shell draws: the current one, or the previous one with its top bar."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "default": "860",
+          "required": "false",
+          "doc": "Design width of the frame from `md` up; the frame scales to fit its host."
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "default": "390",
+          "required": "false",
+          "doc": "Design width of the frame below `md`."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Edge the mockup fades out along; `y` fades top and bottom."
+        },
+        {
+          "name": "chrome",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draws the console bar over the body."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Module label on the console bar; with a rail, `›` splits it into breadcrumbs."
+        },
+        {
+          "name": "rail",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Active entry of the console's side rail; empty renders no rail."
+        },
+        {
+          "name": "texture",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the frame is grounded with, behind the body."
+        },
+        {
+          "name": "textureFade",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the frame's texture fades out before its edges."
+        },
+        {
+          "name": "travel",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'slow-01'",
+          "required": "false",
+          "doc": "Duration token of each part's travel."
+        },
+        {
+          "name": "beat",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'fast-01'",
+          "required": "false",
+          "doc": "Duration token of the gap between one part's beat and the next."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Whether this mockup is the one showing; parts replay their entrance each time it becomes active."
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Lets the viewer operate the controls inside instead of drawing them as an inert picture."
+        },
+        {
+          "name": "still",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draws every part in place from the start, with no entrance and no replay."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The mockup's body, composed of `ShellMockup.Part` beats."
+        },
+        {
+          "name": "overlay",
+          "scope": "—",
+          "notes": "A layer over the whole frame, bar and rail included, such as a drawer."
+        }
+      ],
+      "purpose": "A scaled, inert picture of an Azion Console screen, for marketing bands that show the product. The consumer composes the screen's body from real webkit components at a fixed design width; the frame draws the console shell around it (the slim console bar, the side rail with breadcrumbs and actions, or the previous console's top bar) and scales the whole drawing to fit its host. Each piece of the body is a `ShellMockup.Part` that travels in on its own beat once the mockup scrolls into view, so the screen assembles itself instead of appearing all at once.",
+      "useWhen": [
+        "Showing a console screen or fragment on a marketing band: a hero, a media split, a feature tab, a widget grid cell.",
+        "Depicting a product workflow with real webkit controls instead of a screenshot, so the drawing follows the theme and stays sharp at any size.",
+        "Staggering the parts of a mock so they arrive in reading order when the band scrolls into view, and replaying that entrance each time a tab makes the mock active.",
+        "Drawing only a fragment of a screen (a list, a form row) floating on the band's own surface, with `kind=\"bare\"` and `chrome` off."
+      ],
+      "avoidWhen": [
+        "To show a real, working screen at a device size → use `browser-frame`; it renders live content in a true viewport, not a scaled picture.",
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For an illustration scene → use `illustration`."
+      ],
+      "related": [
+        "browser-frame` — a live, resizable viewport for real screens; `shell-mockup` is an inert, scaled drawing of the console.",
+        "texture-material` — the texture the frame grounds itself with when `texture` is set.",
+        "frame-box` — the page's registration frame a mockup band is often placed inside."
+      ],
+      "bestPractices": [
+        "Compose the body at the design width (`width`, `mobileWidth`), not at the host's width; the frame scales the drawing, so sizes inside are design pixels.",
+        "Give the host a height (or an aspect ratio); the frame fills its host and derives its design height from it.",
+        "Number parts in reading order with `order`, starting at `0`; parts on the same beat land together.",
+        "Keep the mockup decorative: it is hidden from assistive technology unless `interactive` is set, so the band's own copy must say what the picture shows.",
+        "Set `active` from the host when several mockups share one slot (tabs), so only the visible one plays and it replays when it returns.",
+        "Tune a fade with the consumer-side custom properties `--mockup-fade-start` / `--mockup-fade-end` (or `--mockup-fade-edge` for `y`) and match its color to the host surface with `--mockup-fade-color`."
+      ]
+    },
+    "shell-mockup-part": {
+      "import": "@aziontech/webkit/shell-mockup-part",
+      "target": "./src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
+      "kind": "subcomponent",
+      "parent": "shell-mockup",
+      "treeShakeableImport": "@aziontech/webkit/shell-mockup-part"
+    },
     "log-view": {
       "import": "@aziontech/webkit/log-view",
       "target": "./src/components/code/log-view/log-view.vue",
@@ -3731,6 +4215,13 @@
           "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
         },
         {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
+        },
+        {
           "name": "animateLines",
           "type": "boolean",
           "default": "false",
@@ -3755,6 +4246,13 @@
           "name": "copy",
           "payload": "string",
           "notes": "Fires after the active tab code is copied to the clipboard."
+        }
+      ],
+      "slots": [
+        {
+          "name": "tab-icon",
+          "scope": "{ tab: CodeBlockTab }",
+          "notes": "Leading mark before a tab's label in the tab strip; nothing renders when it is not filled."
         }
       ],
       "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
@@ -7396,25 +7894,11 @@
       "status": "implemented",
       "props": [
         {
-          "name": "modelValue",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Two-way bound national number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Enables `v-model`."
-        },
-        {
-          "name": "country",
-          "type": "string",
-          "default": "'BR'",
-          "required": "false",
-          "doc": "Two-way bound ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the mask applied to the input. Enables `v-model:country`."
-        },
-        {
           "name": "countries",
-          "type": "Array<{ code: string; dialCode: string; mask: string; label: string }>",
-          "default": "(built-in curated list — see Notes)",
+          "type": "Array<{ code: string; dialCode: string; mask: string | string[]; label: string }>",
+          "default": "(built-in list — see Notes)",
           "required": "false",
-          "doc": "Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). When omitted, the component uses its built-in list."
+          "doc": "Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). `mask` is a list when the country allows more than one length (e.g. BR `['(##) ####-####', '(##) #####-####']`). When omitted, the component uses its built-in list."
         },
         {
           "name": "label",
@@ -7482,17 +7966,12 @@
       ],
       "events": [
         {
-          "name": "update:modelValue",
-          "payload": "[value: string]",
-          "notes": "Emitted on every native `input` event of the internal `<input>` **and** whenever `country` changes (re-emitted so validators react to dial-code switches). Value is always digits-only (mask characters stripped)."
-        },
-        {
-          "name": "update:country",
-          "payload": "[code: string]",
-          "notes": "Emitted when the user picks a different country in the dial-code `Select`. Enables `v-model:country`."
+          "name": "update:phone",
+          "payload": "[value: PhoneNumber]",
+          "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
         }
       ],
-      "purpose": "Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` applies a per-country mask so the user sees a formatted number as they type (e.g. `(11) 99999-9999` for BR). Emits two v-models: `modelValue` for the national digits (no dial code, no mask characters) and `country` for the selected ISO 3166-1 alpha-2 code."
+      "purpose": "Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` follows the selected country: it applies that country's mask as the user types and accepts exactly the lengths the country allows. A country may allow more than one length — a Brazilian landline (10 digits, `(11) 9999-9999`) and mobile (11 digits, `(11) 99999-9999`) both format correctly, the mask switching as the digits grow. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form everything it would otherwise derive by hand — the full number with its dial code and whether that number is complete — so no form re-implements per-country length rules."
     },
     "helper-text": {
       "import": "@aziontech/webkit/helper-text",
@@ -9570,7 +10049,7 @@
           "notes": "footer-link`: the link label."
         }
       ],
-      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). **Two placements, chosen with `kind` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`). The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px. - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). **Two placements, chosen with `kind` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`). The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - **Row two sizes its two bands by content** (`md:grid-cols-[auto_auto]`), not in half: each band takes what it holds and the two share the slack, so the status pair never wraps while the social band still has room, and the social band wraps only when the zone is narrower than both together. A 50/50 split gave the social band 427px of an 853px docs reading column, 13px short of the brand mark and seven large icons — a premature wrap in every zone narrower than the viewport. - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px. - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
       "useWhen": [
         "The page-level footer of a site or application, paired with `GlobalHeader`.",
         "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
@@ -9585,9 +10064,10 @@
         "frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
       ],
       "bestPractices": [
-        "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+        "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\" size=\"small\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
         "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
         "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
+        "Keep the social `IconButton`s at `size=\"small\"`: a 28px box holds the brand mark and seven icons in 356px, which fits beside the status pair in the narrowest zone a shell gives the footer (the docs reading column at `lg`, 724px wide). At `large` the same row is 440px and wraps there.",
         "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.",
         "Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.",
         "Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.",
@@ -9662,7 +10142,7 @@
           "notes": "footer-link`: the link label."
         }
       ],
-      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). **Two placements, chosen with `kind` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`). The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px. - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). **Two placements, chosen with `kind` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`). The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - **Row two sizes its two bands by content** (`md:grid-cols-[auto_auto]`), not in half: each band takes what it holds and the two share the slack, so the status pair never wraps while the social band still has room, and the social band wraps only when the zone is narrower than both together. A 50/50 split gave the social band 427px of an 853px docs reading column, 13px short of the brand mark and seven large icons — a premature wrap in every zone narrower than the viewport. - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px. - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
       "useWhen": [
         "The page-level footer of a site or application, paired with `GlobalHeader`.",
         "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
@@ -9677,9 +10157,10 @@
         "frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
       ],
       "bestPractices": [
-        "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+        "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\" size=\"small\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
         "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
         "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
+        "Keep the social `IconButton`s at `size=\"small\"`: a 28px box holds the brand mark and seven icons in 356px, which fits beside the status pair in the narrowest zone a shell gives the footer (the docs reading column at `lg`, 724px wide). At `large` the same row is 440px and wraps there.",
         "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.",
         "Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.",
         "Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.",
@@ -9964,6 +10445,29 @@
       "category": "layout",
       "structure": "monolithic",
       "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal' | 'both'",
+          "default": "'vertical'",
+          "required": "false",
+          "doc": "Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name when the region is not labelled by visible text; omit when content provides context."
+        },
+        {
+          "name": "fade",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Fades the edges that still have content to scroll to, sized by the distance left on each side."
+        }
+      ],
       "slots": [
         {
           "name": "default",
@@ -9971,7 +10475,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Structural layout primitive for scrolling or regions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/layout/scroll-area/`."
+      "purpose": "Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it."
     },
     "global-header": {
       "import": "@aziontech/webkit/global-header",
@@ -10528,7 +11032,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
@@ -10597,7 +11101,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
@@ -10683,7 +11187,7 @@
           "type": "CallToActionKind",
           "default": "'panel'",
           "required": "false",
-          "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it."
+          "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor."
         },
         {
           "name": "framed",
@@ -10707,21 +11211,33 @@
         {
           "name": "aside",
           "scope": "—",
-          "notes": "The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`."
+          "notes": "The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`."
+        },
+        {
+          "name": "background",
+          "scope": "—",
+          "notes": "Decoration drawn behind the copy in `primary`, such as a `texture-material`; ignored in the other registers."
+        },
+        {
+          "name": "bottom",
+          "scope": "—",
+          "notes": "The strip that floors the band in `primary`, such as a `ticker`, under a hairline; ignored in the other registers."
         }
       ],
-      "purpose": "The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Three registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.",
+      "purpose": "The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Four registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight. `primary` is the loud close: one centred ask standing alone as a billboard, on the page canvas lit from above by the brand. The texture composed into the band — a pixelated layer whose two waves travel across it in the primary colour — is lit by its waves alone and carries the band's colour, so the ground stays the canvas and the copy keeps its ordinary ink. The texture is composed in through the `background` slot and the strip along the floor through `bottom`, so the band owns the light and the page owns what is drawn on it.",
       "useWhen": [
         "At the end of a marketing page or section, to carry the reader into signup, docs or sales.",
         "Whenever a page needs one visually separated block whose whole job is the action.",
         "Between two sections, as a mid-page ask that should not read as a new section header.",
         "In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.",
+        "In `primary`, when the page ends on a single ask and the close should be the most lit band on the page, with benefits or proof running along its floor.",
         "In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry."
       ],
       "avoidWhen": [
         "To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.",
         "For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.",
         "For a dismissible or time-bound announcement → use `message`.",
+        "For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.",
         "For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row."
       ],
       "related": [
@@ -10729,7 +11245,9 @@
         "hero` — the page's leading band; its `Hero.Title` owns the statement and the `h1`.",
         "frame-box` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.",
         "button` — the controls composed into the `actions` and `aside-actions` slots.",
-        "overline` — the `//`-prefixed eyebrow the band renders above the headline."
+        "overline` — the `//`-prefixed eyebrow the band renders above the headline.",
+        "texture-material` — the pixelated, waving texture composed into `background` in `primary`.",
+        "ticker` — the strip of benefits composed into `bottom` in `primary`."
       ],
       "bestPractices": [
         "framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.",
@@ -10741,6 +11259,9 @@
         "In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.",
         "In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.",
         "lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.",
+        "In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.",
+        "In `primary`, compose one `texture-material` into `background` — `pixelate` at `small` with `fade=\"bottom\"` — and a `ticker` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.",
+        "In `primary`, give the ticker enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.",
         "Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge."
       ]
     },
@@ -11767,7 +12288,21 @@
           "type": "MediaTabsItem[]",
           "default": "[]",
           "required": "false",
-          "doc": "The tabs, in order, at most three; each item is `{ title, description, src, alt }`. Items past the third are not rendered."
+          "doc": "The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered."
+        },
+        {
+          "name": "position",
+          "type": "'left' | 'right' | 'top' | 'bottom'",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down and tightens the inset."
         },
         {
           "name": "selectOn",
@@ -11796,13 +12331,6 @@
           "default": "true",
           "required": "false",
           "doc": "Advances a hairline along the active row's bottom edge while the timer runs."
-        },
-        {
-          "name": "size",
-          "type": "'small' | 'medium' | 'large'",
-          "default": "'medium'",
-          "required": "false",
-          "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
         },
         {
           "name": "texture",
@@ -11840,7 +12368,7 @@
           "notes": "The tab's media; replaces the image built from `item.src`."
         }
       ],
-      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in.",
+      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.",
       "useWhen": [
         "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
         "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
@@ -11862,8 +12390,8 @@
         "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
         "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
         "Use scenes of the same shape. The frame does not resize between tabs.",
-        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.",
-        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
+        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step and tightens the inset so five claims fit.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion."
       ]
     },
     "media-tile": {
@@ -12274,6 +12802,16 @@
           "name": "media",
           "scope": "{ item: StickyStackItem, index: number, active: boolean }",
           "notes": "The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays."
+        },
+        {
+          "name": "actions",
+          "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+          "notes": "The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty."
+        },
+        {
+          "name": "backdrop",
+          "scope": "—",
+          "notes": "Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty."
         }
       ],
       "purpose": "A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open. Each claim expands in turn while the ones already read collapse and stack above it, so the column keeps one height and the reader always sees where they are in the run. The media beside it is replaced, not dimmed: the outgoing scene leaves and the incoming one mounts, so a scene that animates plays its entrance every time it is reached.",
@@ -13784,6 +14322,12 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-reversed.svg"
     },
+    "assets/ai-gateway.svg": {
+      "import": "@aziontech/webkit/assets/ai-gateway.svg",
+      "target": "./src/assets/illustrations/ai-gateway.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ai-gateway.svg"
+    },
     "assets/akamai-extended-color.svg": {
       "import": "@aziontech/webkit/assets/akamai-extended-color.svg",
       "target": "./src/assets/logos/competitors/akamai-extended-color.svg",
@@ -13945,6 +14489,12 @@
       "target": "./src/assets/illustrations/azion-highlight.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/azion-highlight.svg"
+    },
+    "assets/azion-rest-api.svg": {
+      "import": "@aziontech/webkit/assets/azion-rest-api.svg",
+      "target": "./src/assets/illustrations/azion-rest-api.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azion-rest-api.svg"
     },
     "assets/azure-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/azure-symbol-mono.svg",
@@ -14251,6 +14801,12 @@
       "target": "./src/assets/logos/clients/digiplus-extended-reversed.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/digiplus-extended-reversed.svg"
+    },
+    "assets/distributed-apis-tile.svg": {
+      "import": "@aziontech/webkit/assets/distributed-apis-tile.svg",
+      "target": "./src/assets/illustrations/distributed-apis-tile.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/distributed-apis-tile.svg"
     },
     "assets/docusaurus-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg",
@@ -15397,6 +15953,18 @@
       "target": "./src/assets/logos/frameworks/react-symbol-mono.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/react-symbol-mono.svg"
+    },
+    "assets/real-time-metrics-error-rate.svg": {
+      "import": "@aziontech/webkit/assets/real-time-metrics-error-rate.svg",
+      "target": "./src/assets/illustrations/real-time-metrics-error-rate.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/real-time-metrics-error-rate.svg"
+    },
+    "assets/real-time-metrics-status-codes.svg": {
+      "import": "@aziontech/webkit/assets/real-time-metrics-status-codes.svg",
+      "target": "./src/assets/illustrations/real-time-metrics-status-codes.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/real-time-metrics-status-codes.svg"
     },
     "assets/redis-symbol-color.svg": {
       "import": "@aziontech/webkit/assets/redis-symbol-color.svg",

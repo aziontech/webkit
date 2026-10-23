@@ -11,11 +11,11 @@ import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.
 import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
 import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
-import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
-import { PLATFORM_DIRECTORY } from '../product-pages.js'
+import { PLATFORM_PRIMITIVES } from '../platform-primitives.js'
+import { agentsClosing, PLATFORM_DIRECTORY } from '../product-pages.js'
 import { EARTH_NETWORK } from '../solutions.js'
 
 export const HOME_REASONS = [
@@ -52,16 +52,15 @@ const learnMore = (href) => [
 export const HOME_SOLUTIONS = [
   {
     title: 'Modern applications',
-    description:
-      'Build static sites, develop serverless applications, or modernize your legacy systems.',
+    description: 'Build static sites, run serverless applications, or modernize legacy systems.',
     href: '/site/solutions/web-apps',
-    image: { src: quickStartWithTemplates, alt: '', width: 360, height: 165 },
+    illustration: 'quick-start-with-templates',
     actions: learnMore('/site/solutions/web-apps')
   },
   {
     title: 'Optimized workloads',
     description:
-      'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently.',
+      'Speed up applications, deliver content through the CDN, and process images on demand.',
     href: '/site/solutions/performance',
     illustration: 'improve-application-performance-and-reliability',
     actions: learnMore('/site/solutions/performance')
@@ -69,7 +68,7 @@ export const HOME_SOLUTIONS = [
   {
     title: 'AI applications',
     description:
-      'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value on the market.',
+      'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
     href: '/site/solutions/ai',
     illustration: 'ai-applications',
     actions: learnMore('/site/solutions/ai')
@@ -77,7 +76,7 @@ export const HOME_SOLUTIONS = [
   {
     title: 'Protected applications and APIs',
     description:
-      'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
+      'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
     href: '/site/solutions/security',
     illustration: 'programmable-security',
     actions: learnMore('/site/solutions/security')
@@ -85,12 +84,18 @@ export const HOME_SOLUTIONS = [
   {
     title: 'Media and streaming content',
     description:
-      'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
+      'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
     href: '/site/solutions/streaming',
-    illustration: 'low-latency',
+    illustration: 'content-and-media-delivery',
     actions: learnMore('/site/solutions/streaming')
   }
 ]
+
+export const HOME_SOLUTIONS_BAND = {
+  section: 'MediaSplitStack',
+  kind: 'solutions',
+  bands: HOME_SOLUTIONS
+}
 
 const FIRMS = {
   gigaom: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
@@ -99,6 +104,43 @@ const FIRMS = {
   frost: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost },
   g2: { name: 'G2', logo: g2, logoLight: g2 }
 }
+
+const MARKET_RECOGNITIONS = [
+  {
+    text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
+    name: 'G2 Spring 2026 Reports',
+    jobTitle: '',
+    firm: FIRMS.g2
+  },
+  {
+    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
+    name: 'G2 Winter 2026 Reports',
+    jobTitle: '',
+    firm: FIRMS.g2
+  },
+  {
+    text: 'Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report.',
+    name: 'GigaOm Radar for Edge Platforms',
+    jobTitle: '',
+    firm: FIRMS.gigaom
+  },
+  {
+    text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
+    name: '2023 North American New Product Innovation Award',
+    jobTitle: '',
+    firm: FIRMS.frost
+  }
+]
+
+const PRIMITIVE_GROUP_LABELS = ['Compute', 'AI', 'Data', 'Security']
+
+const PRIMITIVE_TITLES = { 'Bot Management': 'Bot Manager' }
+
+const HOME_PRIMITIVE_GROUPS = PLATFORM_PRIMITIVES.map((group, index) => ({
+  ...group,
+  label: PRIMITIVE_GROUP_LABELS[index] ?? group.label,
+  items: group.items.map((item) => ({ ...item, title: PRIMITIVE_TITLES[item.title] ?? item.title }))
+}))
 
 export const HOME_RECOGNITIONS = [
   {
@@ -194,13 +236,30 @@ export const HOME_PAGE = [
       'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
       { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '#contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     carouselLabel: 'Proven on mission-critical workloads',
     carouselMarks: CLIENT_STRIP
   },
-  PLATFORM_DIRECTORY,
-  { section: 'NetworkSection', ...EARTH_NETWORK },
+  {
+    ...PLATFORM_DIRECTORY,
+    title: 'Serverless AI-native primitives for autonomous workloads',
+    ariaLabel: 'Platform primitives',
+    groups: HOME_PRIMITIVE_GROUPS
+  },
+  {
+    section: 'NetworkSection',
+    ...EARTH_NETWORK,
+    title: 'Distributed infrastructure that stays up when others go down',
+    titleTail: '',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps throughput',
+      'Instant scale, automatic routing & failover',
+      '30 ms median latency',
+      'Always-on DDoS protection'
+    ]
+  },
   {
     section: 'FeatureTiles',
     kind: 'artwork',
@@ -210,22 +269,11 @@ export const HOME_PAGE = [
       'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
     tiles: HOME_REASONS
   },
-  { section: 'MediaSplitStack', kind: 'solutions', bands: HOME_SOLUTIONS },
   {
     section: 'RecognitionMarquee',
     title: 'Recognized as a market leader',
-    items: HOME_RECOGNITIONS
+    items: MARKET_RECOGNITIONS
   },
   { section: 'ClientMosaic', cells: HOME_CLIENT_CELLS },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Build',
-    title: 'Build, run, and protect applications.',
-    titleMuted: 'Everywhere.',
-    description:
-      'Get faster launches, lower latency, and less infrastructure overhead from day one.',
-    actions: [{ label: 'Start free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  agentsClosing('Built by you, or your agents.')
 ]

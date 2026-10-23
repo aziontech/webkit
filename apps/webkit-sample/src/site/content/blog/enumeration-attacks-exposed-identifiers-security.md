@@ -219,11 +219,11 @@ Note: rate limiting at the application layer doesn’t stop GraphQL batching. Fo
 
 Azion Bot Manager analyzes behavioral signals per request — including parameter variation patterns, request frequency, fingerprint anomalies, and credential stuffing signatures — without requiring volume thresholds that attackers deliberately stay below. It classifies traffic as legitimate, good bot, bad bot, or under evaluation, and can apply seven distinct mitigation actions (deny, drop, redirect, random delay, hold connection, custom HTML, allow) configured per threshold.
 
-Complementary to this: Azion Edge Firewall with custom Network Lists for IPs that trigger enumeration signatures, combining Reputation Intelligence and per-route behavioral enforcement.
+Complementary to this: Azion Firewall with custom Network Lists for IPs that trigger enumeration signatures, combining Reputation Intelligence and per-route behavioral enforcement.
 
-### Layer 4: Token-based authentication at the edge
+### Layer 4: Token-based authentication close to users
 
-Replace sequential IDs in authentication flows with cryptographically signed tokens validated at the edge using the Web Crypto API, which is natively supported in Azion Runtime:
+Replace sequential IDs in authentication flows with cryptographically signed tokens validated close to users using the Web Crypto API, which is natively supported in Azion Runtime:
 
 ```
 async function verifyJWT(token, secret) {
@@ -276,10 +276,10 @@ Compliance exposure:
 | Attack pattern | Detection signal | Response | Implementation |
 |---|---|---|---|
 | Sequential ID probing | Parameter increment pattern on specific route | Block IP + rotate IDs | Bot Manager behavioral analysis + UUID migration |
-| Login enumeration | Error response rate on /login above baseline | Progressive delays + CAPTCHA | Edge Firewall rules + Bot Manager |
+| Login enumeration | Error response rate on /login above baseline | Progressive delays + CAPTCHA | Firewall rules + Bot Manager |
 | GraphQL batching | Single IP, high request count per minute on /graphql | Batch size limit | API gateway middleware |
 | Forgot-password timing | Response time variance on reset endpoint | Constant-time response | Dummy async email dispatch |
-| Registration oracle | High 409 rate on /register from single IP | Rate limit per IP + per email domain | Edge Firewall custom rules |
+| Registration oracle | High 409 rate on /register from single IP | Rate limit per IP + per email domain | Firewall custom rules |
 | Microservice BOLA | Internal service calling object IDs not owned by session | Zero-trust internal auth | mTLS + service account scoping |
 
 ## What to do now
@@ -290,7 +290,7 @@ Compliance exposure:
 
 3. **Deploy Bot Manager with behavioral thresholds**. Azion Bot Manager adds per-request behavioral scoring — including credential stuffing and crawling signatures — without requiring volume thresholds that attackers deliberately stay below. Start with your highest-value endpoints: login, coupon validation, password reset.
 
-4. **Enforce GraphQL batch limits.** If you run GraphQL APIs, add a maximum batch size (typically 10–20 operations per request) at the edge layer before requests reach your resolvers.
+4. **Enforce GraphQL batch limits.** If you run GraphQL APIs, add a maximum batch size (typically 10–20 operations per request) in the layer closest to users before requests reach your resolvers.
 
 5. **Treat internal services as external**. Review microservice-to-microservice calls for unauthenticated endpoints. Any service that accepts object IDs without verifying ownership is an internal BOLA waiting to be discovered.
 

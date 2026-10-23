@@ -53,7 +53,7 @@
           :key="path.key"
           :d="path.d"
           :data-active="path.active || null"
-          class="stroke-(--text-muted) opacity-70 [stroke-dasharray:var(--spacing-1)] [stroke-width:var(--border-width-default)] data-[active]:stroke-(--primary) data-[active]:opacity-100 data-[active]:[stroke-dasharray:none]"
+          class="stroke-(--border-default) [stroke-width:var(--border-width-default)] data-[active]:stroke-(--accent)"
         />
       </svg>
 
@@ -68,7 +68,8 @@
         v-for="port in ports"
         :key="port.key"
         :data-active="port.active || null"
-        class="absolute size-(--size-2) -translate-1/2 border-(length:--border-width-default) border-(--text-muted)/70 bg-(--bg-canvas) data-[active]:border-(--primary)"
+        :data-side="port.side"
+        class="absolute size-(--size-2) rounded-(--radius-sm) border-(length:--border-width-default) border-(--border-muted) bg-(--border-default) data-[active]:bg-(--accent) data-[side=bottom]:-translate-x-1/2 data-[side=left]:-translate-x-full data-[side=left]:-translate-y-1/2 data-[side=right]:-translate-y-1/2 data-[side=top]:-translate-x-1/2 data-[side=top]:-translate-y-full"
         :style="at(port.x, port.y)"
       />
 
@@ -76,7 +77,7 @@
         v-for="chip in labels"
         :key="chip.key"
         :data-active="chip.active || null"
-        class="absolute -translate-1/2 rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-default) bg-(--bg-canvas) px-(--spacing-xxs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
+        class="absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
         :style="at(chip.x, chip.y)"
       >
         {{ chip.label }}

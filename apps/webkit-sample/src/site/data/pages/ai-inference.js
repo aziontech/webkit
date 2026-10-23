@@ -1,101 +1,119 @@
 import { markRaw } from 'vue'
 
-import Diagram from '../../ui/diagram/Diagram.vue'
-import { AI_FAQ } from '../ai.js'
-import { MODEL_ROUTING } from '../diagrams.js'
-import { BUILD_CTA, EARTH_NETWORK, NETWORK_TOPICS, quotesLedBy } from '../solutions.js'
+import AiInferenceFunctionFragment from '../../ui/mockup/widgets/AiInferenceFunctionFragment.vue'
+import AiInferenceModelFragment from '../../ui/mockup/widgets/AiInferenceModelFragment.vue'
+import AiInferenceTemplateFragment from '../../ui/mockup/widgets/AiInferenceTemplateFragment.vue'
+import {
+  PLATFORM_DIRECTORY,
+  PRODUCT_CLOSING,
+  PRODUCT_DOCS,
+  PRODUCT_HERO_ACTIONS
+} from '../product-pages.js'
+import { quotesLedBy } from '../solutions.js'
 
-const DOCS = '/site/docs'
-
-const FEATURES = [
+const PILLARS = [
   {
     icon: 'pi pi-globe',
-    title: 'Global inference on GPUs',
-    description:
-      'Run real-time serverless inference on GPUs across hundreds of locations with median latency under 30 ms. No infra to manage.'
+    title: 'Built-in reliability',
+    description: 'Automatic failover on a distributed architecture keeps your AI running.'
   },
   {
-    icon: 'ai ai-azion-api',
+    icon: 'pi pi-code',
     title: 'OpenAI-compatible API',
-    description:
-      'Migrate and integrate AI features quickly using OpenAI-compatible endpoints and SDKs. Just swap the endpoint.'
+    description: 'Keep your existing code and SDKs — just change the endpoint.'
   },
+  {
+    icon: 'pi pi-dollar',
+    title: 'Pay for usage',
+    description: 'You pay only when your models are running inference.'
+  }
+]
+
+const USE_CASES = [
   {
     icon: 'pi pi-bolt',
-    title: 'Real-time decisioning with AI agents',
+    title: 'AI agents for automated workflows',
     description:
-      'Run ReAct-style AI agents on a distributed architecture to reason over context, call tools, and respond in real time.'
+      'Build agents that plan, call tools, and complete tasks with context-aware responses.',
+    href: '/site/solutions/ai'
   },
   {
-    icon: 'ai ai-edge-sql',
-    title: 'RAG with SQL vector search',
+    icon: 'pi pi-cog',
+    title: 'AI-powered applications (RAG + search)',
     description:
-      'Integrate AI Inference with SQL Database vector search to power semantic retrieval and hybrid search.'
+      'Create RAG, semantic search, and personalized experiences using SQL Database vector search.',
+    href: '/site/solutions/web-apps'
   },
   {
-    icon: 'pi pi-chart-line',
-    title: 'Observability built for AI',
-    description:
-      'Track behavior and performance with Real-Time Metrics, Real-Time Events, and GraphQL APIs.'
-  },
-  {
-    icon: 'pi pi-shield',
-    title: 'AI-powered security workflows',
-    description:
-      'Build autonomous security agents to detect abuse and mitigate threats before origin impact. Or deploy a pre-built one instantly.'
-  }
-]
-
-const PLATFORM_CARDS = [
-  {
-    icon: 'ai ai-edge-ai',
-    title: 'Build AI Agents',
-    description:
-      'Automate multi-step workflows with AI agents that reason, plan, and act on your behalf. Collapse days of manual effort into minutes and free teams for higher-value work.'
-  },
-  {
-    icon: 'pi pi-share-alt',
-    title: 'Deploy Secure MCP Servers',
-    description:
-      'Connect AI agents to your tools, APIs, and live data through MCP servers running on the same distributed infrastructure as your inference.'
-  },
-  {
-    icon: 'ai ai-layers',
-    title: 'Build and Scale AI Applications',
-    description:
-      'Supercharge your applications with AI models, LoRA fine-tuned with SQL Database context, and generate real-time responses.'
+    icon: 'pi pi-users',
+    title: 'Customer support copilot',
+    description: 'Answer customer questions using your knowledge base and scalable AI inference.',
+    href: '/site/solutions/retail'
   },
   {
     icon: 'pi pi-shield',
-    title: 'Automate Threat Mitigation',
-    description:
-      'Run multi-model AI to identify phishing and abuse patterns across your digital assets. Automate security workflows with agentic AI — from detection to takedown.'
+    title: 'Automated threat detection and takedown',
+    description: 'Classify threats, detect abuse, and automate security actions with AI models.',
+    href: '/site/solutions/security'
   }
 ]
 
-const FRAMEWORKS = ['vue', 'react', 'nextjs', 'astro', 'svelte', 'angular', 'nuxt']
-
-const OPERATE_ROWS = [
+const FAQ = [
   {
-    title: 'Run AI models close to users',
-    description:
-      'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'
+    value: 'what-is',
+    question: 'What is Azion AI Inference?',
+    answer:
+      'AI Inference runs AI models on Azion’s distributed infrastructure. It has an OpenAI-compatible API for easy migration, supports LLMs, VLMs, embeddings, and reranking models, and offers LoRA fine-tuning for your domain. It scales automatically, with no GPUs to manage and low-latency responses worldwide.'
   },
   {
-    title: 'Run AI models close to users',
-    description:
-      'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'
+    value: 'models',
+    question: 'Which models can I run?',
+    answer:
+      'Choose from a catalog of open-source models for text and code generation, vision-language tasks, embeddings, and reranking. The catalog grows as new models arrive, and you can fine-tune supported models with LoRA for your domain.'
   },
   {
-    title: 'Run AI models close to users',
-    description:
-      'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.'
+    value: 'openai-compatible',
+    question: 'Is it compatible with OpenAI API?',
+    answer:
+      'Yes. AI Inference uses an OpenAI-compatible API format, so you can migrate existing applications by updating the base URL and credentials. Keep your current SDKs and integration patterns—no code rewrite required.'
+  },
+  {
+    value: 'fine-tune',
+    question: 'Can I fine-tune models?',
+    answer:
+      'Yes. AI Inference supports LoRA (Low-Rank Adaptation) fine-tuning, so you can specialize a model for your domain without full retraining. That cuts compute costs and improves accuracy on tasks like customer support, code generation, or domain-specific Q&A.'
+  },
+  {
+    value: 'rag',
+    question: 'How do I build RAG and semantic search?',
+    answer:
+      'Use AI Inference with SQL Database Vector Search to store embeddings and retrieve relevant context for RAG applications. This built-in vector search means no separate vector database to manage—SQL and vectors in one service.'
+  },
+  {
+    value: 'agents',
+    question: 'Can I build AI agents and tool-calling workflows?',
+    answer:
+      'Yes. AI Inference powers agent patterns like ReAct and tool-calling workflows when combined with Applications, Functions, and external APIs. Azion provides templates and guides for LangChain and LangGraph-based agent architectures.'
+  },
+  {
+    value: 'migrate',
+    question: 'How do I migrate from Cloudflare Workers AI?',
+    answer:
+      'Both platforms use OpenAI-compatible APIs, so migration is short. Update your base URL to point to Azion AI Inference endpoints, migrate any LoRA adapters, and integrate with Azion Functions. If you use Cloudflare Vectorize, migrate to Azion SQL Database Vector Search for built-in vector storage.'
+  },
+  {
+    value: 'pricing',
+    question: 'How does pricing compare to other platforms?',
+    answer:
+      'AI Inference uses straightforward per-request pricing without abstract units like "neurons." You pay for inference requests based on model and token usage—no idle costs, no capacity commitments. That makes costs easier to forecast than neuron-based billing.'
+  },
+  {
+    value: 'deploy',
+    question: 'How do I deploy AI inference into my application?',
+    answer:
+      'Create an AI Inference endpoint, then integrate it into your request flow using Applications and Functions. This adds AI capabilities to existing APIs and user experiences with distributed execution, managed scaling, and automatic failover.'
   }
 ]
-
-const operateDescription = [
-  ...new Set(OPERATE_ROWS.map((row) => `${row.title}. ${row.description}`))
-].join(' ')
 
 export const AI_INFERENCE_PAGE = [
   {
@@ -103,53 +121,83 @@ export const AI_INFERENCE_PAGE = [
     kind: 'title-band',
     titleLength: 'long',
     eyebrow: 'AI Inference',
-    title: 'Build and deploy AI agents and applications in seconds',
+    title: 'Run AI models close to your users',
     description:
-      'Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality.',
-    actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Docs', href: DOCS, kind: 'outlined' }
+      'Deploy and scale AI applications on Azion’s distributed infrastructure, with an OpenAI-compatible API and no GPUs to manage.',
+    actions: PRODUCT_HERO_ACTIONS
+  },
+  { section: 'CapabilityGrid', gap: false, items: PILLARS },
+  {
+    section: 'FeatureWidgets',
+    anchor: 'built-in',
+    eyebrow: 'Built in',
+    title: 'From a template to a running model',
+    description:
+      'The starter you deploy, the model it loads and the function that calls it ship together in one workflow, to the same distributed infrastructure.',
+    actions: PRODUCT_HERO_ACTIONS,
+    columns: 3,
+    items: [
+      {
+        icon: 'ai ai-marketplace',
+        title: 'Quick start with templates',
+        description:
+          'Start from pre-built applications and starter kits for AI and agent use cases, and deploy a complete project in seconds.',
+        scene: { component: markRaw(AiInferenceTemplateFragment) },
+        href: PRODUCT_DOCS
+      },
+      {
+        icon: 'pi pi-microchip-ai',
+        title: 'Pick the model your app runs',
+        description:
+          'Choose from a catalog of open-source models for text and code generation, vision-language tasks, embeddings, and reranking.',
+        scene: { component: markRaw(AiInferenceModelFragment) },
+        href: PRODUCT_DOCS
+      },
+      {
+        icon: 'ai ai-edge-functions',
+        title: 'From hello world to production AI workloads',
+        description:
+          'Call a model from a function in a few lines, and connect it with SQL Database, Object Storage, and Functions in one platform.',
+        scene: { component: markRaw(AiInferenceFunctionFragment) },
+        href: PRODUCT_DOCS
+      }
     ]
   },
-  { section: 'CapabilityGrid', gap: false, items: FEATURES },
-  { section: 'CapabilityGrid', items: PLATFORM_CARDS },
   {
-    section: 'TemplateGallery',
-    eyebrow: '',
-    title: 'Quick start with templates',
-    description:
-      'Build faster with pre-built applications and starter kits for common use cases. Deploy complete projects in seconds with popular frameworks.',
-    actions: [{ label: 'Deploy now', href: '/signup', kind: 'secondary', trailing: true }],
-    stackLabel: 'Compatible with your stack',
-    stackMarks: FRAMEWORKS
+    section: 'MediaSplitStack',
+    kind: 'solutions',
+    bands: [
+      {
+        title: 'Deploy from your local environment',
+        description:
+          'Build, debug, and ship AI workloads the way you already code, with the scale of Azion’s distributed infrastructure.',
+        href: PRODUCT_DOCS,
+        illustration: 'quick-start-with-templates',
+        illustrationLabel: 'A project going from a starter template to a live deployment',
+        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
+      },
+      {
+        title: 'Fine-tune with LoRA',
+        description:
+          'Adapt model outputs to your domain with Low-Rank Adaptation (LoRA). Accuracy improves on specialized tasks and compute costs drop, with no full model retraining.',
+        href: '/site/solutions/ai',
+        illustration: 'models-and-lora',
+        illustrationLabel: 'A model adapted with LoRA, restyling an image from a few lines of code',
+        actions: [{ label: 'AI solutions', href: '/site/solutions/ai' }]
+      }
+    ]
   },
   {
-    section: 'MediaSplitBand',
-    title: 'Operate AI With Speed, Reliability, and Cost Control',
-    description: operateDescription,
-    orientation: 'vertical',
-    texture: 'none',
-    scene: {
-      component: markRaw(Diagram),
-      props: {
-        spec: MODEL_ROUTING,
-        label:
-          'An AI app routes paid users to OpenAI GPT-5.5 with a fallback to Claude Opus 4.7, and everyone else to Kimi K2.6 or Gemma 4 depending on load'
-      }
-    }
+    section: 'UseCases',
+    eyebrow: 'Use Cases',
+    title: 'What you can build with AI Inference',
+    description:
+      'Put AI Inference behind any application and run models on Azion’s distributed infrastructure, close to your users. Teams use it to:',
+    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('axur') },
-  { section: 'PlatformDirectory', title: 'All the AI Primitives You Need' },
-  { section: 'NetworkSection', ...EARTH_NETWORK, kind: 'benefits', benefits: NETWORK_TOPICS },
-  { section: 'FaqSection', items: AI_FAQ },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: BUILD_CTA.eyebrow,
-    title: BUILD_CTA.title,
-    titleMuted: BUILD_CTA.titleMuted,
-    description: BUILD_CTA.description,
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  PLATFORM_DIRECTORY,
+  { section: 'FaqSection', items: FAQ },
+  PRODUCT_CLOSING
 ]

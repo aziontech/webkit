@@ -72,7 +72,7 @@ All five are implementable in one to two sprint cycles. None require rebuilding 
 
 **Proper HTTP status codes.** Audit the API for 200 responses with errors in the body. Change them to the appropriate 4xx or 5xx. Add a Retry-After header to rate limit responses. This alone can cut agent-related origin load significantly by stopping retry loops before they compound.
 
-**Agent-aware observability.** Add two fields to every API log: client type (human, known agent, unknown agent) and a request context ID that groups all requests from a single agent task. With these, it becomes possible to see what an agent is trying to accomplish, how long it takes, and whether its behavior matches expectations. Azion’s Real-Time Events surfaces this at the network edge before requests reach the origin.
+**Agent-aware observability.** Add two fields to every API log: client type (human, known agent, unknown agent) and a request context ID that groups all requests from a single agent task. With these, it becomes possible to see what an agent is trying to accomplish, how long it takes, and whether its behavior matches expectations. Azion’s Real-Time Events surfaces this close to users before requests reach the origin.
 
 **A classification layer.** Between the internet and the API, a layer that classifies traffic intent in real time changes what is possible. Azion’s Bot Manager uses behavioral signals, Reputation Intelligence, and machine learning to classify each request as human, good bot, bad bot, or under evaluation. Known good agents get an allow rule with higher limits. Unknown agents get a friction response that legitimate integrations handle and abusive bots do not.
 
@@ -92,7 +92,7 @@ Teams that are ahead of this have made three changes: behavioral rate limiting, 
 
 AI agents are already in production, already calling APIs, already hitting assumptions that were never tested at machine speed. The five fixes above are not a future roadmap item. They are a response to traffic that is already there.
 
-[Talk to an Azion specialist](https://www.azion.com/en/contact/) to see how [Bot Manager](https://www.azion.com/en/products/bot-manager/) and [Real-Time Events](https://www.azion.com/en/products/real-time-events/) handle AI agent classification and observability at the network edge.
+[Talk to an Azion specialist](https://www.azion.com/en/contact/) to see how [Bot Manager](https://www.azion.com/en/products/bot-manager/) and [Real-Time Events](https://www.azion.com/en/products/real-time-events/) handle AI agent classification and observability close to users.
 
 ---
 

@@ -58,7 +58,7 @@ The expected outcome provides three pieces of evidence: the application entered 
 
 ## From configuration to the outcome of a request
 
-In Azion, protection acts before allowed traffic proceeds to the origin. The data center receiving the request executes Firewall rules, with WAF and Bot Manager triggered according to the criteria defined in Rules Engine. DDoS Protection remains active across the platform’s distributed network of more than 100 data centers.
+In Azion, protection acts before allowed traffic proceeds to the origin. The data center receiving the request executes Firewall rules, with WAF and Bot Manager triggered according to the criteria defined in Rules Engine. DDoS Protection remains active across the platform’s distributed infrastructure of more than 100 data centers.
 
 When a case requires specific logic, Functions can execute custom code or code from Marketplace solutions in the request flow. This logic can also call AI Inference to support an analysis. The ebook details this architecture and its components.
 

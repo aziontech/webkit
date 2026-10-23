@@ -1,111 +1,112 @@
+import Button from '@aziontech/webkit/button'
+import CodeBlock from '@aziontech/webkit/code-block'
 import FrameBox from '@aziontech/webkit/frame-box'
-import Illustration from '@aziontech/webkit/illustration'
 import MediaTabs from '@aziontech/webkit/media-tabs'
-import MiniButton from '@aziontech/webkit/mini-button'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
-import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { WORKLOAD_RECIPE_TABS } from '../../../../../webkit-sample/src/site/data/workload-recipes.js'
+import { COLUMN_IMPORTS, declareTabs, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
-const IMPORTS = [
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import Illustration from '@aziontech/webkit/illustration'",
-  "import MediaTabs from '@aziontech/webkit/media-tabs'",
-  "import MiniButton from '@aziontech/webkit/mini-button'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
-  "import SectionTitle from '@aziontech/webkit/section-title'"
-]
-
 const components = {
+  Button,
+  CodeBlock,
   FrameBox,
-  Illustration,
   MediaTabs,
-  MiniButton,
   SectionContainer,
   SectionGap,
   SectionModule,
   SectionTitle
 }
 
-const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
+const TITLE = 'From a hostname to a full stack, on one platform'
+const DESCRIPTION =
+  'Storage, a database, a firewall and a cache policy all bind to the same workload. Each one is a binding, not another deployment to run.'
+
+const ITEMS = WORKLOAD_RECIPE_TABS.map(({ title, description }) => ({ title, description }))
+const CODE_TABS = WORKLOAD_RECIPE_TABS.map((tab) => tab.code)
+const FILES = CODE_TABS.map((tab) => [tab])
+
+const text = (value) => `'${value.replace(/'/g, "\\'")}'`
+
+const CODE_IMPORTS = [
+  "import Button from '@aziontech/webkit/button'",
+  "import CodeBlock from '@aziontech/webkit/code-block'",
+  "import FrameBox from '@aziontech/webkit/frame-box'",
+  "import MediaTabs from '@aziontech/webkit/media-tabs'",
+  ...COLUMN_IMPORTS,
+  "import SectionModule from '@aziontech/webkit/section-module'",
+  "import SectionTitle from '@aziontech/webkit/section-title'",
+  '',
+  `const items = [\n${ITEMS.map(
+    (item) => `  {\n    title: ${text(item.title)},\n    description: ${text(item.description)}\n  }`
+  ).join(',\n')}\n]`,
+  '',
+  declareTabs('codeTabs', CODE_TABS),
+  '',
+  'const files = codeTabs.map((tab) => [tab])'
+]
+
+const CODE_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
     <SectionTitle
-      kind="left"
-      eyebrow="Observability"
-      title="Inspect every run end-to-end"
-      description="Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach. Pick a document to open it."
-    />
+      kind="horizontal"
+      title="${TITLE}"
+      description="${DESCRIPTION}"
+    >
+      <template #actions>
+        <Button
+          label="Read the docs"
+          kind="secondary"
+          size="large"
+          href="/docs"
+          icon="pi pi-chevron-right"
+          icon-position="trailing"
+          animated
+        />
+      </template>
+    </SectionTitle>
   </template>
 
   <FrameBox flush borders="y" marks="bottom">
-    <MediaTabs
-      :items="[
-        {
-          title: 'Trace',
-          description:
-            'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.'
-        },
-        {
-          title: 'Logs',
-          description:
-            'Structured output on the same clock as the trace, filtered by level, searchable in place.'
-        },
-        {
-          title: 'Request path',
-          description:
-            'The workload, application, function and connector it travelled, each captioned with the time spent there.'
-        }
-      ]"
-      size="small"
-      :auto-play-interval="5200"
-      class="[--media-tabs-media-min:24rem]"
-    >
-      <template #media="{ index }">
-        <Illustration
-          v-if="index === 0"
-          name="live-debugging"
-          class="size-full"
-        />
-        <Illustration
-          v-else-if="index === 1"
-          name="stay-in-control"
-          class="size-full"
-        />
-        <Illustration
-          v-else
-          name="distributed-apis"
-          class="size-full"
-        />
-      </template>
-    </MediaTabs>
-
-    <div class="p-(--spacing-xl)">
-      <MiniButton
-        label="Open an invocation"
-        show-icon
-        icon="pi pi-angle-right"
-        href="/product-preview"
-      />
+    <div class="-mx-px [--media-tabs-media-min:30rem]">
+      <MediaTabs
+        :items="items"
+        size="medium"
+        texture="pixelate"
+        texture-size="small"
+        texture-fade="top"
+        :auto-play-interval="5200"
+      >
+        <template #media="{ index, active }">
+          <div class="w-full min-w-0 p-(--spacing-xl)">
+            <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+              <CodeBlock
+                :tabs="files[index]"
+                show-line-numbers
+                :animate-lines="active"
+                copy-aria-label="Copy the workload sample"
+              />
+            </div>
+          </div>
+        </template>
+      </MediaTabs>
     </div>
   </FrameBox>
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/FeatureTabs',
-  tags: ['autodocs'],
+  title: 'Templates/Marketing/Solutions/FeatureTabs',
+  excludeStories: ['SITE_SECTION_CODE'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A band that walks through the features behind one claim, one at a time: a stack of up to three tabs on one side, the active tab’s media on the other, advancing on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion. The Functions page uses it for its Observability section, with a `MiniButton` into the console under the frame. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs` and `MiniButton`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -113,15 +114,31 @@ const meta = {
 
 export default meta
 
-export const Default = {
-  render: () => ({ components, template: TEMPLATE }),
+export const Code = {
+  render: () => ({
+    components,
+    setup: () => ({ items: ITEMS, files: FILES }),
+    template: CODE_TEMPLATE
+  }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Functions page’s Observability band: the Trace, Logs and Request path tabs, each held for 5.2 seconds. The sample site draws each tab’s media with its own animated console scene, which is not a webkit component; here the `#media` slot shows one `Illustration` scene per tab instead, picked by the slot’s `index`.'
-      },
-      source: { code: toSfc(IMPORTS, TEMPLATE) }
+      source: { code: toSfc(CODE_IMPORTS, CODE_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_CODE = {
+  _id: 'feature-tabs-code',
+  props: {
+    title: TITLE,
+    description: DESCRIPTION,
+    tabs: WORKLOAD_RECIPE_TABS,
+    copyAriaLabel: 'Copy the workload sample',
+    action: { label: 'Read the docs', href: '/docs' }
+  }
+}
+
+export const CodeJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_CODE)
 }

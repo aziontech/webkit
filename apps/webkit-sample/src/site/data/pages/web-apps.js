@@ -1,14 +1,13 @@
-import { BUILD_CLIENT_STRIP, PRODUCT_STACK } from '@shared/ui/brand/strips.js'
+import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
 
 const HERO = {
   eyebrow: 'Application Development',
-  title: 'Build lightning-fast websites and web apps and launch globally',
+  title: 'Build fast web apps and launch globally',
   description:
-    'Deploy serverless web applications, APIs, and AI workloads from your git repository with built-in performance, security, and scalability.',
-  carouselMarks: BUILD_CLIENT_STRIP
+    'Deploy web applications, APIs, and AI workloads from your Git repository, with performance, security, and scale built in.'
 }
 
 const CAPABILITIES = [
@@ -16,25 +15,25 @@ const CAPABILITIES = [
     icon: 'ai ai-edge-nodes',
     title: 'Consistent global speed',
     description:
-      'Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage.'
+      'Serve content and run web apps from 100+ data centers, with median latency under 30 ms. No infrastructure to manage.'
   },
   {
     icon: 'ai ai-load-balancer',
     title: 'Safer high-traffic launches',
     description:
-      'Scale automatically from routine traffic to campaign spikes without cold starts, manual provisioning, or release-day bottlenecks.'
+      'Scale automatically from routine traffic to campaign spikes, with no cold starts, manual provisioning, or release-day bottlenecks.'
   },
   {
     icon: 'pi pi-chart-line',
     title: 'Higher conversion potential',
     description:
-      'Improve web app responsiveness and user experience with caching, protocol optimizations, and request-level control.'
+      'Make web apps more responsive with caching, protocol optimizations, and request-level control.'
   },
   {
     icon: 'pi pi-eye',
     title: 'Preview every release',
     description:
-      'Validate web app changes in preview environments before production and reduce risk during content and campaign launches.'
+      'Check changes in preview environments before production, and cut the risk of content and campaign launches.'
   },
   {
     icon: 'pi pi-code',
@@ -50,13 +49,13 @@ const CAPABILITIES = [
 ]
 
 const USE_CASES = {
-  title: 'The Full-Stack Platform for Modern Applications',
+  title: 'One Platform for Your Full Stack',
   items: [
     {
       illustration: 'build-applications',
       title: 'Websites',
       description:
-        'Build and deploy websites and web apps without infrastructure management overhead. Deliver fast, reliable experiences through a global network.',
+        "Build and deploy websites and web apps with no infrastructure to manage. Deliver fast, reliable experiences from Azion's distributed infrastructure.",
       action: 'See more',
       href: 'https://www.azion.com/en/solutions/websites/'
     },
@@ -64,7 +63,7 @@ const USE_CASES = {
       illustration: 'distributed-apis',
       title: 'APIs',
       description:
-        'Build serverless APIs and microservices with distributed execution. Scale globally without managing region-by-region infrastructure.',
+        'Build serverless APIs and microservices with distributed, cold-start-free execution. Scale globally without managing infrastructure region by region.',
       action: 'See more',
       href: 'https://www.azion.com/en/solutions/distributed-web-applications-and-apis/'
     },
@@ -72,7 +71,7 @@ const USE_CASES = {
       illustration: 'saas-platforms',
       title: 'E-commerce',
       description:
-        'Build secure storefronts that protect checkout and account flows while maintaining fast, reliable experiences under peak traffic.',
+        'Build secure storefronts that protect checkout and account flows and stay fast under peak traffic.',
       action: 'See more',
       href: '/site/solutions/retail'
     },
@@ -80,7 +79,7 @@ const USE_CASES = {
       illustration: 'ai-applications',
       title: 'AI Apps',
       description:
-        'Build AI-powered applications with serverless inference and your own agents, running on GPUs across hundreds of locations — with no infrastructure to manage.',
+        "Build AI-powered applications with serverless inference and your own agents, running on GPUs across Azion's data centers, with no infrastructure to manage.",
       action: 'See more',
       href: '/site/solutions/ai'
     }
@@ -94,25 +93,25 @@ const FAQ = [
     value: 'q1',
     question: 'What can I build on Azion?',
     answer:
-      "You can build web applications, APIs, AI-powered experiences, and other modern workloads on Azion's globally distributed platform. Start with Applications, then extend performance and specialized capabilities with Cache, Application Accelerator, AI Inference, and Image Processor as your architecture evolves."
+      "You can build web applications, APIs, AI-powered experiences, and other modern workloads on Azion's distributed architecture. Start with Applications, then add Cache, Application Accelerator, AI Inference, and Image Processor as you need them."
   },
   {
     value: 'q2',
     question: 'Does it have cold starts?',
     answer:
-      'Azion Runtime is designed for zero cold starts and fast execution, so applications can respond with low latency even under heavy demand.'
+      'Azion Runtime is designed for zero cold starts and fast execution, so applications respond with low latency even under heavy demand.'
   },
   {
     value: 'q3',
     question: 'Does it scale?',
     answer:
-      'Scaling is built in by default, allowing your application to handle traffic growth and spikes without pre-provisioning infrastructure.'
+      'Scaling is built in. Your application handles traffic growth and spikes without pre-provisioned infrastructure.'
   },
   {
     value: 'q4',
     question: 'Do I need to choose regions or manage infrastructure?',
     answer:
-      "No. Your applications are distributed automatically across 100+ locations, so you don't have to pick regions, provision servers, or manage scaling manually. You focus on the application logic while Azion handles distribution close to your users."
+      "No. Your applications are distributed automatically across 100+ data centers, so you don't pick regions, provision servers, or manage scaling by hand. You focus on application logic, and Azion handles distribution close to your users."
   },
   {
     value: 'q5',
@@ -130,13 +129,13 @@ const FAQ = [
     value: 'q7',
     question: 'Can I combine Functions, Cache, AI, and image optimization in the same application?',
     answer:
-      "Yes. That's one of the main advantages of the platform. Functions can work alongside Cache, Application Accelerator, AI Inference, and Image Processor in the same architecture, so you can add logic, improve performance, and deliver optimized assets without stitching together separate vendors or services."
+      'Yes. That is one of the main advantages of the platform. Functions work alongside Cache, Application Accelerator, AI Inference, and Image Processor, so you can add logic, speed up delivery, and serve optimized assets without stitching together separate vendors.'
   },
   {
     value: 'q8',
     question: 'Can Azion help with dynamic and personalized applications, not just static content?',
     answer:
-      'Yes. Azion Build supports dynamic workloads with features like advanced cache keys, POST caching, request hashing, real-time TTL validation, and route-based logic through Rules Engine. This helps accelerate personalized pages, APIs, and session-aware experiences without breaking application behavior.'
+      'Yes. Azion Build supports dynamic workloads with features like advanced cache keys, POST caching, request hashing, real-time TTL validation, and route-based logic through Rules Engine. That speeds up personalized pages, APIs, and session-aware experiences without breaking application behavior.'
   },
   {
     value: 'q9',
@@ -148,13 +147,13 @@ const FAQ = [
     value: 'q10',
     question: 'How do I debug and monitor my application in production?',
     answer:
-      'You can inspect live behavior with Debug Rules, Real-Time Events, GraphQL-powered metrics, Data Stream, and stack trace visibility. These tools help you understand how requests are processed, trace execution paths, and troubleshoot distributed applications with more confidence.'
+      'You can inspect live behavior with Debug Rules, Real-Time Events, GraphQL-powered metrics, Data Stream, and stack trace visibility. These tools show how requests are processed, trace execution paths, and help you troubleshoot distributed applications.'
   },
   {
     value: 'q11',
     question: 'Can I start free and expand later?',
     answer:
-      'Yes. You can begin with a free single Function or application and add more capabilities as your needs grow. The platform is designed as connected building blocks, so you can progressively introduce caching, acceleration, AI features, observability, and media processing without rebuilding your architecture.'
+      'Yes. You can begin with a free single Function or application and add more capabilities as your needs grow. The platform is built from connected parts, so you can add caching, acceleration, AI, monitoring, and media processing without rebuilding your architecture.'
   }
 ]
 
@@ -171,8 +170,9 @@ export const WEB_APPS_PAGE = solutionPage({
   useCases: USE_CASES,
   stack: STACK,
   quotes: quotesLedBy('herospark'),
-  primitivesTitle: 'All the Development Primitives You Need',
+  primitivesTitle: 'Everything You Need to Build',
   network: EARTH_NETWORK,
   faq: FAQ,
-  cta: CTA
+  cta: CTA,
+  agents: true
 })

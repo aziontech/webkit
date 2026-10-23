@@ -1,4 +1,4 @@
-import { AI_CLIENT_STRIP, AI_STACK } from '@shared/ui/brand/strips.js'
+import { AI_STACK } from '@shared/ui/brand/strips.js'
 
 import { AI_FAQ } from '../ai.js'
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
@@ -8,8 +8,7 @@ const HERO = {
   eyebrow: 'Artificial Intelligence (AI)',
   title: 'Build AI-powered applications on distributed architecture',
   description:
-    'Run AI models for real-time text, image, and media generation. Build with AI Inference, Functions, and SQL Database on Azion.',
-  carouselMarks: AI_CLIENT_STRIP
+    'Run AI models for real-time text, image, and media generation. Build with AI Inference, Functions, and SQL Database on Azion.'
 }
 
 const CAPABILITIES = [
@@ -17,7 +16,7 @@ const CAPABILITIES = [
     icon: 'pi pi-microchip-ai',
     title: 'Global inference on GPUs',
     description:
-      'Run real-time serverless inference on GPUs across hundreds of locations with median latency under 30 ms. No infra to manage.'
+      'Run real-time inference on GPUs across Azion’s distributed infrastructure, with median latency under 30 ms and no infrastructure to manage.'
   },
   {
     icon: 'pi pi-code',
@@ -39,7 +38,7 @@ const CAPABILITIES = [
   },
   {
     icon: 'pi pi-chart-line',
-    title: 'Observability built for AI',
+    title: 'Monitoring built for AI',
     description:
       'Track behavior and performance with Real-Time Metrics, Real-Time Events, and GraphQL APIs.'
   },
@@ -47,7 +46,7 @@ const CAPABILITIES = [
     icon: 'pi pi-shield',
     title: 'AI-powered security workflows',
     description:
-      'Build autonomous security agents to detect abuse and mitigate threats before origin impact. Or deploy a pre-built one instantly.'
+      'Build autonomous security agents to detect abuse and stop threats before they reach your origin. Or deploy a pre-built one instantly.'
   }
 ]
 
@@ -58,7 +57,7 @@ const USE_CASES = {
       illustration: 'ai-applications',
       title: 'Build AI Agents',
       description:
-        'Automate multi-step workflows with AI agents that reason, plan, and act on your behalf. Collapse days of manual effort into minutes and free teams for higher-value work.'
+        'Automate multi-step workflows with AI agents that reason, plan, and act for you. Cut days of manual effort to minutes and free teams for higher-value work.'
     },
     {
       illustration: 'deploy-secure-mcp-server',
@@ -70,13 +69,13 @@ const USE_CASES = {
       illustration: 'build-applications',
       title: 'Build and Scale AI Applications',
       description:
-        'Supercharge your applications by running AI models, LoRA fine-tuning, and RAG pipelines with SQL Database vector search to retrieve context and generate grounded responses. Make any application AI-powered with minimal effort.'
+        'Run AI models, LoRA fine-tuning, and RAG pipelines in your applications, using SQL Database vector search to retrieve context and ground responses. Add AI to any application with minimal effort.'
     },
     {
       illustration: 'automate-threat-mitigation',
       title: 'Automate Threat Mitigation',
       description:
-        'Run multi-model AI to identify phishing and abuse patterns across your digital assets. Automate security workflows with agentic AI — from detection to takedown.'
+        'Run multi-model AI to spot phishing and abuse patterns across your digital assets. Automate security workflows with agentic AI — from detection to takedown.'
     }
   ]
 }
@@ -96,8 +95,9 @@ export const AI_WORKLOADS_PAGE = solutionPage({
   useCases: USE_CASES,
   stack: STACK,
   quotes: quotesLedBy('axur'),
-  primitivesTitle: 'All the AI Primitives You Need',
+  primitivesTitle: 'Everything You Need to Run AI',
   network: EARTH_NETWORK,
   faq: AI_FAQ,
-  cta: CTA
+  cta: CTA,
+  agents: true
 })

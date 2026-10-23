@@ -1,4 +1,4 @@
-In serverless and edge computing environments, ensuring compatibility across browsers, edge runtimes, and servers is more important than ever. Polyfills—small code snippets that mimic newer web features—make it possible to run modern code across a variety of platforms, from browsers to edge functions, without losing functionality.
+In serverless and distributed architecture environments, ensuring compatibility across browsers, edge runtimes, and servers is more important than ever. Polyfills—small code snippets that mimic newer web features—make it possible to run modern code across a variety of platforms, from browsers to functions, without losing functionality.
 
 In this article, we’ll explore how polyfills are essential not just for browser compatibility but also for improving performance and making development smoother in serverless and edge architectures.
 

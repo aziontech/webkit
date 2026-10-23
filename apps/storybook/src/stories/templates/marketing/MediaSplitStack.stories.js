@@ -1,4 +1,3 @@
-import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
 import BandStack from '@aziontech/webkit/band-stack'
 import Button from '@aziontech/webkit/button'
 import Illustration from '@aziontech/webkit/illustration'
@@ -9,6 +8,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -24,44 +24,42 @@ const components = {
 
 const SOLUTIONS = [
   {
-    art: 'quickStartWithTemplates',
+    illustration: 'quick-start-with-templates',
     title: 'Modern applications',
-    description:
-      'Build static sites, develop serverless applications, or modernize your legacy systems.',
+    description: 'Build static sites, run serverless applications, or modernize legacy systems.',
     href: '/solutions/web-apps'
   },
   {
     illustration: 'improve-application-performance-and-reliability',
     title: 'Optimized workloads',
     description:
-      'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently.',
+      'Speed up applications, deliver content through the CDN, and process images on demand.',
     href: '/solutions/performance'
   },
   {
     illustration: 'ai-applications',
     title: 'AI applications',
     description:
-      'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value on the market.',
+      'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
     href: '/solutions/ai'
   },
   {
-    illustration: 'programmable-security',
+    illustration: 'automate-threat-mitigation',
     title: 'Protected applications and APIs',
     description:
-      'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
+      'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
     href: '/solutions/security'
   },
   {
     illustration: 'low-latency',
     title: 'Media and streaming content',
     description:
-      'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
+      'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
     href: '/solutions/streaming'
   }
 ]
 
 const SOLUTIONS_IMPORTS = [
-  "import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'",
   "import BandStack from '@aziontech/webkit/band-stack'",
   "import Button from '@aziontech/webkit/button'",
   "import Illustration from '@aziontech/webkit/illustration'",
@@ -72,6 +70,7 @@ const SOLUTIONS_IMPORTS = [
 
 const ALTERNATING_IMPORTS = [
   "import BandStack from '@aziontech/webkit/band-stack'",
+  "import Button from '@aziontech/webkit/button'",
   "import Illustration from '@aziontech/webkit/illustration'",
   "import MediaSplit from '@aziontech/webkit/media-split'",
   ...COLUMN_IMPORTS,
@@ -86,19 +85,7 @@ ${bands}
   </BandStack>
 </SectionModule>`)
 
-const solutionMedia = (solution) =>
-  solution.art
-    ? `<div class="flex aspect-592/300 w-full items-center justify-center">
-  <img
-    :src="${solution.art}"
-    alt=""
-    width="360"
-    height="165"
-    decoding="async"
-    class="block h-auto w-[60.81%]"
-  />
-</div>`
-    : `<Illustration name="${solution.illustration}" />`
+const solutionMedia = (solution) => `<Illustration name="${solution.illustration}" />`
 
 const solutionBand = (solution) => `<MediaSplit
   kind="media-end"
@@ -137,38 +124,43 @@ const NETWORK_BANDS = [
     kind: 'media-start',
     title: 'Run closer to users',
     description:
-      'Handle requests closer to users instead of sending everything back to a few central regions. That helps cut latency, absorb spikes automatically, and reduce backhaul overhead.',
+      'Handle requests close to users instead of sending everything back to a few central regions. That cuts latency, absorbs spikes automatically, and reduces backhaul.',
     illustration: 'fastest-path-to-live-website',
-    ariaLabel: 'Requests served from the location nearest the user'
+    ariaLabel: 'Requests served from the data center nearest the user',
+    href: '/products/application-accelerator'
   },
   {
     kind: 'media-end',
     title: 'Keep delivery, logic, and data in one place',
     description:
-      'Use one platform for delivery, distributed execution, and data workflows. Support APIs and dynamic applications with real-time request handling, origin protection, and state kept close to execution with services like KV Store.',
+      'Run delivery, execution, and data on one platform. APIs and dynamic applications get real-time request handling, origin protection, and state kept next to the code with KV Store.',
     illustration: 'runtime',
-    ariaLabel: 'Delivery, execution and data served from one platform'
+    ariaLabel: 'Delivery, execution and data served from one platform',
+    href: '/products/kv-store'
   },
   {
     kind: 'media-start',
     title: 'Get better routes and more stable delivery',
     description:
-      'Place traffic entry points inside ISP last-mile networks and connect through IXPs, peering, and Tier 1 transit. Reduce hops, improve route quality, and keep delivery stable during traffic spikes, upstream issues, and regional incidents.',
+      'Traffic enters inside ISP last-mile networks and connects through IXPs, peering, and Tier 1 transit. Fewer hops mean better routes and stable delivery during traffic spikes, upstream issues, and regional incidents.',
     illustration: 'distributed-apis',
-    ariaLabel: 'Entry points inside ISP networks, connected through IXPs and transit'
+    ariaLabel: 'Entry points inside ISP networks, connected through IXPs and transit',
+    href: '/products/load-balancer'
   },
   {
     kind: 'media-end',
     title: 'Stop attack traffic earlier',
     description:
-      'Block attack traffic in the delivery path before it reaches your origin. Deploy code and policies while the platform handles scaling, execution, and traffic steering, so your team spends less time managing regions, capacity, scaling rules, and extra layers.',
+      'Block attack traffic in the delivery path, before it reaches your origin. Deploy code and policies and let the platform handle scaling, execution, and traffic steering. Your team manages fewer regions, less capacity, and fewer scaling rules.',
     illustration: 'automate-threat-mitigation',
-    ariaLabel: 'Attack traffic stopped in the delivery path, before the origin'
+    ariaLabel: 'Attack traffic stopped in the delivery path, before the origin',
+    href: '/products/ddos-protection'
   }
 ]
 
 const ALTERNATING_TEMPLATE = inColumn(`<SectionTitle
   kind="centered"
+  size="large"
   eyebrow="Managed Infrastructure"
   title="Stop managing regions and capacity by hand"
 />
@@ -179,16 +171,32 @@ ${each(
   NETWORK_BANDS,
   (band) => `<MediaSplit
   kind="${band.kind}"
+  :divided="true"
+  align="center"
+  size="large"
+  media-fill="canvas"
   texture="pixelate"
   texture-size="small"
   texture-fade="top"
   title="${band.title}"
   description="${band.description}"
+  media-href="${band.href}"
 >
   <template #media>
     <Illustration
       name="${band.illustration}"
       aria-label="${band.ariaLabel}"
+    />
+  </template>
+  <template #actions>
+    <Button
+      label="Learn more"
+      kind="outlined"
+      size="medium"
+      icon="pi pi-chevron-right"
+      icon-position="trailing"
+      animated
+      href="${band.href}"
     />
   </template>
 </MediaSplit>`,
@@ -198,17 +206,13 @@ ${each(
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/MediaSplitStack',
-  tags: ['autodocs'],
+  title: 'Templates/Marketing/Solutions/MediaSplitStack',
+  excludeStories: ['SITE_SECTION_SOLUTIONS', 'SITE_SECTION_ALTERNATING'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The core of a product page: a run of copy-beside-art bands that pin under the site header from `lg` up and pile on each other as the page scrolls. Each band states one claim with its own media and actions, and with `media-href` set the whole band is a link. Every band grounds its media on the same texture: an animated `pixelate` field at the small size, fading out toward the top. Used by Home (inside Why Azion), Application Accelerator, Functions and Our Network. Built from `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. A band whose media is code is the CodeSplit template.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -219,29 +223,76 @@ export default meta
 export const Solutions = {
   render: () => ({
     components,
-    setup: () => ({ quickStartWithTemplates }),
     template: SOLUTIONS_TEMPLATE
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The five solution areas the Home page stacks inside Why Azion, each a large, centered band with an outlined "Learn more" button. The first band shows the `quick-start-with-templates` art file as an image; the other four use `Illustration` scenes. Each band titles itself with an `h2`, the level MediaSplit accepts under a page’s `h1`; the Home page passes `1`, which gives it five `h1`s.'
-      },
       source: { code: toSfc(SOLUTIONS_IMPORTS, SOLUTIONS_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_SOLUTIONS = {
+  _id: 'media-split-stack-solutions',
+  props: {
+    actionLabel: 'Learn more',
+    bands: [
+      {
+        illustration: 'quick-start-with-templates',
+        title: 'Modern applications',
+        description:
+          'Build static sites, run serverless applications, or modernize legacy systems.',
+        href: '/en/solutions/web-apps/'
+      },
+      {
+        illustration: 'improve-application-performance-and-reliability',
+        title: 'Optimized workloads',
+        description:
+          'Speed up applications, deliver content through the CDN, and process images on demand.',
+        href: '/en/solutions/performance/'
+      },
+      {
+        illustration: 'ai-applications',
+        title: 'AI applications',
+        description:
+          'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
+        href: '/en/solutions/ai/'
+      }
+    ]
+  }
+}
+
+export const SolutionsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_SOLUTIONS)
 }
 
 export const Alternating = {
   render: () => ({ components, template: ALTERNATING_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'From the Our Network page: a centered `SectionTitle` set directly in the column, then four bands alternating media start and end, with no actions. The page itself grounds these bands on no texture; the template gives them the stack’s shared pixelate field.'
-      },
       source: { code: toSfc(ALTERNATING_IMPORTS, ALTERNATING_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_ALTERNATING = {
+  _id: 'media-split-stack-alternating',
+  props: {
+    eyebrow: 'Managed Infrastructure',
+    title: 'Stop managing regions and capacity by hand',
+    actionLabel: 'Learn more',
+    bands: NETWORK_BANDS.slice(0, 2).map((band) => ({
+      title: band.title,
+      description: band.description,
+      href: `/en${band.href}/`,
+      illustration: band.illustration,
+      illustrationLabel: band.ariaLabel
+    }))
+  }
+}
+
+export const AlternatingJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_ALTERNATING)
 }

@@ -1,23 +1,293 @@
+import { RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { markRaw } from 'vue'
+
+import WorkloadDeployLogsWidget from '../../ui/mockup/widgets/WorkloadDeployLogsWidget.vue'
+import WorkloadDomainsWidget from '../../ui/mockup/widgets/WorkloadDomainsWidget.vue'
+import WorkloadRolloutRowsWidget from '../../ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
+import WorkloadsListWidget from '../../ui/mockup/widgets/WorkloadsListWidget.vue'
+import WorkloadTopologyChainWidget from '../../ui/mockup/widgets/WorkloadTopologyChainWidget.vue'
 import { BLOG_FEATURED } from '../blog.js'
-import { AI_INFERENCE_PAGE } from './ai-inference.js'
-import { APPLICATION_ACCELERATOR_PAGE } from './application-accelerator.js'
-import { APPLICATIONS_PAGE } from './applications.js'
-import { BLOG_PAGE } from './blog.js'
+import { PLATFORM_ARCHITECTURE_BAND } from '../product-architectures.js'
+import {
+  agentsClosing,
+  PRODUCT_CLOSING,
+  PRODUCT_DOCS,
+  PRODUCT_SECURITY_CLOSING,
+  salesClosing
+} from '../product-pages.js'
+import { WORKLOAD_RECIPE_TABS } from '../workload-recipes.js'
+import { AI_GATEWAY_PAGE } from './ai-gateway.js'
+import { BLOG_CLOSING, BLOG_PAGE } from './blog.js'
 import { blogPostPage } from './blog-post.js'
 import { CACHE_PAGE } from './cache.js'
 import { CAREERS_HOME_PAGE } from './careers-home.js'
+import { CAREERS_JOBS_PAGE } from './careers-jobs.js'
 import { CONTACT_PAGE } from './contact.js'
 import { FINANCIAL_SERVICES_PAGE } from './financial-services.js'
-import { FUNCTIONS_PAGE } from './functions.js'
-import { HOME_PAGE } from './home.js'
+import { FUNCTIONS_PAGE, INTEGRATION_CODE_BAND } from './functions.js'
+import { HOME_PAGE, HOME_SOLUTIONS_BAND } from './home.js'
 import { LEARNING_PAGE } from './learning.js'
+import { HERO as PERFORMANCE_HERO } from './performance.js'
 import { PRICING_PAGE } from './pricing.js'
 import { PRODUCTS_PAGE } from './products.js'
 import { SOLUTIONS_PAGE } from './solutions.js'
 import { SUCCESS_CASES_PAGE } from './success-cases.js'
 import { SUPPORT_PAGE } from './support.js'
 import { VERCEL_ALTERNATIVE_PAGE } from './vercel-alternative.js'
-import { WORKLOADS_PAGE } from './workloads.js'
+import { WORKLOAD_ARCHITECTURE_BAND } from './workloads.js'
+
+const ROUTING_SAMPLE = `export default {
+  rules: {
+    request: [
+      {
+        name: 'Deliver Static Assets',
+        match: '.(css|js|svg|png|webp|woff2)$',
+        behavior: {
+          setOrigin: { name: 'origin-storage-default' },
+          deliver: true
+        }
+      },
+      {
+        name: 'Send the API to Its Origin',
+        match: '^/api/',
+        behavior: { setOrigin: { name: 'origin-api' } }
+      }
+    ]
+  }
+}`
+
+const CACHE_SAMPLE = `export default {
+  cache: [
+    {
+      name: 'api-cache',
+      browser: { maxAgeSeconds: 0 },
+      edge: { maxAgeSeconds: 60 }
+    }
+  ],
+  rules: {
+    request: [
+      {
+        name: 'Cache Product Listings',
+        match: '^/api/products',
+        behavior: { setCache: 'api-cache' }
+      }
+    ]
+  }
+}`
+
+const FUNCTION_SAMPLE = `export default {
+  functions: [
+    { name: 'auth-handler', path: './functions/auth.js' }
+  ],
+  rules: {
+    request: [
+      {
+        name: 'Guard the Account Area',
+        match: '^/account',
+        behavior: { runFunction: 'auth-handler' }
+      }
+    ]
+  }
+}`
+
+const RESPONSE_SAMPLE = `export default {
+  rules: {
+    response: [
+      {
+        name: 'Security Headers',
+        match: '^\\/',
+        behavior: {
+          setHeaders: [
+            'Strict-Transport-Security: max-age=31536000',
+            'X-Frame-Options: DENY'
+          ]
+        }
+      }
+    ]
+  }
+}`
+
+const IMAGE_SAMPLE = `export default {
+  rules: {
+    request: [
+      {
+        name: 'Optimize Product Images',
+        match: '.(jpg|jpeg|png)$',
+        behavior: { optimizeImages: true }
+      }
+    ]
+  }
+}`
+
+const ANATOMY = [
+  {
+    icon: 'ai ai-rules-engine',
+    title: 'Rules Engine',
+    description:
+      'Each request walks your rules in order: criteria match it, behaviors decide where it goes — a bucket, an origin, a function, a redirect.'
+  },
+  {
+    icon: 'ai ai-tiered-cache',
+    title: 'Cache',
+    description:
+      'Name a cache policy and apply it by rule, so product listings hold for a minute while checkout never caches at all.'
+  },
+  {
+    icon: 'ai ai-edge-functions',
+    title: 'Functions',
+    description:
+      'Bind a function and run it on the routes that need logic — auth checks, redirects, shaped payloads — before the origin is ever reached.'
+  },
+  {
+    icon: 'pi pi-arrow-right-arrow-left',
+    title: 'Response phase',
+    description:
+      'Rules run on the way out too: add security headers, rewrite cookies, or change what the origin answered before the user sees it.'
+  },
+  {
+    icon: 'ai ai-image-processor',
+    title: 'Image Processor',
+    description:
+      'Keep one source image and derive every variant on demand with an ims query — fit-in/400x400 — cached like any other response.'
+  }
+]
+
+const sample = (value, label, code) => ({
+  label,
+  value,
+  language: 'javascript',
+  code,
+  fileName: 'azion.config.js',
+  fileIcon: 'ai-cor ai-js'
+})
+
+const ANATOMY_SAMPLES = [
+  sample('routing', 'Rules Engine', ROUTING_SAMPLE),
+  sample('cache', 'Cache', CACHE_SAMPLE),
+  sample('functions', 'Functions', FUNCTION_SAMPLE),
+  sample('response', 'Response phase', RESPONSE_SAMPLE),
+  sample('images', 'Image Processor', IMAGE_SAMPLE)
+]
+
+const PLATFORM_DIRECTORY_BAND = {
+  section: 'PlatformDirectory',
+  title: 'Everything you need to build and run applications',
+  ariaLabel: 'Azion products',
+  groups: [
+    {
+      label: 'Build',
+      items: [
+        {
+          icon: 'ai ai-edge-functions',
+          title: 'Functions',
+          description: 'Run code globally with no cold starts',
+          href: '/site/products/functions'
+        },
+        {
+          icon: 'pi pi-sitemap',
+          title: 'Rules Engine',
+          description: 'Automate request handling with rules',
+          href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
+        },
+        {
+          icon: 'pi pi-image',
+          title: 'Image Processor',
+          description: 'Resize and convert images on demand',
+          href: 'https://www.azion.com/en/products/image-processor/'
+        },
+        {
+          icon: 'ai ai-tiered-cache',
+          title: 'Cache',
+          description: 'Speed up content delivery and reduce origin load',
+          href: 'https://www.azion.com/en/products/cache/'
+        },
+        {
+          icon: 'ai ai-edge-ai',
+          title: 'AI Inference',
+          description: 'Run models close to the user',
+          href: 'https://www.azion.com/en/products/ai-inference/'
+        },
+        {
+          icon: 'ai ai-gateway',
+          title: 'AI Gateway',
+          description: 'Route, secure and log every model call',
+          href: 'https://www.azion.com/en/solutions#ai'
+        }
+      ]
+    },
+    {
+      label: 'Store',
+      items: [
+        {
+          icon: 'ai ai-edge-storage',
+          title: 'Object Storage',
+          description: 'Store and serve objects close to users',
+          href: 'https://www.azion.com/en/products/object-storage/'
+        },
+        {
+          icon: 'ai ai-edge-sql',
+          title: 'SQL Database',
+          description: 'Run SQL on a distributed database',
+          href: 'https://www.azion.com/en/products/sql-database/'
+        },
+        {
+          icon: 'ai ai-edge-kv',
+          title: 'KV Store',
+          description: 'Store key-value data with low latency',
+          href: 'https://www.azion.com/en/products/kv-store/'
+        }
+      ]
+    },
+    {
+      label: 'Secure',
+      items: [
+        {
+          icon: 'ai ai-waf-rules',
+          title: 'WAF',
+          description: 'Block common attacks close to traffic',
+          href: 'https://www.azion.com/en/products/web-application-firewall/'
+        },
+        {
+          icon: 'ai ai-azion-api',
+          title: 'API Gateway',
+          description: 'Secure, manage, and scale API traffic',
+          href: 'https://www.azion.com/en/solutions/api-gateway/'
+        },
+        {
+          icon: 'pi pi-android',
+          title: 'Bot Manager',
+          description: 'Detect and stop automated traffic',
+          href: 'https://www.azion.com/en/products/bot-manager/'
+        },
+        {
+          icon: 'ai ai-edge-dns',
+          title: 'Edge DNS',
+          description: 'Authoritative DNS, distributed globally',
+          href: 'https://www.azion.com/en/products/edge-dns/'
+        },
+        {
+          icon: 'ai ai-load-balancer',
+          title: 'Load Balancer',
+          description: 'Spread traffic across origins for availability',
+          href: 'https://www.azion.com/en/products/load-balancer/'
+        }
+      ]
+    },
+    {
+      label: 'Observe',
+      items: [
+        {
+          icon: 'ai ai-real-time-metrics',
+          title: 'Real-Time Metrics',
+          description: 'Watch traffic, errors and latency as they happen',
+          href: 'https://www.azion.com/en/products/real-time-metrics/'
+        }
+      ]
+    }
+  ]
+}
+
+const FRAMEWORKS = ['vue', 'react', 'nextjs', 'astro', 'svelte', 'angular', 'nuxt']
 
 const pick = (page, section) => {
   const entry = page.find((candidate) => candidate.section === section)
@@ -26,61 +296,96 @@ const pick = (page, section) => {
   return rest
 }
 
-const BLOG_POST_PAGE = blogPostPage(BLOG_FEATURED.key)
+const BARE_WIDGET = { kind: 'bare', chrome: false, width: 600 }
 
-const ARCHITECTURE = {
-  section: 'Architectures',
-  eyebrow: 'Architecture',
-  title: 'One platform for API and AI traffic',
-  description:
-    'Agents, apps and workflows reach models, tools and APIs through the same gateway, so every call is authenticated, routed and observed in one place.',
-  action: {
-    label: 'See the architecture',
-    href: '/site/docs/ai-inference',
-    kind: 'secondary',
-    trailing: true
+const WORKLOAD_FEATURES = [
+  {
+    title: 'Every workload on one list',
+    description:
+      'See each workload with its domain, status and last deployment, so what is live is never a question.',
+    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    scene: {
+      component: markRaw(WorkloadsListWidget),
+      props: { ...BARE_WIDGET, width: 680 }
+    }
   },
-  levels: [
-    [
-      { icon: 'pi pi-sitemap', role: 'Workflow', title: 'Order pipeline', detail: 'Nightly batch' },
-      { icon: 'pi pi-comments', role: 'AI app', title: 'Support chat', detail: 'Web and mobile' },
-      { icon: 'pi pi-android', role: 'Agent', title: 'Code reviewer', detail: 'MCP client' }
-    ],
-    [
-      {
-        icon: 'pi pi-shield',
-        role: 'AI Gateway',
-        title: 'Routing and control',
-        detail: 'Auth, cache, rate limit, logs',
-        lit: true
-      }
-    ],
-    [
-      {
-        icon: 'pi pi-sparkles',
-        role: 'Model',
-        title: 'Claude Opus 5.5',
-        detail: 'Anthropic',
-        tag: { label: 'Primary', severity: 'success' }
-      },
-      {
-        icon: 'pi pi-sparkles',
-        role: 'Model',
-        title: 'GPT-5.5',
-        detail: 'OpenAI',
-        tag: { label: 'Fallback', severity: 'secondary' }
-      },
-      { icon: 'pi pi-wrench', role: 'MCP server', title: 'Internal tools', detail: 'Self-hosted' },
-      { icon: 'pi pi-database', role: 'Database', title: 'Customer records', detail: 'Postgres' }
-    ]
+  {
+    title: 'Read the deployment topology',
+    description:
+      'The domains, the application and the firewall a workload serves, drawn as one chain.',
+    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    scene: { component: markRaw(WorkloadTopologyChainWidget), props: BARE_WIDGET }
+  },
+  {
+    title: 'Domains and TLS, handled',
+    description:
+      'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
+    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    scene: { component: markRaw(WorkloadDomainsWidget), props: BARE_WIDGET }
+  },
+  {
+    title: 'Ship a version in seconds',
+    description:
+      'Build, upload, propagate and warm the cache, every step streamed as it happens until the version is live everywhere.',
+    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    scene: { component: markRaw(WorkloadDeployLogsWidget), props: BARE_WIDGET }
+  },
+  {
+    title: 'Gradual rollouts and instant rollback',
+    description:
+      'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
+    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    scene: { component: markRaw(WorkloadRolloutRowsWidget), props: BARE_WIDGET }
+  }
+]
+
+const CLOSING_PANEL = {
+  section: 'ClosingCallToAction',
+  kind: 'panel',
+  title: 'Ready to join us?',
+  description: 'Explore our open positions and find the right fit for you.',
+  actions: [
+    {
+      label: 'See all available jobs',
+      href: '/site/careers/jobs',
+      kind: 'secondary',
+      trailing: true
+    }
   ]
 }
 
+const CLOSING_SPLIT = salesClosing({
+  eyebrow: 'Protect',
+  title: 'Protected by default.',
+  titleMuted: 'Always on.',
+  description: 'Stronger protection, less attack exposure, less operational drag.'
+})
+
+const BLOG_POST_PAGE = blogPostPage(BLOG_FEATURED.key)
+
 export const WEBSITE_BUNDLE_PAGE = [
+  pick(SOLUTIONS_PAGE, 'HeroWithOpening'),
   pick(HOME_PAGE, 'Heroes'),
+  {
+    section: 'Heroes',
+    kind: 'copy-beside-art',
+    ...PERFORMANCE_HERO,
+    actions: [
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+    ],
+    art: {
+      name: 'improve-application-performance-and-reliability',
+      alt: 'A website served through Azion, scoring 99 on performance'
+    },
+    carouselMarks: RETAIL_CLIENT_STRIP
+  },
+  pick(VERCEL_ALTERNATIVE_PAGE, 'Heroes'),
+  pick(CACHE_PAGE, 'Heroes'),
+  pick(SUPPORT_PAGE, 'Heroes'),
+  pick(CONTACT_PAGE, 'HeroForm'),
 
   pick(FUNCTIONS_PAGE, 'ClientQuotes'),
-  pick(APPLICATIONS_PAGE, 'QuoteBand'),
   pick(SOLUTIONS_PAGE, 'LogoWallQuote'),
   pick(HOME_PAGE, 'RecognitionMarquee'),
   pick(HOME_PAGE, 'ClientMosaic'),
@@ -89,27 +394,61 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(HOME_PAGE, 'NetworkSection'),
   pick(PRODUCTS_PAGE, 'StatsBand'),
 
-  pick(HOME_PAGE, 'MediaSplitStack'),
-  pick(WORKLOADS_PAGE, 'MediaSplitBand'),
+  HOME_SOLUTIONS_BAND,
   pick(CAREERS_HOME_PAGE, 'PhotoMarquee'),
   pick(HOME_PAGE, 'FeatureTiles'),
-  pick(APPLICATION_ACCELERATOR_PAGE, 'CodeSplit'),
-  pick(APPLICATIONS_PAGE, 'StickyScrollCode'),
-  pick(WORKLOADS_PAGE, 'FeatureTabs'),
-  pick(AI_INFERENCE_PAGE, 'TemplateGallery'),
-  pick(FUNCTIONS_PAGE, 'WidgetGrid'),
-  pick(WORKLOADS_PAGE, 'ConsolePanel'),
-
-  ARCHITECTURE,
-  pick(PRODUCTS_PAGE, 'CapabilityGrid'),
-  pick(PRODUCTS_PAGE, 'PlatformDirectory'),
+  {
+    section: 'FeatureScroll',
+    eyebrow: 'Workloads',
+    title: 'Everything a Workload Does, One Screen at a Time',
+    description:
+      'Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout.',
+    items: WORKLOAD_FEATURES
+  },
+  pick(CACHE_PAGE, 'FeatureWidgets'),
+  {
+    section: 'StickyScrollCode',
+    eyebrow: 'Anatomy',
+    title: 'Configured in code, applied everywhere',
+    description:
+      'Everything an application does is a rule in azion.config.js — so the routing, the cache and the functions ship with the repository, not with a console session.',
+    items: ANATOMY.map((item) => ({
+      ...item,
+      action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true }
+    })),
+    samples: ANATOMY_SAMPLES
+  },
+  pick(AI_GATEWAY_PAGE, 'CodeSplit'),
+  pick(FUNCTIONS_PAGE, 'CliTerminal'),
+  {
+    section: 'FeatureTabs',
+    title: 'From a hostname to a full stack, on one platform',
+    description:
+      'Storage, a database, a firewall and a cache policy all bind to the same workload. Each one is a binding, not another deployment to run.',
+    tabs: WORKLOAD_RECIPE_TABS,
+    copyAriaLabel: 'Copy the workload sample',
+    action: { label: 'Read the docs', href: PRODUCT_DOCS }
+  },
+  WORKLOAD_ARCHITECTURE_BAND,
+  PLATFORM_ARCHITECTURE_BAND,
+  pick(VERCEL_ALTERNATIVE_PAGE, 'MediaSplitBand'),
+  {
+    section: 'TemplateGallery',
+    title: 'Quick start with templates',
+    description:
+      'Build faster with pre-built applications and starter kits for common use cases. Deploy complete projects in seconds with popular frameworks.',
+    stackLabel: 'Compatible with your stack',
+    stackMarks: FRAMEWORKS
+  },
+  PLATFORM_DIRECTORY_BAND,
   pick(CACHE_PAGE, 'UseCases'),
-  pick(FUNCTIONS_PAGE, 'IntegrationCode'),
+  INTEGRATION_CODE_BAND,
   pick(FINANCIAL_SERVICES_PAGE, 'ResourceGrid'),
   pick(LEARNING_PAGE, 'SubjectLibrary'),
   pick(CAREERS_HOME_PAGE, 'ListingTable'),
-  pick(SUCCESS_CASES_PAGE, 'ListingBrowser'),
-  pick(VERCEL_ALTERNATIVE_PAGE, 'ComparisonTable'),
+  pick(CAREERS_JOBS_PAGE, 'ListingBrowser'),
+  pick(SUCCESS_CASES_PAGE, 'StoryLibrary'),
+  pick(VERCEL_ALTERNATIVE_PAGE, 'CompareCompetitors'),
   pick(SUPPORT_PAGE, 'CompareSupportTiers'),
   pick(BLOG_PAGE, 'ArticleHighlight'),
   pick(BLOG_PAGE, 'ArticleIndex'),
@@ -118,9 +457,12 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(PRICING_PAGE, 'ComparePlans'),
   pick(PRICING_PAGE, 'FaqSection'),
 
-  pick(CONTACT_PAGE, 'HeroForm'),
-
   pick(BLOG_POST_PAGE, 'ArticleBody'),
   pick(BLOG_POST_PAGE, 'ArticleCards'),
-  pick(HOME_PAGE, 'ClosingCallToAction')
+  { ...PRODUCT_CLOSING, anchor: '' },
+  { ...PRODUCT_SECURITY_CLOSING, anchor: '' },
+  { ...CLOSING_SPLIT, anchor: '' },
+  { ...CLOSING_PANEL, anchor: '' },
+  { ...BLOG_CLOSING, anchor: '' },
+  agentsClosing('Built by you, or your agents.')
 ]

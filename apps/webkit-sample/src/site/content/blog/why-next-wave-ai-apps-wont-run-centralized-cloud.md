@@ -6,11 +6,11 @@ This article explains why AI-native applications are moving away from fully cent
 
 ## What is distributed AI inference?
 
-Distributed AI inference means handling the parts of an AI request that don’t require a GPU close to where the request originates, and running model execution itself on infrastructure distributed across a global network instead of one or a few data center regions.
+Distributed AI inference means handling the parts of an AI request that don’t require a GPU close to where the request originates, and running model execution itself on infrastructure distributed across a global distributed infrastructure instead of one or a few data center regions.
 
 Centralized inference adds 100–180ms of network latency per request before a model generates a single token. That cost compounds every time an application chains multiple model or function calls, which is exactly what most AI-native apps do: retrieve context, call a model, apply business logic, call another model, return a response.
 
-Azion addresses this at two levels. [AI Inference](https://www.azion.com/en/products/ai-inference/) runs models across Azion’s global network instead of a single data center. [Azion Functions](https://www.azion.com/en/products/functions/) run the request handling, auth, and caching logic around those model calls with no cold start, on the same distributed network, so neither layer requires a round trip to a centralized cloud region.
+Azion addresses this at two levels. [AI Inference](https://www.azion.com/en/products/ai-inference/) runs models across Azion’s global distributed infrastructure instead of a single data center. [Azion Functions](https://www.azion.com/en/products/functions/) run the request handling, auth, and caching logic around those model calls with no cold start, on the same distributed infrastructure, so neither layer requires a round trip to a centralized cloud region.
 
 ## Why centralized cloud AI inference doesn’t scale
 
@@ -30,11 +30,11 @@ These aren’t independent problems. An AI-native app that retrieves context, ca
 
 Azion’s distributed architecture separates AI workloads into the layer that needs a GPU and the layer that doesn’t, and runs each where it makes sense.
 
-[AI Inference](https://www.azion.com/en/products/ai-inference/) **runs models across a distributed network.** It executes LLMs, VLMs, embeddings, reranking, and multimodal models globally rather than from a single data center, with an OpenAI-compatible API so teams don’t have to rewrite existing integrations.
+[AI Inference](https://www.azion.com/en/products/ai-inference/) **runs models across a distributed infrastructure.** It executes LLMs, VLMs, embeddings, reranking, and multimodal models globally rather than from a single data center, with an OpenAI-compatible API so teams don’t have to rewrite existing integrations.
 
 Paired with [LoRA Fine-Tune](https://www.azion.com/en/documentation/products/ai/ai-inference/), teams deploy domain-adapted models tuned for a specific fraud pattern, customer segment, or use case, without retraining a full model. Azion has already put this into production for fraud detection, using LoRA to adapt vision-language models for scenario-specific accuracy.
 
-[Functions](https://www.azion.com/en/products/functions/) **handle everything around the model call with no cold start.** Auth, rate limiting, request shaping, and tool orchestration for agentic flows run on Azion’s distributed network through Functions, which use V8 isolates instead of containers, so a function called once an hour responds with the same latency as one called ten thousand times an hour.
+[Functions](https://www.azion.com/en/products/functions/) **handle everything around the model call with no cold start.** Auth, rate limiting, request shaping, and tool orchestration for agentic flows run on Azion’s distributed infrastructure through Functions, which use V8 isolates instead of containers, so a function called once an hour responds with the same latency as one called ten thousand times an hour.
 
 **Semantic caching cuts how often you pay for inference at all.** Normalizing and hashing prompts to check against a distributed cache, before a request ever reaches the inference origin, captures 20–40% cache hit rates in production workloads like customer support, search, and content generation, where query patterns cluster around common intents. Each cache hit is a request that never touches the model.
 
@@ -44,7 +44,7 @@ Paired with [LoRA Fine-Tune](https://www.azion.com/en/documentation/products/ai/
 
 [Bot Manager](https://www.azion.com/en/products/bot-manager/) **and** [WAF](https://www.azion.com/en/products/web-application-firewall/) **filter traffic before it reaches the model.** AI agent traffic doesn’t follow the rate-limit patterns built for human users, and it often bypasses per-IP limiting outright. Enforcement close to the request, before it reaches [AI Inference](https://www.azion.com/en/products/ai-inference/) or the origin, catches this without disrupting legitimate agent activity.
 
-[Real-Time Events](https://www.azion.com/en/products/real-time-events/) **and** [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) **give visibility across the whole pipeline.** Once inference, caching, retrieval, and application logic are running across a distributed network instead of one region an engineer can log into, per-request tracing is what makes the system debuggable.
+[Real-Time Events](https://www.azion.com/en/products/real-time-events/) **and** [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) **give visibility across the whole pipeline.** Once inference, caching, retrieval, and application logic are running across a distributed infrastructure instead of one region an engineer can log into, per-request tracing is what makes the system debuggable.
 
 ## AI inference latency benchmarks: cold start vs. distributed execution
 
@@ -57,7 +57,7 @@ Paired with [LoRA Fine-Tune](https://www.azion.com/en/documentation/products/ai/
 
 ## Distributed AI inference example: fraud detection at checkout on Azion
 
-A request arrives at the nearest point of presence during a high-traffic sales event. [WAF](https://www.azion.com/en/products/web-application-firewall/) and [Bot Manager](https://www.azion.com/en/products/bot-manager/) filter abusive traffic before it reaches the model. [Functions](https://www.azion.com/en/products/functions/) check a semantic cache for a similar recent request; on a miss, they validate and shape the request with no cold start.
+A request arrives at the nearest data center during a high-traffic sales event. [WAF](https://www.azion.com/en/products/web-application-firewall/) and [Bot Manager](https://www.azion.com/en/products/bot-manager/) filter abusive traffic before it reaches the model. [Functions](https://www.azion.com/en/products/functions/) check a semantic cache for a similar recent request; on a miss, they validate and shape the request with no cold start.
 
 [AI Inference](https://www.azion.com/en/products/ai-inference/) runs a LoRA-adapted model tuned for that specific fraud pattern. [Real-Time Events](https://www.azion.com/en/products/real-time-events/) logs the decision. Most of the traffic that would otherwise hit the inference origin during a spike gets absorbed by the cache before it gets there.
 
@@ -65,7 +65,7 @@ A request arrives at the nearest point of presence during a high-traffic sales e
 
 AI inference is running into the same wall CDNs solved a decade ago: centralizing something that needs to respond fast, to everyone, everywhere, doesn’t scale, no matter how big the data center is. Part of the fix is moving model execution closer to the request. A bigger, more immediately available part is not sending every request to the model at all, and handling everything around the model call without paying a cold-start tax.
 
-Azion built cold-start-free execution and a distributed network before AI made them urgent. [AI Inference](https://www.azion.com/en/products/ai-inference/), [LoRA Fine-Tune](https://www.azion.com/en/documentation/products/ai/ai-inference/), and [SQL Database vector search](https://www.azion.com/en/documentation/products/store/sql-database/vector-search/) extend that same foundation to model execution and retrieval.
+Azion built cold-start-free execution and a distributed infrastructure before AI made them urgent. [AI Inference](https://www.azion.com/en/products/ai-inference/), [LoRA Fine-Tune](https://www.azion.com/en/documentation/products/ai/ai-inference/), and [SQL Database vector search](https://www.azion.com/en/documentation/products/store/sql-database/vector-search/) extend that same foundation to model execution and retrieval.
 
 The infrastructure question for AI apps isn’t only “which model.” It’s “what runs close to the request, and what actually needs to hit the model at all.” On Azion, both questions already have an answer.
 
@@ -75,7 +75,7 @@ The infrastructure question for AI apps isn’t only “which model.” It’s �
 
 ## Frequently asked questions
 
-**What is distributed AI inference?** Distributed AI inference handles request processing, caching, and often model execution close to where each request originates, instead of routing everything to one centralized cloud region. On Azion, this combines [AI Inference](https://www.azion.com/en/products/ai-inference/) running models across a global network with [Functions](https://www.azion.com/en/products/functions/) handling auth, caching, and orchestration with no cold start.
+**What is distributed AI inference?** Distributed AI inference handles request processing, caching, and often model execution close to where each request originates, instead of routing everything to one centralized cloud region. On Azion, this combines [AI Inference](https://www.azion.com/en/products/ai-inference/) running models across a global distributed infrastructure with [Functions](https://www.azion.com/en/products/functions/) handling auth, caching, and orchestration with no cold start.
 
 **Why does centralized cloud inference add latency to AI apps?** Centralized inference requires every request to travel to a single region, wait for the model, and travel back. That round trip adds 100–180ms before the model generates any output, regardless of how fast the model itself runs.
 
@@ -87,7 +87,7 @@ The infrastructure question for AI apps isn’t only “which model.” It’s �
 
 **Does Azion’s distributed architecture eliminate cold starts completely?** Yes, for Functions. [Azion Functions](https://www.azion.com/en/products/functions/) use V8 isolates instead of containers, so there’s no cold initialization step; a function called once an hour responds as fast as one called constantly.
 
-**Can AI inference and application logic both run on Azion’s distributed network?** Yes. [Functions](https://www.azion.com/en/products/functions/) and [AI Inference](https://www.azion.com/en/products/ai-inference/) both run on Azion’s distributed infrastructure, which means neither one requires a round trip to a centralized cloud region. That’s a different claim from zero network latency between the two; a Function calling AI Inference still makes a request, just not one that has to leave Azion’s network.
+**Can AI inference and application logic both run on Azion’s distributed infrastructure?** Yes. [Functions](https://www.azion.com/en/products/functions/) and [AI Inference](https://www.azion.com/en/products/ai-inference/) both run on Azion’s distributed infrastructure, which means neither one requires a round trip to a centralized cloud region. That’s a different claim from zero network latency between the two; a Function calling AI Inference still makes a request, just not one that has to leave Azion’s network.
 
 **How does vector search fit into distributed AI inference?** [SQL Database](https://www.azion.com/en/products/sql-database/) supports [vector search](https://www.azion.com/en/documentation/products/store/sql-database/vector-search/), which most retrieval-augmented AI apps need to pull context before generating a response. Running vector search on the same platform as AI Inference and Functions keeps that retrieval step from becoming a separate round trip to an external vector database.
 

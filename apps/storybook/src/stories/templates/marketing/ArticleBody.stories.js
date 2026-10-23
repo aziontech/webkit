@@ -121,7 +121,7 @@ const PROSE = `<h2 id="challenge">Challenge</h2>
 
 <h2 id="solution">Solution</h2>
 <p>
-  Magalu counts on Azion’s platform to evolve its complex security posture through edge-native, real-time firewall and analytics solutions, empowering Magalu’s SOC squad with granular access control, a fine-grained bot management platform, automated threat blocking, and more.
+  Magalu counts on Azion’s platform to evolve its complex security posture through distributed, real-time firewall and analytics solutions, giving Magalu’s SOC squad granular access control, a fine-grained bot management platform, automated threat blocking, and more.
 </p>
 
 <h2 id="results-and-impact">Results and Impact</h2>
@@ -249,7 +249,7 @@ ${each(COMMUNITY.links, communityLink, 8)}
 </SectionContainer>`
 
 const meta = {
-  title: 'Templates/Marketing/Content/ArticleBody',
+  title: 'Templates/Marketing/Articles/ArticleBody',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

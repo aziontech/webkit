@@ -258,7 +258,6 @@
           :mobile-columns="1"
           role="tablist"
           :aria-label="ariaLabel"
-          class="sm:grid-cols-2! lg:grid-cols-5!"
           @keydown="onKeydown"
         >
           <CardGridCell

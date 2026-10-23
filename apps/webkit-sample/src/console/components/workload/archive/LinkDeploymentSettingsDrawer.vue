@@ -314,16 +314,8 @@
               kind="primary"
               size="medium"
               :loading="submitting"
-              @click="submit"
-            />
-            <button
               type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              Link Settings
-            </button>
+            />
           </PanelFooter>
         </form>
       </DrawerContent>

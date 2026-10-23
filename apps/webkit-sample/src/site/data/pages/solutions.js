@@ -1,21 +1,25 @@
+import { salesClosing } from '../product-pages.js'
 import { BANKS_AND_RETAIL_WALL } from '../proof-wall.js'
-import { quotesLedBy } from '../solutions.js'
+import { BUILD_CTA, quotesLedBy } from '../solutions.js'
 
 const ZOOP = BANKS_AND_RETAIL_WALL.find((item) => item.alt === 'Zoop')
 const [ZOOP_QUOTE] = quotesLedBy('zoop')
 
 const SOLUTION_GUARANTEES = [
   {
+    icon: 'ai ai-workloads',
     title: 'One platform, every workload',
     description:
-      'A solution is the same products configured for one reader — not a separate stack, a separate bill or a separate team.'
+      'A solution is the same products set up for one use case. No separate stack, bill, or team.'
   },
   {
+    icon: 'pi pi-verified',
     title: 'Proven where it is hardest',
     description:
       'Each page carries the clients already running it in production, with the numbers they measured.'
   },
   {
+    icon: 'pi pi-bolt',
     title: 'Live in an afternoon',
     description:
       'Templates, a CLI and a Terraform provider, so the architecture on the page is the one you deploy.'
@@ -39,7 +43,7 @@ const SOLUTION_NEEDS = [
   {
     illustration: 'implement-api-gateway-security',
     title: 'Application Security',
-    description: 'Filter, rate-limit and authenticate at the edge, before the origin sees it.',
+    description: 'Filter, rate-limit and authenticate close to users, before the origin sees it.',
     href: '/site/solutions/security'
   }
 ]
@@ -87,7 +91,7 @@ const SOLUTION_DIRECTORY = [
       {
         icon: 'ai ai-edge-ai',
         title: 'AI',
-        description: 'Inference and agents at the edge',
+        description: 'Inference and agents close to users',
         href: '/site/solutions/ai'
       },
       {
@@ -165,26 +169,25 @@ const SOLUTION_DIRECTORY = [
 
 export const SOLUTIONS_PAGE = [
   {
-    section: 'Heroes',
-    kind: 'centered-band',
+    section: 'HeroWithOpening',
     eyebrow: 'Solutions',
-    highlight: 'The platform,',
-    title: 'argued for your case',
+    highlight: 'One platform,',
+    title: 'set up for your use case',
     description:
-      'The same products, configured for what you are building and the sector you build it in — with the clients already running it and the numbers they measured.',
+      'The same products, configured for what you build and the sector you build it in, with the clients already running it and the numbers they measured.',
     actions: [
-      { label: 'Start Free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to our team', href: '/site/contact', kind: 'outlined', trailing: true }
-    ]
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+    ],
+    items: SOLUTION_GUARANTEES
   },
-  { section: 'CapabilityGrid', items: SOLUTION_GUARANTEES },
   {
     section: 'FeatureTiles',
     kind: 'illustrated',
     anchor: 'needs',
     eyebrow: 'By need',
     title: 'What you are building',
-    description: 'The argument is the workload — the same one whatever sector runs it.',
+    description: 'The workload sets the setup, whatever sector runs it.',
     tiles: SOLUTION_NEEDS
   },
   {
@@ -193,13 +196,13 @@ export const SOLUTIONS_PAGE = [
     anchor: 'industries',
     eyebrow: 'By industries',
     title: 'Where you build it',
-    description: 'Same platform, stated in the terms the sector is audited on.',
+    description: 'Same platform, described in the terms your sector is audited on.',
     tiles: SOLUTION_INDUSTRIES
   },
   {
     section: 'LogoWallQuote',
-    eyebrow: 'Trusted by Industry Leaders',
-    title: "Battle-Tested by the World's Largest Banks and E-commerce Companies",
+    eyebrow: 'Customer stories',
+    title: 'Proven at Banks and E-commerce Companies',
     items: BANKS_AND_RETAIL_WALL,
     ariaLabel: 'Banks and e-commerce companies running on Azion',
     quote: {
@@ -225,14 +228,5 @@ export const SOLUTIONS_PAGE = [
     ariaLabel: 'Solution index',
     groups: SOLUTION_DIRECTORY
   },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Build',
-    title: 'Build once.',
-    titleMuted: 'Run everywhere.',
-    description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  salesClosing(BUILD_CTA)
 ]

@@ -129,6 +129,7 @@
     Object.fromEntries(CAREERS_JOB_FORM.fields.map((field) => [field.key, '']))
   )
   const phoneCountry = ref('BR')
+  const phoneNumber = ref({ number: '', complete: false })
   const errors = reactive(
     Object.fromEntries(CAREERS_JOB_FORM.fields.map((field) => [field.key, '']))
   )
@@ -157,6 +158,11 @@
         continue
       }
 
+      if (field.kind === 'phone' && value && !phoneNumber.value.complete) {
+        errors[field.key] = 'Enter the full phone number, area code included.'
+        continue
+      }
+
       if (field.kind === 'url' && value && !URL_PREFIX.test(value)) {
         errors[field.key] = 'Enter the full URL, starting with https://.'
         continue
@@ -179,13 +185,15 @@
     clearError('resume')
   }
 
+  const sendApplication = () => new Promise((resolve) => setTimeout(resolve, 900))
+
   async function submit() {
     if (submitting.value) return
     if (!validate()) return
 
     submitting.value = true
     try {
-      await new Promise((resolve) => setTimeout(resolve, 900))
+      await sendApplication({ ...values, phone: phoneNumber.value.number })
       sent.value = true
     } finally {
       submitting.value = false
@@ -460,6 +468,7 @@
                   :invalid="!!errors[field.key] && !isEmpty(field.key)"
                   :helper-text="errors[field.key] || field.helper || ''"
                   @update:model-value="clearError(field.key)"
+                  @update:phone="phoneNumber = $event"
                 />
 
                 <!-- No file field ships in the system, so this is the native control with the
@@ -499,26 +508,13 @@
               </div>
             </fieldset>
 
-            <!-- The webkit Button renders a native `type="button"`, so Enter inside a field
-                 would not submit without a real submit control in the form. It is hidden from
-                 the a11y tree and out of the tab order so the reader does not meet the same
-                 action twice; implicit submission does not need it focusable. -->
-            <button
-              type="submit"
-              tabindex="-1"
-              aria-hidden="true"
-              class="sr-only"
-            >
-              {{ CAREERS_JOB_FORM.submit }}
-            </button>
-
             <div class="flex">
               <Button
                 :label="CAREERS_JOB_FORM.submit"
                 kind="primary"
                 size="large"
+                type="submit"
                 :loading="submitting"
-                @click="submit"
               />
             </div>
           </form>

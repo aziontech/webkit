@@ -64,7 +64,7 @@ export const NETWORK_TOPICS = [
     icon: 'pi pi-stopwatch',
     title: 'Low latency everywhere',
     description:
-      'Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app.'
+      'Compute, AI, databases, and security run in every data center, close to your users. Median global latency stays under 30 ms, with a built-in CDN and tiered caching for every app.'
   },
   {
     icon: 'pi pi-arrows-v',
@@ -112,8 +112,8 @@ export const NETWORK_OUTCOMES = [
 
 export const EARTH_NETWORK = {
   eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure, and scale workloads',
-  titleTail: '— without the complexity of managing or scaling it.',
+  title: 'Build, secure, and scale on one distributed infrastructure',
+  titleTail: '— without managing capacity or regions.',
   lead: 'Built around your users. Distributed around your data.',
   claims: [
     '100+ data centers',

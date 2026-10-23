@@ -254,6 +254,7 @@
         <ScrollArea
           :class="scrollClass"
           tabindex="-1"
+          fade
           :data-testid="`${testId}__scroll`"
         >
           <slot />

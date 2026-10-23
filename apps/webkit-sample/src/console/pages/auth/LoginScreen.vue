@@ -360,13 +360,6 @@
               novalidate
               @submit.prevent="handlePrimary"
             >
-              <button
-                type="submit"
-                class="sr-only"
-                aria-hidden="true"
-                tabindex="-1"
-              />
-
               <div class="relative">
                 <Transition
                   enter-from-class="opacity-0"
@@ -681,7 +674,7 @@
                         size="large"
                         class="w-full"
                         :loading="verifying"
-                        @click="handlePrimary"
+                        type="submit"
                       />
                     </div>
                   </Transition>

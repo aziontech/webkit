@@ -91,16 +91,100 @@ export const parameters = {
         'Foundations',
         [
           'Design Tokens',
-          ['Color', 'Theme', 'Typography', 'Layout', 'Motion'],
+          [
+            'Primitives',
+            [
+              'Color',
+              'Font Family',
+              'Font Size',
+              'Font Weight',
+              'Line Height',
+              'Letter Spacing',
+              'Spacing',
+              'Size',
+              'Container',
+              'Breakpoint',
+              'Radius',
+              'Border',
+              'Shadow',
+              'Blur',
+              'Opacity',
+              'Perspective',
+              'Aspect Ratio',
+              'Z-index',
+              'Motion'
+            ],
+            'Semantic',
+            ['Theme', 'Typography'],
+            'Responsive',
+            ['Spacing', 'Layout']
+          ],
           'Assets',
-          ['Illustrations', 'Logos', 'Icons', 'Product Widgets']
+          ['Illustrations', 'Diagrams', 'Logos', 'Icons', 'Product Widgets']
         ],
         'Components',
+        [
+          'Primitives',
+          [
+            'Actions',
+            'Code',
+            'Content',
+            'Data',
+            'Feedback',
+            'Inputs',
+            'Layout',
+            'Navigation',
+            'Overlay'
+          ],
+          'Marketing',
+          'Documentation'
+        ],
         'Documentation',
         ['Overview', 'Authoring', 'Example Page'],
         'Templates',
-        ['Marketing', ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media']],
-        'Marketing',
+        [
+          'Marketing',
+          [
+            'Overview',
+            'Heroes',
+            'Features',
+            'Solutions',
+            'Use Cases',
+            'Social Proof',
+            'Pricing',
+            'Articles',
+            'Listings',
+            'Closing CTAs',
+            'Network',
+            'Comparison',
+            'Content',
+            'Shell'
+          ],
+          'Platform',
+          [
+            'Overview',
+            'Shell',
+            [
+              'PlatformShell',
+              'CreatePage',
+              'SummaryPage',
+              'CodeEditor',
+              'QueryEditor',
+              'EventsVisualizer'
+            ],
+            'Page',
+            'Lists',
+            'Forms',
+            'Overlays',
+            'Creation',
+            'States',
+            'Detail',
+            'Observe',
+            'Account'
+          ],
+          'Headers',
+          'Shells'
+        ],
         'Site'
       ]
     }

@@ -41,7 +41,7 @@ const MEGA_MENUS = [
         {
           label: 'By Industry',
           items: [
-            { label: 'Financial Services', description: 'Accelerate digital financial services' },
+            { label: 'Financial Services', description: 'Speed up digital financial services' },
             { label: 'Technology', description: 'Build high-performance applications' },
             { label: 'Retail', description: 'Build high-performance shopping experiences' }
           ]
@@ -57,20 +57,24 @@ const MEGA_MENUS = [
         {
           label: 'Build',
           items: [
-            { label: 'Workloads', description: 'Put an application on a hostname, everywhere' },
+            { label: 'Workloads', description: 'Serve an application on your domain, globally' },
             { label: 'Applications', description: 'Deliver and configure web applications' },
             {
               label: 'Functions',
-              description: 'Implement serverless functions and scalable applications'
+              description: 'Run code globally with low latency and no cold starts'
             },
-            { label: 'Cache', description: 'Accelerate, optimize content delivery' },
+            { label: 'Cache', description: 'Speed up delivery and reduce origin load' },
             {
               label: 'Application Accelerator',
-              description: 'Boost performance, enhance delivery'
+              description: 'Speed up dynamic content and APIs'
             },
-            { label: 'Image Processor', description: 'Optimize, transform images instantly' },
-            { label: 'AI Inference', description: 'Perform AI inference globally' },
-            { label: 'Durable Objects', description: 'Run stateful compute worldwide' },
+            {
+              label: 'Image Processor',
+              description: 'Resize, crop, and convert images on the fly'
+            },
+            { label: 'AI Inference', description: 'Run AI inference close to users' },
+            { label: 'AI Gateway', description: 'Route, secure and log every model call' },
+            { label: 'Durable Objects', description: 'Run stateful code worldwide' },
             { label: 'Orchestrator', description: 'Deploy, manage, monitor and automate workloads' }
           ]
         }
@@ -80,8 +84,8 @@ const MEGA_MENUS = [
           label: 'Store',
           items: [
             { label: 'SQL Database', description: 'Store relational and structured data' },
-            { label: 'Object Storage', description: 'Store unstructured data in a scalable way' },
-            { label: 'KV Store', description: 'Store key-value data instantly' }
+            { label: 'Object Storage', description: 'Store and deliver data globally' },
+            { label: 'KV Store', description: 'Store key-value data with low latency' }
           ]
         }
       ],
@@ -91,14 +95,19 @@ const MEGA_MENUS = [
           items: [
             {
               label: 'Web Application Firewall (WAF)',
-              description: 'Protect apps, block vulnerabilities'
+              description: 'Block common attacks, enforce policies'
             },
+            {
+              label: 'Firewall',
+              description: 'Filter every request before it reaches your code'
+            },
+            { label: 'DDoS Protection', description: 'Stop volumetric attacks automatically' },
             { label: 'Bot Manager', description: 'Block bots and protect traffic' },
-            { label: 'Network Shield', description: 'Defend, prevent network-level attacks' },
+            { label: 'Network Shield', description: 'Stop network attacks before they reach you' },
             { label: 'Edge DNS', description: 'Resolve DNS quickly and securely' },
             {
               label: 'Load Balancer',
-              description: 'Distribute loads across servers with security and high performance'
+              description: 'Spread traffic across origins and drop unhealthy ones'
             }
           ]
         }
@@ -107,18 +116,18 @@ const MEGA_MENUS = [
         {
           label: 'Observe',
           items: [
-            { label: 'Data Stream', description: 'Stream data for real-time analysis' },
-            { label: 'Real-Time Events', description: 'Track events, gain operational clarity' },
+            { label: 'Data Stream', description: 'Stream event data to your tools as it happens' },
+            { label: 'Real-Time Events', description: 'Query request-level logs in real time' },
             {
               label: 'Real-Time Metrics',
-              description: 'Gain instant insights and operational visibility'
+              description: 'See traffic and performance as they happen'
             },
-            { label: 'Edge Pulse', description: 'Monitor, optimize edge performance' }
+            { label: 'Edge Pulse', description: 'Measure real user performance in the browser' }
           ]
         },
         {
           label: 'Platform',
-          items: [{ label: 'Our Network', description: 'Global delivery, speed, reliability' }]
+          items: [{ label: 'Our Network', description: 'Global delivery across 100+ data centers' }]
         }
       ]
     ]
@@ -131,17 +140,17 @@ const MEGA_MENUS = [
         {
           label: 'Docs',
           items: [
-            { label: 'Azion Docs', description: 'Documentation, technical support' },
-            { label: 'Guides', description: 'Practical guides, step-by-step' },
-            { label: 'Dev Tools', description: 'Tools, developer support' },
-            { label: 'Release Notes', description: 'Updates, new features' }
+            { label: 'Azion Docs', description: 'Documentation and technical references' },
+            { label: 'Guides', description: 'Practical, step-by-step guides' },
+            { label: 'Dev Tools', description: 'CLI, API, and Terraform tools' },
+            { label: 'Release Notes', description: 'Product updates and new features' }
           ]
         }
       ],
       [
         {
           label: 'API',
-          items: [{ label: 'API Reference', description: 'API, advanced integration' }]
+          items: [{ label: 'API Reference', description: 'Automate Azion with the API' }]
         },
         {
           label: 'Community',
@@ -164,12 +173,12 @@ const MEGA_MENUS = [
         {
           label: 'Content',
           items: [
-            { label: 'Blog', description: 'Insights, industry trends' },
+            { label: 'Blog', description: 'Insights and industry trends' },
             { label: 'Learning', description: 'Fundamentals, subject by subject' },
-            { label: 'Resource Hub', description: 'Resources, useful materials' },
+            { label: 'Resource Hub', description: 'Useful materials in one place' },
             { label: 'Success Stories', description: 'Real results from our customers' },
             { label: 'Partners', description: 'Let’s build together' },
-            { label: 'Marketplace', description: 'Apps, ready-made solutions' }
+            { label: 'Marketplace', description: 'Ready-made apps and solutions' }
           ]
         }
       ],
@@ -180,7 +189,7 @@ const MEGA_MENUS = [
             { label: 'Support', description: 'Expert help when you need it' },
             {
               label: 'Professional Services',
-              description: 'Guidance to move faster with confidence'
+              description: 'Specialist guidance to move faster'
             }
           ]
         }

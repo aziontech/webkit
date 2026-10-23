@@ -6,7 +6,7 @@ But pricing didn’t stay flat. AWS S3 egress fees went up. GCP cut sustained-us
 
 We analyzed pricing data from AWS, GCP, and Azure, tested against three real architecture patterns: a SaaS platform, a team that had done everything FinOps right, and a global API. The same problem showed up in all three, just wearing different clothes.
 
-> **The short version:** Cloud egress per-GB prices have barely moved since 2020, but application data volumes have grown 3–7x. A mid-market SaaS company moving 50 TB/month out of AWS pays $54,000/year in bandwidth alone. Routing stateless workloads through a distributed network instead cuts that bill 60–80% without touching the database or rebuilding the architecture.
+> **The short version:** Cloud egress per-GB prices have barely moved since 2020, but application data volumes have grown 3–7x. A mid-market SaaS company moving 50 TB/month out of AWS pays $54,000/year in bandwidth alone. Routing stateless workloads through a distributed infrastructure instead cuts that bill 60–80% without touching the database or rebuilding the architecture.
 
 ---
 
@@ -16,7 +16,7 @@ AWS charged $0.09/GB out of us-east-1 in 2020. In 2026, that number is still $0.
 
 Data volumes grew. User bases went global. Apps got more real-time: more API calls, more WebSocket connections, more media delivery. **The egress multiplier on a modern app is 3 to 7 times what teams put in their 2020 migration plans.** The unit price stayed flat while the volume multiplied underneath it.
 
-A SaaS company moving 50 terabytes out of AWS per month pays roughly $4,500 a month in egress. **That’s $54,000 a year. For bandwidth. Just bandwidth.** Run that same traffic through a distributed network with global points of presence and the bill drops 60 to 80 percent. Same 50 TB. Same users. Different path.
+A SaaS company moving 50 terabytes out of AWS per month pays roughly $4,500 a month in egress. **That’s $54,000 a year. For bandwidth. Just bandwidth.** Run that same traffic through a distributed infrastructure with global data centers and the bill drops 60 to 80 percent. Same 50 TB. Same users. Different path.
 
 ---
 
@@ -64,12 +64,12 @@ The audit takes two to four hours with dashboards you already have open.
 
 | Workload type | Examples | Where it runs | Egress impact |
 |---|---|---|---|
-| Stateless | API responses, auth, asset delivery, edge functions | Distributed edge network | Low — traffic stops hitting the cloud origin per request |
+| Stateless | API responses, auth, asset delivery, functions | Distributed infrastructure | Low — traffic stops hitting the cloud origin per request |
 | Stateful | Databases, job queues, persistent storage | Cloud (unchanged) | Contained — no architectural change needed |
 
-**The principle is simple: stateless workloads belong at the edge, stateful workloads belong in the cloud.** Most teams are running both layers in the cloud by default, which is why the egress bill keeps growing.
+**The principle is simple: stateless workloads belong close to users, stateful workloads belong in the cloud.** Most teams are running both layers in the cloud by default, which is why the egress bill keeps growing.
 
-Azion’s distributed network runs [Functions](https://www.azion.com/en/products/functions/), [WAF](https://www.azion.com/en/products/web-application-firewall/), and application security controls across 100+ locations globally. A user in Buenos Aires hits 15ms instead of 180ms. Egress drops because traffic stops routing through your cloud origin for every request. The database doesn’t move. The team doesn’t rebuild the architecture from scratch.
+Azion’s distributed infrastructure runs [Functions](https://www.azion.com/en/products/functions/), [WAF](https://www.azion.com/en/products/web-application-firewall/), and application security controls across 100+ locations globally. A user in Buenos Aires hits 15ms instead of 180ms. Egress drops because traffic stops routing through your cloud origin for every request. The database doesn’t move. The team doesn’t rebuild the architecture from scratch.
 
 Teams running this split are seeing **60 to 80 percent egress cost reductions** and **40 to 60 percent latency improvements** outside their primary region. The change isn’t a rip-and-replace. It’s moving the 20 percent of workloads that drive 80 percent of the egress bill.
 
@@ -81,7 +81,7 @@ Cloud is still the right call for stateful workloads. For everything stateless, 
 
 Start with egress as a percentage of your total bill. Pull your latency data for users outside your primary region. Draw the stateless/stateful line across your architecture. Those three numbers will tell you whether you have a structural problem or a right-sizing problem — and only one of them is fixable with a FinOps tool.
 
-[Talk to an Azion specialist](https://www.azion.com/en/contact/) to see how moving stateless workloads to a distributed network affects your egress bill.
+[Talk to an Azion specialist](https://www.azion.com/en/contact/) to see how moving stateless workloads to a distributed infrastructure affects your egress bill.
 
 ---
 
@@ -91,10 +91,10 @@ Start with egress as a percentage of your total bill. Pull your latency data for
 
 **Why are cloud egress fees so high in 2026?** The per-GB price has not changed significantly since 2020, but application data volumes have grown 3 to 7 times what teams modeled in their original migration plans. Real-time features, global user bases, and microservices architectures all multiply egress far beyond initial projections.
 
-**What is the difference between stateless and stateful cloud workloads?** Stateless workloads — API responses, authentication, asset delivery, and serverless functions — do not depend on stored session state and can run anywhere. Stateful workloads — databases, job queues, and persistent storage — need to stay in a consistent location. This distinction determines which workloads can move to a distributed edge network to reduce egress costs without disrupting the rest of the architecture.
+**What is the difference between stateless and stateful cloud workloads?** Stateless workloads — API responses, authentication, asset delivery, and serverless functions — do not depend on stored session state and can run anywhere. Stateful workloads — databases, job queues, and persistent storage — need to stay in a consistent location. This distinction determines which workloads can move to a distributed infrastructure to reduce egress costs without disrupting the rest of the architecture.
 
-**Can FinOps reduce cloud egress costs?** FinOps can identify and track egress spend, but it cannot change the per-GB price set by the provider. Right-sizing and reserved instances typically reduce cloud bills by 15 to 25 percent, but egress reduction requires an architectural change: moving stateless, egress-heavy workloads to a distributed network closer to users.
+**Can FinOps reduce cloud egress costs?** FinOps can identify and track egress spend, but it cannot change the per-GB price set by the provider. Right-sizing and reserved instances typically reduce cloud bills by 15 to 25 percent, but egress reduction requires an architectural change: moving stateless, egress-heavy workloads to a distributed infrastructure closer to users.
 
 **How do I calculate egress cost per active user?** Divide your total monthly egress cost by your monthly active users. If that number is growing faster than revenue per user, your infrastructure costs are scaling faster than your business. That is a structural problem, not a right-sizing problem, and it cannot be fixed with a FinOps tool alone.
 
-**What does a stateless/stateful architecture split look like in practice?** API caches, authentication layers, static asset delivery, and edge functions move to a distributed network with global points of presence. Databases, job queues, and persistent storage stay in the cloud unchanged. The result is that user requests are served closer to where users actually are, egress from the cloud origin drops significantly, and the core application infrastructure does not need to be rebuilt.
+**What does a stateless/stateful architecture split look like in practice?** API caches, authentication layers, static asset delivery, and functions move to a distributed infrastructure with global data centers. Databases, job queues, and persistent storage stay in the cloud unchanged. The result is that user requests are served closer to where users actually are, egress from the cloud origin drops significantly, and the core application infrastructure does not need to be rebuilt.

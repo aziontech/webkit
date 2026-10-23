@@ -72,7 +72,7 @@
             v-for="workload in workloads"
             :key="workload.id"
             :to="`/workloads/${workload.id}`"
-            class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) no-underline hover:bg-(--bg-hover) hover:underline"
+            class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) no-underline hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
             @click.stop
           >
             <span class="truncate">{{ workload.name }}</span>

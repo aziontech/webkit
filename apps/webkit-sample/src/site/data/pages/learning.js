@@ -11,9 +11,9 @@ export const LEARNING_PAGE = [
     description: 'Practical knowledge to speed up, secure, and scale applications.',
     actions: [
       { label: 'See articles', href: '#subjects', kind: 'secondary' },
-      { label: 'Talk to a Specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Companies that run on Azion',
     carouselMarks: CLIENT_STRIP
   },
   {
@@ -25,10 +25,10 @@ export const LEARNING_PAGE = [
       title: 'Put what you learned to work.',
       titleMuted: 'On Azion.',
       description:
-        'Deploy your first application in minutes, or talk to our team about your architecture.',
+        'Deploy your first application in minutes, or talk to an expert about your architecture.',
       actions: [
-        { label: 'Start Free', href: '/signup', kind: 'secondary' },
-        { label: 'Talk to our team', href: '/site/contact', kind: 'outlined', trailing: true }
+        { label: 'Start free', href: '/signup', kind: 'secondary' },
+        { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
       ]
     }
   },

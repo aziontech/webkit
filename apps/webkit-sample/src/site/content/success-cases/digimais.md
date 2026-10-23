@@ -8,7 +8,7 @@ In addition, ensuring service continuity and strengthening contingency and recov
 
 ## Solution
 
-The **Azion Platform** provides a comprehensive set of cybersecurity solutions and services designed to empower security teams with automation, intelligence, and mitigation capabilities against complex web application threats, including zero-day attacks.
+The **Azion Platform** provides a comprehensive set of cybersecurity solutions and services designed to equip security teams with automation, intelligence, and mitigation capabilities against complex web application threats, including zero-day attacks.
 
 To strengthen its security posture, Digimais implemented **Azion Firewall**, a powerful solution composed of the **Network Shield**, **Web Application Firewall (WAF)**, and **DDoS Protection** modules. This enabled the team to:
 
@@ -25,7 +25,7 @@ Additionally, Digimais strengthened its encryption standards by implementing **A
 
 ## Results and impacts
 
-With support from Azion engineers throughout the integration process, Digimais added its domains to **Azion’s global network** and deployed **Firewall** in just a few days, without impacting service performance.
+With support from Azion engineers throughout the integration process, Digimais added its domains to **Azion’s global distributed infrastructure** and deployed **Firewall** in just a few days, without impacting service performance.
 
 Since then, Digimais has automatically blocked **tens of thousands of complex cyberattacks**, including SQL injection, cross-site scripting (XSS), and directory traversal attempts.
 

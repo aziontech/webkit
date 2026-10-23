@@ -27,6 +27,7 @@ export const illustrationPalette: Record<string, IllustrationRole | null> = {
   '#141414': 'surface-raised',
   '#1A1A1A': 'block',
   '#2B2B2B': 'line',
+  '#333333': 'line',
   '#242424': 'line-muted',
   '#4D4D4D': 'line-strong',
   '#FFFFFF': 'highlight',

@@ -33,7 +33,7 @@ const SUBJECTS = [
     slug: 'api-security',
     title: 'API Security',
     description:
-      'Understand threat risks, implement a robust API Security checklist, and learn architecture best practices to protect your applications with maximum performance.',
+      'Understand threat risks, follow an API Security checklist, and learn architecture best practices to protect your applications with maximum performance.',
     articles: [
       { label: 'What is API Security?', href: 'https://www.azion.com/en/learning/api/what-is-api-security/' },
       { label: 'API Gateway vs. API Security', href: 'https://www.azion.com/en/learning/api/api-gateway-vs-api-security/' },
@@ -48,7 +48,7 @@ const SUBJECTS = [
     slug: 'ai',
     title: 'AI',
     description:
-      'Discover the transformative power of Artificial Intelligence (AI), a field at the forefront of innovation and technology.',
+      'Learn the core concepts of Artificial Intelligence (AI), from machine learning and RAG to agents and inference.',
     articles: [
       { label: 'What is Artificial Intelligence (AI)?', href: 'https://www.azion.com/en/learning/ai/what-is-artificial-intelligence/' },
       { label: 'What is Machine Learning?', href: 'https://www.azion.com/en/learning/ai/what-is-machine-learning/' },
@@ -131,17 +131,17 @@ const CLOSING_CELL = `<FrameBox
     class="h-full"
     title="Put what you learned to work."
     title-muted="On Azion."
-    description="Deploy your first application in minutes, or talk to our team about your architecture."
+    description="Deploy your first application in minutes, or talk to an expert about your architecture."
   >
     <template #actions>
       <Button
-        label="Start Free"
+        label="Start free"
         kind="secondary"
         size="large"
         href="/signup"
       />
       <Button
-        label="Talk to our team"
+        label="Talk to an expert"
         kind="outlined"
         size="large"
         href="/contact"
@@ -177,7 +177,7 @@ ${indent(CLOSING_CELL, 3)}
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/SubjectLibrary',
+  title: 'Templates/Marketing/Listings/SubjectLibrary',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

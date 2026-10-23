@@ -28,6 +28,20 @@ const CATEGORIES = [
 
 const ROWS = [
   {
+    href: '/blog/ship-portfolio-two-commands-azion-cli',
+    meta: 'Developers · SEP 25, 2026',
+    title: 'How I Shipped My Portfolio in Just Two Commands',
+    authors: ['Patrick Menoti'],
+    byline: 'Patrick Menoti · 9 min read'
+  },
+  {
+    href: '/blog/how-to-reduce-ai-agent-latency',
+    meta: 'Serverless · SEP 23, 2026',
+    title: 'How Do You Reduce AI Agent Latency?',
+    authors: ['Marilia Bafutto Costa'],
+    byline: 'Marilia Bafutto Costa · 8 min read'
+  },
+  {
     href: '/blog/cloudflare-alternatives-and-competitors',
     meta: 'Security · SEP 22, 2026',
     title: 'Best Cloudflare Alternatives and Competitors',
@@ -41,20 +55,6 @@ const ROWS = [
     authors: ['Marilia Bafutto Costa'],
     byline: 'Marilia Bafutto Costa · 7 min read'
   },
-  {
-    href: '/blog/optimize-operations-at-scale-azion-enterprise-plan',
-    meta: 'Developers · SEP 14, 2026',
-    title: 'How to Optimize Operations at Scale with the Azion Enterprise Plan',
-    authors: ['Marilia Bafutto Costa'],
-    byline: 'Marilia Bafutto Costa · 7 min read'
-  },
-  {
-    href: '/blog/azion-pro-plan-personal-project-to-product',
-    meta: 'Developers · SEP 10, 2026',
-    title: 'Azion Pro Plan: When Your Personal Project Becomes a Product',
-    authors: ['Marilia Bafutto Costa'],
-    byline: 'Marilia Bafutto Costa · 4 min read'
-  }
 ]
 
 const quoted = (text) => `'${text.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
@@ -190,7 +190,7 @@ ${indent(MORE, 1)}
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ArticleIndex',
+  title: 'Templates/Marketing/Listings/ArticleIndex',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -214,7 +214,7 @@ export const AllArticles = {
     docs: {
       description: {
         story:
-          'The Blog page’s list at rest: All Articles selected and no search, starting after the four newest posts the highlight shows, with the first rows of the page and the button into the next.'
+          'The Blog page’s list at rest: All Articles selected and no search, starting after the two newest posts the highlight shows, with the first rows of the page and the button into the next.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }

@@ -2,11 +2,11 @@
  * Spacing catalog — sourced from packages/theme/src/tokens/semantic/spacings.data.js
  */
 export {
-  spacingTokens,
-  spacingGroups,
+  breakpointRows,
+  breakpoints,
   buildSpacingTokens,
   getActiveBreakpoint,
   resolveResponsiveValue,
-  breakpoints,
-  breakpointRows
+  spacingGroups,
+  spacingTokens
 } from '../utils/from-tokens.js'

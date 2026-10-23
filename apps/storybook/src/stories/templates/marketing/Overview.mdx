@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/blocks'
+import { Meta, Source } from '@storybook/blocks'
 
 <Meta
   title="Templates/Marketing/Overview"
@@ -17,9 +17,9 @@ import { Meta } from '@storybook/blocks'
 
 # Marketing templates
 
-The marketing components (Components › Marketing) are the primitives: a
+The marketing components (Components › Marketing) are the building blocks: a
 frame, a grid, a title, a quote. A template is one level up. It is a **whole section of a
-landing page**, already composed from those primitives the way the site composes it, with the
+landing page**, already composed from those blocks the way the site composes it, with the
 site's own copy standing in for yours.
 
 Every template here was lifted from a page of the sample site (`/site`). Its description names
@@ -35,70 +35,104 @@ A landing page is one hero, then one framed column of sections, then a close.
 3. Sections are separated by `<SectionGap hatch />`. The templates below the hero show one above and one below so you can see the band the way a page frames it; on a page, two neighbours share a single gap.
 4. The page ends with a call to action and a hatched closing frame that meets the footer's rule.
 
-## Shell
-
-The chrome around every page: the bar above the hero and the footer below the close.
-
-- [SiteNav](?path=/docs/templates-marketing-shell-sitenav--documentation) — the brand, the four mega-menus and the account actions, folding into a drill-down sheet below `xl`.
-- [SiteFooter](?path=/docs/templates-marketing-shell-sitefooter--documentation) — the link columns, the social row, status and language, closing the page frame with its bottom rule.
-
-The two composed around a page, beside the docs and console shells, are on [Templates › Shells](?path=/docs/templates-shells-overview--docs).
-
-## Social Proof
-
-The sections that back a claim with customers, analysts and certifications.
-
-- [ClientQuotes](?path=/docs/templates-marketing-social-proof-clientquotes--documentation) — client testimonials as tabs, one highlighted quote at a time with a progress hairline. The quote band to use.
-- [QuoteBand](?path=/docs/templates-marketing-social-proof-quoteband--documentation) — one client quote standing alone: a highlighted line, or a signed quote with a link to the story.
-- [LogoWallQuote](?path=/docs/templates-marketing-social-proof-logowallquote--documentation) — a titled wall of client marks beside one signed quote.
-- [RecognitionMarquee](?path=/docs/templates-marketing-social-proof-recognitionmarquee--documentation) — analyst recognitions running as a marquee.
-- [ClientMosaic](?path=/docs/templates-marketing-social-proof-clientmosaic--documentation) — a bento mosaic of client tiles, two of them telling their story.
-- [ComplianceBadges](?path=/docs/templates-marketing-social-proof-compliancebadges--documentation) — the certifications the platform holds, as a badge grid.
-
 ## Heroes
 
 The bands that open a page.
 
-- [Hero](?path=/docs/templates-marketing-heroes-hero--documentation) — the opening bands the site uses: centred with the client strip, a large title band, the centred band with the dot field and client strip (Support), the animated pixel floor, copy beside art, and copy on top of the Workloads scene.
+- [Hero](?path=/docs/templates-marketing-heroes-hero--documentation) — the opening bands the site uses: centred with the client strip, a large title band, the animated pixel floor, copy beside art, and copy on top of the Workloads scene.
 - [HeroForm](?path=/docs/templates-marketing-heroes-heroform--documentation) — the lead-capture opening, where the form sits in the hero beside a sticky headline (Contact).
 
-## Content
+## Features
 
-The sections that state what the product does, what it costs and where to go next, in copy, cells and links.
+The sections that show what the product does, one capability at a time, beside its media.
 
-- [ArticleBody](?path=/docs/templates-marketing-content-articlebody--documentation) — the reading page that opens a blog article or a success story: banner, masthead, prose, the share rail and the outline.
-- [ArticleCards](?path=/docs/templates-marketing-content-articlecards--documentation) — three related articles or stories as linked cards, by cover image or client mark.
-- [ArticleHighlight](?path=/docs/templates-marketing-content-articlehighlight--documentation) — the blog's featured posts: the selected one on top, a wall of titles under it that selects and advances.
-- [ArticleIndex](?path=/docs/templates-marketing-content-articleindex--documentation) — every post as a ruled list of rows behind a category control and a search, paged.
-- [CapabilityGrid](?path=/docs/templates-marketing-content-capabilitygrid--documentation) — three or six capabilities on a frame grid, right under a solution page's hero.
-- [PlatformDirectory](?path=/docs/templates-marketing-content-platformdirectory--documentation) — the platform's primitives as a directory of links in four columns.
-- [ListingBrowser](?path=/docs/templates-marketing-content-listingbrowser--documentation) — the full listing a ListingTable previews: search, facets and order over every row, grouped.
-- [ListingTable](?path=/docs/templates-marketing-content-listingtable--documentation) — a titled preview of a longer listing: a few linked rows in columns, and a button into the full list.
-- [ResourceGrid](?path=/docs/templates-marketing-content-resourcegrid--documentation) — the "go deeper" band of linked guides.
-- [SubjectLibrary](?path=/docs/templates-marketing-content-subjectlibrary--documentation) — a library of subjects: one card per subject with its article links, closed by a call to action in the grid.
-- [PricingPlans](?path=/docs/templates-marketing-content-pricingplans--documentation) — the plan cards with the billing-period toggle.
-- [ComparePlans](?path=/docs/templates-marketing-content-compareplans--documentation) — the feature matrix under the plan cards: every plan's allowance, product by product.
-- [CompareSupportTiers](?path=/docs/templates-marketing-content-comparesupporttiers--documentation) — the Support page's tier matrix: every support tier's coverage and response times, band by band.
-- [ComparisonTable](?path=/docs/templates-marketing-content-comparisontable--documentation) — capability-by-capability comparison against an alternative.
-- [FaqSection](?path=/docs/templates-marketing-content-faqsection--documentation) — the page's questions, answered in place.
-- [ClosingCallToAction](?path=/docs/templates-marketing-content-closingcalltoaction--documentation) — the closing ask and the hatched frame that ends the column.
+- [FeatureTiles](?path=/docs/templates-marketing-features-featuretiles--documentation) — a row of media tiles, each a picture over a run-in caption.
+- [FeatureScroll](?path=/docs/templates-marketing-features-featurescroll--documentation) — capabilities pinned while the page scrolls, with a console widget for the open feature on the right.
+- [FeatureWidgets](?path=/docs/templates-marketing-features-featurewidgets--documentation) — two or three cells, each a console fragment over a short caption with a link or a copyable prompt.
+
+## Solutions
+
+The sections that show how the product solves a problem, led by art, code or an architecture.
+
+- [MediaSplitStack](?path=/docs/templates-marketing-solutions-mediasplitstack--documentation) — a sticky stack of text-and-art bands, the core of a product page.
+- [CodeSplit](?path=/docs/templates-marketing-solutions-codesplit--documentation) — copy beside a code sample: the Functions code split, and the Application Accelerator, AI Gateway agents and Workloads variants.
+- [StickyScrollCode](?path=/docs/templates-marketing-solutions-stickyscrollcode--documentation) — capabilities pinned while the page scrolls, with the code for the open one on the right.
+- [ArchitectureTabs](?path=/docs/templates-marketing-solutions-architecturetabs--documentation) — a self-advancing row of up to five tabs, one architecture at a time with its diagram full width below.
+- [TemplateGallery](?path=/docs/templates-marketing-solutions-templategallery--documentation) — a scrolling wall of deployable templates over the compatible-stack ticker.
+
+## CLI
+
+The sections that show the product from the terminal.
+
+- [CliTerminal](?path=/docs/templates-marketing-cli-cliterminal--documentation) — the Azion CLI band: a headline over a terminal typing the two-command deploy (Functions, Workloads).
+
+## Social Proof
+
+The sections that back a claim with customers, analysts, certifications and people.
+
+- [ClientQuotes](?path=/docs/templates-marketing-social-proof-clientquotes--documentation) — client testimonials as tabs, one highlighted quote at a time with a progress hairline. The quote band to use.
+- [LogoWallQuote](?path=/docs/templates-marketing-social-proof-logowallquote--documentation) — a titled wall of client marks beside one signed quote.
+- [RecognitionMarquee](?path=/docs/templates-marketing-social-proof-recognitionmarquee--documentation) — analyst recognitions running as a marquee.
+- [ClientMosaic](?path=/docs/templates-marketing-social-proof-clientmosaic--documentation) — a bento mosaic of client tiles, two of them telling their story.
+- [ComplianceBadges](?path=/docs/templates-marketing-social-proof-compliancebadges--documentation) — the certifications the platform holds, as a badge grid.
+- [PhotoMarquee](?path=/docs/templates-marketing-social-proof-photomarquee--documentation) — a looping row of photos under a section title, for showing places and people.
+
+## Closing CTAs
+
+The bands that close a page.
+
+- [ClosingCallToAction](?path=/docs/templates-marketing-closing-ctas-closingcalltoaction--documentation) — the closing ask and the hatched frame that ends the column.
 
 ## Network
 
 The sections that argue the distributed infrastructure itself.
 
-- [NetworkSection](?path=/docs/templates-marketing-network-networksection--documentation) — the distributed-infrastructure argument over the network map, with a floor of client quotes, network benefits or figures.
-- [StatsBand](?path=/docs/templates-marketing-network-statsband--documentation) — the network's headline figures at big-number scale: latency, availability, data centers.
+- [NetworkSection](?path=/docs/templates-marketing-network-networksection--documentation) — the distributed-infrastructure argument over the network map, with a floor of client quotes or network benefits.
+- [StatsBand](?path=/docs/templates-marketing-network-statsband--documentation) — the infrastructure's headline figures at big-number scale: latency, availability, data centers.
 
-## Media
+## Comparison
 
-The sections led by a picture of the claim: art, code, or media that changes with the claim.
+The sections that set the product against an alternative, or one plan against another.
 
-- [MediaSplitStack](?path=/docs/templates-marketing-media-mediasplitstack--documentation) — a sticky stack of text-and-art bands, the core of a product page.
-- [MediaSplitBand](?path=/docs/templates-marketing-media-mediasplitband--documentation) — one framed claim beside one picture: one outlined action that the whole band lights on hover, or a secondary and an outlined action that each keep their own hover.
-- [PhotoMarquee](?path=/docs/templates-marketing-media-photomarquee--documentation) — a headline and its paragraph over a row of photos looping across the band.
-- [FeatureTiles](?path=/docs/templates-marketing-media-featuretiles--documentation) — a row of media tiles, each a picture over a run-in caption.
-- [CodeSplit](?path=/docs/templates-marketing-media-codesplit--documentation) — copy beside a code sample: the Functions code split, and the Workloads recipe list.
-- [StickyScrollCode](?path=/docs/templates-marketing-media-stickyscrollcode--documentation) — capabilities pinned while the page scrolls, with the code for the open one on the right.
-- [FeatureTabs](?path=/docs/templates-marketing-media-featuretabs--documentation) — a self-advancing tab band, one feature at a time beside its media.
-- [TemplateGallery](?path=/docs/templates-marketing-media-templategallery--documentation) — a scrolling wall of deployable templates over the compatible-stack ticker.
+- [CompareCompetitors](?path=/docs/templates-marketing-comparison-comparecompetitors--documentation) — capability-by-capability comparison against an alternative.
+- [ComparePlans](?path=/docs/templates-marketing-comparison-compareplans--documentation) — the feature matrix under the plan cards: every plan's allowance, product by product.
+- [CompareSupportTiers](?path=/docs/templates-marketing-comparison-comparesupporttiers--documentation) — the support tiers set side by side.
+
+## Articles
+
+The sections that open, carry and recommend an article.
+
+- [ArticleHighlight](?path=/docs/templates-marketing-articles-articlehighlight--docs) — the band that opens a blog under its hero: one article large, over a wall of highlights that is its own selector.
+- [ArticleCards](?path=/docs/templates-marketing-articles-articlecards--docs) — a titled row of three article cards on one hairline grid.
+- [ArticleBody](?path=/docs/templates-marketing-articles-articlebody--docs) — the reading page of an article: share rail, prose at a reading measure, and the outline.
+
+## Listings
+
+The sections that list many entries of one kind, most with the controls to narrow them: jobs, articles, success stories, subjects.
+
+- [ListingTable](?path=/docs/templates-marketing-listings-listingtable--docs) — a titled preview of a longer listing, a few linked rows and one button into the full list (Careers' latest roles).
+- [ListingBrowser](?path=/docs/templates-marketing-listings-listingbrowser--docs) — the full listing with its search, facet and sort controls, every row under its group (Careers' open positions, by department and location).
+- [ArticleIndex](?path=/docs/templates-marketing-listings-articleindex--docs) — every article of a blog as one list, with a category picker and a search field.
+- [StoryLibrary](?path=/docs/templates-marketing-listings-storylibrary--docs) — every success story as a grid of cards, narrowed by industry, solution and product (Success Cases).
+- [SubjectLibrary](?path=/docs/templates-marketing-listings-subjectlibrary--docs) — a divider grid of subjects, each with its article links, closed by a call to action (Learning Center).
+
+## Pricing
+
+The sections that put a price on the product.
+
+- [PricingPlans](?path=/docs/templates-marketing-pricing-pricingplans--documentation) — the plan cards with the billing-period toggle.
+
+## Use Cases
+
+The sections that show how teams apply a product. Two variants, so a page picks the one that fits its weight.
+
+- [UseCaseLinks](?path=/docs/templates-marketing-use-cases-usecaselinks--documentation) — a grid of linked use cases, one topic per cell, under a header with an overline, a headline and a description.
+- [UseCases](?path=/docs/templates-marketing-use-cases-usecases--docs) — a framed title cell with a docs link beside four use cases, as on Cache, Application Accelerator and SQL Database.
+
+## Content
+
+The sections that say where to go next, in copy, cells and links.
+
+- [PlatformDirectory](?path=/docs/templates-marketing-content-platformdirectory--documentation) — the platform's products and resources as a directory of links in four columns.
+- [ResourceGrid](?path=/docs/templates-marketing-content-resourcegrid--documentation) — the "go deeper" band of linked guides.
+- [FaqSection](?path=/docs/templates-marketing-content-faqsection--documentation) — the page's questions, answered in place.

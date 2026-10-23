@@ -24,10 +24,12 @@ import {
 } from '@site/data/alternative-guides'
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
+import { successCaseArticle } from '@site/data/success-case-articles.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
+import LandingAiGateway from '@site/views/LandingAiGateway.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
 import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
@@ -38,6 +40,7 @@ import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
 import LandingBlog from '@site/views/LandingBlog.vue'
 import LandingBlogInset from '@site/views/LandingBlogInset.vue'
 import LandingBlogPost from '@site/views/LandingBlogPost.vue'
+import LandingBotManager from '@site/views/LandingBotManager.vue'
 import LandingCache from '@site/views/LandingCache.vue'
 import LandingCareers from '@site/views/LandingCareers.vue'
 import LandingCareersHome from '@site/views/LandingCareersHome.vue'
@@ -45,19 +48,31 @@ import LandingCareersJob from '@site/views/LandingCareersJob.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
+import LandingDataStream from '@site/views/LandingDataStream.vue'
+import LandingDdosProtection from '@site/views/LandingDdosProtection.vue'
+import LandingEdgeDns from '@site/views/LandingEdgeDns.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
+import LandingFirewall from '@site/views/LandingFirewall.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingGdpr from '@site/views/LandingGdpr.vue'
+import LandingImageProcessor from '@site/views/LandingImageProcessor.vue'
+import LandingKvStore from '@site/views/LandingKvStore.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
+import LandingLoadBalancer from '@site/views/LandingLoadBalancer.vue'
+import LandingNetworkShield from '@site/views/LandingNetworkShield.vue'
+import LandingObjectStorage from '@site/views/LandingObjectStorage.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
 import LandingPartners from '@site/views/LandingPartners.vue'
 import LandingPerformance from '@site/views/LandingPerformance.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
 import LandingProduct from '@site/views/LandingProduct.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
+import LandingRealTimeEvents from '@site/views/LandingRealTimeEvents.vue'
+import LandingRealTimeMetrics from '@site/views/LandingRealTimeMetrics.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
+import LandingSqlDatabase from '@site/views/LandingSqlDatabase.vue'
 import LandingStreaming from '@site/views/LandingStreaming.vue'
 import LandingSuccessCasePost from '@site/views/LandingSuccessCasePost.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
@@ -115,6 +130,11 @@ export const siteRoutes = [
     name: 'site-ai-inference',
     component: LandingAiInference
   },
+  {
+    path: '/site/products/ai-gateway',
+    name: 'site-ai-gateway',
+    component: LandingAiGateway
+  },
   // A product page whose hero is the product: the workload's own deployment topology, drawn
   // with the diagram the console renders, dissolved into the band by a dither ramp.
   { path: '/site/products/workloads', name: 'site-workloads', component: LandingWorkloads },
@@ -126,12 +146,72 @@ export const siteRoutes = [
     name: 'site-applications',
     component: LandingApplications
   },
-  // Every other Products mega-menu entry: one data-driven page per product (data/products.js).
+  // Products with no dedicated page yet: one data-driven page each (data/products.js).
   {
-    path: '/site/products/:product(sql-database|object-storage|kv-store|waf|network-shield|edge-dns|load-balancer|data-stream|real-time-metrics|edge-pulse)',
+    path: '/site/products/:product(waf|edge-pulse)',
     name: 'site-product',
     component: LandingProduct,
     props: true
+  },
+  {
+    path: '/site/products/bot-manager',
+    name: 'site-bot-manager',
+    component: LandingBotManager
+  },
+  {
+    path: '/site/products/data-stream',
+    name: 'site-data-stream',
+    component: LandingDataStream
+  },
+  {
+    path: '/site/products/ddos-protection',
+    name: 'site-ddos-protection',
+    component: LandingDdosProtection
+  },
+  {
+    path: '/site/products/edge-dns',
+    name: 'site-edge-dns',
+    component: LandingEdgeDns
+  },
+  {
+    path: '/site/products/firewall',
+    name: 'site-firewall',
+    component: LandingFirewall
+  },
+  {
+    path: '/site/products/image-processor',
+    name: 'site-image-processor',
+    component: LandingImageProcessor
+  },
+  {
+    path: '/site/products/kv-store',
+    name: 'site-kv-store',
+    component: LandingKvStore
+  },
+  {
+    path: '/site/products/load-balancer',
+    name: 'site-load-balancer',
+    component: LandingLoadBalancer
+  },
+  {
+    path: '/site/products/network-shield',
+    name: 'site-network-shield',
+    component: LandingNetworkShield
+  },
+  {
+    path: '/site/products/real-time-events',
+    name: 'site-real-time-events',
+    component: LandingRealTimeEvents
+  },
+  {
+    path: '/site/products/real-time-metrics',
+    name: 'site-real-time-metrics',
+    component: LandingRealTimeMetrics
+  },
+  {
+    path: '/site/products/sql-database',
+    name: 'site-sql-database',
+    component: LandingSqlDatabase
   },
 
   // ══ Solutions ═════════════════════════════════════════════════════════════════════
@@ -240,7 +320,9 @@ export const siteRoutes = [
   {
     path: '/site/success-cases/:slug',
     name: 'site-success-case-post',
-    component: LandingSuccessCasePost
+    component: LandingSuccessCasePost,
+    props: true,
+    beforeEnter: (to) => (successCaseArticle(String(to.params.slug)) ? true : '/site/success-cases')
   },
   // The blog index in the same shell: 104 posts read off azion.com/en/blog, behind the same
   // search + select toolbar as Careers and the success-case library. The nav's Resources

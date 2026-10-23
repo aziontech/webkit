@@ -6,6 +6,7 @@ import FieldTextarea from '@aziontech/webkit/field-textarea'
 import Hero from '@aziontech/webkit/hero'
 import { ref } from 'vue'
 
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -103,25 +104,25 @@ const CONTACT_TEMPLATE = `<Hero
   align="center"
   :padded="false"
   carousel
-  carousel-label="The teams our specialists work with"
+  carousel-label="The teams our experts work with"
   :carousel-marks="[${CLIENT_STRIP.map((mark) => `'${mark}'`).join(', ')}]"
+  offset="3.5rem"
   bottom-height="clamp(7rem,16dvh,14rem)"
 >
   <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
     <Hero.Title
-      title="Talk to our Specialists"
+      title="Talk to an expert"
       max-width="lg"
       class="min-w-0"
       sticky
     >
-      We are here to help and provide guidance on performance, security, and AI-native workloads.
-      Feel free to give us a call at
-      <a href="tel:+18333329466" class="${LINK_CLASS}">+1 833-332-9466</a>, use our live chat or submit your inquiry on the form.
+      Get help with performance, security, and AI workloads. Call us at
+      <a href="tel:+18333329466" class="${LINK_CLASS}">+1 833-332-9466</a>, use live chat, or send your question through the form.
 
       <template #actions>
-        <Button label="Talk to Support" kind="secondary" size="large" />
+        <Button label="Talk to support" kind="secondary" size="large" />
         <Button
-          label="Under CyberAttack?"
+          label="Under cyberattack?"
           kind="outlined"
           size="large"
           href="https://www.azion.com/en/lp/under-attack-mitigation/"
@@ -136,7 +137,7 @@ const CONTACT_TEMPLATE = `<Hero
     <div class="min-w-0">
       <form novalidate class="flex flex-col gap-(--spacing-md)" @submit.prevent>
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0">
-          <legend class="sr-only">Talk to our Specialists</legend>
+          <legend class="sr-only">Talk to an expert</legend>
 
           <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
             <FieldText label="First name" input-id="contact-first-name" name="firstname" size="large" autocomplete="given-name" />
@@ -146,7 +147,7 @@ const CONTACT_TEMPLATE = `<Hero
           <FieldText label="E-mail" input-id="contact-email" name="email" type="email" size="large" autocomplete="email" />
 
           <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
-            <FieldSelect label="Role" input-id="contact-role" placeholder="Select your Role" size="large" :options="roles" />
+            <FieldSelect label="Role" input-id="contact-role" placeholder="Select your role" size="large" :options="roles" />
             <FieldText label="Company" input-id="contact-company" name="company" size="large" autocomplete="organization" />
           </div>
 
@@ -156,8 +157,7 @@ const CONTACT_TEMPLATE = `<Hero
         </fieldset>
 
         <div class="flex justify-start">
-          <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Send</button>
-          <Button label="Send" kind="secondary" size="large" />
+          <Button type="submit" label="Send" kind="secondary" size="large" />
         </div>
       </form>
     </div>
@@ -166,16 +166,12 @@ const CONTACT_TEMPLATE = `<Hero
 
 const meta = {
   title: 'Templates/Marketing/Heroes/HeroForm',
-  tags: ['autodocs'],
+  excludeStories: ['CONTACT_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The opening band of a lead-capture page, where the form IS the page’s purpose: the hero copy on one side and the form on the other, above the fold. The Contact page opens this way. Built from `Hero`, `Hero.Title`, the `Field*` controls and `Button`; the validation, submit and toast wiring the sample pages add is left to the consumer.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -198,11 +194,85 @@ export const ContactSplit = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Contact page: a sticky title with the phone line in its description, the form in the second column of the default slot, and the client strip on the band’s floor. The band is unpadded and centred so the two columns sit in the middle of the viewport. `offset` is the sticky site nav’s height: it takes the nav out of the screen height and holds the title that far plus `--spacing-xl` from the top, which is where the form starts, so the headline and the form’s first row sit on one line. The canvas draws an empty bar of that height where the nav would be; without it the title would rest a nav’s height below the form.'
-      },
       source: { code: toSfc(CONTACT_IMPORTS, CONTACT_TEMPLATE) }
     }
   }
+}
+
+export const CONTACT_SECTION = {
+  _id: 'hero-form',
+  props: {
+    highlight: '',
+    title: 'Talk to an expert',
+    body: 'Get help with performance, security, and AI workloads. Call us at [+1 833-332-9466](tel:+18333329466), use live chat, or send your question through the form.',
+    primaryAction: {
+      label: 'Talk to support',
+      href: 'https://tickets.azion.com/en/support/login',
+      target: '_blank'
+    },
+    secondaryAction: {
+      label: 'Under cyberattack?',
+      href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
+      target: '_blank'
+    },
+    fields: {
+      firstName: {
+        label: 'First name',
+        placeholder: ''
+      },
+      lastName: {
+        label: 'Last name',
+        placeholder: '',
+        required: true
+      },
+      email: {
+        label: 'Work email',
+        placeholder: 'name@company.com'
+      },
+      role: {
+        label: 'Role',
+        placeholder: 'Select your role',
+        name: 'role',
+        required: true
+      },
+      company: {
+        label: 'Company',
+        placeholder: '',
+        required: true
+      },
+      phone: {
+        label: 'Phone',
+        placeholder: ''
+      },
+      message: {
+        label: 'Message',
+        placeholder: 'How can we help?',
+        required: true
+      }
+    },
+    roleOptions: ['Administrator', 'Advisor', 'Analyst', 'Architect'],
+    submitLabel: 'Send',
+    defaultCountry: 'US',
+    messages: {
+      missing: 'This field is required.',
+      invalidEmail: 'Enter a valid email address.',
+      success: 'We will be in touch.',
+      error: 'We could not send your message. Try again.'
+    },
+    endpoint:
+      'https://api.hsforms.com/submissions/v3/integration/submit/5759082/a22128e2-cd17-4ed2-968a-52aa64800a87',
+    pageName: 'Contact',
+    consentText: '',
+    hiddenFields: {
+      form_action: 'contact_us',
+      voce_gostaria_de_receber_novos_conteudos_por_whatsapp_: 'Não'
+    },
+    carouselLabel: 'Trusted by teams running critical workloads',
+    carouselMarks: ['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes', 'caixa']
+  }
+}
+
+export const ContactSplitJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(CONTACT_SECTION)
 }

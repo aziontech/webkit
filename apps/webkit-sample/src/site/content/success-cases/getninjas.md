@@ -22,22 +22,22 @@ In addition to performance and scalability challenges, GetNinjas also needed to 
 
 Azion provides GetNinjas with capabilities from the **Azion Platform**, enabling service delivery with **100% availability — guaranteed by SLA —**, along with resources that enhance its operational and technology strategies, including:
 
-- **Observability:** using **Firewall** and **Data Streaming**, GetNinjas improves observability practices through programmable security controls and real-time event insights, allowing complex threats to be mitigated quickly;
-- **Performance optimization:** logs collected through **Data Streaming** help the GetNinjas SRE team significantly improve domain performance and optimize cache purge strategies;
+- **Observability:** using **Firewall** and **Data Stream**, GetNinjas improves observability practices through programmable security controls and real-time event insights, allowing complex threats to be mitigated quickly;
+- **Performance optimization:** logs collected through **Data Stream** help the GetNinjas SRE team significantly improve domain performance and optimize cache purge strategies;
 - **Troubleshooting:** real-time insights allow engineers to identify issues affecting page indexing by search engines or recurring broken links, supporting the development of internal proof-of-concept solutions;
 - **Cybersecurity:** protecting applications from sophisticated web threats is a priority for GetNinjas. The team uses automated mitigation mechanisms such as **DDoS Protection**, while securing applications through **Firewall** and **Network Shield**;
 - **Advanced cache configuration:Azion Cache** expands GetNinjas’ capabilities for configuring and managing caching strategies, increasing application speed while significantly reducing infrastructure costs.
 
 Because the **Azion Platform** uses open standards, its capabilities can be extended through APIs to internal or third-party solutions via the **Azion Marketplace**.
 
-Event logs collected via **Data Streaming** are processed in the systems used by GetNinjas and combined with data from Google Analytics. This provides analysts with a comprehensive view of application activity, enabling them to:
+Event logs collected via **Data Stream** are processed in the systems used by GetNinjas and combined with data from Google Analytics. This provides analysts with a comprehensive view of application activity, enabling them to:
 
 - understand what is and isn’t working;
 - monitor an unlimited number of domains;
 - validate request behavior;
 - identify malicious bots and suspicious activity in real time.
 
-With a wide range of service categories and diverse user profiles across the platform, personalization is critical to delivering the best possible experience. Using **Data Streaming** and **Functions**, the GetNinjas team runs A/B tests and monitors key metrics such as revenue, conversion, and retention.
+With a wide range of service categories and diverse user profiles across the platform, personalization is critical to delivering the best possible experience. Using **Data Stream** and **Functions**, the GetNinjas team runs A/B tests and monitors key metrics such as revenue, conversion, and retention.
 
 ## Results and impacts
 
@@ -45,13 +45,13 @@ The success of GetNinjas using the **Azion Platform** spans several areas. One o
 
 Azion’s network infrastructure in Brazil absorbs traffic peaks from GetNinjas, helping maintain consistent service availability and reliability. In 2020, for example, during a campaign broadcast on the country’s largest national television networks, millions of concurrent requests were sustained for hours, with **more than 90% of requests delivered by Azion’s infrastructure**.
 
-The use of **Data Streaming** also played a key role. Real-time event data improved cybersecurity visibility, particularly for identifying malicious bots, while also supporting troubleshooting during internal proof-of-concept projects.
+The use of **Data Stream** also played a key role. Real-time event data improved cybersecurity visibility, particularly for identifying malicious bots, while also supporting troubleshooting during internal proof-of-concept projects.
 
 Through log analysis and optimization strategies, GetNinjas increased the **hit rate of optimized domains by up to 80%**.
 
-Whenever A/B tests are executed, event data collected via **Data Streaming** helps analysts measure and compare the impact of each change. These insights complement data collected through Google Analytics, enabling deeper analysis and new optimization opportunities.
+Whenever A/B tests are executed, event data collected via **Data Stream** helps analysts measure and compare the impact of each change. These insights complement data collected through Google Analytics, enabling deeper analysis and new optimization opportunities.
 
-In less than one year of using **Data Streaming**, GetNinjas collected more than **3 TB of operational data**, improving performance, strengthening security, and helping the platform maintain strong visibility in search engine results. Anyone searching for a gardener in their city on Google or Bing will likely find GetNinjas and receive service quotes within **24 hours**.
+In less than one year of using **Data Stream**, GetNinjas collected more than **3 TB of operational data**, improving performance, strengthening security, and helping the platform maintain strong visibility in search engine results. Anyone searching for a gardener in their city on Google or Bing will likely find GetNinjas and receive service quotes within **24 hours**.
 
 ## About GetNinjas
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
 
   import MockupPart from '../MockupPart.vue'
   import ShellMockup, { type ShellMockupFade, type ShellMockupKind } from '../ShellMockup.vue'
@@ -35,7 +35,8 @@
     name: string
     domain: string
     status: string
-    severity: TagSeverity
+    severity: StatusIndicatorSeverity
+    loading: boolean
     owner: string
     time: string
   }
@@ -46,6 +47,7 @@
       domain: 'shop.example.com',
       status: 'Live',
       severity: 'success',
+      loading: false,
       owner: 'Maria Costa',
       time: '2 minutes ago'
     },
@@ -54,24 +56,63 @@
       domain: 'api.example.com',
       status: 'Live',
       severity: 'success',
+      loading: false,
       owner: 'Jonas Ribeiro',
       time: '1 hour ago'
+    },
+    {
+      name: 'checkout-service',
+      domain: 'checkout.example.com',
+      status: 'Building',
+      severity: 'info',
+      loading: true,
+      owner: 'Alice Lemos',
+      time: 'Just now'
     },
     {
       name: 'assets-cdn',
       domain: 'cdn.example.com',
       status: 'Live',
       severity: 'success',
+      loading: false,
       owner: 'Alice Lemos',
       time: 'Yesterday'
     },
     {
       name: 'checkout-canary',
       domain: 'canary.example.com',
-      status: 'Inactive',
-      severity: 'secondary',
+      status: 'Queued',
+      severity: 'neutral',
+      loading: false,
       owner: 'Maria Costa',
-      time: '3 days ago'
+      time: 'Just now'
+    },
+    {
+      name: 'search-api',
+      domain: 'search.example.com',
+      status: 'Building',
+      severity: 'info',
+      loading: true,
+      owner: 'Maria Costa',
+      time: '12 minutes ago'
+    },
+    {
+      name: 'auth-edge',
+      domain: 'auth.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'Jonas Ribeiro',
+      time: 'Yesterday'
+    },
+    {
+      name: 'docs-site',
+      domain: 'docs.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'Carla Nunes',
+      time: '2 days ago'
     }
   ]
 
@@ -91,12 +132,6 @@
     <div class="flex h-full flex-col gap-(--spacing-md) p-(--spacing-lg)">
       <MockupPart :order="0">
         <div class="flex items-center gap-(--spacing-sm)">
-          <IconButton
-            icon="pi pi-filter"
-            kind="outlined"
-            size="medium"
-            aria-label="Filter"
-          />
           <InputText
             model-value=""
             size="medium"
@@ -126,59 +161,64 @@
         :order="1"
         class="min-h-0 flex-1"
       >
-        <div
-          class="flex h-full flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+        <CardBox
+          :padded="false"
+          class="h-full overflow-hidden"
         >
-          <div
-            :class="ROW_GRID"
-            class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-          >
-            <span>Name</span>
-            <span class="hidden md:block">Domains</span>
-            <span>Status</span>
-            <span class="hidden md:block">Last Modified</span>
-          </div>
-
-          <MockupPart
-            v-for="(row, index) in ROWS"
-            :key="row.name"
-            :order="2 + index"
-          >
+          <template #content>
             <div
               :class="ROW_GRID"
-              class="border-b border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"
+              class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs) text-label-sm text-(--text-muted)"
             >
-              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <i
-                  class="ai ai-workloads shrink-0 text-body-md leading-none text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <span class="truncate text-body-sm text-(--text-default)">{{ row.name }}</span>
-              </span>
-              <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
-                <i
-                  class="ai ai-domains shrink-0 text-body-md leading-none text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <span class="truncate text-body-sm text-(--text-muted)">{{ row.domain }}</span>
-              </span>
-              <span class="inline-flex">
-                <Tag
-                  :label="row.status"
-                  :severity="row.severity"
-                  size="small"
-                />
-              </span>
-              <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
-                <Avatar
-                  :label="row.owner"
-                  size="small"
-                />
-                <span class="truncate text-body-sm text-(--text-muted)">{{ row.time }}</span>
-              </span>
+              <span>Name</span>
+              <span class="hidden md:block">Domains</span>
+              <span>Status</span>
+              <span class="hidden md:block">Last Modified</span>
             </div>
-          </MockupPart>
-        </div>
+
+            <MockupPart
+              v-for="(row, index) in ROWS"
+              :key="row.name"
+              :order="2 + index"
+              class="flex flex-1 flex-col"
+            >
+              <div
+                :class="ROW_GRID"
+                :data-last="index === ROWS.length - 1 || null"
+                class="flex-1 border-b border-(--border-muted) px-(--spacing-md) py-(--spacing-sm) data-last:border-b-0"
+              >
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <i
+                    class="ai ai-workloads shrink-0 text-body-md leading-none text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate text-body-sm text-(--text-default)">{{ row.name }}</span>
+                </span>
+                <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
+                  <i
+                    class="ai ai-domains shrink-0 text-body-md leading-none text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate text-body-sm text-(--text-muted)">{{ row.domain }}</span>
+                </span>
+                <span class="inline-flex">
+                  <StatusIndicator
+                    :label="row.status"
+                    :severity="row.severity"
+                    :loading="row.loading"
+                  />
+                </span>
+                <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
+                  <Avatar
+                    :label="row.owner"
+                    size="small"
+                  />
+                  <span class="truncate text-body-sm text-(--text-muted)">{{ row.time }}</span>
+                </span>
+              </div>
+            </MockupPart>
+          </template>
+        </CardBox>
       </MockupPart>
     </div>
   </ShellMockup>

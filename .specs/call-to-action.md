@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: d6fe5494436ecfa10a804cd4563b80422dfb52a809bc10a28c84204cede6c08e
+checksum: a074f947a8743adec7e76bd6e4fa8c9607e59b3b0a2ac09108acbb03c96ff105
 created: 2026-09-22
-last_updated: 2026-10-16
+last_updated: 2026-10-20
 ---
 
 # Call To Action — Component Spec
@@ -15,9 +15,11 @@ last_updated: 2026-10-16
 
 The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one.
 
-Three registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line.
+Four registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line.
 
 `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.
+
+`primary` is the loud close: one centred ask standing alone as a billboard, on the page canvas lit from above by the brand. The texture composed into the band — a pixelated layer whose two waves travel across it in the primary colour — is lit by its waves alone and carries the band's colour, so the ground stays the canvas and the copy keeps its ordinary ink. The texture is composed in through the `background` slot and the strip along the floor through `bottom`, so the band owns the light and the page owns what is drawn on it.
 
 ## When to use
 
@@ -25,6 +27,7 @@ Three registers. `panel` sets the copy and its controls on one surface, as a row
 - Whenever a page needs one visually separated block whose whole job is the action.
 - Between two sections, as a mid-page ask that should not read as a new section header.
 - In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.
+- In `primary`, when the page ends on a single ask and the close should be the most lit band on the page, with benefits or proof running along its floor.
 - In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry.
 
 ## When NOT to use
@@ -32,6 +35,7 @@ Three registers. `panel` sets the copy and its controls on one surface, as a row
 - To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
 - For a dismissible or time-bound announcement → use `message`.
+- For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
 - For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row.
 
 ## Related
@@ -42,6 +46,8 @@ Three registers. `panel` sets the copy and its controls on one surface, as a row
 - `button` — the controls composed into the `actions` and `aside-actions` slots.
 - `overline` — the `//`-prefixed eyebrow the band renders above the headline.
 - `texture-material` — the dot field the `split` aside paints on its floor when it carries no control.
+- `texture-material` — the pixelated, waving texture composed into `background` in `primary`.
+- `ticker` — the strip of benefits composed into `bottom` in `primary`.
 
 ## Best practices
 
@@ -55,6 +61,9 @@ Three registers. `panel` sets the copy and its controls on one surface, as a row
 - In `split`, an aside with no `aside` control is not left as an empty floor: it paints a `dots` texture faded toward the top, so the field stands where the control would and stays clear of the supporting line. Fill `aside` and the texture goes — a control and a texture never share the cell.
 - In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.
 - `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.
+- In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
+- In `primary`, compose one `texture-material` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `ticker` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
+- In `primary`, give the ticker enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.
 - Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge.
 
 ## Usage
@@ -152,7 +161,7 @@ import Button from '@aziontech/webkit/button'
 | `titleMuted` | `string` | `''` | false | Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `CallToActionKind` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it. |
+| `kind` | `CallToActionKind` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor. |
 | `framed` | `boolean` | `false` | false | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. |
 
 ## Events
@@ -165,12 +174,14 @@ import Button from '@aziontech/webkit/button'
 |---|---|---|
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `actions` | — | The controls the band exists to offer; in `split`, the lead cell's primary control. |
-| `aside` | — | The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`. |
+| `aside` | — | The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`. |
+| `background` | — | Decoration drawn behind the copy in `primary`, such as a `texture-material`; ignored in the other registers. |
+| `bottom` | — | The strip that floors the band in `primary`, such as a `ticker`, under a hairline; ignored in the other registers. |
 
 ## States
 
 - Visual states: `default`
-- Register: `data-kind="panel" | "split" | "lead"` on the root
+- Register: `data-kind="panel" | "split" | "lead" | "primary"` on the root
 - The band holds no state of its own; controls composed into `actions` / `aside` keep theirs
 
 ## Motion & Animations
@@ -200,6 +211,11 @@ _none_
 | spacing (copy stack) | `var(--spacing-lg)` |
 | spacing (copy to actions, `panel`, `split`) | `var(--spacing-xxl)` |
 | spacing (copy to actions, `lead`) | `var(--spacing-xl)` |
+| ground (`primary`) | `var(--bg-canvas)` |
+| texture light (`primary`, supplied by the composed `texture-material`) | `var(--primary)` |
+| floor hairline (`primary`) | `var(--border-default)` |
+| spacing (floor strip, `primary`) | `var(--spacing-lg)` |
+| spacing (band padding, `primary`) | `var(--spacing-xxl)`, `var(--spacing-xl)` |
 
 ## Theme gaps
 
@@ -212,7 +228,7 @@ _none_
 - Visible focus: not applicable to the panel itself; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches only the controls placed in the `actions` slot, in DOM order.
 - ARIA: the headline is a real `h2` — rendered by the composed `section-title` in `panel`, and by the band itself in `split` and `lead`, where `title` and `title-muted` are two spans of that one heading so it is announced as a single string. The band is a `<section>` named by its `title`, reachable as a landmark with a name; no `role` is added.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): in `primary` the copy is ordinary ink on `var(--bg-canvas)`, so the pair is the same as `panel`'s. The headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the panel is static.
 - Touch target ≥40×40 px — both action slots stretch their children to full width below the breakpoint, so slotted buttons keep their own target size.
 
@@ -220,6 +236,7 @@ _none_
 
 - Default
 - Types — the `panel`, `split` and `lead` registers, one under the other
+- Primary — the canvas-lit register with a pixelated texture and a ticker on the floor (justified: it is the one register that composes two other components through slots, and no arg on the Default story reaches `background` or `bottom`)
 - WithEyebrow — the overline above the headline (justified: `eyebrow` is absent from the default args and changes the panel's vertical rhythm)
 
 ## Constraints — DO NOT

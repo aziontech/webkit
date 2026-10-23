@@ -29,9 +29,9 @@
  * qualifier-and-unit anatomy.
  */
 export const PARTNER_FIGURES = [
-  { prefix: '+', value: '100', label: 'Datacenters worldwide' },
-  { prefix: '+', value: '3k', label: 'ASNs directly connected to the Azion network' },
-  { value: '100', suffix: '%', label: 'availability, guaranteed by SLA' }
+  { prefix: '+', value: '100', label: 'Data centers worldwide' },
+  { prefix: '+', value: '3k', label: 'ASNs directly connected to Azion' },
+  { value: '100', suffix: '%', label: 'Availability, guaranteed by SLA' }
 ]
 
 /** The three reasons under `Why you should be a partner of the Azion Marketplace?`. */
@@ -39,16 +39,16 @@ export const PARTNER_REASONS = [
   {
     title: 'Agile',
     description:
-      'Run code and deploy in minutes. From prototype to enterprise scale with NoOps, just code.'
+      'Run code and deploy in minutes. Go from prototype to enterprise scale without managing infrastructure.'
   },
   {
     title: 'Diverse Use Cases',
     description:
-      'Fraud detection, authentication and authorization, bot mitigation, and facial recognition, utilizing technologies such as visual computing and artificial intelligence executed at the edge.'
+      'Build fraud detection, authentication and authorization, bot mitigation, and facial recognition with visual computing and AI that run close to users.'
   },
   {
     title: 'Cost-Effective',
-    description: 'Pricing is based on the edge resources and/or private edge locations in use.'
+    description: 'Pricing is based on the resources and private data centers in use.'
   }
 ]
 

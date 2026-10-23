@@ -117,19 +117,11 @@
                 kind="primary"
                 size="medium"
                 :loading="submitting"
-                @click="emit('submit')"
+                type="submit"
               />
             </div>
           </div>
         </footer>
-        <button
-          type="submit"
-          class="sr-only"
-          tabindex="-1"
-          aria-hidden="true"
-        >
-          {{ saveLabel }}
-        </button>
       </form>
     </main>
   </div>

@@ -620,3 +620,28 @@ export const Actions = {
     }
   }
 }
+
+const PLACEHOLDER_TEMPLATE = `<MediaSplit
+  eyebrow="${EYEBROW}"
+  title="${TITLE}"
+  description="${DESCRIPTION}"
+>
+  <template #media>
+    <Illustration />
+  </template>
+</MediaSplit>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof MediaSplit>} */
+export const Placeholder = {
+  render: () => ({ components: { Illustration, MediaSplit }, template: PLACEHOLDER_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The band with the library placeholder in its media cell. An `Illustration` with no `name` draws the placeholder frame from the asset library, so a band whose artwork has not been made yet keeps its proportions and says so. Swap the empty `Illustration` for a named scene or an image when the artwork lands.'
+      },
+      source: { code: toSfc(IMPORT, PLACEHOLDER_TEMPLATE) }
+    }
+  }
+}

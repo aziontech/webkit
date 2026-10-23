@@ -1,15 +1,16 @@
+import { agentsClosing } from '../product-pages.js'
+
 export const CONTACT_PAGE = [
   {
     section: 'HeroForm',
-    title: 'Talk to our Specialists',
-    description:
-      'We are here to help and provide guidance on performance, security, and AI-native workloads. Feel free to give us a call at',
+    title: 'Talk to an expert',
+    description: 'Get help with performance, security, and AI workloads. Call us at',
     link: { label: '+1 833-332-9466', href: 'tel:+18333329466' },
-    descriptionAfter: ', use our live chat or submit your inquiry on the form.',
+    descriptionAfter: ', use live chat, or send your question through the form.',
     actions: [
-      { label: 'Talk to Support', href: '/site/support', kind: 'secondary' },
+      { label: 'Talk to support', href: '/site/support', kind: 'secondary' },
       {
-        label: 'Under CyberAttack?',
+        label: 'Under cyberattack?',
         href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
         kind: 'outlined',
         trailing: true,
@@ -17,14 +18,5 @@ export const CONTACT_PAGE = [
       }
     ]
   },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Build',
-    title: 'Build once.',
-    titleMuted: 'Run everywhere.',
-    description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '#' }
-  }
+  agentsClosing('Build once. Run everywhere.')
 ]

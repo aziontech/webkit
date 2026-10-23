@@ -66,6 +66,8 @@
     showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). */
     copyAriaLabel?: string
+    /** Shows the copy control; turn it off for a decorative block nobody copies from. */
+    copyable?: boolean
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
@@ -78,6 +80,7 @@
     defaultValue: undefined,
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
+    copyable: true,
     animateLines: false,
     border: true
   })
@@ -88,6 +91,11 @@
   }>()
 
   const valueModel = defineModel<string | undefined>('value', { default: undefined })
+
+  defineSlots<{
+    /** Leading mark of a tab in the tab strip; receives the tab. */
+    'tab-icon'(props: { tab: CodeBlockTab }): unknown
+  }>()
 
   const attrs = useAttrs()
   const tabListRef = ref<HTMLElement | null>(null)
@@ -565,11 +573,12 @@
   <div
     :class="
       cn(
-        'flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
     :data-border="border || null"
+    :data-copyable="copyable || null"
     :data-testid="testId"
   >
     <div
@@ -615,6 +624,16 @@
           @click="setActiveTab(tab.value)"
           @keydown="onTabKeydown($event, tab.value)"
         >
+          <span
+            v-if="$slots['tab-icon']"
+            class="me-(--spacing-xs) flex size-3.5 shrink-0 items-center justify-center"
+            aria-hidden="true"
+          >
+            <slot
+              name="tab-icon"
+              :tab="tab"
+            />
+          </span>
           {{ tab.label }}
         </button>
       </div>
@@ -644,11 +663,12 @@
 
     <div
       ref="contentRef"
-      class="relative flex max-h-[320px] shrink-0 flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      class="relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :data-testid="`${testId}__content`"
       @transitionend="onContentTransitionEnd"
     >
       <div
+        v-if="copyable"
         class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
@@ -716,7 +736,7 @@
                 {{ formatLineNumber(lineIndex + 1) }}
               </span>
               <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-11"
+                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-sm) group-data-[copyable]/code-block:pr-11"
                 :data-testid="`${testId}__line-content`"
               >
                 <span

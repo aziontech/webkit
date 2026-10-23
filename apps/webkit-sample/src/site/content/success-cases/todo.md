@@ -8,7 +8,7 @@ Likewise, there are other bad actors and malicious traffic targeting Todo Cartõ
 
 ## Solution
 
-Today, cybersecurity is an investment in the growth of every company, especially financial services. Azion offers powerful edge-native features and resources that help Todo Cartões to improve its zero-trust security model and make its services more reliable.
+Today, cybersecurity is an investment in the growth of every company, especially financial services. Azion offers powerful distributed features and resources that help Todo Cartões to improve its zero-trust security model and make its services more reliable.
 
 Enhancing the security perimeter with Azion Firewall and its Network Shield, Web Application Firewall (WAF) and DDoS Protection modules, Todo Cartões’s team is able to automate blocking and mitigation of:
 
@@ -17,7 +17,7 @@ Enhancing the security perimeter with Azion Firewall and its Network Shield, Web
 - unwanted traffic according to its network, geolocation, IP address and more; and
 - malicious users previously identified by the Todo team and Azion through Network Lists.
 
-Besides automation, these edge-native protections provide real-time response to incidents that threaten Todo Cartões’s applications, as well as features to secure web gateways, protect user access, and prevent online fraud, just by updating the firewall rules.
+Besides automation, these distributed protections provide real-time response to incidents that threaten Todo Cartões’s applications, as well as features to secure web gateways, protect user access, and prevent online fraud, just by updating the firewall rules.
 
 In addition, Todo Cartões’s engineers can explore security and application events with Real-Time Events, obtaining rich data records to improve their defenses through threat intelligence.
 

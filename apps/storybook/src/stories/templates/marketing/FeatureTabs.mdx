@@ -1,0 +1,50 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as FeatureTabsStories from './FeatureTabs.stories'
+
+<Meta title="Templates/Marketing/Solutions/FeatureTabs" />
+
+# FeatureTabs
+
+A band that walks through up to three features, one at a time. A horizontal title with its button opens the module, the tabs stand on the left at `size="medium"`, each with its own title, description and progress, and the open tab's media fills the other side. On small screens the tabs stack and the open tab's media sits inside its row.
+
+The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox` and `MediaTabs`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Code
+
+From the website bundle: every tab opens its own code file — the workload config, a request handler and a storage handler. The code sits on a pixelate texture that fades out toward the top. The open tab replays its lines as it opens.
+
+<Canvas of={FeatureTabsStories.Code} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` make the section title.
+- `tabs` are up to three features, each a `value`, a `title`, a `description` and the `code` file it opens. A tab without `code` draws the band's `scene`, set in the page's data file, instead.
+- `action` is the button in the section title. Without it the title stands alone.
+- `copyAriaLabel` names the copy control on each file.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={FeatureTabsStories.CodeJson}
+    dark
+  />
+</div>

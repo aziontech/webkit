@@ -1,12 +1,4 @@
-import {
-  type MaybeRefOrGetter,
-  onScopeDispose,
-  readonly,
-  type Ref,
-  ref,
-  toValue,
-  watch
-} from 'vue'
+import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue, watch } from 'vue'
 
 import type { DiagramEdge } from '../types'
 
@@ -16,6 +8,8 @@ export interface DiagramPath {
   active: boolean
 }
 
+export type DiagramSide = 'left' | 'right' | 'top' | 'bottom'
+
 export interface DiagramMarker {
   key: string
   x: number
@@ -24,12 +18,16 @@ export interface DiagramMarker {
   label: string
 }
 
+export interface DiagramPort extends DiagramMarker {
+  side: DiagramSide
+}
+
 export interface UseDiagramConnectorsReturn {
   width: Readonly<Ref<number>>
   height: Readonly<Ref<number>>
   paths: Readonly<Ref<readonly DiagramPath[]>>
   labels: Readonly<Ref<readonly DiagramMarker[]>>
-  ports: Readonly<Ref<readonly DiagramMarker[]>>
+  ports: Readonly<Ref<readonly DiagramPort[]>>
   ready: Readonly<Ref<boolean>>
 }
 
@@ -41,10 +39,16 @@ interface Box {
   middle: number
 }
 
+interface End {
+  x: number
+  y: number
+  side: DiagramSide
+}
+
 interface Route {
   d: string
   label: { x: number; y: number }
-  ends: [{ x: number; y: number }, { x: number; y: number }]
+  ends: [End, End]
 }
 
 const toPx = (value: string, rootSize: number): number => {
@@ -59,8 +63,8 @@ const curve = (s: Box, t: Box): Route => {
     d: `M${s.right} ${s.middle} C${mid} ${s.middle} ${mid} ${t.middle} ${t.left} ${t.middle}`,
     label: { x: mid, y: (s.middle + t.middle) / 2 },
     ends: [
-      { x: s.right, y: s.middle },
-      { x: t.left, y: t.middle }
+      { x: s.right, y: s.middle, side: 'right' },
+      { x: t.left, y: t.middle, side: 'left' }
     ]
   }
 }
@@ -72,8 +76,8 @@ const elbow = (s: Box, t: Box, inset: number, radius: number): Route => {
     d: `M${x} ${s.bottom} V${t.middle - r} Q${x} ${t.middle} ${x + r} ${t.middle} H${t.left}`,
     label: { x, y: t.middle - r - inset },
     ends: [
-      { x, y: s.bottom },
-      { x: t.left, y: t.middle }
+      { x, y: s.bottom, side: 'bottom' },
+      { x: t.left, y: t.middle, side: 'left' }
     ]
   }
 }
@@ -84,8 +88,8 @@ const drop = (s: Box, t: Box, inset: number): Route => {
     d: `M${x} ${s.bottom} V${t.top}`,
     label: { x, y: (s.bottom + t.top) / 2 },
     ends: [
-      { x, y: s.bottom },
-      { x, y: t.top }
+      { x, y: s.bottom, side: 'bottom' },
+      { x, y: t.top, side: 'top' }
     ]
   }
 }
@@ -106,7 +110,7 @@ export function useDiagramConnectors(
   const height = ref(0)
   const paths = ref<DiagramPath[]>([])
   const labels = ref<DiagramMarker[]>([])
-  const ports = ref<DiagramMarker[]>([])
+  const ports = ref<DiagramPort[]>([])
   const ready = ref(false)
 
   let observer: globalThis.ResizeObserver | null = null
@@ -119,7 +123,9 @@ export function useDiagramConnectors(
     const frameBox = element.getBoundingClientRect()
     const style = globalThis.getComputedStyle(element)
     const rootSize =
-      globalThis.parseFloat(globalThis.getComputedStyle(globalThis.document.documentElement).fontSize) || 16
+      globalThis.parseFloat(
+        globalThis.getComputedStyle(globalThis.document.documentElement).fontSize
+      ) || 16
     const inset = toPx(style.getPropertyValue('--spacing-md'), rootSize)
     const radius = toPx(style.getPropertyValue('--shape-card'), rootSize)
 
@@ -138,7 +144,7 @@ export function useDiagramConnectors(
 
     const nextPaths: DiagramPath[] = []
     const nextLabels: DiagramMarker[] = []
-    const nextPorts = new Map<string, DiagramMarker>()
+    const nextPorts = new Map<string, DiagramPort>()
 
     for (const edge of toValue(edges)) {
       const source = box(edge.from)
@@ -152,7 +158,12 @@ export function useDiagramConnectors(
       for (const end of routed.ends) {
         const portKey = `${Math.round(end.x)}:${Math.round(end.y)}`
         const known = nextPorts.get(portKey)
-        nextPorts.set(portKey, { key: portKey, ...end, label: '', active: active || Boolean(known?.active) })
+        nextPorts.set(portKey, {
+          key: portKey,
+          ...end,
+          label: '',
+          active: active || Boolean(known?.active)
+        })
       }
     }
 

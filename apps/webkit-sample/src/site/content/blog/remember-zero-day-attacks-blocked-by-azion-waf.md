@@ -20,6 +20,6 @@ In 2023, a new attack called CRLF injection emerged. According to security resea
 
 Our security team conducted two tests using the proof of concept presented by Praetorian, employing Azion’s WAF in a controlled environment. In both cases, the WAF successfully blocked the CRLF injection attempts, without the need for additional regular expressions.
 
-One of the main factors for Azion’s WAF success in mitigating zero-day attacks is its blocking algorithm based on scoring, but that’s not all. The solution enables the use of pre-established rules that can be customized and also complemented by edge functions, according to the specific needs of the business.
+One of the main factors for Azion’s WAF success in mitigating zero-day attacks is its blocking algorithm based on scoring, but that’s not all. The solution enables the use of pre-established rules that can be customized and also complemented by functions, according to the specific needs of the business.
 
 [Contact our experts](https://www.azion.com/en/contact/?utm_source=blog&utm_medium=site&utm_campaign=blog-post&utm_term=contact-sales&utm_content=site) and learn how we can help your business take security to the next level.

@@ -377,6 +377,7 @@
         :resources="createdResources"
         :domain="names.domain"
         :live="form.domainType !== 'own'"
+        :deployment="provisioned"
         @manage="manageWorkload"
       />
     </template>

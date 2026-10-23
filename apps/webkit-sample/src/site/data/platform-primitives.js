@@ -1,6 +1,6 @@
 export const PLATFORM_PRIMITIVES = [
   {
-    label: 'Compute',
+    label: 'Build',
     items: [
       {
         icon: 'ai ai-edge-functions',
@@ -9,7 +9,13 @@ export const PLATFORM_PRIMITIVES = [
         href: '/site/products/functions'
       },
       {
-        icon: 'pi pi-sitemap',
+        icon: 'ai ai-durable-objects',
+        title: 'Durable Objects',
+        description: 'Stateful compute, deployed worldwide',
+        href: 'https://www.azion.com/en/products/durable-objects/'
+      },
+      {
+        icon: 'ai ai-rules-engine',
         title: 'Rules Engine',
         description: 'Automate request handling with programmable rules',
         href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
@@ -21,10 +27,10 @@ export const PLATFORM_PRIMITIVES = [
         href: '/site/products/load-balancer'
       },
       {
-        icon: 'pi pi-image',
+        icon: 'ai ai-image-processor',
         title: 'Image Processor',
         description: 'Optimize and transform images in real time',
-        href: 'https://www.azion.com/en/products/image-processor/'
+        href: '/site/products/image-processor'
       }
     ]
   },
@@ -35,24 +41,24 @@ export const PLATFORM_PRIMITIVES = [
         icon: 'ai ai-edge-ai',
         title: 'AI Inference',
         description: 'Run AI models closer to users',
-        href: '/site/products/ai-inference'
+        href: 'https://www.azion.com/en/products/ai-inference/'
       },
       {
-        icon: 'ai ai-gateway',
+        icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Secure, manage, and optimize AI traffic',
-        href: 'https://www.azion.com/en/solutions#ai'
+        href: '/site/products/ai-gateway'
       }
     ]
   },
   {
-    label: 'Data',
+    label: 'Store',
     items: [
       {
         icon: 'ai ai-edge-storage',
         title: 'Object Storage',
         description: 'Scalable, durable storage for unstructured data',
-        href: '/site/products/object-storage'
+        href: 'https://www.azion.com/en/products/object-storage/'
       },
       {
         icon: 'ai ai-edge-sql',
@@ -70,18 +76,18 @@ export const PLATFORM_PRIMITIVES = [
         icon: 'ai ai-tiered-cache',
         title: 'Cache',
         description: 'Accelerate content delivery and reduce origin load',
-        href: '/site/products/cache'
+        href: 'https://www.azion.com/en/products/cache/'
       }
     ]
   },
   {
-    label: 'Security',
+    label: 'Secure',
     items: [
       {
-        icon: 'ai ai-waf-rules',
+        icon: 'ai ai-edge-firewall',
         title: 'Web Application Firewall',
         description: 'Protect human and AI applications from threats',
-        href: '/site/products/waf'
+        href: '/site/products/web-application-firewall'
       },
       {
         icon: 'ai ai-azion-api',
@@ -90,10 +96,10 @@ export const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/solutions/api-gateway/'
       },
       {
-        icon: 'pi pi-android',
+        icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Detect and stop automated threats instantly',
-        href: 'https://www.azion.com/en/products/bot-manager/'
+        href: '/site/products/bot-manager'
       },
       {
         icon: 'ai ai-edge-dns',

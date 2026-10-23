@@ -1,0 +1,68 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ArchitectureTabsStories from './ArchitectureTabs.stories'
+
+<Meta title="Templates/Marketing/Solutions/ArchitectureTabs" />
+
+# ArchitectureTabs
+
+A band that plots several architectures of one product, one at a time. Up to five tabs lie in a row, each with its own title, description and progress, and the active tab's diagram runs the full width above or below them. The tabs are held at `size="small"`, so five titles fit the row without the band growing. The AI Gateway page uses it for its routing architectures, with the tabs at the bottom.
+
+The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox` and `MediaTabs`, with the site's diagrams as the media.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws its architecture as a diagram, a `DiagramSet` entry picked by the `#media` slot's `index`.
+
+<Canvas of={ArchitectureTabsStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` make the section title.
+- `position` is the side of the diagram the tabs sit on: `top` (the default), `bottom`, `left` or `right`. Left and right hold up to three tabs.
+- `tabs` are up to five architectures, each a `value`, a `title` and a `description`.
+- `scene` is the diagram set the tabs open: a component and its props, set in the page's data file, not in JSON, so it is left out of the example. The `value` of a tab picks its diagram.
+- `link` is the small button under the frame. Without a label or link it is dropped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ArchitectureTabsStories.DefaultJson}
+    dark
+  />
+</div>
+
+### Platform
+
+The base Azion architecture the website bundle plots: Request path, Security first, Code at the edge, Data close by and Every request seen. Each tab is one product's starter diagram from `PLATFORM_ARCHITECTURE_DIAGRAMS`, so the band reads as one request crossing the platform. Every diagram it draws is documented standalone under Foundations/Assets/Diagrams.
+
+<Canvas of={ArchitectureTabsStories.Platform} />
+
+##### Use it on the site
+
+The page data imports the whole band as `PLATFORM_ARCHITECTURE_BAND` from `site/data/product-architectures.js`. Its JSON, without the scene:
+
+<div className="sb-site-json">
+  <Source
+    of={ArchitectureTabsStories.PlatformJson}
+    dark
+  />
+</div>

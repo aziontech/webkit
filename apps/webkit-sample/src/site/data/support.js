@@ -1,8 +1,8 @@
 export const SUPPORT_HERO = {
   eyebrow: 'Support',
   title: 'Technical support for every stage of your growth',
-  description: 'Designed to help you move independently. Backed by specialists when you need them.',
-  carouselLabel: 'Trusted by mission-critical workloads'
+  description: 'Move on your own, with specialists ready when you need them.',
+  carouselLabel: 'Trusted by teams running critical workloads'
 }
 
 export const SUPPORT_MARKS = [
@@ -24,19 +24,19 @@ export const SUPPORT_REASONS = [
     icon: 'pi pi-server',
     title: 'High availability',
     description:
-      'Ensure operational continuity for latency-sensitive financial applications and APIs, with automatic scalability and real-time responses, even during transaction peaks.'
+      'Keep latency-sensitive financial applications and APIs running, with automatic scaling and real-time responses even during transaction peaks.'
   },
   {
     icon: 'pi pi-shield',
     title: 'Advanced security',
     description:
-      'Protect financial data and transactions with multilayer security integrated into the application, mitigating API attacks, DDoS, and bots without increasing operational complexity.'
+      'Protect financial data and transactions with multilayer security built into the application. Mitigate API attacks, DDoS, and bots without adding operational complexity.'
   },
   {
     icon: 'pi pi-check-circle',
     title: 'Continuous compliance',
     description:
-      'Meet regulatory requirements with consistent security policies and continuous auditing across distributed environments, without compromising performance or development agility.'
+      'Meet regulatory requirements with consistent security policies and continuous auditing across distributed environments, without hurting performance or slowing development.'
   }
 ]
 
@@ -45,26 +45,26 @@ export const SUPPORT_TIERS = [
     id: 'developer',
     name: 'Developer',
     description: 'Ideal for exploring the platform independently.',
-    action: { label: 'Start Free', kind: 'outlined', to: '/signup' }
+    action: { label: 'Start free', kind: 'outlined', to: '/signup' }
   },
   {
     id: 'business',
     name: 'Business',
     description: 'Ideal for teams that need support from specialists.',
-    action: { label: 'Contact Us', kind: 'outlined', to: '/site/contact' }
+    action: { label: 'Contact us', kind: 'outlined', to: '/site/contact' }
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     description: 'Ideal for organizations that require advanced support and ongoing services.',
     highlighted: true,
-    action: { label: 'Contact Us', kind: 'secondary', to: '/site/contact' }
+    action: { label: 'Contact us', kind: 'secondary', to: '/site/contact' }
   },
   {
     id: 'mission-critical',
     name: 'Mission-Critical',
     description: 'Ideal for mission-critical operations that need priority and proactive support.',
-    action: { label: 'Contact Us', kind: 'outlined', to: '/site/contact' }
+    action: { label: 'Contact us', kind: 'outlined', to: '/site/contact' }
   }
 ]
 
@@ -75,8 +75,8 @@ const heading = (label) => ({ label, group: true, values: ['', '', '', ''] })
 export const SUPPORT_SECTIONS = [
   {
     eyebrow: 'Support',
-    title: 'Get assistance when it matters most',
-    link: { label: 'See Pricing', href: `${SUPPORT_PRICING}#support` },
+    title: 'Get help when it matters most',
+    link: { label: 'See pricing', href: `${SUPPORT_PRICING}#support` },
     rows: [
       heading('Self-service support'),
       { label: 'Learning Center', values: [true, true, true, true] },
@@ -97,7 +97,7 @@ export const SUPPORT_SECTIONS = [
   {
     eyebrow: 'Professional Services',
     title: 'Move faster with specialist guidance',
-    link: { label: 'See Pricing', href: `${SUPPORT_PRICING}#professional-services` },
+    link: { label: 'See pricing', href: `${SUPPORT_PRICING}#professional-services` },
     rows: [
       {
         label: 'Integration Services',
@@ -213,9 +213,9 @@ export const SUPPORT_FAQ = [
 ]
 
 export const SUPPORT_CLOSING = {
-  eyebrow: 'Get Started',
-  title: 'Get the right assistance when it matters most',
-  description: 'Explore how companies use Azion to improve performance, security, and reliability.',
-  action: { label: 'Talk to a Specialist', to: '/site/contact' },
-  aside: { label: 'Success Stories', to: '/site/success-cases' }
+  eyebrow: 'Get started',
+  title: 'Get the right help when it matters most',
+  description: 'See how companies use Azion to improve performance, security, and reliability.',
+  action: { label: 'Talk to an expert', to: '/site/contact' },
+  aside: { label: 'See customer stories', to: '/site/success-cases' }
 }

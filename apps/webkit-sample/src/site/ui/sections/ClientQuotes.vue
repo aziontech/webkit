@@ -23,7 +23,7 @@
     ariaLabel: 'Client stories',
     actions: () => [
       {
-        label: 'See success stories',
+        label: 'See customer stories',
         href: '/site/success-cases',
         kind: 'secondary',
         trailing: true

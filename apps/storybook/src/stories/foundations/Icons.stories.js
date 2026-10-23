@@ -6,7 +6,7 @@ import IconGrid from '../../foundations/components/IconGrid.vue'
 import {
   PageContainer,
   PageHeader,
-  SectionHeader
+  PageSection
 } from '../../foundations/components/layout/index.js'
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
@@ -45,7 +45,7 @@ export const Overview = {
     components: {
       PageContainer,
       PageHeader,
-      SectionHeader,
+      PageSection,
       CodeBlock,
       IconGrid
     },
@@ -81,28 +81,26 @@ export const Overview = {
           with the <strong class="text-default">PrimeIcons</strong> library for general-purpose UI icons.
         </PageHeader>
 
-        <!-- Import -->
-        <SectionHeader title="Import" />
-        <CodeBlock :tabs="importTabs" :border="true" :show-line-numbers="false" class="h-fit mb-12" />
+        <PageSection title="Import">
+          <CodeBlock :tabs="importTabs" :border="true" :show-line-numbers="false" class="h-fit" />
+        </PageSection>
 
-        <!-- Usage -->
-        <SectionHeader title="Usage" />
-        <CodeBlock :tabs="usageTabs" :border="true" :show-line-numbers="false" class="h-fit mb-6" />
-        <p class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed mb-12">
-          Icons are a font, which means they inherit text properties.
-          <strong class="text-default">Colored</strong> brand icons (the <code>-cor</code> set) are
-          multicolor logos that can't live in the font — they ship as inline SVG via
-          <code>@aziontech/icons/color-catalog</code> and keep their own palette.
-        </p>
+        <PageSection title="Usage">
+          <template #description>
+            Icons are a font, so they inherit text properties.
+            <strong class="text-(--text-default)">Colored</strong> brand icons (the <code>-cor</code> set)
+            are multicolor logos that can't live in the font — they ship as inline SVG via
+            <code>@aziontech/icons/color-catalog</code> and keep their own palette.
+          </template>
+          <CodeBlock :tabs="usageTabs" :border="true" :show-line-numbers="false" class="h-fit" />
+        </PageSection>
 
-        <!-- Icon Gallery -->
-        <SectionHeader
+        <PageSection
           title="Icon Gallery"
           :description="\`Browse all \${icons.length + colorIcons.length} icons. Use the search to filter by name, and the slider to adjust preview size.\`"
-          size="lg"
-        />
-
-        <IconGrid :icons="icons" :color-icons="colorIcons" :initial-size="args.initialSize" />
+        >
+          <IconGrid :icons="icons" :color-icons="colorIcons" :initial-size="args.initialSize" />
+        </PageSection>
       </PageContainer>
     `
   }),

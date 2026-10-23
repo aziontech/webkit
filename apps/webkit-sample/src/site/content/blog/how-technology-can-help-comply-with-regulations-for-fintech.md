@@ -1,6 +1,6 @@
 Fintechs have brought together two seemingly opposing realms: finance and technology. This convergence has driven innovation and expanded access to financial services, all within a fast-evolving environment that continues to attract investors. According to a report by [Fortune Business Insights](https://www.fortunebusinessinsights.com/fintech-market-108641), the global fintech market was valued at USD 294.74 billion in 2023 and is projected to reach USD 1,152.06 billion by 2032.
 
-In this global landscape, shaped by a fast-paced market and digital transformation demanding seamless and meaningful customer experiences, fintechs face growing challenges—many related to managing vast amounts of sensitive data and the rising sophistication of cyberattacks. To mitigate these risks, governments and regulators have strengthened regulations to ensure secure operations and data protection.
+In this global landscape, shaped by a fast-paced market and modernization demanding seamless and meaningful customer experiences, fintechs face growing challenges—many related to managing vast amounts of sensitive data and the rising sophistication of cyberattacks. To mitigate these risks, governments and regulators have strengthened regulations to ensure secure operations and data protection.
 
 ## Main legal requirements for fintechs
 
@@ -36,24 +36,24 @@ Brazilian authorities have also approved various laws to regulate the fintech se
 - The **European General Data Protection Regulation (GDPR)** is one of the most well-known laws related to this topic. It’s a pioneer and a reference for the world.
 - Other relevant regulations for fintechs in the region are the **Payment Services Directive 2 (PSD2)**, the **Anti-Money Laundering Directive (AMLD)**, and the **European Market Infrastructure Regulation (EMIR)**.
 
-## What to expect from an edge computing platform?
+## What to expect from a distributed platform?
 
-For fintechs to operate securely and comply with regulations, an edge computing platform must prioritize three fundamental pillars: **security**, **monitoring**, and **compliance**.
+For fintechs to operate securely and comply with regulations, a distributed platform must prioritize three fundamental pillars: **security**, **monitoring**, and **compliance**.
 
 ### Security
 
-Security is key to protecting your operations and complying with regulations, especially in an ever-evolving digital environment. A robust edge computing platform must offer advanced technologies and capabilities to strengthen the protection of your data and systems:
+Security is key to protecting your operations and complying with regulations, especially in an ever-evolving digital environment. A robust distributed platform must offer advanced technologies and capabilities to strengthen the protection of your data and systems:
 
 - **Data encryption**: protection of in-transit and stored data through advanced protocols, ensuring the integrity and confidentiality of sensitive information.
 - **Advanced authentication**: [implementing MFA](https://www.azion.com/en/documentation/products/accounts/multi-factor-authentication/) enhances the security of access to critical systems while the [mTLS protocol](https://www.azion.com/en/documentation/products/guides/secure/mtls/) ensures that communication between APIs and systems is encrypted, protecting against *man-in-the-middle* attacks. [Role-based access controls (RBAC)](https://www.azion.com/en/documentation/products/accounts/users-management/) and other measures also protect your data from potential breaches or unauthorized access.
-- **Secure storage**: in addition to safeguarding your digital assets, it enables data redundancy and ensures that sensitive information is replicated across different edge locations.
+- **Secure storage**: in addition to safeguarding your digital assets, it enables data redundancy and ensures that sensitive information is replicated across different data centers.
 - **Zero-Trust Architecture**: this security approach requires constant validation for every access request, minimizing the risk of internal and external threats. It guarantees that no person or system inside the network is trusted by default, continuously validating all access.
 - **Advanced security suite**: the platform should provide products and resources that allow you to [create customized security rules and configurations](https://www.azion.com/en/documentation/products/secure/overview/) to protect your applications, along with defense and mitigation capabilities for complex threats, including:
-  - [Edge Firewall](https://www.azion.com/en/documentation/products/secure/edge-firewall/): operating across the entire network and protecting all solutions to filter malicious traffic before it reaches your applications, reducing risks from DDoS attacks and other volumetric threats.
+  - [Firewall](https://www.azion.com/en/documentation/products/secure/edge-firewall/): operating across the entire network and protecting all solutions to filter malicious traffic before it reaches your applications, reducing risks from DDoS attacks and other volumetric threats.
   - [Web Application Firewall (WAF)](https://www.azion.com/en/documentation/products/secure/edge-firewall/web-application-firewall/): protects web applications against known vulnerabilities and emerging threats, such as SQL injections and cross-site scripting (XSS).
-  - [Network Lists](https://www.azion.com/en/documentation/products/secure/edge-firewall/network-layer-protection/network-lists/): ideal for managing IP allowlists, blocklists, or network ranges to enhance access control across all edge locations.
+  - [Network Lists](https://www.azion.com/en/documentation/products/secure/edge-firewall/network-layer-protection/network-lists/): ideal for managing IP allowlists, blocklists, or network ranges to enhance access control across all data centers.
   - **AI-powered threat detection**: the use of advanced algorithms and machine learning has become a key tool for detecting and responding to new threats, including [bot management](https://www.azion.com/en/documentation/architectures/bot-management/protect-your-applications-with-bot-management/).
-- **Global protection**: each edge location in the network should be protected and have these products integrated, ensuring a robust, scalable security perimeter aligned with local and international compliance and performance needs, ensuring scalability and compliance both locally and globally.
+- **Global protection**: each data center in the network should be protected and have these products integrated, ensuring a robust, scalable security perimeter aligned with local and international compliance and performance needs, ensuring scalability and compliance both locally and globally.
 
 ### Monitoring
 
@@ -66,7 +66,7 @@ Proactive monitoring allows for quick detection and response to incidents, minim
 
 ### Compliance
 
-Complying with local and international regulations is key for market trust and operational stability. An edge computing platform should offer:
+Complying with local and international regulations is key for market trust and operational stability. A distributed platform should offer:
 
 - **Report automation**: keeping detailed and accessible records is crucial to meeting regulatory demands. Therefore, the platform should provide the generation of pre-configured reports for regulatory audits, optimizing compliance without adding complexity to operations.
 - **Compliance with standards**: global frameworks like [SOC](https://www.azion.com/en/documentation/compliance/soc/), [PCI DSS](https://www.azion.com/en/documentation/compliance/pci-dss-certification/), or ISO standards not only standardize processes but also ensure the protection of financial and personal data.

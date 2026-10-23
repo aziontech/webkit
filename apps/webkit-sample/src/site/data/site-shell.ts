@@ -44,7 +44,7 @@ const SOLUTIONS: SiteNavMenu = {
         items: [
           {
             label: 'Financial Services',
-            description: 'Accelerate digital financial services',
+            description: 'Speed up digital financial services',
             href: '/site/solutions/financial-services'
           },
           {
@@ -74,36 +74,35 @@ const PRODUCTS: SiteNavMenu = {
         items: [
           {
             label: 'Workloads',
-            description: 'Put an application on a hostname, everywhere',
+            description: 'Serve an application on your domain, globally',
             href: '/site/products/workloads'
           },
           {
-            label: 'Applications',
-            description: 'Deliver and configure web applications',
-            href: '/site/products/applications'
-          },
-          {
             label: 'Functions',
-            description: 'Implement serverless functions and scalable applications',
+            description: 'Run code globally with low latency and no cold starts',
             href: '/site/products/functions'
           },
           {
             label: 'Cache',
-            description: 'Accelerate, optimize content delivery',
+            description: 'Speed up delivery and reduce origin load',
             href: '/site/products/cache'
           },
           {
             label: 'Application Accelerator',
-            description: 'Boost performance, enhance delivery',
+            description: 'Speed up dynamic content and APIs',
             href: '/site/products/application-accelerator'
           },
-          { label: 'Image Processor', description: 'Optimize, transform images instantly' },
+          {
+            label: 'Image Processor',
+            description: 'Resize, crop, and convert images on the fly',
+            href: '/site/products/image-processor'
+          },
           {
             label: 'AI Inference',
-            description: 'Perform AI inference globally',
+            description: 'Run AI inference close to users',
             href: '/site/products/ai-inference'
           },
-          { label: 'Durable Objects', description: 'Run stateful compute worldwide' },
+          { label: 'Durable Objects', description: 'Run stateful code worldwide' },
           { label: 'Orchestrator', description: 'Deploy, manage, monitor and automate workloads' }
         ]
       }
@@ -120,12 +119,12 @@ const PRODUCTS: SiteNavMenu = {
           },
           {
             label: 'Object Storage',
-            description: 'Store unstructured data in a scalable way',
+            description: 'Store and deliver data globally',
             href: '/site/products/object-storage'
           },
           {
             label: 'KV Store',
-            description: 'Store key-value data instantly',
+            description: 'Store key-value data with low latency',
             href: '/site/products/kv-store'
           }
         ]
@@ -138,13 +137,17 @@ const PRODUCTS: SiteNavMenu = {
         items: [
           {
             label: 'Web Application Firewall (WAF)',
-            description: 'Protect apps, block vulnerabilities',
-            href: '/site/products/waf'
+            description: 'Block common attacks, enforce policies',
+            href: '/site/products/web-application-firewall'
           },
-          { label: 'Bot Manager', description: 'Block bots and protect traffic' },
+          {
+            label: 'Bot Manager',
+            description: 'Block bots and protect traffic',
+            href: '/site/products/bot-manager'
+          },
           {
             label: 'Network Shield',
-            description: 'Defend, prevent network-level attacks',
+            description: 'Stop network attacks before they reach you',
             href: '/site/products/network-shield'
           },
           {
@@ -154,8 +157,14 @@ const PRODUCTS: SiteNavMenu = {
           },
           {
             label: 'Load Balancer',
-            description: 'Distribute loads across servers with security and high performance',
+            description: 'Spread traffic across origins and drop unhealthy ones',
             href: '/site/products/load-balancer'
+          },
+          { label: 'Secure Internet Access', description: 'Protect user access to the web' },
+          {
+            label: 'AI Gateway',
+            description: 'Secure, manage, and optimize AI traffic',
+            href: '/site/products/ai-gateway'
           }
         ]
       }
@@ -167,18 +176,17 @@ const PRODUCTS: SiteNavMenu = {
         items: [
           {
             label: 'Data Stream',
-            description: 'Stream data for real-time analysis',
+            description: 'Stream event data to your tools as it happens',
             href: '/site/products/data-stream'
           },
-          { label: 'Real-Time Events', description: 'Track events, gain operational clarity' },
           {
-            label: 'Real-Time Metrics',
-            description: 'Gain instant insights and operational visibility',
-            href: '/site/products/real-time-metrics'
+            label: 'Real-Time Events',
+            description: 'Query request-level logs in real time',
+            href: '/site/products/real-time-events'
           },
           {
             label: 'Edge Pulse',
-            description: 'Monitor, optimize edge performance',
+            description: 'Measure real user performance in the browser',
             href: '/site/products/edge-pulse'
           }
         ]
@@ -189,7 +197,7 @@ const PRODUCTS: SiteNavMenu = {
         items: [
           {
             label: 'Our Network',
-            description: 'Global delivery, speed, reliability',
+            description: 'Global delivery across 100+ data centers',
             href: '/site/products/our-network'
           }
         ]
@@ -209,12 +217,12 @@ const DEVELOPER: SiteNavMenu = {
         items: [
           {
             label: 'Azion Docs',
-            description: 'Documentation, technical support',
+            description: 'Documentation and technical references',
             href: '/site/docs'
           },
-          { label: 'Guides', description: 'Practical guides, step-by-step' },
-          { label: 'Dev Tools', description: 'Tools, developer support' },
-          { label: 'Release Notes', description: 'Updates, new features' }
+          { label: 'Guides', description: 'Practical, step-by-step guides' },
+          { label: 'Dev Tools', description: 'CLI, API, and Terraform tools' },
+          { label: 'Release Notes', description: 'Product updates and new features' }
         ]
       }
     ],
@@ -224,7 +232,7 @@ const DEVELOPER: SiteNavMenu = {
         items: [
           {
             label: 'API Reference',
-            description: 'API, advanced integration',
+            description: 'Automate Azion with the API',
             href: 'https://api.azion.com/v4'
           }
         ]
@@ -253,20 +261,20 @@ const RESOURCES: SiteNavMenu = {
         label: 'Content',
         href: '#content',
         items: [
-          { label: 'Blog', description: 'Insights, industry trends', href: '/site/blog' },
+          { label: 'Blog', description: 'Insights and industry trends', href: '/site/blog' },
           {
             label: 'Learning',
             description: 'Fundamentals, subject by subject',
             href: '/site/learning'
           },
-          { label: 'Resource Hub', description: 'Resources, useful materials' },
+          { label: 'Resource Hub', description: 'Useful materials in one place' },
           {
             label: 'Success Stories',
             description: 'Real results from our customers',
             href: '/site/success-cases'
           },
           { label: 'Partners', description: 'Let’s build together', href: '/site/partners' },
-          { label: 'Marketplace', description: 'Apps, ready-made solutions' }
+          { label: 'Marketplace', description: 'Ready-made apps and solutions' }
         ]
       }
     ],
@@ -281,7 +289,7 @@ const RESOURCES: SiteNavMenu = {
           },
           {
             label: 'Professional Services',
-            description: 'Guidance to move faster with confidence'
+            description: 'Specialist guidance to move faster'
           }
         ]
       }
@@ -299,10 +307,7 @@ export const SITE_NAV: {
 } = {
   home: '/site',
   menus: [SOLUTIONS, PRODUCTS, DEVELOPER, RESOURCES],
-  links: [
-    { label: 'Customers', href: '/site/success-cases' },
-    { label: 'Pricing', href: '/site/pricing' }
-  ],
+  links: [{ label: 'Pricing', href: '/site/pricing' }],
   contact: { label: 'Contact', href: '/site/contact' },
   login: { label: 'Login', href: '/login' },
   cta: { label: 'Start for free', href: '/signup' }
@@ -315,13 +320,13 @@ const COLUMNS: SiteFooterColumn[] = [
   {
     title: 'Products',
     links: links([
-      'Functions',
-      'Cache',
-      'Object Storage',
-      'SQL Database',
-      { label: 'WAF', href: '/site/products/waf' },
-      'Edge DNS',
-      'Data Stream'
+      { label: 'Functions', href: '/site/products/functions' },
+      { label: 'Cache', href: '/site/products/cache' },
+      { label: 'Object Storage', href: '/site/products/object-storage' },
+      { label: 'SQL Database', href: '/site/products/sql-database' },
+      { label: 'WAF', href: '/site/products/web-application-firewall' },
+      { label: 'Edge DNS', href: '/site/products/edge-dns' },
+      { label: 'Data Stream', href: '/site/products/data-stream' }
     ])
   },
   {

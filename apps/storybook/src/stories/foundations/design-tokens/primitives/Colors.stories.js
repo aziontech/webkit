@@ -1,0 +1,130 @@
+import { primitives } from '@aziontech/theme/colors'
+
+import ColorPaletteSection from '../../../../foundations/components/ColorPaletteSection.vue'
+import {
+  PageContainer,
+  PageHeader,
+  PageSection
+} from '../../../../foundations/components/layout/index.js'
+
+const brandPaletteSections = Object.entries(primitives.brand ?? {})
+  .map(([familyName, scale]) => {
+    if (!scale || typeof scale !== 'object') return null
+
+    const items = Object.entries(scale).map(([shade, hex]) => {
+      const shadeSuffix = String(shade)
+      return {
+        id: `brand-${familyName}-${shadeSuffix}`,
+        label: `${familyName} ${shadeSuffix}`,
+        value: hex,
+        preview: hex,
+        meta: `--brand-${familyName}-${shadeSuffix}`
+      }
+    })
+
+    return {
+      id: `brand-${familyName}`,
+      title: familyName,
+      description: `Brand ${familyName} primitive scale.`,
+      items
+    }
+  })
+  .filter(Boolean)
+
+const shadeScaleKeys = [
+  'orange',
+  'violet',
+  'blue',
+  'green',
+  'yellow',
+  'red',
+  'gray',
+  'slate',
+  'surface'
+]
+
+const shadePaletteSections = shadeScaleKeys
+  .map((scaleKey) => {
+    const scale = primitives[scaleKey]
+    if (!scale || typeof scale !== 'object') return null
+
+    const items = Object.entries(scale).map(([shade, hex]) => ({
+      id: `${scaleKey}-${shade}`,
+      label: `${scaleKey} ${shade}`,
+      value: hex,
+      preview: hex,
+      meta: `--${scaleKey}-${shade}`
+    }))
+
+    return {
+      id: `primitive-${scaleKey}`,
+      title: scaleKey,
+      description: `${scaleKey} primitive scale from theme tokens.`,
+      items
+    }
+  })
+  .filter(Boolean)
+
+export default {
+  title: 'Foundations/Design Tokens/Primitives/Color',
+  parameters: {
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The color foundations catalog: every primitive shade scale and brand palette in the Azion theme. Each swatch maps to its `var(--*)` token and is copyable by clicking its value.'
+      },
+      canvas: { sourceState: 'none' }
+    }
+  }
+}
+
+export const Overview = {
+  name: 'Overview',
+  parameters: {
+    visual: { modes: ['dark-desktop', 'light-desktop'] },
+    docs: {
+      description: {
+        story:
+          'Complete color reference: the primitive shade scales (orange, violet, blue, green, yellow, red, gray, slate, surface) followed by the brand palettes. Click any swatch value to copy its hex; use the semantic `var(--*)` tokens in components and keep the primitive shades for reference.'
+      }
+    }
+  },
+  render: () => ({
+    components: { PageContainer, PageHeader, PageSection, ColorPaletteSection },
+    setup() {
+      return { brandPaletteSections, shadePaletteSections }
+    },
+    template: /* html */ `
+      <PageContainer>
+        <PageHeader title="Color">
+          Every primitive color ramp and brand palette in the theme. Components consume the semantic
+          colors on the Theme page; these shades are the values underneath. Click a swatch to copy its
+          CSS variable.
+        </PageHeader>
+
+        <PageSection title="Primitives">
+          <ColorPaletteSection
+            v-for="section in shadePaletteSections"
+            :key="section.id"
+            :title="section.title"
+            :description="section.description"
+            :items="section.items"
+          />
+        </PageSection>
+
+        <PageSection title="Brand">
+          <ColorPaletteSection
+            v-for="section in brandPaletteSections"
+            :key="section.id"
+            :title="section.title"
+            :description="section.description"
+            :items="section.items"
+          />
+        </PageSection>
+      </PageContainer>
+    `
+  })
+}

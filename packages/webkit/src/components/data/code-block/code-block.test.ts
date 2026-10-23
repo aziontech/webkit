@@ -102,6 +102,27 @@ describe('CodeBlock', () => {
       expect(getAllByRole('tab')).toHaveLength(2)
     })
 
+    it('renders the tab-icon slot inside each tab with that tab as its payload', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' },
+        slots: {
+          'tab-icon': '<template #tab-icon="{ tab }"><i :data-mark="tab.value" /></template>'
+        }
+      })
+
+      const marks = getAllByRole('tab').map((tab) => tab.querySelector('i')?.dataset.mark)
+
+      expect(marks).toEqual(twoTabs.map((tab) => tab.value))
+    })
+
+    it('renders no icon region in a tab when the tab-icon slot is empty', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      getAllByRole('tab').forEach((tab) => expect(tab.querySelector('span')).toBeNull())
+    })
+
     it('does not render a tab header when only one tab is given', () => {
       const { queryByRole } = render(CodeBlock, { props: { tabs: singleTab } })
 
@@ -307,6 +328,25 @@ describe('CodeBlock', () => {
 
       expect(getByRole('button', { name: 'Copy snippet' }).tagName).toBe('BUTTON')
     })
+
+    it('renders the copy anchor and marks the root copyable by default', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('data-code-block').hasAttribute('data-copyable')).toBe(true)
+      expect(getByTestId('data-code-block__copy-anchor')).toBeTruthy()
+      expect(within(getByTestId('data-code-block__copy')).getByRole('button')).toBeTruthy()
+    })
+
+    it('omits the copy anchor and the copyable marker when copyable is false', () => {
+      const { getByTestId, queryByTestId, queryByRole } = render(CodeBlock, {
+        props: { tabs: singleTab, copyable: false, copyAriaLabel: 'Copy snippet' }
+      })
+
+      expect(getByTestId('data-code-block').hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('data-code-block__copy-anchor')).toBeNull()
+      expect(queryByTestId('data-code-block__copy')).toBeNull()
+      expect(queryByRole('button', { name: 'Copy snippet' })).toBeNull()
+    })
   })
 
   describe('line numbers gutter', () => {
@@ -388,6 +428,29 @@ describe('CodeBlock', () => {
     })
   })
 
+  describe('line entrance', () => {
+    it('transitions the translate property the offset utility sets', () => {
+      const { getAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, animateLines: true }
+      })
+
+      for (const line of getAllByTestId('data-code-block__line')) {
+        const properties = line.style.transitionProperty.split(',').map((name) => name.trim())
+
+        expect(properties).toContain('translate')
+        expect(properties).not.toContain('transform')
+      }
+    })
+
+    it('leaves lines without an entrance transition when animateLines is off', () => {
+      const { getAllByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      for (const line of getAllByTestId('data-code-block__line')) {
+        expect(line.style.transitionProperty).toBe('')
+      }
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('single-tab layout has no violations', async () => {
       const { container } = render(CodeBlock, {
@@ -412,6 +475,14 @@ describe('CodeBlock', () => {
 
       await expectNoA11yViolations(container)
     })
+
+    it('non-copyable layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only', copyable: false }
+      })
+
+      await expectNoA11yViolations(container)
+    })
   })
 
   describe('story fixture', () => {
@@ -420,6 +491,34 @@ describe('CodeBlock', () => {
 
       expect(getByTestId('data-code-block')).toBeTruthy()
       await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('javascript highlighting', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['javascript', 'js', 'typescript', 'ts'])(
+      'treats a full-line // as a comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '// Route every request to the origin')).toEqual([
+          { text: '// Route every request to the origin', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing comment separate from the code before it', () => {
+      const line = 'const ttl = 3600 // one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '// one hour')).toBe('comment')
+    })
+
+    it('does not read // inside a string as a comment', () => {
+      const line = "fetch('https://api.azion.com/v4')"
+
+      expect(typeOf('js', line, "'https://api.azion.com/v4'")).toBe('string')
+      expect(highlightCodeLine('js', line).some((token) => token.type === 'comment')).toBe(false)
     })
   })
 
@@ -550,6 +649,61 @@ describe('CodeBlock', () => {
       expect(highlightCodeLine('gql', '# requests per status')).toEqual([
         { text: '# requests per status', type: 'comment' }
       ])
+    })
+  })
+
+  describe('line comments', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['bash', 'javascript', 'typescript', 'hcl', 'graphql', 'yaml', 'toml'])(
+      'reads both # and // as a full-line comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '# Install the Azion CLI')).toEqual([
+          { text: '# Install the Azion CLI', type: 'comment' }
+        ])
+        expect(highlightCodeLine(lang, '// Install the Azion CLI')).toEqual([
+          { text: '// Install the Azion CLI', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing // apart from the shell command before it', () => {
+      const line = 'azion deploy // ship the current branch'
+
+      expect(typeOf('bash', line, 'azion')).toBe('function')
+      expect(typeOf('bash', line, '// ship the current branch')).toBe('comment')
+    })
+
+    it('keeps a trailing # apart from the javascript before it', () => {
+      const line = 'const ttl = 3600 # one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '# one hour')).toBe('comment')
+    })
+
+    it('reads a trailing comment after a yaml value', () => {
+      expect(typeOf('yaml', 'ttl: 3600 # one hour', '# one hour')).toBe('comment')
+      expect(typeOf('yaml', 'ttl: 3600 // one hour', '// one hour')).toBe('comment')
+    })
+
+    it('does not open a comment inside a word, a URL or quoted text', () => {
+      const hasComment = (language: string, line: string) =>
+        highlightCodeLine(language, line).some((token) => token.type === 'comment')
+
+      expect(hasComment('bash', 'curl -fsSL https://cli.azion.app/install.sh | bash')).toBe(false)
+      expect(hasComment('bash', 'echo "step # 2" ${#items[@]}')).toBe(false)
+      expect(hasComment('graphql', 'query Q { url(path: "a // b") }')).toBe(false)
+      expect(hasComment('yaml', 'endpoint: https://api.azion.com/v4#docs')).toBe(false)
+    })
+
+    it('leaves a javascript private field as code', () => {
+      expect(
+        highlightCodeLine('ts', '  #count = 0').some((token) => token.type === 'comment')
+      ).toBe(false)
+      expect(
+        highlightCodeLine('js', 'this.#count += 1').some((token) => token.type === 'comment')
+      ).toBe(false)
     })
   })
 })

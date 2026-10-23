@@ -137,7 +137,7 @@ const HEADER_SLOT = `<template #header>
 const MENU_CONTENT = `<Menu role="presentation">
     <MenuBack />
     <MenuGroup>
-      <MenuItem label="Home" icon="pi pi-home" href="/" selected />
+      <MenuItem label="Home" icon="ai ai-home" href="/" selected />
       <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
     </MenuGroup>
     <MenuGroup label="Build">
@@ -247,7 +247,7 @@ const RESIZABLE_SOURCE = `<div class="relative flex h-screen min-h-0">
 
 /** @type {import('@storybook/vue3').Meta<typeof Sidebar>} */
 const meta = {
-  title: 'Components/Layout/Sidebar',
+  title: 'Components/Primitives/Layout/Sidebar',
   component: Sidebar,
   subcomponents: {
     SidebarHeader,
@@ -271,7 +271,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns the rail gesture — `resizable` adds a drag handle on the trailing edge, `collapsible` adds the collapse trigger at the bottom and the affordance that brings a collapsed rail back. Both are opt-in and independent: with neither set the sidebar renders exactly as it always has, with the host owning the width. Navigation is composed with [`Menu`](/docs/components-navigation-menu--docs), which fills the width the sidebar gives it and adds no outer margin.'
+          'Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns the rail gesture — `resizable` adds a drag handle on the trailing edge, `collapsible` adds the collapse trigger at the bottom and the affordance that brings a collapsed rail back. Both are opt-in and independent: with neither set the sidebar renders exactly as it always has, with the host owning the width. Navigation is composed with [`Menu`](/docs/components-primitives-navigation-menu--documentation), which fills the width the sidebar gives it and adds no outer margin.'
       },
       canvas: { sourceState: 'shown' }
     }

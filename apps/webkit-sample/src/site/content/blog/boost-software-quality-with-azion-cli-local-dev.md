@@ -1,4 +1,4 @@
-[Azion CLI](https://www.azion.com/en/documentation/products/azion-cli/overview/) is an efficient open-source tool for setting up local testing environments for edge functions. You can easily run your application locally by executing the `azion dev` command, kickstarting the local development process. This capability boosts software quality by testing and examining edge functions before integrating them into the live product, preventing errors and unexpected behaviors.
+[Azion CLI](https://www.azion.com/en/documentation/products/azion-cli/overview/) is an efficient open-source tool for setting up local testing environments for functions. You can easily run your application locally by executing the `azion dev` command, kickstarting the local development process. This capability boosts software quality by testing and examining functions before integrating them into the live product, preventing errors and unexpected behaviors.
 
 ## Key Benefits of Local Development with Azion CLI
 
@@ -38,15 +38,15 @@
 
 ---
 
-## The Science Behind Edge Functions
+## The Science Behind Functions
 
-Azion Edge Functions are used to enhance edge applications or to boost security in an edge firewall. Both run on Azion Edge Runtime, reduce latency, and help to implement a distributed approach. OK, but what’s the difference between them?
+Azion Functions are used to enhance applications or to boost security in a Firewall. Both run on Azion Edge Runtime, reduce latency, and help to implement a distributed approach. OK, but what’s the difference between them?
 
 The difference is how the functions are structured. Let’s dive deeper into that.
 
-### Edge Application Functions
+### Application Functions
 
-First, edge functions for edge applications work based on a fetch event. They’re initialized with an `addEventListener` function, passing fetch as the event type, and an event. For example:
+First, functions for applications work based on a fetch event. They’re initialized with an `addEventListener` function, passing fetch as the event type, and an event. For example:
 
 ```js
 addEventListener('fetch', (event) => {
@@ -103,11 +103,11 @@ addEventListener('fetch', (event) => {
 })
 ```
 
-[Learn more about edge functions for edge applications](https://www.azion.com/en/documentation/products/guides/edge-functions/first-steps/).
+[Learn more about functions for applications](https://www.azion.com/en/documentation/products/guides/edge-functions/first-steps/).
 
-### Edge Firewall Functions
+### Firewall Functions
 
-Edge functions for Edge Firewall operate based on a firewall event. They’re initialized using the `addEventListener` function, passing `'firewall'` as the event type, and an event. For example:
+Functions for Firewall operate based on a firewall event. They’re initialized using the `addEventListener` function, passing `'firewall'` as the event type, and an event. For example:
 
 ```js
 addEventListener('firewall', (event) => {
@@ -144,11 +144,11 @@ In this example, the firewall event listener checks the IP address that triggere
 
 > Since it’s not possible to execute any other method after the execution of a finishing event, it’s recommended to use a return right after the event so it’s clear nothing more will be executed.
 
-[Learn more about edge functions for edge firewall](https://www.azion.com/en/documentation/products/secure/edge-firewall/edge-functions/).
+[Learn more about functions for Firewall](https://www.azion.com/en/documentation/products/secure/edge-firewall/edge-functions/).
 
 ---
 
-## Testing Edge Applications Functions
+## Testing Applications Functions
 
 To kick off a local testing environment:
 
@@ -166,11 +166,11 @@ To kick off a local testing environment:
 
 > Note: you can always terminate the terminal process and run `azion dev` to run the application locally. The changes applied to the function are rebuilt using *hot reload*.
 
-The `azion dev` command starts up a local environment where you can test and monitor the functionality and efficiency of your edge function.
+The `azion dev` command starts up a local environment where you can test and monitor the functionality and efficiency of your function.
 
-Azion edge functions run on Azion [Edge Runtime](https://www.azion.com/en/documentation/runtime/overview/) and have compatibility with Web APIs and Azion APIs.
+Azion functions run on Azion [Edge Runtime](https://www.azion.com/en/documentation/runtime/overview/) and have compatibility with Web APIs and Azion APIs.
 
-- [Edge Functions first steps](https://www.azion.com/en/documentation/products/guides/edge-functions/first-steps/).
+- [Functions first steps](https://www.azion.com/en/documentation/products/guides/edge-functions/first-steps/).
 - [Web APIs](https://www.azion.com/en/documentation/runtime-apis/javascript/).
 - [Complete list of Azion Edge Runtime Web APIs support](https://www.azion.com/en/documentation/products/edge-application/edge-functions/runtime-apis/javascript/supported-types/).
 
@@ -178,9 +178,9 @@ Azion edge functions run on Azion [Edge Runtime](https://www.azion.com/en/docume
 
 If you’ve implemented firewall functions within your system, you’ll need to consider special testing conditions.
 
-To do so, you must run the `azion dev` command with the flag `--firewall`. This informs the system you’re testing an edge firewall function.
+To do so, you must run the `azion dev` command with the flag `--firewall`. This informs the system you’re testing a Firewall function.
 
-- [Edge function for Edge Firewall](https://www.azion.com/en/documentation/products/secure/edge-firewall/edge-functions/)
+- [Function for Firewall](https://www.azion.com/en/documentation/products/secure/edge-firewall/edge-functions/)
 - [Network List API](https://www.azion.com/en/documentation/products/edge-application/edge-functions/runtime/api-reference/network-list/)
 - [Metadata API](https://www.azion.com/en/documentation/products/edge-application/edge-functions/runtime/api-reference/metadata/)
 
@@ -188,4 +188,4 @@ To do so, you must run the `azion dev` command with the flag `--firewall`. This 
 
 ## Conclusion
 
-Using local testing environments improves the product development process and software quality. Leveraging tools like Azion CLI makes it easier to build reliable, efficient, secure, and high-performing software solutions. By testing edge functions with the command `azion dev`, and optionally adding a `--firewall` flag when necessary, developers can navigate potential pitfalls before pushing their code into production.
+Using local testing environments improves the product development process and software quality. Leveraging tools like Azion CLI makes it easier to build reliable, efficient, secure, and high-performing software solutions. By testing functions with the command `azion dev`, and optionally adding a `--firewall` flag when necessary, developers can navigate potential pitfalls before pushing their code into production.

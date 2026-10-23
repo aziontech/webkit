@@ -5,6 +5,7 @@ import Illustration from '@aziontech/webkit/illustration'
 import Tag from '@aziontech/webkit/tag'
 
 import { each, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const BUTTON_IMPORT = "import Button from '@aziontech/webkit/button'"
@@ -51,29 +52,23 @@ const RETAIL_CLIENT_STRIP = [
   'nzn'
 ]
 
-const START_FREE = { label: 'Start Free', kind: 'secondary', href: '/signup' }
+const START_FREE = { label: 'Start free', kind: 'secondary', href: '/signup' }
 const START_FREE_LOWER = { label: 'Start free', kind: 'secondary', href: '/signup' }
 const SPECIALIST = {
-  label: 'Talk to a Specialist',
+  label: 'Talk to an expert',
   kind: 'outlined',
   href: '#contact',
   trailing: true
 }
-const SPECIALIST_LOWER = { ...SPECIALIST, label: 'Talk to a specialist' }
 const SPECIALIST_PAGE = {
-  label: 'Talk to a Specialist',
+  label: 'Talk to an expert',
   kind: 'outlined',
   href: '/contact',
   trailing: true
 }
-const CONTACT = {
-  label: 'Contact Us',
-  kind: 'outlined',
-  href: '/contact',
-  trailing: true
-}
-const SPECIALIST_PLAIN = { label: 'Talk to a Specialist', kind: 'outlined' }
+const SPECIALIST_PLAIN = { label: 'Talk to an expert', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
+const SEE_POSTS = { label: 'See posts', kind: 'secondary', href: '#posts' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
 
 const marks = (names, depth) =>
@@ -132,7 +127,7 @@ const WORKLOAD_LEVELS = [
     {
       eyebrow: 'Firewall',
       icon: 'ai ai-edge-firewall',
-      title: 'edge-rules',
+      title: 'shop-rules',
       label: 'Active',
       severity: 'success'
     }
@@ -182,36 +177,26 @@ const CENTERED_CAROUSEL_TEMPLATE = `<Hero
   texture="dots"
   texture-fade="top"
   carousel
-  carousel-label="Proven on mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
     centered
     max-width="xl"
-    highlight="Invisible infrastructure"
-    title="for the speed of AI"
-    description="Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical."
+    highlight="Build and run applications"
+    title="globally, with no ops"
+    description="Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic."
   >
-${indent(actions([START_FREE_LOWER, SPECIALIST_LOWER]), 2)}
+${indent(actions([START_FREE, SPECIALIST]), 2)}
   </Hero.Title>
 </Hero>`
-
-const CENTERED_CAROUSEL_LONG_TEMPLATE = CENTERED_CAROUSEL_TEMPLATE.replace(
-  'max-width="xl"',
-  'max-width="3xl"'
-)
-  .replace('highlight="Invisible infrastructure"', 'eyebrow="Functions"')
-  .replace(
-    'title="for the speed of AI"',
-    'title="Funções serverless instantâneas para aplicações modernas"'
-  )
 
 const TITLE_BAND_TEMPLATE = `<Hero
   kind="band"
   max-width="5xl"
   size="large"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
@@ -223,41 +208,21 @@ ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
   </Hero.Title>
 </Hero>`
 
-const TITLE_BAND_SHORT_TEMPLATE = `<Hero
-  kind="band"
-  max-width="5xl"
-  size="large"
->
-  <Hero.Title
-    centered
-    max-width="xl"
-    eyebrow="Cache"
-    title="Accelerate content delivery globally"
-    description="Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
-  >
-${indent(actions([START_FREE, SPECIALIST]), 2)}
-  </Hero.Title>
-</Hero>`
-
 const CENTERED_BAND_TEMPLATE = `<Hero
   kind="band"
   size="large"
   max-width="site"
   texture="dots"
   texture-fade="top"
-  carousel
-  carousel-label="Trusted by mission-critical workloads"
-  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
     centered
     max-width="2xl"
-    eyebrow="Support"
-    eyebrow-prefix="//"
-    title="Technical support for every stage of your growth"
-    description="Designed to help you move independently. Backed by specialists when you need them."
+    eyebrow="Resources"
+    title="Blog"
+    description="News and hands-on guides from Azion on building apps, security, performance, and AI."
   >
-${indent(actions([START_FREE, CONTACT]), 2)}
+${indent(actions([SEE_POSTS]), 2)}
   </Hero.Title>
 </Hero>`
 
@@ -268,13 +233,13 @@ const PIXEL_FLOOR_TEMPLATE = `<Hero
   max-width="full"
   :bordered="false"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
-  class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
+  class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
     title="Build and deploy AI agents and applications in seconds"
-    description="Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality."
+    description="Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local."
   >
 ${indent(actions([START_FREE, SPECIALIST_PLAIN]), 2)}
   </Hero.Title>
@@ -285,8 +250,9 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
   kind="screen"
   media-align="end"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(RETAIL_CLIENT_STRIP, 1)}"
+  offset="3.5rem"
 >
   <Hero.Title
     max-width="xl"
@@ -315,12 +281,13 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   texture="dots"
   texture-size="small"
   texture-fade="top"
+  class="[--banner-offset:3.5rem]"
 >
   <Hero.Title
     centered
     eyebrow="Workloads"
-    title="Put your application on the edge in seconds"
-    description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion location — no servers to size, no regions to pick."
+    title="Put your application close to users in seconds"
+    description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick."
   >
 ${indent(actions([START_FREE_LOWER, DOCS]), 2)}
   </Hero.Title>
@@ -343,16 +310,19 @@ ${each(WORKLOAD_LEVELS, workloadLevel, 5)}
 
 const meta = {
   title: 'Templates/Marketing/Heroes/Hero',
-  tags: ['autodocs'],
+  excludeStories: [
+    'CENTERED_CAROUSEL_SECTION',
+    'TITLE_BAND_SECTION',
+    'CENTERED_BAND_SECTION',
+    'PIXEL_FLOOR_SECTION',
+    'COPY_BESIDE_ART_SECTION',
+    'COPY_ON_TOP_ART_SECTION'
+  ],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. Every hero that is not a band fills one screen, and only a hero with something standing on its floor is one. The home page, every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology), Products, Our Network and Success Cases open on the centered screen hero with the client strip on its floor. The pages with no strip (Solutions, Cache, Application Accelerator, Compliance, GDPR) open on the centered band, as do Support, Blog and Careers. Learning opens on a large title band, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. The screen stories fill the canvas because nothing sits above them; on the site the shell declares `--banner-offset` for the sticky nav once, and every screen hero under it subtracts it. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -364,52 +334,91 @@ export const CenteredCarousel = {
   render: () => ({ components, template: CENTERED_CAROUSEL_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The home page’s hero: one screen tall, a dot field fading in from the top, the highlighted headline centered, and the eleven-client strip with its overline standing on the floor. The solution pages run the same band with their own copy and client list.'
-      },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_TEMPLATE) }
     }
   }
 }
 
-export const CenteredCarouselLongTitle = {
-  render: () => ({ components, template: CENTERED_CAROUSEL_LONG_TEMPLATE }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The same screen hero for a headline too long for the default column. The title column widens from `xl` to `3xl`, so a headline that would break into three lines breaks into two. Short headlines keep the default column.'
-      },
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_LONG_TEMPLATE) }
-    }
+export const CENTERED_CAROUSEL_SECTION = {
+  _id: 'hero-centered-carousel',
+  props: {
+    highlight: 'Build and run applications',
+    title: 'globally, with no ops',
+    description:
+      'Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.',
+    primaryAction: {
+      label: 'Start free',
+      href: 'https://console.azion.com/signup/'
+    },
+    secondaryAction: {
+      label: 'Talk to an expert',
+      href: 'https://www.azion.com/en/contact/'
+    },
+    carouselLabel: 'Trusted by teams running critical workloads',
+    carouselMarks: [
+      'global-fashion-group',
+      'herospark',
+      'itau',
+      'nzn',
+      'netshoes',
+      'caixa',
+      'agibank',
+      'prime-video',
+      'america-movil',
+      'gpa',
+      'fourbank'
+    ]
   }
+}
+
+export const CenteredCarouselJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(CENTERED_CAROUSEL_SECTION)
 }
 
 export const TitleBand = {
   render: () => ({ components, template: TITLE_BAND_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Learning Center hero: a padded band rather than a screen, at `size="large"` so it opens with twice the band’s usual rhythm above and below, the title, a one-line description and two actions centered, and the client strip on its floor. Use it where the page is a list or a catalogue and a full viewport of title would push the first entry below the fold.'
-      },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
     }
   }
 }
 
-export const TitleBandShortTitle = {
-  render: () => ({ components, template: TITLE_BAND_SHORT_TEMPLATE }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The title band for a product page with a short headline. The title column narrows from `4xl` to `xl`, so the headline and description sit in a compact centered block instead of one wide line, and the band has no client strip, so the first section starts right under it.'
-      },
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_SHORT_TEMPLATE) }
-    }
+export const TITLE_BAND_SECTION = {
+  _id: 'hero-title-band',
+  props: {
+    highlight: '',
+    title: 'Learning Center',
+    description: 'Practical knowledge to speed up, secure, and scale applications.',
+    primaryAction: {
+      label: 'See articles',
+      href: '#subjects'
+    },
+    secondaryAction: {
+      label: 'Talk to an expert',
+      href: 'https://www.azion.com/en/contact/'
+    },
+    carouselLabel: 'Trusted by teams running critical workloads',
+    carouselMarks: [
+      'global-fashion-group',
+      'herospark',
+      'itau',
+      'nzn',
+      'netshoes',
+      'caixa',
+      'agibank',
+      'prime-video',
+      'america-movil',
+      'gpa',
+      'fourbank'
+    ]
   }
+}
+
+export const TitleBandJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(TITLE_BAND_SECTION)
 }
 
 export const CenteredBand = {
@@ -418,34 +427,85 @@ export const CenteredBand = {
     docs: {
       description: {
         story:
-          'The Support page’s hero: the large title band, framed at the site width, with the dot field fading in from the top behind an eyebrowed headline, two actions, and the client strip with its overline on the floor, all centred. It is the screen hero’s composition at band height, for a page whose first section should land above the fold.'
+          'Centered title band with a dotted texture and no client strip. The Blog page opens with it.'
       },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
     }
   }
 }
 
+export const CENTERED_BAND_SECTION = {
+  _id: 'hero-centered-band',
+  props: {
+    kind: 'centered-band',
+    eyebrow: 'Resources',
+    title: 'Blog',
+    description:
+      'News and hands-on guides from Azion on building apps, security, performance, and AI.',
+    actions: [
+      {
+        label: 'See posts',
+        href: '#posts',
+        kind: 'secondary'
+      }
+    ]
+  }
+}
+
+export const CenteredBandJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(CENTERED_BAND_SECTION)
+}
+
 export const PixelFloor = {
   render: () => ({ components, template: PIXEL_FLOOR_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The AI Inference copy over an animated pixelate field standing on the floor under the client strip, at the small texture size, with the copy left-aligned. Light bands drift across the field and stop under reduced motion. `--banner-floor-bg` sets one plinth under the floor and the strip, and `--texture-pool-a` and `-b` place the light in the field.'
-      },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], PIXEL_FLOOR_TEMPLATE) }
     }
   }
+}
+
+export const PIXEL_FLOOR_SECTION = {
+  _id: 'hero-pixel-floor',
+  props: {
+    title: 'Build and deploy AI agents and applications in seconds',
+    description:
+      'Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local.',
+    primaryAction: {
+      label: 'Start free',
+      href: 'https://console.azion.com/signup'
+    },
+    secondaryAction: {
+      label: 'Talk to an expert',
+      href: 'https://www.azion.com/en/contact/'
+    },
+    carouselLabel: 'Trusted by teams running critical workloads',
+    carouselMarks: [
+      'global-fashion-group',
+      'herospark',
+      'itau',
+      'nzn',
+      'netshoes',
+      'caixa',
+      'agibank',
+      'prime-video',
+      'america-movil',
+      'gpa',
+      'fourbank'
+    ]
+  }
+}
+
+export const PixelFloorJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(PIXEL_FLOOR_SECTION)
 }
 
 export const CopyBesideArt = {
   render: () => ({ components, template: COPY_BESIDE_ART_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Copy beside a horizontal asset, with the client strip on the floor: the solution pages’ former opening, kept as SolutionArtHero, with the Performance page’s copy, art and retail client strip. The copy keeps the leading column and the illustration bleeds past the container edge from `md` up: `--hero-art-width` and `--hero-art-bleed` are the values the sample computes for this scene so its drawn part fills the column.'
-      },
       source: {
         code: toSfc([BUTTON_IMPORT, HERO_IMPORT, ILLUSTRATION_IMPORT], COPY_BESIDE_ART_TEMPLATE)
       }
@@ -453,17 +513,120 @@ export const CopyBesideArt = {
   }
 }
 
+export const COPY_BESIDE_ART_SECTION = {
+  _id: 'hero-copy-beside-art',
+  props: {
+    eyebrow: 'AWS Alternative Comparison',
+    highlight: '',
+    title: 'AWS sells services. Your team becomes the integrator.',
+    description:
+      'Every capability is a separate service with its own setup, limits, and bill. Azion delivers one platform, distributed by default. One configuration, one bill, security included, and support in your language.',
+    illustration: 'global-network',
+    illustrationAlt: 'AWS sells services. Your team becomes the integrator.',
+    carouselMarks: [
+      'agibank',
+      'radware',
+      'america-movil',
+      'gpa',
+      'fourbank',
+      'global-fashion-group',
+      'herospark',
+      'itau',
+      'magalu'
+    ],
+    carouselLabel: 'Trusted by teams running critical workloads',
+    primaryAction: {
+      label: 'Talk to an expert',
+      href: 'https://www.azion.com/en/contact/'
+    }
+  }
+}
+
+export const CopyBesideArtJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(COPY_BESIDE_ART_SECTION)
+}
+
 export const CopyOnTopArt = {
   render: () => ({ components, template: COPY_ON_TOP_ART_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Workloads copy on top, with the workload’s topology standing in the `bottom` window under it: two domains feeding the lit workload, which binds an application and a firewall, on a dot field that fades in from the top. The copy centers in the space above the scene. The scene shows at every width: from a 56rem band it is drawn at full size, below that the cards narrow so the diagram fits a tablet, and on a phone the window crops both sides around the centred workload and the cut edges fade out. The widths are container queries on the band itself, not the viewport. Flow measures its connectors from the laid-out nodes, so the scene is resized, never scaled. It is built from `Flow`, `Flow.Parallel`, `Flow.Node` and `Flow.Anchor` with a `Tag` per node.'
-      },
       source: {
         code: toSfc([BUTTON_IMPORT, FLOW_IMPORT, HERO_IMPORT, TAG_IMPORT], COPY_ON_TOP_ART_TEMPLATE)
       }
     }
   }
+}
+
+export const COPY_ON_TOP_ART_SECTION = {
+  _id: 'hero-copy-on-top-art',
+  props: {
+    eyebrow: 'Workloads',
+    title: 'Put your application close to users in seconds',
+    description:
+      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
+    primaryAction: {
+      label: 'Start free',
+      href: 'https://console.azion.com/signup'
+    },
+    secondaryAction: {
+      label: 'Docs',
+      href: 'https://www.azion.com/en/documentation/'
+    },
+    levels: [
+      {
+        nodes: [
+          {
+            eyebrow: 'Domain',
+            icon: 'ai ai-domains',
+            title: 'shop.example.com',
+            label: 'Public',
+            severity: 'info'
+          },
+          {
+            eyebrow: 'Domain',
+            icon: 'ai ai-domains',
+            title: 'api.example.com',
+            label: 'Public',
+            severity: 'info'
+          }
+        ]
+      },
+      {
+        nodes: [
+          {
+            eyebrow: 'Workload',
+            icon: 'ai ai-workloads',
+            title: 'shop-prod',
+            label: 'Live',
+            severity: 'success',
+            lit: true
+          }
+        ]
+      },
+      {
+        nodes: [
+          {
+            eyebrow: 'Application',
+            icon: 'ai ai-edge-application',
+            title: 'storefront',
+            label: 'Active',
+            severity: 'success'
+          },
+          {
+            eyebrow: 'Firewall',
+            icon: 'ai ai-edge-firewall',
+            title: 'shop-rules',
+            label: 'Active',
+            severity: 'success'
+          }
+        ]
+      }
+    ]
+  }
+}
+
+export const CopyOnTopArtJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(COPY_ON_TOP_ART_SECTION)
 }

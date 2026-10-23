@@ -70,7 +70,7 @@ This means that during a volumetric DDoS attack, malicious traffic is filtered a
 
 Legitimate traffic proceeds directly to the origin, preserving performance even during large-scale attacks.
 
-This model distributes mitigation capacity across the global network. Instead of concentrating all processing load in a few locations, each data center absorbs its share of the attack, maintaining stable operations for legitimate users.
+This model distributes mitigation capacity across the global distributed infrastructure. Instead of concentrating all processing load in a few locations, each data center absorbs its share of the attack, maintaining stable operations for legitimate users.
 
 ## Case Study: GPA Mitigated a DDoS Attack and Protected 100+ Applications in 15 Days
 

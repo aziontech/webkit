@@ -74,7 +74,7 @@
     {
       key: 'functions',
       label: 'Functions',
-      description: 'Build ultra-low latency functions that run on the edge.',
+      description: 'Build low-latency functions that run close to users.',
       locked: ''
     },
     {
@@ -263,7 +263,7 @@
                 <div class="flex w-107.5 shrink-0 flex-col gap-(--spacing-xs)">
                   <div class="text-heading-md font-medium text-(--text-default)">General</div>
                   <div class="text-body-sm text-(--text-muted)">
-                    Create an Application to deliver your content from the edge.
+                    Create an Application to deliver your content close to users.
                   </div>
                 </div>
                 <div class="flex w-full max-w-lg flex-col gap-(--spacing-xs)">

@@ -1,4 +1,4 @@
-import { PRODUCT_STACK, RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
 import { BUILD_CTA, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
@@ -7,8 +7,7 @@ const HERO = {
   eyebrow: 'Retail',
   title: 'Shopping experiences that convert',
   description:
-    'Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning.',
-  carouselMarks: RETAIL_CLIENT_STRIP
+    "Deploy fast, secure storefronts on Azion's distributed infrastructure. Handle peak events, stop fraud before checkout, and lower cloud costs without overprovisioning."
 }
 
 const CAPABILITIES = [
@@ -16,37 +15,37 @@ const CAPABILITIES = [
     icon: 'pi pi-bolt',
     title: 'Speed that converts',
     description:
-      'Deliver fast storefront experiences with consistent page speed and Core Web Vitals, lifting conversion, SEO visibility, and average order value across web and mobile.'
+      'Keep page speed and Core Web Vitals consistent across web and mobile. Faster storefronts lift conversion, SEO visibility, and average order value.'
   },
   {
     icon: 'pi pi-chart-line',
     title: 'Built for peak season',
     description:
-      'Stay online during Black Friday, Cyber Monday, and flash sales with automatic scaling and a distributed architecture that absorbs traffic surges without overprovisioning.'
+      'Stay online during Black Friday, Cyber Monday, and flash sales. Automatic scaling on a distributed architecture absorbs traffic surges without overprovisioning.'
   },
   {
     icon: 'pi pi-shield',
     title: 'Security built in',
     description:
-      'Protect transactions, customer data, and storefront availability with DDoS mitigation, WAF, and zero trust controls integrated into the same distributed architecture.'
+      'Protect transactions, customer data, and storefront availability with DDoS mitigation, WAF, and zero trust controls on the same distributed architecture.'
   },
   {
     icon: 'pi pi-lock',
     title: 'Fraud and bots blocked',
     description:
-      'Block bots, scraping, credential stuffing, account takeover, and payment fraud with bot management and application security applied before requests reach your origin.'
+      'Block bots, scraping, credential stuffing, account takeover, and payment fraud before requests reach your origin, with bot management and application security.'
   },
   {
     icon: 'pi pi-sparkles',
     title: 'AI-powered personalization',
     description:
-      'Deliver tailored recommendations, search, and content with AI Inference and Functions executed at request time, improving conversion without round-tripping to centralized origins.'
+      'Deliver tailored recommendations, search, and content by running AI Inference and Functions at request time, with no round trip to a centralized origin.'
   },
   {
     icon: 'pi pi-credit-card',
     title: 'Lower costs at scale',
     description:
-      'Offload origin traffic, optimize images, and serve cached responses from a distributed architecture to cut cloud, egress, and CDN costs while scaling automatically with demand.'
+      'Offload origin traffic, optimize images, and serve cached responses from a distributed architecture. That cuts cloud, egress, and CDN costs while capacity scales with demand.'
   }
 ]
 
@@ -95,7 +94,7 @@ const TEMPLATES_DESCRIPTION =
   'Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks.'
 
 const ARCHITECTURE = {
-  title: 'Accelerate retail application modernization with a distributed architecture',
+  title: 'Modernize retail applications on a distributed architecture',
   illustration: 'retail-application-modernization',
   alt: 'Retail web application modernization architecture diagram',
   href: 'https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/'
@@ -111,7 +110,7 @@ const FAQ = [
     value: 'q1',
     question: 'What types of storefronts can I build and deploy on Azion?',
     answer:
-      'You can build and deploy storefronts, marketplaces, marketing campaign pages, and supporting retail apps, but in fact any web app or website runs on Azion. The platform also provides the primitives to build not only the storefront but much of the backend, with support for static and dynamic workloads on a distributed architecture.'
+      'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a distributed architecture.'
   },
   {
     value: 'q2',
@@ -140,19 +139,19 @@ const FAQ = [
     value: 'q5',
     question: 'Can I integrate my existing commerce platform, CMS, and APIs?',
     answer:
-      'Yes. Azion integrates with modern headless commerce, CMS, and API-based architectures, enabling teams to keep existing workflows while improving performance and reliability.'
+      'Yes. Azion integrates with modern headless commerce, CMS, and API-based architectures, so teams keep their existing workflows while performance and reliability improve.'
   },
   {
     value: 'q6',
     question: 'How does Azion help with SEO and Core Web Vitals?',
     answer:
-      'By reducing latency, optimizing content delivery, and improving responsiveness, Azion helps improve user experience signals that affect Core Web Vitals and search performance.'
+      'Azion reduces latency, optimizes content delivery, and improves responsiveness. Those improve the user experience signals behind Core Web Vitals and search performance.'
   },
   {
     value: 'q7',
     question: 'What happens during peak shopping events like Black Friday?',
     answer:
-      'Scaling is automatic. Azion handles traffic surges without manual provisioning, helping teams maintain availability and performance during launches, campaigns, and seasonal peaks.'
+      'Scaling is automatic. Azion handles traffic surges without manual provisioning, so availability and performance hold during launches, campaigns, and seasonal peaks.'
   },
   {
     value: 'q8',
@@ -184,7 +183,7 @@ export const RETAIL_PAGE = solutionPage({
   quotes: QUOTES,
   compliance: true,
   primitivesEyebrow: 'Built for Speed',
-  primitivesTitle: 'Composable Primitives for Performance and Personalization',
+  primitivesTitle: 'Composable Products for Performance and Personalization',
   faq: FAQ,
   cta: BUILD_CTA
 })

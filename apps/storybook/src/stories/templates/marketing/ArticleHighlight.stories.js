@@ -53,24 +53,6 @@ const ARTICLES = [
     description:
       'See how the open-source Azion MCP Server lets coding agents like Claude Code and Codex query Azion docs and propose security policies (WAF, Firewall, rate limiting) via Terraform, for team review before deploy.',
     readTime: '9 min read'
-  },
-  {
-    href: '/blog/ship-portfolio-two-commands-azion-cli',
-    image: '/media/blog/ship-portfolio-two-commands-azion-cli.png',
-    meta: 'Developers • SEP 25, 2026',
-    title: 'How I Shipped My Portfolio in Just Two Commands',
-    description:
-      "See how a portfolio site went from template to live URL with just azion init and azion deploy, running free on Azion's Hobby plan.",
-    readTime: '9 min read'
-  },
-  {
-    href: '/blog/how-to-reduce-ai-agent-latency',
-    image: '/media/blog/how-to-reduce-ai-agent-latency.jpg',
-    meta: 'Serverless • SEP 23, 2026',
-    title: 'How Do You Reduce AI Agent Latency?',
-    description:
-      'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
-    readTime: '8 min read'
   }
 ]
 
@@ -170,7 +152,6 @@ const WALL = `<CardGrid
   :mobile-columns="1"
   role="tablist"
   aria-label="Highlight articles"
-  class="sm:grid-cols-2! lg:grid-cols-5!"
 >
 ${each(ARTICLES, tab, 1)}
 </CardGrid>`
@@ -191,7 +172,7 @@ ${indent(WALL, 3)}
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ArticleHighlight',
+  title: 'Templates/Marketing/Articles/ArticleHighlight',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -200,7 +181,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The band that opens a blog under its hero: one article large, its cover beside its category and date, headline, deck, read time and a button into it, over a wall of the highlight articles that is the selector itself. The wall is a tablist and the large article its panel; on the page the band advances on its own, pausing under the pointer or keyboard focus, and the arrow, Home and End keys move along the wall. Every article is drawn once, invisibly, under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. The Blog page (/blog) uses it for its featured post and the four newest. Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.'
+          'The band that opens a blog under its hero: one article large, its cover beside its category and date, headline, deck, read time and a button into it, over a wall of the highlight articles that is the selector itself. The wall is a tablist and the large article its panel; on the page the band advances on its own, pausing under the pointer or keyboard focus, and the arrow, Home and End keys move along the wall. Every article is drawn once, invisibly, under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. The Blog page (/blog) uses it for its featured post and the two newest. Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -215,7 +196,7 @@ export const Featured = {
     docs: {
       description: {
         story:
-          'The Blog page’s highlight at rest: the G2 Fall 2026 Reports post selected, then the four newest posts on the wall, five across from `lg`.'
+          'The Blog page’s highlight at rest: the G2 Fall 2026 Reports post selected, then the two newest posts on the wall, three across from `lg`.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }

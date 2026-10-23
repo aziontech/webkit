@@ -1,4 +1,4 @@
-Azion was recently awarded the 2023 North American New Product Innovation Award in the Edge Serverless Computing category by Frost & Sullivan. Azion Web Platform empowers developers to build and deploy serverless applications, create solid zero-trust security architectures, enhance the content delivery experience, and build breakthrough Internet of Things (IoT) use cases.
+Azion was recently awarded the 2023 North American New Product Innovation Award in the Edge Serverless Computing category by Frost & Sullivan. Azion Web Platform lets developers build and deploy serverless applications, create solid zero-trust security architectures, enhance the content delivery experience, and build breakthrough Internet of Things (IoT) use cases.
 
 One of its core products, Azion Edge Application, enables developers to create any application from scratch or adapt a previous design. This sophisticated platform significantly boosts resiliency to unforeseen challenges, increases speed, and lowers costs. Moreover, it supports dozens of web frameworks, such as Next.js and Vue.js, that simplify developing web apps and building dynamic web pages at the edge.
 

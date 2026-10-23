@@ -1,8 +1,8 @@
 ## Challenge
 
-Crefisa is constantly advancing its digital transformation to better serve millions of customers in a fast and efficient way. A key step in this journey involved modernizing its infrastructure to adopt more advanced capabilities for performance and security.
+Crefisa is constantly advancing its modernization to better serve millions of customers in a fast and efficient way. A key step in this journey involved modernizing its infrastructure to adopt more advanced capabilities for performance and security.
 
-However, the migration from on-premise infrastructure to cloud environments was happening gradually. At the same time, traditional financial institutions were accelerating digital transformation to gain competitive advantage and deliver better customer experiences in terms of security, availability, and performance.
+However, the migration from on-premise infrastructure to cloud environments was happening gradually. At the same time, traditional financial institutions were accelerating modernization to gain competitive advantage and deliver better customer experiences in terms of security, availability, and performance.
 
 In this scenario, Crefisa needed a technology partner capable of supporting its evolution without compromising the high security and reliability standards required by the financial sector.
 
@@ -14,7 +14,7 @@ Compatible with both cloud and on-premise environments, the platform enabled Cre
 
 These applications created new opportunities for the company, including:
 
-- content delivery through **Azion’s globally distributed network**;
+- content delivery through **Azion’s globally distributed infrastructure**;
 - granular access control through the **Firewall capability of Azion Platform**;
 - automation of security policies via APIs.
 
@@ -27,7 +27,7 @@ This allowed the security team to:
 - mitigate DDoS attacks using Azion’s globally distributed infrastructure to filter malicious traffic without affecting legitimate requests;
 - manage bot traffic through Radware’s bot management platform.
 
-By implementing these capabilities, Crefisa accelerated its digital transformation, strengthened its defensive posture, and continued innovating while meeting the strict compliance requirements of the financial sector.
+By implementing these capabilities, Crefisa accelerated its modernization, strengthened its defensive posture, and continued innovating while meeting the strict compliance requirements of the financial sector.
 
 ## Results and Impact
 
@@ -37,7 +37,7 @@ With the **Firewall capability of Azion Platform**, Crefisa’s security team si
 
 Application protection also extends to Crefisa’s APIs, combining performance and security to support modern initiatives such as **Open Banking** and the **Crefisa Mais** mobile application, used by millions of Brazilians to manage their finances.
 
-Even while undergoing digital transformation, Crefisa was able to evolve its infrastructure and maintain competitive advantage, running applications with high performance regardless of whether they are hosted in legacy or cloud environments.
+Even while undergoing modernization, Crefisa was able to evolve its infrastructure and maintain competitive advantage, running applications with high performance regardless of whether they are hosted in legacy or cloud environments.
 
 ## About Crefisa
 

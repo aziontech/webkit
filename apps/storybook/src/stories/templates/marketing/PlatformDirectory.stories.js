@@ -6,6 +6,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -29,93 +30,76 @@ const components = {
 
 const PLATFORM_PRIMITIVES = [
   {
-    label: 'Compute',
+    label: 'Build',
     items: [
       {
         icon: 'ai ai-edge-functions',
         title: 'Functions',
-        description: 'Run serverless code closer to users',
+        description: 'Run code globally with no cold starts',
         href: '/products/functions'
       },
       {
-        icon: 'ai ai-durable-objects',
-        title: 'Durable Objects',
-        description: 'Stateful compute, deployed worldwide',
-        href: 'https://www.azion.com/en/products/durable-objects/'
-      },
-      {
-        icon: 'ai ai-rules-engine',
+        icon: 'pi pi-sitemap',
         title: 'Rules Engine',
-        description: 'Automate request handling with programmable rules',
+        description: 'Automate request handling with rules',
         href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
       },
       {
-        icon: 'ai ai-load-balancer',
-        title: 'Load Balancer',
-        description: 'Distribute traffic for performance and availability',
-        href: 'https://www.azion.com/en/products/load-balancer/'
+        icon: 'pi pi-image',
+        title: 'Image Processor',
+        description: 'Resize and convert images on demand',
+        href: 'https://www.azion.com/en/products/image-processor/'
       },
       {
-        icon: 'ai ai-image-processor',
-        title: 'Image Processor',
-        description: 'Optimize and transform images in real time',
-        href: 'https://www.azion.com/en/products/image-processor/'
-      }
-    ]
-  },
-  {
-    label: 'AI',
-    items: [
+        icon: 'ai ai-tiered-cache',
+        title: 'Cache',
+        description: 'Speed up content delivery and reduce origin load',
+        href: 'https://www.azion.com/en/products/cache/'
+      },
       {
         icon: 'ai ai-edge-ai',
         title: 'AI Inference',
-        description: 'Run AI models closer to users',
+        description: 'Run models close to the user',
         href: 'https://www.azion.com/en/products/ai-inference/'
       },
       {
-        icon: 'ai ai-ai-gateway',
+        icon: 'ai ai-gateway',
         title: 'AI Gateway',
-        description: 'Secure, manage, and optimize AI traffic',
-        href: 'https://www.azion.com/en/products/ai-gateway/'
+        description: 'Route, secure and log every model call',
+        href: 'https://www.azion.com/en/solutions#ai'
       }
     ]
   },
   {
-    label: 'Data',
+    label: 'Store',
     items: [
       {
         icon: 'ai ai-edge-storage',
         title: 'Object Storage',
-        description: 'Scalable, durable storage for unstructured data',
+        description: 'Store and serve objects close to users',
         href: 'https://www.azion.com/en/products/object-storage/'
       },
       {
         icon: 'ai ai-edge-sql',
         title: 'SQL Database',
-        description: 'Relational database built for distributed applications',
+        description: 'Run SQL on a distributed database',
         href: 'https://www.azion.com/en/products/sql-database/'
       },
       {
         icon: 'ai ai-edge-kv',
         title: 'KV Store',
-        description: 'Globally distributed, low-latency key-value store',
+        description: 'Store key-value data with low latency',
         href: 'https://www.azion.com/en/products/kv-store/'
-      },
-      {
-        icon: 'ai ai-tiered-cache',
-        title: 'Cache',
-        description: 'Accelerate content delivery and reduce origin load',
-        href: 'https://www.azion.com/en/products/cache/'
       }
     ]
   },
   {
-    label: 'Security',
+    label: 'Secure',
     items: [
       {
-        icon: 'ai ai-edge-firewall',
-        title: 'Web Application Firewall',
-        description: 'Protect human and AI applications from threats',
+        icon: 'ai ai-waf-rules',
+        title: 'WAF',
+        description: 'Block common attacks close to traffic',
         href: 'https://www.azion.com/en/products/web-application-firewall/'
       },
       {
@@ -125,16 +109,33 @@ const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/solutions/api-gateway/'
       },
       {
-        icon: 'ai ai-bot-manager',
-        title: 'Bot Management',
-        description: 'Detect and stop automated threats instantly',
+        icon: 'pi pi-android',
+        title: 'Bot Manager',
+        description: 'Detect and stop automated traffic',
         href: 'https://www.azion.com/en/products/bot-manager/'
       },
       {
         icon: 'ai ai-edge-dns',
-        title: 'DNS',
-        description: 'Reliably host authoritative DNS zones worldwide',
+        title: 'Edge DNS',
+        description: 'Authoritative DNS, distributed globally',
         href: 'https://www.azion.com/en/products/edge-dns/'
+      },
+      {
+        icon: 'ai ai-load-balancer',
+        title: 'Load Balancer',
+        description: 'Spread traffic across origins for availability',
+        href: 'https://www.azion.com/en/products/load-balancer/'
+      }
+    ]
+  },
+  {
+    label: 'Observe',
+    items: [
+      {
+        icon: 'ai ai-real-time-metrics',
+        title: 'Real-Time Metrics',
+        description: 'Watch traffic, errors and latency as they happen',
+        href: 'https://www.azion.com/en/products/real-time-metrics/'
       }
     ]
   }
@@ -169,24 +170,20 @@ ${each(
 </SectionModule>`)
 
 const PRIMITIVES_TEMPLATE = platformDirectory({
-  heading: '<SectionTitle title="Serverless AI-native primitives for autonomous workloads" />',
+  heading: '<SectionTitle title="Everything you need to build and run applications" />',
   marks: 'all',
-  label: 'Platform primitives',
+  label: 'Azion products',
   groups: PLATFORM_PRIMITIVES
 })
 
 const meta = {
   title: 'Templates/Marketing/Content/PlatformDirectory',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The platform as a four-column directory of product links under a section title: each column is a product group (Compute, AI, Data, Security) and each row an icon, a product name and one line of what it does, linking to that product. Home opens its column with it right under the hero, and every solution page and Pricing carry the same band. The product pages (Cache, Application Accelerator, AI Inference, Workloads, Our Network) draw the same band with the sample app’s own NavColumn and NavItem; this template replaces those with the design-system components. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `ColumnNavigation` (`ColumnNavigation.Column`, `ColumnNavigation.Item`).'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -198,11 +195,96 @@ export const Primitives = {
   render: () => ({ components, template: PRIMITIVES_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Home’s band: a title with no eyebrow over the fourteen platform primitives, framed with corner marks on all four corners. Product pages the site hosts link by path (`/products/functions`); the rest go to azion.com.'
-      },
       source: { code: toSfc(IMPORTS, PRIMITIVES_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'platform-directory',
+  props: {
+    title: 'Everything you need to build and run applications',
+    ariaLabel: 'Azion products',
+    groups: [
+      {
+        title: 'Build',
+        items: [
+          {
+            icon: 'ai ai-edge-functions',
+            title: 'Functions',
+            description: 'Run code globally with no cold starts',
+            href: 'https://www.azion.com/en/products/functions/'
+          },
+          {
+            icon: 'pi pi-sitemap',
+            title: 'Rules Engine',
+            description: 'Automate request handling with rules',
+            href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
+          },
+          {
+            icon: 'pi pi-microchip-ai',
+            title: 'AI Inference',
+            description: 'Run models close to the user',
+            href: 'https://www.azion.com/en/products/ai-inference/'
+          },
+          {
+            icon: 'pi pi-sitemap',
+            title: 'AI Gateway',
+            description: 'Route, secure and log every model call',
+            href: 'https://www.azion.com/en/solutions#ai'
+          }
+        ]
+      },
+      {
+        title: 'Store',
+        items: [
+          {
+            icon: 'ai ai-edge-storage',
+            title: 'Object Storage',
+            description: 'Store and serve objects close to users',
+            href: 'https://www.azion.com/en/products/object-storage/'
+          },
+          {
+            icon: 'ai ai-edge-sql',
+            title: 'SQL Database',
+            description: 'Run SQL on a distributed database',
+            href: 'https://www.azion.com/en/products/sql-database/'
+          }
+        ]
+      },
+      {
+        title: 'Secure',
+        items: [
+          {
+            icon: 'ai ai-waf-rules',
+            title: 'WAF',
+            description: 'Block common attacks close to traffic',
+            href: 'https://www.azion.com/en/products/web-application-firewall/'
+          },
+          {
+            icon: 'pi pi-sitemap',
+            title: 'API Gateway',
+            description: 'Secure, manage, and scale API traffic',
+            href: 'https://www.azion.com/en/solutions/api-gateway/'
+          }
+        ]
+      },
+      {
+        title: 'Observe',
+        items: [
+          {
+            icon: 'ai ai-real-time-metrics',
+            title: 'Real-Time Metrics',
+            description: 'Watch traffic, errors and latency as they happen',
+            href: 'https://www.azion.com/en/products/real-time-metrics/'
+          }
+        ]
+      }
+    ]
+  }
+}
+
+export const PrimitivesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

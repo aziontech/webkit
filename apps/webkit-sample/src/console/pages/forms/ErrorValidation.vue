@@ -720,18 +720,10 @@
               size="medium"
               :loading="submitting"
               :disabled="reloadingConnectors"
-              @click="submit"
+              type="submit"
             />
           </div>
         </footer>
-        <button
-          type="submit"
-          class="sr-only"
-          tabindex="-1"
-          aria-hidden="true"
-        >
-          Save
-        </button>
       </form>
     </main>
   </div>

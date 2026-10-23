@@ -1,14 +1,14 @@
-The radical digital transformation of recent years has boosted the migration of multiple services to the digital world. We now use the Internet to carry out financial transactions, study, work and have fun, and that requires companies across all industries and sizes to bring their services to reliable, scalable, and secure platforms.
+The radical modernization of recent years has boosted the migration of multiple services to the digital world. We now use the Internet to carry out financial transactions, study, work and have fun, and that requires companies across all industries and sizes to bring their services to reliable, scalable, and secure platforms.
 
-Cloud and edge computing models offer several benefits that reduce costs, time, and specialized personnel needed to perform operational activities. However, edge stands out when comparing the overall benefits of these two models, with a special highlight to cost-effectiveness.
+Cloud and distributed architecture models offer several benefits that reduce costs, time, and specialized personnel needed to perform operational activities. However, a distributed architecture stands out when comparing the overall benefits of these two models, with a special highlight to cost-effectiveness.
 
-In this blog post, you will understand why the edge, in addition to being faster, more reliable, and more secure, also helps to reduce your infrastructure, bandwidth, and computing costs.
+In this blog post, you will understand why a distributed architecture, in addition to being faster, more reliable, and more secure, also helps to reduce your infrastructure, bandwidth, and computing costs.
 
 ## Cloud Computing Main Costs
 
-Both cloud and edge computing are very complex structures, as they are made up of data centers and additional security, processing, and data delivery engines to serve all types of customers and use cases.
+Both cloud and distributed architecture are very complex structures, as they are made up of data centers and additional security, processing, and data delivery engines to serve all types of customers and use cases.
 
-But even with these similarities, some cloud computing cost sources are not necessarily present in an edge infrastructure:
+But even with these similarities, some cloud computing cost sources are not necessarily present in a distributed infrastructure:
 
 - Compute instances: Charges for RAM and CPU used in processing requests.
 - Data storage: Charges per GB of storage since most of the client’s data will be stored in the cloud provider’s data centers.
@@ -26,28 +26,28 @@ Studies[1,2] have shown that a high percentage of cloud resources end up wasted,
 - Tech debt due to inefficient engineering processes and lack of modern workforce skills.
 - The complexity of managing software licenses often resulting in redundant subscriptions.
 
-## Edge Computing Main Costs
+## Distributed Architecture Main Costs
 
-On the other hand, edge computing pricing is based on criteria that strictly involve the resources used to carry out workloads. So, generally speaking, an edge computing platform will typically establish its billing on
+On the other hand, distributed architecture pricing is based on criteria that strictly involve the resources used to carry out workloads. So, generally speaking, a distributed platform will typically establish its billing on
 
 - number of invocations;
 - complexity and duration of workloads; and
 - amount of memory needed to execute functions.
 
-The edge computing model optimizes how costs are passed on to the customer, ensuring you only pay for the resources you use. In addition, by eliminating waste inherent to cloud structures, the edge helps to significantly reduce your costs and increase the price for money of your investments, because:
+The distributed architecture model optimizes how costs are passed on to the customer, ensuring you only pay for the resources you use. In addition, by eliminating waste inherent to cloud structures, a distributed architecture helps to significantly reduce your costs and increase the price for money of your investments, because:
 
 - There are no upfront costs for provisioning resources.
-- Edge computing platforms typically allow the smooth migration of pre-existing applications using features such as [WebAssembly](/site/blog/webassembly-on-the-azion-platform-truly-embrace-the-edge).
+- Distributed platforms typically allow the smooth migration of pre-existing applications using features such as [WebAssembly](/site/blog/webassembly-on-the-azion-platform-truly-embrace-the-edge).
 - Fewer developer hours spent on management, with a drastic reduction in operational activities;
-- Modern edge platforms prioritize an efficient use of resources with pay-as-you-go pricing models.
+- Modern distributed platforms prioritize an efficient use of resources with pay-as-you-go pricing models.
 
-Businesses from all industries benefit from using an edge computing infrastructure, which reduces requests and workloads in the cloud and speeds up content delivery. For example, [MadeiraMadeira](https://www.azion.com/en/success-case/madeiramadeira/) reduced its cloud provider costs by 90% by migrating its applications to Azion’s Edge Computing Platform.
+Businesses from all industries benefit from using a distributed infrastructure, which reduces requests and workloads in the cloud and speeds up content delivery. For example, [MadeiraMadeira](https://www.azion.com/en/success-case/madeiramadeira/) reduced its cloud provider costs by 90% by migrating its applications to Azion’s platform.
 
-## Edge Computing Offers the Best Price for Money
+## Distributed Architecture Offers the Best Price for Money
 
-Despite being a fundamental technology for the accelerated digital transformation we have experienced in recent years, the cloud still needs to solve major challenges in managing its resources to avoid wastes that become costly for customers. Furthermore, current estimates point to an overall increase of 20% to 30% in prices for cloud services in Europe and the United States in 2023[3].
+Despite being a fundamental technology for the accelerated modernization we have experienced in recent years, the cloud still needs to solve major challenges in managing its resources to avoid wastes that become costly for customers. Furthermore, current estimates point to an overall increase of 20% to 30% in prices for cloud services in Europe and the United States in 2023[3].
 
-The edge computing pricing model avoids waste and values your investments. But that’s not all: when migrating to an edge platform, you can automatically leverage several other benefits, such as:
+The distributed architecture pricing model avoids waste and values your investments. But that’s not all: when migrating to a distributed platform, you can automatically leverage several other benefits, such as:
 
 - Ultralow latency.
 - High resilience.
@@ -55,13 +55,13 @@ The edge computing pricing model avoids waste and values your investments. But t
 - Distributed intelligence.
 - Greater security perimeter.
 
-From a comparative perspective, the advantages of using the edge are effective for your company, your IT teams, and especially your end user:
+From a comparative perspective, the advantages of using a distributed architecture are effective for your company, your IT teams, and especially your end user:
 
 <Frame src="https://www.azion.com/assets/content/blog/uploads/edgecomputingcloudcomputing_1_eng.png" alt="" />
 
-If you are interested in learning more about edge computing and how it can boost your digital transformation and reduce costs, you can [talk to our experts](https://www.azion.com/en/contact/).
+If you are interested in learning more about distributed architecture and how it can boost your modernization and reduce costs, you can [talk to our experts](https://www.azion.com/en/contact/).
 
-In it, you can also better understand the essential differences between [monolithic and modern applications](https://www.azion.com/en/learning/microservices/monolithic-applications-vs-microservices/), the benefits of [edge computing for developers](https://www.azion.com/en/blog/alessandro-cauduro-explains-why-every-developer-should-learn-how-to-leverage-edge-computing/), and how the edge improves the [security of your APIs](https://www.azion.com/en/learning/api/what-is-api-security/).
+In it, you can also better understand the essential differences between [monolithic and modern applications](https://www.azion.com/en/learning/microservices/monolithic-applications-vs-microservices/), the benefits of [distributed architecture for developers](https://www.azion.com/en/blog/alessandro-cauduro-explains-why-every-developer-should-learn-how-to-leverage-edge-computing/), and how a distributed architecture improves the [security of your APIs](https://www.azion.com/en/learning/api/what-is-api-security/).
 
 #### References
 

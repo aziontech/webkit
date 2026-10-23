@@ -106,7 +106,7 @@
     >
       <SectionTitle
         kind="centered"
-        :size="kind === 'solutions' ? 'large' : 'medium'"
+        size="large"
         :eyebrow="eyebrow"
         :title="title"
       />
@@ -122,9 +122,9 @@
         :kind="kind === 'alternating' && index % 2 === 0 ? 'media-start' : 'media-end'"
         :divided="true"
         :heading-level="title ? 3 : 2"
-        :align="kind === 'solutions' ? 'center' : 'top'"
-        :size="kind === 'solutions' ? 'large' : 'medium'"
-        :media-fill="kind === 'solutions' ? 'canvas' : 'surface'"
+        align="center"
+        size="large"
+        media-fill="canvas"
         texture="pixelate"
         texture-size="small"
         texture-fade="top"

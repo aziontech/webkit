@@ -6,7 +6,7 @@ const IMPORT = "import Overline from '@aziontech/webkit/overline'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Overline>} */
 const meta = {
-  title: 'Components/Content/Overline',
+  title: 'Components/Primitives/Content/Overline',
   component: Overline,
   tags: ['autodocs'],
   parameters: {

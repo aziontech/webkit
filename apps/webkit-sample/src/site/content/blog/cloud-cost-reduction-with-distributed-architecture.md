@@ -6,7 +6,7 @@ Egress is the hidden cloud tax. Move compute and caching closer to users, reduce
 
 Most cloud-cost conversations begin with compute and storage. They should begin with egress. Every byte you push from origin to the public internet becomes a recurring monthly bill. In regions with expensive transit (LATAM, parts of APAC), egress often becomes the fastest-growing line item on a cloud invoice.
 
-Across dozens of deployments, a repeated pattern emerges: introduce local points of presence (POPs), serve cacheable content and short-lived dynamic fragments through a distributed network, filter noisy traffic, and compress payloads. Typical outcomes: 60–90% reductions in origin egress; 30–80% latency improvements; and measurable uplifts in usage and revenue.
+Across dozens of deployments, a repeated pattern emerges: introduce local data centers, serve cacheable content and short-lived dynamic fragments through a distributed infrastructure, filter noisy traffic, and compress payloads. Typical outcomes: 60–90% reductions in origin egress; 30–80% latency improvements; and measurable uplifts in usage and revenue.
 
 The rest of this piece explains how and why — with actionable patterns and runnable pseudocode you can use as a starting point.
 
@@ -28,7 +28,7 @@ Because egress is proportional to bytes and traffic geography, reducing bytes le
 
 - Origin egress reduction: 60–90% using multi-layer caching, compression, and request filtering.
 - Cache-hit ratios: uplift from 20–40% to 70–95% with microcaching and smart TTLs.
-- Latency reduction: 30–80% regionally when combining local POPs and HTTP/3.
+- Latency reduction: 30–80% regionally when combining local data centers and HTTP/3.
 - Bandwidth savings from compression: 30–70% on text-heavy payloads with Brotli/Gzip.
 - Observability intake reduction: 30–60% via distributed sampling, aggregation, and pre-filtering.
 
@@ -57,7 +57,7 @@ With customer experience being a primary conversion driver in Brazil (89%), Colo
 
 Dafiti migrated to Azion’s Web Platform, built on 100+ distributed locations with a focus on performance, availability, and cost efficiency. Through a structured proof of concept and full rollout, Dafiti adopted:
 
-- Application Acceleration with multi-layer caching
+- Application Accelerator with multi-layer caching
 - Tiered Cache to reduce origin egress
 - Image Processor for real-time optimization across 17+ million images
 - Functions to execute business logic, personalization, and A/B tests close to users
@@ -191,9 +191,9 @@ These examples are intentionally minimal; in production you should add error han
 | **Component** | **Centralized origin** | **Distributed-native (Azion)** | **Typical cost/metric impact** |
 |---|---|---|---|
 | Origin egress | High — many cache misses | Low — 60–90% reduction | Tens of thousands $/month saved for high-traffic apps |
-| Latency (regional) | Higher (cross-region RTT) | Lower (local POPs + HTTP/3) | 30–80% reduced RT |
+| Latency (regional) | Higher (cross-region RTT) | Lower (local data centers + HTTP/3) | 30–80% reduced RT |
 | Cache hit ratio | Low–medium | High (70–95%) | Fewer origin invocations |
-| Bot/abuse mitigation | Often origin-bound | Blocked at POP | Avoid origin/egress cost |
+| Bot/abuse mitigation | Often origin-bound | Blocked at the data center | Avoid origin/egress cost |
 | Observability | High ingestion & storage | Distributed filtering + sampling | 30–60% lower monitoring spend |
 
 ---
@@ -203,7 +203,7 @@ These examples are intentionally minimal; in production you should add error han
 **Distributed telemetry** enables smarter cost policies:
 
 - Real-time metrics can trigger automated rules (e.g., increase TTLs, throttle endpoints, enforce rate limits when egress spikes).
-- Sampling and aggregation across the distributed network cut ingestion costs while preserving signal.
+- Sampling and aggregation across the distributed infrastructure cut ingestion costs while preserving signal.
 - Combine deployment gates with budget alerts to catch regressions early.
 
 To understand where we’re going, it’s worth looking at where we came from.

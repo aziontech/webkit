@@ -8,13 +8,15 @@
   defineOptions({ name: 'WorkloadDeploymentsWidget' })
 
   interface Props {
+    /** Design width of the frame from `md` up. */
+    width?: number
     /** Edge the mockup fades out along. */
     fade?: ShellMockupFade
     /** Whether this widget is the one showing. */
     active?: boolean
   }
 
-  withDefaults(defineProps<Props>(), { fade: 'none', active: true })
+  withDefaults(defineProps<Props>(), { width: 860, fade: 'none', active: true })
 
   interface DeploymentRow {
     version: string
@@ -55,6 +57,7 @@
 
 <template>
   <ShellMockup
+    :width="width"
     :fade="fade"
     :active="active"
     title="Workloads › storefront-prod › Deployments"

@@ -30,10 +30,10 @@ export const BLOG_NEWSLETTER = {
   eyebrow: 'Stay up to date',
   title: 'Subscribe to our Newsletter',
   description:
-    'Get the latest product updates, event highlights, and tech industry insights delivered to your inbox.',
-  placeholder: 'Your e-mail',
+    'Product updates, event highlights, and industry insights, delivered to your inbox.',
+  placeholder: 'Your email',
   submit: 'Subscribe',
-  success: 'Thanks for subscribing to Azion newsletter'
+  success: 'Thanks for subscribing to the Azion newsletter'
 }
 
 export const BLOG_POSTS = [
@@ -230,7 +230,7 @@ export const BLOG_POSTS = [
   {
     key: 'vlm-domain-adaptation-for-fraud-detection',
     title: 'VLM Domain Adaptation with LoRa for Fraud Detection',
-    description: 'Learn how AI Inference, along with domain adaptation techniques like LoRa, can be leveraged to deploy AI models optimized for specific fraud scenarios, ensuring real-time detection and prevention capabilities.',
+    description: 'Learn how AI Inference, along with domain adaptation techniques like LoRa, can deploy AI models optimized for specific fraud scenarios, with real-time detection and prevention.',
     href: 'https://www.azion.com/en/blog/vlm-domain-adaptation-for-fraud-detection/',
     image: 'https://www.azion.com/assets/content/blog/uploads/launch-week-edge-ai/edge-ai-blogpost-dark.png',
     categories: ['Developers'],
@@ -389,8 +389,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'compare-centralized-cloud-and-serverless-edge',
-    title: 'Total Cost of Ownership: Centralized Cloud vs Serverless Edge',
-    description: 'Compare the total cost of ownership (TCO) of centralized cloud and serverless edge architectures. Explore how infrastructure, operational overhead, and development effort impact long-term cloud economics.',
+    title: 'Total Cost of Ownership: Centralized Cloud vs Distributed Serverless',
+    description: 'Compare the total cost of ownership (TCO) of centralized cloud and distributed serverless architectures. Explore how infrastructure, operational overhead, and development effort impact long-term cloud economics.',
     href: 'https://www.azion.com/en/blog/compare-centralized-cloud-and-serverless-edge/',
     image: 'https://www.azion.com/assets/content/blog/uploads/edgecomputingcloudcomputing_thumblinkedin_1280x720px.png',
     categories: ['Serverless'],
@@ -450,7 +450,7 @@ export const BLOG_POSTS = [
   {
     key: 'terraform-provider-v4-ai-powered',
     title: 'Azion Terraform Provider v4: AI-Powered Infrastructure as Code',
-    description: 'Discover how Azion Terraform Provider v4 revolutionizes Infrastructure as Code with AI-driven automation, eliminating provider lag and delivering Day-0 support for all APIs. Learn about our design-first pipeline that keeps your infrastructure in perfect sync. ',
+    description: 'Discover how Azion Terraform Provider v4 improves Infrastructure as Code with AI-driven automation, eliminating provider lag and delivering Day-0 support for all APIs. Learn about our design-first pipeline that keeps your infrastructure in sync. ',
     href: 'https://www.azion.com/en/blog/terraform-provider-v4-ai-powered/',
     image: 'https://www.azion.com/assets/content/blog/uploads/terraform/terraformcover.png',
     categories: ['Developers'],
@@ -520,7 +520,7 @@ export const BLOG_POSTS = [
   {
     key: 'object-storage-general-availability',
     title: 'Azion Object Storage: how to store and deliver data at global scale',
-    description: 'Discover how Azion Object Storage enables global-scale data storage and delivery with low latency, S3 compatibility, and predictable costs, all integrated into a distributed infrastructure for modern workloads.',
+    description: 'Discover how Azion Object Storage enables global-scale data storage and delivery with low latency, S3 compatibility, and predictable costs, all on a distributed architecture.',
     href: 'https://www.azion.com/en/blog/object-storage-general-availability/',
     image: 'https://www.azion.com/assets/content/blog/uploads/storage-image.png',
     categories: ['Developers', 'Caching'],
@@ -530,7 +530,7 @@ export const BLOG_POSTS = [
   {
     key: 'from-cloud-training-to-global-scale-ai-inference-lora-serverless',
     title: 'Global-Scale AI Inference with LoRA & Serverless GPU',
-    description: 'Centralized cloud inference breaks down for generative AI: latency spikes, inconsistent UX, and fragile failover. This article explains how LoRA enables lightweight adaptation and how serverless GPU at the edge (Azion) delivers global-scale, low-latency inference with automation, standardization, and real-time observability.',
+    description: 'Centralized cloud inference breaks down for generative AI: latency spikes, inconsistent UX, and fragile failover. This article explains how LoRA enables lightweight adaptation and how serverless GPU on a distributed architecture (Azion) delivers global-scale, low-latency inference with automation, standardization, and real-time observability.',
     href: 'https://www.azion.com/en/blog/from-cloud-training-to-global-scale-ai-inference-lora-serverless/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloud-to-lora/cloudtolora.png',
     categories: ['Developers', 'Serverless', 'Market Trends'],
@@ -550,7 +550,7 @@ export const BLOG_POSTS = [
   {
     key: 'new-templates-solutions-and-support',
     title: 'New AI Templates, E-commerce Tools & Nuxt/SvelteKit Support',
-    description: 'Accelerate software delivery with Azion\'s latest platform updates featuring 11 new AI and e-commerce templates, native SSR adapters for Nuxt and SvelteKit, and crucial security/stability improvements. Build high-performance chatbots, fast Shopify stores, and modern SaaS applications at the edge with enhanced control, reduced latency, and faster time-to-market.',
+    description: 'Accelerate software delivery with Azion\'s latest platform updates featuring 11 new AI and e-commerce templates, native SSR adapters for Nuxt and SvelteKit, and crucial security/stability improvements. Build high-performance chatbots, fast Shopify stores, and modern SaaS applications on a distributed architecture with enhanced control, reduced latency, and faster time-to-market.',
     href: 'https://www.azion.com/en/blog/new-templates-solutions-and-support/',
     image: 'https://www.azion.com/assets/content/blog/og-images/templatesnew.png',
     categories: ['Developers'],
@@ -629,8 +629,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'implement-hsts-application',
-    title: 'How to Implement HSTS and CSP at the Edge with Azion Applications',
-    description: 'Practical guide to apply HSTS and Content Security Policy (CSP) at the edge using Azion. Step by step with Rules Engine examples, rollout checklist, monitoring, and before/after metrics to improve security and reduce downgrade, MITM, and XSS risks.',
+    title: 'How to Implement HSTS and CSP with Azion Applications',
+    description: 'Practical guide to apply HSTS and Content Security Policy (CSP) close to users using Azion. Step by step with Rules Engine examples, rollout checklist, monitoring, and before/after metrics to improve security and reduce downgrade, MITM, and XSS risks.',
     href: 'https://www.azion.com/en/blog/implement-hsts-application/',
     image: 'https://www.azion.com/assets/content/blog/uploads/api_shield_thumbnail_blog.png',
     categories: ['Developers'],
@@ -639,8 +639,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'introducing-api-v4',
-    title: 'Introducing Workloads, Edge Connector, Custom Pages, and API v4',
-    description: 'Discover Azion\'s latest innovations: Workloads, Edge Connector, and Custom Pages, along with API v4 - a platform change that transforms how you develop and scale applications at the edge.',
+    title: 'Introducing Workloads, Connectors, Custom Pages, and API v4',
+    description: 'Discover Azion\'s latest releases: Workloads, Connectors, and Custom Pages, along with API v4, a platform change in how you develop and scale applications on a distributed architecture.',
     href: 'https://www.azion.com/en/blog/introducing-api-v4/',
     image: 'https://www.azion.com/assets/content/blog/og-images/api-v4-og-image.svg',
     categories: ['Company News'],
@@ -690,7 +690,7 @@ export const BLOG_POSTS = [
   {
     key: 'launch-week-build-and-scale',
     title: 'Build and Scale Your Web Applications Right at the Data Source',
-    description: 'Modern businesses demand new ways to build, secure, and scale applications. Azion is at the forefront of this compute technology with its suite of products: Edge Functions, Edge SQL, and Edge Storage.',
+    description: 'Modern businesses demand new ways to build, secure, and scale applications. Azion offers a suite of products for it: Functions, SQL Database, and Object Storage.',
     href: 'https://www.azion.com/en/blog/launch-week-build-and-scale/',
     image: 'https://www.azion.com/assets/content/blog/uploads/launch-week-compute/build-and-scale-dark.png',
     categories: ['Developers'],
@@ -700,7 +700,7 @@ export const BLOG_POSTS = [
   {
     key: 'introducing-edge-ai',
     title: 'Introducing Azion AI Inference for Scalable AI Solutions',
-    description: 'AI Inference combines artificial intelligence with edge computing, allowing AI models to run directly on Azion\'s infrastructure—close to data sources and users—rather than in distant cloud data centers.',
+    description: 'AI Inference runs AI models directly on Azion\'s distributed infrastructure, close to data sources and users, rather than in distant cloud data centers.',
     href: 'https://www.azion.com/en/blog/introducing-edge-ai/',
     image: 'https://www.azion.com/assets/content/blog/uploads/launch-week-edge-ai/edge-ai-blogpost-dark.png',
     categories: ['Company News'],
@@ -709,8 +709,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'polyfills-for-edge-compatibility',
-    title: 'Using Polyfills to Bridge Gaps in Serverless Edge Environments',
-    description: 'Polyfills ensure compatibility across serverless edge environments, enabling developers to use modern web features without sacrificing functionality.',
+    title: 'Using Polyfills to Bridge Gaps in Serverless Environments',
+    description: 'Polyfills ensure compatibility across serverless environments, enabling developers to use modern web features without sacrificing functionality.',
     href: 'https://www.azion.com/en/blog/polyfills-for-edge-compatibility/',
     image: 'https://www.azion.com/assets/content/blog/uploads/azion-cells-technical-approach-and-the-future-of-serverless-computing.png',
     categories: ['Developers'],
@@ -730,7 +730,7 @@ export const BLOG_POSTS = [
   {
     key: 'how-technology-can-help-comply-with-regulations-for-fintech',
     title: 'How Technology Can Help You Comply with Regulations for Fintech',
-    description: 'Edge computing provides robust security, regulatory compliance, and intelligent monitoring for reliable, scalable operations.',
+    description: 'A distributed architecture provides security, regulatory compliance, and monitoring for reliable, scalable operations.',
     href: 'https://www.azion.com/en/blog/how-technology-can-help-comply-with-regulations-for-fintech/',
     image: 'https://www.azion.com/assets/content/blog/uploads/regulacionmexicana_thumblinkedin_440x343px.png',
     categories: ['Security'],
@@ -740,7 +740,7 @@ export const BLOG_POSTS = [
   {
     key: 'boost-software-quality-with-azion-cli-local-dev',
     title: 'Boost Software Quality: Local Development with Azion CLI',
-    description: 'Master Edge Functions with Azion CLI for local development and testing. Enhance software security, optimize performance, and streamline debugging.',
+    description: 'Use Functions with Azion CLI for local development and testing. Improve software security, optimize performance, and streamline debugging.',
     href: 'https://www.azion.com/en/blog/boost-software-quality-with-azion-cli-local-dev/',
     image: 'https://www.azion.com/assets/content/blog/uploads/local-dev.png',
     categories: ['Developers'],
@@ -750,7 +750,7 @@ export const BLOG_POSTS = [
   {
     key: 'console-kit-building-a-new-interface',
     title: 'Azion Console Kit: Building a new interface',
-    description: 'Explore the Azion Console Kit, enhancing user interface for Edge Computing with innovative Azion Blocks and open source toolkits for robust app development.',
+    description: 'Explore the Azion Console Kit, a new interface for the Azion Platform built with Azion Blocks and open source toolkits for app development.',
     href: 'https://www.azion.com/en/blog/console-kit-building-a-new-interface/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-codeeditor-chatgpt-440x343px.png',
     categories: ['Developers'],
@@ -760,7 +760,7 @@ export const BLOG_POSTS = [
   {
     key: 'the-experts-speak-cybersecurity-quotes-about-zero-trust-waf-social-engineering',
     title: 'Experts Speak: Cybersecurity Quotes on Zero-Trust & WAF',
-    description: 'Explore expert insights on cybersecurity, Zero Trust, social engineering, and WAF capabilities at Azion Edge.',
+    description: 'Explore expert insights on cybersecurity, Zero Trust, social engineering, and WAF capabilities from Azion.',
     href: 'https://www.azion.com/en/blog/the-experts-speak-cybersecurity-quotes-about-zero-trust-waf-social-engineering/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbblog-whatiswaf-440x343px-1.png',
     categories: ['Security'],
@@ -769,8 +769,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'azion-new-set-templates-dev',
-    title: 'Leverage Edge Computing with Azion\'s New Templates',
-    description: 'Discover Azion\'s Edge Computing templates to enhance web app development, streamline deployment, and optimize performance with tools like MongoDB, Hexo, and Fauna.',
+    title: 'Build Faster with Azion\'s New Templates',
+    description: 'Discover Azion\'s new templates to speed up web app development, streamline deployment, and optimize performance with tools like MongoDB, Hexo, and Fauna.',
     href: 'https://www.azion.com/en/blog/azion-new-set-templates-dev/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-4templatesimproveexperience-440x343px-1.png',
     categories: ['Company News'],
@@ -780,7 +780,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-celebrates-achievements-2023',
     title: 'Azion Celebrates a 2023 Full of Achievements',
-    description: 'Discover how Azion\'s accolades like the Frost & Sullivan Award and Great Place to Work recognition affirm its edge computing superiority in 2023.',
+    description: 'Discover how Azion\'s accolades like the Frost & Sullivan Award and Great Place to Work recognition recognize Azion\'s work on distributed architecture in 2023.',
     href: 'https://www.azion.com/en/blog/azion-celebrates-achievements-2023/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-2023-conquistas-440x343px.png',
     categories: ['Company News'],
@@ -790,7 +790,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-recognized-strong-performer-forrester-wave-2023',
     title: 'Forrester Names Azion a Strong Performer in Edge Dev',
-    description: 'Discover why Azion is a strong performer in The Forrester Wave™ for Edge Development Platforms in Q4 2023, enhancing enterprise edge solutions.',
+    description: 'Discover why Azion is a strong performer in The Forrester Wave™ for Edge Development Platforms in Q4 2023.',
     href: 'https://www.azion.com/en/blog/azion-recognized-strong-performer-forrester-wave-2023/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-forrester-wave2023-440x343px.png',
     categories: ['Company News'],
@@ -800,7 +800,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-awarded-at-santander-x-global-challenge',
     title: 'Azion Wins Award at Santander X Global Challenge',
-    description: 'Azion wins at Santander X Global Challenge for innovative cybersecurity solutions, enhancing global security capabilities and fostering industry connections.',
+    description: 'Azion wins at Santander X Global Challenge for cybersecurity solutions, building global security capabilities and industry connections.',
     href: 'https://www.azion.com/en/blog/azion-awarded-at-santander-x-global-challenge/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-premio-santander-440x343px.png',
     categories: ['Company News'],
@@ -810,7 +810,7 @@ export const BLOG_POSTS = [
   {
     key: 'remember-zero-day-attacks-blocked-by-azion-waf',
     title: 'Remember Zero-Day Attacks Blocked by Azion\'s WAF',
-    description: 'Explore how Azion\'s Web Application Firewall provides robust defense against zero-day attacks, CVE-2021-41773 coverage, and WAF bypass prevention.',
+    description: 'Explore how Azion\'s Web Application Firewall defends against zero-day attacks, with CVE-2021-41773 coverage and WAF bypass prevention.',
     href: 'https://www.azion.com/en/blog/remember-zero-day-attacks-blocked-by-azion-waf/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-zero-day-waf-440x343px.png',
     categories: ['Security'],
@@ -820,7 +820,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-frost-sullivan-award',
     title: 'Azion Earns Frost & Sullivan 2023 Innovation Award',
-    description: 'Discover Azion\'s award-winning Edge Serverless platform, boosting developers\' capabilities in building rapid, resilient applications with superior performance and global scalability.',
+    description: 'Discover Azion\'s award-winning serverless platform, helping developers build fast, resilient applications with high performance and global scalability.',
     href: 'https://www.azion.com/en/blog/azion-frost-sullivan-award/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-f-s-440x343px-1.png',
     categories: ['Company News'],
@@ -830,7 +830,7 @@ export const BLOG_POSTS = [
   {
     key: 'next-level-development-efficiency-azion-edge-functions',
     title: 'Azion Code Editor Adds ChatGPT Assistant for Faster Dev',
-    description: 'Discover how Azion Edge Functions with ChatGPT Code Assistant and Preview Deployment revolutionize developer experience and agile development.',
+    description: 'Discover how Azion Functions with ChatGPT Code Assistant and Preview Deployment improve developer experience and agile development.',
     href: 'https://www.azion.com/en/blog/next-level-development-efficiency-azion-edge-functions/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-codeeditor-chatgpt-440x343px.png',
     categories: ['Developers'],
@@ -850,7 +850,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-named-leader-fast-mover-gigaom-report',
     title: 'Azion Named Leader & Fast Mover in GigaOm Radar',
-    description: 'Azion hailed as a Leader and Fast Mover in the GigaOm Radar for Edge Platforms, emphasizing robust security and innovative edge computing solutions.',
+    description: 'Azion hailed as a Leader and Fast Mover in the GigaOm Radar for Edge Platforms, with strong security and a distributed architecture.',
     href: 'https://www.azion.com/en/blog/azion-named-leader-fast-mover-gigaom-report/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-gigaom-440x343px-1.png',
     categories: ['Company News'],
@@ -860,7 +860,7 @@ export const BLOG_POSTS = [
   {
     key: 'control-access-to-your-platform-with-scheduled-blocking-function',
     title: 'Control Access to Your Platform With Scheduled Blocking Function',
-    description: 'Discover how Azion\'s Scheduled Blocking function enhances application access control. Learn to implement time-based access solutions with edge functions.',
+    description: 'Discover how Azion\'s Scheduled Blocking function enhances application access control. Learn to implement time-based access solutions with Functions.',
     href: 'https://www.azion.com/en/blog/control-access-to-your-platform-with-scheduled-blocking-function/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_440x343px-2x.png',
     categories: ['Security'],
@@ -870,7 +870,7 @@ export const BLOG_POSTS = [
   {
     key: 'protect-your-application-from-session-theft-with-azion',
     title: 'Protect Your Application From Session Theft With Azion',
-    description: 'Protect your applications from cookie tampering attacks with Azion\'s Signed Cookies solution. Learn how to secure your edge applications now!',
+    description: 'Protect your applications from cookie tampering attacks with Azion\'s Signed Cookies solution. Learn how to secure your applications now.',
     href: 'https://www.azion.com/en/blog/protect-your-application-from-session-theft-with-azion/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog.png',
     categories: ['Security'],
@@ -880,7 +880,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-announces-solution-that-blocks-oversized-requests',
     title: 'Azion Announces Solution That Blocks Oversized Requests',
-    description: 'Explore the Azion Marketplace for the Limit Payload Size solution to enhance application efficiency and secure data transfers with Edge Functions.',
+    description: 'Explore the Azion Marketplace for the Limit Payload Size solution to enhance application efficiency and secure data transfers with Functions.',
     href: 'https://www.azion.com/en/blog/azion-announces-solution-that-blocks-oversized-requests/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbblog-limitpayloadsize.png',
     categories: ['Security'],
@@ -899,8 +899,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'five-cases-of-it-transformation-with-edge-computing',
-    title: 'Five Cases of IT Transformation with Edge Computing',
-    description: 'Discover the transformative power of Edge Computing through success stories from diverse sectors. Explore its impacts on cost reduction, application performance, and user experience.',
+    title: 'Five Cases of IT Modernization with a Distributed Architecture',
+    description: 'See how a distributed architecture works in practice through success stories from diverse sectors, including its impact on cost, application performance, and user experience.',
     href: 'https://www.azion.com/en/blog/five-cases-of-it-transformation-with-edge-computing/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbblog-5truestories-mobile.png',
     categories: ['Developers'],
@@ -910,7 +910,7 @@ export const BLOG_POSTS = [
   {
     key: 'how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands',
     title: 'How Justa Evolves Its Tech to Meet Modern Digital Demands',
-    description: 'Explore how Justa enhances payment security and simplifies compliance using Azion\'s Edge solutions, improving performance and customer experience in Brazil.',
+    description: 'Explore how Justa enhances payment security and simplifies compliance using Azion\'s solutions, improving performance and customer experience in Brazil.',
     href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_justa_440x343px.png',
     categories: ['Company News'],
@@ -920,7 +920,7 @@ export const BLOG_POSTS = [
   {
     key: 'recent-waf-bypass-attack-does-not-affect-azion-web-application-firewall',
     title: 'Recent WAF Bypass Attack Doesn\'t Affect Azion\'s WAF',
-    description: 'Discover how Azion\'s Web Application Firewall seamlessly blocks new SQL injection attacks using JSON syntax, ensuring robust cloud security.',
+    description: 'Discover how Azion\'s Web Application Firewall blocks new SQL injection attacks that use JSON syntax.',
     href: 'https://www.azion.com/en/blog/recent-waf-bypass-attack-does-not-affect-azion-web-application-firewall/',
     image: 'https://www.azion.com/assets/content/blog/uploads/vulnerabilidadewaf_thumblinkedin_440x343px.png',
     categories: ['Security'],
@@ -929,8 +929,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'cloud-computing-or-edge-computing-cost',
-    title: 'Cloud Computing or Edge Computing: Cost Comparison',
-    description: 'Explore the cost benefits of Edge Computing vs. cloud computing, learn about infrastructure savings, and how Edge enhances operational efficiency.',
+    title: 'Cloud Computing or Distributed Architecture: Cost Comparison',
+    description: 'Explore the cost benefits of a distributed architecture vs. cloud computing, learn about infrastructure savings, and see how it improves operational efficiency.',
     href: 'https://www.azion.com/en/blog/cloud-computing-or-edge-computing-cost/',
     image: 'https://www.azion.com/assets/content/blog/uploads/edgecomputingcloudcomputing_thumblinkedin_440x343px.png',
     categories: ['Developers'],
@@ -950,7 +950,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-achieves-soc-3-compliance',
     title: 'Azion Achieves SOC 3 Compliance',
-    description: 'Explore Azion\'s SOC 3 compliance, ensuring our edge platform secures web applications and sites with top-tier data security and availability controls.',
+    description: 'Explore Azion\'s SOC 3 compliance, ensuring the Azion Platform secures web applications and sites with top-tier data security and availability controls.',
     href: 'https://www.azion.com/en/blog/azion-achieves-soc-3-compliance/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnail-soc-2.png',
     categories: ['Company News'],
@@ -959,8 +959,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'azion-introduces-product-suite-for-comprehensive-edge-development',
-    title: 'Azion Introduces Product Suite for Comprehensive Edge Development',
-    description: 'Explore Azion Build for seamless edge app development with tools like Edge Functions, WebAssembly, and support for React frameworks.',
+    title: 'Azion Introduces Product Suite for Comprehensive Application Development',
+    description: 'Explore Azion Build for application development with tools like Functions, WebAssembly, and support for React frameworks.',
     href: 'https://www.azion.com/en/blog/azion-introduces-product-suite-for-comprehensive-edge-development/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblogpr_440x343px.png',
     categories: ['Company News'],
@@ -969,7 +969,7 @@ export const BLOG_POSTS = [
   },
   {
     key: 'webassembly-on-the-azion-platform-truly-embrace-the-edge',
-    title: 'WebAssembly on the Azion Edge Computing Platform',
+    title: 'WebAssembly on the Azion Platform',
     description: 'Explore how WebAssembly enhances app modernization on Azion Web Platform, enabling secure, fast deployment and improved performance.',
     href: 'https://www.azion.com/en/blog/webassembly-on-the-azion-platform-truly-embrace-the-edge/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_wasm.png',
@@ -979,8 +979,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'challenges-of-BGP-when-building-global-edge-network',
-    title: 'Challenges of Using BGP when Building a Global Edge Network',
-    description: 'Explore how Azion optimizes BGP for edge networks, enhancing security, performance, and reliability with intelligent routing solutions.',
+    title: 'Challenges of Using BGP when Building a Global Network',
+    description: 'Explore how Azion optimizes BGP for a global network, improving security, performance, and reliability with intelligent routing.',
     href: 'https://www.azion.com/en/blog/challenges-of-BGP-when-building-global-edge-network/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnail_bgp_mofu.png',
     categories: ['Developers'],
@@ -990,7 +990,7 @@ export const BLOG_POSTS = [
   {
     key: 'simplifying-and-accelerating-deliveries-with-serverless-functions',
     title: 'Simplifying and Accelerating Deliveries with Serverless Functions',
-    description: 'Explore how Azion Edge Functions streamline serverless JavaScript code execution for business, enhancing scalability, security, and efficiency.',
+    description: 'Explore how Azion Functions streamline serverless JavaScript code execution for business, improving scalability, security, and efficiency.',
     href: 'https://www.azion.com/en/blog/simplifying-and-accelerating-deliveries-with-serverless-functions/',
     image: 'https://www.azion.com/assets/content/blog/uploads/data-communications-and-cloud-computing-network-concept-picture-id1175136826.jpg',
     categories: ['Developers'],
@@ -1000,7 +1000,7 @@ export const BLOG_POSTS = [
   {
     key: 'how-azion-ddos-protection-mitigates-the-main-types-of-ddos-attacks',
     title: 'How Azion DDoS Protection Mitigates the Main Types of DDoS Attacks',
-    description: 'Explore how Azion DDoS Protection leverages edge computing for advanced DDoS mitigation, ensuring high security with minimal latency and no service degradation.',
+    description: 'Explore how Azion DDoS Protection uses a distributed architecture for DDoS mitigation, keeping security high with minimal latency and no service degradation.',
     href: 'https://www.azion.com/en/blog/how-azion-ddos-protection-mitigates-the-main-types-of-ddos-attacks/',
     image: 'https://www.azion.com/assets/content/blog/uploads/ddos-protection-blog-post-thumbnail.png',
     categories: ['Security'],
@@ -1009,8 +1009,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'edge-traffic-routing-for-extending-SDN-to-the-public-internet',
-    title: 'Edge Traffic Routing: Extending SDN to the Public Internet',
-    description: 'Explore how Azion\'s Edge Network leverages SDN for optimal routing and performance improvements in edge computing environments.',
+    title: 'Traffic Routing: Extending SDN to the Public Internet',
+    description: 'Explore how Azion uses SDN for optimal routing and better performance on a distributed architecture.',
     href: 'https://www.azion.com/en/blog/edge-traffic-routing-for-extending-SDN-to-the-public-internet/',
     image: 'https://www.azion.com/assets/content/blog/uploads/edge-traffic-routing-thumbnail.jpg',
     categories: ['Developers'],
@@ -1019,8 +1019,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'why-azion-chose-v8',
-    title: 'Why Azion Chose the V8 Engine for Edge Functions',
-    description: 'Explore how V8 Engine powers Azion\'s Edge Functions for enhanced security, efficiency, and speed in serverless computing at the network edge.',
+    title: 'Why Azion Chose the V8 Engine for Functions',
+    description: 'Explore how V8 Engine powers Azion\'s Functions with security, efficiency, and speed in serverless computing on a distributed architecture.',
     href: 'https://www.azion.com/en/blog/why-azion-chose-v8/',
     image: 'https://www.azion.com/assets/content/blog/uploads/why-azion-chose-the-v8-engine-for-edge-functions.png',
     categories: ['Developers'],
@@ -1040,7 +1040,7 @@ export const BLOG_POSTS = [
   {
     key: 'how-azion-started-using-jamstack',
     title: 'How Azion started using JAMStack',
-    description: 'Explore how Azion adopted JAMStack for seamless content scaling, reducing dependency on developers and enhancing web development with SSGs.',
+    description: 'Explore how Azion adopted JAMStack for content scaling, reducing dependency on developers and enhancing web development with SSGs.',
     href: 'https://www.azion.com/en/blog/how-azion-started-using-jamstack/',
     image: 'https://www.azion.com/assets/content/blog/uploads/group-4386.png',
     categories: ['Developers'],
@@ -1059,8 +1059,8 @@ export const BLOG_POSTS = [
   },
   {
     key: 'azion-introduces-edge-functions',
-    title: 'Azion Introduces Edge Functions',
-    description: 'Explore Azion Edge Functions: serverless, event-driven JavaScript solutions for low-latency, high-performance applications with enhanced security and monitoring.',
+    title: 'Azion Introduces Functions',
+    description: 'Explore Azion Functions: serverless, event-driven JavaScript solutions for low-latency, high-performance applications with enhanced security and monitoring.',
     href: 'https://www.azion.com/en/blog/azion-introduces-edge-functions/',
     image: 'https://www.azion.com/assets/content/blog/uploads/azion-introduces-edge-functions-thumb.png',
     categories: ['Company News'],
@@ -1070,7 +1070,7 @@ export const BLOG_POSTS = [
   {
     key: 'azion-cells-future-serverless-computing',
     title: 'Azion Cells and the Future of Serverless Computing',
-    description: 'Explore Azion Cells for ultra-low latency, edge-native applications, built with open standards for secure, high-performance serverless computing.',
+    description: 'Explore Azion Cells for ultra-low latency applications built with open standards for secure, high-performance serverless computing.',
     href: 'https://www.azion.com/en/blog/azion-cells-future-serverless-computing/',
     image: 'https://www.azion.com/assets/content/blog/uploads/azion-cells-technical-approach-and-the-future-of-serverless-computing.png',
     categories: ['Developers'],

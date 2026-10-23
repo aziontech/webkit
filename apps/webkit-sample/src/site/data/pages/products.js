@@ -1,10 +1,12 @@
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
+import { PRODUCT_CLOSING } from '../product-pages.js'
+
 const PRODUCT_GUARANTEES = [
   {
     title: 'One platform, one bill',
     description:
-      'Every product runs on the same network and the same account. Nothing to integrate, nothing to reconcile.'
+      "Every product runs on Azion's distributed infrastructure and one account. Nothing to integrate, nothing to reconcile."
   },
   {
     title: 'Provisioned in seconds',
@@ -28,39 +30,39 @@ const PRODUCT_GROUPS = [
   {
     key: 'build',
     title: 'Build',
-    description: 'Code, media, and inference running at the edge, close to whoever asks.',
+    description: 'Code, media, and inference that run close to whoever asks.',
     items: [
       {
         illustration: 'build-applications',
         title: 'Functions',
-        description: 'Run code at the edge, with no server to maintain.'
+        description: 'Run code globally, with no servers to maintain and no cold starts.'
       },
       {
         illustration: 'ai-applications',
         title: 'AI Inference',
-        description: 'Inference and agents right next to your data.'
+        description: 'Run inference and agents close to your data.'
       },
       {
         illustration: 'fastest-path-to-live-website',
         title: 'Image Processor',
-        description: 'One origin, every format negotiated at delivery.'
+        description: 'Keep one origin. Serve every format at delivery.'
       }
     ]
   },
   {
     key: 'store',
     title: 'Store',
-    description: 'Data persisted where the request lands, not in a distant region.',
+    description: 'Data stored where the request lands, not in a distant region.',
     items: [
       {
         illustration: 'distributed-apis',
         title: 'SQL Database',
-        description: 'A distributed relational database, queried at the edge.'
+        description: 'Query a distributed relational database close to users.'
       },
       {
         illustration: 'saas-platforms',
         title: 'Object Storage',
-        description: 'Objects served from the point closest to the user.'
+        description: 'Store objects and serve them from the data center closest to the user.'
       },
       {
         illustration: 'implement-api-gateway-security',
@@ -71,30 +73,30 @@ const PRODUCT_GROUPS = [
   },
   {
     key: 'protect',
-    title: 'Protect',
-    description: 'Traffic inspected before it ever reaches your origin.',
+    title: 'Secure',
+    description: 'Inspect traffic before it reaches your origin.',
     items: [
       {
         illustration: 'programmable-security',
         title: 'WAF',
-        description: 'Rules applied at the edge, ahead of your backend.'
+        description: 'Block common attacks and enforce rules ahead of your backend.'
       },
       {
         illustration: 'automate-threat-mitigation',
         title: 'Bot Manager',
-        description: 'Bots identified and stopped on the way in.'
+        description: 'Identify and stop bots on the way in.'
       },
       {
         illustration: 'dns-protection',
         title: 'Network Shield',
-        description: 'The entire network as your defense perimeter.'
+        description: 'Block threats at the network layer, before they reach your origin.'
       }
     ]
   },
   {
     key: 'observe',
     title: 'Observe',
-    description: 'Every request recorded, every decision traceable.',
+    description: 'Record every request and trace every decision.',
     items: [
       {
         illustration: 'live-debugging',
@@ -104,7 +106,7 @@ const PRODUCT_GROUPS = [
       {
         illustration: 'runtime',
         title: 'Edge Pulse',
-        description: 'Perceived quality measured in the real browser.'
+        description: 'Measure perceived quality in the real browser.'
       },
       {
         illustration: 'infrastructure-as-code',
@@ -117,7 +119,7 @@ const PRODUCT_GROUPS = [
 
 const PRODUCT_DIRECTORY = [
   {
-    label: 'Compute',
+    label: 'Build',
     items: [
       {
         icon: 'ai ai-workloads',
@@ -146,8 +148,20 @@ const PRODUCT_DIRECTORY = [
       {
         icon: 'ai ai-tiered-cache',
         title: 'Cache',
-        description: 'Hold content at the point closest to the request',
+        description: 'Hold content in the data center closest to the request',
         href: '/site/products/cache'
+      },
+      {
+        icon: 'ai ai-image-processor',
+        title: 'Image Processor',
+        description: 'Optimize and transform images in real time',
+        href: '/site/products/image-processor'
+      },
+      {
+        icon: 'ai ai-load-balancer',
+        title: 'Load Balancer',
+        description: 'Distribute traffic for performance and availability',
+        href: '/site/products/load-balancer'
       }
     ]
   },
@@ -164,12 +178,12 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Secure, manage, and optimize AI traffic',
-        href: 'https://www.azion.com/en/solutions#ai'
+        href: '/site/products/ai-gateway'
       }
     ]
   },
   {
-    label: 'Data',
+    label: 'Store',
     items: [
       {
         icon: 'ai ai-edge-storage',
@@ -180,13 +194,19 @@ const PRODUCT_DIRECTORY = [
       {
         icon: 'ai ai-edge-sql',
         title: 'SQL Database',
-        description: 'Query relational data at the edge',
-        href: 'https://www.azion.com/en/products/sql-database/'
+        description: 'Query relational data close to users',
+        href: '/site/products/sql-database'
+      },
+      {
+        icon: 'ai ai-edge-kv',
+        title: 'KV Store',
+        description: 'Globally distributed, low-latency key-value store',
+        href: '/site/products/kv-store'
       }
     ]
   },
   {
-    label: 'Security',
+    label: 'Secure',
     items: [
       {
         icon: 'ai ai-waf-rules',
@@ -198,13 +218,54 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Detect and stop automated threats instantly',
-        href: 'https://www.azion.com/en/products/bot-manager/'
+        href: '/site/products/bot-manager'
       },
       {
         icon: 'ai ai-edge-dns',
         title: 'DNS',
         description: 'Reliably host authoritative DNS zones worldwide',
-        href: 'https://www.azion.com/en/products/edge-dns/'
+        href: '/site/products/edge-dns'
+      },
+      {
+        icon: 'ai ai-edge-firewall',
+        title: 'Firewall',
+        description: 'Filter every request before it reaches your code',
+        href: '/site/products/firewall'
+      },
+      {
+        icon: 'ai ai-network-lists',
+        title: 'Network Shield',
+        description: 'Block threats at the network layer before origin',
+        href: '/site/products/network-shield'
+      },
+      {
+        icon: 'pi pi-shield',
+        title: 'DDoS Protection',
+        description: 'Stop volumetric attacks automatically',
+        href: '/site/products/ddos-protection'
+      }
+    ]
+  },
+  {
+    label: 'Observe',
+    items: [
+      {
+        icon: 'ai ai-data-stream',
+        title: 'Data Stream',
+        description: 'Send logs and events to your SIEM or data lake',
+        href: '/site/products/data-stream'
+      },
+      {
+        icon: 'ai ai-real-time-events',
+        title: 'Real-Time Events',
+        description: 'Investigate every request in seconds',
+        href: '/site/products/real-time-events'
+      },
+      {
+        icon: 'ai ai-real-time-metrics',
+        title: 'Real-Time Metrics',
+        description: 'Watch traffic, errors and latency as they happen',
+        href: '/site/products/real-time-metrics'
       }
     ]
   }
@@ -218,9 +279,9 @@ export const PRODUCTS_PAGE = [
     highlight: 'Everything you need',
     title: 'on one distributed platform',
     description:
-      'Compute, storage, security and observability as products you switch on — provisioned in seconds, billed on one account, and running on the same network.',
+      "Build, store, secure, and observe with products you switch on. They provision in seconds, bill on one account, and run on Azion's distributed infrastructure.",
     actions: [
-      { label: 'Start Free', href: '/signup', kind: 'secondary' },
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
       { label: 'See pricing', href: '/site/pricing', kind: 'outlined', trailing: true }
     ],
     carouselLabel: 'Running in production on these products',
@@ -243,14 +304,5 @@ export const PRODUCTS_PAGE = [
     ariaLabel: 'Product index',
     groups: PRODUCT_DIRECTORY
   },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Build',
-    title: 'Build once.',
-    titleMuted: 'Run everywhere.',
-    description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  PRODUCT_CLOSING
 ]

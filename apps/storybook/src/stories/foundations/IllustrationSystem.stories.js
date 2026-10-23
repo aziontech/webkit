@@ -10,7 +10,7 @@ import Illustration from '@aziontech/webkit/illustration'
 import {
   PageContainer,
   PageHeader,
-  SectionHeader
+  PageSection
 } from '../../foundations/components/layout/index.js'
 
 // Every scene the library ships, in the order `name` accepts them. Data lives beside the
@@ -99,14 +99,13 @@ export default {
 
 const LABEL_CLASS = 'text-label-sm text-[var(--text-muted)]'
 const CELL_CLASS = 'flex flex-col items-start gap-[var(--spacing-sm)]'
-const SECTION_CLASS = 'mb-[var(--spacing-xxl)]'
 
 export const Library = {
   name: 'Library',
   render: () => ({
-    components: { PageContainer, PageHeader, SectionHeader, Illustration },
+    components: { PageContainer, PageHeader, PageSection, Illustration },
     setup() {
-      return { ASSETS, COLOR_ROLES, FILES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
+      return { ASSETS, COLOR_ROLES, FILES, LABEL_CLASS, CELL_CLASS }
     },
     template: /* html */ `
       <PageContainer>
@@ -116,55 +115,35 @@ export const Library = {
           below are the only values the prop accepts.
         </PageHeader>
 
-        <section :class="SECTION_CLASS">
-          <SectionHeader
-            title="The library"
-            description="Every scene is drawn on the same 592×300 frame, so scenes line up with each other in a grid and a cell can reserve the box before the SVG loads. The root fills its container at that aspect ratio, capped at the canvas width."
-          />
+        <PageSection title="The library" description="Every scene is drawn on the same 592×300 frame, so scenes line up with each other in a grid and a cell can reserve the box before the SVG loads. The root fills its container at that aspect ratio, capped at the canvas width.">
           <div class="grid gap-[var(--spacing-xl)] md:grid-cols-2">
             <div v-for="asset in ASSETS" :key="asset" :class="CELL_CLASS">
               <code class="font-code text-code text-[var(--text-default)]">{{ asset }}</code>
               <Illustration :name="asset" />
             </div>
           </div>
-        </section>
+        </PageSection>
 
-        <section :class="SECTION_CLASS">
-          <SectionHeader
-            title="Files"
-            description="Drawings that are not scenes — hero art, card visuals — ship as files on their own canvas. Import one by its file name from @aziontech/webkit/assets/, never by its folder, and render it as an image."
-          />
+        <PageSection title="Files" description="Drawings that are not scenes — hero art, card visuals — ship as files on their own canvas. Import one by its file name from @aziontech/webkit/assets/, never by its folder, and render it as an image.">
           <div class="grid gap-(--spacing-xl) md:grid-cols-2">
             <div v-for="[file, src] in FILES" :key="file" :class="CELL_CLASS">
               <code class="font-code text-code text-(--text-default)">@aziontech/webkit/assets/{{ file }}</code>
               <img :src="src" alt="" class="h-auto max-w-full" />
             </div>
           </div>
-        </section>
+        </PageSection>
 
-        <section :class="SECTION_CLASS">
-          <SectionHeader
-            title="When the scene does not exist yet"
-            description="A name that resolves to nothing — empty, or absent from the registry — renders the placeholder frame instead of collapsing the layout, and an unregistered name also warns in development. Leave &lt;Illustration /&gt; unnamed where a drawing is still being made: the frame holds the space and reads as unfinished on the screen, which is louder than a gap nobody notices."
-          />
+        <PageSection title="When the scene does not exist yet" description="A name that resolves to nothing — empty, or absent from the registry — renders the placeholder frame instead of collapsing the layout, and an unregistered name also warns in development. Leave &lt;Illustration /&gt; unnamed where a drawing is still being made: the frame holds the space and reads as unfinished on the screen, which is louder than a gap nobody notices.">
           <div :class="CELL_CLASS">
             <code class="font-code text-code text-(--text-default)">&lt;Illustration /&gt;</code>
             <Illustration />
           </div>
-        </section>
+        </PageSection>
 
-        <section :class="SECTION_CLASS">
-          <SectionHeader
-            title="Adding a scene"
-            description="Draw it in the Assets file in Figma on the 592×300 frame, export the frame as SVG, drop it into packages/webkit/src/assets/illustrations/ under the frame's own name, and add one line to registry.ts. Never hand-draw one in markup — that is the drift this component exists to prevent. A colour the export palette in palette.ts does not list fails the suite until it is given a role or marked as drawn."
-          />
-        </section>
+        <PageSection title="Adding a scene" description="Draw it in the Assets file in Figma on the 592×300 frame, export the frame as SVG, drop it into packages/webkit/src/assets/illustrations/ under the frame's own name, and add one line to registry.ts. Never hand-draw one in markup — that is the drift this component exists to prevent. A colour the export palette in palette.ts does not list fails the suite until it is given a role or marked as drawn.">
+        </PageSection>
 
-        <section :class="SECTION_CLASS">
-          <SectionHeader
-            title="Colour"
-            description="The library is drawn once, in dark mode. Every colour a scene carries is repainted from an --illustration-* role of the theme, and each role aliases a global token — so one export follows light and dark, inside whatever [data-theme] subtree it renders. Colours that read the same in both themes (window controls, framework marks, the dot map, shadows) stay as drawn."
-          />
+        <PageSection title="Colour" description="The library is drawn once, in dark mode. Every colour a scene carries is repainted from an --illustration-* role of the theme, and each role aliases a global token — so one export follows light and dark, inside whatever [data-theme] subtree it renders. Colours that read the same in both themes (window controls, framework marks, the dot map, shadows) stay as drawn.">
           <div class="overflow-x-auto">
             <table class="w-full border-collapse text-left">
               <thead>
@@ -195,7 +174,7 @@ export const Library = {
               </tbody>
             </table>
           </div>
-        </section>
+        </PageSection>
       </PageContainer>
     `
   })

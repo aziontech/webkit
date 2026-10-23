@@ -17,20 +17,113 @@ export const PRODUCT_DIRECTORY = {
 
 export const PLATFORM_DIRECTORY = {
   section: 'PlatformDirectory',
-  title: 'Serverless AI-native primitives for autonomous workloads',
-  ariaLabel: 'Platform primitives'
+  title: 'Everything you need to build and run applications',
+  ariaLabel: 'Azion products'
 }
 
-export const PRODUCT_CLOSING = {
+const CLI_INSTALL = 'npm install -g azion'
+
+const START_FREE_ACTION = { label: 'Start free', href: '/signup', kind: 'secondary' }
+
+const AGENT_AUDIENCES = [
+  {
+    value: 'humans',
+    label: 'For humans',
+    command: CLI_INSTALL,
+    actions: [START_FREE_ACTION]
+  },
+  {
+    value: 'agents',
+    label: 'For agents',
+    prompt: 'Connect Azion MCP: https://mcp.azion.com',
+    actions: [
+      {
+        label: 'Read the agent docs',
+        href: '/site/docs/agent-setup',
+        kind: 'outlined',
+        trailing: true
+      }
+    ]
+  }
+]
+
+export const agentsClosing = (title) => ({
+  section: 'ClosingCallToAction',
+  kind: 'agents',
+  title,
+  typedLead: 'Drive one platform from the',
+  typedWords: ['Console', 'CLI', 'MCP server'],
+  description: 'A person and an agent ship the same way.',
+  audiencesLabel: 'Audience',
+  audiences: AGENT_AUDIENCES
+})
+
+export const salesClosing = ({ eyebrow, title, titleMuted, description }) => ({
   section: 'ClosingCallToAction',
   kind: 'split',
-  eyebrow: 'Build',
-  title: 'Build once.',
-  titleMuted: 'Run everywhere.',
-  description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
-  actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-  aside: { label: 'Talk to our team', href: '#' }
-}
+  eyebrow,
+  title,
+  titleMuted,
+  description,
+  actions: [START_FREE_ACTION],
+  aside: { label: 'Talk to sales', href: '/site/contact' }
+})
+
+export const primaryClosing = ({ title, description, benefits }) => ({
+  section: 'ClosingCallToAction',
+  kind: 'primary',
+  title,
+  description,
+  actions: [
+    START_FREE_ACTION,
+    { label: 'Read the docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
+  ],
+  benefitsLabel: 'Why teams choose Azion',
+  benefits
+})
+
+export const PRODUCT_CLOSING = primaryClosing({
+  title: 'Build, run, and protect applications everywhere.',
+  description: 'Get faster launches, lower latency, and less infrastructure overhead from day one.',
+  benefits: [
+    { icon: 'ai ai-edge-nodes', label: 'Deployed to 100+ data centers automatically' },
+    { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
+    { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
+    { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
+    { icon: 'pi pi-dollar', label: 'Usage-based pricing with no hidden fees' },
+    { icon: 'pi pi-gift', label: 'Start with $300 in free credits' },
+    { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
+    { icon: 'ai ai-real-time-metrics', label: 'Real-time events and metrics for every request' },
+    { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
+    { icon: 'pi pi-code', label: 'Works with Vue, React, Next.js, Astro and more' },
+    { icon: 'ai ai-edge-ai', label: 'Run AI inference next to your users' },
+    { icon: 'ai ai-edge-sql', label: 'A SQL database close to users, no setup' },
+    { icon: 'ai ai-edge-storage', label: 'Object storage with no egress fees' },
+    { icon: 'ai ai-waf-rules', label: 'WAF and bot protection on by default' },
+    { icon: 'ai ai-tiered-cache', label: 'Tiered cache that shields your origin' },
+    { icon: 'ai ai-data-stream', label: 'Stream every log to the tools you already use' }
+  ]
+})
+
+export const PRODUCT_SECURITY_CLOSING = primaryClosing({
+  title: 'Protect applications and APIs everywhere.',
+  description:
+    'Stop attacks at the edge before they reach your origin, with no security appliances to run.',
+  benefits: [
+    { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
+    { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
+    { icon: 'ai ai-waf-rules', label: 'OWASP protection you turn on, then tune' },
+    { icon: 'ai ai-bot-manager', label: 'Bot scoring with flexible mitigation actions' },
+    { icon: 'ai ai-adaptive-security', label: 'Low false positives on legitimate traffic' },
+    { icon: 'ai ai-security-team', label: "Zero-day rules you don't have to update" },
+    { icon: 'ai ai-network-lists', label: 'Rules synced to every data center automatically' },
+    { icon: 'ai ai-edge-functions', label: 'Extend any rule with your own Functions' },
+    { icon: 'ai ai-real-time-events', label: 'Investigate every security event as it happens' },
+    { icon: 'ai ai-data-stream', label: 'Stream security events to your SIEM' },
+    { icon: 'ai ai-edge-nodes', label: 'Protection on every request, in 100+ data centers' },
+    { icon: 'pi pi-gift', label: 'Start with $300 in free credits' }
+  ]
+})
 
 export const PRODUCT_CUSTOMERS_ACTION = {
   label: 'Customers',
@@ -64,12 +157,12 @@ export const foldList = (description, items) =>
 
 export const PRODUCT_GROUPS = [
   {
-    label: 'Compute',
+    label: 'Build',
     items: [
       {
         icon: 'ai ai-workloads',
         title: 'Workloads',
-        description: 'Put an application on a hostname, everywhere',
+        description: 'Serve an application on your hostname, globally',
         href: '/site/products/workloads'
       },
       {
@@ -81,19 +174,9 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-edge-functions',
         title: 'Functions',
-        description: 'Run serverless code at the edge',
+        description: 'Run code globally with no cold starts',
         href: '/site/products/functions'
       },
-      {
-        icon: 'ai ai-load-balancer',
-        title: 'Load Balancer',
-        description: 'Distribute traffic for availability'
-      }
-    ]
-  },
-  {
-    label: 'Deliver',
-    items: [
       {
         icon: 'ai ai-tiered-cache',
         title: 'Cache',
@@ -103,18 +186,26 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-app-accelerator',
         title: 'Application Accelerator',
-        description: 'Optimize dynamic applications',
+        description: 'Speed up dynamic apps and APIs',
         href: '/site/products/application-accelerator'
       },
       {
         icon: 'ai ai-image-processor',
         title: 'Image Processor',
-        description: 'Optimize and transform images in real time'
+        description: 'Resize and convert images on demand',
+        href: '/site/products/image-processor'
       },
       {
-        icon: 'ai ai-edge-dns',
-        title: 'DNS',
-        description: 'Distributed authoritative DNS'
+        icon: 'ai ai-edge-ai',
+        title: 'AI Inference',
+        description: 'Run models close to the user',
+        href: '/site/products/ai-inference'
+      },
+      {
+        icon: 'ai ai-ai-gateway',
+        title: 'AI Gateway',
+        description: 'Route, secure and log every model call',
+        href: '/site/products/ai-gateway'
       }
     ]
   },
@@ -124,24 +215,20 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-edge-storage',
         title: 'Object Storage',
-        description: 'Store and serve objects at the edge',
+        description: 'Store and serve objects close to users',
         href: '/site/products/object-storage'
       },
       {
         icon: 'ai ai-edge-sql',
         title: 'SQL Database',
-        description: 'A distributed SQL database'
+        description: 'Run SQL on a distributed database',
+        href: '/site/products/sql-database'
       },
       {
         icon: 'ai ai-edge-kv',
         title: 'KV Store',
-        description: 'Low-latency key-value store'
-      },
-      {
-        icon: 'ai ai-edge-ai',
-        title: 'AI Inference',
-        description: 'Run models close to the user',
-        href: '/site/products/ai-inference'
+        description: 'Store key-value data with low latency',
+        href: '/site/products/kv-store'
       }
     ]
   },
@@ -151,23 +238,43 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-edge-firewall',
         title: 'Firewall',
-        description: 'Filter every request before it reaches your code'
+        description: 'Filter every request before it reaches your code',
+        href: '/site/products/firewall'
       },
       {
         icon: 'ai ai-waf-rules',
         title: 'WAF',
-        description: 'Web application firewall',
+        description: 'Block common attacks close to traffic',
         href: '/site/products/web-application-firewall'
       },
       {
         icon: 'ai ai-network-lists',
         title: 'Network Shield',
-        description: 'Network and DDoS protection'
+        description: 'Stop network and DDoS attacks early',
+        href: '/site/products/network-shield'
       },
+      {
+        icon: 'ai ai-load-balancer',
+        title: 'Load Balancer',
+        description: 'Spread traffic across origins for availability',
+        href: '/site/products/load-balancer'
+      },
+      {
+        icon: 'ai ai-edge-dns',
+        title: 'Edge DNS',
+        description: 'Authoritative DNS, distributed globally',
+        href: '/site/products/edge-dns'
+      }
+    ]
+  },
+  {
+    label: 'Observe',
+    items: [
       {
         icon: 'ai ai-real-time-metrics',
         title: 'Real-Time Metrics',
-        description: 'Watch traffic, errors and latency as they happen'
+        description: 'Watch traffic, errors and latency as they happen',
+        href: '/site/products/real-time-metrics'
       }
     ]
   }

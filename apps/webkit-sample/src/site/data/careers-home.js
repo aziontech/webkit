@@ -2,7 +2,7 @@ export const CAREERS_HOME_HERO = {
   eyebrow: 'Careers',
   title: "Let's build together",
   description:
-    'Azion is driven by innovation, reliability, and the ability to make transparent, forward-looking decisions and execute them with agility. Our success depends on the success of our customers.',
+    'Azion values innovation, reliability, and transparent decisions, made and carried out with agility. Our success depends on the success of our customers.',
   action: 'See roles'
 }
 
@@ -61,8 +61,8 @@ export const CAREERS_ROLES = {
 
 export const CAREERS_JOIN = {
   title: 'Ready to join us?',
-  description: 'Explore our open positions and find the right fit for you.',
-  action: 'See all available jobs'
+  description: 'See our open positions and find the right fit.',
+  action: 'See open roles'
 }
 
 export const CAREERS_JOBS_PATH = '/site/careers/jobs'

@@ -1,5 +1,4 @@
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
-
+import { agentsClosing, salesClosing } from '../product-pages.js'
 import { NETWORK_OUTCOMES } from '../solutions.js'
 
 const DOCS = '/site/docs'
@@ -14,7 +13,7 @@ const useCaseBand = (useCase) => ({
   actions: [
     useCase.href
       ? { label: useCase.action, href: useCase.href, trailing: true }
-      : { label: 'Read Docs', href: DOCS, trailing: true }
+      : { label: 'Read the docs', href: DOCS, trailing: true }
   ]
 })
 
@@ -33,24 +32,27 @@ export function solutionPage(data) {
     primitivesTitle,
     network,
     faq,
-    cta
+    cta,
+    agents = false
   } = data
 
   return [
     {
-      section: 'Heroes',
-      kind: 'centered-carousel',
+      section: 'HeroWithOpening',
       eyebrow: hero.eyebrow,
-      eyebrowPrefix: '//',
       title: hero.title,
       description: hero.description,
       actions: [
-        { label: 'Start Free', href: '/signup', kind: 'secondary' },
-        { label: 'Talk to a Specialist', href: '#contact', kind: 'outlined', trailing: true }
+        { label: 'Start free', href: '/signup', kind: 'secondary' },
+        {
+          label: 'Talk to an expert',
+          href: agents ? '/site/contact' : '#contact',
+          kind: 'outlined',
+          trailing: true
+        }
       ],
-      carouselMarks: hero.carouselMarks ?? CLIENT_STRIP
+      items: capabilities
     },
-    { section: 'CapabilityGrid', items: capabilities },
     useCases && {
       section: 'MediaSplitStack',
       kind: 'solutions',
@@ -95,15 +97,6 @@ export function solutionPage(data) {
       outcomes: NETWORK_OUTCOMES
     },
     faq && { section: 'FaqSection', items: faq },
-    {
-      section: 'ClosingCallToAction',
-      kind: 'split',
-      eyebrow: cta.eyebrow,
-      title: cta.title,
-      titleMuted: cta.titleMuted,
-      description: cta.description,
-      actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-      aside: { label: 'Talk to our team', href: '/site/contact' }
-    }
+    agents ? agentsClosing(`${cta.title} ${cta.titleMuted}`) : salesClosing(cta)
   ].filter(Boolean)
 }

@@ -1,7 +1,7 @@
 import { BLOG_ALL, BLOG_CATEGORIES, BLOG_FEATURED, BLOG_LABELS, BLOG_NEWSLETTER, BLOG_POSTS } from '../blog.js'
 import { blogArticle, blogPostLink } from '../blog-articles.js'
 
-const HIGHLIGHT_SIDE = 4
+const HIGHLIGHT_SIDE = 2
 
 const metaOf = (post) => [post.categories?.[0], post.date].filter(Boolean).join(' · ')
 
@@ -51,20 +51,22 @@ export const BLOG_PAGE = [
     kind: 'centered-band',
     eyebrow: 'Resources',
     title: 'Blog',
-    description: 'Insights, industry trends',
+    description:
+      'News and hands-on guides from Azion on building apps, security, performance, and AI.',
     actions: [{ label: 'See posts', href: '#posts', kind: 'secondary' }]
   },
   { section: 'ArticleHighlight', anchor: 'articles', items: HIGHLIGHT },
   {
     section: 'ArticleIndex',
     anchor: 'posts',
+    gap: 'small',
     items: INDEX,
     categories: BLOG_CATEGORIES,
     allLabel: BLOG_ALL,
     leading: HIGHLIGHT_SIDE,
     search: { placeholder: BLOG_LABELS.search, label: 'Search articles' },
     moreLabel: BLOG_LABELS.loadMore,
-    empty: { title: 'No results found for these applied filters.', action: 'View all articles' }
+    empty: { title: 'No articles match these filters.', action: 'View all articles' }
   },
   BLOG_CLOSING
 ]

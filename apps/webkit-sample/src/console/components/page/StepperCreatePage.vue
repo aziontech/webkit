@@ -94,18 +94,20 @@
         :aria-label="title || 'Steps'"
       />
 
-      <div class="flex min-w-0 flex-1 flex-col">
+      <form
+        class="flex min-w-0 flex-1 flex-col"
+        :aria-label="step?.title || title"
+        novalidate
+        @submit.prevent="commit"
+      >
         <main
           ref="mainRef"
           :data-bleed="step?.bleed || null"
           :data-direction="direction"
           class="group/main data-[direction=forward]:[--page-enter-distance:calc(var(--layout-boundary-inline)*-1)] animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto data-bleed:flex data-bleed:flex-col data-bleed:overflow-hidden"
         >
-          <form
+          <div
             class="flex min-h-full flex-col group-data-[bleed]/main:min-h-0 group-data-[bleed]/main:flex-1"
-            :aria-label="step?.title || title"
-            novalidate
-            @submit.prevent="commit"
           >
             <div
               v-if="step?.bleed"
@@ -143,16 +145,7 @@
                 <slot :step="step?.value ?? ''" />
               </fieldset>
             </div>
-
-            <button
-              type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              {{ isLast ? saveLabel : 'Next' }}
-            </button>
-          </form>
+          </div>
         </main>
 
         <footer class="shrink-0 border-t border-(--border-default) bg-(--bg-surface)">
@@ -182,12 +175,12 @@
                 kind="primary"
                 size="medium"
                 :loading="submitting"
-                @click="commit"
+                type="submit"
               />
             </div>
           </div>
         </footer>
-      </div>
+      </form>
 
       <aside
         v-if="$slots.docs"

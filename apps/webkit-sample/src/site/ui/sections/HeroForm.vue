@@ -95,7 +95,7 @@
     descriptionAfter: '',
     actions: () => [],
     carouselMarks: () => CLIENT_STRIP,
-    carouselLabel: 'The teams our specialists work with',
+    carouselLabel: 'The teams our experts work with',
     formLabel: '',
     roles: () => CONTACT_ROLES,
     country: 'US',
@@ -108,7 +108,7 @@
     lastName: 'Last name',
     email: 'E-mail',
     role: 'Role',
-    rolePlaceholder: 'Select your Role',
+    rolePlaceholder: 'Select your role',
     company: 'Company',
     phone: 'Phone',
     message: 'Message',
@@ -342,20 +342,12 @@
           </fieldset>
 
           <div class="flex justify-start">
-            <button
-              type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              {{ copy.submit }}
-            </button>
             <Button
               :label="copy.submit"
               kind="secondary"
               size="large"
               :loading="submitting"
-              @click="submit"
+              type="submit"
             />
           </div>
         </form>
