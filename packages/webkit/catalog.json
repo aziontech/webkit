@@ -11664,7 +11664,7 @@
           "type": "'small' | 'medium' | 'large'",
           "default": "'medium'",
           "required": "false",
-          "doc": "Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down and tightens the inset."
+          "doc": "Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down."
         },
         {
           "name": "selectOn",
@@ -11752,7 +11752,7 @@
         "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
         "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
         "Use scenes of the same shape. The frame does not resize between tabs.",
-        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step and tightens the inset so five claims fit.",
+        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.",
         "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion."
       ]
     },

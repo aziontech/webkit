@@ -38,7 +38,7 @@
     items?: MediaTabsItem[]
     /** Which side of the media the tabs sit on. Below the large breakpoint every position stacks, with the active tab's media inside its row. */
     position?: MediaTabsPosition
-    /** Height each row is held to, as a multiple of the band's own padding step: three, four and a half, six. In a row of tabs, small sets the title and description two steps down and tightens the inset. */
+    /** Height each row is held to, as a multiple of the band's own padding step: three, four and a half, six. In a row of tabs, small sets the title and description two steps down. */
     size?: MediaTabsSize
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
     selectOn?: MediaTabsSelectOn
@@ -225,7 +225,7 @@
             class="relative flex flex-1 flex-col justify-center bg-(--bg-surface) transition-colors duration-moderate-01 ease-out group-data-[active]/row:bg-(--bg-surface-raised) before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 group-data-[active]/row:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
           >
             <div
-              class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-xxs) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:p-(--spacing-sm)"
+              class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-xxs)"
             >
               <h3
                 class="m-0 text-heading-md text-(--text-default) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
