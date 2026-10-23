@@ -105,6 +105,36 @@ describe('ProductWidget', () => {
       .toBe('bare')
   })
 
+  it('clears the earlier widget when the next one fails to load', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const failed = new Error('chunk failed')
+    const load = vi
+      .spyOn(productWidgets, 'workload-topology-chain')
+      .mockImplementation(() => Promise.reject(failed))
+    const name = ref<ProductWidgetName>('workloads-list')
+    const Host = defineComponent({
+      components: { ProductWidget },
+      setup: () => ({ name }),
+      template: '<div style="width: 860px; height: 480px"><ProductWidget :name="name" /></div>'
+    })
+    const view = render(Host)
+    await frameOf(view)
+
+    name.value = 'workload-topology-chain'
+    await nextTick()
+    const root = view.getByTestId(TESTID)
+
+    expect(root.getAttribute('data-name')).toBe('workload-topology-chain')
+    expect(root.children).toHaveLength(0)
+    await expect
+      .poll(() => warn.mock.calls.some(([message]) => String(message).includes('could not load')))
+      .toBe(true)
+    expect(root.children).toHaveLength(0)
+
+    load.mockRestore()
+    warn.mockRestore()
+  })
+
   it('warns and draws nothing for a name outside the registry', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const view = render(host({ name: 'not-a-widget' }))
