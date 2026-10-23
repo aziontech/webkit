@@ -11,7 +11,7 @@ export const PARTNERS_PAGE = [
       "Join Azion's global partner program and offer customers a platform that speeds up, protects, and scales their applications.",
     carouselMarks: [],
     formLabel: 'Become a partner',
-    roles: PARTNER_ROLES.map((role) => ({ value: role, label: role })),
+    roles: PARTNER_ROLES,
     labels: {
       email: 'Email',
       rolePlaceholder: 'Select your role',

@@ -7,12 +7,10 @@ export interface UseOptionSearchReturn {
   narrow: <T>(key: string, options: T[], text: (option: T) => string) => T[]
 }
 
-const SEARCH_THRESHOLD = 5
-
 export function useOptionSearch(): UseOptionSearchReturn {
   const queries = ref<Record<string, string>>({})
 
-  const searchable = (options: unknown[]) => options.length > SEARCH_THRESHOLD
+  const searchable = (options: unknown[]) => options.length > 0
 
   const query = (key: string) => queries.value[key] ?? ''
 

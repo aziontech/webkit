@@ -306,6 +306,7 @@
                 :placeholder="copy.rolePlaceholder"
                 size="large"
                 :options="roles"
+                searchable
                 :disabled="submitting"
                 :required="!!errors.role"
                 :helper-text="errors.role"

@@ -39,6 +39,7 @@ export const CAREERS_JOBS_PAGE = [
   },
   {
     section: 'ListingBrowser',
+    gap: false,
     title: 'Open positions',
     columns: [
       { key: 'role', label: CAREERS_ROLES.columns.role, grow: 2 },
