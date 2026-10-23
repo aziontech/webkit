@@ -4,7 +4,7 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 2f63bb85dcd527c4d6afb369f95cb5c62fb57bd45b531e2c7f5219ce01613ea0
+checksum: fa5394309c6173a730d6d026fed36a314e20a25f4d602601c1668443bdfe363d
 created: 2026-10-21
 last_updated: 2026-10-23
 ---
@@ -140,7 +140,7 @@ _No events — the mockup is a picture; nothing in it reports activation._
 - The bars and the rail are drawings: plain `div`s (no `header`, `aside` or `nav` landmark), each `inert` and `aria-hidden="true"` whatever `interactive` says, so only the slot body is ever operable.
 - Shell matrix: `shell="console"` without `rail` draws the slim bar (brand, title, avatar); with `rail` it draws the side rail (from `md` up) and a top bar with breadcrumbs, a search field, Create, Agent and the avatar; `shell="legacy"` draws the previous console's top bar (menu, brand, Create, Copilot, Feedback, help, account) and swaps the legacy typography weights and line heights onto the frame. `chrome` off removes the bars; the rail stays.
 - Entrance: parts are at rest offset and transparent until the root is at least 30% on screen and `active`; two animation frames later the root flips to entered and each part lands on its beat. `active` turning off resets it so it replays. `still`, or a reduced-motion preference, starts entered with no transition.
-- Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; it re-measures when the host resizes.
+- Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; it re-measures when the host resizes and when `width` or `mobileWidth` changes.
 
 ## Motion & Animations
 

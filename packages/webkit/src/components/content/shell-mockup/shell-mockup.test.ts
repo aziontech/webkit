@@ -132,6 +132,37 @@ describe('ShellMockup (composition)', () => {
     expect(drawnChrome(getByTestId(TESTID))).toHaveLength(0)
   })
 
+  it('rescales the frame when its design width changes', async () => {
+    const width = ref(860)
+    const mobileWidth = ref(390)
+    const Host = defineComponent({
+      components: { ShellMockup, ShellMockupPart },
+      setup: () => ({ width, mobileWidth }),
+      template: `
+        <div style="width: 860px; height: 480px">
+          <ShellMockup :width="width" :mobile-width="mobileWidth" style="display: block; height: 100%">
+            <ShellMockupPart><p>Only part</p></ShellMockupPart>
+          </ShellMockup>
+        </div>
+      `
+    })
+    const { getByTestId } = render(Host)
+    const frame = getByTestId(TESTID).firstElementChild as globalThis.HTMLElement
+    const designWidth = () =>
+      globalThis.matchMedia('(min-width: 768px)').matches ? width.value : mobileWidth.value
+
+    await expect.poll(() => frame.style.width).toBe(`${designWidth()}px`)
+    const before = frame.style.transform
+    await new Promise((resolve) =>
+      globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(resolve))
+    )
+
+    width.value = 430
+    mobileWidth.value = 215
+    await expect.poll(() => frame.style.width).toBe(`${designWidth()}px`)
+    expect(frame.style.transform).not.toBe(before)
+  })
+
   it('renders the overlay slot over the frame', () => {
     const { getByText } = render(host({}, true))
 

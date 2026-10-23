@@ -175,6 +175,8 @@
     measure()
   })
 
+  watch(() => [props.width, props.mobileWidth], measure)
+
   watch(
     () => props.active,
     (active) => {
