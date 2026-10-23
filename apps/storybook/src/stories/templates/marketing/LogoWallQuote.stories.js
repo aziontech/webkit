@@ -68,8 +68,8 @@ const setup = () => ({
 const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
     <SectionTitle
-      eyebrow="Trusted by Industry Leaders"
-      title="Battle-Tested by the World's Largest Banks and E-commerce Companies"
+      eyebrow="Customers"
+      title="Trusted by the world's largest banks and e-commerce companies"
     />
   </template>
 
@@ -186,8 +186,8 @@ export const Default = {
 export const SITE_SECTION = {
   _id: 'logo-wall-quote',
   props: {
-    eyebrow: 'Trusted by Industry Leaders',
-    title: "Battle-Tested by the World's Largest Banks and E-commerce Companies",
+    eyebrow: 'Customers',
+    title: "Trusted by the world's largest banks and e-commerce companies",
     ariaLabel: 'Banks and e-commerce companies running on Azion',
     logos: [
       {

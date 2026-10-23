@@ -2,7 +2,7 @@ import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as TemplateGalleryStories from './TemplateGallery.stories'
 
-<Meta title="Templates/Marketing/Media/TemplateGallery" />
+<Meta title="Templates/Marketing/Solutions/TemplateGallery" />
 
 # TemplateGallery
 
@@ -36,7 +36,7 @@ The Retail page's band, with its storefront description and the first eight depl
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `eyebrow`, `title` and `description` fill the copy.
-- `action` is the main button under the copy. It opens in a new tab.
+- `actions[]` are the two buttons under the copy: `Start free` and `Talk to a specialist`.
 - `templates[]` fill the wall: `title`, `description`, `icon` and the deploy `href`. Turn on `invertInDark` for a mark that ships in dark ink only.
 - `deployLabel` is the label of the button on each card.
 - `templatesAriaLabel` names the wall for screen readers.

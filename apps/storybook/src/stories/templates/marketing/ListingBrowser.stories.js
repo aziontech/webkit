@@ -223,7 +223,7 @@ ${indent(TABLE, 2)}
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ListingBrowser',
+  title: 'Templates/Marketing/Listings/ListingBrowser',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -232,7 +232,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The full listing a ListingTable previews, with the controls to narrow it: a search field and one select per facet and for the order on one row, then every row under its group. It shares ListingTable’s anatomy — overline column headers, one link per row named by its first column, and a list of items below `sm` — and adds a group row in the overline face over each group’s rows, with a rule between groups. Below `lg` the controls stack. Careers uses it for its jobs list, grouped by department and narrowed by department and location. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Table` and, on phones, `Item`.'
+          'The full listing a ListingTable previews, with the controls to narrow it: a search field and one select per facet and for the order on one row, then every row under its group. It shares ListingTable’s anatomy — overline column headers, one link per row named by its first column, and a list of items below `sm` — and adds a group row in the overline face over each group’s rows, with a rule between groups. Below `lg` the controls stack. Careers uses it for its jobs list, grouped by department and narrowed by department and location. Group rows stay pinned under the site nav while their rows scroll, and every column after the first is set in the small overline face. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Table` and, on phones, `Item`.'
       },
       canvas: { sourceState: 'shown' }
     }

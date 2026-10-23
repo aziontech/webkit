@@ -38,7 +38,7 @@ const SECTIONS = [
   {
     eyebrow: 'Managed infrastructure',
     title: 'Azion Platform',
-    description: 'Running modern workloads on a global infrastructure.',
+    description: 'Run applications on a global distributed infrastructure.',
     rows: [
       { label: 'Global infrastructure', group: true, values: ['', '', ''] },
       { label: '100+ data centers', values: [true, true, true] },
@@ -98,7 +98,7 @@ const SECTIONS = [
   },
   {
     eyebrow: 'Build',
-    title: 'Azion Applications',
+    title: 'Applications',
     description: 'Build, run and scale applications globally.',
     rows: [
       { label: 'Applications', group: true, values: ['', '', ''] },
@@ -154,7 +154,7 @@ const SECTIONS = [
       { label: 'Images', values: ['5,000 / mo included', '10,000 / mo included', 'Custom'] },
       {
         label: 'AI Inference',
-        hint: 'Runs model inference on the same distributed network, close to the user.',
+        hint: 'Runs model inference on Azion’s distributed infrastructure, close to the user.',
         group: true,
         tag: 'Preview',
         values: ['', '', '']
@@ -168,7 +168,7 @@ const SECTIONS = [
   {
     eyebrow: 'Azion Platform',
     title: 'Compliance',
-    description: 'Compliance that protects your business.',
+    description: 'Audits and certifications for regulated workloads.',
     rows: [
       {
         label: 'PCI DSS 4.0.1 Level 1 Service Provider',
@@ -398,7 +398,7 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ComparePlans',
+  title: 'Templates/Marketing/Comparison/ComparePlans',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
@@ -471,12 +471,12 @@ export const SITE_SECTION = {
     ],
     sections: [
       {
-        eyebrow: 'Managed Infrastructure',
+        eyebrow: 'Managed infrastructure',
         title: 'Azion Platform',
-        description: 'Powering modern workloads on global infrastructure.',
+        description: 'Run applications on a global distributed infrastructure.',
         rows: [
           {
-            label: 'Global Infrastructure',
+            label: 'Global infrastructure',
             group: true,
             values: ['', '', '']
           },
@@ -497,8 +497,8 @@ export const SITE_SECTION = {
       },
       {
         eyebrow: 'Build',
-        title: 'Azion Applications',
-        description: 'Build, run, and scale applications globally.',
+        title: 'Applications',
+        description: 'Build, run and scale applications globally.',
         rows: [
           {
             label: 'Applications',
@@ -510,7 +510,7 @@ export const SITE_SECTION = {
             values: ['✓', '✓', '✓']
           },
           {
-            label: 'Rules per Application',
+            label: 'Rules per application',
             values: ['10 included', '20 included', 'Custom']
           },
           {

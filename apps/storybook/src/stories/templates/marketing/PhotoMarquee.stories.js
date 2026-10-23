@@ -115,7 +115,7 @@ ${each(
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/PhotoMarquee',
+  title: 'Templates/Marketing/Social Proof/PhotoMarquee',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',

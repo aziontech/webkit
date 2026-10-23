@@ -34,11 +34,11 @@ const FINANCIAL = {
   eyebrow: 'Go Deeper',
   title: 'Guides and Resources',
   description:
-    'Documentation, articles, and customer stories on building secure, compliant financial applications on distributed infrastructure.',
+    'Documentation, articles, and customer stories on building secure, compliant financial applications on a distributed architecture.',
   items: [
     {
-      title: 'New at Azion? Start your Azion journey seamlessly',
-      description: 'This documentation will guide you through your first steps with Azion.',
+      title: 'New to Azion? Start here',
+      description: 'A guide to your first steps with Azion.',
       href: '/docs'
     },
     {
@@ -49,13 +49,13 @@ const FINANCIAL = {
     {
       title: 'How Technology Can Help You Comply with Regulations for Fintech',
       description:
-        'Distributed infrastructure provides robust security, regulatory compliance, and intelligent monitoring for reliable, scalable operations.',
+        'Distributed infrastructure brings security, compliance, and monitoring together for reliable, scalable operations.',
       href: 'https://www.azion.com/en/blog/how-technology-can-help-comply-with-regulations-for-fintech/'
     },
     {
       title: 'How Justa is evolving its technology to meet modern digital demands',
       description:
-        'Discover how Justa uses the Azion Web Platform to optimize security and performance in PIX and QR Code transactions.',
+        'See how Justa uses the Azion Web Platform to improve security and performance in PIX and QR Code transactions.',
       href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/'
     }
   ]
@@ -152,20 +152,20 @@ export const SITE_SECTION = {
     title: 'Guides and Resources',
     items: [
       {
-        title: 'New at Azion? Start your Azion journey seamlessly',
-        description: 'This documentation will guide you through your first steps with Azion.',
+        title: 'New to Azion? Start here',
+        description: 'A guide to your first steps with Azion.',
         href: 'https://www.azion.com/en/documentation/products/azion-platform-overview/'
       },
       {
         title: 'How Technology Can Help You Comply with Regulations for Fintech',
         description:
-          'Distributed infrastructure provides robust security, regulatory compliance, and intelligent monitoring for reliable, scalable operations.',
+          'Distributed infrastructure brings security, compliance, and monitoring together for reliable, scalable operations.',
         href: 'https://www.azion.com/en/blog/how-technology-can-help-comply-with-regulations-for-fintech/'
       },
       {
         title: 'How Justa is evolving its technology to meet modern digital demands',
         description:
-          'Discover how Justa uses the Azion Web Platform to optimize security and performance in PIX and QR Code transactions.',
+          'See how Justa uses the Azion Web Platform to improve security and performance in PIX and QR Code transactions.',
         href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/'
       }
     ]

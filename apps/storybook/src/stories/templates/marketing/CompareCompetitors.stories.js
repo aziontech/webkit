@@ -143,7 +143,7 @@ ${each(CAPABILITIES, row, 3)}
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ComparisonTable',
+  title: 'Templates/Marketing/Comparison/CompareCompetitors',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',

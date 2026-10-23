@@ -2,7 +2,7 @@ import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as MediaSplitStackStories from './MediaSplitStack.stories'
 
-<Meta title="Templates/Marketing/Media/MediaSplitStack" />
+<Meta title="Templates/Marketing/Solutions/MediaSplitStack" />
 
 # MediaSplitStack
 
@@ -55,7 +55,7 @@ Example:
 
 ### Alternating
 
-From the Our Network page: a centered section title, then four bands alternating media start and end, with no actions.
+From the Our Network page: a centered section title, then four large bands alternating media start and end, each with an outlined "Learn more" button and linking through as a whole, like Solutions.
 
 <Canvas of={MediaSplitStackStories.Alternating} />
 
@@ -64,8 +64,9 @@ From the Our Network page: a centered section title, then four bands alternating
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `eyebrow` and `title` make the heading. Without a title the heading is left out.
-- `bands` are the claims, each a `title`, a `description`, and an `illustration` with `illustrationLabel` or an `image` with `imageAlt`. The media side alternates on its own.
-- A band with no picture renders without its media cell.
+- `actionLabel` is the button text every band shares.
+- `bands` are the claims, each a `title`, a `description`, an `href`, and an `illustration` with `illustrationLabel` or an `image` with `imageAlt`. The media side alternates on its own.
+- A band without `href` or without `actionLabel` has no button. A band with no picture renders without its media cell.
 
 Example:
 
