@@ -15,8 +15,9 @@ import {
   PRODUCT_SECURITY_CLOSING,
   salesClosing
 } from '../product-pages.js'
-import { NETWORK_TOPICS } from '../solutions.js'
+import { NETWORK_TOPICS, quotesLedBy } from '../solutions.js'
 import { WORKLOAD_RECIPE_TABS } from '../workload-recipes.js'
+import { ABOUT_PAGE } from './about.js'
 import { AI_GATEWAY_PAGE } from './ai-gateway.js'
 import { BLOG_CLOSING, BLOG_PAGE } from './blog.js'
 import { blogPostPage } from './blog-post.js'
@@ -25,12 +26,14 @@ import { CAREERS_HOME_PAGE } from './careers-home.js'
 import { CAREERS_JOBS_PAGE } from './careers-jobs.js'
 import { CONTACT_PAGE } from './contact.js'
 import { FINANCIAL_SERVICES_PAGE } from './financial-services.js'
-import { FUNCTIONS_PAGE, INTEGRATION_CODE_BAND } from './functions.js'
+import { FUNCTIONS_PAGE } from './functions.js'
 import { HOME_PAGE, HOME_SOLUTIONS_BAND } from './home.js'
 import { LEARNING_PAGE } from './learning.js'
 import { HERO as PERFORMANCE_HERO } from './performance.js'
 import { PRICING_PAGE } from './pricing.js'
 import { PRODUCTS_PAGE } from './products.js'
+import { RECOGNITIONS_PAGE } from './recognitions.js'
+import { RESOURCE_HUB_PAGE } from './resource-hub.js'
 import { SOLUTIONS_PAGE } from './solutions.js'
 import { SUCCESS_CASES_PAGE } from './success-cases.js'
 import { SUPPORT_PAGE } from './support.js'
@@ -363,6 +366,17 @@ const CLOSING_SPLIT = salesClosing({
   description: 'Stronger protection, less attack exposure, less operational drag.'
 })
 
+const [AXUR_QUOTE] = quotesLedBy('axur')
+
+const quoteBand = (kind) => ({
+  section: 'QuoteBand',
+  kind,
+  text: AXUR_QUOTE.text,
+  name: AXUR_QUOTE.name,
+  jobTitle: AXUR_QUOTE.jobTitle,
+  client: AXUR_QUOTE.mark
+})
+
 const BLOG_POST_PAGE = blogPostPage(BLOG_FEATURED.key)
 
 const FINANCIAL_RESOURCES = pick(FINANCIAL_SERVICES_PAGE, 'ResourceGrid')
@@ -392,6 +406,8 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(VERCEL_ALTERNATIVE_PAGE, 'Heroes'),
   pick(CACHE_PAGE, 'Heroes'),
   pick(SUPPORT_PAGE, 'Heroes'),
+  pick(ABOUT_PAGE, 'Heroes'),
+  pick(RECOGNITIONS_PAGE, 'Heroes'),
   pick(CONTACT_PAGE, 'HeroForm'),
 
   pick(FUNCTIONS_PAGE, 'ClientQuotes'),
@@ -399,15 +415,14 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(HOME_PAGE, 'RecognitionMarquee'),
   pick(HOME_PAGE, 'ClientMosaic'),
   pick(FINANCIAL_SERVICES_PAGE, 'ComplianceBadges'),
+  pick(ABOUT_PAGE, 'InvestorMarks'),
+  quoteBand('highlight'),
+  quoteBand('signed'),
 
-  { ...pick(HOME_PAGE, 'NetworkSection'), titleSize: 'medium' },
-  {
-    ...pick(HOME_PAGE, 'NetworkSection'),
-    kind: 'benefits',
-    titleSize: 'medium',
-    benefits: NETWORK_TOPICS
-  },
+  pick(HOME_PAGE, 'NetworkSection'),
+  { ...pick(HOME_PAGE, 'NetworkSection'), kind: 'benefits', benefits: NETWORK_TOPICS },
   pick(PRODUCTS_PAGE, 'StatsBand'),
+  pick(PRODUCTS_PAGE, 'CapabilityGrid'),
 
   HOME_SOLUTIONS_BAND,
   pick(CAREERS_HOME_PAGE, 'PhotoMarquee'),
@@ -421,6 +436,7 @@ export const WEBSITE_BUNDLE_PAGE = [
     items: WORKLOAD_FEATURES
   },
   pick(CACHE_PAGE, 'FeatureWidgets'),
+  pick(AI_GATEWAY_PAGE, 'ConsolePanel'),
   {
     section: 'StickyScrollCode',
     eyebrow: 'Anatomy',
@@ -459,7 +475,6 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(CACHE_PAGE, 'UseCases'),
   FINANCIAL_RESOURCES,
   SCROLLING_RESOURCES,
-  INTEGRATION_CODE_BAND,
   pick(LEARNING_PAGE, 'SubjectLibrary'),
   pick(CAREERS_HOME_PAGE, 'ListingTable'),
   pick(CAREERS_JOBS_PAGE, 'ListingBrowser'),
@@ -468,6 +483,7 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(SUPPORT_PAGE, 'CompareSupportTiers'),
   pick(BLOG_PAGE, 'ArticleHighlight'),
   pick(BLOG_PAGE, 'ArticleIndex'),
+  pick(RESOURCE_HUB_PAGE, 'ArticleIndex'),
 
   pick(PRICING_PAGE, 'PricingPlans'),
   pick(PRICING_PAGE, 'ComparePlans'),
