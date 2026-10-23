@@ -11,7 +11,7 @@ import { ref } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
-import { noMatches, searchable, searchScript, searchSlot, searchState } from '../../_shared/select-search'
+import { noMatches, quoted, searchScript, searchSlot, searchState } from '../../_shared/select-search'
 import { toSfc } from '../../_shared/story-source'
 
 const ALL = 'All articles'
@@ -136,7 +136,6 @@ const RESOURCES = [
   }
 ]
 
-const quoted = (text) => `'${text.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
 
 const BASE_IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
@@ -161,20 +160,18 @@ const BLOG_IMPORTS = [
 
 const narrowing = (facet) => facet.options.slice(1)
 
-const SEARCHED = FACETS.filter((facet) => searchable(narrowing(facet)))
-
 const HUB_IMPORTS = [
   ...BASE_IMPORTS,
-  ...(SEARCHED.length ? ["import InputText from '@aziontech/webkit/input-text'"] : []),
+  "import InputText from '@aziontech/webkit/input-text'",
   "import Select from '@aziontech/webkit/select'",
-  SEARCHED.length ? "import { computed, ref } from 'vue'" : "import { ref } from 'vue'",
+  "import { computed, ref } from 'vue'",
   '',
   ...FACETS.flatMap((facet) => [
     `const ${facet.key}Options = [${facet.options.map(quoted).join(', ')}]`,
     ''
   ]),
   ...FACETS.map((facet) => `const ${facet.key} = ref(${quoted(facet.options[0])})`),
-  ...SEARCHED.flatMap((facet) => ['', ...searchScript(facet.key, `${facet.key}Options.slice(1)`)])
+  ...FACETS.flatMap((facet) => ['', ...searchScript(facet.key, `${facet.key}Options.slice(1)`)])
 ]
 
 const components = {
@@ -199,9 +196,7 @@ const hubSetup = () =>
     FACETS.flatMap((facet) => [
       [`${facet.key}Options`, facet.options],
       [facet.key, ref(facet.options[0])],
-      ...(searchable(narrowing(facet))
-        ? Object.entries(searchState(facet.key, narrowing(facet)))
-        : [])
+      ...Object.entries(searchState(facet.key, narrowing(facet)))
     ])
   )
 
@@ -260,32 +255,12 @@ ${indent(noMatches(facet.key), 2)}
   </Select.Content>
 </Select>`
 
-const facetSelect = (facet) =>
-  searchable(narrowing(facet))
-    ? searchedSelect(facet)
-    : `<Select
-  v-model="${facet.key}"
-  size="medium"
-  class="w-full sm:w-56"
->
-  <Select.Trigger aria-label="${facet.label}" />
-  <Select.Content>
-    <Select.Option
-      v-for="option in ${facet.key}Options"
-      :key="option"
-      :value="option"
-    >
-      {{ option }}
-    </Select.Option>
-  </Select.Content>
-</Select>`
-
 const HUB_CONTROLS = `<h2 class="m-0 text-heading-md text-(--text-default)">
   Explore all resources
 </h2>
 
 <div class="flex flex-col gap-(--spacing-sm) sm:flex-row">
-${each(FACETS, facetSelect, 1)}
+${each(FACETS, searchedSelect, 1)}
 </div>`
 
 const author = (name) => `<Avatar
