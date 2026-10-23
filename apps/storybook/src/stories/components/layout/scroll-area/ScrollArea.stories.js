@@ -30,7 +30,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Native overflow container with themed thin scrollbars and keyboard scrolling (arrow keys, Page Up/Down, Home/End). Set the viewport height and width via `class` on the root, and choose the scroll axis with `orientation`.'
+          'Native overflow container with themed thin scrollbars and keyboard scrolling (arrow keys, Page Up/Down, Home/End). Set the viewport height and width via `class` on the root, choose the scroll axis with `orientation`, and set `fade` to fade the edges that still have content to scroll to.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -51,6 +51,16 @@ const meta = {
       description: 'Accessible name when the region is not labelled by visible text.',
       table: { category: 'props', type: { summary: 'string' } }
     },
+    fade: {
+      control: 'boolean',
+      description:
+        'Fades the edges that still have content to scroll to, sized by the distance left on each side.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
     default: {
       control: false,
       description: 'Scrollable content.',
@@ -59,7 +69,8 @@ const meta = {
   },
   args: {
     orientation: 'vertical',
-    ariaLabel: 'Scrollable content'
+    ariaLabel: 'Scrollable content',
+    fade: false
   }
 }
 
@@ -136,6 +147,54 @@ export const Orientations = {
           'The `orientation` prop drives the scroll axis: `vertical`, `horizontal`, and `both` shown side by side.'
       },
       source: { code: toSfc(IMPORT, ORIENTATIONS_TEMPLATE) }
+    }
+  }
+}
+
+const FADE_TEMPLATE = `<div class="flex flex-wrap items-start gap-(--spacing-6)">
+  <div class="w-[280px] overflow-hidden rounded-(--shape-elements) border border-(--border-default)">
+    <ScrollArea fade aria-label="Deployments" class="h-[240px] p-(--spacing-xs)">
+      <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">edge-app-production</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">edge-app-staging</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">marketing-site</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">docs-portal</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">image-optimizer</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">api-gateway</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">auth-service</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">checkout-function</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">search-indexer</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">media-transcoder</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">waf-rules-engine</li>
+        <li class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">analytics-collector</li>
+      </ul>
+    </ScrollArea>
+  </div>
+  <div class="w-[280px] overflow-hidden rounded-(--shape-elements) border border-(--border-default)">
+    <ScrollArea fade orientation="horizontal" aria-label="Regions" class="p-(--spacing-xs)">
+      <div class="flex w-max gap-(--spacing-xs)">
+        <span class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">São Paulo</span>
+        <span class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">Miami</span>
+        <span class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">Frankfurt</span>
+        <span class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">Tokyo</span>
+        <span class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">Sydney</span>
+        <span class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)">Mumbai</span>
+      </div>
+    </ScrollArea>
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof ScrollArea>} */
+export const Fade = {
+  render: () => ({ components: { ScrollArea }, template: FADE_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'With `fade`, only the edges that still have content fade out, and each fade grows with the distance left to scroll. The border sits on a wrapper so the fade never eats the frame.'
+      },
+      source: { code: toSfc(IMPORT, FADE_TEMPLATE) }
     }
   }
 }

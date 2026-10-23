@@ -112,6 +112,12 @@ const meta = {
         "The claim's medium, receiving `{ item, index, active }`; replaces the image built from the item's own `src`. It is mounted fresh on every change, so an entrance animation inside it replays.",
       table: { category: 'slots' }
     },
+    backdrop: {
+      control: false,
+      description:
+        'Fills the media frame behind every medium, from `lg` up. It is mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it.',
+      table: { category: 'slots' }
+    },
     onIndexChange: {
       action: 'index-change',
       description:
