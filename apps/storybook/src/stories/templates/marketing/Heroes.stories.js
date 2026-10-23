@@ -52,28 +52,23 @@ const RETAIL_CLIENT_STRIP = [
   'nzn'
 ]
 
-const START_FREE = { label: 'Start Free', kind: 'secondary', href: '/signup' }
+const START_FREE = { label: 'Start free', kind: 'secondary', href: '/signup' }
 const START_FREE_LOWER = { label: 'Start free', kind: 'secondary', href: '/signup' }
 const SPECIALIST = {
-  label: 'Talk to a Specialist',
+  label: 'Talk to an expert',
   kind: 'outlined',
   href: '#contact',
   trailing: true
 }
 const SPECIALIST_PAGE = {
-  label: 'Talk to a Specialist',
+  label: 'Talk to an expert',
   kind: 'outlined',
   href: '/contact',
   trailing: true
 }
-const CONTACT = {
-  label: 'Contact Us',
-  kind: 'outlined',
-  href: '/contact',
-  trailing: true
-}
-const SPECIALIST_PLAIN = { label: 'Talk to a Specialist', kind: 'outlined' }
+const SPECIALIST_PLAIN = { label: 'Talk to an expert', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
+const SEE_POSTS = { label: 'See posts', kind: 'secondary', href: '#posts' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
 
 const marks = (names, depth) =>
@@ -132,7 +127,7 @@ const WORKLOAD_LEVELS = [
     {
       eyebrow: 'Firewall',
       icon: 'ai ai-edge-firewall',
-      title: 'edge-rules',
+      title: 'shop-rules',
       label: 'Active',
       severity: 'success'
     }
@@ -182,15 +177,15 @@ const CENTERED_CAROUSEL_TEMPLATE = `<Hero
   texture="dots"
   texture-fade="top"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
     centered
     max-width="xl"
-    highlight="Invisible Infrastructure"
-    title="for the Speed of AI"
-    description="Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical."
+    highlight="Build and run applications"
+    title="globally, with no ops"
+    description="Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic."
   >
 ${indent(actions([START_FREE, SPECIALIST]), 2)}
   </Hero.Title>
@@ -211,7 +206,7 @@ const TITLE_BAND_TEMPLATE = `<Hero
   max-width="5xl"
   size="large"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
@@ -229,19 +224,15 @@ const CENTERED_BAND_TEMPLATE = `<Hero
   max-width="site"
   texture="dots"
   texture-fade="top"
-  carousel
-  carousel-label="Trusted by mission-critical workloads"
-  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
     centered
     max-width="2xl"
-    eyebrow="Support"
-    eyebrow-prefix="//"
-    title="Technical support for every stage of your growth"
-    description="Designed to help you move independently. Backed by specialists when you need them."
+    eyebrow="Resources"
+    title="Blog"
+    description="News and hands-on guides from Azion on building apps, security, performance, and AI."
   >
-${indent(actions([START_FREE, CONTACT]), 2)}
+${indent(actions([SEE_POSTS]), 2)}
   </Hero.Title>
 </Hero>`
 
@@ -252,13 +243,13 @@ const PIXEL_FLOOR_TEMPLATE = `<Hero
   max-width="full"
   :bordered="false"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
   class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
     title="Build and deploy AI agents and applications in seconds"
-    description="Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality."
+    description="Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local."
   >
 ${indent(actions([START_FREE, SPECIALIST_PLAIN]), 2)}
   </Hero.Title>
@@ -269,7 +260,7 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
   kind="screen"
   media-align="end"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(RETAIL_CLIENT_STRIP, 1)}"
 >
   <Hero.Title
@@ -303,8 +294,8 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   <Hero.Title
     centered
     eyebrow="Workloads"
-    title="Put your application on the edge in seconds"
-    description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion location — no servers to size, no regions to pick."
+    title="Put your application close to users in seconds"
+    description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick."
   >
 ${indent(actions([START_FREE_LOWER, DOCS]), 2)}
   </Hero.Title>
@@ -330,6 +321,7 @@ const meta = {
   excludeStories: [
     'CENTERED_CAROUSEL_SECTION',
     'TITLE_BAND_SECTION',
+    'CENTERED_BAND_SECTION',
     'PIXEL_FLOOR_SECTION',
     'COPY_BESIDE_ART_SECTION',
     'COPY_ON_TOP_ART_SECTION'
@@ -358,19 +350,19 @@ export const CenteredCarousel = {
 export const CENTERED_CAROUSEL_SECTION = {
   _id: 'hero-centered-carousel',
   props: {
-    highlight: 'Invisible Infrastructure',
-    title: 'for the Speed of AI',
+    highlight: 'Build and run applications',
+    title: 'globally, with no ops',
     description:
-      'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
+      'Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.',
     primaryAction: {
-      label: 'Start Free',
+      label: 'Start free',
       href: 'https://console.azion.com/signup/'
     },
     secondaryAction: {
-      label: 'Talk to a Specialist',
+      label: 'Talk to an expert',
       href: 'https://www.azion.com/en/contact/'
     },
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Trusted by teams running critical workloads',
     carouselMarks: [
       'global-fashion-group',
       'herospark',
@@ -421,10 +413,10 @@ export const TITLE_BAND_SECTION = {
       href: '#subjects'
     },
     secondaryAction: {
-      label: 'Talk to a Specialist',
+      label: 'Talk to an expert',
       href: 'https://www.azion.com/en/contact/'
     },
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Trusted by teams running critical workloads',
     carouselMarks: [
       'global-fashion-group',
       'herospark',
@@ -450,9 +442,36 @@ export const CenteredBand = {
   render: () => ({ components, template: CENTERED_BAND_TEMPLATE }),
   parameters: {
     docs: {
+      description: {
+        story:
+          'Centered title band with a dotted texture and no client strip. The Blog page opens with it.'
+      },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
     }
   }
+}
+
+export const CENTERED_BAND_SECTION = {
+  _id: 'hero-centered-band',
+  props: {
+    kind: 'centered-band',
+    eyebrow: 'Resources',
+    title: 'Blog',
+    description:
+      'News and hands-on guides from Azion on building apps, security, performance, and AI.',
+    actions: [
+      {
+        label: 'See posts',
+        href: '#posts',
+        kind: 'secondary'
+      }
+    ]
+  }
+}
+
+export const CenteredBandJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(CENTERED_BAND_SECTION)
 }
 
 export const PixelFloor = {
@@ -469,16 +488,16 @@ export const PIXEL_FLOOR_SECTION = {
   props: {
     title: 'Build and deploy AI agents and applications in seconds',
     description:
-      'Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality.',
+      'Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local.',
     primaryAction: {
-      label: 'Start Free',
+      label: 'Start free',
       href: 'https://console.azion.com/signup'
     },
     secondaryAction: {
-      label: 'Talk to a Specialist',
+      label: 'Talk to an expert',
       href: 'https://www.azion.com/en/contact/'
     },
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Trusted by teams running critical workloads',
     carouselMarks: [
       'global-fashion-group',
       'herospark',
@@ -532,9 +551,9 @@ export const COPY_BESIDE_ART_SECTION = {
       'itau',
       'magalu'
     ],
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Trusted by teams running critical workloads',
     primaryAction: {
-      label: 'Talk to a Specialist',
+      label: 'Talk to an expert',
       href: 'https://www.azion.com/en/contact/'
     }
   }
@@ -560,9 +579,9 @@ export const COPY_ON_TOP_ART_SECTION = {
   _id: 'hero-copy-on-top-art',
   props: {
     eyebrow: 'Workloads',
-    title: 'Put your application on the edge in seconds',
+    title: 'Put your application close to users in seconds',
     description:
-      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion location — no servers to size, no regions to pick.',
+      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
     primaryAction: {
       label: 'Start free',
       href: 'https://console.azion.com/signup'
@@ -614,7 +633,7 @@ export const COPY_ON_TOP_ART_SECTION = {
           {
             eyebrow: 'Firewall',
             icon: 'ai ai-edge-firewall',
-            title: 'edge-rules',
+            title: 'shop-rules',
             label: 'Active',
             severity: 'success'
           }

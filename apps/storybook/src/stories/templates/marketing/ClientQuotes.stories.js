@@ -106,7 +106,7 @@ ${each(quotes, (quote, index) => quoteLiteral(quote, index, quotes), 4)}
     >
       <template #actions>
         <Button
-          label="See success stories"
+          label="See customer stories"
           kind="secondary"
           size="large"
           href="/success-cases"
@@ -172,7 +172,7 @@ export const SITE_SECTION = {
       }
     ],
     action: {
-      label: 'See success stories',
+      label: 'See customer stories',
       href: '/success-cases'
     }
   }

@@ -106,9 +106,9 @@ const complianceBadges = (certifications) =>
     align="center"
     texture="none"
     size="large"
-    eyebrow="Scale with Confidence"
-    title="Security and Compliance for High-Stakes Digital Experiences"
-    description="We're committed to making sure our customers and global partners can meet a wide range of compliance requirements."
+    eyebrow="Compliance"
+    title="Meet Your Compliance Requirements"
+    description="Azion's certifications help customers and global partners meet a wide range of compliance requirements."
   >
     <template #media>
       <CardGrid
@@ -157,10 +157,10 @@ export const Default = {
 export const SITE_SECTION = {
   _id: 'compliance-badges',
   props: {
-    eyebrow: 'Scale with Confidence',
-    title: 'Security and Compliance for High-Stakes Digital Experiences',
+    eyebrow: 'Compliance',
+    title: 'Meet Your Compliance Requirements',
     description: '',
-    ariaLabel: 'Security and Compliance for High-Stakes Digital Experiences',
+    ariaLabel: 'Compliance certifications',
     certifications: [
       {
         label: 'SOC 2 Type 2 & 3',

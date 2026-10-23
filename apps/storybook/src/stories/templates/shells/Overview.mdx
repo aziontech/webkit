@@ -1,0 +1,51 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Templates/Shells/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The three application shells Azion ships on webkit, registered as templates: the chrome around a page, composed from the layout components the way each product composes it.'
+      }
+    }
+  }}
+/>
+
+# Shells
+
+A shell is the chrome around a page: the bar at the top, the navigation beside the content,
+the region the content scrolls in, and whatever closes the page. Azion runs three products on
+webkit and each has one shell. The three share their parts (`GlobalHeader`, `Sidebar`, `Menu`,
+`ScrollArea`, `Footer`) and differ in how they are placed, so a reader who has used one already
+knows the other two.
+
+- [DocsShell](?path=/docs/templates-shells-docsshell--documentation) — the documentation: a `content` header, a resizable rail of the current product's pages, the reading column scrolling on its own, the outline beside it, and the footer at the end of the article.
+- [SiteShell](?path=/docs/templates-shells-siteshell--documentation) — the marketing site: a `site` header, a hero opening the page, framed sections stacked in one column, and the footer closing that frame.
+- [PlatformShell](?path=/docs/templates-platformshell--documentation) — the console: a `content` header, the persistent navigation sidebar, a page heading with actions, tabs and a scrolling panel. No footer.
+
+Each shell opens on one of the bars documented on [Templates › Headers](?path=/docs/templates-headers-overview--docs).
+
+## Where the footer goes
+
+The `Footer` component has two placements, chosen with `kind`, and the shell decides which one:
+
+- **Docs: `content`, inside the reading column's scroller.** The bands run full bleed across the zone between the rail and the outline and open on the page boundary, exactly as the docs top bar does. The footer sits inside the `ScrollArea`, not under it: a footer outside that region would be pinned at the bottom of a viewport-height shell, visible over every article and at the end of none.
+- **Site: `site`, closing the page.** The bands are capped at the site measure, the side rules, the hatched gutters and the corner marks are drawn around them, and a full-bleed bottom rule finishes the frame the hero opened. The band above must not draw a bottom rule of its own.
+- **Console: none.** The console shell ends on its scroll region. A page that needs a persistent action row uses a sticky bar inside the page, not a footer.
+
+## One footer, every zone
+
+The docs reading column is the narrowest zone a shell gives the footer: 724px at `lg`, between a
+300px rail and the window, and 853px at a 1409px window once the outline appears. Two decisions keep
+the social row on one line there:
+
+- The social `IconButton`s are `size="small"`. A 28px box holds the brand mark and seven icons in 356px; at `large` the same row is 440px and wraps in every zone narrower than the window.
+- Row two of the footer sizes its two bands by content, not in half. Each band takes what it holds and the two share the slack, so the status pair never wraps while the social band still has room.
+
+The brand mark leads the social row from `lg` and moves to the footer's signature band below it. The
+switch asks a hidden probe element whether the `lg:` utility is showing it, so the consumer never writes
+`1024px` by hand and the sample, the stories and the theme agree on where `lg` is.

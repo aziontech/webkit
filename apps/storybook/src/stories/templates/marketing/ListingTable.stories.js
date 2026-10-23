@@ -172,7 +172,7 @@ ${indent(TABLE, 2)}
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ListingTable',
+  title: 'Templates/Marketing/Listings/ListingTable',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

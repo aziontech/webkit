@@ -1,8 +1,18 @@
 [
   {
+    "name": "browser-frame",
+    "path": "src/components/content/browser-frame/browser-frame.vue",
+    "limit": "11.5 KB"
+  },
+  {
     "name": "button",
     "path": "src/components/actions/button/button.vue",
     "limit": "2.5 KB"
+  },
+  {
+    "name": "diagram",
+    "path": "src/components/marketing/diagram/diagram.vue",
+    "limit": "10 KB"
   },
   {
     "name": "input-text",
