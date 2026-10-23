@@ -11726,7 +11726,21 @@
           "type": "MediaTabsItem[]",
           "default": "[]",
           "required": "false",
-          "doc": "The tabs, in order, at most three; each item is `{ title, description, src, alt }`. Items past the third are not rendered."
+          "doc": "The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered."
+        },
+        {
+          "name": "position",
+          "type": "'left' | 'right' | 'top' | 'bottom'",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down."
         },
         {
           "name": "selectOn",
@@ -11755,13 +11769,6 @@
           "default": "true",
           "required": "false",
           "doc": "Advances a hairline along the active row's bottom edge while the timer runs."
-        },
-        {
-          "name": "size",
-          "type": "'small' | 'medium' | 'large'",
-          "default": "'medium'",
-          "required": "false",
-          "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
         },
         {
           "name": "texture",
@@ -11799,7 +11806,7 @@
           "notes": "The tab's media; replaces the image built from `item.src`."
         }
       ],
-      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in.",
+      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.",
       "useWhen": [
         "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
         "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
@@ -11821,8 +11828,8 @@
         "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
         "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
         "Use scenes of the same shape. The frame does not resize between tabs.",
-        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.",
-        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
+        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion."
       ]
     },
     "embed": {
