@@ -2002,6 +2002,13 @@
           "default": "'_self'",
           "required": "false",
           "doc": "Link target when `href` is set."
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "default": "'button'",
+          "required": "false",
+          "doc": "Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set."
         }
       ],
       "events": [
@@ -2794,6 +2801,11 @@
           "notes": "Replaces the default header layout (title + header-action)."
         },
         {
+          "name": "header-action",
+          "scope": "—",
+          "notes": "Actions aligned to the end of the default header; visible on header hover."
+        },
+        {
           "name": "content",
           "scope": "—",
           "notes": "Main card body."
@@ -3554,10 +3566,10 @@
     },
     "code-block": {
       "import": "@aziontech/webkit/code-block",
-      "target": "./src/components/data/code-block/code-block.vue",
+      "target": "./src/components/code/code-block/code-block.vue",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/code-block",
-      "category": "data",
+      "category": "code",
       "structure": "monolithic",
       "status": "implemented",
       "props": [
@@ -3597,6 +3609,13 @@
           "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
         },
         {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
+        },
+        {
           "name": "animateLines",
           "type": "boolean",
           "default": "false",
@@ -3621,6 +3640,13 @@
           "name": "copy",
           "payload": "string",
           "notes": "Fires after the active tab code is copied to the clipboard."
+        }
+      ],
+      "slots": [
+        {
+          "name": "tab-icon",
+          "scope": "{ tab: CodeBlockTab }",
+          "notes": "Leading mark before a tab's label in the tab strip; nothing renders when it is not filled."
         }
       ],
       "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
@@ -9871,6 +9897,29 @@
       "category": "layout",
       "structure": "monolithic",
       "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal' | 'both'",
+          "default": "'vertical'",
+          "required": "false",
+          "doc": "Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name when the region is not labelled by visible text; omit when content provides context."
+        },
+        {
+          "name": "fade",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Fades the edges that still have content to scroll to, sized by the distance left on each side."
+        }
+      ],
       "slots": [
         {
           "name": "default",
@@ -9878,7 +9927,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Structural layout primitive for scrolling or regions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/layout/scroll-area/`."
+      "purpose": "Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it."
     },
     "global-header": {
       "import": "@aziontech/webkit/global-header",
@@ -11981,7 +12030,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
@@ -12050,7 +12099,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
@@ -13459,6 +13508,12 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-reversed.svg"
     },
+    "assets/ai-gateway.svg": {
+      "import": "@aziontech/webkit/assets/ai-gateway.svg",
+      "target": "./src/assets/illustrations/ai-gateway.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ai-gateway.svg"
+    },
     "assets/akamai-extended-color.svg": {
       "import": "@aziontech/webkit/assets/akamai-extended-color.svg",
       "target": "./src/assets/logos/competitors/akamai-extended-color.svg",
@@ -13620,6 +13675,12 @@
       "target": "./src/assets/illustrations/azion-highlight.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/azion-highlight.svg"
+    },
+    "assets/azion-rest-api.svg": {
+      "import": "@aziontech/webkit/assets/azion-rest-api.svg",
+      "target": "./src/assets/illustrations/azion-rest-api.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azion-rest-api.svg"
     },
     "assets/azure-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/azure-symbol-mono.svg",
@@ -13926,6 +13987,12 @@
       "target": "./src/assets/logos/clients/digiplus-extended-reversed.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/digiplus-extended-reversed.svg"
+    },
+    "assets/distributed-apis-tile.svg": {
+      "import": "@aziontech/webkit/assets/distributed-apis-tile.svg",
+      "target": "./src/assets/illustrations/distributed-apis-tile.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/distributed-apis-tile.svg"
     },
     "assets/docusaurus-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg",
@@ -15072,6 +15139,18 @@
       "target": "./src/assets/logos/frameworks/react-symbol-mono.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/react-symbol-mono.svg"
+    },
+    "assets/real-time-metrics-error-rate.svg": {
+      "import": "@aziontech/webkit/assets/real-time-metrics-error-rate.svg",
+      "target": "./src/assets/illustrations/real-time-metrics-error-rate.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/real-time-metrics-error-rate.svg"
+    },
+    "assets/real-time-metrics-status-codes.svg": {
+      "import": "@aziontech/webkit/assets/real-time-metrics-status-codes.svg",
+      "target": "./src/assets/illustrations/real-time-metrics-status-codes.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/real-time-metrics-status-codes.svg"
     },
     "assets/redis-symbol-color.svg": {
       "import": "@aziontech/webkit/assets/redis-symbol-color.svg",

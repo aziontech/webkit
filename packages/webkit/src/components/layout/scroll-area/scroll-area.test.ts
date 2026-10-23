@@ -212,9 +212,73 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
     expect(viewport.scrollLeft).toBe(40)
   })
 
+  // ---- Fade ---------------------------------------------------------------------------
+  const fadeVar = (el: globalThis.HTMLElement, edge: string) =>
+    el.style.getPropertyValue(`--scroll-area-fade-${edge}`)
+
+  const nextFrame = () => new Promise((resolve) => globalThis.requestAnimationFrame(resolve))
+
+  it('without fade, an overflowing viewport carries no data-fade', async () => {
+    const view = render(host())
+    await nextFrame()
+    expect(area(view).hasAttribute('data-fade')).toBe(false)
+  })
+
+  it('fade marks only the edge that still has content: bottom at the top, top at the end', async () => {
+    const view = render(host({ fade: true }))
+    const viewport = area(view)
+    await vi.waitFor(() => expect(viewport.hasAttribute('data-fade')).toBe(true))
+    expect(fadeVar(viewport, 'top')).toBe('0px')
+    expect(Number.parseFloat(fadeVar(viewport, 'bottom'))).toBeGreaterThan(0)
+
+    await fireEvent.keyDown(viewport, { key: 'End' })
+    await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe('0px'))
+    expect(Number.parseFloat(fadeVar(viewport, 'top'))).toBeGreaterThan(0)
+  })
+
+  it('fade ramps with the distance left to scroll, capped at a sixth of the viewport', async () => {
+    const view = render(host({ fade: true }))
+    const viewport = area(view)
+    const maxScroll = viewport.scrollHeight - viewport.clientHeight
+    const cap = Math.round(viewport.clientHeight / 6)
+
+    await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe(`${cap}px`))
+
+    viewport.scrollTop = maxScroll - 5
+    await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe('5px'))
+    expect(fadeVar(viewport, 'top')).toBe(`${cap}px`)
+  })
+
+  it('horizontal fade tracks the inline edges only', async () => {
+    const view = render(host({ fade: true, orientation: 'horizontal' }))
+    const viewport = area(view)
+    await vi.waitFor(() => expect(viewport.hasAttribute('data-fade')).toBe(true))
+    expect(Number.parseFloat(fadeVar(viewport, 'right'))).toBeGreaterThan(0)
+    expect(fadeVar(viewport, 'left')).toBe('0px')
+    expect(fadeVar(viewport, 'bottom')).toBe('0px')
+  })
+
+  it('fade stays off when the content fits the viewport', async () => {
+    const view = render(
+      defineComponent({
+        components: { ScrollArea },
+        template: `<ScrollArea class="scroll-fixture" fade><p>Short</p></ScrollArea>`
+      })
+    )
+    await nextFrame()
+    await nextFrame()
+    expect(area(view).hasAttribute('data-fade')).toBe(false)
+  })
+
   // ---- Accessibility -------------------------------------------------------------------
   it('has no axe violations with an accessible name on the scroll region', async () => {
     const view = render(host({ ariaLabel: 'Deployment log' }))
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('has no axe violations while fading', async () => {
+    const view = render(host({ ariaLabel: 'Deployment log', fade: true }))
+    await vi.waitFor(() => expect(area(view).hasAttribute('data-fade')).toBe(true))
     await expectNoA11yViolations(view.container)
   })
 })

@@ -4,16 +4,16 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 67180ad6ef9ce7aa6490e94fb3b1b691df27d7ad23cb8daf77302475f0009793
+checksum: 4923a972c9feff5ec6bc65e9d8623b90b50df9207dea9ed4d1c913afbbec5e64
 created: 2026-09-24
-last_updated: 2026-09-26
+last_updated: 2026-10-15
 ---
 
 # Column Navigation — Component Spec
 
 ## Purpose
 
-A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.
+A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.
 
 ## When to use
 
@@ -89,7 +89,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 ## Sub-components
 
 - `column-navigation-column/column-navigation-column.vue` — one column of the directory: its overline heading over a rule, then the rows it holds, as a list that heading names.
-- `column-navigation-item/column-navigation-item.vue` — one destination row: a registration-framed glyph, the destination's name, and one line of what it is.
+- `column-navigation-item/column-navigation-item.vue` — one destination row: a glyph, the destination's name, and one line of what it is.
 
 Column props: `title` (`string`, default `''`) — the column's overline heading, which also names its list for a screen reader. Column slot: `default` — the column's rows, composed as `ColumnNavigation.Item` elements.
 
@@ -139,21 +139,21 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | column heading rule                               | `var(--border-default)`    |
 | typography (column heading)                       | `.text-overline-md`        |
 | column heading ink                                | `var(--primary)`           |
-| typography (row title)                            | `.text-label-sm`           |
+| typography (row title)                            | `.text-label-md`           |
 | row title ink                                     | `var(--text-default)`      |
-| typography (row description)                      | `.text-body-xs`            |
+| typography (row description)                      | `.text-body-sm`            |
 | row description ink                               | `var(--text-muted)`        |
-| typography (row glyph)                            | `.text-body-md`            |
-| glyph frame hairline                              | `var(--border-default)`    |
-| glyph frame fill                                  | `var(--bg-surface-raised)` |
+| typography (row glyph)                            | `text-(length:--size-5)`   |
+| row glyph box                                     | `var(--size-5)`            |
 | row hover plate                                   | `var(--bg-hover)`          |
 | row hover hairline                                | `var(--border-default)`    |
 | row hover glyph ink                               | `var(--primary)`           |
 | shape (row hover plate)                           | `var(--shape-card)`        |
-| spacing (column inset, row rhythm)                | `var(--spacing-lg)`        |
-| spacing (glyph to text)                           | `var(--spacing-md)`        |
-| spacing (row plate padding)                       | `var(--spacing-xs)`        |
-| spacing (glyph frame inset, title to description) | `var(--spacing-xxs)`       |
+| spacing (column inset)                            | `var(--spacing-lg)`        |
+| spacing (glyph to text)                           | `calc(var(--spacing-md) + var(--spacing-xxs))` |
+| spacing (row plate padding, inline)               | `var(--spacing-md)`        |
+| spacing (row plate padding, block)                | `var(--spacing-sm)`        |
+| spacing (title to description)                    | `calc(var(--spacing-xxs) / 2)` |
 | ring                                              | `var(--ring-color)`        |
 
 ## Theme gaps

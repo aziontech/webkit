@@ -77,7 +77,7 @@
     </div>
     <p
       v-if="hasDescription"
-      class="m-0 text-pretty text-body-sm text-(--text-muted)"
+      class="m-0 text-pretty text-body-md text-(--text-muted)"
     >
       <slot>{{ description }}</slot>
     </p>
