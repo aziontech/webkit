@@ -1,81 +1,16 @@
 import ProductWidget from '@aziontech/webkit/product-widget'
 import { ref } from 'vue'
 
+import {
+  productWidgetFragments,
+  productWidgetScreens
+} from '../../../../../../../packages/webkit/src/components/content/product-widget/registry'
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import ProductWidget from '@aziontech/webkit/product-widget'"
 
-const FRAMED = [
-  'application-version',
-  'workload-deploy-logs',
-  'workload-deployments',
-  'workload-domains',
-  'workload-overview',
-  'workload-rollout-rows',
-  'workload-topology-chain',
-  'workload-topology',
-  'workloads-list'
-]
-
-const FRAGMENTS = [
-  'ai-inference-function',
-  'ai-inference-model',
-  'ai-inference-template',
-  'application-accelerator-cookie',
-  'application-accelerator-method',
-  'application-accelerator-query-string',
-  'application-cache',
-  'application-function',
-  'application-rule',
-  'applications-create-method',
-  'applications-device-group',
-  'applications-rule-phases',
-  'bot-manager-metrics',
-  'bot-manager-rule',
-  'bot-manager-traffic',
-  'data-stream-connector',
-  'data-stream-sampling',
-  'data-stream-source',
-  'ddos-firewall-modules',
-  'ddos-http-events',
-  'ddos-requests-metric',
-  'edge-dns-dnssec',
-  'edge-dns-nameserver',
-  'edge-dns-record',
-  'firewall-function',
-  'firewall-modules',
-  'firewall-rules-order',
-  'function-code',
-  'image-processor-events',
-  'image-processor-module',
-  'image-processor-rule',
-  'kv-store-function',
-  'kv-store-key',
-  'kv-store-security-list',
-  'load-balancer-address',
-  'load-balancer-method',
-  'load-balancer-origins',
-  'network-shield-ip-list',
-  'network-shield-lists',
-  'network-shield-rule',
-  'object-storage-access',
-  'object-storage-browser',
-  'object-storage-buckets',
-  'real-time-events-filter',
-  'real-time-events-log',
-  'real-time-events-volume',
-  'real-time-metrics-dashboard',
-  'real-time-metrics-filter',
-  'real-time-metrics-panel',
-  'sql-database-query',
-  'sql-database-row',
-  'sql-database-table',
-  'waf-allowed-rule',
-  'waf-firewall-rule',
-  'waf-threat',
-  'workload-deploy',
-  'workload-domain'
-]
+const FRAMED = Object.keys(productWidgetScreens).sort()
+const FRAGMENTS = Object.keys(productWidgetFragments).sort()
 
 const NAMES = [...FRAMED, ...FRAGMENTS].sort()
 
@@ -183,7 +118,8 @@ const meta = {
     tab: {
       control: 'select',
       options: TABS,
-      description: 'Tab a tabbed widget plays; unset plays its first tab.',
+      description:
+        'Tab a tabbed widget plays (workload-overview, application-version); other widgets ignore it, and unset plays the first tab.',
       table: {
         category: 'props',
         type: { summary: 'ProductWidgetTab' },
