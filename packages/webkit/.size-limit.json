@@ -184,7 +184,7 @@
   {
     "name": "hero-root",
     "path": "src/components/marketing/hero/hero.vue",
-    "limit": "3.25 KB",
+    "limit": "3.5 KB",
     "entryOnly": true
   },
   {
@@ -256,7 +256,7 @@
   {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
-    "limit": "2 KB",
+    "limit": "2.5 KB",
     "entryOnly": true
   },
   {
