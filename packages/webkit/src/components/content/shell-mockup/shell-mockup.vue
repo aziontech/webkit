@@ -116,7 +116,7 @@
         { key: 'waf-rules', icon: 'ai ai-waf-rules', label: 'WAF Rules' },
         {
           key: 'certificate-manager',
-          icon: 'ai ai-digital-certificates',
+          icon: 'ai ai-certificate-manager',
           label: 'Certificate Manager'
         }
       ]
@@ -244,7 +244,7 @@
     :data-interactive="interactive || null"
     :data-kind="kind"
     :data-fade="fade"
-    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:border data-[kind=window]:border-(--border-default)"
+    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[kind=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[kind=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[kind=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]"
   >
     <div
       :data-kind="kind"
@@ -364,7 +364,7 @@
               >
                 <i
                   :class="entry.icon"
-                  class="shrink-0 text-body-md text-(--text-muted)"
+                  class="shrink-0 text-body-md leading-none text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate">{{ entry.label }}</span>

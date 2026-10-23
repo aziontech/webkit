@@ -4,9 +4,9 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 55eed955e04e2592a7bf016db5a8dc8c7a95aa4297ca5ae1fad15a0882ee24b9
+checksum: afd0ec38b1e3cf2365964d3d7e33a51b224c6ebc49f314f0b69427bdddda9168
 created: 2026-10-21
-last_updated: 2026-10-21
+last_updated: 2026-10-23
 ---
 
 # ShellMockup — Component Spec
@@ -134,7 +134,7 @@ _No events — the mockup is a picture; nothing in it reports activation._
 
 ## States
 
-- `data-kind` (`window` \| `bare`) on the root and the frame: `window` paints the canvas fill, a hairline edge and the card shape, and clips the drawing; `bare` paints nothing and lets parts overflow sideways while clipping vertically.
+- `data-kind` (`window` \| `bare`) on the root and the frame: `window` paints the canvas fill, a hairline rim lit from the top-left and bottom-right corners, and the card shape, and clips the drawing; `bare` paints nothing and lets parts overflow sideways while clipping vertically.
 - `data-fade` mirrors `fade` on the root and the fade layer; `none` renders no fade layer.
 - `data-interactive` is present while `interactive` is set; otherwise the root is `inert` and `aria-hidden`, ignores the pointer and blocks text selection.
 - Shell matrix: `shell="console"` without `rail` draws the slim bar (brand, title, avatar); with `rail` it draws the side rail (from `md` up) and a top bar with breadcrumbs, a search field, Create, Agent and the avatar; `shell="legacy"` draws the previous console's top bar (menu, brand, Create, Copilot, Feedback, help, account) and swaps the legacy typography weights and line heights onto the frame. `chrome` off removes the bars; the rail stays.
@@ -156,6 +156,7 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 | window shape | `var(--shape-card)` |
 | window + frame fill | `var(--bg-canvas)` |
 | window edge, bar dividers, rail divider, search edge | `var(--border-default)` |
+| window edge width | `var(--border-width-default)` |
 | legacy bar surface | `var(--bg-surface-raised)` |
 | search field surface | `var(--bg-surface)` |
 | rail active entry | `var(--bg-selected)` |
@@ -175,7 +176,7 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| — (no Figma source; ported from the sample's mockup): the window's rim light, a lit-from-the-corners edge | `var(--border-default)` hairline — the rim's resting color — because the `--illustration-rim*` tokens exist only on the sample branch | `TODO: swap to the rim layers once the illustration theme foundation lands on main` |
+| — (no Figma source; ported from the sample's mockup): the window's rim light, a lit-from-the-corners edge | the `--illustration-rim*` tokens with a fallback that draws the same 135° ramp from `var(--border-default)` at `var(--border-width-default)`, because the illustration theme foundation is not on main yet | `TODO: drop the fallbacks once the illustration theme foundation lands on main` |
 
 ## Accessibility (WCAG 2.1 AA)
 
