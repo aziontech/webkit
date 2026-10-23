@@ -1,3 +1,4 @@
+import { useEventListener } from '@vueuse/core'
 import {
   type MaybeRefOrGetter,
   nextTick,
@@ -35,6 +36,7 @@ export function useMockupCursor(
 ): UseMockupCursorReturn {
   const position = ref<MockupCursorPosition>({ x: 0, y: 0 })
   const timers = new Set<ReturnType<typeof globalThis.setTimeout>>()
+  let disposed = false
 
   const locate = () => {
     const root = container.value
@@ -52,6 +54,7 @@ export function useMockupCursor(
 
   const settle = async (delays = SETTLE_DELAYS) => {
     await nextTick()
+    if (disposed) return
     for (const delay of delays) {
       const timer = globalThis.setTimeout(() => {
         timers.delete(timer)
@@ -65,18 +68,19 @@ export function useMockupCursor(
     if (event.target === scroller?.value && event.propertyName === 'translate') locate()
   }
 
+  useEventListener(() => scroller?.value, 'transitionend', onScrolled)
+
   watch(
     () => toValue(target),
     () => settle()
   )
 
   onMounted(() => {
-    scroller?.value?.addEventListener('transitionend', onScrolled)
     settle(ENTRANCE_DELAYS)
   })
 
   onScopeDispose(() => {
-    scroller?.value?.removeEventListener('transitionend', onScrolled)
+    disposed = true
     for (const timer of timers) globalThis.clearTimeout(timer)
     timers.clear()
   })
