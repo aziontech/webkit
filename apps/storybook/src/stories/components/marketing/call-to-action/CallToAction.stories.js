@@ -266,9 +266,9 @@ const PRIMARY_MARKUP = `<CallToAction
     <TextureMaterial kind="pixelate" size="small" fade="bottom" />
   </template>
   <template #actions>
-    <Button label="Start free" kind="secondary" size="large" />
+    <Button label="Start for free" kind="secondary" size="large" />
     <Button
-      label="Read the docs"
+      label="Docs"
       kind="outlined"
       size="large"
       icon="pi pi-chevron-right"

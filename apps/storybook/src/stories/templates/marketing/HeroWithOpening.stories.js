@@ -114,7 +114,7 @@ const THREE = {
 
 const ACTIONS = `<template #actions>
   <Button
-    label="Start free"
+    label="Start for free"
     kind="secondary"
     size="large"
     href="/signup"
@@ -148,6 +148,7 @@ const heroWithOpening = (page) => `<Hero
     centered
     max-width="${TITLE_WIDTH[page.titleLength]}"
     eyebrow="${page.eyebrow}"
+    eyebrow-prefix="//"
     title="${page.title}"
     description="${page.description}"
   >
@@ -172,7 +173,7 @@ const THREE_TEMPLATE = heroWithOpening(THREE)
 
 const ACTION_PROPS = {
   primaryAction: {
-    label: 'Start free',
+    label: 'Start for free',
     href: 'https://console.azion.com/signup/'
   },
   secondaryAction: {
