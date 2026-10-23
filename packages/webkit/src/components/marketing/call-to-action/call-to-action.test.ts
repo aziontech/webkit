@@ -262,4 +262,67 @@ describe('CallToAction', () => {
 
     await expectNoA11yViolations(container)
   })
+
+  describe('primary', () => {
+    it('carries the primary register on the root', () => {
+      const { getByTestId } = render(CallToAction, { props: { title: TITLE, kind: 'primary' } })
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'primary')
+    })
+
+    it('renders the title as the band heading and the description under it', () => {
+      const { getByRole, getByText } = render(CallToAction, {
+        props: { title: TITLE, description: DESCRIPTION, kind: 'primary' }
+      })
+
+      expect(getByRole('heading', { level: 2 })).toHaveTextContent(TITLE)
+      expect(getByText(DESCRIPTION)).toBeInTheDocument()
+    })
+
+    it('does not draw the eyebrow', () => {
+      const { queryByText } = render(CallToAction, {
+        props: { title: TITLE, eyebrow: EYEBROW, kind: 'primary' }
+      })
+
+      expect(queryByText(EYEBROW)).toBeNull()
+    })
+
+    it('renders the controls from the actions slot', () => {
+      const { getByRole } = render(CallToAction, {
+        props: { title: TITLE, kind: 'primary' },
+        slots: { actions: '<button type="button">Start free</button>' }
+      })
+
+      expect(getByRole('button', { name: 'Start free' })).toBeInTheDocument()
+    })
+
+    it('renders the background and bottom slots', () => {
+      const { getByText } = render(CallToAction, {
+        props: { title: TITLE, kind: 'primary' },
+        slots: { background: '<i>texture</i>', bottom: '<p>floor strip</p>' }
+      })
+
+      expect(getByText('texture')).toBeInTheDocument()
+      expect(getByText('floor strip')).toBeInTheDocument()
+    })
+
+    it('ignores the background and bottom slots outside the primary register', () => {
+      const { queryByText } = render(CallToAction, {
+        props: { title: TITLE },
+        slots: { background: '<i>texture</i>', bottom: '<p>floor strip</p>' }
+      })
+
+      expect(queryByText('texture')).toBeNull()
+      expect(queryByText('floor strip')).toBeNull()
+    })
+
+    it('has no a11y violations', async () => {
+      const { container } = render(CallToAction, {
+        props: { title: TITLE, description: DESCRIPTION, kind: 'primary' },
+        slots: { actions: '<button type="button">Start free</button>' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+  })
 })
