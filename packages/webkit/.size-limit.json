@@ -265,6 +265,12 @@
     "entryOnly": true
   },
   {
+    "name": "product-widget",
+    "path": "src/components/content/product-widget/product-widget.vue",
+    "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
     "name": "shell-mockup",
     "path": "src/components/content/shell-mockup/index.ts",
     "limit": "30 KB"
