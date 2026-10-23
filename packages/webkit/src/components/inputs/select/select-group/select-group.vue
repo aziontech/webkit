@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
+
+  import { selectContextKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectGroup',
@@ -19,13 +21,25 @@
     default(): unknown
   }>()
 
+  const ctx = inject(selectContextKey, null)
+
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-group')
 </script>
 
 <template>
+  <optgroup
+    v-if="ctx?.native.value && label"
+    v-bind="$attrs"
+    :label="label"
+    :data-testid="testId"
+  >
+    <slot />
+  </optgroup>
+  <slot v-else-if="ctx?.native.value" />
   <div
+    v-else
     v-bind="$attrs"
     role="group"
     :aria-label="label"

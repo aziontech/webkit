@@ -208,7 +208,7 @@ describe('FieldPhoneNumber', () => {
 
       const content = getContent()
       expect(content).not.toBeNull()
-      expect(content?.getAttribute('role')).toBe('listbox')
+      expect(content?.querySelector('[role="listbox"]')).not.toBeNull()
 
       const options = getOptions()
       expect(options).toHaveLength(defaultCountries.length)

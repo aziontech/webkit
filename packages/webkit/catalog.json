@@ -9245,6 +9245,41 @@
           "default": "undefined",
           "required": "false",
           "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the field when no visible label is associated with it; applied to the trigger (or the native select) and to the listbox."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Id of the trigger, or of the native select; target it with a `<label for>`. A `useId()` id is used when empty. An `id` passed on `Select.Trigger` wins."
+        },
+        {
+          "name": "native",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders the platform `<select>` + `<option>`/`<optgroup>`: system picker on mobile, form submission, `required` validation, autofill. `#search`, `#footer`, option `icon`/`#left`/`#tag` do not render."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Form field name. Native mode submits the select; the custom mode submits one hidden input per selected value."
+        },
+        {
+          "name": "autocomplete",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Autofill hint forwarded to the native select."
         }
       ],
       "events": [
@@ -9266,7 +9301,7 @@
           "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
         }
       ],
-      "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel)."
+      "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is a panel Teleported to `body`, anchored to the trigger with `position: fixed` by the shared `usePlacement` composable — no `@floating-ui` runtime. With `native`, the same compound renders the platform `<select>` instead (system picker, form submission, autofill). Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel)."
     },
     "select-root": {
       "import": "@aziontech/webkit/select-root",
@@ -9354,6 +9389,41 @@
           "default": "undefined",
           "required": "false",
           "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the field when no visible label is associated with it; applied to the trigger (or the native select) and to the listbox."
+        },
+        {
+          "name": "inputId",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Id of the trigger, or of the native select; target it with a `<label for>`. A `useId()` id is used when empty. An `id` passed on `Select.Trigger` wins."
+        },
+        {
+          "name": "native",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders the platform `<select>` + `<option>`/`<optgroup>`: system picker on mobile, form submission, `required` validation, autofill. `#search`, `#footer`, option `icon`/`#left`/`#tag` do not render."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Form field name. Native mode submits the select; the custom mode submits one hidden input per selected value."
+        },
+        {
+          "name": "autocomplete",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Autofill hint forwarded to the native select."
         }
       ],
       "events": [
@@ -9375,7 +9445,7 @@
           "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
         }
       ],
-      "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel)."
+      "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is a panel Teleported to `body`, anchored to the trigger with `position: fixed` by the shared `usePlacement` composable — no `@floating-ui` runtime. With `native`, the same compound renders the platform `<select>` instead (system picker, form submission, autofill). Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel)."
     },
     "select-trigger": {
       "import": "@aziontech/webkit/select-trigger",

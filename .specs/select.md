@@ -7,16 +7,16 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: cf42bdc6fefb728173a25c37d3d2b75911c62474dcba8ff496c5629e85ed3d5d
+checksum: d8aa1f285b4062a3bbb0d9c8503bebc4dd16a420c6e049c96eae3c53d8b13b33
 created: 2026-06-15
-last_updated: 2026-08-12
+last_updated: 2026-10-23
 ---
 
 # Select — Component Spec
 
 ## Purpose
 
-Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
+Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is a panel Teleported to `body`, anchored to the trigger with `position: fixed` by the shared `usePlacement` composable — no `@floating-ui` runtime. With `native`, the same compound renders the platform `<select>` instead (system picker, form submission, autofill). Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
 
 Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
@@ -45,12 +45,27 @@ const value = defineModel({ default: '' })
 </template>
 ```
 
+The field needs a name: either `ariaLabel="…"` on the root, or a `<label for>` pointing at `inputId`. Native mode reuses the same parts:
+
+```vue
+<template>
+  <label for="fruit">Fruit</label>
+  <Select v-model="value" native input-id="fruit" name="fruit" required placeholder="Select a fruit">
+    <Select.Trigger />
+    <Select.Content>
+      <Select.Option value="lemon">Lemon</Select.Option>
+      <Select.Option value="orange">Orange</Select.Option>
+    </Select.Content>
+  </Select>
+</template>
+```
+
 ## Sub-components
 
-- `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals.
-- `select-content/select-content.vue` — Popover panel rendered via the native Popover API + CSS anchor positioning; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
-- `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm Dropdown puts around its group divider and CommandMenu puts between two bare groups. No hairline: unlike Dropdown, this panel separates groups by space alone.
-- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, *every* option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
+- `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals. Renders nothing in `native` mode.
+- `select-content/select-content.vue` — Panel Teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots, which render **outside** the `role="listbox"` element, and scrolls its option list (`ScrollArea` wrapping the listbox) when content exceeds `max-h-60`. In `native` mode it renders only its default slot, as the select's options.
+- `select-group/select-group.vue` — Section wrapper for a labelled group of options (an `<optgroup>` in `native` mode); renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm Dropdown puts around its group divider and CommandMenu puts between two bare groups. No hairline: unlike Dropdown, this panel separates groups by space alone.
+- `select-option/select-option.vue` — Selectable option row (an `<option>` in `native` mode, where only the default slot renders) with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, *every* option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 
 ## Props
 
@@ -67,6 +82,11 @@ const value = defineModel({ default: '' })
 | `required` | `boolean` | `false` | false | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
 | `displayValue` | `(value: unknown) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the field when no visible label is associated with it; applied to the trigger (or the native select) and to the listbox. |
+| `inputId` | `string` | `''` | false | Id of the trigger, or of the native select; target it with a `<label for>`. A `useId()` id is used when empty. An `id` passed on `Select.Trigger` wins. |
+| `native` | `boolean` | `false` | false | Renders the platform `<select>` + `<option>`/`<optgroup>`: system picker on mobile, form submission, `required` validation, autofill. `#search`, `#footer`, option `icon`/`#left`/`#tag` do not render. |
+| `name` | `string` | `''` | false | Form field name. Native mode submits the select; the custom mode submits one hidden input per selected value. |
+| `autocomplete` | `string` | `''` | false | Autofill hint forwarded to the native select. |
 
 ## Events
 
@@ -89,6 +109,8 @@ const value = defineModel({ default: '' })
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-mode` on the root: `single` | `multiple`
 - `data-selected` on `<SelectOption>` when the option's value is part of the current selection
+- `data-highlighted` on `<SelectOption>` while it is the keyboard-active option (`aria-activedescendant`) and the trigger or listbox holds focus
+- `data-native` on the root in `native` mode
 
 ## Motion & Animations
 
@@ -132,16 +154,30 @@ const value = defineModel({ default: '' })
 |---|---|---|
 | _none_ | — | — |
 
-## Accessibility (WCAG 2.1 AA)
+## Accessibility (WCAG 2.2 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
-- Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
-- Keyboard map (open panel): `ArrowDown`/`ArrowUp` move active option; `Home`/`End` jump to first/last; `Enter`/`Space` select (single) or toggle (multi); `Escape` closes; `Tab` closes and moves focus to the next form control.
-- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable` mirroring `multiple`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
-- `aria-invalid` and `aria-required` on the trigger mirror the matching props.
+**Pattern decision (ENG-47996).** Single mode follows the ARIA APG **select-only combobox**; multiple mode follows the APG **listbox** (a combobox holds a single value, so a multi-value field opens a multiselectable listbox from a plain button). The previous anatomy mixed both: DOM focus moved into the options while `aria-expanded` / `aria-controls` stayed on the trigger, the `ScrollArea` wrapper and the `#search` / `#footer` slots sat inside `role="listbox"` (axe `aria-required-children`), the trigger had no name unless the consumer passed one (`button-name`, 4.1.2), focus fell to `body` on close (2.4.3), and there was no typeahead. `native` is the zero-cost baseline: the platform control carries all of it.
+
+| WCAG 2.2 | How it is met |
+|---|---|
+| 1.3.1 Info and Relationships | `role="listbox"` owns only `option` / `group` children; `aria-controls`, `aria-activedescendant`, `aria-selected`, `aria-multiselectable` and `aria-required` expose the structure and state. |
+| 2.1.1 Keyboard | Every action has a key (maps below), typeahead included; the panel is never pointer-only. |
+| 2.4.3 Focus Order | Single mode keeps DOM focus on the trigger; multiple mode moves it into the listbox on open; Escape, Tab and a pointer pick return it to the trigger. |
+| 2.4.7 Focus Visible | `focus-visible` ring on the trigger; the active option carries `data-highlighted` (hover background + inset ring). |
+| 4.1.2 Name, Role, Value | Name from `ariaLabel` or a `<label for>` targeting `inputId`; the listbox is named the same way; value is the trigger's text. |
+
+- ARIA (single): trigger is `<button type="button" role="combobox" aria-haspopup="listbox">` with `aria-expanded`, `aria-controls` (the listbox id), `aria-activedescendant` (the active option while open), `aria-invalid`, `aria-required`. DOM focus stays on the trigger.
+- ARIA (multiple): trigger is `<button type="button" aria-haspopup="listbox">` with `aria-expanded`, `aria-controls`, `aria-invalid` (no `role="combobox"`). The listbox gets `tabindex="0"`, `aria-multiselectable="true"`, `aria-activedescendant`, `aria-required`, and receives focus on open — unless `#search` is used, whose input owns focus and its own `aria-activedescendant`.
+- Listbox: `role="listbox"` on the element inside `ScrollArea` (the scroller is `tabindex="-1"`), `aria-label` resolved from `ariaLabel`, the trigger's `aria-label`, `aria-labelledby` or `<label for>` when the panel opens. Options are `role="option"` with an `id`, `aria-selected` and `aria-disabled`, never focusable themselves; a pointer press on the list does not move focus. Decorative icons are `aria-hidden="true"`.
+- Keyboard map (trigger, closed): `Enter` / `Space` / `ArrowDown` / `ArrowUp` open on the selected option (or the first); `Home` / `End` open on the first / last option; a printable character opens and jumps to the first match.
+- Keyboard map (single, open — focus on the trigger): `ArrowDown` / `ArrowUp` move the active option, wrapping and skipping disabled options; `Home` / `End` jump; `Enter` / `Space` / `Alt+ArrowUp` select and close; `Escape` closes without changing the value; `Tab` closes without selecting and moves on; printable characters run typeahead (a repeated character cycles through matches, the buffer resets after 500 ms).
+- Keyboard map (multiple, open — focus in the listbox): the same movement and typeahead keys; `Enter` / `Space` toggle the active option and keep the panel open; `Escape` and `Tab` close and return focus to the trigger.
+- Native mode: the platform keyboard, picker and announcements; `aria-label`, `aria-invalid`, `aria-readonly` on the select; `readonly` reverts any change the picker makes.
+- `aria-invalid` and `aria-required` mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
 - Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `InputText`).
+- Gate: `select.test.ts` runs `expectNoA11yViolations` with the panel open (single and multiple) and on the story fixtures, closed and open.
 
 ## Stories (Storybook)
 
@@ -156,6 +192,7 @@ const value = defineModel({ default: '' })
 - Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop).
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - Disabled
+- Native — justification: documents the `native` prop (platform select, `<optgroup>`, `name` submission inside a `<form>`, `required` validation), a different rendering path not reachable from any other story.
 
 ## Constraints — DO NOT
 

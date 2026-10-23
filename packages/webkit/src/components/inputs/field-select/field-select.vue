@@ -233,15 +233,19 @@
           >
             {{ option.label }}
           </SelectOption>
+        </slot>
+        <template
+          v-if="searchEnabled && visibleOptions.length === 0"
+          #footer
+        >
           <p
-            v-if="searchEnabled && visibleOptions.length === 0"
             role="status"
             :data-testid="`${testId}__search-empty`"
-            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+            class="w-full px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
           >
             {{ searchEmptyLabel }}
           </p>
-        </slot>
+        </template>
       </SelectContent>
     </Select>
     <HelperText
