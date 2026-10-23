@@ -1,0 +1,480 @@
+export type CodeBlockHighlightTokenType =
+  'keyword' | 'string' | 'function' | 'type' | 'punctuation' | 'identifier' | 'comment'
+
+export type CodeBlockHighlightToken = {
+  text: string
+  type: CodeBlockHighlightTokenType
+}
+
+const TOKEN_CLASS: Record<CodeBlockHighlightTokenType, string> = {
+  keyword: 'text-(--code-sintax-keyword)',
+  string: 'text-(--code-sintax-string)',
+  function: 'text-(--code-sintax-function)',
+  type: 'text-(--code-sintax-type)',
+  punctuation: 'text-(--code-sintax-punctuation)',
+  identifier: 'text-(--code-sintax-identifier)',
+  comment: 'text-(--code-sintax-comment)'
+}
+
+export const getHighlightTokenClass = (type: CodeBlockHighlightTokenType): string =>
+  TOKEN_CLASS[type] ?? TOKEN_CLASS.identifier
+
+const JS_KEYWORDS = [
+  'export',
+  'default',
+  'import',
+  'from',
+  'return',
+  'const',
+  'let',
+  'var',
+  'function',
+  'class',
+  'new',
+  'if',
+  'else',
+  'for',
+  'while',
+  'switch',
+  'case',
+  'break',
+  'continue',
+  'try',
+  'catch',
+  'finally',
+  'throw',
+  'async',
+  'await',
+  'typeof',
+  'instanceof',
+  'in'
+] as const
+
+// Shell words that are language, not a program: they read as keywords, the same as
+// `const` / `return` do in JavaScript.
+const SHELL_KEYWORDS = [
+  'if',
+  'then',
+  'elif',
+  'else',
+  'fi',
+  'for',
+  'in',
+  'do',
+  'done',
+  'while',
+  'until',
+  'case',
+  'esac',
+  'function',
+  'return',
+  'export',
+  'local',
+  'source',
+  'sudo',
+  'cd',
+  'set',
+  'unset',
+  'echo',
+  'exit'
+] as const
+
+// The keywords another PROGRAM follows, so the word after them is still a command.
+const SHELL_COMMAND_PREFIXES = [
+  'sudo',
+  'source',
+  'then',
+  'else',
+  'elif',
+  'do',
+  'if',
+  'while',
+  'until'
+] as const
+
+const pushToken = (
+  tokens: CodeBlockHighlightToken[],
+  text: string,
+  type: CodeBlockHighlightTokenType
+) => {
+  if (!text) {
+    return
+  }
+
+  const last = tokens[tokens.length - 1]
+
+  if (last && last.type === type) {
+    last.text += text
+    return
+  }
+
+  tokens.push({ text, type })
+}
+
+const LINE_COMMENT = /(?<=^|[\s;])(?:#|\/\/)/y
+const JS_LINE_COMMENT = /\/\/|(?<=^|[\s;])#(?=\s|$|!)/y
+
+const findLineCommentStart = (line: string, marker: RegExp): number => {
+  let quote = ''
+
+  for (let index = 0; index < line.length; index++) {
+    const char = line[index]
+
+    if (quote) {
+      if (char === '\\') {
+        index++
+      } else if (char === quote) {
+        quote = ''
+      }
+      continue
+    }
+
+    if (char === '"' || char === "'" || char === '`') {
+      quote = char
+      continue
+    }
+
+    marker.lastIndex = index
+    if (marker.test(line)) {
+      return index
+    }
+  }
+
+  return -1
+}
+
+const withLineComment = (
+  line: string,
+  marker: RegExp,
+  highlightCode: (code: string) => CodeBlockHighlightToken[]
+): CodeBlockHighlightToken[] => {
+  const start = findLineCommentStart(line, marker)
+
+  if (start === -1) {
+    return highlightCode(line)
+  }
+
+  const tokens = start > 0 ? highlightCode(line.slice(0, start)) : []
+  pushToken(tokens, line.slice(start), 'comment')
+  return tokens
+}
+
+const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
+  const keywordRegex = new RegExp(
+    `\\/\\/.*$|\\b(?:${JS_KEYWORDS.join('|')})\\b|[{}\\[\\]().,:;=<>]|'(?:\\\\'|[^'])*'|"(?:\\\\"|[^"])*"|\\b[A-Z][A-Za-z0-9_]*\\b|\\b[a-zA-Z_$][\\w$]*\\b|\\s+|[^\\s]+`,
+    'g'
+  )
+
+  let previousChunk = ''
+  let match: RegExpExecArray | null
+
+  while ((match = keywordRegex.exec(line)) !== null) {
+    const chunk = match[0]
+
+    if (chunk.startsWith('//')) {
+      pushToken(tokens, chunk, 'comment')
+      previousChunk = chunk
+      continue
+    }
+
+    if (/^\s+$/.test(chunk)) {
+      pushToken(tokens, chunk, 'identifier')
+      previousChunk = chunk
+      continue
+    }
+
+    if (JS_KEYWORDS.includes(chunk as (typeof JS_KEYWORDS)[number])) {
+      pushToken(tokens, chunk, 'keyword')
+      previousChunk = chunk
+      continue
+    }
+
+    if (/^['"]/.test(chunk)) {
+      pushToken(tokens, chunk, 'string')
+      previousChunk = chunk
+      continue
+    }
+
+    if (/^[{}[\]().,:;=<>]$/.test(chunk)) {
+      pushToken(tokens, chunk, 'punctuation')
+      previousChunk = chunk
+      continue
+    }
+
+    if (/^[A-Z]/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+      previousChunk = chunk
+      continue
+    }
+
+    if (previousChunk === '.' && /^[a-zA-Z_$][\w$]*$/.test(chunk)) {
+      pushToken(tokens, chunk, 'function')
+      previousChunk = chunk
+      continue
+    }
+
+    if (
+      /^[a-zA-Z_$][\w$]*$/.test(chunk) &&
+      previousChunk !== '.' &&
+      !JS_KEYWORDS.includes(chunk as (typeof JS_KEYWORDS)[number])
+    ) {
+      const prevToken = tokens[tokens.length - 1]
+      const prevNonSpace = prevToken?.text.trim()
+
+      if (
+        !prevNonSpace ||
+        /[({[,;=\s]$/.test(prevNonSpace) ||
+        JS_KEYWORDS.includes(prevNonSpace as (typeof JS_KEYWORDS)[number])
+      ) {
+        pushToken(tokens, chunk, 'function')
+        previousChunk = chunk
+        continue
+      }
+    }
+
+    pushToken(tokens, chunk, 'identifier')
+    previousChunk = chunk
+  }
+
+  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
+// Shell reuses the same seven token types as JavaScript: the program (first word,
+// or the word after a pipe/joiner) is `function`, shell language words and flags
+// are `keyword`, quoted text is `string`, a variable expansion is `type`, joining
+// operators are `punctuation`, and sub-commands / paths / URLs fall to `identifier`.
+const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
+
+  // The catch-all word must stop at a quote and at `$`, or it swallows the value in
+  // `TOKEN="$VAR"` as one word and the string/expansion alternatives never get to match.
+  const shellRegex =
+    /'[^']*'|"(?:\\"|[^"])*"|\$\{[^}]*\}|\$[A-Za-z_][\w]*|&&|\|\||--?[A-Za-z][-\w]*|[|;><()]|\s+|[^\s|;><()'"$]+/g
+
+  // The next non-space word starts a command: true at the start of the line, and again
+  // after every operator that begins a new one.
+  let expectsCommand = true
+  let match: RegExpExecArray | null
+
+  while ((match = shellRegex.exec(line)) !== null) {
+    const chunk = match[0]
+
+    if (/^\s+$/.test(chunk)) {
+      pushToken(tokens, chunk, 'identifier')
+      continue
+    }
+
+    if (/^['"]/.test(chunk)) {
+      pushToken(tokens, chunk, 'string')
+      expectsCommand = false
+      continue
+    }
+
+    if (chunk.startsWith('$')) {
+      pushToken(tokens, chunk, 'type')
+      expectsCommand = false
+      continue
+    }
+
+    if (/^(?:&&|\|\||[|;><()])$/.test(chunk)) {
+      pushToken(tokens, chunk, 'punctuation')
+      expectsCommand = true
+      continue
+    }
+
+    if (/^--?[A-Za-z]/.test(chunk)) {
+      pushToken(tokens, chunk, 'keyword')
+      continue
+    }
+
+    if (SHELL_KEYWORDS.includes(chunk as (typeof SHELL_KEYWORDS)[number])) {
+      pushToken(tokens, chunk, 'keyword')
+      // `sudo curl …` / `then azion …` run a program next; `export FOO=…` does not.
+      expectsCommand = SHELL_COMMAND_PREFIXES.includes(
+        chunk as (typeof SHELL_COMMAND_PREFIXES)[number]
+      )
+      continue
+    }
+
+    if (expectsCommand) {
+      pushToken(tokens, chunk, 'function')
+      expectsCommand = false
+      continue
+    }
+
+    pushToken(tokens, chunk, 'identifier')
+  }
+
+  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
+const HCL_LITERALS = ['true', 'false', 'null'] as const
+
+const highlightHclLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
+  const hclRegex =
+    /"(?:\\"|[^"])*"|-?\b\d+(?:\.\d+)?\b|[A-Za-z_][\w-]*|[{}[\]().,:=?<>!*/+-]|\s+|\S/g
+
+  let isFirstWord = true
+  let match: RegExpExecArray | null
+
+  while ((match = hclRegex.exec(line)) !== null) {
+    const chunk = match[0]
+    const rest = line.slice(match.index + chunk.length)
+
+    if (/^\s+$/.test(chunk)) {
+      pushToken(tokens, chunk, 'identifier')
+      continue
+    }
+
+    if (chunk.startsWith('"')) {
+      pushToken(tokens, chunk, 'string')
+      isFirstWord = false
+      continue
+    }
+
+    if (/^-?\d/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+      isFirstWord = false
+      continue
+    }
+
+    if (!/^[A-Za-z_]/.test(chunk)) {
+      pushToken(tokens, chunk, 'punctuation')
+      isFirstWord = false
+      continue
+    }
+
+    if (HCL_LITERALS.includes(chunk as (typeof HCL_LITERALS)[number])) {
+      pushToken(tokens, chunk, 'type')
+    } else if (/^\s*\(/.test(rest)) {
+      pushToken(tokens, chunk, 'function')
+    } else if (isFirstWord && /^\s*=(?!=)/.test(rest)) {
+      pushToken(tokens, chunk, 'function')
+    } else if (isFirstWord && /^\s*(?:"|\{|[A-Za-z_])/.test(rest)) {
+      pushToken(tokens, chunk, 'keyword')
+    } else {
+      pushToken(tokens, chunk, 'identifier')
+    }
+
+    isFirstWord = false
+  }
+
+  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
+const GRAPHQL_KEYWORDS = [
+  'query',
+  'mutation',
+  'subscription',
+  'fragment',
+  'type',
+  'input',
+  'enum',
+  'interface',
+  'union',
+  'scalar',
+  'schema',
+  'extend',
+  'directive',
+  'implements'
+] as const
+
+const GRAPHQL_OPERATIONS = ['query', 'mutation', 'subscription', 'fragment'] as const
+
+const GRAPHQL_LITERALS = ['true', 'false', 'null'] as const
+
+const highlightGraphqlLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
+  const graphqlRegex =
+    /"(?:\\"|[^"])*"|\$[A-Za-z_]\w*|@[A-Za-z_]\w*|-?\b\d+(?:\.\d+)?\b|\.\.\.|[A-Za-z_]\w*|[{}[\]()!:=,|&]|\s+|\S/g
+
+  let isFirstWord = true
+  let previousWord = ''
+  let match: RegExpExecArray | null
+
+  while ((match = graphqlRegex.exec(line)) !== null) {
+    const chunk = match[0]
+    const rest = line.slice(match.index + chunk.length)
+
+    if (/^\s+$/.test(chunk)) {
+      pushToken(tokens, chunk, 'identifier')
+      continue
+    }
+
+    if (chunk.startsWith('"')) {
+      pushToken(tokens, chunk, 'string')
+    } else if (chunk.startsWith('$') || /^-?\d/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+    } else if (chunk.startsWith('@')) {
+      pushToken(tokens, chunk, 'keyword')
+    } else if (!/^[A-Za-z_]/.test(chunk)) {
+      pushToken(tokens, chunk, 'punctuation')
+    } else if (
+      (isFirstWord && GRAPHQL_KEYWORDS.includes(chunk as (typeof GRAPHQL_KEYWORDS)[number])) ||
+      (chunk === 'on' && previousWord !== '')
+    ) {
+      pushToken(tokens, chunk, 'keyword')
+    } else if (GRAPHQL_OPERATIONS.includes(previousWord as (typeof GRAPHQL_OPERATIONS)[number])) {
+      pushToken(tokens, chunk, 'function')
+    } else if (GRAPHQL_LITERALS.includes(chunk as (typeof GRAPHQL_LITERALS)[number])) {
+      pushToken(tokens, chunk, 'type')
+    } else if (/^\s*\(/.test(rest)) {
+      pushToken(tokens, chunk, 'function')
+    } else if (/^[A-Z]/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+    } else {
+      pushToken(tokens, chunk, 'identifier')
+    }
+
+    previousWord = /^[A-Za-z_]/.test(chunk) ? chunk : ''
+    isFirstWord = false
+  }
+
+  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
+export const highlightCodeLine = (
+  language: string | undefined,
+  line: string
+): CodeBlockHighlightToken[] => {
+  const lang = (language ?? 'javascript').toLowerCase()
+
+  if (lang === 'javascript' || lang === 'typescript' || lang === 'js' || lang === 'ts') {
+    return withLineComment(line, JS_LINE_COMMENT, highlightJavaScriptLine)
+  }
+
+  if (
+    lang === 'bash' ||
+    lang === 'sh' ||
+    lang === 'shell' ||
+    lang === 'zsh' ||
+    lang === 'console'
+  ) {
+    return withLineComment(line, LINE_COMMENT, highlightShellLine)
+  }
+
+  if (lang === 'hcl' || lang === 'terraform' || lang === 'tf') {
+    return withLineComment(line, LINE_COMMENT, highlightHclLine)
+  }
+
+  if (lang === 'graphql' || lang === 'gql') {
+    return withLineComment(line, LINE_COMMENT, highlightGraphqlLine)
+  }
+
+  // Prose in a code block (a markdown snippet, an agent prompt) is commentary, not code:
+  // it takes the comment colour as one token rather than being tokenised as identifiers.
+  if (lang === 'markdown' || lang === 'md') {
+    return [{ text: line || ' ', type: 'comment' }]
+  }
+
+  return withLineComment(line, LINE_COMMENT, (code) => [{ text: code || ' ', type: 'identifier' }])
+}
+
+export const highlightCode = (
+  code: string,
+  language: string | undefined
+): CodeBlockHighlightToken[][] => code.split('\n').map((line) => highlightCodeLine(language, line))
+
+export const formatLineNumber = (lineNumber: number): string => String(lineNumber).padStart(2, '0')
