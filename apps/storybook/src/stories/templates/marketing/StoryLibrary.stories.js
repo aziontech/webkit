@@ -19,7 +19,6 @@ import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import {
   declareOptions,
   noMatches,
-  searchable,
   searchScript,
   searchSlot,
   searchState
@@ -137,19 +136,15 @@ const EMPTY = {
 
 const labelsOf = (facet) => facet.options.map((option) => option.label)
 
-const SEARCHED = FACETS.filter((facet) => searchable(facet.options))
-
-const SEARCH_SCRIPT = SEARCHED.length
-  ? [
-      "import { computed, ref } from 'vue'",
-      ...SEARCHED.flatMap((facet) => [
-        '',
-        declareOptions(`${facet.key}Options`, labelsOf(facet)),
-        '',
-        ...searchScript(facet.key, `${facet.key}Options`)
-      ])
-    ]
-  : []
+const SEARCH_SCRIPT = [
+  "import { computed, ref } from 'vue'",
+  ...FACETS.flatMap((facet) => [
+    '',
+    declareOptions(`${facet.key}Options`, labelsOf(facet)),
+    '',
+    ...searchScript(facet.key, `${facet.key}Options`)
+  ])
+]
 
 const IMPORTS = [
   "import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'",
@@ -202,7 +197,7 @@ const setup = () => ({
   gpaExtendedReversed,
   marisaExtendedReversed,
   panvelExtendedReversed,
-  ...Object.assign({}, ...SEARCHED.map((facet) => searchState(facet.key, labelsOf(facet))))
+  ...Object.assign({}, ...FACETS.map((facet) => searchState(facet.key, labelsOf(facet))))
 })
 
 const searchedSelect = (facet) => `<Select
@@ -224,20 +219,6 @@ ${indent(noMatches(facet.key), 2)}
   </Select.Content>
 </Select>`
 
-const facetSelect = (facet) =>
-  searchable(facet.options)
-    ? searchedSelect(facet)
-    : `<Select size="large" placeholder="${facet.allLabel}">
-  <Select.Trigger aria-label="${facet.label}" />
-  <Select.Content>
-${each(
-  facet.options,
-  (option) => `<Select.Option value="${option.value}">${option.label}</Select.Option>`,
-  2
-)}
-  </Select.Content>
-</Select>`
-
 const TOOLBAR = `<FrameBox flush borders="y">
   <div
     role="search"
@@ -253,7 +234,7 @@ const TOOLBAR = `<FrameBox flush borders="y">
         <i class="pi pi-search text-(--text-muted)" />
       </template>
     </InputText>
-${each(FACETS, facetSelect, 2)}
+${each(FACETS, searchedSelect, 2)}
   </div>
 </FrameBox>`
 
