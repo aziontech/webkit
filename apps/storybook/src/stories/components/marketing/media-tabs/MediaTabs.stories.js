@@ -292,7 +292,7 @@ export const Sizes = {
     docs: {
       description: {
         story:
-          "Every `size` value beside the media, one band under the other with the same three claims on each, so the only thing that changes is the height of a row. That height is the component's own — three, four and a half, and six times the padding step inside the row — and the media column matches the stack beside it to the pixel. It is a floor rather than a ceiling: at `small` this copy is taller than three padding steps, so the rows keep their text and the media grows with them instead of the text being squeezed. In a row of tabs (`top` or `bottom`) `small` sets the title and description two steps down and tightens the inset, which is what keeps five claims from filling the band."
+          "Every `size` value beside the media, one band under the other with the same three claims on each, so the only thing that changes is the height of a row. That height is the component's own — three, four and a half, and six times the padding step inside the row — and the media column matches the stack beside it to the pixel. It is a floor rather than a ceiling: at `small` this copy is taller than three padding steps, so the rows keep their text and the media grows with them instead of the text being squeezed. In a row of tabs (`top` or `bottom`) `small` sets the title and description two steps down, which is what keeps five claims from filling the band."
       },
       source: { code: toSfc(SCRIPT, SIZES_TEMPLATE) }
     }
