@@ -1,11 +1,19 @@
 import Button from '@aziontech/webkit/button'
 import CallToAction from '@aziontech/webkit/call-to-action'
+import TextureMaterial from '@aziontech/webkit/texture-material'
+import Ticker from '@aziontech/webkit/ticker'
 
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORTS = [
   "import CallToAction from '@aziontech/webkit/call-to-action'",
   "import Button from '@aziontech/webkit/button'"
+]
+
+const PRIMARY_IMPORTS = [
+  ...IMPORTS,
+  "import TextureMaterial from '@aziontech/webkit/texture-material'",
+  "import Ticker from '@aziontech/webkit/ticker'"
 ]
 
 /** @type {import('@storybook/vue3').Meta<typeof CallToAction>} */
@@ -23,7 +31,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Three registers: `panel` sets the copy and its controls on one surface, `split` divides the band into a raised lead cell and an aside that each floor their own control, and `lead` is that lead cell standing alone with every control in one row.'
+          'The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Four registers: `panel` sets the copy and its controls on one surface, `split` divides the band into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in one row, and `primary` is the loud close, on the canvas lit by the brand.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -49,12 +57,12 @@ const meta = {
     },
     kind: {
       control: 'inline-radio',
-      options: ['panel', 'split', 'lead'],
+      options: ['panel', 'split', 'lead', 'primary'],
       description:
-        'Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it.',
+        'Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor.',
       table: {
         category: 'props',
-        type: { summary: "'panel' | 'split' | 'lead'" },
+        type: { summary: "'panel' | 'split' | 'lead' | 'primary'" },
         defaultValue: { summary: "'panel'" }
       }
     },
@@ -102,7 +110,18 @@ const meta = {
     aside: {
       control: false,
       description:
-        "The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`.",
+        "The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`.",
+      table: { category: 'slots' }
+    },
+    background: {
+      control: false,
+      description: 'Decoration drawn behind the copy in `primary`, such as a texture.',
+      table: { category: 'slots' }
+    },
+    bottom: {
+      control: false,
+      description:
+        'The strip that floors the band in `primary`, such as a ticker, under a hairline.',
       table: { category: 'slots' }
     }
   }
@@ -234,6 +253,62 @@ export const Types = {
           'The three registers. `panel` keeps the copy and both controls on one surface and reads as a row from `md` up. `split` divides the band at 7fr/3fr: the raised lead cell carries the two-tone headline and the primary action, the aside carries the supporting line and the secondary one, and each cell pushes its control to the band floor so the two share a baseline whatever the copy does. `lead` is that lead cell with no aside — the supporting line moves under the headline and every control sits in one row on the floor, which is the register for a close whose actions are peers.'
       },
       source: { code: toSfc(IMPORTS, TYPES_MARKUP) }
+    }
+  }
+}
+
+const PRIMARY_MARKUP = `<CallToAction
+  kind="primary"
+  title="Build once. Run everywhere."
+  description="Get a faster path to launch, lower latency, and less infrastructure overhead."
+>
+  <template #background>
+    <TextureMaterial kind="pixelate" size="small" fade="bottom" />
+  </template>
+  <template #actions>
+    <Button label="Start free" kind="secondary" size="large" />
+    <Button
+      label="Read the docs"
+      kind="outlined"
+      size="large"
+      icon="pi pi-chevron-right"
+      icon-position="trailing"
+      animated
+    />
+  </template>
+  <template #bottom>
+    <Ticker
+      aria-label="Why teams choose Azion"
+      :items="[
+            { icon: 'ai ai-edge-nodes', label: 'Distributed to 100+ locations automatically' },
+            { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
+            { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
+            { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
+            { icon: 'pi pi-dollar', label: 'Usage-based pricing with no hidden fees' },
+            { icon: 'pi pi-gift', label: 'Start with $300 in free credits' },
+            { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
+            { icon: 'ai ai-real-time-metrics', label: 'Real-time events and metrics for every request' },
+            { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
+            { icon: 'pi pi-code', label: 'Works with Vue, React, Next.js, Astro and more' }
+          ]"
+    />
+  </template>
+</CallToAction>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CallToAction>} */
+export const Primary = {
+  render: () => ({
+    components: { CallToAction, Button, TextureMaterial, Ticker },
+    template: PRIMARY_MARKUP
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The loud close. The band keeps the canvas ground and owns the light: it moves the resting pools of the composed pixelate out of frame and runs its two waves at triple gain and double pace, so bright and dark bands of the primary colour keep travelling across the headline instead of a still glow. What is drawn is composed in: a pixelated `TextureMaterial` through `background`, and a benefits `Ticker` through `bottom`. The waves stand still under reduced motion.'
+      },
+      source: { code: toSfc(PRIMARY_IMPORTS, PRIMARY_MARKUP) }
     }
   }
 }

@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: cefd8f6e3207b82e16edf5d5327b6a5f5a285634c505b7040c6974180545c5c5
+checksum: 6bcdd94d8dcfc289eedfa534379a74a056ca75b6319c615e657514a8f9129e7d
 created: 2026-05-22
-last_updated: 2026-09-26
+last_updated: 2026-10-19
 ---
 
 # Button — Component Spec
@@ -50,6 +50,7 @@ import Button from '@aziontech/webkit/button'
 | `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
 | `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
 | `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
+| `type`         | `'button' \| 'submit' \| 'reset'`                               | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.        |
 
 ## Events
 
@@ -67,6 +68,7 @@ import Button from '@aziontech/webkit/button'
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 
 ## Motion & Animations
 
@@ -114,6 +116,7 @@ import Button from '@aziontech/webkit/button'
 - Large (size)
 - Icon
 - Disabled
+- Form submit (`type`) — `type` only acts inside a form, so this story renders one with a field, a reset and a submit Button
 
 ## Constraints — DO NOT
 

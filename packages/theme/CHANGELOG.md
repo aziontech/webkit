@@ -11,6 +11,13 @@
 
 * [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.2.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@5.2.0...@aziontech/theme@5.2.1) (2026-10-23)
+
+
+### Tests
+
+* **storybook:** snapshot ticker Sizes in the dark theme only ([#1104](https://github.com/aziontech/webkit/issues/1104)) ([002ae91](https://github.com/aziontech/webkit/commit/002ae917d2d1e111b40d12172fc59273f0d60421))
+
 ## [5.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@5.1.0...@aziontech/theme@5.2.0) (2026-10-06)
 
 

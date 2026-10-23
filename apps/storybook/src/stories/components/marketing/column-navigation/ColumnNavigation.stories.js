@@ -28,7 +28,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar."
+          "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -74,7 +74,7 @@ const meta = {
 
 export default meta
 
-const DEFAULT_TEMPLATE = `<ColumnNavigation aria-label="Platform" :columns="4" :mobile-columns="2">
+const DEFAULT_TEMPLATE = `<ColumnNavigation aria-label="Platform" :columns="4">
   <ColumnNavigationColumn title="Compute">
     <ColumnNavigationItem icon="ai ai-edge-functions" title="Functions" description="Run serverless code closer to users" href="/functions" />
     <ColumnNavigationItem icon="ai ai-edge-orchestrator" title="Rules Engine" description="Automate request handling with programmable rules" href="/rules-engine" />
@@ -105,7 +105,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          "The four-column directory: one column per group, each headed by its overline over a rule, then its destinations. The rules between the columns are the grid's own 1px gaps, so four adjacent columns produce three hairlines instead of six. Below the small breakpoint the block folds to the two columns `mobile-columns` asks for."
+          "The four-column directory: one column per group, each headed by its overline over a rule, then its destinations. The rules between the columns are the grid's own 1px gaps, so four adjacent columns produce three hairlines instead of six. Below the small breakpoint the block folds to a single column, so each row keeps the full width on a phone."
       },
       source: { code: toSfc(IMPORT, DEFAULT_TEMPLATE) }
     }
