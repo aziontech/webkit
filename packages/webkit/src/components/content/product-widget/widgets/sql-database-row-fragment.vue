@@ -36,15 +36,15 @@
   ]
 
   const ROWS = [
-    { id: '1', name: 'Ada Lovelace', email: 'ada@azion.com', created_at: '2026-07-21 08:15:00' },
-    { id: '2', name: 'Alan Turing', email: 'alan@azion.com', created_at: '2026-07-21 08:15:01' },
-    { id: '3', name: 'Grace Hopper', email: 'grace@azion.com', created_at: '2026-07-21 08:15:02' }
+    { id: '1', name: 'Ada Lovelace', email: 'ada@example.com', created_at: '2026-07-21 08:15:00' },
+    { id: '2', name: 'Alan Turing', email: 'alan@example.com', created_at: '2026-07-21 08:15:01' },
+    { id: '3', name: 'Grace Hopper', email: 'grace@example.com', created_at: '2026-07-21 08:15:02' }
   ]
 
   const INSERTED = {
     id: '4',
     name: 'Katherine Johnson',
-    email: 'katherine@azion.com',
+    email: 'katherine@example.com',
     created_at: '2026-07-21 08:15:03'
   }
 
@@ -236,8 +236,10 @@
               </div>
 
               <Transition
-                enter-active-class="animate-slide-down motion-reduce:animate-none"
-                leave-active-class="animate-slide-down [animation-direction:reverse] motion-reduce:animate-none"
+                enter-from-class="-translate-y-1 opacity-0"
+                enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+                leave-to-class="-translate-y-1 opacity-0"
+                leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
               >
                 <div
                   v-if="frame.inserted"

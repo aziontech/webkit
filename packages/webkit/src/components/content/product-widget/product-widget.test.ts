@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
-import { describe, expect, it, vi } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/content/product-widget/ProductWidget.stories'
@@ -13,6 +13,13 @@ const { Default, Types } = composeStories(stories)
 const TESTID = 'content-product-widget'
 const FRAME_TESTID = 'content-shell-mockup'
 const NAMES = Object.keys(productWidgets) as ProductWidgetName[]
+
+const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+const FIXTURE_CSS = `
+  [data-testid='${FRAME_TESTID}'] { position: relative; }
+  [data-testid='${FRAME_TESTID}'] > :first-child { position: absolute; }
+`
 
 const host = (props: Record<string, unknown>) =>
   defineComponent({
@@ -29,6 +36,18 @@ const frameOf = (view: ReturnType<typeof render>) =>
   within(view.container).findByTestId(FRAME_TESTID, {}, { timeout: 5000 })
 
 describe('ProductWidget', () => {
+  let fixtureSheet: globalThis.HTMLStyleElement
+
+  beforeAll(() => {
+    fixtureSheet = document.createElement('style')
+    fixtureSheet.textContent = FIXTURE_CSS
+    document.head.appendChild(fixtureSheet)
+  })
+
+  afterAll(() => {
+    fixtureSheet.remove()
+  })
+
   it('renders the default story under the fallback testid and draws its widget', async () => {
     const view = render(Default())
     const root = view.getByTestId(TESTID)
@@ -49,7 +68,7 @@ describe('ProductWidget', () => {
     expect((await frameOf(framed)).getAttribute('data-kind')).toBe('window')
     framed.unmount()
 
-    const bare = render(host({ name: 'workload-topology-chain' }))
+    const bare = render(host({ name: 'workload-rollout-rows' }))
     expect((await frameOf(bare)).getAttribute('data-kind')).toBe('bare')
   })
 
@@ -92,15 +111,45 @@ describe('ProductWidget', () => {
     const view = render(Host)
     expect((await frameOf(view)).getAttribute('data-kind')).toBe('window')
 
-    name.value = 'workload-topology-chain'
+    name.value = 'workload-rollout-rows'
     await nextTick()
 
-    expect(view.getByTestId(TESTID).getAttribute('data-name')).toBe('workload-topology-chain')
+    expect(view.getByTestId(TESTID).getAttribute('data-name')).toBe('workload-rollout-rows')
     await expect
       .poll(() =>
         view.container.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
       )
       .toBe('bare')
+  })
+
+  it('clears the earlier widget when the next one fails to load', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const failed = new Error('chunk failed')
+    const load = vi
+      .spyOn(productWidgets, 'workload-topology-chain')
+      .mockImplementation(() => Promise.reject(failed))
+    const name = ref<ProductWidgetName>('workloads-list')
+    const Host = defineComponent({
+      components: { ProductWidget },
+      setup: () => ({ name }),
+      template: '<div style="width: 860px; height: 480px"><ProductWidget :name="name" /></div>'
+    })
+    const view = render(Host)
+    await frameOf(view)
+
+    name.value = 'workload-topology-chain'
+    await nextTick()
+    const root = view.getByTestId(TESTID)
+
+    expect(root.getAttribute('data-name')).toBe('workload-topology-chain')
+    expect(root.children).toHaveLength(0)
+    await expect
+      .poll(() => warn.mock.calls.some(([message]) => String(message).includes('could not load')))
+      .toBe(true)
+    expect(root.children).toHaveLength(0)
+
+    load.mockRestore()
+    warn.mockRestore()
   })
 
   it('warns and draws nothing for a name outside the registry', async () => {
@@ -115,6 +164,30 @@ describe('ProductWidget', () => {
     warn.mockRestore()
   })
 
+  it('holds the deploy logs still while they are off screen', async () => {
+    const Host = defineComponent({
+      components: { ProductWidget },
+      template: `
+        <div>
+          <div style="height: 300vh"></div>
+          <div style="width: 600px; height: 480px">
+            <ProductWidget name="workload-deploy-logs" :interval="40" />
+          </div>
+        </div>
+      `
+    })
+    const view = render(Host)
+    const frame = await frameOf(view)
+    const drawn = frame.textContent
+
+    await new Promise((resolve) => globalThis.setTimeout(resolve, 600))
+    expect(frame.textContent).toBe(drawn)
+
+    if (reducedMotion()) return
+    frame.scrollIntoView()
+    await expect.poll(() => frame.textContent).not.toBe(drawn)
+  })
+
   it.each(NAMES)('draws %s inside a shell mockup', async (name) => {
     const view = render(host({ name }))
     const frame = await frameOf(view)
@@ -127,6 +200,15 @@ describe('ProductWidget', () => {
     const view = render(Default())
     await frameOf(view)
 
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('has no axe violations in function-code, the one widget exposed to assistive technology', async () => {
+    const view = render(host({ name: 'function-code' }))
+    const frame = await frameOf(view)
+
+    expect(frame.hasAttribute('aria-hidden')).toBe(false)
+    expect(within(frame).getAllByRole('button').length).toBeGreaterThan(0)
     await expectNoA11yViolations(view.container)
   })
 })

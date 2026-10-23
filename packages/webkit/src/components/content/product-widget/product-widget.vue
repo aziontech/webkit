@@ -102,7 +102,7 @@
     fade?: ShellMockupFade
     /** Texture a full-screen widget is grounded with. */
     texture?: TextureMaterialKind
-    /** Tab a tabbed widget plays; unset plays its first tab. */
+    /** Tab a tabbed widget plays (workload-overview, application-version); other widgets ignore it, and unset plays the first tab. */
     tab?: ProductWidgetTab
     /** Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace. */
     interval?: number
@@ -121,6 +121,8 @@
   })
 
   const attrs = useAttrs()
+
+  const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
   const widget = shallowRef<Component | null>(null)
   const declared = shallowRef<string[]>([])
@@ -151,11 +153,12 @@
   watch(
     () => props.name,
     (name) => {
+      widget.value = null
+      declared.value = []
       const load = resolveProductWidget(name)
       if (!load) {
-        console.warn(`[webkit] <ProductWidget>: no widget registered under name "${name}".`)
-        widget.value = null
-        declared.value = []
+        if (dev)
+          console.warn(`[webkit] <ProductWidget>: no widget registered under name "${name}".`)
         return
       }
       load()
@@ -165,7 +168,7 @@
           widget.value = markRaw(component)
         })
         .catch((error: unknown) => {
-          console.warn(`[webkit] <ProductWidget>: could not load "${name}".`, error)
+          if (dev) console.warn(`[webkit] <ProductWidget>: could not load "${name}".`, error)
         })
     },
     { immediate: true }

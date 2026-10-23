@@ -39,9 +39,9 @@
   ]
 
   const ROWS = [
-    { id: 1, name: 'Ada Lovelace', email: 'ada@azion.com' },
-    { id: 2, name: 'Alan Turing', email: 'alan@azion.com' },
-    { id: 3, name: 'Grace Hopper', email: 'grace@azion.com' }
+    { id: 1, name: 'Ada Lovelace', email: 'ada@example.com' },
+    { id: 2, name: 'Alan Turing', email: 'alan@example.com' },
+    { id: 3, name: 'Grace Hopper', email: 'grace@example.com' }
   ]
 
   interface Frame {
@@ -204,8 +204,10 @@
             <div class="h-48">
               <Transition
                 mode="out-in"
-                enter-active-class="animate-fade-in motion-reduce:animate-none"
-                leave-active-class="animate-fade-out motion-reduce:animate-none"
+                enter-from-class="opacity-0"
+                enter-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
+                leave-to-class="opacity-0"
+                leave-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
               >
                 <div
                   v-if="frame.results"

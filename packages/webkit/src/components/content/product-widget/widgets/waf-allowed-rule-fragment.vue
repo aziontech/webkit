@@ -240,8 +240,10 @@
             </ShellMockupPart>
 
             <Transition
-              enter-active-class="animate-slide-down motion-reduce:animate-none"
-              leave-active-class="animate-slide-down [animation-direction:reverse] motion-reduce:animate-none"
+              enter-from-class="-translate-y-1 opacity-0"
+              enter-active-class="transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+              leave-to-class="-translate-y-1 opacity-0"
+              leave-active-class="transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
             >
               <div
                 v-if="frame.added"
@@ -311,7 +313,7 @@
       </div>
 
       <MockupCursor
-        name="Rafael"
+        name="Alex"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

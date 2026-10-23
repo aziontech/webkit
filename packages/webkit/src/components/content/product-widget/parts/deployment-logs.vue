@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
   import type { LogViewLine } from '../../../code/log-view/injection-key'
@@ -116,11 +116,17 @@
   let tick: ReturnType<typeof globalThis.setInterval> | null = null
   let stream: ReturnType<typeof globalThis.setInterval> | null = null
 
+  const stopTick = () => {
+    if (tick) globalThis.clearInterval(tick)
+    tick = null
+  }
+
   const clearAll = () => {
     timers.forEach((timer) => globalThis.clearTimeout(timer))
     timers.length = 0
-    if (tick) globalThis.clearInterval(tick)
+    stopTick()
     if (stream) globalThis.clearInterval(stream)
+    stream = null
   }
 
   const stepStatus = (i: number): DeploymentStepStatus => {
@@ -274,6 +280,10 @@
     runStep(lastIndex.value, stepList.value[lastIndex.value]?.logs.length ?? 0)
   }
 
+  watch(phase, (next) => {
+    if (next !== 'running') stopTick()
+  })
+
   onMounted(() => {
     if (!props.live) return
     tick = globalThis.setInterval(() => {
@@ -393,7 +403,7 @@
               />
               <span
                 :data-state="stepStatus(i)"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-shimmer motion-reduce:animate-none"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:text-(--text-default)"
               >
                 {{ step.description }}
               </span>

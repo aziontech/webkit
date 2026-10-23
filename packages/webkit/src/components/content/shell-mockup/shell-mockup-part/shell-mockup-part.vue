@@ -33,7 +33,7 @@
     :data-testid="testId"
     :data-entered="entered || null"
     :style="style"
-    class="translate-y-4 opacity-0 data-entered:translate-y-0 data-entered:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100"
+    class="translate-y-4 opacity-0 transition-[opacity,translate] [transition-duration:var(--part-duration)] [transition-delay:var(--part-delay)] ease-expressive-entrance data-entered:translate-y-0 data-entered:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none"
   >
     <slot />
   </div>

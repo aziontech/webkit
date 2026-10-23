@@ -4,7 +4,19 @@ import type { ProductWidgetName } from './product-widget.vue'
 
 export type ProductWidgetLoader = () => Promise<{ default: Component }>
 
-export const productWidgets: Record<ProductWidgetName, ProductWidgetLoader> = {
+export const productWidgetScreens = {
+  'application-version': () => import('./widgets/application-version-widget.vue'),
+  'workload-deploy-logs': () => import('./widgets/workload-deploy-logs-widget.vue'),
+  'workload-deployments': () => import('./widgets/workload-deployments-widget.vue'),
+  'workload-domains': () => import('./widgets/workload-domains-widget.vue'),
+  'workload-overview': () => import('./widgets/workload-overview-widget.vue'),
+  'workload-rollout-rows': () => import('./widgets/workload-rollout-rows-widget.vue'),
+  'workload-topology-chain': () => import('./widgets/workload-topology-chain-widget.vue'),
+  'workload-topology': () => import('./widgets/workload-topology-widget.vue'),
+  'workloads-list': () => import('./widgets/workloads-list-widget.vue')
+} satisfies Partial<Record<ProductWidgetName, ProductWidgetLoader>>
+
+export const productWidgetFragments = {
   'ai-inference-function': () => import('./widgets/ai-inference-function-fragment.vue'),
   'ai-inference-model': () => import('./widgets/ai-inference-model-fragment.vue'),
   'ai-inference-template': () => import('./widgets/ai-inference-template-fragment.vue'),
@@ -17,7 +29,6 @@ export const productWidgets: Record<ProductWidgetName, ProductWidgetLoader> = {
   'application-cache': () => import('./widgets/application-cache-fragment.vue'),
   'application-function': () => import('./widgets/application-function-fragment.vue'),
   'application-rule': () => import('./widgets/application-rule-fragment.vue'),
-  'application-version': () => import('./widgets/application-version-widget.vue'),
   'applications-create-method': () => import('./widgets/applications-create-method-fragment.vue'),
   'applications-device-group': () => import('./widgets/applications-device-group-fragment.vue'),
   'applications-rule-phases': () => import('./widgets/applications-rule-phases-fragment.vue'),
@@ -65,15 +76,12 @@ export const productWidgets: Record<ProductWidgetName, ProductWidgetLoader> = {
   'waf-firewall-rule': () => import('./widgets/waf-firewall-rule-fragment.vue'),
   'waf-threat': () => import('./widgets/waf-threat-fragment.vue'),
   'workload-deploy': () => import('./widgets/workload-deploy-fragment.vue'),
-  'workload-deploy-logs': () => import('./widgets/workload-deploy-logs-widget.vue'),
-  'workload-deployments': () => import('./widgets/workload-deployments-widget.vue'),
-  'workload-domain': () => import('./widgets/workload-domain-fragment.vue'),
-  'workload-domains': () => import('./widgets/workload-domains-widget.vue'),
-  'workload-overview': () => import('./widgets/workload-overview-widget.vue'),
-  'workload-rollout-rows': () => import('./widgets/workload-rollout-rows-widget.vue'),
-  'workload-topology-chain': () => import('./widgets/workload-topology-chain-widget.vue'),
-  'workload-topology': () => import('./widgets/workload-topology-widget.vue'),
-  'workloads-list': () => import('./widgets/workloads-list-widget.vue')
+  'workload-domain': () => import('./widgets/workload-domain-fragment.vue')
+} satisfies Partial<Record<ProductWidgetName, ProductWidgetLoader>>
+
+export const productWidgets: Record<ProductWidgetName, ProductWidgetLoader> = {
+  ...productWidgetScreens,
+  ...productWidgetFragments
 }
 
 export const resolveProductWidget = (name: string): ProductWidgetLoader | null =>
