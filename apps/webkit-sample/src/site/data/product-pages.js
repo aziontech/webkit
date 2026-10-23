@@ -69,7 +69,7 @@ export const salesClosing = ({ eyebrow, title, titleMuted, description }) => ({
   aside: { label: 'Talk to a specialist', href: '/site/contact' }
 })
 
-export const primaryClosing = ({ title, description, benefits }) => ({
+export const primaryClosing = ({ title, description }) => ({
   section: 'ClosingCallToAction',
   kind: 'primary',
   title,
@@ -77,32 +77,12 @@ export const primaryClosing = ({ title, description, benefits }) => ({
   actions: [
     START_FREE_ACTION,
     { label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
-  ],
-  benefitsLabel: 'Why teams choose Azion',
-  benefits
+  ]
 })
 
 export const PRODUCT_CLOSING = primaryClosing({
   title: 'Build, run, and protect applications everywhere.',
-  description: 'Get faster launches, lower latency, and less infrastructure overhead from day one.',
-  benefits: [
-    { icon: 'ai ai-edge-nodes', label: 'Deployed to 100+ data centers automatically' },
-    { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
-    { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
-    { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
-    { icon: 'pi pi-dollar', label: 'Usage-based pricing with no hidden fees' },
-    { icon: 'pi pi-gift', label: 'Start with $300 in free credits' },
-    { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
-    { icon: 'ai ai-real-time-metrics', label: 'Real-time events and metrics for every request' },
-    { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
-    { icon: 'pi pi-code', label: 'Works with Vue, React, Next.js, Astro and more' },
-    { icon: 'ai ai-edge-ai', label: 'Run AI inference next to your users' },
-    { icon: 'ai ai-edge-sql', label: 'A SQL database close to users, no setup' },
-    { icon: 'ai ai-edge-storage', label: 'Object storage with no egress fees' },
-    { icon: 'ai ai-waf-rules', label: 'WAF and bot protection on by default' },
-    { icon: 'ai ai-tiered-cache', label: 'Tiered cache that shields your origin' },
-    { icon: 'ai ai-data-stream', label: 'Stream every log to the tools you already use' }
-  ]
+  description: 'Get faster launches, lower latency, and less infrastructure overhead from day one.'
 })
 
 // The closing every Company page (the footer's Company column) ends on.
@@ -111,21 +91,7 @@ export const COMPANY_CLOSING = PRODUCT_CLOSING
 export const PRODUCT_SECURITY_CLOSING = primaryClosing({
   title: 'Protect applications and APIs everywhere.',
   description:
-    'Stop attacks at the edge before they reach your origin, with no security appliances to run.',
-  benefits: [
-    { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
-    { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
-    { icon: 'ai ai-waf-rules', label: 'OWASP protection you turn on, then tune' },
-    { icon: 'ai ai-bot-manager', label: 'Bot scoring with flexible mitigation actions' },
-    { icon: 'ai ai-adaptive-security', label: 'Low false positives on legitimate traffic' },
-    { icon: 'ai ai-security-team', label: "Zero-day rules you don't have to update" },
-    { icon: 'ai ai-network-lists', label: 'Rules synced to every data center automatically' },
-    { icon: 'ai ai-edge-functions', label: 'Extend any rule with your own Functions' },
-    { icon: 'ai ai-real-time-events', label: 'Investigate every security event as it happens' },
-    { icon: 'ai ai-data-stream', label: 'Stream security events to your SIEM' },
-    { icon: 'ai ai-edge-nodes', label: 'Protection on every request, in 100+ data centers' },
-    { icon: 'pi pi-gift', label: 'Start with $300 in free credits' }
-  ]
+    'Stop attacks at the edge before they reach your origin, with no security appliances to run.'
 })
 
 export const PRODUCT_CUSTOMERS_ACTION = {
