@@ -170,6 +170,7 @@ const SOLUTION_DIRECTORY = [
 export const SOLUTIONS_PAGE = [
   {
     section: 'HeroWithOpening',
+    titleLength: 'short',
     eyebrow: 'Solutions',
     highlight: 'One platform,',
     title: 'set up for your use case',
