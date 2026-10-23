@@ -84,7 +84,7 @@ const TOPICS_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false
     <CardGrid kind="divider" :columns="3">
 ${each(
   USE_CASES,
-  (useCase) => `<div class="flex bg-(--bg-canvas)">
+  (useCase) => `<div class="relative flex bg-(--bg-canvas)">
   <Topic
     icon="${useCase.icon}"
     title="${useCase.title}"
