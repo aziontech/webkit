@@ -118,7 +118,8 @@
           <template #content>
             <Transition
               mode="out-in"
-              leave-active-class="animate-fade-out motion-reduce:animate-none"
+              leave-to-class="opacity-0"
+              leave-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
             >
               <div
                 v-if="deployed"

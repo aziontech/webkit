@@ -248,7 +248,8 @@
       <div class="relative min-h-0 flex-1 overflow-hidden px-(--spacing-xl) pt-(--spacing-md)">
         <Transition
           mode="out-in"
-          enter-active-class="animate-fade-in motion-reduce:animate-none"
+          enter-from-class="opacity-0"
+          enter-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
         >
           <div
             :key="tab"

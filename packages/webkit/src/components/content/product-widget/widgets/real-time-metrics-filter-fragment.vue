@@ -155,8 +155,10 @@
           </span>
 
           <Transition
-            enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-            leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+            enter-from-class="scale-90 opacity-0"
+            enter-active-class="origin-(--popup-origin) transition-[scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+            leave-to-class="scale-90 opacity-0"
+            leave-active-class="origin-(--popup-origin) transition-[scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
           >
             <div
               v-if="frame.open"

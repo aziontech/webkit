@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 3e6be631c4bbd9d104949e6b46337bf1516567c460516e59458ff39d9fdc267f
+checksum: cddd35a5d698bcf186acd940241dd37731e8073308d0a449bc8f712afcb15a0b
 created: 2026-10-23
 last_updated: 2026-10-23
 ---
@@ -99,16 +99,15 @@ _No slots — a widget is a closed drawing selected by `name`._
 
 ## Motion & Animations
 
-| Trigger                                                                          | Animation / Transition                                       | Token (see `.claude/docs/DESIGN.md` § Animations)       | Reduced-motion fallback         |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------- | ------------------------------- |
-| widget entrance                                                                  | `shell-mockup` part transitions on `opacity` and `translate` | `duration` + `curve` from `@aziontech/theme/animations` | parts drawn in place            |
-| row inserted or removed inside a fragment                                        | `animate-slide-down` (reversed on leave)                     | semantic                                                | `motion-reduce:animate-none`    |
-| result or summary swapped inside a fragment                                      | `animate-fade-in` / `animate-fade-out`                       | semantic                                                | `motion-reduce:animate-none`    |
-| select list opened inside a fragment                                             | `animate-popup-scale-in` / `animate-popup-scale-out`         | semantic                                                | `motion-reduce:animate-none`    |
-| running step of the deploy logs widget                                           | `animate-shimmer` on the step sentence, `motion-safe:` only  | semantic                                                | `motion-reduce:animate-none`    |
-| state change inside a fragment (cursor travel, highlight, toggle, elevator step) | `transition-*` with `duration-*` and `ease-*` tokens         | catalog durations and curves                            | `motion-reduce:transition-none` |
+| Trigger                                                                          | Animation / Transition                                                                                                                                                                                               | Token (see `.claude/docs/DESIGN.md` § Animations)       | Reduced-motion fallback         |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
+| widget entrance                                                                  | `shell-mockup` part transitions on `opacity` and `translate`                                                                                                                                                         | `duration` + `curve` from `@aziontech/theme/animations` | parts drawn in place            |
+| row inserted or removed inside a fragment                                        | Vue `<Transition>` from `-translate-y-1 opacity-0` with `transition-[opacity,translate]`: enter `duration-moderate-02 ease-productive-entrance`, leave `duration-fast-02 ease-productive-exit`                       | catalog durations and curves                            | `motion-reduce:transition-none` |
+| result, summary or tab body swapped inside a widget                              | Vue `<Transition>` from `opacity-0` with `transition-opacity duration-moderate-02 ease-in-out`                                                                                                                       | catalog durations and easing                            | `motion-reduce:transition-none` |
+| select list opened or closed inside a fragment                                   | Vue `<Transition>` from `scale-90 opacity-0` with `transition-[scale,opacity]` about `origin-(--popup-origin)`: enter `duration-moderate-01 ease-productive-entrance`, leave `duration-fast-02 ease-productive-exit` | catalog durations and curves                            | `motion-reduce:transition-none` |
+| state change inside a fragment (cursor travel, highlight, toggle, elevator step) | `transition-*` with `duration-*` and `ease-*` tokens                                                                                                                                                                 | catalog durations and curves                            | `motion-reduce:transition-none` |
 
-The root itself carries no motion: every animation above lives in a widget file, each paired with its `motion-reduce:` escape.
+No keyframe animation runs in the root or in any widget: every motion above is a transition, so the root and every widget file share the same empty set of keyframe utilities. The running step of the deploy logs widget is marked by its spinner and a `var(--text-default)` sentence, not by a looping sweep. The root itself carries no motion; every transition lives in a widget file, each paired with its `motion-reduce:` escape.
 
 ## Tokens
 
@@ -130,7 +129,7 @@ The root declares no utility that resolves a token; each widget draws with the t
 - Keyboard map: none in an inert widget. In `function-code`, `Tab` reaches the code block's file tabs and copy button, which keep their own keyboard behaviour.
 - ARIA: the root is a plain `div`; the widget inside is a `figure` with `aria-hidden="true"` and `inert` (except `function-code`), so assistive technology skips the picture. The band's own copy carries what it shows.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): widgets use the console's own text and surface pairs (`var(--text-default)` / `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface)`).
-- Every motion class inside a widget pairs with `motion-reduce:transition-none` or `motion-reduce:animate-none`.
+- Every motion class inside a widget pairs with `motion-reduce:transition-none`.
 - Touch target: not applicable in an inert widget; `function-code` keeps the code block's own targets.
 
 ## Stories (Storybook)
