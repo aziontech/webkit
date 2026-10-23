@@ -1,10 +1,8 @@
 import { computed, ref } from 'vue'
 
-const SEARCH_THRESHOLD = 5
-
 const quoted = (text) => `'${text.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
 
-export const searchable = (options) => options.length > SEARCH_THRESHOLD
+export const searchable = (options) => options.length > 0
 
 export const declareOptions = (name, options) =>
   `const ${name} = [\n${options.map((option) => `  ${quoted(option)}`).join(',\n')}\n]`

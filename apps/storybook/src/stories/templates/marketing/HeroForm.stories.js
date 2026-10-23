@@ -145,7 +145,7 @@ const CONTACT_TEMPLATE = `<Hero
           <FieldText label="E-mail" input-id="contact-email" name="email" type="email" size="large" autocomplete="email" />
 
           <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
-            <FieldSelect label="Role" input-id="contact-role" placeholder="Select your role" size="large" :options="roles" />
+            <FieldSelect label="Role" input-id="contact-role" placeholder="Select your role" size="large" :options="roles" searchable />
             <FieldText label="Company" input-id="contact-company" name="company" size="large" autocomplete="organization" />
           </div>
 
