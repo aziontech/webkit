@@ -118,7 +118,7 @@ export const NAV_FLAT = [
       {
         id: 'certificate-manager',
         label: 'Certificate Manager',
-        icon: 'ai ai-digital-certificates',
+        icon: 'ai ai-certificate-manager',
         path: '/certificates'
       },
       {
@@ -252,7 +252,7 @@ export const NAV_LEVELS = [
       {
         id: 'certificate-manager',
         label: 'Certificate Manager',
-        icon: 'ai ai-digital-certificates',
+        icon: 'ai ai-certificate-manager',
         path: '/certificates'
       }
     ]

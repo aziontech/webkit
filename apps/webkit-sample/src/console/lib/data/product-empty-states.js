@@ -36,7 +36,7 @@ export const productEmptyStates = [
         description: 'Bring a function you already have in Git and deploy it.',
         action: 'Import',
         primary: true,
-        icon: 'pi pi-github',
+        icon: 'ai ai-github',
         route: { path: '/create' }
       }
     ],
@@ -104,7 +104,7 @@ export const productEmptyStates = [
         description: 'Import a repository and Azion deploys it on every push.',
         action: 'Import',
         primary: true,
-        icon: 'pi pi-github',
+        icon: 'ai ai-github',
         route: { path: '/create' }
       },
       {
@@ -154,7 +154,7 @@ export const productEmptyStates = [
         description: 'Import a repository and Azion deploys it on every push.',
         action: 'Import',
         primary: true,
-        icon: 'pi pi-github',
+        icon: 'ai ai-github',
         route: { path: '/create' }
       },
       {
@@ -203,7 +203,7 @@ export const productEmptyStates = [
         description: 'Import a repository and Azion deploys it on every push.',
         action: 'Import',
         primary: true,
-        icon: 'pi pi-github',
+        icon: 'ai ai-github',
         route: { path: '/create' }
       },
       {
@@ -585,7 +585,7 @@ export const productEmptyStates = [
   {
     id: 'certificates',
     label: 'Certificate Manager',
-    icon: 'ai ai-digital-certificates',
+    icon: 'ai ai-certificate-manager',
     figure: 'certificates-chain',
     headline: 'Add your first certificate',
     lead: "Upload a certificate or request one from Let's Encrypt to serve your domains over TLS.",

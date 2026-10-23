@@ -16,6 +16,7 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import DomainCell from '../../components/list/DomainCell.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
@@ -51,13 +52,13 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID', grow: 2 },
+    { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
     { accessorKey: 'typeLabel', header: 'Type', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'subject', header: 'Subject', grow: 2 },
     { accessorKey: 'issuer', header: 'Issuer', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'expires', header: 'Expires', enableSorting: true, grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -124,6 +125,12 @@
     router.push({
       path: createResourcePath('certificates'),
       query: { email: route.query.email || undefined }
+    })
+
+  const openCertificate = (event, row) =>
+    router.push({
+      path: resourceSettingsPath('certificates', row.id),
+      query: { name: row.name, email: route.query.email || undefined }
     })
 
   const pendingDelete = ref(null)
@@ -263,7 +270,7 @@
                         class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                       >
                         <i
-                          class="ai ai-digital-certificates text-body-md leading-none text-(--text-default)"
+                          class="ai ai-certificate-manager text-body-md leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>
@@ -302,7 +309,12 @@
                   :page-size="8"
                   :border="false"
                   :loading="loading"
+                  @row-click="openCertificate"
                 >
+                  <template #cell-name="{ value }">
+                    <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+                  </template>
+
                   <template #cell-id="{ value }">
                     <IdCell
                       :value="value"
@@ -310,8 +322,37 @@
                     />
                   </template>
 
+                  <template #cell-typeLabel="{ value }">
+                    <Tag
+                      :label="value"
+                      severity="secondary"
+                      size="medium"
+                      icon="ai ai-certificate-manager"
+                      rounded
+                    />
+                  </template>
+
                   <template #cell-subject="{ value }">
-                    <span class="min-w-0 truncate">{{ value || '—' }}</span>
+                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span
+                        v-if="!value"
+                        class="text-body-sm text-(--text-muted)"
+                        >—</span
+                      >
+                      <span
+                        v-else-if="value.startsWith('*')"
+                        class="min-w-0 truncate"
+                        >{{ value }}</span
+                      >
+                      <DomainCell
+                        v-else
+                        :value="value"
+                      />
+                    </div>
                   </template>
 
                   <template #cell-issuer="{ value }">

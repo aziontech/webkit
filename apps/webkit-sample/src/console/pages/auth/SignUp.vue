@@ -140,7 +140,7 @@
                   label="Continue with GitHub"
                   kind="outlined"
                   size="large"
-                  icon="pi pi-github"
+                  icon="ai ai-github"
                   class="w-full"
                   :loading="provider === 'github'"
                   :disabled="locked && provider !== 'github'"

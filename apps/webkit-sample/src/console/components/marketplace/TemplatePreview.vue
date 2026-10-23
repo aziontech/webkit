@@ -26,7 +26,7 @@
     href: ''
   })
 
-  const sourceIcon = computed(() => (props.source === 'gitlab' ? 'pi-gitlab' : 'pi-github'))
+  const sourceIcon = computed(() => (props.source === 'gitlab' ? 'pi pi-gitlab' : 'ai ai-github'))
 
   const isLink = computed(() => Boolean(props.href))
 </script>
@@ -84,7 +84,7 @@
             class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
           >
             <i
-              :class="['pi', sourceIcon]"
+              :class="sourceIcon"
               class="text-[length:inherit] leading-none"
               aria-hidden="true"
             />

@@ -213,7 +213,7 @@
                 <Select.Trigger id="tpl-scope">
                   <template #iconLeft>
                     <i
-                      class="pi pi-github"
+                      class="ai ai-github"
                       aria-hidden="true"
                     />
                   </template>

@@ -29,6 +29,8 @@
   const resetEmail = ref('')
   const returnStep = ref('email')
   const verifying = ref(false)
+  const provider = ref('')
+  const locked = computed(() => verifying.value || provider.value !== '')
   const resending = ref(false)
 
   const errors = reactive({
@@ -53,11 +55,11 @@
   const afterSignIn = () => {
     const target = String(route.query.redirect || '')
     if (!target.startsWith('/') || target.startsWith('//')) {
-      return { name: 'home', query: { email: email.value } }
+      return { name: 'home', query: { email: email.value.trim() || undefined } }
     }
     const [path, search] = target.split('?')
     const query = Object.fromEntries(new URLSearchParams(search || ''))
-    return { path, query: { ...query, email: email.value } }
+    return { path, query: { ...query, email: email.value.trim() || undefined } }
   }
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -191,6 +193,26 @@
     resizeObserver?.disconnect()
     resizeObserver = null
   })
+
+  const authorizeProvider = () => new Promise((resolve) => setTimeout(resolve, 900))
+
+  const continueWith = async (id) => {
+    if (locked.value) return
+    expiredNotice.value = false
+    provider.value = id
+    try {
+      await authorizeProvider()
+      startSession(email.value.trim())
+      router.push(afterSignIn())
+    } catch (error) {
+      toast.error("Couldn't continue with that provider.", {
+        description: error?.message ?? 'Check your connection and try again.',
+        action: { label: 'Retry', onClick: () => continueWith(id) }
+      })
+    } finally {
+      provider.value = ''
+    }
+  }
 
   const lookupEmail = () => new Promise((resolve) => setTimeout(resolve, 900))
   const authenticate = (secret) =>
@@ -329,6 +351,7 @@
   }
 
   const handlePrimary = () => {
+    if (provider.value) return
     expiredNotice.value = false
     if (step.value === 'email') goToPassword()
     else if (step.value === 'password') signIn()
@@ -435,16 +458,20 @@
                               size="large"
                               icon="ai-cor ai-google"
                               class="w-full"
-                              :disabled="verifying"
+                              :loading="provider === 'google'"
+                              :disabled="locked && provider !== 'google'"
+                              @click="continueWith('google')"
                             />
                             <Button
                               type="button"
                               label="Continue with GitHub"
                               kind="outlined"
                               size="large"
-                              icon="pi pi-github"
+                              icon="ai ai-github"
                               class="w-full"
-                              :disabled="verifying"
+                              :loading="provider === 'github'"
+                              :disabled="locked && provider !== 'github'"
+                              @click="continueWith('github')"
                             />
                           </div>
 
@@ -495,7 +522,7 @@
                         autocomplete="email"
                         class="w-full"
                         placeholder="myemail@azion.com"
-                        :disabled="verifying"
+                        :disabled="locked"
                         :required="!!errors.email && !email.trim()"
                         :invalid="!!errors.email && !!email.trim()"
                         :aria-describedby="
@@ -740,6 +767,7 @@
                         size="large"
                         class="w-full"
                         :loading="verifying"
+                        :disabled="provider !== ''"
                         type="submit"
                       />
                     </div>
