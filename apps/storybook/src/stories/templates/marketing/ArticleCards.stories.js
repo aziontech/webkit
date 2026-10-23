@@ -8,6 +8,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -46,28 +47,28 @@ const MONOCHROME = 'brightness-0 [[data-theme=dark]_&]:invert'
 
 const POSTS = [
   {
-    href: '/blog/bringing-application-security-into-the-deployment-process',
-    title: 'Bringing application security into the deployment process',
-    description:
-      'Integrate application, API, and AI agent protection into deployment with reusable policies, security reviews, and validation in Real-Time Events.',
-    meta: 'OCT 7, 2026 • 8 min read',
-    image: '/media/blog/bringing-application-security-into-the-deployment-process.png'
-  },
-  {
-    href: '/blog/coding-agent-suggests-security-policy',
-    title: 'The agent that writes your code also suggests your security policy',
-    description:
-      'See how the open-source Azion MCP Server lets coding agents like Claude Code and Codex query Azion docs and propose security policies (WAF, Firewall, rate limiting) via Terraform, for team review before deploy.',
-    meta: 'OCT 5, 2026 • 9 min read',
-    image: '/media/blog/coding-agent-suggests-security-policy.png'
-  },
-  {
     href: '/blog/how-to-reduce-ai-agent-latency',
     title: 'How Do You Reduce AI Agent Latency?',
     description:
       'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
     meta: 'SEP 23, 2026 • 8 min read',
-    image: '/media/blog/how-to-reduce-ai-agent-latency.jpg'
+    image: '/media/blog/reduce-ai-agent-latency.png'
+  },
+  {
+    href: '/blog/cloudflare-alternatives-and-competitors',
+    title: 'Best Cloudflare Alternatives and Competitors',
+    description:
+      'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
+    meta: 'SEP 22, 2026 • 13 min read',
+    image: '/media/blog/best-cloudflare-alternatives.png'
+  },
+  {
+    href: '/blog/which-azion-plan-is-right-for-your-project',
+    title: 'Which Azion Plan Is Right for Your Project?',
+    description:
+      'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
+    meta: 'SEP 22, 2026 • 7 min read',
+    image: '/media/blog/which-azion-plan.png'
   }
 ]
 
@@ -166,7 +167,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -180,7 +180,7 @@ const meta = {
 export default meta
 
 export const RelatedArticles = {
-  render: () => ({ components, template: ARTICLES_TEMPLATE }),
+  ...editable(() => ({ components, template: ARTICLES_TEMPLATE })),
   parameters: {
     docs: {
       description: {
@@ -192,7 +192,7 @@ export const RelatedArticles = {
 }
 
 export const RelatedSuccessCases = {
-  render: () => ({ components, setup, template: STORIES_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: STORIES_TEMPLATE })),
   parameters: {
     docs: {
       description: {

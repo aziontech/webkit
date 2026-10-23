@@ -4,6 +4,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -65,7 +66,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -75,11 +75,14 @@ const meta = {
 export default meta
 
 export const Reach = {
-  render: () => ({
-    components,
-    setup: () => ({ reach: REACH }),
-    template: REACH_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ reach: REACH }),
+      template: REACH_TEMPLATE
+    }),
+    { reach: REACH }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(importsFor('reach', REACH), REACH_TEMPLATE) }
@@ -98,11 +101,14 @@ export const ReachJson = {
 }
 
 export const Partners = {
-  render: () => ({
-    components,
-    setup: () => ({ figures: PARTNER_FIGURES }),
-    template: PARTNERS_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ figures: PARTNER_FIGURES }),
+      template: PARTNERS_TEMPLATE
+    }),
+    { figures: PARTNER_FIGURES }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(importsFor('figures', PARTNER_FIGURES), PARTNERS_TEMPLATE) }

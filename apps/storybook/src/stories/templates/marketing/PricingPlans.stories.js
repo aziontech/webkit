@@ -8,6 +8,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -233,7 +234,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -243,15 +243,18 @@ const meta = {
 export default meta
 
 export const Plans = {
-  render: () => ({
-    components,
-    setup: () => ({
-      period: ref('monthly'),
-      billingPeriods: BILLING_PERIODS,
-      ...priceState()
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({
+        period: ref('monthly'),
+        billingPeriods: BILLING_PERIODS,
+        ...priceState()
+      }),
+      template: TEMPLATE
     }),
-    template: TEMPLATE
-  }),
+    { billingPeriods: BILLING_PERIODS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }

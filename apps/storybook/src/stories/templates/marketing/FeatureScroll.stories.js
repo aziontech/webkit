@@ -16,6 +16,7 @@ import WorkloadDomainsWidget from '../../../../../webkit-sample/src/site/ui/mock
 import WorkloadRolloutRowsWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
 import WorkloadsListWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadsListWidget.vue'
 import WorkloadTopologyChainWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadTopologyChainWidget.vue'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -219,7 +220,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -229,13 +229,13 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup: () => ({
       features: FEATURES.map((item) => ({ ...item, component: markRaw(item.component) }))
     }),
     template: TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }

@@ -32,7 +32,7 @@ const DURATIONS = ['fast-01', 'fast-02', 'moderate-01', 'moderate-02', 'slow-01'
 
 /** @type {import('@storybook/vue3').Meta<typeof ShellMockup>} */
 const meta = {
-  title: 'Components/Content/ShellMockup',
+  title: 'Components/Primitives/Content/ShellMockup',
   component: ShellMockup,
   subcomponents: { 'ShellMockup.Part': ShellMockup.Part },
   tags: ['autodocs'],

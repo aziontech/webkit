@@ -18,6 +18,7 @@ import {
   PLATFORM_ARCHITECTURE_DIAGRAMS
 } from '../../../../../webkit-sample/src/site/data/product-architectures.js'
 import DiagramSet from '../../../../../webkit-sample/src/site/ui/diagram/DiagramSet.vue'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -160,7 +161,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -170,7 +170,9 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, setup: () => ({ diagrams: DIAGRAMS }), template: TEMPLATE }),
+  ...editable(() => ({ components, setup: () => ({ diagrams: DIAGRAMS }), template: TEMPLATE }), {
+    diagrams: DIAGRAMS
+  }),
   parameters: {
     docs: {
       source: { code: toSfc([...IMPORTS, '', DECLARATION], TEMPLATE) }
@@ -260,11 +262,14 @@ const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fal
 </SectionModule>`)
 
 export const Platform = {
-  render: () => ({
-    components,
-    setup: () => ({ diagrams: PLATFORM_ARCHITECTURE_DIAGRAMS }),
-    template: PLATFORM_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ diagrams: PLATFORM_ARCHITECTURE_DIAGRAMS }),
+      template: PLATFORM_TEMPLATE
+    }),
+    { diagrams: PLATFORM_ARCHITECTURE_DIAGRAMS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc([...PLATFORM_IMPORTS, '', PLATFORM_DECLARATION], PLATFORM_TEMPLATE) }

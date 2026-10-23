@@ -4,6 +4,7 @@ import Hero from '@aziontech/webkit/hero'
 import Illustration from '@aziontech/webkit/illustration'
 import Tag from '@aziontech/webkit/tag'
 
+import { editable } from '../../_shared/editable-content'
 import { each, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -68,7 +69,6 @@ const SPECIALIST_PAGE = {
 }
 const SPECIALIST_PLAIN = { label: 'Talk to a specialist', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
-const SEE_POSTS = { label: 'See posts', kind: 'secondary', href: '#posts' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
 
 const marks = (names, depth) =>
@@ -195,6 +195,22 @@ const TITLE_BAND_TEMPLATE = `<Hero
   kind="band"
   max-width="5xl"
   size="large"
+>
+  <Hero.Title
+    centered
+    eyebrow="Cache"
+    eyebrow-prefix="//"
+    title="Deliver content fast, worldwide"
+    description="Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes."
+  >
+${indent(actions([START_FREE, DOCS]), 2)}
+  </Hero.Title>
+</Hero>`
+
+const TITLE_BAND_CAROUSEL_TEMPLATE = `<Hero
+  kind="band"
+  max-width="5xl"
+  size="large"
   carousel
   carousel-label="Trusted by teams running critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
@@ -207,25 +223,6 @@ const TITLE_BAND_TEMPLATE = `<Hero
     description="Practical knowledge to speed up, secure, and scale applications."
   >
 ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
-  </Hero.Title>
-</Hero>`
-
-const CENTERED_BAND_TEMPLATE = `<Hero
-  kind="band"
-  size="large"
-  max-width="site"
-  texture="dots"
-  texture-fade="top"
->
-  <Hero.Title
-    centered
-    max-width="2xl"
-    eyebrow="Resources"
-    eyebrow-prefix="//"
-    title="Blog"
-    description="News and hands-on guides from Azion on building apps, security, performance, and AI."
-  >
-${indent(actions([SEE_POSTS]), 2)}
   </Hero.Title>
 </Hero>`
 
@@ -261,6 +258,7 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
 >
   <Hero.Title
     max-width="xl"
+    mobile-centered
     eyebrow="Application Performance and Reliability"
     eyebrow-prefix="//"
     title="Make your applications fast and always reliable"
@@ -283,13 +281,11 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   kind="screen"
   align="center"
   max-width="site"
-  texture="dots"
-  texture-size="small"
-  texture-fade="top"
   class="[--banner-offset:3.5rem]"
 >
   <Hero.Title
     centered
+    max-width="xl"
     eyebrow="Workloads"
     eyebrow-prefix="//"
     title="Put your application close to users in seconds"
@@ -319,7 +315,7 @@ const meta = {
   excludeStories: [
     'CENTERED_CAROUSEL_SECTION',
     'TITLE_BAND_SECTION',
-    'CENTERED_BAND_SECTION',
+    'TITLE_BAND_CAROUSEL_SECTION',
     'PIXEL_FLOOR_SECTION',
     'COPY_BESIDE_ART_SECTION',
     'COPY_ON_TOP_ART_SECTION'
@@ -327,7 +323,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -337,7 +332,7 @@ const meta = {
 export default meta
 
 export const CenteredCarousel = {
-  render: () => ({ components, template: CENTERED_CAROUSEL_TEMPLATE }),
+  ...editable(() => ({ components, template: CENTERED_CAROUSEL_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_TEMPLATE) }
@@ -383,7 +378,7 @@ export const CenteredCarouselJson = {
 }
 
 export const TitleBand = {
-  render: () => ({ components, template: TITLE_BAND_TEMPLATE }),
+  ...editable(() => ({ components, template: TITLE_BAND_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
@@ -392,6 +387,39 @@ export const TitleBand = {
 }
 
 export const TITLE_BAND_SECTION = {
+  _id: 'hero-title-band',
+  props: {
+    eyebrow: 'Cache',
+    highlight: '',
+    title: 'Deliver content fast, worldwide',
+    description:
+      'Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes.',
+    primaryAction: {
+      label: 'Start for free',
+      href: 'https://console.azion.com/signup/'
+    },
+    secondaryAction: {
+      label: 'Docs',
+      href: 'https://www.azion.com/en/documentation/'
+    }
+  }
+}
+
+export const TitleBandJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(TITLE_BAND_SECTION)
+}
+
+export const TitleBandCarousel = {
+  ...editable(() => ({ components, template: TITLE_BAND_CAROUSEL_TEMPLATE })),
+  parameters: {
+    docs: {
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_CAROUSEL_TEMPLATE) }
+    }
+  }
+}
+
+export const TITLE_BAND_CAROUSEL_SECTION = {
   _id: 'hero-title-band',
   props: {
     eyebrow: 'Resources',
@@ -423,49 +451,13 @@ export const TITLE_BAND_SECTION = {
   }
 }
 
-export const TitleBandJson = {
+export const TitleBandCarouselJson = {
   tags: ['!dev'],
-  ...siteJsonStory(TITLE_BAND_SECTION)
-}
-
-export const CenteredBand = {
-  render: () => ({ components, template: CENTERED_BAND_TEMPLATE }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Centered title band with a dotted texture and no client strip. The Blog page opens with it.'
-      },
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
-    }
-  }
-}
-
-export const CENTERED_BAND_SECTION = {
-  _id: 'hero-centered-band',
-  props: {
-    kind: 'centered-band',
-    eyebrow: 'Resources',
-    title: 'Blog',
-    description:
-      'News and hands-on guides from Azion on building apps, security, performance, and AI.',
-    actions: [
-      {
-        label: 'See posts',
-        href: '#posts',
-        kind: 'secondary'
-      }
-    ]
-  }
-}
-
-export const CenteredBandJson = {
-  tags: ['!dev'],
-  ...siteJsonStory(CENTERED_BAND_SECTION)
+  ...siteJsonStory(TITLE_BAND_CAROUSEL_SECTION)
 }
 
 export const PixelFloor = {
-  render: () => ({ components, template: PIXEL_FLOOR_TEMPLATE }),
+  ...editable(() => ({ components, template: PIXEL_FLOOR_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], PIXEL_FLOOR_TEMPLATE) }
@@ -511,7 +503,7 @@ export const PixelFloorJson = {
 }
 
 export const CopyBesideArt = {
-  render: () => ({ components, template: COPY_BESIDE_ART_TEMPLATE }),
+  ...editable(() => ({ components, template: COPY_BESIDE_ART_TEMPLATE })),
   parameters: {
     docs: {
       source: {
@@ -556,7 +548,7 @@ export const CopyBesideArtJson = {
 }
 
 export const CopyOnTopArt = {
-  render: () => ({ components, template: COPY_ON_TOP_ART_TEMPLATE }),
+  ...editable(() => ({ components, template: COPY_ON_TOP_ART_TEMPLATE })),
   parameters: {
     docs: {
       source: {

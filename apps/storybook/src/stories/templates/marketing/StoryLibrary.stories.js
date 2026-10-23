@@ -14,7 +14,16 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import {
+  declareOptions,
+  noMatches,
+  searchable,
+  searchScript,
+  searchSlot,
+  searchState
+} from '../../_shared/select-search'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
@@ -126,6 +135,22 @@ const EMPTY = {
   action: 'View all success stories'
 }
 
+const labelsOf = (facet) => facet.options.map((option) => option.label)
+
+const SEARCHED = FACETS.filter((facet) => searchable(facet.options))
+
+const SEARCH_SCRIPT = SEARCHED.length
+  ? [
+      "import { computed, ref } from 'vue'",
+      ...SEARCHED.flatMap((facet) => [
+        '',
+        declareOptions(`${facet.key}Options`, labelsOf(facet)),
+        '',
+        ...searchScript(facet.key, `${facet.key}Options`)
+      ])
+    ]
+  : []
+
 const IMPORTS = [
   "import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'",
   "import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'",
@@ -139,7 +164,8 @@ const IMPORTS = [
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'",
-  "import Select from '@aziontech/webkit/select'"
+  "import Select from '@aziontech/webkit/select'",
+  ...SEARCH_SCRIPT
 ]
 
 const EMPTY_IMPORTS = [
@@ -150,7 +176,8 @@ const EMPTY_IMPORTS = [
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'",
-  "import Select from '@aziontech/webkit/select'"
+  "import Select from '@aziontech/webkit/select'",
+  ...SEARCH_SCRIPT
 ]
 
 const components = {
@@ -174,10 +201,33 @@ const setup = () => ({
   fourbankExtendedReversed,
   gpaExtendedReversed,
   marisaExtendedReversed,
-  panvelExtendedReversed
+  panvelExtendedReversed,
+  ...Object.assign({}, ...SEARCHED.map((facet) => searchState(facet.key, labelsOf(facet))))
 })
 
-const facetSelect = (facet) => `<Select size="large" placeholder="${facet.allLabel}">
+const searchedSelect = (facet) => `<Select
+  size="large"
+  placeholder="${facet.allLabel}"
+  @update:open="${facet.key}Query = ''"
+>
+  <Select.Trigger aria-label="${facet.label}" />
+  <Select.Content>
+${indent(searchSlot(facet.key, facet.label), 2)}
+    <Select.Option
+      v-for="option in ${facet.key}Matches"
+      :key="option"
+      :value="option"
+    >
+      {{ option }}
+    </Select.Option>
+${indent(noMatches(facet.key), 2)}
+  </Select.Content>
+</Select>`
+
+const facetSelect = (facet) =>
+  searchable(facet.options)
+    ? searchedSelect(facet)
+    : `<Select size="large" placeholder="${facet.allLabel}">
   <Select.Trigger aria-label="${facet.label}" />
   <Select.Content>
 ${each(
@@ -321,7 +371,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -335,7 +384,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, setup, template: TEMPLATE }),
+  ...editable(() => ({ components, setup, template: TEMPLATE })),
   parameters: {
     docs: {
       description: {
@@ -348,7 +397,7 @@ export const Default = {
 }
 
 export const NoResults = {
-  render: () => ({ components, setup, template: EMPTY_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: EMPTY_TEMPLATE })),
   parameters: {
     docs: {
       description: {

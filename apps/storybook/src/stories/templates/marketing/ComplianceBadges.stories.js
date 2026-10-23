@@ -9,6 +9,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -136,7 +137,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -146,7 +146,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, setup, template: CERTIFICATIONS_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: CERTIFICATIONS_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, CERTIFICATIONS_TEMPLATE) }

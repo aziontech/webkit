@@ -4,16 +4,17 @@ import CopyButton from '@aziontech/webkit/copy-button'
 import FieldText from '@aziontech/webkit/field-text'
 import FrameBox from '@aziontech/webkit/frame-box'
 import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'
+import Overline from '@aziontech/webkit/overline'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
 import TextureMaterial from '@aziontech/webkit/texture-material'
-import Ticker from '@aziontech/webkit/ticker'
 import { toast, Toaster } from '@aziontech/webkit/toast'
-import { onMounted, onScopeDispose, ref } from 'vue'
+import { onMounted, onScopeDispose, ref, useId } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -25,12 +26,12 @@ const IMPORTS = [
   "import FieldText from '@aziontech/webkit/field-text'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
   "import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'",
+  "import Overline from '@aziontech/webkit/overline'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'",
   "import SegmentedButton from '@aziontech/webkit/segmented-button'",
   "import TextureMaterial from '@aziontech/webkit/texture-material'",
-  "import Ticker from '@aziontech/webkit/ticker'",
   "import { Toaster, toast } from '@aziontech/webkit/toast'"
 ]
 
@@ -42,13 +43,13 @@ const components = {
   FrameBox,
   InputGroup,
   InputGroupAddon,
+  Overline,
   SectionContainer,
   SectionGap,
   SectionModule,
   SectionTitle,
   SegmentedButton,
   TextureMaterial,
-  Ticker,
   Toaster
 }
 
@@ -123,24 +124,6 @@ const PANEL_TEMPLATE = closingColumn(`<SectionModule :divided="false" :padded="f
   <TextureMaterial kind="lines" />
 </FrameBox>`)
 
-const PRIMARY_BENEFITS = `[
-        { icon: 'ai ai-edge-nodes', label: 'Deployed to 100+ data centers automatically' },
-        { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
-        { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
-        { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
-        { icon: 'pi pi-dollar', label: 'Usage-based pricing with no hidden fees' },
-        { icon: 'pi pi-gift', label: 'Start with $300 in free credits' },
-        { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
-        { icon: 'ai ai-real-time-metrics', label: 'Real-time events and metrics for every request' },
-        { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
-        { icon: 'pi pi-code', label: 'Works with Vue, React, Next.js, Astro and more' },
-        { icon: 'ai ai-edge-ai', label: 'Run AI inference next to your users' },
-        { icon: 'ai ai-edge-sql', label: 'A SQL database close to users, no setup' },
-        { icon: 'ai ai-edge-storage', label: 'Object storage with no egress fees' },
-        { icon: 'ai ai-waf-rules', label: 'WAF and bot protection on by default' },
-        { icon: 'ai ai-tiered-cache', label: 'Tiered cache that shields your origin' },
-        { icon: 'ai ai-data-stream', label: 'Stream every log to the tools you already use' }
-      ]`
 const PRIMARY_TEMPLATE = closingColumn(`<SectionModule
   id="contact"
   :divided="false"
@@ -166,12 +149,6 @@ const PRIMARY_TEMPLATE = closingColumn(`<SectionModule
         icon="pi pi-chevron-right"
         icon-position="trailing"
         animated
-      />
-    </template>
-    <template #bottom>
-      <Ticker
-        aria-label="Why teams choose Azion"
-        :items="${PRIMARY_BENEFITS}"
       />
     </template>
   </CallToAction>
@@ -362,6 +339,7 @@ const NEWSLETTER_FORM = {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const newsletterForm = () => {
+  const inputId = useId()
   const email = ref('')
   const error = ref('')
   const sending = ref(false)
@@ -379,10 +357,11 @@ const newsletterForm = () => {
     toast.success(NEWSLETTER_FORM.success)
   }
 
-  return { email, error, sending, subscribe }
+  return { inputId, email, error, sending, subscribe }
 }
 
-const NEWSLETTER_SOURCE = `const email = ref('')
+const NEWSLETTER_SOURCE = `const inputId = useId()
+const email = ref('')
 const error = ref('')
 const sending = ref(false)
 
@@ -399,7 +378,7 @@ async function subscribe() {
   toast.success('${NEWSLETTER_FORM.success}')
 }`
 
-const NEWSLETTER_SCRIPT = ["import { ref } from 'vue'", '', NEWSLETTER_SOURCE]
+const NEWSLETTER_SCRIPT = ["import { ref, useId } from 'vue'", '', NEWSLETTER_SOURCE]
 
 const NEWSLETTER_TEMPLATE = closingColumn(`<SectionModule
   id="contact"
@@ -407,45 +386,60 @@ const NEWSLETTER_TEMPLATE = closingColumn(`<SectionModule
   :padded="false"
   class="scroll-mt-(--spacing-xxl)"
 >
-  <CallToAction
-    framed
-    kind="split"
-    eyebrow="${NEWSLETTER_COPY.eyebrow}"
-    title="${NEWSLETTER_COPY.title}"
-    description="${NEWSLETTER_COPY.description}"
-  >
-    <template #actions>
-      <div>
-        <form
-          novalidate
-          class="flex w-full flex-col gap-(--spacing-sm) sm:w-(--container-md) sm:max-w-full sm:flex-row sm:items-start"
-          @submit.prevent="subscribe"
-        >
-          <FieldText
-            v-model="email"
-            label="${NEWSLETTER_FORM.label}"
-            size="large"
-            type="email"
-            autocomplete="email"
-            placeholder="${NEWSLETTER_FORM.placeholder}"
-            :invalid="Boolean(error)"
-            :helper-text="error"
-            :disabled="sending"
-            class="min-w-0 flex-1"
-            @update:model-value="error = ''"
-          />
-          <Button
-            label="${NEWSLETTER_FORM.submit}"
-            kind="secondary"
-            size="large"
-            :loading="sending"
-            class="sm:mt-(--spacing-lg)"
-            @click="subscribe"
-          />
-        </form>
+  <section aria-label="${NEWSLETTER_COPY.title}">
+    <FrameBox flush borders="y" marks="all">
+      <div class="grid gap-(--spacing-xxl) bg-(--bg-surface) p-(--spacing-xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-md))] lg:items-start">
+        <div class="flex flex-col gap-(--spacing-lg)">
+          <Overline prefix="//" show-cursor>${NEWSLETTER_COPY.eyebrow}</Overline>
+          <h2 class="m-0 max-w-(--container-lg) text-balance text-heading-lg text-(--text-default)">
+            ${NEWSLETTER_COPY.description}
+          </h2>
+        </div>
+
+        <div class="flex flex-col gap-(--spacing-md)">
+          <label :for="inputId" class="text-pretty text-heading-sm text-(--text-default)">
+            ${NEWSLETTER_COPY.title}
+          </label>
+          <form
+            novalidate
+            class="flex w-full flex-col gap-(--spacing-sm) sm:flex-row sm:items-start"
+            @submit.prevent="subscribe"
+          >
+            <div class="min-w-0 flex-1">
+              <FieldText
+                v-model="email"
+                :input-id="inputId"
+                size="large"
+                type="email"
+                autocomplete="email"
+                placeholder="${NEWSLETTER_FORM.placeholder}"
+                :invalid="Boolean(error)"
+                :helper-text="error"
+                :disabled="sending"
+                @update:model-value="error = ''"
+              />
+            </div>
+            <div>
+              <Button
+                label="${NEWSLETTER_FORM.submit}"
+                kind="secondary"
+                size="large"
+                :loading="sending"
+                @click="subscribe"
+              />
+            </div>
+          </form>
+        </div>
       </div>
-    </template>
-  </CallToAction>
+
+      <div
+        aria-hidden="true"
+        class="relative isolate h-[calc(var(--spacing-xxl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
+      >
+        <TextureMaterial kind="pixelate" size="small" />
+      </div>
+    </FrameBox>
+  </section>
 </SectionModule>
 <FrameBox
   borders="none"
@@ -463,7 +457,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -473,7 +466,7 @@ const meta = {
 export default meta
 
 export const Split = {
-  render: () => ({ components, template: SPLIT_TEMPLATE }),
+  ...editable(() => ({ components, template: SPLIT_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, SPLIT_TEMPLATE) }
@@ -505,7 +498,7 @@ export const SplitJson = {
 }
 
 export const Panel = {
-  render: () => ({ components, template: PANEL_TEMPLATE }),
+  ...editable(() => ({ components, template: PANEL_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, PANEL_TEMPLATE) }
@@ -531,16 +524,16 @@ export const PanelJson = {
 }
 
 export const Newsletter = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup: newsletterForm,
     template: NEWSLETTER_TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       description: {
         story:
-          'The split band with a subscribe form in place of the actions. The Blog page (/site/blog) closes with it. An empty field and a malformed address each show their message under the field; a valid address clears the field and raises a success toast.'
+          'The ask beside a subscribe form, over a strip lit by the pixelated primary wave. The headline sits large on the lead side and the ask labels the email field. The Blog and Resource Hub pages close with it. An empty field and a malformed address each show their message under the field; a valid address clears the field and raises a success toast.'
       },
       source: { code: toSfc(IMPORTS.concat('', NEWSLETTER_SCRIPT), NEWSLETTER_TEMPLATE) }
     }
@@ -562,7 +555,7 @@ export const NewsletterJson = {
 }
 
 export const Primary = {
-  render: () => ({ components, template: PRIMARY_TEMPLATE }),
+  ...editable(() => ({ components, template: PRIMARY_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, PRIMARY_TEMPLATE) }
@@ -571,11 +564,14 @@ export const Primary = {
 }
 
 export const Agents = {
-  render: () => ({
-    components,
-    setup: () => ({ audience: ref('humans'), ways: AGENT_WAYS, word: typedWord() }),
-    template: AGENTS_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ audience: ref('humans'), ways: AGENT_WAYS, word: typedWord() }),
+      template: AGENTS_TEMPLATE
+    }),
+    { ways: AGENT_WAYS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS.concat('', AGENTS_SCRIPT), AGENTS_TEMPLATE) }

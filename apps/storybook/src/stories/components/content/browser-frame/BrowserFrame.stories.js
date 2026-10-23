@@ -106,7 +106,7 @@ const SCREEN = `<SectionContainer max-width="site">
 </SectionContainer>`
 
 const meta = {
-  title: 'Components/Content/BrowserFrame',
+  title: 'Components/Primitives/Content/BrowserFrame',
   component: BrowserFrame,
   tags: ['autodocs'],
   parameters: {

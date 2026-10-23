@@ -5,6 +5,7 @@ import Select from '@aziontech/webkit/select'
 import StatusIndicator from '@aziontech/webkit/status-indicator'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { LG_PROBE_IMPORT, LG_PROBE_SETUP, useSiteFooter } from '../../_shared/site-footer'
 import { toSfc } from '../../_shared/story-source'
 
@@ -174,7 +175,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -188,7 +188,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup() {
       const { brandLeadsSocialRow } = useSiteFooter()
@@ -201,7 +201,7 @@ export const Default = {
       }
     },
     template: TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       description: {
