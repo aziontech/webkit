@@ -102,7 +102,7 @@ const PLANS = [
       { icon: 'pi pi-calendar', label: 'Savings Plan available' },
       { icon: 'ai ai-business-support', label: 'Advanced support available' }
     ],
-    action: { label: 'Contact us', kind: 'outlined', href: '#contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '#contact' }
   }
 ]
 
@@ -309,7 +309,7 @@ export const SITE_SECTION = {
           }
         ],
         action: {
-          label: 'Start free',
+          label: 'Start for free',
           href: 'https://console.azion.com/signup?plan=hobby'
         }
       },
@@ -388,7 +388,7 @@ export const SITE_SECTION = {
           }
         ],
         action: {
-          label: 'Contact us',
+          label: 'Talk to a specialist',
           href: '/en/contact/'
         }
       }

@@ -121,7 +121,7 @@ const CONTACT_TEMPLATE = `<Hero
       <template #actions>
         <Button label="Talk to support" kind="secondary" size="large" />
         <Button
-          label="Under cyberattack?"
+          label="Stop an active attack"
           kind="outlined"
           size="large"
           href="https://www.azion.com/en/lp/under-attack-mitigation/"
@@ -136,7 +136,7 @@ const CONTACT_TEMPLATE = `<Hero
     <div class="min-w-0">
       <form novalidate class="flex flex-col gap-(--spacing-md)" @submit.prevent>
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0">
-          <legend class="sr-only">Talk to an expert</legend>
+          <legend class="sr-only">Talk to a specialist</legend>
 
           <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
             <FieldText label="First name" input-id="contact-first-name" name="firstname" size="large" autocomplete="given-name" />
@@ -211,7 +211,7 @@ export const CONTACT_SECTION = {
       target: '_blank'
     },
     secondaryAction: {
-      label: 'Under cyberattack?',
+      label: 'Stop an active attack',
       href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
       target: '_blank'
     },

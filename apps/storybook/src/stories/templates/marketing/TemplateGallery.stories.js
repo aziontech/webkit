@@ -207,7 +207,7 @@ ${each(templates, templateCard, 6)}
     </template>
     <template #actions>
       <Button
-        label="Start free"
+        label="Start for free"
         kind="secondary"
         size="large"
         href="/signup"
@@ -282,7 +282,7 @@ export const SITE_SECTION = {
     description:
       'Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'Talk to a specialist', href: '/contact', kind: 'outlined', trailing: true }
     ],
     templates: [

@@ -377,14 +377,14 @@ ${each(items, (item, index) => literal(item, index, items), 1)}
   const faq = slot
     ? `<Faq
   framed
-  title="Frequently Asked Questions"
+  title="Frequently asked questions"
 ${indent(list)}
 >
 ${indent(slot)}
 </Faq>`
     : `<Faq
   framed
-  title="Frequently Asked Questions"
+  title="Frequently asked questions"
 ${indent(list)}
 />`
   return inColumn(`<SectionModule
@@ -427,7 +427,7 @@ export const WithLink = {
 export const WITH_LINK_SECTION = {
   _id: 'faq-section',
   props: {
-    title: 'Frequently Asked Questions',
+    title: 'Frequently asked questions',
     items: [
       {
         question: 'What types of storefronts can I build and deploy on Azion?',
@@ -465,7 +465,7 @@ export const Plain = {
 export const PLAIN_SECTION = {
   _id: 'faq-section',
   props: {
-    title: 'Frequently Asked Questions',
+    title: 'Frequently asked questions',
     items: [
       {
         question: 'What are Functions?',

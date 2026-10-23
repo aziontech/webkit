@@ -26,7 +26,7 @@ const COLUMNS = [
   },
   {
     title: 'Developers',
-    links: ['Documentation', 'API Reference', 'Dev Tools', 'Release Notes', 'Marketplace', 'Status']
+    links: ['Docs', 'API Reference', 'Dev Tools', 'Release Notes', 'Marketplace', 'Status']
   },
   {
     title: 'Company',

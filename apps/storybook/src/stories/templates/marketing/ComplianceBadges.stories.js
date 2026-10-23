@@ -107,7 +107,7 @@ const complianceBadges = (certifications) =>
     texture="none"
     size="large"
     eyebrow="Compliance"
-    title="Meet Your Compliance Requirements"
+    title="Meet your compliance requirements"
     description="Azion's certifications help customers and global partners meet a wide range of compliance requirements."
   >
     <template #media>
@@ -158,7 +158,7 @@ export const SITE_SECTION = {
   _id: 'compliance-badges',
   props: {
     eyebrow: 'Compliance',
-    title: 'Meet Your Compliance Requirements',
+    title: 'Meet your compliance requirements',
     description: '',
     ariaLabel: 'Compliance certifications',
     certifications: [

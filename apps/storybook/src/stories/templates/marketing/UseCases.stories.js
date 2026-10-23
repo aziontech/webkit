@@ -71,7 +71,7 @@ const useCases = ({ tag, title, lead, href, cases }) =>
           <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">${title}</h2>
           <p class="m-0 mb-(--spacing-xl) text-body-md text-(--text-muted)">${lead}</p>
           <Button
-            label="View docs"
+            label="Docs"
             kind="secondary"
             size="large"
             href="${href}"

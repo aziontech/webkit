@@ -282,7 +282,7 @@ const ALIGNED_TEMPLATE = `<div class="grid grid-cols-[repeat(auto-fit,320px)] ga
     value="Free"
     prefix=""
     suffix=""
-    action-label="Start free"
+    action-label="Start for free"
   />
   <CardPricing
     aligned
@@ -302,7 +302,7 @@ const ALIGNED_TEMPLATE = `<div class="grid grid-cols-[repeat(auto-fit,320px)] ga
     value="Custom"
     prefix=""
     suffix=""
-    action-label="Contact sales"
+    action-label="Talk to a specialist"
   />
 </div>`
 
@@ -392,7 +392,7 @@ const SLOTS_TEMPLATE = `<CardPricing
     </li>
   </ul>
   <template #actions>
-    <Button label="Get started" kind="primary" size="large" class="w-full" />
+    <Button label="Start with Pro" kind="primary" size="large" class="w-full" />
   </template>
 </CardPricing>`
 

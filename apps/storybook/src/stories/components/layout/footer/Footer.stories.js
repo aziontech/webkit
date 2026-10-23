@@ -133,7 +133,7 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <Footer.Link href="/products/edge-storage">Edge Storage</Footer.Link>
   </Footer.Column>
   <Footer.Column title="Developers">
-    <Footer.Link href="/documentation">Documentation</Footer.Link>
+    <Footer.Link href="/documentation">Docs</Footer.Link>
     <Footer.Link href="/blog">Blog</Footer.Link>
     <Footer.Link href="/integrations">Integrations</Footer.Link>
   </Footer.Column>
@@ -143,7 +143,7 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <Footer.Link href="/legal">Legal</Footer.Link>
   </Footer.Column>
   <Footer.Column title="Support">
-    <Footer.Link href="/contact">Contact sales</Footer.Link>
+    <Footer.Link href="/contact">Talk to a specialist</Footer.Link>
     <Footer.Link href="/support">Help center</Footer.Link>
     <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
   </Footer.Column>

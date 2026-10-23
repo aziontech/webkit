@@ -118,7 +118,7 @@ const DEFAULT_MARKUP = `<CallToAction
     <Button label="Start for free" />
     <Button
       kind="outlined"
-      label="Talk to sales"
+      label="Talk to a specialist"
     />
   </template>
 </CallToAction>`
@@ -147,7 +147,7 @@ const WITH_EYEBROW_MARKUP = `<CallToAction
     <Button label="Start for free" />
     <Button
       kind="outlined"
-      label="Talk to sales"
+      label="Talk to a specialist"
     />
   </template>
 </CallToAction>`
@@ -177,7 +177,7 @@ const TYPES_MARKUP = `<div class="flex flex-col gap-(--spacing-xxl)">
       <Button label="Start for free" />
       <Button
         kind="outlined"
-        label="Talk to sales"
+        label="Talk to a specialist"
       />
     </template>
   </CallToAction>
@@ -217,7 +217,7 @@ const TYPES_MARKUP = `<div class="flex flex-col gap-(--spacing-xxl)">
       />
       <Button
         kind="outlined"
-        label="Read the docs"
+        label="Docs"
       />
     </template>
   </CallToAction>

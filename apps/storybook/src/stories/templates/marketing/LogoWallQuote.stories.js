@@ -143,7 +143,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
           </template>
           <template #actions>
             <Button
-              label="View success story"
+              label="Read the case study"
               kind="secondary"
               size="large"
               href="https://www.azion.com/en/success-case/zoop-case-performance-at-scale/"
@@ -221,7 +221,7 @@ export const SITE_SECTION = {
       logoAlt: 'Zoop'
     },
     quoteAction: {
-      label: 'View success story',
+      label: 'Read the case study',
       href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/',
       target: '_blank'
     }

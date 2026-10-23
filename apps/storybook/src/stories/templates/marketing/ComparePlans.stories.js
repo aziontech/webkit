@@ -30,7 +30,7 @@ const PLANS = [
     id: 'enterprise',
     name: 'Enterprise',
     highlighted: false,
-    action: { label: 'Contact us', kind: 'outlined', href: '#contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '#contact' }
   }
 ]
 
@@ -446,7 +446,7 @@ export const SITE_SECTION = {
         name: 'Hobby',
         highlighted: false,
         action: {
-          label: 'Start free',
+          label: 'Start for free',
           href: 'https://console.azion.com/signup?plan=hobby'
         }
       },
@@ -464,7 +464,7 @@ export const SITE_SECTION = {
         name: 'Enterprise',
         highlighted: false,
         action: {
-          label: 'Contact us',
+          label: 'Talk to a specialist',
           href: '/en/contact/'
         }
       }

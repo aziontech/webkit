@@ -52,21 +52,21 @@ const RETAIL_CLIENT_STRIP = [
   'nzn'
 ]
 
-const START_FREE = { label: 'Start free', kind: 'secondary', href: '/signup' }
-const START_FREE_LOWER = { label: 'Start free', kind: 'secondary', href: '/signup' }
+const START_FREE = { label: 'Start for free', kind: 'secondary', href: '/signup' }
+const START_FREE_LOWER = { label: 'Start for free', kind: 'secondary', href: '/signup' }
 const SPECIALIST = {
-  label: 'Talk to an expert',
+  label: 'Talk to a specialist',
   kind: 'outlined',
   href: '#contact',
   trailing: true
 }
 const SPECIALIST_PAGE = {
-  label: 'Talk to an expert',
+  label: 'Talk to a specialist',
   kind: 'outlined',
   href: '/contact',
   trailing: true
 }
-const SPECIALIST_PLAIN = { label: 'Talk to an expert', kind: 'outlined' }
+const SPECIALIST_PLAIN = { label: 'Talk to a specialist', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
 const SEE_POSTS = { label: 'See posts', kind: 'secondary', href: '#posts' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
@@ -355,11 +355,11 @@ export const CENTERED_CAROUSEL_SECTION = {
     description:
       'Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.',
     primaryAction: {
-      label: 'Start free',
+      label: 'Start for free',
       href: 'https://console.azion.com/signup/'
     },
     secondaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     },
     carouselLabel: 'Trusted by teams running critical workloads',
@@ -413,7 +413,7 @@ export const TITLE_BAND_SECTION = {
       href: '#subjects'
     },
     secondaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     },
     carouselLabel: 'Trusted by teams running critical workloads',
@@ -553,7 +553,7 @@ export const COPY_BESIDE_ART_SECTION = {
     ],
     carouselLabel: 'Trusted by teams running critical workloads',
     primaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     }
   }
@@ -583,7 +583,7 @@ export const COPY_ON_TOP_ART_SECTION = {
     description:
       'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
     primaryAction: {
-      label: 'Start free',
+      label: 'Start for free',
       href: 'https://console.azion.com/signup'
     },
     secondaryAction: {

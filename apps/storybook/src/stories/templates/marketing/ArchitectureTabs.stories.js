@@ -94,7 +94,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     >
       <template #actions>
         <Button
-          label="Read the docs"
+          label="Docs"
           kind="secondary"
           size="large"
           href="/product-preview"
@@ -310,7 +310,7 @@ export const SITE_SECTION = {
           'A repeated prompt is answered from cache, with no model call and no tokens spent.'
       }
     ],
-    action: { label: 'Read the docs', href: '/product-preview', trailing: true }
+    action: { label: 'Docs', href: '/product-preview', trailing: true }
   }
 }
 

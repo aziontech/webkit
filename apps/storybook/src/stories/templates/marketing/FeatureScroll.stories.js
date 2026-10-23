@@ -108,8 +108,8 @@ const IMPORTS = [
   declareFeatures('features', FEATURES)
 ]
 
-const LEARN_MORE = `<Button
-  label="Learn more"
+const DOCS_ACTION = `<Button
+  label="Docs"
   kind="secondary"
   size="small"
   :href="features[index].href"
@@ -122,7 +122,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
     <SectionTitle
       eyebrow="Workloads"
-      title="Everything a Workload Does, One Screen at a Time"
+      title="Everything a workload does, one screen at a time"
       description="Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it."
       size="large"
     />
@@ -186,7 +186,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
         </div>
       </template>
       <template #actions="{ index }">
-        ${LEARN_MORE.split('\n').join('\n        ')}
+        ${DOCS_ACTION.split('\n').join('\n        ')}
       </template>
     </StickyStack>
   </FrameBox>
@@ -224,14 +224,14 @@ export const SITE_SECTION = {
   _id: 'feature-scroll',
   props: {
     eyebrow: 'Workloads',
-    title: 'Everything a Workload Does, One Screen at a Time',
+    title: 'Everything a workload does, one screen at a time',
     description:
       'Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it.',
     items: FEATURES.map(({ title, description, href, widget, props }) => ({
       title,
       description,
       href,
-      action: { label: 'Learn more', href, trailing: true },
+      action: { label: 'Docs', href, trailing: true },
       scene: { component: widget, props }
     }))
   }
