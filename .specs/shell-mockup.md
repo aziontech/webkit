@@ -4,7 +4,7 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: a9d6e5ee2981447e3db7e0f33d2bd82a06bbbba208e3162a1f594e09e4b250b5
+checksum: 2f63bb85dcd527c4d6afb369f95cb5c62fb57bd45b531e2c7f5219ce01613ea0
 created: 2026-10-21
 last_updated: 2026-10-23
 ---
@@ -146,7 +146,7 @@ _No events — the mockup is a picture; nothing in it reports activation._
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| part entrance (root enters view while active) | inline `transition` on `opacity` and `translate`, landing classes flipped by `data-entered` | duration from `travel`, curve `expressive-entrance`, delay `order × beat` — all from `@aziontech/theme/animations` | `transition: none` inline plus `motion-reduce:translate-y-0 motion-reduce:opacity-100` (parts drawn in place) |
+| part entrance (root enters view while active) | `transition-[opacity,translate]` on each part, landing classes flipped by `data-entered`; the part's root sets only the `--part-duration` and `--part-delay` custom properties inline, so a consumer class can still override the transition | `--part-duration` from `travel` and `--part-delay` = `order × beat`, both from `@aziontech/theme/animations` `duration`; curve `ease-expressive-entrance` | `motion-reduce:transition-none` plus `motion-reduce:translate-y-0 motion-reduce:opacity-100` (parts drawn in place); `still` sets both custom properties to `0ms` |
 
 No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so every part's timing comes from the root's context.
 
@@ -185,7 +185,7 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 - Keyboard map: none by default (inert). With `interactive`, `Tab` reaches the composed controls in DOM order and each keeps its own keyboard behavior; the shell's own bar, rail and search are drawings and never take focus.
 - ARIA: the root is a `figure` with `aria-hidden="true"` and `inert` unless `interactive`; the band hosting it carries the text that describes it. The bars and the rail are non-landmark `div`s that stay `inert` and `aria-hidden="true"` even when `interactive`, so the mockup never exposes a `banner`, `navigation` or `complementary` landmark, nor a focusable drawn control, inside the host page.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the shell's text uses `var(--text-default)` and `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface-raised)`, the same pairs the console uses.
-- `motion-reduce:` landing classes on every part, and the inline transition drops to `none` under reduced motion.
+- `motion-reduce:` landing classes and `motion-reduce:transition-none` on every part.
 - Touch target: not applicable by default (inert). Interactive content keeps the composed components' own targets.
 
 ## Stories (Storybook)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { curve, duration } from '@aziontech/theme/animations'
+  import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, onScopeDispose, provide, readonly, ref, useAttrs, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -225,10 +225,11 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced || props.still) return { transition: 'none' }
-    const enter = `${duration[props.travel]} ${curve['expressive-entrance']}`
-    const delay = `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
-    return { transition: `opacity ${enter} ${delay}, translate ${enter} ${delay}` }
+    if (reduced || props.still) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    return {
+      '--part-duration': duration[props.travel],
+      '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
+    }
   }
 
   provide(SHELL_MOCKUP_KEY, { entered: readonly(entered), beatStyle })
