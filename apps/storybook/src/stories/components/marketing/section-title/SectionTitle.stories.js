@@ -201,8 +201,8 @@ const WITH_ACTIONS_TEMPLATE = `<SectionTitle
   description="One platform for applications, security and observability."
 >
   <template #actions>
-    <Button label="Start building" />
-    <Button kind="outlined" label="Read the docs" />
+    <Button label="Start for free" />
+    <Button kind="outlined" label="Docs" />
   </template>
 </SectionTitle>`
 

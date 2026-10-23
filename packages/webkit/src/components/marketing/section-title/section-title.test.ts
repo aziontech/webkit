@@ -191,8 +191,8 @@ describe('SectionTitle', () => {
       const { getAllByRole } = render(WithActions())
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
-        'Start building',
-        'Read the docs'
+        'Start for free',
+        'Docs'
       ])
     })
   })
