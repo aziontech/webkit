@@ -25,6 +25,7 @@ import Heroes from './Heroes.vue'
 import HeroForm from './HeroForm.vue'
 import HeroWithOpening from './HeroWithOpening.vue'
 import IntegrationCode from './IntegrationCode.vue'
+import InvestorMarks from './InvestorMarks.vue'
 import ListingBrowser from './ListingBrowser.vue'
 import ListingTable from './ListingTable.vue'
 import LogoWallQuote from './LogoWallQuote.vue'
@@ -70,6 +71,7 @@ export const SECTIONS: Record<string, Component> = {
   HeroForm,
   HeroWithOpening,
   IntegrationCode,
+  InvestorMarks,
   ListingBrowser,
   ListingTable,
   LogoWallQuote,

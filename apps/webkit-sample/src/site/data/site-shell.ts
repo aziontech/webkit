@@ -358,7 +358,7 @@ const COLUMNS: SiteFooterColumn[] = [
   {
     title: 'Company',
     links: links([
-      'About',
+      { label: 'About', href: '/site/about' },
       { label: 'Customers', href: '/site/success-cases' },
       { label: 'Partners', href: '/site/partners' },
       { label: 'Careers', href: '/site/careers' },

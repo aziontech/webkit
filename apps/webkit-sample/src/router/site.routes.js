@@ -29,6 +29,7 @@ import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
+import LandingAbout from '@site/views/LandingAbout.vue'
 import LandingAiGateway from '@site/views/LandingAiGateway.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
@@ -306,6 +307,8 @@ export const siteRoutes = [
   // framed `call-to-action` between hatched gaps — webkit sections only. The site nav does not
   // link it, because azion.com's does not either.
   { path: '/site/partners', name: 'site-partners', component: LandingPartners },
+  // azion.com/en/about-us, read verbatim; the footer's Company `About` link points here.
+  { path: '/site/about', name: 'site-about', component: LandingAbout },
   // The success-case library in the same shell: the first /site page whose body is a
   // filtered index rather than an argument — three featured stories, 35 in a hairline grid
   // behind three pickers, and the analyst recognitions. The site nav does not link it,
