@@ -3479,7 +3479,7 @@
           "type": "'overview' | 'topology' | 'deploy' | 'main-settings' | 'cache-settings' | 'device-groups' | 'functions' | 'rules-engine'",
           "default": "undefined",
           "required": "false",
-          "doc": "Tab a tabbed widget plays; unset plays its first tab."
+          "doc": "Tab a tabbed widget plays (`workload-overview`, `application-version`); other widgets ignore it, and unset plays the first tab."
         },
         {
           "name": "interval",
