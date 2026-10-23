@@ -179,10 +179,10 @@ export const LOAD_BALANCER_PAGE = [
         title: 'Failover and error handling',
         description:
           'Detect origin failures in real time, respond to HTTP 5xx and 404 errors, timeouts, and connectivity loss, and reroute traffic to healthy servers without disrupting service. Set primary and backup roles to trigger only when necessary, and tune connection and byte-timeout settings to speed detection and recovery.',
-        href: '/site/products/real-time-metrics',
+        href: '/site/docs/real-time-metrics',
         illustration: 'live-debugging',
         illustrationLabel: 'A time window of traffic with its requests, errors and events counted',
-        actions: [{ label: 'Real-Time Metrics', href: '/site/products/real-time-metrics' }]
+        actions: [{ label: 'Real-Time Metrics', href: '/site/docs/real-time-metrics' }]
       }
     ]
   },
@@ -192,7 +192,7 @@ export const LOAD_BALANCER_PAGE = [
     title: 'Traffic distribution for any industry',
     description:
       'Put Load Balancer in front of your origins and spread traffic across them on Azion’s distributed infrastructure, with the method, weights and failover roles you set. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

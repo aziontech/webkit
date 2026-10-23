@@ -339,7 +339,7 @@ const COLUMNS: SiteFooterColumn[] = [
   {
     title: 'Developers',
     links: links([
-      'Documentation',
+      'Docs',
       'API Reference',
       'Dev Tools',
       'Release Notes',

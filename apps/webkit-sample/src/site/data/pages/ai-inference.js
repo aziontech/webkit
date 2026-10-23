@@ -193,7 +193,7 @@ export const AI_INFERENCE_PAGE = [
     title: 'What you can build with AI Inference',
     description:
       'Put AI Inference behind any application and run models on Azion’s distributed infrastructure, close to your users. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('axur') },

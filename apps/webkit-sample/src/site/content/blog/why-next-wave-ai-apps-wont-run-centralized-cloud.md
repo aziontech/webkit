@@ -44,7 +44,7 @@ Paired with [LoRA Fine-Tune](https://www.azion.com/en/documentation/products/ai/
 
 [Bot Manager](https://www.azion.com/en/products/bot-manager/) **and** [WAF](https://www.azion.com/en/products/web-application-firewall/) **filter traffic before it reaches the model.** AI agent traffic doesn’t follow the rate-limit patterns built for human users, and it often bypasses per-IP limiting outright. Enforcement close to the request, before it reaches [AI Inference](https://www.azion.com/en/products/ai-inference/) or the origin, catches this without disrupting legitimate agent activity.
 
-[Real-Time Events](https://www.azion.com/en/products/real-time-events/) **and** [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) **give visibility across the whole pipeline.** Once inference, caching, retrieval, and application logic are running across a distributed infrastructure instead of one region an engineer can log into, per-request tracing is what makes the system debuggable.
+[Real-Time Events](https://www.azion.com/en/products/real-time-events/) **and** [Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) **give visibility across the whole pipeline.** Once inference, caching, retrieval, and application logic are running across a distributed infrastructure instead of one region an engineer can log into, per-request tracing is what makes the system debuggable.
 
 ## AI inference latency benchmarks: cold start vs. distributed execution
 

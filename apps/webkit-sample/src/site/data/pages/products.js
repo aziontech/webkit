@@ -128,12 +128,6 @@ const PRODUCT_DIRECTORY = [
         href: '/site/products/workloads'
       },
       {
-        icon: 'ai ai-edge-application',
-        title: 'Applications',
-        description: 'Decide what happens to every request',
-        href: '/site/products/applications'
-      },
-      {
         icon: 'ai ai-edge-functions',
         title: 'Functions',
         description: 'Run serverless code closer to users',
@@ -227,22 +221,10 @@ const PRODUCT_DIRECTORY = [
         href: '/site/products/edge-dns'
       },
       {
-        icon: 'ai ai-edge-firewall',
-        title: 'Firewall',
-        description: 'Filter every request before it reaches your code',
-        href: '/site/products/firewall'
-      },
-      {
         icon: 'ai ai-network-lists',
         title: 'Network Shield',
         description: 'Block threats at the network layer before origin',
         href: '/site/products/network-shield'
-      },
-      {
-        icon: 'pi pi-shield',
-        title: 'DDoS Protection',
-        description: 'Stop volumetric attacks automatically',
-        href: '/site/products/ddos-protection'
       }
     ]
   },
@@ -260,12 +242,6 @@ const PRODUCT_DIRECTORY = [
         title: 'Real-Time Events',
         description: 'Investigate every request in seconds',
         href: '/site/products/real-time-events'
-      },
-      {
-        icon: 'ai ai-real-time-metrics',
-        title: 'Real-Time Metrics',
-        description: 'Watch traffic, errors and latency as they happen',
-        href: '/site/products/real-time-metrics'
       }
     ]
   }
@@ -281,7 +257,7 @@ export const PRODUCTS_PAGE = [
     description:
       "Build, store, secure, and observe with products you switch on. They provision in seconds, bill on one account, and run on Azion's distributed infrastructure.",
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'See pricing', href: '/site/pricing', kind: 'outlined', trailing: true }
     ],
     carouselLabel: 'Running in production on these products',

@@ -22,13 +22,13 @@ export const BLOG_CATEGORIES = ['Developers', 'Security', 'Company News', 'Marke
 
 export const BLOG_LABELS = {
   search: 'Search articles',
-  loadMore: 'Show more'
+  loadMore: 'Load more'
 }
 
 // The source's newsletter band, in its own words.
 export const BLOG_NEWSLETTER = {
   eyebrow: 'Stay up to date',
-  title: 'Subscribe to our Newsletter',
+  title: 'Subscribe to our newsletter',
   description:
     'Product updates, event highlights, and industry insights, delivered to your inbox.',
   placeholder: 'Your email',

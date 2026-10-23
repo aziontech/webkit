@@ -178,11 +178,16 @@ export const EDGE_DNS_PAGE = [
         title: 'Built-in DDoS protection and threat detection',
         description:
           'Mitigate DNS floods, amplification attempts, and malicious queries with traffic analysis, automatic rate limiting, and real-time threat detection. Every query is evaluated proactively, with no additional configuration.',
-        href: '/site/products/ddos-protection',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/',
         illustration: 'dns-protection',
         illustrationLabel:
           'DNS queries filtered by a protective layer before they reach the nameservers',
-        actions: [{ label: 'DDoS Protection', href: '/site/products/ddos-protection' }]
+        actions: [
+          {
+            label: 'DDoS Protection',
+            href: 'https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/'
+          }
+        ]
       }
     ]
   },
@@ -192,7 +197,7 @@ export const EDGE_DNS_PAGE = [
     title: 'Safe and reliable authoritative DNS',
     description:
       'Put Edge DNS in front of any domain and answer every query from Azion’s distributed infrastructure, with DNSSEC and DDoS protection built in. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

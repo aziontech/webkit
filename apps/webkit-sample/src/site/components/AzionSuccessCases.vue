@@ -156,11 +156,13 @@
   >
     <Hero.Title
       centered
+      eyebrow="Customers"
+      eyebrow-prefix="//"
       title="Trusted by leading companies"
     >
       <template #actions>
         <Button
-          label="Start free"
+          label="Start for free"
           kind="secondary"
           size="large"
           @click="goSignup"
@@ -509,7 +511,7 @@
       >
         <template #actions>
           <Button
-            label="Start free"
+            label="Start for free"
             kind="secondary"
             size="large"
             @click="goSignup"
@@ -517,7 +519,7 @@
         </template>
         <template #aside>
           <Button
-            label="Talk to an expert"
+            label="Talk to a specialist"
             kind="outlined"
             size="large"
             href="/site/contact"

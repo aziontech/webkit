@@ -206,7 +206,7 @@ No region to choose, no server to provision.
 
 When your application is ready for production, or consistently reaches plan limits, Pro is the next step—same platform, higher limits, on-demand billing. For larger-scale needs, Enterprise offers custom terms, reserved capacity, and advanced support.
 
-[Start free →](https://console.azion.com/signup)
+[Start for free →](https://console.azion.com/signup)
 
 #### FAQ
 

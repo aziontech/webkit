@@ -224,7 +224,7 @@ export const CACHE_PAGE = [
         href: '/signup',
         illustration: 'distributed-apis',
         illustrationLabel: "One request fanning into the cache layer's content types",
-        actions: [{ label: 'Start free', href: '/signup' }]
+        actions: [{ label: 'Start for free', href: '/signup' }]
       }
     ]
   },
@@ -234,7 +234,7 @@ export const CACHE_PAGE = [
     title: 'What teams use Cache for',
     description:
       'Put Cache in front of any origin and serve repeat traffic from Azion’s distributed infrastructure, with the TTLs, cache keys and stale behavior you set. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },

@@ -341,7 +341,7 @@ export const FUNCTIONS_PAGE = [
       'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
     items: INTEGRATIONS.map((item) => ({
       ...item,
-      action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true }
+      action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true }
     })),
     samples: INTEGRATION_SAMPLES
   },
@@ -351,7 +351,7 @@ export const FUNCTIONS_PAGE = [
     title: 'What teams use Functions for',
     description:
       'Run JavaScript and TypeScript in the request flow on Azion’s distributed infrastructure. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },

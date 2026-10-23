@@ -250,7 +250,7 @@ export const AI_GATEWAY_PAGE = [
     tabs: ROUTING_TABS,
     tabsAriaLabel: 'Routing policies',
     scene: { component: markRaw(DiagramSet), props: { diagrams: ROUTING_DIAGRAMS } },
-    actions: [{ label: 'Read the docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }]
+    actions: [{ label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }]
   },
   {
     section: 'UseCases',
@@ -258,7 +258,7 @@ export const AI_GATEWAY_PAGE = [
     title: 'What teams use AI Gateway for',
     description:
       'Put one gateway in front of every model your teams call, and decide routing, limits and logging in one place. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   {

@@ -82,7 +82,7 @@ For scenarios where deterministic controls cannot confidently classify a request
 
 Based on the result, the platform can deny, rate limit, redirect, challenge, delay, or allow a request before it reaches the origin.
 
-Finally, [Real-Time Events](https://www.azion.com/en/products/real-time-events/) and [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) provide visibility into outcomes, allowing teams to investigate attacks, validate decisions, and continuously refine policies.
+Finally, [Real-Time Events](https://www.azion.com/en/products/real-time-events/) and [Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) provide visibility into outcomes, allowing teams to investigate attacks, validate decisions, and continuously refine policies.
 
 This creates a continuous control loop: detect, classify, decide, act, observe, and tune.
 

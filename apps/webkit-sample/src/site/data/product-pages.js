@@ -5,7 +5,7 @@ import { AREZZO, AXUR, CONTABILIZEI, CREFISA } from './clients.js'
 export const PRODUCT_DOCS = '/site/docs'
 
 export const PRODUCT_HERO_ACTIONS = [
-  { label: 'Start free', href: '/signup', kind: 'secondary' },
+  { label: 'Start for free', href: '/signup', kind: 'secondary' },
   { label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
 ]
 
@@ -23,7 +23,7 @@ export const PLATFORM_DIRECTORY = {
 
 const CLI_INSTALL = 'npm install -g azion'
 
-const START_FREE_ACTION = { label: 'Start free', href: '/signup', kind: 'secondary' }
+const START_FREE_ACTION = { label: 'Start for free', href: '/signup', kind: 'secondary' }
 
 const AGENT_AUDIENCES = [
   {
@@ -66,7 +66,7 @@ export const salesClosing = ({ eyebrow, title, titleMuted, description }) => ({
   titleMuted,
   description,
   actions: [START_FREE_ACTION],
-  aside: { label: 'Talk to sales', href: '/site/contact' }
+  aside: { label: 'Talk to a specialist', href: '/site/contact' }
 })
 
 export const primaryClosing = ({ title, description, benefits }) => ({
@@ -76,7 +76,7 @@ export const primaryClosing = ({ title, description, benefits }) => ({
   description,
   actions: [
     START_FREE_ACTION,
-    { label: 'Read the docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
+    { label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
   ],
   benefitsLabel: 'Why teams choose Azion',
   benefits
@@ -166,12 +166,6 @@ export const PRODUCT_GROUPS = [
         href: '/site/products/workloads'
       },
       {
-        icon: 'ai ai-edge-application',
-        title: 'Applications',
-        description: 'Decide what happens to every request',
-        href: '/site/products/applications'
-      },
-      {
         icon: 'ai ai-edge-functions',
         title: 'Functions',
         description: 'Run code globally with no cold starts',
@@ -236,12 +230,6 @@ export const PRODUCT_GROUPS = [
     label: 'Secure',
     items: [
       {
-        icon: 'ai ai-edge-firewall',
-        title: 'Firewall',
-        description: 'Filter every request before it reaches your code',
-        href: '/site/products/firewall'
-      },
-      {
         icon: 'ai ai-waf-rules',
         title: 'WAF',
         description: 'Block common attacks close to traffic',
@@ -271,10 +259,16 @@ export const PRODUCT_GROUPS = [
     label: 'Observe',
     items: [
       {
-        icon: 'ai ai-real-time-metrics',
-        title: 'Real-Time Metrics',
-        description: 'Watch traffic, errors and latency as they happen',
-        href: '/site/products/real-time-metrics'
+        icon: 'ai ai-data-stream',
+        title: 'Data Stream',
+        description: 'Send logs and events to your SIEM or data lake',
+        href: '/site/products/data-stream'
+      },
+      {
+        icon: 'ai ai-real-time-events',
+        title: 'Real-Time Events',
+        description: 'Investigate every request in seconds',
+        href: '/site/products/real-time-events'
       }
     ]
   }

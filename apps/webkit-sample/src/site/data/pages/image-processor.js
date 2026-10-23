@@ -216,7 +216,7 @@ export const IMAGE_PROCESSOR_PAGE = [
     title: 'What teams use Image Processor for',
     description:
       'Put Image Processor in front of any origin and serve optimized images from Azion’s distributed infrastructure, transformed by URL. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },

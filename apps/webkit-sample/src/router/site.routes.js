@@ -35,7 +35,6 @@ import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
 import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
-import LandingApplications from '@site/views/LandingApplications.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
 import LandingBlog from '@site/views/LandingBlog.vue'
@@ -49,10 +48,8 @@ import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
 import LandingDataStream from '@site/views/LandingDataStream.vue'
-import LandingDdosProtection from '@site/views/LandingDdosProtection.vue'
 import LandingEdgeDns from '@site/views/LandingEdgeDns.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
-import LandingFirewall from '@site/views/LandingFirewall.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingGdpr from '@site/views/LandingGdpr.vue'
 import LandingImageProcessor from '@site/views/LandingImageProcessor.vue'
@@ -67,7 +64,6 @@ import LandingPerformance from '@site/views/LandingPerformance.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRealTimeEvents from '@site/views/LandingRealTimeEvents.vue'
-import LandingRealTimeMetrics from '@site/views/LandingRealTimeMetrics.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
@@ -97,7 +93,11 @@ const MOVED = {
   '/site/web-apps': '/site/solutions/web-apps',
   '/site/technology': '/site/solutions/technology',
   '/site/retail': '/site/solutions/retail',
-  '/site/vercel-alternative-guide': '/site/guides/vercel-alternative'
+  '/site/vercel-alternative-guide': '/site/guides/vercel-alternative',
+  '/site/products/applications': '/site/docs/applications',
+  '/site/products/firewall': '/site/docs/firewall',
+  '/site/products/ddos-protection': '/site/docs/workloads',
+  '/site/products/real-time-metrics': '/site/docs/real-time-metrics'
 }
 
 export const siteRoutes = [
@@ -138,12 +138,6 @@ export const siteRoutes = [
   // A product page whose hero is the product: the workload's own deployment topology, drawn
   // with the diagram the console renders, dissolved into the band by a dither ramp.
   { path: '/site/products/workloads', name: 'site-workloads', component: LandingWorkloads },
-  // The Products mega-menu's Applications entry: the delivery logic a workload serves.
-  {
-    path: '/site/products/applications',
-    name: 'site-applications',
-    component: LandingApplications
-  },
   // The Products mega-menu's Object Storage entry.
   {
     path: '/site/products/object-storage',
@@ -169,19 +163,9 @@ export const siteRoutes = [
     component: LandingDataStream
   },
   {
-    path: '/site/products/ddos-protection',
-    name: 'site-ddos-protection',
-    component: LandingDdosProtection
-  },
-  {
     path: '/site/products/edge-dns',
     name: 'site-edge-dns',
     component: LandingEdgeDns
-  },
-  {
-    path: '/site/products/firewall',
-    name: 'site-firewall',
-    component: LandingFirewall
   },
   {
     path: '/site/products/image-processor',
@@ -207,11 +191,6 @@ export const siteRoutes = [
     path: '/site/products/real-time-events',
     name: 'site-real-time-events',
     component: LandingRealTimeEvents
-  },
-  {
-    path: '/site/products/real-time-metrics',
-    name: 'site-real-time-metrics',
-    component: LandingRealTimeMetrics
   },
   {
     path: '/site/products/sql-database',

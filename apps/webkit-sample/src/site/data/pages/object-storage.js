@@ -192,7 +192,7 @@ export const OBJECT_STORAGE_PAGE = [
         href: '/signup',
         illustration: 'azion-to-aws',
         illustrationLabel: 'AWS moving to Azion',
-        actions: [{ label: 'Start free', href: '/signup' }]
+        actions: [{ label: 'Start for free', href: '/signup' }]
       }
     ]
   },
@@ -202,7 +202,7 @@ export const OBJECT_STORAGE_PAGE = [
     title: 'What teams use Object Storage for',
     description:
       'Put Object Storage behind any application and serve files, media and datasets from Azion’s distributed infrastructure, with zero egress between Azion services. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },

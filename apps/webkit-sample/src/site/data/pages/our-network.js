@@ -41,7 +41,12 @@ const NETWORK_BANDS = [
       'Block attack traffic in the delivery path, before it reaches your origin. Deploy code and policies and let the platform handle scaling, execution, and traffic steering. Your team manages fewer regions, less capacity, and fewer scaling rules.',
     illustration: 'automate-threat-mitigation',
     illustrationLabel: 'Attack traffic stopped in the delivery path, before the origin',
-    actions: [{ label: 'Learn more', href: '/site/products/ddos-protection' }]
+    actions: [
+      {
+        label: 'Learn more',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/'
+      }
+    ]
   }
 ]
 
@@ -54,8 +59,8 @@ export const OUR_NETWORK_PAGE = [
     description:
       'Run closer to users with low-latency delivery, stable routing, and built-in DDoS protection across 100+ data centers and 3.3k directly connected ASNs.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     carouselMarks: CLIENT_STRIP
   },

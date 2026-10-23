@@ -197,7 +197,7 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
     title: 'Protect critical applications and APIs',
     description:
       'Put WAF in front of any application or API and stop attacks on Azion’s distributed infrastructure, before they reach your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

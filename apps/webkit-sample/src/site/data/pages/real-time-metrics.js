@@ -179,7 +179,7 @@ export const REAL_TIME_METRICS_PAGE = [
           width: 366,
           height: 193
         },
-        actions: [{ label: 'Start free', href: '/signup' }]
+        actions: [{ label: 'Start for free', href: '/signup' }]
       },
       {
         title: 'Dashboards built for fast decisions',
@@ -202,7 +202,7 @@ export const REAL_TIME_METRICS_PAGE = [
     title: 'What teams use Real-Time Metrics for',
     description:
       'Put Real-Time Metrics in front of every application, function and firewall you run and read their traffic as Azion’s distributed infrastructure serves it, with no sampling. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

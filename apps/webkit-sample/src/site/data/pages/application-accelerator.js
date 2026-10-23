@@ -201,7 +201,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
     title: 'What teams use Application Accelerator for',
     description:
       'Put Application Accelerator in front of dynamic APIs and apps and cache what standard CDN caching cannot, with the methods, query strings and cookies you choose. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('zoop') },

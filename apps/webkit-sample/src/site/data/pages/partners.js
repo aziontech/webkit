@@ -3,6 +3,7 @@ import { PARTNER_FIGURES, PARTNER_REASONS, PARTNER_ROLES } from '../partners.js'
 export const PARTNERS_PAGE = [
   {
     section: 'HeroForm',
+    eyebrow: 'Partners',
     title: 'Grow as an Azion Partner',
     description:
       "Join Azion's global partner program and offer customers a platform that speeds up, protects, and scales their applications.",

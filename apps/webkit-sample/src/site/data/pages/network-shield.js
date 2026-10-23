@@ -180,10 +180,10 @@ export const NETWORK_SHIELD_PAGE = [
         title: 'Traffic control from one set of lists',
         description:
           'Create custom allowlists and blocklists using IPs, CIDR blocks, ASNs, countries, or Azion-managed lists like Tor Exit Nodes. Segment access by region or network type, and share the same lists across multiple firewalls for consistent policies at scale.',
-        href: '/site/products/firewall',
+        href: '/site/docs/firewall',
         illustration: 'reputation-intelligence-for-enhanced-protection',
         illustrationLabel: 'Network lists informing Azion before traffic reaches the firewall',
-        actions: [{ label: 'Firewall', href: '/site/products/firewall' }]
+        actions: [{ label: 'Firewall', href: '/site/docs/firewall' }]
       }
     ]
   },
@@ -193,7 +193,7 @@ export const NETWORK_SHIELD_PAGE = [
     title: 'Block threats at the network layer, before they consume resources',
     description:
       'Put Network Shield in front of any origin and filter traffic by IP, ASN and country on Azion’s distributed infrastructure, before it reaches your servers. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

@@ -191,7 +191,7 @@ export const BOT_MANAGER_PAGE = [
     title: 'Protect critical agentic applications and APIs',
     description:
       'Put Bot Manager in front of any login, checkout or API and stop malicious automation on Azion’s distributed infrastructure, before it reaches your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

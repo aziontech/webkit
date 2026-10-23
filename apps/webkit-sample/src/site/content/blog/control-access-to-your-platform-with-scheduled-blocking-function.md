@@ -106,7 +106,7 @@ As a result, if we try to make a request from Chile, for example, we’ll receiv
 
 ### Or sign up for an account
 
-[SIGN UP NOW](https://console.azion.com/signup/)
+[Start for free](https://console.azion.com/signup/)
 
 #### Azion
 

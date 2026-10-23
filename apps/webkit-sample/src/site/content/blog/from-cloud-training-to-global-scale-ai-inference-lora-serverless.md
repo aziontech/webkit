@@ -67,7 +67,7 @@ In production, **standardization beats modularity** because your routing and fai
 Operating inference across hundreds of micro-sites requires three pillars of control:
 
 - **Total Automation:** Zero-touch deployment and monitoring.
-- **Real-Time Observability:** Tools like [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) and [Events](https://www.azion.com/en/products/real-time-events/) enable measuring GPU saturation and user-perceived latency at every geographic location—not just server uptime. It’ s not “is the server up?”, but:
+- **Real-Time Observability:** Tools like [Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) and [Events](https://www.azion.com/en/products/real-time-events/) enable measuring GPU saturation and user-perceived latency at every geographic location—not just server uptime. It’ s not “is the server up?”, but:
   - GPU saturation
   - time-to-first-token
   - tokens/sec

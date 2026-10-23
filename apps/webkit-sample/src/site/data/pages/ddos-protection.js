@@ -193,7 +193,7 @@ export const DDOS_PROTECTION_PAGE = [
     title: 'Protect critical applications and infrastructure',
     description:
       'Put DDoS Protection in front of any application or infrastructure and absorb attacks on Azion’s distributed infrastructure, before they reach your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

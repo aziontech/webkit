@@ -31,6 +31,7 @@
   >
     <Hero.Title
       max-width="xl"
+      mobile-centered
       :eyebrow="hero.eyebrow"
       eyebrow-prefix="//"
       :title="hero.title"
@@ -39,13 +40,13 @@
       <template #actions>
         <slot name="actions">
           <Button
-            label="Start free"
+            label="Start for free"
             kind="secondary"
             size="large"
             @click="goSignup"
           />
           <Button
-            label="Talk to an expert"
+            label="Talk to a specialist"
             kind="outlined"
             size="large"
             href="#contact"

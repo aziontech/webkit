@@ -39,11 +39,12 @@ export const SUCCESS_CASES_CLOSING = salesClosing(BUILD_CTA)
 export const SUCCESS_CASES_PAGE = [
   {
     section: 'Heroes',
+    eyebrow: 'Customers',
     kind: 'title-band',
-    title: 'Trusted by Leading Companies',
+    title: 'Trusted by leading companies',
     actions: [
       { label: 'See cases', href: '#cases', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
   {

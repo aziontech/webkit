@@ -235,7 +235,7 @@ export const HOME_PAGE = [
     description:
       'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     carouselLabel: 'Proven on mission-critical workloads',
@@ -255,7 +255,7 @@ export const HOME_PAGE = [
     claims: [
       '100+ data centers',
       '100+ Tbps throughput',
-      'Instant scale, automatic routing & failover',
+      { label: 'Instant scale, automatic routing & failover', mobile: false },
       '30 ms median latency',
       'Always-on DDoS protection'
     ]
@@ -269,6 +269,7 @@ export const HOME_PAGE = [
       'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
     tiles: HOME_REASONS
   },
+  HOME_SOLUTIONS_BAND,
   {
     section: 'RecognitionMarquee',
     title: 'Recognized as a market leader',

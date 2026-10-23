@@ -11,7 +11,7 @@ import {
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
-const REAL_TIME_METRICS = '/site/products/real-time-metrics'
+const REAL_TIME_METRICS = '/site/docs/real-time-metrics'
 
 const PILLARS = [
   {
@@ -194,7 +194,7 @@ export const REAL_TIME_EVENTS_PAGE = [
     title: 'Resolve operational and security issues faster',
     description:
       'Put Real-Time Events behind every application, function and WAF you run and read their events on Azion’s distributed infrastructure in under a minute, with no agents to install. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

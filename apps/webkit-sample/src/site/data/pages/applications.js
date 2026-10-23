@@ -184,7 +184,7 @@ export const APPLICATIONS_PAGE = [
     title: 'What teams build with Applications',
     description:
       'Put Applications in front of any origin and decide what happens to each request on Azion’s distributed infrastructure, with the rules and modules you configure. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

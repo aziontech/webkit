@@ -176,8 +176,8 @@ export const SOLUTIONS_PAGE = [
     description:
       'The same products, configured for what you build and the sector you build it in, with the clients already running it and the numbers they measured.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     items: SOLUTION_GUARANTEES
   },
@@ -202,7 +202,7 @@ export const SOLUTIONS_PAGE = [
   {
     section: 'LogoWallQuote',
     eyebrow: 'Customer stories',
-    title: 'Proven at Banks and E-commerce Companies',
+    title: 'Proven at banks and e-commerce companies',
     items: BANKS_AND_RETAIL_WALL,
     ariaLabel: 'Banks and e-commerce companies running on Azion',
     quote: {
@@ -213,7 +213,7 @@ export const SOLUTIONS_PAGE = [
     },
     actions: [
       {
-        label: 'View success story',
+        label: 'Read the case study',
         href: ZOOP.href,
         kind: 'secondary',
         trailing: true,

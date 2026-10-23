@@ -199,7 +199,7 @@ export const DATA_STREAM_PAGE = [
     title: 'Real-time data for security and performance',
     description:
       'Put Data Stream behind any application and send its logs and events from Azion’s distributed infrastructure to the tools you already run. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },

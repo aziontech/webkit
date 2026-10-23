@@ -161,12 +161,12 @@ export const VERCEL_ALTERNATIVE_PAGE = [
     kind: 'copy-beside-art',
     eyebrow: 'Alternative Guide',
     eyebrowPrefix: '//',
-    title: 'Vercel Alternative Guide: Moving to Azion',
+    title: 'Vercel alternative guide: moving to Azion',
     description:
       'Map Vercel projects, preview deployments, Functions, Blob, Edge Config, Firewall, and Web Analytics to Azion. Keep your Git-based build and preview workflow, run functions without cold starts, and move one project at a time before you switch the domain.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     art: {
       name: 'azion-to-vercel',
@@ -191,7 +191,7 @@ export const VERCEL_ALTERNATIVE_PAGE = [
       'Translate Vercel projects into Azion equivalents while keeping validation workflows predictable. Rebuild CDN behavior, redirects, rewrites, image optimization, Functions, AI integrations, storage, security rules, DNS, certificates, and observability before shifting production domains.',
     illustration: 'build-applications',
     illustrationLabel: 'Framework projects mapped through the platform to what each one serves',
-    actions: [{ label: 'See the guide', href: '/site/docs' }]
+    actions: [{ label: 'Read the guide', href: '/site/docs' }]
   },
   { section: 'FaqSection', items: FAQ },
   agentsClosing('Build once. Run everywhere.')

@@ -82,7 +82,7 @@ const USE_CASES = [
     title: 'Protect what you expose',
     description:
       'Bind a firewall to the workload and every request that reaches the hostname passes WAF, rate limiting and network lists before anything else runs.',
-    href: '/site/products/firewall'
+    href: '/site/docs/firewall'
   }
 ]
 
@@ -275,7 +275,7 @@ export const WORKLOADS_PAGE = [
         href: '/signup',
         illustration: 'runtime',
         illustrationLabel: 'Requests from every protocol reaching one workload',
-        actions: [{ label: 'Start free', href: '/signup' }]
+        actions: [{ label: 'Start for free', href: '/signup' }]
       }
     ]
   },
@@ -285,7 +285,7 @@ export const WORKLOADS_PAGE = [
     title: 'What teams run on Workloads',
     description:
       'Put a workload in front of any application and serve it from Azion’s distributed infrastructure, with the domains, certificates and deployments you set. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

@@ -24,7 +24,7 @@ Modern threat landscapes call for security that’s unified, automated, and buil
 
 ### DDoS Protection — Leader
 
-We were also named a **Leader** in [DDoS Protection](https://www.azion.com/en/products/ddos-protection/), recognizing Azion’s ability to help organizations maintain availability and mitigate disruptive volumetric attacks through resilient filtering and traffic control.
+We were also named a **Leader** in [DDoS Protection](https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/), recognizing Azion’s ability to help organizations maintain availability and mitigate disruptive volumetric attacks through resilient filtering and traffic control.
 
 ### Web Security — High Performer
 

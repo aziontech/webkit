@@ -204,7 +204,7 @@ export const KV_STORE_PAGE = [
     title: 'What teams use KV Store for',
     description:
       'Put KV Store behind any function and read sessions, flags and counters from Azion’s distributed infrastructure, close to the request. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },

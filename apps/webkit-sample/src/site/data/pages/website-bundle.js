@@ -15,6 +15,7 @@ import {
   PRODUCT_SECURITY_CLOSING,
   salesClosing
 } from '../product-pages.js'
+import { NETWORK_TOPICS } from '../solutions.js'
 import { WORKLOAD_RECIPE_TABS } from '../workload-recipes.js'
 import { AI_GATEWAY_PAGE } from './ai-gateway.js'
 import { BLOG_CLOSING, BLOG_PAGE } from './blog.js'
@@ -33,6 +34,7 @@ import { PRODUCTS_PAGE } from './products.js'
 import { SOLUTIONS_PAGE } from './solutions.js'
 import { SUCCESS_CASES_PAGE } from './success-cases.js'
 import { SUPPORT_PAGE } from './support.js'
+import { TECHNOLOGY_PAGE } from './technology.js'
 import { VERCEL_ALTERNATIVE_PAGE } from './vercel-alternative.js'
 import { WORKLOAD_ARCHITECTURE_BAND } from './workloads.js'
 
@@ -124,7 +126,7 @@ const ANATOMY = [
     icon: 'ai ai-rules-engine',
     title: 'Rules Engine',
     description:
-      'Each request walks your rules in order: criteria match it, behaviors decide where it goes — a bucket, an origin, a function, a redirect.'
+      'Each request walks your rules in order. Criteria match it, and behaviors send it to a bucket, an origin, a function, or a redirect.'
   },
   {
     icon: 'ai ai-tiered-cache',
@@ -136,7 +138,7 @@ const ANATOMY = [
     icon: 'ai ai-edge-functions',
     title: 'Functions',
     description:
-      'Bind a function and run it on the routes that need logic — auth checks, redirects, shaped payloads — before the origin is ever reached.'
+      'Bind a function and run it on the routes that need logic (auth checks, redirects, shaped payloads) before the origin is ever reached.'
   },
   {
     icon: 'pi pi-arrow-right-arrow-left',
@@ -148,7 +150,7 @@ const ANATOMY = [
     icon: 'ai ai-image-processor',
     title: 'Image Processor',
     description:
-      'Keep one source image and derive every variant on demand with an ims query — fit-in/400x400 — cached like any other response.'
+      'Keep one source image and derive every variant on demand with an ims query, such as fit-in/400x400. Each variant is cached like any other response.'
   }
 ]
 
@@ -184,13 +186,13 @@ const PLATFORM_DIRECTORY_BAND = {
           href: '/site/products/functions'
         },
         {
-          icon: 'pi pi-sitemap',
+          icon: 'ai ai-rules-engine',
           title: 'Rules Engine',
           description: 'Automate request handling with rules',
           href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
         },
         {
-          icon: 'pi pi-image',
+          icon: 'ai ai-image-processor',
           title: 'Image Processor',
           description: 'Resize and convert images on demand',
           href: 'https://www.azion.com/en/products/image-processor/'
@@ -208,7 +210,7 @@ const PLATFORM_DIRECTORY_BAND = {
           href: 'https://www.azion.com/en/products/ai-inference/'
         },
         {
-          icon: 'ai ai-gateway',
+          icon: 'ai ai-ai-gateway',
           title: 'AI Gateway',
           description: 'Route, secure and log every model call',
           href: 'https://www.azion.com/en/solutions#ai'
@@ -254,7 +256,7 @@ const PLATFORM_DIRECTORY_BAND = {
           href: 'https://www.azion.com/en/solutions/api-gateway/'
         },
         {
-          icon: 'pi pi-android',
+          icon: 'ai ai-bot-manager',
           title: 'Bot Manager',
           description: 'Detect and stop automated traffic',
           href: 'https://www.azion.com/en/products/bot-manager/'
@@ -280,7 +282,7 @@ const PLATFORM_DIRECTORY_BAND = {
           icon: 'ai ai-real-time-metrics',
           title: 'Real-Time Metrics',
           description: 'Watch traffic, errors and latency as they happen',
-          href: 'https://www.azion.com/en/products/real-time-metrics/'
+          href: 'https://www.azion.com/en/documentation/platform/real-time-metrics/'
         }
       ]
     }
@@ -303,7 +305,7 @@ const WORKLOAD_FEATURES = [
     title: 'Every workload on one list',
     description:
       'See each workload with its domain, status and last deployment, so what is live is never a question.',
-    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     scene: {
       component: markRaw(WorkloadsListWidget),
       props: { ...BARE_WIDGET, width: 680 }
@@ -313,28 +315,28 @@ const WORKLOAD_FEATURES = [
     title: 'Read the deployment topology',
     description:
       'The domains, the application and the firewall a workload serves, drawn as one chain.',
-    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     scene: { component: markRaw(WorkloadTopologyChainWidget), props: BARE_WIDGET }
   },
   {
     title: 'Domains and TLS, handled',
     description:
       'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     scene: { component: markRaw(WorkloadDomainsWidget), props: BARE_WIDGET }
   },
   {
     title: 'Ship a version in seconds',
     description:
       'Build, upload, propagate and warm the cache, every step streamed as it happens until the version is live everywhere.',
-    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     scene: { component: markRaw(WorkloadDeployLogsWidget), props: BARE_WIDGET }
   },
   {
     title: 'Gradual rollouts and instant rollback',
     description:
       'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-    action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     scene: { component: markRaw(WorkloadRolloutRowsWidget), props: BARE_WIDGET }
   }
 ]
@@ -346,7 +348,7 @@ const CLOSING_PANEL = {
   description: 'Explore our open positions and find the right fit for you.',
   actions: [
     {
-      label: 'See all available jobs',
+      label: 'See all roles',
       href: '/site/careers/jobs',
       kind: 'secondary',
       trailing: true
@@ -363,6 +365,13 @@ const CLOSING_SPLIT = salesClosing({
 
 const BLOG_POST_PAGE = blogPostPage(BLOG_FEATURED.key)
 
+const FINANCIAL_RESOURCES = pick(FINANCIAL_SERVICES_PAGE, 'ResourceGrid')
+const TECHNOLOGY_RESOURCES = pick(TECHNOLOGY_PAGE, 'ResourceGrid')
+const SCROLLING_RESOURCES = {
+  ...TECHNOLOGY_RESOURCES,
+  items: [...TECHNOLOGY_RESOURCES.items, ...FINANCIAL_RESOURCES.items.slice(2)]
+}
+
 export const WEBSITE_BUNDLE_PAGE = [
   pick(SOLUTIONS_PAGE, 'HeroWithOpening'),
   pick(HOME_PAGE, 'Heroes'),
@@ -371,8 +380,8 @@ export const WEBSITE_BUNDLE_PAGE = [
     kind: 'copy-beside-art',
     ...PERFORMANCE_HERO,
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     art: {
       name: 'improve-application-performance-and-reliability',
@@ -391,7 +400,13 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(HOME_PAGE, 'ClientMosaic'),
   pick(FINANCIAL_SERVICES_PAGE, 'ComplianceBadges'),
 
-  pick(HOME_PAGE, 'NetworkSection'),
+  { ...pick(HOME_PAGE, 'NetworkSection'), titleSize: 'medium' },
+  {
+    ...pick(HOME_PAGE, 'NetworkSection'),
+    kind: 'benefits',
+    titleSize: 'medium',
+    benefits: NETWORK_TOPICS
+  },
   pick(PRODUCTS_PAGE, 'StatsBand'),
 
   HOME_SOLUTIONS_BAND,
@@ -400,7 +415,7 @@ export const WEBSITE_BUNDLE_PAGE = [
   {
     section: 'FeatureScroll',
     eyebrow: 'Workloads',
-    title: 'Everything a Workload Does, One Screen at a Time',
+    title: 'Everything a workload does, one screen at a time',
     description:
       'Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout.',
     items: WORKLOAD_FEATURES
@@ -411,10 +426,10 @@ export const WEBSITE_BUNDLE_PAGE = [
     eyebrow: 'Anatomy',
     title: 'Configured in code, applied everywhere',
     description:
-      'Everything an application does is a rule in azion.config.js — so the routing, the cache and the functions ship with the repository, not with a console session.',
+      'Everything an application does is a rule in azion.config.js, so the routing, the cache, and the functions ship with the repository, not with a console session.',
     items: ANATOMY.map((item) => ({
       ...item,
-      action: { label: 'Learn more', href: PRODUCT_DOCS, trailing: true }
+      action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true }
     })),
     samples: ANATOMY_SAMPLES
   },
@@ -427,7 +442,7 @@ export const WEBSITE_BUNDLE_PAGE = [
       'Storage, a database, a firewall and a cache policy all bind to the same workload. Each one is a binding, not another deployment to run.',
     tabs: WORKLOAD_RECIPE_TABS,
     copyAriaLabel: 'Copy the workload sample',
-    action: { label: 'Read the docs', href: PRODUCT_DOCS }
+    action: { label: 'Docs', href: PRODUCT_DOCS }
   },
   WORKLOAD_ARCHITECTURE_BAND,
   PLATFORM_ARCHITECTURE_BAND,
@@ -442,8 +457,9 @@ export const WEBSITE_BUNDLE_PAGE = [
   },
   PLATFORM_DIRECTORY_BAND,
   pick(CACHE_PAGE, 'UseCases'),
+  FINANCIAL_RESOURCES,
+  SCROLLING_RESOURCES,
   INTEGRATION_CODE_BAND,
-  pick(FINANCIAL_SERVICES_PAGE, 'ResourceGrid'),
   pick(LEARNING_PAGE, 'SubjectLibrary'),
   pick(CAREERS_HOME_PAGE, 'ListingTable'),
   pick(CAREERS_JOBS_PAGE, 'ListingBrowser'),

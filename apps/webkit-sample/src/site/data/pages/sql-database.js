@@ -202,7 +202,7 @@ export const SQL_DATABASE_PAGE = [
     title: 'What teams use SQL Database for',
     description:
       'Put SQL Database behind any application and serve relational data and embeddings from replicas on Azion’s distributed infrastructure, with writes on the main instance. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },
