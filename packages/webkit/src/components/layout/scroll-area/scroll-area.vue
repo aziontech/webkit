@@ -113,6 +113,7 @@
 <template>
   <div
     ref="viewportRef"
+    v-bind="$attrs"
     :class="cn(ROOT_CLASS, attrs.class as string)"
     :data-orientation="orientation"
     :data-fade="fading || null"
