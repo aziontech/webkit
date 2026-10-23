@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: e5c2f4897eb9a1ec31376244d76ee97f426224dccec1724f32fa8a810dbfb4bf
+checksum: f350f65228f04be8091d3a65e8c06b6b9cdd13f425ccfb0b60c1e871a50e94f1
 created: 2026-09-24
-last_updated: 2026-09-26
+last_updated: 2026-10-15
 ---
 
 # Topic — Component Spec
@@ -101,7 +101,7 @@ import Topic from '@aziontech/webkit/topic'
 | Region | Token (DESIGN.md) |
 |---|---|
 | typography (heading) | `.text-heading-xs` |
-| typography (description) | `.text-body-sm` |
+| typography (description) | `.text-body-md` |
 | typography (glyph size) | `.text-heading-xs` — the glyph sits on the headline's line, so it takes the headline's size |
 | typography (trailing arrow) | `.text-body-xs` |
 | glyph | `var(--primary)` |
