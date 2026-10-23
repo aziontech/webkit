@@ -10929,6 +10929,56 @@
         "Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge."
       ]
     },
+    "diagram": {
+      "import": "@aziontech/webkit/diagram",
+      "target": "./src/components/marketing/diagram/diagram.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/diagram",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "spec",
+          "type": "DiagramSpec",
+          "default": "—",
+          "required": "true",
+          "doc": "The nodes, their layout and the edges between them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible description of the whole diagram; when set, the root is announced as one image with this name."
+        }
+      ],
+      "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer passes one `spec` — the nodes, how they are arranged, and the edges between them — and the component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
+      "useWhen": [
+        "Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.",
+        "Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.",
+        "Filling the media cell of a marketing band (`media-tabs`, `media-split`) with an architecture instead of a picture."
+      ],
+      "avoidWhen": [
+        "For decorative product art → use `illustration`.",
+        "For a world map of points of presence → use `network-map`.",
+        "For a sequence of steps the reader follows in order → use `stepper` or an ordered list.",
+        "For live data or anything the reader operates — a diagram is a figure, not a control."
+      ],
+      "related": [
+        "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art.",
+        "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
+        "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
+        "tag` — the status chip a card or item node carries."
+      ],
+      "bestPractices": [
+        "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",
+        "Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.",
+        "Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.",
+        "Give every diagram an `ariaLabel` that states what it shows in one sentence; the drawing itself is hidden from assistive technology.",
+        "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
+      ]
+    },
     "big-numbers": {
       "import": "@aziontech/webkit/big-numbers",
       "target": "./src/components/marketing/big-numbers/big-numbers.vue",

@@ -10,6 +10,11 @@
     "limit": "2.5 KB"
   },
   {
+    "name": "diagram",
+    "path": "src/components/marketing/diagram/diagram.vue",
+    "limit": "10 KB"
+  },
+  {
     "name": "input-text",
     "path": "src/components/inputs/input-text/input-text.vue",
     "limit": "2 KB"
