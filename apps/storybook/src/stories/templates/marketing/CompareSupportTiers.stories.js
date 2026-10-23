@@ -7,6 +7,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -286,7 +287,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -300,16 +300,19 @@ const meta = {
 export default meta
 
 export const TierMatrix = {
-  render: () => ({
-    components,
-    setup: () => ({
-      tiers: TIERS,
-      sections: SECTIONS,
-      visibleTier: ref(DEFAULT_TIER),
-      tierName
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({
+        tiers: TIERS,
+        sections: SECTIONS,
+        visibleTier: ref(DEFAULT_TIER),
+        tierName
+      }),
+      template: TEMPLATE
     }),
-    template: TEMPLATE
-  }),
+    { tiers: TIERS, sections: SECTIONS }
+  ),
   parameters: {
     docs: {
       description: {

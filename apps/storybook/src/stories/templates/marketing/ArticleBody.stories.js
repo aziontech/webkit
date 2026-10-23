@@ -10,6 +10,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SplitButton from '@aziontech/webkit/split-button'
 import Tooltip from '@aziontech/webkit/tooltip'
 
+import { editable } from '../../_shared/editable-content'
 import { each, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -256,7 +257,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -270,7 +270,7 @@ const meta = {
 export default meta
 
 export const SuccessStory = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
       description: {

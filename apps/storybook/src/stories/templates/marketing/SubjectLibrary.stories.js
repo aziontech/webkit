@@ -6,6 +6,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -236,7 +237,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -250,7 +250,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: LIBRARY_TEMPLATE }),
+  ...editable(() => ({ components, template: LIBRARY_TEMPLATE })),
   parameters: {
     docs: {
       description: {

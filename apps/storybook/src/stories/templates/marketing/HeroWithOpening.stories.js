@@ -7,6 +7,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Topic from '@aziontech/webkit/topic'
 
+import { editable } from '../../_shared/editable-content'
 import { each, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -35,7 +36,10 @@ const components = {
   Topic
 }
 
+const TITLE_WIDTH = { short: 'xl', long: '4xl' }
+
 const SIX = {
+  titleLength: 'short',
   eyebrow: 'AI Gateway',
   title: 'One gateway for all your AI applications',
   description:
@@ -81,6 +85,7 @@ const SIX = {
 }
 
 const THREE = {
+  titleLength: 'long',
   eyebrow: 'Firewall',
   title: 'Programmable firewall for distributed applications',
   description:
@@ -141,7 +146,7 @@ const heroWithOpening = (page) => `<Hero
 >
   <Hero.Title
     centered
-    max-width="4xl"
+    max-width="${TITLE_WIDTH[page.titleLength]}"
     eyebrow="${page.eyebrow}"
     title="${page.title}"
     description="${page.description}"
@@ -193,7 +198,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -203,9 +207,13 @@ const meta = {
 export default meta
 
 export const SixArguments = {
-  render: () => ({ components, template: SIX_TEMPLATE }),
+  ...editable(() => ({ components, template: SIX_TEMPLATE })),
   parameters: {
     docs: {
+      description: {
+        story:
+          'Six arguments in two rows of three, for a page that argues on breadth. The headline is short, so it keeps the narrow column and breaks early.'
+      },
       source: { code: toSfc(IMPORTS, SIX_TEMPLATE) }
     }
   }
@@ -219,9 +227,13 @@ export const SixArgumentsJson = {
 }
 
 export const ThreeArguments = {
-  render: () => ({ components, template: THREE_TEMPLATE }),
+  ...editable(() => ({ components, template: THREE_TEMPLATE })),
   parameters: {
     docs: {
+      description: {
+        story:
+          'Three arguments in one row, for a page that argues on a few strong claims. The headline is long, so its column widens and it breaks into two lines instead of three.'
+      },
       source: { code: toSfc(IMPORTS, THREE_TEMPLATE) }
     }
   }

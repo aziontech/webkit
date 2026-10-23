@@ -5,6 +5,7 @@ import Select from '@aziontech/webkit/select'
 import StatusIndicator from '@aziontech/webkit/status-indicator'
 import { onBeforeUnmount, ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { toSfc } from '../../_shared/story-source'
 
 const COLUMNS = [
@@ -180,7 +181,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -194,7 +194,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup() {
       const wideQuery = globalThis.matchMedia(WIDE_QUERY)
@@ -214,7 +214,7 @@ export const Default = {
       }
     },
     template: TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       description: {

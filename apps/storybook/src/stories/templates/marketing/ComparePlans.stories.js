@@ -9,6 +9,7 @@ import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/w
 import Tag from '@aziontech/webkit/tag'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -403,7 +404,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -413,18 +413,21 @@ const meta = {
 export default meta
 
 export const PlanMatrix = {
-  render: () => ({
-    components,
-    setup: () => ({
-      plans: PLANS,
-      sections: SECTIONS,
-      visiblePlan: ref(DEFAULT_PLAN),
-      planName,
-      labelHead,
-      labelTail
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({
+        plans: PLANS,
+        sections: SECTIONS,
+        visiblePlan: ref(DEFAULT_PLAN),
+        planName,
+        labelHead,
+        labelTail
+      }),
+      template: TEMPLATE
     }),
-    template: TEMPLATE
-  }),
+    { plans: PLANS, sections: SECTIONS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }

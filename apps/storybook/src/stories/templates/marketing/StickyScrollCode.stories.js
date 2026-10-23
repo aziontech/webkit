@@ -8,6 +8,7 @@ import SectionTitle from '@aziontech/webkit/section-title'
 import StickyStack from '@aziontech/webkit/sticky-stack'
 import TextureMaterial from '@aziontech/webkit/texture-material'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, declareTabs, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -235,7 +236,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -245,11 +245,14 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
-    components,
-    setup: () => ({ capabilities: CAPABILITIES, samples: SAMPLES }),
-    template: TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ capabilities: CAPABILITIES, samples: SAMPLES }),
+      template: TEMPLATE
+    }),
+    { capabilities: CAPABILITIES, samples: SAMPLES }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }

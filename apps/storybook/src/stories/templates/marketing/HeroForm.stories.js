@@ -6,6 +6,7 @@ import FieldTextarea from '@aziontech/webkit/field-textarea'
 import Hero from '@aziontech/webkit/hero'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
@@ -81,9 +82,6 @@ const asOptions = (labels) => labels.map((label) => ({ value: label, label }))
 const optionsLine = (name, labels) =>
   `const ${name} = [\n${labels.map((label) => `  '${label}'`).join(',\n')}\n].map((label) => ({ value: label, label }))`
 
-const LINK_CLASS =
-  'underline underline-offset-2 transition-colors hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none'
-
 const CONTACT_IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
   "import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'",
@@ -117,8 +115,7 @@ const CONTACT_TEMPLATE = `<Hero
       class="min-w-0"
       sticky
     >
-      Get help with performance, security, and AI workloads. Call us at
-      <a href="tel:+18333329466" class="${LINK_CLASS}">+1 833-332-9466</a>, use live chat, or send your question through the form.
+      Get help with performance, security, and AI workloads. Use live chat or send your question through the form.
 
       <template #actions>
         <Button label="Talk to support" kind="secondary" size="large" />
@@ -171,7 +168,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -188,11 +184,11 @@ const withSiteNavBar = (story) => ({
 
 export const ContactSplit = {
   decorators: [withSiteNavBar],
-  render: () => ({
+  ...editable(() => ({
     components,
     setup: () => ({ country: ref('US'), roles: asOptions(ROLES) }),
     template: CONTACT_TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       source: { code: toSfc(CONTACT_IMPORTS, CONTACT_TEMPLATE) }
@@ -206,7 +202,7 @@ export const CONTACT_SECTION = {
     eyebrow: 'Contact',
     highlight: '',
     title: 'Talk to a specialist',
-    body: 'Get help with performance, security, and AI workloads. Call us at [+1 833-332-9466](tel:+18333329466), use live chat, or send your question through the form.',
+    body: 'Get help with performance, security, and AI workloads. Use live chat or send your question through the form.',
     primaryAction: {
       label: 'Talk to support',
       href: 'https://tickets.azion.com/en/support/login',
