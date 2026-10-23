@@ -55,6 +55,18 @@ describe('SectionTitle', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'medium')
   })
 
+  it.each(['small', 'medium'] as const)('reflects padding="%s" on data-padding', (padding) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, padding } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-padding', padding)
+  })
+
+  it('defaults to the medium padding', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-padding', 'medium')
+  })
+
   it.each(['small', 'medium', 'large'] as const)(
     'keeps the headline an h2 at size="%s"',
     (size) => {
