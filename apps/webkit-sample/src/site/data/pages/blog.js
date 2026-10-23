@@ -1,5 +1,6 @@
 import { BLOG_ALL, BLOG_CATEGORIES, BLOG_FEATURED, BLOG_LABELS, BLOG_NEWSLETTER, BLOG_POSTS } from '../blog.js'
 import { blogArticle, blogPostLink } from '../blog-articles.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 
 const HIGHLIGHT_SIDE = 2
 
@@ -36,6 +37,7 @@ const INDEX = BLOG_POSTS.map((post) => {
   return {
     key: post.key,
     href: blogPostLink(post).href,
+    image: post.image,
     title: post.title,
     description: post.description,
     categories: post.categories ?? [],
@@ -68,5 +70,5 @@ export const BLOG_PAGE = [
     moreLabel: BLOG_LABELS.loadMore,
     empty: { title: 'No articles match these filters.', action: 'View all articles' }
   },
-  BLOG_CLOSING
+  COMPANY_CLOSING
 ]

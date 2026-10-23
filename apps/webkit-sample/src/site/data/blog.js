@@ -62,7 +62,8 @@ export const BLOG_POSTS = [
     title: 'How I Shipped My Portfolio in Just Two Commands',
     description: 'See how a portfolio site went from template to live URL with just azion init and azion deploy, running free on Azion\'s Hobby plan.',
     href: 'https://www.azion.com/en/blog/ship-portfolio-two-commands-azion-cli/',
-    image: 'https://www.azion.com/assets/screenshot-2026-09-25-at-10-47-14.png',
+    image: '/blog/ship-portfolio-two-commands.png',
+    highlightImage: '/blog/ship-portfolio-two-commands-highlight.png',
     categories: ['Developers'],
     date: 'SEP 25, 2026',
     readTime: '9 min read'
@@ -72,7 +73,8 @@ export const BLOG_POSTS = [
     title: 'How Do You Reduce AI Agent Latency?',
     description: 'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
     href: 'https://www.azion.com/en/blog/how-to-reduce-ai-agent-latency/',
-    image: 'https://www.azion.com/assets/content/blog/uploads/Programmingdark.jpg',
+    image: '/blog/reduce-ai-agent-latency.png',
+    highlightImage: '/blog/reduce-ai-agent-latency-highlight.png',
     categories: ['Serverless'],
     date: 'SEP 23, 2026',
     readTime: '8 min read'
@@ -82,7 +84,8 @@ export const BLOG_POSTS = [
     title: 'Best Cloudflare Alternatives and Competitors',
     description: 'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
     href: 'https://www.azion.com/en/blog/cloudflare-alternatives-and-competitors/',
-    image: 'https://www.azion.com/assets/content/blog/uploads/best-cloudflare-alternatives/best-cloudflare-alternatives.png',
+    image: '/blog/best-cloudflare-alternatives.png',
+    highlightImage: '/blog/best-cloudflare-alternatives-highlight.png',
     categories: ['Security'],
     date: 'SEP 22, 2026',
     readTime: '13 min read'
@@ -92,7 +95,8 @@ export const BLOG_POSTS = [
     title: 'Which Azion Plan Is Right for Your Project?',
     description: 'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
     href: 'https://www.azion.com/en/blog/which-azion-plan-is-right-for-your-project/',
-    image: 'https://www.azion.com/assets/content/blog/uploads/thumblinkedin-4templatesimproveexperience-1280x720px.png',
+    image: '/blog/which-azion-plan.png',
+    highlightImage: '/blog/which-azion-plan-highlight.png',
     categories: ['Company News'],
     date: 'SEP 22, 2026',
     readTime: '7 min read'

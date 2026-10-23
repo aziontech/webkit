@@ -28,12 +28,12 @@
     class="group/post relative flex h-full flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
   >
     <div class="border-b border-(--border-default) p-(--spacing-md)">
-      <div class="aspect-video overflow-hidden bg-(--bg-surface)">
+      <div class="aspect-40/21 overflow-hidden bg-(--bg-surface)">
         <img
           :src="post.image"
           alt=""
           loading="lazy"
-          class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/post:scale-105 motion-reduce:transition-none"
+          class="size-full object-cover"
         />
       </div>
     </div>
@@ -65,12 +65,12 @@
     :rel="link.external ? 'noopener' : undefined"
     class="group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
   >
-    <span class="block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-surface)">
+    <span class="block aspect-40/21 overflow-hidden border-b border-(--border-default) bg-(--bg-surface)">
       <img
         :src="post.image"
         alt=""
         loading="lazy"
-        class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/post:scale-105 motion-reduce:transition-none"
+        class="size-full object-cover"
       />
     </span>
     <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">

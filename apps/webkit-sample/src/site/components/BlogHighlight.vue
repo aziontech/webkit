@@ -124,11 +124,13 @@
       role="tabpanel"
       :aria-labelledby="tabId(selected)"
       :data-direction="direction"
-      class="group/panel relative bg-(--bg-canvas)"
+      class="group/panel relative bg-(--bg-canvas) lg:min-h-0 lg:flex-1"
     >
       <!-- Every article stacked in one cell: the invisible copies hold the tallest height, the
-           visible one travels in and out over them. -->
-      <div class="grid *:col-start-1 *:row-start-1">
+           visible one travels in and out over them. From lg up the panel takes the height the
+           wall leaves it, so the image fills the row instead of holding its ratio; on a short
+           screen the copy tightens and drops its description to stay inside. -->
+      <div class="grid *:col-start-1 *:row-start-1 lg:h-full">
         <div
           aria-hidden="true"
           inert
@@ -139,11 +141,11 @@
             :key="post.key"
             class="grid lg:grid-cols-2"
           >
-            <span class="block aspect-video lg:aspect-4/3" />
-            <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl)">
+            <span class="block aspect-39/35 lg:aspect-auto" />
+            <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl) lg:[@media(max-height:50rem)]:py-(--spacing-lg)">
               <span class="text-overline-sm">{{ meta(post) }}</span>
               <span class="text-heading-lg">{{ post.title }}</span>
-              <span class="line-clamp-3 text-body-md">{{ post.description }}</span>
+              <span class="line-clamp-3 text-body-md lg:[@media(max-height:50rem)]:hidden">{{ post.description }}</span>
               <span class="text-body-sm">{{ post.readTime }}</span>
               <span class="h-10" />
             </div>
@@ -164,15 +166,15 @@
             class="group/article relative grid min-w-0 lg:grid-cols-2"
           >
             <div
-              class="block aspect-video overflow-hidden lg:aspect-4/3 border-b border-(--border-default) bg-(--bg-surface) lg:border-r lg:border-b-0"
+              class="relative block aspect-39/35 overflow-hidden lg:aspect-auto border-b border-(--border-default) bg-(--bg-canvas) lg:border-r lg:border-b-0"
             >
               <img
-                :src="current.image"
+                :src="current.highlightImage || current.image"
                 alt=""
-                class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
+                class="absolute inset-0 size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
               />
             </div>
-            <div class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-xxl)">
+            <div class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-xxl) lg:[@media(max-height:50rem)]:py-(--spacing-lg)">
               <span class="text-overline-sm text-(--text-muted)">{{ meta(current) }}</span>
               <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
                 <a
@@ -182,7 +184,7 @@
                   {{ current.title }}
                 </a>
               </h2>
-              <p class="m-0 line-clamp-3 text-pretty text-body-md text-(--text-muted)">
+              <p class="m-0 line-clamp-3 text-pretty text-body-md text-(--text-muted) lg:[@media(max-height:50rem)]:hidden">
                 {{ current.description }}
               </p>
               <span class="text-body-sm text-(--text-muted)">{{ current.readTime }}</span>
@@ -212,7 +214,7 @@
     <CardGrid
       kind="frame"
       flush
-      :columns="3"
+      :columns="posts.length >= 4 ? 4 : 3"
       :mobile-columns="1"
       role="tablist"
       aria-label="Highlight articles"
