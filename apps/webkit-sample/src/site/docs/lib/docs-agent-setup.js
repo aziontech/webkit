@@ -311,7 +311,7 @@ export const TRADEOFFS = [
   },
   {
     title: 'Proprietary vs. open source',
-    icon: 'pi pi-github',
+    icon: 'ai ai-github',
     description:
       'Open source can be audited, forked and self-hosted. Proprietary tends to ship the newest capability first.'
   },

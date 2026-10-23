@@ -27,7 +27,7 @@ export function docsRailGroups(sourcePath) {
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: REPOSITORY, icon: 'pi pi-github' },
+        { label: 'Azion Docs', href: REPOSITORY, icon: 'ai ai-github' },
         {
           label: 'Contribute to this page',
           href: `${REPOSITORY}/edit/dev/${sourcePath}`,
