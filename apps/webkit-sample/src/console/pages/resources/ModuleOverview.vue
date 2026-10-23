@@ -89,7 +89,7 @@
 
 <template>
   <AppLayout
-    :active="`${module}-overview`"
+    :active="module === 'firewall' ? 'firewall-overview' : module"
     :breadcrumb="[{ label: config.title }]"
   >
     <main class="layout-column flex min-h-full flex-col">

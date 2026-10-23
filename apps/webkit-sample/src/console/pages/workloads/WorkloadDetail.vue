@@ -34,6 +34,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import DeployDrawer from '../../components/workload/DeployDrawer.vue'
   import DeploymentFooter from '../../components/workload/DeploymentFooter.vue'
+  import EnvironmentCrumb from '../../components/workload/EnvironmentCrumb.vue'
   import TopologyBindControl from '../../components/workload/TopologyBindControl.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
@@ -88,6 +89,9 @@
       demoDeployment(workloadId, route.query.name || 'Workload Name')
   )
   const workload = computed(() => record.value.workload)
+  const workloadHref = computed(
+    () => `/workloads/${workloadId}?${new URLSearchParams({ name: String(workload.value.name) })}`
+  )
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -665,8 +669,20 @@
   <AppLayout
     active="workloads"
     :padded="false"
-    :breadcrumb="[{ label: 'Workloads', href: '/workloads' }, { label: workload.name }]"
+    :breadcrumb="[
+      { label: 'Workloads', href: '/workloads' },
+      { label: workload.name, href: workloadHref },
+      { label: selectedEnvironment }
+    ]"
   >
+    <template #crumb>
+      <EnvironmentCrumb
+        v-model="selectedEnvironment"
+        :environments="environments"
+        @create="openAdd('environment')"
+      />
+    </template>
+
     <main class="flex h-full flex-col">
       <PageTabs
         v-model:value="activeTab"
