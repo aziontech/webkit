@@ -74,7 +74,7 @@
   ]
 
   const socials = [
-    { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+    { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
     {
       icon: 'pi pi-linkedin',
       label: 'Azion on LinkedIn',

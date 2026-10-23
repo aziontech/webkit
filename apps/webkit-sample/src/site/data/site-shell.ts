@@ -263,7 +263,11 @@ const RESOURCES: SiteNavMenu = {
             description: 'Fundamentals, subject by subject',
             href: '/site/learning'
           },
-          { label: 'Resource Hub', description: 'Useful materials in one place' },
+          {
+            label: 'Resource Hub',
+            description: 'Useful materials in one place',
+            href: '/site/resource-hub'
+          },
           {
             label: 'Success Stories',
             description: 'Real results from our customers',
@@ -350,8 +354,9 @@ const COLUMNS: SiteFooterColumn[] = [
   {
     title: 'Company',
     links: links([
-      'About',
+      { label: 'About', href: '/site/about' },
       { label: 'Customers', href: '/site/success-cases' },
+      { label: 'Recognition and Awards', href: '/site/recognitions' },
       { label: 'Partners', href: '/site/partners' },
       { label: 'Careers', href: '/site/careers' },
       { label: 'Blog', href: '/site/blog' },
@@ -361,7 +366,7 @@ const COLUMNS: SiteFooterColumn[] = [
 ]
 
 const SOCIALS: SiteSocial[] = [
-  { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+  { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
   {
     icon: 'pi pi-linkedin',
     label: 'Azion on LinkedIn',
