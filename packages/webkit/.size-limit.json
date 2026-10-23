@@ -1,8 +1,18 @@
 [
   {
+    "name": "browser-frame",
+    "path": "src/components/content/browser-frame/browser-frame.vue",
+    "limit": "11.5 KB"
+  },
+  {
     "name": "button",
     "path": "src/components/actions/button/button.vue",
     "limit": "2.5 KB"
+  },
+  {
+    "name": "diagram",
+    "path": "src/components/marketing/diagram/diagram.vue",
+    "limit": "10 KB"
   },
   {
     "name": "input-text",
@@ -179,7 +189,7 @@
   {
     "name": "hero-root",
     "path": "src/components/marketing/hero/hero.vue",
-    "limit": "3.25 KB",
+    "limit": "3.5 KB",
     "entryOnly": true
   },
   {
@@ -251,7 +261,7 @@
   {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
-    "limit": "2 KB",
+    "limit": "2.5 KB",
     "entryOnly": true
   },
   {

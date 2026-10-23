@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -29,77 +29,10 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
   )
-
-  const scrollBodyWrapRef = ref<HTMLElement | null>(null)
-  const scrollViewportRef = ref<HTMLElement | null>(null)
-  const showBottomFade = ref(false)
-
-  const updateBottomFade = () => {
-    const viewport = scrollViewportRef.value
-
-    if (!viewport) {
-      showBottomFade.value = false
-      return
-    }
-
-    showBottomFade.value = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight > 8
-  }
-
-  let resizeObserver: ResizeObserver | undefined
-
-  const bindScrollViewport = (viewport: HTMLElement | null) => {
-    if (scrollViewportRef.value) {
-      scrollViewportRef.value.removeEventListener('scroll', updateBottomFade)
-    }
-
-    resizeObserver?.disconnect()
-    resizeObserver = undefined
-    scrollViewportRef.value = viewport
-
-    if (!viewport) {
-      showBottomFade.value = false
-      return
-    }
-
-    viewport.addEventListener('scroll', updateBottomFade, { passive: true })
-
-    if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => updateBottomFade())
-      resizeObserver.observe(viewport)
-    }
-
-    updateBottomFade()
-  }
-
-  const resolveScrollViewport = () => {
-    bindScrollViewport(scrollBodyWrapRef.value?.querySelector('[role="log"]') ?? null)
-  }
-
-  onMounted(() => {
-    nextTick(resolveScrollViewport)
-  })
-
-  onUnmounted(() => {
-    bindScrollViewport(null)
-  })
-
-  watch(
-    () =>
-      [
-        ctx.filteredLines.value.length,
-        ctx.warningsOnly.value,
-        ctx.search.value,
-        ctx.loading.value
-      ] as const,
-    () => {
-      nextTick(resolveScrollViewport)
-    }
-  )
 </script>
 
 <template>
   <div
-    ref="scrollBodyWrapRef"
     v-bind="attrs"
     :data-testid="testId"
     class="relative min-h-0 flex-1"
@@ -137,8 +70,9 @@
     <ScrollArea
       v-else
       orientation="both"
+      fade
       :data-testid="`${testId}__body`"
-      class="h-full min-h-0 bg-(--bg-canvas) sm:overflow-x-hidden"
+      class="h-full min-h-0 bg-(--bg-canvas) sm:data-[orientation=both]:overflow-x-hidden"
       role="log"
       aria-live="polite"
     >
@@ -333,12 +267,5 @@
         <slot name="empty">No log lines match the current filters.</slot>
       </div>
     </ScrollArea>
-
-    <div
-      v-show="showBottomFade && ctx.filteredLines.value.length > 0"
-      aria-hidden="true"
-      :data-testid="`${testId}__fade-bottom`"
-      class="pointer-events-none absolute bottom-0 left-0 right-0 z-2 h-(--spacing-xl) bg-gradient-to-b from-transparent to-(--bg-canvas) opacity-100 transition-opacity duration-150 ease-out motion-reduce:transition-none"
-    />
   </div>
 </template>

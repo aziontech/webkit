@@ -52,7 +52,7 @@ const SOLUTIONS = [
     href: '/solutions/security'
   },
   {
-    illustration: 'low-latency',
+    illustration: 'content-and-media-delivery',
     title: 'Media and streaming content',
     description:
       'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
