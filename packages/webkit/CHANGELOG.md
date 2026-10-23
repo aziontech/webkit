@@ -4,6 +4,45 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.5.0...@aziontech/webkit@5.6.0) (2026-10-23)
+
+
+### Features
+
+* **webkit:** [ENG-49133] let Button submit its form with a type prop ([#1081](https://github.com/aziontech/webkit/issues/1081)) ([e89284a](https://github.com/aziontech/webkit/commit/e89284a8122448d83c2103e24fcca8347c6c861a))
+* **webkit:** add a copyable prop to code-block and replay its panel motion when the active tab's code changes ([#1077](https://github.com/aziontech/webkit/issues/1077)) ([471c797](https://github.com/aziontech/webkit/commit/471c797e74d30307afcd63afcb40b3370dc79082))
+* **webkit:** add a primary call-to-action register lit by a waving texture ([#1094](https://github.com/aziontech/webkit/issues/1094)) ([558433d](https://github.com/aziontech/webkit/commit/558433d58d0cc88f2c649612f28c891da92c9ad9))
+* **webkit:** add a small padding step and a headline-span hatch to section-title ([#1091](https://github.com/aziontech/webkit/issues/1091)) ([9c3ca25](https://github.com/aziontech/webkit/commit/9c3ca25314211458186dd15c3ca796cf10a22179))
+* **webkit:** add BrowserFrame, a resizable browser window with a live viewport ([#1095](https://github.com/aziontech/webkit/issues/1095)) ([1489e8c](https://github.com/aziontech/webkit/commit/1489e8c683611f0e059b9a5f7bf0473c057502b3))
+* **webkit:** add Diagram, a measured node-and-connector figure for marketing bands ([#1098](https://github.com/aziontech/webkit/issues/1098)) ([275f4e4](https://github.com/aziontech/webkit/commit/275f4e4842f80940afa0e83a0227bf788fa2c25d))
+* **webkit:** fade ScrollArea edges that still have content to scroll ([#1086](https://github.com/aziontech/webkit/issues/1086)) ([d741420](https://github.com/aziontech/webkit/commit/d741420b440d4eb950721fef8efaff38de122ce6))
+* **webkit:** give sticky-stack per-claim actions and a held backdrop slot ([#1092](https://github.com/aziontech/webkit/issues/1092)) ([94d4603](https://github.com/aziontech/webkit/commit/94d46031565d7dba6a002655ada13e0b95c9c5df))
+* **webkit:** let a band tune the pixelate texture's wave gain and pace ([#1090](https://github.com/aziontech/webkit/issues/1090)) ([b959788](https://github.com/aziontech/webkit/commit/b9597889424e3b61ec21a8b08ac05637916be9a9))
+* **webkit:** let media-tabs place its tabs on any side of the media ([#1093](https://github.com/aziontech/webkit/issues/1093)) ([1f0830c](https://github.com/aziontech/webkit/commit/1f0830c5dd97d45788f5ad65bbecee9ecb1715e1))
+* **webkit:** let ticker run a strip of short claims through an items prop ([#1089](https://github.com/aziontech/webkit/issues/1089)) ([07468fa](https://github.com/aziontech/webkit/commit/07468fae110263b899834c42a58039ce6bedba2f))
+* **webkit:** re-export the illustration scenes from Figma ([#1075](https://github.com/aziontech/webkit/issues/1075)) ([89dc391](https://github.com/aziontech/webkit/commit/89dc39109487283490ff1f65da5d40178bd0789c))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-49232] highlight both # and // line comments in code-block ([#1085](https://github.com/aziontech/webkit/issues/1085)) ([fc4d4e6](https://github.com/aziontech/webkit/commit/fc4d4e6b9561f9603d4c9d9e3f7b1d319a963664))
+* **webkit:** cap the call-to-action split headline at the xl container ([#1061](https://github.com/aziontech/webkit/issues/1061)) ([b76a7c9](https://github.com/aziontech/webkit/commit/b76a7c94c03d5149d1b2a3f00d2d0a3d69af2aba))
+* **webkit:** cap the media-split copy column at the container measure ([#1076](https://github.com/aziontech/webkit/issues/1076)) ([61a1064](https://github.com/aziontech/webkit/commit/61a10648ba64bfa3ff1086e323e663706ecc0fcb))
+* **webkit:** forward ScrollArea attributes to the viewport ([#1087](https://github.com/aziontech/webkit/issues/1087)) ([56102a7](https://github.com/aziontech/webkit/commit/56102a743960131a89b170bb274969b4d71022f9))
+* **webkit:** let the topmost overlay take Escape and refine sidebar, toast and code-block ([#1071](https://github.com/aziontech/webkit/issues/1071)) ([6e6126a](https://github.com/aziontech/webkit/commit/6e6126a5a7ed68e6ba38cef655cbe067c5fbf19d))
+* **webkit:** rework column navigation rows on a token box model and set topic body to 16px ([#1078](https://github.com/aziontech/webkit/issues/1078)) ([75e944a](https://github.com/aziontech/webkit/commit/75e944a2aa417502009e6fad01ef806db6af83a0))
+* **webkit:** size the footer's second row by content so the social icons stay on one line ([#1064](https://github.com/aziontech/webkit/issues/1064)) ([3ec09fd](https://github.com/aziontech/webkit/commit/3ec09fd4c28a37286475631712a3397a4e011034))
+
+
+### Documentation
+
+* **webkit:** [ENG-49133] submit webkit forms with Button type="submit" ([#1082](https://github.com/aziontech/webkit/issues/1082)) ([d6f6bf7](https://github.com/aziontech/webkit/commit/d6f6bf78ad328c346ed261814be4d246816ec154))
+
+
+### Tests
+
+* **storybook:** snapshot ticker Sizes in the dark theme only ([#1104](https://github.com/aziontech/webkit/issues/1104)) ([002ae91](https://github.com/aziontech/webkit/commit/002ae917d2d1e111b40d12172fc59273f0d60421))
+
 ## [5.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.4.0...@aziontech/webkit@5.5.0) (2026-10-20)
 
 
