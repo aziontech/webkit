@@ -3,6 +3,7 @@
   import CardGrid from '@aziontech/webkit/card-grid-root'
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
+  import SectionTitle from '@aziontech/webkit/section-title'
   import Topic from '@aziontech/webkit/topic'
 
   import type { SiteTopic } from './types'
@@ -10,11 +11,21 @@
   defineOptions({ name: 'CapabilityGrid' })
 
   interface Props {
+    /** Overline above the title. */
+    eyebrow?: string
+    /** Section headline over the grid; omit for a bare grid. */
+    title?: string
+    /** One or two sentences under the title. */
+    description?: string
     /** Three or six capabilities, three to a row. */
     items: SiteTopic[]
   }
 
-  defineProps<Props>()
+  withDefaults(defineProps<Props>(), {
+    eyebrow: '',
+    title: '',
+    description: ''
+  })
 </script>
 
 <template>
@@ -22,6 +33,17 @@
     :divided="false"
     :padded="false"
   >
+    <template
+      v-if="title"
+      #header
+    >
+      <SectionTitle
+        :eyebrow="eyebrow"
+        :title="title"
+        :description="description"
+      />
+    </template>
+
     <FrameBox
       flush
       borders="y"
@@ -38,7 +60,7 @@
           kind="canvas"
         >
           <Topic
-            :heading-level="2"
+            :heading-level="title ? 3 : 2"
             :icon="item.icon ?? ''"
             :title="item.title"
             :description="item.description"

@@ -298,10 +298,10 @@ export const siteRoutes = [
   // The Learning Center in the same shell: 16 subjects and 78 articles, read verbatim off
   // azion.com/en/learning. The Resources mega-menu's `Learning` entry points here.
   { path: '/site/learning', name: 'site-learning', component: LandingLearning },
-  // The partner programme page in the same shell, and the one composed ENTIRELY from the
-  // marketing components: its hero, its proof band and its three reasons are `hero`,
-  // `big-numbers` and `content-columns` configured, with nothing hand-drawn around them. The
-  // site nav does not link it, because azion.com's does not either.
+  // The partner programme page in the same shell, laid out on the contact page: pitch and form
+  // side by side in the hero over the client strip, then `big-numbers`, `content-columns` and the
+  // framed `call-to-action` between hatched gaps — webkit sections only. The site nav does not
+  // link it, because azion.com's does not either.
   { path: '/site/partners', name: 'site-partners', component: LandingPartners },
   // The success-case library in the same shell: the first /site page whose body is a
   // filtered index rather than an argument — three featured stories, 35 in a hairline grid

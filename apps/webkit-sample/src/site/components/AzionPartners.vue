@@ -1,26 +1,29 @@
 <script setup>
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
-  import ContentColumns from '@aziontech/webkit/content-columns'
   import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
-  import Label from '@aziontech/webkit/label'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
-  import SectionTitle from '@aziontech/webkit/section-title'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref } from 'vue'
 
+  import { CLIENT_STRIP } from '../../shared/ui/brand/strips.js'
   import {
     PARTNER_COUNTRIES,
     PARTNER_FIGURES,
     PARTNER_REASONS,
     PARTNER_ROLES
   } from '../data/partners.js'
+  import { COMPANY_CLOSING } from '../data/product-pages.js'
+  import CapabilityGrid from '../ui/sections/CapabilityGrid.vue'
+  import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
+
+  const { section: _section, ...CLOSING } = COMPANY_CLOSING
 
   const form = reactive({
     firstname: '',
@@ -104,216 +107,169 @@
 <template>
   <Hero
     kind="screen"
-    texture="dots"
-    texture-fade="bottom"
-    max-width="site"
-    class="[--banner-offset:3.5rem]"
+    max-width="5xl"
+    align="center"
+    :padded="false"
+    carousel
+    carousel-label="The teams our partners build for"
+    :carousel-marks="CLIENT_STRIP"
+    offset="3.5rem"
+    bottom-height="clamp(7rem,16dvh,14rem)"
   >
-    <Hero.Title
-      title="Grow as an Azion Partner"
-      description="Join Azion's global partner ecosystem and unlock new business opportunities with a platform built to accelerate, protect, and scale modern applications."
-    />
+    <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
+      <Hero.Title
+        title="Grow as an Azion Partner"
+        max-width="lg"
+        class="min-w-0"
+        sticky
+      >
+        Join Azion's global partner ecosystem and unlock new business opportunities with a platform
+        built to accelerate, protect, and scale modern applications.
+      </Hero.Title>
 
-    <template #media>
-      <FrameBox class="w-full bg-(--bg-surface) p-(--spacing-xl)">
+      <div class="min-w-0">
         <form
           novalidate
-          aria-labelledby="partners-form-title"
-          class="flex flex-col gap-(--spacing-lg)"
+          class="flex flex-col gap-(--spacing-md)"
           @submit.prevent="submit"
         >
-          <h2
-            id="partners-form-title"
-            class="m-0 text-heading-lg text-(--text-default)"
-          >
-            Become a Partner
-          </h2>
-
           <fieldset
             :disabled="submitting"
-            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
           >
-            <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-first-name"
-                  required
-                  >First name</Label
-                >
-                <FieldText
-                  v-model="form.firstname"
-                  input-id="partners-first-name"
-                  name="firstname"
-                  size="large"
-                  autocomplete="given-name"
-                  :disabled="submitting"
-                  :required="!!errors.firstname"
-                  :helper-text="errors.firstname"
-                  @update:model-value="errors.firstname = ''"
-                />
-              </div>
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-last-name"
-                  required
-                  >Last name</Label
-                >
-                <FieldText
-                  v-model="form.lastname"
-                  input-id="partners-last-name"
-                  name="lastname"
-                  size="large"
-                  autocomplete="family-name"
-                  :disabled="submitting"
-                  :required="!!errors.lastname"
-                  :helper-text="errors.lastname"
-                  @update:model-value="errors.lastname = ''"
-                />
-              </div>
-            </div>
+            <legend class="sr-only">Become a Partner</legend>
 
-            <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-              <Label
-                for="partners-email"
-                required
-                >E-mail:</Label
-              >
+            <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
               <FieldText
-                v-model="form.email"
-                input-id="partners-email"
-                name="email"
-                type="email"
+                v-model="form.firstname"
+                label="First name"
+                input-id="partners-first-name"
+                name="firstname"
                 size="large"
-                autocomplete="email"
+                autocomplete="given-name"
                 :disabled="submitting"
-                :required="!!errors.email && !form.email.trim()"
-                :invalid="!!errors.email && !!form.email.trim()"
-                :helper-text="errors.email"
-                @update:model-value="errors.email = ''"
+                :required="!!errors.firstname"
+                :helper-text="errors.firstname"
+                @update:model-value="errors.firstname = ''"
+              />
+              <FieldText
+                v-model="form.lastname"
+                label="Last name"
+                input-id="partners-last-name"
+                name="lastname"
+                size="large"
+                autocomplete="family-name"
+                :disabled="submitting"
+                :required="!!errors.lastname"
+                :helper-text="errors.lastname"
+                @update:model-value="errors.lastname = ''"
               />
             </div>
 
-            <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-company"
-                  required
-                  >Company name</Label
-                >
-                <FieldText
-                  v-model="form.company"
-                  input-id="partners-company"
-                  name="company"
-                  size="large"
-                  autocomplete="organization"
-                  :disabled="submitting"
-                  :required="!!errors.company"
-                  :helper-text="errors.company"
-                  @update:model-value="errors.company = ''"
-                />
-              </div>
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label for="partners-phone">Phone number:</Label>
-                <FieldPhoneNumber
-                  v-model="form.phone"
-                  v-model:country="phoneCountry"
-                  input-id="partners-phone"
-                  name="phone"
-                  :disabled="submitting"
-                />
-              </div>
+            <FieldText
+              v-model="form.email"
+              label="E-mail"
+              input-id="partners-email"
+              name="email"
+              type="email"
+              size="large"
+              autocomplete="email"
+              :disabled="submitting"
+              :required="!!errors.email && !form.email.trim()"
+              :invalid="!!errors.email && !!form.email.trim()"
+              :helper-text="errors.email"
+              @update:model-value="errors.email = ''"
+            />
+
+            <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
+              <FieldSelect
+                v-model="form.role"
+                label="Role"
+                input-id="partners-role"
+                placeholder="Select your Role"
+                size="large"
+                :options="PARTNER_ROLES"
+                :disabled="submitting"
+                :required="!!errors.role"
+                :helper-text="errors.role"
+                @update:model-value="errors.role = ''"
+              />
+              <FieldText
+                v-model="form.company"
+                label="Company"
+                input-id="partners-company"
+                name="company"
+                size="large"
+                autocomplete="organization"
+                :disabled="submitting"
+                :required="!!errors.company"
+                :helper-text="errors.company"
+                @update:model-value="errors.company = ''"
+              />
             </div>
 
-            <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-role"
-                  required
-                  >Role</Label
-                >
-                <FieldSelect
-                  v-model="form.role"
-                  input-id="partners-role"
-                  placeholder="Please Select"
-                  :options="PARTNER_ROLES"
-                  size="large"
-                  :disabled="submitting"
-                  :required="!!errors.role"
-                  :helper-text="errors.role"
-                  @update:model-value="errors.role = ''"
-                />
-              </div>
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-address"
-                  required
-                  >Street address</Label
-                >
-                <FieldText
-                  v-model="form.address"
-                  input-id="partners-address"
-                  name="address"
-                  size="large"
-                  autocomplete="street-address"
-                  :disabled="submitting"
-                  :required="!!errors.address"
-                  :helper-text="errors.address"
-                  @update:model-value="errors.address = ''"
-                />
-              </div>
-            </div>
+            <FieldPhoneNumber
+              v-model="form.phone"
+              v-model:country="phoneCountry"
+              label="Phone"
+              input-id="partners-phone"
+              name="phone"
+              :disabled="submitting"
+            />
 
-            <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-city"
-                  required
-                  >City</Label
-                >
-                <FieldText
-                  v-model="form.city"
-                  input-id="partners-city"
-                  name="city"
-                  size="large"
-                  autocomplete="address-level2"
-                  :disabled="submitting"
-                  :required="!!errors.city"
-                  :helper-text="errors.city"
-                  @update:model-value="errors.city = ''"
-                />
-              </div>
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label
-                  for="partners-country"
-                  required
-                  >Country</Label
-                >
-                <FieldSelect
-                  v-model="form.country_contato"
-                  input-id="partners-country"
-                  placeholder="Please Select"
-                  :options="PARTNER_COUNTRIES"
-                  size="large"
-                  :disabled="submitting"
-                  :required="!!errors.country_contato"
-                  :helper-text="errors.country_contato"
-                  @update:model-value="errors.country_contato = ''"
-                />
-              </div>
+            <FieldText
+              v-model="form.address"
+              label="Street address"
+              input-id="partners-address"
+              name="address"
+              size="large"
+              autocomplete="street-address"
+              :disabled="submitting"
+              :required="!!errors.address"
+              :helper-text="errors.address"
+              @update:model-value="errors.address = ''"
+            />
+
+            <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
+              <FieldText
+                v-model="form.city"
+                label="City"
+                input-id="partners-city"
+                name="city"
+                size="large"
+                autocomplete="address-level2"
+                :disabled="submitting"
+                :required="!!errors.city"
+                :helper-text="errors.city"
+                @update:model-value="errors.city = ''"
+              />
+              <FieldSelect
+                v-model="form.country_contato"
+                label="Country"
+                input-id="partners-country"
+                placeholder="Select your Country"
+                size="large"
+                :options="PARTNER_COUNTRIES"
+                :disabled="submitting"
+                :required="!!errors.country_contato"
+                :helper-text="errors.country_contato"
+                @update:model-value="errors.country_contato = ''"
+              />
             </div>
           </fieldset>
 
           <p class="m-0 text-body-sm text-(--text-muted)">
+            By submitting, you agree to our
             <a
               href="https://www.azion.com/en/documentation/agreements/privacy-policy/"
               target="_blank"
               rel="noopener"
               :class="LINK_CLASS"
               >Privacy Policy</a
-            >
+            >.
           </p>
 
-          <div class="flex justify-end">
+          <div class="flex justify-start">
             <button
               type="submit"
               class="sr-only"
@@ -331,8 +287,8 @@
             />
           </div>
         </form>
-      </FrameBox>
-    </template>
+      </div>
+    </div>
   </Hero>
 
   <SectionContainer max-width="site">
@@ -353,35 +309,14 @@
 
     <SectionGap hatch />
 
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <template #header>
-        <SectionTitle
-          kind="centered"
-          title="Why you should be a partner of the Azion Marketplace?"
-          description="With the Azion Marketplace, we enable you to expand your revenue channels by offering edge-enabled solutions integrated into the Azion Edge Computing Platform. Azion is rapidly expanding the number of use cases covered by the Marketplace, which already include fraud detection, authentication and authorization, bot mitigation, and facial recognition, utilizing technologies such as visual computing and artificial intelligence executed at the edge."
-        />
-      </template>
-
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <ContentColumns
-          :items="PARTNER_REASONS"
-          :columns="3"
-        />
-      </FrameBox>
-    </SectionModule>
-
-    <FrameBox
-      borders="none"
-      marks="none"
-      hatch
-      class="h-(--spacing-xxl)"
+    <CapabilityGrid
+      title="Why you should be a partner of the Azion Marketplace?"
+      description="With the Azion Marketplace, we enable you to expand your revenue channels by offering edge-enabled solutions integrated into the Azion Edge Computing Platform. Azion is rapidly expanding the number of use cases covered by the Marketplace, which already include fraud detection, authentication and authorization, bot mitigation, and facial recognition, utilizing technologies such as visual computing and artificial intelligence executed at the edge."
+      :items="PARTNER_REASONS"
     />
+
+    <SectionGap hatch />
+
+    <ClosingCallToAction v-bind="CLOSING" />
   </SectionContainer>
 </template>
