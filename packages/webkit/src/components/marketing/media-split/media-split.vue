@@ -187,7 +187,9 @@
           <div
             class="flex h-full flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-xxl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
           >
-            <div class="flex flex-col gap-(--spacing-lg)">
+            <div
+              class="flex max-w-(--container-md) flex-col gap-(--spacing-lg) group-data-[size=large]/split:max-w-(--container-lg)"
+            >
               <Overline
                 v-if="eyebrow"
                 prefix="//"
