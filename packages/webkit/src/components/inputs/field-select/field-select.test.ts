@@ -362,6 +362,11 @@ describe('FieldSelect', () => {
       expect(
         document.body.querySelector('[data-testid="input-field-select__search-empty"]')?.textContent
       ).toContain('Nada')
+      const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement
+      expect(listbox.querySelector('[role="status"]')).toBeNull()
+      await expectNoA11yViolations(
+        document.body.querySelector('[data-testid="input-field-select__content"]') as HTMLElement
+      )
     })
 
     it('closes on Tab and returns focus to the trigger', async () => {

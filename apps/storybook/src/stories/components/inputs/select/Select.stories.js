@@ -142,6 +142,35 @@ const meta = {
         'Composition slot; receives `<Select.Trigger>` and `<Select.Content>` (with the option tree inside it).',
       table: { category: 'slots', type: { summary: 'Select.Trigger + Select.Content' } }
     },
+    ariaLabel: {
+      control: 'text',
+      description:
+        'Accessible name for the field when no visible label is associated with it. A `<label for>` pointing at `inputId` names it instead.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    inputId: {
+      control: 'text',
+      description:
+        'Id of the trigger (or of the native select). Point a `<label for>` at it; a generated id is used when empty.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    native: {
+      control: 'boolean',
+      description:
+        'Renders the platform `<select>`: native picker on mobile, form submission and autofill. Search, footer and option extras are not rendered.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
+    name: {
+      control: 'text',
+      description:
+        'Form field name. The selection is submitted under it with the surrounding `<form>`, in both modes.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    autocomplete: {
+      control: 'text',
+      description: 'Autofill hint forwarded to the native select.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Fires when an option is selected (single) or toggled (multi).',
@@ -157,6 +186,8 @@ const meta = {
     multiple: false,
     size: 'medium',
     placeholder: 'Select an option',
+    ariaLabel: 'Option',
+    native: false,
     disabled: false,
     readonly: false,
     required: false,
@@ -187,7 +218,7 @@ const OPTIONS_SNIPPET = `const options = [
 const basicSnippet = ({ initial = "''", attrs = '' } = {}) =>
   toSfc(
     [IMPORT, "import { ref } from 'vue'", '', `const value = ref(${initial})`, OPTIONS_SNIPPET],
-    `<Select v-model="value"${attrs ? ` ${attrs}` : ''} placeholder="Select an option">
+    `<Select v-model="value"${attrs ? ` ${attrs}` : ''} placeholder="Select an option" aria-label="Option">
   <Select.Trigger />
   <Select.Content>
     <Select.Option
@@ -254,6 +285,7 @@ const SIZES_TEMPLATE = `<div class="flex flex-col gap-4 w-[280px]">
     v-model="value"
     :size="s"
     :placeholder="s.charAt(0).toUpperCase() + s.slice(1)"
+    :aria-label="'Option ' + s"
   >
     <Select.Trigger />
     <Select.Content>
@@ -320,7 +352,7 @@ export const Multiple = {
 }
 
 const GROUPS_TEMPLATE = `<div class="w-[280px]">
-  <Select v-model="value" placeholder="Select an option">
+  <Select v-model="value" placeholder="Select an option" aria-label="Option">
     <Select.Trigger />
     <Select.Content>
       <Select.Group
@@ -402,11 +434,11 @@ export const WithGroups = {
 }
 
 const SEARCH_FOOTER_TEMPLATE = `<div class="w-[280px]">
-  <Select v-model="value" placeholder="Select an option">
+  <Select v-model="value" placeholder="Select an option" aria-label="Option">
     <Select.Trigger />
     <Select.Content>
       <template #search>
-        <InputText v-model="search" size="small" placeholder="Search">
+        <InputText v-model="search" size="small" placeholder="Search" aria-label="Search options">
           <template #iconLeft>
             <i class="pi pi-search" aria-hidden="true" />
           </template>
@@ -501,7 +533,7 @@ export const WithSearchAndFooter = {
 }
 
 const OPTION_EXTRAS_TEMPLATE = `<div class="w-[280px]">
-  <Select v-model="value" placeholder="Select an option">
+  <Select v-model="value" placeholder="Select an option" aria-label="Option">
     <Select.Trigger />
     <Select.Content>
       <Select.Option
@@ -566,7 +598,7 @@ export const WithOptionExtras = {
 }
 
 const LONG_LIST_TEMPLATE = `<div class="w-[280px]">
-  <Select v-model="value" placeholder="Pick one of many">
+  <Select v-model="value" placeholder="Pick one of many" aria-label="Option">
     <Select.Trigger />
     <Select.Content>
       <Select.Option
@@ -630,7 +662,7 @@ export const Filled = {
 }
 
 const INVALID_TEMPLATE = `<div class="w-[280px]">
-  <Select v-model="value" :invalid="invalid" placeholder="Select an option">
+  <Select v-model="value" :invalid="invalid" placeholder="Select an option" aria-label="Option">
     <Select.Trigger />
     <Select.Content>
       <Select.Option
@@ -685,6 +717,73 @@ export const Disabled = {
     docs: {
       description: { story: 'Disabled trigger; the dropdown cannot open.' },
       source: { code: basicSnippet({ attrs: 'disabled' }) }
+    }
+  }
+}
+
+const NATIVE_TEMPLATE = `<form class="flex w-[280px] flex-col gap-2" @submit.prevent="onSubmit">
+  <label for="native-fruit" class="text-label-sm">Fruit</label>
+  <Select
+    v-model="value"
+    native
+    input-id="native-fruit"
+    name="fruit"
+    placeholder="Select a fruit"
+    required
+  >
+    <Select.Trigger />
+    <Select.Content>
+      <Select.Group label="Citrus">
+        <Select.Option value="lemon">Lemon</Select.Option>
+        <Select.Option value="orange">Orange</Select.Option>
+      </Select.Group>
+      <Select.Group label="Berries">
+        <Select.Option value="blueberry">Blueberry</Select.Option>
+        <Select.Option value="strawberry" disabled>Strawberry</Select.Option>
+      </Select.Group>
+    </Select.Content>
+  </Select>
+  <Button label="Submit" type="submit" size="small" />
+  <output class="text-label-sm">{{ submitted }}</output>
+</form>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
+export const Native = {
+  render: () => ({
+    components,
+    setup() {
+      const value = ref('')
+      const submitted = ref('')
+      const onSubmit = (event) => {
+        submitted.value = new URLSearchParams(new FormData(event.target)).toString()
+      }
+      return { value, submitted, onSubmit }
+    },
+    template: NATIVE_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The `native` prop renders the platform `<select>` with `<option>` and `<optgroup>`: the system picker on mobile, `name` submission with the `<form>`, `required` validation and autofill. The same compound parts are used; search, footer and option extras do not render.'
+      },
+      source: {
+        code: toSfc(
+          [
+            IMPORT,
+            "import Button from '@aziontech/webkit/button'",
+            "import { ref } from 'vue'",
+            '',
+            "const value = ref('')",
+            "const submitted = ref('')",
+            'const onSubmit = (event) => {',
+            '  submitted.value = new URLSearchParams(new FormData(event.target)).toString()',
+            '}'
+          ],
+          NATIVE_TEMPLATE
+        )
+      }
     }
   }
 }

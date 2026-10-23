@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, useAttrs, useId, watch } from 'vue'
 
   import { selectContextKey } from '../injection-key'
 
@@ -37,7 +37,28 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-option')
 
+  const generatedId = `select-option-${useId()}`
+
+  const optionId = computed(() => (attrs['id'] as string | undefined) ?? generatedId)
+
   const selected = computed(() => ctx.isSelected(props.value))
+
+  const highlighted = computed(() => ctx.navigating.value && ctx.activeId.value === optionId.value)
+
+  const nativeKey = computed(() => String(props.value))
+
+  let unregister: (() => void) | undefined
+
+  watch(
+    [nativeKey, () => ctx.native.value],
+    ([key, native]) => {
+      unregister?.()
+      unregister = native ? ctx.registerNativeOption(key, props.value) : undefined
+    },
+    { immediate: true }
+  )
+
+  onBeforeUnmount(() => unregister?.())
 
   const onClick = () => {
     if (props.disabled) return
@@ -54,18 +75,30 @@
 </script>
 
 <template>
-  <div
+  <option
+    v-if="ctx.native.value"
     v-bind="$attrs"
+    :value="nativeKey"
+    :selected="selected"
+    :disabled="disabled"
+    :data-testid="testId"
+  >
+    <slot />
+  </option>
+  <div
+    v-else
+    v-bind="$attrs"
+    :id="optionId"
     role="option"
-    tabindex="-1"
     :aria-selected="selected"
     :aria-disabled="disabled || undefined"
     :data-testid="testId"
     :data-selected="selected || null"
     :data-disabled="disabled || null"
+    :data-highlighted="highlighted || null"
     :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
     :class="attrs.class"
-    class="flex h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
+    class="flex h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) data-[highlighted]:bg-(--bg-hover) data-[highlighted]:ring-2 data-[highlighted]:ring-inset data-[highlighted]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
     @click="onClick"
     @keydown="onKeydown"
   >

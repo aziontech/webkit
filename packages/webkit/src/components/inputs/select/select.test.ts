@@ -7,7 +7,8 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
 
-const { Default, Multiple, WithGroups, Disabled } = composeStories(stories)
+const { Default, Multiple, WithGroups, WithSearchAndFooter, Disabled, Native } =
+  composeStories(stories)
 
 const OPTIONS = [
   { value: 'opt-1', label: 'Option 1' },
@@ -83,8 +84,82 @@ const Host = defineComponent({
 const getContent = () =>
   document.body.querySelector('[data-testid="select-content"]') as HTMLElement | null
 
+const getListbox = () => document.body.querySelector('[role="listbox"]') as HTMLElement | null
+
 const getOptions = () =>
   Array.from(document.body.querySelectorAll('[data-testid="select-option"]')) as HTMLElement[]
+
+const optionByText = (text: string) =>
+  getOptions().find((option) => option.textContent?.trim() === text) as HTMLElement
+
+const removeStrayContent = () =>
+  document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+
+const settle = async () => {
+  for (let i = 0; i < 4; i++) await nextTick()
+}
+
+const press = async (target: HTMLElement, key: string) => {
+  await fireEvent.keyDown(target, { key })
+  await settle()
+}
+
+const openWithKey = async (trigger: HTMLElement, key: string) => {
+  trigger.focus()
+  await press(trigger, key)
+}
+
+const waitForTypeaheadReset = () => new Promise((resolve) => setTimeout(resolve, 600))
+
+const Fruits = defineComponent({
+  props: {
+    ariaLabel: { type: String, default: '' },
+    inputId: { type: String, default: '' },
+    label: { type: String, default: '' },
+    disabledValue: { type: String, default: '' },
+    startOpen: { type: Boolean, default: false }
+  },
+  setup(props) {
+    const value = ref('')
+    const open = ref(props.startOpen)
+    const fruits = ['Apple', 'Banana', 'Blueberry', 'Cherry']
+    return () =>
+      h('div', [
+        props.label ? h('label', { for: props.inputId }, props.label) : null,
+        h(
+          Select,
+          {
+            modelValue: value.value,
+            open: open.value,
+            ariaLabel: props.ariaLabel,
+            inputId: props.inputId,
+            'onUpdate:modelValue': (v: unknown) => {
+              value.value = v as string
+            },
+            'onUpdate:open': (v: boolean) => {
+              open.value = v
+            }
+          },
+          () => [
+            h(SelectTrigger),
+            h(SelectContent, null, () =>
+              fruits.map((fruit) =>
+                h(
+                  SelectOption,
+                  {
+                    key: fruit,
+                    value: fruit.toLowerCase(),
+                    disabled: fruit.toLowerCase() === props.disabledValue
+                  },
+                  () => fruit
+                )
+              )
+            )
+          ]
+        )
+      ])
+  }
+})
 
 afterEach(() => {
   // Teleported content leaks across tests when a wrapper unmounts mid-transition;
@@ -149,7 +224,8 @@ describe('Select (compound / overlay)', () => {
 
     const content = getContent()
     expect(content).not.toBeNull()
-    expect(content?.getAttribute('role')).toBe('listbox')
+    expect(content?.querySelector('[role="listbox"]')).toBe(getListbox())
+    expect(getByTestId('select-trigger').getAttribute('aria-controls')).toBe(getListbox()?.id)
     // content is Teleported OUT of the render container, onto document.body
     expect(content?.closest('[data-testid="select"]')).toBeNull()
     // trigger aria-expanded now reflects open (shared context)
@@ -162,13 +238,13 @@ describe('Select (compound / overlay)', () => {
   it('sets aria-multiselectable on the listbox only in multiple mode', async () => {
     const single = render(Host)
     await fireEvent.click(single.getByTestId('select-trigger'))
-    expect(getContent()?.getAttribute('aria-multiselectable')).toBeNull()
+    expect(getListbox()?.getAttribute('aria-multiselectable')).toBeNull()
     single.unmount()
     document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
 
     const multi = render(Host, { props: { multiple: true } })
     await fireEvent.click(multi.getByTestId('select-trigger'))
-    expect(getContent()?.getAttribute('aria-multiselectable')).toBe('true')
+    expect(getListbox()?.getAttribute('aria-multiselectable')).toBe('true')
   })
 
   it('opens the dropdown from the trigger on Enter, Space and ArrowDown', async () => {
@@ -258,18 +334,6 @@ describe('Select (compound / overlay)', () => {
     expect(getOptions()[0].getAttribute('aria-selected')).toBe('true')
     await fireEvent.click(getOptions()[0])
     expect(getOptions()[0].getAttribute('aria-selected')).toBe('false')
-  })
-
-  it('selects an option via keyboard Enter and Space on the option element', async () => {
-    const enter = render(Host, { props: { startOpen: true } })
-    await fireEvent.keyDown(getOptions()[0], { key: 'Enter' })
-    expect(enter.getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-1')
-    enter.unmount()
-    document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
-
-    const space = render(Host, { props: { startOpen: true } })
-    await fireEvent.keyDown(getOptions()[1], { key: ' ' })
-    expect(space.getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-2')
   })
 
   // ---- Emitted events on real user actions ----------------------------------
@@ -371,62 +435,440 @@ describe('Select (compound / overlay)', () => {
     expect(root.hasAttribute('data-required')).toBe(true)
   })
 
-  // ---- axe on a realistic composed trigger ----------------------------------
-  // NOTE: axe on the OPEN listbox is intentionally omitted — the component
-  // wraps its role="option" children in a ScrollArea <div>, which trips the
-  // real `aria-required-children` rule on role="listbox". That is a genuine
-  // component a11y defect (see notes), not fixable from the test.
-  it('has no a11y violations on the closed, named combobox trigger', async () => {
-    const { container } = render(Host, { props: { initial: 'opt-1' } })
-    await expectNoA11yViolations(container)
+  describe('keyboard: single mode follows the select-only combobox pattern', () => {
+    it('keeps focus on the trigger and points aria-activedescendant at the selected option', async () => {
+      const { getByTestId } = render(Host, { props: { initial: 'opt-2' } })
+      const trigger = getByTestId('select-trigger')
+
+      await openWithKey(trigger, 'ArrowDown')
+
+      const options = getOptions()
+      expect(document.activeElement).toBe(trigger)
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(options[1].id)
+      expect(options[1].hasAttribute('data-highlighted')).toBe(true)
+      expect(options.every((option) => !option.hasAttribute('tabindex'))).toBe(true)
+    })
+
+    it('opens on ArrowUp on the first option when nothing is selected', async () => {
+      const { getByTestId } = render(Host)
+      const trigger = getByTestId('select-trigger')
+
+      await openWithKey(trigger, 'ArrowUp')
+
+      expect(getContent()).not.toBeNull()
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(getOptions()[0].id)
+    })
+
+    it('opens on Home and End on the first and the last option', async () => {
+      const home = render(Host, { props: { initial: 'opt-2' } })
+      await openWithKey(home.getByTestId('select-trigger'), 'Home')
+      expect(home.getByTestId('select-trigger').getAttribute('aria-activedescendant')).toBe(
+        getOptions()[0].id
+      )
+      home.unmount()
+      removeStrayContent()
+
+      const end = render(Host)
+      await openWithKey(end.getByTestId('select-trigger'), 'End')
+      const options = getOptions()
+      expect(end.getByTestId('select-trigger').getAttribute('aria-activedescendant')).toBe(
+        options[options.length - 1].id
+      )
+    })
+
+    it('moves the active option with the arrows and wraps at both ends', async () => {
+      const { getByTestId } = render(Host)
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'ArrowDown')
+      const options = getOptions()
+
+      await press(trigger, 'ArrowUp')
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(options[2].id)
+      await press(trigger, 'ArrowDown')
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(options[0].id)
+      await press(trigger, 'ArrowDown')
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(options[1].id)
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('skips disabled options', async () => {
+      const { getByTestId } = render(Fruits, { props: { disabledValue: 'banana' } })
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'ArrowDown')
+
+      await press(trigger, 'ArrowDown')
+
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(optionByText('Blueberry').id)
+    })
+
+    it('selects the active option on Enter, closes and keeps focus on the trigger', async () => {
+      const { getByTestId } = render(Host)
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'ArrowDown')
+
+      await press(trigger, 'ArrowDown')
+      await press(trigger, 'Enter')
+
+      expect(getContent()).toBeNull()
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-2')
+      expect(document.activeElement).toBe(trigger)
+      expect(trigger.hasAttribute('aria-activedescendant')).toBe(false)
+    })
+
+    it('closes on Escape without changing the value and keeps focus on the trigger', async () => {
+      const { getByTestId } = render(Host, { props: { initial: 'opt-1' } })
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'ArrowDown')
+
+      await press(trigger, 'ArrowDown')
+      await press(trigger, 'Escape')
+
+      expect(getContent()).toBeNull()
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-1')
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('closes on Tab without selecting', async () => {
+      const { getByTestId } = render(Host)
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'ArrowDown')
+
+      await press(trigger, 'ArrowDown')
+      await press(trigger, 'Tab')
+
+      expect(getContent()).toBeNull()
+      expect(getByTestId('select-trigger__value').getAttribute('data-filled')).toBe('false')
+    })
+
+    it('typeahead opens the panel on the first match and cycles on a repeated character', async () => {
+      const { getByTestId } = render(Fruits)
+      const trigger = getByTestId('select-trigger')
+      trigger.focus()
+
+      await press(trigger, 'b')
+      expect(getContent()).not.toBeNull()
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(optionByText('Banana').id)
+
+      await press(trigger, 'b')
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(optionByText('Blueberry').id)
+
+      await waitForTypeaheadReset()
+      await press(trigger, 'c')
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(optionByText('Cherry').id)
+
+      await waitForTypeaheadReset()
+      await press(trigger, 'b')
+      await press(trigger, 'l')
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(optionByText('Blueberry').id)
+    })
+
+    it('returns focus to the trigger after picking an option with the pointer', async () => {
+      const { getByTestId } = render(Host, { props: { startOpen: true } })
+      const trigger = getByTestId('select-trigger')
+      ;(document.activeElement as HTMLElement | null)?.blur()
+
+      await fireEvent.click(getOptions()[2])
+
+      expect(getContent()).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('keeps focus on the trigger when an option is pressed', async () => {
+      render(Host, { props: { startOpen: true } })
+
+      const mousedown = new MouseEvent('mousedown', { bubbles: true, cancelable: true })
+      getOptions()[0].dispatchEvent(mousedown)
+
+      expect(mousedown.defaultPrevented).toBe(true)
+    })
   })
 
-  // ---- Story fixtures mount and expose their trigger ------------------------
-  // Story fixtures render the trigger without an accessible name, so an axe
-  // assertion would trip the real `button-name` defect (see notes). These
-  // therefore assert a clean mount + the compound anatomy instead.
-  it.each([
-    ['Default', Default],
-    ['Multiple', Multiple],
-    ['WithGroups', WithGroups],
-    ['Disabled', Disabled]
-  ] as const)('mounts the %s story fixture and renders a role=combobox trigger', (_name, Story) => {
-    const { getByTestId } = render(Story())
-    const trigger = getByTestId('select-trigger')
-    expect(trigger.tagName).toBe('BUTTON')
-    expect(trigger.getAttribute('role')).toBe('combobox')
+  describe('keyboard: multiple mode follows the listbox pattern', () => {
+    it('renders the trigger as a button that opens a listbox, not as a combobox', () => {
+      const { getByTestId } = render(Host, { props: { multiple: true, required: true } })
+      const trigger = getByTestId('select-trigger')
+
+      expect(trigger.tagName).toBe('BUTTON')
+      expect(trigger.hasAttribute('role')).toBe(false)
+      expect(trigger.getAttribute('aria-haspopup')).toBe('listbox')
+      expect(trigger.hasAttribute('aria-required')).toBe(false)
+    })
+
+    it('moves focus into the listbox and toggles the active option with Space and Enter', async () => {
+      const { getByTestId } = render(Host, { props: { multiple: true } })
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'Enter')
+
+      const listbox = getListbox() as HTMLElement
+      const options = getOptions()
+      expect(document.activeElement).toBe(listbox)
+      expect(listbox.getAttribute('aria-activedescendant')).toBe(options[0].id)
+
+      await press(listbox, ' ')
+      await press(listbox, 'ArrowDown')
+      await press(listbox, 'ArrowDown')
+      await press(listbox, 'Enter')
+
+      expect(getContent()).not.toBeNull()
+      expect(getOptions()[0].getAttribute('aria-selected')).toBe('true')
+      expect(getOptions()[2].getAttribute('aria-selected')).toBe('true')
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-1, opt-3')
+    })
+
+    it('closes on Escape from the listbox and returns focus to the trigger', async () => {
+      const { getByTestId } = render(Host, { props: { multiple: true } })
+      const trigger = getByTestId('select-trigger')
+      await openWithKey(trigger, 'ArrowDown')
+
+      await press(getListbox() as HTMLElement, 'Escape')
+
+      expect(getContent()).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('marks the listbox required in multiple mode', async () => {
+      const { getByTestId } = render(Host, { props: { multiple: true, required: true } })
+      await fireEvent.click(getByTestId('select-trigger'))
+
+      expect(getListbox()?.getAttribute('aria-required')).toBe('true')
+    })
   })
 
-  // ---- Focus ring: arrow-key navigation focuses the option (ENG-46730) -----
-  // Options carry `focus-visible:ring-2 focus-visible:ring-(--ring-color)`
-  // and `tabindex="-1"`, so the ring shows when the keyboard handler moves
-  // focus to the option via `.focus()`. This regression test asserts the
-  // handler actually moves DOM focus, which is the missing link when the ring
-  // does not appear.
-  it('moves DOM focus onto the first option on ArrowDown from within the panel (ENG-46730)', async () => {
-    render(Host, { props: { startOpen: true } })
-    const content = getContent() as HTMLElement
-    expect(content).not.toBeNull()
+  describe('accessible name', () => {
+    it('names the trigger and the listbox from the ariaLabel prop', async () => {
+      const { getByTestId } = render(Fruits, { props: { ariaLabel: 'Fruit' } })
+      const trigger = getByTestId('select-trigger')
 
-    await fireEvent.keyDown(content, { key: 'ArrowDown' })
+      expect(trigger.getAttribute('aria-label')).toBe('Fruit')
+      await fireEvent.click(trigger)
+      await settle()
+      expect(getListbox()?.getAttribute('aria-label')).toBe('Fruit')
+    })
 
-    const options = getOptions()
-    expect(document.activeElement).toBe(options[0])
-    // Options render tabindex=-1 + the focus-visible ring classes; asserting
-    // both here proves the ring is reachable by keyboard navigation.
-    expect(options[0].getAttribute('tabindex')).toBe('-1')
-    expect(options[0].className).toContain('focus-visible:ring-2')
+    it('lets a label point at inputId and names the listbox from that label', async () => {
+      const { getByTestId } = render(Fruits, { props: { inputId: 'fruit-field', label: 'Fruit' } })
+      const trigger = getByTestId('select-trigger') as HTMLButtonElement
+
+      expect(trigger.id).toBe('fruit-field')
+      expect(trigger.hasAttribute('aria-label')).toBe(false)
+      expect(trigger.labels?.[0]?.textContent?.trim()).toBe('Fruit')
+      await fireEvent.click(trigger)
+      await settle()
+      expect(getListbox()?.getAttribute('aria-label')).toBe('Fruit')
+    })
+
+    it('gives every trigger a generated id when inputId is not set', () => {
+      render({ setup: () => () => h('div', [h(Host), h(Host)]) })
+
+      const ids = Array.from(document.querySelectorAll('[data-testid="select-trigger"]')).map(
+        (trigger) => trigger.id
+      )
+      expect(ids.every(Boolean)).toBe(true)
+      expect(new Set(ids).size).toBe(ids.length)
+    })
+
+    it('resolves the name and the active option when mounted already open', async () => {
+      render(Fruits, { props: { ariaLabel: 'Fruit', startOpen: true } })
+      await settle()
+
+      expect(getListbox()?.getAttribute('aria-label')).toBe('Fruit')
+      expect(
+        document
+          .querySelector('[data-testid="select-trigger"]')
+          ?.getAttribute('aria-activedescendant')
+      ).toBe(optionByText('Apple').id)
+    })
   })
 
-  it('wraps ArrowDown from the last option back to the first (ENG-46730)', async () => {
-    render(Host, { props: { startOpen: true } })
-    const content = getContent() as HTMLElement
-    const options = getOptions()
-    options[options.length - 1].focus()
+  describe('axe', () => {
+    it('has no a11y violations on the closed, named combobox trigger', async () => {
+      const { container } = render(Host, { props: { initial: 'opt-1' } })
+      await expectNoA11yViolations(container)
+    })
 
-    await fireEvent.keyDown(content, { key: 'ArrowDown' })
+    it.each([
+      ['single', false],
+      ['multiple', true]
+    ] as const)('has no a11y violations with the %s panel open', async (_mode, multiple) => {
+      const { container, getByTestId } = render(Host, {
+        props: { multiple, initial: multiple ? ['opt-2'] : 'opt-2' }
+      })
+      await openWithKey(getByTestId('select-trigger'), 'ArrowDown')
 
-    expect(document.activeElement).toBe(options[0])
+      expect(getContent()).not.toBeNull()
+      await expectNoA11yViolations(container)
+      await expectNoA11yViolations(getContent() as HTMLElement)
+    })
+
+    it.each([
+      ['Default', Default],
+      ['Multiple', Multiple],
+      ['WithGroups', WithGroups],
+      ['WithSearchAndFooter', WithSearchAndFooter]
+    ] as const)('the %s story is axe-clean closed and open', async (_name, Story) => {
+      const { container, getByTestId } = render(Story())
+      await expectNoA11yViolations(container)
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await settle()
+      expect(getContent()).not.toBeNull()
+      await expectNoA11yViolations(container)
+      await expectNoA11yViolations(getContent() as HTMLElement)
+    })
+
+    it('the Disabled story is axe-clean', async () => {
+      const { container } = render(Disabled())
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('form participation', () => {
+    it('submits the custom selection under name through hidden inputs', async () => {
+      const { container } = render({
+        setup: () => () =>
+          h('form', [
+            h(
+              Select,
+              {
+                name: 'fruit',
+                multiple: true,
+                modelValue: ['apple', 'cherry'],
+                ariaLabel: 'Fruit'
+              },
+              () => [
+                h(SelectTrigger),
+                h(SelectContent, null, () => [
+                  h(SelectOption, { value: 'apple' }, () => 'Apple'),
+                  h(SelectOption, { value: 'cherry' }, () => 'Cherry')
+                ])
+              ]
+            )
+          ])
+      })
+
+      const form = container.querySelector('form') as HTMLFormElement
+      expect(new FormData(form).getAll('fruit')).toEqual(['apple', 'cherry'])
+    })
+  })
+
+  describe('native mode', () => {
+    it('renders a select with option and optgroup instead of the custom trigger and panel', () => {
+      const { getByTestId, queryByTestId } = render(Native())
+      const select = getByTestId('select__native') as HTMLSelectElement
+
+      expect(select.tagName).toBe('SELECT')
+      expect(select.id).toBe('native-fruit')
+      expect(select.labels?.[0]?.textContent?.trim()).toBe('Fruit')
+      expect(Array.from(select.querySelectorAll('optgroup')).map((g) => g.label)).toEqual([
+        'Citrus',
+        'Berries'
+      ])
+      expect(select.querySelectorAll('option:not([value=""])')).toHaveLength(4)
+      expect(queryByTestId('select-trigger')).toBeNull()
+      expect(getListbox()).toBeNull()
+    })
+
+    it('submits the picked value with its form and validates required natively', async () => {
+      const { getByTestId } = render(Native())
+      const select = getByTestId('select__native') as HTMLSelectElement
+      const form = select.form as HTMLFormElement
+
+      expect(select.required).toBe(true)
+      expect(select.checkValidity()).toBe(false)
+
+      select.value = 'orange'
+      await fireEvent.change(select)
+
+      expect(select.checkValidity()).toBe(true)
+      expect(new FormData(form).get('fruit')).toBe('orange')
+    })
+
+    it('emits the original typed value and reflects modelValue back on the select', async () => {
+      const { getByTestId, emitted, rerender } = render(Select, {
+        props: { native: true, modelValue: 1, ariaLabel: 'Count' },
+        slots: {
+          default: () => [
+            h(SelectTrigger),
+            h(SelectContent, null, () => [
+              h(SelectOption, { value: 1 }, () => 'One'),
+              h(SelectOption, { value: 2 }, () => 'Two')
+            ])
+          ]
+        }
+      })
+      const select = getByTestId('select__native') as HTMLSelectElement
+      expect(select.value).toBe('1')
+
+      select.value = '2'
+      await fireEvent.change(select)
+      expect(emitted()['update:modelValue']).toEqual([[2]])
+
+      await rerender({ modelValue: 2 })
+      expect(select.value).toBe('2')
+    })
+
+    it('submits every selected value in multiple mode and keeps disabled native', async () => {
+      const { getByTestId, container } = render({
+        setup: () => () =>
+          h('form', [
+            h(
+              Select,
+              {
+                native: true,
+                multiple: true,
+                disabled: true,
+                name: 'tags',
+                modelValue: ['a', 'c'],
+                ariaLabel: 'Tags'
+              },
+              () => [
+                h(SelectTrigger),
+                h(SelectContent, null, () =>
+                  ['a', 'b', 'c'].map((v) =>
+                    h(SelectOption, { key: v, value: v }, () => v.toUpperCase())
+                  )
+                )
+              ]
+            )
+          ])
+      })
+      const select = getByTestId('select__native') as HTMLSelectElement
+
+      expect(select.multiple).toBe(true)
+      expect(select.disabled).toBe(true)
+      select.disabled = false
+      expect(
+        new FormData(container.querySelector('form') as HTMLFormElement).getAll('tags')
+      ).toEqual(['a', 'c'])
+    })
+
+    it('reverts a change and emits nothing when readonly', async () => {
+      const { getByTestId, emitted } = render(Select, {
+        props: { native: true, readonly: true, modelValue: 'a', ariaLabel: 'Letter' },
+        slots: {
+          default: () => [
+            h(SelectContent, null, () => [
+              h(SelectOption, { value: 'a' }, () => 'A'),
+              h(SelectOption, { value: 'b' }, () => 'B')
+            ])
+          ]
+        }
+      })
+      const select = getByTestId('select__native') as HTMLSelectElement
+
+      select.value = 'b'
+      await fireEvent.change(select)
+      await nextTick()
+
+      expect(emitted()['update:modelValue']).toBeUndefined()
+      expect(select.value).toBe('a')
+      expect(select.getAttribute('aria-readonly')).toBe('true')
+    })
+
+    it('the Native story is axe-clean', async () => {
+      const { container } = render(Native())
+      await expectNoA11yViolations(container)
+    })
   })
 
   // ---- Regression: trigger reopen (ENG-46739) -------------------------------

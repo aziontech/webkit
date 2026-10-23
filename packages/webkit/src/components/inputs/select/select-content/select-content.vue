@@ -1,5 +1,15 @@
 <script setup lang="ts">
-  import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    inject,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    useSlots,
+    watch
+  } from 'vue'
 
   import { usePlacement } from '../../../../composables/use-placement'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
@@ -10,12 +20,19 @@
     inheritAttrs: false
   })
 
+  defineSlots<{
+    default(): unknown
+    search(): unknown
+    footer(): unknown
+  }>()
+
   const ctx = inject(selectContextKey)
   if (!ctx) {
     throw new Error('SelectContent must be used inside <Select>.')
   }
 
   const attrs = useAttrs()
+  const slots = useSlots()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-content')
 
@@ -32,40 +49,21 @@
     matchTriggerWidth: true
   })
 
-  const onKeydown = (event: globalThis.KeyboardEvent) => {
+  const onPanelKeydown = (event: globalThis.KeyboardEvent) => {
     if (event.key === 'Escape') {
       event.preventDefault()
-      ctx.setOpen(false)
-      return
+      ctx.close(true)
+    } else if (event.key === 'Tab') {
+      ctx.close(true)
     }
-    if (event.key === 'Tab') {
-      ctx.setOpen(false)
-      return
-    }
-    if (
-      event.key !== 'ArrowDown' &&
-      event.key !== 'ArrowUp' &&
-      event.key !== 'Home' &&
-      event.key !== 'End'
-    )
-      return
+  }
+
+  const onListboxKeydown = (event: globalThis.KeyboardEvent) => {
+    if (ctx.onListKeydown(event)) event.stopPropagation()
+  }
+
+  const onListboxMousedown = (event: globalThis.MouseEvent) => {
     event.preventDefault()
-    const el = root.value
-    if (!el) return
-    const options = Array.from(
-      el.querySelectorAll<HTMLElement>('[role="option"]:not([data-disabled])')
-    )
-    if (options.length === 0) return
-    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    const currentIndex = active ? options.indexOf(active) : -1
-    let nextIndex = currentIndex
-    if (event.key === 'ArrowDown')
-      nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0
-    else if (event.key === 'ArrowUp')
-      nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1
-    else if (event.key === 'Home') nextIndex = 0
-    else if (event.key === 'End') nextIndex = options.length - 1
-    options[nextIndex]?.focus()
   }
 
   const onDocumentPointerDown = (event: globalThis.PointerEvent) => {
@@ -88,6 +86,9 @@
       if (next) {
         await nextTick()
         document.addEventListener('pointerdown', onDocumentPointerDown, true)
+        if (ctx.multiple.value && !slots['search']) {
+          ctx.listboxRef.value?.focus({ preventScroll: true })
+        }
       } else {
         document.removeEventListener('pointerdown', onDocumentPointerDown, true)
       }
@@ -106,7 +107,11 @@
 </script>
 
 <template>
-  <Teleport to="body">
+  <slot v-if="ctx.native.value" />
+  <Teleport
+    v-else
+    to="body"
+  >
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
@@ -115,16 +120,13 @@
         v-if="ctx.open.value"
         ref="root"
         v-bind="$attrs"
-        :id="ctx.contentId"
-        role="listbox"
-        :aria-multiselectable="ctx.multiple.value || undefined"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
         :style="panelStyle"
         class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
-        @keydown="onKeydown"
+        @keydown="onPanelKeydown"
       >
         <div
           v-if="$slots['search']"
@@ -140,9 +142,31 @@
         -->
         <ScrollArea
           class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
+          tabindex="-1"
           :data-testid="`${testId}__list`"
         >
-          <slot />
+          <div
+            :id="ctx.contentId"
+            :ref="
+              (el) => {
+                ctx.listboxRef.value = el as globalThis.HTMLElement | null
+              }
+            "
+            role="listbox"
+            :aria-label="ctx.listboxLabel.value"
+            :aria-multiselectable="ctx.multiple.value || undefined"
+            :aria-required="(ctx.required.value && ctx.multiple.value) || undefined"
+            :aria-activedescendant="ctx.multiple.value ? ctx.activeId.value : undefined"
+            :tabindex="ctx.multiple.value ? 0 : undefined"
+            :data-testid="`${testId}__listbox`"
+            class="flex flex-col items-stretch outline-none"
+            @keydown="onListboxKeydown"
+            @mousedown="onListboxMousedown"
+            @focus="ctx.setNavigating(true)"
+            @blur="ctx.setNavigating(false)"
+          >
+            <slot />
+          </div>
         </ScrollArea>
         <div
           v-if="$slots['footer']"

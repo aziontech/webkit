@@ -253,14 +253,18 @@
           >
             {{ c.dialCode }} {{ c.label }}
           </SelectOption>
-          <p
+          <template
             v-if="filteredCountries.length === 0"
-            role="status"
-            :data-testid="`${testId}__search-empty`"
-            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+            #footer
           >
-            {{ searchEmptyLabel }}
-          </p>
+            <p
+              role="status"
+              :data-testid="`${testId}__search-empty`"
+              class="w-full px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+            >
+              {{ searchEmptyLabel }}
+            </p>
+          </template>
         </SelectContent>
       </Select>
       <input
