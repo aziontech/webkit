@@ -69,6 +69,7 @@ import LandingProduct from '@site/views/LandingProduct.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRealTimeEvents from '@site/views/LandingRealTimeEvents.vue'
 import LandingRealTimeMetrics from '@site/views/LandingRealTimeMetrics.vue'
+import LandingResourceHub from '@site/views/LandingResourceHub.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
@@ -298,6 +299,8 @@ export const siteRoutes = [
   // The Learning Center in the same shell: 16 subjects and 78 articles, read verbatim off
   // azion.com/en/learning. The Resources mega-menu's `Learning` entry points here.
   { path: '/site/learning', name: 'site-learning', component: LandingLearning },
+  // azion.com/en/resource-hub, read verbatim; its listing renders the blog's article rows.
+  { path: '/site/resource-hub', name: 'site-resource-hub', component: LandingResourceHub },
   // The partner programme page in the same shell, laid out on the contact page: pitch and form
   // side by side in the hero over the client strip, then `big-numbers`, `content-columns` and the
   // framed `call-to-action` between hatched gaps — webkit sections only. The site nav does not

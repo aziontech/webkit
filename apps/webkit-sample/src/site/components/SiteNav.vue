@@ -272,7 +272,8 @@
         {
           icon: 'ai ai-layers',
           label: 'Resource Hub',
-          description: 'E-books, webinars, and whitepapers'
+          description: 'E-books, webinars, and whitepapers',
+          href: '/site/resource-hub'
         },
         {
           icon: 'ai ai-marketplace',

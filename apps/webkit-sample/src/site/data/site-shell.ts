@@ -267,7 +267,11 @@ const RESOURCES: SiteNavMenu = {
             description: 'Fundamentals, subject by subject',
             href: '/site/learning'
           },
-          { label: 'Resource Hub', description: 'Useful materials in one place' },
+          {
+            label: 'Resource Hub',
+            description: 'Useful materials in one place',
+            href: '/site/resource-hub'
+          },
           {
             label: 'Success Stories',
             description: 'Real results from our customers',

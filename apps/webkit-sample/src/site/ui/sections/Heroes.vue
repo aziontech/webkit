@@ -67,6 +67,8 @@
     carouselLabel?: string
     /** Art beside the copy, for copy-beside-art. */
     art?: HeroesArt | null
+    /** Drops the band's dot texture. */
+    plain?: boolean
     /** Sample scene drawn in the band's top or bottom window. */
     scene?: SiteScene | null
     /** Window the scene stands in. */
@@ -85,6 +87,7 @@
     carouselMarks: () => [],
     carouselLabel: 'Trusted by teams running critical workloads',
     art: null,
+    plain: false,
     scene: null,
     scenePlacement: 'bottom'
   })
@@ -142,7 +145,11 @@
 
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
 
-  const frame = computed(() => FRAMES[props.kind])
+  const frame = computed(() => {
+    if (!props.plain) return FRAMES[props.kind]
+    const { texture, textureSize, textureFade, ...rest } = FRAMES[props.kind] as Record<string, unknown>
+    return rest
+  })
   const titleFrame = computed(() => {
     const base = TITLES[props.kind]
     const widened =
