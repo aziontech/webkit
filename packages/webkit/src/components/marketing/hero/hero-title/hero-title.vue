@@ -30,6 +30,8 @@
     eyebrowPrefix?: HeroTitleEyebrowPrefix
     /** Center the whole block — copy, headline and actions — instead of aligning it to the start. */
     centered?: boolean
+    /** Center the whole block below the medium breakpoint only, where a band with media stacks the copy above it. */
+    mobileCentered?: boolean
     /** Headline scale; medium steps one rung below large. */
     size?: HeroTitleSize
     /** Width the copy block — headline, paragraph and actions — is capped at. */
@@ -44,6 +46,7 @@
     eyebrow: '',
     eyebrowPrefix: '',
     centered: false,
+    mobileCentered: false,
     size: 'large',
     maxWidth: '4xl',
     sticky: false
@@ -66,13 +69,15 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-centered="centered || null"
+    :data-mobile-centered="mobileCentered || null"
     :data-width="maxWidth"
     :data-sticky="sticky || null"
-    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--banner-offset,0rem)+var(--spacing-xl))] data-[centered]:mx-auto data-[centered]:items-center data-[centered]:text-center"
+    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--banner-offset,0rem)+var(--spacing-xl))] data-[centered]:mx-auto data-[centered]:items-center data-[centered]:text-center max-md:data-[mobile-centered]:mx-auto max-md:data-[mobile-centered]:items-center max-md:data-[mobile-centered]:text-center"
   >
     <Overline
       v-if="eyebrow"
       :prefix="eyebrowPrefix"
+      :single-line="false"
       show-cursor
       >{{ eyebrow }}</Overline
     >
@@ -98,7 +103,7 @@
       class="@container mt-(--spacing-xs) w-full"
     >
       <div
-        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @xs:flex-row @xs:flex-wrap @xs:items-center @xs:group-data-[centered]:justify-center @xs:[&>*]:w-auto"
+        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @xs:flex-row @xs:flex-wrap @xs:items-center @xs:group-data-[centered]:justify-center max-md:@xs:group-data-[mobile-centered]:justify-center @xs:[&>*]:w-auto"
       >
         <slot name="actions" />
       </div>
