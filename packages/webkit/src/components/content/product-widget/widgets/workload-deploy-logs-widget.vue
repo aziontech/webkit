@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { duration } from '@aziontech/theme/animations'
-  import { onScopeDispose, ref, watch } from 'vue'
+  import { useElementVisibility } from '@vueuse/core'
+  import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import Divider from '../../../layout/divider/divider.vue'
@@ -25,7 +26,7 @@
     width?: number
     /** Edge the mockup fades out along. */
     fade?: ShellMockupFade
-    /** Whether this widget is the one showing; the deployment streams only while it is. */
+    /** Whether this widget is the one showing; the deployment streams only while it is and is on screen. */
     active?: boolean
     /** Milliseconds between revealed log lines. */
     interval?: number
@@ -60,8 +61,14 @@
     transitionDelay: `${Math.round(globalThis.parseFloat(duration['fast-02']) * index)}ms`
   })
 
+  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+
+  const shell = ref<InstanceType<typeof ShellMockup> | null>(null)
+  const visible = useElementVisibility(shell, { threshold: 0.35 })
+
   const run = ref(0)
   const deployed = ref(false)
+  const streaming = computed(() => props.active && visible.value && !reduced)
 
   let restartTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -81,19 +88,17 @@
     restartTimer = setTimeout(restart, SUMMARY_HOLD_MS)
   }
 
-  watch(
-    () => props.active,
-    (active) => {
-      if (active) restart()
-      else clearRestart()
-    }
-  )
+  watch(streaming, (live) => {
+    if (live) restart()
+    else clearRestart()
+  })
 
   onScopeDispose(clearRestart)
 </script>
 
 <template>
   <ShellMockup
+    ref="shell"
     :kind="kind"
     :chrome="chrome"
     :width="width"
@@ -169,8 +174,8 @@
                 key="logs"
               >
                 <DeploymentLogs
-                  :key="active ? run : 'idle'"
-                  :live="active"
+                  :key="streaming ? run : 'idle'"
+                  :live="streaming"
                   active-at="build"
                   label="Logs"
                   :controls="false"

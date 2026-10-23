@@ -14,6 +14,8 @@ const TESTID = 'content-product-widget'
 const FRAME_TESTID = 'content-shell-mockup'
 const NAMES = Object.keys(productWidgets) as ProductWidgetName[]
 
+const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 const host = (props: Record<string, unknown>) =>
   defineComponent({
     components: { ProductWidget },
@@ -113,6 +115,30 @@ describe('ProductWidget', () => {
       '[webkit] <ProductWidget>: no widget registered under name "not-a-widget".'
     )
     warn.mockRestore()
+  })
+
+  it('holds the deploy logs still while they are off screen', async () => {
+    const Host = defineComponent({
+      components: { ProductWidget },
+      template: `
+        <div>
+          <div style="height: 300vh"></div>
+          <div style="width: 600px; height: 480px">
+            <ProductWidget name="workload-deploy-logs" :interval="40" />
+          </div>
+        </div>
+      `
+    })
+    const view = render(Host)
+    const frame = await frameOf(view)
+    const drawn = frame.textContent
+
+    await new Promise((resolve) => globalThis.setTimeout(resolve, 600))
+    expect(frame.textContent).toBe(drawn)
+
+    if (reducedMotion()) return
+    frame.scrollIntoView()
+    await expect.poll(() => frame.textContent).not.toBe(drawn)
   })
 
   it.each(NAMES)('draws %s inside a shell mockup', async (name) => {
