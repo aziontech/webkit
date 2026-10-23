@@ -70,6 +70,7 @@ import LandingProduct from '@site/views/LandingProduct.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRealTimeEvents from '@site/views/LandingRealTimeEvents.vue'
 import LandingRealTimeMetrics from '@site/views/LandingRealTimeMetrics.vue'
+import LandingRecognitions from '@site/views/LandingRecognitions.vue'
 import LandingResourceHub from '@site/views/LandingResourceHub.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
@@ -309,6 +310,8 @@ export const siteRoutes = [
   { path: '/site/partners', name: 'site-partners', component: LandingPartners },
   // azion.com/en/about-us, read verbatim; the footer's Company `About` link points here.
   { path: '/site/about', name: 'site-about', component: LandingAbout },
+  // azion.com/en/recognitions, read verbatim; the footer's Company `Recognition and Awards` link points here.
+  { path: '/site/recognitions', name: 'site-recognitions', component: LandingRecognitions },
   // The success-case library in the same shell: the first /site page whose body is a
   // filtered index rather than an argument — three featured stories, 35 in a hairline grid
   // behind three pickers, and the analyst recognitions. The site nav does not link it,

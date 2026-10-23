@@ -4,8 +4,12 @@
   import Quote from '@aziontech/webkit/quote'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import Tag from '@aziontech/webkit/tag'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { computed } from 'vue'
+
+  import SectionAction from './SectionAction.vue'
+  import type { SiteAction } from './types'
 
   defineOptions({ name: 'RecognitionMarquee' })
 
@@ -18,6 +22,10 @@
     jobTitle: string
     /** The analyst firm, signing the card with its logo. */
     firm: Pick<Client, 'name' | 'logo' | 'logoLight' | 'artwork'>
+    /** What the card is, as a tag over it. */
+    tag?: string
+    /** Link to the coverage, floored under the attribution. */
+    action?: SiteAction | null
   }
 
   interface Props {
@@ -87,7 +95,18 @@
                 marks="all"
                 class="w-full bg-(--bg-surface)"
               >
-                <div class="p-(--spacing-xl)">
+                <div class="flex flex-col gap-(--spacing-md) p-(--spacing-xl)">
+                  <div
+                    v-if="recognition.tag"
+                    class="flex"
+                  >
+                    <Tag
+                      :label="recognition.tag"
+                      severity="accent"
+                      size="small"
+                      icon="pi pi-star-fill"
+                    />
+                  </div>
                   <Quote
                     kind="signed"
                     :text="recognition.text"
@@ -98,6 +117,15 @@
                       <ClientMark
                         :client="recognition.firm"
                         mark="h-8 w-auto max-w-40 object-contain"
+                      />
+                    </template>
+                    <template
+                      v-if="recognition.action"
+                      #actions
+                    >
+                      <SectionAction
+                        :action="{ kind: 'text', size: 'medium', trailing: true, ...recognition.action }"
+                        :tabindex="copy === 2 ? -1 : undefined"
                       />
                     </template>
                   </Quote>

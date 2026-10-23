@@ -105,7 +105,7 @@ const FIRMS = {
   g2: { name: 'G2', logo: g2, logoLight: g2 }
 }
 
-const MARKET_RECOGNITIONS = [
+export const MARKET_RECOGNITIONS = [
   {
     text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
     name: 'G2 Spring 2026 Reports',

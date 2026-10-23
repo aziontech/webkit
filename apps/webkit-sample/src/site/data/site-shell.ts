@@ -360,6 +360,7 @@ const COLUMNS: SiteFooterColumn[] = [
     links: links([
       { label: 'About', href: '/site/about' },
       { label: 'Customers', href: '/site/success-cases' },
+      { label: 'Recognition and Awards', href: '/site/recognitions' },
       { label: 'Partners', href: '/site/partners' },
       { label: 'Careers', href: '/site/careers' },
       { label: 'Blog', href: '/site/blog' },
