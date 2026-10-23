@@ -116,12 +116,14 @@ export const WithoutIcon = {
   }
 }
 
-const LINKED_MARKUP = `<Topic
-  icon="ai ai-tiered-cache"
-  title="Accelerate API responses"
-  description="Cache API responses on a distributed architecture to reduce latency and origin load."
-  href="/products/cache"
-/>`
+const LINKED_MARKUP = `<div class="relative">
+  <Topic
+    icon="ai ai-tiered-cache"
+    title="Accelerate API responses"
+    description="Cache API responses on a distributed architecture to reduce latency and origin load."
+    href="/products/cache"
+  />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Topic>} */
 export const Linked = {
@@ -131,7 +133,7 @@ export const Linked = {
     docs: {
       description: {
         story:
-          'With an href the whole claim is the link and its headline closes on an arrow — so a band of claims carries no row of "learn more" buttons under it.'
+          'With an href the whole claim is the link and its headline closes on an arrow — so a band of claims carries no row of "learn more" buttons under it. The link covers the nearest positioned ancestor, so the cell it sits in is the hover and click target.'
       },
       source: { code: toSfc(IMPORT, LINKED_MARKUP) }
     }
@@ -139,7 +141,7 @@ export const Linked = {
 }
 
 const IN_GRID_TEMPLATE = `<CardGrid kind="divider" :columns="3">
-  <div class="bg-(--bg-canvas) p-(--spacing-xl)">
+  <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
     <Topic
       icon="ai ai-edge-nodes"
       title="Consistent global speed"
@@ -147,7 +149,7 @@ const IN_GRID_TEMPLATE = `<CardGrid kind="divider" :columns="3">
       href="/products/edge-application"
     />
   </div>
-  <div class="bg-(--bg-canvas) p-(--spacing-xl)">
+  <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
     <Topic
       icon="ai ai-load-balancer"
       title="Safer high-traffic launches"
@@ -155,7 +157,7 @@ const IN_GRID_TEMPLATE = `<CardGrid kind="divider" :columns="3">
       href="/products/load-balancer"
     />
   </div>
-  <div class="bg-(--bg-canvas) p-(--spacing-xl)">
+  <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
     <Topic
       icon="pi pi-code"
       title="Compatible with your framework"

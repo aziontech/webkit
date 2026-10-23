@@ -2,11 +2,11 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../../apps/storybook/src/stories/marketing/HeroTitle.stories'
+import * as stories from '../../../../../../../apps/storybook/src/stories/components/marketing/hero-title/HeroTitle.stories'
 import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
 
-const { Default, Highlight, Centered, WithActions } = composeStories(stories)
+const { Default, Highlight, Centered, MobileCentered, WithActions } = composeStories(stories)
 
 const TESTID = 'marketing-hero-title'
 
@@ -51,6 +51,16 @@ describe('HeroTitle', () => {
     const { getByTestId } = render(HeroTitle, { props: { ...props, centered: true } })
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
+  })
+
+  it('marks the root mobile-centered only when mobileCentered is set', async () => {
+    const { getByTestId, rerender } = render(HeroTitle, { props })
+    expect(getByTestId(TESTID)).not.toHaveAttribute('data-mobile-centered')
+
+    await rerender({ ...props, mobileCentered: true })
+    const root = getByTestId(TESTID)
+    expect(root).toHaveAttribute('data-mobile-centered', 'true')
+    expect(root).not.toHaveAttribute('data-centered')
   })
 
   it('sets the headline size to large by default', () => {
@@ -205,12 +215,20 @@ describe('HeroTitle', () => {
       expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
     })
 
+    it('renders the MobileCentered story centered below md only', () => {
+      const { getByTestId } = render(MobileCentered())
+      const root = getByTestId(TESTID)
+
+      expect(root).toHaveAttribute('data-mobile-centered', 'true')
+      expect(root).not.toHaveAttribute('data-centered')
+    })
+
     it('renders the WithActions story with both CTAs', () => {
       const { getAllByRole } = render(WithActions())
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
         'Start for free',
-        'Talk to sales'
+        'Talk to a specialist'
       ])
     })
   })
