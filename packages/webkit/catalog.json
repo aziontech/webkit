@@ -16009,7 +16009,8 @@
         "Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.",
         "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
         "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
-        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at."
+        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.",
+        "A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band."
       ]
     },
     "section-module": {
