@@ -15,7 +15,7 @@ const ACTIONS_MARKUP = `  <template #actions>
       <Button kind="secondary" label="Secondary Item" />
       <Button kind="outlined" label="Create Item" />
     </div>
-    <MiniButton label="View Documentation" icon="pi pi-arrow-right" size="medium" href="#" />
+    <MiniButton label="Docs" icon="pi pi-arrow-right" size="medium" href="#" />
   </template>`
 
 /** @type {import('@storybook/vue3').Meta<typeof EmptyState>} */

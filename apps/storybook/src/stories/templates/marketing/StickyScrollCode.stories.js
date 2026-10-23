@@ -176,8 +176,8 @@ const IMPORTS = [
   declareTabs('samples', SAMPLES)
 ]
 
-const LEARN_MORE = `<Button
-  label="Learn more"
+const DOCS_ACTION = `<Button
+  label="Docs"
   kind="secondary"
   size="small"
   :href="capabilities[index].href"
@@ -223,7 +223,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
         </div>
       </template>
       <template #actions="{ index }">
-        ${LEARN_MORE.split('\n').join('\n        ')}
+        ${DOCS_ACTION.split('\n').join('\n        ')}
       </template>
     </StickyStack>
   </FrameBox>
@@ -266,7 +266,7 @@ export const SITE_SECTION = {
       'Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves.',
     items: CAPABILITIES.slice(0, 3).map((capability, index) => ({
       ...capability,
-      action: { label: 'Learn more', href: capability.href, trailing: true },
+      action: { label: 'Docs', href: capability.href, trailing: true },
       code: {
         fileName: SAMPLES[index].fileName,
         fileIcon: SAMPLES[index].fileIcon.replace(' text-(--primary)!', ''),

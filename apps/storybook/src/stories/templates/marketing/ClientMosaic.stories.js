@@ -190,7 +190,7 @@ ${indent(clientMark(cell))}
       ${cell.story}
     </p>
     <MiniButton
-      label="Learn more"
+      label="Read the case study"
       show-icon
       icon="pi pi-angle-right"
       href="${cell.href}"
@@ -386,7 +386,7 @@ export const SITE_SECTION = {
   _id: 'client-mosaic',
   props: {
     ariaLabel: 'Client stories',
-    linkLabel: 'Learn more',
+    linkLabel: 'Read the case study',
     stories: [
       {
         logo: '/marketing-components/logos/netshoes-extended-color.svg',

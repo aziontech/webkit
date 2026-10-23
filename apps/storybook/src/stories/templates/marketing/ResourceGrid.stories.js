@@ -1,12 +1,13 @@
 import Button from '@aziontech/webkit/button'
 import CardGrid from '@aziontech/webkit/card-grid'
 import MediaSplit from '@aziontech/webkit/media-split'
+import ScrollArea from '@aziontech/webkit/scroll-area'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Topic from '@aziontech/webkit/topic'
 
-import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
@@ -19,11 +20,16 @@ const IMPORTS = [
   "import Topic from '@aziontech/webkit/topic'"
 ]
 
+const VISIBLE_ITEMS = 4
+
+const SCROLLING_IMPORTS = [...IMPORTS, "import ScrollArea from '@aziontech/webkit/scroll-area'"]
+
 const components = {
   Button,
   CardGrid,
   'CardGrid.Cell': CardGrid.Cell,
   MediaSplit,
+  ScrollArea,
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -61,24 +67,66 @@ const FINANCIAL = {
   ]
 }
 
+const TECHNOLOGY = {
+  eyebrow: 'Go Deeper',
+  title: 'Guides and Resources',
+  description:
+    'Documentation and articles on building, securing, and scaling modern applications on a distributed architecture.',
+  items: [
+    ...FINANCIAL.items.slice(0, 2),
+    {
+      title: 'Build modern applications with Functions',
+      description: 'Create serverless functions that run close to users.',
+      href: 'https://www.azion.com/en/documentation/products/build/edge-application/edge-functions/'
+    },
+    {
+      title: 'SQL Database for modern applications',
+      description:
+        'Build data-driven applications with SQL Database on a distributed architecture.',
+      href: 'https://www.azion.com/en/documentation/products/store/edge-sql/'
+    },
+    ...FINANCIAL.items.slice(2)
+  ]
+}
+
 const isExternal = (href) => /^https?:/.test(href)
 
 const resourceCard = (card) =>
   [
-    '<CardGrid.Cell',
-    '  kind="surface"',
-    '  :padded="false"',
-    '>',
+    '<CardGrid.Cell kind="surface">',
     '  <Topic',
     '    :heading-level="3"',
     `    title="${card.title}"`,
     `    description="${card.description}"`,
     `    href="${card.href}"`,
     ...(isExternal(card.href) ? ['    target="_blank"', '    rel="noopener noreferrer"'] : []),
-    '    class="h-full p-(--spacing-xl)"',
     '  />',
     '</CardGrid.Cell>'
   ].join('\n')
+
+const cardGrid = (resources, classes) => `<CardGrid
+  flush
+  kind="frame"
+  :columns="2"${classes ? `\n  class="${classes}"` : ''}
+>
+${each(resources.items, resourceCard, 1)}
+</CardGrid>`
+
+const resourceMedia = (resources) =>
+  resources.items.length > VISIBLE_ITEMS
+    ? `<div class="relative -mb-px flex w-full flex-col self-stretch">
+  <div class="flex min-h-0 flex-1 flex-col lg:absolute lg:inset-0">
+    <ScrollArea
+      aria-label="${resources.title}"
+      fade
+    >
+      <div class="pb-px">
+${indent(cardGrid(resources), 4)}
+      </div>
+    </ScrollArea>
+  </div>
+</div>`
+    : cardGrid(resources, 'w-full self-stretch sm:auto-rows-fr')
 
 const resourceGrid = (resources) =>
   inColumn(`<SectionModule
@@ -96,14 +144,7 @@ const resourceGrid = (resources) =>
     description="${resources.description}"
   >
     <template #media>
-      <CardGrid
-        flush
-        kind="frame"
-        :columns="2"
-        class="w-full self-stretch"
-      >
-${each(resources.items, resourceCard, 4)}
-      </CardGrid>
+${indent(resourceMedia(resources), 3)}
     </template>
     <template #actions>
       <Button
@@ -121,6 +162,7 @@ ${each(resources.items, resourceCard, 4)}
 </SectionModule>`)
 
 const FINANCIAL_TEMPLATE = resourceGrid(FINANCIAL)
+const SCROLLING_TEMPLATE = resourceGrid(TECHNOLOGY)
 
 const meta = {
   title: 'Templates/Marketing/Content/ResourceGrid',
@@ -142,6 +184,15 @@ export const Default = {
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, FINANCIAL_TEMPLATE) }
+    }
+  }
+}
+
+export const Scrollable = {
+  render: () => ({ components, template: SCROLLING_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(SCROLLING_IMPORTS, SCROLLING_TEMPLATE) }
     }
   }
 }

@@ -108,7 +108,7 @@ const THREE = {
 
 const ACTIONS = `<template #actions>
   <Button
-    label="Start free"
+    label="Start for free"
     kind="secondary"
     size="large"
     href="/signup"
@@ -142,6 +142,7 @@ const heroWithOpening = (page) => `<Hero
     centered
     max-width="4xl"
     eyebrow="${page.eyebrow}"
+    eyebrow-prefix="//"
     title="${page.title}"
     description="${page.description}"
   >

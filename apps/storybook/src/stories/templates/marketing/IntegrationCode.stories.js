@@ -145,7 +145,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
           />
           <Button
             class="self-end"
-            label="Documentation"
+            label="Docs"
             kind="outlined"
             size="small"
             href="${DOCS_HREF}"

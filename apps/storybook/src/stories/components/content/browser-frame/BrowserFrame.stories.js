@@ -98,7 +98,7 @@ const SCREEN = `<SectionContainer max-width="site">
         <Button kind="secondary" label="Start for free" />
       </template>
       <template #aside>
-        <Button kind="outlined" label="Talk to sales" />
+        <Button kind="outlined" label="Talk to a specialist" />
       </template>
     </CallToAction>
   </SectionModule>

@@ -135,13 +135,13 @@ const CLOSING_CELL = `<FrameBox
   >
     <template #actions>
       <Button
-        label="Start free"
+        label="Start for free"
         kind="secondary"
         size="large"
         href="/signup"
       />
       <Button
-        label="Talk to an expert"
+        label="Talk to a specialist"
         kind="outlined"
         size="large"
         href="/contact"

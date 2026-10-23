@@ -39,13 +39,13 @@ const PLATFORM_PRIMITIVES = [
         href: '/products/functions'
       },
       {
-        icon: 'pi pi-sitemap',
+        icon: 'ai ai-rules-engine',
         title: 'Rules Engine',
         description: 'Automate request handling with rules',
         href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
       },
       {
-        icon: 'pi pi-image',
+        icon: 'ai ai-image-processor',
         title: 'Image Processor',
         description: 'Resize and convert images on demand',
         href: 'https://www.azion.com/en/products/image-processor/'
@@ -63,7 +63,7 @@ const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/products/ai-inference/'
       },
       {
-        icon: 'ai ai-gateway',
+        icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Route, secure and log every model call',
         href: 'https://www.azion.com/en/solutions#ai'
@@ -109,7 +109,7 @@ const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/solutions/api-gateway/'
       },
       {
-        icon: 'pi pi-android',
+        icon: 'ai ai-bot-manager',
         title: 'Bot Manager',
         description: 'Detect and stop automated traffic',
         href: 'https://www.azion.com/en/products/bot-manager/'
@@ -216,19 +216,19 @@ export const SITE_SECTION = {
             href: 'https://www.azion.com/en/products/functions/'
           },
           {
-            icon: 'pi pi-sitemap',
+            icon: 'ai ai-rules-engine',
             title: 'Rules Engine',
             description: 'Automate request handling with rules',
             href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
           },
           {
-            icon: 'pi pi-microchip-ai',
+            icon: 'ai ai-edge-ai',
             title: 'AI Inference',
             description: 'Run models close to the user',
             href: 'https://www.azion.com/en/products/ai-inference/'
           },
           {
-            icon: 'pi pi-sitemap',
+            icon: 'ai ai-ai-gateway',
             title: 'AI Gateway',
             description: 'Route, secure and log every model call',
             href: 'https://www.azion.com/en/solutions#ai'
@@ -262,7 +262,7 @@ export const SITE_SECTION = {
             href: 'https://www.azion.com/en/products/web-application-firewall/'
           },
           {
-            icon: 'pi pi-sitemap',
+            icon: 'ai ai-azion-api',
             title: 'API Gateway',
             description: 'Secure, manage, and scale API traffic',
             href: 'https://www.azion.com/en/solutions/api-gateway/'

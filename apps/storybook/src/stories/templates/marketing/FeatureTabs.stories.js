@@ -60,7 +60,7 @@ const CODE_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     >
       <template #actions>
         <Button
-          label="Read the docs"
+          label="Docs"
           kind="secondary"
           size="large"
           href="/docs"
@@ -134,7 +134,7 @@ export const SITE_SECTION_CODE = {
     description: DESCRIPTION,
     tabs: WORKLOAD_RECIPE_TABS,
     copyAriaLabel: 'Copy the workload sample',
-    action: { label: 'Read the docs', href: '/docs' }
+    action: { label: 'Docs', href: '/docs' }
   }
 }
 

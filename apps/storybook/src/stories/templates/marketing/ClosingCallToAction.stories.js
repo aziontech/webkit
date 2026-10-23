@@ -70,11 +70,11 @@ const SPLIT_TEMPLATE = closingColumn(`<SectionModule
     description="Get a faster path to launch, lower latency, and less infrastructure overhead."
   >
     <template #actions>
-      <Button label="Start free" kind="secondary" size="large" href="/signup" />
+      <Button label="Start for free" kind="secondary" size="large" href="/signup" />
     </template>
     <template #aside>
       <Button
-        label="Talk to an expert"
+        label="Talk to a specialist"
         kind="outlined"
         size="large"
         href="#"
@@ -157,9 +157,9 @@ const PRIMARY_TEMPLATE = closingColumn(`<SectionModule
       <TextureMaterial kind="pixelate" size="small" fade="bottom" />
     </template>
     <template #actions>
-      <Button label="Start free" kind="secondary" size="large" href="/signup" />
+      <Button label="Start for free" kind="secondary" size="large" href="/signup" />
       <Button
-        label="Read the docs"
+        label="Docs"
         kind="outlined"
         size="large"
         href="/docs"
@@ -189,7 +189,7 @@ const AGENT_WAYS = {
   humans: {
     line: 'npm install -g azion',
     shell: true,
-    action: { label: 'Start free', kind: 'secondary', href: '/signup' }
+    action: { label: 'Start for free', kind: 'secondary', href: '/signup' }
   },
   agents: {
     line: 'Connect Azion MCP: https://mcp.azion.com',
@@ -346,7 +346,7 @@ const AGENTS_TEMPLATE = closingColumn(`<SectionModule
 
 const NEWSLETTER_COPY = {
   eyebrow: 'Stay up to date',
-  title: 'Subscribe to our Newsletter',
+  title: 'Subscribe to our newsletter',
   description: 'Product updates, event highlights, and industry insights, delivered to your inbox.'
 }
 
@@ -489,11 +489,11 @@ export const SPLIT_SECTION = {
     titleMuted: 'Run everywhere.',
     description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
     primaryAction: {
-      label: 'Start free',
+      label: 'Start for free',
       href: 'https://console.azion.com/signup?tck=build_cta'
     },
     asideAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     }
   }

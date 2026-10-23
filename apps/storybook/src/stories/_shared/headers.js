@@ -195,7 +195,7 @@ export const AUTH_HEADER_MARKUP = `<GlobalHeader aria-label="Azion Console">
   </GlobalHeader.Brand>
   <GlobalHeader.Middle />
   <GlobalHeader.Right>
-    <Button label="Documentation" kind="outlined" size="medium" icon="pi pi-book" href="/docs" />
+    <Button label="Docs" kind="outlined" size="medium" icon="pi pi-book" href="/docs" />
   </GlobalHeader.Right>
 </GlobalHeader>`
 
