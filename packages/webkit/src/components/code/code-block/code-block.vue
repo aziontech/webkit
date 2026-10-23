@@ -92,6 +92,11 @@
 
   const valueModel = defineModel<string | undefined>('value', { default: undefined })
 
+  defineSlots<{
+    /** Leading mark of a tab in the tab strip; receives the tab. */
+    'tab-icon'(props: { tab: CodeBlockTab }): unknown
+  }>()
+
   const attrs = useAttrs()
   const tabListRef = ref<HTMLElement | null>(null)
   const tabRefs = ref<HTMLElement[]>([])
@@ -568,7 +573,7 @@
   <div
     :class="
       cn(
-        'group/code-block flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
@@ -619,6 +624,16 @@
           @click="setActiveTab(tab.value)"
           @keydown="onTabKeydown($event, tab.value)"
         >
+          <span
+            v-if="$slots['tab-icon']"
+            class="me-(--spacing-xs) flex size-3.5 shrink-0 items-center justify-center"
+            aria-hidden="true"
+          >
+            <slot
+              name="tab-icon"
+              :tab="tab"
+            />
+          </span>
           {{ tab.label }}
         </button>
       </div>
@@ -648,7 +663,7 @@
 
     <div
       ref="contentRef"
-      class="relative flex max-h-[320px] shrink-0 flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      class="relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :data-testid="`${testId}__content`"
       @transitionend="onContentTransitionEnd"
     >

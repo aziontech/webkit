@@ -2,7 +2,7 @@ import { Canvas, Meta, Source } from '@storybook/blocks'
 
 import * as StickyScrollCodeStories from './StickyScrollCode.stories'
 
-<Meta title="Templates/Marketing/Media/StickyScrollCode" />
+<Meta title="Templates/Marketing/Solutions/StickyScrollCode" />
 
 # StickyScrollCode
 
@@ -27,7 +27,7 @@ Built from `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `CodeBloc
 
 ### Default
 
-The "Everything You Need to Build and Deploy" band for the Web Apps page: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each with a one-file code sample. The docs button sits under the sample from `lg` up and under the title below it.
+The "Everything You Need to Build and Deploy" band for the Web Apps page: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each with a one-file code sample. Each capability carries its own docs button under its description, shown only while it is open.
 
 <Canvas of={StickyScrollCodeStories.Default} />
 
@@ -36,8 +36,8 @@ The "Everything You Need to Build and Deploy" band for the Web Apps page: five c
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `eyebrow`, `title` and `description` fill the section title.
-- `action` is the docs button, with `label` and `href`.
 - `items[]` are the capabilities in reading order, each a `title` and a `description`.
+- `items[].action` is the capability's own button, with `label` and `href`; it shows under the description while the capability is open.
 - `items[].code` is the one-file sample: `fileName`, `fileIcon`, `language` and the `code` itself.
 
 Example:

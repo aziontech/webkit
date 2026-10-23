@@ -96,7 +96,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/FeatureTabs',
+  title: 'Templates/Marketing/Solutions/FeatureTabs',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',

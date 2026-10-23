@@ -117,7 +117,22 @@ export const parameters = {
         'Templates',
         [
           'Marketing',
-          ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media'],
+          [
+            'Overview',
+            'Heroes',
+            'Features',
+            'Solutions',
+            'Use Cases',
+            'Social Proof',
+            'Pricing',
+            'Articles',
+            'Listings',
+            'Closing CTAs',
+            'Network',
+            'Comparison',
+            'Content',
+            'Shell'
+          ],
           'Platform',
           [
             'Overview',
@@ -139,7 +154,9 @@ export const parameters = {
             'Detail',
             'Observe',
             'Account'
-          ]
+          ],
+          'Headers',
+          'Shells'
         ],
         'Site'
       ]

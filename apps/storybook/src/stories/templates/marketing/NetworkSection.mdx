@@ -6,11 +6,11 @@ import * as NetworkSectionStories from './NetworkSection.stories'
 
 # NetworkSection
 
-A framed section that argues for the network: a headline over an animated world map, a lead line, a few infrastructure claims as pills, and a floor that backs the claim up: client quotes, network benefits or figures, one story each.
+A framed section that makes the case for Azion's distributed infrastructure: a headline over an animated world map, a lead line, a few infrastructure claims as pills, and a floor that backs the claim up: client quotes or network benefits, one story each. The Home page uses it.
 
 The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
 
-Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for the figures.
+Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit.
 
 <p
   style={{
@@ -58,24 +58,18 @@ Example:
 
 ### Benefits
 
-The AI Inference page: three network benefits on the floor, each an icon, a title and one sentence.
+Three network benefits on the floor, each an icon, a title and one sentence.
 
 <Canvas of={NetworkSectionStories.Benefits} />
 
-This variation has no site block yet, so it has no page-JSON entry.
+##### Use it on the site
 
-<hr
-  style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
-    border: 0,
-    borderTop: '1px solid var(--border-default)'
-  }}
-/>
+Same entry, with `kind` set to `benefits` and `benefits[]` in place of `outcomes[]`:
 
-### Stats
+- `benefits[]` fill the floor; three fill the row. Each has an `icon`, a `title` and a `description`.
 
-The Our Network page: four figures on the floor, each a big number with its unit and a one-line caption.
+Example:
 
-<Canvas of={NetworkSectionStories.Stats} />
-
-This variation has no site block yet, so it has no page-JSON entry.
+<div className="sb-site-json">
+  <Source of={NetworkSectionStories.BenefitsJson} dark />
+</div>

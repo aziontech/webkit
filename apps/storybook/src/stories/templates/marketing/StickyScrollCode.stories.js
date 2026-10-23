@@ -28,26 +28,31 @@ const DOCS_HREF = 'https://www.azion.com/en/documentation/devtools/'
 
 const CAPABILITIES = [
   {
+    href: DOCS_HREF,
     title: 'Automated deployment via Git or CLI',
     description:
       'Run one command from the project you already have, or connect the repository and let every push to the branch ship itself.'
   },
   {
+    href: DOCS_HREF,
     title: 'Compatibility with modern web frameworks',
     description:
       'Next, Nuxt, Astro, Svelte and twenty more build through a preset the CLI detects, so the config file stays this short.'
   },
   {
+    href: DOCS_HREF,
     title: 'APIs for automation and integration',
     description:
       'Everything the console does is a call you can make yourself, so a workload can be created by the pipeline that needed it.'
   },
   {
+    href: DOCS_HREF,
     title: 'Infrastructure as code with Terraform',
     description:
       'Declare workloads, applications and domains in the provider and apply them under the same review as the rest of your estate.'
   },
   {
+    href: DOCS_HREF,
     title: 'Metrics and events via GraphQL API',
     description:
       'Query the same numbers the console charts, from one endpoint, so a dashboard you already run can carry the platform too.'
@@ -76,7 +81,7 @@ azion rollback --to previous`
     value: 'config',
     language: 'javascript',
     fileName: 'azion.config.js',
-    fileIcon: 'ai ai-azion text-(--primary)!',
+    fileIcon: 'ai-cor ai-js',
     code: `${'import'} { defineConfig } from 'azion'
 
 export default defineConfig({
@@ -152,7 +157,7 @@ const declareCapabilities = (name, items) =>
   `const ${name} = [\n${items
     .map(
       (item) =>
-        `  {\n    title: ${quoted(item.title)},\n    description:\n      ${quoted(item.description)}\n  }`
+        `  {\n    title: ${quoted(item.title)},\n    description:\n      ${quoted(item.description)},\n    href: ${quoted(item.href)}\n  }`
     )
     .join(',\n')}\n]`
 
@@ -171,12 +176,11 @@ const IMPORTS = [
   declareTabs('samples', SAMPLES)
 ]
 
-const learnMore = (extraClass) => `<Button
-  class="${extraClass}"
+const LEARN_MORE = `<Button
   label="Learn more"
   kind="secondary"
   size="small"
-  href="${DOCS_HREF}"
+  :href="capabilities[index].href"
   icon="pi pi-chevron-right"
   icon-position="trailing"
   animated
@@ -189,11 +193,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
       title="Everything You Need to Build and Deploy"
       description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."
       size="large"
-    >
-      <template #actions>
-        ${learnMore('lg:hidden').split('\n').join('\n        ')}
-      </template>
-    </SectionTitle>
+    />
   </template>
 
   <FrameBox
@@ -203,14 +203,15 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     class="[--sticky-stack-top:3.5rem] [--sticky-stack-height:min(40rem,calc(100dvh-3.5rem))] [--sticky-stack-align:stretch] [--sticky-stack-frame-border:1px]"
   >
     <StickyStack :items="capabilities">
-      <template #media="{ index }">
+      <template #backdrop>
         <TextureMaterial
           kind="pixelate"
           size="small"
           fade="top"
-          class="max-lg:hidden"
         />
-        <div class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md)">
+      </template>
+      <template #media="{ index }">
+        <div class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md) lg:h-90">
           <div class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
             <CodeBlock
               :tabs="[samples[index]]"
@@ -219,17 +220,17 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
               :copy-aria-label="'Copy the ' + samples[index].fileName + ' sample'"
             />
           </div>
-          <div class="max-lg:hidden">
-            ${learnMore('').replace('\n  class=""', '').split('\n').join('\n            ')}
-          </div>
         </div>
+      </template>
+      <template #actions="{ index }">
+        ${LEARN_MORE.split('\n').join('\n        ')}
       </template>
     </StickyStack>
   </FrameBox>
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Media/StickyScrollCode',
+  title: 'Templates/Marketing/Solutions/StickyScrollCode',
   excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
@@ -263,9 +264,9 @@ export const SITE_SECTION = {
     title: 'Everything You Need to Build and Deploy',
     description:
       'Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves.',
-    action: { label: 'Learn more', href: DOCS_HREF },
     items: CAPABILITIES.slice(0, 3).map((capability, index) => ({
       ...capability,
+      action: { label: 'Learn more', href: capability.href, trailing: true },
       code: {
         fileName: SAMPLES[index].fileName,
         fileIcon: SAMPLES[index].fileIcon.replace(' text-(--primary)!', ''),

@@ -25,7 +25,7 @@ const RETAIL = [
     value: 'q1',
     question: 'What types of storefronts can I build and deploy on Azion?',
     answer:
-      'You can build and deploy storefronts, marketplaces, marketing campaign pages, and supporting retail apps, but in fact any web app or website runs on Azion. The platform also provides the primitives to build not only the storefront but much of the backend, with support for static and dynamic workloads on a distributed architecture.'
+      'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a distributed architecture.'
   },
   {
     value: 'q2',
@@ -54,19 +54,19 @@ const RETAIL = [
     value: 'q5',
     question: 'Can I integrate my existing commerce platform, CMS, and APIs?',
     answer:
-      'Yes. Azion integrates with modern headless commerce, CMS, and API-based architectures, enabling teams to keep existing workflows while improving performance and reliability.'
+      'Yes. Azion integrates with modern headless commerce, CMS, and API-based architectures, so teams keep their existing workflows while performance and reliability improve.'
   },
   {
     value: 'q6',
     question: 'How does Azion help with SEO and Core Web Vitals?',
     answer:
-      'By reducing latency, optimizing content delivery, and improving responsiveness, Azion helps improve user experience signals that affect Core Web Vitals and search performance.'
+      'Azion reduces latency, optimizes content delivery, and improves responsiveness. Those improve the user experience signals behind Core Web Vitals and search performance.'
   },
   {
     value: 'q7',
     question: 'What happens during peak shopping events like Black Friday?',
     answer:
-      'Scaling is automatic. Azion handles traffic surges without manual provisioning, helping teams maintain availability and performance during launches, campaigns, and seasonal peaks.'
+      'Scaling is automatic. Azion handles traffic surges without manual provisioning, so availability and performance hold during launches, campaigns, and seasonal peaks.'
   },
   {
     value: 'q8',
@@ -93,61 +93,67 @@ const FUNCTIONS = [
     value: 'what-is',
     question: 'What are Functions?',
     answer:
-      'Azion Functions is a serverless platform for running code on distributed infrastructure with up to 5 minutes of CPU time per execution. Key features include: zero cold starts, 20MB bundle size, TypeScript/JavaScript support, WebAssembly runtime, and native framework support for Next.js, React, Vue, and Astro. Deploy API handlers, authentication, data pipelines, and browser automation without managing servers.'
-  },
-  {
-    value: 'vs-workers',
-    question: 'How does Functions compare to Cloudflare Workers?',
-    answer:
-      'Both platforms offer serverless compute with zero cold starts. The key difference is CPU time: Azion Functions supports extended execution, while Cloudflare Workers is optimized for lightweight request handlers. This makes Azion suitable for longer-running workloads like data transformation and browser automation. Cloudflare offers broader global distribution and multi-language support (Python, Rust, etc.). Choose Azion for compute-intensive jobs; choose Cloudflare for maximum global distribution.'
+      'Azion Functions runs JavaScript and TypeScript in the request flow of an application or a firewall, across 100+ data centers, with no cold starts. A Rules Engine rule calls the function, and it answers with a Response. There is no server to provision or scale.'
   },
   {
     value: 'languages',
     question: 'Which languages and frameworks are supported?',
     answer:
-      'Functions supports TypeScript and JavaScript natively, plus WebAssembly for compiled extensions. Frameworks with native CLI support include Next.js, Vue, React, Angular, Gatsby, and Astro. The runtime provides web-standard APIs, extended Node.js APIs, and WebAssembly support.'
+      'JavaScript and TypeScript, plus WebAssembly through the WebAssembly API. The runtime follows web standards such as fetch, Streams and Web Crypto, and can import 68 Node.js modules. azion init ships 25 presets, including Next.js, Nuxt, React, Vue, Astro, Angular, Svelte, Qwik and Hono.'
   },
   {
     value: 'cold-starts',
     question: 'Are there cold starts?',
     answer:
-      'No. Functions are designed for consistent first-request performance with zero cold starts on the Azion Web Platform. Initial requests perform as fast as subsequent requests—critical for user-facing APIs and authentication flows.'
-  },
-  {
-    value: 'cpu-time',
-    question: 'What can I do with 5 minutes of CPU time?',
-    answer:
-      "Extended CPU time enables workloads that traditional serverless platforms can't handle: browser automation with Puppeteer, complex data transformation pipelines, image and video processing, AI inference jobs, and multi-step API orchestration. You don't need to architect around execution limits or set up external orchestration services."
+      'No. Each function runs in a V8 isolate, so the first request performs like every request after it. That matters most for user-facing APIs, authentication and inference.'
   },
   {
     value: 'limits',
     question: 'What are the execution limits?',
     answer:
-      'Functions support up to 5 minutes of CPU time per execution and bundle sizes up to 20 MB. These limits are designed for production workloads requiring extended processing time.'
+      'Each invocation gets 2 seconds of CPU time and up to 5 minutes of wall-clock time, so waiting on I/O does not count against the CPU budget. An isolate has 512 MB of memory, and code can be up to 6 MB from the Console or 20 MB through the API.'
   },
   {
-    value: 'deploy',
-    question: 'How do I deploy Functions?',
+    value: 'application-or-firewall',
+    question: 'Should a function run on an application or a firewall?',
     answer:
-      'Deploy from Git repositories with continuous deployment or use the Azion CLI (`azion init`, `azion build`, `azion deploy`). Functions integrate with Applications and Firewall via Rules Engine for request-time execution.'
-  },
-  {
-    value: 'observability',
-    question: 'How do I monitor and debug Functions?',
-    answer:
-      'Functions include built-in observability with metrics, logs, and per-request execution traces. You can troubleshoot issues directly in the console or stream data to external tools via Data Stream.'
+      'On an application, a function runs in the request or response phase, after routing, to rewrite requests or build responses. On a firewall, it runs before the request reaches an application, and it can refuse the request with ctx.deny().'
   },
   {
     value: 'data-access',
     question: 'Can Functions access databases and storage?',
     answer:
-      'Yes. Functions can connect to SQL Database, KV Store, and Object Storage using native APIs in the runtime. This enables building complete applications with data persistence on a single platform.'
+      'Yes, through runtime globals that need no keys: Azion.KV for KV Store, Azion.Sql for SQL Database and Azion.AI for AI Inference, plus the azion/storage library for Object Storage. A SQL Database connection opened from a function is read-only; writes go through the Azion API.'
+  },
+  {
+    value: 'deploy',
+    question: 'How do I deploy Functions?',
+    answer:
+      'From the terminal, azion init scaffolds a project, azion dev serves it on localhost:3333, and azion deploy puts it on a live domain. In the Console, create the function, instance it on an application, and add a rule that runs it. A coding agent can do the same through the Azion MCP servers.'
+  },
+  {
+    value: 'variables',
+    question: 'How do environment variables and secrets work?',
+    answer:
+      'Create them with azion create variables or in the Console, and read them with Azion.env.get(). Keys that name a token, a key, a secret or auth are stored as secrets by default. A change takes effect on the next deploy.'
+  },
+  {
+    value: 'observability',
+    question: 'How do I monitor and debug Functions?',
+    answer:
+      'Every console.log lands in Real-Time Events, in the Functions Console tab, with its level and request id. Stream the same events out with Data Stream, or follow them live with azion logs cells --tail.'
+  },
+  {
+    value: 'pricing',
+    question: 'How are Functions priced?',
+    answer:
+      'By requests and compute time. Hobby is free, with 3M function requests and 8 hours of compute time a month. Pro is $25 a month, with 10M requests and 10 hours. Enterprise plans are custom.'
   },
   {
     value: 'migrate',
     question: 'How do I migrate from Cloudflare Workers?',
     answer:
-      "Both platforms use JavaScript/TypeScript, so code migration is straightforward for most functions. Export your Worker code, initialize an Azion Function, adapt runtime APIs, and deploy. If using Cloudflare KV/R2/D1, migrate data to Azion SQL Database, KV Store, or Object Storage. Lightweight request handlers can work on both platforms; longer-running functions benefit from Azion's extended execution time."
+      'Both run JavaScript in V8 isolates behind a fetch handler, so most handlers move with small changes. Keep the handler, swap the platform bindings for KV Store, SQL Database and Object Storage, and deploy with azion deploy.'
   }
 ]
 
@@ -426,7 +432,7 @@ export const WITH_LINK_SECTION = {
       {
         question: 'What types of storefronts can I build and deploy on Azion?',
         answer:
-          'You can build and deploy storefronts, marketplaces, marketing campaign pages, and supporting retail apps, but in fact any web app or website runs on Azion. The platform also provides the primitives to build not only the storefront but much of the backend, with support for static and dynamic workloads on a distributed architecture.'
+          'You can build and deploy storefronts, marketplaces, campaign pages, and supporting retail apps. Any web app or website runs on Azion. The platform also covers much of the backend, for static and dynamic workloads on a distributed architecture.'
       },
       {
         question: 'Which frameworks are compatible?',
@@ -464,17 +470,17 @@ export const PLAIN_SECTION = {
       {
         question: 'What are Functions?',
         answer:
-          'Azion Functions is a serverless platform for running code on distributed infrastructure with up to 5 minutes of CPU time per execution. Key features include: zero cold starts, 20MB bundle size, TypeScript/JavaScript support, WebAssembly runtime, and native framework support for Next.js, React, Vue, and Astro. Deploy API handlers, authentication, data pipelines, and browser automation without managing servers.'
+          'Azion Functions runs JavaScript and TypeScript in the request flow of an application or a firewall, across 100+ data centers, with no cold starts. A Rules Engine rule calls the function, and it answers with a Response. There is no server to provision or scale.'
       },
       {
-        question: 'How does Functions compare to Cloudflare Workers?',
+        question: 'Are there cold starts?',
         answer:
-          'Both platforms offer serverless compute with zero cold starts. The key difference is CPU time: Azion Functions supports extended execution, while Cloudflare Workers is optimized for lightweight request handlers. This makes Azion suitable for longer-running workloads like data transformation and browser automation. Cloudflare offers broader global distribution and multi-language support (Python, Rust, etc.). Choose Azion for compute-intensive jobs; choose Cloudflare for maximum global distribution.'
+          'No. Each function runs in a V8 isolate, so the first request performs like every request after it. That matters most for user-facing APIs, authentication and inference.'
       },
       {
         question: 'Which languages and frameworks are supported?',
         answer:
-          'Functions supports TypeScript and JavaScript natively, plus WebAssembly for compiled extensions. Frameworks with native CLI support include Next.js, Vue, React, Angular, Gatsby, and Astro. The runtime provides web-standard APIs, extended Node.js APIs, and WebAssembly support.'
+          'JavaScript and TypeScript, plus WebAssembly through the WebAssembly API. The runtime follows web standards such as fetch, Streams and Web Crypto, and can import 68 Node.js modules. azion init ships 25 presets, including Next.js, Nuxt, React, Vue, Astro, Angular, Svelte, Qwik and Hono.'
       }
     ]
   }

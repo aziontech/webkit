@@ -2002,6 +2002,13 @@
           "default": "'_self'",
           "required": "false",
           "doc": "Link target when `href` is set."
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "default": "'button'",
+          "required": "false",
+          "doc": "Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set."
         }
       ],
       "events": [
@@ -2599,6 +2606,114 @@
       ],
       "purpose": "The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the \"A\" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the \"move to the edge technologies®\" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component."
     },
+    "browser-frame": {
+      "import": "@aziontech/webkit/browser-frame",
+      "target": "./src/components/content/browser-frame/browser-frame.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/browser-frame",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "address",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty."
+        },
+        {
+          "name": "minWidth",
+          "type": "number",
+          "default": "320",
+          "required": "false",
+          "doc": "Smallest viewport width the resize handles can reach, in pixels."
+        },
+        {
+          "name": "maxWidth",
+          "type": "number",
+          "default": "1920",
+          "required": "false",
+          "doc": "Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit."
+        },
+        {
+          "name": "minHeight",
+          "type": "number",
+          "default": "320",
+          "required": "false",
+          "doc": "Smallest viewport height the resize handles can reach, in pixels."
+        },
+        {
+          "name": "maxHeight",
+          "type": "number",
+          "default": "1440",
+          "required": "false",
+          "doc": "Largest viewport height the resize handles can reach, in pixels."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "'Copy address'",
+          "required": "false",
+          "doc": "Accessible name of the address bar's copy button."
+        },
+        {
+          "name": "widthHandleAriaLabel",
+          "type": "string",
+          "default": "'Resize preview width'",
+          "required": "false",
+          "doc": "Accessible name of the right-edge width handle."
+        },
+        {
+          "name": "heightHandleAriaLabel",
+          "type": "string",
+          "default": "'Resize preview height'",
+          "required": "false",
+          "doc": "Accessible name of the bottom-edge height handle."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only."
+        }
+      ],
+      "purpose": "A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.",
+      "useWhen": [
+        "Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.",
+        "Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.",
+        "Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.",
+        "Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`."
+      ],
+      "avoidWhen": [
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For third-party content loaded from another origin → use `embed`.",
+        "For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.",
+        "For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.",
+        "For a framed page section or grid cell → use `frame-box`."
+      ],
+      "related": [
+        "doc-frame` — the documentation figure frame for stills and clips; no live viewport.",
+        "embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.",
+        "frame-box` — the page's registration frame (hairlines + corner marks), not a window.",
+        "copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value."
+      ],
+      "bestPractices": [
+        "Compose the default slot exactly as the screen would be composed in an app — the frame mirrors the page's stylesheets and theme into its viewport, so no extra wiring or classes are needed.",
+        "Pin the device the example is about with `v-model:width` and `v-model:height` (`375 × 812` mobile, `768 × 1024` tablet, `1280 × 800` desktop); leave `width` unset to fill the container.",
+        "Give the frame an `ariaLabel` that names what is shown (`Pricing page at tablet size`); it becomes the viewport's accessible name.",
+        "Viewport-height units (`h-screen`, `min-h-dvh`) in slot content resolve against the simulated height, so a full-height shell renders as it would on the device.",
+        "Do not add controls to the chrome — the address's copy button and the resize handles are the frame's only controls. Interactive content belongs in the default slot."
+      ]
+    },
     "accordion": {
       "import": "@aziontech/webkit/accordion",
       "target": "./src/components/content/accordion/index.ts",
@@ -2794,6 +2909,11 @@
           "notes": "Replaces the default header layout (title + header-action)."
         },
         {
+          "name": "header-action",
+          "scope": "—",
+          "notes": "Actions aligned to the end of the default header; visible on header hover."
+        },
+        {
           "name": "content",
           "scope": "—",
           "notes": "Main card body."
@@ -2985,6 +3105,13 @@
           "default": "true",
           "required": "false",
           "doc": "Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both."
+        },
+        {
+          "name": "padding",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band."
         }
       ],
       "slots": [
@@ -3022,6 +3149,7 @@
         "Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.",
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
+        "In `horizontal`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.",
         "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
         "The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component."
       ]
@@ -3628,6 +3756,13 @@
           "name": "copy",
           "payload": "string",
           "notes": "Fires after the active tab code is copied to the clipboard."
+        }
+      ],
+      "slots": [
+        {
+          "name": "tab-icon",
+          "scope": "{ tab: CodeBlockTab }",
+          "notes": "Leading mark before a tab's label in the tab strip; nothing renders when it is not filled."
         }
       ],
       "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
@@ -9878,6 +10013,29 @@
       "category": "layout",
       "structure": "monolithic",
       "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal' | 'both'",
+          "default": "'vertical'",
+          "required": "false",
+          "doc": "Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name when the region is not labelled by visible text; omit when content provides context."
+        },
+        {
+          "name": "fade",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Fades the edges that still have content to scroll to, sized by the distance left on each side."
+        }
+      ],
       "slots": [
         {
           "name": "default",
@@ -9885,7 +10043,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Structural layout primitive for scrolling or regions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/layout/scroll-area/`."
+      "purpose": "Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it."
     },
     "global-header": {
       "import": "@aziontech/webkit/global-header",
@@ -10430,6 +10588,13 @@
           "doc": "Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete."
         },
         {
+          "name": "items",
+          "type": "TickerItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered."
+        },
+        {
           "name": "label",
           "type": "string",
           "default": "''",
@@ -10448,7 +10613,7 @@
           "type": "number",
           "default": "0",
           "required": "false",
-          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks so every strip moves at one speed."
+          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed."
         },
         {
           "name": "ariaLabel",
@@ -10458,11 +10623,12 @@
           "doc": "Accessible name for the row of marks, announced instead of an unnamed list."
         }
       ],
-      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes.",
+      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band.",
       "useWhen": [
         "Under a hero, to name the companies a product already serves (\"Trusted by mission-critical workloads\").",
         "To state compatibility as a list of framework, cloud and tooling marks (\"Your Stack, Your Way\").",
-        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read."
+        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read.",
+        "To run a handful of short benefits (\"Deploy to 330+ cities instantly\") along the floor of a closing band, where each claim restates what the band above already argues."
       ],
       "avoidWhen": [
         "When every mark must be seen → use `logo-wall`, which wraps into a grid and never moves.",
@@ -10478,9 +10644,10 @@
       ],
       "bestPractices": [
         "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",
-        "Let `duration` derive itself. The component holds speed constant rather than duration, so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
+        "Let `duration` derive itself. The component holds speed constant rather than duration (two seconds per mark, six per item, since a claim is read and a mark is not), so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
         "Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.",
         "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
+        "Keep each `items` label to a short clause with no punctuation to end it, and give every item the same kind of icon; the row repeats, so a claim is read as one of a run, never on its own.",
         "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
       ]
     },
@@ -10684,7 +10851,7 @@
           "type": "CallToActionKind",
           "default": "'panel'",
           "required": "false",
-          "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it."
+          "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor."
         },
         {
           "name": "framed",
@@ -10708,21 +10875,33 @@
         {
           "name": "aside",
           "scope": "—",
-          "notes": "The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`."
+          "notes": "The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`."
+        },
+        {
+          "name": "background",
+          "scope": "—",
+          "notes": "Decoration drawn behind the copy in `primary`, such as a `texture-material`; ignored in the other registers."
+        },
+        {
+          "name": "bottom",
+          "scope": "—",
+          "notes": "The strip that floors the band in `primary`, such as a `ticker`, under a hairline; ignored in the other registers."
         }
       ],
-      "purpose": "The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Three registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.",
+      "purpose": "The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Four registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight. `primary` is the loud close: one centred ask standing alone as a billboard, on the page canvas lit from above by the brand. The texture composed into the band — a pixelated layer whose two waves travel across it in the primary colour — is lit by its waves alone and carries the band's colour, so the ground stays the canvas and the copy keeps its ordinary ink. The texture is composed in through the `background` slot and the strip along the floor through `bottom`, so the band owns the light and the page owns what is drawn on it.",
       "useWhen": [
         "At the end of a marketing page or section, to carry the reader into signup, docs or sales.",
         "Whenever a page needs one visually separated block whose whole job is the action.",
         "Between two sections, as a mid-page ask that should not read as a new section header.",
         "In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.",
+        "In `primary`, when the page ends on a single ask and the close should be the most lit band on the page, with benefits or proof running along its floor.",
         "In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry."
       ],
       "avoidWhen": [
         "To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.",
         "For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.",
         "For a dismissible or time-bound announcement → use `message`.",
+        "For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.",
         "For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row."
       ],
       "related": [
@@ -10730,7 +10909,9 @@
         "hero` — the page's leading band; its `Hero.Title` owns the statement and the `h1`.",
         "frame-box` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.",
         "button` — the controls composed into the `actions` and `aside-actions` slots.",
-        "overline` — the `//`-prefixed eyebrow the band renders above the headline."
+        "overline` — the `//`-prefixed eyebrow the band renders above the headline.",
+        "texture-material` — the pixelated, waving texture composed into `background` in `primary`.",
+        "ticker` — the strip of benefits composed into `bottom` in `primary`."
       ],
       "bestPractices": [
         "framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.",
@@ -10742,7 +10923,60 @@
         "In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.",
         "In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.",
         "lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.",
+        "In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.",
+        "In `primary`, compose one `texture-material` into `background` — `pixelate` at `small` with `fade=\"bottom\"` — and a `ticker` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.",
+        "In `primary`, give the ticker enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.",
         "Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge."
+      ]
+    },
+    "diagram": {
+      "import": "@aziontech/webkit/diagram",
+      "target": "./src/components/marketing/diagram/diagram.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/diagram",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "spec",
+          "type": "DiagramSpec",
+          "default": "—",
+          "required": "true",
+          "doc": "The nodes, their layout and the edges between them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible description of the whole diagram; when set, the root is announced as one image with this name."
+        }
+      ],
+      "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer passes one `spec` — the nodes, how they are arranged, and the edges between them — and the component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
+      "useWhen": [
+        "Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.",
+        "Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.",
+        "Filling the media cell of a marketing band (`media-tabs`, `media-split`) with an architecture instead of a picture."
+      ],
+      "avoidWhen": [
+        "For decorative product art → use `illustration`.",
+        "For a world map of points of presence → use `network-map`.",
+        "For a sequence of steps the reader follows in order → use `stepper` or an ordered list.",
+        "For live data or anything the reader operates — a diagram is a figure, not a control."
+      ],
+      "related": [
+        "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art.",
+        "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
+        "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
+        "tag` — the status chip a card or item node carries."
+      ],
+      "bestPractices": [
+        "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",
+        "Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.",
+        "Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.",
+        "Give every diagram an `ariaLabel` that states what it shows in one sentence; the drawing itself is hidden from assistive technology.",
+        "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
       ]
     },
     "big-numbers": {
@@ -11443,6 +11677,16 @@
           "name": "media",
           "scope": "{ item: StickyStackItem, index: number, active: boolean }",
           "notes": "The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays."
+        },
+        {
+          "name": "actions",
+          "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+          "notes": "The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty."
+        },
+        {
+          "name": "backdrop",
+          "scope": "—",
+          "notes": "Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty."
         }
       ],
       "purpose": "A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open. Each claim expands in turn while the ones already read collapse and stack above it, so the column keeps one height and the reader always sees where they are in the run. The media beside it is replaced, not dimmed: the outgoing scene leaves and the incoming one mounts, so a scene that animates plays its entrance every time it is reached.",
@@ -11657,7 +11901,21 @@
           "type": "MediaTabsItem[]",
           "default": "[]",
           "required": "false",
-          "doc": "The tabs, in order, at most three; each item is `{ title, description, src, alt }`. Items past the third are not rendered."
+          "doc": "The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered."
+        },
+        {
+          "name": "position",
+          "type": "'left' | 'right' | 'top' | 'bottom'",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down."
         },
         {
           "name": "selectOn",
@@ -11686,13 +11944,6 @@
           "default": "true",
           "required": "false",
           "doc": "Advances a hairline along the active row's bottom edge while the timer runs."
-        },
-        {
-          "name": "size",
-          "type": "'small' | 'medium' | 'large'",
-          "default": "'medium'",
-          "required": "false",
-          "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
         },
         {
           "name": "texture",
@@ -11730,7 +11981,7 @@
           "notes": "The tab's media; replaces the image built from `item.src`."
         }
       ],
-      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in.",
+      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.",
       "useWhen": [
         "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
         "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
@@ -11752,8 +12003,8 @@
         "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
         "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
         "Use scenes of the same shape. The frame does not resize between tabs.",
-        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.",
-        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
+        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion."
       ]
     },
     "embed": {
@@ -11988,7 +12239,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
@@ -12057,7 +12308,7 @@
           "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
         }
       ],
-      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
       "useWhen": [
         "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
         "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",

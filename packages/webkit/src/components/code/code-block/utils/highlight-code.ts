@@ -111,6 +111,54 @@ const pushToken = (
   tokens.push({ text, type })
 }
 
+const LINE_COMMENT = /(?<=^|[\s;])(?:#|\/\/)/y
+const JS_LINE_COMMENT = /\/\/|(?<=^|[\s;])#(?=\s|$|!)/y
+
+const findLineCommentStart = (line: string, marker: RegExp): number => {
+  let quote = ''
+
+  for (let index = 0; index < line.length; index++) {
+    const char = line[index]
+
+    if (quote) {
+      if (char === '\\') {
+        index++
+      } else if (char === quote) {
+        quote = ''
+      }
+      continue
+    }
+
+    if (char === '"' || char === "'" || char === '`') {
+      quote = char
+      continue
+    }
+
+    marker.lastIndex = index
+    if (marker.test(line)) {
+      return index
+    }
+  }
+
+  return -1
+}
+
+const withLineComment = (
+  line: string,
+  marker: RegExp,
+  highlightCode: (code: string) => CodeBlockHighlightToken[]
+): CodeBlockHighlightToken[] => {
+  const start = findLineCommentStart(line, marker)
+
+  if (start === -1) {
+    return highlightCode(line)
+  }
+
+  const tokens = start > 0 ? highlightCode(line.slice(0, start)) : []
+  pushToken(tokens, line.slice(start), 'comment')
+  return tokens
+}
+
 const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
   const keywordRegex = new RegExp(
@@ -199,18 +247,6 @@ const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
 const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
 
-  // A comment runs to end of line, so it is decided before tokenising anything.
-  const commentStart = line.search(/(^|\s)#/)
-  if (commentStart !== -1) {
-    const before = line.slice(0, commentStart === 0 ? 0 : commentStart + 1)
-    const comment = line.slice(before.length)
-    if (before) {
-      tokens.push(...highlightShellLine(before))
-    }
-    pushToken(tokens, comment, 'comment')
-    return tokens.length ? tokens : [{ text: line || ' ', type: 'comment' }]
-  }
-
   // The catch-all word must stop at a quote and at `$`, or it swallows the value in
   // `TOKEN="$VAR"` as one word and the string/expansion alternatives never get to match.
   const shellRegex =
@@ -278,7 +314,7 @@ const HCL_LITERALS = ['true', 'false', 'null'] as const
 const highlightHclLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
   const hclRegex =
-    /#.*$|\/\/.*$|"(?:\\"|[^"])*"|-?\b\d+(?:\.\d+)?\b|[A-Za-z_][\w-]*|[{}[\]().,:=?<>!*/+-]|\s+|\S/g
+    /"(?:\\"|[^"])*"|-?\b\d+(?:\.\d+)?\b|[A-Za-z_][\w-]*|[{}[\]().,:=?<>!*/+-]|\s+|\S/g
 
   let isFirstWord = true
   let match: RegExpExecArray | null
@@ -289,11 +325,6 @@ const highlightHclLine = (line: string): CodeBlockHighlightToken[] => {
 
     if (/^\s+$/.test(chunk)) {
       pushToken(tokens, chunk, 'identifier')
-      continue
-    }
-
-    if (chunk.startsWith('#') || chunk.startsWith('//')) {
-      pushToken(tokens, chunk, 'comment')
       continue
     }
 
@@ -357,7 +388,7 @@ const GRAPHQL_LITERALS = ['true', 'false', 'null'] as const
 const highlightGraphqlLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
   const graphqlRegex =
-    /#.*$|"(?:\\"|[^"])*"|\$[A-Za-z_]\w*|@[A-Za-z_]\w*|-?\b\d+(?:\.\d+)?\b|\.\.\.|[A-Za-z_]\w*|[{}[\]()!:=,|&]|\s+|\S/g
+    /"(?:\\"|[^"])*"|\$[A-Za-z_]\w*|@[A-Za-z_]\w*|-?\b\d+(?:\.\d+)?\b|\.\.\.|[A-Za-z_]\w*|[{}[\]()!:=,|&]|\s+|\S/g
 
   let isFirstWord = true
   let previousWord = ''
@@ -369,11 +400,6 @@ const highlightGraphqlLine = (line: string): CodeBlockHighlightToken[] => {
 
     if (/^\s+$/.test(chunk)) {
       pushToken(tokens, chunk, 'identifier')
-      continue
-    }
-
-    if (chunk.startsWith('#')) {
-      pushToken(tokens, chunk, 'comment')
       continue
     }
 
@@ -416,7 +442,7 @@ export const highlightCodeLine = (
   const lang = (language ?? 'javascript').toLowerCase()
 
   if (lang === 'javascript' || lang === 'typescript' || lang === 'js' || lang === 'ts') {
-    return highlightJavaScriptLine(line)
+    return withLineComment(line, JS_LINE_COMMENT, highlightJavaScriptLine)
   }
 
   if (
@@ -426,15 +452,15 @@ export const highlightCodeLine = (
     lang === 'zsh' ||
     lang === 'console'
   ) {
-    return highlightShellLine(line)
+    return withLineComment(line, LINE_COMMENT, highlightShellLine)
   }
 
   if (lang === 'hcl' || lang === 'terraform' || lang === 'tf') {
-    return highlightHclLine(line)
+    return withLineComment(line, LINE_COMMENT, highlightHclLine)
   }
 
   if (lang === 'graphql' || lang === 'gql') {
-    return highlightGraphqlLine(line)
+    return withLineComment(line, LINE_COMMENT, highlightGraphqlLine)
   }
 
   // Prose in a code block (a markdown snippet, an agent prompt) is commentary, not code:
@@ -443,7 +469,7 @@ export const highlightCodeLine = (
     return [{ text: line || ' ', type: 'comment' }]
   }
 
-  return [{ text: line || ' ', type: 'identifier' }]
+  return withLineComment(line, LINE_COMMENT, (code) => [{ text: code || ' ', type: 'identifier' }])
 }
 
 export const highlightCode = (

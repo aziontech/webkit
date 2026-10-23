@@ -102,6 +102,27 @@ describe('CodeBlock', () => {
       expect(getAllByRole('tab')).toHaveLength(2)
     })
 
+    it('renders the tab-icon slot inside each tab with that tab as its payload', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' },
+        slots: {
+          'tab-icon': '<template #tab-icon="{ tab }"><i :data-mark="tab.value" /></template>'
+        }
+      })
+
+      const marks = getAllByRole('tab').map((tab) => tab.querySelector('i')?.dataset.mark)
+
+      expect(marks).toEqual(twoTabs.map((tab) => tab.value))
+    })
+
+    it('renders no icon region in a tab when the tab-icon slot is empty', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      getAllByRole('tab').forEach((tab) => expect(tab.querySelector('span')).toBeNull())
+    })
+
     it('does not render a tab header when only one tab is given', () => {
       const { queryByRole } = render(CodeBlock, { props: { tabs: singleTab } })
 
@@ -628,6 +649,61 @@ describe('CodeBlock', () => {
       expect(highlightCodeLine('gql', '# requests per status')).toEqual([
         { text: '# requests per status', type: 'comment' }
       ])
+    })
+  })
+
+  describe('line comments', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['bash', 'javascript', 'typescript', 'hcl', 'graphql', 'yaml', 'toml'])(
+      'reads both # and // as a full-line comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '# Install the Azion CLI')).toEqual([
+          { text: '# Install the Azion CLI', type: 'comment' }
+        ])
+        expect(highlightCodeLine(lang, '// Install the Azion CLI')).toEqual([
+          { text: '// Install the Azion CLI', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing // apart from the shell command before it', () => {
+      const line = 'azion deploy // ship the current branch'
+
+      expect(typeOf('bash', line, 'azion')).toBe('function')
+      expect(typeOf('bash', line, '// ship the current branch')).toBe('comment')
+    })
+
+    it('keeps a trailing # apart from the javascript before it', () => {
+      const line = 'const ttl = 3600 # one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '# one hour')).toBe('comment')
+    })
+
+    it('reads a trailing comment after a yaml value', () => {
+      expect(typeOf('yaml', 'ttl: 3600 # one hour', '# one hour')).toBe('comment')
+      expect(typeOf('yaml', 'ttl: 3600 // one hour', '// one hour')).toBe('comment')
+    })
+
+    it('does not open a comment inside a word, a URL or quoted text', () => {
+      const hasComment = (language: string, line: string) =>
+        highlightCodeLine(language, line).some((token) => token.type === 'comment')
+
+      expect(hasComment('bash', 'curl -fsSL https://cli.azion.app/install.sh | bash')).toBe(false)
+      expect(hasComment('bash', 'echo "step # 2" ${#items[@]}')).toBe(false)
+      expect(hasComment('graphql', 'query Q { url(path: "a // b") }')).toBe(false)
+      expect(hasComment('yaml', 'endpoint: https://api.azion.com/v4#docs')).toBe(false)
+    })
+
+    it('leaves a javascript private field as code', () => {
+      expect(
+        highlightCodeLine('ts', '  #count = 0').some((token) => token.type === 'comment')
+      ).toBe(false)
+      expect(
+        highlightCodeLine('js', 'this.#count += 1').some((token) => token.type === 'comment')
+      ).toBe(false)
     })
   })
 })

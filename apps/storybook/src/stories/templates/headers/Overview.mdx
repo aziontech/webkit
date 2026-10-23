@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Templates/Headers/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The header bars Azion ships on webkit, registered as templates: one for the docs, one for the site and three for the console, all one `GlobalHeader`.'
+      }
+    }
+  }}
+/>
+
+# Headers
+
+Every Azion surface opens on one `GlobalHeader`: a 56px bar with a hairline under it. The channels
+share the component and differ in the placement they choose and the controls they compose, so a
+reader who has used one already knows where to look in the others. Five bars cover everything.
+
+## Docs
+
+- [DocsHeader](?path=/docs/templates-headers-docsheader--documentation): `content` placement. Brand with the Docs tag, section links, then search, GitHub and Console.
+
+## Site
+
+- [SiteHeader](?path=/docs/templates-headers-siteheader--documentation): `site` placement, sticky. Brand, navigation, then search, Contact, Login and Start for free.
+
+## Console
+
+The console has three bars, chosen by where the reader is in the product.
+
+- [AuthHeader](?path=/docs/templates-headers-authheader--documentation): sign in, sign up, recovery and onboarding. The brand and one Documentation button. No session yet, so nothing else.
+- [CreationHeader](?path=/docs/templates-headers-creationheader--documentation): the focused create, edit and deploy flows, with no rail. A back button, the brand, the breadcrumb of the flow and the account avatar.
+- [ResourceHeader](?path=/docs/templates-headers-resourceheader--documentation): every page inside the persistent shell. The first level of a resource shows the brand alone; the second level adds the module and resource breadcrumb. Search, Create, Agent and the avatar at the end.
+
+The bars live inside the shells on [Templates › Shells](?path=/docs/templates-shells-overview--docs).
+
+## The end cluster
+
+On the docs and console bars, search is the first control of the end cluster, ahead of every button.
+On the site bar it closes the cluster, after Start for free.
+
+| Bar              | End cluster, left to right             |
+| ---------------- | -------------------------------------- |
+| Docs             | Search, GitHub, Console                |
+| Site             | Contact, Login, Start for free, Search |
+| Console resource | Search, Create, Agent, Avatar          |
+| Console creation | Avatar                                 |
+| Console auth     | Documentation                          |
+
+On the docs and console, search leads because it is the control a reader reaches for first there,
+and the controls that change from page to page (the call to action, the account entry) follow it.
+The site bar leads with its actions instead, so Contact, Login and Start for free come first and
+search sits at the end. The creation and auth bars carry no search on purpose: a flow in progress and a
+signed-out screen have nothing to search.
+
+## Placement
+
+The two placements of `GlobalHeader` decide where the inset is measured from, and the channel decides which one:
+
+- **Content** (docs and every console bar): the bar runs full bleed across the zone that holds it and insets its regions by the page boundary, so the first control opens on the same vertical as the page heading under it.
+- **Site**: the surface runs to the window edges while the regions are capped at the bar's own measure and centred, one rung wider than the page frame, so the brand and the account actions stay held apart at the two ends of a wide window.
+
+## What the bars have in common
+
+- A navigation trigger appears when the navigation leaves the bar: below `lg` in the docs, below `xl` on the site, below `md` in the console. It is an outlined icon button with an accessible name.
+- Controls are medium, 32px in a 56px bar. The creation bar's back button is small, because it is a way out and not an action.
+- The brand is `Brand kind="default" size="small"`, wrapped in a link to the channel's home, with one opacity transition on hover and a focus ring.
+- Search is an outlined icon button with `aria-label`. The sample widens it into a field carrying the ⌘K shortcut where the bar has room; that field is sample code, not part of the design system.
+
+## Thresholds come from tokens
+
+Nothing in these bars hardcodes a width. The visibility utilities (`md:hidden`, `lg:flex`, `xl:hidden`)
+resolve to the `--breakpoint-*` tokens, and the one decision the sample makes in script answers
+through them: the console's mobile state asks a hidden probe element whether the `md:` utility is
+showing it, instead of repeating 768 in a media query. The search field reads `--container-2xl`
+against the bar's own width.
+
+The breakpoint tokens cannot be read as custom properties at runtime, because Tailwind only emits
+a theme variable that something references and a media condition never does. A CSS media or
+container condition cannot read a custom property either, which is why script asks the utility, or
+reads a token that is emitted, and never writes the number.
