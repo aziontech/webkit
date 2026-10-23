@@ -135,8 +135,8 @@ const DESKTOP_MAP = `<NetworkMap
   :opacity="0.3"
   density="medium"
   :scale="1.3"
-  :offset-x="0.4"
-  :offset-y="-0.2"
+  :offset-x="0.5"
+  :offset-y="-0.22"
   class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
 />`
 
@@ -155,7 +155,7 @@ const MOBILE_MAP = `<div
   />
 </div>`
 
-const mapBand = (floor) =>
+const mapBand = (floor, titleSize = 'small') =>
   inColumn(`<SectionModule :divided="false" :padded="false">
   <FrameBox flush borders="y" marks="all" class="relative overflow-hidden">
 ${indent(DESKTOP_MAP, 2)}
@@ -167,7 +167,7 @@ ${indent(DESKTOP_MAP, 2)}
         <SectionTitle
           :framed="false"
           kind="left"
-          size="small"
+          size="${titleSize}"
           eyebrow="${NETWORK_BAND.eyebrow}"
           title="${NETWORK_BAND.title}"
           class="relative [&_h2]:max-w-[16em]"
@@ -238,7 +238,7 @@ ${each(
 </CardGrid>`
 
 const QUOTES_TEMPLATE = mapBand(OUTCOME_FLOOR)
-const BENEFITS_TEMPLATE = mapBand(BENEFIT_FLOOR)
+const BENEFITS_TEMPLATE = mapBand(BENEFIT_FLOOR, 'medium')
 
 const meta = {
   title: 'Templates/Marketing/Network/NetworkSection',
@@ -327,6 +327,7 @@ export const BENEFITS_SECTION = {
   _id: 'network-section',
   props: {
     kind: 'benefits',
+    titleSize: 'medium',
     eyebrow: SITE_SECTION.props.eyebrow,
     title: SITE_SECTION.props.title,
     lead: SITE_SECTION.props.lead,
