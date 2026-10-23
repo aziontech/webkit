@@ -36,15 +36,15 @@
   ]
 
   const ROWS = [
-    { id: '1', name: 'Ada Lovelace', email: 'ada@azion.com', created_at: '2026-07-21 08:15:00' },
-    { id: '2', name: 'Alan Turing', email: 'alan@azion.com', created_at: '2026-07-21 08:15:01' },
-    { id: '3', name: 'Grace Hopper', email: 'grace@azion.com', created_at: '2026-07-21 08:15:02' }
+    { id: '1', name: 'Ada Lovelace', email: 'ada@example.com', created_at: '2026-07-21 08:15:00' },
+    { id: '2', name: 'Alan Turing', email: 'alan@example.com', created_at: '2026-07-21 08:15:01' },
+    { id: '3', name: 'Grace Hopper', email: 'grace@example.com', created_at: '2026-07-21 08:15:02' }
   ]
 
   const INSERTED = {
     id: '4',
     name: 'Katherine Johnson',
-    email: 'katherine@azion.com',
+    email: 'katherine@example.com',
     created_at: '2026-07-21 08:15:03'
   }
 

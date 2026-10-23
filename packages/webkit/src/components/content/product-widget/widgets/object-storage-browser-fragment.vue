@@ -10,7 +10,6 @@
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import { authorAt } from '../data/people'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
   defineOptions({ name: 'ObjectStorageBrowserFragment' })
@@ -29,6 +28,7 @@
 
   const BUCKET = 'edgeflow-site-assets'
   const MODIFIED = '4 months ago'
+  const AUTHORS = ['JA', 'SR', 'AM', 'CL']
 
   const COLUMNS = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 as const },
@@ -83,13 +83,12 @@
   const tableRows = (entries: Entry[]) => {
     let files = 0
     return entries.map((entry) => {
-      const person = entry.kind === 'file' ? authorAt(files++) : null
+      const author = entry.kind === 'file' ? (AUTHORS[files++ % AUTHORS.length] ?? '') : ''
       return {
         ...entry,
         id: entry.name,
-        lastModified: person ? MODIFIED : '',
-        author: person?.name ?? '',
-        avatar: person?.avatar ?? ''
+        lastModified: author ? MODIFIED : '',
+        author
       }
     })
   }
@@ -268,8 +267,6 @@
                   class="flex min-w-0 items-center gap-(--spacing-xs)"
                 >
                   <Avatar
-                    :src="cellRow(cell).avatar"
-                    :alt="cellRow(cell).author"
                     :label="cellRow(cell).author"
                     size="small"
                     kind="square"
@@ -285,7 +282,7 @@
       </ShellMockupPart>
 
       <MockupCursor
-        name="Rafael"
+        name="Alex"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

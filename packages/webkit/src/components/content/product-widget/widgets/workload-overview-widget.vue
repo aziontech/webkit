@@ -78,8 +78,8 @@
   const FACTS = {
     domain: 'w1082318.azion.run',
     id: '1082318',
-    created: 'Jul 13 by Robson Junior',
-    owner: 'Robson Junior'
+    created: 'Jul 13 by Jordan Avery',
+    owner: 'JA'
   }
 
   const NODES: TopologyNode[] = [

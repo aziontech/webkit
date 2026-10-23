@@ -215,7 +215,7 @@
       </ShellMockupPart>
 
       <MockupCursor
-        name="Rafael"
+        name="Alex"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

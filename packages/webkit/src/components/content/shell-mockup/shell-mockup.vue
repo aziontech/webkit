@@ -278,7 +278,7 @@
         >
         <span class="ml-auto inline-flex shrink-0 items-center">
           <Avatar
-            label="myemail@azion.com"
+            label="myemail@example.com"
             size="small"
             kind="square"
           />
@@ -425,7 +425,7 @@
                 icon="ai ai-ask-azion"
               />
               <Avatar
-                label="myemail@azion.com"
+                label="myemail@example.com"
                 size="small"
                 kind="square"
               />
