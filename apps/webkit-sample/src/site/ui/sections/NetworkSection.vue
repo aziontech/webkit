@@ -8,6 +8,7 @@
   import NetworkMap from '@aziontech/webkit/network-map'
   import Quote from '@aziontech/webkit/quote'
   import SectionModule from '@aziontech/webkit/section-module'
+  import type { SectionTitleSize } from '@aziontech/webkit/section-title'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Topic from '@aziontech/webkit/topic'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
@@ -31,6 +32,13 @@
     monochrome?: boolean
   }
 
+  export interface NetworkClaim {
+    /** The claim, a few words. */
+    label: string
+    /** Shows the chip below the md breakpoint; false keeps it to wider screens. */
+    mobile?: boolean
+  }
+
   interface Props {
     /** What stands on the band's floor. */
     kind?: NetworkSectionKind
@@ -40,12 +48,14 @@
     eyebrow?: string
     /** The network claim. */
     title: string
+    /** Headline size; small sets the claim in a compact headline type. */
+    titleSize?: SectionTitleSize
     /** Closing clause of the claim, set in the headline's type on its own line under it. */
     titleTail?: string
     /** Muted line above the claim chips. */
     lead?: string
-    /** Infrastructure claims, one chip each. */
-    claims?: string[]
+    /** Infrastructure claims, one chip each; a string, or a claim that can sit out the mobile band. */
+    claims?: (string | NetworkClaim)[]
     /** Client outcomes on the quotes floor, four to a row. */
     outcomes?: NetworkOutcome[]
     /** Benefits on the benefits floor, three to a row. */
@@ -58,6 +68,7 @@
     kind: 'quotes',
     anchor: '',
     eyebrow: '',
+    titleSize: 'small',
     titleTail: '',
     lead: '',
     claims: () => [],
@@ -65,6 +76,12 @@
     benefits: () => [],
     stats: () => []
   })
+
+  const chips = computed(() =>
+    props.claims.map((claim) =>
+      typeof claim === 'string' ? { label: claim, mobile: true } : { mobile: true, ...claim }
+    )
+  )
 
   const floor = computed(() =>
     props.outcomes.map((outcome) => ({
@@ -97,8 +114,8 @@
           :opacity="0.3"
           density="medium"
           :scale="1.3"
-          :offset-x="0.4"
-          :offset-y="-0.2"
+          :offset-x="0.5"
+          :offset-y="-0.22"
         />
       </div>
 
@@ -107,12 +124,13 @@
           class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
         >
           <div
-            class="relative [&_h2]:max-w-[27em] [&_h2]:text-heading-md! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] [&_h2+p]:text-heading-md [&_h2+p]:text-(--text-default)"
+            :data-title-size="titleSize"
+            class="relative [&_h2]:max-w-[27em] data-[title-size=small]:[&_h2]:text-heading-md! max-sm:data-[title-size=small]:[&_h2]:text-heading-xl! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] data-[title-size=small]:[&_h2+p]:text-heading-md max-sm:data-[title-size=small]:[&_h2+p]:text-heading-xl [&_h2+p]:text-(--text-default)"
           >
             <SectionTitle
               :framed="false"
               kind="left"
-              size="small"
+              :size="titleSize"
               :eyebrow="eyebrow"
               :title="title"
               :description="titleTail"
@@ -128,9 +146,9 @@
               animated
               :opacity="0.3"
               density="medium"
-              :scale="1.8"
-              :offset-x="0.24"
-              :offset-y="0.03"
+              :scale="3.3"
+              :offset-x="0.31"
+              :offset-y="0.14"
             />
           </div>
 
@@ -143,15 +161,16 @@
             </p>
 
             <ul
-              v-if="claims.length"
+              v-if="chips.length"
               class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
             >
               <li
-                v-for="claim in claims"
-                :key="claim"
-                class="inline-flex h-7 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-sm) text-label-md text-(--text-default)"
+                v-for="claim in chips"
+                :key="claim.label"
+                :data-mobile="claim.mobile ? null : 'hidden'"
+                class="inline-flex max-md:data-[mobile=hidden]:hidden h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default) sm:h-7 sm:px-(--spacing-sm) sm:text-label-md"
               >
-                {{ claim }}
+                {{ claim.label }}
               </li>
             </ul>
           </div>

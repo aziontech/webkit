@@ -62,6 +62,8 @@
   interface Props {
     /** In-page anchor for the band. */
     anchor?: string
+    /** Overline above the headline. */
+    eyebrow?: string
     /** The page's h1. */
     title: string
     /** Copy beside the form, or the part of it before the link. */
@@ -90,6 +92,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     anchor: '',
+    eyebrow: '',
     description: '',
     link: null,
     descriptionAfter: '',
@@ -214,6 +217,8 @@
     <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
       <div class="min-w-0">
         <HeroTitle
+          :eyebrow="eyebrow"
+          eyebrow-prefix="//"
           :title="title"
           max-width="lg"
           sticky

@@ -77,7 +77,7 @@
     kind: 'centered-carousel',
     anchor: '',
     eyebrow: '',
-    eyebrowPrefix: '',
+    eyebrowPrefix: '//',
     titleLength: 'short',
     highlight: '',
     description: '',
@@ -130,7 +130,7 @@
     'title-band': { centered: true, maxWidth: 'xl' },
     'centered-band': { centered: true, maxWidth: '2xl' },
     'pixel-floor': {},
-    'copy-beside-art': { maxWidth: 'xl' },
+    'copy-beside-art': { maxWidth: 'xl', mobileCentered: true },
     'copy-on-top-art': { centered: true }
   } as const
 

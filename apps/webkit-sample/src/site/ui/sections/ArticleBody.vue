@@ -260,6 +260,8 @@
               @navigate="follow"
             />
             <HeroTitle
+              eyebrow="Blog"
+              eyebrow-prefix="//"
               size="medium"
               max-width="2xl"
               :title="article.title"

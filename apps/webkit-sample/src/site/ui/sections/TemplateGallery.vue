@@ -64,7 +64,7 @@
     description:
       'Start from pre-built applications and starter kits for common use cases, and deploy a complete project in seconds with popular frameworks.',
     actions: () => [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     templates: () => DEPLOY_TEMPLATES,

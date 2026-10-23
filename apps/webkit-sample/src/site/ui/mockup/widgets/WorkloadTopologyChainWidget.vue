@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Tag from '@aziontech/webkit/tag'
+  import { onMounted, onScopeDispose, ref } from 'vue'
 
   import MockupPart from '../MockupPart.vue'
   import ShellMockup, { type ShellMockupFade, type ShellMockupKind } from '../ShellMockup.vue'
@@ -32,99 +34,215 @@
     eyebrow: string
     icon: string
     title: string
-    detail: string
     label: string
-    severity: TagSeverity
-    lead?: boolean
+    indicator?: boolean
   }
-
-  type TopologySide = 'start' | 'center' | 'end'
 
   interface TopologyColumn {
     key: string
     order: number
-    side: TopologySide
     nodes: TopologyNode[]
   }
 
-  const COLUMNS: TopologyColumn[] = [
+  type TopologySide = 'left' | 'right'
+
+  interface TopologyEdge {
+    from: string
+    to: string
+  }
+
+  type TopologyLayout = 'chain' | 'compact'
+
+  interface TopologyArrangement {
+    key: TopologyLayout
+    columns: TopologyColumn[]
+    edges: TopologyEdge[]
+  }
+
+  interface TopologyDrawing {
+    viewBox: string
+    paths: string[]
+  }
+
+  const DOMAINS: TopologyNode[] = [
     {
-      key: 'domains',
-      order: 0,
-      side: 'start',
-      nodes: [
-        {
-          key: 'domain-shop',
-          eyebrow: 'Domain',
-          icon: 'ai ai-domains',
-          title: 'shop.example.com',
-          detail: 'TLS 1.3',
-          label: 'Public',
-          severity: 'info'
-        },
-        {
-          key: 'domain-www',
-          eyebrow: 'Domain',
-          icon: 'ai ai-domains',
-          title: 'www.example.com',
-          detail: 'TLS 1.3',
-          label: 'Public',
-          severity: 'info'
-        },
-        {
-          key: 'domain-generated',
-          eyebrow: 'Domain',
-          icon: 'ai ai-domains',
-          title: 'storefront.azion.app',
-          detail: 'TLS 1.3',
-          label: 'Public',
-          severity: 'info'
-        }
-      ]
+      key: 'domain-shop',
+      eyebrow: 'Domain',
+      icon: 'ai ai-domains',
+      title: 'shop.example.com',
+      label: 'Public'
     },
     {
-      key: 'workload',
-      order: 1,
-      side: 'center',
-      nodes: [
-        {
-          key: 'workload',
-          eyebrow: 'Workload',
-          icon: 'ai ai-workloads',
-          title: 'storefront-prod',
-          detail: '3 domains',
-          label: 'Live',
-          severity: 'success',
-          lead: true
-        }
-      ]
+      key: 'domain-www',
+      eyebrow: 'Domain',
+      icon: 'ai ai-domains',
+      title: 'www.example.com',
+      label: 'Public'
     },
     {
-      key: 'bindings',
-      order: 2,
-      side: 'end',
-      nodes: [
-        {
-          key: 'application',
-          eyebrow: 'Application',
-          icon: 'ai ai-edge-application',
-          title: 'storefront',
-          detail: 'Cache enabled',
-          label: 'Active',
-          severity: 'success'
-        },
-        {
-          key: 'firewall',
-          eyebrow: 'Firewall',
-          icon: 'ai ai-edge-firewall',
-          title: 'edge-rules',
-          detail: '12 rules',
-          label: 'Active',
-          severity: 'success'
-        }
-      ]
+      key: 'domain-generated',
+      eyebrow: 'Domain',
+      icon: 'ai ai-domains',
+      title: 'storefront.azion.app',
+      label: 'Public'
     }
   ]
+
+  const WORKLOAD: TopologyNode = {
+    key: 'workload',
+    eyebrow: 'Workload',
+    icon: 'ai ai-workloads',
+    title: 'storefront-prod',
+    label: 'Live',
+    indicator: true
+  }
+
+  const APPLICATION: TopologyNode = {
+    key: 'application',
+    eyebrow: 'Application',
+    icon: 'ai ai-edge-application',
+    title: 'storefront',
+    label: 'Active'
+  }
+
+  const FIREWALL: TopologyNode = {
+    key: 'firewall',
+    eyebrow: 'Firewall',
+    icon: 'ai ai-edge-firewall',
+    title: 'edge-rules',
+    label: 'Active'
+  }
+
+  const DOMAIN_GROUP: TopologyNode = {
+    key: 'domains',
+    eyebrow: 'Domains',
+    icon: 'ai ai-domains',
+    title: '',
+    label: ''
+  }
+
+  const BINDING_EDGES: TopologyEdge[] = [
+    { from: WORKLOAD.key, to: APPLICATION.key },
+    { from: WORKLOAD.key, to: FIREWALL.key }
+  ]
+
+  const ARRANGEMENTS: TopologyArrangement[] = [
+    {
+      key: 'chain',
+      columns: [
+        { key: 'domains', order: 0, nodes: DOMAINS },
+        { key: 'workload', order: 1, nodes: [WORKLOAD] },
+        { key: 'bindings', order: 2, nodes: [APPLICATION, FIREWALL] }
+      ],
+      edges: [...DOMAINS.map((domain) => ({ from: domain.key, to: WORKLOAD.key })), ...BINDING_EDGES]
+    },
+    {
+      key: 'compact',
+      columns: [
+        { key: 'domains', order: 0, nodes: [DOMAIN_GROUP] },
+        { key: 'workload', order: 1, nodes: [WORKLOAD] },
+        { key: 'bindings', order: 2, nodes: [APPLICATION, FIREWALL] }
+      ],
+      edges: [{ from: DOMAIN_GROUP.key, to: WORKLOAD.key }, ...BINDING_EDGES]
+    }
+  ]
+
+  const CORNER = 10
+
+  const EMPTY: TopologyDrawing = { viewBox: '0 0 0 0', paths: [] }
+
+  const drawings = ref<Record<TopologyLayout, TopologyDrawing>>({ chain: EMPTY, compact: EMPTY })
+
+  const canvases = new Map<TopologyLayout, globalThis.HTMLElement>()
+
+  let observer: globalThis.ResizeObserver | null = null
+
+  const portsOf = (arrangement: TopologyArrangement, key: string): TopologySide[] => [
+    ...new Set(
+      arrangement.edges.flatMap((edge): TopologySide[] => [
+        ...(edge.to === key ? (['left'] as const) : []),
+        ...(edge.from === key ? (['right'] as const) : [])
+      ])
+    )
+  ]
+
+  const offsetWithin = (node: globalThis.HTMLElement, canvas: globalThis.HTMLElement) => {
+    let left = 0
+    let top = 0
+    let current: globalThis.Element | null = node
+    while (current instanceof globalThis.HTMLElement && current !== canvas) {
+      left += current.offsetLeft
+      top += current.offsetTop
+      current = current.offsetParent
+    }
+    return { left, top }
+  }
+
+  const anchor = (
+    node: globalThis.HTMLElement,
+    canvas: globalThis.HTMLElement,
+    side: TopologySide
+  ) => {
+    const { left, top } = offsetWithin(node, canvas)
+    const y = top + node.offsetHeight / 2
+    return side === 'left' ? { x: left, y } : { x: left + node.offsetWidth, y }
+  }
+
+  const elbow = (fromX: number, fromY: number, toX: number, toY: number) => {
+    if (Math.abs(fromY - toY) < 0.5) return `M${fromX},${fromY} L${toX},${toY}`
+    const busX = fromX + (toX - fromX) / 2
+    const dir = toY > fromY ? 1 : -1
+    const radius = Math.max(0, Math.min(CORNER, Math.abs(toY - fromY) / 2, Math.abs(busX - fromX)))
+    return [
+      `M${fromX},${fromY}`,
+      `H${busX - radius}`,
+      `Q${busX},${fromY} ${busX},${fromY + dir * radius}`,
+      `V${toY - dir * radius}`,
+      `Q${busX},${toY} ${busX + radius},${toY}`,
+      `H${toX}`
+    ].join(' ')
+  }
+
+  const draw = (arrangement: TopologyArrangement): TopologyDrawing => {
+    const canvas = canvases.get(arrangement.key)
+    if (!canvas?.offsetWidth) return EMPTY
+    const nodeOf = (key: string) =>
+      canvas.querySelector<globalThis.HTMLElement>(`[data-topology-node="${key}"]`)
+    const paths = arrangement.edges.flatMap((edge) => {
+      const source = nodeOf(edge.from)
+      const target = nodeOf(edge.to)
+      if (!source || !target) return []
+      const from = anchor(source, canvas, 'right')
+      const to = anchor(target, canvas, 'left')
+      return [elbow(from.x, from.y, to.x, to.y)]
+    })
+    return { viewBox: `0 0 ${canvas.offsetWidth} ${canvas.offsetHeight}`, paths }
+  }
+
+  const measure = () => {
+    drawings.value = {
+      chain: draw(ARRANGEMENTS[0]),
+      compact: draw(ARRANGEMENTS[1])
+    }
+  }
+
+  const bindCanvas = (key: TopologyLayout, element: unknown) => {
+    if (element instanceof globalThis.HTMLElement) canvases.set(key, element)
+    else canvases.delete(key)
+  }
+
+  onMounted(() => {
+    observer = new globalThis.ResizeObserver(measure)
+    canvases.forEach((canvas) => {
+      observer?.observe(canvas)
+      canvas
+        .querySelectorAll('[data-topology-node]')
+        .forEach((node) => observer?.observe(node))
+    })
+    measure()
+  })
+
+  onScopeDispose(() => observer?.disconnect())
 </script>
 
 <template>
@@ -135,58 +253,93 @@
     :fade="fade"
     :active="active"
   >
-    <div class="grid h-full grid-cols-3 items-center gap-x-(--spacing-lg) p-(--spacing-xs)">
+    <div
+      v-for="arrangement in ARRANGEMENTS"
+      :key="arrangement.key"
+      :ref="(element) => bindCanvas(arrangement.key, element)"
+      :data-layout="arrangement.key"
+      class="group/topology relative grid h-full grid-cols-3 items-center gap-x-(--spacing-xl) p-(--spacing-xs) data-[layout=chain]:hidden md:data-[layout=chain]:grid md:data-[layout=compact]:hidden"
+    >
       <MockupPart
-        v-for="column in COLUMNS"
+        :order="3"
+        class="pointer-events-none absolute inset-0"
+      >
+        <svg
+          v-if="drawings[arrangement.key].paths.length"
+          :viewBox="drawings[arrangement.key].viewBox"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+          class="absolute inset-0 h-full w-full overflow-visible"
+        >
+          <path
+            v-for="(path, index) in drawings[arrangement.key].paths"
+            :key="index"
+            :d="path"
+            stroke-width="1.5"
+            class="stroke-(--accent)"
+          />
+        </svg>
+      </MockupPart>
+      <MockupPart
+        v-for="column in arrangement.columns"
         :key="column.key"
         :order="column.order"
         class="min-w-0 self-center"
       >
-        <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-lg) group-data-[layout=compact]/topology:gap-(--spacing-xxl)">
           <div
-            v-for="(node, index) in column.nodes"
+            v-for="node in column.nodes"
             :key="node.key"
-            class="relative min-w-0"
+            :data-topology-node="node.key"
+            class="relative flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-xs)"
           >
             <span
-              v-if="column.side !== 'start'"
-              class="absolute top-1/2 right-full h-px w-[calc(var(--spacing-lg)/2)] bg-(--border-default)"
-              aria-hidden="true"
-            />
-            <span
-              v-if="column.side !== 'end'"
-              class="absolute top-1/2 left-full h-px w-[calc(var(--spacing-lg)/2)] bg-(--border-default)"
-              aria-hidden="true"
-            />
-            <span
-              v-if="column.side !== 'center' && column.nodes.length > 1"
-              :data-side="column.side"
-              :data-first="index === 0 || null"
-              :data-last="index === column.nodes.length - 1 || null"
-              class="absolute top-[calc(var(--spacing-md)/-2)] bottom-[calc(var(--spacing-md)/-2)] w-px bg-(--border-default) data-first:top-1/2 data-last:bottom-1/2 data-[side=end]:right-[calc(100%+var(--spacing-lg)/2)] data-[side=start]:left-[calc(100%+var(--spacing-lg)/2)]"
+              v-for="side in portsOf(arrangement, node.key)"
+              :key="side"
+              :data-side="side"
+              class="absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) data-[side=left]:-left-px data-[side=left]:-translate-x-full data-[side=right]:-right-px data-[side=right]:translate-x-full"
               aria-hidden="true"
             />
             <div
-              :data-lead="node.lead || null"
-              class="relative flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-xs) data-lead:border-(--primary) data-lead:shadow-[0_0_var(--spacing-lg)_var(--primary-mask),0_0_var(--spacing-xl)_var(--primary-mask)]"
+              v-if="arrangement.key === 'compact'"
+              class="flex min-w-0 flex-col items-center gap-(--spacing-xs) py-(--spacing-xxs) text-center"
             >
-              <div class="flex items-center gap-(--spacing-xxs)">
-                <i
-                  :class="node.icon"
-                  class="shrink-0 text-label-sm leading-none text-(--text-muted)"
-                  aria-hidden="true"
-                />
-                <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
-                <Tag
-                  class="ml-auto shrink-0"
+              <i
+                :class="node.icon"
+                class="shrink-0 text-heading-sm leading-none text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="max-w-full truncate text-label-md text-(--text-default)">{{ node.eyebrow }}</span>
+            </div>
+            <div
+              v-else
+              class="flex items-center gap-(--spacing-xxs)"
+            >
+              <i
+                :class="node.icon"
+                class="shrink-0 text-label-sm leading-none text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
+              <span class="ml-auto inline-flex shrink-0">
+                <StatusIndicator
+                  v-if="node.indicator"
                   :label="node.label"
-                  :severity="node.severity"
+                />
+                <Tag
+                  v-else
+                  :label="node.label"
+                  severity="secondary"
                   size="small"
                 />
-              </div>
-              <span class="truncate text-label-md text-(--text-default)">{{ node.title }}</span>
-              <span class="truncate text-body-sm text-(--text-muted)">{{ node.detail }}</span>
+              </span>
             </div>
+            <span
+              v-if="arrangement.key !== 'compact'"
+              class="truncate text-label-md text-(--text-default)"
+              >{{ node.title }}</span
+            >
           </div>
         </div>
       </MockupPart>

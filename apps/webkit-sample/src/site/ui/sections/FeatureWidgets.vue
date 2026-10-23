@@ -169,7 +169,7 @@
               >
                 <Button
                   v-if="item.href"
-                  :label="item.linkLabel || 'Learn more'"
+                  :label="item.linkLabel || 'Docs'"
                   kind="outlined"
                   size="medium"
                   icon="pi pi-chevron-right"

@@ -70,7 +70,7 @@
   withDefaults(defineProps<Props>(), {
     kind: 'mosaic',
     ariaLabel: 'Client stories',
-    storyLabel: 'Learn more',
+    storyLabel: 'Read the case study',
     anchor: ''
   })
 
