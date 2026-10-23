@@ -400,302 +400,7 @@
                 </div>
               </Transition>
 
-              <div class="relative">
-                <Transition
-                  enter-from-class="opacity-0 translate-y-1"
-                  enter-to-class="opacity-100 translate-y-0"
-                  leave-from-class="opacity-100 translate-y-0"
-                  leave-to-class="opacity-0 -translate-y-1"
-                  leave-active-class="absolute inset-x-0 top-0"
-                >
-                  <div
-                    v-if="step === 'email'"
-                    key="email"
-                    :style="stepTransitionStyle"
-                    class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
-                  >
-                    <Label
-                      for="login-email"
-                      label="Email"
-                      required
-                    />
-                    <InputText
-                      id="login-email"
-                      v-model="email"
-                      type="email"
-                      size="large"
-                      name="email"
-                      autocomplete="email"
-                      class="w-full"
-                      placeholder="myemail@azion.com"
-                      :disabled="verifying"
-                      :required="!!errors.email && !email.trim()"
-                      :invalid="!!errors.email && !!email.trim()"
-                      :aria-describedby="
-                        errors.email && !verifying ? 'login-email-error' : undefined
-                      "
-                      @update:model-value="errors.email = ''"
-                    />
-                    <HelperText
-                      v-if="errors.email && !verifying"
-                      id="login-email-error"
-                      :kind="email.trim() ? 'invalid' : 'required'"
-                      :label="errors.email"
-                    />
-                  </div>
-
-                  <div
-                    v-else-if="step === 'password'"
-                    key="password"
-                    :style="stepTransitionStyle"
-                    class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                  >
-                    <Transition
-                      appear
-                      appear-from-class="opacity-0 -translate-x-1"
-                      appear-to-class="opacity-100 translate-x-0"
-                    >
-                      <div
-                        :style="identityTransitionStyle"
-                        class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <Tooltip text="Change email">
-                          <IconButton
-                            icon="pi pi-chevron-left"
-                            aria-label="Change email"
-                            kind="outlined"
-                            size="small"
-                            :disabled="verifying"
-                            @click="backToEmail"
-                          />
-                        </Tooltip>
-                        <span class="truncate text-label-sm text-(--text-default)">{{
-                          email
-                        }}</span>
-                      </div>
-                    </Transition>
-
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label
-                        for="login-password"
-                        label="Password"
-                        required
-                      />
-                      <FieldPassword
-                        v-model="password"
-                        input-id="login-password"
-                        name="password"
-                        autocomplete="current-password"
-                        placeholder="Type your password"
-                        :disabled="verifying"
-                        :required="!!errors.password && !password"
-                        :invalid="!!errors.password && !!password"
-                        :helper-text="verifying ? '' : errors.password"
-                        @update:model-value="errors.password = ''"
-                      />
-
-                      <a
-                        :aria-disabled="verifying || undefined"
-                        :tabindex="verifying ? -1 : undefined"
-                        class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) aria-disabled:pointer-events-none aria-disabled:opacity-60 motion-reduce:transition-none"
-                        href="#"
-                        @click.prevent="forgotPassword"
-                        >Forgot your password?</a
-                      >
-                    </div>
-                  </div>
-
-                  <div
-                    v-else-if="step === 'reset'"
-                    key="reset"
-                    :style="stepTransitionStyle"
-                    class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                  >
-                    <Transition
-                      appear
-                      appear-from-class="opacity-0 -translate-x-1"
-                      appear-to-class="opacity-100 translate-x-0"
-                    >
-                      <div
-                        :style="identityTransitionStyle"
-                        class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <Tooltip text="Back to sign in">
-                          <IconButton
-                            icon="pi pi-chevron-left"
-                            aria-label="Back to sign in"
-                            kind="outlined"
-                            size="small"
-                            :disabled="verifying"
-                            @click="backToSignIn"
-                          />
-                        </Tooltip>
-                        <span class="truncate text-label-sm text-(--text-default)"
-                          >Back to sign in</span
-                        >
-                      </div>
-                    </Transition>
-
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label
-                        for="reset-email"
-                        label="Email"
-                        required
-                      />
-                      <InputText
-                        id="reset-email"
-                        v-model="resetEmail"
-                        type="email"
-                        size="large"
-                        name="reset-email"
-                        autocomplete="email"
-                        class="w-full"
-                        placeholder="myemail@azion.com"
-                        :disabled="verifying"
-                        :required="!!errors.resetEmail && !resetEmail.trim()"
-                        :invalid="!!errors.resetEmail && !!resetEmail.trim()"
-                        :aria-describedby="
-                          errors.resetEmail && !verifying ? 'reset-email-error' : undefined
-                        "
-                        @update:model-value="errors.resetEmail = ''"
-                      />
-                      <HelperText
-                        v-if="errors.resetEmail && !verifying"
-                        id="reset-email-error"
-                        :kind="resetEmail.trim() ? 'invalid' : 'required'"
-                        :label="errors.resetEmail"
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    v-else-if="step === 'new-password'"
-                    key="new-password"
-                    :style="stepTransitionStyle"
-                    class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                  >
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label
-                        for="new-password"
-                        label="New password"
-                        required
-                      />
-                      <FieldPassword
-                        v-model="newPassword"
-                        input-id="new-password"
-                        name="new-password"
-                        autocomplete="new-password"
-                        placeholder="Enter a new password"
-                        requirements
-                        :disabled="verifying"
-                        :required="!!errors.newPassword && !newPassword"
-                        :invalid="!!errors.newPassword && !!newPassword"
-                        :helper-text="verifying ? '' : errors.newPassword"
-                        @update:model-value="errors.newPassword = ''"
-                      />
-                    </div>
-
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label
-                        for="confirm-password"
-                        label="Confirm password"
-                        required
-                      />
-                      <FieldPassword
-                        v-model="confirmPassword"
-                        input-id="confirm-password"
-                        name="confirm-password"
-                        autocomplete="new-password"
-                        placeholder="Repeat the new password"
-                        :disabled="verifying"
-                        :required="!!errors.confirmPassword && !confirmPassword"
-                        :invalid="!!errors.confirmPassword && !!confirmPassword"
-                        :helper-text="verifying ? '' : errors.confirmPassword"
-                        @update:model-value="errors.confirmPassword = ''"
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    v-else
-                    key="sent"
-                    :style="stepTransitionStyle"
-                    class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
-                  >
-                    <div class="flex items-center gap-(--spacing-xs)">
-                      <p class="text-body-sm text-(--text-default)">
-                        Didn't receive the email?
-                      </p>
-                      <span
-                        v-if="resending"
-                        class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                      >
-                        <Spinner class="size-4" />
-                        Sending…
-                      </span>
-                      <a
-                        v-else
-                        class="text-link text-body-sm"
-                        href="#"
-                        @click.prevent="resendReset"
-                        >Resend Email</a
-                      >
-                    </div>
-                    <div class="flex items-center gap-(--spacing-xs)">
-                      <p class="text-body-sm text-(--text-default)">Already opened it?</p>
-                      <a
-                        class="text-link text-body-sm"
-                        href="#"
-                        @click.prevent="openResetLink"
-                        >Set a new password</a
-                      >
-                    </div>
-                  </div>
-                </Transition>
-              </div>
-
               <div class="flex flex-col">
-                <div class="relative">
-                  <Transition
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                    leave-active-class="pointer-events-none absolute inset-x-0 top-0"
-                  >
-                    <div
-                      :key="primaryAction.label"
-                      :style="fadeTransitionStyle"
-                      class="motion-reduce:transition-none"
-                    >
-                      <Button
-                        :label="primaryAction.label"
-                        :kind="primaryAction.kind"
-                        size="large"
-                        class="w-full"
-                        :loading="verifying"
-                        type="submit"
-                      />
-                    </div>
-                  </Transition>
-
-                  <Transition
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                  >
-                    <Tag
-                      v-if="step === 'email'"
-                      label="Last used"
-                      severity="info"
-                      size="small"
-                      :style="fadeTransitionStyle"
-                      class="absolute right-(--spacing-sm) top-0 -translate-y-1/2 motion-reduce:transition-none"
-                    />
-                  </Transition>
-                </div>
-
                 <div class="relative">
                   <Transition
                     enter-from-class="opacity-0"
@@ -707,10 +412,8 @@
                     <div
                       v-if="step === 'email'"
                       :style="fadeTransitionStyle"
-                      class="flex flex-col gap-(--spacing-lg) pt-(--spacing-lg) motion-reduce:transition-none"
+                      class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg) motion-reduce:transition-none"
                     >
-                      <Divider label="or" />
-
                       <div class="relative">
                         <Transition
                           enter-from-class="opacity-0"
@@ -758,7 +461,304 @@
                           </div>
                         </Transition>
                       </div>
+
+                      <Divider label="or" />
                     </div>
+                  </Transition>
+                </div>
+
+                <div class="relative">
+                  <Transition
+                    enter-from-class="opacity-0 translate-y-1"
+                    enter-to-class="opacity-100 translate-y-0"
+                    leave-from-class="opacity-100 translate-y-0"
+                    leave-to-class="opacity-0 -translate-y-1"
+                    leave-active-class="absolute inset-x-0 top-0"
+                  >
+                    <div
+                      v-if="step === 'email'"
+                      key="email"
+                      :style="stepTransitionStyle"
+                      class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
+                    >
+                      <Label
+                        for="login-email"
+                        label="Email"
+                        required
+                      />
+                      <InputText
+                        id="login-email"
+                        v-model="email"
+                        type="email"
+                        size="large"
+                        name="email"
+                        autocomplete="email"
+                        class="w-full"
+                        placeholder="myemail@azion.com"
+                        :disabled="verifying"
+                        :required="!!errors.email && !email.trim()"
+                        :invalid="!!errors.email && !!email.trim()"
+                        :aria-describedby="
+                          errors.email && !verifying ? 'login-email-error' : undefined
+                        "
+                        @update:model-value="errors.email = ''"
+                      />
+                      <HelperText
+                        v-if="errors.email && !verifying"
+                        id="login-email-error"
+                        :kind="email.trim() ? 'invalid' : 'required'"
+                        :label="errors.email"
+                      />
+                    </div>
+
+                    <div
+                      v-else-if="step === 'password'"
+                      key="password"
+                      :style="stepTransitionStyle"
+                      class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                    >
+                      <Transition
+                        appear
+                        appear-from-class="opacity-0 -translate-x-1"
+                        appear-to-class="opacity-100 translate-x-0"
+                      >
+                        <div
+                          :style="identityTransitionStyle"
+                          class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <Tooltip text="Change email">
+                            <IconButton
+                              icon="pi pi-chevron-left"
+                              aria-label="Change email"
+                              kind="outlined"
+                              size="small"
+                              :disabled="verifying"
+                              @click="backToEmail"
+                            />
+                          </Tooltip>
+                          <span class="truncate text-label-sm text-(--text-default)">{{
+                            email
+                          }}</span>
+                        </div>
+                      </Transition>
+
+                      <div class="flex flex-col gap-(--spacing-xs)">
+                        <Label
+                          for="login-password"
+                          label="Password"
+                          required
+                        />
+                        <FieldPassword
+                          v-model="password"
+                          input-id="login-password"
+                          name="password"
+                          autocomplete="current-password"
+                          placeholder="Type your password"
+                          :disabled="verifying"
+                          :required="!!errors.password && !password"
+                          :invalid="!!errors.password && !!password"
+                          :helper-text="verifying ? '' : errors.password"
+                          @update:model-value="errors.password = ''"
+                        />
+
+                        <a
+                          :aria-disabled="verifying || undefined"
+                          :tabindex="verifying ? -1 : undefined"
+                          class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) aria-disabled:pointer-events-none aria-disabled:opacity-60 motion-reduce:transition-none"
+                          href="#"
+                          @click.prevent="forgotPassword"
+                          >Forgot your password?</a
+                        >
+                      </div>
+                    </div>
+
+                    <div
+                      v-else-if="step === 'reset'"
+                      key="reset"
+                      :style="stepTransitionStyle"
+                      class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                    >
+                      <Transition
+                        appear
+                        appear-from-class="opacity-0 -translate-x-1"
+                        appear-to-class="opacity-100 translate-x-0"
+                      >
+                        <div
+                          :style="identityTransitionStyle"
+                          class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <Tooltip text="Back to sign in">
+                            <IconButton
+                              icon="pi pi-chevron-left"
+                              aria-label="Back to sign in"
+                              kind="outlined"
+                              size="small"
+                              :disabled="verifying"
+                              @click="backToSignIn"
+                            />
+                          </Tooltip>
+                          <span class="truncate text-label-sm text-(--text-default)"
+                            >Back to sign in</span
+                          >
+                        </div>
+                      </Transition>
+
+                      <div class="flex flex-col gap-(--spacing-xs)">
+                        <Label
+                          for="reset-email"
+                          label="Email"
+                          required
+                        />
+                        <InputText
+                          id="reset-email"
+                          v-model="resetEmail"
+                          type="email"
+                          size="large"
+                          name="reset-email"
+                          autocomplete="email"
+                          class="w-full"
+                          placeholder="myemail@azion.com"
+                          :disabled="verifying"
+                          :required="!!errors.resetEmail && !resetEmail.trim()"
+                          :invalid="!!errors.resetEmail && !!resetEmail.trim()"
+                          :aria-describedby="
+                            errors.resetEmail && !verifying ? 'reset-email-error' : undefined
+                          "
+                          @update:model-value="errors.resetEmail = ''"
+                        />
+                        <HelperText
+                          v-if="errors.resetEmail && !verifying"
+                          id="reset-email-error"
+                          :kind="resetEmail.trim() ? 'invalid' : 'required'"
+                          :label="errors.resetEmail"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      v-else-if="step === 'new-password'"
+                      key="new-password"
+                      :style="stepTransitionStyle"
+                      class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                    >
+                      <div class="flex flex-col gap-(--spacing-xs)">
+                        <Label
+                          for="new-password"
+                          label="New password"
+                          required
+                        />
+                        <FieldPassword
+                          v-model="newPassword"
+                          input-id="new-password"
+                          name="new-password"
+                          autocomplete="new-password"
+                          placeholder="Enter a new password"
+                          requirements
+                          :disabled="verifying"
+                          :required="!!errors.newPassword && !newPassword"
+                          :invalid="!!errors.newPassword && !!newPassword"
+                          :helper-text="verifying ? '' : errors.newPassword"
+                          @update:model-value="errors.newPassword = ''"
+                        />
+                      </div>
+
+                      <div class="flex flex-col gap-(--spacing-xs)">
+                        <Label
+                          for="confirm-password"
+                          label="Confirm password"
+                          required
+                        />
+                        <FieldPassword
+                          v-model="confirmPassword"
+                          input-id="confirm-password"
+                          name="confirm-password"
+                          autocomplete="new-password"
+                          placeholder="Repeat the new password"
+                          :disabled="verifying"
+                          :required="!!errors.confirmPassword && !confirmPassword"
+                          :invalid="!!errors.confirmPassword && !!confirmPassword"
+                          :helper-text="verifying ? '' : errors.confirmPassword"
+                          @update:model-value="errors.confirmPassword = ''"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      v-else
+                      key="sent"
+                      :style="stepTransitionStyle"
+                      class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
+                    >
+                      <div class="flex items-center gap-(--spacing-xs)">
+                        <p class="text-body-sm text-(--text-default)">Didn't receive the email?</p>
+                        <span
+                          v-if="resending"
+                          class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                        >
+                          <Spinner class="size-4" />
+                          Sending…
+                        </span>
+                        <a
+                          v-else
+                          class="text-link text-body-sm"
+                          href="#"
+                          @click.prevent="resendReset"
+                          >Resend Email</a
+                        >
+                      </div>
+                      <div class="flex items-center gap-(--spacing-xs)">
+                        <p class="text-body-sm text-(--text-default)">Already opened it?</p>
+                        <a
+                          class="text-link text-body-sm"
+                          href="#"
+                          @click.prevent="openResetLink"
+                          >Set a new password</a
+                        >
+                      </div>
+                    </div>
+                  </Transition>
+                </div>
+              </div>
+
+              <div class="flex flex-col">
+                <div class="relative">
+                  <Transition
+                    enter-from-class="opacity-0"
+                    enter-to-class="opacity-100"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
+                    leave-active-class="pointer-events-none absolute inset-x-0 top-0"
+                  >
+                    <div
+                      :key="primaryAction.label"
+                      :style="fadeTransitionStyle"
+                      class="motion-reduce:transition-none"
+                    >
+                      <Button
+                        :label="primaryAction.label"
+                        :kind="primaryAction.kind"
+                        size="large"
+                        class="w-full"
+                        :loading="verifying"
+                        type="submit"
+                      />
+                    </div>
+                  </Transition>
+
+                  <Transition
+                    enter-from-class="opacity-0"
+                    enter-to-class="opacity-100"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
+                  >
+                    <Tag
+                      v-if="step === 'email'"
+                      label="Last used"
+                      severity="info"
+                      size="small"
+                      :style="fadeTransitionStyle"
+                      class="absolute right-(--spacing-sm) top-0 -translate-y-1/2 motion-reduce:transition-none"
+                    />
                   </Transition>
                 </div>
               </div>
@@ -768,9 +768,7 @@
       </template>
     </CardBox>
 
-    <div
-      class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
-    >
+    <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
       <div class="flex items-center justify-center gap-(--spacing-xs)">
         <p class="text-body-xs text-(--text-default)">Don't have an account?</p>
         <a

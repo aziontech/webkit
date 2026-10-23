@@ -111,6 +111,58 @@
             <h1 class="text-heading-sm text-(--text-default)">Sign Up for a Free Account</h1>
           </header>
 
+          <div class="relative">
+            <Transition
+              enter-from-class="opacity-0"
+              enter-to-class="opacity-100"
+              leave-from-class="opacity-100"
+              leave-to-class="opacity-0"
+              leave-active-class="absolute inset-x-0 top-0"
+            >
+              <div
+                v-if="providersReady"
+                key="providers"
+                class="flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+              >
+                <Button
+                  type="button"
+                  label="Continue with Google"
+                  kind="outlined"
+                  size="large"
+                  icon="ai-cor ai-google"
+                  class="w-full"
+                  :loading="provider === 'google'"
+                  :disabled="locked && provider !== 'google'"
+                  @click="continueWith('google')"
+                />
+                <Button
+                  type="button"
+                  label="Continue with GitHub"
+                  kind="outlined"
+                  size="large"
+                  icon="pi pi-github"
+                  class="w-full"
+                  :loading="provider === 'github'"
+                  :disabled="locked && provider !== 'github'"
+                  @click="continueWith('github')"
+                />
+              </div>
+
+              <div
+                v-else
+                key="preparing"
+                role="status"
+                aria-label="Preparing sign-up providers"
+                class="flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+              >
+                <Skeleton height="2.5rem" />
+                <Skeleton height="2.5rem" />
+              </div>
+            </Transition>
+          </div>
+
+          <Divider label="or" />
+
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="locked"
@@ -177,65 +229,11 @@
             :disabled="provider !== ''"
             type="submit"
           />
-
-          <Divider label="or" />
-
-          <div class="relative">
-            <Transition
-              enter-from-class="opacity-0"
-              enter-to-class="opacity-100"
-              leave-from-class="opacity-100"
-              leave-to-class="opacity-0"
-              leave-active-class="absolute inset-x-0 top-0"
-            >
-              <div
-                v-if="providersReady"
-                key="providers"
-                class="flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-              >
-                <Button
-                  type="button"
-                  label="Continue with Google"
-                  kind="outlined"
-                  size="large"
-                  icon="ai-cor ai-google"
-                  class="w-full"
-                  :loading="provider === 'google'"
-                  :disabled="locked && provider !== 'google'"
-                  @click="continueWith('google')"
-                />
-                <Button
-                  type="button"
-                  label="Continue with GitHub"
-                  kind="outlined"
-                  size="large"
-                  icon="pi pi-github"
-                  class="w-full"
-                  :loading="provider === 'github'"
-                  :disabled="locked && provider !== 'github'"
-                  @click="continueWith('github')"
-                />
-              </div>
-
-              <div
-                v-else
-                key="preparing"
-                role="status"
-                aria-label="Preparing sign-up providers"
-                class="flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-              >
-                <Skeleton height="2.5rem" />
-                <Skeleton height="2.5rem" />
-              </div>
-            </Transition>
-          </div>
         </form>
       </template>
     </CardBox>
 
-    <div
-      class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
-    >
+    <div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)">
       <div class="flex items-center justify-center gap-(--spacing-xs)">
         <p class="text-body-xs text-(--text-default)">Already have an account?</p>
         <a
