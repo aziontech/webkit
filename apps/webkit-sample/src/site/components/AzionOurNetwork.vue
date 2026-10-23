@@ -8,11 +8,11 @@
   //   1  11-mark client marquee                          Ticker, on the hero's floor
   //  2+3 heading, five claims and four figures on map   one FrameBox, backdrop + Tag row
   //                                                      + BigNumbers on its floor
-  //   4  "Stop managing regions and capacity by hand"    SectionTitle centered
-  //   5  art | copy — "Run closer to users"              BandStack band, MediaSplit
-  //   6  copy | art — "Keep delivery, logic, and data"   BandStack band, MediaSplit
-  //   7  art | copy — "Get better routes"                BandStack band, MediaSplit
-  //   8  copy | art — "Stop attack traffic earlier"      BandStack band, MediaSplit
+  //   4  "Stop managing regions and capacity by hand"    MediaSplitStack title
+  //   5  art | copy — "Run closer to users"              MediaSplitStack band
+  //   6  copy | art — "Keep delivery, logic, and data"   MediaSplitStack band
+  //   7  art | copy — "Get better routes"                MediaSplitStack band
+  //   8  copy | art — "Stop attack traffic earlier"      MediaSplitStack band
   //   9  spacer                                          SectionGap hatch
   //   10 client marks + one quote                        FrameBox flush, ClientMark + Quote
   //   11 "Build, run, and protect applications…"         SectionTitle in the module header
@@ -43,18 +43,15 @@
   // `clients/dark/`, so they are declared locally — as AzionCache.vue does.
   import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
   import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
   import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
   import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import BandStack from '@aziontech/webkit/band-stack'
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
   import Quote from '@aziontech/webkit/quote'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
@@ -68,6 +65,7 @@
   import { useRouter } from 'vue-router'
 
   import { NavColumn, NavItem } from '../ui/index.js'
+  import MediaSplitStack from '../ui/sections/MediaSplitStack.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -86,6 +84,37 @@
       '100% availability'
     ]
   }
+
+  const NETWORK_BANDS = [
+    {
+      title: 'Run closer to users',
+      description:
+        'Handle requests closer to users instead of sending everything back to a few central regions. That helps cut latency, absorb spikes automatically, and reduce backhaul overhead.',
+      illustration: 'fastest-path-to-live-website',
+      illustrationLabel: 'Requests served from the location nearest the user'
+    },
+    {
+      title: 'Keep delivery, logic, and data in one place',
+      description:
+        'Use one platform for delivery, distributed execution, and data workflows. Support APIs and dynamic applications with real-time request handling, origin protection, and state kept close to execution with services like KV Store.',
+      illustration: 'runtime',
+      illustrationLabel: 'Delivery, execution and data served from one platform'
+    },
+    {
+      title: 'Get better routes and more stable delivery',
+      description:
+        'Place traffic entry points inside ISP last-mile networks and connect through IXPs, peering, and Tier 1 transit. Reduce hops, improve route quality, and keep delivery stable during traffic spikes, upstream issues, and regional incidents.',
+      illustration: 'distributed-apis',
+      illustrationLabel: 'Entry points inside ISP networks, connected through IXPs and transit'
+    },
+    {
+      title: 'Stop attack traffic earlier',
+      description:
+        'Block attack traffic in the delivery path before it reaches your origin. Deploy code and policies while the platform handles scaling, execution, and traffic steering, so your team spends less time managing regions, capacity, scaling rules, and extra layers.',
+      illustration: 'automate-threat-mitigation',
+      illustrationLabel: 'Attack traffic stopped in the delivery path, before the origin'
+    }
+  ]
 
   const byName = (name) => CLIENTS.find((client) => client.name === name)
 
@@ -320,76 +349,15 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- ── Band 4 — the section's claim ─────────────────────────────────────────
-         SectionTitle already renders its own `FrameBox flush borders="y"`, so it is a brick
-         in its own right and needs no wrapper frame. -->
-    <SectionTitle
-      kind="centered"
+    <!-- ── Bands 4–8 — the section's claim, then four bands swapping the media side ──
+         The shared stack every product page uses: it puts the SectionTitle in the module
+         header and drops each band's headline to h3 under it. -->
+    <MediaSplitStack
+      kind="alternating"
       eyebrow="Managed Infrastructure"
       title="Stop managing regions and capacity by hand"
+      :bands="NETWORK_BANDS"
     />
-
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <BandStack
-        sticky
-        flush
-      >
-        <MediaSplit
-          kind="media-start"
-          title="Run closer to users"
-          description="Handle requests closer to users instead of sending everything back to a few central regions. That helps cut latency, absorb spikes automatically, and reduce backhaul overhead."
-        >
-          <template #media>
-            <Illustration
-              name="fastest-path-to-live-website"
-              aria-label="Requests served from the location nearest the user"
-            />
-          </template>
-        </MediaSplit>
-
-        <MediaSplit
-          kind="media-end"
-          title="Keep delivery, logic, and data in one place"
-          description="Use one platform for delivery, distributed execution, and data workflows. Support APIs and dynamic applications with real-time request handling, origin protection, and state kept close to execution with services like KV Store."
-        >
-          <template #media>
-            <Illustration
-              name="runtime"
-              aria-label="Delivery, execution and data served from one platform"
-            />
-          </template>
-        </MediaSplit>
-
-        <MediaSplit
-          kind="media-start"
-          title="Get better routes and more stable delivery"
-          description="Place traffic entry points inside ISP last-mile networks and connect through IXPs, peering, and Tier 1 transit. Reduce hops, improve route quality, and keep delivery stable during traffic spikes, upstream issues, and regional incidents."
-        >
-          <template #media>
-            <Illustration
-              name="distributed-apis"
-              aria-label="Entry points inside ISP networks, connected through IXPs and transit"
-            />
-          </template>
-        </MediaSplit>
-
-        <MediaSplit
-          kind="media-end"
-          title="Stop attack traffic earlier"
-          description="Block attack traffic in the delivery path before it reaches your origin. Deploy code and policies while the platform handles scaling, execution, and traffic steering, so your team spends less time managing regions, capacity, scaling rules, and extra layers."
-        >
-          <template #media>
-            <Illustration
-              name="automate-threat-mitigation"
-              aria-label="Attack traffic stopped in the delivery path, before the origin"
-            />
-          </template>
-        </MediaSplit>
-      </BandStack>
-    </SectionModule>
 
     <!-- Band 9 — spacer. -->
     <SectionGap hatch />
