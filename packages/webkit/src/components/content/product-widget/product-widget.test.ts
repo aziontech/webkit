@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
-import { describe, expect, it, vi } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/content/product-widget/ProductWidget.stories'
@@ -15,6 +15,11 @@ const FRAME_TESTID = 'content-shell-mockup'
 const NAMES = Object.keys(productWidgets) as ProductWidgetName[]
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+const FIXTURE_CSS = `
+  [data-testid='${FRAME_TESTID}'] { position: relative; }
+  [data-testid='${FRAME_TESTID}'] > :first-child { position: absolute; }
+`
 
 const host = (props: Record<string, unknown>) =>
   defineComponent({
@@ -31,6 +36,18 @@ const frameOf = (view: ReturnType<typeof render>) =>
   within(view.container).findByTestId(FRAME_TESTID, {}, { timeout: 5000 })
 
 describe('ProductWidget', () => {
+  let fixtureSheet: globalThis.HTMLStyleElement
+
+  beforeAll(() => {
+    fixtureSheet = document.createElement('style')
+    fixtureSheet.textContent = FIXTURE_CSS
+    document.head.appendChild(fixtureSheet)
+  })
+
+  afterAll(() => {
+    fixtureSheet.remove()
+  })
+
   it('renders the default story under the fallback testid and draws its widget', async () => {
     const view = render(Default())
     const root = view.getByTestId(TESTID)
@@ -51,7 +68,7 @@ describe('ProductWidget', () => {
     expect((await frameOf(framed)).getAttribute('data-kind')).toBe('window')
     framed.unmount()
 
-    const bare = render(host({ name: 'workload-topology-chain' }))
+    const bare = render(host({ name: 'workload-rollout-rows' }))
     expect((await frameOf(bare)).getAttribute('data-kind')).toBe('bare')
   })
 
@@ -94,10 +111,10 @@ describe('ProductWidget', () => {
     const view = render(Host)
     expect((await frameOf(view)).getAttribute('data-kind')).toBe('window')
 
-    name.value = 'workload-topology-chain'
+    name.value = 'workload-rollout-rows'
     await nextTick()
 
-    expect(view.getByTestId(TESTID).getAttribute('data-name')).toBe('workload-topology-chain')
+    expect(view.getByTestId(TESTID).getAttribute('data-name')).toBe('workload-rollout-rows')
     await expect
       .poll(() =>
         view.container.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
@@ -183,6 +200,15 @@ describe('ProductWidget', () => {
     const view = render(Default())
     await frameOf(view)
 
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('has no axe violations in function-code, the one widget exposed to assistive technology', async () => {
+    const view = render(host({ name: 'function-code' }))
+    const frame = await frameOf(view)
+
+    expect(frame.hasAttribute('aria-hidden')).toBe(false)
+    expect(within(frame).getAllByRole('button').length).toBeGreaterThan(0)
     await expectNoA11yViolations(view.container)
   })
 })
