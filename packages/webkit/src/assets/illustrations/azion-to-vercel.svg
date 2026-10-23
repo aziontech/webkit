@@ -1,5 +1,7 @@
 <svg width="592" height="300" viewBox="0 0 592 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="azion-to-vercel" transform="translate(125 47.4)">
+<g transform="translate(173 48)">
+<g id="All scenes">
+<g id="azion-to-vercel">
 <g id="Icon box" filter="url(#filter0_dd_1616_203)">
 <mask id="path-3-inside-1_1616_203" fill="white">
 <path d="M141 102.6C141 95.5308 146.731 89.8 153.8 89.8H230.6C237.669 89.8 243.4 95.5308 243.4 102.6V179.4C243.4 186.469 237.669 192.2 230.6 192.2H153.8C146.731 192.2 141 186.469 141 179.4V102.6Z"/>
@@ -16,6 +18,8 @@
 <path d="M54 13V15H150V13V11H54V13ZM166 29H164V125H166H168V29H166ZM150 141V139H54V141V143H150V141ZM38 125H40V29H38H36V125H38ZM54 141V139C46.268 139 40 132.732 40 125H38H36C36 134.941 44.0589 143 54 143V141ZM166 125H164C164 132.732 157.732 139 150 139V141V143C159.941 143 168 134.941 168 125H166ZM150 13V15C157.732 15 164 21.268 164 29H166H168C168 19.0589 159.941 11 150 11V13ZM54 13V11C44.0589 11 36 19.0589 36 29H38H40C40 21.268 46.268 15 54 15V13Z" fill="url(#paint1_linear_1616_203)" mask="url(#path-6-inside-2_1616_203)"/>
 <g id="ai-azion">
 <path id="Vector" d="M125.429 57.7705L118.238 95.4844H111.052L115.801 70.5732L86.3369 95.4844H80.8574L81.9062 89.9463L119.942 57.7705H125.429Z" fill="#F3652B"/>
+</g>
+</g>
 </g>
 </g>
 </g>
@@ -53,8 +57,8 @@
 </linearGradient>
 <linearGradient id="paint1_linear_1616_203" x1="64.5" y1="37" x2="153" y2="131" gradientUnits="userSpaceOnUse">
 <stop stop-color="#F3652B"/>
-<stop offset="0.284697" stop-color="#F3652B" stop-opacity="0.1"/>
-<stop offset="0.600155" stop-color="#F3652B" stop-opacity="0.1"/>
+<stop offset="0.284697" stop-color="#FE601F" stop-opacity="0.1"/>
+<stop offset="0.600155" stop-color="#FE601F" stop-opacity="0.1"/>
 <stop offset="1" stop-color="#F3652B"/>
 </linearGradient>
 </defs>

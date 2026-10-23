@@ -1,6 +1,10 @@
+import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
+import openaiMark from '@aziontech/webkit/assets/openai-symbol-mono.svg'
+import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
 import CodeBlock from '@aziontech/webkit/code-block'
 import { ref, watch } from 'vue'
 
+import { declareTabs } from '../../../_shared/markup'
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import CodeBlock from '@aziontech/webkit/code-block'"
@@ -163,6 +167,103 @@ const shellTabs = [
   }
 ]
 
+const agentTabs = [
+  {
+    label: 'OpenAI SDK',
+    value: 'openai-sdk',
+    language: 'ts',
+    fileName: 'client.ts',
+    code: `import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: process.env.AI_GATEWAY_URL,
+  apiKey: process.env.AI_GATEWAY_KEY
+});
+
+const reply = await client.chat.completions.create({
+  model: 'general',
+  messages: [{ role: 'user', content: 'Summarize this ticket.' }]
+});`
+  },
+  {
+    label: 'Codex',
+    value: 'codex',
+    language: 'toml',
+    fileName: 'config.toml',
+    code: `model = "general"
+model_provider = "azion"
+
+[model_providers.azion]
+name = "Azion AI Gateway"
+base_url = "https://YOUR_GATEWAY_DOMAIN/v1"
+env_key = "AI_GATEWAY_KEY"
+wire_api = "chat"`
+  },
+  {
+    label: 'OpenCode',
+    value: 'opencode',
+    language: 'json',
+    fileName: 'opencode.json',
+    code: `{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "azion/general",
+  "provider": {
+    "azion": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Azion AI Gateway",
+      "options": {
+        "baseURL": "{env:AI_GATEWAY_URL}",
+        "apiKey": "{env:AI_GATEWAY_KEY}"
+      }
+    }
+  }
+}`
+  }
+]
+
+const agentMarks = { 'openai-sdk': openaiMark, codex: codexMark, opencode: opencodeMark }
+
+const agentMarkStyle = (tab) => ({
+  maskImage: `url("${agentMarks[tab.value]}")`,
+  maskSize: 'contain',
+  maskRepeat: 'no-repeat',
+  maskPosition: 'center'
+})
+
+const AGENTS_TEMPLATE = `<div class="max-w-[692px]">
+  <CodeBlock :tabs="agentTabs" show-line-numbers>
+    <template #tab-icon="{ tab }">
+      <span
+        aria-hidden="true"
+        class="block size-3.5 bg-current"
+        :style="markStyle(tab)"
+      />
+    </template>
+  </CodeBlock>
+</div>`
+
+const AGENTS_IMPORTS = [
+  "import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'",
+  "import openaiMark from '@aziontech/webkit/assets/openai-symbol-mono.svg'",
+  "import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'",
+  IMPORT,
+  '',
+  declareTabs('agentTabs', agentTabs),
+  '',
+  'const marks = {',
+  "  'openai-sdk': openaiMark,",
+  '  codex: codexMark,',
+  '  opencode: opencodeMark',
+  '}',
+  '',
+  'const markStyle = (tab) => ({',
+  '  maskImage: `url("${marks[tab.value]}")`,',
+  "  maskSize: 'contain',",
+  "  maskRepeat: 'no-repeat',",
+  "  maskPosition: 'center'",
+  '})'
+]
+
 // Serialize a tabs array into a runnable `const tabs = …` script line so the
 // "Show code" snippet carries the exact data the canvas renders (zero drift).
 const tabsConst = (tabs) => `const tabs = ${JSON.stringify(tabs, null, 2)}`
@@ -255,6 +356,15 @@ const meta = {
         defaultValue: { summary: "'Copy code'" }
       }
     },
+    copyable: {
+      control: 'boolean',
+      description: 'Shows the copy control; turn it off for a decorative block nobody copies from.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
     animateLines: {
       control: 'boolean',
       description:
@@ -291,6 +401,7 @@ const meta = {
     defaultValue: 'js',
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
+    copyable: true,
     animateLines: false,
     border: true
   }
@@ -348,6 +459,28 @@ export const WithoutLineNumbers = {
       description: { story: 'Same language switcher with the line-number gutter hidden.' },
       source: {
         code: snippet(languageSwitcherTabs, 'default-value="js" :show-line-numbers="false"')
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const WithoutCopy = {
+  args: {
+    copyable: false
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Same language switcher with the copy control removed via `:copyable="false"`, for a decorative block nobody copies from.'
+      },
+      source: {
+        code: snippet(
+          languageSwitcherTabs,
+          'default-value="js" show-line-numbers :copyable="false"'
+        )
       }
     }
   }
@@ -484,6 +617,25 @@ export const UnevenTabs = {
           'Two tabs holding a different number of lines — the only geometry where the shell changes height on a swap. It animates between the two heights while the new snippet enters line by line, so neither the block nor the page under it jumps a whole row set in one frame.'
       },
       source: { code: snippet(unevenTabs, 'default-value="shell" :show-line-numbers="false"') }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const WithTabIcons = {
+  render: () => ({
+    components: { CodeBlock },
+    setup: () => ({ agentTabs, markStyle: agentMarkStyle }),
+    template: AGENTS_TEMPLATE
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'One tab per coding agent, each opening its own config file with the agent mark beside its name. The `tab-icon` slot receives the tab, so the mark is chosen from `tab.value`; the marks are drawn as a mask so they take the tab text color in both themes.'
+      },
+      source: { code: toSfc(AGENTS_IMPORTS, AGENTS_TEMPLATE) }
     }
   }
 }

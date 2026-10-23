@@ -8,6 +8,11 @@ const TESTID = 'marketing-ticker'
 
 const MARKS = ['itau', 'magalu', 'netshoes', 'caixa']
 
+const ITEMS = [
+  { label: 'Deploy to 330+ cities instantly', icon: 'ai ai-content-delivery' },
+  { label: 'Predictable pricing without surprises' }
+]
+
 const markFor = (container: Element, name: string) =>
   waitFor(() => {
     const art = container.querySelector(`svg[data-mark="${name}"]`)
@@ -178,6 +183,67 @@ describe('Ticker', () => {
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(container.querySelectorAll('ul')).toHaveLength(0)
+  })
+
+  describe('items', () => {
+    it('prints each claim as text in both copies of the row', () => {
+      const { container, getAllByText } = render(Ticker, { props: { items: ITEMS } })
+
+      expect(getAllByText('Deploy to 330+ cities instantly')).toHaveLength(2)
+      expect(container.querySelectorAll('ul')).toHaveLength(2)
+      expect(container.querySelectorAll('li')).toHaveLength(ITEMS.length * 2)
+    })
+
+    it('draws a leading icon only for an item that names one', () => {
+      const { container } = render(Ticker, { props: { items: ITEMS } })
+      const [first] = [...container.querySelectorAll('ul')]
+      const [withIcon, withoutIcon] = [...first.querySelectorAll('li')]
+
+      expect(withIcon.querySelector('span.ai-content-delivery')).toHaveAttribute(
+        'aria-hidden',
+        'true'
+      )
+      expect(withoutIcon.querySelector('span')).toBeNull()
+    })
+
+    it('mirrors the content onto data-content', () => {
+      const items = render(Ticker, { props: { items: ITEMS } })
+      expect(items.getByTestId(TESTID)).toHaveAttribute('data-content', 'items')
+      items.unmount()
+
+      const marks = render(Ticker, { props: { marks: MARKS } })
+      expect(marks.getByTestId(TESTID)).toHaveAttribute('data-content', 'marks')
+    })
+
+    it('does not render marks while items are set', () => {
+      const { container } = render(Ticker, { props: { items: ITEMS, marks: MARKS } })
+
+      expect(container.querySelector('svg[data-mark]')).toBeNull()
+      expect(container.querySelectorAll('li')).toHaveLength(ITEMS.length * 2)
+    })
+
+    it('derives a slower pass from the item count, since a claim is read and a mark is not', () => {
+      const { container } = render(Ticker, { props: { items: ITEMS } })
+      const track = container.querySelector('.animate-brand-marquee')
+
+      expect(track?.getAttribute('style')).toContain(
+        `animation-duration: ${Math.round(ITEMS.length * 6)}s`
+      )
+    })
+
+    it('starts the loop without waiting on any artwork', () => {
+      const { container } = render(Ticker, { props: { items: ITEMS } })
+
+      expect(container.querySelector('.animate-brand-marquee')).not.toHaveAttribute('data-loading')
+    })
+
+    it('has no a11y violations', async () => {
+      const { container } = render(Ticker, {
+        props: { items: ITEMS, ariaLabel: 'Why teams choose Azion' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
   })
 
   it('has no a11y violations', async () => {
