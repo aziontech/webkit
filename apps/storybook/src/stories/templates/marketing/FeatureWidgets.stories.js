@@ -2,12 +2,12 @@ import BentoGrid from '@aziontech/webkit/bento-grid'
 import Button from '@aziontech/webkit/button'
 import ButtonHighlight from '@aziontech/webkit/button-highlight'
 import FrameBox from '@aziontech/webkit/frame-box'
+import ProductWidget from '@aziontech/webkit/product-widget'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
-import FunctionsStartScene from '../../../../../webkit-sample/src/site/ui/FunctionsStartScene.vue'
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
@@ -18,8 +18,8 @@ const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
   "import ButtonHighlight from '@aziontech/webkit/button-highlight'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import FunctionsStartScene from '@site/ui/FunctionsStartScene.vue'",
   ...COLUMN_IMPORTS,
+  "import ProductWidget from '@aziontech/webkit/product-widget'",
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
@@ -30,7 +30,7 @@ const components = {
   Button,
   ButtonHighlight,
   FrameBox,
-  FunctionsStartScene,
+  ProductWidget,
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -66,7 +66,7 @@ const ITEMS = [
 const cell = (item) => `<BentoGrid.Cell :padded="false">
   <div class="flex h-full w-full min-w-0 flex-col">
     <div class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]">
-      <FunctionsStartScene tab="${item.scene}" />
+      <ProductWidget name="functions-start" tab="${item.scene}" />
     </div>
     <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
       <p class="m-0 text-pretty text-body-md text-(--text-muted)">
