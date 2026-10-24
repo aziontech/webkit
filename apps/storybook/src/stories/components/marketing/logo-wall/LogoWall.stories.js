@@ -1,3 +1,13 @@
+import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
+import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+import marisaLogo from '@aziontech/webkit/assets/marisa-extended-color.svg'
+import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
+import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
+import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
+import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
 import FrameBox from '@aziontech/webkit/frame-box'
 import LogoWall from '@aziontech/webkit/logo-wall'
 import Quote from '@aziontech/webkit/quote'
@@ -22,11 +32,33 @@ const CLIENTS = [
   { key: 'itau', alt: 'Itaú', shape: 'compact' }
 ]
 
+const LOGOS = {
+  herospark: { src: herosparkLogo, asset: 'herospark-extended-color' },
+  ifood: { src: ifoodLogo, asset: 'ifood-extended-color' },
+  itau: { src: itauLogo, asset: 'itau-extended-color' },
+  magalu: { src: magaluLogo, asset: 'magalu-extended-color' },
+  marisa: { src: marisaLogo, asset: 'marisa-extended-color' },
+  netshoes: { src: netshoesLogo, asset: 'netshoes-extended-color' },
+  nzn: { src: nznLogo, asset: 'nzn-extended-reversed' },
+  renner: { src: rennerLogo, asset: 'renner-extended-color' },
+  stone: { src: stoneLogo, asset: 'stone-extended-color' },
+  zoop: { src: zoopLogo, asset: 'zoop-extended-color' }
+}
+
+const logoImport = (key) =>
+  `import ${key}Logo from '@aziontech/webkit/assets/${LOGOS[key].asset}.svg'`
+
 const markFor = ({ key, alt, shape }) => ({
-  src: `/clients/color/${key}.svg`,
+  key,
+  src: LOGOS[key].src,
   alt,
   ...(shape ? { shape } : {})
 })
+
+const withLogos = (imports, items, keys = []) => [
+  ...imports,
+  ...[...new Set([...items.map((item) => item.key), ...keys])].sort().map(logoImport)
+]
 
 const LINKED_ITEMS = CLIENTS.map((client) => ({
   ...markFor(client),
@@ -54,7 +86,7 @@ const itemsMarkup = (items) =>
     .map((item) => {
       const href = item.href ? `, href: '${item.href}'` : ''
       const shape = item.shape ? `, shape: '${item.shape}'` : ''
-      return `      { src: '${item.src}', alt: '${item.alt}'${href}${shape} }`
+      return `      { src: ${item.key}Logo, alt: '${item.alt}'${href}${shape} }`
     })
     .join(',\n')
 
@@ -72,7 +104,7 @@ ${itemsMarkup(items)}
 const QUOTE_MARKUP = `    <template #aside>
       <Quote
         kind="signed"
-        logo="/clients/color/herospark.svg"
+        :logo="herosparkLogo"
         logo-alt="HeroSpark"
         text="Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development."
         name="Mateus Leonardi"
@@ -175,7 +207,7 @@ export const Default = {
   render: (args) => ({
     components: { FrameBox, LogoWall, Quote },
     setup() {
-      return { args }
+      return { args, herosparkLogo }
     },
     template: `<FrameBox><LogoWall v-bind="args">\n${QUOTE_MARKUP}\n</LogoWall></FrameBox>`
   }),
@@ -185,7 +217,12 @@ export const Default = {
         story:
           "The Web Apps band: six linked customer marks on the start edge, one of those customers speaking on the end edge. Each cell is a `card-grid` frame cell and a whole-square link to that customer’s success case — hover or `Tab` to one and a wash rises behind it, the mark lifts, and `Read story` slides in underneath. From `lg` up the band splits: the wall sits in half the width, two to a row until `xl` and three from it, and the quote is centred beside it in a panel that never sets the band’s height, so the cells stay perfect squares whatever the quotation’s length. Beside a quote the wall takes exactly six marks. iFood and Itaú carry `shape: 'compact'`, which sets a near-square mark taller so it reads at the same weight as the wordmarks. The wall assumes a surrounding `frame-box` draws its outer rules, which is why the snippet includes one."
       },
-      source: { code: toSfc(ASIDE_IMPORTS, wallMarkup(LINKED_ITEMS, QUOTE_MARKUP)) }
+      source: {
+        code: toSfc(
+          withLogos(ASIDE_IMPORTS, LINKED_ITEMS, ['herospark']),
+          wallMarkup(LINKED_ITEMS, QUOTE_MARKUP)
+        )
+      }
     }
   }
 }
@@ -202,7 +239,7 @@ export const Wall = {
         story:
           'With nothing in `aside` the wall spans the full width, six to a row from `lg` — the same cell size as the three-column wall beside a quote, so the two layouts share one rhythm. Twelve marks fill two full rows; give the wall a multiple of six here so the last row is never ragged. Empty the `items` control and the band renders nothing rather than an empty frame.'
       },
-      source: { code: toSfc(IMPORTS, wallMarkup(WALL_ITEMS)) }
+      source: { code: toSfc(withLogos(IMPORTS, WALL_ITEMS), wallMarkup(WALL_ITEMS)) }
     }
   }
 }
@@ -212,7 +249,7 @@ export const Rectangle = {
   render: (args) => ({
     components: { FrameBox, LogoWall, Quote },
     setup() {
-      return { args }
+      return { args, herosparkLogo }
     },
     template: `<FrameBox><LogoWall v-bind="args">\n${QUOTE_MARKUP}\n</LogoWall></FrameBox>`
   }),
@@ -226,7 +263,12 @@ export const Rectangle = {
         story:
           "Nine customers beside one of them speaking. `kind: 'rectangle'` sets every cell at 3:2, and beside `aside` the wall holds three columns from `lg`, so three rows of rectangles take exactly the height two rows of squares do — the band grows by three names without growing taller. Below `sm` the wall keeps three columns, so nine marks never leave a ragged row. Every mark links to its story, so hover or `Tab` reveals `Read story` under it."
       },
-      source: { code: toSfc(ASIDE_IMPORTS, wallMarkup(RECTANGLE_ITEMS, QUOTE_MARKUP, 'rectangle')) }
+      source: {
+        code: toSfc(
+          withLogos(ASIDE_IMPORTS, RECTANGLE_ITEMS, ['herospark']),
+          wallMarkup(RECTANGLE_ITEMS, QUOTE_MARKUP, 'rectangle')
+        )
+      }
     }
   }
 }
@@ -243,7 +285,7 @@ export const Unlinked = {
         story:
           'Without an `href` a cell is only its mark: no wash, no lift, no label, and no tab stop — `Tab` walks straight past the wall. Link a mark only when there is somewhere worth going; a wall of links to nowhere costs a reader a tab stop per cell and gives nothing back.'
       },
-      source: { code: toSfc(IMPORTS, wallMarkup(UNLINKED_ITEMS)) }
+      source: { code: toSfc(withLogos(IMPORTS, UNLINKED_ITEMS), wallMarkup(UNLINKED_ITEMS)) }
     }
   }
 }
