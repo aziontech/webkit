@@ -27,7 +27,7 @@ Built from `SectionModule`, `SectionTitle`, `FrameBox` and `MediaTabs`, with the
 
 ### Default
 
-The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws its architecture as a diagram, a `DiagramSet` entry picked by the `#media` slot's `index`.
+The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws one of webkit's named diagrams (`ai-gateway`, `ai-gateway-provider-failover`, `ai-gateway-model-routing`, `ai-gateway-latency-routing`, `ai-gateway-response-cache`), picked by the `#media` slot's `index`.
 
 <Canvas of={ArchitectureTabsStories.Default} />
 
@@ -52,7 +52,7 @@ Example:
 
 ### Platform
 
-The base Azion architecture the website bundle plots: Request path, Security first, Code at the edge, Data close by and Every request seen. Each tab is one product's starter diagram from `PLATFORM_ARCHITECTURE_DIAGRAMS`, so the band reads as one request crossing the platform. Every diagram it draws is documented standalone under Foundations/Assets/Diagrams.
+The base Azion architecture the website bundle plots: Request path, Security first, Code at the edge, Data close by and Every request seen. Each tab draws one product's starter diagram from webkit by name (`<Diagram name="workloads" />`, `firewall`, `functions`, `sql-database`, `real-time-events`), so the band reads as one request crossing the platform. Every diagram it draws is documented standalone under Foundations/Assets/Diagrams.
 
 <Canvas of={ArchitectureTabsStories.Platform} />
 

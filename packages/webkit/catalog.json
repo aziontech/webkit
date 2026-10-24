@@ -3600,7 +3600,7 @@
       "props": [
         {
           "name": "name",
-          "type": "'ai-inference-function' | 'ai-inference-model' | 'ai-inference-template' | 'application-accelerator-cookie' | 'application-accelerator-method' | 'application-accelerator-query-string' | 'application-cache' | 'application-function' | 'application-rule' | 'application-version' | 'applications-create-method' | 'applications-device-group' | 'applications-rule-phases' | 'bot-manager-metrics' | 'bot-manager-rule' | 'bot-manager-traffic' | 'data-stream-connector' | 'data-stream-sampling' | 'data-stream-source' | 'ddos-firewall-modules' | 'ddos-http-events' | 'ddos-requests-metric' | 'edge-dns-dnssec' | 'edge-dns-nameserver' | 'edge-dns-record' | 'firewall-function' | 'firewall-modules' | 'firewall-rules-order' | 'function-code' | 'image-processor-events' | 'image-processor-module' | 'image-processor-rule' | 'kv-store-function' | 'kv-store-key' | 'kv-store-security-list' | 'load-balancer-address' | 'load-balancer-method' | 'load-balancer-origins' | 'network-shield-ip-list' | 'network-shield-lists' | 'network-shield-rule' | 'object-storage-access' | 'object-storage-browser' | 'object-storage-buckets' | 'real-time-events-filter' | 'real-time-events-log' | 'real-time-events-volume' | 'real-time-metrics-dashboard' | 'real-time-metrics-filter' | 'real-time-metrics-panel' | 'sql-database-query' | 'sql-database-row' | 'sql-database-table' | 'waf-allowed-rule' | 'waf-firewall-rule' | 'waf-threat' | 'workload-deploy' | 'workload-deploy-logs' | 'workload-deployments' | 'workload-domain' | 'workload-domains' | 'workload-overview' | 'workload-rollout-rows' | 'workload-topology-chain' | 'workload-topology' | 'workloads-list'",
+          "type": "'ai-inference-function' | 'ai-inference-model' | 'ai-inference-template' | 'application-accelerator-cookie' | 'application-accelerator-method' | 'application-accelerator-query-string' | 'application-cache' | 'application-function' | 'application-rule' | 'application-version' | 'applications-create-method' | 'applications-device-group' | 'applications-rule-phases' | 'bot-manager-metrics' | 'bot-manager-rule' | 'bot-manager-traffic' | 'cli-terminal-deploy' | 'cli-terminal-start' | 'data-stream-connector' | 'data-stream-sampling' | 'data-stream-source' | 'ddos-firewall-modules' | 'ddos-http-events' | 'ddos-requests-metric' | 'edge-dns-dnssec' | 'edge-dns-nameserver' | 'edge-dns-record' | 'firewall-function' | 'firewall-modules' | 'firewall-rules-order' | 'function-code' | 'functions-start' | 'image-processor-events' | 'image-processor-module' | 'image-processor-rule' | 'kv-store-function' | 'kv-store-key' | 'kv-store-security-list' | 'load-balancer-address' | 'load-balancer-method' | 'load-balancer-origins' | 'network-shield-ip-list' | 'network-shield-lists' | 'network-shield-rule' | 'object-storage-access' | 'object-storage-browser' | 'object-storage-buckets' | 'real-time-events-filter' | 'real-time-events-log' | 'real-time-events-volume' | 'real-time-metrics-dashboard' | 'real-time-metrics-filter' | 'real-time-metrics-panel' | 'sql-database-query' | 'sql-database-row' | 'sql-database-table' | 'waf-allowed-rule' | 'waf-firewall-rule' | 'waf-threat' | 'workload-deploy' | 'workload-deploy-logs' | 'workload-deployments' | 'workload-domain' | 'workload-domains' | 'workload-overview' | 'workload-rollout-rows' | 'workload-topology-chain' | 'workload-topology' | 'workload-topology-flow' | 'workloads-list'",
           "default": "—",
           "required": "true",
           "doc": "Name of the console widget to draw."
@@ -3656,10 +3656,10 @@
         },
         {
           "name": "tab",
-          "type": "'overview' | 'topology' | 'deploy' | 'main-settings' | 'cache-settings' | 'device-groups' | 'functions' | 'rules-engine'",
+          "type": "'agents' | 'console' | 'cli' | 'overview' | 'topology' | 'deploy' | 'main-settings' | 'cache-settings' | 'device-groups' | 'functions' | 'rules-engine'",
           "default": "undefined",
           "required": "false",
-          "doc": "Tab a tabbed widget plays (`workload-overview`, `application-version`); other widgets ignore it, and unset plays the first tab."
+          "doc": "Tab a tabbed widget plays (`workload-overview`, `application-version`, `functions-start`); other widgets ignore it, and unset plays the first tab."
         },
         {
           "name": "interval",
@@ -3669,7 +3669,7 @@
           "doc": "Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace."
         }
       ],
-      "purpose": "Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product. `name` selects the widget from a closed registry of 66 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.",
+      "purpose": "Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.",
       "useWhen": [
         "A product band (hero, media split, feature tab, widget grid cell) needs to show a console screen or a fragment of one.",
         "The same console screen appears on more than one page and must be the same drawing on each.",
@@ -3691,7 +3691,7 @@
         "Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.",
         "Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`.",
         "Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.",
-        "Keep the copy beside the widget saying what it shows. Every widget but `function-code` is hidden from assistive technology."
+        "Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology."
       ]
     },
     "shell-mockup": {
@@ -11451,21 +11451,28 @@
       "status": "approved",
       "props": [
         {
+          "name": "name",
+          "type": "'ai-gateway' | 'ai-gateway-latency-routing' | 'ai-gateway-model-routing' | 'ai-gateway-provider-failover' | 'ai-gateway-response-cache' | 'ai-inference' | 'application-accelerator' | 'applications' | 'bot-manager' | 'cache' | 'data-stream' | 'ddos-protection' | 'edge-dns' | 'firewall' | 'functions' | 'image-processor' | 'kv-store' | 'load-balancer' | 'network-shield' | 'object-storage' | 'real-time-events' | 'real-time-metrics' | 'sql-database' | 'web-application-firewall' | 'workloads' | 'workloads-gradual-rollout' | 'workloads-isolate-per-request' | 'workloads-security'",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Name of an official diagram in the asset library; ignored when spec is set."
+        },
+        {
           "name": "spec",
           "type": "DiagramSpec",
-          "default": "—",
-          "required": "true",
-          "doc": "The nodes, their layout and the edges between them."
+          "default": "undefined",
+          "required": "false",
+          "doc": "The nodes, their layout and the edges between them, for a diagram the library does not have."
         },
         {
           "name": "ariaLabel",
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Accessible description of the whole diagram; when set, the root is announced as one image with this name."
+          "doc": "Accessible description of the whole diagram; empty uses the description the spec carries."
         }
       ],
-      "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer passes one `spec` — the nodes, how they are arranged, and the edges between them — and the component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
+      "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
       "useWhen": [
         "Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.",
         "Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.",
@@ -11478,7 +11485,7 @@
         "For live data or anything the reader operates — a diagram is a figure, not a control."
       ],
       "related": [
-        "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art.",
+        "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
         "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
         "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
         "tag` — the status chip a card or item node carries."
@@ -11487,7 +11494,8 @@
         "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",
         "Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.",
         "Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.",
-        "Give every diagram an `ariaLabel` that states what it shows in one sentence; the drawing itself is hidden from assistive technology.",
+        "Name an official diagram instead of rebuilding its `spec`, so the same architecture is the same drawing on every page. Reach for `spec` only for a diagram the library does not have.",
+        "Every named diagram carries its own one-sentence description. Give a `spec` diagram an `ariaLabel` (in the prop or in the spec) that states what it shows; the drawing itself is hidden from assistive technology.",
         "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
       ]
     },
@@ -15273,6 +15281,12 @@
       "target": "./src/assets/logos/agents/gemini-symbol-color.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/gemini-symbol-color.svg"
+    },
+    "assets/google-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/google-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/google-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/google-symbol-color.svg"
     },
     "assets/getninjas-extended-mono.svg": {
       "import": "@aziontech/webkit/assets/getninjas-extended-mono.svg",

@@ -1,19 +1,5 @@
-import {
-  GATEWAY_REQUEST_PATH,
-  GRADUAL_ROLLOUT,
-  ISOLATE_PER_REQUEST,
-  LATENCY_ROUTING,
-  MODEL_ROUTING,
-  PROVIDER_FAILOVER,
-  RESPONSE_CACHE,
-  WORKLOAD_REQUEST_PATH,
-  WORKLOAD_SECURITY
-} from '../../../../webkit-sample/src/site/data/diagrams.js'
-import {
-  PRODUCT_ARCHITECTURE_GROUPS,
-  PRODUCT_ARCHITECTURES
-} from '../../../../webkit-sample/src/site/data/product-architectures.js'
-import Diagram from '../../../../webkit-sample/src/site/ui/diagram/Diagram.vue'
+import Diagram from '@aziontech/webkit/diagram'
+
 import {
   CodeBlock,
   PageContainer,
@@ -21,22 +7,83 @@ import {
   PageSection
 } from '../../foundations/components/layout/index.js'
 
-const PAGE_DIAGRAMS = [
-  ['WORKLOAD_REQUEST_PATH', 'Workloads · Request path', WORKLOAD_REQUEST_PATH],
-  ['ISOLATE_PER_REQUEST', 'Workloads · Isolate per request', ISOLATE_PER_REQUEST],
-  ['GRADUAL_ROLLOUT', 'Workloads · Gradual rollout', GRADUAL_ROLLOUT],
-  ['WORKLOAD_SECURITY', 'Workloads · Security on the workload', WORKLOAD_SECURITY],
-  ['GATEWAY_REQUEST_PATH', 'AI Gateway · Request path', GATEWAY_REQUEST_PATH],
-  ['PROVIDER_FAILOVER', 'AI Gateway · Provider failover', PROVIDER_FAILOVER],
-  ['MODEL_ROUTING', 'AI Gateway · Cost routing', MODEL_ROUTING],
-  ['LATENCY_ROUTING', 'AI Gateway · Latency routing', LATENCY_ROUTING],
-  ['RESPONSE_CACHE', 'AI Gateway · Response cache', RESPONSE_CACHE]
-].map(([name, title, spec]) => ({ name, title, spec }))
-
-const GROUPS = PRODUCT_ARCHITECTURE_GROUPS.map((group) => ({
+const GROUPS = [
+  {
+    key: 'build',
+    label: 'Build',
+    diagrams: [
+      ['workloads', 'Workloads'],
+      ['applications', 'Applications'],
+      ['functions', 'Functions']
+    ]
+  },
+  {
+    key: 'deliver',
+    label: 'Deliver',
+    diagrams: [
+      ['application-accelerator', 'Application Accelerator'],
+      ['cache', 'Cache'],
+      ['image-processor', 'Image Processor'],
+      ['load-balancer', 'Load Balancer'],
+      ['edge-dns', 'Edge DNS']
+    ]
+  },
+  {
+    key: 'ai',
+    label: 'AI',
+    diagrams: [
+      ['ai-inference', 'AI Inference'],
+      ['ai-gateway', 'AI Gateway']
+    ]
+  },
+  {
+    key: 'store',
+    label: 'Store',
+    diagrams: [
+      ['object-storage', 'Object Storage'],
+      ['sql-database', 'SQL Database'],
+      ['kv-store', 'KV Store']
+    ]
+  },
+  {
+    key: 'secure',
+    label: 'Secure',
+    diagrams: [
+      ['web-application-firewall', 'WAF'],
+      ['bot-manager', 'Bot Manager'],
+      ['firewall', 'Firewall'],
+      ['network-shield', 'Network Shield'],
+      ['ddos-protection', 'DDoS Protection']
+    ]
+  },
+  {
+    key: 'observe',
+    label: 'Observe',
+    diagrams: [
+      ['data-stream', 'Data Stream'],
+      ['real-time-events', 'Real-Time Events'],
+      ['real-time-metrics', 'Real-Time Metrics']
+    ]
+  },
+  {
+    key: 'pages',
+    label: 'Page diagrams',
+    diagrams: [
+      ['workloads-isolate-per-request', 'Workloads · Isolate per request'],
+      ['workloads-gradual-rollout', 'Workloads · Gradual rollout'],
+      ['workloads-security', 'Workloads · Security on the workload'],
+      ['ai-gateway-provider-failover', 'AI Gateway · Provider failover'],
+      ['ai-gateway-model-routing', 'AI Gateway · Cost routing'],
+      ['ai-gateway-latency-routing', 'AI Gateway · Latency routing'],
+      ['ai-gateway-response-cache', 'AI Gateway · Response cache']
+    ]
+  }
+].map((group) => ({
   ...group,
-  architectures: PRODUCT_ARCHITECTURES.filter((architecture) => architecture.group === group.key)
+  diagrams: group.diagrams.map(([name, title]) => ({ name, title }))
 }))
+
+const ENTRIES = GROUPS.flatMap((group) => group.diagrams)
 
 const NODE_KINDS = [
   ['pill', 'A small rounded label: the user, a request, a yes/no question.'],
@@ -86,16 +133,13 @@ const SPEC_SAMPLE = `export const KV_STORE = {
   ]
 }`
 
-const USAGE_SAMPLE = `import Diagram from '@site/ui/diagram/Diagram.vue'
-import { PRODUCT_ARCHITECTURES, PLATFORM_ARCHITECTURE_BAND } from '@site/data/product-architectures.js'
+const USAGE_SAMPLE = `import Diagram from '@aziontech/webkit/diagram'
 
-const kv = PRODUCT_ARCHITECTURES.find((architecture) => architecture.key === 'kv-store')
+// An official diagram, by name; it carries its own description
+<Diagram name="kv-store" />
 
-// One diagram, standalone
-<Diagram :spec="kv.spec" :label="kv.ariaLabel" />
-
-// Several diagrams on a page go through an ArchitectureTabs section
-sections: [PLATFORM_ARCHITECTURE_BAND]`
+// A diagram the library does not have, as a one-off spec
+<Diagram :spec="spec" aria-label="What the diagram shows, in one sentence" />`
 
 const FRAME_CLASS =
   'm-0 flex w-full flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)'
@@ -112,7 +156,7 @@ export default {
     docs: {
       description: {
         component:
-          'Architecture diagrams the Site draws its product bands with. Each one is a data spec (nodes, a layout tree and edges) rendered by the Diagram engine in the sample app: real CSS layout that reflows below the container breakpoint, connectors measured from the laid-out nodes, and only design tokens for every size, stroke and colour. One starter architecture ships per Azion product, grouped the way the products page groups them.'
+          'The official diagrams webkit ships, picked by name with `<Diagram name>`. Each one is a data spec (nodes, a layout tree and edges) in the webkit asset library, drawn with real CSS layout that reflows below the container breakpoint, connectors measured from the laid-out nodes, and only design tokens for every size, stroke and colour. One starter architecture ships per Azion product, plus the page diagrams the product pages tab through.'
       },
       canvas: { sourceState: 'none' }
     }
@@ -127,51 +171,32 @@ export const Library = {
     setup() {
       return {
         GROUPS,
-        PAGE_DIAGRAMS,
         NODE_KINDS,
         LAYOUT_ITEMS,
         SPEC_SAMPLE,
         USAGE_SAMPLE,
         FRAME_CLASS,
         CAPTION_CLASS,
-        total: PRODUCT_ARCHITECTURES.length
+        total: ENTRIES.length
       }
     },
     template: /* html */ `
       <PageContainer>
         <PageHeader title="Diagrams">
-          {{ total }} starter architectures, one per Azion product, plus the page diagrams the
-          Workloads and AI Gateway pages already plot. Every diagram is a spec in the sample app
-          under site/data, drawn by site/ui/diagram. The highlighted path is the request the product
-          is about; the lit node is the product itself. Resize the canvas to watch a row fold into a
-          column below the container breakpoint.
+          {{ total }} official diagrams in webkit: one starter architecture per Azion product, plus
+          the page diagrams the Workloads and AI Gateway pages tab through. Name one with
+          Diagram name and it loads with its own description. The highlighted path is the request
+          the product is about; the lit node is the product itself. Resize the canvas to watch a row
+          fold into a column below the container breakpoint.
         </PageHeader>
 
-        <PageSection
-          v-for="group in GROUPS"
-          :key="group.key"
-          :title="group.label"
-          :description="group.title + '. ' + group.description"
-        >
+        <PageSection v-for="group in GROUPS" :key="group.key" :title="group.label">
           <div class="flex flex-col gap-(--spacing-lg)">
-            <figure v-for="architecture in group.architectures" :key="architecture.key" :class="FRAME_CLASS">
-              <Diagram :spec="architecture.spec" :label="architecture.ariaLabel" />
-              <figcaption :class="CAPTION_CLASS">
-                <span class="text-label-md text-(--text-default)">{{ architecture.title }}</span>
-                <span class="text-body-sm text-(--text-muted)">{{ architecture.summary }}</span>
-                <code class="font-code text-code text-(--text-muted)">PRODUCT_ARCHITECTURES · key: '{{ architecture.key }}'</code>
-              </figcaption>
-            </figure>
-          </div>
-        </PageSection>
-
-        <PageSection title="Page diagrams" description="Diagrams a product page plots beyond its starter architecture, exported by name from site/data/diagrams.js. The Workloads and AI Gateway ArchitectureTabs bands use these.">
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <figure v-for="entry in PAGE_DIAGRAMS" :key="entry.name" :class="FRAME_CLASS">
-              <Diagram :spec="entry.spec" :label="entry.title" />
+            <figure v-for="entry in group.diagrams" :key="entry.name" :class="FRAME_CLASS">
+              <Diagram :name="entry.name" />
               <figcaption :class="CAPTION_CLASS">
                 <span class="text-label-md text-(--text-default)">{{ entry.title }}</span>
-                <code class="font-code text-code text-(--text-muted)">import { {{ entry.name }} } from '@site/data/diagrams.js'</code>
+                <code class="font-code text-code text-(--text-muted)">name="{{ entry.name }}"</code>
               </figcaption>
             </figure>
           </div>
@@ -204,7 +229,7 @@ export const Library = {
           </div>
         </PageSection>
 
-        <PageSection title="Adding a diagram" description="Write the spec next to the others in site/data, keep it to one row of four or five columns so it fits an ArchitectureTabs media cell at its 28rem floor, give the product node lit and the request path active, add the entry to PRODUCT_ARCHITECTURES with its group, summary and ariaLabel, and give it a standalone story here. To show several on a page, plot them through the ArchitectureTabs template, never a hand-made tab control.">
+        <PageSection title="Adding a diagram" description="Add the spec as one file in webkit's diagram library (src/assets/diagrams) with its ariaLabel, register its name, keep it to one row of four or five columns so it fits an ArchitectureTabs media cell at its 28rem floor, give the product node lit and the request path active, and give it a standalone story here. To show several on a page, plot them through the ArchitectureTabs template, never a hand-made tab control.">
         </PageSection>
       </PageContainer>
     `
@@ -213,64 +238,47 @@ export const Library = {
 
 const STANDALONE_CLASS = 'w-full max-w-(--container-7xl)'
 
-const diagramStory = ({ title, spec, label, description }) => ({
-  name: title,
-  parameters: {
-    docs: { description: { story: description } }
-  },
-  render: () => ({
-    components: { Diagram },
-    setup: () => ({ spec, label, STANDALONE_CLASS }),
-    template: '<Diagram :spec="spec" :label="label" :class="STANDALONE_CLASS" />'
-  })
-})
-
-const product = (key) => {
-  const architecture = PRODUCT_ARCHITECTURES.find((entry) => entry.key === key)
-  return diagramStory({
-    title: architecture.title,
-    spec: architecture.spec,
-    label: architecture.ariaLabel,
-    description: `${architecture.summary} PRODUCT_ARCHITECTURES, key '${key}'.`
-  })
+const named = (name) => {
+  const entry = ENTRIES.find((candidate) => candidate.name === name)
+  return {
+    name: entry.title,
+    parameters: {
+      docs: { description: { story: `The official diagram named '${name}'.` } }
+    },
+    render: () => ({
+      components: { Diagram },
+      setup: () => ({ name, STANDALONE_CLASS }),
+      template: '<Diagram :name="name" :class="STANDALONE_CLASS" />'
+    })
+  }
 }
 
-const page = (name) => {
-  const entry = PAGE_DIAGRAMS.find((candidate) => candidate.name === name)
-  return diagramStory({
-    title: entry.title,
-    spec: entry.spec,
-    label: entry.title,
-    description: `Page diagram ${name} from site/data/diagrams.js.`
-  })
-}
+export const Workloads = named('workloads')
+export const Applications = named('applications')
+export const Functions = named('functions')
+export const ApplicationAccelerator = named('application-accelerator')
+export const Cache = named('cache')
+export const ImageProcessor = named('image-processor')
+export const LoadBalancer = named('load-balancer')
+export const Dns = named('edge-dns')
+export const AiInference = named('ai-inference')
+export const AiGateway = named('ai-gateway')
+export const ObjectStorage = named('object-storage')
+export const SqlDatabase = named('sql-database')
+export const KvStore = named('kv-store')
+export const Waf = named('web-application-firewall')
+export const BotManagement = named('bot-manager')
+export const Firewall = named('firewall')
+export const NetworkShield = named('network-shield')
+export const DdosProtection = named('ddos-protection')
+export const DataStream = named('data-stream')
+export const RealTimeEvents = named('real-time-events')
+export const RealTimeMetrics = named('real-time-metrics')
 
-export const Workloads = product('workloads')
-export const Applications = product('applications')
-export const Functions = product('functions')
-export const ApplicationAccelerator = product('application-accelerator')
-export const Cache = product('cache')
-export const ImageProcessor = product('image-processor')
-export const LoadBalancer = product('load-balancer')
-export const Dns = product('edge-dns')
-export const AiInference = product('ai-inference')
-export const AiGateway = product('ai-gateway')
-export const ObjectStorage = product('object-storage')
-export const SqlDatabase = product('sql-database')
-export const KvStore = product('kv-store')
-export const Waf = product('web-application-firewall')
-export const BotManagement = product('bot-manager')
-export const Firewall = product('firewall')
-export const NetworkShield = product('network-shield')
-export const DdosProtection = product('ddos-protection')
-export const DataStream = product('data-stream')
-export const RealTimeEvents = product('real-time-events')
-export const RealTimeMetrics = product('real-time-metrics')
-
-export const IsolatePerRequest = page('ISOLATE_PER_REQUEST')
-export const GradualRollout = page('GRADUAL_ROLLOUT')
-export const WorkloadSecurity = page('WORKLOAD_SECURITY')
-export const ProviderFailover = page('PROVIDER_FAILOVER')
-export const CostRouting = page('MODEL_ROUTING')
-export const LatencyRouting = page('LATENCY_ROUTING')
-export const ResponseCache = page('RESPONSE_CACHE')
+export const IsolatePerRequest = named('workloads-isolate-per-request')
+export const GradualRollout = named('workloads-gradual-rollout')
+export const WorkloadSecurity = named('workloads-security')
+export const ProviderFailover = named('ai-gateway-provider-failover')
+export const CostRouting = named('ai-gateway-model-routing')
+export const LatencyRouting = named('ai-gateway-latency-routing')
+export const ResponseCache = named('ai-gateway-response-cache')
