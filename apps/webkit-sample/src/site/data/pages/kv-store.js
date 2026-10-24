@@ -132,7 +132,7 @@ export const KV_STORE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'KV Store',
     title: 'Fast key-value storage built for global applications',
     description:

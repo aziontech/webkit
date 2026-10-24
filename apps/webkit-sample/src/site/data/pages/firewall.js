@@ -67,7 +67,7 @@ export const FIREWALL_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Firewall',
     title: 'Programmable firewall for distributed applications',
     description:

@@ -119,7 +119,7 @@ export const BOT_MANAGER_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Bot Manager',
     title: 'Stop bots before they reach your applications',
     description:

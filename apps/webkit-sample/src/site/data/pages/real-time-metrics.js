@@ -122,7 +122,7 @@ export const REAL_TIME_METRICS_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Real-Time Metrics',
     title: 'Monitor application performance in real time',
     description:

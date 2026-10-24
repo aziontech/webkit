@@ -124,7 +124,7 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'WAF',
     title: 'Protect applications and APIs with rules you control',
     description:

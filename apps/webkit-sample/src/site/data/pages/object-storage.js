@@ -129,7 +129,7 @@ export const OBJECT_STORAGE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Object Storage',
     title: 'S3-compatible object storage for global workloads',
     description:

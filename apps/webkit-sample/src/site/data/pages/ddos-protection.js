@@ -120,7 +120,7 @@ export const DDOS_PROTECTION_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'DDoS Protection',
     title: 'Always-on protection that never slows traffic',
     description:

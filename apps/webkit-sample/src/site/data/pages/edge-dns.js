@@ -119,7 +119,7 @@ export const EDGE_DNS_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Edge DNS',
     title: 'Secure, highly available authoritative DNS',
     description:

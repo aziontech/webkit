@@ -130,7 +130,7 @@ export const SQL_DATABASE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'SQL Database',
     title: 'Serverless distributed SQL with built-in vector search',
     description:

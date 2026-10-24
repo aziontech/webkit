@@ -120,7 +120,7 @@ export const NETWORK_SHIELD_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Network Shield',
     title: 'Block threats at the network layer before origin',
     description:

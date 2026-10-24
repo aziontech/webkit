@@ -121,7 +121,7 @@ export const AI_INFERENCE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'AI Inference',
     title: 'Run AI models close to your users',
     description:

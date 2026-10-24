@@ -229,7 +229,7 @@ export const AI_GATEWAY_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'AI Gateway',
     title: 'One gateway for all your AI applications',
     description:

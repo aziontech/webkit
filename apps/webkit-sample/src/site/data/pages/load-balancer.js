@@ -120,7 +120,7 @@ export const LOAD_BALANCER_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Load Balancer',
     title: 'Cut downtime and scale your applications',
     description:

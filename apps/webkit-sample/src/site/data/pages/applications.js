@@ -110,7 +110,7 @@ export const APPLICATIONS_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Applications',
     title: 'Build and run distributed web applications',
     description:
