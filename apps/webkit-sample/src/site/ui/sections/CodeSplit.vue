@@ -3,8 +3,8 @@
   import CodeBlock from '@aziontech/webkit/code-block'
   import MediaSplit from '@aziontech/webkit/media-split'
   import SectionModule from '@aziontech/webkit/section-module'
+  import { computed } from 'vue'
 
-  import AgentCodeScene from '../AgentCodeScene.vue'
   import SectionAction from './SectionAction.vue'
   import type { SiteAction } from './types'
 
@@ -39,7 +39,7 @@
     actions?: SiteAction[]
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     kind: 'default',
     anchor: '',
     title: '',
@@ -50,6 +50,8 @@
     copyAriaLabel: 'Copy the code sample',
     actions: () => []
   })
+
+  const agentIcons = computed(() => new Map(props.agents.map((agent) => [agent.value, agent.icon])))
 </script>
 
 <template>
@@ -68,16 +70,29 @@
       :description="description"
     >
       <template #media>
-        <AgentCodeScene
-          v-if="kind === 'agents'"
-          :agents="agents"
-          :copy-aria-label="copyAriaLabel"
-        />
         <div
-          v-else
           class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-elements) border-x border-t border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm)"
         >
           <CodeBlock
+            v-if="kind === 'agents'"
+            key="agents"
+            :tabs="agents"
+            show-line-numbers
+            :border="false"
+            animate-lines
+            :copy-aria-label="copyAriaLabel"
+          >
+            <template #tab-icon="{ tab }">
+              <i
+                :class="agentIcons.get(tab.value)"
+                class="size-3.5!"
+                aria-hidden="true"
+              />
+            </template>
+          </CodeBlock>
+          <CodeBlock
+            v-else
+            key="files"
             :tabs="files"
             :default-value="defaultFile || undefined"
             show-line-numbers

@@ -1,5 +1,5 @@
 <script setup>
-  import WorkloadTopologyFlow from './WorkloadTopologyFlow.vue'
+  import ProductWidget from '@aziontech/webkit/product-widget'
 </script>
 
 <template>
@@ -7,7 +7,7 @@
     <div
       class="mt-(--spacing-xl) flex animate-content-enter justify-center motion-reduce:animate-none [--content-enter-delay:120ms]"
     >
-      <WorkloadTopologyFlow />
+      <ProductWidget name="workload-topology-flow" />
     </div>
   </div>
 </template>
