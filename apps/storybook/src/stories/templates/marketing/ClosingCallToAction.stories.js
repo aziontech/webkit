@@ -3,7 +3,7 @@ import CallToAction from '@aziontech/webkit/call-to-action'
 import CopyButton from '@aziontech/webkit/copy-button'
 import FieldText from '@aziontech/webkit/field-text'
 import FrameBox from '@aziontech/webkit/frame-box'
-import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'
+import InputGroup from '@aziontech/webkit/input-group'
 import Overline from '@aziontech/webkit/overline'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
@@ -25,7 +25,7 @@ const IMPORTS = [
   "import CopyButton from '@aziontech/webkit/copy-button'",
   "import FieldText from '@aziontech/webkit/field-text'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'",
+  "import InputGroup from '@aziontech/webkit/input-group'",
   "import Overline from '@aziontech/webkit/overline'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
@@ -42,7 +42,6 @@ const components = {
   FieldText,
   FrameBox,
   InputGroup,
-  InputGroupAddon,
   Overline,
   SectionContainer,
   SectionGap,
@@ -164,14 +163,15 @@ const PRIMARY_TEMPLATE = closingColumn(`<SectionModule
 
 const AGENT_WAYS = {
   humans: {
-    line: 'npm install -g azion',
-    shell: true,
-    action: { label: 'Start for free', kind: 'secondary', href: '/signup' }
+    line: '',
+    actions: [
+      { label: 'Start for free', kind: 'secondary', href: '/signup' },
+      { label: 'Talk to a specialist', kind: 'outlined', href: '/site/contact' }
+    ]
   },
   agents: {
     line: 'Connect Azion MCP: https://mcp.azion.com',
-    shell: false,
-    action: { label: 'Read the agent docs', kind: 'outlined', href: '/site/docs/agent-setup' }
+    actions: [{ label: 'Read the agent docs', kind: 'outlined', href: '/site/docs/agent-setup' }]
   }
 }
 
@@ -275,19 +275,20 @@ const AGENTS_TEMPLATE = closingColumn(`<SectionModule
             :key="audience"
             class="flex w-full min-w-0 animate-fade-in flex-col items-stretch justify-center gap-(--spacing-sm) motion-reduce:animate-none sm:items-center lg:flex-row"
           >
-            <div class="w-full min-w-0 max-w-(--container-xs) lg:w-(--container-xs)">
+            <div v-if="ways[audience].line" class="w-full min-w-0 max-w-(--container-xs) lg:w-(--container-xs)">
               <InputGroup size="large">
-                <InputGroupAddon v-if="ways[audience].shell" aria-hidden="true">$</InputGroupAddon>
-                <input readonly :value="ways[audience].line" :aria-label="ways[audience].shell ? 'Command' : 'Prompt'" class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none" />
-                <CopyButton size="large" :value="ways[audience].line" :aria-label="ways[audience].shell ? 'Copy command' : 'Copy prompt'" />
+                <input readonly :value="ways[audience].line" aria-label="Prompt" class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none" />
+                <CopyButton size="large" :value="ways[audience].line" aria-label="Copy prompt" />
               </InputGroup>
             </div>
             <Button
-              :label="ways[audience].action.label"
-              :kind="ways[audience].action.kind"
+              v-for="action in ways[audience].actions"
+              :key="action.label"
+              :label="action.label"
+              :kind="action.kind"
               size="large"
               class="shrink-0"
-              :href="ways[audience].action.href"
+              :href="action.href"
               icon="pi pi-chevron-right"
               icon-position="trailing"
               animated
