@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 3fd4bee4651ba78e9052d49ee5846ecf345fc06ae57c1309430f508753838e5d
+checksum: 8135dee436b0b53046ed830603f28d798e217af5735b7a4008e5fe8e41c428ea
 created: 2026-10-21
 last_updated: 2026-10-21
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-10-21
 
 ## Purpose
 
-A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer passes one `spec` — the nodes, how they are arranged, and the edges between them — and the component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.
+A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.
 
 ## When to use
 
@@ -30,7 +30,7 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
 ## Related
 
-- `illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art.
+- `illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.
 - `media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.
 - `frame-box` — the registration frame a diagram's groups and tiles are drawn in.
 - `tag` — the status chip a card or item node carries.
@@ -40,32 +40,53 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 - Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.
 - Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.
 - Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.
-- Give every diagram an `ariaLabel` that states what it shows in one sentence; the drawing itself is hidden from assistive technology.
+- Name an official diagram instead of rebuilding its `spec`, so the same architecture is the same drawing on every page. Reach for `spec` only for a diagram the library does not have.
+- Every named diagram carries its own one-sentence description. Give a `spec` diagram an `ariaLabel` (in the prop or in the spec) that states what it shows; the drawing itself is hidden from assistive technology.
 - Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application.
 
 ## Usage
 
 ```vue
 <script setup>
-import Diagram from '@aziontech/webkit/diagram'
+  import Diagram from '@aziontech/webkit/diagram'
 
-const spec = {
-  nodes: [
-    { key: 'client', kind: 'pill', title: 'Client', icon: 'pi pi-user', active: true },
-    { key: 'app', kind: 'card', title: 'Application', eyebrow: 'Workload', icon: 'pi pi-globe', active: true },
-    { key: 'firewall', kind: 'card', title: 'Firewall', eyebrow: 'Product', icon: 'pi pi-shield', lit: true, active: true },
-    { key: 'origin', kind: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'pi pi-server' }
-  ],
-  layout: { row: [{ node: 'client' }, { node: 'app' }, { node: 'firewall' }, { node: 'origin' }], gap: 'wide' },
-  edges: [
-    { from: 'client', to: 'app', active: true },
-    { from: 'app', to: 'firewall', label: 'inspect', active: true },
-    { from: 'firewall', to: 'origin', label: 'allow' }
-  ]
-}
+  const spec = {
+    nodes: [
+      { key: 'client', kind: 'pill', title: 'Client', icon: 'pi pi-user', active: true },
+      {
+        key: 'app',
+        kind: 'card',
+        title: 'Application',
+        eyebrow: 'Workload',
+        icon: 'pi pi-globe',
+        active: true
+      },
+      {
+        key: 'firewall',
+        kind: 'card',
+        title: 'Firewall',
+        eyebrow: 'Product',
+        icon: 'pi pi-shield',
+        lit: true,
+        active: true
+      },
+      { key: 'origin', kind: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'pi pi-server' }
+    ],
+    layout: {
+      row: [{ node: 'client' }, { node: 'app' }, { node: 'firewall' }, { node: 'origin' }],
+      gap: 'wide'
+    },
+    edges: [
+      { from: 'client', to: 'app', active: true },
+      { from: 'app', to: 'firewall', label: 'inspect', active: true },
+      { from: 'firewall', to: 'origin', label: 'allow' }
+    ]
+  }
 </script>
 
 <template>
+  <Diagram name="ai-gateway-model-routing" />
+
   <Diagram
     :spec="spec"
     aria-label="A request from the client reaches the application, is inspected by the firewall and allowed through to the origin."
@@ -75,14 +96,16 @@ const spec = {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `spec` | `DiagramSpec` | `—` | true | The nodes, their layout and the edges between them. |
-| `ariaLabel` | `string` | `''` | false | Accessible description of the whole diagram; when set, the root is announced as one image with this name. |
+| Prop        | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Default     | Required | JSDoc                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------- |
+| `name`      | `'ai-gateway' \| 'ai-gateway-latency-routing' \| 'ai-gateway-model-routing' \| 'ai-gateway-provider-failover' \| 'ai-gateway-response-cache' \| 'ai-inference' \| 'application-accelerator' \| 'applications' \| 'bot-manager' \| 'cache' \| 'data-stream' \| 'ddos-protection' \| 'edge-dns' \| 'firewall' \| 'functions' \| 'image-processor' \| 'kv-store' \| 'load-balancer' \| 'network-shield' \| 'object-storage' \| 'real-time-events' \| 'real-time-metrics' \| 'sql-database' \| 'web-application-firewall' \| 'workloads' \| 'workloads-gradual-rollout' \| 'workloads-isolate-per-request' \| 'workloads-security'` | `undefined` | false    | Name of an official diagram in the asset library; ignored when spec is set.                  |
+| `spec`      | `DiagramSpec`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | `undefined` | false    | The nodes, their layout and the edges between them, for a diagram the library does not have. |
+| `ariaLabel` | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `''`        | false    | Accessible description of the whole diagram; empty uses the description the spec carries.    |
 
-`DiagramSpec` and its parts are exported types:
+`name` and `spec` default to `undefined` because absence is meaningful: a diagram draws from `spec` when one is passed and from the named library entry otherwise. `DiagramName` and `DiagramSpec` and its parts are exported types:
 
-- `DiagramSpec` — `{ nodes: DiagramNode[]; layout: DiagramLayoutItem; edges: DiagramEdge[] }`.
+- `DiagramName` — the union of library names above.
+- `DiagramSpec` — `{ ariaLabel?: string; nodes: DiagramNode[]; layout: DiagramLayoutItem; edges: DiagramEdge[] }`.
 - `DiagramNode` — `key`, `kind` (`DiagramNodeKind`: `'card' | 'pill' | 'tile' | 'app' | 'item'`), `title`, and optional `eyebrow`, `status` (`DiagramNodeStatus`: `{ label, severity }` with a `tag` severity), `icon` (icon class), `logo` (full-colour mark URL), `mark` (single-ink mark URL, drawn in the current text colour), `active`, `lit`.
 - `DiagramLayoutItem` — one of `{ node }`, `{ row, align?, gap? }` (`DiagramRowAlign`: `'start' | 'center'`; `DiagramRowGap`: `'default' | 'wide'`), `{ branches }`, `{ grid, columns? }` (`2 | 3`), `{ group, label, kind?, fill?, content }` (`DiagramGroupKind`: `'solid' | 'dashed'`; `DiagramGroupFill`: `'none' | 'primary' | 'secondary'`).
 - `DiagramEdge` — `from`, `to` (a node or group key), optional `label`, `active`.
@@ -99,6 +122,8 @@ _None — every node is drawn from `spec`._
 
 - **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
 - **Connectors.** After layout, the component measures every node and group (each carries `data-diagram-node` with its key) and draws each edge whose two ends exist: a curve when the target sits to the right of the source, an elbow from the source's bottom edge into the target's left edge when the target sits below and to the right, and a straight drop otherwise. Each end gets a port; ports at the same point merge. Edges whose ends are missing are skipped. The drawing is re-measured on every resize of the canvas or of any node, when the web fonts settle, and when the edges change.
+- **Named.** A `name` loads its spec on demand from the library; the root keeps its width and draws nothing until the spec arrives, and a `name` change clears the current drawing at once. A `name` outside the library (from untyped code), or a spec that fails to load, warns in development only and leaves the root empty; it never throws. With neither `name` nor `spec` the root is empty.
+- **Label.** The root is announced as one image named by `ariaLabel`, or, when that is empty, by the description the spec carries; with neither it is a plain figure.
 - **Ready.** The canvas sets `data-ready` once the first measure lands and fades in from transparent, so a diagram never shows unconnected nodes.
 - **Active.** An `active` edge, its ports and its label chip are drawn in the accent colour and painted above the rest; an `active` node is part of the highlighted path.
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
@@ -108,43 +133,43 @@ _None — every node is drawn from `spec`._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                            | Animation / Transition                                             | Token (see `.claude/docs/DESIGN.md` § Animations)     | Reduced-motion fallback         |
+| ---------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------- | ------------------------------- |
 | first measure lands (`data-ready`) | `transition-opacity duration-moderate-02 ease-productive-entrance` | duration `moderate-02` · easing `productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| root padding | `var(--spacing-md)`, `var(--spacing-xl)` at the `3xl` container width |
-| layout gap | `var(--spacing-xl)`, `var(--spacing-xxl)` for a wide row |
-| branch indent (stacked) | `var(--spacing-12)` |
-| grid gap | `var(--spacing-xs)` |
-| connector stroke | `var(--border-default)` at `var(--border-width-default)` |
-| active connector, port and chip | `var(--accent)` |
-| port | `var(--border-default)` fill, `var(--border-muted)` edge, `var(--radius-sm)` |
-| edge label chip | `var(--bg-surface)`, `var(--border-default)`, `.text-label-code-sm`, `var(--text-muted)` / `var(--text-default)` when active |
-| node surface | `var(--bg-surface)` |
-| node edge | `var(--border-default)` |
-| node shadow | `var(--shadow-xs)` |
-| node shape | `var(--shape-card)`; `var(--shape-flat)` for groups and tiles; `var(--shape-elements)` inside the app window |
-| node typography | `.text-label-sm`; `.text-label-code-sm` for an item's eyebrow; `.text-heading-sm` for the app title and an item's icon |
-| node text | `var(--text-default)`, `var(--text-muted)` |
-| lit edge and glow | `var(--primary)`, `var(--accent)` |
-| group fill | `var(--primary-mask)`, `var(--secondary-mask)` |
-| app placeholder bars | `var(--bg-placeholder)` |
-| node sizes | `var(--size-2)`, `var(--size-3)`, `var(--size-6)`, `var(--size-7)`, `var(--size-14)`, `var(--size-20)`, `var(--size-44)`, `var(--size-60)`, `var(--size-72)` |
+| Region                          | Token (DESIGN.md)                                                                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| root padding                    | `var(--spacing-md)`, `var(--spacing-xl)` at the `3xl` container width                                                                                        |
+| layout gap                      | `var(--spacing-xl)`, `var(--spacing-xxl)` for a wide row                                                                                                     |
+| branch indent (stacked)         | `var(--spacing-12)`                                                                                                                                          |
+| grid gap                        | `var(--spacing-xs)`                                                                                                                                          |
+| connector stroke                | `var(--border-default)` at `var(--border-width-default)`                                                                                                     |
+| active connector, port and chip | `var(--accent)`                                                                                                                                              |
+| port                            | `var(--border-default)` fill, `var(--border-muted)` edge, `var(--radius-sm)`                                                                                 |
+| edge label chip                 | `var(--bg-surface)`, `var(--border-default)`, `.text-label-code-sm`, `var(--text-muted)` / `var(--text-default)` when active                                 |
+| node surface                    | `var(--bg-surface)`                                                                                                                                          |
+| node edge                       | `var(--border-default)`                                                                                                                                      |
+| node shadow                     | `var(--shadow-xs)`                                                                                                                                           |
+| node shape                      | `var(--shape-card)`; `var(--shape-flat)` for groups and tiles; `var(--shape-elements)` inside the app window                                                 |
+| node typography                 | `.text-label-sm`; `.text-label-code-sm` for an item's eyebrow; `.text-heading-sm` for the app title and an item's icon                                       |
+| node text                       | `var(--text-default)`, `var(--text-muted)`                                                                                                                   |
+| lit edge and glow               | `var(--primary)`, `var(--accent)`                                                                                                                            |
+| group fill                      | `var(--primary-mask)`, `var(--secondary-mask)`                                                                                                               |
+| app placeholder bars            | `var(--bg-placeholder)`                                                                                                                                      |
+| node sizes                      | `var(--size-2)`, `var(--size-3)`, `var(--size-6)`, `var(--size-7)`, `var(--size-14)`, `var(--size-20)`, `var(--size-44)`, `var(--size-60)`, `var(--size-72)` |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| — (documentation gap, not a token gap): active connector, port and chip, lit glow | `var(--accent)` — ships in the theme, used by `network-map` | `TODO: list --accent in DESIGN.md § Colors` |
-| — (documentation gap): connector and node edge width | `var(--border-width-default)` — ships in the theme | `TODO: list --border-width-* in DESIGN.md` |
-| — (documentation gap): group tints | `var(--primary-mask)`, `var(--secondary-mask)` — ship in the theme | `TODO: list the --*-mask surfaces in DESIGN.md § Colors` |
-| — (documentation gap): port corner | `var(--radius-sm)` — ships in the theme | `TODO: list --radius-* in DESIGN.md § Shape` |
-| — (documentation gap): node, port and placeholder sizes | `var(--size-2)` … `var(--size-72)` — the theme size scale | `TODO: list the --size-* scale in DESIGN.md` |
-| — (documentation gap): stacked branch indent | `var(--spacing-12)` — the numeric spacing scale | `TODO: list the numeric --spacing-* steps in DESIGN.md § Spacing` |
+| Figma variable                                                                                       | Temporary primitive                                                                                                                                      | Follow-up                                                                       |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| — (documentation gap, not a token gap): active connector, port and chip, lit glow                    | `var(--accent)` — ships in the theme, used by `network-map`                                                                                              | `TODO: list --accent in DESIGN.md § Colors`                                     |
+| — (documentation gap): connector and node edge width                                                 | `var(--border-width-default)` — ships in the theme                                                                                                       | `TODO: list --border-width-* in DESIGN.md`                                      |
+| — (documentation gap): group tints                                                                   | `var(--primary-mask)`, `var(--secondary-mask)` — ship in the theme                                                                                       | `TODO: list the --*-mask surfaces in DESIGN.md § Colors`                        |
+| — (documentation gap): port corner                                                                   | `var(--radius-sm)` — ships in the theme                                                                                                                  | `TODO: list --radius-* in DESIGN.md § Shape`                                    |
+| — (documentation gap): node, port and placeholder sizes                                              | `var(--size-2)` … `var(--size-72)` — the theme size scale                                                                                                | `TODO: list the --size-* scale in DESIGN.md`                                    |
+| — (documentation gap): stacked branch indent                                                         | `var(--spacing-12)` — the numeric spacing scale                                                                                                          | `TODO: list the numeric --spacing-* steps in DESIGN.md § Spacing`               |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -157,7 +182,8 @@ _None — every node is drawn from `spec`._
 
 ## Stories (Storybook)
 
-- Default — a request path from a client through an application to the lit product and its outcomes, with labelled, active edges.
+- Default — a named diagram from the library (`name`), with Controls to switch between every registered name.
+- Spec — a one-off request path passed as `spec`, from a client through an application to the lit product and its outcomes, with labelled, active edges. Justified addition: `spec` is the second way in, for a diagram the library does not have, and Default shows only `name`.
 - NodeKinds — composite story drawing one node of each kind (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node kind is the component's one visual axis, carried in the data rather than a `kind` prop, so no Types story covers it.
 - Groups — a framed group with a grid of tiles and a dashed, tinted group, connected to the nodes beside them. Justified addition: groups and grids are the layout primitives a Default row does not show.
 
