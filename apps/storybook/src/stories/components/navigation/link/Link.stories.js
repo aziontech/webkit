@@ -91,7 +91,7 @@ const meta = {
     }
   },
   args: {
-    label: 'Learn More',
+    label: 'Learn more',
     size: 'large',
     disabled: false,
     showIcon: true,
@@ -111,7 +111,7 @@ const Template = (args) => ({
   template: '<Link v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<Link label="Learn More" size="large" href="#" />'
+const DEFAULT_MARKUP = '<Link label="Learn more" size="large" href="#" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Default = {
@@ -125,9 +125,9 @@ export const Default = {
 }
 
 const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <Link size="large" label="Learn More" />
-  <Link size="medium" label="Learn More" />
-  <Link size="small" label="Learn More" />
+  <Link size="large" label="Learn more" />
+  <Link size="medium" label="Learn more" />
+  <Link size="small" label="Learn more" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
@@ -142,7 +142,7 @@ export const Sizes = {
   }
 }
 
-const DISABLED_MARKUP = '<Link label="Learn More" disabled />'
+const DISABLED_MARKUP = '<Link label="Learn more" disabled />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Link>} */
 export const Disabled = {

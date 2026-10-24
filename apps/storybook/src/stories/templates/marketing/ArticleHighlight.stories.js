@@ -5,6 +5,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -28,31 +29,44 @@ const components = {
 
 const ARTICLES = [
   {
-    href: '/blog/azion-leader-g2-fall-reports-2026',
-    image: '/media/blog/azion-leader-g2-fall-reports-2026.png',
-    meta: 'AUG 28, 2026',
-    title: 'Azion Named Leader in Four Categories — G2 Fall 2026 Reports',
+    href: '/blog/ship-portfolio-two-commands-azion-cli',
+    image: '/media/blog/ship-portfolio-two-commands.png',
+    highlightImage: '/media/blog/ship-portfolio-two-commands-highlight.png',
+    meta: 'Developers • SEP 25, 2026',
+    title: 'How I Shipped My Portfolio in Just Two Commands',
     description:
-      'Azion earned Leader status in CDN, Web Security, DDoS Protection, and Bot Detection and Mitigation (Enterprise) in the G2 Fall 2026 Reports, plus High Performer recognition in five more categories.',
-    readTime: '5 min read'
+      "See how a portfolio site went from template to live URL with just azion init and azion deploy, running free on Azion's Hobby plan.",
+    readTime: '9 min read'
   },
   {
-    href: '/blog/bringing-application-security-into-the-deployment-process',
-    image: '/media/blog/bringing-application-security-into-the-deployment-process.png',
-    meta: 'Security • OCT 7, 2026',
-    title: 'Bringing application security into the deployment process',
+    href: '/blog/how-to-reduce-ai-agent-latency',
+    image: '/media/blog/reduce-ai-agent-latency.png',
+    highlightImage: '/media/blog/reduce-ai-agent-latency-highlight.png',
+    meta: 'Serverless • SEP 23, 2026',
+    title: 'How Do You Reduce AI Agent Latency?',
     description:
-      'Integrate application, API, and AI agent protection into deployment with reusable policies, security reviews, and validation in Real-Time Events.',
+      'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
     readTime: '8 min read'
   },
   {
-    href: '/blog/coding-agent-suggests-security-policy',
-    image: '/media/blog/coding-agent-suggests-security-policy.png',
-    meta: 'Developers • OCT 5, 2026',
-    title: 'The agent that writes your code also suggests your security policy',
+    href: '/blog/cloudflare-alternatives-and-competitors',
+    image: '/media/blog/best-cloudflare-alternatives.png',
+    highlightImage: '/media/blog/best-cloudflare-alternatives-highlight.png',
+    meta: 'Security • SEP 22, 2026',
+    title: 'Best Cloudflare Alternatives and Competitors',
     description:
-      'See how the open-source Azion MCP Server lets coding agents like Claude Code and Codex query Azion docs and propose security policies (WAF, Firewall, rate limiting) via Terraform, for team review before deploy.',
-    readTime: '9 min read'
+      'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
+    readTime: '13 min read'
+  },
+  {
+    href: '/blog/which-azion-plan-is-right-for-your-project',
+    image: '/media/blog/which-azion-plan.png',
+    highlightImage: '/media/blog/which-azion-plan-highlight.png',
+    meta: 'Company news • SEP 22, 2026',
+    title: 'Which Azion Plan Is Right for Your Project?',
+    description:
+      'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
+    readTime: '7 min read'
   }
 ]
 
@@ -88,13 +102,13 @@ ${each(ARTICLES, sizer, 3)}
 
     <article class="group/article relative grid min-w-0 lg:grid-cols-2">
       <div
-        class="block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:aspect-4/3 lg:border-r lg:border-b-0"
+        class="relative block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-canvas) lg:aspect-4/3 lg:border-r lg:border-b-0"
       >
         <img
-          src="${CURRENT.image}"
+          src="${CURRENT.highlightImage || CURRENT.image}"
           alt=""
           decoding="async"
-          class="size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
+          class="absolute inset-0 size-full object-cover transition-[scale] duration-moderate-02 ease-productive-entrance group-hover/article:scale-105 motion-reduce:transition-none"
         />
       </div>
       <div
@@ -148,7 +162,7 @@ const tab = (article, index) => `<CardGrid.Cell kind="canvas" :padded="false" ro
 const WALL = `<CardGrid
   kind="frame"
   flush
-  :columns="3"
+  :columns="${ARTICLES.length >= 4 ? 4 : 3}"
   :mobile-columns="1"
   role="tablist"
   aria-label="Highlight articles"
@@ -177,11 +191,10 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
-          'The band that opens a blog under its hero: one article large, its cover beside its category and date, headline, deck, read time and a button into it, over a wall of the highlight articles that is the selector itself. The wall is a tablist and the large article its panel; on the page the band advances on its own, pausing under the pointer or keyboard focus, and the arrow, Home and End keys move along the wall. Every article is drawn once, invisibly, under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. The Blog page (/blog) uses it for its featured post and the two newest. Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.'
+          'The band that opens a blog under its hero: one article large, its cover beside its category and date, headline, deck, read time and a button into it, over a wall of the highlight articles that is the selector itself. The wall is a tablist and the large article its panel; on the page the band advances on its own, pausing under the pointer or keyboard focus, and the arrow, Home and End keys move along the wall. Every article is drawn once, invisibly, under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. The panel draws an article’s highlight cover when it has one, and its card cover otherwise; with four or more articles the wall runs four across. The Blog page (/blog) uses it for its four newest posts. Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -191,12 +204,12 @@ const meta = {
 export default meta
 
 export const Featured = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
       description: {
         story:
-          'The Blog page’s highlight at rest: the G2 Fall 2026 Reports post selected, then the two newest posts on the wall, three across from `lg`.'
+          'The Blog page’s highlight at rest: the newest post selected with its highlight cover, and the four highlight posts on the wall, four across from `lg`.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
