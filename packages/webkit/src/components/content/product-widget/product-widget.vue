@@ -24,6 +24,8 @@
     | 'bot-manager-metrics'
     | 'bot-manager-rule'
     | 'bot-manager-traffic'
+    | 'cli-terminal-deploy'
+    | 'cli-terminal-start'
     | 'data-stream-connector'
     | 'data-stream-sampling'
     | 'data-stream-source'
@@ -37,6 +39,7 @@
     | 'firewall-modules'
     | 'firewall-rules-order'
     | 'function-code'
+    | 'functions-start'
     | 'image-processor-events'
     | 'image-processor-module'
     | 'image-processor-rule'
@@ -73,9 +76,13 @@
     | 'workload-rollout-rows'
     | 'workload-topology-chain'
     | 'workload-topology'
+    | 'workload-topology-flow'
     | 'workloads-list'
 
   export type ProductWidgetTab =
+    | 'agents'
+    | 'console'
+    | 'cli'
     | 'overview'
     | 'topology'
     | 'deploy'
@@ -102,7 +109,7 @@
     fade?: ShellMockupFade
     /** Texture a full-screen widget is grounded with. */
     texture?: TextureMaterialKind
-    /** Tab a tabbed widget plays (workload-overview, application-version); other widgets ignore it, and unset plays the first tab. */
+    /** Tab a tabbed widget plays (workload-overview, application-version, functions-start); other widgets ignore it, and unset plays the first tab. */
     tab?: ProductWidgetTab
     /** Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace. */
     interval?: number

@@ -6,6 +6,8 @@ export type ProductWidgetLoader = () => Promise<{ default: Component }>
 
 export const productWidgetScreens = {
   'application-version': () => import('./widgets/application-version-widget.vue'),
+  'cli-terminal-deploy': () => import('./widgets/cli-terminal-deploy-widget.vue'),
+  'cli-terminal-start': () => import('./widgets/cli-terminal-start-widget.vue'),
   'workload-deploy-logs': () => import('./widgets/workload-deploy-logs-widget.vue'),
   'workload-deployments': () => import('./widgets/workload-deployments-widget.vue'),
   'workload-domains': () => import('./widgets/workload-domains-widget.vue'),
@@ -13,6 +15,7 @@ export const productWidgetScreens = {
   'workload-rollout-rows': () => import('./widgets/workload-rollout-rows-widget.vue'),
   'workload-topology-chain': () => import('./widgets/workload-topology-chain-widget.vue'),
   'workload-topology': () => import('./widgets/workload-topology-widget.vue'),
+  'workload-topology-flow': () => import('./widgets/workload-topology-flow-widget.vue'),
   'workloads-list': () => import('./widgets/workloads-list-widget.vue')
 } satisfies Partial<Record<ProductWidgetName, ProductWidgetLoader>>
 
@@ -48,6 +51,7 @@ export const productWidgetFragments = {
   'firewall-modules': () => import('./widgets/firewall-modules-fragment.vue'),
   'firewall-rules-order': () => import('./widgets/firewall-rules-order-fragment.vue'),
   'function-code': () => import('./widgets/function-code-fragment.vue'),
+  'functions-start': () => import('./widgets/functions-start-widget.vue'),
   'image-processor-events': () => import('./widgets/image-processor-events-fragment.vue'),
   'image-processor-module': () => import('./widgets/image-processor-module-fragment.vue'),
   'image-processor-rule': () => import('./widgets/image-processor-rule-fragment.vue'),
