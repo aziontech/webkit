@@ -149,8 +149,10 @@ Add this entry to the page data. `section` picks the band and the rest fill it:
     {
       value: 'humans',
       label: 'For humans',
-      command: 'npm install -g azion',
-      actions: [{ label: 'Start for free', href: '/signup', kind: 'secondary' }]
+      actions: [
+        { label: 'Start for free', href: '/signup', kind: 'secondary' },
+        { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      ]
     },
     {
       value: 'agents',
