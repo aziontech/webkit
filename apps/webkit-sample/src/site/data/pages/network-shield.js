@@ -2,8 +2,8 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS,
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
@@ -135,7 +135,7 @@ export const NETWORK_SHIELD_PAGE = [
     title: 'Network lists every firewall can reference',
     description:
       'Lists of IPs, ASNs and countries, the firewall rules that match them and the entries your tools add live in one versioned configuration, deployed together.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -165,31 +165,6 @@ export const NETWORK_SHIELD_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Programmable network-layer security',
-        description:
-          'Define access policies with lists that combine IP addresses, CIDR blocks, geolocation, ASNs, and reputation scores. Reference these lists directly in the Firewall Rules Engine. Updates propagate automatically across all associated firewalls, with no service interruption.',
-        href: PRODUCT_DOCS,
-        illustration: 'network-lists-rules-engine',
-        illustrationLabel:
-          'Network lists of CIDRs, IPs, ASNs and countries feeding the Rules Engine',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Traffic control from one set of lists',
-        description:
-          'Create custom allowlists and blocklists using IPs, CIDR blocks, ASNs, countries, or Azion-managed lists like Tor Exit Nodes. Segment access by region or network type, and share the same lists across multiple firewalls for consistent policies at scale.',
-        href: '/site/docs/firewall',
-        illustration: 'reputation-intelligence-for-enhanced-protection',
-        illustrationLabel: 'Network lists informing Azion before traffic reaches the firewall',
-        actions: [{ label: 'Firewall', href: '/site/docs/firewall' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Block threats at the network layer, before they consume resources',
@@ -199,7 +174,6 @@ export const NETWORK_SHIELD_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_SECURITY_CLOSING
 ]

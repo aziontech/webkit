@@ -2,8 +2,8 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS,
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
@@ -134,7 +134,7 @@ export const BOT_MANAGER_PAGE = [
     title: 'Bot defense inside the firewall',
     description:
       'The rule that sends a path to Bot Manager, the classification of every request and the dashboards that track it live in the firewall you already run.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -164,30 +164,6 @@ export const BOT_MANAGER_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Detect bots with precision',
-        description:
-          'Detect bots in real time with machine learning that evaluates device fingerprints, browser behavior, and network reputation. Use SDKs for web and mobile apps to reduce false positives.',
-        href: PRODUCT_DOCS,
-        illustration: 'detect-and-classify',
-        illustrationLabel: 'Bot Manager classifying traffic as a bad bot, a good bot or a human',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Flexible mitigation actions',
-        description:
-          'Choose from 7 mitigation actions: block, challenge, rate limit, redirect, custom HTML, random delay, and connection hold. Adjust enforcement by risk level to protect critical flows while preserving legitimate traffic.',
-        href: '/site/products/web-application-firewall',
-        illustration: 'mitigation-actions',
-        illustrationLabel: 'A scored request answered with rate limit, challenge or block',
-        actions: [{ label: 'WAF', href: '/site/products/web-application-firewall' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Protect critical agentic applications and APIs',
@@ -197,7 +173,6 @@ export const BOT_MANAGER_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_SECURITY_CLOSING
 ]

@@ -1,14 +1,4 @@
-import { markRaw } from 'vue'
-
-import FunctionsStartScene from '../../ui/FunctionsStartScene.vue'
-import { cliBand } from '../cli-band.js'
-import { AGENT_PROMPT, START_TABS } from '../functions-start.js'
-import {
-  PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
-  PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
-} from '../product-pages.js'
+import { PRODUCT_CLOSING, PRODUCT_DOCS, PRODUCT_HERO_ACTIONS } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
 const IMPORT = 'import'
@@ -289,15 +279,6 @@ const FAQ = [
   }
 ]
 
-const START_TILES = START_TABS.map(({ value, title, description }) => ({
-  title,
-  description,
-  scene: { component: markRaw(FunctionsStartScene), props: { tab: value } },
-  ...(value === 'agents'
-    ? { copy: { label: 'Copy Prompt', text: AGENT_PROMPT } }
-    : { href: PRODUCT_DOCS })
-}))
-
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
@@ -311,17 +292,6 @@ export const FUNCTIONS_PAGE = [
     carouselMarks: FRAMEWORK_MARKS
   },
   { section: 'CapabilityGrid', items: BENEFITS },
-  {
-    section: 'FeatureWidgets',
-    anchor: 'get-started',
-    eyebrow: 'Get started',
-    title: 'Start where you already work',
-    description:
-      'The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.',
-    actions: PRODUCT_HERO_ACTIONS,
-    columns: 3,
-    items: START_TILES
-  },
   {
     section: 'StickyScrollCode',
     eyebrow: 'Integrations',
@@ -344,12 +314,6 @@ export const FUNCTIONS_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
-  cliBand({
-    title: 'Deploy your first function in two commands',
-    description:
-      'Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.'
-  }),
   PRODUCT_CLOSING
 ]

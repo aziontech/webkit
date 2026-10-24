@@ -1,18 +1,16 @@
 <script setup lang="ts">
+  import Diagram, { type DiagramName } from '@aziontech/webkit/diagram'
   import { computed } from 'vue'
-
-  import Diagram from './Diagram.vue'
-  import type { DiagramSpec } from './types'
 
   defineOptions({ name: 'DiagramSet', inheritAttrs: false })
 
   export interface DiagramSetEntry {
     /** Tab value that shows this diagram. */
     value: string
-    /** The diagram. */
-    spec: DiagramSpec
-    /** Accessible description of the diagram. */
-    ariaLabel: string
+    /** Name of the official diagram in webkit's library. */
+    name: DiagramName
+    /** Accessible description that replaces the one the diagram carries. */
+    ariaLabel?: string
   }
 
   interface Props {
@@ -34,7 +32,7 @@
     v-if="entry"
     :key="entry.value"
     v-bind="$attrs"
-    :spec="entry.spec"
-    :label="entry.ariaLabel"
+    :name="entry.name"
+    :ariaLabel="entry.ariaLabel"
   />
 </template>

@@ -2,9 +2,9 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
@@ -140,7 +140,7 @@ export const DATA_STREAM_PAGE = [
     title: 'Every stream setting in one configuration',
     description:
       'The data source, the sampling that trims it and the connector that receives it live in one stream, saved and changed together.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -170,33 +170,6 @@ export const DATA_STREAM_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Stream, filter, and route event data',
-        description:
-          'Run continuous streaming with full capture or optional sampling. Filter and transform events, then route them to SIEM, analytics, and BI platforms.',
-        href: PRODUCT_DOCS,
-        illustration: 'live-debugging',
-        illustrationLabel: 'A time window of streamed requests, errors and events',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Integrate with your existing tools',
-        description:
-          'Stream structured event data to SIEM, analytics, storage, and HTTP endpoints, including Splunk, Datadog, BigQuery, S3, and Azure Monitor. Customize payload format, batching, and delivery intervals to match your existing workflows.',
-        href: '/site/products/web-application-firewall',
-        illustration: 'stream-security-events-for-investigation-and-response',
-        illustrationLabel:
-          'Event data streamed in under 40 seconds to APIs, dashboards, SIEM and other interfaces',
-        actions: [
-          { label: 'Web Application Firewall', href: '/site/products/web-application-firewall' }
-        ]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Real-time data for security and performance',
@@ -206,7 +179,6 @@ export const DATA_STREAM_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

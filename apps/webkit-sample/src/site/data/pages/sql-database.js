@@ -2,9 +2,9 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
@@ -145,7 +145,7 @@ export const SQL_DATABASE_PAGE = [
     title: 'Every table, query and row in one database',
     description:
       'The schema, the queries that read it and the rows your functions serve live in the same database. Writes go to the primary and reads come from replicas.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -175,30 +175,6 @@ export const SQL_DATABASE_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Distributed SQL for resilient global reads',
-        description:
-          'The primary instance handles writes while distributed replicas serve read-heavy workloads close to users. Applications stay responsive and available.',
-        href: PRODUCT_DOCS,
-        illustration: 'distributed-sql-for-resilient-global-reads',
-        illustrationLabel: 'A globe of data centers reading from SQL Database through Functions',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Combine relational data and vector search',
-        description:
-          'SQL Database stores structured records and embeddings together, so you can build RAG applications without adding a separate vector database.',
-        href: '/site/products/ai-inference',
-        illustration: 'combine-data-and-vector-search',
-        illustrationLabel: 'Stored records and embeddings connected to an AI model on Azion',
-        actions: [{ label: 'AI Inference', href: '/site/products/ai-inference' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use SQL Database for',
@@ -208,7 +184,6 @@ export const SQL_DATABASE_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

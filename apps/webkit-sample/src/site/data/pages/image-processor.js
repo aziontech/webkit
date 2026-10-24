@@ -2,9 +2,9 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
@@ -159,7 +159,7 @@ export const IMAGE_PROCESSOR_PAGE = [
     title: 'Image optimization inside the application',
     description:
       'Image Processor is a module of the application: switch it on, point a rule at your images, and follow every processed request in Real-Time Events.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -189,31 +189,6 @@ export const IMAGE_PROCESSOR_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'URL-based transformations without API complexity',
-        description:
-          'Transform images on demand with URL query parameters. Adapt dimensions, aspect ratio, quality, and format to each browser, screen size, or network condition, with no API calls or variant configuration.',
-        href: PRODUCT_DOCS,
-        illustration: 'url-based-transformations-without-api-complexity',
-        illustrationLabel:
-          'A website asset passing through the rules engine, tiered cache and Image Processor',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Multi-format optimization with automatic detection',
-        description:
-          'Adjust format, resolution, and quality for each browser and device while keeping visual fidelity high and file size low. Supports JPEG, PNG, GIF, BMP, ICO, WebP, and AVIF, with automatic format selection.',
-        href: '/site/products/cache',
-        illustration: 'multi-format-optimization-with-automatic-detection',
-        illustrationLabel: 'One photo delivered as JPEG or WebP, chosen for each browser',
-        actions: [{ label: 'Cache', href: '/site/products/cache' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use Image Processor for',
@@ -223,7 +198,6 @@ export const IMAGE_PROCESSOR_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

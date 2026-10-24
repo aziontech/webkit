@@ -2,9 +2,9 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
@@ -134,7 +134,7 @@ export const EDGE_DNS_PAGE = [
     title: 'Every DNS setting in one zone',
     description:
       'The nameservers you delegate to, the DNSSEC keys your provider needs and the records the zone answers with live together, served from every data center once the zone is active.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -164,36 +164,6 @@ export const EDGE_DNS_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Authoritative DNS with enterprise uptime',
-        description:
-          'Run your DNS on authoritative nameservers across the Azion Platform. You get a 99.99% uptime SLA, automatic failover, real-time health monitoring, and instant global propagation.',
-        href: PRODUCT_DOCS,
-        illustration: 'global-network',
-        illustrationLabel: 'Nameservers spread across data centers worldwide',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Built-in DDoS protection and threat detection',
-        description:
-          'Mitigate DNS floods, amplification attempts, and malicious queries with traffic analysis, automatic rate limiting, and real-time threat detection. Every query is evaluated proactively, with no additional configuration.',
-        href: 'https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/',
-        illustration: 'dns-protection',
-        illustrationLabel:
-          'DNS queries filtered by a protective layer before they reach the nameservers',
-        actions: [
-          {
-            label: 'DDoS Protection',
-            href: 'https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/'
-          }
-        ]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Safe and reliable authoritative DNS',
@@ -203,7 +173,6 @@ export const EDGE_DNS_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

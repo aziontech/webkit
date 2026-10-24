@@ -9,6 +9,10 @@ export const PRODUCT_HERO_ACTIONS = [
   { label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
 ]
 
+export const PRODUCT_DOCS_ACTIONS = [
+  { label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }
+]
+
 export const PRODUCT_DIRECTORY = {
   section: 'PlatformDirectory',
   eyebrow: 'Complete, not complex',
@@ -21,16 +25,16 @@ export const PLATFORM_DIRECTORY = {
   ariaLabel: 'Azion products'
 }
 
-const CLI_INSTALL = 'npm install -g azion'
-
 const START_FREE_ACTION = { label: 'Start for free', href: '/signup', kind: 'secondary' }
 
 const AGENT_AUDIENCES = [
   {
     value: 'humans',
     label: 'For humans',
-    command: CLI_INSTALL,
-    actions: [START_FREE_ACTION]
+    actions: [
+      START_FREE_ACTION,
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+    ]
   },
   {
     value: 'agents',
@@ -163,12 +167,6 @@ export const PRODUCT_GROUPS = [
         title: 'AI Inference',
         description: 'Run models close to the user',
         href: '/site/products/ai-inference'
-      },
-      {
-        icon: 'ai ai-ai-gateway',
-        title: 'AI Gateway',
-        description: 'Route, secure and log every model call',
-        href: '/site/products/ai-gateway'
       }
     ]
   },
@@ -221,6 +219,12 @@ export const PRODUCT_GROUPS = [
         title: 'Edge DNS',
         description: 'Authoritative DNS, distributed globally',
         href: '/site/products/edge-dns'
+      },
+      {
+        icon: 'ai ai-ai-gateway',
+        title: 'AI Gateway',
+        description: 'Route, secure and log every model call',
+        href: '/site/products/ai-gateway'
       }
     ]
   },

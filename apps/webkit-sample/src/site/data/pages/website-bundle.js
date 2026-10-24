@@ -3,6 +3,7 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import { BLOG_FEATURED } from '../blog.js'
+import { cliBand } from '../cli-band.js'
 import { PLATFORM_ARCHITECTURE_BAND } from '../product-architectures.js'
 import {
   agentsClosing,
@@ -435,7 +436,11 @@ export const WEBSITE_BUNDLE_PAGE = [
     samples: ANATOMY_SAMPLES
   },
   pick(AI_GATEWAY_PAGE, 'CodeSplit'),
-  pick(FUNCTIONS_PAGE, 'CliTerminal'),
+  cliBand({
+    title: 'Deploy your first function in two commands',
+    description:
+      'Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.'
+  }),
   {
     section: 'FeatureTabs',
     title: 'From a hostname to a full stack, on one platform',

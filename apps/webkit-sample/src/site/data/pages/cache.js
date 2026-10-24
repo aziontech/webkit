@@ -2,10 +2,9 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import {
-  foldList,
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
@@ -33,20 +32,6 @@ const PILLARS = [
     description:
       'Set TTLs, cache keys, stale content, and global purges to keep content fresh and fast, without complex CDN operations.'
   }
-]
-
-const SURFACES = [
-  { icon: 'ai ai-azion-cli', label: 'Azion CLI' },
-  { icon: 'ai ai-azion-api', label: 'REST API' },
-  { icon: 'ai ai-azion', label: 'Console UI' },
-  { icon: 'ai ai-terraform', label: 'Terraform' }
-]
-
-const AVAILABILITY = [
-  { icon: 'ai ai-origin-shield', label: 'Stale cache' },
-  { icon: 'pi pi-link', label: 'Persistent connections' },
-  { icon: 'pi pi-cog', label: 'Protocol optimization' },
-  { icon: 'pi pi-check-circle', label: 'High availability' }
 ]
 
 const USE_CASES = [
@@ -173,7 +158,7 @@ export const CACHE_PAGE = [
     title: 'Every cache control in one application',
     description:
       'Cache settings, the rules that apply them and the functions that shape responses live inside the application, versioned and deployed with it.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -203,34 +188,6 @@ export const CACHE_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Configure smarter cache policies',
-        description: foldList(
-          'Set browser and CDN TTLs, enable tiered cache, and keep content fresh with stale revalidation. That raises hit ratio, lowers latency, and cuts origin bandwidth.',
-          SURFACES
-        ),
-        href: PRODUCT_DOCS,
-        illustration: 'fastest-path-to-live-website',
-        illustrationLabel: 'A request served from cache, with the origin behind it',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'High-availability caching for critical traffic',
-        description: foldList(
-          'Protocol optimizations, persistent connections, and stale cache keep serving the latest cached responses during origin failures or revalidation, so websites and APIs stay fast.',
-          AVAILABILITY
-        ),
-        href: '/signup',
-        illustration: 'distributed-apis',
-        illustrationLabel: "One request fanning into the cache layer's content types",
-        actions: [{ label: 'Start for free', href: '/signup' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use Cache for',
@@ -240,7 +197,6 @@ export const CACHE_PAGE = [
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]
