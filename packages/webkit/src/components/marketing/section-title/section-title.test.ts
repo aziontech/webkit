@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
-const { Default, Kinds, Sizes, WithActions } = composeStories(stories)
+const { Default, Kinds, Sizes, WithActions, DescriptionWidths } = composeStories(stories)
 
 const TESTID = 'marketing-section-title'
 
@@ -65,6 +65,23 @@ describe('SectionTitle', () => {
     const { getByTestId } = render(SectionTitle, { props })
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-padding', 'medium')
+  })
+
+  it.each(['narrow', 'wide'] as const)(
+    'reflects descriptionWidth="%s" on data-description-width',
+    (descriptionWidth) => {
+      const { getByTestId } = render(SectionTitle, {
+        props: { ...props, kind: 'horizontal', descriptionWidth }
+      })
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-description-width', descriptionWidth)
+    }
+  )
+
+  it('defaults to the narrow description width', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-description-width', 'narrow')
   })
 
   it.each(['small', 'medium', 'large'] as const)(
@@ -191,8 +208,19 @@ describe('SectionTitle', () => {
       const { getAllByRole } = render(WithActions())
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
-        'Start building',
-        'Read the docs'
+        'Start for free',
+        'Docs'
+      ])
+    })
+
+    it('renders the DescriptionWidths story with one horizontal header per width', () => {
+      const { getAllByTestId } = render(DescriptionWidths())
+      const roots = getAllByTestId(TESTID)
+
+      expect(roots.map((el) => el.getAttribute('data-kind'))).toEqual(['horizontal', 'horizontal'])
+      expect(roots.map((el) => el.getAttribute('data-description-width'))).toEqual([
+        'narrow',
+        'wide'
       ])
     })
   })

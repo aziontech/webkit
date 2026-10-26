@@ -53,7 +53,7 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
     "vee-validate": "^4.15.1",
-    "zod": "^3.23.0"
+    "zod": "^4.6.7"
   },
   "peerDependencies": {
     "eslint": ">=9",
@@ -148,6 +148,10 @@
     "./item-footer": "./src/components/content/item/item-footer.vue",
     "./currency": "./src/components/content/currency/currency.vue",
     "./illustration": "./src/components/content/illustration/illustration.vue",
+    "./product-widget": "./src/components/content/product-widget/product-widget.vue",
+    "./shell-mockup": "./src/components/content/shell-mockup/index.ts",
+    "./shell-mockup-root": "./src/components/content/shell-mockup/shell-mockup.vue",
+    "./shell-mockup-part": "./src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
     "./kbd": "./src/components/content/kbd/kbd.vue",
     "./network-map": "./src/components/content/network-map/network-map.vue",
     "./log-view": "./src/components/code/log-view/log-view.vue",
@@ -494,6 +498,7 @@
     "./assets/gcp-symbol-mono.svg": "./src/assets/logos/frameworks/gcp-symbol-mono.svg",
     "./assets/gdpr-symbol-color.svg": "./src/assets/logos/certifications/gdpr-symbol-color.svg",
     "./assets/gemini-symbol-color.svg": "./src/assets/logos/agents/gemini-symbol-color.svg",
+    "./assets/google-symbol-color.svg": "./src/assets/logos/frameworks/google-symbol-color.svg",
     "./assets/getninjas-extended-mono.svg": "./src/assets/logos/clients/getninjas-extended-mono.svg",
     "./assets/getninjas-extended-reversed.svg": "./src/assets/logos/clients/getninjas-extended-reversed.svg",
     "./assets/gfg-extended-mono.svg": "./src/assets/logos/clients/gfg-extended-mono.svg",

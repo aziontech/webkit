@@ -19,6 +19,7 @@ interface Endpoint {
 interface Origin {
   left: number
   top: number
+  scale: number
 }
 
 /** A direct child of the flow container: a single node or a group of parallel branches. */
@@ -58,9 +59,9 @@ const elbow = (fromX: number, fromY: number, toX: number, toY: number, busX: num
 const measureRect = (el: HTMLElement, base: Origin) => {
   const r = el.getBoundingClientRect()
   return {
-    left: r.left - base.left,
-    right: r.right - base.left,
-    cy: (r.top + r.bottom) / 2 - base.top
+    left: (r.left - base.left) / base.scale,
+    right: (r.right - base.left) / base.scale,
+    cy: ((r.top + r.bottom) / 2 - base.top) / base.scale
   }
 }
 
@@ -136,7 +137,12 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       return
     }
 
-    const base = container.getBoundingClientRect()
+    const rect = container.getBoundingClientRect()
+    const base: Origin = {
+      left: rect.left,
+      top: rect.top,
+      scale: container.offsetWidth > 0 ? rect.width / container.offsetWidth : 1
+    }
     const elements = Array.from(
       container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]')
     )
