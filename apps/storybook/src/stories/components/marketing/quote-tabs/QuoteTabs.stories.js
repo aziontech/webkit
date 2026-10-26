@@ -1,3 +1,8 @@
+import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
+import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
+import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
+import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
 import Button from '@aziontech/webkit/button'
 import FrameBox from '@aziontech/webkit/frame-box'
 import QuoteTabs from '@aziontech/webkit/quote-tabs'
@@ -27,7 +32,7 @@ const ACTIONS_MARKUP = `  <template #actions>
 const ARIA = 'Client stories'
 
 const MAGALU = {
-  logo: '/clients/color/magalu.svg',
+  logo: magaluLogo,
   clientName: 'Magalu',
   text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',
   name: 'Allan Monteiro',
@@ -37,7 +42,7 @@ const MAGALU = {
 const CLIENTS = [
   MAGALU,
   {
-    logo: '/clients/color/ifood.svg',
+    logo: ifoodLogo,
     clientName: 'iFood',
     shape: 'compact',
     text: 'iFood serves every order screen from the edge, so a lunch-hour peak reaches millions of customers without a capacity plan.',
@@ -45,7 +50,7 @@ const CLIENTS = [
     jobTitle: 'Food delivery'
   },
   {
-    logo: '/clients/color/herospark.svg',
+    logo: herosparkLogo,
     clientName: 'HeroSpark',
     text: 'HeroSpark serves course pages and checkouts from the edge, so a launch day reaches every student without a capacity plan.',
     name: 'HeroSpark',
@@ -58,14 +63,14 @@ const CLIENTS = [
     jobTitle: 'Financial services'
   },
   {
-    logo: '/clients/color/stone.svg',
+    logo: stoneLogo,
     clientName: 'Stone',
     text: 'Stone keeps its payment flows answering in milliseconds for merchants across Brazil, peak day or not.',
     name: 'Stone',
     jobTitle: 'Payments'
   },
   {
-    logo: '/clients/color/itau.svg',
+    logo: itauLogo,
     clientName: 'Itaú',
     shape: 'compact',
     text: 'Itaú protects its digital banking channels at the edge, before a request ever reaches its origin.',
@@ -84,6 +89,30 @@ const FALLBACK_CLIENTS = [
   }
 ]
 
+const LOGO_ASSETS = {
+  herospark: 'herospark-extended-color',
+  ifood: 'ifood-extended-color',
+  itau: 'itau-extended-color',
+  magalu: 'magalu-extended-color',
+  stone: 'stone-extended-color'
+}
+
+const LOGO_URLS = {
+  herospark: herosparkLogo,
+  ifood: ifoodLogo,
+  itau: itauLogo,
+  magalu: magaluLogo,
+  stone: stoneLogo
+}
+
+const logoKey = (item) => Object.keys(LOGO_URLS).find((key) => LOGO_URLS[key] === item.logo)
+
+const logoImports = (items) =>
+  items
+    .map(logoKey)
+    .filter(Boolean)
+    .map((key) => `import ${key}Logo from '@aziontech/webkit/assets/${LOGO_ASSETS[key]}.svg'`)
+
 const escape = (value) => value.replace(/'/g, "\\'")
 
 const field = (indent, key, value) => (value ? [`${indent}  ${key}: '${escape(value)}',`] : [])
@@ -93,7 +122,7 @@ const list = (items, indent = '    ') =>
     .map((item) =>
       [
         `${indent}{`,
-        ...field(indent, 'logo', item.logo),
+        ...(logoKey(item) ? [`${indent}  logo: ${logoKey(item)}Logo,`] : []),
         ...field(indent, 'mark', item.mark),
         ...field(indent, 'clientName', item.clientName),
         ...field(indent, 'shape', item.shape),
@@ -242,7 +271,7 @@ export const Default = {
         story:
           'Six clients, one quotation on screen at a time. Left alone the band moves to the next client every five seconds, with an orange hairline filling along the panel’s bottom edge; pointing at the band or reaching it with `Tab` holds the quotation. Click a card, or focus the wall and use the arrow keys — `Tab` reaches only the selected card, `ArrowRight` and `ArrowLeft` move and select, wrapping at either end, and `Home` / `End` jump to the first and last client. A card later in the wall brings its quotation in from the right and sends the old one out to the left; an earlier card reverses it. The selected card sits on `--bg-selected`. Fourbank passes a registry `mark` instead of a `logo`, so it is drawn in the theme’s one ink.'
       },
-      source: { code: toSfc(DEFAULT_IMPORTS, DEFAULT_MARKUP) }
+      source: { code: toSfc([...DEFAULT_IMPORTS, ...logoImports(CLIENTS)], DEFAULT_MARKUP) }
     }
   }
 }
@@ -266,7 +295,7 @@ export const Fallback = {
         story:
           'Acme has neither a colour `logo` nor a registered `mark`, so its card and its panel write the client’s name in heading type where the logo would sit. That is what lets a page add a client before its artwork lands — the card keeps its size either way, and adding the logo later changes nothing else at the call site.'
       },
-      source: { code: toSfc(FRAME_IMPORTS, FALLBACK_MARKUP) }
+      source: { code: toSfc([...FRAME_IMPORTS, ...logoImports(FALLBACK_CLIENTS)], FALLBACK_MARKUP) }
     }
   }
 }
