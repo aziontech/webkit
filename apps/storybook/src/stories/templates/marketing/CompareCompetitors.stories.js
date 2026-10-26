@@ -6,6 +6,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -82,7 +83,7 @@ ${indent(SUPPORT_MARKUP[level])}
 const row = (entry, index) => `<tr${index === 0 ? ' data-first' : ''} class="group/row">
   <th
     scope="row"
-    class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-default) group-data-[first]/row:border-t-0"
+    class="border-t border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-default) group-data-[first]/row:border-t-0"
   >
     ${entry.capability}
   </th>
@@ -103,7 +104,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
       <tr>
         <th
           scope="col"
-          class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal"
+          class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-lg) align-top font-normal"
         >
           <span class="text-overline-md text-(--text-muted)">Capability</span>
         </th>
@@ -148,7 +149,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -158,11 +158,11 @@ const meta = {
 export default meta
 
 export const AzionVsVercel = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup: () => ({ vercelExtendedMono, vercelExtendedReversed }),
     template: TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }

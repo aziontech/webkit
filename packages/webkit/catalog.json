@@ -3112,6 +3112,13 @@
           "default": "'medium'",
           "required": "false",
           "doc": "Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band."
+        },
+        {
+          "name": "descriptionWidth",
+          "type": "'narrow' | 'wide'",
+          "default": "'narrow'",
+          "required": "false",
+          "doc": "Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too."
         }
       ],
       "slots": [
@@ -3150,6 +3157,7 @@
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
         "In `horizontal`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.",
+        "In `horizontal`, set `descriptionWidth=\"wide\"` when the description runs to a paragraph and would stack six or more lines in the third column alone; it then spans the middle and third columns, capped at `--container-xl` and aligned to the right edge so it ends where the narrow description ends. It takes the column a `--section-title-headline-span` of `2` would claim, so use one or the other. Outside `horizontal` the prop has no effect.",
         "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
         "The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component."
       ]
@@ -16624,7 +16632,8 @@
         "Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.",
         "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
         "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
-        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at."
+        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.",
+        "A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band."
       ]
     },
     "section-module": {

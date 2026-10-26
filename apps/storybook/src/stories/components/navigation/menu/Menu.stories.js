@@ -250,8 +250,8 @@ export const Types = {
 }
 
 const CONDENSED_TEMPLATE = `<div class="${HOST_CLASS}">
-  <Menu aria-label="Documentation">
-    <MenuGroup label="Documentation">
+  <Menu aria-label="Docs">
+    <MenuGroup label="Docs">
       <MenuSub default-open>
         <MenuSubTrigger label="Build" kind="inline" />
         <MenuSubContent>

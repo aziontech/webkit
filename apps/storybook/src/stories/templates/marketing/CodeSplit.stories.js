@@ -6,6 +6,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
 import { FUNCTION_SAMPLE_TABS } from '../../_shared/code-samples'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, declareTabs, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -270,7 +271,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -280,11 +280,14 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
-    components,
-    setup: () => ({ codeTabs: FUNCTION_SAMPLE_TABS }),
-    template: FULL_STACK_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ codeTabs: FUNCTION_SAMPLE_TABS }),
+      template: FULL_STACK_TEMPLATE
+    }),
+    { codeTabs: FUNCTION_SAMPLE_TABS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(FULL_STACK_IMPORTS, FULL_STACK_TEMPLATE) }
@@ -314,11 +317,14 @@ export const DefaultJson = {
 }
 
 export const Accelerator = {
-  render: () => ({
-    components,
-    setup: () => ({ codeTabs: CACHE_TABS }),
-    template: ACCELERATOR_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ codeTabs: CACHE_TABS }),
+      template: ACCELERATOR_TEMPLATE
+    }),
+    { codeTabs: CACHE_TABS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(ACCELERATOR_IMPORTS, ACCELERATOR_TEMPLATE) }
@@ -347,11 +353,14 @@ export const AcceleratorJson = {
 }
 
 export const Agents = {
-  render: () => ({
-    components,
-    setup: () => ({ agentTabs: GATEWAY_TABS }),
-    template: AGENTS_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ agentTabs: GATEWAY_TABS }),
+      template: AGENTS_TEMPLATE
+    }),
+    { agentTabs: GATEWAY_TABS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(AGENTS_IMPORTS, AGENTS_TEMPLATE) }

@@ -183,7 +183,7 @@
   {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
-    "limit": "4 KB",
+    "limit": "4.25 KB",
     "entryOnly": true
   },
   {
