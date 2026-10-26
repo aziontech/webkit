@@ -265,6 +265,27 @@
     "entryOnly": true
   },
   {
+    "name": "product-widget",
+    "path": "src/components/content/product-widget/product-widget.vue",
+    "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "shell-mockup",
+    "path": "src/components/content/shell-mockup/index.ts",
+    "limit": "30 KB"
+  },
+  {
+    "name": "shell-mockup-root",
+    "path": "src/components/content/shell-mockup/shell-mockup.vue",
+    "limit": "30 KB"
+  },
+  {
+    "name": "shell-mockup-part",
+    "path": "src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
+    "limit": "1 KB"
+  },
+  {
     "name": "big-numbers",
     "path": "src/components/marketing/big-numbers/big-numbers.vue",
     "limit": "2.5 KB"
