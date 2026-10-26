@@ -3112,6 +3112,13 @@
           "default": "'medium'",
           "required": "false",
           "doc": "Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band."
+        },
+        {
+          "name": "descriptionWidth",
+          "type": "'narrow' | 'wide'",
+          "default": "'narrow'",
+          "required": "false",
+          "doc": "Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too."
         }
       ],
       "slots": [
@@ -3150,6 +3157,7 @@
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
         "In `horizontal`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.",
+        "In `horizontal`, set `descriptionWidth=\"wide\"` when the description runs to a paragraph and would stack six or more lines in the third column alone; it then spans the middle and third columns, capped at `--container-xl` and aligned to the right edge so it ends where the narrow description ends. It takes the column a `--section-title-headline-span` of `2` would claim, so use one or the other. Outside `horizontal` the prop has no effect.",
         "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
         "The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component."
       ]
@@ -3408,6 +3416,429 @@
         "To add a scene, export the frame from the Figma assets library at 592×300, drop the `.svg` into `src/assets/illustrations/`, and register it. Never hand-draw one.",
         "Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices."
       ]
+    },
+    "product-widget": {
+      "import": "@aziontech/webkit/product-widget",
+      "target": "./src/components/content/product-widget/product-widget.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/product-widget",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "name",
+          "type": "'ai-inference-function' | 'ai-inference-model' | 'ai-inference-template' | 'application-accelerator-cookie' | 'application-accelerator-method' | 'application-accelerator-query-string' | 'application-cache' | 'application-function' | 'application-rule' | 'application-version' | 'applications-create-method' | 'applications-device-group' | 'applications-rule-phases' | 'bot-manager-metrics' | 'bot-manager-rule' | 'bot-manager-traffic' | 'cli-terminal-deploy' | 'cli-terminal-start' | 'data-stream-connector' | 'data-stream-sampling' | 'data-stream-source' | 'ddos-firewall-modules' | 'ddos-http-events' | 'ddos-requests-metric' | 'edge-dns-dnssec' | 'edge-dns-nameserver' | 'edge-dns-record' | 'firewall-function' | 'firewall-modules' | 'firewall-rules-order' | 'function-code' | 'functions-start' | 'image-processor-events' | 'image-processor-module' | 'image-processor-rule' | 'kv-store-function' | 'kv-store-key' | 'kv-store-security-list' | 'load-balancer-address' | 'load-balancer-method' | 'load-balancer-origins' | 'network-shield-ip-list' | 'network-shield-lists' | 'network-shield-rule' | 'object-storage-access' | 'object-storage-browser' | 'object-storage-buckets' | 'real-time-events-filter' | 'real-time-events-log' | 'real-time-events-volume' | 'real-time-metrics-dashboard' | 'real-time-metrics-filter' | 'real-time-metrics-panel' | 'sql-database-query' | 'sql-database-row' | 'sql-database-table' | 'waf-allowed-rule' | 'waf-firewall-rule' | 'waf-threat' | 'workload-deploy' | 'workload-deploy-logs' | 'workload-deployments' | 'workload-domain' | 'workload-domains' | 'workload-overview' | 'workload-rollout-rows' | 'workload-topology-chain' | 'workload-topology' | 'workload-topology-flow' | 'workloads-list'",
+          "default": "—",
+          "required": "true",
+          "doc": "Name of the console widget to draw."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Whether this widget is the one showing; it replays its entrance each time it becomes active."
+        },
+        {
+          "name": "hover",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Whether the pointer is over the host; a fragment plays its beat while it is."
+        },
+        {
+          "name": "kind",
+          "type": "'window' | 'bare'",
+          "default": "undefined",
+          "required": "false",
+          "doc": "How a framed widget is plated; unset keeps the widget's own plating."
+        },
+        {
+          "name": "chrome",
+          "type": "boolean",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Draws the console bar on a framed widget; unset keeps the widget's own bar."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Design width of a framed widget from md up; unset keeps the widget's own width."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Edge a framed widget fades out along."
+        },
+        {
+          "name": "texture",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture a full-screen widget is grounded with."
+        },
+        {
+          "name": "tab",
+          "type": "'agents' | 'console' | 'cli' | 'overview' | 'topology' | 'deploy' | 'main-settings' | 'cache-settings' | 'device-groups' | 'functions' | 'rules-engine'",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Tab a tabbed widget plays (`workload-overview`, `application-version`, `functions-start`); other widgets ignore it, and unset plays the first tab."
+        },
+        {
+          "name": "interval",
+          "type": "number",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace."
+        }
+      ],
+      "purpose": "Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.",
+      "useWhen": [
+        "A product band (hero, media split, feature tab, widget grid cell) needs to show a console screen or a fragment of one.",
+        "The same console screen appears on more than one page and must be the same drawing on each.",
+        "Several widgets share one slot (tabs), and only the one showing should play: drive `active` from the host.",
+        "A grid cell plays its fragment's beat while the pointer is over it: drive `hover` from the host."
+      ],
+      "avoidWhen": [
+        "The screen you need is not in the registry → compose it with `shell-mockup` and its parts, then add it to the registry. Do not approximate it at the call site.",
+        "A live, working screen at a device size → use `browser-frame`.",
+        "A static product concept drawing → use `illustration`.",
+        "A screenshot or clip in documentation → use `doc-frame`."
+      ],
+      "related": [
+        "shell-mockup` — the frame every widget is drawn in; reach for it directly to compose a new screen.",
+        "illustration` — the same closed-registry pattern for static scenes.",
+        "texture-material` — the texture a full-screen widget grounds itself with through `texture`."
+      ],
+      "bestPractices": [
+        "Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.",
+        "Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`.",
+        "Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.",
+        "Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology."
+      ]
+    },
+    "shell-mockup": {
+      "import": "@aziontech/webkit/shell-mockup",
+      "target": "./src/components/content/shell-mockup/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
+      "subcomponents": [
+        "@aziontech/webkit/shell-mockup-part"
+      ],
+      "category": "content",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'window' | 'bare'",
+          "default": "'window'",
+          "required": "false",
+          "doc": "How the mockup is plated: a bordered console window, or bare parts floating on the host's surface."
+        },
+        {
+          "name": "shell",
+          "type": "'console' | 'legacy'",
+          "default": "'console'",
+          "required": "false",
+          "doc": "Console generation the shell draws: the current one, or the previous one with its top bar."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "default": "860",
+          "required": "false",
+          "doc": "Design width of the frame from `md` up; the frame scales to fit its host."
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "default": "390",
+          "required": "false",
+          "doc": "Design width of the frame below `md`."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Edge the mockup fades out along; `y` fades top and bottom."
+        },
+        {
+          "name": "chrome",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draws the console bar over the body."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Module label on the console bar; with a rail, `›` splits it into breadcrumbs."
+        },
+        {
+          "name": "rail",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Active entry of the console's side rail; empty renders no rail."
+        },
+        {
+          "name": "texture",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the frame is grounded with, behind the body."
+        },
+        {
+          "name": "textureFade",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the frame's texture fades out before its edges."
+        },
+        {
+          "name": "travel",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'slow-01'",
+          "required": "false",
+          "doc": "Duration token of each part's travel."
+        },
+        {
+          "name": "beat",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'fast-01'",
+          "required": "false",
+          "doc": "Duration token of the gap between one part's beat and the next."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Whether this mockup is the one showing; parts replay their entrance each time it becomes active."
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Lets the viewer operate the controls inside instead of drawing them as an inert picture."
+        },
+        {
+          "name": "still",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draws every part in place from the start, with no entrance and no replay."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The mockup's body, composed of `ShellMockup.Part` beats."
+        },
+        {
+          "name": "overlay",
+          "scope": "—",
+          "notes": "A layer over the whole frame, bar and rail included, such as a drawer."
+        }
+      ],
+      "purpose": "A scaled, inert picture of an Azion Console screen, for marketing bands that show the product. The consumer composes the screen's body from real webkit components at a fixed design width; the frame draws the console shell around it (the slim console bar, the side rail with breadcrumbs and actions, or the previous console's top bar) and scales the whole drawing to fit its host. Each piece of the body is a `ShellMockup.Part` that travels in on its own beat once the mockup scrolls into view, so the screen assembles itself instead of appearing all at once.",
+      "useWhen": [
+        "Showing a console screen or fragment on a marketing band: a hero, a media split, a feature tab, a widget grid cell.",
+        "Depicting a product workflow with real webkit controls instead of a screenshot, so the drawing follows the theme and stays sharp at any size.",
+        "Staggering the parts of a mock so they arrive in reading order when the band scrolls into view, and replaying that entrance each time a tab makes the mock active.",
+        "Drawing only a fragment of a screen (a list, a form row) floating on the band's own surface, with `kind=\"bare\"` and `chrome` off."
+      ],
+      "avoidWhen": [
+        "To show a real, working screen at a device size → use `browser-frame`; it renders live content in a true viewport, not a scaled picture.",
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For an illustration scene → use `illustration`."
+      ],
+      "related": [
+        "browser-frame` — a live, resizable viewport for real screens; `shell-mockup` is an inert, scaled drawing of the console.",
+        "texture-material` — the texture the frame grounds itself with when `texture` is set.",
+        "frame-box` — the page's registration frame a mockup band is often placed inside."
+      ],
+      "bestPractices": [
+        "Compose the body at the design width (`width`, `mobileWidth`), not at the host's width; the frame scales the drawing, so sizes inside are design pixels.",
+        "Give the host a height (or an aspect ratio); the frame fills its host and derives its design height from it.",
+        "Number parts in reading order with `order`, starting at `0`; parts on the same beat land together.",
+        "Keep the mockup decorative: it is hidden from assistive technology unless `interactive` is set, so the band's own copy must say what the picture shows.",
+        "Set `active` from the host when several mockups share one slot (tabs), so only the visible one plays and it replays when it returns.",
+        "Tune a fade with the consumer-side custom properties `--mockup-fade-start` / `--mockup-fade-end` (or `--mockup-fade-edge` for `y`) and match its color to the host surface with `--mockup-fade-color`."
+      ]
+    },
+    "shell-mockup-root": {
+      "import": "@aziontech/webkit/shell-mockup-root",
+      "target": "./src/components/content/shell-mockup/shell-mockup.vue",
+      "kind": "root",
+      "rootOf": "shell-mockup",
+      "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
+      "category": "content",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'window' | 'bare'",
+          "default": "'window'",
+          "required": "false",
+          "doc": "How the mockup is plated: a bordered console window, or bare parts floating on the host's surface."
+        },
+        {
+          "name": "shell",
+          "type": "'console' | 'legacy'",
+          "default": "'console'",
+          "required": "false",
+          "doc": "Console generation the shell draws: the current one, or the previous one with its top bar."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "default": "860",
+          "required": "false",
+          "doc": "Design width of the frame from `md` up; the frame scales to fit its host."
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "default": "390",
+          "required": "false",
+          "doc": "Design width of the frame below `md`."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Edge the mockup fades out along; `y` fades top and bottom."
+        },
+        {
+          "name": "chrome",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draws the console bar over the body."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Module label on the console bar; with a rail, `›` splits it into breadcrumbs."
+        },
+        {
+          "name": "rail",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Active entry of the console's side rail; empty renders no rail."
+        },
+        {
+          "name": "texture",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the frame is grounded with, behind the body."
+        },
+        {
+          "name": "textureFade",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the frame's texture fades out before its edges."
+        },
+        {
+          "name": "travel",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'slow-01'",
+          "required": "false",
+          "doc": "Duration token of each part's travel."
+        },
+        {
+          "name": "beat",
+          "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
+          "default": "'fast-01'",
+          "required": "false",
+          "doc": "Duration token of the gap between one part's beat and the next."
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Whether this mockup is the one showing; parts replay their entrance each time it becomes active."
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Lets the viewer operate the controls inside instead of drawing them as an inert picture."
+        },
+        {
+          "name": "still",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draws every part in place from the start, with no entrance and no replay."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The mockup's body, composed of `ShellMockup.Part` beats."
+        },
+        {
+          "name": "overlay",
+          "scope": "—",
+          "notes": "A layer over the whole frame, bar and rail included, such as a drawer."
+        }
+      ],
+      "purpose": "A scaled, inert picture of an Azion Console screen, for marketing bands that show the product. The consumer composes the screen's body from real webkit components at a fixed design width; the frame draws the console shell around it (the slim console bar, the side rail with breadcrumbs and actions, or the previous console's top bar) and scales the whole drawing to fit its host. Each piece of the body is a `ShellMockup.Part` that travels in on its own beat once the mockup scrolls into view, so the screen assembles itself instead of appearing all at once.",
+      "useWhen": [
+        "Showing a console screen or fragment on a marketing band: a hero, a media split, a feature tab, a widget grid cell.",
+        "Depicting a product workflow with real webkit controls instead of a screenshot, so the drawing follows the theme and stays sharp at any size.",
+        "Staggering the parts of a mock so they arrive in reading order when the band scrolls into view, and replaying that entrance each time a tab makes the mock active.",
+        "Drawing only a fragment of a screen (a list, a form row) floating on the band's own surface, with `kind=\"bare\"` and `chrome` off."
+      ],
+      "avoidWhen": [
+        "To show a real, working screen at a device size → use `browser-frame`; it renders live content in a true viewport, not a scaled picture.",
+        "For a static screenshot or clip in documentation → use `doc-frame`.",
+        "For an illustration scene → use `illustration`."
+      ],
+      "related": [
+        "browser-frame` — a live, resizable viewport for real screens; `shell-mockup` is an inert, scaled drawing of the console.",
+        "texture-material` — the texture the frame grounds itself with when `texture` is set.",
+        "frame-box` — the page's registration frame a mockup band is often placed inside."
+      ],
+      "bestPractices": [
+        "Compose the body at the design width (`width`, `mobileWidth`), not at the host's width; the frame scales the drawing, so sizes inside are design pixels.",
+        "Give the host a height (or an aspect ratio); the frame fills its host and derives its design height from it.",
+        "Number parts in reading order with `order`, starting at `0`; parts on the same beat land together.",
+        "Keep the mockup decorative: it is hidden from assistive technology unless `interactive` is set, so the band's own copy must say what the picture shows.",
+        "Set `active` from the host when several mockups share one slot (tabs), so only the visible one plays and it replays when it returns.",
+        "Tune a fade with the consumer-side custom properties `--mockup-fade-start` / `--mockup-fade-end` (or `--mockup-fade-edge` for `y`) and match its color to the host surface with `--mockup-fade-color`."
+      ]
+    },
+    "shell-mockup-part": {
+      "import": "@aziontech/webkit/shell-mockup-part",
+      "target": "./src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
+      "kind": "subcomponent",
+      "parent": "shell-mockup",
+      "treeShakeableImport": "@aziontech/webkit/shell-mockup-part"
     },
     "kbd": {
       "import": "@aziontech/webkit/kbd",
@@ -16201,7 +16632,8 @@
         "Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.",
         "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
         "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
-        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at."
+        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.",
+        "A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band."
       ]
     },
     "section-module": {

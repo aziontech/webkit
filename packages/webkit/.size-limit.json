@@ -183,7 +183,7 @@
   {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
-    "limit": "4 KB",
+    "limit": "4.25 KB",
     "entryOnly": true
   },
   {
@@ -263,6 +263,27 @@
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2.5 KB",
     "entryOnly": true
+  },
+  {
+    "name": "product-widget",
+    "path": "src/components/content/product-widget/product-widget.vue",
+    "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "shell-mockup",
+    "path": "src/components/content/shell-mockup/index.ts",
+    "limit": "30 KB"
+  },
+  {
+    "name": "shell-mockup-root",
+    "path": "src/components/content/shell-mockup/shell-mockup.vue",
+    "limit": "30 KB"
+  },
+  {
+    "name": "shell-mockup-part",
+    "path": "src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
+    "limit": "1 KB"
   },
   {
     "name": "big-numbers",

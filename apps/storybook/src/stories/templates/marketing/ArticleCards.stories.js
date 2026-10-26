@@ -8,6 +8,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -46,28 +47,28 @@ const MONOCHROME = 'brightness-0 [[data-theme=dark]_&]:invert'
 
 const POSTS = [
   {
-    href: '/blog/bringing-application-security-into-the-deployment-process',
-    title: 'Bringing application security into the deployment process',
-    description:
-      'Integrate application, API, and AI agent protection into deployment with reusable policies, security reviews, and validation in Real-Time Events.',
-    meta: 'OCT 7, 2026 • 8 min read',
-    image: '/media/blog/bringing-application-security-into-the-deployment-process.png'
-  },
-  {
-    href: '/blog/coding-agent-suggests-security-policy',
-    title: 'The agent that writes your code also suggests your security policy',
-    description:
-      'See how the open-source Azion MCP Server lets coding agents like Claude Code and Codex query Azion docs and propose security policies (WAF, Firewall, rate limiting) via Terraform, for team review before deploy.',
-    meta: 'OCT 5, 2026 • 9 min read',
-    image: '/media/blog/coding-agent-suggests-security-policy.png'
-  },
-  {
     href: '/blog/how-to-reduce-ai-agent-latency',
     title: 'How Do You Reduce AI Agent Latency?',
     description:
       'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
     meta: 'SEP 23, 2026 • 8 min read',
-    image: '/media/blog/how-to-reduce-ai-agent-latency.jpg'
+    image: '/media/blog/reduce-ai-agent-latency.png'
+  },
+  {
+    href: '/blog/cloudflare-alternatives-and-competitors',
+    title: 'Best Cloudflare Alternatives and Competitors',
+    description:
+      'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
+    meta: 'SEP 22, 2026 • 13 min read',
+    image: '/media/blog/best-cloudflare-alternatives.png'
+  },
+  {
+    href: '/blog/which-azion-plan-is-right-for-your-project',
+    title: 'Which Azion Plan Is Right for Your Project?',
+    description:
+      'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
+    meta: 'SEP 22, 2026 • 7 min read',
+    image: '/media/blog/which-azion-plan.png'
   }
 ]
 
@@ -137,10 +138,10 @@ ${indent(item.image ? cover(item) : clientMark(item), 3)}
   </a>
 </CardGrid.Cell>`
 
-const band = (title, items) =>
+const band = (title, items, kind = 'left') =>
   inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
-    <SectionTitle kind="left" title="${title}" />
+    <SectionTitle${kind === 'centered' ? '' : ' kind="left"'} title="${title}" />
   </template>
 
   <FrameBox flush borders="y" marks="all">
@@ -160,17 +161,18 @@ const ARTICLES_TEMPLATE = band('Related Articles', POSTS)
 
 const STORIES_TEMPLATE = band('Related Success Cases', STORIES)
 
+const CENTERED_TEMPLATE = band('When our customers succeed, we succeed', STORIES, 'centered')
+
 const meta = {
   title: 'Templates/Marketing/Articles/ArticleCards',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
-          'A titled row of three article cards on one hairline grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell, then the headline, the deck and a `date • read time` overline pinned to the foot. The media cell holds the article’s cover, or the client’s mark drawn as one flat ink that follows the theme when the article has no cover. On hover the card lifts to the raised surface and the media scales up slightly. It closes every blog post (/blog/:slug) with its related articles and every success story (/success-cases/:slug) with its related stories. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`).'
+          'A titled row of three article cards on one hairline grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell, then the headline, the deck and a `date • read time` overline pinned to the foot. The media cell holds the article’s cover, or the client’s mark drawn as one flat ink that follows the theme when the article has no cover. On hover the card lifts to the raised surface and the media scales up slightly. It closes every blog post (/blog/:slug) with its related articles and every success story (/success-cases/:slug) with its related stories; the under-attack page centres the title over its customer stories. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`).'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -180,7 +182,7 @@ const meta = {
 export default meta
 
 export const RelatedArticles = {
-  render: () => ({ components, template: ARTICLES_TEMPLATE }),
+  ...editable(() => ({ components, template: ARTICLES_TEMPLATE })),
   parameters: {
     docs: {
       description: {
@@ -192,7 +194,7 @@ export const RelatedArticles = {
 }
 
 export const RelatedSuccessCases = {
-  render: () => ({ components, setup, template: STORIES_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: STORIES_TEMPLATE })),
   parameters: {
     docs: {
       description: {
@@ -200,6 +202,19 @@ export const RelatedSuccessCases = {
           'The Magalu story’s closing band: the next three Retail stories in the library’s order, Netshoes, Renner and GPA. A story has no cover, so each card draws its client’s mark.'
       },
       source: { code: toSfc(MARK_IMPORTS, STORIES_TEMPLATE) }
+    }
+  }
+}
+
+export const Centered = {
+  ...editable(() => ({ components, setup, template: CENTERED_TEMPLATE })),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The title centred and balanced over the cards, as a landing-page band rather than an article’s closing row (Under attack).'
+      },
+      source: { code: toSfc(MARK_IMPORTS, CENTERED_TEMPLATE) }
     }
   }
 }
