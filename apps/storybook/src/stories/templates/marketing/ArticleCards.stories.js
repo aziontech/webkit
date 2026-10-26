@@ -138,10 +138,10 @@ ${indent(item.image ? cover(item) : clientMark(item), 3)}
   </a>
 </CardGrid.Cell>`
 
-const band = (title, items) =>
+const band = (title, items, kind = 'left') =>
   inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
-    <SectionTitle kind="left" title="${title}" />
+    <SectionTitle${kind === 'centered' ? '' : ' kind="left"'} title="${title}" />
   </template>
 
   <FrameBox flush borders="y" marks="all">
@@ -161,6 +161,8 @@ const ARTICLES_TEMPLATE = band('Related Articles', POSTS)
 
 const STORIES_TEMPLATE = band('Related Success Cases', STORIES)
 
+const CENTERED_TEMPLATE = band('When our customers succeed, we succeed', STORIES, 'centered')
+
 const meta = {
   title: 'Templates/Marketing/Articles/ArticleCards',
   tags: ['autodocs'],
@@ -170,7 +172,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A titled row of three article cards on one hairline grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell, then the headline, the deck and a `date • read time` overline pinned to the foot. The media cell holds the article’s cover, or the client’s mark drawn as one flat ink that follows the theme when the article has no cover. On hover the card lifts to the raised surface and the media scales up slightly. It closes every blog post (/blog/:slug) with its related articles and every success story (/success-cases/:slug) with its related stories. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`).'
+          'A titled row of three article cards on one hairline grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell, then the headline, the deck and a `date • read time` overline pinned to the foot. The media cell holds the article’s cover, or the client’s mark drawn as one flat ink that follows the theme when the article has no cover. On hover the card lifts to the raised surface and the media scales up slightly. It closes every blog post (/blog/:slug) with its related articles and every success story (/success-cases/:slug) with its related stories; the under-attack page centres the title over its customer stories. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`).'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -200,6 +202,19 @@ export const RelatedSuccessCases = {
           'The Magalu story’s closing band: the next three Retail stories in the library’s order, Netshoes, Renner and GPA. A story has no cover, so each card draws its client’s mark.'
       },
       source: { code: toSfc(MARK_IMPORTS, STORIES_TEMPLATE) }
+    }
+  }
+}
+
+export const Centered = {
+  ...editable(() => ({ components, setup, template: CENTERED_TEMPLATE })),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The title centred and balanced over the cards, as a landing-page band rather than an article’s closing row (Under attack).'
+      },
+      source: { code: toSfc(MARK_IMPORTS, CENTERED_TEMPLATE) }
     }
   }
 }
