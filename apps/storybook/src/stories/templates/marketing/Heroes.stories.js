@@ -207,6 +207,20 @@ ${indent(actions([START_FREE, DOCS]), 2)}
   </Hero.Title>
 </Hero>`
 
+const TITLE_BAND_SMALL_TEMPLATE = `<Hero
+  kind="band"
+  max-width="5xl"
+  size="medium"
+>
+  <Hero.Title
+    centered
+    eyebrow="Contact"
+    eyebrow-prefix="//"
+    title="Contact us"
+    description="Talk to sales about a new project, or reach support about one already running."
+  />
+</Hero>`
+
 const TITLE_BAND_CAROUSEL_TEMPLATE = `<Hero
   kind="band"
   max-width="5xl"
@@ -315,6 +329,7 @@ const meta = {
   excludeStories: [
     'CENTERED_CAROUSEL_SECTION',
     'TITLE_BAND_SECTION',
+    'TITLE_BAND_SMALL_SECTION',
     'TITLE_BAND_CAROUSEL_SECTION',
     'PIXEL_FLOOR_SECTION',
     'COPY_BESIDE_ART_SECTION',
@@ -408,6 +423,34 @@ export const TITLE_BAND_SECTION = {
 export const TitleBandJson = {
   tags: ['!dev'],
   ...siteJsonStory(TITLE_BAND_SECTION)
+}
+
+export const TitleBandSmall = {
+  ...editable(() => ({ components, template: TITLE_BAND_SMALL_TEMPLATE })),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The title band at the medium height, for a page whose bands start right under the headline (Contact).'
+      },
+      source: { code: toSfc([HERO_IMPORT], TITLE_BAND_SMALL_TEMPLATE) }
+    }
+  }
+}
+
+export const TITLE_BAND_SMALL_SECTION = {
+  _id: 'hero-title-band-small',
+  props: {
+    eyebrow: 'Contact',
+    highlight: '',
+    title: 'Contact us',
+    description: 'Talk to sales about a new project, or reach support about one already running.'
+  }
+}
+
+export const TitleBandSmallJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(TITLE_BAND_SMALL_SECTION)
 }
 
 export const TitleBandCarousel = {
