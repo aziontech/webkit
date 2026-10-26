@@ -498,6 +498,7 @@
     "./assets/gcp-symbol-mono.svg": "./src/assets/logos/frameworks/gcp-symbol-mono.svg",
     "./assets/gdpr-symbol-color.svg": "./src/assets/logos/certifications/gdpr-symbol-color.svg",
     "./assets/gemini-symbol-color.svg": "./src/assets/logos/agents/gemini-symbol-color.svg",
+    "./assets/google-symbol-color.svg": "./src/assets/logos/frameworks/google-symbol-color.svg",
     "./assets/getninjas-extended-mono.svg": "./src/assets/logos/clients/getninjas-extended-mono.svg",
     "./assets/getninjas-extended-reversed.svg": "./src/assets/logos/clients/getninjas-extended-reversed.svg",
     "./assets/gfg-extended-mono.svg": "./src/assets/logos/clients/gfg-extended-mono.svg",

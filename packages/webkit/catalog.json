@@ -11370,21 +11370,28 @@
       "status": "approved",
       "props": [
         {
+          "name": "name",
+          "type": "'ai-gateway' | 'ai-gateway-latency-routing' | 'ai-gateway-model-routing' | 'ai-gateway-provider-failover' | 'ai-gateway-response-cache' | 'ai-inference' | 'application-accelerator' | 'applications' | 'bot-manager' | 'cache' | 'data-stream' | 'ddos-protection' | 'edge-dns' | 'firewall' | 'functions' | 'image-processor' | 'kv-store' | 'load-balancer' | 'network-shield' | 'object-storage' | 'real-time-events' | 'real-time-metrics' | 'sql-database' | 'web-application-firewall' | 'workloads' | 'workloads-gradual-rollout' | 'workloads-isolate-per-request' | 'workloads-security'",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Name of an official diagram in the asset library; ignored when spec is set."
+        },
+        {
           "name": "spec",
           "type": "DiagramSpec",
-          "default": "—",
-          "required": "true",
-          "doc": "The nodes, their layout and the edges between them."
+          "default": "undefined",
+          "required": "false",
+          "doc": "The nodes, their layout and the edges between them, for a diagram the library does not have."
         },
         {
           "name": "ariaLabel",
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Accessible description of the whole diagram; when set, the root is announced as one image with this name."
+          "doc": "Accessible description of the whole diagram; empty uses the description the spec carries."
         }
       ],
-      "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer passes one `spec` — the nodes, how they are arranged, and the edges between them — and the component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
+      "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
       "useWhen": [
         "Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.",
         "Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.",
@@ -11397,7 +11404,7 @@
         "For live data or anything the reader operates — a diagram is a figure, not a control."
       ],
       "related": [
-        "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art.",
+        "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
         "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
         "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
         "tag` — the status chip a card or item node carries."
@@ -11406,7 +11413,8 @@
         "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",
         "Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.",
         "Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.",
-        "Give every diagram an `ariaLabel` that states what it shows in one sentence; the drawing itself is hidden from assistive technology.",
+        "Name an official diagram instead of rebuilding its `spec`, so the same architecture is the same drawing on every page. Reach for `spec` only for a diagram the library does not have.",
+        "Every named diagram carries its own one-sentence description. Give a `spec` diagram an `ariaLabel` (in the prop or in the spec) that states what it shows; the drawing itself is hidden from assistive technology.",
         "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
       ]
     },
@@ -14873,6 +14881,12 @@
       "target": "./src/assets/logos/agents/gemini-symbol-color.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/gemini-symbol-color.svg"
+    },
+    "assets/google-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/google-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/google-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/google-symbol-color.svg"
     },
     "assets/getninjas-extended-mono.svg": {
       "import": "@aziontech/webkit/assets/getninjas-extended-mono.svg",
