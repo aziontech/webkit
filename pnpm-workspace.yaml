@@ -23,7 +23,7 @@ overrides:
   brace-expansion: ">=5.0.12" # GHSA-rgw5-rvv9-x895 (CVE-2026-14257 mitigation bypass), GHSA-6j4f-fj2g-mc7p and GHSA-qhr7-859c-m2p7 (DoS via uncontrolled recursion), patched 5.0.12
   minimatch: ">=9.0.0" # keeps minimatch@3 chains out so the brace-expansion force stays within one API major
   uuid: ">=14.0.0" # GHSA-w5hq-g745-h8pq, patched 11.1.1; jest/storybook chains pin 8.x/9.x
-  fast-uri: ">=3.1.8 <4" # GHSA-jqff-g426-hqxp, GHSA-5jgf-p345-68v8, GHSA-f65p-4m7j-42xc, GHSA-fph4-wmhf-6fwf (host confusion/SSRF), patched 3.1.8; bounded to 3.x — ajv pins ^3
+  fast-uri: ">=3.1.9 <4" # GHSA-jqff-g426-hqxp, GHSA-5jgf-p345-68v8, GHSA-f65p-4m7j-42xc, GHSA-fph4-wmhf-6fwf (host confusion/SSRF), patched 3.1.8; GHSA-w74x-v6f9-j3xg, GHSA-wjr9-j795-jxcr, GHSA-xhq7-xmqj-769h, GHSA-333x-w4r6-6crp, patched 3.1.9; bounded to 3.x — ajv pins ^3
   qs: ">=6.16.0 <7" # GHSA-4mjr-xmp4-gh2g (DoS via isBuffer) and GHSA-x5fp-wj9c-mxmx (array-limit bypass), patched 6.16.0; bounded to 6.x — express/union pin ^6
   "@xmldom/xmldom": ">=0.9.12 <0.10" # GHSA-6gmq-8vp8-gcm6 (XML fragment injection), patched 0.9.12; bounded — 0.x minors break API
   "@babel/core": ">=7.29.1 <8" # bounded: peer ranges (^7 || ^8.0.0-0) would jump to Babel 8
@@ -35,9 +35,12 @@ overrides:
   colord: ">=2.9.4 <3" # GHSA-2wm5-q62r-hmrv (slow rejection of oversized malformed color strings), patched 2.9.4; bounded — stylelint pins ^2.9.x, no 3.x published
   axios: ">=1.20.0 <2" # eight 1.x advisories (ReDoS, prototype-pollution gadgets, HTTP/2 DNS bypass), patched 1.20.0; bounded to 1.x — icons-gallery pins ^1
   follow-redirects: ">=1.16.1 <2" # GHSA-8r9p-f939-6h3c and the sensitiveHeaders regex advisory (header leak on redirect), patched 1.16.1; bounded to 1.x — axios and http-proxy pin ^1
-  undici: ">=7.29.1 <8" # GHSA-rfgv-xxqx-mfg5 (DoS), GHSA-w293-vg96-wgc3 (TLS validation bypass), patched 7.29.1; bounded to 7.x — @figma/code-connect pins ^7
+  undici: ">=7.30.1 <8" # GHSA-rfgv-xxqx-mfg5 (DoS), GHSA-w293-vg96-wgc3 (TLS validation bypass), GHSA-xjj6-f33q-929c (DoS), patched 7.30.1; bounded to 7.x — @figma/code-connect pins ^7
   ip-address: ">=10.7.4 <11" # GHSA-rxp7-6hxx-x8q5 (Address6 zone-id quadratic ReDoS), patched 10.7.4; bounded to 10.x - node-gyp chain via fantasticon, express-rate-limit
   vitest: ">=4.1.12 <5" # GHSA-82fw-gwwq-j7x9 (path traversal / arbitrary file read via @vitest/mocker redirect mock), patched 4.1.11; GHSA-qxg6-89mg-rqv8 + GHSA-xp26-3454-mjgp (@vitest/mocker), patched 4.1.12; already inside the ^4.1.x devDependency range — lockfile was just stale
+  "@figma/code-connect>zod": ">=4.6.6 <5" # GHSA-mrhx-c7xc-m3w5 (memory exhaustion validating oversized input), patched 4.6.6; every code-connect release pins zod 3 exactly, and the APIs it calls (object, record, nativeEnum, parse) hold on zod 4
+  "@figma/code-connect>zod-validation-error": ">=4.0.2 <5" # 3.x reads zod 3 error internals and throws on zod 4 errors; 4.x peers on zod ^3.25 || ^4 and keeps fromZodError
+  body-parser: ">=2.4.0 <3" # GHSA-27r3-jxmh-p828 (DoS via trailing bytes after a compressed body), patched 2.4.0; bounded to 2.x — express 5 (MCP SDK) pins the 2.3.x line it locked
   "@vitest/mocker": ">=4.1.12 <5" # GHSA-82fw-gwwq-j7x9, GHSA-qxg6-89mg-rqv8, GHSA-xp26-3454-mjgp, same fix as vitest above; bounded to 4.x
   http-cache-semantics: ">=4.3.0 <5" # GHSA-ch52-4w7c-c8xp (cross-user cached responses), fixed in 4.3.0; bounded to 4.x — make-fetch-happen (node-gyp via fantasticon) pins ^4
   proxy-addr: ">=2.0.8 <3" # GHSA-jqcg-44mw-7w3h (IP spoofing via IPv4-mapped addresses), patched 2.0.8; bounded to 2.x — express (MCP SDK) pins ^2
