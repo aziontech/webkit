@@ -7,6 +7,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -56,7 +57,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     >
       <template #actions>
         <Button
-          label="Read the docs"
+          label="Docs"
           kind="secondary"
           size="large"
           href="/product-preview"
@@ -120,7 +121,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -130,7 +130,9 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, setup: () => ({ diagrams: DIAGRAMS }), template: TEMPLATE }),
+  ...editable(() => ({ components, setup: () => ({ diagrams: DIAGRAMS }), template: TEMPLATE }), {
+    diagrams: DIAGRAMS
+  }),
   parameters: {
     docs: {
       source: { code: toSfc([...IMPORTS, '', DECLARATION], TEMPLATE) }
@@ -256,11 +258,14 @@ const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fal
 </SectionModule>`)
 
 export const Platform = {
-  render: () => ({
-    components,
-    setup: () => ({ diagrams: PLATFORM_DIAGRAMS }),
-    template: PLATFORM_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ diagrams: PLATFORM_DIAGRAMS }),
+      template: PLATFORM_TEMPLATE
+    }),
+    { diagrams: PLATFORM_DIAGRAMS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc([...PLATFORM_IMPORTS, '', PLATFORM_DECLARATION], PLATFORM_TEMPLATE) }
@@ -306,7 +311,7 @@ export const SITE_SECTION = {
           'A repeated prompt is answered from cache, with no model call and no tokens spent.'
       }
     ],
-    action: { label: 'Read the docs', href: '/product-preview', trailing: true }
+    action: { label: 'Docs', href: '/product-preview', trailing: true }
   }
 }
 

@@ -19,6 +19,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -190,7 +191,7 @@ ${indent(clientMark(cell))}
       ${cell.story}
     </p>
     <MiniButton
-      label="Learn more"
+      label="Read the case study"
       show-icon
       icon="pi pi-angle-right"
       href="${cell.href}"
@@ -347,7 +348,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -357,7 +357,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, setup, template: TEMPLATE }),
+  ...editable(() => ({ components, setup, template: TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }
@@ -366,11 +366,11 @@ export const Default = {
 }
 
 export const Columns = {
-  render: () => ({
+  ...editable(() => ({
     components: columnsComponents,
     setup: columnsSetup,
     template: COLUMNS_TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       description: {
@@ -386,7 +386,7 @@ export const SITE_SECTION = {
   _id: 'client-mosaic',
   props: {
     ariaLabel: 'Client stories',
-    linkLabel: 'Learn more',
+    linkLabel: 'Read the case study',
     stories: [
       {
         logo: '/marketing-components/logos/netshoes-extended-color.svg',
