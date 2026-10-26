@@ -15,6 +15,7 @@
   export type HeroesKind =
     | 'centered-carousel'
     | 'title-band'
+    | 'title-band-small'
     | 'centered-band'
     | 'pixel-floor'
     | 'copy-beside-art'
@@ -98,6 +99,7 @@
       textureFade: 'top'
     },
     'title-band': { kind: 'band', maxWidth: '5xl', size: 'large' },
+    'title-band-small': { kind: 'band', maxWidth: '5xl', size: 'medium' },
     'centered-band': {
       kind: 'band',
       size: 'large',
@@ -123,6 +125,7 @@
   const TITLES = {
     'centered-carousel': { centered: true, maxWidth: 'xl' },
     'title-band': { centered: true, maxWidth: 'xl' },
+    'title-band-small': { centered: true, maxWidth: 'xl' },
     'centered-band': { centered: true, maxWidth: '2xl' },
     'pixel-floor': {},
     'copy-beside-art': { maxWidth: 'xl', mobileCentered: true },
@@ -132,6 +135,7 @@
   const LONG_TITLE_WIDTH = {
     'centered-carousel': '3xl',
     'title-band': '4xl',
+    'title-band-small': '4xl',
     'centered-band': '3xl'
   } as const
 

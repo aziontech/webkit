@@ -236,7 +236,7 @@ export const HOME_PAGE = [
       'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ],
     carouselLabel: 'Proven on mission-critical workloads',
     carouselMarks: CLIENT_STRIP

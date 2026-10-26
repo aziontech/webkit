@@ -16,6 +16,7 @@ import ComparePlans from './ComparePlans.vue'
 import CompareSupportTiers from './CompareSupportTiers.vue'
 import ComplianceBadges from './ComplianceBadges.vue'
 import ConsolePanel from './ConsolePanel.vue'
+import ContactHub from './ContactHub.vue'
 import FaqSection from './FaqSection.vue'
 import FeatureScroll from './FeatureScroll.vue'
 import FeatureTabs from './FeatureTabs.vue'
@@ -61,6 +62,7 @@ export const SECTIONS: Record<string, Component> = {
   CompareSupportTiers,
   ComplianceBadges,
   ConsolePanel,
+  ContactHub,
   FaqSection,
   FeatureScroll,
   FeatureTabs,

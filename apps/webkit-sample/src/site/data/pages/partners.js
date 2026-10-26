@@ -33,7 +33,7 @@ export const PARTNERS_PAGE = [
     items: PARTNER_REASONS,
     actions: [
       { label: 'Become a partner', href: '#become-a-partner', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ]
   },
   COMPANY_CLOSING

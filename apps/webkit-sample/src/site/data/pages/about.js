@@ -61,6 +61,27 @@ const FIRMS = {
   frost: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost }
 }
 
+export const MARKET_RECOGNITIONS = [
+  {
+    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
+    name: 'G2 Winter 2026 Reports',
+    jobTitle: '',
+    firm: FIRMS.g2
+  },
+  {
+    text: 'Named a Leader, and the only vendor whose capabilities meet every key criterion in the report.',
+    name: 'GigaOm Radar for Edge Platforms',
+    jobTitle: '',
+    firm: FIRMS.gigaom
+  },
+  {
+    text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
+    name: '2023 North American New Product Innovation Award',
+    jobTitle: '',
+    firm: FIRMS.frost
+  }
+]
+
 export const ABOUT_PAGE = [
   {
     section: 'Heroes',
@@ -72,7 +93,7 @@ export const ABOUT_PAGE = [
       'The Azion Platform runs your code, data, and security on a distributed architecture, with instant deploys and cold-start-free scale.',
     actions: [
       { label: 'Join our team', href: '/site/careers', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ]
   },
   {
@@ -89,26 +110,7 @@ export const ABOUT_PAGE = [
   {
     section: 'RecognitionMarquee',
     title: 'Recognized as a market leader',
-    items: [
-      {
-        text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
-        name: 'G2 Winter 2026 Reports',
-        jobTitle: '',
-        firm: FIRMS.g2
-      },
-      {
-        text: 'Named a Leader, and the only vendor whose capabilities meet every key criterion in the report.',
-        name: 'GigaOm Radar for Edge Platforms',
-        jobTitle: '',
-        firm: FIRMS.gigaom
-      },
-      {
-        text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
-        name: '2023 North American New Product Innovation Award',
-        jobTitle: '',
-        firm: FIRMS.frost
-      }
-    ]
+    items: MARKET_RECOGNITIONS
   },
   {
     section: 'InvestorMarks',

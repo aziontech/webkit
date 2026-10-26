@@ -65,6 +65,6 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     description:
       'Ganhe proteção mais forte, menos exposição a ataques e menos sobrecarga operacional.',
     actions: [{ label: 'Comece grátis', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Fale com um especialista', href: '/site/contact' }
+    aside: { label: 'Fale com vendas', href: '/site/contact/sales' }
   }
 ]

@@ -60,7 +60,7 @@ export const OUR_NETWORK_PAGE = [
       'Run closer to users with low-latency delivery, stable routing, and built-in DDoS protection across 100+ data centers and 3.3k directly connected ASNs.',
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ],
     carouselMarks: CLIENT_STRIP
   },

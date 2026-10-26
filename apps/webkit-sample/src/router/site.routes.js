@@ -48,6 +48,8 @@ import LandingCareersJob from '@site/views/LandingCareersJob.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
+import LandingContactSales from '@site/views/LandingContactSales.vue'
+import LandingContactUnderAttack from '@site/views/LandingContactUnderAttack.vue'
 import LandingDataStream from '@site/views/LandingDataStream.vue'
 import LandingEdgeDns from '@site/views/LandingEdgeDns.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
@@ -86,6 +88,7 @@ import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 // Every path this tree served before the pages were grouped. Kept so a link that is
 // already out — a bookmark, a deployed URL, an ad — still lands on the page it named.
 const MOVED = {
+  '/site/contact/support': '/site/contact',
   '/site/functions': '/site/products/functions',
   '/site/application-accelerator': '/site/products/application-accelerator',
   '/site/cache': '/site/products/cache',
@@ -278,10 +281,13 @@ export const siteRoutes = [
   // opens cannot name two different jobs. The header is per-posting; the description is the one
   // posting we read (stated in `site/data/careers-job.js`).
   { path: '/site/careers/:id', name: 'site-careers-job', component: LandingCareersJob },
-  // The contact page in the same shell: the pitch and its form side by side in the hero, the
-  // offices as a hairline grid, and the site's own closing CTA. The website nav's `Contact`
-  // entry points here — it used to be a bare `#contact` anchor onto the closing band.
   { path: '/site/contact', name: 'site-contact', component: LandingContact },
+  { path: '/site/contact/sales', name: 'site-contact-sales', component: LandingContactSales },
+  {
+    path: '/site/contact/under-attack',
+    name: 'site-contact-under-attack',
+    component: LandingContactUnderAttack
+  },
   // The Learning Center in the same shell: 16 subjects and 78 articles, read verbatim off
   // azion.com/en/learning. The Resources mega-menu's `Learning` entry points here.
   { path: '/site/learning', name: 'site-learning', component: LandingLearning },

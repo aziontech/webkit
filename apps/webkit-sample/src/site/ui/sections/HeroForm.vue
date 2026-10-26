@@ -16,6 +16,9 @@
 
   defineOptions({ name: 'HeroForm' })
 
+  /** Field set: contact asks for a role and a message; incident asks for a website, for a team under attack. */
+  export type HeroFormKind = 'contact' | 'incident'
+
   export interface HeroFormOption {
     /** Submitted value. */
     value: string
@@ -36,10 +39,14 @@
     rolePlaceholder: string
     /** Company field label. */
     company: string
+    /** Website field label, on the incident form. */
+    website: string
     /** Phone field label. */
     phone: string
     /** Message field label. */
     message: string
+    /** Hint inside the empty message field. */
+    messagePlaceholder: string
     /** Submit button label. */
     submit: string
   }
@@ -60,6 +67,8 @@
   }
 
   interface Props {
+    /** Field set the form asks for. */
+    kind?: HeroFormKind
     /** In-page anchor for the band. */
     anchor?: string
     /** Overline above the headline. */
@@ -91,6 +100,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'contact',
     anchor: '',
     eyebrow: '',
     description: '',
@@ -113,8 +123,10 @@
     role: 'Role',
     rolePlaceholder: 'Select your role',
     company: 'Company',
+    website: 'Website',
     phone: 'Phone',
     message: 'Message',
+    messagePlaceholder: '',
     submit: 'Send'
   }
 
@@ -137,6 +149,7 @@
     email: '',
     role: '',
     company: '',
+    domain: '',
     mobilephone: '',
     message: ''
   })
@@ -168,9 +181,10 @@
       : EMAIL.test(form.email.trim())
         ? ''
         : notice.value.invalidEmail
-    errors.role = form.role ? '' : required
-    errors.company = form.company.trim() ? '' : required
-    errors.message = form.message.trim() ? '' : required
+    const asksContact = props.kind === 'contact'
+    errors.role = !asksContact || form.role ? '' : required
+    errors.company = !asksContact || form.company.trim() ? '' : required
+    errors.message = !asksContact || form.message.trim() ? '' : required
     return Object.values(errors).every((message) => !message)
   }
 
@@ -188,6 +202,7 @@
         email: '',
         role: '',
         company: '',
+        domain: '',
         mobilephone: '',
         message: ''
       })
@@ -300,6 +315,7 @@
 
             <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
               <FieldSelect
+                v-if="kind === 'contact'"
                 v-model="form.role"
                 :label="copy.role"
                 :input-id="`${uid}-role`"
@@ -324,6 +340,17 @@
                 :helper-text="errors.company"
                 @update:model-value="errors.company = ''"
               />
+              <FieldText
+                v-if="kind === 'incident'"
+                v-model="form.domain"
+                :label="copy.website"
+                :input-id="`${uid}-website`"
+                name="domain"
+                type="url"
+                size="large"
+                autocomplete="url"
+                :disabled="submitting"
+              />
             </div>
 
             <FieldPhoneNumber
@@ -336,8 +363,10 @@
             />
 
             <FieldTextarea
+              v-if="kind === 'contact'"
               v-model="form.message"
               :label="copy.message"
+              :placeholder="copy.messagePlaceholder"
               :input-id="`${uid}-message`"
               name="message"
               :disabled="submitting"
@@ -347,10 +376,10 @@
             />
           </fieldset>
 
-          <div class="flex justify-start">
+          <div class="flex flex-col">
             <Button
               :label="copy.submit"
-              kind="secondary"
+              kind="primary"
               size="large"
               :loading="submitting"
               type="submit"

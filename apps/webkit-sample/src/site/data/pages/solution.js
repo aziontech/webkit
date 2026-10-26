@@ -45,8 +45,8 @@ export function solutionPage(data) {
       actions: [
         { label: 'Start for free', href: '/signup', kind: 'secondary' },
         {
-          label: 'Talk to a specialist',
-          href: agents ? '/site/contact' : '#contact',
+          label: 'Talk to sales',
+          href: '/site/contact/sales',
           kind: 'outlined',
           trailing: true
         }

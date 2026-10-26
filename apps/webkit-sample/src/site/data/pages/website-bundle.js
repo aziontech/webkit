@@ -22,6 +22,7 @@ import { CACHE_PAGE } from './cache.js'
 import { CAREERS_HOME_PAGE } from './careers-home.js'
 import { CAREERS_JOBS_PAGE } from './careers-jobs.js'
 import { CONTACT_PAGE } from './contact.js'
+import { CONTACT_SALES_PAGE } from './contact-sales.js'
 import { FINANCIAL_SERVICES_PAGE } from './financial-services.js'
 import { FUNCTIONS_PAGE } from './functions.js'
 import { HOME_PAGE, HOME_SOLUTIONS_BAND } from './home.js'
@@ -386,7 +387,7 @@ export const WEBSITE_BUNDLE_PAGE = [
     ...PERFORMANCE_HERO,
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ],
     art: {
       name: 'improve-application-performance-and-reliability',
@@ -399,7 +400,7 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(SUPPORT_PAGE, 'Heroes'),
   pick(ABOUT_PAGE, 'Heroes'),
   pick(RECOGNITIONS_PAGE, 'Heroes'),
-  pick(CONTACT_PAGE, 'HeroForm'),
+  pick(CONTACT_SALES_PAGE, 'HeroForm'),
 
   pick(FUNCTIONS_PAGE, 'ClientQuotes'),
   pick(SOLUTIONS_PAGE, 'LogoWallQuote'),
@@ -478,6 +479,7 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(PRICING_PAGE, 'PricingPlans'),
   pick(PRICING_PAGE, 'ComparePlans'),
   pick(PRICING_PAGE, 'FaqSection'),
+  pick(CONTACT_PAGE, 'ContactHub'),
 
   pick(BLOG_POST_PAGE, 'ArticleBody'),
   pick(BLOG_POST_PAGE, 'ArticleCards'),

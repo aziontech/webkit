@@ -178,7 +178,7 @@ export const SOLUTIONS_PAGE = [
       'The same products, configured for what you build and the sector you build it in, with the clients already running it and the numbers they measured.',
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ],
     items: SOLUTION_GUARANTEES
   },

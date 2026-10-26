@@ -57,7 +57,7 @@ export const RESOURCE_HUB_PAGE = [
     description: RESOURCE_HUB_HERO.description,
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ]
   },
   {

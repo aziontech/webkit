@@ -120,3 +120,7 @@ export const CONTACT_TRUST_MARKS = [
   'GPA',
   'Fourbank'
 ]
+
+export const CONSOLE_LOGIN = 'https://console.azion.com/login'
+
+export const SYSTEM_STATUS = { label: 'System status', href: 'https://status.azion.com/' }

@@ -10,6 +10,9 @@
 
   defineOptions({ name: 'ArticleCards' })
 
+  /** Title placement: left for an article's related row, centered for a band in a landing page. */
+  export type ArticleCardsKind = 'left' | 'centered'
+
   export interface ArticleCardMark {
     /** The client's name, the mark's alternative text. */
     name: string
@@ -39,6 +42,8 @@
   }
 
   interface Props {
+    /** Title placement over the cards. */
+    kind?: ArticleCardsKind
     /** Id of the band, for in-page links. */
     anchor?: string
     /** Headline over the cards. */
@@ -50,6 +55,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
+    kind: 'left',
     anchor: '',
     ariaLabel: ''
   })
@@ -65,7 +71,7 @@
   >
     <template #header>
       <SectionTitle
-        kind="left"
+        :kind="kind"
         :title="title"
       />
     </template>

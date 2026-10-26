@@ -43,7 +43,7 @@ export const SUCCESS_CASES_PAGE = [
     title: 'Trusted by leading companies',
     actions: [
       { label: 'See customer stories', href: '#cases', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
     ]
   },
   {
