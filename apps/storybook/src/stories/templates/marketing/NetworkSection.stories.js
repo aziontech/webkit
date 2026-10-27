@@ -63,7 +63,8 @@ const setup = () => ({
 
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
-  title: 'Build, secure, and scale on one distributed infrastructure',
+  title:
+    'One distributed infrastructure to build, secure, and scale workloads - without the complexity of managing or scaling it.',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -168,10 +169,10 @@ ${indent(DESKTOP_MAP, 2)}
         <SectionTitle
           :framed="false"
           kind="left"
-          size="medium"
+          size="small"
           eyebrow="${NETWORK_BAND.eyebrow}"
           title="${NETWORK_BAND.title}"
-          class="relative [&_h2]:max-w-[16em]"
+          class="relative [&_h2]:max-w-(--container-lg)"
         />
 
 ${indent(MOBILE_MAP, 4)}
@@ -268,7 +269,8 @@ export const SITE_SECTION = {
   _id: 'network-section',
   props: {
     eyebrow: 'Region: Earth.',
-    title: 'Build, secure, and scale on one distributed infrastructure',
+    title:
+      'One distributed infrastructure to build, secure, and scale workloads - without the complexity of managing or scaling it.',
     lead: 'Built around your users. Distributed around your data.',
     claims: [
       '100+ data centers',
