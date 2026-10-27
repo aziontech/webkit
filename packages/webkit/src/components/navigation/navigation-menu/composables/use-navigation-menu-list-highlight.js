@@ -8,7 +8,6 @@ import { computed, onScopeDispose, ref, shallowRef, watch } from 'vue'
 import { resolveHostElement } from './resolve-host-element.js'
 
 /**
- * Sliding highlight that moves between nav triggers/links inside a list.
  * @param {import('vue').Ref<HTMLElement | import('vue').ComponentPublicInstance | null>} containerRef
  * @param {ReturnType<import('./use-navigation-menu-context.js').useNavigationMenuRoot>} root
  */

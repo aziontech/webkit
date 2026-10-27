@@ -17,7 +17,7 @@ figma.connect(
       open: figma.boolean('open'),
       content: figma.children('*')
     },
-    example: (props) => /* html */ `
+    example: (props) => `
       <Dropdown
         :placement="${props.placement}"
         :disabled="${props.disabled}"

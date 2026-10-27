@@ -150,9 +150,6 @@
 
   const showTabHeader = computed(() => normalizedTabs.value.length > 1)
 
-  // On a single line the copy control centres on the row instead of pinning to the
-  // top inset: shell 44px, control 28px, so a 12px inset sits it 4px below the
-  // line's own centre (measured, and visible against one row of code).
   const isSingleLine = computed(() => highlightedLines.value.length === 1)
 
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
@@ -195,9 +192,6 @@
     return codeBlockEnterOffsetClasses.none
   })
 
-  // The swap animates line by line, not as one sliding block: each row enters from
-  // the direction of travel with a short per-line delay. `enter` is the marketing
-  // entrance (40ms a line); `swap` is the tab change (24ms a line, capped).
   const lineEnterOffsetClass = computed(() =>
     lineMotionMode.value === 'swap'
       ? panelEnterOffsetClass.value
@@ -266,11 +260,6 @@
     typeof globalThis.matchMedia === 'function' &&
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  // Commit the pre-transition style before flipping to the ready state: a node
-  // inserted in the same rendering opportunity has no previous computed value to
-  // interpolate from, so a freshly created row would appear fully opaque. Reading a
-  // layout property commits the hidden state (and the outgoing shell height) as that
-  // previous value. Measured: 4 of 5 rows skipped the fade without this.
   const flushStyles = () => {
     void contentRef.value?.offsetHeight
   }
@@ -290,11 +279,6 @@
     })
   }
 
-  // Height swap: pin the shell at its outgoing height, let the new panel size
-  // itself, then animate between the two — tabs rarely hold the same line count.
-  // Reading the natural height with the inline value cleared forces layout, but the
-  // old value is restored in the same task, so nothing paints at auto; transitionend
-  // drops the inline height so later reflows stay free to resize the shell.
   const layoutScale = (el: HTMLElement) => {
     const { width } = el.getBoundingClientRect()
     return el.offsetWidth && width ? width / el.offsetWidth : 1
@@ -444,10 +428,6 @@
 
   let resizeObserver: ResizeObserver | null = null
 
-  // Observe the strip AND every tab: the list is stretched to the header, so a tab
-  // that resizes on its own (a web font swapping in, a relabel) never changes the
-  // list's box and a list-only observer never fires — the pill indicator then keeps
-  // the stale width (measured 8px short of its tab after the Sora font swap).
   const observeTabStrip = () => {
     if (typeof ResizeObserver === 'undefined') {
       return

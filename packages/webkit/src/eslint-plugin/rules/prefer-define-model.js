@@ -1,22 +1,14 @@
-// Flags a script setup declaring BOTH a `modelValue` prop and an `update:modelValue`
-// emit (any declaration form) — exactly the pair `defineModel()` replaces (Vue 3.4+).
-// Named models are not flagged. Parser-agnostic across typescript-eslint versions
-// (typeArguments | typeParameters). Fail-open. See .claude/rules/v-model.md.
-
-/** First type argument of a call (defineProps<T>()), across parser versions. */
 function typeArg(node) {
   const t = node.typeArguments || node.typeParameters
   return (t && t.params && t.params[0]) || null
 }
 
-/** The declared key of a type member: `modelValue` or the string `'update:modelValue'`. */
 function memberKeyName(m) {
   if (!m) return null
   if (m.key) {
     if (m.key.type === 'Identifier') return m.key.name
     if (m.key.type === 'Literal') return String(m.key.value)
   }
-  // emit call-signature form: `(e: 'update:modelValue', v: T): void`
   if (m.type === 'TSCallSignatureDeclaration' && m.params && m.params[0]) {
     const ann = m.params[0].typeAnnotation && m.params[0].typeAnnotation.typeAnnotation
     if (ann && ann.type === 'TSLiteralType' && ann.literal && ann.literal.type === 'Literal') {
@@ -26,7 +18,6 @@ function memberKeyName(m) {
   return null
 }
 
-/** Type members of an inline literal, or of a referenced interface/type alias. */
 function membersOf(typeNode, interfaces) {
   if (!typeNode) return []
   if (typeNode.type === 'TSTypeLiteral') return typeNode.members || []
@@ -37,7 +28,6 @@ function membersOf(typeNode, interfaces) {
   return []
 }
 
-/** All declared names from a defineProps/defineEmits call (types + runtime forms). */
 function namesFromDefine(call, interfaces) {
   const names = new Set()
   for (const m of membersOf(typeArg(call), interfaces)) {

@@ -115,7 +115,6 @@ function isVertical(side: Side): boolean {
   return side === 'top' || side === 'bottom'
 }
 
-/** `transform-origin` for the open/close scale animation: the edge touching the trigger. */
 function getPopupOrigin(placement: Placement): string {
   const { side, align } = splitPlacement(placement)
   if (isVertical(side)) {
@@ -137,18 +136,12 @@ function resolvePadding(padding: CollisionPadding): { x: number; y: number } {
   return { x: padding?.x ?? 0, y: padding?.y ?? 0 }
 }
 
-/**
- * Pure placement geometry: resolves the side (flip first), caps the panel to the free
- * space only when no side fits (shrink second), anchors it and shifts it back inside the
- * boundary. Everything is in viewport pixels; callers convert to their fixed frame.
- */
 export function computePlacement(input: ComputePlacementInput): ComputePlacementResult {
   const { triggerRect: trigger, panelSize, boundary, offset } = input
   const padding = resolvePadding(input.collisionPadding)
   const alignOffset = input.alignOffset ?? 0
 
   const mainSize = (side: Side) => (isVertical(side) ? panelSize.height : panelSize.width)
-  /** Free main-axis space on `side`, between the trigger and the boundary. */
   const available = (side: Side) => {
     switch (side) {
       case 'bottom':
@@ -179,7 +172,6 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
     resolved = input.placement
     const { side, align } = splitPlacement(resolved)
     const opposite = joinPlacement(OPPOSITE[side], align)
-    // Flip when the other side fits; when neither does, take the roomier one.
     if (
       input.flip &&
       !fits(resolved) &&
@@ -233,11 +225,6 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   }
 }
 
-/**
- * The viewport intersected with every ancestor of `trigger` that actually scrolls on an
- * axis. `overflow: hidden | clip` do not count (they clip their own children, not a panel
- * teleported to `body`); a `position: fixed` ancestor escapes every clip above it.
- */
 export function getClippingBoundary(trigger: globalThis.Element, viewport: Size): Rect {
   let top = 0
   let left = 0
@@ -261,7 +248,6 @@ export function getClippingBoundary(trigger: globalThis.Element, viewport: Size)
         bottom = Math.min(bottom, rect.top + node.clientTop + node.clientHeight)
       }
     }
-    // A fixed ancestor (Dialog, Drawer shell) escapes every clip above it.
     if (style.position === 'fixed') break
     node = node.parentElement
   }
@@ -275,11 +261,6 @@ export function getClippingBoundary(trigger: globalThis.Element, viewport: Size)
   return { top, left, right, bottom, width: right - left, height: bottom - top }
 }
 
-/**
- * Anchors a floating panel to a trigger: flips to the side that fits, caps it to the free
- * space when none does (so it scrolls instead of clipping), stays inside the nearest
- * scrolling ancestor, and corrects for a transformed Teleport target (Storybook's zoom).
- */
 export function usePlacement({
   triggerRef,
   panelRef,
@@ -297,8 +278,6 @@ export function usePlacement({
   const resolvedPlacement = ref<Placement>(
     initial === 'auto' ? (autoPlacements?.[0] ?? 'bottom') : initial
   )
-  // Placed with `translate` (a compositor property re-anchors can transition, and one
-  // that composes with the open/close `transform: scale` keyframes) instead of top/left.
   const offScreenStyle: Record<string, string> = {
     position: 'fixed',
     top: '0',
@@ -317,13 +296,8 @@ export function usePlacement({
       return
     }
 
-    // Natural size: drop our own caps first (a panel shrunk on a previous pass would be
-    // believed to fit where only the shrunk version does); the cap is written back below
-    // in the same task, so no unconstrained frame paints.
     panel.style.maxHeight = ''
     panel.style.maxWidth = ''
-    // `offsetWidth`/`offsetHeight` are the layout box, unaffected by the entrance scale
-    // animation that `getBoundingClientRect` would report mid-flight.
     const frame = getFixedFrame(panel)
     const rawPanelRect = panel.getBoundingClientRect()
     const panelSize = {
@@ -346,8 +320,6 @@ export function usePlacement({
     })
     resolvedPlacement.value = result.placement
 
-    // Viewport coordinates expressed in the frame of a transformed Teleport target, so
-    // they are not scaled twice.
     const style: Record<string, string> = {
       position: 'fixed',
       top: '0',
@@ -377,8 +349,6 @@ export function usePlacement({
 
   function onScroll(event?: globalThis.Event) {
     if (!isOpen.value) return
-    // Capture phase (scroll does not bubble) also sees the panel's own scroll container;
-    // a scroll inside the panel moves no trigger, so there is nothing to re-anchor.
     const target = (event?.target ?? null) as globalThis.Node | null
     if (target && panelRef.value?.contains(target)) return
     if (onDismiss) {
@@ -392,7 +362,6 @@ export function usePlacement({
     () => isOpen.value,
     async (open) => {
       if (!open) {
-        // Only the flag resets: the panel is still playing its leave animation.
         anchored.value = false
         return
       }
@@ -400,8 +369,6 @@ export function usePlacement({
       updatePosition()
       await nextTick()
       updatePosition()
-      // Opens one frame after the opening placements landed, so the entrance is the
-      // panel's own scale animation and only later re-anchors glide.
       globalThis.requestAnimationFrame(() => {
         if (isOpen.value) anchored.value = true
       })
@@ -416,9 +383,6 @@ export function usePlacement({
     }
   )
 
-  // Re-anchor when the OPEN panel's own content changes size (a centred panel keeps a
-  // `left` computed for the width it used to have). Re-applying an unchanged cap settles
-  // the box at its previous size, so repositioning does not feed back into a resize.
   let panelObserver: globalThis.ResizeObserver | null = null
 
   function observePanelSize() {
@@ -438,7 +402,6 @@ export function usePlacement({
 
   onMounted(() => {
     globalThis.window?.addEventListener('resize', onResize)
-    // Capture phase: catches scrolls on any ancestor scroll container, not just the window.
     globalThis.document?.addEventListener('scroll', onScroll, true)
   })
 

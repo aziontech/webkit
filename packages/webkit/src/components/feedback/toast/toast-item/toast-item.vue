@@ -31,14 +31,10 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__item'
   )
 
-  // Assertive surfaces (error / warning) announce as alerts; the rest are status.
   const role = computed(() =>
     props.type === 'error' || props.type === 'warning' ? 'alert' : 'status'
   )
 
-  // No leading icon for the neutral `default` toast — only the typed variants.
-  // `default` shows no icon; `loading` renders the spinning <Spinner/> (below),
-  // not a glyph — so both map to an empty glyph here.
   const icons: Record<ToastType, string> = {
     default: '',
     success: 'pi pi-check',

@@ -90,8 +90,6 @@
 
   const resolvedIcon = computed(() => props.icon || defaultIcons[normalizedSeverity.value])
 
-  // A trailing control (action button or close) brings its own inline padding, so the
-  // banner tightens its end edge to keep the optical inset even.
   const hasTrailingControl = computed(() =>
     Boolean(props.actionLabel || slots.action || props.closable)
   )
@@ -187,10 +185,6 @@
             aria-hidden="true"
           />
         </span>
-        <!-- The copy region is a flow container, not a paragraph: a p cannot hold a list
-             or a nested paragraph, and when the copy arrives as server-rendered markup the
-             HTML parser closes the p at the first block, which then lands beside the copy
-             in this flex row and squeezes the text to zero width. -->
         <div
           :data-size="size"
           class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"

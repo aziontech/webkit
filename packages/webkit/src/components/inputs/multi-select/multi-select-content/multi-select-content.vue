@@ -23,8 +23,6 @@
 
   const root = ref<globalThis.HTMLDivElement | null>(null)
 
-  // Anchored below the trigger, flipping above when there is no room and shrinking to
-  // the free space when neither side fits; the width follows the trigger.
   const { panelStyle } = usePlacement({
     triggerRef: ctx.triggerRef,
     panelRef: root,

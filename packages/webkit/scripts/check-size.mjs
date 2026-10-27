@@ -1,13 +1,4 @@
 #!/usr/bin/env node
-// CI gate for .claude/rules/bundle-budget.md. The package ships source (.vue/.ts), so
-// the stock size-limit presets can't measure it — this script IS the vue-aware gate:
-// each entry in .size-limit.json is compiled in isolation with Vite + @vitejs/plugin-vue
-// (vue externalized, minified), and the gzipped output is compared against its budget.
-// Budgets only ratchet DOWN — raising one requires a written justification in the PR.
-// Exit 1 on any over-budget entry; exit 0 when every entry fits.
-//
-// Coverage is intentionally per-entry (the heaviest/representative public paths), not
-// all 197 exports — entries not yet budgeted are listed so the gap is never silent.
 
 import { readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'

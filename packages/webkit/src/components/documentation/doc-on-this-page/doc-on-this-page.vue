@@ -63,20 +63,16 @@
 
   const attrs = useAttrs()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(
     () => (attrs['data-testid'] as string) ?? 'documentation-doc-on-this-page'
   )
 
-  /** Whether a complementary link leaves the documentation (opens in a new tab). */
   const isExternal = (href: string) => /^[a-z]+:/i.test(href) || href.startsWith('//')
 
   const listRef = ref<HTMLElement | null>(null)
   const probeRef = ref<SVGPathElement | null>(null)
   const entryRefs = ref<HTMLElement[]>([])
 
-  // One element moves between entries (instead of per-entry hover backgrounds), so
-  // the highlight morphs down the outline like the NavigationMenu selector.
   const highlight = ref({ top: 0, left: 0, width: 0, height: 0 })
   const highlighting = ref(false)
   const highlightIndex = ref(-1)
@@ -89,7 +85,6 @@
     opacity: highlighting.value ? '1' : '0'
   }))
 
-  /** Move the highlight onto the entry at `index`, measuring its anchor box. */
   function moveHighlight(index: number) {
     const list = listRef.value
     const anchor = entryRefs.value[index]?.querySelector('a')
@@ -106,7 +101,6 @@
     highlightIndex.value = index
   }
 
-  /** Hide the highlight only when the pointer leaves the list itself, not between entries. */
   function handleListLeave(event: PointerEvent) {
     const related = event.relatedTarget as Node | null
     if (related && listRef.value?.contains(related)) return
@@ -118,7 +112,6 @@
   const spans = ref<Array<{ start: number; end: number }>>([])
   const total = ref(0)
 
-  /** Deepest level present, so the rail reserves exactly the width it needs. */
   const railWidth = computed(() => {
     const deepest = props.items.reduce((max, item) => Math.max(max, item.depth), 2)
     return (deepest - 2) * RAIL_INDENT + RAIL_STROKE
@@ -126,10 +119,6 @@
 
   const activeIndex = computed(() => props.items.findIndex((item) => item.id === props.activeId))
 
-  /**
-   * The active dash: dasharray sets the lit length, dashoffset where along the
-   * path it starts — transitioning both is what makes the marker travel.
-   */
   const marker = computed(() => {
     const span = spans.value[activeIndex.value]
     if (!span || !total.value)
@@ -140,10 +129,6 @@
     }
   })
 
-  /**
-   * Re-measure the entries and rebuild the path: on mount, outline change, and
-   * resize — a narrow rail wraps a heading onto two lines, moving every band below.
-   */
   function remeasure() {
     const list = listRef.value
     const probe = probeRef.value
@@ -152,8 +137,6 @@
       return
     }
     const listTop = list.getBoundingClientRect().top
-    // Function refs keep entries from a longer previous outline; trim to the
-    // current items, or the length check below would freeze the rail.
     entryRefs.value.length = props.items.length
     const bands = entryRefs.value.filter(Boolean).map((element, index) => {
       const box = element.getBoundingClientRect()
@@ -206,8 +189,6 @@
       :aria-label="title"
       class="flex flex-col gap-(--spacing-xs)"
     >
-      <!-- data-toc-title marks the rail's first line: the stable box a docs shell
-           measures to align the rail against the page bar beside it. -->
       <p
         data-toc-title
         class="m-0 text-overline-xs text-(--text-muted)"
@@ -223,7 +204,6 @@
           :height="height"
           aria-hidden="true"
         >
-          <!-- Ruler: rendered but never painted, so measuring never flickers the rail. -->
           <path
             ref="probeRef"
             fill="none"

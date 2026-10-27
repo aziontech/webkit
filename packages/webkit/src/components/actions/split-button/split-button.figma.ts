@@ -9,7 +9,7 @@ figma.connect(
     props: {
       label: figma.string('Label')
     },
-    example: (props) => /* html */ `
+    example: (props) => `
       <SplitButton
         label="${props.label}"
         icon="pi pi-check"

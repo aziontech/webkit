@@ -56,10 +56,6 @@ export interface DropdownContext {
 
 export const DropdownInjectionKey: InjectionKey<DropdownContext> = Symbol('DropdownContext')
 
-/**
- * Consumes the Dropdown context, throwing when used outside `<Dropdown>`.
- * Narrows the type to `DropdownContext` for the calling sub-component.
- */
 export function useDropdownContext(): DropdownContext {
   const ctx = inject(DropdownInjectionKey)
   if (!ctx) {
