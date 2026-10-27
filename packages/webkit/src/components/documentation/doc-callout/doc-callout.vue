@@ -3,11 +3,6 @@
 
   import Message from '../../feedback/message/message.vue'
 
-  // A Mintlify-style admonition on the webkit Message surface; geometry is Message's
-  // own. Anatomy: a glyph plus prose (a sentence, or short paragraphs and a list), no
-  // title row; DocProse stops at data-doc-chrome, so the prose rhythm is laid out here.
-  // `tip` is the one severity-free kind: page surface and rule, emphasis on the glyph
-  // alone; each override is important because Message's data-severity variant outranks it.
   defineOptions({ name: 'DocCallout', inheritAttrs: false })
 
   /** The admonition flavours an MDX author can write. */
@@ -43,8 +38,6 @@
 
   const preset = computed(() => KINDS[props.kind] ?? KINDS.note)
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback. The kind
-  // stays readable on data-kind, so a test can still target one flavour.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-callout')
 </script>
 
@@ -60,11 +53,6 @@
     :data-testid="testId"
     class="data-[neutral]:border-(--border-default)! data-[neutral]:bg-(--bg-surface)! data-[neutral]:[&_i]:text-(--primary)!"
   >
-    <!-- No weight in the prose: a strong that survived a paste is neutralised — bolding
-         inside a callout emphasises against an emphasis. A link gives up the page's link
-         ink for the box's own colour, so weight plus underline is its whole affordance.
-         Copy and chip ink stay --text-default in every kind (measured 13.31:1–18.97:1 and
-         10.05:1+). Block rhythm is set here: DocProse excludes data-doc-chrome subtrees. -->
     <div
       :data-kind="kind"
       :data-severity="preset.severity"

@@ -4,11 +4,6 @@ import type { DialogMotionState } from '../presets/transitions'
 
 export type { DialogMotionState }
 
-/**
- * Drives `data-state` for CSS transitions.
- * Enter: paints `closed` first, then `open` on the next frame.
- * Exit: keeps `open` for one frame, then `closed` so the browser can interpolate.
- */
 export function useDialogMotionState(isOpen: Ref<boolean>) {
   const motionState = ref<DialogMotionState>('closed')
 

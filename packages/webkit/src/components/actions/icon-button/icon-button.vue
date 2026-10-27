@@ -63,7 +63,6 @@
 
   const attrs = useAttrs()
 
-  // `class`/`data-testid` are excluded — already applied explicitly below, so spreading them again would double-apply.
   const forwardedAttrs = computed(() => {
     const rest = { ...attrs }
     delete rest.class
@@ -112,13 +111,9 @@
       'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
   }
 
-  // Disabled shows the not-allowed cursor. Interaction is blocked natively (`<button :disabled>`)
-  // and via the handleClick guard (anchor), so pointer-events stay on for the cursor to render.
   const disabledClasses =
     'cursor-not-allowed border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
-  // Loading reuses the disabled visual tokens (per design) but keeps the loading cursor
-  // and the spinner. Interaction stays blocked via handleClick.
   const loadingClasses =
     'cursor-wait border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 

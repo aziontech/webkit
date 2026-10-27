@@ -42,11 +42,6 @@
     transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
   }))
 
-  // Edge-fade affordance (same intent as the table's frozen-edge gradient): a gradient
-  // overlay on the scrollable side(s) fades the tabs into the nav background, hinting at
-  // off-screen tabs. Rendered as elements (not a mask) so their appearance/removal can use
-  // the semantic fade-in / fade-out animation utilities; a non-scrollable edge renders
-  // nothing, so the first / last tab is never covered at rest.
   const updateScrollAffordance = () => {
     const el = listRef.value
     if (!el) return
@@ -54,12 +49,6 @@
     canScrollEnd.value = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
   }
 
-  /**
-   * TODO: tokenizar — Figma `--tabview/tabviewnavbg` (transparent nav).
-   * `overflow-x-auto` lets the tab row scroll horizontally on narrow (mobile) viewports
-   * instead of overflowing; the scrollbar is hidden so the bar stays clean, and the tabs
-   * remain `shrink-0` so they keep their intrinsic width and scroll rather than compress.
-   */
   const listClasses = computed(() =>
     cn(
       'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
@@ -67,10 +56,6 @@
     )
   )
 
-  // Figma `TabViewItem` (selected): the pill is a translucent mask over the nav
-  // (`--secondary-mask`), hairline-bordered with `--border-muted` and lifted by the xs
-  // shadow — not the solid `--secondary-selected` fill, which resolves to pure white
-  // (dark) / near-black (light) and reads as an inverted chip.
   const indicatorClasses = [
     'pointer-events-none absolute left-0 top-0 z-0',
     'rounded-(--shape-button) bg-(--secondary-mask)',
@@ -101,9 +86,6 @@
 
     indicatorWidth.value = tabRect.width
     indicatorHeight.value = tabRect.height
-    // Offsets are relative to the list's scrolled content origin (add scrollLeft/Top), so
-    // the absolutely-positioned indicator — which scrolls with the content — stays aligned
-    // with its tab when the list scrolls horizontally on mobile.
     indicatorOffsetX.value = tabRect.left - listRect.left + listEl.scrollLeft
     indicatorOffsetY.value = tabRect.top - listRect.top + listEl.scrollTop
     indicatorVisible.value = true

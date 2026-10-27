@@ -70,8 +70,6 @@
 
   const query = ref('')
   const activeValue = ref<CommandMenuItemValue | null>(null)
-  // shallowRef so the inner `disabled` / `isVisible` Refs are NOT unwrapped
-  // (a deep `ref([])` unwraps nested Refs, breaking `.value` access + reactivity).
   const items = shallowRef<CommandMenuRegisteredItem[]>([])
   const previousActiveElement = ref<HTMLElement | null>(null)
 
@@ -81,11 +79,6 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  /** The items roving navigation walks: filtered, in DOM order rather than registration order.
-   *  A group mounted after the palette opened registers last but renders where the consumer put
-   *  it, so a registration-ordered list would highlight a row further down than the one in view.
-   *  `compareDocumentPosition` reads the live DOM, so hidden rows and Teleported panels compare
-   *  correctly; an item whose element has not mounted keeps its registration position. */
   const navigableItems = computed(() => {
     const visible = items.value.filter((item) => item.isVisible.value && !item.disabled.value)
     return visible
@@ -218,11 +211,6 @@
     setOpen(!isOpen.value)
   })
 
-  // Twice, on purpose. The synchronous pass re-highlights the first row of the list as it
-  // stands; the `nextTick` pass runs after the DOM has settled, which is the only moment a
-  // group the consumer renders CONDITIONALLY on the query (a result list) has mounted and
-  // registered. Without it, the first keystroke of a search leaves the highlight — and
-  // therefore `Enter` — on a row that is no longer the first one.
   watch(query, () => {
     resetActive()
     nextTick(() => resetActive())

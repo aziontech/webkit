@@ -1,13 +1,3 @@
-/**
- * CSV serialization + download helpers for the data Table's export feature.
- *
- * `toCsv` is pure (RFC 4180 quoting, CRLF line breaks) so it is trivially
- * testable; `downloadCsv` owns the browser side-effect and is a no-op outside
- * the browser (SSR-safe). The Table builds the `columns` list from the visible,
- * ordered leaf columns and the `rows` from the filtered row model, so the export
- * honors column visibility, column order, and active filters for free.
- */
-
 /** One exported column: `id` reads the field off each row, `header` is the label written to the file. */
 export interface CsvColumn {
   id: string
@@ -28,7 +18,6 @@ function escapeField(value: unknown, delimiter: string): string {
   return mustQuote ? `"${raw.replace(/"/g, '""')}"` : raw
 }
 
-/** Serialize `columns` + `rows` into an RFC 4180 CSV string. Pure — no side effects. */
 export function toCsv(options: CsvSerializeOptions): string {
   const { columns, rows, delimiter = ',' } = options
   const header = columns.map((column) => escapeField(column.header, delimiter)).join(delimiter)
@@ -38,7 +27,6 @@ export function toCsv(options: CsvSerializeOptions): string {
   return [header, ...body].join('\r\n')
 }
 
-/** Trigger a browser download of `csv` as `filename`. No-op outside the browser (SSR-safe). */
 export function downloadCsv(filename: string, csv: string): void {
   if (typeof globalThis.document === 'undefined') return
   const blob = new globalThis.Blob([csv], { type: 'text/csv;charset=utf-8;' })

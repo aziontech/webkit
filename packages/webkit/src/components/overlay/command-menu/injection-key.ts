@@ -58,13 +58,8 @@ export interface CommandMenuContext {
 export const CommandMenuInjectionKey: InjectionKey<CommandMenuContext> =
   Symbol('CommandMenuContext')
 
-/** Group id provided to descendant items so they can report group membership. */
 export const CommandMenuGroupIdKey: InjectionKey<string | null> = Symbol('CommandMenuGroupId')
 
-/**
- * Consumes the Command Menu context, throwing when used outside `<CommandMenu>`.
- * Narrows the type to `CommandMenuContext` for the calling sub-component.
- */
 export function useCommandMenuContext(): CommandMenuContext {
   const ctx = inject(CommandMenuInjectionKey)
   if (!ctx) {

@@ -22,9 +22,6 @@
     kind: 'default'
   })
 
-  // Density flows to the head cells through the row-group context, so the
-  // consumer sets it once on the header instead of on every cell. `reactive`
-  // unwraps the computed, keeping `compact` a plain (but live) boolean.
   provide(
     TableRowGroupKey,
     reactive({

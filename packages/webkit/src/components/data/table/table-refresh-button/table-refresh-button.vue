@@ -28,8 +28,6 @@
       (ctx ? `${ctx.testId}__refresh-button` : 'data-table__refresh-button')
   )
 
-  // Context-aware: signals a refresh (the root emits `refresh`; the app refetches).
-  // Disabled while loading so a refresh can't stack mid-fetch.
   const isDisabled = computed<boolean>(() => props.disabled || (ctx?.loading.value ?? false))
   const onClick = (): void => ctx?.reload()
 </script>

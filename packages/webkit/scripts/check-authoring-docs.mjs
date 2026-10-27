@@ -1,12 +1,4 @@
 #!/usr/bin/env node
-// CI ratchet for .claude/rules/authoring-docs.md. Scans the four skill/agent doc
-// populations with the SAME engine the write-time hook runs
-// (.claude/hooks/_lib/authoring-docs-checks.mjs) and fails when a file introduces a
-// violation NOT already in doc-standards-baseline.json. Existing debt is grandfathered;
-// new/edited docs must comply even from an editor that never ran the hook. Dependency-free.
-//
-//   node scripts/check-authoring-docs.mjs            # CI: fail on any NEW violation
-//   node scripts/check-authoring-docs.mjs --update   # re-snapshot the baseline (deliberate)
 
 import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -44,7 +36,7 @@ function currentViolations() {
   for (const base of DIRS) {
     for (const abs of walk(join(ROOT, base))) {
       const rel = relative(ROOT, abs).split('\\').join('/')
-      if (!docFileKind(rel)) continue // skips _README.md, non-SKILL.md .md
+      if (!docFileKind(rel)) continue
       const content = readFileSync(abs, 'utf-8')
       for (const v of scanDoc(rel, content)) keys.push(`${rel}::doc:${v.id}`)
     }

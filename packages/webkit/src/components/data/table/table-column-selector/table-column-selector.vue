@@ -36,7 +36,6 @@
       (ctx ? `${ctx.testId}__column-selector` : 'data-table__column-selector')
   )
 
-  // --- Anchored popover (use-placement + Teleport; no Drawer) -----------------
   const open = ref<boolean>(false)
   const triggerRef = ref<HTMLElement | null>(null)
   const panelRef = ref<HTMLElement | null>(null)
@@ -72,8 +71,6 @@
     globalThis.document?.removeEventListener('keydown', onKeydown)
   })
 
-  // Context-aware: reads the hideable leaf columns and toggles visibility through
-  // the injected table (which routes back to v-model:columnVisibility).
   const columns = computed<Column<TableRowRecord, unknown>[]>(() => {
     const table = ctx?.table.value
     return table ? table.getAllLeafColumns().filter((column) => column.getCanHide()) : []

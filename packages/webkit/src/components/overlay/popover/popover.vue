@@ -11,7 +11,6 @@
     inheritAttrs: false
   })
 
-  /** Focusable, enabled elements — used both to trap Tab and to restore focus on close. */
   const FOCUSABLE_SELECTOR =
     'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
 
@@ -101,17 +100,12 @@
   function focusTrigger() {
     const trigger = triggerRef.value
     if (!trigger) return
-    // The trigger wrapper is a passthrough span with no tabindex, so focusing it
-    // directly is a no-op — the browser then dropped focus on the document body as
-    // the panel unmounted, losing the user's place. Focus the wrapper only when it
-    // is itself focusable, otherwise its first focusable descendant.
     const target = trigger.matches(FOCUSABLE_SELECTOR)
       ? trigger
       : (trigger.querySelector<globalThis.HTMLElement>(FOCUSABLE_SELECTOR) ?? trigger)
     target.focus({ preventScroll: true })
   }
 
-  /** Returns the focusable, enabled elements inside the panel, in DOM order. */
   function getFocusable(): globalThis.HTMLElement[] {
     const panel = panelRef.value
     if (!panel) return []
@@ -149,7 +143,6 @@
       const first = focusables[0]
       const last = focusables[focusables.length - 1]
 
-      // Focus on the trigger (or escaped the panel): pull it into the panel.
       if (active === trigger || !panel.contains(active)) {
         event.preventDefault()
         const target = event.shiftKey ? (last ?? trigger) : (first ?? trigger)
@@ -157,7 +150,6 @@
         return
       }
 
-      // Focus inside the panel: wrap the ends back to the trigger.
       if (focusables.length === 0) {
         event.preventDefault()
         trigger.focus({ preventScroll: true })

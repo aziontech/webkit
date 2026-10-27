@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-// @aziontech/webkit-mcp — MCP server (stdio) exposing the pure queries.js functions
-// as tools over the installed webkit's version-locked catalog. Intentionally THIN:
-// all logic and tests live in queries.js + catalog.js. The SDK + zod are loaded
-// lazily via dynamic import so running without installed deps fails with an actionable
-// message; `registerTool` takes a zod RAW SHAPE (legacy `.tool` fallback below).
 
 import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
@@ -26,7 +21,6 @@ const SDK_MCP = '@modelcontextprotocol/sdk/server/mcp.js'
 const SDK_STDIO = '@modelcontextprotocol/sdk/server/stdio.js'
 const ZOD = 'zod'
 
-/** This server's own version, read from its package.json (never hardcoded). */
 function serverVersion() {
   try {
     const pkgUrl = new URL('../../package.json', import.meta.url)
@@ -36,7 +30,6 @@ function serverVersion() {
   }
 }
 
-/** Wrap a plain-JSON result as an MCP tool response. */
 function json(result) {
   return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
 }
@@ -58,18 +51,14 @@ async function main() {
     return
   }
 
-  // Resolve the catalog from the directory the server was launched in (the
-  // consuming project), so answers are locked to the webkit version it installed.
   const catalog = loadCatalog(process.cwd())
 
   const server = new McpServer({ name: '@aziontech/webkit-mcp', version: serverVersion() })
 
-  /** Register a tool across the modern (registerTool) and legacy (tool) SDK shapes. */
   const tool = (name, config, handler) => {
     if (typeof server.registerTool === 'function') {
       server.registerTool(name, config, handler)
     } else {
-      // Legacy signature: server.tool(name, inputShape, handler)
       server.tool(name, config.inputSchema ?? {}, handler)
     }
   }
@@ -236,7 +225,6 @@ async function main() {
 
   const transport = new StdioServerTransport()
   await server.connect(transport)
-  // stderr only — stdout is the MCP transport channel.
   process.stderr.write(
     `@aziontech/webkit-mcp ready` +
       (catalog.available

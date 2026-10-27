@@ -28,26 +28,15 @@
 
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
-  /**
-   * A separator's own orientation is the perpendicular of the axis it divides —
-   * the bar between side-by-side panes is a vertical line. Getting it backwards
-   * reads fine to the eye but inverts the arrow keys a screen reader announces.
-   */
   const ariaOrientation = computed(() =>
     orientation.value === 'horizontal' ? 'vertical' : 'horizontal'
   )
 
-  /** One keyboard press moves the edge by a visible amount without overshooting a panel. */
   const NUDGE_STEP = 24
 
   const handleRef = ref<globalThis.HTMLElement | null>(null)
   const resizing = ref(false)
 
-  /**
-   * The pane this handle moves and the gesture's sign, resolved from the DOM at
-   * interaction time: the sized pane adjacent to the handle, preferring the one
-   * before it. A pane before grows on a drag toward the end; one after shrinks.
-   */
   const target = (): { pane: ResizablePanelPaneApi; sign: 1 | -1 } | null => {
     const el = handleRef.value
     if (!el || !ctx) return null
@@ -55,14 +44,13 @@
     if (before && !before.flexible()) return { pane: before, sign: 1 }
     const after = ctx.paneFor(el.nextElementSibling)
     if (after && !after.flexible()) return { pane: after, sign: -1 }
-    // Both neighbours flexible (or absent): there is nothing with a length to set.
     return null
   }
 
   const current = computed(() => {
     const el = handleRef.value
     if (!el || !ctx) return null
-    void ctx.revision.value // re-resolve whenever a pane joins or leaves the group
+    void ctx.revision.value
     const before = ctx.paneFor(el.previousElementSibling)
     if (before && !before.flexible()) return before
     const after = ctx.paneFor(el.nextElementSibling)
@@ -70,8 +58,6 @@
     return null
   })
 
-  // Published so the separator is a real slider to assistive tech, not an unlabelled
-  // divider that happens to respond to arrows.
   const valueNow = computed(() => current.value?.basis() ?? 0)
   const valueMin = computed(() => current.value?.min() ?? 0)
   const valueMax = computed(() => current.value?.max() ?? 0)
@@ -88,10 +74,7 @@
     const start = hit.pane.measure()
 
     resizing.value = true
-    // The gesture belongs to the pointer that started it: capture keeps the moves coming
-    // even when the pointer outruns the 4px rail, which it always does.
     handleRef.value?.setPointerCapture?.(event.pointerId)
-    // The drag reads as a resize everywhere on the page, and selects nothing on the way.
     globalThis.document.body.style.userSelect = 'none'
     globalThis.document.body.style.cursor = horizontal ? 'col-resize' : 'row-resize'
 
@@ -116,7 +99,6 @@
     event.preventDefault()
   }
 
-  /** The keyboard equivalent of one drag step. `direction` is toward the group's end. */
   const nudge = (direction: -1 | 1) => {
     if (props.disabled) return
     const hit = target()
@@ -131,7 +113,6 @@
     hit.pane.setBasis(edge === 'min' ? hit.pane.min() : hit.pane.max())
   }
 
-  /** Enter toggles a collapsible pane — the keyboard's version of dragging it shut. */
   const toggleCollapse = () => {
     if (props.disabled) return
     const hit = target()
@@ -139,17 +120,10 @@
     hit.pane.setBasis(hit.pane.collapsed() ? hit.pane.min() : 0)
   }
 
-  // A drag in flight when the handle goes away would leave the listeners — and the body's
-  // resize cursor — behind for the rest of the session.
   onScopeDispose(() => stopDrag?.())
 </script>
 
 <template>
-  <!-- THE RAIL IS THIN AND THE TARGET IS NOT. The visible edge is one `--spacing-xxs`
-       hairline, because a thick bar between two panes reads as a third panel; the
-       grabbable area is widened to 16px by a pseudo-element that draws nothing. That is
-       the whole reason the hit area is `before:` and not padding — padding would move the
-       panes apart by the size of the target. -->
   <div
     ref="handleRef"
     v-bind="$attrs"

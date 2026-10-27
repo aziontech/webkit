@@ -3,8 +3,6 @@ import { onScopeDispose, ref, watch } from 'vue'
 /** @typedef {'starting' | 'ending' | 'idle' | undefined} TransitionStatus */
 
 /**
- * Mirrors Base UI useTransitionStatus — drives data-starting-style / data-ending-style.
- * @see https://github.com/mui/base-ui/blob/d81ec002/packages/react/src/utils/useTransitionStatus.ts
  * @param {import('vue').MaybeRefOrGetter<boolean>} open
  * @param {boolean} [enableIdleState]
  */

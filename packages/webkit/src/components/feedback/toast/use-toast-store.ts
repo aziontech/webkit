@@ -88,14 +88,10 @@ export interface ToastStore {
 
 const DEFAULT_DURATION = 4000
 
-// The active Toaster's `duration` prop sets this, so its control changes the
-// auto-dismiss time new toasts inherit; a per-toast `duration` still overrides
-// it, and `0` keeps a toast until it is dismissed.
 const defaultDuration = ref(DEFAULT_DURATION)
 
 const entries = reactive<ToastEntry[]>([])
 const timers = new Map<string, ReturnType<typeof setTimeout>>()
-// Remaining lifetime per scheduled toast, so hover can pause then resume it.
 const expiry = new Map<string, { remaining: number; startedAt: number }>()
 
 let counter = 0
@@ -140,7 +136,6 @@ const scheduleDismiss = (id: string, duration: number) => {
   }
 }
 
-/** Pause every running timer, banking each toast's remaining time. */
 const pauseAll = () => {
   const now = Date.now()
   timers.forEach((timer, id) => {
@@ -151,7 +146,6 @@ const pauseAll = () => {
   timers.clear()
 }
 
-/** Resume the banked timers; finished ones (remaining 0) dismiss on the next tick. */
 const resumeAll = () => {
   const now = Date.now()
   expiry.forEach((meta, id) => {
@@ -188,11 +182,6 @@ const update: ToastStore['update'] = (id, patch) => {
   scheduleDismiss(id, merged.duration)
 }
 
-/**
- * The singleton reactive store backing the imperative API. The same instance is
- * provided by every Toaster, so a single `toast()` call surfaces in the mounted
- * region regardless of where it was raised.
- */
 export const toastStore: ToastStore = {
   get toasts() {
     return readonly(entries) as readonly ToastEntry[]
@@ -207,11 +196,6 @@ export const toastStore: ToastStore = {
   }
 }
 
-/**
- * Access the singleton toast store. Exposed as a composable for parity with the
- * rest of the webkit layer; the Toaster injects it and the imperative `toast`
- * function is a thin wrapper over it.
- */
 export const useToastStore = (): ToastStore => toastStore
 
 const raise = (type: ToastType, message: string, options: ToastOptions = {}): string =>
@@ -270,24 +254,10 @@ toastFn.promise = (promise, messages, options) => {
 
 toastFn.dismiss = (id) => toastStore.dismiss(id)
 
-/**
- * Imperative entry point; the typed shortcuts cover the severity, loading,
- * promise, and dismiss cases. Returns the toast id for later update or dismissal.
- */
 export const toast: ToastFn = toastFn
 
-/**
- * Composable accessor for the imperative API: `const toast = useToast()`. Returns
- * the same singleton as the direct `import { toast }`, so the direct and the
- * service (plugin / inject) styles drive one shared stack.
- */
 export const useToast = (): ToastFn => toast
 
-/**
- * Single-active-instance registry: with several mounted Toasters (e.g. Storybook
- * stories on one Docs page) only the first to mount renders the stack, so toasts
- * never duplicate across overlapping regions.
- */
 let toasterSeq = 0
 const activeToasterId = ref<number | null>(null)
 

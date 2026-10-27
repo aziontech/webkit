@@ -30,9 +30,6 @@
   const endDateText = ref('')
   const endTimeText = ref('')
 
-  /* Stable ids so each visible label is programmatically bound to its date field;
-     the time inputs share a row with their date field and are named by their own
-     aria-label instead, so they need no id. */
   const startDateId = useId()
   const endDateId = useId()
 
@@ -105,9 +102,6 @@
 </script>
 
 <template>
-  <!-- These fields sit on the popover's raised surface, not the canvas, so the
-       focus ring's offset has to match it. --input-ring-offset is InputText's hook
-       for that; declared once here it inherits to every field below. -->
   <div
     class="flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)]"
     data-testid="input-calendar__fields"

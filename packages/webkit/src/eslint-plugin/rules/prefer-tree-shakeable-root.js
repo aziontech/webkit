@@ -1,8 +1,3 @@
-// Performance: when a compound component is imported from its compound entry (which
-// Object.assigns every sub-component, so bundlers retain them all) but the file only
-// renders the bare root, suggest the tree-shakeable standalone `-root` entry instead.
-// Suggestion only; conservative — any dotted / member / namespace-ish use suppresses it.
-
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 
@@ -36,8 +31,8 @@ export default {
     if (!catalog.available) return {}
     const pkgPrefix = catalog.prefix
 
-    const compoundImports = [] // { binding, compound, root, sourceNode }
-    const scriptMembers = new Set() // identifiers used as `X.something` in <script>
+    const compoundImports = []
+    const scriptMembers = new Set()
 
     return {
       ImportDeclaration(node) {
@@ -46,9 +41,6 @@ export default {
         const sub = src.slice(pkgPrefix.length)
         const entry = catalog.getEntry(sub)
         if (!entry || !entry.compoundRoot) return
-        // Only suggest when a DISTINCT tree-shakeable root actually exists. A .vue-rooted
-        // compound (dialog, drawer, …) is already its own lean root — treeShakeableImport
-        // equals the compound import — so there is nothing leaner to switch to.
         if (!entry.treeShakeableImport || entry.treeShakeableImport === entry.import) return
         const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
         if (!def) return

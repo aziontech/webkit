@@ -1,12 +1,3 @@
-/**
- * Compile all primitives into a single CSS variables stylesheet.
- *
- * Imports every primitive module (colors, shape, typography, effects,
- * breakpoints, border-widths, ring-offset), resolves `tokenRef(...)` aliases,
- * and produces a `:root { ... }` block. Mirrors `injectThemeCss` (compile-theme.js)
- * but for primitives only — no semantic light/dark split.
- */
-
 import { animate } from '../tokens/primitives/animations/animate.js'
 import { ease } from '../tokens/primitives/animations/ease.js'
 import { borderWidths } from '../tokens/primitives/border-widths.js'
@@ -35,13 +26,6 @@ import { lineHeight } from '../tokens/primitives/typography/line-height.js'
 import { tracking } from '../tokens/primitives/typography/tracking.js'
 import { assertResolvedRefs, isTokenRef } from './refs.js'
 
-/**
- * Returns two trees:
- *   - `refsTree`: deep structure preserved so `tokenRef('shape.container.X')`
- *     keeps resolving via path lookup.
- *   - `varsTree`: same data with the `shape` / `typography` / `effects`
- *     wrappers removed, so emitted CSS vars are flat (no group prefix).
- */
 export const buildTrees = () => {
   const { brand, ...restColors } = colorPrimitives
   const color = {
@@ -116,8 +100,6 @@ const resolveRef = (refPath, refsTree) => {
   return null
 }
 
-// A leaf key of `DEFAULT` collapses to the parent prefix (Tailwind convention),
-// so `{ radius: { DEFAULT: '4px' } }` emits `--radius: 4px;`.
 const varNameFor = (path) => {
   const segments = path[path.length - 1] === 'DEFAULT' ? path.slice(0, -1) : path
   return `--${segments.join('-')}`

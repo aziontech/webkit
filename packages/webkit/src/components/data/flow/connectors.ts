@@ -32,8 +32,6 @@ interface FlowChild {
 
 const CORNER = 10
 
-/** Orthogonal H–V–H connector with rounded corners; straight when endpoints share a row.
-    The vertical leg is pinned to `busX` so diverging/converging branches share one column. */
 const elbow = (fromX: number, fromY: number, toX: number, toY: number, busX: number): string => {
   if (Math.abs(fromY - toY) < 0.5) {
     return `M${fromX},${fromY} L${toX},${toY}`
@@ -55,7 +53,6 @@ const elbow = (fromX: number, fromY: number, toX: number, toY: number, busX: num
   ].join(' ')
 }
 
-/** Read an element's box in the container's coordinate space (scroll-invariant). */
 const measureRect = (el: HTMLElement, base: Origin) => {
   const r = el.getBoundingClientRect()
   return {
@@ -65,10 +62,6 @@ const measureRect = (el: HTMLElement, base: Origin) => {
   }
 }
 
-/** Resolve a node's incoming (`end` anchor) and outgoing (`start` anchor) attachment points.
-    Falls back to the node's left/right edge when no matching anchor is present.
-    `terminal` marks a node that ends its branch: it still reports an exit point, but
-    readChild drops it, so nothing is ever drawn leaving the node. */
 const readNode = (
   nodeEl: HTMLElement,
   base: Origin
@@ -91,9 +84,6 @@ const readNode = (
   }
 }
 
-/** Build a FlowChild from a direct container child (a node, or a parallel group of nodes).
-    A `terminal` branch contributes an entry but NO exit, so the chain continues through
-    its siblings while the branch itself ends there. */
 const readChild = (el: HTMLElement, base: Origin): FlowChild => {
   if (el.dataset['flowKind'] === 'parallel') {
     const branches = Array.from(
@@ -110,7 +100,6 @@ const readChild = (el: HTMLElement, base: Origin): FlowChild => {
   return { exits: terminal ? [] : [exit], entries: [entry] }
 }
 
-/** Pair the exits of one child with the entries of the next: 1→1, fan-out (1→N), fan-in (N→1), or zip (N→M). */
 const pairEndpoints = (exits: Endpoint[], entries: Endpoint[]): Array<[Endpoint, Endpoint]> => {
   if (exits.length === 1) {
     return entries.map((entry): [Endpoint, Endpoint] => [exits[0], entry])
@@ -122,11 +111,6 @@ const pairEndpoints = (exits: Endpoint[], entries: Endpoint[]): Array<[Endpoint,
   return Array.from({ length: count }, (_, i): [Endpoint, Endpoint] => [exits[i], entries[i]])
 }
 
-/**
- * Measures a flow container's direct children and produces every connector in one SVG.
- * Connectors are drawn only BETWEEN consecutive children, so a leading parallel fans in
- * (no dangling left stubs) and a trailing parallel fans out, automatically.
- */
 export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
   const paths = ref<FlowPath[]>([])
   const viewBox = ref<string>('0 0 0 0')
@@ -147,11 +131,6 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]')
     )
 
-    // Stamp the sequence ends; flow.vue hides the ports that would attach to nothing
-    // off these attributes. Attributes, not first-child / last-child pseudo-classes:
-    // the connector svg is a sibling of the nodes in this container, so positional
-    // pseudo-classes would address the svg instead of the first node. Both sit outside
-    // the MutationObserver attributeFilter, so stamping cannot re-enter measure().
     elements.forEach((el, index) => {
       el.toggleAttribute('data-flow-leading', index === 0)
       el.toggleAttribute('data-flow-trailing', index === elements.length - 1)

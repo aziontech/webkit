@@ -39,7 +39,6 @@
     disabled: false
   })
 
-  // Emitted by the LINK only; declared rather than left to `$attrs` fallthrough, which would fire for the arrow too.
   const emit = defineEmits<{
     click: [event: globalThis.MouseEvent]
   }>()
@@ -59,13 +58,10 @@
 
   const isInline = computed(() => props.kind === 'inline')
 
-  // With `href` set the label is a LINK and the arrow alone reveals the children; with none, the label reveals them too.
   const hasReference = computed(() => props.href.length > 0)
 
-  // Only a DRILL row may carry a glyph — an inline row heads the rows it expands, in their own column.
   const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
 
-  // Names the arrow: an inline arrow names the disclosure state, a drill arrow names the level it opens.
   const arrowAriaLabel = computed(() => {
     const name = props.label
     if (!isInline.value) return name ? `Open ${name} menu` : 'Open submenu'
@@ -75,11 +71,9 @@
 
   const arrowIcon = computed(() => (isInline.value ? 'pi pi-chevron-down' : 'pi pi-chevron-right'))
 
-  /** The box that holds the row's two controls. Not interactive itself. */
   const ROW_CLASS =
     'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pr-(--spacing-xxs)'
 
-  // Reads as a MENU ROW at the rows' own size and colour — a group title alone is smaller and muted.
   const CONTROL_CLASS =
     'group relative flex h-8 shrink-0 items-center gap-(--spacing-xs) ' +
     'rounded-(--shape-elements) pr-(--spacing-xs) py-(--spacing-xxs) text-left ' +
@@ -91,22 +85,18 @@
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))] ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:before:hidden data-[disabled]:after:hidden'
 
-  // Borrows the menu's ring offset instead of IconButton's own; `!` overrides IconButton's own utilities.
   const ARROW_CLASS =
     'focus-visible:ring-offset-1! focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]!'
 
-  // A disabled arrow paints NO fill — IconButton's filled disabled box made it the brightest thing on a dead row.
   const ARROW_DISABLED_CLASS = 'bg-transparent!'
 
   const MOTION_CLASS =
     'transition-transform duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none motion-reduce:transform-none'
 
-  // Colour goes through `iconClass` on the `i` itself, not the button's class — two colour utilities on one list resolve by stylesheet order.
   const arrowIconClass = computed(() =>
     cn(
       MOTION_CLASS,
-      // Disabled ink, not muted — must dim with the row's own label.
       props.disabled ? 'text-(--text-disabled)' : 'text-(--text-muted)',
       isInline.value && sub.open.value && 'rotate-180'
     )
@@ -114,8 +104,6 @@
 
   const arrowClass = computed(() => cn(ARROW_CLASS, props.disabled && ARROW_DISABLED_CLASS))
 
-  // Same box and glyph as `Menu.Item`, so the two land on the menu's one content column: the
-  // 32px box supplies the inset and the glyph's centring carries it the rest of the way.
   const ICON_BOX_CLASS = 'flex size-8 shrink-0 items-center justify-center overflow-hidden'
 
   const iconClass = computed(() =>
@@ -128,18 +116,14 @@
     )
   )
 
-  // The menu's ONE content column (`--spacing-sm`): a group title's text, an icon-bearing
-  // row's glyph and an icon-less row's label all start on it.
   const contentColumnClass = computed(() =>
     showIcon.value ? 'pl-(--spacing-xxs)' : 'pl-(--spacing-sm)'
   )
 
   const rowClass = computed(() => cn(ROW_CLASS, attrs.class as string | undefined))
 
-  /** The label control fills whatever the arrow leaves, in both shapes. */
   const labelClass = computed(() => cn(CONTROL_CLASS, 'min-w-0 flex-1', contentColumnClass.value))
 
-  // Focus returns to whichever control revealed the children on leaving.
   const register = () => {
     const target = hasReference.value
       ? ((arrowEl.value?.$el as globalThis.HTMLElement | null) ?? null)
@@ -150,13 +134,11 @@
   onMounted(register)
   watch([() => props.kind, () => props.label, hasReference], register)
 
-  // The link announces its activation only — it never reveals the children.
   const activate = (event: globalThis.MouseEvent) => {
     if (props.disabled) return
     emit('click', event)
   }
 
-  /** Reveal the children: expand in place, or push the level. */
   const reveal = () => {
     if (props.disabled) return
     if (isInline.value) sub.toggle()
@@ -167,8 +149,6 @@
     if (props.disabled) return
 
     if (event.key === 'ArrowRight') {
-      // Kept on the link as well as on the arrow: the arrow keys are how a keyboard reader
-      // reaches the children without leaving the row, which is the whole point of them here.
       if (!isInline.value) {
         event.preventDefault()
         sub.push()
@@ -183,7 +163,6 @@
 
     if (event.key === 'ArrowLeft' && isInline.value && sub.open.value) {
       event.preventDefault()
-      // The root pops a drill level on ArrowLeft; collapsing this sub wins over that.
       event.stopPropagation()
       sub.setOpen(false)
     }
@@ -191,7 +170,6 @@
 </script>
 
 <template>
-  <!-- ONE anatomy: a box holding a LABEL control and an ARROW IconButton; href decides what the LABEL does, never the arrow's shape. -->
   <div
     v-bind="$attrs"
     :data-testid="testId"
@@ -200,7 +178,6 @@
     :data-disabled="disabled ? '' : undefined"
     :class="rowClass"
   >
-    <!-- A LINK when the row has a destination, a BUTTON otherwise — component :is on a data prop, never an as string. -->
     <component
       :is="hasReference ? 'a' : 'button'"
       ref="labelEl"
@@ -218,7 +195,6 @@
       @click="hasReference ? activate($event) : reveal()"
       @keydown="onKeydown"
     >
-      <!-- Drill rows only, and only when given one — see `showIcon`. -->
       <span
         v-if="showIcon"
         :class="ICON_BOX_CLASS"
@@ -230,8 +206,6 @@
           aria-hidden="true"
         />
       </span>
-      <!-- Same label treatment as a Menu.Item, colour inherited from the control; the smaller,
-           muted treatment is reserved for a first-level group title, never a trigger. -->
       <span
         class="min-w-0 flex-1 truncate text-left text-label-md"
         :data-testid="`${testId}__label`"
@@ -239,7 +213,6 @@
         <slot>{{ label }}</slot>
       </span>
     </component>
-    <!-- aria-expanded/aria-controls live on whichever control expands the children; a redundant arrow leaves the tab order and a11y tree. -->
     <IconButton
       ref="arrowEl"
       :icon="arrowIcon"

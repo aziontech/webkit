@@ -1,8 +1,3 @@
-/**
- * Navigation Menu animation tokens (aligned with Base UI hero demo).
- * @see https://github.com/mui/base-ui/blob/d81ec002/docs/src/app/(docs)/react/components/navigation-menu/demos/hero/css-modules/index.module.css
- */
-
 import {
   NAVIGATION_MENU_CLOSE_DURATION_MS,
   NAVIGATION_MENU_DURATION_MS,
@@ -14,7 +9,6 @@ export { NAVIGATION_MENU_CLOSE_DURATION_MS, NAVIGATION_MENU_DURATION_MS, NAVIGAT
 const STARTING_STYLE_ATTR = 'data-starting-style'
 const ENDING_STYLE_ATTR = 'data-ending-style'
 
-/** Tailwind class groups for popup / positioner / content (use on component roots). */
 export const navigationMenuTransitionClasses = {
   positioner:
     'transition-[transform] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[instant]:transition-none data-[starting-style]:transition-none',
@@ -32,19 +26,14 @@ export const PRESET_IDS = {
   INSTANT: 'instant'
 }
 
-/**
- * @param {number} ms
- */
+/** @param {number} ms */
 function delay(ms) {
   return new Promise((resolve) => {
     globalThis.setTimeout(resolve, ms)
   })
 }
 
-/**
- * Wait for one or more animation frames (paint before exit styles apply).
- * @param {number} [frameCount]
- */
+/** @param {number} [frameCount] */
 export function waitForAnimationFrames(frameCount = 1) {
   return new Promise((resolve) => {
     let remaining = frameCount
@@ -105,10 +94,7 @@ function waitForDataAttribute(
   })
 }
 
-/**
- * Wait for Web Animations API on an element (Base UI open-change-complete pattern).
- * @param {Element | null | undefined} element
- */
+/** @param {Element | null | undefined} element */
 export async function waitForElementAnimations(element) {
   if (!element || typeof element.getAnimations !== 'function') {
     return
@@ -118,10 +104,7 @@ export async function waitForElementAnimations(element) {
   await Promise.all(animations.map((animation) => animation.finished.catch(() => undefined)))
 }
 
-/**
- * Mirrors Base UI useAnimationsFinished on open — wait for starting-style removal, then animations.
- * @param {Element | null | undefined} element
- */
+/** @param {Element | null | undefined} element */
 export async function waitForOpenTransition(element) {
   if (!element) {
     await delay(NAVIGATION_MENU_DURATION_MS)
@@ -134,10 +117,7 @@ export async function waitForOpenTransition(element) {
   await Promise.all([delay(NAVIGATION_MENU_DURATION_MS), waitForElementAnimations(element)])
 }
 
-/**
- * Mirrors Base UI close flow — wait for ending-style, paint, then run exit animations fully.
- * @param {Element | null | undefined} element
- */
+/** @param {Element | null | undefined} element */
 export async function waitForCloseTransition(element) {
   if (!element) {
     await delay(NAVIGATION_MENU_DURATION_MS)

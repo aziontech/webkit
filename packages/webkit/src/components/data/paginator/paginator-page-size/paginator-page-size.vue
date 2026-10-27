@@ -33,9 +33,6 @@
       (ctx ? `${ctx.testId}__page-size` : 'data-paginator__page-size')
   )
 
-  // The selector must never render blank: if the current value isn't one of the
-  // configured options (e.g. a page size of 3 with the default [10, 25, 50, 100]),
-  // fold it in so there's always a matching option for the selected value.
   const displayOptions = computed<number[]>(() =>
     props.options.includes(props.modelValue)
       ? props.options
