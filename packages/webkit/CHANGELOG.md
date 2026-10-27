@@ -4,6 +4,25 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.6.0...@aziontech/webkit@5.7.0) (2026-10-26)
+
+
+### Features
+
+* **webkit:** add hero-title mobileCentered and section-title descriptionWidth, and let linked topics cover their cell ([#1106](https://github.com/aziontech/webkit/issues/1106)) ([65226e7](https://github.com/aziontech/webkit/commit/65226e7438765def0903ef122e88e93c288e63a6))
+* **webkit:** add ProductWidget, the console widget library, with ShellMockup ([#1109](https://github.com/aziontech/webkit/issues/1109)) ([fc84df1](https://github.com/aziontech/webkit/commit/fc84df1e22673915c1d08d7f54aad4bd61cfdc14))
+* **webkit:** let Diagram draw an official diagram by name ([#1112](https://github.com/aziontech/webkit/issues/1112)) ([97a54d3](https://github.com/aziontech/webkit/commit/97a54d368b6645fb15c1fcd67dc649acd4b424bd))
+
+
+### Bug Fixes
+
+* **webkit:** draw flow connectors in the flow's own scale ([#1111](https://github.com/aziontech/webkit/issues/1111)) ([c9d9a1f](https://github.com/aziontech/webkit/commit/c9d9a1f0e8f1e219b6f2d61051b973818bb8128e))
+
+
+### Documentation
+
+* **storybook:** carry the site's action copy and band tweaks into the marketing stories ([#1107](https://github.com/aziontech/webkit/issues/1107)) ([9a0e8ed](https://github.com/aziontech/webkit/commit/9a0e8ed5ab1b6566bb623c668b384b7545a3fcf6))
+
 ## [5.6.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.5.0...@aziontech/webkit@5.6.0) (2026-10-23)
 
 

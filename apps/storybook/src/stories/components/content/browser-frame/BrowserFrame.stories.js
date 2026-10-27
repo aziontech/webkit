@@ -216,7 +216,8 @@ const meta = {
     },
     'onUpdate:height': {
       action: 'update:height',
-      description: 'Emitted on every height resize step, pointer move or key press (v-model:height).',
+      description:
+        'Emitted on every height resize step, pointer move or key press (v-model:height).',
       table: { category: 'events', type: { summary: 'number' } }
     },
     default: {

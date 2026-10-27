@@ -74,14 +74,16 @@ export default meta
 const Template = (args) => ({
   components: { Topic },
   setup: () => ({ props: args }),
-  template: '<Topic v-bind="props" />'
+  template: '<div class="relative"><Topic v-bind="props" /></div>'
 })
 
-const DEFAULT_MARKUP = `<Topic
-  icon="ai ai-edge-nodes"
-  title="Consistent global speed"
-  description="Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage."
-/>`
+const DEFAULT_MARKUP = `<div class="relative">
+  <Topic
+    icon="ai ai-edge-nodes"
+    title="Consistent global speed"
+    description="Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage."
+  />
+</div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Topic>} */
 export const Default = {

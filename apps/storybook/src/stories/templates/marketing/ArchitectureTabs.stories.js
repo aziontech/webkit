@@ -14,9 +14,9 @@ import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
+  "import Diagram from '@aziontech/webkit/diagram'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
   "import MediaTabs from '@aziontech/webkit/media-tabs'",
-  "import Diagram from '@aziontech/webkit/diagram'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
@@ -24,8 +24,8 @@ const IMPORTS = [
 
 const components = {
   Button,
-  FrameBox,
   Diagram,
+  FrameBox,
   MediaTabs,
   SectionContainer,
   SectionGap,
@@ -41,9 +41,10 @@ const DIAGRAMS = [
   { value: 'cache', name: 'ai-gateway-response-cache' }
 ]
 
-const DECLARATION = `const diagrams = ${JSON.stringify(DIAGRAMS, null, 2)
-  .replace(/"/g, "'")
-  .replace(/'([a-z]+)':/g, '$1:')}`
+const declaration = (diagrams) =>
+  `const diagrams = [\n${diagrams.map(({ value, name }) => `  { value: '${value}', name: '${name}' }`).join(',\n')}\n]`
+
+const DECLARATION = declaration(DIAGRAMS)
 
 const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
@@ -104,7 +105,6 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     >
       <template #media="{ index }">
         <Diagram
-          v-if="diagrams[index]"
           :key="diagrams[index].value"
           :name="diagrams[index].name"
           class="w-full"
@@ -142,9 +142,9 @@ export const Default = {
 
 const PLATFORM_IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
+  "import Diagram from '@aziontech/webkit/diagram'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
   "import MediaTabs from '@aziontech/webkit/media-tabs'",
-  "import Diagram from '@aziontech/webkit/diagram'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
@@ -187,9 +187,7 @@ const PLATFORM_TABS = [
 
 const PLATFORM_DIAGRAMS = PLATFORM_TABS.map(({ value, name }) => ({ value, name }))
 
-const PLATFORM_DECLARATION = `const diagrams = ${JSON.stringify(PLATFORM_DIAGRAMS, null, 2)
-  .replace(/"/g, "'")
-  .replace(/'([a-z]+)':/g, '$1:')}`
+const PLATFORM_DECLARATION = declaration(PLATFORM_DIAGRAMS)
 
 const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
@@ -250,7 +248,6 @@ const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fal
     >
       <template #media="{ index }">
         <Diagram
-          v-if="diagrams[index]"
           :key="diagrams[index].value"
           :name="diagrams[index].name"
           class="w-full"
@@ -332,7 +329,11 @@ export const PLATFORM_SITE_SECTION = {
     description:
       'The base architecture every product plugs into: a workload answers near the user, Firewall filters first, a function runs where logic is needed, data sits in the same data center, and every request is seen.',
     position: 'bottom',
-    tabs: PLATFORM_TABS.map(({ value, title, description }) => ({ value, title, description })),
+    tabs: PLATFORM_TABS.map(({ value, title, description }) => ({
+      value,
+      title,
+      description
+    })),
     action: { label: 'See every product', href: '/site/products', trailing: true }
   }
 }

@@ -215,7 +215,7 @@ describe('HeroTitle', () => {
       expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
     })
 
-    it('renders the MobileCentered story centered below md only', () => {
+    it('marks the MobileCentered story mobile-centered, not centered', () => {
       const { getByTestId } = render(MobileCentered())
       const root = getByTestId(TESTID)
 

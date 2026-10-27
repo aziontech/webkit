@@ -267,11 +267,7 @@ const AGENTS_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false
 
 const meta = {
   title: 'Templates/Marketing/Solutions/CodeSplit',
-  excludeStories: [
-    'SITE_SECTION',
-    'SITE_SECTION_ACCELERATOR',
-    'SITE_SECTION_AGENTS'
-  ],
+  excludeStories: ['SITE_SECTION', 'SITE_SECTION_ACCELERATOR', 'SITE_SECTION_AGENTS'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
