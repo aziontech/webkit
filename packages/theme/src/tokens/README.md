@@ -118,7 +118,6 @@ src/
     ├── compile-primitives.js    # flattens primitive trees into CSS vars
     ├── compile-theme.js         # semantic light/dark compiler (exported as ./theme-colors)
     ├── zero-unit.mjs            # build gate: a zero length carries no unit
-    ├── measure-comment.mjs      # build gate: a `// Npx` comment matches its rung
     └── build-tokens.mjs         # main entrypoint: emits the dist/v4 bundle
 ```
 
@@ -206,12 +205,6 @@ The group also ships `layoutsUtilities`, the container-system classes (`.layout-
 `.layout-boundary`, …) emitted as Tailwind v4 `@utility` blocks so they support variants
 (`md:layout-column`). Each entry is a rule body: a string value is a declaration, an object value is
 a nested rule keyed by a literal selector (`'&:first-child'`).
-
-A measure carries a `// 1620px` annotation for the reader, and **the token value is the source of
-truth for it** — the comment is a convenience, never the decision. `measure-comment.mjs` resolves
-every annotated `var(--container-*)` back to its rung and **fails the build** when the two disagree,
-because nothing else can see this: the annotation is a JS comment, so it never reaches the compiled
-CSS, and no linter resolves a `var()` to the value it names.
 
 ---
 

@@ -1,9 +1,5 @@
 import { tokenRef } from '../../scripts/refs.js'
 
-/**
- * Syntax-highlighting colors for code editors (Figma: code-sintax).
- * Dark values match variable set 77:502 in Webkit Figma.
- */
 export const codeSintax = {
   light: {
     'code-sintax-identifier': tokenRef('primitives.gray.900'),

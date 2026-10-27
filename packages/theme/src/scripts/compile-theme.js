@@ -1,12 +1,3 @@
-/**
- * Compile semantic theme tokens into a light/dark CSS variables stylesheet.
- *
- * Resolves `tokenRef(...)` aliases from `tokens/theme/*` (primary, secondary,
- * accent, surfaces, background, border, text, ring, code-sintax, feedback/*)
- * against the
- * primitives + brand + (pre-resolved) surfaces. Emits two blocks (light + dark).
- */
-
 import {
   brandPrimitives,
   primitives as colorPrimitives
@@ -89,7 +80,6 @@ const resolveGroup = (group, surfacesResolved, variant, unresolved, semanticReso
 }
 
 const compileVariant = (variant, unresolved) => {
-  // Surfaces resolved first — other groups depend on them.
   const surfacesResolved = {}
   Object.entries(surfaces[variant]).forEach(([key, value]) => {
     if (!isTokenRef(value)) return
