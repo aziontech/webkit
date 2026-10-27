@@ -87,10 +87,12 @@
             class="underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline"
             >{{ label }}</span
           >
-          <i
-            class="pi pi-link ml-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
-            aria-hidden="true"
-          />
+          <span class="ml-(--spacing-xs) inline-flex h-lh items-center align-top">
+            <i
+              class="pi pi-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+              aria-hidden="true"
+            />
+          </span>
         </a>
       </h2>
       <span
@@ -143,10 +145,12 @@
               class="underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline"
               >{{ title }}</span
             >
-            <i
-              class="pi pi-link ml-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
-              aria-hidden="true"
-            />
+            <span class="ml-(--spacing-xs) inline-flex h-lh items-center align-top">
+              <i
+                class="pi pi-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
+                aria-hidden="true"
+              />
+            </span>
           </a>
         </h2>
         <div
