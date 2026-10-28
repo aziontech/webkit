@@ -250,7 +250,6 @@ export const HOME_PAGE = [
   {
     section: 'NetworkSection',
     ...EARTH_NETWORK,
-    title: 'Distributed infrastructure that stays up when others go down',
     claims: [
       '100+ data centers',
       '100+ Tbps throughput',
