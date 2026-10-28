@@ -64,7 +64,7 @@
   }
 
   watch(parentOpen, (open) => {
-    if (open) return
+    if (!open) return
     form.name = ''
     form.functionId = ''
     errors.name = ''
@@ -110,7 +110,7 @@
   }
 
   watch(childOpen, (open) => {
-    if (open) return
+    if (!open) return
     childForm.name = ''
     childForm.runtime = ''
     childErrors.name = ''

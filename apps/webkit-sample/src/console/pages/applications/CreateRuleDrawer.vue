@@ -111,7 +111,8 @@
   watch(
     open,
     (isOpen) => {
-      Object.assign(form, formFor(isOpen ? (props.rule ?? props.draft) : null))
+      if (!isOpen) return
+      Object.assign(form, formFor(props.rule ?? props.draft))
       submitted.value = false
     },
     { immediate: true }

@@ -53,7 +53,8 @@
     () => confirmation.value.trim().length > 0 && confirmation.value.trim() === props.name.trim()
   )
 
-  watch(open, () => {
+  watch(open, (isOpen) => {
+    if (!isOpen) return
     confirmation.value = ''
     copied.value = false
   })

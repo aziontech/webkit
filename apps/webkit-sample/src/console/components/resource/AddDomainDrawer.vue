@@ -93,13 +93,9 @@
   const certificateTouched = ref(false)
 
   watch(open, (isOpen) => {
+    if (!isOpen) return
     Object.assign(errors, { domain: '', environment: '' })
     submitting.value = false
-    if (!isOpen) {
-      Object.assign(form, blankForm())
-      certificateTouched.value = false
-      return
-    }
     Object.assign(form, props.domain ? formForDomain(props.domain) : blankForm())
     certificateTouched.value = editing.value
   })

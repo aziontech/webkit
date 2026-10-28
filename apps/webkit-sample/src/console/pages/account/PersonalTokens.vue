@@ -191,7 +191,7 @@
   }
 
   watch(drawerOpen, (open) => {
-    if (open) return
+    if (!open) return
     form.name = ''
     form.description = ''
     form.expiresWithin = '1d'
@@ -259,10 +259,6 @@
   }
 
   const onTokenCopied = () => toast.success('Personal token copied to clipboard.')
-
-  watch(dialogOpen, (open) => {
-    if (!open) generatedToken.value = ''
-  })
 </script>
 
 <template>

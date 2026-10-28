@@ -44,7 +44,7 @@
   const filteredTypes = computed(() => filterTypes(typeQuery.value))
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     Object.assign(form, blankForm())
     submitted.value = false
     typeQuery.value = ''

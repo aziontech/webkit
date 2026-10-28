@@ -43,7 +43,7 @@
   const isValid = computed(() => !nameEmpty.value && !regionEmpty.value)
 
   watch(drawerOpen, (open) => {
-    if (open) return
+    if (!open) return
     form.name = ''
     form.region = ''
     form.description = ''

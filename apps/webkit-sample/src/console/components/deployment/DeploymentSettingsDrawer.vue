@@ -40,7 +40,7 @@
   const submitting = ref(false)
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     Object.assign(form, blankForm())
     errors.name = ''
     submitting.value = false

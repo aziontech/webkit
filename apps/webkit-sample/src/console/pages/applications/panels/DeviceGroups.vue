@@ -4,7 +4,7 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { reactive, ref, watch } from 'vue'
+  import { reactive, ref } from 'vue'
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
@@ -66,6 +66,10 @@
 
   const openCreate = () => {
     editing.value = null
+    form.name = ''
+    form.userAgent = ''
+    errors.name = ''
+    errors.userAgent = ''
     createOpen.value = true
   }
 
@@ -77,15 +81,6 @@
     errors.userAgent = ''
     createOpen.value = true
   }
-
-  watch(createOpen, (open) => {
-    if (open) return
-    editing.value = null
-    form.name = ''
-    form.userAgent = ''
-    errors.name = ''
-    errors.userAgent = ''
-  })
 
   const validate = () => {
     const name = form.name.trim()
