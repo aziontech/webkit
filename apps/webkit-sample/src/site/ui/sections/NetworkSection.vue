@@ -116,18 +116,18 @@
         <div
           class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
         >
-          <div class="relative [&_h2]:max-w-[27em]">
+          <div class="relative [&_h2]:max-w-(--container-lg)">
             <SectionTitle
               :framed="false"
               kind="left"
-              size="medium"
+              size="small"
               :eyebrow="eyebrow"
               :title="title"
             />
           </div>
 
           <div
-            class="relative -mx-(--spacing-xxl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
+            class="relative -mx-(--spacing-xxl) min-h-48 flex-1 mask-[linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
           >
             <NetworkMap
               region="world"
@@ -144,7 +144,7 @@
           <div class="relative flex flex-col gap-(--spacing-md)">
             <p
               v-if="lead"
-              class="m-0 text-overline-sm text-(--text-muted)"
+              class="m-0 text-overline-md text-(--text-muted)"
             >
               {{ lead }}
             </p>
