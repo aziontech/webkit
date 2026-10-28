@@ -117,7 +117,8 @@ const meta = {
     },
     required: {
       control: 'boolean',
-      description: 'Marks the field as required and sets `aria-required` on the trigger.',
+      description:
+        'Applies the required (warning) border and sets `aria-required` on the trigger. A submit state: bind it to `submitted && !value`, not statically.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     invalid: {
@@ -671,6 +672,57 @@ export const Invalid = {
             'const invalid = computed(() => !value.value)'
           ],
           INVALID_TEMPLATE
+        )
+      }
+    }
+  }
+}
+
+const REQUIRED_TEMPLATE = `<div class="flex w-[280px] flex-col items-start gap-4">
+  <Select v-model="value" :required="submitted && !value" placeholder="Select an option">
+    <Select.Trigger />
+    <Select.Content>
+      <Select.Option
+        v-for="o in options"
+        :key="o.value"
+        :value="o.value"
+      >{{ o.label }}</Select.Option>
+    </Select.Content>
+  </Select>
+  <Button label="Submit" size="medium" @click="submitted = true" />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Select>} */
+export const Required = {
+  render: () => ({
+    components,
+    setup() {
+      const value = ref('')
+      const submitted = ref(false)
+      const options = BASIC_OPTIONS
+      return { value, submitted, options }
+    },
+    template: REQUIRED_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Required state (warning border + `aria-required`). It is a submit state: bind `required` to `submitted && !value` so the field is flagged only after a submit attempt and clears once a value is selected. Press Submit with nothing selected to see it.'
+      },
+      source: {
+        code: toSfc(
+          [
+            IMPORT,
+            "import Button from '@aziontech/webkit/button'",
+            "import { ref } from 'vue'",
+            '',
+            "const value = ref('')",
+            'const submitted = ref(false)',
+            OPTIONS_SNIPPET
+          ],
+          REQUIRED_TEMPLATE
         )
       }
     }
