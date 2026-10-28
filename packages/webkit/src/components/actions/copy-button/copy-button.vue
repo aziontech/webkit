@@ -48,9 +48,6 @@
 
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
 
-  // One string names the control and labels its tooltip so the two cannot disagree:
-  // `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — which
-  // makes the copy confirmation visible on hover, not only announced.
   const label = computed(() => (copied.value ? props.copiedLabel : props.ariaLabel))
 
   async function handleCopy(event: MouseEvent) {
@@ -61,7 +58,6 @@
     try {
       await globalThis.navigator.clipboard.writeText(props.value)
     } catch {
-      // Clipboard access may be denied; keep the idle state.
       return
     }
 

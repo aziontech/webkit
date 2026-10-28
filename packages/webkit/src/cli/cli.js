@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// @aziontech/webkit — bin name `webkit`. `init` wires the design system into an
-// existing project (idempotent; `--dry-run` plans only); `doctor` checks the wiring.
-// Feature-scoped setup (e.g. toast) is deliberately NOT part of init: it is wired
-// just-in-time from the component's catalog `setup` recipe; `doctor` flags it when missing.
 
 import { applyPlan } from './apply.js'
 import { runCanary } from './canary.js'
@@ -67,15 +63,12 @@ const KNOWN_FLAGS = new Set([
   '-h',
   '--help'
 ])
-// Flags that take a value as the next argv token (report only, so far).
 const VALUE_FLAGS = new Set(['--format', '--fail-on'])
 
 function parseArgs(argv) {
   const args = argv.slice(2)
   const command = args.find((a) => !a.startsWith('-')) || null
 
-  // Pull out `--flag value` pairs first so their value never gets mistaken for another
-  // flag or for a positional pattern.
   const values = {}
   const rest = []
   for (let i = 0; i < args.length; i++) {
@@ -91,7 +84,6 @@ function parseArgs(argv) {
   const flagList = rest.filter((a) => a.startsWith('-'))
   const unknown = flagList.filter((f) => !KNOWN_FLAGS.has(f))
   const flags = new Set(flagList)
-  // Positional args after the command (and after the value-flag pairs already removed).
   const positionals = rest.filter((a) => a !== command && !a.startsWith('-'))
 
   return {
@@ -112,22 +104,17 @@ function parseArgs(argv) {
   }
 }
 
-// Prompts only on a real TTY without --yes, so piped/CI runs never hang; a --no-*
-// flag also suppresses its question.
 async function resolveInitOptions(parsed) {
   const opts = {
     recommended: parsed.recommended,
     icons: !parsed.noIcons,
     wireEntry: !parsed.noEntry
   }
-  // --dry-run implies --yes: a plan-only run prints the plan, it never prompts.
   const interactive = process.stdin.isTTY && process.stdout.isTTY && !parsed.yes && !parsed.dryRun
   if (!interactive) return opts
 
   const { createInterface } = await import('node:readline/promises')
   const rl = createInterface({ input: process.stdin, output: process.stdout })
-  // Without a SIGINT listener, readline pauses the input stream on Ctrl+C and the
-  // pending question never resolves (per Node docs) — exit like an interrupted CLI.
   rl.on('SIGINT', () => {
     rl.close()
     process.exit(130)
@@ -165,9 +152,6 @@ function runDoctor(projectDir) {
   return fails ? 1 : 0
 }
 
-// Labels for `sync`'s state table — one line per acted-on entry, plus a summary. `force`
-// only changes the label for modified/unstamped-different entries (the only states whose
-// action depends on it); every other state's action is unconditional.
 function syncLabel(state, forced) {
   switch (state) {
     case 'missing':
@@ -308,7 +292,6 @@ async function run(argv) {
     return command ? 0 : help ? 0 : 1
   }
 
-  // A silently ignored `--dryrun` would perform a real write run.
   if (unknown.length) {
     process.stderr.write(`Unknown option(s): ${unknown.join(', ')}\n\n${HELP}`)
     return 1
@@ -395,8 +378,6 @@ async function run(argv) {
   return 0
 }
 
-// Set exitCode rather than process.exit() so buffered stdout flushes before exit
-// (process.exit can truncate piped output mid-write).
 run(process.argv).then(
   (code) => {
     process.exitCode = code

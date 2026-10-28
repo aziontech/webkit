@@ -18,8 +18,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'content-item-group'
   )
 
-  // A group is a borderless, gapped list — force descendant Items inline so they don't draw their
-  // own surface/padding inside the group (avoids the box-in-box effect).
   provide(ItemContainerInjectionKey, { forceKind: 'inline' })
 </script>
 

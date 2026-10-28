@@ -1,62 +1,37 @@
-// Pure planner for `webkit init`: `planInit(projectDir, opts)` reads the project and
-// returns an ordered action list without touching disk, so the plan is a testable value.
-// The `type` field drives apply.js: add-dep, write, merge-json, append, copy,
-// patch-entry, fence, advise (print-only — reminders and merge snippets applied by hand).
-
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { LEGACY_MARKER, listBundle } from './bundle.js'
 import { planSync } from './sync.js'
 
-// Floating range so the consumer resolves the latest published design-system
-// version; `apply.js` never downgrades an existing pin.
 const DEP_VERSION = 'latest'
 
-// The eslint plugin, stylelint config and MCP ship inside @aziontech/webkit
-// (subpaths + bins) — no separate toolkit packages to install.
 const RUNTIME_DEPS = ['@aziontech/webkit', '@aziontech/theme']
-// Optional icon font — `init` asks (or takes `--no-icons`).
 const ICONS_DEP = '@aziontech/icons'
 
 const DEV_DEPS = [
   'eslint',
   'stylelint',
   'vue-eslint-parser',
-  // Static a11y floor backing the accessibility skill (the runtime half is axe).
   'eslint-plugin-vuejs-accessibility',
-  // TS sub-parser: the standards mandate TS script setup, which vue-eslint-parser alone cannot parse.
   '@typescript-eslint/parser',
-  // Custom syntaxes the generated .stylelintrc wires for .vue style blocks and .scss.
   'postcss-html',
   'postcss-scss',
   'husky'
 ]
 
-// Pinned ranges (not "latest"). The theme ships a Tailwind v4 stylesheet, so the consumer
-// runs v4 via @tailwindcss/postcss; the CSS entry's `@source` registration is what makes
-// Tailwind compile webkit's component classes — without it the components render unstyled.
 const STYLE_DEV_DEPS = [
   { dep: 'tailwindcss', version: '^4.0.0' },
   { dep: '@tailwindcss/postcss', version: '^4.0.0' }
 ]
 
-// Claude Code bundle files, copied into the consumer's `.claude/` only when missing.
-// Derived from the templates directory itself (every .md under rules/, skills/, agents/)
-// instead of a hand-maintained list, so a new template ships automatically — see bundle.js.
 const CLAUDE_BUNDLE = listBundle()
 
-// Legacy single-line marker, re-exported under its old name: earlier `init` runs guarded
-// the CLAUDE.md fragment with this line alone (append-once, never updated in place).
-// `spliceFragment` (bundle.js) still recognizes it, so an existing fragment is migrated
-// into the new fenced form instead of being duplicated.
 export const CLAUDE_FRAGMENT_MARKER = LEGACY_MARKER
 
-// The webkit MCP server entry merged into `.mcp.json`.
 export const MCP_SERVER_NAME = 'webkit'
 export const MCP_SERVER_ENTRY = {
   command: 'npx',
-  // The MCP ships as the `webkit-mcp` bin of @aziontech/webkit.
   args: ['-y', '-p', '@aziontech/webkit', 'webkit-mcp']
 }
 
@@ -72,8 +47,6 @@ function firstExisting(projectDir, candidates) {
 }
 
 function eslintFlatConfig(severityConfig) {
-  // Flat ESLint 9 config: webkit preset ('strict' | 'recommended') + vue-eslint-parser
-  // with the TS sub-parser (vue-eslint-parser alone cannot parse TS script setup).
   return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
 import a11y from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
@@ -110,8 +83,6 @@ export default [
 `
 }
 
-// Vite auto-detects postcss.config.mjs, so no vite.config change; `.mjs` forces ESM
-// regardless of package.json `type`. (v4 folds autoprefixer in.)
 function postcssConfig() {
   return `export default {
   plugins: {
@@ -121,10 +92,6 @@ function postcssConfig() {
 `
 }
 
-// The CSS entry the consumer imports once. The theme import pulls the Tailwind v4
-// stylesheet; the webkit/styles import registers webkit's source with Tailwind
-// (node_modules is excluded from auto content-detection) — without it the components
-// render unstyled. Both resolve by package name, immune to hoisting/workspace layouts.
 function styleEntryContent() {
   return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
@@ -152,7 +119,6 @@ const ESLINT_SNIPPET_HEADER =
 const STYLELINT_SNIPPET_HEADER =
   'A Stylelint config already exists — not overwriting it. Merge the webkit config manually:'
 
-// .vue style blocks and .scss need a custom syntax the base config leaves to the consumer.
 const STYLELINT_CONTENT = `${JSON.stringify(
   {
     extends: ['@aziontech/webkit/stylelint-config'],
@@ -165,21 +131,17 @@ const STYLELINT_CONTENT = `${JSON.stringify(
   2
 )}\n`
 
-// husky v9+: the hook file is just the commands (the old husky.sh bootstrap line now
-// warns/breaks); hooks activate via the `prepare` script init adds to package.json.
 const HUSKY_PRECOMMIT = `# Lint with the webkit rules before every commit.
 npx eslint .
 npx stylelint "**/*.{css,scss,vue}"
 `
 
-/** Build the ordered init plan for `projectDir`. Pure — no disk writes. */
 export function planInit(projectDir, opts = {}) {
   const actions = []
   const severity = opts.recommended ? 'recommended' : 'strict'
   const icons = opts.icons !== false
   const wireEntry = opts.wireEntry !== false
 
-  // 1. Dependencies (recorded only; apply never runs a package manager).
   const runtimeDeps = icons ? [...RUNTIME_DEPS, ICONS_DEP] : RUNTIME_DEPS
   for (const dep of runtimeDeps) {
     actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: false })
@@ -187,7 +149,6 @@ export function planInit(projectDir, opts = {}) {
   for (const dep of DEV_DEPS) {
     actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: true })
   }
-  // Style pipeline deps at pinned ranges (Tailwind v4, to match the theme's v4 stylesheet).
   for (const { dep, version } of STYLE_DEV_DEPS) {
     actions.push({ type: 'add-dep', dep, version, dev: true })
   }
@@ -197,7 +158,6 @@ export function planInit(projectDir, opts = {}) {
       'Dependencies recorded in package.json — run your package manager install (npm install / pnpm install / yarn) to fetch them.'
   })
 
-  // 1b. PostCSS (Tailwind v4) — write if absent; otherwise print a merge snippet.
   const existingPostcss = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
   if (existingPostcss) {
     actions.push({
@@ -212,7 +172,6 @@ export function planInit(projectDir, opts = {}) {
       skipIfExists: true
     })
   }
-  // Ready-to-import CSS entry; written only if missing.
   actions.push({
     type: 'write',
     path: 'src/webkit.css',
@@ -220,7 +179,6 @@ export function planInit(projectDir, opts = {}) {
     skipIfExists: true
   })
 
-  // 2. eslint.config.mjs — write if absent; otherwise print a merge snippet.
   const existingEslint = firstExisting(projectDir, ESLINT_CONFIG_CANDIDATES)
   if (existingEslint) {
     actions.push({
@@ -236,7 +194,6 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  // 3. .stylelintrc.json — write if absent; otherwise print a merge snippet.
   const existingStylelint = firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES)
   const pkgHasStylelint = (() => {
     const raw = read(join(projectDir, 'package.json'))
@@ -261,7 +218,6 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  // 4. .mcp.json — merge the webkit server (idempotent; only if absent).
   actions.push({
     type: 'merge-json',
     path: '.mcp.json',
@@ -269,8 +225,6 @@ export function planInit(projectDir, opts = {}) {
     merge: { mcpServers: { [MCP_SERVER_NAME]: MCP_SERVER_ENTRY } }
   })
 
-  // 5. husky v9 needs scripts.prepare="husky" or .husky/pre-commit never runs; when a
-  //    different prepare script exists, advise loudly instead of leaving hooks inert.
   const existingPrepare = (() => {
     const raw = read(join(projectDir, 'package.json'))
     if (!raw) return undefined
@@ -296,7 +250,6 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  // 6. .husky/pre-commit — write if absent (append the lint block otherwise).
   actions.push({
     type: 'append',
     path: '.husky/pre-commit',
@@ -310,16 +263,8 @@ export function planInit(projectDir, opts = {}) {
       'Husky pre-commit hook written. Run your package manager install (which runs the "prepare" script) to activate git hooks.'
   })
 
-  // 6-7. Copy the Claude Code bundle into .claude/ (provenance-stamped) and fence the
-  //    CLAUDE.md fragment — delegated to `planSync` so `init` and `sync` share one
-  //    policy. On a fresh project every bundle file is `missing` and the fragment is
-  //    `missing`, so this yields exactly the same "copy everything, fence once" plan
-  //    `init` always produced — now with every copy stamped for future `sync` runs.
   actions.push(...planSync(projectDir).actions)
 
-  // 8. Wire the entry imports. Importing the generated src/webkit.css is what includes
-  //    the `@source` that compiles webkit's classes — skipping it is the "installed but
-  //    unstyled" failure. `--no-entry` falls back to printed advice.
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   const entryImports = ["import './webkit.css'"]
   if (icons) entryImports.push("import '@aziontech/icons'")
@@ -340,7 +285,6 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  // 9. Tokens default to LIGHT; dark is opt-in — nothing else in the wiring reveals it.
   actions.push({
     type: 'advise',
     message:
@@ -350,7 +294,6 @@ export function planInit(projectDir, opts = {}) {
   return actions
 }
 
-// Shared, side-effect-free helpers + constants reused by the doctor planner.
 export { firstExisting, read }
 export const ALL_DEPS = [
   ...RUNTIME_DEPS,

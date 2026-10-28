@@ -58,13 +58,8 @@
 
   const active = computed(() => interactive.value && !props.disabled)
 
-  // One string for the remove control's tooltip AND its accessible name, so they cannot
-  // drift; in a row of chips, `label` is what tells identical Remove controls apart.
   const removeLabel = computed(() => (props.label ? `Remove ${props.label}` : 'Remove'))
 
-  // Presence is the consumer's call: emit and stop. A chip that fades itself out before
-  // emitting cannot survive its own removal, and the inline transition style that fade
-  // needs silently overrides any transition utility a consumer puts on the root.
   function onRemove(event: MouseEvent) {
     if (props.disabled) {
       return
@@ -86,27 +81,18 @@
   }
 
   function onKeydown(event: KeyboardEvent) {
-    // Only the chip root drives activation; keys originating in the remove button are ignored.
     if (!active.value || event.target !== event.currentTarget) {
       return
     }
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      // Synthesise a real DOM click, as a native button does: overlay triggers open on the
-      // DOM click that bubbles out of their child, so a chip that only emitted a Vue event
-      // worked with the mouse but did nothing from the keyboard. The dispatched click runs
-      // `onClick`, so `click` is still emitted exactly once.
       ;(event.currentTarget as globalThis.HTMLElement).click()
     }
   }
 </script>
 
 <template>
-  <!-- All three kinds share one surface fill and differ only in elevation (`filled`
-       carries the small shadow) and the dash: the raised-surface token equals the surface
-       token in the light theme, so a fill distinction cannot carry the applied/available
-       contrast. -->
   <span
     v-bind="$attrs"
     :data-testid="testId"
@@ -136,8 +122,6 @@
       >
         {{ label }}
       </span>
-      <!-- 24px at medium is the WCAG 2.5.8 minimum for a pointer target; `small` keeps a
-           16px control — a justified deviation where the chip itself stays the affordance. -->
       <Tooltip
         v-if="removable"
         :text="removeLabel"

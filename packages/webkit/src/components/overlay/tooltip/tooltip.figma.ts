@@ -9,7 +9,7 @@ figma.connect(
     props: {
       text: figma.string('label')
     },
-    example: ({ text }) => /* html */ `
+    example: ({ text }) => `
     <Tooltip text="${text}">
       <IconButton icon="pi pi-info-circle" aria-label="More information" />
     </Tooltip>

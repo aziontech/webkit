@@ -42,7 +42,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
 | [testing](./testing.md) | webkit | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
-| [comments](./comments.md) | general | Comments rare + objective; ≤5-line blocks, ≤20% prose | authoring · ratchet · lint · review |
+| [comments](./comments.md) | general | No prose comments; API JSDoc + directives only | authoring · ratchet · lint · review |
 | [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · doc-standards (CI) |
 
 **Split:** 15 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 12 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).

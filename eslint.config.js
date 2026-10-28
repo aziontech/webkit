@@ -38,6 +38,7 @@ export default [
     rules: {
       // Base ESLint rules
       ...js.configs.recommended.rules,
+      'no-empty': ['error', { allowEmptyCatch: true }],
 
       // Vue-specific rules
       // https://eslint.vuejs.org/rules/no-dupe-v-else-if.html

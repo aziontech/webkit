@@ -12,10 +12,6 @@ export interface PasswordRequirement {
   test: RegExp | ((value: string) => boolean)
 }
 
-/**
- * The rule set a bare `requirements` prop enables, in design order. A consumer passes
- * their own array for a different set; to start from these and drop one, filter by `key`.
- */
 export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
   { key: 'length', label: '8-128 characters', test: /^.{8,128}$/ },
   { key: 'uppercase', label: 'Uppercase letter', test: /[A-Z]/ },

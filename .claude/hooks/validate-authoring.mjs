@@ -8,10 +8,10 @@
 //   - composable returns reactive()                          → refs/computed + readonly() (composables.md)
 //   - a new composable authored as .js                       → composables are .ts (composables.md)
 //   - @deprecated with no replacement/version                → name it (deprecation.md)
+//   - a prose comment anywhere under packages/               → API docs only (comments.md)
 //
 // Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
-// block a pattern that is NOT already present in the baseline (we block NEW sins, never
-// grandfathered ones — so legacy components migrate as they are touched, not all at once).
+// block when a check's occurrence count GROWS past the baseline's.
 // Fail-open on any error.
 
 import { readFileSync } from 'node:fs'
@@ -22,6 +22,11 @@ import { CONTENT_CHECKS, MESSAGES } from './_lib/authoring-checks.mjs'
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/'
 const WIP_PREFIX = 'packages/webkit/src/components/wip/'
+const PACKAGES_PREFIX = 'packages/'
+const PACKAGE_WIDE_CHECKS = new Set(['prose-comment'])
+
+const occurrences = (check, text, rel) =>
+  check.count ? check.count(text, rel) : check.violated(text, rel) ? 1 : 0
 
 function readStdin() {
   return new Promise((resolveStdin) => {
@@ -76,8 +81,8 @@ async function main() {
   if (!filePath) process.exit(0)
 
   const relPath = relative(ROOT, resolve(filePath))
-  if (!relPath.startsWith(TARGET_PREFIX) || relPath.startsWith(WIP_PREFIX)) process.exit(0)
-  if (!/\.(vue|ts|js)$/.test(relPath)) process.exit(0)
+  if (!relPath.startsWith(PACKAGES_PREFIX) || relPath.startsWith(WIP_PREFIX)) process.exit(0)
+  const inWebkitSrc = relPath.startsWith(TARGET_PREFIX)
 
   const baseline = tool === 'Write' ? '' : readExistingFile(filePath)
   const result = resultingContent(tool, ti, baseline)
@@ -85,21 +90,23 @@ async function main() {
   const violations = []
 
   // Path-based: a NEW composable must be .ts, not .js (only on Write of a fresh file).
-  if (tool === 'Write' && /(^|\/)use-[^/]*\.js$/.test(relPath) && !baseline) {
+  if (inWebkitSrc && tool === 'Write' && /(^|\/)use-[^/]*\.js$/.test(relPath) && !baseline) {
     violations.push({ id: 'composable-js', message: MESSAGES['composable-js'] })
   }
 
   for (const c of CONTENT_CHECKS) {
+    if (!inWebkitSrc && !PACKAGE_WIDE_CHECKS.has(c.id)) continue
     if (!c.applies(relPath)) continue
-    if (c.violated(result) && !c.violated(baseline)) {
-      violations.push({ id: c.id, message: c.message })
-    }
+    const added = occurrences(c, result, relPath) - occurrences(c, baseline, relPath)
+    if (added > 0) violations.push({ id: c.id, message: c.message, added })
   }
 
   if (violations.length === 0) process.exit(0)
 
   const lines = [`Webkit authoring validation blocked ${tool} on ${relPath}.`, '']
-  for (const v of violations) lines.push(`  [${v.id}] ${v.message}`)
+  for (const v of violations) {
+    lines.push(`  [${v.id}]${v.added > 1 ? ` ×${v.added}` : ''} ${v.message}`)
+  }
   lines.push('')
   lines.push(
     'These are the construction standards in .claude/rules/. Fix the pattern — do not work around the hook.'

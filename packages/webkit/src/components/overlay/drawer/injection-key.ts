@@ -27,5 +27,4 @@ export interface DrawerContext {
 
 export const DrawerInjectionKey: InjectionKey<DrawerContext> = Symbol('DrawerContext')
 
-/** Set by `drawer-content` so panel regions defer scrolling to its `ScrollArea`. */
 export const DrawerPanelScrollInjectionKey: InjectionKey<boolean> = Symbol('DrawerPanelScroll')

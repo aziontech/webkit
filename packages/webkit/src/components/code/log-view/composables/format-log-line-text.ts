@@ -1,6 +1,5 @@
 import type { LogViewLine } from '../injection-key'
 
-/** Plain-text representation of a log line, aligned with LogViewContent rendering. */
 export function formatLogLineText(line: LogViewLine): string {
   const parts: string[] = [line.time]
 

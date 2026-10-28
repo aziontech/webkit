@@ -43,6 +43,7 @@ Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construct
 - `<slot>` in the template without a typed `defineSlots`
 - A composable returning `reactive()` state or authored as `.js`
 - `@deprecated` without a named replacement + removal version
+- A prose comment (`prose-comment`) in any non-test source under `packages/` — only component API JSDoc and tool directives are allowed ([`comments`](../rules/comments.md)); blocks when the count grows
 
 Engine: [`_lib/authoring-checks.mjs`](./_lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run.
 
