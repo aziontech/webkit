@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: approved
 spec_version: 2
-checksum: a22234248b768807348910e62f1e7bfce8d35f82edb313bf94dba52c17d44d6d
+checksum: ebf68d43abf3864da1d282534885afec290b3b8f8b1678ea230702e2a4ca6eda
 created: 2026-09-22
-last_updated: 2026-10-01
+last_updated: 2026-10-26
 ---
 
 # Hero — Component Spec
@@ -44,7 +44,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - Pass `kind="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
 - Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.
-- Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
+- Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, `small` the compact head of an index page whose listing should start in the first screen — pair it with a start-aligned `Hero.Title` — and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
 - Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.
 - Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.
 - Set `mediaAlign="end"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.
@@ -95,7 +95,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 | `maxWidth` | `HeroWidth` | `'7xl'` | false | Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset. |
 | `bordered` | `boolean` | `true` | false | Draw the band's bottom rule, which is the top edge of whatever follows it. |
 | `padded` | `boolean` | `true` | false | Apply the band's own vertical rhythm. The inline inset is always applied. |
-| `size` | `HeroSize` | `'medium'` | false | Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with. |
+| `size` | `HeroSize` | `'medium'` | false | Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with, `small` the compact head of an index page. |
 | `texture` | `TextureMaterialKind` | `'none'` | false | Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. |
 | `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the tiling the `texture` prop paints — how far apart its cells sit. |
 | `textureFade` | `TextureMaterialFade` | `'none'` | false | Fade applied to the layer the `texture` prop paints. |
@@ -139,7 +139,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `data-width` carries the resolved width key
 - `data-bordered` present when the bottom rule is drawn
 - `data-padded` present when the band applies its own vertical rhythm
-- `data-size` carries the rhythm key (`medium` or `large`); it takes effect only with `data-padded`, and the same step applies above and below the content, so the copy and the media sit on the band's vertical centre
+- `data-size` carries the rhythm key (`small`, `medium` or `large`); it takes effect only with `data-padded`, and the same step applies above and below the content, so the copy and the media sit on the band's vertical centre
 - `data-media` present when the `media` slot is filled and the content column is split into two equal halves from `md` up, the copy leading and the media trailing; stacked below `md`
 - `data-media-align` carries where the `media` slot sits in its column (`center` or `end`); it takes effect only with `data-media`. With `end`, from `md` up, the media cell extends through the end-side inline inset so its end edge lands on the container boundary — the same line the frames of the section below draw — and media narrower than the cell is set against that edge. Stacked below `md`, the media keeps the inset
 - `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
@@ -167,6 +167,7 @@ _none_
 | floor texture ink | `var(--banner-floor-ink, 0.6)` |
 | band rule | `var(--border-default)` |
 | band inset | `var(--layout-boundary-inline)` |
+| band rhythm (`size` small) | `var(--spacing-xl)` |
 | band rhythm (`size` medium) | `var(--spacing-xxl)` |
 | band rhythm (`size` large) | `calc(var(--spacing-xxl) * 2)` |
 | media column gap | `var(--spacing-xl)` from `md` up, `var(--spacing-xxl)` stacked |

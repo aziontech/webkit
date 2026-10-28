@@ -26,7 +26,7 @@
   export type HeroAlign = 'top' | 'center' | 'bottom'
 
   /** Vertical rhythm the band applies when padded. */
-  export type HeroSize = 'medium' | 'large'
+  export type HeroSize = 'small' | 'medium' | 'large'
 
   /** Where the media slot sits in its column. */
   export type HeroMediaAlign = 'center' | 'end'
@@ -40,7 +40,7 @@
     bordered?: boolean
     /** Apply the band's own vertical rhythm. The inline inset is always applied. */
     padded?: boolean
-    /** Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with. */
+    /** Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with, `small` the compact head of an index page. */
     size?: HeroSize
     /** Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. */
     texture?: TextureMaterialKind
@@ -162,7 +162,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-xxl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
+      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=small]:py-(--spacing-xl) data-[padded]:data-[size=medium]:py-(--spacing-xxl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
     >
       <div
         v-if="hasMedia"

@@ -81,12 +81,12 @@ const meta = {
     },
     size: {
       control: 'inline-radio',
-      options: ['medium', 'large'],
+      options: ['small', 'medium', 'large'],
       description:
-        'Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with.',
+        'Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with, `small` the compact head of an index page.',
       table: {
         category: 'props',
-        type: { summary: "'medium' | 'large'" },
+        type: { summary: "'small' | 'medium' | 'large'" },
         defaultValue: { summary: "'medium'" }
       }
     },

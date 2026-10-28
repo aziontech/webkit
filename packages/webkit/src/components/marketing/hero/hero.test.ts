@@ -21,9 +21,9 @@ describe('Hero', () => {
     expect(root).not.toHaveAttribute('data-media')
   })
 
-  it('carries the large rhythm on data-size when size is large', () => {
-    const { getByTestId } = render(Hero, { props: { size: 'large' } })
-    expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'large')
+  it.each(['small', 'large'] as const)('carries the %s rhythm on data-size', (size) => {
+    const { getByTestId } = render(Hero, { props: { size } })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', size)
   })
 
   it('lets a consumer-supplied data-testid win', () => {
