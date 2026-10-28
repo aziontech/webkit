@@ -485,6 +485,29 @@ group('hook: validate-authoring.mjs comments', () => {
   })
 })
 
+group('hook: validate-references.mjs', () => {
+  test('the Code Connect runtime resolves in a .figma.ts template (exit 0)', () => {
+    const r = runHook('.claude/hooks/validate-references.mjs', {
+      tool_name: 'Write',
+      tool_input: {
+        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/zz.figma.ts'),
+        content: "import figma from 'figma'"
+      }
+    })
+    assertEqual(r.code, 0)
+  })
+  test('the Code Connect runtime blocks outside a .figma.ts template (exit 2)', () => {
+    const r = runHook('.claude/hooks/validate-references.mjs', {
+      tool_name: 'Write',
+      tool_input: {
+        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/zz.ts'),
+        content: "import figma from 'figma'"
+      }
+    })
+    assertEqual(r.code, 2)
+  })
+})
+
 // ---- summary ----
 
 const failed = results.filter((r) => !r.ok)
