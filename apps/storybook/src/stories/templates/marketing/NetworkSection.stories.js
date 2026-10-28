@@ -64,7 +64,7 @@ const setup = () => ({
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
   title:
-    'One distributed infrastructure to build, secure, and scale workloads - without the complexity of managing or scaling it.',
+    'One distributed infrastructure without the complexity of managing, securing and scaling it',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -270,7 +270,7 @@ export const SITE_SECTION = {
   props: {
     eyebrow: 'Region: Earth.',
     title:
-      'One distributed infrastructure to build, secure, and scale workloads - without the complexity of managing or scaling it.',
+      'One distributed infrastructure without the complexity of managing, securing and scaling it',
     lead: 'Built around your users. Distributed around your data.',
     claims: [
       '100+ data centers',
