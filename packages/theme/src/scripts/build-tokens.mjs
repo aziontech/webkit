@@ -38,7 +38,6 @@ import { animateExtras, keyframes } from '../tokens/primitives/animations/keyfra
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
-import { container } from '../tokens/primitives/shape/container.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import {
   illustrationsData,
@@ -49,18 +48,14 @@ import { layoutsData, layoutsUtilities } from '../tokens/semantic/layouts.data.j
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
-import { assertMeasureCommentsMatch } from './measure-comment.mjs';
 import { assertNoZeroWithUnit } from './zero-unit.mjs';
 
 const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl'];
 
 const kebab = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 
-// ─── 1. Primitives ──────────────────────────────────────────────────────────
-// compilePrimitivesVars throws on any unresolved tokenRef (see refs.js).
 const flattenPrimitives = () => compilePrimitivesVars();
 
-// ─── 2. Semantic flattening ─────────────────────────────────────────────────
 const splitResponsive = (value) => {
   if (value === null || typeof value !== 'object') return { _: String(value) };
   const out = {};
@@ -112,18 +107,11 @@ const buildFlatModel = () => ({
   texts: flattenBundle(textsData),
 });
 
-// ─── 3. Formatting helpers ─────────────────────────────────────────────────
 const formatVars = (vars, indent) =>
   Object.entries(vars)
     .map(([k, v]) => `${indent}${k}: ${v};`)
     .join('\n');
 
-/**
- * Container / spacing / animation-extra classes — emitted inside `@layer components`.
- * These are used bare (never behind Tailwind variants), so component-layer is fine.
- * Typography classes are NOT here; they ship as `@utility` (see emitTextUtilities)
- * so that variant modifiers like `data-[size=medium]:text-button-md` compile.
- */
 const emitComponentClasses = (indent = '  ') => {
   const lines = [];
 
@@ -151,12 +139,6 @@ const emitComponentClasses = (indent = '  ') => {
   return lines.join('\n');
 };
 
-/**
- * Emit typography classes as Tailwind v4 `@utility` blocks so they participate
- * in variant compilation (`data-[size=medium]:text-button-md`, `hover:text-link`,
- * etc.). `@layer components` classes are opaque to v4's variant resolver and
- * their modifiers silently drop, leaving elements at the inherited 16px.
- */
 const emitTextUtilities = () => {
   const blocks = [];
   for (const [key, bundle] of Object.entries(textsData)) {
@@ -182,26 +164,6 @@ const emitTextUtilities = () => {
   return blocks.join('\n\n');
 };
 
-/**
- * Emit semantic color utilities (`text-*`, `bg-*`, `border-*`, `ring-*`).
- *
- * Tailwind v4's auto-generated color utilities pull from `@theme { --color-* }`,
- * but our semantic tokens live under domain-specific prefixes (`--text-default`,
- * `--bg-canvas`, `--border-default`, `--primary`) so v3's preset generated the
- * classes by axis instead. Without them, `text-primary`, `bg-surface`, and
- * `border-default` (heavily used across the webkit components — unchanged
- * from dev) compile to nothing under v4.
- *
- * Rules:
- *   - Prefix-keyed tokens (`bg-*`, `text-*`, `border-*`, `ring-*`) become one
- *     utility on the matching axis: `@utility bg-canvas { background-color: var(--bg-canvas); }`.
- *   - Bare semantic tokens (`primary`, `accent`, `danger`, `warning`, `success`,
- *     `info`, `secondary`, and their `-mask`/`-selected`/`-contrast`/`-border`
- *     suffixes) become three utilities so a consumer can use `bg-primary`,
- *     `text-primary`, `border-primary` interchangeably.
- *   - `code-sintax-*` tokens are consumer-composed via arbitrary values in code
- *     highlighters and don't need a utility (skipped).
- */
 const AXIS_BY_PREFIX = {
   'bg-': { utility: (k) => k, prop: 'background-color' },
   'text-': { utility: (k) => k, prop: 'color' },
@@ -216,9 +178,6 @@ const emitSemanticColorUtilities = () => {
   const { light } = compileThemeVars();
   const keys = Object.keys(light).map((k) => k.replace(/^--/, ''));
   const blocks = [];
-  // Skip utilities already defined as typography (textsData) — `text-link`
-  // there ships the hover/focus states and would be silently overridden by
-  // a bare color-only utility emitted afterwards.
   const emitted = new Set(Object.keys(textsData));
 
   for (const key of keys) {
@@ -234,9 +193,8 @@ const emitSemanticColorUtilities = () => {
       blocks.push(`@utility ${utility} { ${axis.prop}: var(--${key}); }`);
       continue;
     }
-    // Bare token — expose on all three color axes.
     for (const [prefix, axis] of Object.entries(AXIS_BY_PREFIX)) {
-      if (prefix === 'ring-') continue; // ring is opt-in, not for every token
+      if (prefix === 'ring-') continue;
       const utility = `${prefix}${key}`;
       if (emitted.has(utility)) continue;
       emitted.add(utility);
@@ -246,17 +204,6 @@ const emitSemanticColorUtilities = () => {
   return blocks.join('\n');
 };
 
-/**
- * Restore browser affordances that Tailwind v4's preflight removed.
- * v3 shipped `button { cursor: pointer }` by default; v4 does not, so every
- * interactive element loses the hand cursor unless a component overrides it.
- * Disabled controls keep the default cursor.
- */
-/**
- * Emit a map of `@utility` blocks. A string value is a plain declaration; an object
- * value is a nested rule keyed by a literal selector (`&:first-child { … }`), the way
- * the typography utilities nest their `&:hover`.
- */
 const emitUtilities = (utilities) =>
   Object.entries(utilities)
     .map(([name, decls]) => {
@@ -271,12 +218,6 @@ const emitUtilities = (utilities) =>
     })
     .join('\n\n');
 
-/**
- * The container system as `@utility` blocks — same reason as the typography
- * utilities: `@layer components` classes are opaque to the variant resolver, and a
- * layout class is exactly the kind a consumer wants behind a variant
- * (`md:layout-column`).
- */
 const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
 
 const emitBaseLayer = () =>
@@ -335,24 +276,6 @@ const emitKeyframes = () => {
   return blocks.join('\n\n');
 };
 
-// ─── 4. v4 emission (@import "tailwindcss" + @theme) ───────────────────────
-/**
- * v4 puts color primitives, breakpoints, and animation shorthands under
- * `@theme` so Tailwind auto-generates `bg-gray-50`, `text-violet-500`,
- * `sm:` screens, and `animate-*` utilities. Semantic tokens stay in plain
- * `:root` (with `@media` overrides) so we keep full control of the
- * component classes.
- *
- * Notes:
- *   - `@theme { --color-* }`      → color utilities.
- *   - `@theme { --breakpoint-* }` → screens (`sm:`, `md:`, …).
- *   - `@theme { --animate-* }`    → `animate-*` utilities (the shorthand
- *                                    references a `@keyframes` emitted
- *                                    later in the file).
- *   - Semantic shape/typography tokens are NOT in @theme — we own their
- *     class definitions in @layer components and they swap responsively
- *     via `:root @media` overrides.
- */
 const V4_SELECTOR = ':root, [data-theme=light], .azion.azion-light';
 
 const emitCssV4 = () => {
@@ -370,12 +293,6 @@ const emitCssV4 = () => {
     themeVars[`--animate-${name}`] = shorthand;
   }
 
-  // Named `duration-*` / `ease-*` utilities. Without these the design system's
-  // own `duration-moderate-02` / `ease-productive-entrance` classes compile to
-  // NOTHING (Tailwind v4 silently drops an unknown named step), and every
-  // component that declares one falls back to Tailwind's default 150ms `ease`.
-  // The namespaces are fixed by Tailwind: `--transition-duration-*` backs
-  // `duration-*`, `--ease-*` backs `ease-*`.
   for (const [name, value] of Object.entries(duration)) {
     themeVars[`--transition-duration-${name}`] = value;
   }
@@ -468,7 +385,6 @@ const emitCssV4 = () => {
   ].join('\n');
 };
 
-// ─── 5. Write to disk ──────────────────────────────────────────────────────
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distRoot = resolve(__dirname, '../../dist');
 
@@ -479,21 +395,12 @@ const fontsCss = await readFile(
 
 const dir = resolve(distRoot, 'v4');
 await mkdir(dir, { recursive: true });
-// `@import` must precede every other at-rule (CSS spec); `@font-face` before
-// `@import "tailwindcss"` would silently invalidate the import and skip
-// Tailwind's layer setup / utility generation. Splice fonts in AFTER the
-// import line by looking for the marker in the emitted CSS.
 const rawCss = emitCssV4();
 const IMPORT_LINE = '@import "tailwindcss";';
 const importIdx = rawCss.indexOf(IMPORT_LINE);
 if (importIdx === -1) throw new Error('emitCssV4 output is missing the tailwind import line');
 const afterImport = importIdx + IMPORT_LINE.length;
 const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterImport)}`;
-assertMeasureCommentsMatch(
-  await readFile(resolve(__dirname, '../tokens/semantic/layouts.data.js'), 'utf8'),
-  container,
-  'tokens/semantic/layouts.data.js',
-);
 assertNoZeroWithUnit(css, 'globals.css');
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');

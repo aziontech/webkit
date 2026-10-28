@@ -47,10 +47,6 @@
     :data-testid="testId"
     class="flex flex-col [:not([role=separator])+&]:mt-(--spacing-sm)"
   >
-    <!--
-      Top margin applies only after a sibling group, never after a separator —
-      the separator owns its surrounding space, so the two spacings cannot stack.
-    -->
     <div
       v-if="hasHeading"
       :id="headingId"

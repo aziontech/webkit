@@ -94,7 +94,6 @@
   >
     <template v-if="items.length">
       <BreadcrumbList :data-testid="`${testId}__list`">
-        <!-- Desktop: full trail -->
         <template v-if="!isCollapsed">
           <template
             v-for="(item, index) in resolvedItems"
@@ -122,7 +121,6 @@
           </template>
         </template>
 
-        <!-- Mobile: first + overflow menu + current -->
         <template v-else-if="firstItem">
           <li
             class="inline-flex items-center"
@@ -149,14 +147,10 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <!-- `select(event, value)` is emitted by the Dropdown root (options forward
-                   activation through the injected context) — bound on an option it never fires. -->
               <Dropdown
                 :data-testid="`${testId}__overflow-menu`"
                 @select="onOverflowSelect"
               >
-                <!-- The Trigger is already role="button"; nesting a real button here trips
-                     axe nested-interactive, so the icon stays decorative content. -->
                 <Dropdown.Trigger
                   aria-label="Show pages in between"
                   :data-testid="`${testId}__overflow-trigger`"

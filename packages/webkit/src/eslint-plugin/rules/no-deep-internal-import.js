@@ -1,7 +1,3 @@
-// Blocks reaching into webkit internals: `@aziontech/webkit/src/**` or any subpath
-// deeper than a published entry point (e.g. `.../table/internal/x`). These break on
-// any refactor and bypass the public API. Suggests the published entry point.
-
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 
@@ -9,8 +5,6 @@ export default {
   meta: {
     type: 'problem',
     docs: { description: 'Disallow importing @aziontech/webkit internals (deep paths / src).' },
-    // The replacement is a single, catalog-verified published entry point, so it is a
-    // safe autofix (not just a suggestion).
     fixable: 'code',
     hasSuggestions: true,
     schema: [],
@@ -32,7 +26,7 @@ export default {
       if (catalog.has(sub)) return
       const isSrc = sub.startsWith('src/')
       const prefix = catalog.nearestPublishedPrefix(sub)
-      if (!isSrc && !prefix) return // unknown-but-not-deep → valid-import-path owns it
+      if (!isSrc && !prefix) return
 
       const replacement = prefix ? pkgPrefix + prefix : null
       const applyFix = (fixer) => fixer.replaceText(sourceNode, JSON.stringify(replacement))
@@ -40,7 +34,6 @@ export default {
         node: sourceNode,
         messageId: 'deep',
         data: { source, hint: replacement ? ` '${replacement}'` : '' },
-        // Autofix + suggestion share the same deterministic replacement when one exists.
         fix: replacement ? applyFix : undefined,
         suggest: replacement ? [{ messageId: 'replace', data: { replacement }, fix: applyFix }] : []
       })

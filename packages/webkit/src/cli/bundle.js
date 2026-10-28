@@ -1,7 +1,3 @@
-// Derives the Claude Code bundle from cli-templates and fences the CLAUDE.md fragment.
-// See docs/toolkit/cli.md for why (drift-proof bundle, in-place fragment updates,
-// legacy-marker migration/repair).
-
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join, sep } from 'node:path'
@@ -11,7 +7,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const TEMPLATES = join(__dirname, '../../cli-templates')
 export const CLAUDE_TEMPLATES = join(TEMPLATES, 'claude')
 
-// Version of the installed webkit, stamped into every provenance marker.
 function resolveWebkitVersion() {
   try {
     const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf8'))
@@ -34,8 +29,6 @@ function listDir(dir) {
   }
 }
 
-// The bundle has a fixed shape; a template outside it (a skill's references/) is not
-// shipped. bundle.test.mjs fails when the templates dir grows past this shape.
 function flatMarkdown(dir) {
   return listDir(dir)
     .filter((e) => e.isFile() && e.name.endsWith('.md'))
@@ -48,7 +41,6 @@ function skillFiles(dir) {
     .map((e) => `${e.name}/SKILL.md`)
 }
 
-/** `rules/*.md`, `agents/*.md` and `skills/*\/SKILL.md`, as sorted POSIX paths relative to `templatesDir`. */
 export function listBundle(templatesDir = CLAUDE_TEMPLATES) {
   const rels = [
     ...flatMarkdown(join(templatesDir, 'rules')).map((name) => `rules/${name}`),
@@ -58,11 +50,8 @@ export function listBundle(templatesDir = CLAUDE_TEMPLATES) {
   return rels.map(toPosix).sort()
 }
 
-// --- CLAUDE.md fragment fencing ------------------------------------------------------
-
 export const FRAGMENT_START = '<!-- @aziontech/webkit:start -->'
 export const FRAGMENT_END = '<!-- @aziontech/webkit:end -->'
-// Pre-fence marker from older `init` runs; detected only to migrate/repair.
 export const LEGACY_MARKER = '<!-- @aziontech/webkit -->'
 
 function findFencedBlocks(source, startMarker, endMarker) {
@@ -91,8 +80,6 @@ function headingsOf(text) {
   )
 }
 
-// A legacy block runs from its marker to the next foreign heading, the next marker, or EOF.
-// Own (not foreign): the heading right after the marker, and any heading in `body`.
 function findLegacyBlocks(source, body = '') {
   const ownHeadings = headingsOf(body)
   const blocks = []
@@ -136,8 +123,6 @@ function fence(body, startMarker, endMarker) {
   return `${startMarker}\n${body}\n${endMarker}`
 }
 
-// Collapses whitespace noise from splicing/removing blocks to: ≤1 blank line between
-// sections, a blank line before an abutting heading, one trailing newline. Idempotent.
 function normalize(text) {
   return `${text
     .replace(/\n{3,}/g, '\n\n')
@@ -146,11 +131,6 @@ function normalize(text) {
     .replace(/\s+$/, '')}\n`
 }
 
-/**
- * Splices `body` into `source` as the fenced @aziontech/webkit fragment.
- * Idempotent: splice(splice(source, body), body) === splice(source, body).
- * See docs/toolkit/cli.md for the fenced/legacy/append cases this covers.
- */
 export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRAGMENT_END } = {}) {
   const fenced = findFencedBlocks(source, start, end)
   if (fenced.length) {
@@ -159,7 +139,6 @@ export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRA
       fence(body, start, end) +
       '\n' +
       source.slice(fenced[0].end)
-    // Remove any further fenced blocks (recompute offsets against the shrinking string).
     for (let i = 1; i < fenced.length; i += 1) {
       const extra = findFencedBlocks(result, start, end).slice(1)[0]
       if (!extra) break
@@ -188,11 +167,6 @@ export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRA
   return normalize(`${trimmed}${separator}${fence(body, start, end)}\n`)
 }
 
-// --- Provenance marker (webkit sync) -------------------------------------------------
-// One inert HTML-comment line stamped into every copied bundle file: source, webkit
-// version, and a content hash of its own body. See docs/toolkit/cli.md ("sync") for
-// the marker format, placement rule, and how `sync` uses it to classify a file.
-
 const MARKER_LINE_RE =
   /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->\r?\n?/m
 
@@ -204,28 +178,20 @@ function sha256Short(text) {
   return createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 16)
 }
 
-/** Remove the provenance marker line, if present. Normalizes line endings first. */
 export function stripMarker(content) {
   return normalizeNewlines(content).replace(MARKER_LINE_RE, '')
 }
 
-/** Parse the provenance marker out of `content`, or `null` when there is none. */
 export function parseMarker(content) {
   const match = normalizeNewlines(content).match(MARKER_LINE_RE)
   if (!match) return null
   return { source: match[1], version: match[2], sha256: match[3] }
 }
 
-/** sha256 (first 16 hex chars) of `content`'s body — the marker line stripped first. */
 export function bodyHash(content) {
   return sha256Short(stripMarker(content))
 }
 
-/**
- * Stamp `content` with a fresh provenance marker for `source`/`version`, computed over
- * its own body (any existing marker is stripped before hashing/re-inserting). Placement:
- * line 1, or right after a leading YAML frontmatter block's closing `---` line.
- */
 export function stamp(content, { source, version }) {
   const body = stripMarker(content)
   const marker = `<!-- webkit-sync source=${source} version=${version} sha256=${sha256Short(body)} -->`
@@ -237,10 +203,6 @@ export function stamp(content, { source, version }) {
   return `${marker}\n${body}`
 }
 
-/**
- * Classify a consumer file against its template counterpart (`consumerContent` is `null`
- * when it doesn't exist yet). States and their policy: docs/toolkit/cli.md ("sync").
- */
 export function classify(templateContent, consumerContent) {
   const templateHash = bodyHash(templateContent)
   if (consumerContent === null || consumerContent === undefined) return 'missing'

@@ -44,8 +44,6 @@ export const animate = {
   'slide-out-right': `slideOutRight ${duration['moderate-01']} ${curve['productive-exit']}`,
   'progress-indeterminate': `progressIndeterminate ${duration['slow-04']} ${curve['productive-entrance']} infinite`,
   'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
-  // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
-  // looping animation must not accelerate, or the seam between repeats is visible.
   'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
   'illustration-rim-sweep': `illustrationRimSweep ${duration['slow-04']} linear infinite`,
   // Off the duration scale for the same reason as the chat pair below: that scale budgets UI

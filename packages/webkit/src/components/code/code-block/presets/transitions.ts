@@ -1,27 +1,19 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-/** Tab pill indicator — values read only from `animate.js`. */
 export const codeBlockIndicatorMotion = {
   slide: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-/**
- * Per-line entrance on a tab swap — a shorter step than the 40ms
- * marketing stagger, and capped: past `maxSteps` every remaining line shares
- * the last delay, so a 200-line file swaps in the same time a 12-line one does.
- */
 export const codeBlockLineSwapMotion = {
   stagger: '24ms',
   maxSteps: 12,
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-/** Shell height across a tab swap — the two panels rarely have the same line count. */
 export const codeBlockHeightMotion = {
   resize: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
 
-/** Staggered line entrance for marketing / website use cases. */
 export const codeBlockLineEnterMotion = {
   stagger: '40ms',
   offsetClass: '-translate-x-2',

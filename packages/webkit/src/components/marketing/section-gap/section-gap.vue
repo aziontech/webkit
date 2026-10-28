@@ -32,11 +32,6 @@
 </script>
 
 <template>
-  <!-- Steps are one, two and three times the theme's largest spacing step (32/64/96px on a
-       phone, 96/192/288px wide), so the gap adds no scale of its own. flush leaves a shared
-       junction one rule; every corner is still ticked. Hatch belongs here, the one band
-       with no copy of its own, and the rules stay unmasked — one solid ink edge to edge, so
-       the field never reads as a fill that fades. -->
   <FrameBox
     v-bind="$attrs"
     flush

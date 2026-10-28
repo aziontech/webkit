@@ -39,9 +39,6 @@
 </script>
 
 <template>
-  <!-- The rules are the grid's own gaps: the block carries the hairline colour and each
-       column paints the page canvas over it, so four adjacent columns produce three
-       rules instead of six, and an empty block paints nothing at all. -->
   <nav
     v-bind="$attrs"
     :data-testid="testId"

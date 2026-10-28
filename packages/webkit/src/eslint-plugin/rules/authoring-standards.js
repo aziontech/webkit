@@ -1,8 +1,3 @@
-// Enforces the construction standards on components the CONSUMER writes — the same
-// checks the design system's own write-time hook and CI ratchet run, via the shared
-// engine in ../authoring-checks.js (one definition, three surfaces: AI hook, DS ratchet,
-// consumer lint). Text-level, parser-agnostic, fail-open on virtual filenames.
-
 import { CONTENT_CHECKS, isJsComposable, MESSAGES } from '../authoring-checks.js'
 
 export default {
@@ -17,14 +12,19 @@ export default {
   },
   create(context) {
     const filename = context.filename ?? context.getFilename()
-    // Virtual/unknown filenames (stdin, <input>) — skip path-based checks gracefully.
     const rel = typeof filename === 'string' ? filename.split('\\').join('/') : ''
 
     return {
       Program(node) {
-        const text = context.sourceCode?.text ?? context.getSourceCode().text
+        const sourceCode = context.sourceCode ?? context.getSourceCode()
+        const text = sourceCode.text
         for (const c of CONTENT_CHECKS) {
-          if (c.applies(rel) && c.violated(text)) {
+          if (!c.applies(rel)) continue
+          if (c.locate) {
+            for (const index of c.locate(text, rel)) {
+              context.report({ loc: sourceCode.getLocFromIndex(index), messageId: c.id })
+            }
+          } else if (c.violated(text, rel)) {
             context.report({ node, messageId: c.id })
           }
         }

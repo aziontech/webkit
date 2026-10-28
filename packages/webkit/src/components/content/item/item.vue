@@ -47,8 +47,6 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-item')
 
-  // Inside a list container (ItemGroup forces `inline`, ItemList forces `default`), the container's
-  // kind wins to avoid a box-in-box effect.
   const kind = computed<ItemKind>(() => container?.forceKind ?? props.kind)
 
   const rootBindings = computed(() => {
@@ -62,8 +60,6 @@
       'data-testid': testId.value,
       'data-kind': kind.value,
       'data-size': props.size,
-      // as-child target is the sole focusable/hoverable element for the whole row, so it draws the
-      // focus ring and hover/active ghost layers.
       class: cn(
         itemRowShellClasses,
         props.asChild && [...focusVisibleRingClasses, ...ghostLayerClasses],
@@ -78,7 +74,6 @@
     size: props.size
   })
 
-  // as-child: clone the single default-slot child and merge the row bindings (layout, kind, size, data-*) onto it.
   const ItemAsChild = () => mergeAsChildSlot(rootBindings.value, slots['default'])
 </script>
 

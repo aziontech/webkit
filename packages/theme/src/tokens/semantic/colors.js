@@ -1,24 +1,3 @@
-/**
- * SEMANTIC COLOR TOKENS
- *
- * Single source of truth for semantic color tokens.
- *
- * - `semanticColorsData`: token refs grouped by category (`text`, `background`,
- *   `border`) and mode (`light`, `dark`). The raw ref source `semanticColors`
- *   derives from; only re-exported via `tokens/index.js` today. Note: its
- *   `backdrop` / `primary-mask` refs point at `alpha` shades that do not exist
- *   (`alpha.neutral`, `alpha.brand`) — fix them before wiring this data to a
- *   compiler, or the unresolved-ref guard will reject it.
- * - `semanticColors`: derived map of `var(--…)` strings, grouped by category,
- *   consumed by `tokens/theme.js` to extend Tailwind's `textColor`,
- *   `backgroundColor`, and `borderColor`. Generates utilities like
- *   `text-default`, `bg-surface`, `border-danger` natively — no plugin needed.
- *
- * Adding a new semantic color: add a key under both `light` and `dark` in the
- * relevant category here. The CSS variable and the Tailwind utility are both
- * derived automatically.
- */
-
 import { tokenRef } from '../../scripts/refs.js'
 
 export const semanticColorsData = {

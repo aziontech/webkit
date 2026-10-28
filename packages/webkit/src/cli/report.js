@@ -1,9 +1,3 @@
-// `webkit report` — measures how much of a consumer's UI is actually the design system.
-//
-// Runs the project's own ESLint, keeps only `webkit/*` results, and writes Markdown to
-// stdout so a CI step can redirect it into a run summary. Why it spawns the installed
-// `.bin/eslint` shim and not the ESLint Node API: docs/toolkit/report.md § Why the shim.
-
 import { spawnSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -11,10 +5,8 @@ import { dirname, join, relative } from 'node:path'
 
 import { loadCatalog } from '../eslint-plugin/catalog.js'
 
-/** Extensions the design system governs — the denominator of the adoption score. */
 export const UI_EXTENSIONS = ['vue', 'astro']
 
-/** What each rule catches, keyed by the bare name so a namespace change cannot break it. */
 export const RULE_PURPOSE = {
   'valid-import-path': 'import path that does not exist in the installed version',
   'no-deep-internal-import': 'reaches into the package internals instead of a published entry',
@@ -30,7 +22,6 @@ export const RULE_PURPOSE = {
   'authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)'
 }
 
-/** Cannot run on `.astro` — needs vue-eslint-parser's template visitor. Reported as a gap. */
 const TEMPLATE_ONLY_RULES = ['no-style-override']
 
 export const FORMATS = new Set(['markdown', 'json'])
@@ -42,11 +33,6 @@ function extensionOf(path) {
   return dot === -1 ? '' : base.slice(dot + 1)
 }
 
-/**
- * Always the `node_modules/.bin/eslint` shim, never the ESLint Node API (both silently
- * drop `.astro` findings under pnpm; docs/toolkit/report.md § Why the shim). Falls back
- * to `eslint/package.json#bin` only when the shim itself is missing.
- */
 export function resolveEslintBin(cwd) {
   const shim = join(
     cwd,
@@ -85,8 +71,6 @@ function runESLint(cwd, patterns) {
 
   if (proc.error) return { ok: false, reason: proc.error.message }
 
-  // ESLint exits 1 when it finds errors, which is the normal case here — only unparsable
-  // output means the run itself failed.
   let results
   try {
     results = JSON.parse(proc.stdout)
@@ -98,11 +82,6 @@ function runESLint(cwd, patterns) {
   return { ok: true, results }
 }
 
-/**
- * Aggregate raw ESLint JSON results into the report shape. Pure — no I/O. Scores by clean
- * file, not by finding count; `keys` is a flat multiset for a future baseline diff. See
- * docs/toolkit/report.md § The score counts clean files, not violations.
- */
 export function collect(results, cwd) {
   const byRule = new Map()
   const byFile = new Map()
@@ -119,8 +98,6 @@ export function collect(results, cwd) {
 
     for (const message of result.messages) {
       if (message.fatal || !message.ruleId) {
-        // A fatal parse error means the rules never ran on this file — count it as a
-        // blind spot, never as a webkit/* finding.
         if (message.fatal && isUiFile) fatalFiles.add(path)
         continue
       }
@@ -140,8 +117,6 @@ export function collect(results, cwd) {
     throw new Error('measured nothing: no .vue/.astro file reached ESLint')
   }
 
-  // A UI file is "clean" iff it has no fatal parse error AND no webkit/* finding — a file
-  // we could not actually check is a blind spot, not evidence of adoption.
   const dirtyUi = new Set([...byFile.keys(), ...fatalFiles].filter((f) => uiFiles.has(f)))
   const uiFilesClean = uiFiles.size - dirtyUi.size
   const score = Math.round((uiFilesClean / uiFiles.size) * 100)
@@ -257,10 +232,6 @@ export function renderMarkdown(report, { catalog }) {
   return out.join('\n') + '\n'
 }
 
-/**
- * Runs the consumer's own ESLint and returns `{exitCode, stdout, error?, report?}`; the
- * caller writes stdout/stderr, so this stays testable without touching real streams.
- */
 export function runReport(cwd, options = {}) {
   const { format = 'markdown', failOn = 'never', patterns = ['.'] } = options
   const log = options.log ?? (() => {})

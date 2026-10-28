@@ -57,9 +57,7 @@
     ctx.triggerRef.value = el
   }
 
-  onMounted(() => {
-    // Triggered when the wrapper mounts; the consumer's element is its only child.
-  })
+  onMounted(() => {})
 
   onBeforeUnmount(() => {
     if (ctx.triggerRef.value) ctx.triggerRef.value = null

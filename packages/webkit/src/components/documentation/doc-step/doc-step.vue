@@ -31,7 +31,6 @@
   const id = Symbol('DocStep')
   const { index } = context.register(id)
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-step')
 
   onBeforeUnmount(() => context.unregister(id))

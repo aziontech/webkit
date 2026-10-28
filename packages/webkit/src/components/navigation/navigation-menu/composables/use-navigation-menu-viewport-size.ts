@@ -63,28 +63,17 @@ export function useNavigationMenuViewportSize({
 
     const previousScale = popup.style.scale
     popup.style.scale = '1'
-    // The positioner caps the popup (`--available-*`) from the size measured here, so the
-    // measurement itself must not be capped or the cap would shrink on every pass.
     const previousMaxWidth = popup.style.maxWidth
     const previousMaxHeight = popup.style.maxHeight
     popup.style.maxWidth = 'none'
     popup.style.maxHeight = 'none'
 
-    // `fit-content`, not `auto`: the popup is a block child of the positioner, so `auto`
-    // means "fill the parent" and only reads as the natural width while the positioner
-    // itself shrink-wraps. A positioner with a real width (a mega-menu on a page column)
-    // would then measure every panel as that column, so none is ever measured on its own.
     popup.style.setProperty(POPUP_WIDTH, 'fit-content')
     popup.style.setProperty(POPUP_HEIGHT, 'auto')
     target?.style.setProperty(VIEWPORT_WIDTH, 'max-content')
 
-    // Pass 1 — the panel's natural width, as clamped by whatever the popup's box allows.
     const { width } = getCssDimensions(popup)
 
-    // Pass 2 — height at the real width. Reading it while still `max-content` measures a
-    // WIDER layout where text hasn't wrapped yet, so the height comes back short and the
-    // popup (overflow-hidden at that height) clips its last row. No-op when nothing
-    // constrains the popup.
     target?.style.setProperty(VIEWPORT_WIDTH, `${width}px`)
     const { height } = getCssDimensions(popup)
 
