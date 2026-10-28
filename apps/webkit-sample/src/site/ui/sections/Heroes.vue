@@ -3,6 +3,7 @@
   import type { HeroTitleEyebrowPrefix } from '@aziontech/webkit/hero-title'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import Illustration from '@aziontech/webkit/illustration'
+  import { CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import type { Component } from 'vue'
   import { computed } from 'vue'
 
@@ -84,7 +85,7 @@
     description: '',
     actions: () => [],
     carouselMarks: () => [],
-    carouselLabel: 'Trusted by teams running critical workloads',
+    carouselLabel: CLIENT_STRIP_LABEL,
     art: null,
     scene: null,
     scenePlacement: 'bottom'

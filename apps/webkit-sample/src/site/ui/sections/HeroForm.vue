@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
+  import FieldPhoneNumber, { type PhoneNumber } from '@aziontech/webkit/field-phone-number'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
   import Hero from '@aziontech/webkit/hero-root'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import { toast } from '@aziontech/webkit/toast'
-  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+  import { CLIENT_STRIP, CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import { computed, reactive, ref, useId } from 'vue'
 
   import { CONTACT_ROLES } from '../../data/contact.js'
@@ -37,6 +37,10 @@
     role: string
     /** Role select placeholder. */
     rolePlaceholder: string
+    /** Placeholder of the box that filters the roles. */
+    roleSearch: string
+    /** Shown in the role list when no role matches the search. */
+    roleSearchEmpty: string
     /** Company field label. */
     company: string
     /** Website field label, on the incident form. */
@@ -56,6 +60,8 @@
     required: string
     /** Helper text on a malformed e-mail. */
     invalidEmail: string
+    /** Helper text on a phone number too short for its country. */
+    invalidPhone: string
     /** Toast title once the form is sent. */
     success: string
     /** Toast title when sending fails. */
@@ -108,7 +114,7 @@
     descriptionAfter: '',
     actions: () => [],
     carouselMarks: () => CLIENT_STRIP,
-    carouselLabel: 'The teams our experts work with',
+    carouselLabel: CLIENT_STRIP_LABEL,
     formLabel: '',
     roles: () => CONTACT_ROLES,
     country: 'US',
@@ -122,6 +128,8 @@
     email: 'E-mail',
     role: 'Role',
     rolePlaceholder: 'Select your role',
+    roleSearch: 'Search roles',
+    roleSearchEmpty: 'No role found',
     company: 'Company',
     website: 'Website',
     phone: 'Phone',
@@ -133,6 +141,7 @@
   const DEFAULT_MESSAGES: HeroFormMessages = {
     required: 'This field is required.',
     invalidEmail: 'Enter a valid e-mail address.',
+    invalidPhone: 'Enter a complete phone number.',
     success: 'Message sent.',
     error: 'Could not send the message.',
     errorDescription: 'Check your connection and try again.',
@@ -155,6 +164,7 @@
   })
 
   const phoneCountry = ref(props.country)
+  const phoneComplete = ref(false)
 
   const errors = reactive({
     firstname: '',
@@ -162,6 +172,7 @@
     email: '',
     role: '',
     company: '',
+    mobilephone: '',
     message: ''
   })
 
@@ -184,6 +195,12 @@
     const asksContact = props.kind === 'contact'
     errors.role = !asksContact || form.role ? '' : required
     errors.company = !asksContact || form.company.trim() ? '' : required
+    errors.mobilephone =
+      !asksContact || phoneComplete.value
+        ? ''
+        : form.mobilephone
+          ? notice.value.invalidPhone
+          : required
     errors.message = !asksContact || form.message.trim() ? '' : required
     return Object.values(errors).every((message) => !message)
   }
@@ -323,6 +340,8 @@
                 size="large"
                 :options="roles"
                 searchable
+                :search-placeholder="copy.roleSearch"
+                :search-empty-label="copy.roleSearchEmpty"
                 :disabled="submitting"
                 :required="!!errors.role"
                 :helper-text="errors.role"
@@ -359,7 +378,13 @@
               :label="copy.phone"
               :input-id="`${uid}-phone`"
               name="mobilephone"
+              size="large"
               :disabled="submitting"
+              :required="!!errors.mobilephone && !form.mobilephone"
+              :invalid="!!errors.mobilephone && !!form.mobilephone"
+              :helper-text="errors.mobilephone"
+              @update:model-value="errors.mobilephone = ''"
+              @update:phone="(phone: PhoneNumber) => (phoneComplete = phone.complete)"
             />
 
             <FieldTextarea

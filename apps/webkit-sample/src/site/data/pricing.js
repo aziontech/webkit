@@ -119,7 +119,7 @@ export const PLANS = [
       { icon: 'pi pi-calendar', label: 'Savings Plan available' },
       { icon: 'ai ai-business-support', label: 'Advanced support available' }
     ],
-    action: { label: 'Talk to sales', kind: 'outlined', to: '/site/contact/sales' }
+    action: { label: 'Talk to sales', kind: 'outlined', to: '/site/contact' }
   }
 ]
 

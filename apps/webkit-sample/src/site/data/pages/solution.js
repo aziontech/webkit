@@ -46,7 +46,7 @@ export function solutionPage(data) {
         { label: 'Start for free', href: '/signup', kind: 'secondary' },
         {
           label: 'Talk to sales',
-          href: '/site/contact/sales',
+          href: '/site/contact',
           kind: 'outlined',
           trailing: true
         }

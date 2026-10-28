@@ -3,6 +3,7 @@
   import CardGrid from '@aziontech/webkit/card-grid-root'
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Topic from '@aziontech/webkit/topic'
 
   import { useSiteLink } from '../../composables/use-site-link'
@@ -20,7 +21,7 @@
     description: string
     /** Buttons on the lane's floor; the first leads. */
     actions: SiteAction[]
-    /** The status page, drawn as an outlined button led by a dot. */
+    /** The status page, drawn as an outlined button carrying the footer's status indicator. */
     status?: SiteLink | null
   }
 
@@ -29,7 +30,7 @@
     anchor?: string
     /** The two people to reach, side by side. */
     lanes: ContactLane[]
-    /** Linked self-serve channels, three to a row, under the lanes. */
+    /** Two linked self-serve channels, under the lanes. */
     channels?: SiteTopic[]
   }
 
@@ -92,31 +93,16 @@
                 :href="lane.status.href"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex h-10 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                class="inline-flex h-10 items-center whitespace-nowrap rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               >
-                <span
-                  aria-hidden="true"
-                  class="size-2 shrink-0 rounded-full bg-(--success-contrast)"
+                <StatusIndicator
+                  severity="success"
+                  :label="lane.status.label"
                 />
-                {{ lane.status.label }}
               </a>
             </div>
           </div>
         </CardGridCell>
-      </CardGrid>
-    </FrameBox>
-
-    <FrameBox
-      v-if="channels.length"
-      flush
-      borders="y"
-      marks="bottom"
-    >
-      <CardGrid
-        flush
-        kind="frame"
-        :columns="3"
-      >
         <CardGridCell
           v-for="channel in channels"
           :key="channel.title"

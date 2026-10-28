@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
+  import { CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -26,7 +27,7 @@
     kind="screen"
     media-align="end"
     :carousel="hasCarousel"
-    :carousel-label="hero.carouselLabel ?? 'Trusted by teams running critical workloads'"
+    :carousel-label="hero.carouselLabel ?? CLIENT_STRIP_LABEL"
     :carousel-marks="hero.carouselMarks ?? []"
   >
     <Hero.Title

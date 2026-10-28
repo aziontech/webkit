@@ -1,3 +1,5 @@
+import { SITE_FOOTER } from './site-shell'
+
 // THE CONTACT PAGE'S REPEATING COPY, read off the live page rather than retyped from it.
 //
 // Every string below is verbatim from https://www.azion.com/en/contact/ as that page rendered
@@ -123,4 +125,4 @@ export const CONTACT_TRUST_MARKS = [
 
 export const CONSOLE_LOGIN = 'https://console.azion.com/login'
 
-export const SYSTEM_STATUS = { label: 'System status', href: 'https://status.azion.com/' }
+export const SYSTEM_STATUS = { label: SITE_FOOTER.status, href: 'https://status.azion.com/' }

@@ -166,7 +166,7 @@ export const VERCEL_ALTERNATIVE_PAGE = [
       'Map Vercel projects, preview deployments, Functions, Blob, Edge Config, Firewall, and Web Analytics to Azion. Keep your Git-based build and preview workflow, run functions without cold starts, and move one project at a time before you switch the domain.',
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     art: {
       name: 'azion-to-vercel',

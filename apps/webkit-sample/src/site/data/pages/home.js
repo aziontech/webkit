@@ -12,7 +12,7 @@ import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
 import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { CLIENT_STRIP, CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
 
 import { PLATFORM_PRIMITIVES } from '../platform-primitives.js'
 import { agentsClosing, PLATFORM_DIRECTORY } from '../product-pages.js'
@@ -236,9 +236,9 @@ export const HOME_PAGE = [
       'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
       { label: 'Start for free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
-    carouselLabel: 'Proven on mission-critical workloads',
+    carouselLabel: CLIENT_STRIP_LABEL,
     carouselMarks: CLIENT_STRIP
   },
   {

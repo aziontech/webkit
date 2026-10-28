@@ -33,7 +33,7 @@ const AGENT_AUDIENCES = [
     label: 'For humans',
     actions: [
       START_FREE_ACTION,
-      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
   {
@@ -70,7 +70,7 @@ export const salesClosing = ({ eyebrow, title, titleMuted, description }) => ({
   titleMuted,
   description,
   actions: [START_FREE_ACTION],
-  aside: { label: 'Talk to sales', href: '/site/contact/sales' }
+  aside: { label: 'Talk to sales', href: '/site/contact' }
 })
 
 export const primaryClosing = ({ title, description }) => ({

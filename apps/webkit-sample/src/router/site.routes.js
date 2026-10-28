@@ -48,7 +48,6 @@ import LandingCareersJob from '@site/views/LandingCareersJob.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
-import LandingContactSales from '@site/views/LandingContactSales.vue'
 import LandingContactUnderAttack from '@site/views/LandingContactUnderAttack.vue'
 import LandingDataStream from '@site/views/LandingDataStream.vue'
 import LandingEdgeDns from '@site/views/LandingEdgeDns.vue'
@@ -89,6 +88,7 @@ import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 // already out — a bookmark, a deployed URL, an ad — still lands on the page it named.
 const MOVED = {
   '/site/contact/support': '/site/contact',
+  '/site/contact/sales': '/site/contact',
   '/site/functions': '/site/products/functions',
   '/site/application-accelerator': '/site/products/application-accelerator',
   '/site/cache': '/site/products/cache',
@@ -282,7 +282,6 @@ export const siteRoutes = [
   // posting we read (stated in `site/data/careers-job.js`).
   { path: '/site/careers/:id', name: 'site-careers-job', component: LandingCareersJob },
   { path: '/site/contact', name: 'site-contact', component: LandingContact },
-  { path: '/site/contact/sales', name: 'site-contact-sales', component: LandingContactSales },
   {
     path: '/site/contact/under-attack',
     name: 'site-contact-under-attack',

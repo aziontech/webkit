@@ -93,7 +93,7 @@ export const ABOUT_PAGE = [
       'The Azion Platform runs your code, data, and security on a distributed architecture, with instant deploys and cold-start-free scale.',
     actions: [
       { label: 'Join our team', href: '/site/careers', kind: 'secondary' },
-      { label: 'Talk to sales', href: '/site/contact/sales', kind: 'outlined', trailing: true }
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
   {
