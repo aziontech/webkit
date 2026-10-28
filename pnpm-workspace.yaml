@@ -62,3 +62,7 @@ auditConfig:
     # the advisory names >=1.1.4). Dev tooling only — storybook test-runner via jest; nothing
     # ships it. Drop once sprintf-js publishes 1.1.4.
     - GHSA-hp3w-g68c-fv3c
+    # deepmerge <=4.3.1 mergeObject prototype poisoning (2026-10-28): no patched release exists
+    # (4.3.1 is the latest on npm, the advisory names >=4.3.2). Dev tooling only — storybook
+    # test-runner via jest-config; nothing ships it. Drop once deepmerge publishes 4.3.2.
+    - GHSA-gcqx-w48m-w2h4
