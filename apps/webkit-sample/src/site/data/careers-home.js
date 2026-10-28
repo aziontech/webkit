@@ -11,6 +11,12 @@ export const CAREERS_WORK = {
     "At Azion, culture is how we live and work every day. The Azion Way of Life is built on the belief that high performance goes hand in hand with autonomy, authenticity, and enjoyment. We trust people to manage their own routines with balance and accountability, focusing on outcomes. We collaborate across countries and cultures to build solutions for the world. And we value originality, bold ideas, and the courage to challenge convention. That's why there's no dress code: what matters is what each person brings to the table, their ideas, energy, and integrity."
 }
 
+export const CAREERS_VISION = {
+  title: 'Our vision',
+  description:
+    'We envision a world where digital experiences are built, accelerated, automated and secured effortlessly through a simple, reliable solution that provides intuitive application primitives and the best price-performance. Our innovative approach enables customers to focus on creating better digital experiences faster while maintaining full control over their workloads, whether on Azion’s infrastructure, the Cloud, or their own.'
+}
+
 // Served from public/careers; width and height are the files' own, so each slide reserves its box.
 export const CAREERS_PHOTOS = [
   {

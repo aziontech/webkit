@@ -16,6 +16,7 @@
     | 'centered-carousel'
     | 'title-band'
     | 'centered-band'
+    | 'compact-band'
     | 'pixel-floor'
     | 'copy-beside-art'
     | 'copy-on-top-art'
@@ -108,6 +109,7 @@
       texture: 'dots',
       textureFade: 'top'
     },
+    'compact-band': { kind: 'band', size: 'small', maxWidth: 'site' },
     'pixel-floor': {
       kind: 'screen',
       floorTexture: 'pixelate',
@@ -132,6 +134,7 @@
     'centered-carousel': { centered: true, maxWidth: 'xl' },
     'title-band': { centered: true, maxWidth: 'xl' },
     'centered-band': { centered: true, maxWidth: '2xl' },
+    'compact-band': { maxWidth: '2xl' },
     'pixel-floor': {},
     'copy-beside-art': { maxWidth: 'xl' },
     'copy-on-top-art': { centered: true }
@@ -140,7 +143,8 @@
   const LONG_TITLE_WIDTH = {
     'centered-carousel': '3xl',
     'title-band': '4xl',
-    'centered-band': '3xl'
+    'centered-band': '3xl',
+    'compact-band': '3xl'
   } as const
 
   const hasCarousel = computed(() => props.carouselMarks.length > 0)

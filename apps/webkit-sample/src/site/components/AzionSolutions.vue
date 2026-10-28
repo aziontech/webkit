@@ -197,7 +197,7 @@
           icon: 'pi pi-arrow-right-arrow-left',
           title: 'Vercel alternative',
           description: 'What maps onto what, feature by feature',
-          href: '/site/guides/vercel-alternative'
+          href: '/site/lp/guia-alternativa-a-vercel'
         },
         {
           icon: 'ai ai-azion-cli',

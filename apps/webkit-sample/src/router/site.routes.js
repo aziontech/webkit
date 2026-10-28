@@ -5,7 +5,7 @@
 // THE URL SAYS WHAT KIND OF PAGE IT IS. A page family with more than one member owns a
 // segment, and the segment's own path is that family's index: `/site/products` lists the
 // products and `/site/products/cache` argues one of them; `/site/solutions` lists the
-// solutions and `/site/solutions/retail` argues one. `/site/guides` holds the campaign
+// solutions and `/site/solutions/retail` argues one. `/site/lp` holds the campaign
 // landing pages, which are neither. Singletons the site reaches straight from its nav —
 // pricing, careers, contact, learning, partners — stay one segment deep, because a
 // `/site/company/careers` that holds exactly one page names a group that does not exist.
@@ -16,14 +16,9 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
-import {
-  AKAMAI_GUIDE,
-  AWS_GUIDE,
-  CLOUDFLARE_GUIDE,
-  FASTLY_GUIDE
-} from '@site/data/alternative-guides'
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
+import { hasLandingPage, LANDING_PAGE_SLUGS } from '@site/data/pages/lp'
 import { successCaseArticle } from '@site/data/success-case-articles.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
@@ -33,7 +28,6 @@ import LandingAbout from '@site/views/LandingAbout.vue'
 import LandingAiGateway from '@site/views/LandingAiGateway.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
-import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingApplications from '@site/views/LandingApplications.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
@@ -59,6 +53,7 @@ import LandingGdpr from '@site/views/LandingGdpr.vue'
 import LandingImageProcessor from '@site/views/LandingImageProcessor.vue'
 import LandingKvStore from '@site/views/LandingKvStore.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
+import LandingLp from '@site/views/LandingLp.vue'
 import LandingLoadBalancer from '@site/views/LandingLoadBalancer.vue'
 import LandingNetworkShield from '@site/views/LandingNetworkShield.vue'
 import LandingObjectStorage from '@site/views/LandingObjectStorage.vue'
@@ -82,7 +77,6 @@ import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
 import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
-import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
 import LandingWorkloads from '@site/views/LandingWorkloads.vue'
@@ -100,7 +94,13 @@ const MOVED = {
   '/site/web-apps': '/site/solutions/web-apps',
   '/site/technology': '/site/solutions/technology',
   '/site/retail': '/site/solutions/retail',
-  '/site/vercel-alternative-guide': '/site/guides/vercel-alternative'
+  '/site/vercel-alternative-guide': '/site/lp/guia-alternativa-a-vercel',
+  '/site/guides': '/site/lp',
+  '/site/guides/vercel-alternative': '/site/lp/guia-alternativa-a-vercel',
+  '/site/guides/akamai-alternative': '/site/lp/guia-alternativa-a-akamai',
+  '/site/guides/aws-alternative': '/site/lp/guia-alternativa-a-aws',
+  '/site/guides/cloudflare-alternative': '/site/lp/guia-alternativa-a-cloudflare',
+  '/site/guides/fastly-alternative': '/site/lp/guia-alternativa-a-fastly'
 }
 
 export const siteRoutes = [
@@ -144,6 +144,12 @@ export const siteRoutes = [
   // The one composed entirely from the MARKETING components rather than hand-built bricks —
   // the Products mega-menu's Our Network entry.
   { path: '/site/products/our-network', name: 'site-our-network', component: LandingOurNetwork },
+  {
+    path: '/site/products/our-network/embed',
+    name: 'site-our-network-embed',
+    component: LandingOurNetwork,
+    meta: { embed: true }
+  },
   {
     path: '/site/products/applications',
     name: 'site-applications',
@@ -242,41 +248,17 @@ export const siteRoutes = [
   // `By Industries › Retail` entry points here.
   { path: '/site/solutions/retail', name: 'site-retail', component: LandingRetail },
 
-  // ══ Guides ════════════════════════════════════════════════════════════════════════
-  // Campaign landing pages: not a product, a solution or the platform, but one migration's
-  // argument. The site nav does not link them, because azion.com's does not either — a
-  // guide is reached from a search result or an ad. One today, so the segment's own path
-  // goes to it rather than to an index of one row.
-  { path: '/site/guides', redirect: '/site/guides/vercel-alternative' },
-  // The guide that maps a Vercel project onto Azion, and the capability matrix behind it.
+  // ══ Landing pages ═════════════════════════════════════════════════════════════════
+  // Campaign pages, the azion.com /lp/ family: a migration guide, a webinar, a gated case.
+  // The site nav does not link them, because azion.com's does not either. Each slug is a
+  // file in data/pages/lp/, named after the azion.com page it translates.
+  { path: '/site/lp', redirect: `/site/lp/${LANDING_PAGE_SLUGS[0]}` },
   {
-    path: '/site/guides/vercel-alternative',
-    name: 'site-vercel-alternative-guide',
-    component: LandingVercelAlternative
-  },
-  {
-    path: '/site/guides/akamai-alternative',
-    name: 'site-akamai-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: AKAMAI_GUIDE }
-  },
-  {
-    path: '/site/guides/aws-alternative',
-    name: 'site-aws-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: AWS_GUIDE }
-  },
-  {
-    path: '/site/guides/cloudflare-alternative',
-    name: 'site-cloudflare-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: CLOUDFLARE_GUIDE }
-  },
-  {
-    path: '/site/guides/fastly-alternative',
-    name: 'site-fastly-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: FASTLY_GUIDE }
+    path: '/site/lp/:slug',
+    name: 'site-lp',
+    component: LandingLp,
+    props: true,
+    beforeEnter: (to) => (hasLandingPage(String(to.params.slug)) ? true : '/site/home')
   },
 
   // ══ The rest of the site ══════════════════════════════════════════════════════════
@@ -285,6 +267,12 @@ export const siteRoutes = [
   { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },
   { path: '/site/support', name: 'site-support', component: LandingSupport },
   { path: '/site/careers', name: 'site-careers', component: LandingCareersHome },
+  {
+    path: '/site/careers/embed',
+    name: 'site-careers-embed',
+    component: LandingCareersHome,
+    meta: { embed: true }
+  },
   // The careers listing in the same shell: a page whose content is a live ATS query rather
   // than an argument, so what it demonstrates is the frame doing the work — a hero with the
   // globe in it, and one ruled module holding an area label and its open positions.
@@ -298,20 +286,50 @@ export const siteRoutes = [
   // offices as a hairline grid, and the site's own closing CTA. The website nav's `Contact`
   // entry points here — it used to be a bare `#contact` anchor onto the closing band.
   { path: '/site/contact', name: 'site-contact', component: LandingContact },
+  {
+    path: '/site/contact/embed',
+    name: 'site-contact-embed',
+    component: LandingContact,
+    meta: { embed: true }
+  },
   // The Learning Center in the same shell: 16 subjects and 78 articles, read verbatim off
   // azion.com/en/learning. The Resources mega-menu's `Learning` entry points here.
   { path: '/site/learning', name: 'site-learning', component: LandingLearning },
   // azion.com/en/resource-hub, read verbatim; its listing renders the blog's article rows.
   { path: '/site/resource-hub', name: 'site-resource-hub', component: LandingResourceHub },
+  {
+    path: '/site/resource-hub/embed',
+    name: 'site-resource-hub-embed',
+    component: LandingResourceHub,
+    meta: { embed: true }
+  },
   // The partner programme page in the same shell, laid out on the contact page: pitch and form
   // side by side in the hero over the client strip, then `big-numbers`, `content-columns` and the
   // framed `call-to-action` between hatched gaps — webkit sections only. The site nav does not
   // link it, because azion.com's does not either.
   { path: '/site/partners', name: 'site-partners', component: LandingPartners },
+  {
+    path: '/site/partners/embed',
+    name: 'site-partners-embed',
+    component: LandingPartners,
+    meta: { embed: true }
+  },
   // azion.com/en/about-us, read verbatim; the footer's Company `About` link points here.
   { path: '/site/about', name: 'site-about', component: LandingAbout },
+  {
+    path: '/site/about/embed',
+    name: 'site-about-embed',
+    component: LandingAbout,
+    meta: { embed: true }
+  },
   // azion.com/en/recognitions, read verbatim; the footer's Company `Recognition and Awards` link points here.
   { path: '/site/recognitions', name: 'site-recognitions', component: LandingRecognitions },
+  {
+    path: '/site/recognitions/embed',
+    name: 'site-recognitions-embed',
+    component: LandingRecognitions,
+    meta: { embed: true }
+  },
   // The success-case library in the same shell: the first /site page whose body is a
   // filtered index rather than an argument — three featured stories, 35 in a hairline grid
   // behind three pickers, and the analyst recognitions. The site nav does not link it,
@@ -337,6 +355,12 @@ export const siteRoutes = [
   // search + select toolbar as Careers and the success-case library. The nav's Resources
   // `Blog` entry and the footer's Company `Blog` link point here.
   { path: '/site/blog', name: 'site-blog', component: LandingBlog },
+  {
+    path: '/site/blog/embed',
+    name: 'site-blog-embed',
+    component: LandingBlog,
+    meta: { embed: true }
+  },
   // The same index with the inset post cards, kept beside the default for comparison.
   { path: '/site/blog/inset', name: 'site-blog-inset', component: LandingBlogInset },
   // One rebuilt article per slug (data/blog-articles.js); the static `inset` path above wins.

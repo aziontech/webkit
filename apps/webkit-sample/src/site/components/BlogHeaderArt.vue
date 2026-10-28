@@ -1,20 +1,19 @@
 <script setup>
-  // The article header banner, from Figma "Banner image" (Azion.com, node 13264:205381): the
-  // outlined Azion asterisk on black, one 1920×1080 asset. It sits on a 16:9 stage centred in a
-  // shorter band, so it keeps its exact proportions and shows its middle at any width.
+  // The article header banner: the pixel-floor hero's floor, alone — the small pixelate field on
+  // the surface, lit from both lower corners, in a short band above the masthead. The waves are
+  // boosted so their drift reads at this height.
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 </script>
 
 <template>
   <div
     aria-hidden="true"
-    class="relative aspect-3/1 overflow-hidden bg-(--bg-canvas) lg:aspect-4/1"
+    class="relative h-[clamp(6rem,14dvh,10rem)] overflow-hidden bg-(--bg-surface) [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%] [--texture-wave-gain:2.4] [--texture-wave-pace:3]"
   >
-    <div class="absolute inset-x-0 top-1/2 aspect-video -translate-y-1/2">
-      <img
-        src="/blog/banner.svg"
-        alt=""
-        class="block size-full max-w-none"
-      />
-    </div>
+    <TextureMaterial
+      kind="pixelate"
+      size="small"
+      class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] opacity-60"
+    />
   </div>
 </template>

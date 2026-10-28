@@ -33,6 +33,7 @@
   import { useRouter } from 'vue-router'
 
   import FrameworkStackScene from '../ui/FrameworkStackScene.vue'
+  import Heroes from '../ui/sections/Heroes.vue'
   import WorkloadTopologyScene from '../ui/WorkloadTopologyScene.vue'
   import SolutionArtHero from './SolutionArtHero.vue'
 
@@ -89,6 +90,12 @@
       title: 'Copy beside art, bled to the edge',
       description:
         'The solution pages’ former opening, stored as SolutionArtHero for when the art returns. The illustration sets its end edge on the container boundary, and hero-art.js trims each canvas so the drawn part fills the column. Shown with the Performance page’s copy, art and client strip.'
+    },
+    {
+      eyebrow: 'Heroes · compact-band',
+      title: 'Compact band',
+      description:
+        'The head of an index page whose listing should start in the first screen. A band, not a screen, at the small rhythm, with the copy set to the start of the site measure: the h1 and one sentence, no overline and no actions. Live on the Blog.'
     },
     {
       eyebrow: '#background',
@@ -345,15 +352,34 @@
       />
     </SectionModule>
 
-    <!-- ── 6. Artwork backdrop ────────────────────────────────────────────────
-         The last module in the column: its floor is the SiteFooter's `border-t`, so it
-         draws none of its own. -->
+    <!-- ── 6. Compact band ────────────────────────────────────────────────────
+         The one specimen that is not a screen band: its whole point is how little height it
+         takes. Rendered through the Heroes section, the same way the Blog renders it. -->
     <SectionModule :padded="false">
       <template #header>
         <SectionTitle
           :eyebrow="specimens[6].eyebrow"
           :title="specimens[6].title"
           :description="specimens[6].description"
+        />
+      </template>
+
+      <Heroes
+        kind="compact-band"
+        title="Blog"
+        description="Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights."
+      />
+    </SectionModule>
+
+    <!-- ── 7. Artwork backdrop ────────────────────────────────────────────────
+         The last module in the column: its floor is the SiteFooter's `border-t`, so it
+         draws none of its own. -->
+    <SectionModule :padded="false">
+      <template #header>
+        <SectionTitle
+          :eyebrow="specimens[7].eyebrow"
+          :title="specimens[7].title"
+          :description="specimens[7].description"
         />
       </template>
 

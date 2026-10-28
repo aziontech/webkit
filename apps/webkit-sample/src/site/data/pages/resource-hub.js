@@ -9,6 +9,7 @@ import {
 } from '../resource-hub.js'
 import { successCaseLink } from '../success-case-articles.js'
 import { SUCCESS_CASES } from '../success-cases.js'
+import { hasLandingPage } from './lp'
 
 const path = (href) => new URL(href).pathname.replace(/\/?$/, '/')
 const byPath = (list) => new Map(list.map((entry) => [path(entry.href), entry]))
@@ -16,11 +17,14 @@ const byPath = (list) => new Map(list.map((entry) => [path(entry.href), entry]))
 const POSTS = byPath(BLOG_POSTS)
 const STORIES = byPath(SUCCESS_CASES)
 
-// The competitor guides this Site rebuilds, by the source's landing-page slug.
-const GUIDES = ['akamai', 'aws', 'cloudflare', 'fastly', 'vercel']
-const guideLink = (href) => {
-  const vendor = path(href).match(/\/lp\/([a-z0-9]+)-to-azion-alternative-guide\/$/)?.[1]
-  return GUIDES.includes(vendor) ? { href: `/site/guides/${vendor}-alternative` } : null
+// An azion.com /lp/ link lands on the /site/lp page that rebuilds it; the competitor guides
+// are rebuilt from their pt-br versions, so the English slug is mapped onto those.
+const landingLink = (href) => {
+  const slug = path(href).match(/\/lp\/([a-z0-9-]+)\/$/)?.[1]
+  if (!slug) return null
+  const vendor = slug.match(/^([a-z0-9]+)-to-azion-alternative-guide$/)?.[1]
+  const target = vendor ? `guia-alternativa-a-${vendor}` : slug
+  return hasLandingPage(target) ? { href: `/site/lp/${target}` } : null
 }
 
 const linkOf = (resource) => {
@@ -28,7 +32,7 @@ const linkOf = (resource) => {
   if (post) return blogPostLink(post)
   const story = STORIES.get(path(resource.href))
   if (story) return successCaseLink(story)
-  return guideLink(resource.href) ?? { href: resource.href, external: true }
+  return landingLink(resource.href) ?? { href: resource.href, external: true }
 }
 
 const INDEX = RESOURCES.map((resource, index) => ({

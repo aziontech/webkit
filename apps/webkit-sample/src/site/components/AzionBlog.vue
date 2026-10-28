@@ -3,8 +3,8 @@
   // source's listing payload, verbatim (see data/blog.js); the form is this Site's.
   //
   // Departures from the source, on purpose:
-  //   • The source opens on its featured post as the h1. Ours opens straight on the highlight
-  //     carousel: the featured post and the two newest.
+  //   • The source opens on its featured post as the h1. Ours opens on the `compact-band` hero
+  //     (the page's h1), then the highlight carousel: the featured post and the two newest.
   //   • The category tabs become one segmented control beside a compact search.
   //   • No author name or photo on any post.
   import Button from '@aziontech/webkit/button'
@@ -22,6 +22,7 @@
   import {
     BLOG_ALL,
     BLOG_CATEGORIES,
+    BLOG_HERO,
     BLOG_LABELS,
     BLOG_POSTS
   } from '../data/blog.js'
@@ -29,6 +30,7 @@
   import { COMPANY_CLOSING } from '../data/product-pages.js'
   import ArticleRows from '../ui/ArticleRows.vue'
   import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
+  import Heroes from '../ui/sections/Heroes.vue'
   import BlogHighlight from './BlogHighlight.vue'
   import BlogPostCard from './BlogPostCard.vue'
 
@@ -116,9 +118,13 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap size="small" />
+  <Heroes
+    kind="compact-band"
+    :title="BLOG_HERO.title"
+    :description="BLOG_HERO.description"
+  />
 
+  <SectionContainer max-width="site">
     <SectionModule
       id="articles"
       :divided="false"

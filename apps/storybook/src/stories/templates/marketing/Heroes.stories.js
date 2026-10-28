@@ -226,6 +226,18 @@ ${indent(actions([SEE_POSTS]), 2)}
   </Hero.Title>
 </Hero>`
 
+const COMPACT_BAND_TEMPLATE = `<Hero
+  kind="band"
+  size="small"
+  max-width="site"
+>
+  <Hero.Title
+    max-width="2xl"
+    title="Blog"
+    description="Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights."
+  />
+</Hero>`
+
 const PIXEL_FLOOR_TEMPLATE = `<Hero
   kind="screen"
   floor-texture="pixelate"
@@ -314,6 +326,7 @@ const meta = {
     'CENTERED_CAROUSEL_SECTION',
     'TITLE_BAND_SECTION',
     'CENTERED_BAND_SECTION',
+    'COMPACT_BAND_SECTION',
     'PIXEL_FLOOR_SECTION',
     'COPY_BESIDE_ART_SECTION',
     'COPY_ON_TOP_ART_SECTION'
@@ -427,7 +440,7 @@ export const CenteredBand = {
     docs: {
       description: {
         story:
-          'Centered title band with a dotted texture and no client strip. The Blog page opens with it.'
+          'Centered title band with a dotted texture and no client strip.'
       },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
     }
@@ -455,6 +468,34 @@ export const CENTERED_BAND_SECTION = {
 export const CenteredBandJson = {
   tags: ['!dev'],
   ...siteJsonStory(CENTERED_BAND_SECTION)
+}
+
+export const CompactBand = {
+  render: () => ({ components, template: COMPACT_BAND_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Compact band: the small rhythm, the copy at the start of the site measure, no overline and no actions. The Blog page opens with it.'
+      },
+      source: { code: toSfc(HERO_IMPORT, COMPACT_BAND_TEMPLATE) }
+    }
+  }
+}
+
+export const COMPACT_BAND_SECTION = {
+  _id: 'hero-compact-band',
+  props: {
+    kind: 'compact-band',
+    title: 'Blog',
+    description:
+      "Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights."
+  }
+}
+
+export const CompactBandJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(COMPACT_BAND_SECTION)
 }
 
 export const PixelFloor = {

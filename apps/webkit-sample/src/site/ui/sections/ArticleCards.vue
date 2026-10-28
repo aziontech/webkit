@@ -22,17 +22,17 @@
   export interface ArticleCard {
     /** Stable key of the card. */
     key: string
-    /** Destination of the card. */
-    href: string
+    /** Destination of the card; empty renders the card unlinked. */
+    href?: string
     /** Opens the destination in a new tab. */
     external?: boolean
     /** The article's headline. */
     title: string
-    /** The article's deck. */
-    description: string
+    /** The article's deck; empty renders none. */
+    description?: string
     /** Overline under the deck: date and read time. */
     meta: string
-    /** Cover image URL; a card without one draws its client mark instead. */
+    /** Cover image URL; a card without one draws its client mark instead, and without either no media. */
     image?: string
     /** Client mark drawn in the media slot when there is no image. */
     mark?: ArticleCardMark | null
@@ -88,14 +88,16 @@
           kind="canvas"
           :padded="false"
         >
-          <a
-            :href="item.href"
-            :target="item.external ? '_blank' : undefined"
-            :rel="item.external ? 'noopener' : undefined"
+          <component
+            :is="item.href ? 'a' : 'div'"
+            :href="item.href || undefined"
+            :target="item.href && item.external ? '_blank' : undefined"
+            :rel="item.href && item.external ? 'noopener' : undefined"
             class="group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-            @click="follow($event, item.href)"
+            @click="item.href && follow($event, item.href)"
           >
             <span
+              v-if="item.image || item.mark"
               class="flex aspect-video items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface)"
             >
               <img
@@ -119,14 +121,17 @@
               <h3 class="m-0 text-balance text-heading-sm text-(--text-default)">
                 {{ item.title }}
               </h3>
-              <p class="m-0 text-pretty text-body-sm text-(--text-muted)">
+              <p
+                v-if="item.description"
+                class="m-0 text-pretty text-body-sm text-(--text-muted)"
+              >
                 {{ item.description }}
               </p>
               <p class="m-0 mt-auto pt-(--spacing-sm) text-overline-sm text-(--text-muted)">
                 {{ item.meta }}
               </p>
             </span>
-          </a>
+          </component>
         </CardGridCell>
       </CardGrid>
     </FrameBox>

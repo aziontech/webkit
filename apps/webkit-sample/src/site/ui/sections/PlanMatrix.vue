@@ -25,8 +25,8 @@
     description?: string
     /** Marks the recommended plan with the accent bar. */
     highlighted?: boolean
-    /** The column's call to action. */
-    action: SiteAction
+    /** The column's call to action; omit for a column with none. */
+    action?: SiteAction | null
   }
 
   export interface PlanMatrixRow {
@@ -158,6 +158,7 @@
               >
             </div>
             <SectionAction
+              v-if="plan.action"
               :action="plan.action"
               class="w-full"
             />

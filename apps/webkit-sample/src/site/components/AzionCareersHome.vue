@@ -1,4 +1,5 @@
 <script setup>
+  import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
@@ -16,9 +17,11 @@
     CAREERS_JOBS_PATH,
     CAREERS_PHOTOS,
     CAREERS_ROLES,
+    CAREERS_VISION,
     CAREERS_WORK
   } from '../data/careers-home.js'
   import { COMPANY_CLOSING } from '../data/product-pages.js'
+  import SpinningGlobe from '../ui/SpinningGlobe.vue'
   import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
 
   const router = useRouter()
@@ -116,6 +119,44 @@
         </div>
       </FrameBox>
     </SectionModule>
+
+    <SectionGap hatch />
+
+    <FrameBox
+      flush
+      borders="y"
+      marks="bottom"
+    >
+      <section
+        aria-labelledby="careers-vision-title"
+        class="flex flex-col items-center gap-(--spacing-xxl) p-(--spacing-xl) lg:flex-row lg:items-start"
+      >
+        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) text-(--text-default)">
+          <h2
+            id="careers-vision-title"
+            class="m-0 text-balance text-heading-2xl"
+          >
+            {{ CAREERS_VISION.title }}
+          </h2>
+          <p class="m-0 text-pretty text-body-lg">
+            {{ CAREERS_VISION.description }}
+          </p>
+        </div>
+
+        <div class="@container relative w-full max-w-147 shrink-0">
+          <SpinningGlobe />
+          <div
+            class="absolute left-1/2 top-1/2 flex aspect-square w-[29.4%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[5.5cqw] border-[0.92cqw] border-transparent [background:linear-gradient(var(--illustration-surface),var(--illustration-surface))_padding-box,linear-gradient(45deg,var(--illustration-surface),var(--illustration-primary)_35%,var(--illustration-primary)_65%,var(--illustration-surface))_border-box]"
+          >
+            <Brand
+              kind="reduced"
+              aria-hidden="true"
+              class="w-[28%] [&>svg]:h-auto! [&>svg]:w-full!"
+            />
+          </div>
+        </div>
+      </section>
+    </FrameBox>
 
     <SectionGap hatch />
 
