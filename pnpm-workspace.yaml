@@ -27,7 +27,7 @@ overrides:
   qs: ">=6.16.1 <7" # GHSA-4mjr-xmp4-gh2g (DoS via isBuffer) and GHSA-x5fp-wj9c-mxmx (array-limit bypass), patched 6.16.0; GHSA-6pq8-jhm2-2vcw (stringify comma-format DoS), patched 6.16.1; bounded to 6.x — express/union pin ^6
   "@xmldom/xmldom": ">=0.9.12 <0.10" # GHSA-6gmq-8vp8-gcm6 (XML fragment injection), patched 0.9.12; bounded — 0.x minors break API
   "@babel/core": ">=7.29.1 <8" # bounded: peer ranges (^7 || ^8.0.0-0) would jump to Babel 8
-  "@hono/node-server": ">=2.0.5" # GHSA-frvp-7c67-39w9; MCP SDK still pins ^1.19.x — drop when the SDK moves to ^2
+  "@hono/node-server": ">=2.1.3" # GHSA-frvp-7c67-39w9, patched 2.0.5; GHSA-rmxm-3fg6-px4f (serveStatic double decode bypasses middleware), patched 2.1.3; MCP SDK still pins ^1.19.x — drop when the SDK moves to ^2
   hono: ">=4.13.11 <5" # GHSA-5r4p-p66f-jhc7 (serveStatic double decode bypasses middleware), patched 4.13.11; supersedes the GHSA-gqvv-2mrq-wpjv / GHSA-g6gw-c38x-mqfc / GHSA-crvj-82cr-hjcx 4.13.5 floor; bounded to 4.x — MCP SDK pins ^4
   "js-yaml@3": ">=3.15.2 <4" # GHSA-2883-xcg3-v3hh (maxTotalMergeKeys does not limit CPU use for empty merge sources), patched 3.15.2; supersedes the GHSA-5p4m-2wfm-xmqj floor; bounded — 4.x removed the legacy safeLoad API
   "js-yaml@4": ">=4.3.2 <5" # GHSA-2883-xcg3-v3hh, patched 4.3.2; supersedes the GHSA-5p4m-2wfm-xmqj floor; bounded to 4.x — 5.x is ESM-only
@@ -62,3 +62,7 @@ auditConfig:
     # the advisory names >=1.1.4). Dev tooling only — storybook test-runner via jest; nothing
     # ships it. Drop once sprintf-js publishes 1.1.4.
     - GHSA-hp3w-g68c-fv3c
+    # deepmerge <=4.3.1 prototype poisoning via mergeObject (2026-10-29): no patched release
+    # exists (4.3.1 is the latest on npm, the advisory names >=4.3.2). Dev tooling only —
+    # storybook test-runner via jest-config; nothing ships it. Drop once deepmerge publishes 4.3.2.
+    - GHSA-gcqx-w48m-w2h4
