@@ -1,7 +1,8 @@
 import { userEvent } from '@storybook/test'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, nextTick } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
+import { compileTemplate, parse } from 'vue/compiler-sfc'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Menu, {
@@ -14,14 +15,10 @@ import Menu, {
   MenuSubContent,
   MenuSubTrigger
 } from './index'
+import menuGroupSource from './menu-group/menu-group.vue?raw'
 
 const COMPONENTS = { Menu, MenuBack, MenuGroup, MenuItem, MenuSub, MenuSubContent, MenuSubTrigger }
 
-/**
- * The console-style tree from the spec's Usage block: two titled groups, the second
- * plain group holding an inline sub and a drill sub. `inlineOpen` / `disabled`
- * flip the two states the assertions need.
- */
 const composed = (
   props: Record<string, unknown> = {},
   options: { inlineOpen?: boolean; disabled?: boolean } = {}
@@ -88,10 +85,6 @@ const GROUPS: MenuGroupNode[] = [
   }
 ]
 
-/**
- * The data-driven tree with its drill level ALREADY on the stack, the way a consumer that
- * persists `path` hands it back after its host remounted. No push ever ran here.
- */
 const restored = (options: { enterOnMount?: boolean } = {}) =>
   defineComponent({
     components: COMPONENTS,
@@ -108,10 +101,6 @@ const restored = (options: { enterOnMount?: boolean } = {}) =>
     `
   })
 
-/**
- * A drill inside a drill, so the stack is deep enough for the level below the current one to
- * have a name — the one case where the back button can report its destination.
- */
 const NESTED: MenuGroupNode[] = [
   {
     items: [
@@ -149,18 +138,9 @@ const nested = (backProps = '') =>
     `
   })
 
-/**
- * A drill row is TWO controls. `Open <label> menu` is the arrow — the one that pushes the
- * level; the plain `<label>` button beside it is the reference to the level's landing page.
- */
 const arrow = (view: ReturnType<typeof render>, label: string) =>
   view.getByRole('button', { name: `Open ${label} menu` })
 
-/**
- * The arrow of the row of this kind, found by testid. An inline arrow's accessible NAME tracks
- * the state it moves to (`Expand …` / `Collapse …`), so a name-based locator cannot be held
- * across a toggle; this one can.
- */
 const arrowOfKind = (view: ReturnType<typeof render>, kind: string) => {
   const row = view
     .getAllByTestId('navigation-menu-sub-trigger')
@@ -171,12 +151,7 @@ const arrowOfKind = (view: ReturnType<typeof render>, kind: string) => {
 }
 
 describe('Menu (composition, drill stack + data mode)', () => {
-  // ---- Compound API ------------------------------------------------------------
   it('attaches every sub-component to the compound root for dot-notation', () => {
-    // The root is asserted first, then read through `?.`: static analysis cannot resolve
-    // the default export of a `.vue` module, so it reads this base as undefined and every
-    // member access below as a null dereference. The guard is the real assertion — a
-    // missing member still fails on `undefined !== expected`.
     expect(Menu).toBeDefined()
     expect(Menu?.Group).toBe(MenuGroup)
     expect(Menu?.Item).toBe(MenuItem)
@@ -186,7 +161,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(Menu?.Back).toBe(MenuBack)
   })
 
-  // ---- Root anatomy ------------------------------------------------------------
   it('renders the navigation region with the fallback testid and its accessible name', () => {
     const view = render(composed())
 
@@ -208,9 +182,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(view.getByTestId('navigation-menu').getAttribute('role')).toBe('presentation')
   })
 
-  // The Sidebar case: the host is already a `<nav>`, so the menu gives up BOTH halves of the
-  // landmark. Keeping the name on a presentational element is prohibited by ARIA (the a11y
-  // tree drops it) and axe reports it, so the label goes with the role rather than lingering.
   it('drops its accessible name when the host owns the landmark', async () => {
     const view = render(composed({ role: 'presentation' }))
 
@@ -224,15 +195,27 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(view.queryByTestId('navigation-menu')).toBeNull()
   })
 
-  // ---- Data-driven mode --------------------------------------------------------
+  it('serves its groups as live markup, never inside an inert <template>', () => {
+    const { descriptor } = parse(menuGroupSource, { filename: 'menu-group.vue' })
+    const { code, errors } = compileTemplate({
+      source: descriptor.template?.content ?? '',
+      filename: 'menu-group.vue',
+      id: 'menu-group',
+      ssr: true,
+      ssrCssVars: []
+    })
+
+    expect(errors).toEqual([])
+    expect(code).toContain('<section')
+    expect(code).not.toContain('<template>')
+  })
+
   it('renders the data-driven tree through the same sub-components', () => {
     const view = render(Menu, { props: { groups: GROUPS } })
 
     expect(view.getAllByTestId('navigation-menu-group')).toHaveLength(2)
     expect(view.getByRole('link', { name: 'End User' })).toBeTruthy()
     expect(view.getByRole('link', { name: 'Web Browser' })).toBeTruthy()
-    // A node with children renders as a sub + trigger instead of a leaf row. `data-kind` is on
-    // the trigger ROW, which for a drill is the box holding its two controls.
     expect(view.getByTestId('navigation-menu-sub-trigger').getAttribute('data-kind')).toBe('drill')
   })
 
@@ -259,9 +242,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(events[0][1].id).toBe('end-user')
   })
 
-  // A drill row is a destination AND a level, and the two are separate controls: the label
-  // references the landing page, the arrow opens the level. Activating the reference must not
-  // also move the reader into the level — that is the whole reason they are two controls.
   it('a drill label navigates without opening its level', async () => {
     const events: MenuNode[] = []
     const paths: string[][] = []
@@ -273,7 +253,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
       }
     })
 
-    // Referenced, so the label is a real anchor — middle-click and new-tab still work.
     const link = view.getByRole('link', { name: 'Settings' })
     expect(link.getAttribute('href')).toBe('/settings')
 
@@ -284,8 +263,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(view.queryByRole('link', { name: 'General' })).toBeNull()
   })
 
-  // The mirror of the above: the arrow is a control for the MENU, not a destination, so it
-  // opens the level and announces no navigation.
   it('the drill arrow opens the level without navigating', async () => {
     const events: MenuNode[] = []
     const paths: string[][] = []
@@ -304,9 +281,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(view.getByRole('link', { name: 'General' })).toBeTruthy())
   })
 
-  // A link-less container has nowhere to go, so it never announces a navigation — the whole
-  // row is the disclosure. This is the shape most containers have (the console's Settings, the
-  // site's drawer nav): the parent is not a reference, so the parent opens the children.
   it('a link-less condensed row reveals its children from the WHOLE row and emits no navigate', async () => {
     const events: MenuNode[] = []
     const view = render(Menu, {
@@ -333,11 +307,9 @@ describe('Menu (composition, drill stack + data mode)', () => {
 
     await waitFor(() => expect(row.getAttribute('aria-expanded')).toBe('true'))
     expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy()
-    // Revealing children is a move inside the menu, not a navigation.
     expect(events).toEqual([])
   })
 
-  // With an `href` the row splits, and then the LINK is the only thing that navigates.
   it('a referenced condensed row splits into a link and an arrow', async () => {
     const events: MenuNode[] = []
     const view = render(Menu, {
@@ -358,22 +330,18 @@ describe('Menu (composition, drill stack + data mode)', () => {
       }
     })
 
-    // The link is a real anchor, so a middle-click or a new tab still works.
     const link = view.getByRole('link', { name: 'Getting started' })
     expect(link.getAttribute('href')).toBe('/docs/getting-started')
     expect(link.hasAttribute('aria-expanded')).toBe(false)
 
-    // The arrow reveals, and announces nothing.
     await userEvent.click(arrowOfKind(view, 'inline'))
     await waitFor(() => expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy())
     expect(events).toEqual([])
 
-    // The link navigates, and reveals nothing further.
     await fireEvent.click(link)
     expect(events.map((node) => node.id)).toEqual(['getting-started'])
   })
 
-  // ---- SubTrigger icon: drill only ---------------------------------------------
   it('renders a drill trigger icon and withholds one from an inline trigger', () => {
     const view = render(Menu, {
       props: {
@@ -400,42 +368,30 @@ describe('Menu (composition, drill stack + data mode)', () => {
     })
 
     const [drill, inline] = view.getAllByTestId('navigation-menu-sub-trigger')
-    // The glyph lands in the leaves' own 32px box, so the drill row sits on the same content
-    // column as the destinations it is listed among.
     expect(drill.querySelector('[data-testid="navigation-menu-sub-trigger__icon"] i')).toBeTruthy()
-    // An inline row heads the rows it expands beneath it; the column belongs to them, and the
-    // component enforces that rather than trusting the caller.
     expect(inline.querySelector('[data-testid="navigation-menu-sub-trigger__icon"]')).toBeNull()
   })
 
-  // ---- Group is a title, not a control -----------------------------------------
   it('renders a group title as static text that names the section and never folds it', () => {
     const view = render(composed())
 
-    // A title, not a toggle: no control carries the label, so it cannot compete with the
-    // rows it labels. Folding is a condensed ROW's job.
     expect(view.queryByRole('button', { name: 'User agents' })).toBeNull()
 
     const group = view.getAllByTestId('navigation-menu-group')[0]
     expect(group.hasAttribute('data-state')).toBe(false)
     expect(view.queryByTestId('navigation-menu-group__toggle')).toBeNull()
 
-    // The visible title is what names the section.
     const label = view.getAllByTestId('navigation-menu-group__label')[0]
     expect(label.textContent?.trim()).toBe('User agents')
     expect(group.getAttribute('aria-labelledby')).toBe(label.id)
     expect(view.getByRole('region', { name: 'User agents' })).toBe(group)
 
-    // Rows are unconditionally present — there is no closed state to hide them.
     expect(view.getByRole('link', { name: 'End User' })).toBeTruthy()
   })
 
-  // ---- Inline sub --------------------------------------------------------------
   it('a link-less condensed row expands in place, wiring aria-expanded and aria-controls on the row', async () => {
     const view = render(composed())
 
-    // `aria-expanded` / `aria-controls` belong to the control that expands the children. With no
-    // reference to protect, that is the LABEL control, so it carries them and the arrow does not.
     const trigger = view.getByRole('button', { name: 'Getting started' })
     expect(trigger.getAttribute('data-testid')).toBe('navigation-menu-sub-trigger__control')
     expect(
@@ -443,9 +399,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     ).toBe('inline')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
 
-    // The arrow is still a real IconButton — it is the affordance that says the row owns
-    // children — but as a REDUNDANT pointer target it leaves the tab order and the a11y tree
-    // rather than announcing a second control for the one action.
     const arrowButton = arrowOfKind(view, 'inline')
     expect(arrowButton.getAttribute('tabindex')).toBe('-1')
     expect(arrowButton.getAttribute('aria-hidden')).toBe('true')
@@ -474,7 +427,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
   })
 
-  // ---- Drill stack -------------------------------------------------------------
   it('renders no Back button at the root level', () => {
     const view = render(composed())
 
@@ -485,7 +437,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     const paths: string[][] = []
     const view = render(composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }))
 
-    // Nothing expands, so the attribute would be a lie — on either control.
     expect(view.getByRole('link', { name: 'Settings' }).hasAttribute('aria-expanded')).toBe(false)
     const open = arrow(view, 'Settings')
     expect(open.hasAttribute('aria-expanded')).toBe(false)
@@ -496,29 +447,20 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(paths[0]).toHaveLength(1)
 
     const back = await waitFor(() => view.getByTestId('navigation-menu-back'))
-    // A back button names where it GOES. One level deep that is the menu root, which no
-    // trigger names, so a bare "Back" is the honest text — and that visible text IS the
-    // accessible name, so there is no `aria-label` that could disagree with it.
     expect(back.textContent?.trim()).toBe('Back')
     expect(back.hasAttribute('aria-label')).toBe(false)
     await waitFor(() => expect(document.activeElement).toBe(back))
 
-    // A pushed level is a container, not a list — that is what lets it hold groups, so a
-    // second-level nav has the same anatomy as the root rather than being flat rows.
     const level = view.getByRole('group', { name: 'Settings' })
     expect(level.getAttribute('data-kind')).toBe('drill')
     expect(level.getAttribute('data-state')).toBe('open')
     expect(view.getByRole('link', { name: 'General' })).toBeTruthy()
 
-    // The group nested inside the pushed level is real anatomy, and it is the one the
-    // user is looking at — so it keeps its label and stays in the a11y tree.
     const levelGroup = view.getByRole('region', { name: 'Account' })
     expect(level.contains(levelGroup)).toBe(true)
     expect(levelGroup.hasAttribute('aria-hidden')).toBe(false)
     expect(levelGroup.hasAttribute('inert')).toBe(false)
 
-    // The root level stays mounted for the slide but leaves the a11y tree and tab order.
-    // Groups inside the pushed level are excluded — they are the current surface.
     for (const group of view.getAllByTestId('navigation-menu-group')) {
       if (level.contains(group)) continue
       expect(group.getAttribute('aria-hidden')).toBe('true')
@@ -529,8 +471,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
 
     await waitFor(() => expect(paths[1]).toEqual([]))
     await waitFor(() => expect(view.queryByTestId('navigation-menu-back')).toBeNull())
-    // Focus returns to the control that OPENED the level — the arrow — not to the label beside
-    // it, which goes somewhere else entirely.
     await waitFor(() => expect(document.activeElement).toBe(open))
     expect(view.getAllByTestId('navigation-menu-group')[0].hasAttribute('inert')).toBe(false)
   })
@@ -546,22 +486,15 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(paths[0]).toEqual(['settings']))
   })
 
-  // A consumer whose host remounts on navigation persists `path` and hands it back, so the
-  // level is restored as STATE with no push behind it. The level still has to name itself —
-  // every drill sub announces its label when its TRIGGER mounts, not only when pushed — or a
-  // level nobody pushed reaches the a11y tree nameless and its parent has nothing to name.
   it('a stack supplied through v-model:path names its level and offers Back', async () => {
     const view = render(restored())
 
     const back = await waitFor(() => view.getByTestId('navigation-menu-back'))
     expect(back.textContent?.trim()).toBe('Back')
     expect(view.getByRole('group', { name: 'Settings' })).toBeTruthy()
-    // The restored level is really open, not just labelled.
     expect(view.getByRole('link', { name: 'General' })).toBeTruthy()
   })
 
-  // The whole point of a back button over a level header: it says where activating it LANDS.
-  // Two levels deep that is the level below, which has a trigger and therefore a name.
   it('the back button names the level a pop lands on', async () => {
     const view = render(nested())
 
@@ -572,16 +505,12 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await userEvent.click(await waitFor(() => arrow(view, 'Security')))
     await waitFor(() => expect(back.textContent?.trim()).toBe('Back to Settings'))
 
-    // Popping hands the button to the level it landed on, whose own destination is the
-    // unnamed root — so the text follows the button rather than the level that left.
     await userEvent.click(back)
     await waitFor(() =>
       expect(view.getByTestId('navigation-menu-back').textContent?.trim()).toBe('Back')
     )
   })
 
-  // The root is the one destination that cannot name itself: it has no trigger. `label` is how
-  // a consumer supplies that name — the reference's "Back to app".
   it('label names the destination when it is the menu root', async () => {
     const view = render(nested('label="app"'))
 
@@ -591,9 +520,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(back.textContent?.trim()).toBe('Back to app')
   })
 
-  // With `enterOnMount` a restored level ARRIVES rather than just being there: `MenuSubContent`'s
-  // appear transition plays its entrance and the root supplies the push motion, so the timing and
-  // the sliding surfaces' fill match a real push. Asserted as state (`data-motion`), never timing.
   it('a restored stack arrives in the push motion when enterOnMount is set', async () => {
     const view = render(restored({ enterOnMount: true }))
 
@@ -601,9 +527,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(level.getAttribute('data-motion')).toBe('push')
   })
 
-  // The default. Navigating BETWEEN rows of a level remounts the host and restores the same
-  // stack, so animating every restored level would replay the entrance on each row the reader
-  // activates inside it — the menu appearing to re-open under someone who never left.
   it('a restored stack renders in place by default', async () => {
     const view = render(restored())
 
@@ -611,13 +534,9 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(level.getAttribute('data-motion')).toBe('none')
   })
 
-  // The rail arriving is an entrance too — coming back out of a level, the host remounted, so the
-  // root groups have no rendered off-canvas position to slide from. The DIRECTION is derived: an
-  // empty stack was travelled back to, so it is a pop, not a push.
   it('an empty stack arrives in the pop motion when enterOnMount is set', async () => {
     const view = render(Menu, { props: { groups: GROUPS, enterOnMount: true } })
 
-    // The motion is set on mount, so it reaches the DOM on the tick after it.
     await nextTick()
     for (const group of view.getAllByTestId('navigation-menu-group')) {
       expect(group.getAttribute('data-motion')).toBe('pop')
@@ -638,8 +557,26 @@ describe('Menu (composition, drill stack + data mode)', () => {
 
     await userEvent.click(await waitFor(() => view.getByTestId('navigation-menu-back')))
 
-    // The trigger element was registered on mount, so popping a level nobody pushed still
-    // returns focus to the row that owns it.
+    await waitFor(() => expect(globalThis.document.activeElement).toBe(arrow(view, 'Settings')))
+  })
+
+  it('pop() leaves the current level the way Back does, for a host with its own way back', async () => {
+    const path = ref(['settings'])
+    const view = render(
+      defineComponent({
+        components: COMPONENTS,
+        setup: () => ({ groups: GROUPS, path, menu: ref<{ pop: () => void } | null>(null) }),
+        template: `
+          <button type="button" @click="menu?.pop()">Leave level</button>
+          <Menu ref="menu" v-model:path="path" :groups="groups" aria-label="Console navigation" />
+        `
+      })
+    )
+
+    await waitFor(() => view.getByRole('group', { name: 'Settings' }))
+    await userEvent.click(view.getByRole('button', { name: 'Leave level' }))
+
+    await waitFor(() => expect(path.value).toEqual([]))
     await waitFor(() => expect(globalThis.document.activeElement).toBe(arrow(view, 'Settings')))
   })
 
@@ -655,7 +592,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(paths[1]).toEqual([]))
   })
 
-  // ---- Disabled suppression ----------------------------------------------------
   it('a disabled row is out of the tab order and emits no navigate', async () => {
     const events: Array<[globalThis.MouseEvent, MenuNode]> = []
     const view = render(Menu, {
@@ -680,8 +616,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
       composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }, { disabled: true })
     )
 
-    // A disabled row drops its `href` outright, so it is no longer a link at all — an anchor
-    // without a destination is not one, and that is the honest rendering of "nowhere to go".
     expect(view.queryByRole('link', { name: 'Settings' })).toBeNull()
     const settings = view.getByTestId('navigation-menu-sub-trigger__reference')
     expect(settings.getAttribute('data-disabled')).toBe('')
@@ -689,7 +623,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(settings.hasAttribute('href')).toBe(false)
     expect(settings.getAttribute('tabindex')).toBe('-1')
 
-    // Both controls of the row are suppressed, the arrow included — it is the one that pushes.
     const open = arrow(view, 'Settings')
     expect(open.hasAttribute('disabled')).toBe(true)
 
@@ -701,7 +634,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(view.queryByTestId('navigation-menu-back')).toBeNull()
   })
 
-  // ---- Accessibility -----------------------------------------------------------
   it('has no axe violations composed, with an inline sub expanded', async () => {
     const view = render(composed({}, { inlineOpen: true }))
 

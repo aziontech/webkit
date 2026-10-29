@@ -1384,7 +1384,7 @@ export const createResources = [
     id: 'certificates',
     label: 'Certificate Manager',
     unit: 'certificate',
-    icon: 'ai ai-digital-certificates',
+    icon: 'ai ai-certificate-manager',
     title: 'Create Certificate',
     listPath: '/certificates',
     listLabel: 'Certificate Manager',

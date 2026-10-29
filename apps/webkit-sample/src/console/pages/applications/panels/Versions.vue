@@ -3,21 +3,23 @@
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { applyFilters } from '@shared/lib/filter-bar'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import FilterButton from '@shared/ui/filter/FilterButton.vue'
-  import FilterChips from '@shared/ui/filter/FilterChips.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import ExportButton from '../../../components/list/ExportButton.vue'
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
-  import { applyFilters } from '@shared/lib/filter-bar'
   import { useListRefresh } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
   import {
@@ -48,8 +50,9 @@
       principal: true,
       hideable: false
     },
+    { accessorKey: 'description', header: 'Description', grow: 2 },
     { accessorKey: 'state', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'createdAt', header: 'Created by', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'createdAt', header: 'Created', enableSorting: true, minWidth: FIT_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -68,13 +71,20 @@
 
   const userEmail = computed(() => route.query.email || undefined)
 
-  const versions = computed(() => applicationVersions(String(props.application.name)))
+  const versions = computed(() =>
+    applicationVersions(String(props.application.name)).map((entry) => ({
+      ...entry,
+      description: versionComment(entry)
+    }))
+  )
 
   const latestId = computed(() => latestBuiltVersionId(String(props.application.name)))
 
   const search = ref('')
   const filters = ref({})
   const pagination = ref({ pageIndex: 0, pageSize: 10 })
+  const tableRef = ref(null)
+  const columnVisibility = ref({})
 
   const { loading, refresh } = useListRefresh()
 
@@ -168,6 +178,14 @@
             :loading="loading"
             @refresh="refresh"
           />
+          <ExportButton
+            :table="tableRef"
+            :filename="`${application.name}-versions.csv`"
+          />
+          <ColumnsButton
+            v-model="columnVisibility"
+            :columns="COLUMNS"
+          />
         </template>
       </ControlsHeader>
 
@@ -178,9 +196,11 @@
 
       <CardBox :padded="false">
         <template #content>
-          <Table
+          <TableRoot
+            ref="tableRef"
             v-model:pagination="pagination"
             v-model:globalFilter="search"
+            v-model:columnVisibility="columnVisibility"
             :data="visibleVersions"
             :columns="COLUMNS"
             row-key="id"
@@ -192,27 +212,23 @@
             @row-click="openVersion"
           >
             <template #cell-name="{ value, row }">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <span
-                    class="truncate font-(family-name:--font-code) text-body-sm text-(--text-default)"
-                  >
-                    {{ value }}
-                  </span>
-                  <Tag
-                    v-if="row.id === latestId"
-                    label="Latest"
-                    severity="info"
-                    size="small"
-                  />
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <span
+                  class="cursor-pointer truncate font-(family-name:--font-code) text-body-sm text-(--text-default) hover:underline"
+                >
+                  {{ value }}
                 </span>
                 <span
-                  v-if="versionComment(row)"
-                  class="truncate text-body-xs text-(--text-muted)"
+                  v-if="row.id === latestId"
+                  class="shrink-0 text-body-sm text-(--text-muted)"
                 >
-                  {{ versionComment(row) }}
+                  Latest
                 </span>
               </div>
+            </template>
+
+            <template #cell-description="{ value }">
+              <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
             </template>
 
             <template #cell-state="{ value }">
@@ -220,7 +236,7 @@
                 :label="versionStateMeta(value).label"
                 :severity="versionStateMeta(value).severity"
                 :icon="versionStateMeta(value).icon"
-                size="small"
+                size="medium"
               />
             </template>
 
@@ -274,7 +290,7 @@
                 </Dropdown.Group>
               </Dropdown>
             </template>
-          </Table>
+          </TableRoot>
         </template>
       </CardBox>
     </section>

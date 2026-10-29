@@ -3,20 +3,19 @@
 // cover is the client's logo, drawn from this app's client registry instead.
 
 export const RESOURCE_HUB_HERO = {
-  eyebrow: 'Resources',
-  title: 'Resource Hub',
+  eyebrow: 'Resource hub',
+  title: 'Articles, ebooks, and customer stories',
   description:
-    'Technical content and real-world cases on performance, security, and scalability in modern applications for developers and infrastructure teams.'
+    'Practical guides on performance, security, and scale, and the results teams get running on the Azion Platform.'
 }
 
 export const RESOURCE_HUB_LISTING = {
-  title: 'Explore All Resources',
-  moreLabel: 'Show more',
+  title: 'Explore all resources',
+  moreLabel: 'Load more',
   empty: {
-    title: 'Nothing here yet',
-    description:
-      "We're working hard to bring you compelling content soon. In the meantime, feel free to explore other categories or come back later. Thanks for your patience!",
-    action: 'view all resources'
+    title: 'No resources match these filters',
+    description: 'Try another content type, category, or industry.',
+    action: 'View all resources'
   }
 }
 
@@ -25,42 +24,41 @@ export const RESOURCE_HUB_FACETS = [
   {
     key: 'contentType',
     label: 'Content type',
-    allLabel: 'All Content Type',
-    options: ['E-books', 'Blog', 'Comparisons', 'Success Stories']
+    allLabel: 'All content types',
+    options: ['E-books', 'Blog', 'Comparisons', 'Success stories']
   },
   {
     key: 'categories',
     label: 'Category',
-    allLabel: 'All Categories',
+    allLabel: 'All categories',
     options: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ]
   },
   {
     key: 'industry',
     label: 'Industry',
-    allLabel: 'All Industries',
+    allLabel: 'All industries',
     options: ['Financial', 'Fintech', 'EdTech', 'Retail', 'Tech', 'Education', 'Media']
   }
 ]
 
 export const RESOURCE_HUB_NEWSLETTER = {
-  eyebrow: 'stay up to date',
-  title: 'Subscribe to our Newsletter',
-  description:
-    'Get the latest product updates, event highlights, and tech industry insights delivered to your inbox.',
-  placeholder: 'Your e-mail',
+  eyebrow: 'Stay up to date',
+  title: 'Subscribe to our newsletter',
+  description: 'Product updates, event highlights, and industry insights, delivered to your inbox.',
+  placeholder: 'Your email',
   submit: 'Subscribe',
-  success: 'Thanks for subscribing to Azion newsletter'
+  success: 'Thanks for subscribing to the Azion newsletter'
 }
 
 export const RESOURCES = [
@@ -79,7 +77,7 @@ export const RESOURCES = [
     description:
       'Azion MCP servers connect Claude Code, Cursor, and other coding agents to the Azion documentation and API, with a dry_run preview before each write.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'OCT 14, 2026',
     href: 'https://www.azion.com/en/blog/azion-mcp-servers-generally-available/',
     image: 'https://www.azion.com/assets/content/blog/uploads/mcp-ga/Azion-MCP.svg'
@@ -210,7 +208,7 @@ export const RESOURCES = [
     description:
       'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'SEP 22, 2026',
     href: 'https://www.azion.com/en/blog/which-azion-plan-is-right-for-your-project/',
     image:
@@ -272,7 +270,7 @@ export const RESOURCES = [
     description:
       'Azion earned Leader status in CDN, Web Security, DDoS Protection, and Bot Detection and Mitigation (Enterprise) in the G2 Fall 2026 Reports, plus High Performer recognition in five more categories.',
     contentType: 'Blog',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'AUG 28, 2026',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-fall-reports-2026/',
     image: 'https://www.azion.com/assets/g2fallreports.png'
@@ -292,7 +290,7 @@ export const RESOURCES = [
     description:
       'AI agents can access data, recommend decisions, and execute actions across financial systems. Learn how to structure identity, authorization, enforcement, observability, and API protection controls for production environments.',
     contentType: 'Blog',
-    categories: ['Market Trends'],
+    categories: ['Market trends'],
     date: 'AUG 24, 2026',
     href: 'https://www.azion.com/en/blog/ai-agents-financial-services/',
     image:
@@ -303,7 +301,7 @@ export const RESOURCES = [
     description:
       'Learn why fragmented security and delivery vendors drive up the real cost of running banking infrastructure — and how to consolidate WAF, Bot Manager, DDoS Protection, and AI Inference on a single platform.',
     contentType: 'Blog',
-    categories: ['Market Trends'],
+    categories: ['Market trends'],
     date: 'AUG 24, 2026',
     href: 'https://www.azion.com/en/blog/how-many-vendors-does-a-bank-need-secure-infrastructure/',
     image:
@@ -356,7 +354,7 @@ export const RESOURCES = [
     description:
       'LLM inference cost is a model problem and an architecture problem. Centralized inference adds 100–180ms of network latency per request and forces over-provisioning to maintain p95. Learn how distributed execution cuts inference origin load by up to 60% and global p50 latency by 75%.',
     contentType: 'Blog',
-    categories: ['Developers', 'Routing & Networking', 'Serverless'],
+    categories: ['Developers', 'Routing and networking', 'Serverless'],
     date: 'AUG 3, 2026',
     href: 'https://www.azion.com/en/blog/llm-inference-cost-distributed-architecture-2026/',
     image: 'https://www.azion.com/assets/edge-computing.png'
@@ -366,7 +364,7 @@ export const RESOURCES = [
     description:
       'Serverless cold starts add 200ms to over 1 second of latency to affected requests and compound inside AI inference pipelines that chain multiple function calls. Learn what causes cold starts, why they are especially damaging for AI workloads, and what architectures eliminate them entirely.',
     contentType: 'Blog',
-    categories: ['Serverless', 'Market Trends'],
+    categories: ['Serverless', 'Market trends'],
     date: 'JUL 28, 2026',
     href: 'https://www.azion.com/en/blog/cold-starts-killing-ai-application-performance/',
     image: 'https://www.azion.com/assets/100-uptimedark.png'
@@ -376,7 +374,7 @@ export const RESOURCES = [
     description:
       'Discover why inference location is a strategic architectural decision for AI applications. Learn how to reduce provider dependency, strengthen governance, meet regulatory requirements, and build resilient AI workloads with distributed inference.',
     contentType: 'Blog',
-    categories: ['Market Trends'],
+    categories: ['Market trends'],
     date: 'JUL 24, 2026',
     href: 'https://www.azion.com/en/blog/digital-sovereignty-ai-inference/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_440x343px_livemap.png'
@@ -446,7 +444,7 @@ export const RESOURCES = [
     description:
       "Cloud egress costs are compounding for most teams even though per-GB prices haven't changed. Learn how to calculate your egress cost per user, identify the stateless/stateful split, and reduce cloud bandwidth spend by 60–80% without rebuilding your architecture.",
     contentType: 'Blog',
-    categories: ['Market Trends', 'Serverless'],
+    categories: ['Market trends', 'Serverless'],
     date: 'JUL 6, 2026',
     href: 'https://www.azion.com/en/blog/cloud-egress-costs-2026-why-the-math-stopped-working/',
     image: 'https://www.azion.com/assets/cloud-test-1.png'
@@ -521,7 +519,7 @@ export const RESOURCES = [
     description:
       'Azion earned recognition across nine categories in the G2 Summer 2026 Reports, including Leader in Content Delivery Network (CDN) and High Performer in Web Security, Cloud Security, Load Balancing, DDoS Protection, Bot Detection and Mitigation, WAF, SSL & TLS Certificate Tools, and API Security Tools.',
     contentType: 'Blog',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'MAY 26, 2026',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-summer-reports-2026/',
     image: 'https://www.azion.com/assets/g2-leaders-badget-linkedin-formato-1-91-1-horizontal-3.png'
@@ -552,7 +550,7 @@ export const RESOURCES = [
     description:
       'Learn how Azion accelerated application deploys across the Console and CLI with S3-based uploads and dynamic parallelism, reducing static file upload times by 73% in the Console and up to 90% in CLI 4.21+.',
     contentType: 'Blog',
-    categories: ['Developers', 'Company News'],
+    categories: ['Developers', 'Company news'],
     date: 'MAY 6, 2026',
     href: 'https://www.azion.com/en/blog/azion-cli-static-uploads-90-percent-faster/',
     image: 'https://www.azion.com/assets/cli-keyillustration3-1.png'
@@ -603,7 +601,7 @@ export const RESOURCES = [
     description:
       'In the G2 Spring 2026 Reports, Azion earned Leader rankings in Content Delivery Network (CDN), Web Security, and DDoS Protection, along with High Performer recognition in Cloud Security, API Security Tools, SSL & TLS Certificate Tools, and top placements for WAF and Bot Detection across Enterprise and Product grids.',
     contentType: 'Blog',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'MAR 17, 2026',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-spring-reports-2026/',
     image: 'https://www.azion.com/assets/content/blog/uploads/g2spring/G2spring.jpg'
@@ -613,7 +611,7 @@ export const RESOURCES = [
     description:
       'DDoS attacks now routinely combine volumetric floods (L3/L4) with application-layer attacks (L7) and DNS disruption. The “best” DDoS protection isn’t a universal winner—it’s the provider whose documented capabilities and commercial terms match your risk profile, architecture, and uptime requirements.',
     contentType: 'Blog',
-    categories: ['Developers', 'Market Trends', 'Security'],
+    categories: ['Developers', 'Market trends', 'Security'],
     date: 'MAR 10, 2026',
     href: 'https://www.azion.com/en/blog/best-ddos-protection-2026-azion-vs-cloudflare-akamai-aws-fastly-imperva/',
     image:
@@ -656,7 +654,7 @@ export const RESOURCES = [
     description:
       'Centralized cloud inference breaks down for generative AI: latency spikes, inconsistent UX, and fragile failover. This article explains how LoRA enables lightweight adaptation and how serverless GPU at the edge (Azion) delivers global-scale, low-latency inference with automation, standardization, and real-time observability.',
     contentType: 'Blog',
-    categories: ['Developers', 'Serverless', 'Market Trends'],
+    categories: ['Developers', 'Serverless', 'Market trends'],
     date: 'JAN 22, 2026',
     href: 'https://www.azion.com/en/blog/from-cloud-training-to-global-scale-ai-inference-lora-serverless/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloud-to-lora/cloudtolora.png'
@@ -666,7 +664,7 @@ export const RESOURCES = [
     description:
       'OWASP Top 10:2025 shifts AppSec from code-level mistakes to architectural and supply-chain risks. Learn why legacy WAFs fall short and how a programmable infrastructure approach (WAF + Functions + bot and rate controls) mitigates modern threats from access control to zero-days.',
     contentType: 'Blog',
-    categories: ['Developers', 'Routing & Networking', 'Security'],
+    categories: ['Developers', 'Routing and networking', 'Security'],
     date: 'JAN 21, 2026',
     href: 'https://www.azion.com/en/blog/owasp-top-10-2025-programmable/',
     image: 'https://www.azion.com/assets/content/blog/uploads/owasp-2025/owasp2025.png'
@@ -675,18 +673,18 @@ export const RESOURCES = [
     title: 'Banco de la Nación: 97% Faster, 75% Lower Costs',
     description:
       'With Azion, Banco de la Nación achieved maximum performance efficiency, reducing latency and accelerating content delivery across Peru.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'JAN 5, 2026',
     href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/',
@@ -696,18 +694,18 @@ export const RESOURCES = [
     title: 'Zoop Cuts Costs, Latency & Attacks with Azion',
     description:
       'To handle transaction spikes without compromising the checkout experience, Zoop, iFood’s fintech, adopted Azion’s platform, reducing costs and accelerating risk decisions with high performance.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'DEC 16, 2025',
     href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/',
@@ -728,7 +726,7 @@ export const RESOURCES = [
     description:
       'Azion is a Leader in CDN & High Performer in 6 security categories in the G2 Winter 2026 Reports. With 100% user satisfaction, see how our web platform delivers ultra-fast performance & enterprise-grade security. Try free.',
     contentType: 'Blog',
-    categories: ['Company News', 'Market Trends'],
+    categories: ['Company news', 'Market trends'],
     date: 'DEC 8, 2025',
     href: 'https://www.azion.com/en/blog/azion-leader-g2-winter-reports-2026/',
     image: 'https://www.azion.com/assets/content/blog/uploads/g2award/G2Leaders.png'
@@ -738,7 +736,7 @@ export const RESOURCES = [
     description:
       'Go beyond the traditional cloud. This guide details how to deploy secure, high-performance MCP servers for real-time AI applications.',
     contentType: 'Blog',
-    categories: ['Developers', 'Serverless', 'Market Trends'],
+    categories: ['Developers', 'Serverless', 'Market trends'],
     date: 'DEC 1, 2025',
     href: 'https://www.azion.com/en/blog/mcp-security-high-performance/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloudvsedge/edgecloud.png'
@@ -748,7 +746,7 @@ export const RESOURCES = [
     description:
       'Learn how distributed architectures dramatically reduce egress, latency, and observability costs by moving compute, caching, and compression closer to users. This article combines benchmarks, real-world transformations, and practical patterns to show how Azion helps teams optimize traffic, lower TCO, and build faster, more efficient applications.',
     contentType: 'Blog',
-    categories: ['Routing & Networking', 'Caching', 'Serverless', 'Security', 'Observability'],
+    categories: ['Routing and networking', 'Caching', 'Serverless', 'Security', 'Observability'],
     date: 'NOV 17, 2025',
     href: 'https://www.azion.com/en/blog/cloud-cost-reduction-with-distributed-architecture/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_wasm.png'
@@ -757,18 +755,18 @@ export const RESOURCES = [
     title: 'HeroSpark Accelerates Its Platform 30% with Azion',
     description:
       'HeroSpark accelerated access to its digital learning platform and scaled content delivery for thousands of students and creators using Azion’s distributed infrastructure.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'NOV 7, 2025',
     href: 'https://www.azion.com/en/success-case/herospark-30-percent-performance-azion/',
@@ -778,18 +776,18 @@ export const RESOURCES = [
     title: 'HeroSpark Cuts Fraud & Attacks 99.5% with Azion',
     description:
       'With Azion, HeroSpark automated fraud prevention, sped up content delivery, and strengthened HeroPay’s infrastructure to scale globally.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'NOV 7, 2025',
     href: 'https://www.azion.com/en/success-case/herospark-fraud-prevention-azion/',
@@ -800,7 +798,7 @@ export const RESOURCES = [
     description:
       "Bridge Latin America's Digital Divide with Decentralized Infrastructure. Learn how it cuts latency, costs, and enables vital digital services.",
     contentType: 'Blog',
-    categories: ['Developers', 'Routing & Networking'],
+    categories: ['Developers', 'Routing and networking'],
     date: 'NOV 3, 2025',
     href: 'https://www.azion.com/en/blog/descentralized-evolution-latin-america/',
     image:
@@ -811,7 +809,7 @@ export const RESOURCES = [
     description:
       'Azion announces a series of product launches and enhancements to its web platform.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'MAY 7, 2025',
     href: 'https://www.azion.com/en/blog/product-launch-h1-2025/',
     image: 'https://www.azion.com/assets/content/blog/uploads/cloudtoedge.png'
@@ -820,18 +818,18 @@ export const RESOURCES = [
     title: 'GPA stopped a cyberattack and reduced costs by 30%',
     description:
       'Grupo Pão de Açúcar (GPA) stopped a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'MAY 6, 2025',
     href: 'https://www.azion.com/en/success-case/gpa-solved-cyberattack/',
@@ -853,7 +851,7 @@ export const RESOURCES = [
     description:
       "AI Inference combines artificial intelligence with edge computing, allowing AI models to run directly on Azion's infrastructure—close to data sources and users—rather than in distant cloud data centers.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'MAY 5, 2025',
     href: 'https://www.azion.com/en/blog/introducing-edge-ai/',
     image:
@@ -863,18 +861,18 @@ export const RESOURCES = [
     title: 'Axur Automates Billions of Page Checks with Azion AI',
     description:
       'Learn how moving AI inference from managed infrastructure unlocked the fastest automatic takedown in the market.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'MAY 5, 2025',
     href: 'https://www.azion.com/en/success-case/axur-reduced-time-to-takedown-with-ai/',
@@ -949,7 +947,7 @@ export const RESOURCES = [
     description:
       "Discover Azion's Edge Computing templates to enhance web app development, streamline deployment, and optimize performance with tools like MongoDB, Hexo, and Fauna.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'JAN 29, 2024',
     href: 'https://www.azion.com/en/blog/azion-new-set-templates-dev/',
     image:
@@ -960,7 +958,7 @@ export const RESOURCES = [
     description:
       "Discover how Azion's accolades like the Frost & Sullivan Award and Great Place to Work recognition affirm its edge computing superiority in 2023.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'DEC 21, 2023',
     href: 'https://www.azion.com/en/blog/azion-celebrates-achievements-2023/',
     image:
@@ -971,7 +969,7 @@ export const RESOURCES = [
     description:
       'Discover why Azion is a strong performer in The Forrester Wave™ for Edge Development Platforms in Q4 2023, enhancing enterprise edge solutions.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'DEC 1, 2023',
     href: 'https://www.azion.com/en/blog/azion-recognized-strong-performer-forrester-wave-2023/',
     image:
@@ -982,7 +980,7 @@ export const RESOURCES = [
     description:
       'Azion wins at Santander X Global Challenge for innovative cybersecurity solutions, enhancing global security capabilities and fostering industry connections.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 29, 2023',
     href: 'https://www.azion.com/en/blog/azion-awarded-at-santander-x-global-challenge/',
     image:
@@ -1004,7 +1002,7 @@ export const RESOURCES = [
     description:
       "Discover Azion's award-winning Edge Serverless platform, boosting developers' capabilities in building rapid, resilient applications with superior performance and global scalability.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'OCT 25, 2023',
     href: 'https://www.azion.com/en/blog/azion-frost-sullivan-award/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-f-s-440x343px-1.png'
@@ -1035,7 +1033,7 @@ export const RESOURCES = [
     description:
       'Azion hailed as a Leader and Fast Mover in the GigaOm Radar for Edge Platforms, emphasizing robust security and innovative edge computing solutions.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'AUG 29, 2023',
     href: 'https://www.azion.com/en/blog/azion-named-leader-fast-mover-gigaom-report/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog-gigaom-440x343px-1.png'
@@ -1044,18 +1042,18 @@ export const RESOURCES = [
     title: 'Universidad Iberoamericana Optimizes UX with Edge DNS',
     description:
       'Universidad Iberoamericana strengthened digital security and improved user experience with resilient DNS and application protection using Azion’s distributed infrastructure.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'JUL 27, 2023',
     href: 'https://www.azion.com/en/success-case/ibero/',
@@ -1105,18 +1103,18 @@ export const RESOURCES = [
     title: 'EXAME Scales Election Traffic 40x with Azion',
     description:
       'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'MAR 23, 2023',
     href: 'https://www.azion.com/en/success-case/exame/',
@@ -1137,7 +1135,7 @@ export const RESOURCES = [
     description:
       "Explore how Justa enhances payment security and simplifies compliance using Azion's Edge solutions, improving performance and customer experience in Brazil.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'JAN 17, 2023',
     href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblog_justa_440x343px.png'
@@ -1169,7 +1167,7 @@ export const RESOURCES = [
     description:
       "Explore Azion's GraphQL API for real-time metrics and enhanced data observability, featuring improved performance and cost savings. Learn to access advanced security data and performance insights.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 29, 2022',
     href: 'https://www.azion.com/en/blog/announcing-graphql-for-increased-observability/',
     image:
@@ -1180,7 +1178,7 @@ export const RESOURCES = [
     description:
       "Explore Azion's SOC 3 compliance, ensuring our edge platform secures web applications and sites with top-tier data security and availability controls.",
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 14, 2022',
     href: 'https://www.azion.com/en/blog/azion-achieves-soc-3-compliance/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnail-soc-2.png'
@@ -1190,7 +1188,7 @@ export const RESOURCES = [
     description:
       'Explore Azion Build for seamless edge app development with tools like Edge Functions, WebAssembly, and support for React frameworks.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'NOV 9, 2022',
     href: 'https://www.azion.com/en/blog/azion-introduces-product-suite-for-comprehensive-edge-development/',
     image: 'https://www.azion.com/assets/content/blog/uploads/thumbnailblogpr_440x343px.png'
@@ -1230,18 +1228,18 @@ export const RESOURCES = [
     title: 'FourBank Protects Apps & APIs from DDoS with Azion',
     description:
       'FourBank strengthened the security of its financial services and increased resilience against DDoS attacks using the security capabilities of the Azion Platform.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'JUN 24, 2022',
     href: 'https://www.azion.com/en/success-case/fourbank/',
@@ -1251,18 +1249,18 @@ export const RESOURCES = [
     title: 'Todo Cartões Stops Gift Card Fraud with Azion',
     description:
       'Todo Cartões strengthened digital payment security and reduced fraud risks in gift cards using Azion’s distributed security infrastructure.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'MAY 16, 2022',
     href: 'https://www.azion.com/en/success-case/todo/',
@@ -1272,18 +1270,18 @@ export const RESOURCES = [
     title: 'Panvel Boosts E-commerce & Ensures 100% Uptime with Azion',
     description:
       'Over 60% faster applications and 86% offloaded traffic allowed Panvel to scale its e-commerce using Azion’s distributed platform.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'APR 18, 2022',
     href: 'https://www.azion.com/en/success-case/panvel/',
@@ -1293,18 +1291,18 @@ export const RESOURCES = [
     title: 'Contabilizei Boosts Performance 73% with Azion Caching',
     description:
       'Scalable infrastructure and optimized application performance enabled Contabilizei to support rapid growth of its digital accounting platform.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'APR 14, 2022',
     href: 'https://www.azion.com/en/success-case/contabilizei/',
@@ -1314,18 +1312,18 @@ export const RESOURCES = [
     title: 'Mobiauto Boosts Content Delivery 70% with Azion',
     description:
       'Mobiauto strengthened application scalability and sustained 500,000 simultaneous users during nationwide campaigns using Azion’s distributed infrastructure.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'APR 13, 2022',
     href: 'https://www.azion.com/en/success-case/mobiauto/',
@@ -1335,18 +1333,18 @@ export const RESOURCES = [
     title: 'Quero-Quero Protects APIs with Azion Firewall',
     description:
       'Explore how Quero-Quero protects its e-commerce platform with Azion Firewall, strengthening API security and ensuring high availability.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'APR 4, 2022',
     href: 'https://www.azion.com/en/success-case/quero-quero/',
@@ -1356,18 +1354,18 @@ export const RESOURCES = [
     title: 'Digimais Safeguards Its Digital Bank with Azion Firewall',
     description:
       'Digi+ increased the security and resilience of its digital banking services while scaling access for a growing customer base.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'APR 4, 2022',
     href: 'https://www.azion.com/en/success-case/digimais/',
@@ -1377,18 +1375,18 @@ export const RESOURCES = [
     title: 'Marisa Accelerates E-commerce, Delivers 85% of Traffic via Azion',
     description:
       'Discover how Marisa improved e-commerce performance with the Azion Platform, delivering 85% of traffic through distributed infrastructure, reducing origin costs, and supporting 96% online sales growth.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'APR 1, 2022',
     href: 'https://www.azion.com/en/success-case/marisa/',
@@ -1398,18 +1396,18 @@ export const RESOURCES = [
     title: 'FAM strengthens application and network protection with Azion Firewall capabilities',
     description:
       'Discover how FAM uses the security capabilities of the Azion Platform to implement a zero-trust model and protect academic applications with Firewall, WAF, and DDoS Protection.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'MAR 31, 2022',
     href: 'https://www.azion.com/en/success-case/fam/',
@@ -1430,18 +1428,18 @@ export const RESOURCES = [
     title: 'Crefisa Accelerates Digital Transformation with Azion',
     description:
       'Discover how Crefisa modernized its digital infrastructure and reinforced application and API security using the security capabilities of Azion Platform.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'MAR 4, 2022',
     href: 'https://www.azion.com/en/success-case/crefisa/',
@@ -1451,18 +1449,18 @@ export const RESOURCES = [
     title: 'Pernambucanas Speeds E-commerce & CX with Azion',
     description:
       'Faster checkout performance and improved platform reliability helped Pernambucanas deliver better e-commerce experiences to millions of customers.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 21, 2022',
     href: 'https://www.azion.com/en/success-case/pernambucanas/pernambucanas-relies-on-azion-to-speed-up-its-e-commerce-platform-and-innovate-customer-experience-through-edge-applications/',
@@ -1472,18 +1470,18 @@ export const RESOURCES = [
     title: 'Pernambucanas Enhances Digital Security Model with Azion Platform',
     description:
       'Pernambucanas increased visibility into security events and strengthened e-commerce protection with automated mitigation and observability capabilities.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 21, 2022',
     href: 'https://www.azion.com/en/success-case/pernambucanas-built-a-robust-zero-trust-security-model-with-azions-platform/',
@@ -1503,18 +1501,18 @@ export const RESOURCES = [
     title: 'MadeiraMadeira Cuts Cloud Costs 90% with Azion',
     description:
       'Faster product delivery and scalable infrastructure allowed MadeiraMadeira to support massive traffic growth during major e-commerce campaigns.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 16, 2022',
     href: 'https://www.azion.com/en/success-case/madeiramadeira/',
@@ -1524,18 +1522,18 @@ export const RESOURCES = [
     title: 'B2W Automates E-commerce Security with Azion Firewall',
     description:
       'B2W Digital strengthened e-commerce security by automating protection rules and increasing visibility into security events.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 9, 2022',
     href: 'https://www.azion.com/en/success-case/b2w/',
@@ -1545,18 +1543,18 @@ export const RESOURCES = [
     title: 'Dafiti Speeds E-commerce 86%, Cuts Costs 45% with Azion',
     description:
       'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 7, 2022',
     href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
@@ -1566,18 +1564,18 @@ export const RESOURCES = [
     title: 'Dafiti Protects Payment Data with Azion Firewall',
     description:
       'Dafiti strengthened its e-commerce security by automatically blocking threats and ensuring compliance with standards such as PCI DSS.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 7, 2022',
     href: 'https://www.azion.com/en/success-case/dafiti/dafiti-azion-edge-firewall/',
@@ -1587,18 +1585,18 @@ export const RESOURCES = [
     title: 'Magalu Ensures High Availability at Scale with Azion',
     description:
       "Explore how Magalu enhances cybersecurity with Azion's Firewall and WAF, improving threat intelligence and bot management in retail.",
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 4, 2022',
     href: 'https://www.azion.com/en/success-case/magalu/',
@@ -1608,18 +1606,18 @@ export const RESOURCES = [
     title: 'Netshoes Blocks 4M+ Threats in 6 Months with Azion WAF',
     description:
       'Netshoes strengthened its e-commerce security and improved the shopping experience by blocking threats such as SQL Injection and XSS.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'FEB 4, 2022',
     href: 'https://www.azion.com/en/success-case/netshoes/',
@@ -1630,18 +1628,18 @@ export const RESOURCES = [
       "Azion's Edge DNS helps NZN increase the performance, security and reliability of its applications and improve the experience of millions of Internet users",
     description:
       'Explore how NZN enhances user experiences with Azion Edge DNS for improved content delivery, performance, and security against DNS attacks.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'NOV 3, 2021',
     href: 'https://www.azion.com/en/success-case/nzn/azion-intelligent-dns-helps-nzn-to-increase-performance-security-and-reliability-of-its-applications-and-delight-millions-of-users-in-brazil/',
@@ -1651,18 +1649,18 @@ export const RESOURCES = [
     title: 'VTEX Builds Low-Latency Serverless Apps with Azion',
     description:
       'High-performance serverless applications enabled VTEX to accelerate global e-commerce experiences while maintaining low latency and high availability.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 12, 2021',
     href: 'https://www.azion.com/en/success-case/vtex/',
@@ -1683,18 +1681,18 @@ export const RESOURCES = [
     title: 'GetNinjas Improves Data Analysis with Azion',
     description:
       "GetNinjas now delivers about 70% of requests through Azion's infrastructure, reaching a hit rate of up to 80% and collecting over 3 TB of data to optimize performance, SEO, and security.",
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 10, 2021',
     href: 'https://www.azion.com/en/success-case/getninjas/',
@@ -1704,18 +1702,18 @@ export const RESOURCES = [
     title: 'NZN Builds 100+ Apps, Cuts Load Time 50% with Azion',
     description:
       'Discover how NZN leverages Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 10, 2021',
     href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/',
@@ -1725,18 +1723,18 @@ export const RESOURCES = [
     title: 'Lojas Renner Optimizes Online Shopping Journey with Azion',
     description:
       'Faster product pages and more resilient digital shopping experiences allowed Renner to scale its e-commerce platform using Azion’s distributed infrastructure.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 10, 2021',
     href: 'https://www.azion.com/en/success-case/renner/',
@@ -1746,18 +1744,18 @@ export const RESOURCES = [
     title: 'UniCesumar Improves Distance Learning 70% with Azion',
     description:
       'Scalable infrastructure and faster application delivery allowed UniCesumar to improve digital education experiences for thousands of online students.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 10, 2021',
     href: 'https://www.azion.com/en/success-case/unicesumar/',
@@ -1767,18 +1765,18 @@ export const RESOURCES = [
     title: 'UNINTER Delivers Low-Latency Video Lessons with Azion',
     description:
       'Reliable digital learning experiences enabled Uninter to scale its online education platform and support thousands of students accessing classes simultaneously.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 10, 2021',
     href: 'https://www.azion.com/en/success-case/uninter/',
@@ -1788,18 +1786,18 @@ export const RESOURCES = [
     title: 'Agi Blocks Threats & Boosts Observability with Azion',
     description:
       'Explore how Agi leverages Firewall and Data Stream on the Azion Platform to enhance cybersecurity and ensure continuous service availability.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 10, 2021',
     href: 'https://www.azion.com/en/success-case/agibank/',
@@ -1809,18 +1807,18 @@ export const RESOURCES = [
     title: 'Omelete Builds Dozens of Apps on Azion to Scale Content',
     description:
       'High-traffic media experiences became faster and more reliable as Omelete scaled its entertainment platform to millions of users.',
-    contentType: 'Success Stories',
+    contentType: 'Success stories',
     categories: [
       'Developers',
       'Security',
-      'Company News',
-      'Market Trends',
+      'Company news',
+      'Market trends',
       'Routing',
       'Serverless',
       'Caching',
       'Orchestration',
       'Observability',
-      'Routing & Networking'
+      'Routing and networking'
     ],
     date: 'AUG 6, 2021',
     href: 'https://www.azion.com/en/success-case/omelete/',
@@ -1863,7 +1861,7 @@ export const RESOURCES = [
     description:
       'Explore Azion Edge Functions: serverless, event-driven JavaScript solutions for low-latency, high-performance applications with enhanced security and monitoring.',
     contentType: 'Blog',
-    categories: ['Company News'],
+    categories: ['Company news'],
     date: 'JAN 15, 2021',
     href: 'https://www.azion.com/en/blog/azion-introduces-edge-functions/',
     image:

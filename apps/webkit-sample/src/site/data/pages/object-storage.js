@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import ObjectStorageAccessFragment from '../../ui/mockup/widgets/ObjectStorageAccessFragment.vue'
-import ObjectStorageBrowserFragment from '../../ui/mockup/widgets/ObjectStorageBrowserFragment.vue'
-import ObjectStorageBucketsFragment from '../../ui/mockup/widgets/ObjectStorageBucketsFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ObjectStorageAccessFragment = productWidget('object-storage-access')
+const ObjectStorageBrowserFragment = productWidget('object-storage-browser')
+const ObjectStorageBucketsFragment = productWidget('object-storage-buckets')
 
 const PILLARS = [
   {
@@ -127,7 +129,7 @@ export const OBJECT_STORAGE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Object Storage',
     title: 'S3-compatible object storage for global workloads',
     description:
@@ -142,7 +144,7 @@ export const OBJECT_STORAGE_PAGE = [
     title: 'Every bucket in one console',
     description:
       'Buckets, the access workloads have to them and the objects they hold live in the same workspace as the applications that serve them.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -172,41 +174,15 @@ export const OBJECT_STORAGE_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Connect Object Storage to your stack',
-        description:
-          'Manage Object Storage through Azion Console, CLI, or the S3-compatible API. Standard tools like AWS CLI, rclone, and Terraform work out of the box.',
-        href: PRODUCT_DOCS,
-        illustration: 'infrastructure-as-code',
-        illustrationLabel:
-          'An Azion provider declared in Terraform, raising the resources beside it',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Migrate from S3 without rewriting code',
-        description:
-          'Move objects from AWS S3, Cloudflare R2, or any S3-compatible provider with no code changes. Object Storage exposes a standard S3 API, so your current clients, scripts, and SDKs keep working.',
-        href: '/signup',
-        illustration: 'azion-to-aws',
-        illustrationLabel: 'AWS moving to Azion',
-        actions: [{ label: 'Start free', href: '/signup' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use Object Storage for',
     description:
       'Put Object Storage behind any application and serve files, media and datasets from Azion’s distributed infrastructure, with zero egress between Azion services. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

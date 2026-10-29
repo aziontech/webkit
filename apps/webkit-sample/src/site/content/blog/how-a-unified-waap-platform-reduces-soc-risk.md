@@ -118,7 +118,7 @@ With [Functions](https://www.azion.com/en/documentation/products/secure/automate
 
 Because these capabilities operate within the same architecture, security teams can investigate activity through a shared operational context rather than relying on disconnected security products.
 
-[Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) and [Real-Time Events](https://www.azion.com/en/products/real-time-events/) further simplify investigations by providing visibility into traffic, security events, and application behavior through the same operational environment.
+[Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) and [Real-Time Events](https://www.azion.com/en/products/real-time-events/) further simplify investigations by providing visibility into traffic, security events, and application behavior through the same operational environment.
 
 Organizations still need governance, policy tuning, and experienced analysts. A unified architecture simply makes investigations less operationally demanding.
 

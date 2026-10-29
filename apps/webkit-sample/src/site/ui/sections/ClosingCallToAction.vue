@@ -4,8 +4,6 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import TextureMaterial from '@aziontech/webkit/texture-material'
-  import type { TickerItem } from '@aziontech/webkit/ticker'
-  import Ticker from '@aziontech/webkit/ticker'
   import { computed, ref } from 'vue'
 
   import { useTypedWords } from '../../composables/use-typed-words'
@@ -16,7 +14,7 @@
 
   defineOptions({ name: 'ClosingCallToAction' })
 
-  /** split: the lead and aside actions side by side; panel: one centred ask; newsletter: the ask beside a subscribe form over a wave strip with the Azion mark; primary: a centred ask on the canvas lit by a pixelated primary wave, with a benefits strip; agents: the primary layout with a switch between the human and the agent way in, a copyable line and a typed sentence; frame: the closing frame alone. */
+  /** split: the lead and aside actions side by side; panel: one centred ask; newsletter: the ask beside a subscribe form over a wave strip with the Azion mark; primary: a centred ask on the canvas lit by a pixelated primary wave; agents: the primary layout with a switch between the human and the agent way in, a copyable line and a typed sentence; frame: the closing frame alone. */
   export type ClosingCallToActionKind =
     'split' | 'panel' | 'newsletter' | 'primary' | 'agents' | 'frame'
 
@@ -71,10 +69,6 @@
     aside?: SiteAction | null
     /** Copy of the subscribe form, for the newsletter layout. */
     form?: ClosingCallToActionForm | null
-    /** Claims the primary layout runs along its floor, each with an optional leading icon class. */
-    benefits?: TickerItem[]
-    /** Accessible name of the benefits strip. */
-    benefitsLabel?: string
     /** The ways in the agents layout switches between; the first one opens. */
     audiences?: ClosingCallToActionAudience[]
     /** Accessible name of the audience switch. */
@@ -97,8 +91,6 @@
     command: '',
     aside: null,
     form: null,
-    benefits: () => [],
-    benefitsLabel: '',
     audiences: () => [],
     audiencesLabel: 'Audience',
     typedLead: '',
@@ -240,15 +232,6 @@
           kind="pixelate"
           size="small"
           fade="bottom"
-        />
-      </template>
-      <template
-        v-if="kind === 'primary' && benefits.length"
-        #bottom
-      >
-        <Ticker
-          :items="benefits"
-          :aria-label="benefitsLabel"
         />
       </template>
       <template

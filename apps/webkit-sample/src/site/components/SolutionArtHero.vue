@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
+  import { CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -26,11 +27,12 @@
     kind="screen"
     media-align="end"
     :carousel="hasCarousel"
-    :carousel-label="hero.carouselLabel ?? 'Trusted by teams running critical workloads'"
+    :carousel-label="hero.carouselLabel ?? CLIENT_STRIP_LABEL"
     :carousel-marks="hero.carouselMarks ?? []"
   >
     <Hero.Title
       max-width="xl"
+      mobile-centered
       :eyebrow="hero.eyebrow"
       eyebrow-prefix="//"
       :title="hero.title"
@@ -39,13 +41,13 @@
       <template #actions>
         <slot name="actions">
           <Button
-            label="Start free"
+            label="Start for free"
             kind="secondary"
             size="large"
             @click="goSignup"
           />
           <Button
-            label="Talk to an expert"
+            label="Talk to a specialist"
             kind="outlined"
             size="large"
             href="#contact"

@@ -22,6 +22,8 @@
   interface Props {
     /** Id of the band, for in-page links. */
     anchor?: string
+    /** Overline above the headline. */
+    eyebrow?: string
     /** The section's headline. */
     title: string
     /** The investors, one cell each, in reading order. */
@@ -30,7 +32,7 @@
     linkLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), { anchor: '', linkLabel: 'Visit website' })
+  withDefaults(defineProps<Props>(), { anchor: '', eyebrow: '', linkLabel: 'Visit website' })
 </script>
 
 <template>
@@ -42,6 +44,7 @@
     <template #header>
       <SectionTitle
         kind="centered"
+        :eyebrow="eyebrow"
         :title="title"
       />
     </template>

@@ -3,6 +3,7 @@ import CardGrid from '@aziontech/webkit/card-grid'
 import CardGridCell from '@aziontech/webkit/card-grid-cell'
 import FrameBox from '@aziontech/webkit/frame-box'
 import MediaTile from '@aziontech/webkit/media-tile'
+import ProductWidget from '@aziontech/webkit/product-widget'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
@@ -11,11 +12,7 @@ import StickyStack from '@aziontech/webkit/sticky-stack'
 import TextureMaterial from '@aziontech/webkit/texture-material'
 import { markRaw } from 'vue'
 
-import WorkloadDeployLogsWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadDeployLogsWidget.vue'
-import WorkloadDomainsWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadDomainsWidget.vue'
-import WorkloadRolloutRowsWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
-import WorkloadsListWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadsListWidget.vue'
-import WorkloadTopologyChainWidget from '../../../../../webkit-sample/src/site/ui/mockup/widgets/WorkloadTopologyChainWidget.vue'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -44,8 +41,7 @@ const FEATURES = [
     description:
       'See each workload with its domain, status and last deployment, so what is live is never a question.',
     href: DOCS_HREF,
-    widget: 'WorkloadsListWidget',
-    component: WorkloadsListWidget,
+    name: 'workloads-list',
     props: { ...BARE, width: 680 }
   },
   {
@@ -53,8 +49,7 @@ const FEATURES = [
     description:
       'The domains, the application and the firewall a workload serves, drawn as one chain.',
     href: DOCS_HREF,
-    widget: 'WorkloadTopologyChainWidget',
-    component: WorkloadTopologyChainWidget,
+    name: 'workload-topology-chain',
     props: BARE
   },
   {
@@ -62,8 +57,7 @@ const FEATURES = [
     description:
       'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
     href: DOCS_HREF,
-    widget: 'WorkloadDomainsWidget',
-    component: WorkloadDomainsWidget,
+    name: 'workload-domains',
     props: BARE
   },
   {
@@ -71,8 +65,7 @@ const FEATURES = [
     description:
       'Build, upload, propagate and warm the cache, every step streamed as it happens until the version is live everywhere.',
     href: DOCS_HREF,
-    widget: 'WorkloadDeployLogsWidget',
-    component: WorkloadDeployLogsWidget,
+    name: 'workload-deploy-logs',
     props: BARE
   },
   {
@@ -80,8 +73,7 @@ const FEATURES = [
     description:
       'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
     href: DOCS_HREF,
-    widget: 'WorkloadRolloutRowsWidget',
-    component: WorkloadRolloutRowsWidget,
+    name: 'workload-rollout-rows',
     props: BARE
   }
 ]
@@ -97,7 +89,7 @@ const declareFeatures = (name, items) =>
   `const ${name} = [\n${items
     .map(
       (item) =>
-        `  {\n    title: ${quoted(item.title)},\n    description:\n      ${quoted(item.description)},\n    href: ${quoted(item.href)},\n    component: ${item.widget},\n    props: ${propsLiteral(item.props)}\n  }`
+        `  {\n    title: ${quoted(item.title)},\n    description:\n      ${quoted(item.description)},\n    href: ${quoted(item.href)},\n    component: ProductWidget,\n    props: ${propsLiteral({ name: item.name, ...item.props })}\n  }`
     )
     .join(',\n')}\n]`
 
@@ -112,15 +104,13 @@ const IMPORTS = [
   "import SectionTitle from '@aziontech/webkit/section-title'",
   "import StickyStack from '@aziontech/webkit/sticky-stack'",
   "import TextureMaterial from '@aziontech/webkit/texture-material'",
-  ...FEATURES.map(
-    (item) => `import ${item.widget} from '@site/ui/mockup/widgets/${item.widget}.vue'`
-  ),
+  "import ProductWidget from '@aziontech/webkit/product-widget'",
   '',
   declareFeatures('features', FEATURES)
 ]
 
-const LEARN_MORE = `<Button
-  label="Learn more"
+const DOCS_ACTION = `<Button
+  label="Docs"
   kind="secondary"
   size="small"
   :href="features[index].href"
@@ -133,7 +123,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
     <SectionTitle
       eyebrow="Workloads"
-      title="Everything a Workload Does, One Screen at a Time"
+      title="Everything a workload does, one screen at a time"
       description="Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it."
       size="large"
     />
@@ -207,7 +197,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
         </div>
       </template>
       <template #actions="{ index }">
-        ${LEARN_MORE.split('\n').join('\n        ')}
+        ${DOCS_ACTION.split('\n').join('\n        ')}
       </template>
     </StickyStack>
   </FrameBox>
@@ -219,7 +209,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -229,13 +218,17 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup: () => ({
-      features: FEATURES.map((item) => ({ ...item, component: markRaw(item.component) }))
+      features: FEATURES.map((item) => ({
+        ...item,
+        component: markRaw(ProductWidget),
+        props: { name: item.name, ...item.props }
+      }))
     }),
     template: TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }
@@ -247,15 +240,15 @@ export const SITE_SECTION = {
   _id: 'feature-scroll',
   props: {
     eyebrow: 'Workloads',
-    title: 'Everything a Workload Does, One Screen at a Time',
+    title: 'Everything a workload does, one screen at a time',
     description:
       'Scroll through the console a workload is run from: the list, the topology, the domains, the deploy and the rollout. Each screen is the one you get, not a picture of it.',
-    items: FEATURES.map(({ title, description, href, widget, props }) => ({
+    items: FEATURES.map(({ title, description, href, name, props }) => ({
       title,
       description,
       href,
-      action: { label: 'Learn more', href, trailing: true },
-      scene: { component: widget, props }
+      action: { label: 'Docs', href, trailing: true },
+      scene: { component: 'ProductWidget', props: { name, ...props } }
     }))
   }
 }

@@ -1,12 +1,13 @@
 import Button from '@aziontech/webkit/button'
 import FrameBox from '@aziontech/webkit/frame-box'
+import ProductWidget from '@aziontech/webkit/product-widget'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 import TextureMaterial from '@aziontech/webkit/texture-material'
 
-import FunctionsTerminalScene from '../../../../../webkit-sample/src/site/ui/FunctionsTerminalScene.vue'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -14,7 +15,7 @@ import { toSfc } from '../../_shared/story-source'
 const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import FunctionsTerminalScene from '@site/ui/FunctionsTerminalScene.vue'",
+  "import ProductWidget from '@aziontech/webkit/product-widget'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'",
@@ -24,7 +25,7 @@ const IMPORTS = [
 const components = {
   Button,
   FrameBox,
-  FunctionsTerminalScene,
+  ProductWidget,
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -70,13 +71,7 @@ const TERMINAL_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fal
       <div
         class="relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) rounded-(--shape-elements) shadow-(--shadow-2xl) md:h-(--size-96)"
       >
-        <FunctionsTerminalScene
-          script="deploy"
-          :texture="false"
-          :speed="2.5"
-          flush
-          :copyable="false"
-        />
+        <ProductWidget name="cli-terminal-deploy" />
       </div>
     </div>
   </FrameBox>
@@ -88,7 +83,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -98,7 +92,7 @@ const meta = {
 export default meta
 
 export const Terminal = {
-  render: () => ({ components, template: TERMINAL_TEMPLATE }),
+  ...editable(() => ({ components, template: TERMINAL_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TERMINAL_TEMPLATE) }

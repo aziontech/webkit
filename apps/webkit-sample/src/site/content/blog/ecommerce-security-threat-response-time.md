@@ -94,7 +94,7 @@ Security without traceability is protection without proof.
 
 Knowing that a rule blocked malicious traffic is the starting point. What an investigation, an audit, or a compliance process will ask is more specific: which traffic was identified as malicious, based on what criteria, at what moment, and what happened to each request.
 
-[Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) shows request volume, rule triggers, and traffic behavior over time. That view helps identify variations, track how an incident evolves, and assess whether a policy is producing the expected effect.
+[Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) shows request volume, rule triggers, and traffic behavior over time. That view helps identify variations, track how an incident evolves, and assess whether a policy is producing the expected effect.
 
 [Data Stream](https://www.azion.com/en/products/data-stream/) forwards security events to the brand’s tools — SIEMs and observability platforms like Splunk, Datadog, or Elastic. With the right data sources and fields configured, those records show which rule was triggered, which requests were blocked, when the behavior started, and how the policy responded.
 

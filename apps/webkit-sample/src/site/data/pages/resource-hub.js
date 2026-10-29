@@ -55,14 +55,13 @@ export const RESOURCE_HUB_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-band',
-    plain: true,
     eyebrow: RESOURCE_HUB_HERO.eyebrow,
     eyebrowPrefix: '//',
     title: RESOURCE_HUB_HERO.title,
     description: RESOURCE_HUB_HERO.description,
     actions: [
-      { label: 'Create a free account', href: 'https://console.azion.com/signup/', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
   {

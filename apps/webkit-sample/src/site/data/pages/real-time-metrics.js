@@ -2,9 +2,7 @@ import realTimeMetricsErrorRate from '@aziontech/webkit/assets/real-time-metrics
 import realTimeMetricsStatusCodes from '@aziontech/webkit/assets/real-time-metrics-status-codes.svg'
 import { markRaw } from 'vue'
 
-import RealTimeMetricsDashboardFragment from '../../ui/mockup/widgets/RealTimeMetricsDashboardFragment.vue'
-import RealTimeMetricsFilterFragment from '../../ui/mockup/widgets/RealTimeMetricsFilterFragment.vue'
-import RealTimeMetricsPanelFragment from '../../ui/mockup/widgets/RealTimeMetricsPanelFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -12,6 +10,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const RealTimeMetricsDashboardFragment = productWidget('real-time-metrics-dashboard')
+const RealTimeMetricsFilterFragment = productWidget('real-time-metrics-filter')
+const RealTimeMetricsPanelFragment = productWidget('real-time-metrics-panel')
 
 const PILLARS = [
   {
@@ -120,7 +122,7 @@ export const REAL_TIME_METRICS_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Real-Time Metrics',
     title: 'Monitor application performance in real time',
     description:
@@ -179,7 +181,7 @@ export const REAL_TIME_METRICS_PAGE = [
           width: 366,
           height: 193
         },
-        actions: [{ label: 'Start free', href: '/signup' }]
+        actions: [{ label: 'Start for free', href: '/signup' }]
       },
       {
         title: 'Dashboards built for fast decisions',
@@ -202,7 +204,7 @@ export const REAL_TIME_METRICS_PAGE = [
     title: 'What teams use Real-Time Metrics for',
     description:
       'Put Real-Time Metrics in front of every application, function and firewall you run and read their traffic as Azion’s distributed infrastructure serves it, with no sampling. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

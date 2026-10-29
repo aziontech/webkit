@@ -29,7 +29,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '@shared/lib/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
-  import { FIT_COLUMN, TAG_COLUMN, TAG_LIST_COLUMN } from '../../lib/behavior/table-columns'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { createResourcePath } from '../../lib/data/create-resources'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { WAF_MODES, WAF_RULES } from '../../lib/data/waf-rules'
@@ -50,7 +50,7 @@
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
     { accessorKey: 'mode', header: 'Mode', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'threatLabels', header: 'Threat Types', minWidth: TAG_LIST_COLUMN },
+    { accessorKey: 'threatLabels', header: 'Threat Types', grow: 3 },
     {
       accessorKey: 'sensitivity',
       header: 'Sensitivity',
@@ -308,7 +308,13 @@
                   @row-click="(event, row) => openRuleSet(row)"
                 >
                   <template #cell-name="{ value }">
-                    <span class="cursor-pointer truncate hover:underline">{{ value }}</span>
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-waf-rules shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+                    </div>
                   </template>
 
                   <template #cell-id="{ value }">
@@ -330,6 +336,7 @@
                     <TagListCell
                       :items="row.threatLabels"
                       noun="threat types"
+                      wrap
                     />
                   </template>
 

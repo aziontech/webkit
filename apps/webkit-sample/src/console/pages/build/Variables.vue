@@ -274,7 +274,13 @@
                   :loading="loading"
                 >
                   <template #cell-key="{ value }">
-                    <span class="min-w-0 truncate">{{ value }}</span>
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-variables shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="min-w-0 truncate">{{ value }}</span>
+                    </div>
                   </template>
 
                   <template #cell-id="{ value }">

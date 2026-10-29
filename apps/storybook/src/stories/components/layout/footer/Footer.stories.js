@@ -92,7 +92,8 @@ const meta = {
     },
     social: {
       control: false,
-      description: 'The social icon buttons; renders its own band.',
+      description:
+        'The social icon buttons, transparent `IconButton`s at `size="small"`; renders its own band. From md that band shares a row with the status pair, each sized by its content, so neither wraps while the other has room.',
       table: { type: { summary: '—' }, category: 'slots' }
     },
     status: {
@@ -132,7 +133,7 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <Footer.Link href="/products/edge-storage">Edge Storage</Footer.Link>
   </Footer.Column>
   <Footer.Column title="Developers">
-    <Footer.Link href="/documentation">Documentation</Footer.Link>
+    <Footer.Link href="/documentation">Docs</Footer.Link>
     <Footer.Link href="/blog">Blog</Footer.Link>
     <Footer.Link href="/integrations">Integrations</Footer.Link>
   </Footer.Column>
@@ -142,18 +143,18 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <Footer.Link href="/legal">Legal</Footer.Link>
   </Footer.Column>
   <Footer.Column title="Support">
-    <Footer.Link href="/contact">Contact sales</Footer.Link>
+    <Footer.Link href="/contact">Talk to a specialist</Footer.Link>
     <Footer.Link href="/support">Help center</Footer.Link>
     <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
   </Footer.Column>
   <template #social>
-    <IconButton kind="transparent" icon="pi pi-github" aria-label="Azion on GitHub" href="https://github.com/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-linkedin" aria-label="Azion on LinkedIn" href="https://www.linkedin.com/company/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-youtube" aria-label="Azion on YouTube" href="https://www.youtube.com/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-twitter" aria-label="Azion on X" href="https://x.com/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-instagram" aria-label="Azion on Instagram" href="https://www.instagram.com/aziontech" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-discord" aria-label="Azion on Discord" href="https://discord.gg/azion" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/aziontech" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-github" aria-label="Azion on GitHub" href="https://github.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-linkedin" aria-label="Azion on LinkedIn" href="https://www.linkedin.com/company/aziontech" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-youtube" aria-label="Azion on YouTube" href="https://www.youtube.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-twitter" aria-label="Azion on X" href="https://x.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-instagram" aria-label="Azion on Instagram" href="https://www.instagram.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-discord" aria-label="Azion on Discord" href="https://discord.gg/azion" target="_blank" />
+    <IconButton kind="transparent" size="small" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/aziontech" target="_blank" />
   </template>
   <template #status>
     <StatusIndicator severity="success" label="All Systems Operational" />
@@ -214,7 +215,7 @@ export const DefaultFooter = {
     docs: {
       description: {
         story:
-          'The footer composed with four link columns, the status row, the signature band (brand beside its tagline) and the social icon buttons. From lg the icons and the status cluster share one row above the signature; stacked, the order is links, status, signature, icons.'
+          'The footer composed with four link columns, the status row, the signature band (brand beside its tagline) and the social icon buttons. From md the icons and the status cluster share one row above the signature, each band sized by its content; stacked, the order is links, status, signature, icons. The social buttons are small, so the row holds the brand mark and seven icons beside the status pair in a zone as narrow as the docs reading column.'
       },
       source: { code: toSfc([...IMPORT, '', SETUP_SNIPPET], DEFAULT_MARKUP) }
     }

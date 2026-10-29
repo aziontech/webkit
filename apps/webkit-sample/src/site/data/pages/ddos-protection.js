@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import DdosFirewallModulesFragment from '../../ui/mockup/widgets/DdosFirewallModulesFragment.vue'
-import DdosHttpEventsFragment from '../../ui/mockup/widgets/DdosHttpEventsFragment.vue'
-import DdosRequestsMetricFragment from '../../ui/mockup/widgets/DdosRequestsMetricFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const DdosFirewallModulesFragment = productWidget('ddos-firewall-modules')
+const DdosHttpEventsFragment = productWidget('ddos-http-events')
+const DdosRequestsMetricFragment = productWidget('ddos-requests-metric')
 
 const PILLARS = [
   {
@@ -118,7 +120,7 @@ export const DDOS_PROTECTION_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'DDoS Protection',
     title: 'Always-on protection that never slows traffic',
     description:
@@ -193,7 +195,7 @@ export const DDOS_PROTECTION_PAGE = [
     title: 'Protect critical applications and infrastructure',
     description:
       'Put DDoS Protection in front of any application or infrastructure and absorb attacks on Azion’s distributed infrastructure, before they reach your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

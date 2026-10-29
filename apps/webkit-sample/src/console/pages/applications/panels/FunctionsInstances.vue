@@ -8,7 +8,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { daysAgo, formatListDate } from '@shared/lib/dates'
   import { authorAt } from '@shared/lib/people'
-  import { computed, defineAsyncComponent, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, defineAsyncComponent, onMounted, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import FieldStack from '../../../components/form/FieldStack.vue'
@@ -182,6 +182,13 @@
 
   const openCreate = () => {
     editing.value = null
+    form.name = ''
+    form.functionId = ''
+    form.args = EMPTY_ARGS
+    submitted.value = false
+    errors.name = ''
+    errors.functionId = ''
+    errors.args = ''
     createOpen.value = true
   }
 
@@ -196,18 +203,6 @@
     errors.args = ''
     createOpen.value = true
   }
-
-  watch(createOpen, (open) => {
-    if (open) return
-    editing.value = null
-    form.name = ''
-    form.functionId = ''
-    form.args = EMPTY_ARGS
-    submitted.value = false
-    errors.name = ''
-    errors.functionId = ''
-    errors.args = ''
-  })
 
   const parsedArgs = () => {
     try {

@@ -3,6 +3,7 @@
   import type { HeroTitleEyebrowPrefix } from '@aziontech/webkit/hero-title'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import Illustration from '@aziontech/webkit/illustration'
+  import { CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import type { Component } from 'vue'
   import { computed } from 'vue'
 
@@ -15,6 +16,7 @@
   export type HeroesKind =
     | 'centered-carousel'
     | 'title-band'
+    | 'title-band-small'
     | 'centered-band'
     | 'compact-band'
     | 'pixel-floor'
@@ -80,13 +82,13 @@
     kind: 'centered-carousel',
     anchor: '',
     eyebrow: '',
-    eyebrowPrefix: '',
+    eyebrowPrefix: '//',
     titleLength: 'short',
     highlight: '',
     description: '',
     actions: () => [],
     carouselMarks: () => [],
-    carouselLabel: 'Trusted by teams running critical workloads',
+    carouselLabel: CLIENT_STRIP_LABEL,
     art: null,
     plain: false,
     scene: null,
@@ -102,12 +104,11 @@
       textureFade: 'top'
     },
     'title-band': { kind: 'band', maxWidth: '5xl', size: 'large' },
+    'title-band-small': { kind: 'band', maxWidth: '5xl', size: 'medium' },
     'centered-band': {
       kind: 'band',
       size: 'large',
-      maxWidth: 'site',
-      texture: 'dots',
-      textureFade: 'top'
+      maxWidth: 'site'
     },
     'compact-band': { kind: 'band', size: 'small', maxWidth: 'site' },
     'pixel-floor': {
@@ -123,26 +124,25 @@
       kind: 'screen',
       align: 'center',
       maxWidth: 'site',
-      padded: false,
-      texture: 'dots',
-      textureSize: 'small',
-      textureFade: 'top'
+      padded: false
     }
   } as const
 
   const TITLES = {
     'centered-carousel': { centered: true, maxWidth: 'xl' },
     'title-band': { centered: true, maxWidth: 'xl' },
+    'title-band-small': { centered: true, maxWidth: 'xl' },
     'centered-band': { centered: true, maxWidth: '2xl' },
     'compact-band': { maxWidth: '2xl' },
     'pixel-floor': {},
-    'copy-beside-art': { maxWidth: 'xl' },
-    'copy-on-top-art': { centered: true }
+    'copy-beside-art': { maxWidth: 'xl', mobileCentered: true },
+    'copy-on-top-art': { centered: true, maxWidth: 'xl' }
   } as const
 
   const LONG_TITLE_WIDTH = {
     'centered-carousel': '3xl',
     'title-band': '4xl',
+    'title-band-small': '4xl',
     'centered-band': '3xl',
     'compact-band': '3xl'
   } as const

@@ -1,4 +1,5 @@
 import Button from '@aziontech/webkit/button'
+import Diagram from '@aziontech/webkit/diagram'
 import FrameBox from '@aziontech/webkit/frame-box'
 import MediaTabs from '@aziontech/webkit/media-tabs'
 import SectionContainer from '@aziontech/webkit/section-container'
@@ -6,28 +7,16 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
-import {
-  GATEWAY_REQUEST_PATH,
-  LATENCY_ROUTING,
-  MODEL_ROUTING,
-  PROVIDER_FAILOVER,
-  RESPONSE_CACHE
-} from '../../../../../webkit-sample/src/site/data/diagrams.js'
-import {
-  PLATFORM_ARCHITECTURE_BAND,
-  PLATFORM_ARCHITECTURE_DIAGRAMS
-} from '../../../../../webkit-sample/src/site/data/product-architectures.js'
-import DiagramSet from '../../../../../webkit-sample/src/site/ui/diagram/DiagramSet.vue'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
+  "import Diagram from '@aziontech/webkit/diagram'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
   "import MediaTabs from '@aziontech/webkit/media-tabs'",
-  "import DiagramSet from '@site/ui/diagram/DiagramSet.vue'",
-  "import {\n  GATEWAY_REQUEST_PATH,\n  LATENCY_ROUTING,\n  MODEL_ROUTING,\n  PROVIDER_FAILOVER,\n  RESPONSE_CACHE\n} from '@site/data/diagrams.js'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
@@ -35,8 +24,8 @@ const IMPORTS = [
 
 const components = {
   Button,
+  Diagram,
   FrameBox,
-  DiagramSet,
   MediaTabs,
   SectionContainer,
   SectionGap,
@@ -45,45 +34,17 @@ const components = {
 }
 
 const DIAGRAMS = [
-  {
-    value: 'request-path',
-    spec: GATEWAY_REQUEST_PATH,
-    ariaLabel:
-      'An AI app calls the gateway; Firewall filters the request, the AI Gateway function checks the key, and the call goes to a model on AI Inference, with third-party providers as the fallback'
-  },
-  {
-    value: 'failover',
-    spec: PROVIDER_FAILOVER,
-    ariaLabel:
-      'An AI app checks whether its provider is degraded; Claude Haiku 5.5 on Anthropic is degraded, so the call falls back to Claude Haiku 5.5 on Amazon Bedrock'
-  },
-  {
-    value: 'costs',
-    spec: MODEL_ROUTING,
-    ariaLabel:
-      'An AI app routes paid users to OpenAI GPT-5.5 with a fallback to Claude Opus 4.7, and everyone else to Kimi K2.6 or Gemma 4 depending on load'
-  },
-  {
-    value: 'latency',
-    spec: LATENCY_ROUTING,
-    ariaLabel:
-      'An AI app sends real-time tasks to Mistral 3 Small on AI Inference, under 30 ms, and other tasks to OpenAI GPT-5.5'
-  },
-  {
-    value: 'cache',
-    spec: RESPONSE_CACHE,
-    ariaLabel:
-      'An AI app checks for a cached response; a match is served from the Cache API with no tokens spent, and anything else goes to a model call'
-  }
+  { value: 'request-path', name: 'ai-gateway' },
+  { value: 'failover', name: 'ai-gateway-provider-failover' },
+  { value: 'costs', name: 'ai-gateway-model-routing' },
+  { value: 'latency', name: 'ai-gateway-latency-routing' },
+  { value: 'cache', name: 'ai-gateway-response-cache' }
 ]
 
-const DECLARATION = `const diagrams = [
-  { value: 'request-path', spec: GATEWAY_REQUEST_PATH, ariaLabel: 'The path an AI request takes through the platform' },
-  { value: 'failover', spec: PROVIDER_FAILOVER, ariaLabel: 'A call falling back to a second provider' },
-  { value: 'costs', spec: MODEL_ROUTING, ariaLabel: 'Requests routed to models by cost' },
-  { value: 'latency', spec: LATENCY_ROUTING, ariaLabel: 'A real-time task answered close to the user' },
-  { value: 'cache', spec: RESPONSE_CACHE, ariaLabel: 'A cached response returned without a model call' }
-]`
+const declaration = (diagrams) =>
+  `const diagrams = [\n${diagrams.map(({ value, name }) => `  { value: '${value}', name: '${name}' }`).join(',\n')}\n]`
+
+const DECLARATION = declaration(DIAGRAMS)
 
 const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
@@ -96,7 +57,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     >
       <template #actions>
         <Button
-          label="Read the docs"
+          label="Docs"
           kind="secondary"
           size="large"
           href="/product-preview"
@@ -143,9 +104,9 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
       class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
     >
       <template #media="{ index }">
-        <DiagramSet
-          :diagrams="diagrams"
-          :tab="diagrams[index]?.value"
+        <Diagram
+          :key="diagrams[index].value"
+          :name="diagrams[index].name"
           class="w-full"
         />
       </template>
@@ -160,7 +121,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -170,7 +130,9 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, setup: () => ({ diagrams: DIAGRAMS }), template: TEMPLATE }),
+  ...editable(() => ({ components, setup: () => ({ diagrams: DIAGRAMS }), template: TEMPLATE }), {
+    diagrams: DIAGRAMS
+  }),
   parameters: {
     docs: {
       source: { code: toSfc([...IMPORTS, '', DECLARATION], TEMPLATE) }
@@ -180,16 +142,52 @@ export const Default = {
 
 const PLATFORM_IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
+  "import Diagram from '@aziontech/webkit/diagram'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
   "import MediaTabs from '@aziontech/webkit/media-tabs'",
-  "import DiagramSet from '@site/ui/diagram/DiagramSet.vue'",
-  "import { PLATFORM_ARCHITECTURE_DIAGRAMS } from '@site/data/product-architectures.js'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
 
-const PLATFORM_DECLARATION = 'const diagrams = PLATFORM_ARCHITECTURE_DIAGRAMS'
+const PLATFORM_TABS = [
+  {
+    value: 'request-path',
+    title: 'Request path',
+    description:
+      'Routing sends the request to the nearest data center, where the workload answers from cache or the origin.',
+    name: 'workloads'
+  },
+  {
+    value: 'security',
+    title: 'Security first',
+    description: 'Network lists, the WAF and rate limits run in order before any application code.',
+    name: 'firewall'
+  },
+  {
+    value: 'compute',
+    title: 'Code at the edge',
+    description: 'A rule runs a function on the routes that need logic, with no cold start.',
+    name: 'functions'
+  },
+  {
+    value: 'data',
+    title: 'Data close by',
+    description: 'Reads come from the nearest replica; writes are applied once on the primary.',
+    name: 'sql-database'
+  },
+  {
+    value: 'observe',
+    title: 'Every request seen',
+    description:
+      'Each request becomes a queryable event within seconds, in the Console or over GraphQL.',
+    name: 'real-time-events'
+  }
+]
+
+const PLATFORM_DIAGRAMS = PLATFORM_TABS.map(({ value, name }) => ({ value, name }))
+
+const PLATFORM_DECLARATION = declaration(PLATFORM_DIAGRAMS)
 
 const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
@@ -249,9 +247,9 @@ const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fal
       class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
     >
       <template #media="{ index }">
-        <DiagramSet
-          :diagrams="diagrams"
-          :tab="diagrams[index]?.value"
+        <Diagram
+          :key="diagrams[index].value"
+          :name="diagrams[index].name"
           class="w-full"
         />
       </template>
@@ -260,11 +258,14 @@ const PLATFORM_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fal
 </SectionModule>`)
 
 export const Platform = {
-  render: () => ({
-    components,
-    setup: () => ({ diagrams: PLATFORM_ARCHITECTURE_DIAGRAMS }),
-    template: PLATFORM_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ diagrams: PLATFORM_DIAGRAMS }),
+      template: PLATFORM_TEMPLATE
+    }),
+    { diagrams: PLATFORM_DIAGRAMS }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc([...PLATFORM_IMPORTS, '', PLATFORM_DECLARATION], PLATFORM_TEMPLATE) }
@@ -310,7 +311,7 @@ export const SITE_SECTION = {
           'A repeated prompt is answered from cache, with no model call and no tokens spent.'
       }
     ],
-    action: { label: 'Read the docs', href: '/product-preview', trailing: true }
+    action: { label: 'Docs', href: '/product-preview', trailing: true }
   }
 }
 
@@ -319,9 +320,23 @@ export const DefaultJson = {
   ...siteJsonStory(SITE_SECTION)
 }
 
-const { scene: _scene, section: _section, ...PLATFORM_PROPS } = PLATFORM_ARCHITECTURE_BAND
-
-export const PLATFORM_SITE_SECTION = { _id: 'architecture-tabs', props: PLATFORM_PROPS }
+export const PLATFORM_SITE_SECTION = {
+  _id: 'architecture-tabs',
+  props: {
+    anchor: 'platform-architecture',
+    eyebrow: 'Platform',
+    title: 'One request through the Azion platform',
+    description:
+      'The base architecture every product plugs into: a workload answers near the user, Firewall filters first, a function runs where logic is needed, data sits in the same data center, and every request is seen.',
+    position: 'bottom',
+    tabs: PLATFORM_TABS.map(({ value, title, description }) => ({
+      value,
+      title,
+      description
+    })),
+    action: { label: 'See every product', href: '/site/products', trailing: true }
+  }
+}
 
 export const PlatformJson = {
   tags: ['!dev'],

@@ -150,7 +150,7 @@ Use application acceleration for checkout or API endpoints that still require or
 
 ### 6) Close the loop with FinOps
 
-Stream [real-time metrics](https://www.azion.com/en/products/real-time-metrics/) from your distributed infrastructure into your cost model. Attribute savings to business KPIs and reinvest liberated budgets.
+Stream [real-time metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) from your distributed infrastructure into your cost model. Attribute savings to business KPIs and reinvest liberated budgets.
 
 ### 7) Iterate and expand
 

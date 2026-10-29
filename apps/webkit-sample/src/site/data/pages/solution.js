@@ -13,7 +13,7 @@ const useCaseBand = (useCase) => ({
   actions: [
     useCase.href
       ? { label: useCase.action, href: useCase.href, trailing: true }
-      : { label: 'Read the docs', href: DOCS, trailing: true }
+      : { label: 'Docs', href: DOCS, trailing: true }
   ]
 })
 
@@ -43,10 +43,10 @@ export function solutionPage(data) {
       title: hero.title,
       description: hero.description,
       actions: [
-        { label: 'Start free', href: '/signup', kind: 'secondary' },
+        { label: 'Start for free', href: '/signup', kind: 'secondary' },
         {
-          label: 'Talk to an expert',
-          href: agents ? '/site/contact' : '#contact',
+          label: 'Talk to sales',
+          href: '/site/contact',
           kind: 'outlined',
           trailing: true
         }
@@ -91,7 +91,6 @@ export function solutionPage(data) {
       section: 'NetworkSection',
       eyebrow: network.eyebrow,
       title: network.title,
-      titleTail: network.titleTail,
       lead: network.lead,
       claims: network.claims,
       outcomes: NETWORK_OUTCOMES

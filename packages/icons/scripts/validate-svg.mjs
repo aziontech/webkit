@@ -1,19 +1,3 @@
-/**
- * SVG Validation Script
- *
- * Audits all SVG files in svg/ai and svg/pi directories for common issues
- * that affect icon font generation:
- *
- *  - Missing or incomplete SVGs (placeholder content with <rect>/<text> instead of <path>)
- *  - Non-square viewBox (should be square for consistent icon rendering)
- *  - Non-standard viewBox size (should be 24x24 for consistency)
- *  - Stroke-based paths (icon fonts only support filled paths, not strokes)
- *  - fill="none" on the root SVG (expected for outlined icons using fill on paths)
- *  - Filenames with spaces (causes build issues)
- *
- * Usage: node scripts/validate-svg.js
- */
-
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -37,12 +21,10 @@ for (const dir of SVG_DIRS) {
     const filePath = join(dir, file)
     const content = readFileSync(filePath, 'utf-8')
 
-    // Filename with spaces
     if (file.includes(' ')) {
       issues.filenameSpace.push({ file: filePath, detail: `"${file}"` })
     }
 
-    // Placeholder SVGs (rect + text with "?")
     if (content.includes('<rect') && content.includes('<text') && content.includes('?')) {
       issues.placeholder.push({
         file: filePath,
@@ -50,12 +32,10 @@ for (const dir of SVG_DIRS) {
       })
     }
 
-    // No <path> element at all
     if (!content.includes('<path')) {
       issues.noPath.push({ file: filePath, detail: 'No <path> element found' })
     }
 
-    // Stroke-based paths
     if (content.includes('stroke=')) {
       const strokeColors = [...content.matchAll(/stroke="([^"]*)"/g)].map((m) => m[1])
       issues.stroke.push({
@@ -64,7 +44,6 @@ for (const dir of SVG_DIRS) {
       })
     }
 
-    // Fill="black" (should use currentColor for theming)
     const fillBlackMatches = [...content.matchAll(/fill="(black|#000|#000000)"/g)]
     if (fillBlackMatches.length > 0) {
       issues.fillBlack.push({
@@ -73,7 +52,6 @@ for (const dir of SVG_DIRS) {
       })
     }
 
-    // ViewBox analysis
     const viewBoxMatch = content.match(/viewBox="([^"]*)"/)
     if (viewBoxMatch) {
       const vb = viewBoxMatch[1]
@@ -92,7 +70,6 @@ for (const dir of SVG_DIRS) {
       }
     }
 
-    // clipPath usage (can cause issues in icon fonts)
     if (content.includes('<clipPath') || content.includes('clip-path=')) {
       issues.clipPath.push({
         file: filePath,
@@ -102,7 +79,6 @@ for (const dir of SVG_DIRS) {
   }
 }
 
-// Print report
 console.log('╔══════════════════════════════════════════════════════╗')
 console.log('║           SVG ICON VALIDATION REPORT                ║')
 console.log('╚══════════════════════════════════════════════════════╝\n')
@@ -127,7 +103,6 @@ printSection('CLIP-PATH USAGE (may not render in icon font)', issues.clipPath, '
 printSection('NON-SQUARE VIEWBOX (icons should be square)', issues.nonSquareViewBox, 'warn')
 printSection('NON-STANDARD SIZE (expected 24x24)', issues.nonStandardSize, 'info')
 
-// Summary
 const errorCount = issues.placeholder.length + issues.noPath.length + issues.filenameSpace.length
 const warnCount =
   issues.stroke.length +

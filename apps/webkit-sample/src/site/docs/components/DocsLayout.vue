@@ -591,11 +591,11 @@
              `rel="noopener noreferrer"` itself for that target. `outlined` at `medium`, so
              it is the same 32px box as the search square it sits beside below `lg`.
 
-             The glyph is `pi pi-github`, which IS in the set this app loads — verified in
+             The glyph is `ai ai-github`, which IS in the set this app loads — verified in
              @aziontech/icons' primeicons build rather than assumed, since a missing glyph
              renders as an empty box with no error. -->
         <IconButton
-          icon="pi pi-github"
+          icon="ai ai-github"
           kind="outlined"
           size="medium"
           aria-label="Azion on GitHub"

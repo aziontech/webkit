@@ -60,8 +60,6 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-ticker')
 
-  // Speed is the constant, not duration: one pass covers exactly one copy of the row, so a
-  // flat duration would run a thirty-mark strip three times faster than an eleven-mark one.
   const SECONDS_PER_MARK = 2
   const SECONDS_PER_ITEM = 6
 
@@ -167,23 +165,17 @@
       >{{ label }}</Overline
     >
 
-    <!-- The mask fades both ends so a mark enters and leaves instead of popping in. -->
     <div
       v-if="resolved.length || isItems"
       ref="loop"
       class="group/loop relative w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
     >
-      <!-- The pass is set here, on the animated element: Tailwind declares `--animate-*` on
-           `:root`, so a duration var inside that shorthand resolves there and never sees it. -->
       <div
         ref="track"
         :style="{ animationDuration: `${passDuration}s` }"
         :data-loading="!ready || null"
         class="flex w-max animate-brand-marquee data-[loading]:invisible data-[loading]:[animation-play-state:paused] group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
       >
-        <!-- The row in two equal halves: the loop travels exactly -50%, so the second half
-             lands where the first started and the seam never shows. The trailing padding is
-             the seam's only gap, since `gap` draws nothing between the copies. -->
         <ul
           v-for="copy in copies"
           :key="copy"
@@ -218,7 +210,6 @@
               :data-mark="mark.name"
               class="h-(--brand-mark) w-auto max-w-(--brand-cell) object-contain"
             />
-            <!-- No artwork registered: the name keeps the row complete. -->
             <span
               v-else
               class="whitespace-nowrap text-heading-xxs"

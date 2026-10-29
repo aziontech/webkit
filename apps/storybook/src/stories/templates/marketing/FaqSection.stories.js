@@ -3,6 +3,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -193,14 +194,14 @@ ${each(items, (item, index) => faqLiteral(item, index, items), 1)}
   const faq = answerSlot
     ? `<Faq
   framed
-  title="Frequently Asked Questions"
+  title="Frequently asked questions"
 ${indent(list)}
 >
 ${indent(ANSWER_SLOT)}
 </Faq>`
     : `<Faq
   framed
-  title="Frequently Asked Questions"
+  title="Frequently asked questions"
 ${indent(list)}
 />`
   return inColumn(`<SectionModule
@@ -221,7 +222,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -231,7 +231,7 @@ const meta = {
 export default meta
 
 export const WithLink = {
-  render: () => ({ components, template: WITH_LINK_TEMPLATE }),
+  ...editable(() => ({ components, template: WITH_LINK_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, WITH_LINK_TEMPLATE) }
@@ -242,7 +242,7 @@ export const WithLink = {
 export const WITH_LINK_SECTION = {
   _id: 'faq-section',
   props: {
-    title: 'Frequently Asked Questions',
+    title: 'Frequently asked questions',
     items: [
       {
         question: 'What types of storefronts can I build and deploy on Azion?',
@@ -269,7 +269,7 @@ export const WithLinkJson = {
 }
 
 export const Plain = {
-  render: () => ({ components, template: PLAIN_TEMPLATE }),
+  ...editable(() => ({ components, template: PLAIN_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, PLAIN_TEMPLATE) }
@@ -280,7 +280,7 @@ export const Plain = {
 export const PLAIN_SECTION = {
   _id: 'faq-section',
   props: {
-    title: 'Frequently Asked Questions',
+    title: 'Frequently asked questions',
     items: [
       {
         question: 'What are Functions?',

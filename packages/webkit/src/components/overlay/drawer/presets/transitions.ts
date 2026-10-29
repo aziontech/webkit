@@ -7,11 +7,6 @@ import {
 
 export type DrawerMotionState = 'open' | 'closed'
 
-/**
- * Drawer motion presets — values read only from `animate.js` (`duration`, `curve`).
- * Applied via inline `transition` (Tailwind does not emit dynamic `duration-[…]` classes).
- */
-
 export type DrawerMotionPhase = 'open' | 'close'
 
 export type DrawerMotionTarget = 'panel' | 'overlay'
@@ -21,9 +16,6 @@ export type DrawerMotionToken = {
   curve: string
 }
 
-/**
- * Drawer targets mapped to `duration` / `curve` primitives from animate.js.
- */
 export const drawerMotion: Record<
   DrawerMotionTarget,
   Record<DrawerMotionPhase, DrawerMotionToken>
@@ -50,7 +42,6 @@ export const drawerCurves = {
   exit: curve['productive-exit']
 } as const
 
-/** Longest close transition — defers portal unmount until exit finishes. */
 export const DRAWER_EXIT_MS = Math.max(
   Number.parseInt(drawerDurations.panelClose, 10),
   Number.parseInt(drawerDurations.overlayClose, 10)
@@ -59,7 +50,6 @@ export const DRAWER_EXIT_MS = Math.max(
 const motionPhaseForState = (state: DrawerMotionState): DrawerMotionPhase =>
   state === 'open' ? 'open' : 'close'
 
-/** Inline transition for the active `data-state` (matches animate.js values in computed styles). */
 export const getDrawerTransitionStyle = (
   state: DrawerMotionState,
   target: DrawerMotionTarget
@@ -67,10 +57,6 @@ export const getDrawerTransitionStyle = (
   const phase = motionPhaseForState(state)
   const { duration: transitionDuration, curve: transitionTimingFunction } =
     drawerMotion[target][phase]
-  // Tailwind v4 compiles `translate-x-*` / `translate-y-*` to the CSS
-  // `translate` property, not the `transform` shorthand — so the panel must
-  // transition `translate`. Transitioning `transform` alone would leave the
-  // translate change untweened (the drawer would snap into place).
   const property = target === 'panel' ? 'translate' : 'opacity'
 
   return {

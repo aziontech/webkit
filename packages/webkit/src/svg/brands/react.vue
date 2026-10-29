@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  // Drawn rather than traced: the source file embedded a raster, and this mark is pure
-  // geometry — a nucleus and three orbits at 60 degrees, so it is exact at any size.
   defineOptions({ name: 'BrandMarkReact', inheritAttrs: false })
 </script>
 

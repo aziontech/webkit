@@ -1,8 +1,4 @@
 <script setup lang="ts">
-  // One tier of a pricing table. `slotPosition` decides the composition (`bottom`
-  // compact / `middle` full, action pinned to the bottom edge); `kind` only toggles
-  // the surface. See .specs/card-pricing.md for the full rationale (the overline
-  // plan name, the single caveat region, the `aligned` band's 3lh measurement).
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -78,13 +74,8 @@
 
   const isMiddle = computed(() => props.slotPosition === 'middle')
 
-  // The headline figure grows with the composition: a fact on a compact card
-  // (`medium`), the card's own headline on the full one (`large`).
   const currencySize = computed(() => (isMiddle.value ? 'large' : 'medium'))
 
-  // `showPrefix` / `showSuffix` are the card's switches; Currency itself hides a part
-  // by receiving an empty string, so the booleans are resolved here rather than
-  // duplicated as a second pair of props on Currency.
   const currencyPrefix = computed(() => (props.showPrefix ? props.prefix : ''))
   const currencySuffix = computed(() => (props.showSuffix ? props.suffix : ''))
 </script>
@@ -98,14 +89,9 @@
     :data-aligned="aligned || null"
     class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[slot-position=bottom]:gap-(--spacing-lg) data-[slot-position=middle]:justify-between data-[kind=contained]:rounded-(--shape-card) data-[kind=contained]:border-(length:--border-width-default) data-[kind=contained]:border-(--border-default) data-[kind=contained]:bg-(--bg-surface)"
   >
-    <!-- The upper block. On `middle` it is the growing region (the slot inside it
-         takes the slack), which is what leaves the action pinned to the card's
-         bottom edge. On `bottom` it is content-sized. -->
     <div
       class="flex w-full flex-col items-start group-data-[slot-position=bottom]/card:shrink-0 group-data-[slot-position=middle]/card:min-h-px group-data-[slot-position=middle]/card:flex-1 group-data-[slot-position=middle]/card:gap-(--spacing-lg)"
     >
-      <!-- Name, amount and caveat sit in one column capped at `--container-xs` so
-           the caveat wraps on the price's measure, not the card's full width. -->
       <div
         class="flex w-full max-w-(--container-xs) shrink-0 flex-col items-start group-data-[slot-position=bottom]/card:gap-(--spacing-xs) group-data-[slot-position=middle]/card:gap-(--spacing-md)"
         :data-testid="`${testId}__header`"
@@ -136,8 +122,6 @@
             :suffix="currencySuffix"
             :data-testid="`${testId}__currency`"
           />
-          <!-- One step up the type scale on `middle`: it is the card's supporting
-               line, read at the same distance as the 56px figure above it. -->
           <p
             v-if="(showPricingDetails && pricingDetails) || aligned"
             class="text-(--text-muted) [word-break:break-word] group-data-[aligned]/card:min-h-[3lh] group-data-[slot-position=bottom]/card:text-body-sm group-data-[slot-position=middle]/card:text-body-md"
@@ -148,7 +132,6 @@
         </div>
       </div>
 
-      <!-- `middle` only: the slot is inside the growing block and takes its slack. -->
       <div
         v-if="isMiddle"
         class="min-h-40 w-full flex-1"
@@ -158,9 +141,6 @@
       </div>
     </div>
 
-    <!-- `middle`: `justify-between` pins the action to the bottom edge; its top padding
-         is `--spacing-xl`, one step above the card's own, so it reads as the card's
-         conclusion rather than as attached to the slot above it. -->
     <div
       class="flex w-full shrink-0 items-start gap-(--spacing-md) group-data-[slot-position=middle]/card:pt-(--spacing-xl)"
       :data-testid="`${testId}__actions`"
@@ -177,7 +157,6 @@
       </slot>
     </div>
 
-    <!-- `bottom` only: the slot follows the action, outside the upper block. -->
     <div
       v-if="!isMiddle"
       class="min-h-40 w-full shrink-0"

@@ -91,15 +91,10 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-field-password'
   )
 
-  // `inputId` defaults to '' — an empty string is not nullish, so `??` would keep it and
-  // every derived id would collapse to a bare suffix (duplicated across instances, and no
-  // real label/describedby association). `||` is what makes the useId() fallback fire.
   const resolvedInputId = computed(() => props.inputId || generatedId)
   const helperId = computed(() => `${resolvedInputId.value}-helper`)
   const requirementsTitleId = computed(() => `${resolvedInputId.value}-requirements-title`)
 
-  // `true` opts into the built-in rule set, an array replaces it, `false` (the default)
-  // renders no row — so the consumer's only two levers are "on" and "my own rules".
   const resolvedRequirements = computed<PasswordRequirement[]>(() => {
     if (props.requirements === true) return DEFAULT_PASSWORD_REQUIREMENTS
     if (props.requirements === false) return []
@@ -115,11 +110,6 @@
     return 'helper'
   })
 
-  // The field never writes copy of its own. No `helperText` means no helper row — while
-  // disabled as much as anywhere else: a field that goes disabled for the length of a
-  // request would otherwise grow a padlock line the screen never asked for, in the one
-  // moment it has nothing to say. Disabling is already legible from the field's own
-  // treatment, and a caller who wants a reason passes one (it renders with the lock).
   const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 </script>
 

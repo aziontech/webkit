@@ -8,6 +8,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { WORKLOAD_RECIPE_TABS } from '../../../../../webkit-sample/src/site/data/workload-recipes.js'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, declareTabs, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -60,7 +61,7 @@ const CODE_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     >
       <template #actions>
         <Button
-          label="Read the docs"
+          label="Docs"
           kind="secondary"
           size="large"
           href="/docs"
@@ -105,7 +106,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -115,11 +115,14 @@ const meta = {
 export default meta
 
 export const Code = {
-  render: () => ({
-    components,
-    setup: () => ({ items: ITEMS, files: FILES }),
-    template: CODE_TEMPLATE
-  }),
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({ items: ITEMS, files: FILES }),
+      template: CODE_TEMPLATE
+    }),
+    { items: ITEMS, files: FILES }
+  ),
   parameters: {
     docs: {
       source: { code: toSfc(CODE_IMPORTS, CODE_TEMPLATE) }
@@ -134,7 +137,7 @@ export const SITE_SECTION_CODE = {
     description: DESCRIPTION,
     tabs: WORKLOAD_RECIPE_TABS,
     copyAriaLabel: 'Copy the workload sample',
-    action: { label: 'Read the docs', href: '/docs' }
+    action: { label: 'Docs', href: '/docs' }
   }
 }
 

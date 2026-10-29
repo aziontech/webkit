@@ -52,7 +52,7 @@
   const columnsError = computed(() => submitted.value && namedColumns.value.length === 0)
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     Object.assign(form, blankForm())
     submitted.value = false
   })

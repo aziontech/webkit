@@ -10,12 +10,6 @@ import qualcommReversed from '@aziontech/webkit/assets/qualcomm-extended-reverse
 
 import { COMPANY_CLOSING } from '../product-pages.js'
 
-const ABOUT_FIGURES = [
-  { prefix: '+', value: '100', label: 'Datacenters worldwide' },
-  { prefix: '+', value: '3k', label: 'ASNs directly connected to the Azion network' },
-  { value: '100', suffix: '%', label: 'Availability, guaranteed by SLA' }
-]
-
 const ABOUT_PHOTOS = [
   {
     src: '/about/office-lounge-tv.jpg',
@@ -67,30 +61,60 @@ const FIRMS = {
   frost: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost }
 }
 
+export const MARKET_RECOGNITIONS = [
+  {
+    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
+    name: 'G2 Winter 2026 Reports',
+    jobTitle: '',
+    firm: FIRMS.g2
+  },
+  {
+    text: 'Named a Leader, and the only vendor whose capabilities meet every key criterion in the report.',
+    name: 'GigaOm Radar for Edge Platforms',
+    jobTitle: '',
+    firm: FIRMS.gigaom
+  },
+  {
+    text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
+    name: '2023 North American New Product Innovation Award',
+    jobTitle: '',
+    firm: FIRMS.frost
+  }
+]
+
 export const ABOUT_PAGE = [
   {
-    section: 'HeroWithOpening',
-    title: 'The web platform for modern workloads',
+    section: 'Heroes',
+    eyebrow: 'About',
+    kind: 'title-band',
     titleLength: 'short',
+    title: 'Build, secure, and scale applications everywhere',
     description:
-      'Azion exists to simplify how modern applications are built, secured, and scaled in a distributed world.',
+      'The Azion Platform runs your code, data, and security on a distributed architecture, with instant deploys and cold-start-free scale.',
     actions: [
       { label: 'Join our team', href: '/site/careers', kind: 'secondary' },
       { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
-    ],
-    figures: ABOUT_FIGURES
+    ]
   },
   {
     section: 'PhotoMarquee',
-    title: 'Builders who build, secure, and scale.',
+    gap: false,
+    title: 'Builders, not spectators',
     description:
-      'At Azion, we make every application fast and reliable: deploy your projects instantly on the most reliable global infrastructure, rely on enterprise-grade security, and scale from zero to peak without cold starts. Behind that platform is a culture of ownership, high performance, and continuous evolution. We look for people who lead by example, challenge the status quo, and move fast regardless of the size of the problem, because here every delivery is a new starting point.',
+      'We make every application fast and reliable. Deploy your projects instantly on the most reliable global infrastructure, leverage enterprise-grade security, and scale from zero to peak without cold starts. Our culture is built on ownership, high performance, and continuous evolution. We look for people who lead by example, challenge the status quo, and move fast regardless of the size of the problem. At Azion, every delivery is a new starting point.',
+    descriptionWidth: 'wide',
     photos: ABOUT_PHOTOS,
     ariaLabel: 'Azion offices',
     duration: 60
   },
   {
+    section: 'RecognitionMarquee',
+    title: 'Recognized as a market leader',
+    items: MARKET_RECOGNITIONS
+  },
+  {
     section: 'InvestorMarks',
+    eyebrow: 'Investors',
     title: 'Backed by visionary investors',
     items: [
       {
@@ -104,30 +128,6 @@ export const ABOUT_PAGE = [
         logo: qualcommReversed,
         logoLight: qualcomm,
         href: 'https://www.qualcommventures.com'
-      }
-    ]
-  },
-  {
-    section: 'RecognitionMarquee',
-    title: 'Recognized as a Market Leader',
-    items: [
-      {
-        text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
-        name: 'G2 Winter 2026 Reports',
-        jobTitle: '',
-        firm: FIRMS.g2
-      },
-      {
-        text: 'Named a Leader and the only edge platform built specifically for that purpose, whose capabilities meet all key criteria in the report.',
-        name: 'GigaOm Radar for Edge Platforms',
-        jobTitle: '',
-        firm: FIRMS.gigaom
-      },
-      {
-        text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
-        name: '2023 North American New Product Innovation Award',
-        jobTitle: '',
-        firm: FIRMS.frost
       }
     ]
   },

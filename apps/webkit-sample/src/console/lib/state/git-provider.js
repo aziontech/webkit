@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 
-export const GIT_PROVIDER = { id: 'github', label: 'GitHub', icon: 'pi pi-github' }
+export const GIT_PROVIDER = { id: 'github', label: 'GitHub', icon: 'ai ai-github' }
 
 const HANDSHAKE_MS = 1500
 

@@ -4,9 +4,9 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 55eed955e04e2592a7bf016db5a8dc8c7a95aa4297ca5ae1fad15a0882ee24b9
+checksum: fa5394309c6173a730d6d026fed36a314e20a25f4d602601c1668443bdfe363d
 created: 2026-10-21
-last_updated: 2026-10-21
+last_updated: 2026-10-23
 ---
 
 # ShellMockup — Component Spec
@@ -134,18 +134,19 @@ _No events — the mockup is a picture; nothing in it reports activation._
 
 ## States
 
-- `data-kind` (`window` \| `bare`) on the root and the frame: `window` paints the canvas fill, a hairline edge and the card shape, and clips the drawing; `bare` paints nothing and lets parts overflow sideways while clipping vertically.
+- `data-kind` (`window` \| `bare`) on the root and the frame: `window` paints the canvas fill, a hairline rim lit from the top-left and bottom-right corners, and the card shape, and clips the drawing; `bare` paints nothing and lets parts overflow sideways while clipping vertically.
 - `data-fade` mirrors `fade` on the root and the fade layer; `none` renders no fade layer.
 - `data-interactive` is present while `interactive` is set; otherwise the root is `inert` and `aria-hidden`, ignores the pointer and blocks text selection.
+- The bars and the rail are drawings: plain `div`s (no `header`, `aside` or `nav` landmark), each `inert` and `aria-hidden="true"` whatever `interactive` says, so only the slot body is ever operable.
 - Shell matrix: `shell="console"` without `rail` draws the slim bar (brand, title, avatar); with `rail` it draws the side rail (from `md` up) and a top bar with breadcrumbs, a search field, Create, Agent and the avatar; `shell="legacy"` draws the previous console's top bar (menu, brand, Create, Copilot, Feedback, help, account) and swaps the legacy typography weights and line heights onto the frame. `chrome` off removes the bars; the rail stays.
 - Entrance: parts are at rest offset and transparent until the root is at least 30% on screen and `active`; two animation frames later the root flips to entered and each part lands on its beat. `active` turning off resets it so it replays. `still`, or a reduced-motion preference, starts entered with no transition.
-- Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; it re-measures when the host resizes.
+- Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; it re-measures when the host resizes and when `width` or `mobileWidth` changes.
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| part entrance (root enters view while active) | inline `transition` on `opacity` and `translate`, landing classes flipped by `data-entered` | duration from `travel`, curve `expressive-entrance`, delay `order × beat` — all from `@aziontech/theme/animations` | `transition: none` inline plus `motion-reduce:translate-y-0 motion-reduce:opacity-100` (parts drawn in place) |
+| part entrance (root enters view while active) | `transition-[opacity,translate]` on each part, landing classes flipped by `data-entered`; the part's root sets only the `--part-duration` and `--part-delay` custom properties inline, so a consumer class can still override the transition | `--part-duration` from `travel` and `--part-delay` = `order × beat`, both from `@aziontech/theme/animations` `duration`; curve `ease-expressive-entrance` | `motion-reduce:transition-none` plus `motion-reduce:translate-y-0 motion-reduce:opacity-100` (parts drawn in place); `still` sets both custom properties to `0ms` |
 
 No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so every part's timing comes from the root's context.
 
@@ -156,6 +157,7 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 | window shape | `var(--shape-card)` |
 | window + frame fill | `var(--bg-canvas)` |
 | window edge, bar dividers, rail divider, search edge | `var(--border-default)` |
+| window edge width | `var(--border-width-default)` |
 | legacy bar surface | `var(--bg-surface-raised)` |
 | search field surface | `var(--bg-surface)` |
 | rail active entry | `var(--bg-selected)` |
@@ -175,15 +177,15 @@ No `animate-*` keyframes: the entrance is a transition on a `data-*` flip, so ev
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| — (no Figma source; ported from the sample's mockup): the window's rim light, a lit-from-the-corners edge | `var(--border-default)` hairline — the rim's resting color — because the `--illustration-rim*` tokens exist only on the sample branch | `TODO: swap to the rim layers once the illustration theme foundation lands on main` |
+| — (no Figma source; ported from the sample's mockup): the window's rim light, a lit-from-the-corners edge | the `--illustration-rim*` tokens with a fallback that draws the same 135° ramp from `var(--border-default)` at `var(--border-width-default)`, because the illustration theme foundation is not on main yet | `TODO: drop the fallbacks once the illustration theme foundation lands on main` |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: none by default — the root is `inert`, so nothing inside takes focus. With `interactive`, the composed controls keep their own focus rings.
 - Keyboard map: none by default (inert). With `interactive`, `Tab` reaches the composed controls in DOM order and each keeps its own keyboard behavior; the shell's own bar, rail and search are drawings and never take focus.
-- ARIA: the root is a `figure` with `aria-hidden="true"` and `inert` unless `interactive`; the band hosting it carries the text that describes it. Rail and crumb icons are `aria-hidden="true"`; the drawn icon buttons carry their `aria-label`s for when the mockup is interactive.
+- ARIA: the root is a `figure` with `aria-hidden="true"` and `inert` unless `interactive`; the band hosting it carries the text that describes it. The bars and the rail are non-landmark `div`s that stay `inert` and `aria-hidden="true"` even when `interactive`, so the mockup never exposes a `banner`, `navigation` or `complementary` landmark, nor a focusable drawn control, inside the host page.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the shell's text uses `var(--text-default)` and `var(--text-muted)` on `var(--bg-canvas)` / `var(--bg-surface-raised)`, the same pairs the console uses.
-- `motion-reduce:` landing classes on every part, and the inline transition drops to `none` under reduced motion.
+- `motion-reduce:` landing classes and `motion-reduce:transition-none` on every part.
 - Touch target: not applicable by default (inert). Interactive content keeps the composed components' own targets.
 
 ## Stories (Storybook)

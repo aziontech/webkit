@@ -15,7 +15,6 @@ const NEXT_TESTID = 'marketing-carousel-next'
 
 const slides = ['First slide', 'Second slide', 'Third slide', 'Fourth slide', 'Fifth slide']
 
-// Flat tags on purpose: dot-notation does not resolve in a runtime template.
 const host = (props: Record<string, unknown> = {}) =>
   defineComponent({
     components: { Carousel, CarouselItem, CarouselNext, CarouselPrevious },
@@ -37,9 +36,6 @@ const host = (props: Record<string, unknown> = {}) =>
     `
   })
 
-// No Tailwind runs in this env, so the track's own utilities emit nothing and the
-// list never overflows. These inline styles create the real horizontal overflow the
-// component relies on, so scrollLeft below is genuine browser scroll state.
 function makeTrackOverflow(container: Element): globalThis.HTMLUListElement {
   const track = container.querySelector('ul') as globalThis.HTMLUListElement
   track.style.cssText = 'display: flex; overflow-x: auto; width: 200px'

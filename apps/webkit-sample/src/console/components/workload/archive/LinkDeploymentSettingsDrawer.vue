@@ -76,7 +76,7 @@
   const submitting = ref(false)
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     form.bundle = ''
     form.application = ''
     form.applicationVersion = 'latest'

@@ -38,7 +38,7 @@
 
   withDefaults(defineProps<Props>(), {
     eyebrow: 'Compliance',
-    title: 'Meet Your Compliance Requirements',
+    title: 'Meet your compliance requirements',
     description:
       "Azion's certifications help customers and global partners meet a wide range of compliance requirements.",
     certifications: () => CERTIFICATIONS,

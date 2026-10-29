@@ -310,6 +310,29 @@ describe('Flow (composition compound)', () => {
       expect(svg.getAttribute('aria-hidden')).toBe('true')
     })
 
+    it('draws the same connectors when an ancestor scales the flow with a transform', async () => {
+      const tree = (scale: number, testid: string) => `
+        <div style="width: 600px; transform: scale(${scale}); transform-origin: top left">
+          <Flow data-testid="${testid}">
+            <FlowNode>Source</FlowNode>
+            <FlowNode>Deliver</FlowNode>
+          </Flow>
+        </div>
+      `
+      const { getByTestId } = renderTree(
+        `<div>${tree(1, 'flow-plain')}${tree(0.5, 'flow-scaled')}</div>`
+      )
+      const pathsOf = (testid: string) =>
+        Array.from(getByTestId(testid).querySelectorAll('svg path')).map((path) =>
+          path.getAttribute('d')
+        )
+
+      await waitFor(() => {
+        expect(pathsOf('flow-plain').length).toBeGreaterThan(0)
+        expect(pathsOf('flow-scaled')).toEqual(pathsOf('flow-plain'))
+      })
+    })
+
     it('renders no connector SVG when there is a single node (nothing to join)', async () => {
       const { getByTestId } = renderTree(`<Flow><FlowNode>Only</FlowNode></Flow>`)
       const root = getByTestId('data-flow')

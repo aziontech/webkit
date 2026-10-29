@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { curve, duration } from '@aziontech/theme/animations'
+  import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, onScopeDispose, provide, readonly, ref, useAttrs, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -116,7 +116,7 @@
         { key: 'waf-rules', icon: 'ai ai-waf-rules', label: 'WAF Rules' },
         {
           key: 'certificate-manager',
-          icon: 'ai ai-digital-certificates',
+          icon: 'ai ai-certificate-manager',
           label: 'Certificate Manager'
         }
       ]
@@ -175,6 +175,8 @@
     measure()
   })
 
+  watch(() => [props.width, props.mobileWidth], measure)
+
   watch(
     () => props.active,
     (active) => {
@@ -225,10 +227,11 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced || props.still) return { transition: 'none' }
-    const enter = `${duration[props.travel]} ${curve['expressive-entrance']}`
-    const delay = `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
-    return { transition: `opacity ${enter} ${delay}, translate ${enter} ${delay}` }
+    if (reduced || props.still) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    return {
+      '--part-duration': duration[props.travel],
+      '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
+    }
   }
 
   provide(SHELL_MOCKUP_KEY, { entered: readonly(entered), beatStyle })
@@ -244,7 +247,7 @@
     :data-interactive="interactive || null"
     :data-kind="kind"
     :data-fade="fade"
-    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:border data-[kind=window]:border-(--border-default)"
+    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[kind=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[kind=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[kind=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]"
   >
     <div
       :data-kind="kind"
@@ -257,8 +260,10 @@
         :fade="textureFade"
       />
 
-      <header
+      <div
         v-if="chrome && !rail && shell === 'console'"
+        inert
+        aria-hidden="true"
         class="relative z-10 flex h-11 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md)"
       >
         <span class="inline-flex shrink-0 items-center">
@@ -278,15 +283,17 @@
         >
         <span class="ml-auto inline-flex shrink-0 items-center">
           <Avatar
-            label="myemail@azion.com"
+            label="myemail@example.com"
             size="small"
             kind="square"
           />
         </span>
-      </header>
+      </div>
 
-      <header
+      <div
         v-if="chrome && shell === 'legacy'"
+        inert
+        aria-hidden="true"
         class="relative z-10 flex h-14 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xl)"
       >
         <IconButton
@@ -330,11 +337,13 @@
             ariaLabel="Account"
           />
         </div>
-      </header>
+      </div>
 
       <div class="relative z-10 flex min-h-0 flex-1">
-        <aside
+        <div
           v-if="rail && shell === 'console'"
+          inert
+          aria-hidden="true"
           class="hidden w-64 shrink-0 flex-col border-r border-(--border-default) md:flex"
         >
           <div class="flex h-14 shrink-0 items-center px-(--spacing-md)">
@@ -343,7 +352,7 @@
               size="small"
             />
           </div>
-          <nav
+          <div
             class="flex min-h-0 flex-1 flex-col gap-(--spacing-md) overflow-hidden p-(--spacing-sm)"
           >
             <div
@@ -364,18 +373,20 @@
               >
                 <i
                   :class="entry.icon"
-                  class="shrink-0 text-body-md text-(--text-muted)"
+                  class="shrink-0 text-body-md leading-none text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate">{{ entry.label }}</span>
               </span>
             </div>
-          </nav>
-        </aside>
+          </div>
+        </div>
 
         <div class="flex min-h-0 min-w-0 flex-1 flex-col">
-          <header
+          <div
             v-if="chrome && rail && shell === 'console'"
+            inert
+            aria-hidden="true"
             class="flex h-14 shrink-0 items-center gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-md)"
           >
             <ol class="m-0 flex min-w-0 list-none items-center gap-(--spacing-xs) p-0 text-body-sm">
@@ -425,12 +436,12 @@
                 icon="ai ai-ask-azion"
               />
               <Avatar
-                label="myemail@azion.com"
+                label="myemail@example.com"
                 size="small"
                 kind="square"
               />
             </div>
-          </header>
+          </div>
 
           <div
             :data-kind="kind"

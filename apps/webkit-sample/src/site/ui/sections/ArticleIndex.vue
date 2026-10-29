@@ -12,6 +12,7 @@
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import { useOptionSearch } from '../../composables/use-option-search'
   import ArticleRows, { type ArticleRow, type ArticleRowsKind } from '../ArticleRows.vue'
 
   defineOptions({ name: 'ArticleIndex' })
@@ -99,6 +100,7 @@
   })
 
   const route = useRoute()
+  const { searchable, query, setQuery, narrow } = useOptionSearch()
 
   const requested = props.categories.includes(String(route.query.category))
     ? String(route.query.category)
@@ -115,6 +117,8 @@
   )
 
   const facetActive = (facet: ArticleIndexFacet) => picked[facet.key] !== facet.allLabel
+
+  const matching = (facet: ArticleIndexFacet) => narrow(facet.key, facet.options, (option) => option)
 
   const filtering = computed(
     () =>
@@ -201,16 +205,44 @@
             v-model="picked[facet.key]"
             size="medium"
             class="w-full sm:w-56"
+            @update:open="setQuery(facet.key, '')"
           >
             <SelectTrigger :aria-label="facet.label" />
             <SelectContent>
+              <template
+                v-if="searchable(facet.options)"
+                #search
+              >
+                <InputText
+                  :model-value="query(facet.key)"
+                  size="small"
+                  placeholder="Search"
+                  :aria-label="`Search ${facet.label.toLowerCase()}`"
+                  @update:model-value="setQuery(facet.key, $event)"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
+              </template>
+              <SelectOption :value="facet.allLabel">{{ facet.allLabel }}</SelectOption>
               <SelectOption
-                v-for="option in [facet.allLabel, ...facet.options]"
+                v-for="option in matching(facet)"
                 :key="option"
                 :value="option"
               >
                 {{ option }}
               </SelectOption>
+              <p
+                v-if="!matching(facet).length"
+                role="status"
+                class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+              >
+                No results found
+              </p>
             </SelectContent>
           </Select>
         </div>

@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import KvStoreFunctionFragment from '../../ui/mockup/widgets/KvStoreFunctionFragment.vue'
-import KvStoreKeyFragment from '../../ui/mockup/widgets/KvStoreKeyFragment.vue'
-import KvStoreSecurityListFragment from '../../ui/mockup/widgets/KvStoreSecurityListFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const KvStoreFunctionFragment = productWidget('kv-store-function')
+const KvStoreKeyFragment = productWidget('kv-store-key')
+const KvStoreSecurityListFragment = productWidget('kv-store-security-list')
 
 const PILLARS = [
   {
@@ -130,7 +132,7 @@ export const KV_STORE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'KV Store',
     title: 'Fast key-value storage built for global applications',
     description:
@@ -145,7 +147,7 @@ export const KV_STORE_PAGE = [
     title: 'Application state in one namespace',
     description:
       'Keys, their expiration and the functions that read them live in the same namespace, replicated globally and read where the request lands.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -175,40 +177,15 @@ export const KV_STORE_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Native JavaScript API for Functions',
-        description:
-          'Access KV Store directly from Functions to store and retrieve sessions, flags, and counters with no extra network hops. The API is compatible with Cloudflare Workers KV, so migration is easy.',
-        href: '/site/products/functions',
-        illustration: 'replicated-reads',
-        illustrationLabel: 'A function reading a session cache from KV Store across data centers',
-        actions: [{ label: 'Functions', href: '/site/products/functions' }]
-      },
-      {
-        title: 'Store any data type, no schema required',
-        description:
-          'Store JSON objects, binary data, and streams with no rigid schema and no serialization overhead. Attach metadata for extra context.',
-        href: PRODUCT_DOCS,
-        illustration: 'read-at-the-edge',
-        illustrationLabel: 'Code reading keys from KV Store, with text, JSON and blob values',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use KV Store for',
     description:
       'Put KV Store behind any function and read sessions, flags and counters from Azion’s distributed infrastructure, close to the request. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

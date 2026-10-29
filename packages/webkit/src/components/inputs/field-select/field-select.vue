@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useSelectSearch } from '../../../composables/use-select-search'
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
+  import InputText from '../input-text/input-text.vue'
   import Label from '../label/label.vue'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
@@ -47,6 +49,12 @@
     invalid?: boolean
     /** id for the trigger; consumed by Label via for and by aria-describedby wiring. */
     inputId?: string
+    /** Adds a search box that filters the options as you type; applies to the options prop, not the default slot. */
+    searchable?: boolean
+    /** Placeholder of the search box when searchable. */
+    searchPlaceholder?: string
+    /** Shown in the list when searchable and no option matches. */
+    searchEmptyLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -60,12 +68,15 @@
     readonly: false,
     required: false,
     invalid: false,
-    inputId: ''
+    inputId: '',
+    searchable: false,
+    searchPlaceholder: 'Search',
+    searchEmptyLabel: 'No results found'
   })
 
   const modelValue = defineModel<FieldSelectValue>({ default: undefined })
 
-  defineSlots<{
+  const slots = defineSlots<{
     default(): unknown
   }>()
 
@@ -86,12 +97,62 @@
     return 'helper'
   })
 
-  // The field never writes copy of its own. No `helperText` means no helper row — while
-  // disabled as much as anywhere else: a field that goes disabled for the length of a
-  // request would otherwise grow a padlock line the screen never asked for, in the one
-  // moment it has nothing to say. Disabling is already legible from the field's own
-  // treatment, and a caller who wants a reason passes one (it renders with the lock).
   const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
+
+  const searchEnabled = computed(() => props.searchable && !slots.default)
+
+  const keyOf = (option: FieldSelectOption) => String(props.options.indexOf(option))
+
+  const togglePicked = (key: string) => {
+    const option = props.options[Number(key)]
+    if (!option) return
+    if (!props.multiple) {
+      modelValue.value = option.value as FieldSelectValue
+      return
+    }
+    const current = Array.isArray(modelValue.value) ? [...modelValue.value] : []
+    const index = current.indexOf(option.value)
+    if (index === -1) current.push(option.value)
+    else current.splice(index, 1)
+    modelValue.value = current
+  }
+
+  const {
+    open,
+    query,
+    filtered,
+    activeKey,
+    activeIndex,
+    searchId,
+    optionId,
+    setActive,
+    onTriggerKeydown,
+    onContentKeydown,
+    onSearchKeydown
+  } = useSelectSearch({
+    items: () =>
+      props.options.map((o, index) => ({
+        key: String(index),
+        text: o.label,
+        disabled: o.disabled
+      })),
+    selectedKeys: () => {
+      const current = modelValue.value
+      const selected = Array.isArray(current) ? current : [current]
+      return props.options.filter((o) => selected.includes(o.value)).map(keyOf)
+    },
+    idPrefix: generatedId,
+    triggerId: resolvedInputId,
+    multiple: () => props.multiple,
+    locked: () => props.disabled || props.readonly,
+    onPick: togglePicked
+  })
+
+  const visibleOptions = computed(() => {
+    if (!searchEnabled.value) return props.options
+    const keys = new Set(filtered.value.map((item) => item.key))
+    return props.options.filter((o) => keys.has(keyOf(o)))
+  })
 </script>
 
 <template>
@@ -114,6 +175,7 @@
     />
     <Select
       v-model="modelValue"
+      v-model:open="open"
       :multiple="multiple"
       :placeholder="placeholder"
       :size="size"
@@ -127,18 +189,53 @@
         :id="resolvedInputId"
         :aria-describedby="describedBy"
         :data-testid="`${testId}__trigger`"
+        @keydown="searchEnabled && onTriggerKeydown($event)"
       />
-      <SelectContent :data-testid="`${testId}__content`">
+      <SelectContent
+        :data-testid="`${testId}__content`"
+        @keydown="searchEnabled && onContentKeydown($event)"
+      >
+        <template
+          v-if="searchEnabled"
+          #search
+        >
+          <InputText
+            :id="searchId"
+            v-model="query"
+            :placeholder="searchPlaceholder"
+            :aria-label="searchPlaceholder || 'Search'"
+            :aria-activedescendant="activeKey ? optionId(activeKey) : undefined"
+            autocomplete="off"
+            :data-testid="`${testId}__search`"
+            @keydown="onSearchKeydown"
+          >
+            <template #iconLeft>
+              <i class="pi pi-search" />
+            </template>
+          </InputText>
+        </template>
         <slot>
           <SelectOption
-            v-for="option in options"
+            v-for="(option, index) in visibleOptions"
+            :id="searchEnabled ? optionId(keyOf(option)) : undefined"
             :key="String(option.value)"
             :value="option.value"
             :disabled="option.disabled"
+            :data-active="(searchEnabled && index === activeIndex) || null"
             :data-testid="`${testId}__option`"
+            class="data-[active]:bg-(--bg-hover)"
+            @mousemove="searchEnabled && setActive(index)"
           >
             {{ option.label }}
           </SelectOption>
+          <p
+            v-if="searchEnabled && visibleOptions.length === 0"
+            role="status"
+            :data-testid="`${testId}__search-empty`"
+            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+          >
+            {{ searchEmptyLabel }}
+          </p>
         </slot>
       </SelectContent>
     </Select>

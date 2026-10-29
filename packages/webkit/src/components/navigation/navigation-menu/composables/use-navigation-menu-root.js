@@ -175,9 +175,7 @@ export function useNavigationMenuRootState(
     openTimer = setTimeout(() => setValue(itemValue, details), options.delay)
   }
 
-  /**
-   * @param {ReturnType<typeof createChangeEventDetails>} details
-   */
+  /** @param {ReturnType<typeof createChangeEventDetails>} details */
   function scheduleClose(details) {
     cancelTimers()
     closeTimer = setTimeout(() => setValue(null, details), options.closeDelay)
@@ -200,16 +198,12 @@ export function useNavigationMenuRootState(
     triggers.value = next
   }
 
-  /**
-   * @param {string | number} itemValue
-   */
+  /** @param {string | number} itemValue */
   function unregisterTrigger(itemValue) {
     triggers.value = triggers.value.filter((entry) => entry.value !== itemValue)
   }
 
-  /**
-   * @param {string | number} itemValue
-   */
+  /** @param {string | number} itemValue */
   function isItemOpen(itemValue) {
     return value.value === itemValue
   }
@@ -228,9 +222,7 @@ export function useNavigationMenuRootState(
     setPopupMounted(false)
   }
 
-  /**
-   * @param {boolean} isOpen
-   */
+  /** @param {boolean} isOpen */
   async function notifyOpenChangeComplete(isOpen) {
     await nextTick()
 
@@ -261,9 +253,7 @@ export function useNavigationMenuRootState(
     }
   )
 
-  /**
-   * @param {KeyboardEvent} event
-   */
+  /** @param {KeyboardEvent} event */
   function onTriggerKeydown(event) {
     const currentIndex = triggers.value.findIndex((entry) => entry.value === value.value)
     const focusedIndex = triggers.value.findIndex((entry) => entry.el === document.activeElement)

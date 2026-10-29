@@ -64,8 +64,6 @@
 
   const flushSides = computed(() => resolveSides(props.flush))
 
-  // `flush` subtracts the sides a neighbour already draws, so a shared edge is
-  // one rule at one colour — never two hairlines meeting.
   const borderSides = computed(() => {
     const sides = resolveSides(props.borders)
     for (const side of flushSides.value) sides.delete(side)
@@ -74,8 +72,6 @@
 
   const markCorners = computed(() => resolveCorners(props.marks))
 
-  // Space-separated so a data-attribute word-match variant can target one name out
-  // of the list; `none` keeps the attribute unmatchable when the set is empty.
   const listAttr = (names: Set<string>) => (names.size > 0 ? [...names].join(' ') : 'none')
 
   const bordersAttr = computed(() => listAttr(borderSides.value))
@@ -84,23 +80,16 @@
     flushSides.value.size > 0 ? [...flushSides.value].join(' ') : null
   )
 
-  // A frame that paints no hatch of its own defers to a consumer-set `data-hatch`, so a
-  // component drawing the texture itself can still mark the state on this root.
   const hatchAttr = computed(
     () => props.hatch || (attrs['data-hatch'] as string | undefined) || null
   )
 
   const hasCorner = (corner: FrameBoxCorner) => markCorners.value.has(corner)
 
-  // Anchored to a corner and inset from both rules by its own margin, so the mark
-  // sits inside the frame; at 6px filled it reads as a tick, not a second border.
   const MARK_CLASS = 'pointer-events-none absolute z-20 m-1 block size-1.5 bg-(--border-default)'
 </script>
 
 <template>
-  <!-- Rules, marks and hatch share the default border token, an OPAQUE surface step —
-       so two rules meeting cannot composite into a brighter line (what made a stacked
-       junction read as a double rule). Each edge matches its own resolved side name. -->
   <div
     v-bind="$attrs"
     :data-testid="testId"
@@ -110,16 +99,12 @@
     :data-flush="flushAttr"
     class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-l data-[borders~=right]:border-r data-[borders~=top]:border-t"
   >
-    <!-- Hatch: vertical rules at fixed pitch, faded by the radial mask alone — the
-         asset that gives SectionGap its identity. -->
     <div
       v-if="hatch"
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(to_right,var(--border-default)_0,var(--border-default)_1px,transparent_1px,transparent_var(--spacing-lg))] mask-[radial-gradient(ellipse_at_center,black_35%,transparent_90%)]"
     />
 
-    <!-- Corners are addressed individually so abutting frames can drop duplicate ticks
-         and a stack reads one mark per corner — as `flush` gives one rule per shared edge. -->
     <span
       v-if="hasCorner('top-left')"
       aria-hidden="true"
@@ -141,9 +126,6 @@
       :class="[MARK_CLASS, 'right-0 bottom-0']"
     />
 
-    <!-- Full height hands a grid-stretched frame's height down to the content (auto
-         against an auto-height frame), so a cell's footer can sit on the row's bottom
-         edge and align with its neighbours. -->
     <div class="relative z-10 h-full">
       <slot />
     </div>

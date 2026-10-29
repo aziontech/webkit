@@ -94,7 +94,7 @@
         <tr>
           <th
             scope="col"
-            class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal"
+            class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-lg) align-top font-normal"
           >
             <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
           </th>
@@ -133,7 +133,7 @@
         >
           <th
             scope="row"
-            class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-default) group-data-[first]/row:border-t-0"
+            class="border-t border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-default) group-data-[first]/row:border-t-0"
           >
             {{ row.capability }}
           </th>

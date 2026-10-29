@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  // Traced from the raster the source file embedded, which no single ink could reach.
   defineOptions({ name: 'BrandMarkGithub', inheritAttrs: false })
 </script>
 

@@ -7,6 +7,7 @@ import { dataStreamRow } from '../data/data-streams'
 import { firewallRow } from '../data/firewalls'
 import { networkListRow } from '../data/network-lists'
 import { bucketRow } from '../data/object-storage'
+import { purgeLines, purgeRow } from '../data/real-time-purge'
 import { wafRuleRow } from '../data/waf-rules'
 
 const STORAGE_KEY = 'webkit-sample:created-resources'
@@ -142,6 +143,11 @@ const BASE = {
     access: form.workloadsAccess === 'restricted' ? 'Private' : 'Public',
     objects: 0,
     size: '0 B'
+  }),
+  'real-time-purge': (form) => ({
+    type: form.type,
+    layer: form.layer,
+    arguments: Array.isArray(form.arguments) ? form.arguments : purgeLines(form.arguments)
   })
 }
 
@@ -153,7 +159,8 @@ const ROWS = {
   certificates: certificateRow,
   'network-lists': networkListRow,
   'data-stream': dataStreamRow,
-  'object-storage': bucketRow
+  'object-storage': bucketRow,
+  'real-time-purge': purgeRow
 }
 
 export const storesCreated = (resource) => Boolean(BASE[resource] && ROWS[resource])

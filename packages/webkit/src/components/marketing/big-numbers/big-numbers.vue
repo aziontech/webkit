@@ -46,9 +46,6 @@
 
   const hasItems = computed(() => props.items.length > 0)
 
-  // The divider grid paints its own background through EVERY track, so a column count the
-  // figures do not fill leaves a cell painted in the seam colour. The band picks the count
-  // that leaves the fewest cells empty, widest first — 4 figures still fan out to four.
   const emptyCells = (count: number, columns: number) => (columns - (count % columns)) % columns
 
   const columns = computed<CardGridColumns>(() => {

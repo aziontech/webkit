@@ -56,10 +56,6 @@
 
   const cellRef = ref<HTMLElement | null>(null)
 
-  // A cell that owns its click (clickable, checkbox, or action) swallows it so the
-  // row-level click never also fires; an inert cell lets it bubble to the row. The
-  // listener is attached natively rather than via @click so an inert cell stays a
-  // plain non-interactive element with no implied keyboard affordance.
   const ownsClick = computed<boolean>(
     () => props.clickable || props.kind === 'action' || props.kind === 'checkbox'
   )
@@ -70,13 +66,6 @@
 
   onMounted(() => cellRef.value?.addEventListener('click', stopOwnedClick))
   onBeforeUnmount(() => cellRef.value?.removeEventListener('click', stopOwnedClick))
-
-  // THE CELL CARRIES BLOCK PADDING, not just `min-h-12`. A single-line cell is decided
-  // entirely by the minimum height (48px against ~20px of text), so the padding is
-  // invisible there and every existing row is unchanged. It only shows on a cell whose
-  // content is TALLER than the minimum — a wrapped list of tags, a two-line summary —
-  // where height came from the content alone and the first and last lines were flush
-  // against the row's borders with no breathing room at all.
 </script>
 
 <template>

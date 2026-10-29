@@ -40,7 +40,6 @@
     )
   }
 
-  // Context-aware: reflects a selected state when its value matches the draft selection.
   const selected = computed<boolean>(() => {
     const current = ctx?.draft.value ?? null
     const target = props.value

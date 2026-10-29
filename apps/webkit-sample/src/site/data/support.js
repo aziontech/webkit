@@ -1,8 +1,12 @@
+import { CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
+
+import { CONSOLE_LOGIN } from './contact.js'
+
 export const SUPPORT_HERO = {
   eyebrow: 'Support',
   title: 'Technical support for every stage of your growth',
   description: 'Move on your own, with specialists ready when you need them.',
-  carouselLabel: 'Trusted by teams running critical workloads'
+  carouselLabel: CLIENT_STRIP_LABEL
 }
 
 export const SUPPORT_MARKS = [
@@ -45,26 +49,26 @@ export const SUPPORT_TIERS = [
     id: 'developer',
     name: 'Developer',
     description: 'Ideal for exploring the platform independently.',
-    action: { label: 'Start free', kind: 'outlined', to: '/signup' }
+    action: { label: 'Start for free', kind: 'outlined', to: '/signup' }
   },
   {
     id: 'business',
     name: 'Business',
     description: 'Ideal for teams that need support from specialists.',
-    action: { label: 'Contact us', kind: 'outlined', to: '/site/contact' }
+    action: { label: 'Talk to sales', kind: 'outlined', to: '/site/contact' }
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     description: 'Ideal for organizations that require advanced support and ongoing services.',
     highlighted: true,
-    action: { label: 'Contact us', kind: 'secondary', to: '/site/contact' }
+    action: { label: 'Talk to sales', kind: 'secondary', to: '/site/contact' }
   },
   {
     id: 'mission-critical',
     name: 'Mission-Critical',
     description: 'Ideal for mission-critical operations that need priority and proactive support.',
-    action: { label: 'Contact us', kind: 'outlined', to: '/site/contact' }
+    action: { label: 'Talk to sales', kind: 'outlined', to: '/site/contact' }
   }
 ]
 
@@ -216,6 +220,6 @@ export const SUPPORT_CLOSING = {
   eyebrow: 'Get started',
   title: 'Get the right help when it matters most',
   description: 'See how companies use Azion to improve performance, security, and reliability.',
-  action: { label: 'Talk to an expert', to: '/site/contact' },
-  aside: { label: 'See customer stories', to: '/site/success-cases' }
+  action: { label: 'Talk to sales', to: '/site/contact' },
+  aside: { label: 'Log in to open a ticket', to: CONSOLE_LOGIN }
 }

@@ -58,11 +58,6 @@
 </script>
 
 <template>
-  <!-- `style="width: 100%"` is inline on purpose: Storybook's Tailwind runs with
-       `important: true` (apps/storybook/tailwind.config.js), so `w-full` compiles
-       to `width: 100% !important` and beats the plain inline width the browser
-       writes when the user drags the native resize handle horizontally. Setting
-       width as a plain inline declaration lets the drag handle overwrite it. -->
   <textarea
     v-bind="passthroughAttrs"
     style="width: 100%"

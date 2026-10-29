@@ -15,6 +15,8 @@
   export type SectionTitleSize = 'small' | 'medium' | 'large'
   /** Vertical padding step of the framed header. */
   export type SectionTitlePadding = 'small' | 'medium'
+  /** Column span of the description in the horizontal layout. */
+  export type SectionTitleDescriptionWidth = 'narrow' | 'wide'
 
   interface Props {
     /** Headline of the section, rendered as the section's `h2`. */
@@ -31,6 +33,8 @@
     framed?: boolean
     /** Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. */
     padding?: SectionTitlePadding
+    /** Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too. */
+    descriptionWidth?: SectionTitleDescriptionWidth
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -39,7 +43,8 @@
     kind: 'centered',
     size: 'medium',
     framed: true,
-    padding: 'medium'
+    padding: 'medium',
+    descriptionWidth: 'narrow'
   })
 
   const slots = defineSlots<{
@@ -57,8 +62,6 @@
     () => Boolean(slots.default) || props.description.length > 0
   )
 
-  // Unframed, the header is a plain block: the band composing it owns the rule and the
-  // padding, so drawing either here would draw it twice.
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
@@ -66,10 +69,6 @@
 </script>
 
 <template>
-  <!-- There is no gap around the frame: it spans the column edge to edge and its own bottom
-       rule is what divides the title from the section body, so the row adds no outer margin
-       and no second line. The header holds no vertical air of its own beyond this padding —
-       the rhythm around it belongs to the SectionGap frames on either side. -->
   <component
     :is="frame"
     v-bind="{ ...$attrs, ...frameProps }"
@@ -78,15 +77,12 @@
     :data-size="size"
     :data-framed="props.framed || null"
     :data-padding="padding"
+    :data-description-width="descriptionWidth"
     class="group"
   >
     <div
       class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-xxl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[kind=centered]:items-center"
     >
-      <!-- Horizontal: the overline leads, then the headline and its description share a
-           three-column grid — headline in the first column, description in the third, the
-           middle column left as air. Below `md` the grid collapses to one column and the
-           description falls back under the headline, in reading order. -->
       <div
         v-if="kind === 'horizontal'"
         class="flex w-full flex-col gap-(--spacing-lg)"
@@ -105,22 +101,17 @@
           </h2>
           <p
             v-if="hasDescription"
-            class="m-0 self-start text-pretty text-heading-sm text-(--text-muted) md:col-start-3"
+            class="m-0 self-start text-pretty text-heading-sm text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
           >
             <slot>{{ description }}</slot>
           </p>
         </div>
       </div>
 
-      <!-- Centered and left share one stacked column; only the alignment differs, which is
-           why it switches on the root's `data-kind` instead of on a second template. -->
       <div
         v-else
         class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[kind=centered]:items-center group-data-[kind=centered]:text-center"
       >
-        <!-- The overline anatomy the framed sections share: a `//` prefix, the label in the
-             accent, and the blinking cursor. All three are props of Overline, so this is the
-             DS component configured — not a copy of its look. -->
         <Overline
           v-if="eyebrow"
           prefix="//"
@@ -140,11 +131,6 @@
         </p>
       </div>
 
-      <!-- The actions row stacks and goes fluid below `sm` — a section CTA is a primary
-           target and a thumb should not have to aim at a shrink-wrapped label — and
-           `[&>*]:w-full` is what reaches the slotted controls, since the wrapper's own width
-           says nothing about theirs. From `sm` up it is a content-width row, centered only
-           when the header is. -->
       <div
         v-if="slots.actions"
         class="flex w-full flex-col items-stretch gap-(--spacing-md) [&>*]:w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[kind=centered]:justify-center"

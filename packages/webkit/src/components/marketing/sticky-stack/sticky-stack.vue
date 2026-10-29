@@ -212,7 +212,7 @@
                 </p>
 
                 <div
-                  v-if="$slots.actions"
+                  v-if="$slots['actions']"
                   class="mt-(--spacing-xl) flex items-center gap-(--spacing-sm) transition-[opacity,translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:invisible lg:mt-auto lg:translate-y-(--spacing-sm) lg:pt-(--spacing-xl) lg:opacity-0 lg:group-data-[active]:visible lg:group-data-[active]:translate-y-0 lg:group-data-[active]:opacity-100 lg:group-data-[active]:delay-200"
                 >
                   <slot
@@ -254,7 +254,7 @@
           class="relative hidden bg-(--bg-canvas) lg:block lg:h-full lg:min-w-0 lg:border-l lg:border-(--border-default)"
         >
           <div
-            v-if="$slots.backdrop"
+            v-if="$slots['backdrop']"
             aria-hidden="true"
             class="pointer-events-none absolute inset-0"
           >

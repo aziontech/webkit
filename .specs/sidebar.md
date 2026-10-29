@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 1076c3ce003478f75df8de33f9ea79b49fb7ba471aae01eaf565349ffc19e9c6
+checksum: 3681dca15b6d43bce9e527200a749fb4138732fcb63dad57cba5e368b66e3957
 created: 2026-05-22
-last_updated: 2026-09-22
+last_updated: 2026-10-23
 ---
 # Sidebar — Component Spec
 
@@ -336,6 +336,9 @@ and the host's own `class="w-[280px]"` governs exactly as before.
 - `data-hydrated` on the root once Vue has mounted — internal only (switches the native
   `resize: horizontal` pre-hydration fallback back off in favor of the JS-driven handle); not a
   documented consumer styling hook.
+- `data-settled` on the root and on the panel two frames after mount — internal only (gates the
+  rail's motion off until then, so a state restored at mount lands in place; see Motion &
+  Animations); not a documented consumer styling hook.
 - Region testids derived from the root: `__panel` (the fixed-width inner panel),
   `__collapse-input` (the hidden checkbox that carries `collapsed` for CSS — not an interactive
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
@@ -351,8 +354,8 @@ computing an inline `transition` string. A `<input type="checkbox" class="sr-onl
 width/translate/opacity targets and the leave-phase easing. The variant is **scoped to that one
 input by structure** — the root's own toggle is its `> div > input`, the panel's is its `> input`.
 A bare `has-checked:` is `:has(:checked)`, which matches *any* checked descendant, so a rail whose
-slot holds checkboxes (a fields picker, a filter list) would collapse itself the moment a consumer
-checked one. Because a native checkbox reflects `:checked` the instant it is
+slot holds checkboxes (a fields picker, a filter list) collapses itself the moment a consumer
+checks one. Because a native checkbox reflects `:checked` the instant it is
 toggled — by a real click, by `Space`, or simply by the server-rendered `checked` attribute before
 Vue has hydrated — this animation runs correctly even before the component's JavaScript has loaded,
 which a JS-computed `transition` string never could. `sidebar/presets/transitions.ts` no longer
@@ -365,6 +368,7 @@ restructuring this component does not take on.
 |---|---|---|---|
 | rail expands | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1 | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
 | rail collapses | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration) | same |
+| state restored at mount (a host seeding its persisted `collapsed` / `width` in its own `onMounted`) | none — the restored rail lands in place | `not-data-[settled]:transition-none` on the root **and the panel**: `data-settled` is set two frames after mount, so the first frame paints the restored state with motion off and the second gives every later change a rendered style to tween from | — |
 | drag in flight | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag | — |
 | collapsed edge affordance appears | `opacity` 0 → 1 | Vue `<Transition>`, unchanged | `motion-reduce:transition-none` |
 | collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-[>div>input:checked]:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
@@ -431,6 +435,12 @@ property, so an inline `transform` does not override the class — the two compo
 property the class writes is what makes the inline value win.
 
 The collapse takes `ease-productive-exit`, not `ease-expressive-exit`. `expressive-exit` is
+The panel holds the rail's width (`calc(var(--sidebar-width) - 1px)`) so it slides out whole
+instead of reflowing. `--sidebar-width` is the rail's **border** box; the 1px is the root's own
+`border-r`, so the panel fills exactly the box it sits in. At the full width it ran under the
+hairline, and every row and the scrollbar moved 1px right the moment the width was set — after a
+server-rendered first paint, where the width is not yet set and the panel fills the box on its own.
+
 `cubic-bezier(0.95, 0.05, 0.8, 0.04)` — near-flat for most of its run and near-vertical at the end.
 That reads as intent on an opacity, but on a layout width it holds the rail still and then snaps it
 shut. The exit curve for the rail's own box is the productive one.

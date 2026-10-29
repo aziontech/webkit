@@ -451,6 +451,40 @@ group('hook: validate-story-source.mjs', () => {
   })
 })
 
+group('hook: validate-authoring.mjs comments', () => {
+  const write = (rel, content) =>
+    runHook('.claude/hooks/validate-authoring.mjs', {
+      tool_name: 'Write',
+      tool_input: { file_path: resolve(ROOT, rel), content }
+    })
+  test('a prose comment in a component blocks (exit 2)', () => {
+    const r = write('packages/webkit/src/components/actions/button/zz.ts', '// why\nexport const a = 1')
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('prose-comment'), 'names the check')
+  })
+  test('a prose comment in another package blocks (exit 2)', () => {
+    assertEqual(write('packages/theme/src/zz.js', 'export const a = 1 // note').code, 2)
+  })
+  test('prop JSDoc and directives pass (exit 0)', () => {
+    const sfc = [
+      '<script setup lang="ts">',
+      '  interface Props {',
+      '    /** Visual variant. */',
+      '    kind?: string',
+      '  }',
+      '  defineProps<Props>()',
+      '  // eslint-disable-next-line no-console',
+      '  console.log(1)',
+      '</script>',
+      '<template><div /></template>'
+    ].join('\n')
+    assertEqual(write('packages/webkit/src/components/actions/button/zz.vue', sfc).code, 0)
+  })
+  test('test files are out of scope (exit 0)', () => {
+    assertEqual(write('packages/webkit/src/components/actions/button/zz.test.ts', '// ok\n').code, 0)
+  })
+})
+
 // ---- summary ----
 
 const failed = results.filter((r) => !r.ok)

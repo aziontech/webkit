@@ -70,7 +70,7 @@ ${indent(DOCS_HEADER_MARKUP)}
 
   <div class="relative flex min-h-0 flex-1">
     <aside class="hidden h-full w-(--container-2xs) shrink-0 lg:flex">
-      <Sidebar aria-label="Documentation" class="h-full w-full">
+      <Sidebar aria-label="Docs" class="h-full w-full">
         <template #footer>
           <ThemeSwitcher v-model:value="theme" aria-label="Theme" />
         </template>

@@ -159,10 +159,6 @@ describe('Footer', () => {
       expect(getByTestId('layout-footer__signature')).toBeTruthy()
     })
 
-    // The gutters are page material with no content of their own, so they must not
-    // reach the a11y tree — a screen reader announcing empty groups at the end of every
-    // page is the failure this pins. They exist only in the `site` placement, which is
-    // where this renders them.
     it('keeps the hatched gutters out of the a11y tree', () => {
       const { getAllByTestId } = renderComposedSite()
       for (const gutter of getAllByTestId('layout-footer__gutter')) {
@@ -194,8 +190,6 @@ describe('Footer', () => {
       expect(frame.getAttribute('data-marks')).toBe('none')
     })
 
-    // The column is the frame's last box: it draws the side rules and registers all
-    // four corners, so the page frame ends on the footer itself.
     it('frames the column in the site placement, with both gutters beside it', () => {
       const { getAllByTestId, getByTestId } = renderComposedSite()
       expect(getAllByTestId('layout-footer__gutter')).toHaveLength(2)

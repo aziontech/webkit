@@ -2,12 +2,13 @@ import BentoGrid from '@aziontech/webkit/bento-grid'
 import Button from '@aziontech/webkit/button'
 import ButtonHighlight from '@aziontech/webkit/button-highlight'
 import FrameBox from '@aziontech/webkit/frame-box'
+import ProductWidget from '@aziontech/webkit/product-widget'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
-import FunctionsStartScene from '../../../../../webkit-sample/src/site/ui/FunctionsStartScene.vue'
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -17,8 +18,8 @@ const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
   "import ButtonHighlight from '@aziontech/webkit/button-highlight'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import FunctionsStartScene from '@site/ui/FunctionsStartScene.vue'",
   ...COLUMN_IMPORTS,
+  "import ProductWidget from '@aziontech/webkit/product-widget'",
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
@@ -29,7 +30,7 @@ const components = {
   Button,
   ButtonHighlight,
   FrameBox,
-  FunctionsStartScene,
+  ProductWidget,
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -50,7 +51,7 @@ const ITEMS = [
       'Choose the application it runs on, write the handler in the editor, name it, and create it. The rule that runs it is drafted for you.',
     scene: 'console',
     href: '/site/docs',
-    linkLabel: 'Learn more'
+    linkLabel: 'Docs'
   },
   {
     title: 'Ship it from the terminal',
@@ -58,14 +59,14 @@ const ITEMS = [
       'azion init scaffolds from 25 presets, azion dev serves it on localhost:3333, and azion deploy puts it on a live domain.',
     scene: 'cli',
     href: '/site/docs',
-    linkLabel: 'Learn more'
+    linkLabel: 'Docs'
   }
 ]
 
 const cell = (item) => `<BentoGrid.Cell :padded="false">
   <div class="flex h-full w-full min-w-0 flex-col">
     <div class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]">
-      <FunctionsStartScene tab="${item.scene}" />
+      <ProductWidget name="functions-start" tab="${item.scene}" />
     </div>
     <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
       <p class="m-0 text-pretty text-body-md text-(--text-muted)">
@@ -100,7 +101,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
       description="The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal."
     >
       <template #actions>
-        <Button label="Start free" kind="secondary" href="/signup" />
+        <Button label="Start for free" kind="secondary" href="/signup" />
         <Button label="Docs" kind="outlined" icon="pi pi-chevron-right" icon-position="trailing" href="/site/docs" />
       </template>
     </SectionTitle>
@@ -119,7 +120,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -129,7 +129,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }
@@ -146,7 +146,7 @@ export const SITE_SECTION = {
     description:
       'The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'Docs', href: '/site/docs', kind: 'outlined', trailing: true }
     ],
     columns: 3,
@@ -163,13 +163,13 @@ export const SITE_SECTION = {
         title: ITEMS[1].title,
         description: ITEMS[1].description,
         href: '/site/docs',
-        linkLabel: 'Learn more'
+        linkLabel: 'Docs'
       },
       {
         title: ITEMS[2].title,
         description: ITEMS[2].description,
         href: '/site/docs',
-        linkLabel: 'Learn more'
+        linkLabel: 'Docs'
       }
     ]
   }

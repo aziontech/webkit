@@ -67,7 +67,7 @@
     () =>
       props.splash ?? {
         verb: 'Cloning',
-        icon: 'pi pi-github',
+        icon: 'ai ai-github',
         from: `${props.repoOwner}/${props.repoPath}`,
         to: props.scope
       }

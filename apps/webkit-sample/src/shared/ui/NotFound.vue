@@ -43,7 +43,7 @@
               @click="goHome"
             />
             <Button
-              label="Read documentation"
+              label="Docs"
               kind="outlined"
               icon="pi pi-book"
               size="medium"

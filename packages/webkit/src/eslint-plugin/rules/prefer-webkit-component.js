@@ -1,10 +1,4 @@
-// Steers consumers OFF foreign UI libraries toward the webkit design system: flags an
-// import from a configured foreign package (default: PrimeVue) and points at webkit.
-// Configurable via options so a team can add its own "don't use X, use webkit" mappings.
-// Catalog-independent (pure import-source matching), so it works even without a catalog.
-
 const DEFAULT_PACKAGES = {
-  // foreign package prefix → human hint
   primevue:
     'Use the @aziontech/webkit equivalent (see @aziontech/webkit/list_components or suggest_component).'
 }
@@ -19,7 +13,6 @@ export default {
       {
         type: 'object',
         properties: {
-          // { "<package-or-prefix>": "<hint>" } — overrides the default map entirely.
           packages: { type: 'object', additionalProperties: { type: 'string' } }
         },
         additionalProperties: false
@@ -35,7 +28,6 @@ export default {
     const prefixes = Object.keys(map)
 
     function match(source) {
-      // exact package or a subpath of it (primevue, primevue/button)
       return prefixes.find((p) => source === p || source.startsWith(`${p}/`)) || null
     }
 

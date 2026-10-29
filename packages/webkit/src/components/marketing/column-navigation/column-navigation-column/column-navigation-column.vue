@@ -27,7 +27,6 @@
   )
 
   const headingId = useId()
-  // An untitled column has no heading to name its list with.
   const listLabelledBy = computed(() => (props.title ? headingId : undefined))
 </script>
 
@@ -49,8 +48,6 @@
       >
     </div>
 
-    <!-- The reset strips the bullets, which also strips list semantics in Safari;
-         the explicit role is what keeps the group and its length announced. -->
     <ul
       role="list"
       :aria-labelledby="listLabelledBy"

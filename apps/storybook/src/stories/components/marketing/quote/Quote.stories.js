@@ -1,10 +1,15 @@
+import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
 import Quote from '@aziontech/webkit/quote'
 
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Quote from '@aziontech/webkit/quote'"
+const LOGO_IMPORTS = [
+  "import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'",
+  IMPORT
+]
 
-const LOGO = '/logos/magalu.svg'
+const LOGO = magaluLogo
 
 const TEXT =
   'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.'
@@ -149,7 +154,7 @@ const DEFAULT_MARKUP = `<Quote
   text="${TEXT}"
   name="${NAME}"
   job-title="${JOB_TITLE}"
-  logo="${LOGO}"
+  :logo="magaluLogo"
 />`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Quote>} */
@@ -161,7 +166,7 @@ export const Default = {
         story:
           "One statement, its attribution, and the company mark above it. Both are real: the mark is Magalu's, served from Storybook's static folder, and the sentence is quoted from the published success case the attribution names — point `logo` at your own asset. The wordmark ships in the brand blue rather than in one ink, so it reads on both themes; `logo` is a single URL with no per-theme swap, which a white-on-dark mark would need. `logoAlt` is empty here, so the mark takes its accessible name from `jobTitle`."
       },
-      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+      source: { code: toSfc(LOGO_IMPORTS, DEFAULT_MARKUP) }
     }
   }
 }
@@ -175,14 +180,14 @@ const TYPES_MARKUP = `<div class="flex flex-col gap-(--spacing-xxl)">
     text="${TEXT}"
     name="${NAME}"
     job-title="${JOB_TITLE}"
-    logo="${LOGO}"
+    :logo="magaluLogo"
   />
   <Quote
     kind="signed"
     text="${TEXT}"
     name="${NAME}"
     job-title="${JOB_TITLE}"
-    logo="${LOGO}"
+    :logo="magaluLogo"
   />
   <Quote
     kind="highlight"
@@ -190,13 +195,13 @@ const TYPES_MARKUP = `<div class="flex flex-col gap-(--spacing-xxl)">
     name="${NAME}"
     job-title="${JOB_TITLE}"
     photo="${PHOTO}"
-    logo="${LOGO}"
+    :logo="magaluLogo"
   />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Quote>} */
 export const Types = {
-  render: () => ({ components: { Quote }, template: TYPES_MARKUP }),
+  render: () => ({ components: { Quote }, setup: () => ({ magaluLogo }), template: TYPES_MARKUP }),
   parameters: {
     controls: { disable: true },
     docs: {
@@ -204,7 +209,7 @@ export const Types = {
         story:
           "The three registers, on one quotation. `inline` is the quiet unit inside a cell of a larger band — the mark on a fixed band, the quotation at the smallest heading size, and no glyph. `signed` is the card a client sentence or an analyst report takes: the mark, the glyph, the quotation in body type. `highlight` is the featured one: the quotation largest, with the mark in its own column at the quotation's first line. Every register attributes the same way — the name in the accent over the role in the muted ink — and `text` is quoted verbatim, never carrying punctuation of its own."
       },
-      source: { code: toSfc(IMPORT, TYPES_MARKUP) }
+      source: { code: toSfc(LOGO_IMPORTS, TYPES_MARKUP) }
     }
   }
 }
@@ -239,7 +244,7 @@ const HIGHLIGHTS_MARKUP = `<Quote
   :highlights="['${HIGHLIGHTS[0]}', '${HIGHLIGHTS[1]}']"
   name="${NAME}"
   job-title="${JOB_TITLE}"
-  logo="${LOGO}"
+  :logo="magaluLogo"
 />`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Quote>} */
@@ -254,7 +259,7 @@ export const Highlights = {
         story:
           'The claim lifted out of the sentence: each phrase in `highlights` keeps the default ink and the rest of the quotation recedes to the muted one. Phrases are matched verbatim against `text`, so keep them to the figure and what it measured — a quotation that highlights most of itself highlights nothing.'
       },
-      source: { code: toSfc(IMPORT, HIGHLIGHTS_MARKUP) }
+      source: { code: toSfc(LOGO_IMPORTS, HIGHLIGHTS_MARKUP) }
     }
   }
 }

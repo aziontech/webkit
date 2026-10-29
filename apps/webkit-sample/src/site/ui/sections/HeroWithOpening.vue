@@ -13,6 +13,8 @@
   interface Props {
     /** Overline above the headline. */
     eyebrow?: string
+    /** Length of the headline; long widens its column so it breaks into two lines instead of three. */
+    titleLength?: HeroesTitleLength
     /** Opening phrase of the headline, in the brand accent. */
     highlight?: string
     /** The page's h1. */
@@ -31,6 +33,7 @@
 
   withDefaults(defineProps<Props>(), {
     eyebrow: '',
+    titleLength: 'long',
     highlight: '',
     titleLength: 'long',
     description: '',

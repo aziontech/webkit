@@ -38,11 +38,12 @@ export const SUCCESS_CASES_CLOSING = COMPANY_CLOSING
 export const SUCCESS_CASES_PAGE = [
   {
     section: 'Heroes',
+    eyebrow: 'Customers',
     kind: 'title-band',
-    title: 'Trusted by Leading Companies',
+    title: 'Trusted by leading companies',
     actions: [
-      { label: 'See cases', href: '#cases', kind: 'secondary' },
-      { label: 'Talk to an expert', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'See customer stories', href: '#cases', kind: 'secondary' },
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
   {
@@ -84,13 +85,13 @@ export const SUCCESS_CASES_PAGE = [
       label: 'Search success stories'
     },
     empty: {
-      title: 'No stories match these filters.',
+      title: 'No stories match these filters',
       action: 'View all success stories'
     }
   },
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a Market Leader',
+    title: 'Recognized as a market leader',
     items: HOME_RECOGNITIONS
   },
   SUCCESS_CASES_CLOSING

@@ -101,4 +101,4 @@ Choose a public application, an API with known traffic volume, or an AI agent’
 
 Azion brings Firewall, WAF, Bot Manager, DDoS Protection, and observability together on one platform. Talk to an expert about defining a protection baseline and integrating it into your deployment process.
 
-[Talk to an expert →](https://www.azion.com/en/contact/)
+[Talk to a specialist →](https://www.azion.com/en/contact/)

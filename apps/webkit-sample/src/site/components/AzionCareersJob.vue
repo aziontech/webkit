@@ -252,7 +252,11 @@
         @navigate="goToTrail"
       />
 
-      <Hero.Title :title="job.title" />
+      <Hero.Title
+        eyebrow="Careers"
+        eyebrow-prefix="//"
+        :title="job.title"
+      />
     </div>
   </Hero>
 

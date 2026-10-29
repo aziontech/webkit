@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import LoadBalancerAddressFragment from '../../ui/mockup/widgets/LoadBalancerAddressFragment.vue'
-import LoadBalancerMethodFragment from '../../ui/mockup/widgets/LoadBalancerMethodFragment.vue'
-import LoadBalancerOriginsFragment from '../../ui/mockup/widgets/LoadBalancerOriginsFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const LoadBalancerAddressFragment = productWidget('load-balancer-address')
+const LoadBalancerMethodFragment = productWidget('load-balancer-method')
+const LoadBalancerOriginsFragment = productWidget('load-balancer-origins')
 
 const PILLARS = [
   {
@@ -118,7 +120,7 @@ export const LOAD_BALANCER_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Load Balancer',
     title: 'Cut downtime and scale your applications',
     description:
@@ -133,7 +135,7 @@ export const LOAD_BALANCER_PAGE = [
     title: 'Every origin behind one connector',
     description:
       'The balancing method, the addresses behind it and the role and weight of each one live in the connector, versioned and deployed with it.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -163,40 +165,15 @@ export const LOAD_BALANCER_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Traffic distribution and origin monitoring',
-        description:
-          'Manage requests between servers with configurable algorithms such as Round-Robin, Least Connections, and IP Hash. Adjust weights and monitor origin health in real time to keep your infrastructure stable.',
-        href: PRODUCT_DOCS,
-        illustration: 'runtime',
-        illustrationLabel: 'Request lines passing through a single server',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Failover and error handling',
-        description:
-          'Detect origin failures in real time, respond to HTTP 5xx and 404 errors, timeouts, and connectivity loss, and reroute traffic to healthy servers without disrupting service. Set primary and backup roles to trigger only when necessary, and tune connection and byte-timeout settings to speed detection and recovery.',
-        href: '/site/products/real-time-metrics',
-        illustration: 'live-debugging',
-        illustrationLabel: 'A time window of traffic with its requests, errors and events counted',
-        actions: [{ label: 'Real-Time Metrics', href: '/site/products/real-time-metrics' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Traffic distribution for any industry',
     description:
       'Put Load Balancer in front of your origins and spread traffic across them on Azion’s distributed infrastructure, with the method, weights and failover roles you set. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

@@ -1,10 +1,12 @@
 <script setup>
   import CardBox from '@aziontech/webkit/card-box'
+  import FlowAnchor from '@aziontech/webkit/flow-anchor'
+  import FlowNode from '@aziontech/webkit/flow-node'
   import FlowRoot from '@aziontech/webkit/flow-root'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import FlowCard from '@shared/ui/flow/FlowCard.vue'
   import { functionRuns, RUN_FUNCTION, runById, runPath } from '@shared/ui/trace/run-trace.js'
   import RunLogs from '@shared/ui/trace/RunLogs.vue'
   import RunTrace from '@shared/ui/trace/RunTrace.vue'
@@ -93,43 +95,76 @@
                 align="start"
                 class="[&>div]:w-full"
               >
-                <FlowCard
+                <FlowNode
                   v-for="node in path"
                   :key="node.key"
-                  :eyebrow="node.eyebrow"
-                  :icon="node.icon"
-                  :title="node.title"
-                  :label="node.label"
-                  :severity="node.severity"
+                  unstyled
                   :terminal="Boolean(node.terminal)"
-                  class="min-w-(--size-56) flex-1"
+                  class="w-full min-w-(--size-56) flex-1"
                 >
-                  <template
-                    v-if="node.spanId"
-                    #actions
-                  >
-                    <Tooltip text="Show this hop in the trace">
-                      <IconButton
-                        icon="pi pi-align-left"
-                        kind="outlined"
-                        size="small"
-                        :aria-label="`Show ${node.title} in the trace`"
-                        @click="showSpan(node.spanId)"
-                      />
-                    </Tooltip>
-                  </template>
-
                   <div
-                    v-for="field in node.fields"
-                    :key="field.label"
-                    class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+                    class="flex w-full min-w-0 flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
                   >
-                    <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
-                    <span class="truncate text-body-xs text-(--text-default)">
-                      {{ field.value }}
-                    </span>
+                    <FlowAnchor>
+                      <div
+                        class="flex w-full items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"
+                      >
+                        <i
+                          :class="node.icon"
+                          aria-hidden="true"
+                          class="shrink-0 text-label-sm leading-none text-(--text-muted)"
+                        />
+                        <span class="truncate text-label-sm text-(--text-muted)">{{
+                          node.eyebrow
+                        }}</span>
+                        <Tag
+                          class="ml-auto shrink-0"
+                          :severity="node.severity || 'secondary'"
+                          :label="node.label"
+                          size="small"
+                        />
+                      </div>
+                    </FlowAnchor>
+
+                    <div
+                      class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
+                    >
+                      <span class="min-w-0 truncate text-label-sm text-(--text-default)">{{
+                        node.title
+                      }}</span>
+                      <span
+                        v-if="node.spanId"
+                        class="ml-auto flex shrink-0 items-center"
+                      >
+                        <Tooltip text="Show this hop in the trace">
+                          <IconButton
+                            icon="pi pi-align-left"
+                            kind="outlined"
+                            size="small"
+                            :aria-label="`Show ${node.title} in the trace`"
+                            @click="showSpan(node.spanId)"
+                          />
+                        </Tooltip>
+                      </span>
+                    </div>
+
+                    <div
+                      v-if="node.fields?.length"
+                      class="flex flex-col gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md)"
+                    >
+                      <div
+                        v-for="field in node.fields"
+                        :key="field.label"
+                        class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+                      >
+                        <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
+                        <span class="truncate text-body-xs text-(--text-default)">
+                          {{ field.value }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </FlowCard>
+                </FlowNode>
               </FlowRoot>
             </template>
           </CardBox>

@@ -16,10 +16,10 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
-import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
-import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import { hasLandingPage, LANDING_PAGE_SLUGS } from '@site/data/pages/lp'
 import { successCaseArticle } from '@site/data/success-case-articles.js'
+import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
+import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
@@ -29,7 +29,6 @@ import LandingAiGateway from '@site/views/LandingAiGateway.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
-import LandingApplications from '@site/views/LandingApplications.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
 import LandingBlog from '@site/views/LandingBlog.vue'
@@ -43,18 +42,17 @@ import LandingCareersJob from '@site/views/LandingCareersJob.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
+import LandingContactUnderAttack from '@site/views/LandingContactUnderAttack.vue'
 import LandingDataStream from '@site/views/LandingDataStream.vue'
-import LandingDdosProtection from '@site/views/LandingDdosProtection.vue'
 import LandingEdgeDns from '@site/views/LandingEdgeDns.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
-import LandingFirewall from '@site/views/LandingFirewall.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingGdpr from '@site/views/LandingGdpr.vue'
 import LandingImageProcessor from '@site/views/LandingImageProcessor.vue'
 import LandingKvStore from '@site/views/LandingKvStore.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
-import LandingLp from '@site/views/LandingLp.vue'
 import LandingLoadBalancer from '@site/views/LandingLoadBalancer.vue'
+import LandingLp from '@site/views/LandingLp.vue'
 import LandingNetworkShield from '@site/views/LandingNetworkShield.vue'
 import LandingObjectStorage from '@site/views/LandingObjectStorage.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
@@ -64,7 +62,6 @@ import LandingPricing from '@site/views/LandingPricing.vue'
 import LandingProduct from '@site/views/LandingProduct.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRealTimeEvents from '@site/views/LandingRealTimeEvents.vue'
-import LandingRealTimeMetrics from '@site/views/LandingRealTimeMetrics.vue'
 import LandingRecognitions from '@site/views/LandingRecognitions.vue'
 import LandingResourceHub from '@site/views/LandingResourceHub.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
@@ -77,6 +74,7 @@ import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
 import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
+import LandingWebApplicationFirewall from '@site/views/LandingWebApplicationFirewall.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
 import LandingWorkloads from '@site/views/LandingWorkloads.vue'
@@ -84,6 +82,8 @@ import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 // Every path this tree served before the pages were grouped. Kept so a link that is
 // already out — a bookmark, a deployed URL, an ad — still lands on the page it named.
 const MOVED = {
+  '/site/contact/support': '/site/contact',
+  '/site/contact/sales': '/site/contact',
   '/site/functions': '/site/products/functions',
   '/site/application-accelerator': '/site/products/application-accelerator',
   '/site/cache': '/site/products/cache',
@@ -100,7 +100,11 @@ const MOVED = {
   '/site/guides/akamai-alternative': '/site/lp/guia-alternativa-a-akamai',
   '/site/guides/aws-alternative': '/site/lp/guia-alternativa-a-aws',
   '/site/guides/cloudflare-alternative': '/site/lp/guia-alternativa-a-cloudflare',
-  '/site/guides/fastly-alternative': '/site/lp/guia-alternativa-a-fastly'
+  '/site/guides/fastly-alternative': '/site/lp/guia-alternativa-a-fastly',
+  '/site/products/applications': '/site/docs/applications',
+  '/site/products/firewall': '/site/docs/firewall',
+  '/site/products/ddos-protection': '/site/docs/workloads',
+  '/site/products/real-time-metrics': '/site/docs/real-time-metrics'
 }
 
 export const siteRoutes = [
@@ -150,10 +154,16 @@ export const siteRoutes = [
     component: LandingOurNetwork,
     meta: { embed: true }
   },
+  // The Products mega-menu's Object Storage entry.
   {
-    path: '/site/products/applications',
-    name: 'site-applications',
-    component: LandingApplications
+    path: '/site/products/object-storage',
+    name: 'site-object-storage',
+    component: LandingObjectStorage
+  },
+  {
+    path: '/site/products/web-application-firewall',
+    name: 'site-web-application-firewall',
+    component: LandingWebApplicationFirewall
   },
   // Products with no dedicated page yet: one data-driven page each (data/products.js).
   {
@@ -173,19 +183,9 @@ export const siteRoutes = [
     component: LandingDataStream
   },
   {
-    path: '/site/products/ddos-protection',
-    name: 'site-ddos-protection',
-    component: LandingDdosProtection
-  },
-  {
     path: '/site/products/edge-dns',
     name: 'site-edge-dns',
     component: LandingEdgeDns
-  },
-  {
-    path: '/site/products/firewall',
-    name: 'site-firewall',
-    component: LandingFirewall
   },
   {
     path: '/site/products/image-processor',
@@ -211,11 +211,6 @@ export const siteRoutes = [
     path: '/site/products/real-time-events',
     name: 'site-real-time-events',
     component: LandingRealTimeEvents
-  },
-  {
-    path: '/site/products/real-time-metrics',
-    name: 'site-real-time-metrics',
-    component: LandingRealTimeMetrics
   },
   {
     path: '/site/products/sql-database',
@@ -282,15 +277,17 @@ export const siteRoutes = [
   // opens cannot name two different jobs. The header is per-posting; the description is the one
   // posting we read (stated in `site/data/careers-job.js`).
   { path: '/site/careers/:id', name: 'site-careers-job', component: LandingCareersJob },
-  // The contact page in the same shell: the pitch and its form side by side in the hero, the
-  // offices as a hairline grid, and the site's own closing CTA. The website nav's `Contact`
-  // entry points here — it used to be a bare `#contact` anchor onto the closing band.
   { path: '/site/contact', name: 'site-contact', component: LandingContact },
   {
     path: '/site/contact/embed',
     name: 'site-contact-embed',
     component: LandingContact,
     meta: { embed: true }
+  },
+  {
+    path: '/site/contact/under-attack',
+    name: 'site-contact-under-attack',
+    component: LandingContactUnderAttack
   },
   // The Learning Center in the same shell: 16 subjects and 78 articles, read verbatim off
   // azion.com/en/learning. The Resources mega-menu's `Learning` entry points here.

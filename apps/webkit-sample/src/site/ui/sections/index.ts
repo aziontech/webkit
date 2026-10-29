@@ -16,6 +16,7 @@ import ComparePlans from './ComparePlans.vue'
 import CompareSupportTiers from './CompareSupportTiers.vue'
 import ComplianceBadges from './ComplianceBadges.vue'
 import ConsolePanel from './ConsolePanel.vue'
+import ContactHub from './ContactHub.vue'
 import FaqSection from './FaqSection.vue'
 import FeatureScroll from './FeatureScroll.vue'
 import FeatureTabs from './FeatureTabs.vue'
@@ -24,7 +25,6 @@ import FeatureWidgets from './FeatureWidgets.vue'
 import Heroes from './Heroes.vue'
 import HeroForm from './HeroForm.vue'
 import HeroWithOpening from './HeroWithOpening.vue'
-import IntegrationCode from './IntegrationCode.vue'
 import InvestorMarks from './InvestorMarks.vue'
 import ListingBrowser from './ListingBrowser.vue'
 import ListingTable from './ListingTable.vue'
@@ -62,6 +62,7 @@ export const SECTIONS: Record<string, Component> = {
   CompareSupportTiers,
   ComplianceBadges,
   ConsolePanel,
+  ContactHub,
   FaqSection,
   FeatureScroll,
   FeatureTabs,
@@ -70,7 +71,6 @@ export const SECTIONS: Record<string, Component> = {
   Heroes,
   HeroForm,
   HeroWithOpening,
-  IntegrationCode,
   InvestorMarks,
   ListingBrowser,
   ListingTable,

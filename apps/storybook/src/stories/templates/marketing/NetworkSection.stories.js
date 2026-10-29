@@ -12,6 +12,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 import Topic from '@aziontech/webkit/topic'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -62,7 +63,8 @@ const setup = () => ({
 
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
-  title: 'Build, secure, and scale on one distributed infrastructure',
+  title:
+    'One distributed infrastructure without the complexity of managing, securing and scaling it',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -135,8 +137,8 @@ const DESKTOP_MAP = `<NetworkMap
   :opacity="0.3"
   density="medium"
   :scale="1.3"
-  :offset-x="0.4"
-  :offset-y="-0.2"
+  :offset-x="0.5"
+  :offset-y="-0.22"
   class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
 />`
 
@@ -170,17 +172,17 @@ ${indent(DESKTOP_MAP, 2)}
           size="small"
           eyebrow="${NETWORK_BAND.eyebrow}"
           title="${NETWORK_BAND.title}"
-          class="relative [&_h2]:max-w-[16em]"
+          class="relative [&_h2]:max-w-(--container-lg)"
         />
 
 ${indent(MOBILE_MAP, 4)}
 
         <div class="relative flex flex-col gap-(--spacing-md)">
-          <p class="m-0 text-overline-sm text-(--text-muted)">
+          <p class="m-0 text-overline-md text-(--text-muted)">
             ${NETWORK_BAND.lead}
           </p>
 
-          <ul class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0">
+          <ul class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0">
 ${each(
   NETWORK_CLAIMS,
   (claim) => `<li
@@ -246,7 +248,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -256,7 +257,7 @@ const meta = {
 export default meta
 
 export const ClientQuotes = {
-  render: () => ({ components, setup, template: QUOTES_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: QUOTES_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(QUOTES_IMPORTS, QUOTES_TEMPLATE) }
@@ -268,7 +269,8 @@ export const SITE_SECTION = {
   _id: 'network-section',
   props: {
     eyebrow: 'Region: Earth.',
-    title: 'Build, secure, and scale on one distributed infrastructure',
+    title:
+      'One distributed infrastructure without the complexity of managing, securing and scaling it',
     lead: 'Built around your users. Distributed around your data.',
     claims: [
       '100+ data centers',
@@ -315,7 +317,7 @@ export const ClientQuotesJson = {
 }
 
 export const Benefits = {
-  render: () => ({ components, template: BENEFITS_TEMPLATE }),
+  ...editable(() => ({ components, template: BENEFITS_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(BENEFITS_IMPORTS, BENEFITS_TEMPLATE) }

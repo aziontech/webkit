@@ -1,6 +1,5 @@
 export type IllustrationAssetLoader = () => Promise<{ default: string }>
 
-/** Loads the frame shown when `name` is empty or names no registered scene. */
 export const loadIllustrationPlaceholder: IllustrationAssetLoader = () =>
   import('./placeholder.svg')
 
@@ -68,12 +67,10 @@ export const illustrationAssets = {
 /** Every registered scene name. */
 export type IllustrationAssetName = keyof typeof illustrationAssets
 
-/** Sorted scene names — the values `name` accepts, for docs and stories. */
 export const illustrationAssetNames = Object.keys(
   illustrationAssets
 ).sort() as IllustrationAssetName[]
 
-/** The loader for `name`, or `null` when nothing is registered under it. */
 export function resolveIllustrationAsset(name: string): IllustrationAssetLoader | null {
   if (!Object.hasOwn(illustrationAssets, name)) return null
   return illustrationAssets[name as IllustrationAssetName]

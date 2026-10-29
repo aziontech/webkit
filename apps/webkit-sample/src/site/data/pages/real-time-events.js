@@ -1,17 +1,17 @@
 import { markRaw } from 'vue'
 
-import RealTimeEventsFilterFragment from '../../ui/mockup/widgets/RealTimeEventsFilterFragment.vue'
-import RealTimeEventsLogFragment from '../../ui/mockup/widgets/RealTimeEventsLogFragment.vue'
-import RealTimeEventsVolumeFragment from '../../ui/mockup/widgets/RealTimeEventsVolumeFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
-const REAL_TIME_METRICS = '/site/products/real-time-metrics'
+const RealTimeEventsFilterFragment = productWidget('real-time-events-filter')
+const RealTimeEventsLogFragment = productWidget('real-time-events-log')
+const RealTimeEventsVolumeFragment = productWidget('real-time-events-volume')
 
 const PILLARS = [
   {
@@ -134,7 +134,7 @@ export const REAL_TIME_EVENTS_PAGE = [
     title: 'Every event in one searchable log',
     description:
       'Filters, the event log and the volume chart read the same query, so a narrowed view, an export and a dashboard always show the same events.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -164,41 +164,15 @@ export const REAL_TIME_EVENTS_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Investigate any event across your platform',
-        description:
-          'Access detailed data for every request, response, and security event from Applications, Functions, WAF, and all connected Azion products. Drill down to specific requests, IPs, and timestamps with field-level precision.',
-        href: PRODUCT_DOCS,
-        illustration: 'live-debugging',
-        illustrationLabel:
-          'A time range picked on an event log, with its request, error and event counts',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Connect your logs to Grafana and any analytics tool',
-        description:
-          'Use the GraphQL API to power dashboards, automate incident workflows, and share consistent operational views across your team. Query top IPs, paths, and status codes in real time, and group by the dimensions that match your SLOs and KPIs. Engineering, security, and ops teams can export and share the same views.',
-        href: REAL_TIME_METRICS,
-        illustration: 'stay-in-control',
-        illustrationLabel: 'A dashboard plotting traffic and cost as bars over time',
-        actions: [{ label: 'Real-Time Metrics', href: REAL_TIME_METRICS }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Resolve operational and security issues faster',
     description:
       'Put Real-Time Events behind every application, function and WAF you run and read their events on Azion’s distributed infrastructure in under a minute, with no agents to install. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

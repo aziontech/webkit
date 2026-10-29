@@ -28,6 +28,9 @@ const host = (props: Record<string, unknown> = {}, overlay = false) =>
 
 const fadeLayers = (root: Element) => root.querySelectorAll(':scope > [data-fade]')
 
+const drawnChrome = (root: Element) =>
+  Array.from(root.querySelectorAll('[inert][aria-hidden="true"]'))
+
 const parts = (container: Element) =>
   Array.from(container.querySelectorAll(`[data-testid="${PART_TESTID}"]`))
 
@@ -91,9 +94,11 @@ describe('ShellMockup (composition)', () => {
     const { getByTestId } = render(host({ title: 'Workloads' }))
     const root = getByTestId(TESTID)
 
-    expect(root.querySelectorAll('header')).toHaveLength(1)
-    expect(root.querySelector('header')?.textContent).toContain('Workloads')
-    expect(root.querySelector('aside')).toBeNull()
+    const bars = drawnChrome(root)
+
+    expect(bars).toHaveLength(1)
+    expect(bars[0]?.textContent).toContain('Workloads')
+    expect(root.querySelector('[data-active]')).toBeNull()
   })
 
   it('splits the title into breadcrumbs and marks the active rail entry when a rail is set', () => {
@@ -105,7 +110,7 @@ describe('ShellMockup (composition)', () => {
     expect(crumbs[1]?.hasAttribute('data-current')).toBe(true)
     expect(crumbs[0]?.hasAttribute('data-current')).toBe(false)
 
-    const active = root.querySelectorAll('aside [data-active]')
+    const active = root.querySelectorAll('[data-active]')
     expect(active).toHaveLength(1)
     expect(active[0]?.textContent).toContain('Workloads')
   })
@@ -114,15 +119,48 @@ describe('ShellMockup (composition)', () => {
     const { getByTestId } = render(host({ shell: 'legacy' }))
     const root = getByTestId(TESTID)
 
-    expect(root.querySelectorAll('header')).toHaveLength(1)
-    expect(root.querySelector('header')?.textContent).toContain('Feedback')
+    const bars = drawnChrome(root)
+
+    expect(bars).toHaveLength(1)
+    expect(bars[0]?.textContent).toContain('Feedback')
     expect(root.querySelector('ol')).toBeNull()
   })
 
   it('draws no bar when chrome is off', () => {
     const { getByTestId } = render(host({ chrome: false, title: 'Workloads' }))
 
-    expect(getByTestId(TESTID).querySelector('header')).toBeNull()
+    expect(drawnChrome(getByTestId(TESTID))).toHaveLength(0)
+  })
+
+  it('rescales the frame when its design width changes', async () => {
+    const width = ref(860)
+    const mobileWidth = ref(390)
+    const Host = defineComponent({
+      components: { ShellMockup, ShellMockupPart },
+      setup: () => ({ width, mobileWidth }),
+      template: `
+        <div style="width: 860px; height: 480px">
+          <ShellMockup :width="width" :mobile-width="mobileWidth" style="display: block; height: 100%">
+            <ShellMockupPart><p>Only part</p></ShellMockupPart>
+          </ShellMockup>
+        </div>
+      `
+    })
+    const { getByTestId } = render(Host)
+    const frame = getByTestId(TESTID).firstElementChild as globalThis.HTMLElement
+    const designWidth = () =>
+      globalThis.matchMedia('(min-width: 768px)').matches ? width.value : mobileWidth.value
+
+    await expect.poll(() => frame.style.width).toBe(`${designWidth()}px`)
+    const before = frame.style.transform
+    await new Promise((resolve) =>
+      globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(resolve))
+    )
+
+    width.value = 430
+    mobileWidth.value = 215
+    await expect.poll(() => frame.style.width).toBe(`${designWidth()}px`)
+    expect(frame.style.transform).not.toBe(before)
   })
 
   it('renders the overlay slot over the frame', () => {
@@ -179,6 +217,55 @@ describe('ShellMockup (composition)', () => {
       'useShellMockupContext must be used within ShellMockup.'
     )
   })
+
+  it.each(['console', 'legacy'] as const)(
+    'keeps the drawn %s chrome out of the accessibility tree when interactive',
+    async (shell) => {
+      const Page = defineComponent({
+        components: { ShellMockup, ShellMockupPart },
+        setup: () => ({ shell }),
+        template: `
+          <div>
+            <header><p>Page banner</p></header>
+            <div style="width: 860px; height: 480px">
+              <ShellMockup
+                interactive
+                :shell="shell"
+                title="Workloads › my-workload"
+                :rail="shell === 'console' ? 'workloads' : ''"
+                style="display: block; height: 100%"
+              >
+                <ShellMockupPart><button type="button">Slot action</button></ShellMockupPart>
+              </ShellMockup>
+            </div>
+          </div>
+        `
+      })
+      const { container, getByRole, queryAllByRole, getByTestId } = render(Page)
+
+      expect(queryAllByRole('banner')).toHaveLength(1)
+      expect(queryAllByRole('navigation')).toHaveLength(0)
+      expect(queryAllByRole('complementary')).toHaveLength(0)
+      expect(queryAllByRole('button').map((button) => button.textContent?.trim())).toEqual([
+        'Slot action'
+      ])
+
+      const slotAction = getByRole('button', { name: 'Slot action' })
+      const drawnButtons = Array.from(getByTestId(TESTID).querySelectorAll('button')).filter(
+        (button) => button !== slotAction
+      )
+
+      expect(drawnButtons.length).toBeGreaterThan(0)
+      for (const button of drawnButtons) {
+        button.focus()
+        expect(document.activeElement).not.toBe(button)
+      }
+      slotAction.focus()
+      expect(document.activeElement).toBe(slotAction)
+
+      await expectNoA11yViolations(container)
+    }
+  )
 
   it('has no axe violations as a picture or when interactive', async () => {
     const picture = render(host({ title: 'Workloads › my-workload', rail: 'workloads' }))

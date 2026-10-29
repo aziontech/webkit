@@ -1,15 +1,19 @@
 import { markRaw } from 'vue'
 
-import ApplicationAcceleratorCookieFragment from '../../ui/mockup/widgets/ApplicationAcceleratorCookieFragment.vue'
-import ApplicationAcceleratorMethodFragment from '../../ui/mockup/widgets/ApplicationAcceleratorMethodFragment.vue'
-import ApplicationAcceleratorQueryStringFragment from '../../ui/mockup/widgets/ApplicationAcceleratorQueryStringFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ApplicationAcceleratorCookieFragment = productWidget('application-accelerator-cookie')
+const ApplicationAcceleratorMethodFragment = productWidget('application-accelerator-method')
+const ApplicationAcceleratorQueryStringFragment = productWidget(
+  'application-accelerator-query-string'
+)
 
 const PILLARS = [
   {
@@ -142,7 +146,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
     title: 'Advanced Cache Key in every cache setting',
     description:
       'Method, query string and cookie variation live in the cache setting the module unlocks, versioned and deployed with the application.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -172,40 +176,15 @@ export const APPLICATION_ACCELERATOR_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Optimize dynamic delivery',
-        description:
-          'Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. That improves performance, SEO, and reliability across distributed applications.',
-        href: PRODUCT_DOCS,
-        illustration: 'low-latency',
-        illustrationLabel: 'A dynamic request answered close to the user, ahead of the origin',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Advanced Cache Key for personalized content delivery',
-        description:
-          'Control how content is segmented in cache beyond the URL path. Vary the cache by query string, cookie, and header to serve personalized experiences.',
-        href: '/site/products/cache',
-        illustration: 'distributed-apis',
-        illustrationLabel: 'One request segmented into cache by query string, cookie and header',
-        actions: [{ label: 'Cache', href: '/site/products/cache' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use Application Accelerator for',
     description:
       'Put Application Accelerator in front of dynamic APIs and apps and cache what standard CDN caching cannot, with the methods, query strings and cookies you choose. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('zoop') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

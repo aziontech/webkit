@@ -1,16 +1,3 @@
-/**
- * A `position: fixed` element is positioned against the viewport *unless* an
- * ancestor establishes a containing block (a transform, filter, perspective,
- * `will-change`, `contain`, or a container query). When one does, the `top` /
- * `left` we write are interpreted in that ancestor's own, possibly scaled,
- * coordinate space — so viewport coordinates read from `getBoundingClientRect()`
- * would be transformed a second time and the panel lands off-target.
- *
- * Storybook does exactly this: its zoom control applies a `transform: scale()`
- * to the preview iframe's `body`, which is also the Teleport target for every
- * overlay panel in the package.
- */
-
 /** Offset and scale of the frame a fixed-position element is laid out against. */
 export interface FixedFrame {
   /** Left edge of the frame, in viewport pixels. */
@@ -34,11 +21,6 @@ const establishesContainingBlock = (style: globalThis.CSSStyleDeclaration): bool
   /paint|layout|strict|content/.test(style.contain) ||
   style.containerType !== 'normal'
 
-/**
- * Resolves the frame a fixed-position `panel` is laid out against. Returns the
- * identity frame when that frame is the viewport, so callers can apply the same
- * arithmetic unconditionally.
- */
 export const getFixedFrame = (panel: globalThis.HTMLElement | null | undefined): FixedFrame => {
   if (!panel || typeof globalThis.getComputedStyle !== 'function') return IDENTITY
   let node = panel.parentElement

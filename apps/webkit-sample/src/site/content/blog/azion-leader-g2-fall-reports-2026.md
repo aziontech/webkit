@@ -37,7 +37,7 @@ For the first time, Azion moved from High Performer to **Leader in Web Security*
 
 Azion returned to **Leader** status in DDoS Protection, reflecting the platform’s ability to filter volumetric attacks and keep applications available under pressure — without adding a separate vendor to the stack.
 
-[Explore DDoS Protection →](https://www.azion.com/en/products/ddos-protection/)
+[Explore DDoS Protection →](https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/)
 
 ---
 

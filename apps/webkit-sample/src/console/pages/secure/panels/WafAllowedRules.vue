@@ -113,13 +113,6 @@
     { immediate: true }
   )
 
-  watch(createOpen, (open) => {
-    if (!open) {
-      editing.value = null
-      reset()
-    }
-  })
-
   const submit = async () => {
     const ruleId = form.ruleId.trim()
     const path = form.path.trim()

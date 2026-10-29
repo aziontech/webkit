@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import FirewallFunctionFragment from '../../ui/mockup/widgets/FirewallFunctionFragment.vue'
-import FirewallModulesFragment from '../../ui/mockup/widgets/FirewallModulesFragment.vue'
-import FirewallRulesOrderFragment from '../../ui/mockup/widgets/FirewallRulesOrderFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
@@ -10,6 +8,10 @@ import {
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const FirewallFunctionFragment = productWidget('firewall-function')
+const FirewallModulesFragment = productWidget('firewall-modules')
+const FirewallRulesOrderFragment = productWidget('firewall-rules-order')
 
 const PILLARS = [
   {
@@ -65,7 +67,7 @@ export const FIREWALL_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Firewall',
     title: 'Programmable firewall for distributed applications',
     description:
@@ -141,7 +143,7 @@ export const FIREWALL_PAGE = [
     title: 'Used by security teams in banking, e-commerce, and technology',
     description:
       'Put Firewall in front of any application or API and control traffic on Azion’s distributed infrastructure, before it reaches your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

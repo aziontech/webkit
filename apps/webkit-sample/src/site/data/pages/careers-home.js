@@ -31,8 +31,10 @@ export const CAREERS_HOME_PAGE = [
   },
   {
     section: 'PhotoMarquee',
+    gap: false,
     title: CAREERS_WORK.title,
     description: CAREERS_WORK.description,
+    descriptionWidth: 'wide',
     photos: CAREERS_PHOTOS,
     ariaLabel: 'Azion offices',
     duration: 60

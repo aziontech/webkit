@@ -318,7 +318,7 @@ The following table summarizes key metrics, their importance, and typical perfor
 | Throughput Metrics | Ensures capacity under load | Sustained RPS Target |
 | Semantic Search Accuracy | Protects response quality | 85–95% per intent |
 
-To effectively track these metrics, a robust observability platform is essential. Using open standards like OpenTelemetry allows developers to instrument every component of the system—from the function to the database calls—and aggregate performance data. Integrated platform tools like Azion’s [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/)and [Data Stream](https://www.azion.com/en/products/data-stream/) provide a unified dashboard for this data, creating a single source of truth that is invaluable for troubleshooting bottlenecks and ensuring a high-quality user experience.
+To effectively track these metrics, a robust observability platform is essential. Using open standards like OpenTelemetry allows developers to instrument every component of the system—from the function to the database calls—and aggregate performance data. Integrated platform tools like Azion’s [Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/)and [Data Stream](https://www.azion.com/en/products/data-stream/) provide a unified dashboard for this data, creating a single source of truth that is invaluable for troubleshooting bottlenecks and ensuring a high-quality user experience.
 
 Monitoring performance ensures operational excellence; the final step is seeing the results in production.
 

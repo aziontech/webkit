@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
+  import FieldPhoneNumber, { type PhoneNumber } from '@aziontech/webkit/field-phone-number'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
   import Hero from '@aziontech/webkit/hero-root'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import { toast } from '@aziontech/webkit/toast'
-  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+  import { CLIENT_STRIP, CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import { computed, reactive, ref, useId } from 'vue'
 
   import { CONTACT_ROLES } from '../../data/contact.js'
@@ -16,11 +16,14 @@
 
   defineOptions({ name: 'HeroForm' })
 
+  /** Field set: contact asks for a role and a message; incident asks for a website, for a team under attack. */
+  export type HeroFormKind = 'contact' | 'incident'
+
   /** An optional field of the form; name, e-mail and company always render. */
   export type HeroFormField = 'role' | 'website' | 'phone' | 'message'
 
   /** A field the form renders but does not require. */
-  export type HeroFormOptionalField = 'company' | 'role' | 'message'
+  export type HeroFormOptionalField = 'company' | 'role' | 'phone' | 'message'
 
   /** A paragraph beside the form, plain or opening on a bold lead. */
   export type HeroFormParagraph = string | { lead: string; text: string }
@@ -43,6 +46,10 @@
     role: string
     /** Role select placeholder. */
     rolePlaceholder: string
+    /** Placeholder of the box that filters the roles. */
+    roleSearch: string
+    /** Shown in the role list when no role matches the search. */
+    roleSearchEmpty: string
     /** Company field label. */
     company: string
     /** Website field label. */
@@ -53,6 +60,8 @@
     phone: string
     /** Message field label. */
     message: string
+    /** Hint inside the empty message field. */
+    messagePlaceholder: string
     /** Submit button label. */
     submit: string
   }
@@ -62,6 +71,8 @@
     required: string
     /** Helper text on a malformed e-mail. */
     invalidEmail: string
+    /** Helper text on a phone number too short for its country. */
+    invalidPhone: string
     /** Toast title once the form is sent. */
     success: string
     /** Toast title when sending fails. */
@@ -73,6 +84,8 @@
   }
 
   interface Props {
+    /** Field set the form asks for. */
+    kind?: HeroFormKind
     /** In-page anchor for the band. */
     anchor?: string
     /** Overline above the headline. */
@@ -114,6 +127,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'contact',
     anchor: '',
     eyebrow: '',
     description: '',
@@ -124,7 +138,7 @@
     fields: () => ['role', 'phone', 'message'],
     optional: () => [],
     carouselMarks: () => CLIENT_STRIP,
-    carouselLabel: 'The teams our experts work with',
+    carouselLabel: CLIENT_STRIP_LABEL,
     formLabel: '',
     formTitle: '',
     contactOnly: false,
@@ -140,17 +154,21 @@
     email: 'E-mail',
     role: 'Role',
     rolePlaceholder: 'Select your role',
+    roleSearch: 'Search roles',
+    roleSearchEmpty: 'No role found',
     company: 'Company',
     website: 'Website',
     websitePlaceholder: 'https://',
     phone: 'Phone',
     message: 'Message',
+    messagePlaceholder: '',
     submit: 'Send'
   }
 
   const DEFAULT_MESSAGES: HeroFormMessages = {
     required: 'This field is required.',
     invalidEmail: 'Enter a valid e-mail address.',
+    invalidPhone: 'Enter a complete phone number.',
     success: 'Message sent.',
     error: 'Could not send the message.',
     errorDescription: 'Check your connection and try again.',
@@ -158,6 +176,9 @@
   }
 
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  const INCIDENT_FIELDS: HeroFormField[] = ['website', 'phone']
+  const INCIDENT_OPTIONAL: HeroFormOptionalField[] = ['company', 'phone']
 
   const uid = useId()
 
@@ -173,6 +194,7 @@
   })
 
   const phoneCountry = ref(props.country)
+  const phoneComplete = ref(false)
 
   const errors = reactive({
     firstname: '',
@@ -180,6 +202,7 @@
     email: '',
     role: '',
     company: '',
+    mobilephone: '',
     message: ''
   })
 
@@ -189,8 +212,10 @@
   const notice = computed(() => ({ ...DEFAULT_MESSAGES, ...(props.messages ?? {}) }))
   const legend = computed(() => props.formLabel || props.title)
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
-  const shows = (field: HeroFormField) => !props.contactOnly && props.fields.includes(field)
-  const requires = (field: HeroFormOptionalField) => !props.optional.includes(field)
+  const fieldSet = computed(() => (props.kind === 'incident' ? INCIDENT_FIELDS : props.fields))
+  const optionalSet = computed(() => (props.kind === 'incident' ? INCIDENT_OPTIONAL : props.optional))
+  const shows = (field: HeroFormField) => !props.contactOnly && fieldSet.value.includes(field)
+  const requires = (field: HeroFormOptionalField) => !optionalSet.value.includes(field)
 
   const validate = () => {
     const required = notice.value.required
@@ -204,6 +229,14 @@
     errors.role = form.role || !shows('role') || !requires('role') ? '' : required
     errors.company =
       form.company.trim() || props.contactOnly || !requires('company') ? '' : required
+    errors.mobilephone =
+      !shows('phone') || phoneComplete.value
+        ? ''
+        : form.mobilephone
+          ? notice.value.invalidPhone
+          : requires('phone')
+            ? required
+            : ''
     errors.message =
       form.message.trim() || !shows('message') || !requires('message') ? '' : required
     return Object.values(errors).every((message) => !message)
@@ -254,6 +287,7 @@
       <div class="min-w-0">
         <HeroTitle
           :eyebrow="eyebrow"
+          eyebrow-prefix="//"
           :title="title"
           max-width="lg"
           sticky
@@ -363,6 +397,9 @@
                 :placeholder="copy.rolePlaceholder"
                 size="large"
                 :options="roles"
+                searchable
+                :search-placeholder="copy.roleSearch"
+                :search-empty-label="copy.roleSearchEmpty"
                 :disabled="submitting"
                 :required="!!errors.role"
                 :helper-text="errors.role"
@@ -401,13 +438,20 @@
               :label="copy.phone"
               :input-id="`${uid}-phone`"
               name="mobilephone"
+              size="large"
               :disabled="submitting"
+              :required="!!errors.mobilephone && !form.mobilephone"
+              :invalid="!!errors.mobilephone && !!form.mobilephone"
+              :helper-text="errors.mobilephone"
+              @update:model-value="errors.mobilephone = ''"
+              @update:phone="(phone: PhoneNumber) => (phoneComplete = phone.complete)"
             />
 
             <FieldTextarea
               v-if="shows('message')"
               v-model="form.message"
               :label="copy.message"
+              :placeholder="copy.messagePlaceholder"
               :input-id="`${uid}-message`"
               name="message"
               :disabled="submitting"
@@ -417,10 +461,10 @@
             />
           </fieldset>
 
-          <div class="flex justify-start">
+          <div class="flex flex-col">
             <Button
               :label="copy.submit"
-              kind="secondary"
+              kind="primary"
               size="large"
               :loading="submitting"
               type="submit"

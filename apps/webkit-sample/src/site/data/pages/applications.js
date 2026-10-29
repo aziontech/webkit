@@ -1,8 +1,6 @@
 import { markRaw } from 'vue'
 
-import ApplicationsCreateMethodFragment from '../../ui/mockup/widgets/ApplicationsCreateMethodFragment.vue'
-import ApplicationsDeviceGroupFragment from '../../ui/mockup/widgets/ApplicationsDeviceGroupFragment.vue'
-import ApplicationsRulePhasesFragment from '../../ui/mockup/widgets/ApplicationsRulePhasesFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
@@ -10,6 +8,10 @@ import {
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ApplicationsCreateMethodFragment = productWidget('applications-create-method')
+const ApplicationsDeviceGroupFragment = productWidget('applications-device-group')
+const ApplicationsRulePhasesFragment = productWidget('applications-rule-phases')
 
 const PILLARS = [
   {
@@ -108,7 +110,7 @@ export const APPLICATIONS_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Applications',
     title: 'Build and run distributed web applications',
     description:
@@ -184,7 +186,7 @@ export const APPLICATIONS_PAGE = [
     title: 'What teams build with Applications',
     description:
       'Put Applications in front of any origin and decide what happens to each request on Azion’s distributed infrastructure, with the rules and modules you configure. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },

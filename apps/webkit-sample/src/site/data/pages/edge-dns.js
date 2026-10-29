@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import EdgeDnsDnssecFragment from '../../ui/mockup/widgets/EdgeDnsDnssecFragment.vue'
-import EdgeDnsNameserverFragment from '../../ui/mockup/widgets/EdgeDnsNameserverFragment.vue'
-import EdgeDnsRecordFragment from '../../ui/mockup/widgets/EdgeDnsRecordFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const EdgeDnsDnssecFragment = productWidget('edge-dns-dnssec')
+const EdgeDnsNameserverFragment = productWidget('edge-dns-nameserver')
+const EdgeDnsRecordFragment = productWidget('edge-dns-record')
 
 const PILLARS = [
   {
@@ -117,7 +119,7 @@ export const EDGE_DNS_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Edge DNS',
     title: 'Secure, highly available authoritative DNS',
     description:
@@ -132,7 +134,7 @@ export const EDGE_DNS_PAGE = [
     title: 'Every DNS setting in one zone',
     description:
       'The nameservers you delegate to, the DNSSEC keys your provider needs and the records the zone answers with live together, served from every data center once the zone is active.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -162,41 +164,15 @@ export const EDGE_DNS_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Authoritative DNS with enterprise uptime',
-        description:
-          'Run your DNS on authoritative nameservers across the Azion Platform. You get a 99.99% uptime SLA, automatic failover, real-time health monitoring, and instant global propagation.',
-        href: PRODUCT_DOCS,
-        illustration: 'global-network',
-        illustrationLabel: 'Nameservers spread across data centers worldwide',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Built-in DDoS protection and threat detection',
-        description:
-          'Mitigate DNS floods, amplification attempts, and malicious queries with traffic analysis, automatic rate limiting, and real-time threat detection. Every query is evaluated proactively, with no additional configuration.',
-        href: '/site/products/ddos-protection',
-        illustration: 'dns-protection',
-        illustrationLabel:
-          'DNS queries filtered by a protective layer before they reach the nameservers',
-        actions: [{ label: 'DDoS Protection', href: '/site/products/ddos-protection' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Safe and reliable authoritative DNS',
     description:
       'Put Edge DNS in front of any domain and answer every query from Azion’s distributed infrastructure, with DNSSEC and DDoS protection built in. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

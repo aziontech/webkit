@@ -155,20 +155,41 @@ test('no-hardcoded-color (script + template)', () => {
       // short 3-4 digit hex outside a style string is an id/anchor/route, not a color
       "const anchor = '#dad'",
       "const route = '#face'",
-      "const hash = '#bad'"
+      "const hash = '#bad'",
+      // a URL fragment is not a color, even when its first digits spell a valid #RRGGBBAA
+      "const href = 'https://api.azion.com/#75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4'",
+      "const href = 'https://example.com/docs#ff0000'",
+      "const href = '/reference?tab=api#ff0000ff'",
+      // a full-length hex right after `/#` is a URL fragment
+      "const href = 'https://example.com/#deadbeef'",
+      // a bare UUID starts with 8 hex digits — an id, not a color
+      "const id = '75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4'"
     ],
     invalid: [
       { code: "const c = '#ff0000'", errors: [{ messageId: 'token' }] },
+      // the same digits ARE a color when they stand as a value, not as a URL fragment
+      { code: "const c = 'bg-[#75d2b32f]'", errors: [{ messageId: 'token' }] },
+      { code: "const c = 'red #ff0000'", errors: [{ messageId: 'token' }] },
       { code: "const c = 'text-gray-500'", errors: [{ messageId: 'token' }] },
       // short hex IS a color when the string looks like a style value
-      { code: "const c = 'color:#fff'", errors: [{ messageId: 'token' }] }
+      { code: "const c = 'color:#fff'", errors: [{ messageId: 'token' }] },
+      // a color next to a UUID is still a color
+      {
+        code: "const c = 'bg-[#ff0000] 75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4'",
+        errors: [{ messageId: 'token' }]
+      }
     ]
   })
   vue.run('no-hardcoded-color', noHardcodedColor, {
     valid: [
       { code: '<template><div class="text-body-sm">x</div></template>', filename: 'a.vue' },
       // anchor href that happens to be valid hex must not be flagged
-      { code: '<template><a href="#dad">x</a></template>', filename: 'anchor.vue' }
+      { code: '<template><a href="#dad">x</a></template>', filename: 'anchor.vue' },
+      // a URL fragment whose first eight hex digits spell a #RRGGBBAA must not be flagged
+      {
+        code: '<template><a href="https://api.azion.com/#75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4">x</a></template>',
+        filename: 'uuid-anchor.vue'
+      }
     ],
     invalid: [
       {
@@ -431,6 +452,12 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       {
         code: sfc('defineSlots<{ default(): unknown }>()', '<div><slot /></div>'),
         filename: 'b.vue'
+      },
+      {
+        code: sfc(
+          '/** Size token. */ export type Size = "small" | "large"; interface Props { /** Visual variant. */ kind?: string; size?: Size } defineProps<Props>(); defineEmits<{ /** Fired on activation. */ click: [event: MouseEvent] }>()'
+        ),
+        filename: 'c.vue'
       }
     ],
     invalid: [
@@ -453,6 +480,16 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: sfc('const a = 1', '<div><slot /></div>'),
         filename: 'e.vue',
         errors: [{ messageId: 'slot-without-defineslots' }]
+      },
+      {
+        code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'prose-comment' }, { messageId: 'prose-comment' }]
+      },
+      {
+        code: sfc('/** File header. */\n\ntype Size = "small"\ndefineProps<{ size?: Size }>()'),
+        filename: 'g.vue',
+        errors: [{ messageId: 'prose-comment' }]
       }
     ]
   })
@@ -468,18 +505,21 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: '/** @deprecated since 4.2 — use `kind`. Removed in 5.0 */ export const a = 1',
         filename: 'src/x.js'
       },
-      // a 5-line comment block is the ceiling, not a violation
       {
-        code: ['// 1', '// 2', '// 3', '// 4', '// 5', 'export const a = 1'].join('\n'),
-        filename: 'src/z.js'
+        code: "// eslint-disable-next-line no-console\nconsole.log(1)\nconst u = 'http://x'",
+        filename: 'src/directive.js'
       },
-      // one-line JSDoc (mandated on public surface) never counts as prose
       {
-        code: Array.from(
-          { length: 16 },
-          (_, i) => `/** doc ${i} */\nexport const v${i} = ${i}`
-        ).join('\n'),
-        filename: 'src/jsdoc.js'
+        code: '/** @param {string} v */\nexport const f = (v) => v',
+        filename: 'src/typed.js'
+      },
+      {
+        code: "// url=https://www.figma.com/design/k/F?node-id=1-2\n// source=src/a.vue\n// component=A\nimport figma from 'figma'\nexport default { id: 'a' }",
+        filename: 'src/components/a/a.figma.ts'
+      },
+      {
+        code: '// a note in a test is out of scope\nexport const a = 1',
+        filename: 'src/thing.test.js'
       }
     ],
     invalid: [
@@ -495,25 +535,29 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         filename: 'src/y.js',
         errors: [{ messageId: 'deprecated-without-replacement' }]
       },
-      // 6 consecutive comment lines → verbose-comment-block
       {
-        code: ['// 1', '// 2', '// 3', '// 4', '// 5', '// 6', 'export const a = 1'].join('\n'),
+        code: '// url=https://www.figma.com/design/k/F?node-id=1-2\nexport const a = 1',
+        filename: 'src/a.ts',
+        errors: [{ messageId: 'prose-comment', line: 1 }]
+      },
+      {
+        code: ['// 1', 'export const a = 1 // 2', '/* 3 */ export const b = 2'].join('\n'),
         filename: 'src/w.js',
-        errors: [{ messageId: 'verbose-comment-block' }]
+        errors: [
+          { messageId: 'prose-comment', line: 1 },
+          { messageId: 'prose-comment', line: 2 },
+          { messageId: 'prose-comment', line: 3 }
+        ]
       },
-      // blank lines do not reset the block (no evasion by spacing)
       {
-        code: ['// 1', '// 2', '// 3', '', '// 4', '// 5', '// 6', 'export const a = 1'].join('\n'),
-        filename: 'src/v.js',
-        errors: [{ messageId: 'verbose-comment-block' }]
+        code: '/** Builds the thing. */\nexport function build() {}',
+        filename: 'src/build.ts',
+        errors: [{ messageId: 'prose-comment' }]
       },
-      // ≥15 prose lines at ≥20% of the file → comment-heavy-file
       {
-        code: Array.from({ length: 15 }, (_, i) => `// note ${i}\nexport const n${i} = ${i}`).join(
-          '\n'
-        ),
-        filename: 'src/u.js',
-        errors: [{ messageId: 'comment-heavy-file' }]
+        code: '/**\n * Explains the value.\n * @param {string} v\n */\nexport const f = (v) => v',
+        filename: 'src/typed.js',
+        errors: [{ messageId: 'prose-comment' }]
       }
     ]
   })

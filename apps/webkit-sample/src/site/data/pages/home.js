@@ -12,7 +12,7 @@ import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
 import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { CLIENT_STRIP, CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
 
 import { PLATFORM_PRIMITIVES } from '../platform-primitives.js'
 import { agentsClosing, PLATFORM_DIRECTORY } from '../product-pages.js'
@@ -119,7 +119,7 @@ export const MARKET_RECOGNITIONS = [
     firm: FIRMS.g2
   },
   {
-    text: 'Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report.',
+    text: 'Named a Leader, and the only vendor whose capabilities meet every key criterion in the report.',
     name: 'GigaOm Radar for Edge Platforms',
     jobTitle: '',
     firm: FIRMS.gigaom
@@ -235,10 +235,10 @@ export const HOME_PAGE = [
     description:
       'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
-    carouselLabel: 'Proven on mission-critical workloads',
+    carouselLabel: CLIENT_STRIP_LABEL,
     carouselMarks: CLIENT_STRIP
   },
   {
@@ -250,12 +250,10 @@ export const HOME_PAGE = [
   {
     section: 'NetworkSection',
     ...EARTH_NETWORK,
-    title: 'Distributed infrastructure that stays up when others go down',
-    titleTail: '',
     claims: [
       '100+ data centers',
       '100+ Tbps throughput',
-      'Instant scale, automatic routing & failover',
+      { label: 'Instant scale, automatic routing & failover', mobile: false },
       '30 ms median latency',
       'Always-on DDoS protection'
     ]
@@ -269,6 +267,7 @@ export const HOME_PAGE = [
       'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
     tiles: HOME_REASONS
   },
+  HOME_SOLUTIONS_BAND,
   {
     section: 'RecognitionMarquee',
     title: 'Recognized as a market leader',

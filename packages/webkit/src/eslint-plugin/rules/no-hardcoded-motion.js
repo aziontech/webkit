@@ -1,9 +1,3 @@
-// Flags motion that bypasses the theme's animation catalog, in class and style strings,
-// in both script literals and the SFC template: arbitrary timing utilities, literal
-// timing in style strings, animate names missing from the installed catalog, and a
-// static class attribute with motion but no reduced-motion escape (bound fragments are
-// skipped). Fail-open without a catalog; style blocks are owned by the stylelint config.
-
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
 
@@ -13,7 +7,6 @@ const STYLE_LITERAL_TIMING = /\b(?:transition|animation)\s*:[^;]*?\b\d+(?:\.\d+)
 const STYLE_CUBIC_BEZIER = /cubic-bezier\s*\(/
 const STYLE_TRANSITION_ALL = /\btransition\s*:\s*all\b/
 const ANIMATE_NAME = /\banimate-([a-z][a-z0-9-]*)/g
-// Tailwind transition utilities only (not arbitrary class names containing "transition").
 const TRANSITION_UTILITY =
   /(?:^|[\s:'"`])transition(?:-(?:all|colors|opacity|shadow|transform))?(?=$|[\s'"`])/
 const MOTION_ESCAPE = /motion-reduce:/
@@ -71,8 +64,6 @@ export default {
       }
     }
 
-    // The static class attribute holds the FULL class list, so the motion-reduce pairing
-    // can be checked reliably there (and only there).
     function scanClassPairing(node, text) {
       if (typeof text !== 'string' || !text) return
       const hasAnimation = /\banimate-(?!none\b)[a-z]/.test(text)

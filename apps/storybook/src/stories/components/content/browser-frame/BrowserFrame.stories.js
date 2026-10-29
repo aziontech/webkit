@@ -98,7 +98,7 @@ const SCREEN = `<SectionContainer max-width="site">
         <Button kind="secondary" label="Start for free" />
       </template>
       <template #aside>
-        <Button kind="outlined" label="Talk to sales" />
+        <Button kind="outlined" label="Talk to a specialist" />
       </template>
     </CallToAction>
   </SectionModule>
@@ -106,7 +106,7 @@ const SCREEN = `<SectionContainer max-width="site">
 </SectionContainer>`
 
 const meta = {
-  title: 'Components/Content/BrowserFrame',
+  title: 'Components/Primitives/Content/BrowserFrame',
   component: BrowserFrame,
   tags: ['autodocs'],
   parameters: {
@@ -216,7 +216,8 @@ const meta = {
     },
     'onUpdate:height': {
       action: 'update:height',
-      description: 'Emitted on every height resize step, pointer move or key press (v-model:height).',
+      description:
+        'Emitted on every height resize step, pointer move or key press (v-model:height).',
       table: { category: 'events', type: { summary: 'number' } }
     },
     default: {

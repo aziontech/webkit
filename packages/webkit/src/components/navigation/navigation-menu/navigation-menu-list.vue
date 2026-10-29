@@ -50,8 +50,6 @@
 
   const isGroup = computed(() => props.label != null && props.label !== '')
 
-  // The heading is a link only when it has somewhere to go — a data prop switching the element,
-  // never an `as`/`is` string (see .claude/rules/root-element.md).
   const isLabelLink = computed(() => props.href !== '')
 
   const labelClass = computed(() =>
@@ -61,11 +59,6 @@
     )
   )
 
-  /**
-   * A heading link is a destination, so following it ends the menu's job — the same close a
-   * `close-on-click` entry performs, and for the same reason: the panel must not outlive the
-   * navigation it triggered.
-   */
   const onLabelClick = (event: globalThis.MouseEvent) => {
     if (!isLabelLink.value) {
       return

@@ -118,7 +118,7 @@ export const NAV_FLAT = [
       {
         id: 'certificate-manager',
         label: 'Certificate Manager',
-        icon: 'ai ai-digital-certificates',
+        icon: 'ai ai-certificate-manager',
         path: '/certificates'
       },
       {
@@ -184,22 +184,7 @@ export const NAV_LEVELS = [
   {
     items: [
       { id: 'overview', label: 'Overview', icon: 'pi pi-home', path: '/home' },
-      {
-        id: 'workloads-module',
-        label: 'Workloads',
-        icon: 'ai ai-workloads',
-        kind: 'drill',
-        href: '/workloads/overview',
-        groups: [
-          {
-            label: 'Workloads',
-            items: [
-              { id: 'workloads-overview', label: 'Overview', path: '/workloads/overview' },
-              { id: 'workloads', label: 'All Workloads', path: '/workloads' }
-            ]
-          }
-        ]
-      },
+      { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
       {
         id: 'deployments',
         label: 'Deployments',
@@ -212,36 +197,16 @@ export const NAV_LEVELS = [
     label: 'Build',
     items: [
       {
-        id: 'applications-module',
+        id: 'applications',
         label: 'Applications',
         icon: 'ai ai-edge-application',
-        kind: 'drill',
-        href: '/applications/overview',
-        groups: [
-          {
-            label: 'Applications',
-            items: [
-              { id: 'applications-overview', label: 'Overview', path: '/applications/overview' },
-              { id: 'applications', label: 'All Applications', path: '/applications' }
-            ]
-          }
-        ]
+        path: '/applications'
       },
       {
-        id: 'functions-module',
+        id: 'functions',
         label: 'Functions',
         icon: 'ai ai-edge-functions',
-        kind: 'drill',
-        href: '/functions/overview',
-        groups: [
-          {
-            label: 'Functions',
-            items: [
-              { id: 'functions-overview', label: 'Overview', path: '/functions/overview' },
-              { id: 'functions', label: 'All Functions', path: '/functions' }
-            ]
-          }
-        ]
+        path: '/functions'
       },
       { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
       {
@@ -287,7 +252,7 @@ export const NAV_LEVELS = [
       {
         id: 'certificate-manager',
         label: 'Certificate Manager',
-        icon: 'ai ai-digital-certificates',
+        icon: 'ai ai-certificate-manager',
         path: '/certificates'
       }
     ]
@@ -296,24 +261,10 @@ export const NAV_LEVELS = [
     label: 'Store',
     items: [
       {
-        id: 'object-storage-module',
+        id: 'object-storage',
         label: 'Object Storage',
         icon: 'ai ai-edge-storage',
-        kind: 'drill',
-        href: '/object-storage/overview',
-        groups: [
-          {
-            label: 'Object Storage',
-            items: [
-              {
-                id: 'object-storage-overview',
-                label: 'Overview',
-                path: '/object-storage/overview'
-              },
-              { id: 'object-storage', label: 'Buckets', path: '/object-storage' }
-            ]
-          }
-        ]
+        path: '/object-storage'
       },
       {
         id: 'sql-database',

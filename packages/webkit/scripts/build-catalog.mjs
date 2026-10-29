@@ -1,15 +1,4 @@
 #!/usr/bin/env node
-// Generates packages/webkit/catalog.json — the machine-readable, version-locked
-// manifest that the adoption tooling reads (eslint-plugin-webkit, webkit-mcp,
-// the Claude Code bundle). One source of truth, derived from:
-//   - packages/webkit/package.json#exports  (the canonical allowed-import list)
-//   - .specs/*.md                            (per-component API: props/events/slots)
-//
-// Deterministic by design (no timestamps) so a CI drift-check can assert the
-// committed catalog.json matches a fresh build. Re-run at release time via the
-// .releaserc `prepareCmd` so it always tracks the published exports.
-//
-// No external deps — Node built-ins + the repo's own spec parser.
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
@@ -28,24 +17,14 @@ const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 
-// Theme sources for the positive token inventory (see buildTokens): the generated CSS
-// custom properties and the semantic typography utility table. Both channels are unioned
-// so the inventory carries BOTH the semantic tokens consumers write (`--primary`,
-// `--bg-surface`, in v3) and the primitive scale (`--color-primary-500`, in v4).
 const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
   resolve(REPO_ROOT, 'packages/theme/dist/v4/globals.css')
 ]
 const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/texts.data.js')
 
-// The public import name is always `@aziontech/webkit`: every import written anywhere
-// is `@aziontech/webkit/<subpath>`, so the catalog stamps this name into every
-// import path.
 const PKG_NAME = '@aziontech/webkit'
 
-// Token rules ported verbatim from .claude/hooks/validate-tokens.mjs so the
-// linter / stylelint / MCP validate against the same set the DS itself enforces.
-// Stored as source strings + flags (JSON-serializable) — consumers rebuild RegExp.
 const TOKEN_RULES = [
   {
     id: 'hex-color',
@@ -85,7 +64,6 @@ const TOKEN_RULES = [
   }
 ]
 
-/** Strip surrounding backticks/whitespace from a markdown table cell. */
 function clean(cell) {
   return String(cell ?? '')
     .trim()
@@ -93,11 +71,6 @@ function clean(cell) {
     .trim()
 }
 
-/**
- * Split a markdown table row into trimmed cells (leading/trailing pipes stripped).
- * A trailing backslash is dropped so an escaped union pipe (`'a' \| 'b'`) rejoins
- * cleanly as `'a' | 'b'` after overflow merge, matching unescaped union cells.
- */
 function splitRow(line) {
   return line
     .replace(/^\||\|$/g, '')
@@ -105,12 +78,6 @@ function splitRow(line) {
     .map((c) => c.trim().replace(/\s*\\$/, ''))
 }
 
-/**
- * Parse a markdown table into header-keyed rows, tolerating union types like
- * `'a' | 'b' | 'c'` inside a cell (unescaped `|`). Extra cells are absorbed by
- * `overflowHeader`'s column (joined with ' | '); the trailing columns keep their
- * positions. Returns [] when the section has no table.
- */
 function parseSpecTable(section, overflowHeader) {
   if (!section) return []
   const lines = section
@@ -141,18 +108,12 @@ function parseSpecTable(section, overflowHeader) {
   return rows
 }
 
-/** Category from an export target path: src/components/<category>/<name>/... → <category>. */
 function categoryFromTarget(target) {
   const m = target.match(/^\.\/src\/components\/([^/]+)\/([^/]+)\//)
   if (!m) return null
-  // Two shapes: components/<category>/<name>/ (3 dirs) or components/<name>/ (name only).
-  // When the 2nd segment is the component's own file dir (name === 2nd seg name), the
-  // 1st segment is the category. When there is no category dir the regex still yields
-  // <name> as [1]; guard by requiring the target to have the deeper shape.
   return m[1]
 }
 
-/** kind by target path for non-component exports. */
 function kindFromTarget(target) {
   if (target.startsWith('./src/eslint-plugin/')) return 'other'
   if (target.startsWith('./src/mcp/')) return 'other'
@@ -163,8 +124,6 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/assets/')) return 'asset'
   if (target.startsWith('./src/styles/')) return 'style'
   if (target.startsWith('./src/vite/')) return 'other'
-  // Only a `.vue` root or an `index.ts` compound barrel is a renderable component;
-  // any other target under src/components (a bare helper .ts) is not.
   if (/\.vue$/.test(target) || /\/index\.(ts|js)$/.test(target)) return 'component'
   return 'other'
 }
@@ -177,10 +136,6 @@ function loadSpec(subpath) {
   return value
 }
 
-/**
- * Strip HTML comments, re-applying until the text is stable: a single pass can leave a
- * residual `<!--` when removals concatenate into a new comment opener.
- */
 function stripHtmlComments(text) {
   let out = String(text)
   let prev
@@ -191,7 +146,6 @@ function stripHtmlComments(text) {
   return out
 }
 
-/** First real prose paragraph of a section (drops HTML comments + the `_none_` sentinel). */
 function firstProse(section) {
   if (!section) return ''
   const text = stripHtmlComments(section)
@@ -203,7 +157,6 @@ function firstProse(section) {
   return text
 }
 
-/** Markdown list items of a section as a trimmed string array (drops HTML comments). */
 function bullets(section) {
   if (!section) return []
   return stripHtmlComments(section)
@@ -244,25 +197,13 @@ function _readSpec(subpath) {
     category: frontmatter.category ?? null,
     structure: frontmatter.structure ?? null,
     status: frontmatter.status ?? null,
-    // Deprecation (B4): optional frontmatter (`deprecated: true`, `replaced_by: <name>`).
-    // Absent on every current spec, so no consumer rule fires until a component is
-    // actually deprecated — then no-deprecated-component steers to the replacement.
     deprecated: frontmatter.deprecated === true,
     replacedBy: frontmatter.replaced_by ?? null,
-    // App-level setup (frontmatter `setup:`): the one-time wiring a component needs before
-    // first use (e.g. toast's `.use(ToastPlugin)`). Surfaced by the MCP so the AI wires it
-    // just-in-time; `doctor` backstops it mechanically.
     setup:
       typeof frontmatter.setup === 'string' && frontmatter.setup.trim()
         ? frontmatter.setup.trim()
         : null,
-    // Style seam (pillar 2): a component that INTENTIONALLY lets the consumer pass
-    // class/style to its root (a layout/container wrapper). no-style-override reads this
-    // to allow it. Opt-in via spec frontmatter `style_seam: true`; default false.
     styleSeam: frontmatter.style_seam === true,
-    // Usage guidance (B3): Purpose prose + the structured "when/why" sections. Extracted
-    // when present; empty until a spec is backfilled. Powers get_component / suggest /
-    // get_best_practices and the Storybook description.
     purpose: firstProse(getSection(body, 'Purpose')),
     useWhen: bullets(getSection(body, 'When to use')),
     avoidWhen: bullets(getSection(body, 'When NOT to use')),
@@ -282,19 +223,12 @@ function build() {
     .map((k) => k.slice(2))
   const subpathSet = new Set(subpaths)
 
-  // A top-level subpath hosts a compound (owns sub-components) iff its spec is a
-  // composition, its target is an index.ts barrel, or it exports a `-root` sibling.
-  // Spec structure is the reliable signal: it catches .vue-rooted compounds
-  // (dialog, drawer, …) and index.ts compounds (dropdown, paginator) while NOT
-  // mis-catching monolithic components that merely share a name prefix
-  // (button vs button-highlight).
   const compoundRoots = subpaths.filter((s) => {
     if (s.includes('/')) return false
     if (subpathSet.has(`${s}-root`)) return true
     if (/^\.\/src\/components\/.+\/index\.(ts|js)$/.test(exportsMap[`./${s}`] || '')) return true
     return loadSpec(s)?.structure === 'composition'
   })
-  // Longest-first so multi-select wins over select when attributing subcomponents.
   const compoundByLength = [...compoundRoots].sort((a, b) => b.length - a.length)
 
   function parentCompound(subpath) {
@@ -311,7 +245,6 @@ function build() {
     const importPath = `${PKG_NAME}/${subpath}`
     const entry = { import: importPath, target }
 
-    // Non-module exports (package.json, catalog.json, docs/*.md): valid imports, not components.
     if (subpath.endsWith('.json') || subpath.endsWith('.md')) {
       entry.kind = subpath.endsWith('.md') ? 'doc' : 'other'
       entry.treeShakeableImport = importPath
@@ -351,16 +284,11 @@ function build() {
         const rootKey = `${subpath}-root`
         const isBarrel = /\/index\.(ts|js)$/.test(target)
         if (subpathSet.has(rootKey)) {
-          // Dedicated tree-shakeable root export (the canonical compound-api shape).
           entry.treeShakeableImport = `${PKG_NAME}/${rootKey}`
         } else if (isBarrel) {
-          // index.ts barrel with no `-root` export: the compound path pulls in every
-          // sub-component, so there is no tree-shakeable way in. Report it honestly
-          // instead of pointing at a non-existent `-root`.
           entry.treeShakeableImport = null
           entry.treeShakeableNote = `No tree-shakeable root. Add "./${rootKey}" -> the root .vue, or import sub-components individually.`
         } else {
-          // .vue-rooted compound: the main export already resolves to the lean root .vue.
           entry.treeShakeableImport = importPath
         }
         entry.subcomponents = subpaths
@@ -377,7 +305,6 @@ function build() {
       }
     }
 
-    // Enrich components/roots with spec API when a spec exists.
     const spec = loadSpec(subpath) || (entry.kind === 'root' ? loadSpec(entry.rootOf) : null)
     if (spec) {
       entry.category = spec.category ?? categoryFromTarget(target)
@@ -408,20 +335,11 @@ function build() {
     deniedPrefixes: [`${PKG_NAME}/src/`],
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
-    // Canonical prop vocabulary (pillar 1): the MCP surfaces this so AI-generated
-    // consumer code uses `kind` (not `variant`), `severity` (not `status`), etc.
     vocabulary: vocabularySnapshot(),
     imports
   }
 }
 
-/**
- * Positive token inventory sourced from @aziontech/theme: the valid CSS custom
- * properties (from the generated globals.css) and the typography utility classes (from
- * the semantic texts table). Complements `tokenRules` (what NOT to write) with what a
- * consumer SHOULD use. Deterministic (sorted) so the drift-check stays stable; fail-safe
- * (empty) if the theme build output is unavailable.
- */
 function buildTokens() {
   const cssVarSet = new Set()
   for (const globals of THEME_GLOBALS_CANDIDATES.filter((p) => existsSync(p))) {
@@ -437,7 +355,6 @@ function buildTokens() {
   }
   const typography = [...typoSet].sort()
 
-  // Group CSS vars by their first path segment (e.g. --bg-surface → "bg", --primary → "primary").
   const grouped = {}
   for (const v of cssVars) {
     const name = v.slice(2)
@@ -447,9 +364,6 @@ function buildTokens() {
   const groups = {}
   for (const k of Object.keys(grouped).sort()) groups[k] = grouped[k]
 
-  // Animation catalog: the valid `animate-*` NAMES (without the prefix), unioning the
-  // semantic-plugin utilities (.animate-*) with the primitive --animate-* custom
-  // properties. This is the source of truth the compliance hook cross-checks against.
   const animSet = new Set()
   const semAnim = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/animations.js')
   if (existsSync(semAnim)) {
@@ -462,9 +376,6 @@ function buildTokens() {
   }
   const animations = [...animSet].sort()
 
-  // Animation guide: per-utility timing value + "when to use it" prose, read from the
-  // theme's own token source (single source of truth). The MCP surfaces this so a
-  // consumer (or its AI) picks the right utility — e.g. slide-in-left for a sidebar.
   const animationGuide = {}
   for (const name of animations) {
     animationGuide[name] = {

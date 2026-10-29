@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Hint from '@aziontech/webkit/hint'
+  import InputText from '@aziontech/webkit/input-text'
   import Link from '@aziontech/webkit/link'
   import Overline from '@aziontech/webkit/overline'
   import SelectContent from '@aziontech/webkit/select-content'
@@ -7,8 +8,9 @@
   import Select from '@aziontech/webkit/select-root'
   import SelectTrigger from '@aziontech/webkit/select-trigger'
   import Tag from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
+  import { useOptionSearch } from '../../composables/use-option-search'
   import SectionAction from './SectionAction.vue'
   import type { SiteAction, SiteLink } from './types'
 
@@ -83,11 +85,17 @@
     notIncludedLabel: 'Not included'
   })
 
+  const PLAN_KEY = 'plan'
+
+  const { searchable, query, setQuery, narrow } = useOptionSearch()
+
   const visiblePlan = ref(
     (props.plans.find((plan) => plan.highlighted) ?? props.plans[0])?.id ?? ''
   )
 
   const planName = (id: unknown) => props.plans.find((plan) => plan.id === id)?.name ?? ''
+
+  const matchingPlans = computed(() => narrow(PLAN_KEY, props.plans, (plan) => plan.name))
 
   const labelHead = (label: string) => label.slice(0, label.lastIndexOf(' ') + 1)
 
@@ -122,16 +130,43 @@
               v-model="visiblePlan"
               :display-value="planName"
               size="large"
+              @update:open="setQuery(PLAN_KEY, '')"
             >
               <SelectTrigger :aria-label="pickerLabel" />
               <SelectContent>
+                <template
+                  v-if="searchable(plans)"
+                  #search
+                >
+                  <InputText
+                    :model-value="query(PLAN_KEY)"
+                    size="small"
+                    placeholder="Search"
+                    :aria-label="pickerLabel ? `Search ${pickerLabel.toLowerCase()}` : 'Search'"
+                    @update:model-value="setQuery(PLAN_KEY, $event)"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </InputText>
+                </template>
                 <SelectOption
-                  v-for="plan in plans"
+                  v-for="plan in matchingPlans"
                   :key="plan.id"
                   :value="plan.id"
                 >
                   {{ plan.name }}
                 </SelectOption>
+                <p
+                  v-if="!matchingPlans.length"
+                  role="status"
+                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                >
+                  No results found
+                </p>
               </SelectContent>
             </Select>
           </div>

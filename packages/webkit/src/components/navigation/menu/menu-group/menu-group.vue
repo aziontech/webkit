@@ -12,9 +12,7 @@
   })
 
   interface Props {
-    /** Header text; omit for an unlabeled block. */
     label?: string
-    /** Accessible name for the section when there is no visible label. */
     ariaLabel?: string
   }
 
@@ -40,29 +38,18 @@
 
   const hasLabel = computed(() => Boolean(props.label) || Boolean(slots.label))
 
-  // Only a ROOT-level group steps aside on a push — a nested one slides with its level;
-  // hiding it would pull the pushed level's own rows out of the a11y tree.
   const isNested = inject(MenuSubInjectionKey, null) !== null
   const isCurrent = computed(() => isNested || ctx.levels.value.length === 0)
 
-  /** Timing follows the direction of travel (out on a push, back on a pop); only the timing is inline. */
   const levelStyle = computed(() => {
     if (isNested) return undefined
-    // A pop slides in OPAQUE so it covers the leaving level; a push fades as it goes.
     return isCurrent.value
       ? getMenuLevelTransitionStyle('enter', { fade: false })
       : getMenuLevelTransitionStyle('leave')
   })
 
-  // Out of flow, not unrendered, while hidden: an unrendered element has nothing to tween
-  // from, so the slide back in on a pop would snap. Reduced motion drops it out entirely.
   const ROOT_CLASS =
-    // The hidden level is positioned, so by default it paints above the in-flow current
-    // level — the current one has to win the stacking.
     'relative z-10 flex w-full flex-col my-(--spacing-sm) first-of-type:my-0 translate-x-0 ' +
-    // The slide clears the group's width but not the host's padding — a sliver of the
-    // outgoing level would show, and fading the leave is the only fix (enter stays opaque;
-    // see presets/transitions.ts). Backgroundless layers need a fill during the slide to occlude.
     'data-[motion=push]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
     'data-[motion=pop]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
     'aria-hidden:z-0 ' +
@@ -72,20 +59,16 @@
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 
-  // After a host remount there is no rendered off-canvas position to tween from, so the pop
-  // entrance needs Vue's from-frame like a mounting level's. Gated on `enterOnMount` and an
-  // empty stack — a group behind a pushed level stays put.
   const appear = computed(
     () => !isNested && ctx.enterOnMount.value && ctx.levels.value.length === 0
   )
+
+  const transitionAttrs = computed(() => (appear.value ? { appear: true } : {}))
 </script>
 
 <template>
-  <!-- The from-frame must exist one paint before the class-driven resting position wins (the
-       enter-from class outranks it on specificity). No opacity is tweened — an arriving surface
-       stays opaque to cover what leaves — and its guard skips the frame under reduced motion. -->
   <Transition
-    :appear="appear"
+    v-bind="transitionAttrs"
     :duration="{ enter: MENU_LEVEL_ENTER_MS, leave: 0 }"
     enter-from-class="motion-safe:-translate-x-full!"
   >
@@ -100,8 +83,6 @@
       :class="rootClass"
       :style="levelStyle"
     >
-      <!-- A title, not a control: a group separates rows, it does not fold them — folding
-           belongs to a condensed ROW, whose chevron and rail say which rows it owns. -->
       <div
         v-if="hasLabel"
         :id="labelId"

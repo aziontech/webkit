@@ -86,7 +86,7 @@ const KINDS = [
     rows: () => CERTIFICATES,
     scope: 'certificates',
     typeLabel: 'Certificate',
-    icon: 'ai ai-digital-certificates',
+    icon: 'ai ai-certificate-manager',
     navId: 'certificate-manager',
     keywords: 'certificate tls ssl',
     entry: (row) => ({

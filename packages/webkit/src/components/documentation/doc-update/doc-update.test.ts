@@ -9,7 +9,7 @@ import DocUpdate from './doc-update.vue'
 // Browser mode loads no Tailwind — sticky column/rule/fade belong to the visual gate;
 // asserted here: structure, id derivation, aria-labelledby wiring, chips, testids.
 
-const { Default, Changelog } = composeStories(stories)
+const { Default, Changelog, Releases } = composeStories(stories)
 
 describe('DocUpdate', () => {
   describe('rendering & testid', () => {
@@ -88,6 +88,78 @@ describe('DocUpdate', () => {
     })
   })
 
+  describe('a titled entry', () => {
+    const titled = {
+      label: 'September 2, 2026',
+      title: 'Terraform Provider',
+      description: 'Version 2.8.0',
+      tags: ['Improvements', 'Bug Fixes']
+    }
+
+    it('makes the title the heading and the label a plain date', () => {
+      const { getByRole, getByText, getAllByRole } = render(DocUpdate, { props: titled })
+      const heading = getByRole('heading', { level: 2 })
+      expect(heading.textContent?.trim()).toBe('Terraform Provider')
+      expect(getAllByRole('heading')).toHaveLength(1)
+      expect(getByText('September 2, 2026').closest('h2')).toBeNull()
+      expect(getByText('Version 2.8.0')).toBeInTheDocument()
+    })
+
+    it('anchors on the label and title together', () => {
+      const { getByTestId, getByRole } = render(DocUpdate, { props: titled })
+      const root = getByTestId('documentation-doc-update')
+      expect(root.id).toBe('september-2-2026-terraform-provider')
+      expect(root.getAttribute('aria-labelledby')).toBe('september-2-2026-terraform-provider-label')
+      expect(getByRole('heading', { level: 2 }).id).toBe(
+        'september-2-2026-terraform-provider-label'
+      )
+      expect(getByRole('link', { name: 'Terraform Provider' }).getAttribute('href')).toBe(
+        '#september-2-2026-terraform-provider'
+      )
+    })
+
+    it('still prefers an explicit anchor prop', () => {
+      const { getByTestId } = render(DocUpdate, { props: { ...titled, anchor: 'tf-2-8' } })
+      expect(getByTestId('documentation-doc-update').id).toBe('tf-2-8')
+    })
+
+    it('renders the tags under the title at medium size, without the rounded shape', () => {
+      const { getAllByTestId, getByRole } = render(DocUpdate, { props: titled })
+      const tags = getAllByTestId('content-tag')
+      expect(tags).toHaveLength(2)
+      for (const tag of tags) {
+        expect(tag.getAttribute('data-size')).toBe('medium')
+        expect(tag.hasAttribute('data-rounded')).toBe(false)
+      }
+      const heading = getByRole('heading', { level: 2 })
+      expect(heading.parentElement?.contains(tags[0])).toBe(true)
+    })
+
+    it('marks the root titled and keeps the rule node decorative', () => {
+      const { getByTestId } = render(DocUpdate, { props: titled })
+      expect(getByTestId('documentation-doc-update').hasAttribute('data-titled')).toBe(true)
+      expect(getByTestId('documentation-doc-update__node').getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('renders no node and no titled marker without a title', () => {
+      const { getByTestId, queryByTestId } = render(DocUpdate, {
+        props: { label: 'August 19, 2026' }
+      })
+      expect(getByTestId('documentation-doc-update').hasAttribute('data-titled')).toBe(false)
+      expect(queryByTestId('documentation-doc-update__node')).not.toBeInTheDocument()
+    })
+
+    it('gives two titled entries on one date distinct ids', () => {
+      const { getAllByTestId } = render(Releases())
+      const ids = getAllByTestId('documentation-doc-update').map((entry) => entry.id)
+      expect(ids).toEqual([
+        'september-2-2026-terraform-provider',
+        'august-26-2026-azion-cli',
+        'august-26-2026-azion-console'
+      ])
+    })
+  })
+
   describe('heading navigation', () => {
     it('does not crash when the label anchor is activated outside a provider', async () => {
       const { getByRole } = render(DocUpdate, {
@@ -114,6 +186,11 @@ describe('DocUpdate', () => {
 
     it('has no violations across a changelog of entries', async () => {
       const { container } = render(Changelog())
+      await expectNoA11yViolations(container)
+    })
+
+    it('has no violations across titled releases', async () => {
+      const { container } = render(Releases())
       await expectNoA11yViolations(container)
     })
   })

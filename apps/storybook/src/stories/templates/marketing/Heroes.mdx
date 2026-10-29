@@ -57,9 +57,38 @@ Example:
 
 ### Title band
 
-The Learning Center hero. A padded band instead of a full screen, with the title, one line of description and two actions centered, and the client strip below. Use it on list and catalogue pages, where a full screen of title would push the first entry below the fold.
+The Cache hero, and every product page's. A padded band instead of a full screen, with the eyebrow, title, one line of description and two actions centered. Use it where a full screen of title would push the first section below the fold.
 
 <Canvas of={HeroesStories.TitleBand} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `carouselLabel` and `carouselMarks` stay out: with no marks the band has no client strip. Title band carousel below adds them.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.TitleBandJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Title band carousel
+
+The Learning Center hero, and the Support page's. The same band with the client strip on its floor, for list and catalogue pages that open on proof.
+
+<Canvas of={HeroesStories.TitleBandCarousel} />
 
 ##### Use it on the site
 
@@ -73,7 +102,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 Example:
 
 <div className="sb-site-json">
-  <Source of={HeroesStories.TitleBandJson} dark />
+  <Source of={HeroesStories.TitleBandCarouselJson} dark />
 </div>
 
 <hr

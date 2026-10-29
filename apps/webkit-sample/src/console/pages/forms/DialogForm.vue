@@ -29,7 +29,7 @@
   const confirmLabel = computed(() => `To confirm, type "${application.name}" in the box below:`)
 
   watch(open, (isOpen) => {
-    if (!isOpen) confirmation.value = ''
+    if (isOpen) confirmation.value = ''
   })
 
   const remove = async () => {

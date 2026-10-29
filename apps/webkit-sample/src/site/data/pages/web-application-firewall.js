@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import WafAllowedRuleFragment from '../../ui/mockup/widgets/WafAllowedRuleFragment.vue'
-import WafFirewallRuleFragment from '../../ui/mockup/widgets/WafFirewallRuleFragment.vue'
-import WafThreatFragment from '../../ui/mockup/widgets/WafThreatFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS,
   PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const WafAllowedRuleFragment = productWidget('waf-allowed-rule')
+const WafFirewallRuleFragment = productWidget('waf-firewall-rule')
+const WafThreatFragment = productWidget('waf-threat')
 
 const PILLARS = [
   {
@@ -122,7 +124,7 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'WAF',
     title: 'Protect applications and APIs with rules you control',
     description:
@@ -137,7 +139,7 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
     title: 'Protection applied to every request',
     description:
       'Threat types, the firewall rule that runs them, and exceptions for trusted traffic live in one versioned configuration. They deploy together.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -167,41 +169,15 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Stream security events for investigation and response',
-        description:
-          'Send security events to your SIEM, Splunk, Datadog, or analytics tools and see suspicious traffic and application threats fast.',
-        href: PRODUCT_DOCS,
-        illustration: 'stream-security-events-for-investigation-and-response',
-        illustrationLabel:
-          'Security events streamed in under 40 seconds to APIs, dashboards, SIEM and other interfaces',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Extend protection with custom logic',
-        description:
-          'Write custom security rules with Functions for business-specific protections and automated mitigation. Extend WAF with your own detection logic or AI models.',
-        href: '/site/products/functions',
-        illustration: 'custom-rules-mitigation',
-        illustrationLabel: 'A custom rule in code returning block, rate limit or alert',
-        actions: [{ label: 'Functions', href: '/site/products/functions' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'Protect critical applications and APIs',
     description:
       'Put WAF in front of any application or API and stop attacks on Azion’s distributed infrastructure, before they reach your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_SECURITY_CLOSING
 ]

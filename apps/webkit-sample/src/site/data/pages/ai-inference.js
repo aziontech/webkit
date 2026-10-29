@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import AiInferenceFunctionFragment from '../../ui/mockup/widgets/AiInferenceFunctionFragment.vue'
-import AiInferenceModelFragment from '../../ui/mockup/widgets/AiInferenceModelFragment.vue'
-import AiInferenceTemplateFragment from '../../ui/mockup/widgets/AiInferenceTemplateFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const AiInferenceFunctionFragment = productWidget('ai-inference-function')
+const AiInferenceModelFragment = productWidget('ai-inference-model')
+const AiInferenceTemplateFragment = productWidget('ai-inference-template')
 
 const PILLARS = [
   {
@@ -119,7 +121,7 @@ export const AI_INFERENCE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'AI Inference',
     title: 'Run AI models close to your users',
     description:
@@ -134,7 +136,7 @@ export const AI_INFERENCE_PAGE = [
     title: 'From a template to a running model',
     description:
       'The starter you deploy, the model it loads and the function that calls it ship together in one workflow, to the same distributed infrastructure.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -164,40 +166,15 @@ export const AI_INFERENCE_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Deploy from your local environment',
-        description:
-          'Build, debug, and ship AI workloads the way you already code, with the scale of Azion’s distributed infrastructure.',
-        href: PRODUCT_DOCS,
-        illustration: 'quick-start-with-templates',
-        illustrationLabel: 'A project going from a starter template to a live deployment',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Fine-tune with LoRA',
-        description:
-          'Adapt model outputs to your domain with Low-Rank Adaptation (LoRA). Accuracy improves on specialized tasks and compute costs drop, with no full model retraining.',
-        href: '/site/solutions/ai',
-        illustration: 'models-and-lora',
-        illustrationLabel: 'A model adapted with LoRA, restyling an image from a few lines of code',
-        actions: [{ label: 'AI solutions', href: '/site/solutions/ai' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What you can build with AI Inference',
     description:
       'Put AI Inference behind any application and run models on Azion’s distributed infrastructure, close to your users. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('axur') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

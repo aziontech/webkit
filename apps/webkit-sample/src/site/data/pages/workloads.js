@@ -1,23 +1,19 @@
 import { markRaw } from 'vue'
 
 import DiagramSet from '../../ui/diagram/DiagramSet.vue'
-import WorkloadDeployFragment from '../../ui/mockup/widgets/WorkloadDeployFragment.vue'
-import WorkloadDomainFragment from '../../ui/mockup/widgets/WorkloadDomainFragment.vue'
-import WorkloadRolloutRowsWidget from '../../ui/mockup/widgets/WorkloadRolloutRowsWidget.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  GRADUAL_ROLLOUT,
-  ISOLATE_PER_REQUEST,
-  WORKLOAD_REQUEST_PATH,
-  WORKLOAD_SECURITY
-} from '../diagrams.js'
-import {
-  foldList,
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const WorkloadDeployFragment = productWidget('workload-deploy')
+const WorkloadDomainFragment = productWidget('workload-domain')
+const WorkloadRolloutRowsWidget = productWidget('workload-rollout-rows')
+const WorkloadTopologyFlowWidget = productWidget('workload-topology-flow')
 
 const PILLARS = [
   {
@@ -38,21 +34,6 @@ const PILLARS = [
     description:
       'The workload domain ships with TLS on, and a custom domain gets a Let’s Encrypt certificate issued and renewed for you.'
   }
-]
-
-const SURFACES = [
-  { icon: 'ai ai-azion-cli', label: 'Azion CLI' },
-  { icon: 'ai ai-azion-api', label: 'REST API' },
-  { icon: 'ai ai-azion', label: 'Console UI' },
-  { icon: 'ai ai-terraform', label: 'Terraform' }
-]
-
-const PROTOCOLS = [
-  { label: 'HTTP/1.1' },
-  { label: 'HTTP/2' },
-  { label: 'HTTP/3' },
-  { label: 'TLS up to 1.3' },
-  { label: 'mTLS in enforce or permissive mode' }
 ]
 
 const USE_CASES = [
@@ -82,7 +63,7 @@ const USE_CASES = [
     title: 'Protect what you expose',
     description:
       'Bind a firewall to the workload and every request that reaches the hostname passes WAF, rate limiting and network lists before anything else runs.',
-    href: '/site/products/firewall'
+    href: '/site/docs/firewall'
   }
 ]
 
@@ -140,28 +121,13 @@ const FAQ = [
 const ARCHITECTURE_DIAGRAMS = [
   {
     value: 'request-path',
-    spec: WORKLOAD_REQUEST_PATH,
+    name: 'workloads',
     ariaLabel:
       'A user request is routed to the nearest data center and reaches the workload; a cache hit is served from cache close to the user and a miss goes to the origin'
   },
-  {
-    value: 'isolates',
-    spec: ISOLATE_PER_REQUEST,
-    ariaLabel:
-      'Requests reach Azion Runtime, which starts a separate isolate for each one, with no cold start'
-  },
-  {
-    value: 'rollout',
-    spec: GRADUAL_ROLLOUT,
-    ariaLabel:
-      'A workload splits traffic between two deployments: 10% to the new one, which is being watched, and 90% to the one that was serving'
-  },
-  {
-    value: 'security',
-    spec: WORKLOAD_SECURITY,
-    ariaLabel:
-      'A user request reaches the workload over TLS, passes the bound firewall, and only then reaches the application'
-  }
+  { value: 'isolates', name: 'workloads-isolate-per-request' },
+  { value: 'rollout', name: 'workloads-gradual-rollout' },
+  { value: 'security', name: 'workloads-security' }
 ]
 
 const ARCHITECTURE_TABS = [
@@ -206,13 +172,13 @@ export const WORKLOAD_ARCHITECTURE_BAND = {
 export const WORKLOADS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'title-band',
-    titleLength: 'long',
+    kind: 'copy-on-top-art',
     eyebrow: 'Workloads',
     title: 'Put your application close to users in seconds',
     description:
-      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center.',
-    actions: PRODUCT_HERO_ACTIONS
+      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
+    actions: PRODUCT_HERO_ACTIONS,
+    scene: { component: WorkloadTopologyFlowWidget }
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
@@ -222,7 +188,7 @@ export const WORKLOADS_PAGE = [
     title: 'The parts you never assemble',
     description:
       'Every workload ships with the operational pieces an application needs, working from the first deploy.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -252,44 +218,15 @@ export const WORKLOADS_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Go fast, or slow',
-        description: foldList(
-          'Promote a deployment to every data center at once, or move a share of traffic to it and watch the metrics first. Run it locally with azion dev, try it on a staging domain, then ship it from the tool you already use:',
-          SURFACES
-        ),
-        href: PRODUCT_DOCS,
-        illustration: 'preview',
-        illustrationLabel: 'A deployment moving from preview to production',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'One entry point for every protocol',
-        description: foldList(
-          'A workload holds up to 50 domains and answers each one with the protocols and TLS policy you set, before any application logic runs. It speaks',
-          PROTOCOLS
-        ),
-        href: '/signup',
-        illustration: 'runtime',
-        illustrationLabel: 'Requests from every protocol reaching one workload',
-        actions: [{ label: 'Start free', href: '/signup' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams run on Workloads',
     description:
       'Put a workload in front of any application and serve it from Azion’s distributed infrastructure, with the domains, certificates and deployments you set. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

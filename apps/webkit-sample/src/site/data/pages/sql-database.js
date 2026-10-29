@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import SqlDatabaseQueryFragment from '../../ui/mockup/widgets/SqlDatabaseQueryFragment.vue'
-import SqlDatabaseRowFragment from '../../ui/mockup/widgets/SqlDatabaseRowFragment.vue'
-import SqlDatabaseTableFragment from '../../ui/mockup/widgets/SqlDatabaseTableFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const SqlDatabaseQueryFragment = productWidget('sql-database-query')
+const SqlDatabaseRowFragment = productWidget('sql-database-row')
+const SqlDatabaseTableFragment = productWidget('sql-database-table')
 
 const PILLARS = [
   {
@@ -128,7 +130,7 @@ export const SQL_DATABASE_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'SQL Database',
     title: 'Serverless distributed SQL with built-in vector search',
     description:
@@ -143,7 +145,7 @@ export const SQL_DATABASE_PAGE = [
     title: 'Every table, query and row in one database',
     description:
       'The schema, the queries that read it and the rows your functions serve live in the same database. Writes go to the primary and reads come from replicas.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
@@ -173,40 +175,15 @@ export const SQL_DATABASE_PAGE = [
     ]
   },
   {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Distributed SQL for resilient global reads',
-        description:
-          'The primary instance handles writes while distributed replicas serve read-heavy workloads close to users. Applications stay responsive and available.',
-        href: PRODUCT_DOCS,
-        illustration: 'distributed-sql-for-resilient-global-reads',
-        illustrationLabel: 'A globe of data centers reading from SQL Database through Functions',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Combine relational data and vector search',
-        description:
-          'SQL Database stores structured records and embeddings together, so you can build RAG applications without adding a separate vector database.',
-        href: '/site/products/ai-inference',
-        illustration: 'combine-data-and-vector-search',
-        illustrationLabel: 'Stored records and embeddings connected to an AI model on Azion',
-        actions: [{ label: 'AI Inference', href: '/site/products/ai-inference' }]
-      }
-    ]
-  },
-  {
     section: 'UseCases',
     eyebrow: 'Use Cases',
     title: 'What teams use SQL Database for',
     description:
       'Put SQL Database behind any application and serve relational data and embeddings from replicas on Azion’s distributed infrastructure, with writes on the main instance. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

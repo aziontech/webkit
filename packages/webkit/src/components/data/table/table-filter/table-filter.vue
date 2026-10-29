@@ -57,7 +57,6 @@
       (ctx ? `${ctx.testId}__filter` : 'data-table__filter')
   )
 
-  // --- Anchored popover (use-placement + Teleport; no Drawer) -----------------
   const open = ref<boolean>(false)
   const triggerRef = ref<HTMLElement | null>(null)
   const panelRef = ref<HTMLElement | null>(null)
@@ -99,7 +98,6 @@
   const applied = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? [])
   const count = computed<number>(() => applied.value.length)
 
-  // Default operator set per field type; a field may override via `operators`.
   const DEFAULT_OPERATORS: Record<FilterField['type'], FilterOperator[]> = {
     text: ['contains', 'eq', 'neq', 'starts-with', 'ends-with', 'is-empty', 'is-not-empty'],
     number: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
@@ -155,7 +153,6 @@
     editingKey.value = null
   }
 
-  // When the field changes, keep the operator valid and reset the value.
   watch(draftField, () => {
     const next = operators.value
     if (!next.includes(draftOperator.value)) draftOperator.value = next[0] ?? 'eq'
@@ -185,7 +182,6 @@
   }
   const removeOne = (filter: AppliedFilter): void => ctx?.removeFilter(filter)
 
-  // Editing a chip re-opens the popover pre-filled (the root sets ctx.editingFilter).
   watch(
     () => ctx?.editingFilter.value ?? null,
     (filter) => {

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  // Traced from the raster the registry carried; the lettering is knocked out of the tile.
   defineOptions({ name: 'BrandMarkItau', inheritAttrs: false })
 </script>
 

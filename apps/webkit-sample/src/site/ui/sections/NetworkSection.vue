@@ -31,6 +31,13 @@
     monochrome?: boolean
   }
 
+  export interface NetworkClaim {
+    /** The claim, a few words. */
+    label: string
+    /** Shows the chip below the md breakpoint; false keeps it to wider screens. */
+    mobile?: boolean
+  }
+
   interface Props {
     /** What stands on the band's floor. */
     kind?: NetworkSectionKind
@@ -40,12 +47,10 @@
     eyebrow?: string
     /** The network claim. */
     title: string
-    /** Closing clause of the claim, set in the headline's type on its own line under it. */
-    titleTail?: string
     /** Muted line above the claim chips. */
     lead?: string
-    /** Infrastructure claims, one chip each. */
-    claims?: string[]
+    /** Infrastructure claims, one chip each; a string, or a claim that can sit out the mobile band. */
+    claims?: (string | NetworkClaim)[]
     /** Client outcomes on the quotes floor, four to a row. */
     outcomes?: NetworkOutcome[]
     /** Benefits on the benefits floor, three to a row. */
@@ -58,13 +63,18 @@
     kind: 'quotes',
     anchor: '',
     eyebrow: '',
-    titleTail: '',
     lead: '',
     claims: () => [],
     outcomes: () => [],
     benefits: () => [],
     stats: () => []
   })
+
+  const chips = computed(() =>
+    props.claims.map((claim) =>
+      typeof claim === 'string' ? { label: claim, mobile: true } : { mobile: true, ...claim }
+    )
+  )
 
   const floor = computed(() =>
     props.outcomes.map((outcome) => ({
@@ -97,8 +107,8 @@
           :opacity="0.3"
           density="medium"
           :scale="1.3"
-          :offset-x="0.4"
-          :offset-y="-0.2"
+          :offset-x="0.5"
+          :offset-y="-0.22"
         />
       </div>
 
@@ -106,21 +116,18 @@
         <div
           class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
         >
-          <div
-            class="relative [&_h2]:max-w-[27em] [&_h2]:text-heading-md! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] [&_h2+p]:text-heading-md [&_h2+p]:text-(--text-default)"
-          >
+          <div class="relative [&_h2]:max-w-(--container-lg)">
             <SectionTitle
               :framed="false"
               kind="left"
               size="small"
               :eyebrow="eyebrow"
               :title="title"
-              :description="titleTail"
             />
           </div>
 
           <div
-            class="relative -mx-(--spacing-xxl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
+            class="relative -mx-(--spacing-xxl) min-h-48 flex-1 mask-[linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
           >
             <NetworkMap
               region="world"
@@ -128,30 +135,31 @@
               animated
               :opacity="0.3"
               density="medium"
-              :scale="1.8"
-              :offset-x="0.24"
-              :offset-y="0.03"
+              :scale="3.3"
+              :offset-x="0.31"
+              :offset-y="0.14"
             />
           </div>
 
           <div class="relative flex flex-col gap-(--spacing-md)">
             <p
               v-if="lead"
-              class="m-0 text-overline-sm text-(--text-muted)"
+              class="m-0 text-overline-md text-(--text-muted)"
             >
               {{ lead }}
             </p>
 
             <ul
-              v-if="claims.length"
-              class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
+              v-if="chips.length"
+              class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0"
             >
               <li
-                v-for="claim in claims"
-                :key="claim"
-                class="inline-flex h-7 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-sm) text-label-md text-(--text-default)"
+                v-for="claim in chips"
+                :key="claim.label"
+                :data-mobile="claim.mobile ? null : 'hidden'"
+                class="inline-flex max-md:data-[mobile=hidden]:hidden h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default) sm:h-7 sm:px-(--spacing-sm) sm:text-label-md"
               >
-                {{ claim }}
+                {{ claim.label }}
               </li>
             </ul>
           </div>

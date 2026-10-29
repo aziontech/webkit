@@ -1,7 +1,3 @@
-// `webkit canary` — proves the design-system rules still reach this project. Inverted
-// logic: each fixture violates one rule on purpose and must keep being flagged by that
-// exact rule. See docs/toolkit/report.md § Why canary exists.
-
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -10,10 +6,8 @@ import { join } from 'node:path'
 import { loadCatalog } from '../eslint-plugin/catalog.js'
 import { resolveEslintBin } from './report.js'
 
-/** Written under the project root so the project's own ESLint config resolves for them. */
 export const CANARY_DIR = '.webkit-canary'
 
-/** True when the consumer's project can actually parse `.astro` files. */
 function astroParserAvailable(cwd) {
   const require = createRequire(join(cwd, '__webkit_canary__.js'))
   try {
@@ -25,7 +19,6 @@ function astroParserAvailable(cwd) {
   }
 }
 
-/** One fixture per guarded rule. The `.astro` entry catches a preset that skips Astro. */
 export function buildFixtures(cwd) {
   const astroAvailable = astroParserAvailable(cwd)
   return [
@@ -79,7 +72,6 @@ const label = 'deliberately hardcoded'
   ]
 }
 
-/** Which rules fired per fixture. A fatal parse error is reported, never counted as a pass. */
 function lintFixtures(cwd, command, dir) {
   const proc = spawnSync(
     command.command,
@@ -109,10 +101,6 @@ function lintFixtures(cwd, command, dir) {
   return { ok: true, byFile }
 }
 
-/**
- * Runs the canary and returns `{exitCode, lines}`; the caller writes, so this stays
- * testable. `options.fixtures` lets tests inject a fixture list instead of the real one.
- */
 export function runCanary(cwd, options = {}) {
   const lines = []
   const say = (line = '') => lines.push(line)

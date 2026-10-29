@@ -119,6 +119,6 @@ If your team is experiencing unexplained latency issues, it may be worth looking
 
 Discover how Azion can help your organization implement real-time attack mitigation without compromising performance.
 
-[Request a Demo →](https://www.azion.com/en/contact/)
+[Talk to a specialist →](https://www.azion.com/en/contact/)
 
 Want to see this architecture in action? Watch the webinar [“How to Mitigate Attacks on Web Applications and APIs”](https://www.youtube.com/watch?v=T-AhMvttI2I) for a technical demonstration of distributed mitigation.

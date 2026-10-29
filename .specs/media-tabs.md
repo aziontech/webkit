@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 85a0396356118185d0b06bed6ee1d4f068c0766c230a8983a9c9435afaa275a1
+checksum: 3f52f749cabe1cb771937f5e4a99c1d8137a15643c529bbf9776143481f3ae4b
 created: 2026-09-24
-last_updated: 2026-10-21
+last_updated: 2026-10-22
 ---
 
 # Media Tabs — Component Spec
@@ -43,7 +43,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.
 - Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.
 - Use scenes of the same shape. The frame does not resize between tabs.
-- Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step and tightens the inset so five claims fit.
+- Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.
 - Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.
 
 ## Usage
@@ -88,7 +88,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 | ------------------ | ---------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
 | `position`         | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'`     | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row.                                                                 |
-| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down and tightens the inset.                             |
+| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                     |
 | `selectOn`         | `'hover' \| 'click'`                     | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                    |
 | `autoPlay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                                                  |
 | `autoPlayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |
@@ -121,7 +121,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - A tab's frame carries no padding of its own; the title and description sit in an inset block, so the mobile media runs flush to the frame's edges
 - Every tab and the media column are `frame-box` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
 - The band holds at most three tabs when the position is `left` or `right` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
-- Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with `--spacing-sm` of inset and the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
+- Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
 - With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
 - `data-position` carries the position and `data-orientation` the axis it implies (`vertical` for `left` and `right`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `right` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every position keeps one hairline at the seam between the tabs and the media
 - The media column is grounded on a `texture-material` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
@@ -156,7 +156,6 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 | typography (horizontal tab description)        | `.text-body-sm`            |
 | typography (horizontal tab title, small)       | `.text-heading-xs`         |
 | typography (horizontal tab description, small) | `.text-body-xs`            |
-| spacing (horizontal tab inset, small)          | `var(--spacing-sm)`        |
 | ring                                           | `var(--ring-color)`        |
 
 ## Theme gaps

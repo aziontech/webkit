@@ -347,7 +347,7 @@ const COLUMNS: SiteFooterColumn[] = [
   {
     title: 'Developers',
     links: links([
-      'Documentation',
+      'Docs',
       'API Reference',
       'Dev Tools',
       'Release Notes',
@@ -370,7 +370,7 @@ const COLUMNS: SiteFooterColumn[] = [
 ]
 
 const SOCIALS: SiteSocial[] = [
-  { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+  { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
   {
     icon: 'pi pi-linkedin',
     label: 'Azion on LinkedIn',

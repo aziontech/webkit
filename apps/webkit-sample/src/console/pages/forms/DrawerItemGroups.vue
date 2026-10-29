@@ -61,7 +61,7 @@
   }
 
   watch(drawerOpen, (open) => {
-    if (open) return
+    if (!open) return
     form.name = ''
     form.description = ''
     form.runtime = ''
