@@ -3,7 +3,7 @@
   // source's listing payload, verbatim (see data/blog.js); the form is this Site's.
   //
   // Departures from the source, on purpose:
-  //   • The source opens on its featured post as the h1. Ours opens on the `compact-band` hero
+  //   • The source opens on its featured post as the h1. Ours opens on the small title band
   //     (the page's h1), then the highlight carousel: the featured post and the two newest.
   //   • The category tabs become one segmented control beside a compact search.
   //   • No author name or photo on any post.
@@ -11,6 +11,7 @@
   import CardGrid from '@aziontech/webkit/card-grid'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import Hero from '@aziontech/webkit/hero'
   import InputText from '@aziontech/webkit/input-text'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
@@ -30,7 +31,6 @@
   import { COMPANY_CLOSING } from '../data/product-pages.js'
   import ArticleRows from '../ui/ArticleRows.vue'
   import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
-  import Heroes from '../ui/sections/Heroes.vue'
   import BlogHighlight from './BlogHighlight.vue'
   import BlogPostCard from './BlogPostCard.vue'
 
@@ -118,11 +118,20 @@
 </script>
 
 <template>
-  <Heroes
-    kind="compact-band"
-    :title="BLOG_HERO.title"
-    :description="BLOG_HERO.description"
-  />
+  <Hero
+    kind="band"
+    size="medium"
+    max-width="5xl"
+  >
+    <Hero.Title
+      centered
+      max-width="xl"
+      eyebrow-prefix="//"
+      :eyebrow="BLOG_HERO.eyebrow"
+      :title="BLOG_HERO.title"
+      :description="BLOG_HERO.description"
+    />
+  </Hero>
 
   <SectionContainer max-width="site">
     <SectionModule
@@ -145,8 +154,8 @@
         />
       </FrameBox>
 
-      <!-- A short blank gap between the carousel and the all-articles section. -->
-      <SectionGap size="small" />
+      <!-- The hatched gap between the carousel and the all-articles section. -->
+      <SectionGap hatch />
 
       <!-- The all-articles section opens on its filters (the `#posts` anchor lands here,
            under the sticky bar): the categories as one segmented control, scrolling
@@ -161,21 +170,21 @@
       >
         <div
           role="search"
-          class="flex flex-col gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:flex-row lg:items-center lg:justify-between"
+          class="flex flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg) lg:flex-row lg:items-center lg:justify-between"
         >
-          <div class="min-w-0 overflow-x-auto">
+          <div class="min-w-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <SegmentedButton
               v-model="selection.category"
               :options="CATEGORY_OPTIONS"
               :aria-label="LABEL.category"
-              size="medium"
+              size="large"
             />
           </div>
 
           <div class="w-full shrink-0 lg:w-(--container-3xs)">
             <InputText
               v-model="selection.query"
-              size="medium"
+              size="large"
               type="text"
               :placeholder="BLOG_LABELS.search"
               :aria-label="LABEL.searchLabel"

@@ -237,8 +237,6 @@
   <Hero
     kind="band"
     max-width="site"
-    texture="dots"
-    texture-fade="top"
     class="[--banner-offset:3.5rem]"
   >
     <!-- No `items-*`: a flex column stretches its children, so every row opens on the
@@ -465,6 +463,7 @@
                   v-if="field.kind === 'phone'"
                   v-model="values[field.key]"
                   v-model:country="phoneCountry"
+                  size="large"
                   :input-id="fieldId(field.key)"
                   :name="field.key"
                   :disabled="submitting"
@@ -488,7 +487,7 @@
                     :disabled="submitting"
                     :aria-describedby="helperId(field.key)"
                     :aria-invalid="!!errors[field.key] || undefined"
-                    class="w-full text-body-sm text-(--text-default) file:mr-(--spacing-md) file:cursor-pointer file:rounded-(--shape-button) file:border file:border-(--border-default) file:bg-(--bg-surface) file:px-(--spacing-md) file:py-(--spacing-xs) file:text-label-sm file:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                    class="w-full text-body-sm text-(--text-default) file:mr-(--spacing-md) file:cursor-pointer file:rounded-(--shape-button) file:border file:border-(--border-default) file:bg-(--bg-surface) file:h-10 file:px-(--spacing-md) file:text-button-lg file:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
                     @change="onResume"
                   />
                   <HelperText
@@ -501,6 +500,7 @@
                 <FieldText
                   v-else
                   v-model="values[field.key]"
+                  size="large"
                   :input-id="fieldId(field.key)"
                   :name="field.key"
                   :disabled="submitting"

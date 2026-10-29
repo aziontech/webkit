@@ -60,6 +60,8 @@
     size?: MediaSplitSize
     /** Link the whole band to a lone action; turn it off when the media holds controls of its own. */
     linked?: boolean
+    /** Inset the media from the cell's edges, for a scene that would otherwise touch the frame. */
+    mediaPadded?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -74,7 +76,8 @@
     orientation: 'horizontal',
     texture: 'pixelate',
     size: 'medium',
-    linked: true
+    linked: true,
+    mediaPadded: false
   })
 
   const { follow } = useSiteLink()
@@ -115,6 +118,7 @@
       :align="size === 'large' ? 'center' : 'top'"
       :size="size"
       media-fill="surface"
+      :media-padded="mediaPadded"
       :texture="texture"
       texture-size="small"
       texture-fade="top"

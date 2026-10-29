@@ -4,6 +4,7 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
   import Item from '@aziontech/webkit/item'
+  import Overline from '@aziontech/webkit/overline'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -16,13 +17,15 @@
     CAREERS_HOME_HERO,
     CAREERS_JOBS_PATH,
     CAREERS_PHOTOS,
+    CAREERS_PROCESS,
     CAREERS_ROLES,
     CAREERS_VISION,
     CAREERS_WORK
   } from '../data/careers-home.js'
   import { COMPANY_CLOSING } from '../data/product-pages.js'
-  import SpinningGlobe from '../ui/SpinningGlobe.vue'
   import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
+  import ProcessScroll from '../ui/sections/ProcessScroll.vue'
+  import SpinningGlobe from '../ui/SpinningGlobe.vue'
 
   const router = useRouter()
   const openRole = (id) => router.push(`/site/careers/${id}`)
@@ -36,7 +39,7 @@
       type: `${arrangement} · ${contract}`
     }
   })
-  const { section: _section, ...CLOSING } = COMPANY_CLOSING
+  const { section: _section, benefits: _benefits, ...CLOSING } = COMPANY_CLOSING
 </script>
 
 <template>
@@ -129,34 +132,50 @@
     >
       <section
         aria-labelledby="careers-vision-title"
-        class="flex flex-col items-center gap-(--spacing-xxl) p-(--spacing-xl) lg:flex-row lg:items-start"
+        class="grid grid-cols-1 lg:grid-cols-2"
       >
-        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xl) text-(--text-default)">
-          <h2
-            id="careers-vision-title"
-            class="m-0 text-balance text-heading-2xl"
-          >
-            {{ CAREERS_VISION.title }}
-          </h2>
-          <p class="m-0 text-pretty text-body-lg">
-            {{ CAREERS_VISION.description }}
-          </p>
+        <div
+          class="flex min-w-0 flex-col justify-between gap-(--spacing-xxl) border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xl) max-lg:border-b lg:border-r"
+        >
+          <Overline>{{ CAREERS_VISION.eyebrow }}</Overline>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <h2
+              id="careers-vision-title"
+              class="m-0 text-balance text-heading-2xl text-(--text-default)"
+            >
+              {{ CAREERS_VISION.title }}
+            </h2>
+            <p class="m-0 text-pretty text-body-lg text-(--text-muted)">
+              {{ CAREERS_VISION.description }}
+            </p>
+          </div>
         </div>
 
-        <div class="@container relative w-full max-w-147 shrink-0">
-          <SpinningGlobe />
-          <div
-            class="absolute left-1/2 top-1/2 flex aspect-square w-[29.4%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[5.5cqw] border-[0.92cqw] border-transparent [background:linear-gradient(var(--illustration-surface),var(--illustration-surface))_padding-box,linear-gradient(45deg,var(--illustration-surface),var(--illustration-primary)_35%,var(--illustration-primary)_65%,var(--illustration-surface))_border-box]"
-          >
-            <Brand
-              kind="reduced"
-              aria-hidden="true"
-              class="w-[28%] [&>svg]:h-auto! [&>svg]:w-full!"
-            />
+        <div class="flex min-w-0 items-center justify-center p-(--spacing-xl)">
+          <div class="@container relative w-full max-w-147">
+            <SpinningGlobe />
+            <div
+              class="absolute left-1/2 top-1/2 flex aspect-square w-[29.4%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[5.5cqw] border-[0.92cqw] border-transparent [background:linear-gradient(var(--illustration-surface),var(--illustration-surface))_padding-box,linear-gradient(45deg,var(--illustration-surface),var(--illustration-primary)_35%,var(--illustration-primary)_65%,var(--illustration-surface))_border-box]"
+            >
+              <Brand
+                kind="reduced"
+                aria-hidden="true"
+                class="w-[28%] [&>svg]:h-auto! [&>svg]:w-full!"
+              />
+            </div>
           </div>
         </div>
       </section>
     </FrameBox>
+
+    <SectionGap hatch />
+
+    <ProcessScroll
+      :title="CAREERS_PROCESS.title"
+      :description="CAREERS_PROCESS.description"
+      :steps="CAREERS_PROCESS.steps"
+      aria-label="Hiring process stages"
+    />
 
     <SectionGap hatch />
 

@@ -18,6 +18,7 @@ export const BLOG_FEATURED = {
 
 // The page head. The source's h1 is its featured post; the description is its meta description, verbatim.
 export const BLOG_HERO = {
+  eyebrow: 'Resources',
   title: 'Blog',
   description:
     "Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights."

@@ -1,20 +1,50 @@
 export const CAREERS_HOME_HERO = {
   eyebrow: 'Careers',
   title: "Let's build together",
-  description: 'Innovation, reliability, and transparent decisions, carried out with agility.',
+  description: 'We build new things, keep them reliable, decide in the open, and move fast.',
   action: 'See roles'
 }
 
 export const CAREERS_WORK = {
   title: 'Work at Azion',
   description:
-    "The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
+    "The Azion Way of Life pairs high performance with autonomy, and with room to be yourself and enjoy the work. You manage your own routine, answer for your results, and work with teammates across countries and cultures. There's no dress code: we care about the ideas, energy, and integrity you bring."
 }
 
 export const CAREERS_VISION = {
-  title: 'Our vision',
+  eyebrow: 'Our vision',
+  title: 'Building for the web should be simple',
   description:
-    'We envision a world where digital experiences are built, accelerated, automated and secured effortlessly through a simple, reliable solution that provides intuitive application primitives and the best price-performance. Our innovative approach enables customers to focus on creating better digital experiences faster while maintaining full control over their workloads, whether on Azion’s infrastructure, the Cloud, or their own.'
+    'We want teams to build, speed up, automate, and secure applications with less operational drag. The Azion Platform gives them one reliable place to do it, with clear building blocks and strong price-performance. They ship faster and keep full control of where workloads run: on Azion’s infrastructure, in the cloud, or on their own.'
+}
+
+export const CAREERS_PROCESS = {
+  title: 'Hiring process',
+  description: 'Every role goes through the same five stages, from the first request to the offer.',
+  steps: [
+    {
+      title: 'Role request',
+      description: 'A hiring manager requests a new role.'
+    },
+    {
+      title: 'Scope and posting',
+      description:
+        'We define the role’s scope, write the job description, and post the opening on selected channels.'
+    },
+    {
+      title: 'Recruiting and interviews',
+      description:
+        'We source and screen candidates, then schedule interviews and, when the role needs one, a technical assessment.'
+    },
+    {
+      title: 'Calibration',
+      description: 'Interviewers meet to compare feedback and choose the candidate.'
+    },
+    {
+      title: 'Offer letter',
+      description: 'We prepare the offer and send it to the chosen candidate.'
+    }
+  ]
 }
 
 // Served from public/careers; width and height are the files' own, so each slide reserves its box.

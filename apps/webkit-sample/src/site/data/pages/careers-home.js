@@ -1,9 +1,14 @@
+import { markRaw } from 'vue'
+
+import BrandGlobeScene from '../../ui/BrandGlobeScene.vue'
 import { CAREERS_JOBS, jobFacets, jobId } from '../careers.js'
 import {
   CAREERS_HOME_HERO,
   CAREERS_JOBS_PATH,
   CAREERS_PHOTOS,
+  CAREERS_PROCESS,
   CAREERS_ROLES,
+  CAREERS_VISION,
   CAREERS_WORK
 } from '../careers-home.js'
 import { COMPANY_CLOSING } from '../product-pages.js'
@@ -38,6 +43,23 @@ export const CAREERS_HOME_PAGE = [
     photos: CAREERS_PHOTOS,
     ariaLabel: 'Azion offices',
     duration: 60
+  },
+  {
+    section: 'MediaSplitBand',
+    eyebrow: CAREERS_VISION.eyebrow,
+    title: CAREERS_VISION.title,
+    description: CAREERS_VISION.description,
+    size: 'large',
+    mediaPadded: true,
+    scene: { component: markRaw(BrandGlobeScene) }
+  },
+  {
+    section: 'ProcessScroll',
+    title: CAREERS_PROCESS.title,
+    titleKind: 'centered',
+    description: CAREERS_PROCESS.description,
+    steps: CAREERS_PROCESS.steps,
+    ariaLabel: 'Hiring process stages'
   },
   {
     section: 'ListingTable',
