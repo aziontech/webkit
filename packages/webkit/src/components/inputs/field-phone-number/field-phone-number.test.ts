@@ -56,6 +56,29 @@ describe('FieldPhoneNumber', () => {
     })
   })
 
+  describe('size', () => {
+    it('defaults to medium on the root, the group and the dial-code trigger', () => {
+      const { getByTestId, getByRole } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      expect(getByTestId('input-field-phone-number').dataset.size).toBe('medium')
+      expect(getByTestId('input-field-phone-number__group').dataset.size).toBe('medium')
+      expect(getByRole('combobox', { name: 'Country dial code' }).dataset.size).toBe('medium')
+    })
+
+    it.each(['small', 'large'] as const)(
+      'forwards %s to the group and the dial-code trigger',
+      (size) => {
+        const { getByTestId, getByRole } = render(FieldPhoneNumber, {
+          props: { label: 'Phone', size }
+        })
+
+        expect(getByTestId('input-field-phone-number').dataset.size).toBe(size)
+        expect(getByTestId('input-field-phone-number__group').dataset.size).toBe(size)
+        expect(getByRole('combobox', { name: 'Country dial code' }).dataset.size).toBe(size)
+      }
+    )
+  })
+
   describe('internal input semantics', () => {
     it('renders a tel input with inputmode and autocomplete for national numbers', () => {
       const { getByRole } = render(FieldPhoneNumber, { props: { label: 'Phone' } })

@@ -25,6 +25,9 @@
     inheritAttrs: false
   })
 
+  /** Size token; heights match the sibling field primitives. */
+  export type FieldPhoneNumberSize = 'small' | 'medium' | 'large'
+
   /** Snapshot of the number emitted by update:phone. */
   export interface PhoneNumber {
     /** ISO 3166-1 alpha-2 code of the selected country. */
@@ -48,6 +51,8 @@
     placeholder?: string
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
+    /** Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. */
+    size?: FieldPhoneNumberSize
     /** Disables both the dial-code Select and the internal input; a supplied helperText switches to kind=disabled. */
     disabled?: boolean
     /** Marks the internal input read-only; dial-code Select is also disabled while readonly. */
@@ -71,6 +76,7 @@
     label: '',
     placeholder: '',
     helperText: '',
+    size: 'medium',
     disabled: false,
     readonly: false,
     required: false,
@@ -186,6 +192,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
+    :data-size="size"
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
@@ -199,6 +206,7 @@
       :data-testid="`${testId}__label`"
     />
     <InputGroup
+      :size="size"
       :invalid="invalid"
       :required="required"
       :disabled="disabled"
@@ -207,6 +215,7 @@
       <Select
         v-model:open="open"
         :model-value="country"
+        :size="size"
         :disabled="disabled || readonly"
         :display-value="() => selectedCountry.dialCode"
         :data-testid="`${testId}__country`"
