@@ -1,5 +1,30 @@
 import { CONSOLE_LOGIN, SYSTEM_STATUS } from '../contact.js'
 import { COMPANY_CLOSING } from '../product-pages.js'
+import { quotesLedBy } from '../solutions.js'
+import { HOME_SOLUTIONS_BAND, HOME_WHY_AZION, MARKET_RECOGNITIONS } from './home.js'
+
+const SALES_HIGHLIGHTS = [
+  {
+    icon: 'ai ai-edge-ai',
+    title: 'Build AI applications',
+    description: 'Run AI agents and inference close to your users.'
+  },
+  {
+    icon: 'ai ai-build-pillar',
+    title: 'Modernize applications',
+    description: 'Go from commit to a live URL in minutes.'
+  },
+  {
+    icon: 'ai ai-secure-pillar',
+    title: 'Protect applications and APIs',
+    description: 'Block DDoS attacks, malicious bots, and API abuse.'
+  },
+  {
+    icon: 'ai ai-app-accelerator',
+    title: 'Speed up every workload',
+    description: '100+ data centers, with a 30 ms median latency.'
+  }
+]
 
 export const CONTACT_PAGE = [
   {
@@ -8,6 +33,7 @@ export const CONTACT_PAGE = [
     title: 'Talk to our sales team',
     description:
       'Get a custom demo, plan your migration, and explore plans and pricing built for your company.',
+    highlights: SALES_HIGHLIGHTS,
     formLabel: 'Contact sales',
     labels: {
       email: 'Company e-mail',
@@ -69,6 +95,19 @@ export const CONTACT_PAGE = [
         href: 'https://www.azion.com/en/documentation/'
       }
     ]
+  },
+  HOME_WHY_AZION,
+  {
+    ...HOME_SOLUTIONS_BAND,
+    eyebrow: 'Solutions',
+    title: 'One platform for every workload you run',
+    description:
+      'Modernize applications, run AI, protect APIs, and deliver media from the same infrastructure.'
+  },
+  { section: 'ClientQuotes', quotes: quotesLedBy('herospark') },
+  {
+    section: 'RecognitionMarquee',
+    items: MARKET_RECOGNITIONS
   },
   COMPANY_CLOSING
 ]

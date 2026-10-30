@@ -91,7 +91,6 @@ export const SUCCESS_CASES_PAGE = [
   },
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a market leader',
     items: HOME_RECOGNITIONS
   },
   SUCCESS_CASES_CLOSING

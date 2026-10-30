@@ -7,12 +7,13 @@
   import Hero from '@aziontech/webkit/hero-root'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import { toast } from '@aziontech/webkit/toast'
+  import Topic from '@aziontech/webkit/topic'
   import { CLIENT_STRIP, CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import { computed, reactive, ref, useId } from 'vue'
 
   import { CONTACT_ROLES } from '../../data/contact.js'
   import SectionAction from './SectionAction.vue'
-  import type { SiteAction, SiteLink } from './types'
+  import type { SiteAction, SiteLink, SiteTopic } from './types'
 
   defineOptions({ name: 'HeroForm' })
 
@@ -89,6 +90,8 @@
     descriptionAfter?: string
     /** Actions under the copy. */
     actions?: SiteAction[]
+    /** Benefits stacked under the copy, beside the form. */
+    highlights?: SiteTopic[]
     /** Client marks the floor strip runs; without marks the band has no strip. */
     carouselMarks?: string[]
     /** Overline above the client strip. */
@@ -113,6 +116,7 @@
     link: null,
     descriptionAfter: '',
     actions: () => [],
+    highlights: () => [],
     carouselMarks: () => CLIENT_STRIP,
     carouselLabel: CLIENT_STRIP_LABEL,
     formLabel: '',
@@ -182,6 +186,7 @@
   const notice = computed(() => ({ ...DEFAULT_MESSAGES, ...(props.messages ?? {}) }))
   const legend = computed(() => props.formLabel || props.title)
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
+  const hasHighlights = computed(() => props.highlights.length > 0)
 
   const validate = () => {
     const required = notice.value.required
@@ -246,14 +251,17 @@
     :carousel-marks="carouselMarks"
     bottom-height="clamp(7rem,16dvh,14rem)"
   >
-    <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
+    <div
+      :data-highlights="hasHighlights || null"
+      class="group grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2 data-[highlights]:gap-y-(--spacing-xl) lg:data-[highlights]:grid-rows-[auto_1fr]"
+    >
       <div class="min-w-0">
         <HeroTitle
           :eyebrow="eyebrow"
           eyebrow-prefix="//"
           :title="title"
           max-width="lg"
-          sticky
+          :sticky="!hasHighlights"
         >
           {{ description }}
           <a
@@ -276,7 +284,24 @@
         </HeroTitle>
       </div>
 
-      <div class="min-w-0">
+      <ul
+        v-if="hasHighlights"
+        class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-lg) self-start p-0 lg:col-start-1 lg:row-start-2"
+      >
+        <li
+          v-for="item in highlights"
+          :key="item.title"
+        >
+          <Topic
+            :heading-level="2"
+            :icon="item.icon ?? ''"
+            :title="item.title"
+            :description="item.description"
+          />
+        </li>
+      </ul>
+
+      <div class="min-w-0 lg:group-data-[highlights]:col-start-2 lg:group-data-[highlights]:row-span-2 lg:group-data-[highlights]:row-start-1">
         <form
           novalidate
           class="flex flex-col gap-(--spacing-md)"

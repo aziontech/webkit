@@ -35,6 +35,8 @@ export const RECOGNITIONS_PAGE = [
   {
     section: 'RecognitionMarquee',
     gap: false,
+    eyebrow: '',
+    title: '',
     ariaLabel: 'Recognitions',
     items: MARKET_RECOGNITIONS
   },

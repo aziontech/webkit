@@ -46,6 +46,8 @@
     kind?: ArticleCardsKind
     /** Id of the band, for in-page links. */
     anchor?: string
+    /** Overline above the headline. */
+    eyebrow?: string
     /** Headline over the cards. */
     title: string
     /** The cards, three to a row. */
@@ -57,6 +59,7 @@
   withDefaults(defineProps<Props>(), {
     kind: 'left',
     anchor: '',
+    eyebrow: '',
     ariaLabel: ''
   })
 
@@ -72,6 +75,7 @@
     <template #header>
       <SectionTitle
         :kind="kind"
+        :eyebrow="eyebrow"
         :title="title"
       />
     </template>

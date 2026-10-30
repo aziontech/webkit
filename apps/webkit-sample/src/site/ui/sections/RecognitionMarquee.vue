@@ -21,6 +21,8 @@
   }
 
   interface Props {
+    /** Overline above the band title. */
+    eyebrow?: string
     /** Band title over the marquee. */
     title?: string
     /** One signed card per report, in loop order. */
@@ -32,7 +34,8 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    title: '',
+    eyebrow: 'Analysts',
+    title: 'Recognized as a market leader',
     ariaLabel: 'Analyst recognitions',
     anchor: ''
   })
@@ -52,7 +55,10 @@
       v-if="title"
       #header
     >
-      <SectionTitle :title="title" />
+      <SectionTitle
+        :eyebrow="eyebrow"
+        :title="title"
+      />
     </template>
 
     <FrameBox
