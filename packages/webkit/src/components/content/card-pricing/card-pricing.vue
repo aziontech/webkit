@@ -44,6 +44,8 @@
     showSuffix?: boolean
     /** action Label. */
     actionLabel?: string
+    /** Rolls the price into place when value changes, such as on a billing-period toggle. */
+    animated?: boolean
   }
 
   const props = withDefaults(defineProps<CardPricingProps>(), {
@@ -60,7 +62,8 @@
     suffix: '/ mon',
     showPrefix: true,
     showSuffix: true,
-    actionLabel: 'Label'
+    actionLabel: 'Label',
+    animated: false
   })
 
   defineSlots<{
@@ -120,6 +123,7 @@
             :value="value"
             :prefix="currencyPrefix"
             :suffix="currencySuffix"
+            :animated="animated"
             :data-testid="`${testId}__currency`"
           />
           <p

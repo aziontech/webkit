@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 092d3bc30e7a43aca8d92d9396c95bdb607fa4f830f99b02fa47b63fe12e16c7
+checksum: 835afb4eb2bd1eadb8d54dd78a7f851b7fb68d586b1f243b2a989d52a3413e0b
 created: 2026-05-22
-last_updated: 2026-08-24
+last_updated: 2026-10-29
 ---
 
 # Currency — Component Spec
@@ -17,6 +17,10 @@ Typesets one monetary amount as three separately-styled parts — the currency s
 
 The size ladder is the house one (`small` / `medium` / `large`) and each step is a different reading distance: `small` is an amount inside a table row or a list cell, `medium` an amount stated as a fact on a card, `large` the headline figure of a pricing card. `large` bottom-aligns the suffix against the figure rather than centring it, because a 56px numeral centred against a 14px unit reads as two unrelated pieces of text.
 
+The symbol and the figure set in tabular numerals (`tabular-nums`), so amounts stacked in a column or swapped in place keep the same width digit for digit.
+
+`animated` rolls the figure odometer-style when `value` changes — a billing-period toggle swapping `25` for `20` on a pricing card. Each character that changes gets a clipped column that steps through the digits between the old and the new one and lands on the new one; characters that stay the same do not move, and the columns stagger left to right. The column rolls up when the amount grows and down when it shrinks. A non-digit change (`Free` → `25`) flips straight from the old glyph to the new one. Nothing rolls on mount: the motion confirms a change the reader asked for, it does not decorate the first paint. Under `prefers-reduced-motion` the new value lands with no roll.
+
 ## Props
 
 | Prop     | Type                             | Default   | Required | JSDoc                                                                         |
@@ -25,6 +29,7 @@ The size ladder is the house one (`small` / `medium` / `large`) and each step is
 | `prefix` | `string`                         | `'$'`     | false    | prefix.                                                                       |
 | `suffix` | `string`                         | `''`      | false    | suffix.                                                                       |
 | `size`   | `'small' \| 'medium' \| 'large'` | `'small'` | false    | Size token; affects typography and the gap between the figure and the suffix. |
+| `animated` | `boolean`                      | `false`   | false    | Rolls the changed characters of the figure into place when value changes.     |
 
 ## Events
 
@@ -40,7 +45,9 @@ The size ladder is the house one (`small` / `medium` / `large`) and each step is
 
 ## Motion & Animations
 
-_none_
+| Trigger                                  | Animation / Transition                                                                                                                                                                                                                                                                                         | Token (see `.claude/docs/DESIGN.md` § Animations)                          | Reduced-motion fallback         |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------- |
+| `value` changes while `animated` is true | `transition-[translate] duration-slow-01 ease-expressive-entrance` on each glyph column, which moves from `translate-y-(--currency-roll-from)` to `data-rolling:translate-y-(--currency-roll-to)` after two `requestAnimationFrame`s; each rolling column waits an inline `transitionDelay` of its order × `duration.fast-01` | `duration-slow-01`, `ease-expressive-entrance`, `duration.fast-01` stagger | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -76,6 +83,7 @@ _none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is
 
 - Default
 - Sizes (small / medium / large)
+- Animated — a period toggle swapping the value, because the roll only plays on a change and no static story can show it
 
 ## Constraints — DO NOT
 

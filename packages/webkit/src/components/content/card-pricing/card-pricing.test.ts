@@ -91,6 +91,18 @@ describe('CardPricing', () => {
     expect(getByTestId(`${ROOT}__currency__suffix`)).toHaveTextContent('per year')
   })
 
+  it('rolls the price on a value change only when animated', async () => {
+    const still = render(CardPricing, { props: { value: '25' } })
+    await still.rerender({ value: '20' })
+    expect(still.queryByTestId(`${ROOT}__currency__roll`)).toBeNull()
+    still.unmount()
+
+    const rolling = render(CardPricing, { props: { value: '25', animated: true } })
+    expect(rolling.queryByTestId(`${ROOT}__currency__roll`)).toBeNull()
+    await rolling.rerender({ value: '20', animated: true })
+    expect(rolling.getByTestId(`${ROOT}__currency__roll`)).toBeTruthy()
+  })
+
   it('renders the default action button with actionLabel when the actions slot is empty', () => {
     const { getByTestId } = render(CardPricing, { props: { actionLabel: 'Choose plan' } })
 

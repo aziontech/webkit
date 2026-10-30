@@ -168,6 +168,15 @@ const meta = {
         defaultValue: { summary: "'Label'" }
       }
     },
+    animated: {
+      control: 'boolean',
+      description: 'Rolls the price into place when value changes, such as on a billing-period toggle.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
     default: {
       control: false,
       description: 'Main content region, typically a feature list.',
@@ -193,7 +202,8 @@ const meta = {
     suffix: '/ mon',
     showPrefix: true,
     showSuffix: true,
-    actionLabel: 'Label'
+    actionLabel: 'Label',
+    animated: false
   }
 }
 

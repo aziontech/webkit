@@ -131,6 +131,7 @@
             :value="card.value"
             :prefix="card.prefix"
             :suffix="card.suffix"
+            animated
             :show-prefix="Boolean(card.prefix)"
             :show-suffix="Boolean(card.suffix)"
             :pricing-details="card.details"
