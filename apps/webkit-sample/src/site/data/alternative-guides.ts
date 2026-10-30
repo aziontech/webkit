@@ -12,7 +12,15 @@ export interface AlternativeGuide {
   reasons: { icon: string; title: string; description: string }[]
   quotes: QuoteTabsItem[]
   comparison: { eyebrow: string; title: string }
-  capabilities: { capability: string; azion: SupportLevel; rival: SupportLevel }[]
+  capabilities: {
+    title: string
+    rows: {
+      capability: string
+      definition?: string
+      azion: SupportLevel
+      competitor: SupportLevel
+    }[]
+  }[]
   mapping: { title: string; description: string }
   faq: { value: string; question: string; answer: string }[]
 }
@@ -146,46 +154,178 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
   },
   capabilities: [
     {
-      capability: 'Entrega, computação, storage e segurança em uma plataforma',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Plataforma',
+      rows: [
+        {
+          capability: 'Entrega, computação, storage e segurança em uma plataforma',
+          definition:
+            'Entrega, computação, armazenamento e segurança rodam em uma plataforma, com um único modelo de configuração.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Um único console para todos os fluxos de trabalho',
+          definition:
+            'Configurar, publicar e monitorar todos os produtos a partir da mesma interface.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Mudanças de configuração e regras no ar em segundos',
+          definition: 'Quanto tempo uma alteração leva para valer em todas as localidades da rede.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
     {
-      capability: 'Um único console para todos os fluxos de trabalho',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Computação',
+      rows: [
+        {
+          capability: 'Runtime JavaScript e WebAssembly',
+          definition: 'Executar código de aplicação perto dos usuários com APIs padrão da web.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Execução de funções sem cold start',
+          definition: 'Funções que respondem à primeira requisição sem atraso de inicialização.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Inferência de AI na plataforma',
+          definition: 'Executar modelos de AI na rede do provedor, perto dos usuários.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
     },
     {
-      capability: 'Mudanças de configuração e regras no ar em segundos',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Armazenamento',
+      rows: [
+        {
+          capability: 'Armazenamento chave-valor distribuído',
+          definition:
+            'Leituras de baixa latência para configurações, flags e sessões replicadas perto dos usuários.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Object storage compatível com S3',
+          definition:
+            'Armazenamento de arquivos e objetos acessível pelas APIs e ferramentas do S3.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Banco de dados SQL distribuído com busca vetorial',
+          definition:
+            'Um banco relacional replicado perto dos usuários, com busca por similaridade para aplicações de AI.',
+          azion: 'full',
+          competitor: 'none'
+        }
+      ]
     },
-    { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'full' },
-    { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'partial' },
-    { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'full' },
-    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
-    { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
     {
-      capability: 'Banco de dados SQL distribuído com busca vetorial',
-      azion: 'full',
-      rival: 'none'
+      title: 'Segurança',
+      rows: [
+        {
+          capability: 'WAF gerenciado para aplicações e APIs',
+          definition: 'Regras gerenciadas que bloqueiam ataques a aplicações e APIs.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Descoberta e proteção de APIs',
+          definition: 'Encontrar as APIs expostas e aplicar regras de segurança a cada uma.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Gerenciamento de bots',
+          definition: 'Detectar e bloquear tráfego automatizado antes que ele chegue à aplicação.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Proteção DDoS inclusa na entrega',
+          definition:
+            'Absorver ataques volumétricos e de aplicação sem contratar um produto à parte.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Firewall de rede',
+          definition: 'Filtrar tráfego por IP, rede e localização antes da camada de aplicação.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
     },
-    { capability: 'WAF gerenciado para aplicações e APIs', azion: 'full', rival: 'full' },
-    { capability: 'Descoberta e proteção de APIs', azion: 'full', rival: 'full' },
-    { capability: 'Gerenciamento de bots', azion: 'full', rival: 'full' },
-    { capability: 'Proteção DDoS inclusa na entrega', azion: 'full', rival: 'partial' },
-    { capability: 'Firewall de rede', azion: 'full', rival: 'full' },
-    { capability: 'Cache em camadas e alívio de origem', azion: 'full', rival: 'full' },
-    { capability: 'Otimização de imagem e vídeo', azion: 'full', rival: 'full' },
-    { capability: 'DNS autoritativo e balanceamento de carga', azion: 'full', rival: 'full' },
-    { capability: 'Métricas em tempo real e busca de eventos', azion: 'full', rival: 'partial' },
     {
-      capability: 'Streaming de logs e monitoramento de usuário real',
-      azion: 'full',
-      rival: 'full'
+      title: 'Entrega e rede',
+      rows: [
+        {
+          capability: 'Cache em camadas e alívio de origem',
+          definition:
+            'Camadas intermediárias de cache que reduzem as requisições que chegam à origem.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Otimização de imagem e vídeo',
+          definition:
+            'Redimensionar, comprimir e converter mídia na entrega, sem processar na origem.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'DNS autoritativo e balanceamento de carga',
+          definition:
+            'Responder pelos registros DNS dos seus domínios e distribuir o tráfego entre origens saudáveis.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
     },
-    { capability: 'Preço por uso publicado', azion: 'full', rival: 'partial' },
-    { capability: 'Começar sem professional services obrigatório', azion: 'full', rival: 'partial' }
+    {
+      title: 'Observabilidade',
+      rows: [
+        {
+          capability: 'Métricas em tempo real e busca de eventos',
+          definition:
+            'Painéis ao vivo de tráfego, desempenho e segurança, com consulta aos eventos de cada requisição.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Streaming de logs e monitoramento de usuário real',
+          definition:
+            'Enviar logs em tempo real para outras ferramentas e medir o desempenho percebido no navegador.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Comercial',
+      rows: [
+        {
+          capability: 'Preço por uso publicado',
+          definition: 'Preço por unidade publicado, para saber antes quanto um mês vai custar.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Começar sem professional services obrigatório',
+          definition:
+            'Contratar e entrar em produção sem um projeto obrigatório de serviços profissionais.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
+    }
   ],
   mapping: {
     title: 'Mapeie os serviços da Akamai para a Azion',
@@ -256,192 +396,6 @@ export const AKAMAI_GUIDE: AlternativeGuide = {
   ]
 }
 
-export const CLOUDFLARE_GUIDE: AlternativeGuide = {
-  rival: 'Cloudflare',
-  hero: {
-    eyebrow: 'Guia de alternativas',
-    title: 'Alternativa à Cloudflare: guia para mudar para a Azion',
-    description:
-      'Mova Workers, KV, R2, regras de WAF e configurações de DDoS da Cloudflare para a Azion. A maior parte do código de Workers roda em Functions com pequenos ajustes, buckets R2 sincronizam por APIs compatíveis com S3 e você valida cada mudança antes de mover o tráfego.',
-    art: 'azion-to-cloudflare'
-  },
-  why: {
-    eyebrow: 'Por que a Azion',
-    title: 'Por que times trocam a Cloudflare para a Azion'
-  },
-  reasons: [
-    {
-      icon: 'pi pi-lock-open',
-      title: 'Ligue a proteção sem falar com o comercial',
-      description:
-        'A Cloudflare deixa gerenciamento de bots, streaming de logs, balanceamento de carga e ajuste de WAF atrás do tier Enterprise. Na Azion isso vem com a plataforma, então você habilita o que precisa sem abrir uma negociação de contrato.'
-    },
-    {
-      icon: 'pi pi-comments',
-      title: 'Fale com um engenheiro em minutos',
-      description:
-        'Abra um ticket, mande um e-mail ou entre em uma call. O compromisso de primeira resposta começa em 15 minutos, em português, espanhol ou inglês, e um Security Response Team entra com você enquanto o ataque acontece.'
-    },
-    {
-      icon: 'pi pi-history',
-      title: 'Publique uma mudança com caminho de volta',
-      description:
-        'Valide regras de WAF em Learning Mode antes de aplicar, acompanhe o efeito no Real-Time Events e reverta em segundos. Você testa o release contra tráfego de produção e desfaz do mesmo jeito.'
-    },
-    {
-      icon: 'pi pi-clock',
-      title: 'Execuções mais longas',
-      description:
-        'Os Workers limitam o tempo de CPU em 30 segundos. As Functions dão até 5 minutos por execução, e a lógica de requisição pesada roda em um lugar só.'
-    },
-    {
-      icon: 'pi pi-dollar',
-      title: 'Cresça sem trocar de plano',
-      description:
-        'Preços de pagamento por uso publicados, sem cobrança de egress entre serviços Azion. Mais tráfego aumenta a fatura, mas não obriga você a trocar de plano.'
-    },
-    {
-      icon: 'pi pi-sync',
-      title: 'Leve o código dos Workers com poucos ajustes',
-      description:
-        '`wrangler.toml` vira `azion.config.js`, `env.VARIABLE` vira `Azion.env.get()` e `request.cf.country` vira metadado da requisição. Seus dados de KV mapeiam para KV Store e seus buckets R2 para Object Storage via APIs compatíveis com S3.'
-    }
-  ],
-  quotes: quotesLedBy('dafiti'),
-  comparison: {
-    eyebrow: 'Comparação',
-    title: 'Como a Azion se compara com a Cloudflare'
-  },
-  capabilities: [
-    {
-      capability: 'Entrega, computação, storage e segurança em uma plataforma',
-      azion: 'full',
-      rival: 'full'
-    },
-    {
-      capability: 'Um único console para todos os fluxos de trabalho',
-      azion: 'full',
-      rival: 'full'
-    },
-    {
-      capability: 'Mudanças de configuração e regras no ar em segundos',
-      azion: 'full',
-      rival: 'full'
-    },
-    { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'full' },
-    { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'full' },
-    {
-      capability: 'Execução de funções acima de 30 segundos de CPU',
-      azion: 'full',
-      rival: 'partial'
-    },
-    { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'full' },
-    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
-    { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
-    {
-      capability: 'Banco SQL distribuído com ACID e busca vetorial em um só produto',
-      azion: 'full',
-      rival: 'partial'
-    },
-    { capability: 'WAF gerenciado para aplicações e APIs', azion: 'full', rival: 'full' },
-    { capability: 'Descoberta e proteção de APIs', azion: 'full', rival: 'full' },
-    { capability: 'Gerenciamento de bots sem plano enterprise', azion: 'full', rival: 'partial' },
-    { capability: 'Proteção DDoS inclusa na entrega', azion: 'full', rival: 'full' },
-    { capability: 'Firewall de rede', azion: 'full', rival: 'full' },
-    { capability: 'Cache em camadas e alívio de origem', azion: 'full', rival: 'full' },
-    { capability: 'Otimização de imagem e vídeo', azion: 'full', rival: 'full' },
-    { capability: 'DNS autoritativo e balanceamento de carga', azion: 'full', rival: 'full' },
-    { capability: 'Métricas em tempo real e busca de eventos', azion: 'full', rival: 'full' },
-    { capability: 'Streaming de logs sem plano enterprise', azion: 'full', rival: 'partial' },
-    { capability: 'Monitoramento de usuário real', azion: 'full', rival: 'full' },
-    {
-      capability: 'Sem cobrança de egress entre serviços da plataforma',
-      azion: 'full',
-      rival: 'full'
-    },
-    { capability: 'Preço por uso publicado', azion: 'full', rival: 'full' }
-  ],
-  mapping: {
-    title: 'Troque sem reescrever seu código',
-    description:
-      'A Azion fornece APIs compatíveis com os serviços da Cloudflare. Código de Workers roda em Functions com mudanças mínimas, dados de KV mapeiam para o KV Store, e buckets do Cloudflare R2 sincronizam com Object Storage usando APIs compatíveis com S3. Regras do WAF da Cloudflare, configurações de proteção DDoS e políticas de tráfego do Cloudflare Gateway se traduzem para Azion WAF, DDoS Protection e Firewall.'
-  },
-  faq: [
-    {
-      value: 'a-azion-e-uma-boa-alternativa',
-      question: 'A Azion é uma boa alternativa à Cloudflare?',
-      answer:
-        'Sim. A Azion é uma alternativa à Cloudflare, com APIs compatíveis para Workers, KV e R2, além de WAF, proteção DDoS e gerenciamento de bots integrados em uma plataforma só. Preços transparentes e $300 em créditos gratuitos ajudam a avaliar a troca.'
-    },
-    {
-      value: 'o-kv-store-e-compativel-com',
-      question: 'O KV Store é compatível com o Cloudflare Workers KV?',
-      answer:
-        'Sim. O KV Store fornece uma API compatível com o Cloudflare Workers KV, facilitando mover aplicações existentes ou o uso de padrões familiares.'
-    },
-    {
-      value: 'como-o-codigo-de-workers-mapeia',
-      question: 'Como o código de Workers mapeia para Azion Functions?',
-      answer:
-        'As Azion Functions suportam TypeScript e JavaScript com APIs web padrão e polyfills de Node.js. Você pode fazer deploy usando a CLI da Azion, integração com Git com deploy contínuo, ou frameworks como Next.js, Vue, React, Angular, Gatsby e Astro. A maioria do código de Workers requer mudanças mínimas.'
-    },
-    {
-      value: 'quais-sao-os-limites-de-tempo',
-      question: 'Quais são os limites de tempo de execução das Azion Functions?',
-      answer:
-        'As Functions suportam até 5 minutos de tempo de CPU por execução e tamanhos de bundle de até 20 MB, em comparação com o limite de 30 segundos de tempo de CPU da Cloudflare. Isso permite executar workloads complexos sem dividir a lógica entre múltiplas funções.'
-    },
-    {
-      value: 'existem-cold-starts-nas-azion-functions',
-      question: 'Existem cold starts nas Azion Functions?',
-      answer:
-        'Não. As Azion Functions executam imediatamente na infraestrutura distribuída sem latência de cold start. Você tem performance consistente já na primeira requisição, sem os atrasos imprevisíveis comuns em plataformas serverless.'
-    },
-    {
-      value: 'qual-latencia-posso-esperar-globalmente',
-      question: 'Qual latência posso esperar globalmente?',
-      answer:
-        'Latência inferior a 30 ms em mais de 120 data centers ao redor do mundo. A arquitetura distribuída da Azion mantém os tempos de resposta baixos para usuários em qualquer lugar, com roteamento automático para o data center mais próximo.'
-    },
-    {
-      value: 'como-os-precos-se-comparam-a',
-      question: 'Como os preços se comparam à Cloudflare?',
-      answer:
-        'A Azion oferece preços de pagamento por uso transparentes, sem taxas ocultas, sem cobranças de egresso entre serviços e sem contratos de longo prazo obrigatórios. Você paga apenas pelo que usa, e ganha $300 em créditos gratuitos válidos por 365 dias para começar a testar.'
-    },
-    {
-      value: 'o-que-substitui-o-waf-e',
-      question: 'O que substitui o WAF e a proteção DDoS da Cloudflare?',
-      answer:
-        'As regras do WAF da Cloudflare mapeiam para o Azion Web Application Firewall, e a proteção DDoS já vem incluída na infraestrutura distribuída da Azion. Políticas de filtragem de tráfego do Cloudflare Gateway podem ser recriadas com Azion Firewall e Network Shield. Se você compara os preços do WAF da Cloudflare com concorrentes, a Azion oferece pagamento por uso sem taxas por regra nem níveis de plano.'
-    },
-    {
-      value: 'como-o-cloudflare-r2-mapeia-para',
-      question: 'Como o Cloudflare R2 mapeia para o Azion Object Storage?',
-      answer:
-        'Buckets do Cloudflare R2 sincronizam com o Azion Object Storage por meio de APIs compatíveis com S3, então suas ferramentas e SDKs atuais continuam funcionando. Transfira objetos com tooling S3 padrão, valide os padrões de acesso e atualize os endpoints da aplicação, sem taxas de egresso entre serviços da Azion.'
-    },
-    {
-      value: 'existe-vendor-lock-in-com-a',
-      question: 'Existe vendor lock-in com a Azion?',
-      answer:
-        'Não. A Azion utiliza APIs compatíveis com S3 para Object Storage, APIs web padrão para Functions e padrões de código portáveis. Você pode sair a qualquer momento sem dependências proprietárias ou contratos obrigatórios que o travem.'
-    },
-    {
-      value: 'qual-suporte-esta-disponivel-durante-a',
-      question: 'Qual suporte está disponível durante a mudança?',
-      answer:
-        'Documentação completa, guias técnicos passo a passo e referências técnicas estão disponíveis. Além disso, você ganha $300 em créditos gratuitos válidos por 365 dias para testar e validar a troca sem necessidade de cartão de crédito.'
-    },
-    {
-      value: 'posso-rodar-ambas-as-plataformas-em',
-      question: 'Posso rodar ambas as plataformas em paralelo?',
-      answer:
-        'Sim. Você pode rodar Cloudflare e Azion simultaneamente e transferir tráfego gradualmente usando configuração DNS. Isso permite testar, validar e fazer a transição sem interrupção do serviço.'
-    }
-  ]
-}
-
 export const FASTLY_GUIDE: AlternativeGuide = {
   rival: 'Fastly',
   hero: {
@@ -500,52 +454,189 @@ export const FASTLY_GUIDE: AlternativeGuide = {
   },
   capabilities: [
     {
-      capability: 'Entrega, computação, storage e segurança em uma plataforma',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Plataforma',
+      rows: [
+        {
+          capability: 'Entrega, computação, storage e segurança em uma plataforma',
+          definition:
+            'Entrega, computação, armazenamento e segurança rodam em uma plataforma, com um único modelo de configuração.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Um único console para todos os fluxos de trabalho',
+          definition:
+            'Configurar, publicar e monitorar todos os produtos a partir da mesma interface.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Mudanças de configuração e regras no ar em segundos',
+          definition: 'Quanto tempo uma alteração leva para valer em todas as localidades da rede.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Regras de entrega configuráveis sem escrever VCL',
+          definition:
+            'Definir cache, roteamento e cabeçalhos por regras, sem programar em Varnish Configuration Language.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
     {
-      capability: 'Um único console para todos os fluxos de trabalho',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Computação',
+      rows: [
+        {
+          capability: 'Runtime JavaScript e WebAssembly',
+          definition: 'Executar código de aplicação perto dos usuários com APIs padrão da web.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Execução de funções sem cold start',
+          definition: 'Funções que respondem à primeira requisição sem atraso de inicialização.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Inferência de AI na plataforma',
+          definition: 'Executar modelos de AI na rede do provedor, perto dos usuários.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
     {
-      capability: 'Mudanças de configuração e regras no ar em segundos',
-      azion: 'full',
-      rival: 'full'
+      title: 'Armazenamento',
+      rows: [
+        {
+          capability: 'Armazenamento chave-valor distribuído',
+          definition:
+            'Leituras de baixa latência para configurações, flags e sessões replicadas perto dos usuários.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Object storage compatível com S3',
+          definition:
+            'Armazenamento de arquivos e objetos acessível pelas APIs e ferramentas do S3.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Banco de dados SQL distribuído com busca vetorial',
+          definition:
+            'Um banco relacional replicado perto dos usuários, com busca por similaridade para aplicações de AI.',
+          azion: 'full',
+          competitor: 'none'
+        }
+      ]
     },
     {
-      capability: 'Regras de entrega configuráveis sem escrever VCL',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Segurança',
+      rows: [
+        {
+          capability: 'WAF gerenciado para aplicações e APIs',
+          definition: 'Regras gerenciadas que bloqueiam ataques a aplicações e APIs.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Descoberta e proteção de APIs',
+          definition: 'Encontrar as APIs expostas e aplicar regras de segurança a cada uma.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Gerenciamento de bots',
+          definition: 'Detectar e bloquear tráfego automatizado antes que ele chegue à aplicação.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Proteção DDoS inclusa na entrega',
+          definition:
+            'Absorver ataques volumétricos e de aplicação sem contratar um produto à parte.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Firewall de rede',
+          definition: 'Filtrar tráfego por IP, rede e localização antes da camada de aplicação.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
-    { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'full' },
-    { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'full' },
-    { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'partial' },
-    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
-    { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
     {
-      capability: 'Banco de dados SQL distribuído com busca vetorial',
-      azion: 'full',
-      rival: 'none'
+      title: 'Entrega e rede',
+      rows: [
+        {
+          capability: 'Cache em camadas e alívio de origem',
+          definition:
+            'Camadas intermediárias de cache que reduzem as requisições que chegam à origem.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Otimização de imagem e vídeo',
+          definition:
+            'Redimensionar, comprimir e converter mídia na entrega, sem processar na origem.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'DNS autoritativo',
+          definition: 'Hospedar e responder pelos registros DNS dos seus domínios.',
+          azion: 'full',
+          competitor: 'none'
+        },
+        {
+          capability: 'Balanceamento de carga entre origens multi-cloud',
+          definition:
+            'Distribuir o tráfego entre origens em diferentes provedores de nuvem ou on-premises.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
-    { capability: 'WAF gerenciado para aplicações e APIs', azion: 'full', rival: 'full' },
-    { capability: 'Descoberta e proteção de APIs', azion: 'full', rival: 'partial' },
-    { capability: 'Gerenciamento de bots', azion: 'full', rival: 'full' },
-    { capability: 'Proteção DDoS inclusa na entrega', azion: 'full', rival: 'full' },
-    { capability: 'Firewall de rede', azion: 'full', rival: 'partial' },
-    { capability: 'Cache em camadas e alívio de origem', azion: 'full', rival: 'full' },
-    { capability: 'Otimização de imagem e vídeo', azion: 'full', rival: 'partial' },
-    { capability: 'DNS autoritativo', azion: 'full', rival: 'none' },
     {
-      capability: 'Balanceamento de carga entre origens multi-cloud',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Observabilidade',
+      rows: [
+        {
+          capability: 'Métricas em tempo real e busca de eventos',
+          definition:
+            'Painéis ao vivo de tráfego, desempenho e segurança, com consulta aos eventos de cada requisição.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Streaming de logs para ferramentas de terceiros',
+          definition: 'Enviar logs em tempo real para o seu SIEM ou data lake.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Monitoramento de usuário real',
+          definition: 'Medir o desempenho que os usuários percebem no navegador.',
+          azion: 'full',
+          competitor: 'none'
+        }
+      ]
     },
-    { capability: 'Métricas em tempo real e busca de eventos', azion: 'full', rival: 'full' },
-    { capability: 'Streaming de logs para ferramentas de terceiros', azion: 'full', rival: 'full' },
-    { capability: 'Monitoramento de usuário real', azion: 'full', rival: 'none' },
-    { capability: 'Preço por uso publicado', azion: 'full', rival: 'full' }
+    {
+      title: 'Comercial',
+      rows: [
+        {
+          capability: 'Preço por uso publicado',
+          definition: 'Preço por unidade publicado, para saber antes quanto um mês vai custar.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    }
   ],
   mapping: {
     title: 'Troque por equivalência de serviços',
@@ -674,42 +765,176 @@ export const AWS_GUIDE: AlternativeGuide = {
   },
   capabilities: [
     {
-      capability: 'Entrega, computação, storage e segurança em uma plataforma',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Plataforma',
+      rows: [
+        {
+          capability: 'Entrega, computação, storage e segurança em uma plataforma',
+          definition:
+            'Entrega, computação, armazenamento e segurança rodam em uma plataforma, com um único modelo de configuração.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Um único console para todos os fluxos de trabalho',
+          definition:
+            'Configurar, publicar e monitorar todos os produtos a partir da mesma interface.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Mudanças de configuração e regras no ar em segundos',
+          definition: 'Quanto tempo uma alteração leva para valer em todas as localidades da rede.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
     {
-      capability: 'Um único console para todos os fluxos de trabalho',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Computação',
+      rows: [
+        {
+          capability: 'Runtime JavaScript e WebAssembly',
+          definition: 'Executar código de aplicação perto dos usuários com APIs padrão da web.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Execução de funções sem cold start',
+          definition: 'Funções que respondem à primeira requisição sem atraso de inicialização.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Inferência de AI na plataforma',
+          definition: 'Executar modelos de AI na rede do provedor, perto dos usuários.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
     },
     {
-      capability: 'Mudanças de configuração e regras no ar em segundos',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Armazenamento',
+      rows: [
+        {
+          capability: 'Armazenamento chave-valor distribuído',
+          definition:
+            'Leituras de baixa latência para configurações, flags e sessões replicadas perto dos usuários.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Object storage compatível com S3',
+          definition:
+            'Armazenamento de arquivos e objetos acessível pelas APIs e ferramentas do S3.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Banco de dados SQL distribuído com busca vetorial',
+          definition:
+            'Um banco relacional replicado perto dos usuários, com busca por similaridade para aplicações de AI.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
     },
-    { capability: 'Runtime JavaScript e WebAssembly', azion: 'full', rival: 'partial' },
-    { capability: 'Execução de funções sem cold start', azion: 'full', rival: 'partial' },
-    { capability: 'Inferência de AI na plataforma', azion: 'full', rival: 'full' },
-    { capability: 'Armazenamento chave-valor distribuído', azion: 'full', rival: 'full' },
-    { capability: 'Object storage compatível com S3', azion: 'full', rival: 'full' },
     {
-      capability: 'Banco de dados SQL distribuído com busca vetorial',
-      azion: 'full',
-      rival: 'partial'
+      title: 'Segurança',
+      rows: [
+        {
+          capability: 'WAF gerenciado para aplicações e APIs',
+          definition: 'Regras gerenciadas que bloqueiam ataques a aplicações e APIs.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Descoberta e proteção de APIs',
+          definition: 'Encontrar as APIs expostas e aplicar regras de segurança a cada uma.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Gerenciamento de bots',
+          definition: 'Detectar e bloquear tráfego automatizado antes que ele chegue à aplicação.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Proteção DDoS inclusa na entrega',
+          definition:
+            'Absorver ataques volumétricos e de aplicação sem contratar um produto à parte.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Firewall de rede',
+          definition: 'Filtrar tráfego por IP, rede e localização antes da camada de aplicação.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
     },
-    { capability: 'WAF gerenciado para aplicações e APIs', azion: 'full', rival: 'full' },
-    { capability: 'Descoberta e proteção de APIs', azion: 'full', rival: 'partial' },
-    { capability: 'Gerenciamento de bots', azion: 'full', rival: 'full' },
-    { capability: 'Proteção DDoS inclusa na entrega', azion: 'full', rival: 'full' },
-    { capability: 'Firewall de rede', azion: 'full', rival: 'full' },
-    { capability: 'Cache em camadas e alívio de origem', azion: 'full', rival: 'full' },
-    { capability: 'Otimização de imagem e vídeo', azion: 'full', rival: 'partial' },
-    { capability: 'DNS autoritativo e balanceamento de carga', azion: 'full', rival: 'full' },
-    { capability: 'Métricas em tempo real e busca de eventos', azion: 'full', rival: 'partial' },
-    { capability: 'Streaming de logs para ferramentas de terceiros', azion: 'full', rival: 'full' },
-    { capability: 'Monitoramento de usuário real', azion: 'full', rival: 'full' },
-    { capability: 'Preço por uso publicado', azion: 'full', rival: 'full' }
+    {
+      title: 'Entrega e rede',
+      rows: [
+        {
+          capability: 'Cache em camadas e alívio de origem',
+          definition:
+            'Camadas intermediárias de cache que reduzem as requisições que chegam à origem.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Otimização de imagem e vídeo',
+          definition:
+            'Redimensionar, comprimir e converter mídia na entrega, sem processar na origem.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'DNS autoritativo e balanceamento de carga',
+          definition:
+            'Responder pelos registros DNS dos seus domínios e distribuir o tráfego entre origens saudáveis.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Observabilidade',
+      rows: [
+        {
+          capability: 'Métricas em tempo real e busca de eventos',
+          definition:
+            'Painéis ao vivo de tráfego, desempenho e segurança, com consulta aos eventos de cada requisição.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Streaming de logs para ferramentas de terceiros',
+          definition: 'Enviar logs em tempo real para o seu SIEM ou data lake.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Monitoramento de usuário real',
+          definition: 'Medir o desempenho que os usuários percebem no navegador.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Comercial',
+      rows: [
+        {
+          capability: 'Preço por uso publicado',
+          definition: 'Preço por unidade publicado, para saber antes quanto um mês vai custar.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    }
   ],
   mapping: {
     title: 'Mapeie os serviços da AWS para a Azion',

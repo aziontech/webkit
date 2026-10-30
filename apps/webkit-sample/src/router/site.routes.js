@@ -16,12 +16,7 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
-import {
-  AKAMAI_GUIDE,
-  AWS_GUIDE,
-  CLOUDFLARE_GUIDE,
-  FASTLY_GUIDE
-} from '@site/data/alternative-guides'
+import { AKAMAI_GUIDE, AWS_GUIDE, FASTLY_GUIDE } from '@site/data/alternative-guides'
 import { blogArticle } from '@site/data/blog-articles.js'
 import { successCaseArticle } from '@site/data/success-case-articles.js'
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
@@ -79,6 +74,7 @@ import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
+import LandingCloudflareAlternative from '@site/views/LandingCloudflareAlternative.vue'
 import LandingWebApplicationFirewall from '@site/views/LandingWebApplicationFirewall.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
@@ -256,8 +252,7 @@ export const siteRoutes = [
   {
     path: '/site/guides/cloudflare-alternative',
     name: 'site-cloudflare-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: CLOUDFLARE_GUIDE }
+    component: LandingCloudflareAlternative
   },
   {
     path: '/site/guides/fastly-alternative',

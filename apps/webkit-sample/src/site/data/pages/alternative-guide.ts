@@ -38,15 +38,13 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     section: 'CompareCompetitors',
     eyebrow: guide.comparison.eyebrow,
     title: guide.comparison.title,
-    rival: guide.rival,
-    rows: guide.capabilities,
+    competitor: { name: guide.rival },
+    groups: guide.capabilities,
     caption: `Comparação de capacidades entre a Azion e a ${guide.rival}.`,
     columnLabel: 'Capacidade',
-    supportLabels: {
-      full: 'Suporte completo',
-      partial: 'Suporte parcial',
-      none: 'Não disponível'
-    }
+    fullLabel: 'Suporte completo',
+    partialLabel: 'Suporte parcial',
+    noneLabel: 'Não disponível'
   },
   {
     section: 'MediaSplitBand',
