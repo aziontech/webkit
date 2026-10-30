@@ -9776,7 +9776,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+          "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `InputText`. The label's Required tag is owned by the wrapping form-field, not by this component."
         },
         {
           "name": "invalid",
@@ -9885,7 +9885,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+          "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `InputText`. The label's Required tag is owned by the wrapping form-field, not by this component."
         },
         {
           "name": "invalid",
