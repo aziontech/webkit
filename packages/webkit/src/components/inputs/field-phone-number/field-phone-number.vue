@@ -13,6 +13,7 @@
   import {
     type Country,
     defaultCountries,
+    flagStyle,
     formatNational,
     isComplete,
     maxDigits,
@@ -24,6 +25,9 @@
     name: 'FieldPhoneNumber',
     inheritAttrs: false
   })
+
+  /** Size token; heights match the sibling field primitives. */
+  export type FieldPhoneNumberSize = 'small' | 'medium' | 'large'
 
   /** Snapshot of the number emitted by update:phone. */
   export interface PhoneNumber {
@@ -48,6 +52,8 @@
     placeholder?: string
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
+    /** Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. */
+    size?: FieldPhoneNumberSize
     /** Disables both the dial-code Select and the internal input; a supplied helperText switches to kind=disabled. */
     disabled?: boolean
     /** Marks the internal input read-only; dial-code Select is also disabled while readonly. */
@@ -71,6 +77,7 @@
     label: '',
     placeholder: '',
     helperText: '',
+    size: 'medium',
     disabled: false,
     readonly: false,
     required: false,
@@ -186,6 +193,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
+    :data-size="size"
     :data-disabled="disabled || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
@@ -199,6 +207,7 @@
       :data-testid="`${testId}__label`"
     />
     <InputGroup
+      :size="size"
       :invalid="invalid"
       :required="required"
       :disabled="disabled"
@@ -207,6 +216,7 @@
       <Select
         v-model:open="open"
         :model-value="country"
+        :size="size"
         :disabled="disabled || readonly"
         :display-value="() => selectedCountry.dialCode"
         :data-testid="`${testId}__country`"
@@ -246,7 +256,25 @@
             class="data-[active]:bg-(--bg-hover)"
             @mousemove="setActive(index)"
           >
-            {{ c.dialCode }} {{ c.label }}
+            <template #left>
+              <i
+                v-if="flagStyle(c.code)"
+                :style="flagStyle(c.code)"
+                class="block w-4 aspect-[22/15] bg-no-repeat"
+                aria-hidden="true"
+                :data-country="c.code"
+                :data-testid="`${testId}__flag`"
+              />
+            </template>
+            {{ c.label }}
+            <template #tag>
+              <span
+                :data-testid="`${testId}__dial-code`"
+                class="shrink-0 text-label-code-sm text-(--text-muted)"
+              >
+                {{ c.dialCode }}
+              </span>
+            </template>
           </SelectOption>
           <p
             v-if="filteredCountries.length === 0"

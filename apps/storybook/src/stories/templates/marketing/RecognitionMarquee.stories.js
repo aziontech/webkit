@@ -138,7 +138,7 @@ const firmMark = (firm) =>
 
 const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
-    <SectionTitle title="Recognized as a Market Leader" />
+    <SectionTitle eyebrow="Analysts" title="Recognized as a market leader" />
   </template>
 
   <FrameBox flush borders="y" marks="all">
