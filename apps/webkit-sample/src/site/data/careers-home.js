@@ -12,10 +12,10 @@ export const CAREERS_WORK = {
 }
 
 export const CAREERS_VISION = {
-  eyebrow: 'Our vision',
-  title: 'Building for the web should be simple',
+  eyebrow: 'Our values',
+  title: 'Four values shape every role at Azion',
   description:
-    'We want teams to build, speed up, automate, and secure applications with less operational drag. The Azion Platform gives them one reliable place to do it, with clear building blocks and strong price-performance. They ship faster and keep full control of where workloads run: on Azion’s infrastructure, in the cloud, or on their own.'
+    'Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers.'
 }
 
 export const CAREERS_PROCESS = {
