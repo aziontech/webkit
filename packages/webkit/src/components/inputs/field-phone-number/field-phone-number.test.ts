@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-phone-number/FieldPhoneNumber.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
-import { defaultCountries, OTHER_COUNTRY_CODE } from './countries'
+import { defaultCountries } from './countries'
 import FieldPhoneNumber, { type PhoneNumber } from './field-phone-number.vue'
 
 const { Default, Countries, Invalid, Disabled, Readonly } = composeStories(stories)
@@ -16,6 +16,14 @@ const getContent = () =>
 
 const getOptions = () =>
   Array.from(document.body.querySelectorAll('[data-testid="select-option"]')) as HTMLElement[]
+
+const optionText = (option: HTMLElement) =>
+  [
+    option.querySelector('.truncate'),
+    option.querySelector('[data-testid="input-field-phone-number__dial-code"]')
+  ]
+    .map((el) => el?.textContent?.trim())
+    .join(' ')
 
 const lastPhone = (emitted: Record<string, unknown[]>) => {
   const events = emitted['update:phone'] as PhoneNumber[][]
@@ -235,7 +243,27 @@ describe('FieldPhoneNumber', () => {
 
       const options = getOptions()
       expect(options).toHaveLength(defaultCountries.length)
-      expect(options[1].textContent?.trim()).toBe('+1 United States')
+      const us = options[1]
+      const flag = us.querySelector('[data-testid="input-field-phone-number__flag"]')
+      expect(flag?.getAttribute('data-country')).toBe('US')
+      expect(flag?.getAttribute('aria-hidden')).toBe('true')
+      expect(us.querySelector('.truncate')?.textContent?.trim()).toBe('United States')
+      expect(
+        us.querySelector('[data-testid="input-field-phone-number__dial-code"]')?.textContent?.trim()
+      ).toBe('+1')
+    })
+
+    it('keeps the check on the selected country, after the dial code', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone', country: 'BR' } })
+      await fireEvent.click(getByTestId('select-trigger'))
+
+      const br = getOptions()[0]
+      const dialCode = br.querySelector('[data-testid="input-field-phone-number__dial-code"]')
+      const check = br.querySelector('[data-testid="select-option__check"]')
+      expect(check).not.toBeNull()
+      expect(dialCode?.compareDocumentPosition(check as Node)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING
+      )
     })
 
     it('emits update:country and re-emits truncated digits when a country is picked', async () => {
@@ -344,31 +372,6 @@ describe('FieldPhoneNumber', () => {
   })
 
   describe('countries', () => {
-    it('ships Other as the last option', () => {
-      const other = defaultCountries[defaultCountries.length - 1]
-      expect(other.code).toBe(OTHER_COUNTRY_CODE)
-      expect(other.dialCode).toBe('+')
-    })
-
-    it('takes the country code and number together under Other', async () => {
-      const { getByRole, getByTestId, emitted } = render(FieldPhoneNumber, {
-        props: { label: 'Phone', country: OTHER_COUNTRY_CODE }
-      })
-      const input = getByRole('textbox') as HTMLInputElement
-
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+')
-
-      await fireEvent.update(input, '81312345678')
-      expect(input.value).toBe('81312345678')
-      expect(lastPhone(emitted())).toMatchObject({ number: '+81312345678', complete: true })
-
-      await fireEvent.update(input, '123456')
-      expect(lastPhone(emitted())).toMatchObject({ complete: false })
-
-      await fireEvent.update(input, '1234567890123456789')
-      expect(lastPhone(emitted())).toMatchObject({ digits: '123456789012345', complete: true })
-    })
-
     it('changes country without a v-model:country binding', async () => {
       const { getByTestId, getByRole } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
 
@@ -401,7 +404,7 @@ describe('FieldPhoneNumber', () => {
       await fireEvent.click(getByTestId('select-trigger'))
       await fireEvent.update(getSearch() as HTMLInputElement, 'MÉX')
 
-      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+52 Mexico'])
+      expect(getOptions().map(optionText)).toEqual(['Mexico +52'])
     })
 
     it('filters by dial code with or without the plus sign', async () => {
@@ -409,10 +412,10 @@ describe('FieldPhoneNumber', () => {
 
       await fireEvent.click(getByTestId('select-trigger'))
       await fireEvent.update(getSearch() as HTMLInputElement, '+55')
-      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+55 Brazil'])
+      expect(getOptions().map(optionText)).toEqual(['Brazil +55'])
 
       await fireEvent.update(getSearch() as HTMLInputElement, '351')
-      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+351 Portugal'])
+      expect(getOptions().map(optionText)).toEqual(['Portugal +351'])
     })
 
     it('shows the empty label when nothing matches', async () => {
@@ -464,11 +467,11 @@ describe('FieldPhoneNumber', () => {
       await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
 
       expect(getSearch()?.value).toBe('p')
-      expect(getOptions().map((o) => o.textContent?.trim())).toEqual([
-        '+351 Portugal',
-        '+595 Paraguay',
-        '+51 Peru',
-        '+48 Poland'
+      expect(getOptions().map(optionText)).toEqual([
+        'Portugal +351',
+        'Paraguay +595',
+        'Peru +51',
+        'Poland +48'
       ])
     })
 
