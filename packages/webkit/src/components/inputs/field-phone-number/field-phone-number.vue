@@ -13,6 +13,7 @@
   import {
     type Country,
     defaultCountries,
+    flagStyle,
     formatNational,
     isComplete,
     maxDigits,
@@ -255,7 +256,25 @@
             class="data-[active]:bg-(--bg-hover)"
             @mousemove="setActive(index)"
           >
-            {{ c.dialCode }} {{ c.label }}
+            <template #left>
+              <i
+                v-if="flagStyle(c.code)"
+                :style="flagStyle(c.code)"
+                class="block w-4 aspect-[22/15] bg-no-repeat"
+                aria-hidden="true"
+                :data-country="c.code"
+                :data-testid="`${testId}__flag`"
+              />
+            </template>
+            {{ c.label }}
+            <template #tag>
+              <span
+                :data-testid="`${testId}__dial-code`"
+                class="shrink-0 text-label-code-sm text-(--text-muted)"
+              >
+                {{ c.dialCode }}
+              </span>
+            </template>
           </SelectOption>
           <p
             v-if="filteredCountries.length === 0"
