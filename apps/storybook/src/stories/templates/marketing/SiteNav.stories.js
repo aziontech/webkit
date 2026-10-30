@@ -297,7 +297,7 @@ const IMPORTS = [
   'const navPath = ref([])',
   '',
   'watch(navOpen, (open) => {',
-  '  if (!open) navPath.value = []',
+  '  if (open) navPath.value = []',
   '})',
   '',
   'const onNavigate = (event, node) => {',
@@ -525,7 +525,7 @@ export const Default = {
       const columnInset = ref(0)
 
       watch(navOpen, (open) => {
-        if (!open) navPath.value = []
+        if (open) navPath.value = []
       })
 
       const onNavigate = (event, node) => {

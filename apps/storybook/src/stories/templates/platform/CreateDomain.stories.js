@@ -184,13 +184,15 @@ const formScript = ({ resource, editing }) => [
   ...(editing
     ? [
         'watch(open, (isOpen) => {',
+        '  if (!isOpen) return',
         '  submitted.value = false',
-        '  certificateTouched.value = isOpen',
-        '  Object.assign(form, isOpen ? { ...editingDomain } : blankForm())',
+        '  certificateTouched.value = true',
+        '  Object.assign(form, { ...editingDomain })',
         '})'
       ]
     : [
-        'watch(open, () => {',
+        'watch(open, (isOpen) => {',
+        '  if (!isOpen) return',
         '  submitted.value = false',
         '  certificateTouched.value = false',
         '  Object.assign(form, blankForm())',
@@ -249,9 +251,10 @@ const formState = ({ resource, editing }) => {
     { immediate: true }
   )
   watch(open, (isOpen) => {
+    if (!isOpen) return
     submitted.value = false
-    certificateTouched.value = Boolean(editing) && isOpen
-    Object.assign(form, editing && isOpen ? { ...editing } : blankForm())
+    certificateTouched.value = Boolean(editing)
+    Object.assign(form, editing ? { ...editing } : blankForm())
   })
   const onCertificate = (value) => {
     certificateTouched.value = true

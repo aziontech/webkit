@@ -687,6 +687,10 @@ export const pageState = (initial) => {
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
+  const documentEvent = ref(null)
+  watch(selectedEvent, (event) => {
+    if (event) documentEvent.value = event
+  })
 
   const logMinWidth = 480
   const documentMinWidth = 348
@@ -1216,6 +1220,7 @@ export const pageState = (initial) => {
     statusTone,
     selectedId,
     selectedEvent,
+    documentEvent,
     logMinWidth,
     documentMinWidth,
     fieldsPanelWidth,
@@ -1949,6 +1954,10 @@ const selectedId = ref('')
 const selectedEvent = computed(
   () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
 )
+const documentEvent = ref(null)
+watch(selectedEvent, (event) => {
+  if (event) documentEvent.value = event
+})
 
 const logMinWidth = 480
 const documentMinWidth = 348
@@ -3027,11 +3036,11 @@ const eventDocument = (condition = '') => `<div${condition} class="flex min-w-0 
   <div class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)">
     <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
       <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-        <Tag :label="selectedEvent.level" :severity="eventLevelSeverity(selectedEvent.level)" size="medium" />
-        <Tag :label="selectedEvent.sourceLabel" severity="secondary" size="medium" />
+        <Tag :label="documentEvent.level" :severity="eventLevelSeverity(documentEvent.level)" size="medium" />
+        <Tag :label="documentEvent.sourceLabel" severity="secondary" size="medium" />
       </div>
-      <p class="text-body-md text-(--text-default)">{{ selectedEvent.message }}</p>
-      <p class="text-label-code-sm tabular-nums text-(--text-muted)">{{ selectedEvent.time }}</p>
+      <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
+      <p class="text-label-code-sm tabular-nums text-(--text-muted)">{{ documentEvent.time }}</p>
     </div>
 
     <dl class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)">
@@ -3083,7 +3092,7 @@ const DOCUMENT_PANEL = `<Sidebar
     </div>
   </template>
 
-  <div v-if="selectedEvent" class="-m-(--spacing-md)">
+  <div v-if="documentEvent" class="-m-(--spacing-md)">
 ${indent(eventDocument(), 2)}
   </div>
 </Sidebar>`
@@ -3097,7 +3106,7 @@ const DOCUMENT_DRAWER = `<Drawer v-model:open="documentDrawerOpen" size="medium"
         <DrawerClose />
       </PanelHeader>
       <div class="min-h-0 flex-1 overflow-auto">
-${indent(eventDocument(' v-if="selectedEvent"'), 4)}
+${indent(eventDocument(' v-if="documentEvent"'), 4)}
       </div>
     </DrawerContent>
   </DrawerPortal>
