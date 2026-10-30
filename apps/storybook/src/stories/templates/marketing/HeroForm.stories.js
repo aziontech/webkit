@@ -167,7 +167,7 @@ const CONTACT_TEMPLATE = `<Hero
   :carousel-marks="[${CLIENT_STRIP.map((mark) => `'${mark}'`).join(', ')}]"
   bottom-height="clamp(7rem,16dvh,14rem)"
 >
-  <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-(--spacing-xl)">
+  <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) gap-y-(--spacing-xl) lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
     <Hero.Title
       eyebrow="Sales"
       eyebrow-prefix="//"
@@ -178,7 +178,9 @@ const CONTACT_TEMPLATE = `<Hero
       Get a custom demo, plan your migration, and explore plans and pricing built for your company.
     </Hero.Title>
 
-    <div class="min-w-0 lg:row-span-2">
+    ${highlightsList(SALES_HIGHLIGHTS)}
+
+    <div class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
       <form novalidate class="flex flex-col gap-(--spacing-md)" @submit.prevent>
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0">
           <legend class="sr-only">Contact sales</legend>
@@ -210,8 +212,6 @@ const CONTACT_TEMPLATE = `<Hero
         </div>
       </form>
     </div>
-
-    ${highlightsList(SALES_HIGHLIGHTS)}
   </div>
 </Hero>`
 
@@ -225,7 +225,7 @@ const INCIDENT_TEMPLATE = `<Hero
   :carousel-marks="[${CLIENT_STRIP.map((mark) => `'${mark}'`).join(', ')}]"
   bottom-height="clamp(7rem,16dvh,14rem)"
 >
-  <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-(--spacing-xl)">
+  <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) gap-y-(--spacing-xl) lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
     <Hero.Title
       eyebrow="Under Cyberattack?"
       eyebrow-prefix="//"
@@ -236,7 +236,9 @@ const INCIDENT_TEMPLATE = `<Hero
       Our digital security team is available to provide immediate assistance.
     </Hero.Title>
 
-    <div class="min-w-0 lg:row-span-2">
+    ${highlightsList(ATTACK_HIGHLIGHTS)}
+
+    <div class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
       <form novalidate class="flex flex-col gap-(--spacing-md)" @submit.prevent>
         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0">
           <legend class="sr-only">Request immediate contact</legend>
@@ -261,8 +263,6 @@ const INCIDENT_TEMPLATE = `<Hero
         </div>
       </form>
     </div>
-
-    ${highlightsList(ATTACK_HIGHLIGHTS)}
   </div>
 </Hero>`
 
