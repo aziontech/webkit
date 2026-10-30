@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 883f7bc3f65e66d9c7cd8042f8ab1e81b34603cdc1c3c54b0c46e971ddd5b608
+checksum: 7a9954273e82538ee3fe554522b3d2e924eefb0d128fa7a0410254bd112d92b0
 created: 2026-07-06
-last_updated: 2026-10-19
+last_updated: 2026-10-28
 ---
 
 # FieldPhoneNumber — Component Spec
@@ -51,6 +51,7 @@ Form field for international phone-number entry that composes `Label`, `InputGro
 | `label`             | `string`                                                                             | `''`                        | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                                                                                                                      |
 | `placeholder`       | `string`                                                                             | `''`                        | false    | Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's longest mask with each `#` shown as `9` (e.g. `(99) 99999-9999`).                                                                                                                                                                                                                          |
 | `helperText`        | `string`                                                                             | `''`                        | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say.                                                                                                                     |
+| `size`              | `'small' \| 'medium' \| 'large'`                                                    | `'medium'`                  | false    | Size forwarded to the `InputGroup` and the dial-code `Select` trigger, so the field lines up with sibling fields of the same size. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                          |
 | `disabled`          | `boolean`                                                                            | `false`                     | false    | Disables both the dial-code `Select` and the internal `<input>`, and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                                                                                                   |
 | `readonly`          | `boolean`                                                                            | `false`                     | false    | Marks the internal `<input>` read-only; value is visible but not editable. The dial-code `Select` is also disabled while readonly (dial code cannot change without editing). Native pass-through on the input.                                                                                                                                                                                               |
 | `required`          | `boolean`                                                                            | `false`                     | false    | Adds the Required tag to the `Label`, sets `required` on `InputGroup`, and sets native `required` + `aria-required` on the internal `<input>`.                                                                                                                                                                                                                                                               |
@@ -84,7 +85,7 @@ _none_ — the affordance is fixed (dial-code Select on the left, phone input on
 ## States
 
 - Visual states delegated to `InputGroup`: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`.
-- On the field wrapper root: `data-disabled`, `data-invalid`, `data-required` mirror the props (for test/query targeting).
+- On the field wrapper root: `data-size`, `data-disabled`, `data-invalid`, `data-required` mirror the props (for test/query targeting).
 - `HelperText.kind` computed by precedence: `disabled > invalid > required > 'helper'`.
 - When `disabled` is set and `helperText` is empty, no helper row renders (parity with `FieldText`, `FieldInputGroup`) — the field substitutes no copy, so a transient lock adds no padlock line.
 - Completeness is reported, not rendered: an incomplete number sets `complete: false` on `update:phone`, and the consumer decides when to show it (typically on submit, via `invalid` + `helperText`). The field writes no "incomplete" copy of its own.
@@ -125,13 +126,14 @@ Border / focus / hover / invalid / required / disabled tokens are owned by the n
 ## Stories (Storybook)
 
 - Default — `label='Phone'`, `country='BR'`, empty value, sample `placeholder` and `helperText`.
+- Sizes — composite story rendering `small`, `medium` and `large` side by side, each next to a `FieldText` of the same size, to document that the heights line up.
 - Countries — composite story with BR mobile, BR landline, US and GB side by side, each with a value formatted by its mask, to document per-country masking and a country with two lengths.
 - Required — `required=true`; documents the Label's Required tag plus the input's `aria-required` wiring.
 - Invalid — `invalid=true` with a `helperText` such as `'Enter a valid phone number.'`.
 - Disabled — `disabled=true`; documents the lock-icon helper and the disabled dial-code `Select` + `<input>`.
 - Readonly — `readonly=true`; documents that the value is visible but neither the number nor the dial code can change.
 
-Justification for six stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind` and no `size`, so `Types` and `Sizes` do not apply. `Default` and `Countries` document the composition API (Label + `InputGroup` with `Select` + masked input + `HelperText`, plus per-country mask switching). `Required`, `Invalid`, `Disabled`, and `Readonly` exercise the four state signals the wrapper propagates.
+Justification for seven stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind`, so `Types` does not apply; `Sizes` covers the one multi-option axis. `Default` and `Countries` document the composition API (Label + `InputGroup` with `Select` + masked input + `HelperText`, plus per-country mask switching). `Required`, `Invalid`, `Disabled`, and `Readonly` exercise the four state signals the wrapper propagates.
 
 ## Constraints — DO NOT
 
