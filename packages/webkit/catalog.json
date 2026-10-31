@@ -7892,6 +7892,13 @@
           "doc": "Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say."
         },
         {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Size forwarded to the `InputGroup` and the dial-code `Select` trigger, so the field lines up with sibling fields of the same size. Heights: small=28px, medium=32px, large=40px."
+        },
+        {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
@@ -9769,7 +9776,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+          "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `InputText`. The label's Required tag is owned by the wrapping form-field, not by this component."
         },
         {
           "name": "invalid",
@@ -9878,7 +9885,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+          "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `InputText`. The label's Required tag is owned by the wrapping form-field, not by this component."
         },
         {
           "name": "invalid",

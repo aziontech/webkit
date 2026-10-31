@@ -2,7 +2,7 @@
 name: webkit-tables
 description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions Dropdown cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's right edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-09-19
+last_updated: 2026-10-28
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -327,22 +327,30 @@ When a cell holds a primary value plus overflow (multiple domains, tags), show t
 that opens a `Popover` listing the rest. The `+N` tag is `shrink-0` and sits right after the primary;
 copy (if any) still pins right.
 
+The popover itself — summary line, search past 7 items, the scrolling list, Load more, the no-match
+line — is the overflow rule in `/webkit-ux-heuristics` (Usability rules § 2). Build it once as a
+shared component and drop it into the cell:
+
 ```vue
-<Popover v-if="row.domainCount" placement="bottom-start" width="medium">
-  <Popover.Trigger @click.stop>
-    <Tag :label="`+${row.domainCount}`" severity="secondary" size="small" class="shrink-0 cursor-pointer" />
-  </Popover.Trigger>
-  <Popover.Content @click.stop>
-    <div class="flex max-h-(--container-xs) flex-col overflow-auto p-(--spacing-xxs)">
-      <p class="px-(--spacing-xs) py-(--spacing-xxs) text-overline-sm text-(--text-muted)">
-        {{ row.domains.length }} domains
-      </p>
-      <span v-for="d in row.domains" :key="d" class="truncate px-(--spacing-xs) py-(--spacing-xxs) text-body-sm">
-        {{ d }}
-      </span>
-    </div>
-  </Popover.Content>
-</Popover>
+<template #cell-domainName="{ row }">
+  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+    <ResourceLink
+      :label="row.domains[0]"
+      :href="`https://${row.domains[0]}`"
+    />
+    <DomainOverflow
+      v-if="row.domains.length > 1"
+      :domains="row.domains.slice(1)"
+      :count="row.domains.length - 1"
+    />
+    <CopyButton
+      kind="outlined"
+      :value="row.domains[0]"
+      aria-label="Copy domain name"
+      class="ml-auto shrink-0"
+    />
+  </div>
+</template>
 ```
 
 ### Copy-value cell — text + CopyButton at the end
@@ -464,7 +472,7 @@ destructive actions in their own `Dropdown.Group`.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
 - [ ] Every copyable cell uses text-then-copy with the copy button pinned right (`ml-auto shrink-0`), never flush against the text.
 - [ ] "Last Modified" cell = `Avatar` + relative time in one column, name on the avatar tooltip; no raw absolute date and no separate "Last Modified By"/"Author" column beside it.
-- [ ] Overflow shown as a `+N` `Tag` opening a `Popover`, not a wrapped inline list.
+- [ ] Overflow shown as a `+N` `Tag` opening a `Popover` (summary, search past 7, Load more — per `/webkit-ux-heuristics`), not a wrapped inline list.
 - [ ] Status via `Tag :severity`, never a raw color; long text `truncate`s inside `min-w-0`.
 - [ ] Interactive controls in non-action cells use `@click.stop` when the table has `@row-click`.
 

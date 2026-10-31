@@ -153,6 +153,7 @@ async function main() {
     if (/^(virtual:|vue|vue\/.*)$/.test(spec)) continue
     // node: prefix is always valid
     if (spec.startsWith('node:')) continue
+    if (spec === 'figma' && /\.figma\.(ts|js)$/.test(filePath)) continue
 
     let ok = false
     let reason = ''
