@@ -40,6 +40,7 @@ import LandingCache from '@site/views/LandingCache.vue'
 import LandingCareers from '@site/views/LandingCareers.vue'
 import LandingCareersHome from '@site/views/LandingCareersHome.vue'
 import LandingCareersJob from '@site/views/LandingCareersJob.vue'
+import LandingCloudflareAlternative from '@site/views/LandingCloudflareAlternative.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
@@ -74,7 +75,6 @@ import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
-import LandingCloudflareAlternative from '@site/views/LandingCloudflareAlternative.vue'
 import LandingWebApplicationFirewall from '@site/views/LandingWebApplicationFirewall.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
@@ -351,7 +351,7 @@ export const siteRoutes = [
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   // A docs reading page COMPOSED in Vue: prose, but with a filtering tool picker and
   // cards carrying other vendors' real marks — neither of which MDX can express. Every
-  // block in it still comes from @aziontech/webkit-docs.
+  // block in it still comes from the documentation layer.
   {
     path: '/site/docs/agent-setup',
     name: 'site-docs-agent-setup',
@@ -369,7 +369,7 @@ export const siteRoutes = [
     beforeEnter: (to) => (agentBySlug(String(to.params.agent)) ? true : '/site/docs/agent-setup')
   },
   // EVERY OTHER DOCS PAGE, from one route and one view. A reading page is `.mdx` rendered by
-  // @aziontech/webkit-docs — the other half of the docs example, and the way most of a real
+  // the documentation layer — the other half of the docs example, and the way most of a real
   // documentation site is written — so the pages are files in `site/docs/content/` and the
   // route resolves the slug against that folder (see docs-pages.js). Adding a page is adding
   // the file and giving its row in the rail an `href`; no route, no view, no wiring.

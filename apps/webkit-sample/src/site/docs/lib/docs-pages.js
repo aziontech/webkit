@@ -14,10 +14,10 @@
 // (`First deploy`'s `next` still pointed at a "Go live" page that never existed). Derived
 // here, a page's neighbours change when the tree changes, and a page nobody can reach from
 // the rail gets no neighbours at all, which is the honest answer.
-import { splitFrontmatter } from '@aziontech/webkit-docs/mdx'
 import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
 
 import { docsLeaves, docsNavSections } from './docs-nav.js'
+import { splitFrontmatter } from './mdx.js'
 
 /**
  * Every `.mdx` under `content/`, as slug → raw source.

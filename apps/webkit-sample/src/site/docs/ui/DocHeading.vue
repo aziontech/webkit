@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useHeadingNav } from '../lib/heading-nav'
+  import { useHeadingNav } from '@aziontech/webkit/use-heading-nav'
 
   /**
    * A section heading that is also the link to itself — the one shape every
