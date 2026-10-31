@@ -10,6 +10,18 @@
 
 * bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
 
+## [4.4.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.3.0...@aziontech/icons@4.4.0) (2026-10-31)
+
+
+### Features
+
+* **icons:** add the ai-circle-half and ai-circle-minus support marks ([#1128](https://github.com/aziontech/webkit/issues/1128)) ([74d5bc9](https://github.com/aziontech/webkit/commit/74d5bc991a42a59e1bf629419ef3b50c6396a5da))
+
+
+### Code Refactoring
+
+* limit comments to API docs and tool directives across packages ([#1119](https://github.com/aziontech/webkit/issues/1119)) ([9886b44](https://github.com/aziontech/webkit/commit/9886b448d464fa41573a04e2f5231a964738125e))
+
 ## [4.3.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.2.0...@aziontech/icons@4.3.0) (2026-10-23)
 
 
