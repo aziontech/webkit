@@ -4,6 +4,29 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.7.0...@aziontech/webkit@5.8.0) (2026-10-31)
+
+
+### Features
+
+* **webkit:** add size to FieldPhoneNumber ([#1126](https://github.com/aziontech/webkit/issues/1126)) ([2a11d2d](https://github.com/aziontech/webkit/commit/2a11d2db114a77361f93d0ea06e453488429acd8))
+* **webkit:** show country flags in the field-phone-number dial-code list ([#1132](https://github.com/aziontech/webkit/issues/1132)) ([674e5fb](https://github.com/aziontech/webkit/commit/674e5fbaaea1f6c94d290149adc939bdf1909d4d))
+
+
+### Bug Fixes
+
+* **webkit:** show the required border on the Select trigger ([#1125](https://github.com/aziontech/webkit/issues/1125)) ([2c4e6a5](https://github.com/aziontech/webkit/commit/2c4e6a575cd701edff3ba4f5443a0ec9cd2c98b2))
+
+
+### Documentation
+
+* **webkit:** add long-list, external-link and resource-picker rules to consumer skills ([#1127](https://github.com/aziontech/webkit/issues/1127)) ([b5eccbc](https://github.com/aziontech/webkit/commit/b5eccbc5395c829dda2fdd3ad70f979fc9cabfb0))
+
+
+### Code Refactoring
+
+* limit comments to API docs and tool directives across packages ([#1119](https://github.com/aziontech/webkit/issues/1119)) ([9886b44](https://github.com/aziontech/webkit/commit/9886b448d464fa41573a04e2f5231a964738125e))
+
 ## [5.7.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.6.0...@aziontech/webkit@5.7.0) (2026-10-26)
 
 
