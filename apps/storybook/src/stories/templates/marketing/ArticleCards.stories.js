@@ -10,6 +10,7 @@ import SectionTitle from '@aziontech/webkit/section-title'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -168,17 +169,66 @@ const CENTERED_TEMPLATE = band(
   'Success cases'
 )
 
+const slugOf = (href) => href.split('/').filter(Boolean).pop()
+
+const MARK_FILES = {
+  gpaExtendedReversed: 'gpa-extended-reversed.svg',
+  netshoesExtendedReversed: 'netshoes-extended-reversed.svg',
+  rennerExtendedColor: 'renner-extended-color.svg'
+}
+
+const cardOf = (item) => ({
+  key: slugOf(item.href),
+  href: item.href,
+  title: item.title,
+  description: item.description,
+  meta: item.meta,
+  ...(item.image
+    ? { image: item.image }
+    : {
+        mark: {
+          name: item.mark.name,
+          logo: `/marketing-components/logos/${MARK_FILES[item.mark.logo]}`
+        }
+      })
+})
+
+export const SITE_SECTION_ARTICLES = {
+  _id: 'article-cards-articles',
+  props: {
+    title: 'Related Articles',
+    items: POSTS.map(cardOf),
+    ariaLabel: 'Related Articles'
+  }
+}
+
+export const SITE_SECTION_SUCCESS_CASES = {
+  _id: 'article-cards-success-cases',
+  props: {
+    title: 'Related Success Cases',
+    items: STORIES.map(cardOf),
+    ariaLabel: 'Related Success Cases'
+  }
+}
+
+export const SITE_SECTION_CENTERED = {
+  _id: 'article-cards-centered',
+  props: {
+    kind: 'centered',
+    eyebrow: 'Success cases',
+    title: 'When our customers succeed, we succeed',
+    items: STORIES.map(cardOf),
+    ariaLabel: 'When our customers succeed, we succeed'
+  }
+}
+
 const meta = {
   title: 'Templates/Marketing/Articles/ArticleCards',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION_ARTICLES', 'SITE_SECTION_SUCCESS_CASES', 'SITE_SECTION_CENTERED'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'A titled row of three article cards on one hairline grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell, then the headline, the deck and a `date • read time` overline pinned to the foot. The media cell holds the article’s cover, or the client’s mark drawn as one flat ink that follows the theme when the article has no cover. On hover the card lifts to the raised surface and the media scales up slightly. It closes every blog post (/blog/:slug) with its related articles and every success story (/success-cases/:slug) with its related stories; the under-attack page centres the title over its customer stories. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`).'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -190,36 +240,40 @@ export const RelatedArticles = {
   ...editable(() => ({ components, template: ARTICLES_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story: 'The blog post’s closing band: three related posts, each with its cover image.'
-      },
       source: { code: toSfc(IMPORTS, ARTICLES_TEMPLATE) }
     }
   }
+}
+
+export const RelatedArticlesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_ARTICLES)
 }
 
 export const RelatedSuccessCases = {
   ...editable(() => ({ components, setup, template: STORIES_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Magalu story’s closing band: the next three Retail stories in the library’s order, Netshoes, Renner and GPA. A story has no cover, so each card draws its client’s mark.'
-      },
       source: { code: toSfc(MARK_IMPORTS, STORIES_TEMPLATE) }
     }
   }
+}
+
+export const RelatedSuccessCasesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_SUCCESS_CASES)
 }
 
 export const Centered = {
   ...editable(() => ({ components, setup, template: CENTERED_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The title centred and balanced over the cards under an overline, as a landing-page band rather than an article’s closing row (Under attack).'
-      },
       source: { code: toSfc(MARK_IMPORTS, CENTERED_TEMPLATE) }
     }
   }
+}
+
+export const CenteredJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_CENTERED)
 }

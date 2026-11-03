@@ -1,0 +1,53 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ArticleBodyStories from './ArticleBody.stories'
+
+<Meta title="Templates/Marketing/Articles/ArticleBody" />
+
+# ArticleBody
+
+The reading page of an article. A brand banner sits over a three-column grid: the share, community and Copy page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right.
+
+Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `SectionContainer` instead of sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it.
+
+Built from `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Divider`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Success Story
+
+The Magalu success story under Success cases › Retail. A story has no author, so the byline is the date and read time alone, and it has no feed, so the share group drops the RSS action. The outline lists the three sections the prose opens with, the first one active.
+
+<Canvas of={ArticleBodyStories.SuccessStory} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `article` is the piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`.
+- `trail` is the breadcrumb, each a `label` and an `href`, the last entry marked `current`.
+- `body` is the article as markdown. Its `##` headings feed the "On this page" outline.
+- `banner` is the image over the masthead.
+- `share` labels the share group: `title`, `copyLink`, `shareX` and `shareLinkedIn`. An empty `copyFeed` drops the RSS action, as a success story has no feed.
+- `community` is the community group: a `title` and `links`, each a `label`, an `href` and an `icon`.
+- `copyPage` is the split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ArticleBodyStories.SuccessStoryJson}
+    dark
+  />
+</div>
