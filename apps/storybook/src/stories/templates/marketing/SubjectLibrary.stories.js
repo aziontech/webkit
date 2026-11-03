@@ -8,6 +8,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -233,15 +234,11 @@ ${indent(CLOSING_CELL, 3)}
 
 const meta = {
   title: 'Templates/Marketing/Listings/SubjectLibrary',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'A library of subjects in a divider grid: one card per subject holding its name, what it covers, and a list of its article links, closed by a call to action that spans the last two cells so the grid has no empty cell at any breakpoint. The Learning Center renders it. Built from `SectionModule`, `FrameBox`, `CardGrid`, `CallToAction` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -253,11 +250,31 @@ export const Default = {
   ...editable(() => ({ components, template: LIBRARY_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The first four Learning Center subjects with their articles, and the closing call to action in the grid’s last two cells.'
-      },
       source: { code: toSfc(IMPORTS, LIBRARY_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'subject-library',
+  props: {
+    anchor: 'subjects',
+    subjects: SUBJECTS,
+    closing: {
+      eyebrow: 'Next step',
+      title: 'Put what you learned to work.',
+      titleMuted: 'On Azion.',
+      description:
+        'Deploy your first application in minutes, or talk to an expert about your architecture.',
+      actions: [
+        { label: 'Start for free', href: '/signup', kind: 'secondary' },
+        { label: 'Talk to a specialist', href: '/contact', kind: 'outlined', trailing: true }
+      ]
+    }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }
