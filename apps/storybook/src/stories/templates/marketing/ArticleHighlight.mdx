@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ArticleHighlightStories from './ArticleHighlight.stories'
+
+<Meta title="Templates/Marketing/Articles/ArticleHighlight" />
+
+# ArticleHighlight
+
+The band that opens a blog under its hero. One article is shown large, with its cover beside its category and date, headline, deck, read time and a button into it. Under it, a wall of the highlight articles acts as the selector.
+
+The wall is a tablist and the large article is its panel. On the page the band advances on its own and pauses under the pointer or keyboard focus; the arrow, Home and End keys move along the wall. Every article is also drawn invisibly under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. With four or more articles the wall runs four across. The Blog page uses it for its four newest posts.
+
+Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Featured
+
+The Blog page's highlight at rest: the newest post selected with its highlight cover, and the four highlight posts on the wall, four across from `lg`.
+
+<Canvas of={ArticleHighlightStories.Featured} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items[]` are the highlight articles in wall order, the first selected on load. Each is a `key`, an `href`, an `image` cover, an optional `highlightImage` for the panel, a `meta` overline (category and date), a `title`, a `description` and a `readTime`.
+- `actionLabel` is the button into the selected article.
+- `ariaLabel` names the wall of titles for assistive tech.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ArticleHighlightStories.FeaturedJson}
+    dark
+  />
+</div>

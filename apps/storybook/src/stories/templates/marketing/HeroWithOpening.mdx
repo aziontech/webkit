@@ -1,0 +1,80 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as HeroWithOpeningStories from './HeroWithOpening.stories'
+
+<Meta title="Templates/Marketing/Heroes/HeroWithOpening" />
+
+# HeroWithOpening
+
+The large title band with the sales arguments that open the page right under it. Each argument is an icon, a title and one sentence on a hairline frame grid, three to a row.
+
+The grid starts at the hero’s floor with no hatched gap between them, so the arguments read as the hero’s second half. The hatched gap comes after the grid, before the next section.
+
+Built from `Hero`, `Hero.Title`, `Button`, `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid`, `Topic` and `SectionGap`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Six arguments
+
+Six arguments in two rows of three, for a page that argues on breadth. The headline is short, so it keeps the narrow column and breaks early.
+
+<Canvas of={HeroWithOpeningStories.SixArguments} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the title band; `titleLength` is `short` or `long`, and `long` widens the headline's column so it breaks into two lines instead of three.
+- `actions[]` are the buttons under the copy, each a `label`, an `href` and a `kind`; `trailing` draws the animated chevron.
+- `items[]` are the six arguments, each an `icon`, a `title` and a `description`, three to a row.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={HeroWithOpeningStories.SixArgumentsJson}
+    dark
+  />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Three arguments
+
+Three arguments in one row, for a page that argues on a few strong claims. The headline is long, so its column widens and it breaks into two lines instead of three.
+
+<Canvas of={HeroWithOpeningStories.ThreeArguments} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the title band; `titleLength` is `short` or `long`, and `long` widens the headline's column so it breaks into two lines instead of three.
+- `actions[]` are the buttons under the copy, each a `label`, an `href` and a `kind`; `trailing` draws the animated chevron.
+- `items[]` are the three arguments, each an `icon`, a `title` and a `description`, in one row.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={HeroWithOpeningStories.ThreeArgumentsJson}
+    dark
+  />
+</div>

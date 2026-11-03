@@ -16,6 +16,7 @@ import ScrollArea from '@aziontech/webkit/scroll-area'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const MEGA_MENUS = [
@@ -499,15 +500,11 @@ const components = {
 
 const meta = {
   title: 'Templates/Marketing/Shell/SiteNav',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developer, Resources) and one plain link (Pricing), then the account actions, the `Start for free` call to action and a search trigger. `GlobalHeader kind="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it. From `xl` the menus sit in the bar; below it the bar keeps the menu button, the mark, `Login`, the call to action and the search trigger (`Login` steps out under 384px, where it would crowd the mark), and the same menus open in a `Drawer` where each mega-menu is a drill level behind a Back row, with `Login` and `Start for free` stacked full width at its foot. Built from `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -561,11 +558,24 @@ export const Default = {
   })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The site’s own navigation. Each mega-menu lists its panel as `columns`, an array of columns that each hold one or more groups, so the panel’s track count is the column count; Products stacks Platform under Observe to keep four tracks. Only that four-track panel is stretched to the page column, and `collision-padding` is set to the bar’s own inset (read off the bar once it mounts and on resize) so the clamp lands it on the column’s leading edge. The sheet’s tree is projected from the same `megaMenus`, so a product added to a panel is in both. Below `xl`, open the sheet with the menu button; widen past `xl` to see the menus in the bar.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'site-nav',
+  props: {
+    home: '#',
+    menus: MEGA_MENUS,
+    links: PLAIN_LINKS.map((link) => ({ label: link.label, href: '#' })),
+    contact: { label: 'Contact', href: '#' },
+    login: { label: 'Login', href: '#' },
+    cta: { label: 'Start for free', href: '#' }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

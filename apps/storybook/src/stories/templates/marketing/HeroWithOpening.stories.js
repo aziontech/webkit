@@ -9,6 +9,7 @@ import Topic from '@aziontech/webkit/topic'
 
 import { editable } from '../../_shared/editable-content'
 import { each, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -172,15 +173,11 @@ const THREE_TEMPLATE = heroWithOpening(THREE)
 
 const meta = {
   title: 'Templates/Marketing/Heroes/HeroWithOpening',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION_SIX', 'SITE_SECTION_THREE'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The large title band with the sales arguments that open the page right under it, each an icon, a title and one sentence on a hairline frame grid, three to a row. The grid starts at the hero’s floor with no hatched gap between them, so the arguments read as the hero’s second half; the hatched gap comes after the grid, before the next section. Built from `Hero`, `Hero.Title`, `Button`, `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid`, `Topic` and `SectionGap`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -192,24 +189,56 @@ export const SixArguments = {
   ...editable(() => ({ components, template: SIX_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Six arguments in two rows of three, for a page that argues on breadth. The headline is short, so it keeps the narrow column and breaks early.'
-      },
       source: { code: toSfc(IMPORTS, SIX_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_SIX = {
+  _id: 'hero-with-opening-six',
+  props: {
+    titleLength: SIX.titleLength,
+    eyebrow: SIX.eyebrow,
+    title: SIX.title,
+    description: SIX.description,
+    actions: [
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Docs', href: '/docs', kind: 'outlined', trailing: true }
+    ],
+    items: SIX.arguments
+  }
+}
+
+export const SixArgumentsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_SIX)
 }
 
 export const ThreeArguments = {
   ...editable(() => ({ components, template: THREE_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Three arguments in one row, for a page that argues on a few strong claims. The headline is long, so its column widens and it breaks into two lines instead of three.'
-      },
       source: { code: toSfc(IMPORTS, THREE_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_THREE = {
+  _id: 'hero-with-opening-three',
+  props: {
+    titleLength: THREE.titleLength,
+    eyebrow: THREE.eyebrow,
+    title: THREE.title,
+    description: THREE.description,
+    actions: [
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Docs', href: '/docs', kind: 'outlined', trailing: true }
+    ],
+    items: THREE.arguments
+  }
+}
+
+export const ThreeArgumentsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_THREE)
 }

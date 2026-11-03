@@ -9,6 +9,7 @@ import Table from '@aziontech/webkit/table'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -174,15 +175,11 @@ ${indent(TABLE, 2)}
 
 const meta = {
   title: 'Templates/Marketing/Listings/ListingTable',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. The column headers are set in the overline face, as on the pricing matrix and the jobs list, and every value after the first column in the small overline face. Each row is one link, named by its first column; the whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -194,11 +191,26 @@ export const LatestRoles = {
   ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Careers page’s six latest roles: role, team and location, and work type aligned to the end, with the button into all 23 roles in the table’s footer.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'listing-table',
+  props: {
+    title: 'Latest roles',
+    columns: [
+      { key: 'role', label: 'Role', grow: 2 },
+      { key: 'team', label: 'Team and location', grow: 2 },
+      { key: 'type', label: 'Work type', align: 'end' }
+    ],
+    rows: ROLES.map(({ href, role, team, type }) => ({ href, values: { role, team, type } })),
+    action: { label: 'See all 23 roles', href: '/careers/jobs' }
+  }
+}
+
+export const LatestRolesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }
