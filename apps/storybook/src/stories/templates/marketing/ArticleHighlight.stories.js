@@ -7,6 +7,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -185,17 +186,24 @@ ${indent(WALL, 3)}
   </FrameBox>
 </SectionModule>`)
 
+const slugOf = (href) => href.split('/').filter(Boolean).pop()
+
+export const SITE_SECTION = {
+  _id: 'article-highlight',
+  props: {
+    items: ARTICLES.map((article) => ({ key: slugOf(article.href), ...article })),
+    actionLabel: 'Read article',
+    ariaLabel: 'Highlight articles'
+  }
+}
+
 const meta = {
   title: 'Templates/Marketing/Articles/ArticleHighlight',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The band that opens a blog under its hero: one article large, its cover beside its category and date, headline, deck, read time and a button into it, over a wall of the highlight articles that is the selector itself. The wall is a tablist and the large article its panel; on the page the band advances on its own, pausing under the pointer or keyboard focus, and the arrow, Home and End keys move along the wall. Every article is drawn once, invisibly, under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. The panel draws an article’s highlight cover when it has one, and its card cover otherwise; with four or more articles the wall runs four across. The Blog page (/blog) uses it for its four newest posts. Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -207,11 +215,12 @@ export const Featured = {
   ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Blog page’s highlight at rest: the newest post selected with its highlight cover, and the four highlight posts on the wall, four across from `lg`.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const FeaturedJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

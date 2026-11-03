@@ -9,6 +9,7 @@ import { ref } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const PRICING = 'https://www.azion.com/en/documentation/products/pricing/'
@@ -283,15 +284,11 @@ const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="f
 
 const meta = {
   title: 'Templates/Marketing/Comparison/CompareSupportTiers',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The tier-by-tier comparison on the Support page: one column per support tier, one band per service family, and what each tier includes on every row. It is the support counterpart of ComparePlans, which compares the pricing plans: the same real `table` with one `tbody` per band, the same three kinds of cell (a tick, an em dash, or the stated allowance, with `sr-only` text on the two glyphs), the same sticky header at `top-14` with an accent bar on the recommended tier, and the same narrow layout that folds to one tier picked with a `Select`. Where it differs: the first column is headed `Support`, each tier states who it is for under its name, and each band closes on its own link to the matching section of the pricing documentation instead of one link for the whole table. Built from `SectionModule`, `Select`, `Button`, `Overline` and `Link`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -315,11 +312,24 @@ export const TierMatrix = {
   ),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Developer, Business, Enterprise and Mission-Critical across the Support band (self-service, technical support and first response time) and the Professional Services band. Developer is the free tier, so its button starts a free account; the other three hand off to the contact page, with Enterprise as the recommended tier. Narrow the canvas below 1024px to see the tier picker; it opens on Enterprise.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'compare-support-tiers',
+  props: {
+    tiers: TIERS,
+    sections: SECTIONS,
+    caption:
+      'Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers.',
+    columnLabel: 'Support',
+    pickerLabel: 'Tier being compared'
+  }
+}
+
+export const TierMatrixJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

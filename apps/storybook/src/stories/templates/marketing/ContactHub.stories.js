@@ -9,6 +9,7 @@ import Topic from '@aziontech/webkit/topic'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -136,14 +137,11 @@ const CONTACT_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fals
 
 const meta = {
   title: 'Templates/Marketing/Content/ContactHub',
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The contact hub under the Contact title band: Sales and Support side by side, each with its scope in one sentence and the action that actually reaches that team, over a row of self-serve channels. Contact renders it.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -158,4 +156,60 @@ export const Default = {
       source: { code: toSfc(IMPORTS, CONTACT_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'contact-hub',
+  props: {
+    lanes: [
+      {
+        icon: 'pi pi-briefcase',
+        label: 'Sales',
+        description:
+          'Discuss your requirements, get custom pricing, or see the platform running on your own workload.',
+        actions: [{ label: 'Talk to sales', href: '/contact/sales', kind: 'secondary' }]
+      },
+      {
+        icon: 'pi pi-headphones',
+        label: 'Support',
+        description:
+          'Log in with your Azion account to open a ticket. Our engineers pick it up 24/7 on paid support plans.',
+        actions: [
+          {
+            label: 'Log in to open a ticket',
+            href: 'https://console.azion.com/login',
+            kind: 'secondary',
+            trailing: true
+          }
+        ],
+        status: { label: 'System status', href: 'https://status.azion.com/' }
+      }
+    ],
+    channels: [
+      {
+        icon: 'pi pi-shield',
+        title: 'Under a cyberattack?',
+        description:
+          'Get emergency mitigation for an attack in progress, even before you become a customer.',
+        href: 'https://www.azion.com/en/lp/under-attack-mitigation/'
+      },
+      {
+        icon: 'pi pi-discord',
+        title: 'Join the community',
+        description: 'Ask developers and the Azion team on Discord. Open to everyone, on any plan.',
+        href: 'https://discord.com/invite/pM8ANzztuB'
+      },
+      {
+        icon: 'pi pi-book',
+        title: 'Read the docs',
+        description: 'Guides, API reference, and troubleshooting for every Azion product.',
+        href: 'https://www.azion.com/en/documentation/'
+      }
+    ]
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

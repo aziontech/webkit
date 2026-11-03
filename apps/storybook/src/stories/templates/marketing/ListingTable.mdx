@@ -1,0 +1,50 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ListingTableStories from './ListingTable.stories'
+
+<Meta title="Templates/Marketing/Listings/ListingTable" />
+
+# ListingTable
+
+A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. The column headers are set in the overline face, as on the pricing matrix and the jobs list, and every value after the first column in the small overline face.
+
+Each row is one link, named by its first column. The whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Latest Roles
+
+The Careers page's six latest roles: role, team and location, and work type aligned to the end, with the button into all 23 roles in the table's footer.
+
+<Canvas of={ListingTableStories.LatestRoles} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` heads the table; `anchor` gives the band an id for in-page links.
+- `columns` are the columns left to right, each a `key`, a `label`, and an optional `grow` (1, 2 or 3) and `align` (`start` or `end`). The first column names the row and the second describes it on phones.
+- `rows[]` are the linked rows, each an `href` and its `values` keyed by column.
+- `action` is the outlined button into the full listing, a `label` and an `href`. Leave it out for no button.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ListingTableStories.LatestRolesJson}
+    dark
+  />
+</div>

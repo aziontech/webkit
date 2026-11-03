@@ -9,6 +9,7 @@ import Topic from '@aziontech/webkit/topic'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -103,15 +104,11 @@ const SQL_DATABASE_TEMPLATE = useCases(SQL_DATABASE)
 
 const meta = {
   title: 'Templates/Marketing/Use Cases/UseCases',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The band a product page closes its argument with: one framed cell that names the product and links to its docs, beside the handful of things you would use it for. The title cell is the simplest variant of the media-and-title split, an overline, a headline, a one-line lead and a single "View docs" button pinned to the foot of the cell, and the use cases sit in `CardGrid` frame cells that draw their own rules and corner marks, each a short title over one sentence. Built from `SectionModule`, `FrameBox`, `CardGrid`, `Topic`, `Overline` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -123,11 +120,23 @@ export const Default = {
   ...editable(() => ({ components, template: SQL_DATABASE_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Four use cases of equal weight in a two-by-two set, each a short title over one sentence.'
-      },
       source: { code: toSfc(IMPORTS, SQL_DATABASE_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'use-cases',
+  props: {
+    eyebrow: SQL_DATABASE.tag,
+    title: SQL_DATABASE.title,
+    description: SQL_DATABASE.lead,
+    action: { label: 'Docs', href: SQL_DATABASE.href, trailing: true },
+    items: SQL_DATABASE.cases
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }
