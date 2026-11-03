@@ -413,6 +413,7 @@ export const WEBSITE_BUNDLE_PAGE = [
 
   HOME_SOLUTIONS_BAND,
   pick(CAREERS_HOME_PAGE, 'PhotoMarquee'),
+  pick(CAREERS_HOME_PAGE, 'StickyCarousel'),
   pick(HOME_PAGE, 'FeatureTiles'),
   {
     section: 'FeatureScroll',
