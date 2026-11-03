@@ -120,7 +120,7 @@ export const parameters = {
             ['Spacing', 'Layout']
           ],
           'Assets',
-          ['Illustrations', 'Diagrams', 'Logos', 'Icons', 'Product Widgets']
+          ['Illustrations', 'Diagrams', 'Globe', 'Logos', 'Icons', 'Product Widgets']
         ],
         'Components',
         [
