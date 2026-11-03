@@ -16,8 +16,8 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
-import { AKAMAI_GUIDE, AWS_GUIDE, FASTLY_GUIDE } from '@site/data/alternative-guides'
 import { blogArticle } from '@site/data/blog-articles.js'
+import { hasLandingPage, LANDING_PAGE_SLUGS } from '@site/data/pages/lp'
 import { successCaseArticle } from '@site/data/success-case-articles.js'
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
@@ -29,7 +29,6 @@ import LandingAbout from '@site/views/LandingAbout.vue'
 import LandingAiGateway from '@site/views/LandingAiGateway.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
-import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
@@ -54,6 +53,7 @@ import LandingImageProcessor from '@site/views/LandingImageProcessor.vue'
 import LandingKvStore from '@site/views/LandingKvStore.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
 import LandingLoadBalancer from '@site/views/LandingLoadBalancer.vue'
+import LandingLp from '@site/views/LandingLp.vue'
 import LandingNetworkShield from '@site/views/LandingNetworkShield.vue'
 import LandingObjectStorage from '@site/views/LandingObjectStorage.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
@@ -96,6 +96,9 @@ const MOVED = {
   '/site/technology': '/site/solutions/technology',
   '/site/retail': '/site/solutions/retail',
   '/site/vercel-alternative-guide': '/site/guides/vercel-alternative',
+  '/site/guides/akamai-alternative': '/site/lp/guia-alternativa-a-akamai',
+  '/site/guides/aws-alternative': '/site/lp/guia-alternativa-a-aws',
+  '/site/guides/fastly-alternative': '/site/lp/guia-alternativa-a-fastly',
   '/site/products/applications': '/site/docs/applications',
   '/site/products/firewall': '/site/docs/firewall',
   '/site/products/ddos-protection': '/site/docs/workloads',
@@ -238,27 +241,18 @@ export const siteRoutes = [
     component: LandingVercelAlternative
   },
   {
-    path: '/site/guides/akamai-alternative',
-    name: 'site-akamai-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: AKAMAI_GUIDE }
-  },
-  {
-    path: '/site/guides/aws-alternative',
-    name: 'site-aws-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: AWS_GUIDE }
-  },
-  {
     path: '/site/guides/cloudflare-alternative',
     name: 'site-cloudflare-alternative-guide',
     component: LandingCloudflareAlternative
   },
+
+  { path: '/site/lp', redirect: `/site/lp/${LANDING_PAGE_SLUGS[0]}` },
   {
-    path: '/site/guides/fastly-alternative',
-    name: 'site-fastly-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: FASTLY_GUIDE }
+    path: '/site/lp/:slug',
+    name: 'site-lp',
+    component: LandingLp,
+    props: true,
+    beforeEnter: (to) => (hasLandingPage(String(to.params.slug)) ? true : '/site/home')
   },
 
   // ══ The rest of the site ══════════════════════════════════════════════════════════
