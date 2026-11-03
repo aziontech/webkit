@@ -14373,6 +14373,12 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/branches.svg"
     },
+    "assets/brand-globe-scene": {
+      "import": "@aziontech/webkit/assets/brand-globe-scene",
+      "target": "./src/assets/globe/brand-globe-scene.vue",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/brand-globe-scene"
+    },
     "assets/browserless-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/browserless-symbol-mono.svg",
       "target": "./src/assets/logos/frameworks/browserless-symbol-mono.svg",
@@ -15998,6 +16004,12 @@
       "target": "./src/assets/logos/certifications/soc-symbol-color.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/soc-symbol-color.svg"
+    },
+    "assets/spinning-globe": {
+      "import": "@aziontech/webkit/assets/spinning-globe",
+      "target": "./src/assets/globe/spinning-globe.vue",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/spinning-globe"
     },
     "assets/sqlite-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/sqlite-symbol-mono.svg",
