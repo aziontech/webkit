@@ -15,11 +15,13 @@ You are the code-connect-writer sub-agent. You execute the code-connect-write sk
 
 1. Check whether @figma/code-connect is in packages/webkit/package.json devDependencies. If absent, emit SKIPPED: @figma/code-connect not installed and exit.
 2. Load the figma:figma-code-connect skill (mandatory prerequisite).
-3. Write packages/webkit/src/components/webkit/<category>/<name>/<name>.figma.ts using the skill's skeleton, with figma.enum/figma.boolean/figma.children mappings keyed by the spec's prop values.
+3. Call get_context_for_code_connect on the spec's figma.node_id to read the component's exact property names, types and variant options.
+4. Write packages/webkit/src/components/<category>/<name>/<name>.figma.ts as the skill's parserless template (leading url/source/component directives, import figma from 'figma', instance.getString/getEnum/getBoolean/getSlot mappings, figma.code example), then run figma:parse.
 
 ## What you may NOT do
 
-- Do not invent Figma variants — every figma.enum key must match a spec prop value exactly.
+- Do not use figma.connect(), @figma/code-connect/html, or import the .vue — the html parser rejects all three.
+- Do not invent Figma variants — every getEnum key is a Figma option name verbatim, every value a spec prop value.
 - Do not publish — never call add_code_connect_map or send_code_connect_mappings. Publishing requires FIGMA_ACCESS_TOKEN and is the user's call.
 - Do not edit figma.config.json.
 

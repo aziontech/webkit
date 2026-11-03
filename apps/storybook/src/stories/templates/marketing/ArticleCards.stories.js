@@ -138,10 +138,10 @@ ${indent(item.image ? cover(item) : clientMark(item), 3)}
   </a>
 </CardGrid.Cell>`
 
-const band = (title, items, kind = 'left') =>
+const band = (title, items, kind = 'left', eyebrow = '') =>
   inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
-    <SectionTitle${kind === 'centered' ? '' : ' kind="left"'} title="${title}" />
+    <SectionTitle${kind === 'centered' ? '' : ' kind="left"'}${eyebrow ? ` eyebrow="${eyebrow}"` : ''} title="${title}" />
   </template>
 
   <FrameBox flush borders="y" marks="all">
@@ -161,7 +161,12 @@ const ARTICLES_TEMPLATE = band('Related Articles', POSTS)
 
 const STORIES_TEMPLATE = band('Related Success Cases', STORIES)
 
-const CENTERED_TEMPLATE = band('When our customers succeed, we succeed', STORIES, 'centered')
+const CENTERED_TEMPLATE = band(
+  'When our customers succeed, we succeed',
+  STORIES,
+  'centered',
+  'Success cases'
+)
 
 const meta = {
   title: 'Templates/Marketing/Articles/ArticleCards',
@@ -212,7 +217,7 @@ export const Centered = {
     docs: {
       description: {
         story:
-          'The title centred and balanced over the cards, as a landing-page band rather than an article’s closing row (Under attack).'
+          'The title centred and balanced over the cards under an overline, as a landing-page band rather than an article’s closing row (Under attack).'
       },
       source: { code: toSfc(MARK_IMPORTS, CENTERED_TEMPLATE) }
     }

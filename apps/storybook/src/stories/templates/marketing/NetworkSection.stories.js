@@ -64,7 +64,7 @@ const setup = () => ({
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
   title:
-    'One distributed infrastructure to build, secure, and scale workloads - without the complexity of managing or scaling it.',
+    'One distributed infrastructure without the complexity of managing, securing and scaling it',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -178,7 +178,7 @@ ${indent(DESKTOP_MAP, 2)}
 ${indent(MOBILE_MAP, 4)}
 
         <div class="relative flex flex-col gap-(--spacing-md)">
-          <p class="m-0 text-overline-sm text-(--text-muted)">
+          <p class="m-0 text-overline-md text-(--text-muted)">
             ${NETWORK_BAND.lead}
           </p>
 
@@ -270,7 +270,7 @@ export const SITE_SECTION = {
   props: {
     eyebrow: 'Region: Earth.',
     title:
-      'One distributed infrastructure to build, secure, and scale workloads - without the complexity of managing or scaling it.',
+      'One distributed infrastructure without the complexity of managing, securing and scaling it',
     lead: 'Built around your users. Distributed around your data.',
     claims: [
       '100+ data centers',

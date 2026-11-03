@@ -64,7 +64,7 @@ const value = defineModel({ default: '' })
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and prevents opening; applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
-| `required` | `boolean` | `false` | false | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
+| `required` | `boolean` | `false` | false | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `InputText`. The label's Required tag is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
 | `displayValue` | `(value: unknown) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`. |
 
@@ -83,7 +83,7 @@ const value = defineModel({ default: '' })
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`, `opened`
+- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`, `required`, `opened`
 - `data-state` on the root and trigger: `open` | `closed`
 - `data-size` on the trigger mirrors the `size` prop
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
@@ -114,6 +114,7 @@ const value = defineModel({ default: '' })
 | border (default) | `var(--border-default)` |
 | border (hover) | `var(--border-strong)` |
 | border (invalid) | `var(--danger-border)` |
+| border (required) | `var(--warning-border)` |
 | ring (focus) | `var(--ring-color)` |
 | ring (invalid focus) | `var(--danger)` |
 | spacing (trigger horizontal padding) | `var(--spacing-sm)` |
@@ -155,6 +156,7 @@ const value = defineModel({ default: '' })
 - LongList — justification: documents the panel's internal scroll behaviour (options list wrapped in `ScrollArea`) when the option count exceeds the `max-h-60` viewport; not reachable from any other story.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop).
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
+- Required — justification: documents the `required` warning-border treatment and its submit-state binding (`submitted && !value`), which a static Default cannot show without flagging the field on first render.
 - Disabled
 
 ## Constraints — DO NOT

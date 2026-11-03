@@ -1,25 +1,33 @@
-import figma, { html } from '@figma/code-connect/html'
+// url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/link/link.vue
+// component=Link
+import figma from 'figma'
 
-const FIGMA_NODE = 'https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578'
+const instance = figma.selectedInstance
 
-figma.connect(FIGMA_NODE, {
-  label: 'Link',
-  imports: ['import Link from "@aziontech/webkit/link"'],
-  props: {
-    label: figma.string('label'),
-    size: figma.enum('Size', {
-      Large: 'large',
-      Medium: 'medium',
-      Small: 'small'
-    }),
-    showIcon: figma.boolean('showIcon')
-  },
-  example: ({ label, size, showIcon }) => html`
-    <link
-      label=${label}
-      size=${size}
-      :show-icon=${showIcon}
-      href="#"
-    />
-  `
+const label = instance.getString('label')
+const size = instance.getEnum('size', {
+  large: 'large',
+  medium: 'medium'
 })
+const showIcon = instance.getBoolean('showIcon')
+
+export default {
+  example: figma.code`<Link
+  label="${label}"${
+    size === 'large'
+      ? ''
+      : figma.code`
+  size="${size}"`
+  }${
+    showIcon
+      ? ''
+      : figma.code`
+  :show-icon="false"`
+  }
+  href="#"
+/>`,
+  imports: ["import Link from '@aziontech/webkit/link'"],
+  id: 'link',
+  metadata: { nestable: true }
+}

@@ -1,9 +1,11 @@
 import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
+import FieldText from '@aziontech/webkit/field-text'
 import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'"
+const FIELD_TEXT_IMPORT = "import FieldText from '@aziontech/webkit/field-text'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPhoneNumber>} */
 const meta = {
@@ -35,7 +37,7 @@ const meta = {
     countries: {
       control: false,
       description:
-        'Countries offered by the dial-code Select. `mask` is a list when a country allows several lengths. Falls back to the built-in list, which ends with Other.',
+        'Countries offered by the dial-code Select. `mask` is a list when a country allows several lengths. Falls back to the built-in list.',
       table: { category: 'props', type: { summary: 'Country[]' } }
     },
     label: {
@@ -54,6 +56,17 @@ const meta = {
       description:
         'Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted (except when `disabled` — fallback copy is shown).',
       table: { category: 'props', type: { summary: 'string' } }
+    },
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large'],
+      description:
+        'Size forwarded to the `InputGroup` and the dial-code `Select` trigger. Heights: small=28px, medium=32px, large=40px.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: 'medium' }
+      }
     },
     disabled: {
       control: 'boolean',
@@ -136,6 +149,7 @@ const meta = {
     label: 'Phone',
     placeholder: '',
     helperText: "We'll use this to send the verification code.",
+    size: 'medium',
     disabled: false,
     readonly: false,
     required: false,
@@ -180,6 +194,39 @@ export const Default = {
           'Label + `InputGroup` with dial-code Select and masked input + helper text. Country defaults to `BR` (`+55`), mask is `(##) #####-####`.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const SIZES_MARKUP = `<div class="flex flex-col gap-4 w-[480px]">
+  <div class="grid grid-cols-2 gap-4">
+    <FieldText label="Company" size="small" />
+    <FieldPhoneNumber label="Phone" size="small" />
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+    <FieldText label="Company" size="medium" />
+    <FieldPhoneNumber label="Phone" size="medium" />
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+    <FieldText label="Company" size="large" />
+    <FieldPhoneNumber label="Phone" size="large" />
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldPhoneNumber>} */
+export const Sizes = {
+  render: () => ({
+    components: { FieldPhoneNumber, FieldText },
+    template: SIZES_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'All three sizes, each beside a `FieldText` of the same size: the group and the dial-code trigger take the same height as the sibling field.'
+      },
+      source: { code: toSfc([IMPORT, FIELD_TEXT_IMPORT], SIZES_MARKUP) }
     }
   }
 }
