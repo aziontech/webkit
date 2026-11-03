@@ -16,6 +16,14 @@ export const BLOG_FEATURED = {
   readTime: '5 min read'
 }
 
+// The page head. The source's h1 is its featured post; the description is its meta description, verbatim.
+export const BLOG_HERO = {
+  eyebrow: 'Resources',
+  title: 'Blog',
+  description:
+    "Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights."
+}
+
 // The source's category tabs, in its order; `All Articles` is the reset.
 export const BLOG_ALL = 'All articles'
 export const BLOG_CATEGORIES = ['Developers', 'Security', 'Company news', 'Market trends', 'Serverless', 'Caching', 'Observability', 'Routing and networking']
