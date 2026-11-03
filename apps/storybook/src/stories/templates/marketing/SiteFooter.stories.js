@@ -6,6 +6,7 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 import { onBeforeUnmount, ref } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const COLUMNS = [
@@ -177,15 +178,11 @@ const components = {
 
 const meta = {
   title: 'Templates/Marketing/Shell/SiteFooter',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The footer under every marketing page: four link columns, then the social row beside the status indicator and the language select. `Footer kind="site"` caps its bands at the page frame’s measure and draws that frame: the side rules, the hatched gutters, the corner marks and the full-bleed bottom rule that closes the page. The hairline above it is the mirror of the hero’s top rule, so the frame turns the corner instead of stopping at it. The page above must not draw a bottom rule of its own. Built from `Footer` (`Footer.Column`, `Footer.Link`), `Brand`, `IconButton`, `StatusIndicator` and `Select`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -217,11 +214,27 @@ export const Default = {
   })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The site’s own footer. From `lg` the Azion mark leads the social row at the social glyphs’ size; below it the mark moves to the footer’s signature band and the icons get the row to themselves. The `#brand` slot is withheld rather than hidden on wide screens, because the footer opens that band whenever the slot is given. The language select’s values are the labels the reader sees, since its trigger shows the value.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'site-footer',
+  props: {
+    kind: 'site',
+    home: '#',
+    columns: COLUMNS.map((column) => ({
+      title: column.title,
+      links: column.links.map((label) => ({ label, href: '#' }))
+    })),
+    socials: SOCIALS,
+    status: 'All Systems Operational',
+    languages: LANGUAGES
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

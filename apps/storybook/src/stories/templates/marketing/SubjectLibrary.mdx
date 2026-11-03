@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as SubjectLibraryStories from './SubjectLibrary.stories'
+
+<Meta title="Templates/Marketing/Listings/SubjectLibrary" />
+
+# SubjectLibrary
+
+A library of subjects in a divider grid. Each subject is one card with its name, what it covers, and a list of its article links.
+
+A call to action closes the grid and spans its last two cells, so the grid has no empty cell at any breakpoint. The Learning Center renders it.
+
+Built from `SectionModule`, `FrameBox`, `CardGrid`, `CallToAction` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The first four Learning Center subjects with their articles, and the closing call to action in the grid's last two cells.
+
+<Canvas of={SubjectLibraryStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` gives the band an id for in-page links.
+- `subjects[]` are the cards, each a `slug` (the card's id), a `title`, a `description` and its `articles` as `label` and `href` links.
+- `closing` is the call to action across the last two cells: `eyebrow`, `title`, `titleMuted`, `description` and its `actions`. Leave it out and the grid ends on the last subject.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={SubjectLibraryStories.DefaultJson}
+    dark
+  />
+</div>
