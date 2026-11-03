@@ -1,12 +1,14 @@
 import Button from '@aziontech/webkit/button'
-import Hint from '@aziontech/webkit/hint'
+import IconButton from '@aziontech/webkit/icon-button'
 import Link from '@aziontech/webkit/link'
 import Overline from '@aziontech/webkit/overline'
+import Popover from '@aziontech/webkit/popover'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import Tag from '@aziontech/webkit/tag'
+import Tooltip from '@aziontech/webkit/tooltip'
 import { ref } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
@@ -238,13 +240,15 @@ const literal = (value, depth = 0) => {
 
 const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
-  "import Hint from '@aziontech/webkit/hint'",
+  "import IconButton from '@aziontech/webkit/icon-button'",
   "import Link from '@aziontech/webkit/link'",
   "import Overline from '@aziontech/webkit/overline'",
+  "import Popover from '@aziontech/webkit/popover'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import Select from '@aziontech/webkit/select'",
   "import Tag from '@aziontech/webkit/tag'",
+  "import Tooltip from '@aziontech/webkit/tooltip'",
   "import { ref } from 'vue'",
   '',
   `const plans = ${literal(PLANS)}`,
@@ -262,9 +266,13 @@ const IMPORTS = [
 
 const components = {
   Button,
-  Hint,
+  IconButton,
   Link,
   Overline,
+  Popover,
+  ...Object.fromEntries(
+    ['Trigger', 'Content', 'Title', 'Description'].map((part) => [`Popover.${part}`, Popover[part]])
+  ),
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -272,7 +280,8 @@ const components = {
   'Select.Trigger': SelectTrigger,
   'Select.Content': SelectContent,
   'Select.Option': SelectOption,
-  Tag
+  Tag,
+  Tooltip
 }
 
 const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padded="false">
@@ -353,7 +362,17 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
           class="border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
         >
           <span>
-            <template v-if="row.hint">{{ labelHead(row.label) }}<span class="whitespace-nowrap">{{ labelTail(row.label) }}<Hint :text="row.hint" class="ml-(--spacing-xxs) align-middle" /></span></template>
+            <template v-if="row.hint">{{ labelHead(row.label) }}<span class="whitespace-nowrap">{{ labelTail(row.label) }}<span class="-my-(--spacing-xxs) ml-(--spacing-xxs) inline-flex align-middle"><Popover placement="auto">
+              <Popover.Trigger>
+                <IconButton kind="transparent" size="small" icon="pi pi-info-circle" :aria-label="'About ' + row.label" />
+              </Popover.Trigger>
+              <Popover.Content>
+                <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-sm)">
+                  <Popover.Title>{{ row.label }}</Popover.Title>
+                  <Popover.Description>{{ row.hint }}</Popover.Description>
+                </div>
+              </Popover.Content>
+            </Popover></span></span></template>
             <template v-else>{{ row.label }}</template>
             <Tag
               v-if="row.tag"
@@ -371,11 +390,15 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
           class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
         >
           <template v-if="row.values[planIndex] === true">
-            <i class="pi pi-check text-body-sm text-(--success-contrast)" aria-hidden="true" />
+            <Tooltip text="Included">
+              <i class="pi pi-check-circle text-body-md text-(--success-contrast)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Included</span>
           </template>
           <template v-else-if="row.values[planIndex] === '—'">
-            <span class="text-(--text-muted)" aria-hidden="true">—</span>
+            <Tooltip text="Not included">
+              <i class="ai ai-circle-minus text-body-md text-(--text-muted)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Not included</span>
           </template>
           <span v-else-if="row.values[planIndex]">{{ row.values[planIndex] }}</span>
