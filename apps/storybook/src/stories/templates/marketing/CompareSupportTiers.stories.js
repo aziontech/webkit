@@ -7,6 +7,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -18,28 +19,28 @@ const TIERS = [
     name: 'Developer',
     description: 'Ideal for exploring the platform independently.',
     highlighted: false,
-    action: { label: 'Start free', kind: 'outlined', href: '/signup' }
+    action: { label: 'Start for free', kind: 'outlined', href: '/signup' }
   },
   {
     id: 'business',
     name: 'Business',
     description: 'Ideal for teams that need support from specialists.',
     highlighted: false,
-    action: { label: 'Contact us', kind: 'outlined', href: '/contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '/contact' }
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     description: 'Ideal for organizations that require advanced support and ongoing services.',
     highlighted: true,
-    action: { label: 'Contact us', kind: 'secondary', href: '/contact' }
+    action: { label: 'Talk to a specialist', kind: 'secondary', href: '/contact' }
   },
   {
     id: 'mission-critical',
     name: 'Mission-Critical',
     description: 'Ideal for mission-critical operations that need priority and proactive support.',
     highlighted: false,
-    action: { label: 'Contact us', kind: 'outlined', href: '/contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '/contact' }
   }
 ]
 
@@ -286,7 +287,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -300,16 +300,19 @@ const meta = {
 export default meta
 
 export const TierMatrix = {
-  render: () => ({
-    components,
-    setup: () => ({
-      tiers: TIERS,
-      sections: SECTIONS,
-      visibleTier: ref(DEFAULT_TIER),
-      tierName
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({
+        tiers: TIERS,
+        sections: SECTIONS,
+        visibleTier: ref(DEFAULT_TIER),
+        tierName
+      }),
+      template: TEMPLATE
     }),
-    template: TEMPLATE
-  }),
+    { tiers: TIERS, sections: SECTIONS }
+  ),
   parameters: {
     docs: {
       description: {

@@ -68,6 +68,12 @@ const meta = {
         'Center the whole block — copy, headline and actions — instead of aligning it to the start.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
+    mobileCentered: {
+      control: 'boolean',
+      description:
+        'Center the whole block below the medium breakpoint only, where a band with media stacks the copy above it.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
+    },
     default: {
       control: false,
       description: 'Description body; replaces the `description` prop when provided.',
@@ -84,8 +90,9 @@ const meta = {
     highlight: '',
     description: 'Ship applications, security and observability from one platform.',
     eyebrow: 'Edge platform',
-    eyebrowPrefix: '',
-    centered: false
+    eyebrowPrefix: '//',
+    centered: false,
+    mobileCentered: false
   }
 }
 
@@ -102,6 +109,7 @@ const Template = (args) => ({
 
 const DEFAULT_MARKUP = `<HeroTitle
   eyebrow="Edge platform"
+  eyebrow-prefix="//"
   title="Run it everywhere."
   description="Ship applications, security and observability from one platform."
 />`
@@ -122,6 +130,7 @@ export const Default = {
 
 const HIGHLIGHT_TEMPLATE = `<HeroTitle
   eyebrow="Edge platform"
+  eyebrow-prefix="//"
   highlight="Build anything."
   title="Run it everywhere."
   description="Ship applications, security and observability from one platform."
@@ -168,15 +177,46 @@ export const Centered = {
   }
 }
 
+const MOBILE_CENTERED_TEMPLATE = `<HeroTitle
+  mobile-centered
+  eyebrow="Application Performance and Reliability"
+  eyebrow-prefix="//"
+  title="Make your applications fast and always reliable"
+  description="Serve websites, web apps, and APIs from Azion's globally distributed infrastructure."
+>
+  <template #actions>
+    <Button kind="secondary" label="Start for free" />
+    <Button kind="outlined" label="Talk to a specialist" />
+  </template>
+</HeroTitle>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof HeroTitle>} */
+export const MobileCentered = {
+  render: () => ({ components: { HeroTitle, Button }, template: MOBILE_CENTERED_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    viewport: { defaultViewport: 'mobile' },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Centered below `md` only, and aligned to the start from `md` up — the alignment for a hero whose copy sits beside art on a wide screen and stacks above it on a phone. An eyebrow longer than the column wraps instead of overflowing it. Open the story on its own to see it at phone width.'
+      },
+      source: { code: toSfc(IMPORT_WITH_BUTTON, MOBILE_CENTERED_TEMPLATE) }
+    }
+  }
+}
+
 const WITH_ACTIONS_TEMPLATE = `<HeroTitle
   eyebrow="Edge platform"
+  eyebrow-prefix="//"
   highlight="Build anything."
   title="Run it everywhere."
   description="Ship applications, security and observability from one platform."
 >
   <template #actions>
     <Button label="Start for free" />
-    <Button kind="outlined" label="Talk to sales" />
+    <Button kind="outlined" label="Talk to a specialist" />
   </template>
 </HeroTitle>`
 

@@ -15,6 +15,7 @@ import PanelHeader from '@aziontech/webkit/panel-header'
 import ScrollArea from '@aziontech/webkit/scroll-area'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { toSfc } from '../../_shared/story-source'
 
 const MEGA_MENUS = [
@@ -502,7 +503,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -516,7 +516,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({
+  ...editable(() => ({
     components,
     setup() {
       const navOpen = ref(false)
@@ -558,7 +558,7 @@ export const Default = {
       }
     },
     template: TEMPLATE
-  }),
+  })),
   parameters: {
     docs: {
       description: {

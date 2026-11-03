@@ -1,7 +1,6 @@
 import type { VNode, VNodeArrayChildren } from 'vue'
 import { Comment, Fragment, Text } from 'vue'
 
-/** True when a slot's vnodes would paint something — comments and blank text do not count. */
 export function hasRenderedContent(nodes: VNodeArrayChildren): boolean {
   return nodes.some((node) => {
     if (Array.isArray(node)) return hasRenderedContent(node)

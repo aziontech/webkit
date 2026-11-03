@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useDiagramConnectors } from './composables/use-diagram-connectors'
   import DiagramLayout from './diagram-layout/diagram-layout.vue'
@@ -20,27 +20,89 @@
     DiagramSpec
   } from './types'
 
+  export type DiagramName =
+    | 'ai-gateway'
+    | 'ai-gateway-latency-routing'
+    | 'ai-gateway-model-routing'
+    | 'ai-gateway-provider-failover'
+    | 'ai-gateway-response-cache'
+    | 'ai-inference'
+    | 'application-accelerator'
+    | 'applications'
+    | 'bot-manager'
+    | 'cache'
+    | 'data-stream'
+    | 'ddos-protection'
+    | 'edge-dns'
+    | 'firewall'
+    | 'functions'
+    | 'image-processor'
+    | 'kv-store'
+    | 'load-balancer'
+    | 'network-shield'
+    | 'object-storage'
+    | 'real-time-events'
+    | 'real-time-metrics'
+    | 'sql-database'
+    | 'web-application-firewall'
+    | 'workloads'
+    | 'workloads-gradual-rollout'
+    | 'workloads-isolate-per-request'
+    | 'workloads-security'
+
   interface Props {
-    /** The nodes, their layout and the edges between them. */
-    spec: DiagramSpec
-    /** Accessible description of the whole diagram; when set, the root is announced as one image with this name. */
+    /** Name of an official diagram in the asset library; ignored when spec is set. */
+    name?: DiagramName
+    /** The nodes, their layout and the edges between them, for a diagram the library does not have. */
+    spec?: DiagramSpec
+    /** Accessible description of the whole diagram; empty uses the description the spec carries. */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), { ariaLabel: '' })
+  const props = withDefaults(defineProps<Props>(), {
+    name: undefined,
+    spec: undefined,
+    ariaLabel: ''
+  })
 
   const attrs = useAttrs()
 
+  const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
+
   const canvas = ref<globalThis.HTMLElement | null>(null)
+  const named = shallowRef<DiagramSpec | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram')
+  const drawn = computed<DiagramSpec | null>(() => props.spec ?? named.value)
+  const label = computed(() => props.ariaLabel || drawn.value?.ariaLabel || '')
   const nodes = computed<Record<string, DiagramNode>>(() =>
-    Object.fromEntries(props.spec.nodes.map((node) => [node.key, node]))
+    Object.fromEntries((drawn.value?.nodes ?? []).map((node) => [node.key, node]))
+  )
+
+  watch(
+    () => props.name,
+    (name) => {
+      named.value = null
+      if (!name) return
+      import('../../../assets/diagrams/registry')
+        .then(({ resolveDiagram }) => {
+          const load = resolveDiagram(name)
+          if (!load) throw new Error('not in the diagram library')
+          return load()
+        })
+        .then((loaded) => {
+          if (props.name === name) named.value = loaded.default
+        })
+        .catch((error: unknown) => {
+          if (dev) console.warn(`[webkit] <Diagram>: could not load "${name}".`, error)
+        })
+    },
+    { immediate: true }
   )
 
   const { width, height, paths, labels, ports, ready } = useDiagramConnectors(
     canvas,
-    () => props.spec.edges
+    () => drawn.value?.edges ?? []
   )
 
   const at = (x: number, y: number) => ({ left: `${x}px`, top: `${y}px` })
@@ -50,11 +112,13 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
-    :role="ariaLabel ? 'img' : undefined"
-    :aria-label="ariaLabel || undefined"
+    :data-name="spec ? undefined : name"
+    :role="label ? 'img' : undefined"
+    :aria-label="label || undefined"
     class="@container m-0 w-full min-w-0 p-(--spacing-md) select-none @3xl:p-(--spacing-xl)"
   >
     <div
+      v-if="drawn"
       ref="canvas"
       aria-hidden="true"
       :data-testid="`${testId}__canvas`"
@@ -77,7 +141,7 @@
 
       <div class="relative">
         <DiagramLayout
-          :item="spec.layout"
+          :item="drawn.layout"
           :nodes="nodes"
         />
       </div>

@@ -452,6 +452,12 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       {
         code: sfc('defineSlots<{ default(): unknown }>()', '<div><slot /></div>'),
         filename: 'b.vue'
+      },
+      {
+        code: sfc(
+          '/** Size token. */ export type Size = "small" | "large"; interface Props { /** Visual variant. */ kind?: string; size?: Size } defineProps<Props>(); defineEmits<{ /** Fired on activation. */ click: [event: MouseEvent] }>()'
+        ),
+        filename: 'c.vue'
       }
     ],
     invalid: [
@@ -474,6 +480,16 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: sfc('const a = 1', '<div><slot /></div>'),
         filename: 'e.vue',
         errors: [{ messageId: 'slot-without-defineslots' }]
+      },
+      {
+        code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'prose-comment' }, { messageId: 'prose-comment' }]
+      },
+      {
+        code: sfc('/** File header. */\n\ntype Size = "small"\ndefineProps<{ size?: Size }>()'),
+        filename: 'g.vue',
+        errors: [{ messageId: 'prose-comment' }]
       }
     ]
   })
@@ -489,18 +505,21 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: '/** @deprecated since 4.2 — use `kind`. Removed in 5.0 */ export const a = 1',
         filename: 'src/x.js'
       },
-      // a 5-line comment block is the ceiling, not a violation
       {
-        code: ['// 1', '// 2', '// 3', '// 4', '// 5', 'export const a = 1'].join('\n'),
-        filename: 'src/z.js'
+        code: "// eslint-disable-next-line no-console\nconsole.log(1)\nconst u = 'http://x'",
+        filename: 'src/directive.js'
       },
-      // one-line JSDoc (mandated on public surface) never counts as prose
       {
-        code: Array.from(
-          { length: 16 },
-          (_, i) => `/** doc ${i} */\nexport const v${i} = ${i}`
-        ).join('\n'),
-        filename: 'src/jsdoc.js'
+        code: '/** @param {string} v */\nexport const f = (v) => v',
+        filename: 'src/typed.js'
+      },
+      {
+        code: "// url=https://www.figma.com/design/k/F?node-id=1-2\n// source=src/a.vue\n// component=A\nimport figma from 'figma'\nexport default { id: 'a' }",
+        filename: 'src/components/a/a.figma.ts'
+      },
+      {
+        code: '// a note in a test is out of scope\nexport const a = 1',
+        filename: 'src/thing.test.js'
       }
     ],
     invalid: [
@@ -516,25 +535,29 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         filename: 'src/y.js',
         errors: [{ messageId: 'deprecated-without-replacement' }]
       },
-      // 6 consecutive comment lines → verbose-comment-block
       {
-        code: ['// 1', '// 2', '// 3', '// 4', '// 5', '// 6', 'export const a = 1'].join('\n'),
+        code: '// url=https://www.figma.com/design/k/F?node-id=1-2\nexport const a = 1',
+        filename: 'src/a.ts',
+        errors: [{ messageId: 'prose-comment', line: 1 }]
+      },
+      {
+        code: ['// 1', 'export const a = 1 // 2', '/* 3 */ export const b = 2'].join('\n'),
         filename: 'src/w.js',
-        errors: [{ messageId: 'verbose-comment-block' }]
+        errors: [
+          { messageId: 'prose-comment', line: 1 },
+          { messageId: 'prose-comment', line: 2 },
+          { messageId: 'prose-comment', line: 3 }
+        ]
       },
-      // blank lines do not reset the block (no evasion by spacing)
       {
-        code: ['// 1', '// 2', '// 3', '', '// 4', '// 5', '// 6', 'export const a = 1'].join('\n'),
-        filename: 'src/v.js',
-        errors: [{ messageId: 'verbose-comment-block' }]
+        code: '/** Builds the thing. */\nexport function build() {}',
+        filename: 'src/build.ts',
+        errors: [{ messageId: 'prose-comment' }]
       },
-      // ≥15 prose lines at ≥20% of the file → comment-heavy-file
       {
-        code: Array.from({ length: 15 }, (_, i) => `// note ${i}\nexport const n${i} = ${i}`).join(
-          '\n'
-        ),
-        filename: 'src/u.js',
-        errors: [{ messageId: 'comment-heavy-file' }]
+        code: '/**\n * Explains the value.\n * @param {string} v\n */\nexport const f = (v) => v',
+        filename: 'src/typed.js',
+        errors: [{ messageId: 'prose-comment' }]
       }
     ]
   })

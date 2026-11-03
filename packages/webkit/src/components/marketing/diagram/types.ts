@@ -75,6 +75,8 @@ export interface DiagramEdge {
 
 /** Everything a diagram draws. */
 export interface DiagramSpec {
+  /** Accessible description of the drawing, used when the diagram sets no ariaLabel. */
+  ariaLabel?: string
   /** The leaves. */
   nodes: DiagramNode[]
   /** How the leaves are arranged. */

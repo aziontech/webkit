@@ -50,8 +50,6 @@ const JS_KEYWORDS = [
   'in'
 ] as const
 
-// Shell words that are language, not a program: they read as keywords, the same as
-// `const` / `return` do in JavaScript.
 const SHELL_KEYWORDS = [
   'if',
   'then',
@@ -79,7 +77,6 @@ const SHELL_KEYWORDS = [
   'exit'
 ] as const
 
-// The keywords another PROGRAM follows, so the word after them is still a command.
 const SHELL_COMMAND_PREFIXES = [
   'sudo',
   'source',
@@ -240,20 +237,12 @@ const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
   return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
 }
 
-// Shell reuses the same seven token types as JavaScript: the program (first word,
-// or the word after a pipe/joiner) is `function`, shell language words and flags
-// are `keyword`, quoted text is `string`, a variable expansion is `type`, joining
-// operators are `punctuation`, and sub-commands / paths / URLs fall to `identifier`.
 const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
 
-  // The catch-all word must stop at a quote and at `$`, or it swallows the value in
-  // `TOKEN="$VAR"` as one word and the string/expansion alternatives never get to match.
   const shellRegex =
     /'[^']*'|"(?:\\"|[^"])*"|\$\{[^}]*\}|\$[A-Za-z_][\w]*|&&|\|\||--?[A-Za-z][-\w]*|[|;><()]|\s+|[^\s|;><()'"$]+/g
 
-  // The next non-space word starts a command: true at the start of the line, and again
-  // after every operator that begins a new one.
   let expectsCommand = true
   let match: RegExpExecArray | null
 
@@ -290,7 +279,6 @@ const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
 
     if (SHELL_KEYWORDS.includes(chunk as (typeof SHELL_KEYWORDS)[number])) {
       pushToken(tokens, chunk, 'keyword')
-      // `sudo curl …` / `then azion …` run a program next; `export FOO=…` does not.
       expectsCommand = SHELL_COMMAND_PREFIXES.includes(
         chunk as (typeof SHELL_COMMAND_PREFIXES)[number]
       )
@@ -463,8 +451,6 @@ export const highlightCodeLine = (
     return withLineComment(line, LINE_COMMENT, highlightGraphqlLine)
   }
 
-  // Prose in a code block (a markdown snippet, an agent prompt) is commentary, not code:
-  // it takes the comment colour as one token rather than being tokenised as identifiers.
   if (lang === 'markdown' || lang === 'md') {
     return [{ text: line || ' ', type: 'comment' }]
   }

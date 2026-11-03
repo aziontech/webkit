@@ -4,6 +4,7 @@ import Hero from '@aziontech/webkit/hero'
 import Illustration from '@aziontech/webkit/illustration'
 import Tag from '@aziontech/webkit/tag'
 
+import { editable } from '../../_shared/editable-content'
 import { each, indent } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -52,23 +53,22 @@ const RETAIL_CLIENT_STRIP = [
   'nzn'
 ]
 
-const START_FREE = { label: 'Start free', kind: 'secondary', href: '/signup' }
-const START_FREE_LOWER = { label: 'Start free', kind: 'secondary', href: '/signup' }
+const START_FREE = { label: 'Start for free', kind: 'secondary', href: '/signup' }
+const START_FREE_LOWER = { label: 'Start for free', kind: 'secondary', href: '/signup' }
 const SPECIALIST = {
-  label: 'Talk to an expert',
+  label: 'Talk to a specialist',
   kind: 'outlined',
   href: '#contact',
   trailing: true
 }
 const SPECIALIST_PAGE = {
-  label: 'Talk to an expert',
+  label: 'Talk to a specialist',
   kind: 'outlined',
   href: '/contact',
   trailing: true
 }
-const SPECIALIST_PLAIN = { label: 'Talk to an expert', kind: 'outlined' }
+const SPECIALIST_PLAIN = { label: 'Talk to a specialist', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
-const SEE_POSTS = { label: 'See posts', kind: 'secondary', href: '#posts' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
 
 const marks = (names, depth) =>
@@ -191,17 +191,37 @@ ${indent(actions([START_FREE, SPECIALIST]), 2)}
   </Hero.Title>
 </Hero>`
 
-const CENTERED_CAROUSEL_LONG_TEMPLATE = CENTERED_CAROUSEL_TEMPLATE.replace(
-  'max-width="xl"',
-  'max-width="3xl"'
-)
-  .replace('highlight="Invisible Infrastructure"', 'eyebrow="Functions"')
-  .replace(
-    'title="for the Speed of AI"',
-    'title="Funções serverless instantâneas para aplicações modernas"'
-  )
-
 const TITLE_BAND_TEMPLATE = `<Hero
+  kind="band"
+  max-width="5xl"
+  size="large"
+>
+  <Hero.Title
+    centered
+    eyebrow="Cache"
+    eyebrow-prefix="//"
+    title="Deliver content fast, worldwide"
+    description="Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes."
+  >
+${indent(actions([START_FREE, DOCS]), 2)}
+  </Hero.Title>
+</Hero>`
+
+const TITLE_BAND_SMALL_TEMPLATE = `<Hero
+  kind="band"
+  max-width="5xl"
+  size="medium"
+>
+  <Hero.Title
+    centered
+    eyebrow="Contact"
+    eyebrow-prefix="//"
+    title="Contact us"
+    description="Talk to sales about a new project, or reach support about one already running."
+  />
+</Hero>`
+
+const TITLE_BAND_CAROUSEL_TEMPLATE = `<Hero
   kind="band"
   max-width="5xl"
   size="large"
@@ -211,28 +231,12 @@ const TITLE_BAND_TEMPLATE = `<Hero
 >
   <Hero.Title
     centered
+    eyebrow="Resources"
+    eyebrow-prefix="//"
     title="Learning Center"
     description="Practical knowledge to speed up, secure, and scale applications."
   >
 ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
-  </Hero.Title>
-</Hero>`
-
-const CENTERED_BAND_TEMPLATE = `<Hero
-  kind="band"
-  size="large"
-  max-width="site"
-  texture="dots"
-  texture-fade="top"
->
-  <Hero.Title
-    centered
-    max-width="2xl"
-    eyebrow="Resources"
-    title="Blog"
-    description="News and hands-on guides from Azion on building apps, security, performance, and AI."
-  >
-${indent(actions([SEE_POSTS]), 2)}
   </Hero.Title>
 </Hero>`
 
@@ -248,6 +252,8 @@ const PIXEL_FLOOR_TEMPLATE = `<Hero
   class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
+    eyebrow="AI Inference"
+    eyebrow-prefix="//"
     title="Build and deploy AI agents and applications in seconds"
     description="Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local."
   >
@@ -265,6 +271,7 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
 >
   <Hero.Title
     max-width="xl"
+    mobile-centered
     eyebrow="Application Performance and Reliability"
     eyebrow-prefix="//"
     title="Make your applications fast and always reliable"
@@ -287,13 +294,12 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   kind="screen"
   align="center"
   max-width="site"
-  texture="dots"
-  texture-size="small"
-  texture-fade="top"
 >
   <Hero.Title
     centered
+    max-width="xl"
     eyebrow="Workloads"
+    eyebrow-prefix="//"
     title="Put your application close to users in seconds"
     description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick."
   >
@@ -321,7 +327,8 @@ const meta = {
   excludeStories: [
     'CENTERED_CAROUSEL_SECTION',
     'TITLE_BAND_SECTION',
-    'CENTERED_BAND_SECTION',
+    'TITLE_BAND_SMALL_SECTION',
+    'TITLE_BAND_CAROUSEL_SECTION',
     'PIXEL_FLOOR_SECTION',
     'COPY_BESIDE_ART_SECTION',
     'COPY_ON_TOP_ART_SECTION'
@@ -329,7 +336,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -339,7 +345,7 @@ const meta = {
 export default meta
 
 export const CenteredCarousel = {
-  render: () => ({ components, template: CENTERED_CAROUSEL_TEMPLATE }),
+  ...editable(() => ({ components, template: CENTERED_CAROUSEL_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_TEMPLATE) }
@@ -355,11 +361,11 @@ export const CENTERED_CAROUSEL_SECTION = {
     description:
       'Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.',
     primaryAction: {
-      label: 'Start free',
+      label: 'Start for free',
       href: 'https://console.azion.com/signup/'
     },
     secondaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     },
     carouselLabel: 'Trusted by teams running critical workloads',
@@ -384,17 +390,8 @@ export const CenteredCarouselJson = {
   ...siteJsonStory(CENTERED_CAROUSEL_SECTION)
 }
 
-export const CenteredCarouselLongTitle = {
-  render: () => ({ components, template: CENTERED_CAROUSEL_LONG_TEMPLATE }),
-  parameters: {
-    docs: {
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_LONG_TEMPLATE) }
-    }
-  }
-}
-
 export const TitleBand = {
-  render: () => ({ components, template: TITLE_BAND_TEMPLATE }),
+  ...editable(() => ({ components, template: TITLE_BAND_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
@@ -405,6 +402,68 @@ export const TitleBand = {
 export const TITLE_BAND_SECTION = {
   _id: 'hero-title-band',
   props: {
+    eyebrow: 'Cache',
+    highlight: '',
+    title: 'Deliver content fast, worldwide',
+    description:
+      'Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes.',
+    primaryAction: {
+      label: 'Start for free',
+      href: 'https://console.azion.com/signup/'
+    },
+    secondaryAction: {
+      label: 'Docs',
+      href: 'https://www.azion.com/en/documentation/'
+    }
+  }
+}
+
+export const TitleBandJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(TITLE_BAND_SECTION)
+}
+
+export const TitleBandSmall = {
+  ...editable(() => ({ components, template: TITLE_BAND_SMALL_TEMPLATE })),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The title band at the medium height, for a page whose bands start right under the headline (Contact).'
+      },
+      source: { code: toSfc([HERO_IMPORT], TITLE_BAND_SMALL_TEMPLATE) }
+    }
+  }
+}
+
+export const TITLE_BAND_SMALL_SECTION = {
+  _id: 'hero-title-band-small',
+  props: {
+    eyebrow: 'Contact',
+    highlight: '',
+    title: 'Contact us',
+    description: 'Talk to sales about a new project, or reach support about one already running.'
+  }
+}
+
+export const TitleBandSmallJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(TITLE_BAND_SMALL_SECTION)
+}
+
+export const TitleBandCarousel = {
+  ...editable(() => ({ components, template: TITLE_BAND_CAROUSEL_TEMPLATE })),
+  parameters: {
+    docs: {
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_CAROUSEL_TEMPLATE) }
+    }
+  }
+}
+
+export const TITLE_BAND_CAROUSEL_SECTION = {
+  _id: 'hero-title-band',
+  props: {
+    eyebrow: 'Resources',
     highlight: '',
     title: 'Learning Center',
     description: 'Practical knowledge to speed up, secure, and scale applications.',
@@ -413,7 +472,7 @@ export const TITLE_BAND_SECTION = {
       href: '#subjects'
     },
     secondaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     },
     carouselLabel: 'Trusted by teams running critical workloads',
@@ -433,49 +492,13 @@ export const TITLE_BAND_SECTION = {
   }
 }
 
-export const TitleBandJson = {
+export const TitleBandCarouselJson = {
   tags: ['!dev'],
-  ...siteJsonStory(TITLE_BAND_SECTION)
-}
-
-export const CenteredBand = {
-  render: () => ({ components, template: CENTERED_BAND_TEMPLATE }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Centered title band with a dotted texture and no client strip. The Blog page opens with it.'
-      },
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
-    }
-  }
-}
-
-export const CENTERED_BAND_SECTION = {
-  _id: 'hero-centered-band',
-  props: {
-    kind: 'centered-band',
-    eyebrow: 'Resources',
-    title: 'Blog',
-    description:
-      'News and hands-on guides from Azion on building apps, security, performance, and AI.',
-    actions: [
-      {
-        label: 'See posts',
-        href: '#posts',
-        kind: 'secondary'
-      }
-    ]
-  }
-}
-
-export const CenteredBandJson = {
-  tags: ['!dev'],
-  ...siteJsonStory(CENTERED_BAND_SECTION)
+  ...siteJsonStory(TITLE_BAND_CAROUSEL_SECTION)
 }
 
 export const PixelFloor = {
-  render: () => ({ components, template: PIXEL_FLOOR_TEMPLATE }),
+  ...editable(() => ({ components, template: PIXEL_FLOOR_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], PIXEL_FLOOR_TEMPLATE) }
@@ -486,15 +509,16 @@ export const PixelFloor = {
 export const PIXEL_FLOOR_SECTION = {
   _id: 'hero-pixel-floor',
   props: {
+    eyebrow: 'AI Inference',
     title: 'Build and deploy AI agents and applications in seconds',
     description:
       'Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local.',
     primaryAction: {
-      label: 'Start free',
+      label: 'Start for free',
       href: 'https://console.azion.com/signup'
     },
     secondaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     },
     carouselLabel: 'Trusted by teams running critical workloads',
@@ -520,7 +544,7 @@ export const PixelFloorJson = {
 }
 
 export const CopyBesideArt = {
-  render: () => ({ components, template: COPY_BESIDE_ART_TEMPLATE }),
+  ...editable(() => ({ components, template: COPY_BESIDE_ART_TEMPLATE })),
   parameters: {
     docs: {
       source: {
@@ -553,7 +577,7 @@ export const COPY_BESIDE_ART_SECTION = {
     ],
     carouselLabel: 'Trusted by teams running critical workloads',
     primaryAction: {
-      label: 'Talk to an expert',
+      label: 'Talk to a specialist',
       href: 'https://www.azion.com/en/contact/'
     }
   }
@@ -565,7 +589,7 @@ export const CopyBesideArtJson = {
 }
 
 export const CopyOnTopArt = {
-  render: () => ({ components, template: COPY_ON_TOP_ART_TEMPLATE }),
+  ...editable(() => ({ components, template: COPY_ON_TOP_ART_TEMPLATE })),
   parameters: {
     docs: {
       source: {
@@ -583,7 +607,7 @@ export const COPY_ON_TOP_ART_SECTION = {
     description:
       'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
     primaryAction: {
-      label: 'Start free',
+      label: 'Start for free',
       href: 'https://console.azion.com/signup'
     },
     secondaryAction: {

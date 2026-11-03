@@ -25,11 +25,6 @@ function readRect(el) {
 }
 
 /**
- * Thin wrapper over the shared `computePlacement` geometry (flip, shift, size cap,
- * scrolling-ancestor boundary) that keeps what is specific to the navigation menu: the
- * settled popup size as the measured box, the arrow, rAF-coalesced updates, and a
- * `placed` flag that suppresses the move transition on the first placement.
- *
  * @param {import('vue').MaybeRef<HTMLElement | null>} anchorRef
  * @param {import('vue').Ref<HTMLElement | null>} floatingRef
  * @param {import('vue').Ref<HTMLElement | null>} arrowRef
@@ -92,8 +87,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     })
     const [resolvedSide, resolvedAlign = 'center'] = result.placement.split('-')
 
-    // The positioner is fixed inside the Portal target; express viewport coordinates in
-    // that frame so a transformed ancestor (Storybook's zoom) does not scale them twice.
     const frame = getFixedFrame(floatingEl)
     state.value = {
       x: (result.left - frame.left) / frame.scaleX,
@@ -176,8 +169,6 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     }
   })
 
-  // flex drops the slot's whitespace text nodes; as a block they open a ~16px line box
-  // that overhangs a panel flipped above its trigger. Inline so it holds without CSS.
   const floatingStyles = computed(() => ({
     position: 'fixed',
     top: '0',
@@ -189,12 +180,9 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
 
   const resolvedSide = computed(() => state.value.side)
   const resolvedAlign = computed(() => state.value.align)
-  /** Cap for the popup on each axis, in px, or `null` when its natural size fits. */
   const availableWidth = computed(() => state.value.maxWidth)
   const availableHeight = computed(() => state.value.maxHeight)
 
-  // The arrow sits on the anchor's centre along the axis perpendicular to the side,
-  // kept `arrowPadding` away from the popup's (possibly capped) edges.
   const arrowStyles = computed(() => {
     const anchorRect = readRect(unref(anchorRef))
     const arrowEl = unref(arrowRef)

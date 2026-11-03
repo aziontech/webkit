@@ -73,11 +73,6 @@
     return 'helper'
   })
 
-  // The field never writes copy of its own. No `helperText` means no helper row — while
-  // disabled as much as anywhere else: a field that goes disabled for the length of a
-  // request would otherwise grow a padlock line the screen never asked for, in the one
-  // moment it has nothing to say. Disabling is already legible from the field's own
-  // treatment, and a caller who wants a reason passes one (it renders with the lock).
   const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 
   const onInput = (event: Event) => {

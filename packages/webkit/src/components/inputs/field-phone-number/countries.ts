@@ -1,14 +1,11 @@
+import flagSprite from '../../../images/country-flags.png'
+
 export interface Country {
   code: string
   dialCode: string
   mask: string | string[]
   label: string
 }
-
-export const OTHER_COUNTRY_CODE = 'ZZ'
-
-const E164_MIN_DIGITS = 7
-const E164_MAX_DIGITS = 15
 
 export const defaultCountries: Country[] = [
   { code: 'BR', dialCode: '+55', mask: ['(##) ####-####', '(##) #####-####'], label: 'Brazil' },
@@ -49,15 +46,7 @@ export const defaultCountries: Country[] = [
     label: 'United Arab Emirates'
   },
   { code: 'UY', dialCode: '+598', mask: '#### ####', label: 'Uruguay' },
-  { code: 'VE', dialCode: '+58', mask: '### ### ####', label: 'Venezuela' },
-  {
-    code: OTHER_COUNTRY_CODE,
-    dialCode: '+',
-    mask: Array.from({ length: E164_MAX_DIGITS - E164_MIN_DIGITS + 1 }, (_, i) =>
-      '#'.repeat(E164_MIN_DIGITS + i)
-    ),
-    label: 'Other'
-  }
+  { code: 'VE', dialCode: '+58', mask: '### ### ####', label: 'Venezuela' }
 ]
 
 export function stripToDigits(input: string): string {
@@ -107,6 +96,31 @@ export function formatNational(country: Country, digits: string): string {
 export function placeholderFor(country: Country): string {
   const masks = masksOf(country)
   return masks[masks.length - 1].replace(/#/g, '9')
+}
+
+const FLAG_SPRITE_ROWS = [
+  'ad ae af ag ai al am an ao aq ar as at au aw az ba bb bd be bf bg bh bi bj bm',
+  'bn bo br bs bt bv bw by bz ca cc cd cf cg ch ci ck cl cm cn co cr cu cv cx cy',
+  'cz de dj dk dm do dz ec ee eg eh er es et fi fj fk fm fo fr ga gd ge gf gh gi',
+  'gl gm gn gp gq gr gs gt gu gw gy hk hm hn hr ht hu id ie il in io iq ir is it',
+  'jm jo jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma',
+  'mc md me mg mh mk ml mm mn mo mp mq mr ms mt mu mv mw mx my mz na nc ne nf ng',
+  'ni nl no np nr nu nz om pa pe pf pg ph pk pl pm pn pr pt pw py qa re ro rs ru',
+  'rw sa sb sc sd se sg sh si sj sk sl sm sn so sr ss st sv sy sz tc td tf tg th',
+  'tj tk tl tm tn to tp tr tt tv tw ty tz ua ug gb um us uy uz va vc ve vg vi vn',
+  'vu wf ws ye za zm zr zw'
+]
+  .join(' ')
+  .split(' ')
+
+export function flagStyle(code: string): Record<string, string> | null {
+  const row = FLAG_SPRITE_ROWS.indexOf(code.toLowerCase()) + 1
+  if (row === 0) return null
+  return {
+    backgroundImage: `url(${flagSprite})`,
+    backgroundPosition: `0 ${(row / FLAG_SPRITE_ROWS.length) * 100}%`,
+    backgroundSize: '100% auto'
+  }
 }
 
 export function isComplete(country: Country, digits: string): boolean {

@@ -11,6 +11,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -160,7 +161,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -170,7 +170,7 @@ const meta = {
 export default meta
 
 export const Artwork = {
-  render: () => ({ components, setup, template: ARTWORK_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: ARTWORK_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(ARTWORK_IMPORTS, ARTWORK_TEMPLATE) }
@@ -208,7 +208,7 @@ export const ArtworkJson = {
 }
 
 export const Illustrated = {
-  render: () => ({ components, template: ILLUSTRATED_TEMPLATE }),
+  ...editable(() => ({ components, template: ILLUSTRATED_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(ILLUSTRATED_IMPORTS, ILLUSTRATED_TEMPLATE) }

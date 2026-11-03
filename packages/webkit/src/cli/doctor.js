@@ -1,7 +1,3 @@
-// Pure health-check planner for `webkit doctor`: reads the project, returns ordered
-// `{ check, status, detail }` records, writes nothing. Each check mirrors what `init`
-// sets up — the fail-open toolkit is otherwise silent about a half-broken install.
-
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
@@ -21,7 +17,6 @@ import { planSync } from './sync.js'
 
 const WEBKIT_PKGS = ['@aziontech/webkit']
 
-/** Resolve the webkit catalog.json from the consumer project. */
 function resolveCatalog(projectDir) {
   if (process.env.WEBKIT_CATALOG_PATH && existsSync(process.env.WEBKIT_CATALOG_PATH)) {
     return process.env.WEBKIT_CATALOG_PATH
@@ -30,21 +25,16 @@ function resolveCatalog(projectDir) {
   for (const pkg of WEBKIT_PKGS) {
     try {
       return require.resolve(`${pkg}/catalog.json`)
-    } catch {
-      /* try next */
-    }
+    } catch {}
     try {
       return join(dirname(require.resolve(`${pkg}/package.json`)), 'catalog.json')
-    } catch {
-      /* try next */
-    }
+    } catch {}
   }
   return null
 }
 
 const SRC_EXTENSIONS = ['.vue', '.ts', '.js', '.mts', '.mjs', '.tsx', '.jsx']
 
-/** All source files under src/ (recursive; dotfolders skipped). */
 function listSrcFiles(projectDir) {
   const files = []
   const walk = (dir) => {
@@ -65,7 +55,6 @@ function listSrcFiles(projectDir) {
   return files
 }
 
-/** Installed version of `dep` under the project's node_modules, or null. */
 function installedVersion(projectDir, dep) {
   try {
     const pkgPath = join(projectDir, 'node_modules', dep, 'package.json')
@@ -76,23 +65,17 @@ function installedVersion(projectDir, dep) {
   }
 }
 
-/**
- * Build the ordered doctor report for `projectDir`. Pure: no disk writes.
- * @returns {Array<{check: string, status: 'ok'|'warn'|'fail', detail: string}>}
- */
+/** @returns {Array<{check: string, status: 'ok'|'warn'|'fail', detail: string}>} */
 export function planDoctor(projectDir) {
   const checks = []
   const add = (check, status, detail) => checks.push({ check, status, detail })
 
-  // 1. Catalog resolvable — without it, the lint rules disable themselves.
   const catalogPath = resolveCatalog(projectDir)
   if (catalogPath) {
     let version = null
     try {
       version = JSON.parse(readFileSync(catalogPath, 'utf8')).webkitVersion || null
-    } catch {
-      /* unreadable catalog → still resolvable, report below */
-    }
+    } catch {}
     add('webkit catalog', 'ok', `resolved${version ? ` (webkit ${version})` : ''}`)
   } else {
     add(
@@ -102,7 +85,6 @@ export function planDoctor(projectDir) {
     )
   }
 
-  // 2. ESLint config present.
   const eslintCfg = firstExisting(projectDir, ESLINT_CONFIG_CANDIDATES)
   add(
     'eslint config',
@@ -110,16 +92,13 @@ export function planDoctor(projectDir) {
     eslintCfg || 'no eslint config found — run `npx @aziontech/webkit init`.'
   )
 
-  // 3. Stylelint config present (file or package.json#stylelint).
   const stylelintCfg = firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES)
   const pkgRaw = read(join(projectDir, 'package.json'))
   let pkg = null
   if (pkgRaw) {
     try {
       pkg = JSON.parse(pkgRaw)
-    } catch {
-      /* handled per-check below */
-    }
+    } catch {}
   }
   const hasStylelint = Boolean(stylelintCfg) || Boolean(pkg && pkg.stylelint)
   add(
@@ -131,11 +110,6 @@ export function planDoctor(projectDir) {
         : 'no stylelint config found — run `npx @aziontech/webkit init`.')
   )
 
-  // 3b. The CSS entry must register webkit's source with Tailwind — under v4 that is what
-  //     compiles webkit's component classes (node_modules is excluded from auto
-  //     content-detection). The current form is `@import '@aziontech/webkit/styles'` (the
-  //     `@source` ships inside the package); a legacy inline `@source …@aziontech/webkit…`
-  //     still counts. Without either, the components render unstyled.
   const cssEntry = read(join(projectDir, 'src/webkit.css'))
   const hasSource = Boolean(
     cssEntry &&
@@ -150,7 +124,6 @@ export function planDoctor(projectDir) {
       : "src/webkit.css does not register webkit with Tailwind (`@import '@aziontech/webkit/styles'`) — component classes will not compile (unstyled UI). Run `npx @aziontech/webkit init`."
   )
 
-  // 3c. PostCSS config present — it runs Tailwind v4 (`@tailwindcss/postcss`) in the build.
   const postcssCfg = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
   add(
     'postcss config',
@@ -159,7 +132,6 @@ export function planDoctor(projectDir) {
       'no postcss config — Tailwind v4 may not run in the build. Run `npx @aziontech/webkit init`.'
   )
 
-  // 4. .mcp.json registers the webkit server.
   const mcpPath = join(projectDir, '.mcp.json')
   if (!existsSync(mcpPath)) {
     add('mcp server', 'fail', 'no .mcp.json — the webkit MCP is not registered.')
@@ -177,7 +149,6 @@ export function planDoctor(projectDir) {
     }
   }
 
-  // 5. husky prepare script (activates hooks on install).
   const prepare = pkg?.scripts?.prepare
   add(
     'husky prepare script',
@@ -187,10 +158,6 @@ export function planDoctor(projectDir) {
       : 'missing scripts.prepare="husky" — git hooks will not activate on install.'
   )
 
-  // 6. husky pre-commit hook lints on commit. Checked loosely (any stylelint invocation)
-  //    rather than requiring the exact `HUSKY_HOOK_MARKER` line — a consumer who adjusted
-  //    the hook to their own staged-file pattern (e.g. lint-staged) still passes; the
-  //    exact marker is kept only as `init`'s append-once guard (see plan.js/apply.js).
   const hook = read(join(projectDir, '.husky/pre-commit'))
   const hasHook = Boolean(hook && /stylelint/.test(hook))
   add(
@@ -201,9 +168,6 @@ export function planDoctor(projectDir) {
       : 'no .husky/pre-commit lint block — commits are not linted locally.'
   )
 
-  // 7. Design-system styles imported at the app entry (advisory; only when an entry exists).
-  //    Looks for the generated src/webkit.css — importing it (not `@aziontech/theme` bare)
-  //    is what includes the `@source` that compiles webkit's component classes.
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   if (entry) {
     const src = read(join(projectDir, entry)) || ''
@@ -215,7 +179,6 @@ export function planDoctor(projectDir) {
         ? `imported in ${entry}`
         : `add \`import './webkit.css'\` (theme tokens + fonts + Tailwind + the webkit source registration) to ${entry}.`
     )
-    // Icon font — only meaningful when the project depends on @aziontech/icons.
     const declaredIcons = Boolean(
       pkg?.dependencies?.['@aziontech/icons'] || pkg?.devDependencies?.['@aziontech/icons']
     )
@@ -231,9 +194,6 @@ export function planDoctor(projectDir) {
     }
   }
 
-  // 7b. Feature-scoped setup: toast. Only reported when the app actually imports the
-  //     toast family — then a region must exist (`.use(ToastPlugin)` in the entry, or a
-  //     manually mounted Toaster) or every `toast('…')` call silently renders nowhere.
   const srcFiles = listSrcFiles(projectDir)
   let usesToast = false
   let toastWired = false
@@ -255,7 +215,6 @@ export function planDoctor(projectDir) {
     )
   }
 
-  // 8. Dependency versions — report resolved installs; warn on floating "latest" pins.
   const declared = { ...(pkg?.dependencies || {}), ...(pkg?.devDependencies || {}) }
   const present = ALL_DEPS.filter((dep) => dep in declared)
   if (present.length) {
@@ -281,10 +240,6 @@ export function planDoctor(projectDir) {
     }
   }
 
-  // 9. Claude bundle drift — every copied rule/skill/agent still matches what this
-  //    webkit version ships, and the CLAUDE.md fragment is current. `sync` never runs
-  //    automatically (it would overwrite files the consumer may have edited on purpose),
-  //    so doctor is what surfaces drift between releases.
   const sync = planSync(projectDir)
   const missingOrStale = sync.entries.filter((e) => e.state === 'missing' || e.state === 'stale')
   const orphans = sync.entries.filter((e) => e.state === 'orphan')

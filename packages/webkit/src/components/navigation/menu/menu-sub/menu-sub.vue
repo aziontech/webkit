@@ -26,7 +26,6 @@
   }>()
 
   const ctx = useMenuContext()
-  /** Read before providing, so the depth counts ancestors only. */
   const parentSub = inject(MenuSubInjectionKey, null)
   const attrs = useAttrs()
   const uid = useId()
@@ -35,11 +34,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-sub'
   )
 
-  /**
-   * Identity of this sub on the drill stack. Data-driven mode hands the tree node's
-   * own id down as an attribute, so the emitted path carries real node ids; a
-   * hand-composed sub falls back to a generated one.
-   */
   const id = (attrs['data-node-id'] as string | undefined) || uid
   const level = (parentSub?.level ?? -1) + 1
 
@@ -49,9 +43,6 @@
 
   const isDrill = computed(() => kind.value === 'drill')
 
-  // The ROOT holds inline expansion (see `Menu`'s `expanded` model): one sub opening must
-  // not disturb another, and a consumer whose shell remounts can persist it. `defaultOpen`
-  // seeds that set once; `v-model:open` on this sub still works, writing through to it.
   ctx.registerExpandable(id, openModel.value ?? props.defaultOpen)
   watch(openModel, (value) => {
     if (value !== undefined && !isDrill.value) ctx.setExpanded(id, value)
@@ -66,7 +57,6 @@
   const setOpen = (value: boolean) => {
     if (isDrill.value) return
     ctx.setExpanded(id, value)
-    // Mirrored so a consumer binding `v-model:open` on this sub still hears the change.
     openModel.value = value
   }
 
@@ -86,9 +76,6 @@
     kind.value = nextKind
     label.value = nextLabel
     triggerEl.value = el
-    // A drill sub names its level to the ROOT here rather than only when pushed, so a stack
-    // restored from `v-model:path` still has a label for `Menu.Back` and an element to return
-    // focus to. Inline subs never enter the stack, so they announce nothing.
     if (nextKind === 'drill') ctx.registerLevel(id, nextLabel, el)
   }
 

@@ -1,8 +1,3 @@
-// Pure query functions over a loaded webkit catalog: plain JSON in/out, no MCP SDK,
-// no I/O — testable with `node --test` alone; `server.js` is the thin MCP adapter.
-// Goal: steer AI-generated consumer code to the right component, the right
-// (tree-shakeable) import, real props, and a runnable SFC.
-
 const NOT_AVAILABLE = {
   ok: false,
   available: false,
@@ -11,7 +6,6 @@ const NOT_AVAILABLE = {
     'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH to its catalog.json.'
 }
 
-/** kebab subpath → PascalCase binding: `empty-state` → `EmptyState`, `table-row` → `TableRow`. */
 export function pascalCase(subpath) {
   const last = String(subpath).split('/').pop() || ''
   return last
@@ -21,14 +15,12 @@ export function pascalCase(subpath) {
     .join('')
 }
 
-/** The subpath of a full import path, stripped of the catalog's package prefix. */
 function subpathOf(catalog, importPath) {
   const prefix = catalog.prefix
   const s = String(importPath || '')
   return s.startsWith(prefix) ? s.slice(prefix.length) : s
 }
 
-/** A compact card for list/search results. */
 function componentCard(catalog, name) {
   const e = catalog.getEntry(name)
   if (!e) return null
@@ -43,10 +35,6 @@ function componentCard(catalog, name) {
   }
 }
 
-/**
- * List every renderable component (kind === 'component'), optionally filtered by category.
- * Returns compact cards — enough to pick a component, not the full API.
- */
 export function listComponents(catalog, { category } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const wanted = category ? String(category).toLowerCase() : null
@@ -65,7 +53,6 @@ export function listComponents(catalog, { category } = {}) {
   }
 }
 
-/** Distinct categories present in the catalog, for discovery / filtering. */
 export function listCategories(catalog) {
   if (!catalog.available) return NOT_AVAILABLE
   const cats = new Set()
@@ -76,11 +63,6 @@ export function listCategories(catalog) {
   return { ok: true, available: true, categories: [...cats].sort() }
 }
 
-/**
- * The POSITIVE token inventory (complement of validate_usage's deny rules). Without a
- * `category`: the group index + typography classes; with one: that group's CSS custom
- * properties. Answers "which token do I use instead of a hardcoded value?".
- */
 export function listTokens(catalog, { category } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const tokens = catalog.tokens || { cssVars: [], typography: [], groups: {} }
@@ -88,8 +70,6 @@ export function listTokens(catalog, { category } = {}) {
 
   if (category != null && String(category).length) {
     const key = String(category).toLowerCase().trim()
-    // Animations are their own catalog (utility classes, not CSS custom properties):
-    // each entry is `animate-<name>` + its timing value + when to reach for it.
     if (key === 'animations' || key === 'animation' || key === 'animate' || key === 'motion') {
       return {
         ok: true,
@@ -130,10 +110,6 @@ export function listTokens(catalog, { category } = {}) {
   }
 }
 
-/**
- * Full entry for a component (props / events / slots / subcomponents), or a
- * not-found object carrying fuzzy suggestions so the caller can recover.
- */
 export function getComponent(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const key = String(name || '').trim()
@@ -164,10 +140,7 @@ export function getComponent(catalog, name) {
     subcomponents: e.subcomponents ?? [],
     parent: e.parent ?? null,
     rootOf: e.rootOf ?? null,
-    // Usage guidance (B3) — helps the AI pick the RIGHT component, not just a valid one.
     purpose: e.purpose ?? null,
-    // One-time app-level wiring required before first use (null for most components).
-    // When set, apply it BEFORE emitting code that uses the component.
     setup: e.setup ?? null,
     useWhen: e.useWhen ?? [],
     avoidWhen: e.avoidWhen ?? [],
@@ -179,11 +152,6 @@ export function getComponent(catalog, name) {
   }
 }
 
-/**
- * The best-practices + when-to-use guidance for one component (a focused subset of
- * getComponent): purpose, when to use, when NOT to use, related components, and the
- * best-practice bullets. Answers "am I using this the right way / is this the right one?".
- */
 export function getBestPractices(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const key = String(name || '').trim()
@@ -212,11 +180,6 @@ export function getBestPractices(catalog, name) {
   }
 }
 
-/**
- * The correct + performant import line. For a compound root the default is the
- * tree-shakeable `-root` import; the compound dot-notation import is offered as the
- * ergonomic alternative. For everything else the tree-shakeable import IS the plain one.
- */
 export function getImport(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const key = String(name || '').trim()
@@ -232,9 +195,6 @@ export function getImport(catalog, name) {
     }
   }
 
-  // A distinct tree-shakeable root exists only when the catalog gives one. A .vue-rooted
-  // compound already IS its own lean root (treeShakeableImport === import). An index.ts
-  // compound with no `-root` export has none (treeShakeableImport === null).
   const hasLeanRoot = e.treeShakeableImport != null
   const tree = e.treeShakeableImport ?? e.import
   const binding = pascalCase(subpathOf(catalog, tree))
@@ -244,7 +204,6 @@ export function getImport(catalog, name) {
     found: true,
     name: key,
     binding,
-    // The performant import to prefer.
     import: `import ${binding} from '${tree}'`,
     importPath: tree,
     treeShakeable: hasLeanRoot
@@ -253,10 +212,6 @@ export function getImport(catalog, name) {
   if (e.compoundRoot) {
     const subs = e.subcomponents ?? []
     const subExample = subs[0] ?? `${catalog.prefix}name-part`
-    // Two compound shapes. An index.ts Object.assign compound has a DISTINCT -root
-    // (tree !== import): the compound import gives dot-notation but is not tree-shakeable.
-    // A .vue-rooted compound is already its own lean root (tree === import): no separate
-    // non-tree-shakeable alternative exists; its sub-components are just separate exports.
     if (hasLeanRoot && tree !== e.import) {
       const compoundBinding = pascalCase(key)
       result.compoundAlternative = {
@@ -284,15 +239,12 @@ export function getImport(catalog, name) {
   return result
 }
 
-/** Score a component against a free-text need. Higher is better; 0 = no match. */
 function scoreMatch(name, entry, query) {
   const q = query.toLowerCase().trim()
   if (!q) return 0
   const n = name.toLowerCase()
   const c = (entry.category || '').toLowerCase()
   const words = q.split(/[\s/_-]+/).filter(Boolean)
-  // Intent text the need can match against: Purpose + the "when to use" bullets. This is
-  // what lets a phrase like "side panel that slides in" reach `drawer` over `dialog`.
   const prose = [entry.purpose || '', ...(entry.useWhen || [])].join(' ').toLowerCase()
 
   let score = 0
@@ -306,16 +258,11 @@ function scoreMatch(name, entry, query) {
     else if (n.includes(w)) score += 15
     else if (w.includes(n) && n.length >= 3) score += 12
     if (c.includes(w)) score += 4
-    if (w.length >= 3 && prose.includes(w)) score += 6 // intent match on purpose/useWhen
+    if (w.length >= 3 && prose.includes(w)) score += 6
   }
   return score
 }
 
-/**
- * Fuzzy / substring search across component names + categories. Returns ranked
- * cards so a phrase like "dropdown" or "paginated table" resolves to a real
- * component instead of the AI reinventing one.
- */
 export function searchComponents(catalog, query) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(query || '')
@@ -333,11 +280,6 @@ export function searchComponents(catalog, query) {
   return { ok: true, available: true, query: q, count: ranked.length, matches: ranked }
 }
 
-/**
- * Given a plain-language need, suggest the single best-fitting component (plus a
- * couple of runners-up). Falls back to edit-distance suggestions when nothing
- * scores on the substring/word heuristic.
- */
 export function suggestComponent(catalog, need) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
@@ -353,7 +295,6 @@ export function suggestComponent(catalog, need) {
       alternatives: rest.slice(0, 3)
     }
   }
-  // Nothing matched by words — offer typo-level suggestions over the raw phrase.
   const fuzzy = catalog
     .suggestSubpaths(q.toLowerCase().replace(/\s+/g, '-'))
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
@@ -371,22 +312,18 @@ export function suggestComponent(catalog, need) {
   }
 }
 
-/** Pick a small set of illustrative props (required first, then leading scalars). */
 function exampleProps(props) {
   const scalar = (t) => /^('.*'|string|number|boolean)/.test(String(t || '').trim())
   const literalDefault = (p) => {
-    // Prefer the documented default for enums; otherwise synthesize by type.
     const d = String(p.default ?? '').trim()
     if (d && d !== '—' && d !== "''" && d !== '[]' && d !== '{}') return d.replace(/^'|'$/g, '')
     const t = String(p.type || '').trim()
-    if (/^'/.test(t)) return t.split('|')[0].trim().replace(/^'|'$/g, '') // first enum literal
+    if (/^'/.test(t)) return t.split('|')[0].trim().replace(/^'|'$/g, '')
     if (t === 'boolean') return true
     if (t === 'number') return 0
     return 'text'
   }
 
-  // The spec's Required column says `true` / `false`; `yes` / `no` is the older
-  // spelling, still accepted so a half-migrated .specs tree reads the same.
   const isRequired = (p) => ['true', 'yes'].includes(String(p.required).toLowerCase())
 
   const required = props.filter(isRequired)
@@ -402,12 +339,8 @@ function exampleProps(props) {
     }
     if (t === 'number') return { name: p.name, attr: `:${p.name}="${literalDefault(p)}"` }
     if (scalar(t)) {
-      // String / enum → quoted static attribute.
       return { name: p.name, attr: `${p.name}="${literalDefault(p)}"` }
     }
-    // Non-scalar (array / object / function): a static string would be wrong
-    // (`columns="text"` is not runnable). Bind an empty literal of the right shape so
-    // the snippet still parses and runs — the consumer fills it in.
     const isArray = /\[\]\s*$|^Array\s*<|^readonly\s/.test(t)
     const isFn = /=>|\bFunction\b/.test(t)
     const literal = isArray ? '[]' : isFn ? '() => {}' : '{}'
@@ -415,10 +348,6 @@ function exampleProps(props) {
   })
 }
 
-/**
- * A runnable SFC synthesized from the entry: tree-shakeable import + PascalCase tag
- * with example props derived from the props table. No placeholders — paste-and-run.
- */
 export function getUsageExample(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const comp = getComponent(catalog, name)
@@ -459,10 +388,6 @@ export function getUsageExample(catalog, name) {
   }
 }
 
-/**
- * Validate usage before it ships: `import` → real, non-denied webkit export (else
- * suggestions); `classes` → token deny rules over the class string. Returns { ok, problems }.
- */
 export function validateUsage(catalog, { import: importPath, classes } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const problems = []
@@ -471,9 +396,6 @@ export function validateUsage(catalog, { import: importPath, classes } = {}) {
     const raw = String(importPath).trim()
     const bare = catalog.bare
     const prefix = catalog.prefix
-    // Match the webkit package itself only — NOT sibling packages that share the name
-    // as a prefix (`@aziontech/webkit-cli`, `@aziontech/webkit-mcp`). Those are not
-    // webkit imports, so they must fall into the "nothing to validate" branch.
     const isWebkit = raw === bare || raw.startsWith(prefix)
     if (!isWebkit) {
       problems.push({

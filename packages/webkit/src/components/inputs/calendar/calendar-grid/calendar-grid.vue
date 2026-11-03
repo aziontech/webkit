@@ -44,20 +44,12 @@
   const viewYear = computed(() => viewDate.value.getFullYear())
   const viewMonth = computed(() => viewDate.value.getMonth())
 
-  /* ---- month-change motion — a horizontal scroll. Keying the strip by month swaps it
-     through a <Transition>: the outgoing strip slides out one side while the incoming
-     slides in from the other, both on screen at once, so it reads as a continuous scroll
-     instead of a fade/blink. Forward → positive translate, backward → negative; the
-     productive-entrance transform+opacity is shared with the TabView panel. ---- */
   const slideDirection = ref<TabViewSlideDirection>(null)
   const transitioning = ref(false)
 
   const monthsKey = computed(() => `${viewYear.value}-${viewMonth.value}`)
   const monthsTransitionStyle = computed(() => getTabViewPanelTransitionStyle())
 
-  // The incoming strip starts off-screen on the side being navigated toward; the outgoing
-  // one leaves to the opposite side. `motion-safe:` gates the offset/opacity so a
-  // reduced-motion swap is instant, with no movement.
   const monthsEnterFromClass = computed(() =>
     slideDirection.value === 'left'
       ? 'motion-safe:-translate-x-full motion-safe:opacity-0'
@@ -233,8 +225,6 @@
     nextTick(() => {
       const buttons =
         gridRef.value?.querySelectorAll<globalThis.HTMLButtonElement>('button[tabindex="0"]')
-      // While a month scroll is running two strips coexist; focus the incoming (in-flow)
-      // one, never the outgoing strip (positioned absolutely and about to unmount).
       const target =
         [...(buttons ?? [])].find((button) => !button.closest('.absolute')) ?? buttons?.[0]
       target?.focus()
@@ -325,10 +315,6 @@
     data-testid="input-calendar__grid"
     class="flex flex-col items-start gap-(--spacing-md)"
   >
-    <!-- Static header. The month label and the prev/next controls live OUTSIDE the
-         transition so they never travel with the sliding strip — only the month
-         itself moves. Keeping the buttons mounted also means focus stays on the
-         control the user just pressed instead of being torn down under them. -->
     <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
       <span class="text-body-sm text-(--text-default)">
         {{ monthGrid.label }}
@@ -363,7 +349,6 @@
       </div>
     </div>
 
-    <!-- Only the month strip slides; it clips its two in-flight copies. -->
     <div
       :data-transitioning="transitioning || null"
       class="relative w-full data-[transitioning]:overflow-hidden"

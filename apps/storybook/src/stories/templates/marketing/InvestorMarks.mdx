@@ -1,0 +1,46 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as InvestorMarksStories from './InvestorMarks.stories'
+
+<Meta title="Templates/Marketing/Social Proof/InvestorMarks" />
+
+# InvestorMarks
+
+The company's investors as a row of linked marks under a centered title, like the backers on About. Each mark sits in its own cell and opens the investor's website in a new tab.
+
+On hover and keyboard focus the mark lifts and a "Visit website" line rises under it. Under reduced motion both stay put. Each mark carries a light and a dark logo, so it reads in either theme.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox` and `BentoGrid`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The two investors About runs: monashees+ and Qualcomm Ventures.
+
+<Canvas of={InvestorMarksStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items[].logo` is the mark drawn on the dark theme, `logoLight` the one drawn on the light theme.
+- `items[].href` is the investor's website, opened in a new tab.
+- `linkLabel` is the line revealed under a mark, and the lead of its link's accessible name.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={InvestorMarksStories.DefaultJson} dark />
+</div>

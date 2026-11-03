@@ -192,8 +192,6 @@
     setLoading
   })
 
-  // Imperative API for controls rendered outside the root (via a template ref):
-  // `<button @click="pl.move('to-target')" />` + `<PickList ref="pl" />`.
   defineExpose({ move, moveAll, hasSelection, count })
 </script>
 

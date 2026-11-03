@@ -18,7 +18,6 @@
 
   const attrs = useAttrs()
 
-  /** Registered step ids, in registration (document) order. */
   const steps = ref<symbol[]>([])
 
   const register: DocStepsContext['register'] = (id) => {
@@ -38,7 +37,6 @@
 
   provide(DocStepsInjectionKey, { register, unregister })
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-steps')
 </script>
 

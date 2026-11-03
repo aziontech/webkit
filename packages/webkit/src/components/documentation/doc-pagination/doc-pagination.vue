@@ -40,14 +40,8 @@
 
   const attrs = useAttrs()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-pagination')
 
-  /*
-   * Read from attrs so a consumer-supplied aria-label wins (a static attribute
-   * after the attrs bind would beat it): two nav landmarks sharing one accessible
-   * name is an axe landmark-unique violation.
-   */
   const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? 'Page navigation')
 </script>
 

@@ -88,9 +88,6 @@
       'group relative flex h-8 w-full shrink-0 items-center',
       'gap-(--spacing-xs) rounded-(--shape-elements)',
       'pr-(--spacing-xs) py-(--spacing-xxs)',
-      // One content column for the whole menu (`--spacing-sm`). With an icon the 32px box
-      // supplies the inset and the glyph lands on that column (`--spacing-xxs` + the glyph's
-      // centring); with no icon the label takes the column directly.
       props.icon ? 'pl-(--spacing-xxs)' : 'pl-(--spacing-sm)',
       'transition-colors motion-reduce:transition-none',
       focusRingClasses,
@@ -111,9 +108,6 @@
     )
   )
 
-  // Both branches share ONE label class. A menu row is compact UI text, so it belongs to the
-  // `label` family, not `body` — and the anchor and button branches must agree, or the same
-  // menu renders two sizes depending on whether a row happens to carry an `href`.
   const iconBoxClasses = 'flex size-8 shrink-0 items-center justify-center overflow-hidden'
 
   const iconClasses = computed(() =>

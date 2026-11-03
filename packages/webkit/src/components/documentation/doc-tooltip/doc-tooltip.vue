@@ -47,7 +47,6 @@
 
   const attrs = useAttrs()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-tooltip')
 
   const uid = useId()
@@ -62,16 +61,11 @@
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const open = ref(false)
 
-  /** A panel the reader can travel into is a dialog; a passive one is a tooltip. */
   const interactive = computed(() => props.cta.length > 0 && props.href.length > 0)
   const hasContent = computed(() => props.tip.length > 0 || props.headline.length > 0)
 
   const isOpen = computed(() => open.value && hasContent.value)
 
-  /*
-   * A dialog with no accessible name fails axe aria-dialog-name, so the panel is
-   * named by the headline it glosses — or by the tip itself when there is none.
-   */
   const labelledBy = computed(() => (props.headline ? headlineId : tipId))
   const placementRef = computed(() => props.placement)
 
@@ -82,7 +76,6 @@
     placement: placementRef,
     offset: 8,
     autoPlacements: ['top', 'bottom'],
-    // The shared floating-overlay tier, so a gloss inside a docs panel is not occluded.
     zIndex: 1100,
     onDismiss: () => close()
   })
@@ -107,11 +100,6 @@
     }, props.delay)
   }
 
-  /*
-   * An interactive panel closes on a short delay: the pointer must cross the 8px
-   * gap to reach the CTA, and closing on the first mouseleave makes it unclickable.
-   * Entering the panel cancels the close; a passive panel closes at once.
-   */
   function scheduleClose() {
     clearTimers()
     if (!interactive.value) {
@@ -131,11 +119,6 @@
     }
   }
 
-  /*
-   * The panel teleports to body, so Tab order skips it and focus is handed across
-   * by hand. Refocusing the trigger fires the same focusin that opens the panel —
-   * the flag makes that one event inert, or Tab could never pass the glossed word.
-   */
   function returnFocusToTrigger() {
     restoringFocus.value = true
     close()

@@ -1,30 +1,39 @@
-# Rule: comments — rare, objective, never prose
+# Rule: comments — API docs only, never prose
 
-The code is the document; a comment is the exception. A comment exists only to state what the code **cannot** show — a constraint, a non-obvious why, a measured value the classes were fitted to. Everything else (what the next line does, how the code arrived here, why a change is correct, design essays) is noise that rots the moment the code moves.
+The code is the document. Names, types and structure carry the intent; when a block needs a comment to be understood, rename or restructure it instead. The only comments that survive in implementation code are the ones a tool or a consumer reads: the documented component API and tool directives.
 
 ## The rule
 
-> Default to **no comment**. When one is needed, it is **objective** and fits in at most **5 lines** per block. A file is never more than **20% prose comments**. Long rationale lives in the spec, a `.claude/rules` doc, or `.claude/docs/` — never in the source.
+> Implementation code carries **no prose comments** — not in functions, composables, stores, computeds, watchers, handlers, template markup, config, build scripts or tooling. Two kinds of comment are allowed: **component API docs** and **tool directives**. Rationale lives in the spec, a `.claude/rules` doc, `.claude/docs/`, the commit message or the PR body — never in the source.
 
-- **Public surface JSDoc stays** — one line per prop/event/slot/exported type (mandated by [`props.md`](./props.md)); it is excluded from the prose count.
-- **Directives** (`eslint-*`, `@ts-*`, `prettier-ignore`, `@vite-ignore`) are not prose.
-- **A constraint note is welcome** — one or two lines stating the invariant (`// consumer-supplied data-testid wins`, `// blank lines don't break a block, so spacing can't evade the limit`).
-- Blank lines neither extend nor break a comment block — splitting an essay with spacing does not make it compliant.
+### Allowed
+
+- **Component API docs** — a JSDoc `/** … */` on a member of a type the consumer reads: `interface Props` entries, `defineEmits<{…}>()` / `defineSlots<{…}>()` / `defineModel` declarations, `defineExpose({…})` members, and exported type / interface declarations (variant unions, column shapes, context types). Mandated by [`props.md`](./props.md).
+- **Tool directives** — `eslint-*`, `@ts-*` (with the justification a lint rule requires), `prettier-ignore`, `@vite-ignore`, `@vue-ignore`, `#__PURE__`, `/*! license */`, coverage ignores, and `<!-- eslint-disable … -->` / `<!-- prettier-ignore -->` in templates.
+- **`@deprecated`** JSDoc, which [`deprecation.md`](./deprecation.md) requires.
+- **JSDoc type tags in `.js`** (`@type`, `@typedef`, `@param {T} name`, `@returns {T}`, `@property {T} name`, `@template`) — they are types, not prose. The description lines around them are prose and go.
+
+### Not allowed
+
+Everything else: a `//` or `/* */` explaining a line, a "why" note, a section banner, a JSDoc description on a function or constant, a `<!-- -->` narrating a layout decision, commented-out code, a note to the reviewer, a history of what the code used to do.
+
+### Scope
+
+Every non-test source file (`.vue`, `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, `.cjs`) under `packages/`. Tests (`*.test.*`, `*.spec.*`, `test/`, `__tests__/`, `fixtures/`) are out of scope.
 
 ## Hard prohibitions
 
-- Do not write a comment block longer than 5 lines.
-- Do not narrate the code (`// loop over items`), restate a name, or address the reviewer (`// this is correct because…`).
+- Do not add a prose comment to implementation code — not one line, not a constraint note.
+- Do not write a JSDoc description on a function, composable, constant or handler; only API types carry JSDoc.
 - Do not leave commented-out code — delete it; git remembers.
-- Do not paste design rationale, migration history, or process notes into a source file — that content belongs in the spec or a rules/docs file.
-- Do not spell out utility classes inside comments (the token checks scan raw text — describe them in prose).
-- Do not use angle brackets in `<script>` comments (breaks downstream SFC parsing — see [`styling.md`](./styling.md)).
+- Do not paste design rationale, measurements, migration history or process notes into a source file.
+- Do not use angle brackets in `<script>` JSDoc (breaks downstream SFC parsing — see [`styling.md`](./styling.md)).
+- When porting code from another repo, port the design, not its comments.
 
 ## Enforcement
 
-- **`verbose-comment-block`** and **`comment-heavy-file`** in the shared authoring-checks engine ([`authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js)) — enforced write-time by [`validate-authoring.mjs`](../hooks/validate-authoring.mjs), in CI by the [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) ratchet, and for consumers by the `webkit/authoring-standards` ESLint rule. One definition, three surfaces.
-- Semantic prolixity below the thresholds (a 4-line comment that says nothing) is held by review.
+- **`prose-comment`** in the shared authoring-checks engine ([`authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js), scanner in [`comment-scan.js`](../../packages/webkit/src/eslint-plugin/comment-scan.js)) — one key per comment, so the count can only fall. Enforced write-time by [`validate-authoring.mjs`](../hooks/validate-authoring.mjs) over all of `packages/`, in CI by the [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) ratchet over all of `packages/`, and for consumers by the `webkit/authoring-standards` ESLint rule, which reports each comment at its line.
 
 ## Why this rule exists
 
-The tree accumulated 6.7k comment lines (10% of the source) — including 200+-line design essays inside components. Verbose comments drown the one-line constraints that matter, drift from the code they describe, and teach every next author (human or agent) that essays belong in source files. Fixing the ceiling mechanically keeps commentary at the level the repo actually reads: the constraint, stated once, objectively.
+A ceiling (blocks of at most 5 lines, files at most 20% prose) still let 2,300 comments accumulate across `packages/` — 200-line design essays in `webkit-docs`, measurement tables in theme tokens, and "why" notes in half the components. Comments drift from the code they describe and teach every next author that the source is where reasoning goes. Allowing only what a tool or a consumer reads makes the rule mechanical: there is nothing left to judge.

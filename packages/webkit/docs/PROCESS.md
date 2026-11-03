@@ -483,7 +483,7 @@ Construction patterns for **any** Vue component, anywhere. These are the future
 | [accessibility](../../../.claude/rules/accessibility.md)             | semantics, keyboard, `focus-visible`, `motion-reduce`, `useId`                             |
 | [testid](../../../.claude/rules/testid.md)                           | overridable `data-testid` derived `<category>-<name>`                                      |
 | [deprecation](../../../.claude/rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                 |
-| [comments](../../../.claude/rules/comments.md)                       | comments rare and objective; blocks of 5 lines at most, files at most 20% prose            |
+| [comments](../../../.claude/rules/comments.md)                       | no prose comments; only API JSDoc and tool directives                                      |
 
 ### `scope: webkit` — 12 standards (internal to the design system)
 

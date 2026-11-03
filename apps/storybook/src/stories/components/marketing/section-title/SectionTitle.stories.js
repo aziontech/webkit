@@ -67,6 +67,17 @@ const meta = {
         defaultValue: { summary: "'medium'" }
       }
     },
+    descriptionWidth: {
+      control: 'inline-radio',
+      options: ['narrow', 'wide'],
+      description:
+        'Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too.',
+      table: {
+        category: 'props',
+        type: { summary: "'narrow' | 'wide'" },
+        defaultValue: { summary: "'narrow'" }
+      }
+    },
     default: {
       control: false,
       description: 'Description body; replaces the `description` prop when provided.',
@@ -201,8 +212,8 @@ const WITH_ACTIONS_TEMPLATE = `<SectionTitle
   description="One platform for applications, security and observability."
 >
   <template #actions>
-    <Button label="Start building" />
-    <Button kind="outlined" label="Read the docs" />
+    <Button label="Start for free" />
+    <Button kind="outlined" label="Docs" />
   </template>
 </SectionTitle>`
 
@@ -221,6 +232,39 @@ export const WithActions = {
           'The `actions` slot owns its own responsive layout: the controls stack full-width below `sm` and return to a content-width row above it, centered only when the header is.'
       },
       source: { code: toSfc(IMPORT_WITH_BUTTON, WITH_ACTIONS_TEMPLATE) }
+    }
+  }
+}
+
+const DESCRIPTION_WIDTHS_TEMPLATE = `<div>
+  <SectionTitle
+    kind="horizontal"
+    description-width="narrow"
+    eyebrow="Narrow"
+    title="Builders, not spectators"
+    description="We make every application fast and reliable. Deploy your projects instantly on the most reliable global infrastructure, leverage enterprise-grade security, and scale from zero to peak without cold starts."
+  />
+  <SectionTitle
+    kind="horizontal"
+    description-width="wide"
+    eyebrow="Wide"
+    title="Builders, not spectators"
+    description="We make every application fast and reliable. Deploy your projects instantly on the most reliable global infrastructure, leverage enterprise-grade security, and scale from zero to peak without cold starts."
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof SectionTitle>} */
+export const DescriptionWidths = {
+  render: () => ({ components: { SectionTitle }, template: DESCRIPTION_WIDTHS_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The horizontal layout with each `descriptionWidth`, stacked. `narrow` keeps the description to the third column; `wide` runs it across the middle column too, for a description long enough to stack into a tall block on its own.'
+      },
+      source: { code: toSfc(IMPORT, DESCRIPTION_WIDTHS_TEMPLATE) }
     }
   }
 }

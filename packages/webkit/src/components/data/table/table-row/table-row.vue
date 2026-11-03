@@ -36,8 +36,6 @@
 </script>
 
 <template>
-  <!-- Native listeners (e.g. @click) fall through via $attrs; row activation is
-       supplementary and keyboard-activatable controls live inside the cells. -->
   <div
     v-bind="$attrs"
     role="row"

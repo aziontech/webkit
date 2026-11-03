@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  // One monetary amount as three spans (symbol / figure / unit), never a formatted
-  // string — see .specs/currency.md for the full rationale (size ladder, code-face
-  // suffix, large's bottom-aligned unit, the amount's own tracking tokens).
   import { computed, useAttrs } from 'vue'
 
   defineOptions({
@@ -42,8 +39,6 @@
     :data-size="size"
     class="group/currency inline-flex items-center whitespace-nowrap data-[size=small]:gap-(--spacing-xxs) data-[size=medium]:gap-(--spacing-xs) data-[size=large]:items-end data-[size=large]:gap-(--spacing-xs)"
   >
-    <!-- Symbol and figure share a group so the root's gap separates the amount from
-         its unit, not the symbol from its digits. -->
     <span
       class="inline-flex items-center gap-(--spacing-xxs) group-data-[size=large]/currency:gap-0"
     >

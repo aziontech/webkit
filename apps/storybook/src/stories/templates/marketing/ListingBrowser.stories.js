@@ -8,6 +8,7 @@ import SectionTitle from '@aziontech/webkit/section-title'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import Table from '@aziontech/webkit/table'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -228,7 +229,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -242,7 +242,7 @@ const meta = {
 export default meta
 
 export const OpenPositions = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
       description: {

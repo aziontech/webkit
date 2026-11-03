@@ -13,16 +13,11 @@ export default defineConfig({
     retry: process.env.CI ? 2 : 0,
     browser: {
       enabled: true,
-      // Vitest 4: provider is a factory from @vitest/browser-playwright (was the
-      // string 'playwright' in v3). See https://vitest.dev/config/browser/provider
       provider: playwright(),
       headless: true,
       instances: [{ browser: 'chromium' }]
     },
     coverage: {
-      // Reporting only (no gate yet) — measure the suite's reach over the
-      // component source. Requires @vitest/coverage-v8; enabled by the
-      // `test:coverage` script (`--coverage`), so the default `test` stays fast.
       provider: 'v8',
       reporter: ['text', 'lcov'],
       reportsDirectory: './coverage',

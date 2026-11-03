@@ -61,7 +61,6 @@
 
   const attrs = useAttrs()
   const ctx = inject(TableInjectionKey, null)
-  // A compact TableHeader publishes density through the row-group context.
   const group = inject(TableRowGroupKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)
 
@@ -85,11 +84,6 @@
     emit('sort', direction)
   }
 
-  // The whole sortable header is the sort control: a pointer click anywhere on
-  // it, or Enter/Space while it is focused, toggles the sort — mirroring the
-  // sort button's own toggle (none/descending → ascending, ascending → descending).
-  // The sort button stops its own click/keydown from bubbling here, so activating
-  // the button never double-toggles via this handler.
   const toggleSort = () => {
     if (!props.sortable) return
     handleSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')

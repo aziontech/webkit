@@ -285,7 +285,7 @@ export const STANDARDS = [
       { surface: 'lint', by: 'authoring-standards' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Comments are rare and objective: no block over 5 lines, no file over 20% prose comments (one-line JSDoc and directives excluded). verbose-comment-block + comment-heavy-file in the shared authoring-checks engine; semantic prolixity below the thresholds is held by review.'
+    note: 'Implementation code carries no prose comments: only component API JSDoc (props, emits, slots, models, exposed members, exported types), tool directives, @deprecated and .js JSDoc type tags. prose-comment in the shared authoring-checks engine (comment-scan.js), one key per comment, scoped to every non-test source under packages/.'
   },
   {
     id: 'authoring-docs',

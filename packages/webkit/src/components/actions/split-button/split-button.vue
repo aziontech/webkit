@@ -69,7 +69,6 @@
     return item.value ?? item.label
   }
 
-  /** Value of the menu action mirrored by the primary segment; only set while updateLabelOnSelect is on. */
   const selectedValue = ref<string | null>(null)
 
   const selectedItem = computed(() => {
@@ -92,8 +91,6 @@
   )
 
   function onPrimaryClick(event: MouseEvent) {
-    // Button already suppresses activation while disabled/loading, so the
-    // event only reaches here when the primary segment is actionable.
     emit('click', event, selectedItem.value)
   }
 

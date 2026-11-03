@@ -21,7 +21,6 @@
       (ctx ? `${ctx.testId}__clear` : 'input-calendar__clear')
   )
 
-  // Context-aware: disabled while the calendar is disabled or nothing is selected.
   const disabled = computed<boolean>(
     () => (ctx?.disabled.value ?? false) || !(ctx?.hasSelection.value ?? false)
   )

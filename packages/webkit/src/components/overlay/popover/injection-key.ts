@@ -45,10 +45,6 @@ export interface PopoverContext {
 
 export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('PopoverContext')
 
-/**
- * Consumes the Popover context, throwing when used outside the root component.
- * Narrows the type to PopoverContext for the calling sub-component.
- */
 export function usePopoverContext(): PopoverContext {
   const ctx = inject(PopoverInjectionKey)
   if (!ctx) {

@@ -8,6 +8,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -50,7 +51,7 @@ const ITEMS = [
       'Choose the application it runs on, write the handler in the editor, name it, and create it. The rule that runs it is drafted for you.',
     illustration: 'build-applications',
     href: '/site/docs',
-    linkLabel: 'Learn more'
+    linkLabel: 'Docs'
   },
   {
     title: 'Ship it from the terminal',
@@ -58,7 +59,7 @@ const ITEMS = [
       'azion init scaffolds from 25 presets, azion dev serves it on localhost:3333, and azion deploy puts it on a live domain.',
     illustration: 'quick-start-with-templates',
     href: '/site/docs',
-    linkLabel: 'Learn more'
+    linkLabel: 'Docs'
   }
 ]
 
@@ -98,7 +99,7 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
       description="The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal."
     >
       <template #actions>
-        <Button label="Start free" kind="secondary" href="/signup" />
+        <Button label="Start for free" kind="secondary" href="/signup" />
         <Button label="Docs" kind="outlined" icon="pi pi-chevron-right" icon-position="trailing" href="/site/docs" />
       </template>
     </SectionTitle>
@@ -117,7 +118,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -127,7 +127,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }
@@ -144,7 +144,7 @@ export const SITE_SECTION = {
     description:
       'The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'Docs', href: '/site/docs', kind: 'outlined', trailing: true }
     ],
     columns: 3,
@@ -161,13 +161,13 @@ export const SITE_SECTION = {
         title: ITEMS[1].title,
         description: ITEMS[1].description,
         href: '/site/docs',
-        linkLabel: 'Learn more'
+        linkLabel: 'Docs'
       },
       {
         title: ITEMS[2].title,
         description: ITEMS[2].description,
         href: '/site/docs',
-        linkLabel: 'Learn more'
+        linkLabel: 'Docs'
       }
     ]
   }

@@ -1,16 +1,3 @@
-/**
- * Raw `@keyframes` definitions used by `--animate-*` in `animate.js`.
- *
- * Consumed by `scripts/build-tokens.mjs` to emit real `@keyframes` blocks
- * in the Tailwind v4 `dist/v4/globals.css` output. Tailwind v4 registers
- * the utility via `@theme { --animate-<name>: ... }`, but does not
- * generate the `@keyframes` — those live here.
- *
- * Values are plain CSS-style declarations (strings), not the camelCase
- * object form used by the legacy v3 plugin — this way the build script
- * can serialize them verbatim.
- */
-
 export const keyframes = {
   fadeIn: {
     '0%': 'opacity: 0',
@@ -28,8 +15,6 @@ export const keyframes = {
     '0%, 100%': 'opacity: 1',
     '50%': 'opacity: 0'
   },
-  // Holds the highlight for the first 40% of the run, then fades it back to
-  // normal over the remaining 60% — a row-flash, not a permanent tint.
   highlight: {
     '0%, 40%': 'background-color: var(--surface-hover); font-weight: 500',
     '100%': 'background-color: transparent; font-weight: 400'
@@ -80,11 +65,6 @@ export const keyframes = {
     '60%': 'inset-inline-start: 107%; inset-inline-end: -8%',
     '100%': 'inset-inline-start: 107%; inset-inline-end: -8%'
   },
-  // Marching dashes along an SVG stroke — the "flowing connection" of a node-based
-  // diagram. The travel distance is 24, so the loop is seamless for any
-  // `stroke-dasharray` whose cycle DIVIDES 24 (`4 4` = 8, `2 4` = 6, `8 4` = 12): the
-  // pattern lands exactly where it started. A cycle that does not divide 24 (`5 5` = 10)
-  // visibly jumps on repeat.
   flowDash: {
     '0%': 'stroke-dashoffset: 24',
     '100%': 'stroke-dashoffset: 0'
@@ -101,11 +81,6 @@ export const keyframes = {
   }
 }
 
-/**
- * Utilities that need CSS properties beyond the `animation` shorthand
- * emitted by Tailwind v4 from `--animate-*`. Serialized into
- * `@layer components` in `dist/v4/globals.css`.
- */
 export const animateExtras = {
   'animate-popup-scale-in': { 'transform-origin': 'var(--popup-origin, center)' },
   'animate-popup-scale-out': { 'transform-origin': 'var(--popup-origin, center)' }

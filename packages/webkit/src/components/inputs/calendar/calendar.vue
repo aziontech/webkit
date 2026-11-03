@@ -136,7 +136,6 @@
     if (value && props.disabled) {
       return
     }
-    // The two-part trigger's dropdowns are mutually exclusive.
     if (value) {
       internalPresetsOpen.value = false
     }
@@ -197,9 +196,6 @@
   const draft = ref<CalendarValue>(cloneValue(props.modelValue))
   const draftRef = computed(() => draft.value)
 
-  /* The relative token of the committed period (e.g. `45m`). Set when a period is
-     applied, cleared on any non-period commit or clear, so the trigger only shows
-     the two-line period display while a period selection is actually live. */
   const committedPeriodLabel = ref('')
 
   const resetDraft = () => {
@@ -266,7 +262,6 @@
       const date = value instanceof Date ? value : (value.start ?? value.end ?? null)
       draft.value = date ? new Date(date.getTime()) : null
     }
-    // Period selections are complete ranges — commit and close immediately.
     if (props.period) {
       committedPeriodLabel.value = periodLabel ?? ''
       emit('update:modelValue', cloneValue(draft.value))
@@ -278,8 +273,6 @@
     commitIfImmediate()
   }
 
-  /* Left-segment preset selection: applies the consumer-provided range immediately
-     (no separate Apply), records its label for the trigger, and closes the menu. */
   const applyPreset = (value: Date | CalendarRange, label: string) => {
     if (props.disabled) {
       return
@@ -366,8 +359,6 @@
     () => displayValue.value || (props.period ? 'Period' : props.placeholder)
   )
 
-  /* A committed period selects a time interval, not whole days: the trigger stacks the
-     relative token (`45m`) over the concrete window it resolves to (`14:44 – 23:59`). */
   const isPeriodDisplay = computed(
     () => props.period && committedPeriodLabel.value !== '' && hasCommitted.value
   )
@@ -377,8 +368,6 @@
 
   const hasPresets = computed(() => props.presets.length > 0 || Boolean(slots['presets']))
 
-  /* When presets are configured, the trigger splits into two segments: a preset
-     dropdown (left) and the calendar (right). */
   const isTwoPart = computed(() => hasPresets.value && !props.period)
   const presetLabel = computed(() => committedPeriodLabel.value || 'Select Period')
   const rangeText = computed(() => windowLabel.value || props.placeholder)
@@ -634,11 +623,6 @@
     </span>
 
     <Teleport to="body">
-      <!-- The panel is content-sized, so its widest child — including the consumer's
-           `#footer` slot — sets its width; a wide footer would otherwise stretch the panel
-           and spread the month grid across it. The cap is rem-based (the growing content
-           is text, so it must scale with the root font) with a viewport bound for narrow
-           screens, and it clears every built-in layout, horizontal included. -->
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

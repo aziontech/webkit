@@ -1,9 +1,3 @@
-// Flags hardcoded colors / raw palette / raw typography in class & style strings, in
-// both <script> string literals and the SFC <template> (via vue-eslint-parser). The
-// token-rule set is read from the installed webkit catalog (`tokenRules`), so it stays
-// version-synced with what the design system itself enforces. Fail-open: no catalog →
-// no rules → no-op. CSS/SCSS `<style>` blocks are owned by @aziontech/stylelint-config-webkit.
-
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
 
@@ -23,19 +17,10 @@ export default {
     const rules = catalog.tokenRules
     if (!rules.length) return {}
 
-    // A short 3-4 digit hex (#dad, #face, #bad) is ambiguous: it is a color in a style
-    // string but also a perfectly valid DOM id / anchor / route (href="#dad"). Enforce
-    // the hex-color rule on a short hex ONLY when the string actually looks like a class
-    // or style value. A 6/8-digit hex (#ffffff) is almost never anything but a color.
     const STYLE_SIGNAL =
       /[:;{}]|--|\[#|\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent|from|via|to|shadow|decoration)-|\b(?:rgba?|hsla?|var|color|background)\b/
     const FULL_HEX = /#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b/
-    // A hash glued to a URL character is a fragment, not a color: in
-    // https://api.azion.com/#75d2b32f-fb8a-… the first eight hex digits spell a valid
-    // #RRGGBBAA. A color literal opens the string or follows whitespace, a quote, [ ( , : =.
     const URL_FRAGMENT = /(?<=[\w/.~%?&-])#[\w-]+/g
-    // A bare UUID (`75d2b32f-fb8a-47d8-…`) also opens with 8 hex digits; blank it out too
-    // so a `#` in front of it never reads as a color.
     const UUID = /#?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b/g
 
     function scan(node, text) {
@@ -71,11 +56,9 @@ export default {
     if (!defineTemplateBodyVisitor) return scriptVisitor
 
     const templateVisitor = {
-      // Static attribute value: class="text-[#fff]"
       VLiteral(node) {
         scan(node, node.value)
       },
-      // Bound expression string: :class="'text-[#fff]'"
       Literal(node) {
         if (typeof node.value === 'string') scan(node, node.value)
       },

@@ -8,6 +8,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Ticker from '@aziontech/webkit/ticker'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -207,7 +208,7 @@ ${each(templates, templateCard, 6)}
     </template>
     <template #actions>
       <Button
-        label="Start free"
+        label="Start for free"
         kind="secondary"
         size="large"
         href="/signup"
@@ -254,7 +255,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -264,7 +264,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: RETAIL_TEMPLATE }),
+  ...editable(() => ({ components, template: RETAIL_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, RETAIL_TEMPLATE) }
@@ -282,7 +282,7 @@ export const SITE_SECTION = {
     description:
       'Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks.',
     actions: [
-      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
       { label: 'Talk to a specialist', href: '/contact', kind: 'outlined', trailing: true }
     ],
     templates: [

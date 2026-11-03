@@ -1,11 +1,6 @@
 import { endOfDay, startOfDay } from './format'
 import type { CalendarRange } from './injection-key'
 
-/**
- * Parses a period expression into `{ start, end }`, or `null` when not understood; pure native-`Date`
- * math. Accepts, case-insensitively: relative spans (`45m`, `2 weeks`) → [now − span, now]; keywords
- * (`today`, `yesterday`, `last week/month/year`, `this month`); fixed dates and ranges (`1/1`, `Jan 1, 2026` → whole day; separators `-`, `–`, `to`).
- */
 export function parsePeriod(input: string, now: Date = new Date()): CalendarRange | null {
   const text = input.trim().toLowerCase()
 
@@ -166,14 +161,12 @@ const MONTHS: Record<string, number> = {
   december: 11
 }
 
-/** Parses a single date token (`M/D`, `M/D/Y`, `Jan 1`, `Jan 1, 2026`) to a Date, or null. */
 export function parseFixedDate(token: string, now: Date = new Date()): Date | null {
   const text = token.trim().toLowerCase()
   if (!text) {
     return null
   }
 
-  // M/D or M/D/Y
   const slash = text.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/)
   if (slash) {
     const month = Number(slash[1]) - 1
@@ -182,7 +175,6 @@ export function parseFixedDate(token: string, now: Date = new Date()): Date | nu
     return validDate(year, month, day)
   }
 
-  // "Jan 1" or "Jan 1, 2026" or "January 1 2026"
   const named = text.match(/^([a-z]+)\.?\s+(\d{1,2})(?:,?\s*(\d{2,4}))?$/)
   if (named && named[1] in MONTHS) {
     const month = MONTHS[named[1]]

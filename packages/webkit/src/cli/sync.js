@@ -1,7 +1,3 @@
-// Pure planner for `webkit sync`: reconciles the copied `.claude/` bundle and CLAUDE.md
-// fragment with the templates this webkit version ships, without clobbering local edits.
-// See docs/toolkit/cli.md ("sync") and bundle.js (stamp/parseMarker/classify).
-
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, sep } from 'node:path'
 
@@ -25,7 +21,6 @@ function readOrNull(path) {
   return existsSync(path) ? readFileSync(path, 'utf8') : null
 }
 
-/** Recursively collect `.md` files under `dir`, as POSIX paths relative to `dir`. */
 function walkMarkdown(dir) {
   if (!existsSync(dir)) return []
   const out = []
@@ -52,9 +47,6 @@ function walkMarkdown(dir) {
 
 const BUNDLE_DIRS = ['rules', 'skills', 'agents']
 
-// A consumer file "belongs" to the webkit naming convention (and is therefore a sync
-// candidate for orphan detection) when it is a rule/agent named `webkit-*.md`, or a
-// skill directory named `webkit-*` with a `SKILL.md`.
 function isWebkitBundleName(rel) {
   return (
     /^rules\/webkit-[^/]+\.md$/.test(rel) ||
@@ -63,7 +55,6 @@ function isWebkitBundleName(rel) {
   )
 }
 
-/** Every `.md` file under the consumer's `.claude/{rules,skills,agents}`, as posix rels. */
 function listConsumerClaudeFiles(claudeDir) {
   const out = []
   for (const bundleDir of BUNDLE_DIRS) {
@@ -75,9 +66,6 @@ function listConsumerClaudeFiles(claudeDir) {
   return out
 }
 
-// The CLAUDE.md fragment isn't part of the provenance-marker scheme (it is one
-// long-lived fenced block, replaced wholesale by `spliceFragment` — see bundle.js), so
-// its state is derived directly from fence presence/idempotency instead of a marker hash.
 function classifyFragment(claudeMdContent, fragmentBody) {
   if (claudeMdContent === null) return 'missing'
   const hasFence =
@@ -92,10 +80,6 @@ function classifyFragment(claudeMdContent, fragmentBody) {
   return next === claudeMdContent ? 'current' : 'stale'
 }
 
-/**
- * Plan a `sync`: classify every bundle file + the CLAUDE.md fragment, and produce the
- * action list. Policy per state: docs/toolkit/cli.md ("sync"). Pure — writes nothing.
- */
 export function planSync(
   projectDir,
   { force = false, templatesDir = CLAUDE_TEMPLATES, version = WEBKIT_VERSION } = {}
@@ -142,14 +126,11 @@ export function planSync(
         }
       }
     }
-    // `current` → no action.
 
     entries.push({ rel, state, action })
     if (action) actions.push(action)
   }
 
-  // Orphans: files under .claude/{rules,skills,agents} named like a bundle entry, still
-  // carrying a marker, whose source is no longer part of the current bundle.
   for (const rel of listConsumerClaudeFiles(claudeDir)) {
     if (bundleRelSet.has(rel)) continue
     if (!isWebkitBundleName(rel)) continue
@@ -170,7 +151,6 @@ export function planSync(
     actions.push(action)
   }
 
-  // CLAUDE.md fragment.
   const claudeMdPath = join(projectDir, 'CLAUDE.md')
   const claudeMdContent = readOrNull(claudeMdPath)
   const fragmentBody = readOrNull(join(templatesDir, 'CLAUDE.fragment.md')) || ''

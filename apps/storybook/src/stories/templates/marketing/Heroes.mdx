@@ -55,25 +55,9 @@ Example:
   }}
 />
 
-### Centered carousel, long title
-
-The same screen hero for a headline too long for the default column. The title column widens from `xl` to `3xl`, so a headline that would break into three lines breaks into two. Short headlines keep the default column.
-
-<Canvas of={HeroesStories.CenteredCarouselLongTitle} />
-
-This variation has no site block yet, so it has no page-JSON entry.
-
-<hr
-  style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
-    border: 0,
-    borderTop: '1px solid var(--border-default)'
-  }}
-/>
-
 ### Title band
 
-The Learning Center hero. A padded band instead of a full screen, with the title, one line of description and two actions centered, and the client strip below. Use it on list and catalogue pages, where a full screen of title would push the first entry below the fold.
+The Cache hero, and every product page's. A padded band instead of a full screen, with the eyebrow, title, one line of description and two actions centered. Use it where a full screen of title would push the first section below the fold.
 
 <Canvas of={HeroesStories.TitleBand} />
 
@@ -84,7 +68,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
-- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `carouselLabel` and `carouselMarks` stay out: with no marks the band has no client strip. Title band carousel below adds them.
 
 Example:
 
@@ -100,13 +84,26 @@ Example:
   }}
 />
 
-### Centered band
+### Title band carousel
 
-The Support page's hero: the large title band at the site width, the dot field fading in from the top behind an eyebrowed headline, two actions, and the client strip on the floor, all centered. It is the screen hero's composition at band height, for a page whose first section should land above the fold.
+The Learning Center hero, and the Support page's. The same band with the client strip on its floor, for list and catalogue pages that open on proof.
 
-<Canvas of={HeroesStories.CenteredBand} />
+<Canvas of={HeroesStories.TitleBandCarousel} />
 
-This variation has no site block yet, so it has no page-JSON entry.
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.TitleBandCarouselJson} dark />
+</div>
 
 <hr
   style={{

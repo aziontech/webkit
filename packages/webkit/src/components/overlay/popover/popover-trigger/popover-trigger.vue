@@ -32,10 +32,6 @@
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
-    // Keyboard activation is owned by the focusable child (e.g. Button): its native
-    // Enter/Space already synthesises a click that bubbles here. Only act on keys that
-    // land DIRECTLY on this wrapper (e.g. a consumer that made it focusable via attrs),
-    // so a child's key press never double-fires the toggle.
     if (event.target !== event.currentTarget) return
     if (isDisabled.value) return
     if (event.key === 'Enter' || event.key === ' ') {
@@ -54,10 +50,6 @@
 </script>
 
 <template>
-  <!--
-    Passthrough wrapper: the focusable child owns focus and keyboard activation;
-    its native Enter/Space click bubbles here to toggle (see the onKeydown guard).
-  -->
   <span
     :ref="(el) => registerTrigger(el as globalThis.HTMLElement | null)"
     :id="ctx.triggerId"

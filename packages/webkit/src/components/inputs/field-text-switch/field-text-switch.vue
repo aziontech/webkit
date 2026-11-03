@@ -73,19 +73,12 @@
     return 'helper'
   })
 
-  // The field never writes copy of its own. No `helperText` means no helper row — while
-  // disabled as much as anywhere else: a field that goes disabled for the length of a
-  // request would otherwise grow a padlock line the screen never asked for, in the one
-  // moment it has nothing to say. Disabling is already legible from the field's own
-  // treatment, and a caller who wants a reason passes one (it renders with the lock).
   const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 
   const inputInert = computed(() => props.disabled || !props.enabled)
 
   const switchLabel = computed(() => (props.label ? `Toggle ${props.label}` : 'Toggle field'))
 
-  // Counter-override the InputGroup's `[&_button]:!rounded-none [&_button]:!border-transparent`
-  // (descendant selector with !important). Inline style + !important always wins.
   const switchStyle = computed(() => {
     const radius = 'border-radius: 9999px !important;'
     const border = props.enabled

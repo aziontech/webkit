@@ -7,6 +7,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Topic from '@aziontech/webkit/topic'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 
@@ -71,7 +72,7 @@ const useCases = ({ tag, title, lead, href, cases }) =>
           <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">${title}</h2>
           <p class="m-0 mb-(--spacing-xl) text-body-md text-(--text-muted)">${lead}</p>
           <Button
-            label="View docs"
+            label="Docs"
             kind="secondary"
             size="large"
             href="${href}"
@@ -106,7 +107,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       description: {
         component:
@@ -120,7 +120,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: SQL_DATABASE_TEMPLATE }),
+  ...editable(() => ({ components, template: SQL_DATABASE_TEMPLATE })),
   parameters: {
     docs: {
       description: {

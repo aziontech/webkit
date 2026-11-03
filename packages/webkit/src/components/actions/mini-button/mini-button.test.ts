@@ -131,7 +131,7 @@ describe('MiniButton', () => {
   describe('composeStories (the story fixture runs in-test)', () => {
     it('Default story mounts a large mini button with its label', () => {
       const { getByRole } = render(Default)
-      const link = getByRole('link', { name: 'Learn More' })
+      const link = getByRole('link', { name: 'Learn more' })
       expect(link.tagName).toBe('A')
       expect(link.getAttribute('data-size')).toBe('large')
     })

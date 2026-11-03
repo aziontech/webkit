@@ -60,12 +60,14 @@ ${indent(SITE_HEADER_MARKUP)}
     <Hero kind="band" size="large" max-width="site">
       <Hero.Title
         centered
+        eyebrow="Functions"
+        eyebrow-prefix="//"
         title="Run serverless code at the edge"
         description="Functions execute on 100+ data centers worldwide, with no servers to provision and nothing to scale by hand."
       >
         <template #actions>
           <Button label="Start for Free" kind="primary" size="large" href="#" />
-          <Button label="Talk to an expert" kind="outlined" size="large" href="#" />
+          <Button label="Talk to a specialist" kind="outlined" size="large" href="#" />
         </template>
       </Hero.Title>
     </Hero>

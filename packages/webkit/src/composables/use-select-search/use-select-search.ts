@@ -56,7 +56,6 @@ const matches = (item: SelectSearchItem, term: string) => {
 const isPrintable = (event: KeyboardEvent) =>
   event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey
 
-/** Type-to-filter and active-descendant keyboard model for a Select list; per-instance state. */
 export function useSelectSearch(options: UseSelectSearchOptions): UseSelectSearchReturn {
   const open = ref(false)
   const query = ref('')

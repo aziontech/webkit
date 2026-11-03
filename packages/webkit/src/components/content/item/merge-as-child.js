@@ -30,7 +30,6 @@ function resolveSingleChild(nodes) {
   }
   return resolved
 }
-/** Merge `attrs` onto the single default-slot vnode (as-child pattern). */
 export function mergeAsChildSlot(attrs, defaultSlot) {
   const child = resolveSingleChild(defaultSlot?.())
   if (!child) {

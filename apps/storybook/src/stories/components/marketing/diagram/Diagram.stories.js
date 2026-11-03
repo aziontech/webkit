@@ -4,6 +4,37 @@ import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Diagram from '@aziontech/webkit/diagram'"
 
+const NAMES = [
+  'ai-gateway',
+  'ai-gateway-latency-routing',
+  'ai-gateway-model-routing',
+  'ai-gateway-provider-failover',
+  'ai-gateway-response-cache',
+  'ai-inference',
+  'application-accelerator',
+  'applications',
+  'bot-manager',
+  'cache',
+  'data-stream',
+  'ddos-protection',
+  'edge-dns',
+  'firewall',
+  'functions',
+  'image-processor',
+  'kv-store',
+  'load-balancer',
+  'network-shield',
+  'object-storage',
+  'real-time-events',
+  'real-time-metrics',
+  'sql-database',
+  'web-application-firewall',
+  'workloads',
+  'workloads-gradual-rollout',
+  'workloads-isolate-per-request',
+  'workloads-security'
+]
+
 const REQUEST_PATH = {
   nodes: [
     { key: 'user', kind: 'pill', title: 'User', icon: 'pi pi-user', active: true },
@@ -156,24 +187,36 @@ const meta = {
     docs: {
       description: {
         component:
-          'A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product in its place on the platform. Pass one `spec` — the nodes, how they are arranged, and the edges between them — and the diagram lays the nodes out with real CSS, then measures them and draws every connector, port and label on top. Below its container breakpoint the layout stacks into an indented tree and the connectors are measured again, so the figure stays legible on a phone.'
+          'A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product in its place on the platform. Name one of the official diagrams with `name` — one starter architecture per Azion product plus the page diagrams the product pages tab through — or pass a one-off `spec`: the nodes, how they are arranged, and the edges between them. The diagram lays the nodes out with real CSS, then measures them and draws every connector, port and label on top. Below its container breakpoint the layout stacks into an indented tree and the connectors are measured again, so the figure stays legible on a phone.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
-    spec: {
-      control: 'object',
-      description: 'The nodes, their layout and the edges between them.',
+    name: {
+      control: 'select',
+      options: NAMES,
+      description: 'Name of an official diagram in the asset library; ignored when spec is set.',
       table: {
         category: 'props',
-        type: { summary: 'DiagramSpec' }
+        type: { summary: 'DiagramName' },
+        defaultValue: { summary: 'undefined' }
+      }
+    },
+    spec: {
+      control: 'object',
+      description:
+        'The nodes, their layout and the edges between them, for a diagram the library does not have.',
+      table: {
+        category: 'props',
+        type: { summary: 'DiagramSpec' },
+        defaultValue: { summary: 'undefined' }
       }
     },
     ariaLabel: {
       control: 'text',
       description:
-        'Accessible description of the whole diagram; when set, the root is announced as one image with this name.',
+        'Accessible description of the whole diagram; empty uses the description the spec carries.',
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -182,9 +225,7 @@ const meta = {
     }
   },
   args: {
-    spec: REQUEST_PATH,
-    ariaLabel:
-      'A user request is routed to the nearest data center and reaches the workload, which serves it from cache on a hit and from the origin on a miss.'
+    name: 'ai-gateway-model-routing'
   }
 }
 
@@ -198,10 +239,7 @@ const Template = (args) => ({
   template: '<Diagram v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = `<Diagram
-  :spec="spec"
-  aria-label="A user request is routed to the nearest data center and reaches the workload, which serves it from cache on a hit and from the origin on a miss."
-/>`
+const DEFAULT_MARKUP = '<Diagram name="ai-gateway-model-routing" />'
 
 export const Default = {
   render: Template,
@@ -209,9 +247,32 @@ export const Default = {
     docs: {
       description: {
         story:
-          'The request path of a workload. The workload is the one `lit` node, the path the request takes is `active` on its nodes and edges, and the row is `wide` so the `hit` and `miss` chips have room. Narrow the canvas and the row stacks, the branches indent under the workload, and the connectors follow.'
+          'An official diagram picked by `name`: the AI Gateway cost routing. It carries its own description, so it needs no `aria-label`. Switch `name` in Controls to see every registered diagram.'
       },
-      source: { code: toSfc([IMPORT, '', specScript(REQUEST_PATH)], DEFAULT_MARKUP) }
+      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const SPEC_MARKUP = `<Diagram
+  :spec="spec"
+  aria-label="A user request is routed to the nearest data center and reaches the workload, which serves it from cache on a hit and from the origin on a miss."
+/>`
+
+export const Spec = {
+  render: () => ({
+    components: { Diagram },
+    setup: () => ({ spec: REQUEST_PATH }),
+    template: SPEC_MARKUP
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'A one-off diagram passed as `spec`. The request path of a workload. The workload is the one `lit` node, the path the request takes is `active` on its nodes and edges, and the row is `wide` so the `hit` and `miss` chips have room. Narrow the canvas and the row stacks, the branches indent under the workload, and the connectors follow.'
+      },
+      source: { code: toSfc([IMPORT, '', specScript(REQUEST_PATH)], SPEC_MARKUP) }
     }
   }
 }

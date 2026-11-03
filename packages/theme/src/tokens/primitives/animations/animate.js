@@ -37,8 +37,6 @@ export const animate = {
   'slide-out-right': `slideOutRight ${duration['moderate-01']} ${curve['productive-exit']}`,
   'progress-indeterminate': `progressIndeterminate ${duration['slow-04']} ${curve['productive-entrance']} infinite`,
   'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
-  // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
-  // looping animation must not accelerate, or the seam between repeats is visible.
   'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
   'texture-wave-a': 'textureWaveA 13s linear infinite',
   'texture-wave-b': 'textureWaveB 19s linear infinite',

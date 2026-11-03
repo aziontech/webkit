@@ -1,13 +1,17 @@
 import { composeStories } from '@storybook/vue3'
 import { render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/diagram/Diagram.stories'
+import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Diagram from './diagram.vue'
+import Diagram, { type DiagramName } from './diagram.vue'
 import type { DiagramSpec } from './types'
 
-const { Default, NodeKinds, Groups } = composeStories(stories)
+const { Default, Spec, NodeKinds, Groups } = composeStories(stories)
+
+const NAMES = Object.keys(diagrams) as DiagramName[]
 
 const TESTID = 'marketing-diagram'
 
@@ -34,9 +38,9 @@ const spec: DiagramSpec = {
 }
 
 const ready = async (container: Element) => {
-  const canvas = container.querySelector(`[data-testid="${TESTID}__canvas"]`)
-  await waitFor(() => expect(canvas).toHaveAttribute('data-ready'))
-  return canvas as HTMLElement
+  const canvas = () => container.querySelector(`[data-testid="${TESTID}__canvas"]`)
+  await waitFor(() => expect(canvas()).toHaveAttribute('data-ready'))
+  return canvas() as HTMLElement
 }
 
 describe('Diagram', () => {
@@ -166,15 +170,84 @@ describe('Diagram', () => {
     })
   })
 
+  describe('named diagrams', () => {
+    it.each(NAMES)('loads and draws %s with its own description', async (name) => {
+      const { container, getByTestId } = render(Diagram, { props: { name } })
+      const root = getByTestId(TESTID)
+
+      expect(root.getAttribute('data-name')).toBe(name)
+      const canvas = await ready(container)
+      expect(canvas.querySelectorAll('[data-diagram-node]').length).toBeGreaterThan(0)
+      expect(canvas.querySelectorAll('svg path').length).toBeGreaterThan(0)
+      expect(root.getAttribute('role')).toBe('img')
+      expect(root.getAttribute('aria-label')).toBeTruthy()
+    })
+
+    it('lets ariaLabel win over the description the diagram carries', async () => {
+      const { container, getByTestId } = render(Diagram, {
+        props: { name: 'workloads', ariaLabel: 'The workload request path' }
+      })
+      await ready(container)
+
+      expect(getByTestId(TESTID).getAttribute('aria-label')).toBe('The workload request path')
+    })
+
+    it('draws spec over name when both are set', async () => {
+      const { container, getByTestId } = render(Diagram, {
+        props: { name: 'workloads', spec, ariaLabel: 'Spec wins' }
+      })
+      const canvas = await ready(container)
+
+      expect(getByTestId(TESTID).hasAttribute('data-name')).toBe(false)
+      expect(canvas.querySelectorAll('[data-diagram-node]').length).toBe(spec.nodes.length)
+    })
+
+    it('swaps the drawing when name changes', async () => {
+      const name = ref<DiagramName>('cache')
+      const Host = defineComponent({
+        components: { Diagram },
+        setup: () => ({ name }),
+        template: '<Diagram :name="name" />'
+      })
+      const { container, getByTestId } = render(Host)
+      await ready(container)
+      const before = getByTestId(TESTID).getAttribute('aria-label')
+
+      name.value = 'kv-store'
+      await nextTick()
+      expect(getByTestId(TESTID).getAttribute('data-name')).toBe('kv-store')
+      await waitFor(() => expect(getByTestId(TESTID).getAttribute('aria-label')).not.toBe(before))
+    })
+
+    it('stays empty and warns for a name outside the library', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const { getByTestId } = render(Diagram, {
+        props: { name: 'missing' as DiagramName }
+      })
+      await nextTick()
+
+      expect(getByTestId(TESTID).querySelector('[data-diagram-node]')).toBeNull()
+      expect(getByTestId(TESTID).hasAttribute('role')).toBe(false)
+      warn.mockRestore()
+    })
+
+    it('has no a11y violations for a named diagram', async () => {
+      const { container } = render(Diagram, { props: { name: 'ai-gateway-model-routing' } })
+      await ready(container)
+      await expectNoA11yViolations(container)
+    })
+  })
+
   describe('stories', () => {
     it.each([
       ['Default', Default],
+      ['Spec', Spec],
       ['NodeKinds', NodeKinds],
       ['Groups', Groups]
-    ])('renders the %s story as a named image', (_name, Story) => {
-      const { getByRole } = render(Story)
+    ])('renders the %s story as a named image', async (_name, Story) => {
+      const { findByRole } = render(Story)
 
-      expect(getByRole('img')).toHaveAccessibleName()
+      expect(await findByRole('img')).toHaveAccessibleName()
     })
   })
 })

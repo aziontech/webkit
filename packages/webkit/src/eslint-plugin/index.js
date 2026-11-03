@@ -1,7 +1,3 @@
-// @aziontech/eslint-plugin-webkit — forces correct + performant usage of the design
-// system. Flat-config first (ESLint 9), namespace `webkit`. Presets: recommended and
-// strict (everything = error; aliases today) and performance (performance rules only).
-
 import authoringStandards from './rules/authoring-standards.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
@@ -59,8 +55,6 @@ function preset(name, severities) {
   ]
 }
 
-// Nothing out of standard is a warning — every rule is `error` so the design system
-// cannot be used off-pattern without failing the consumer's lint.
 const RECOMMENDED = {
   'valid-import-path': 'error',
   'no-deep-internal-import': 'error',

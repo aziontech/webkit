@@ -60,9 +60,6 @@ const prefersReducedMotion = (): boolean => {
   return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-/** The steady-state enter/leave animation runs in CSS off the hidden checkbox's `:checked`
- *  state (see sidebar.vue). Only the drag-driven preview sliver still needs a JS-computed
- *  transition, because its width comes from a pointer gesture, not from that boolean. */
 const previewTransition = (): string => {
   if (prefersReducedMotion()) return 'none'
   return `width ${duration['moderate-02']} ${curve['expressive-entrance']}`
@@ -133,8 +130,6 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
       return
     }
 
-    // Below the minimum the rail keeps tracking the pointer, so its edge and its content
-    // move as one. The minimum is a resting constraint, restored on release.
     width.value = Math.max(0, Math.min(next, railMax.value))
   }
 
@@ -222,10 +217,6 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
 
   const underMin = computed(() => resizing.value && pullProgress.value < 1)
 
-  // Above the minimum the panel is the rail, at the rail's width. Below it the panel holds
-  // the minimum — reflowing further truncates the labels the minimum exists to fit — and is
-  // carried by the closing edge, so its trailing edge stays flush with the rail's instead of
-  // the rail sweeping across content that stands still.
   const innerStyle = computed(() => {
     if (!toValue(options.enabled) || !resizing.value) return {}
     if (!underMin.value) return { translate: '0%', opacity: '1', transition: 'none' }

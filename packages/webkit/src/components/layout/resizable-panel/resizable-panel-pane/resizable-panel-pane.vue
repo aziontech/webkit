@@ -49,11 +49,6 @@
 
   const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max)
 
-  /**
-   * The single landing place for drag, nudge, and programmatic sets — clamp and
-   * collapse decided once. Collapse is a separate fact from length: `basis` stays
-   * at the minimum so the pane reopens there, not at zero.
-   */
   const setBasis = (next: number) => {
     if (props.collapsible && next < props.min / 2) {
       if (!isCollapsed.value) collapsed.value = true
@@ -64,11 +59,6 @@
     basis.value = clamp(next)
   }
 
-  /**
-   * The size is one inline declaration, the flex shorthand included: as base plus
-   * variant utilities both set the same shorthand, the flexible pane resolved to
-   * none, and a drag widened the group past its container (measured 1140 to 1282px).
-   */
   const paneStyle = computed<Record<string, string>>(() => {
     const axis = orientation.value === 'horizontal' ? 'width' : 'height'
     if (isCollapsed.value) return { flex: '0 0 0', [axis]: '0' }
@@ -82,8 +72,6 @@
     return orientation.value === 'horizontal' ? el.offsetWidth : el.offsetHeight
   }
 
-  // A pane that arrives already out of range would hand its handle an aria-valuenow the
-  // handle can never reach. Pull it in on mount, and again if the bounds move.
   watch(
     () => [props.min, props.max] as const,
     () => {
@@ -112,10 +100,6 @@
 </script>
 
 <template>
-  <!-- A collapsed pane is zero-sized, not unmounted and not display-none: content
-       keeps its state, and self-measuring children (editors, charts) come back laid
-       out correctly. Hidden overflow plus zero min sizes are the other half —
-       without them a flex item refuses to shrink below its content. -->
   <div
     ref="paneRef"
     v-bind="$attrs"

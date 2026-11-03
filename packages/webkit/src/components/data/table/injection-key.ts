@@ -9,8 +9,6 @@ import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
 export type TableRowRecord = Record<string, unknown>
 
-// ---- Structured filter model (Table.Filter / Table.AppliedFilters) ----
-
 /** Comparison operators offered by the built-in filter builder. */
 export type FilterOperator =
   | 'eq'
@@ -52,8 +50,6 @@ export interface AppliedFilter {
   label?: string
 }
 
-// ---- Serializable aggregate state (v-model:state / getState / setState) ----
-
 /** JSON-serializable snapshot of every table concern; every field optional for partial restore. */
 export interface TableStateSnapshot {
   sorting?: SortingState
@@ -63,8 +59,6 @@ export interface TableStateSnapshot {
   globalFilter?: string
   filters?: AppliedFilter[]
 }
-
-// ---- Injected table context ----
 
 export interface TableContext {
   /** Root data-testid; sub-components derive BEM-suffixed ids from it. */

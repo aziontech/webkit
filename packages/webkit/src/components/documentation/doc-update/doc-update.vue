@@ -41,7 +41,6 @@
   const attrs = useAttrs()
   const nav = useHeadingNav()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-update')
 
   const anchorId = computed(
@@ -60,8 +59,6 @@
     :aria-labelledby="`${anchorId}-label`"
     class="flex w-full scroll-mt-(--spacing-lg) flex-col gap-(--spacing-sm) md:flex-row md:gap-(--spacing-lg)"
   >
-    <!-- Chrome, not prose: data-doc-chrome keeps DocProse from restyling the label
-         heading it would otherwise size and space as a section heading. -->
     <div
       data-doc-chrome
       class="flex shrink-0 flex-col items-start gap-(--spacing-xxs) md:sticky md:top-(--spacing-lg) md:w-40 md:self-start"
@@ -112,9 +109,6 @@
         />
       </div>
     </div>
-    <!-- An entry that follows another pulls its rule up through the 24px block gap
-         and pads the content back down, so the timeline reads as one continuous
-         line instead of a dashed one; the first entry does not. -->
     <div
       :data-titled="title ? '' : null"
       class="relative min-w-0 flex-1 md:border-l md:border-(--border-default) md:pl-(--spacing-lg) md:data-titled:pl-(--spacing-xl) md:[[data-doc-update]+[data-doc-update]_&]:-mt-6 md:[[data-doc-update]+[data-doc-update]_&]:pt-6 data-titled:[[data-doc-update]:has(+[data-doc-update])_&]:pb-(--spacing-xl) [&>*:first-child]:pt-0!"

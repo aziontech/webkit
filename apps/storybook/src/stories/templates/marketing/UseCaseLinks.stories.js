@@ -6,6 +6,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 import Topic from '@aziontech/webkit/topic'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -84,7 +85,7 @@ const TOPICS_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false
     <CardGrid kind="divider" :columns="3">
 ${each(
   USE_CASES,
-  (useCase) => `<div class="flex bg-(--bg-canvas)">
+  (useCase) => `<div class="relative flex bg-(--bg-canvas)">
   <Topic
     icon="${useCase.icon}"
     title="${useCase.title}"
@@ -106,7 +107,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -116,7 +116,7 @@ const meta = {
 export default meta
 
 export const Topics = {
-  render: () => ({ components, template: TOPICS_TEMPLATE }),
+  ...editable(() => ({ components, template: TOPICS_TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(TOPICS_IMPORTS, TOPICS_TEMPLATE) }

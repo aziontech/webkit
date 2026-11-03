@@ -111,10 +111,6 @@
       return
     }
 
-    // offsetLeft/offsetTop are measured from the positioned root's padding edge —
-    // the same origin as the indicator's `left-0 top-0` anchor — so the indicator
-    // lands exactly over the equally sized segment (no border-width drift that a
-    // getBoundingClientRect delta would introduce).
     indicatorOffsetX.value = activeSegmentEl.offsetLeft
     indicatorOffsetY.value = activeSegmentEl.offsetTop
     indicatorVisible.value = true

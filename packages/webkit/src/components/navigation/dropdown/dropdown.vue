@@ -62,11 +62,6 @@
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
-  /**
-   * Teleport target for groups: captured when the panel body mounts, cleared only after
-   * the close transition ends (onPanelAfterLeave). Vue nulls the template ref the instant
-   * `isOpen` flips, which would otherwise empty the panel mid leave-animation.
-   */
   const bodyTarget = ref<globalThis.HTMLElement | null>(null)
   const groupCount = ref(0)
 
@@ -117,7 +112,6 @@
     isOpenState.set(value)
   }
 
-  /** Returns the list of focusable, enabled option elements inside the panel, in DOM order. */
   function getEnabledOptions(): globalThis.HTMLElement[] {
     const panel = panelRef.value
     if (!panel) return []

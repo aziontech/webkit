@@ -4,6 +4,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
@@ -69,7 +70,8 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
     <SectionTitle
       kind="horizontal"
       title="Work at Azion"
-      description="We trust people to manage their own routines with balance and accountability, focusing on outcomes, and we collaborate across countries and cultures to build solutions for the world."
+      description="The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring."
+      description-width="wide"
     />
   </template>
 
@@ -120,7 +122,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
       canvas: { sourceState: 'shown' }
     }
@@ -130,7 +131,7 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
       source: { code: toSfc(IMPORTS, TEMPLATE) }
@@ -143,7 +144,8 @@ export const SITE_SECTION = {
   props: {
     title: 'Work at Azion',
     description:
-      'We trust people to manage their own routines with balance and accountability, focusing on outcomes, and we collaborate across countries and cultures to build solutions for the world.',
+      "The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across countries and cultures. There's no dress code: what counts is the ideas, energy, and integrity you bring.",
+    descriptionWidth: 'wide',
     ariaLabel: 'Azion offices',
     duration: PHOTOS.length * SECONDS_PER_PHOTO,
     photos: PHOTOS.map((photo) => ({ ...photo, src: photo.src.replace('/media', '') }))

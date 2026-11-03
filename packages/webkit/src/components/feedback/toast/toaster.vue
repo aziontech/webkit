@@ -61,15 +61,12 @@
   const store = useToastStore()
   provide(ToastInjectionKey, store)
 
-  // The `duration` prop is the default auto-dismiss time new toasts inherit
-  // (a per-toast `duration` overrides it; `0` keeps a toast until dismissed).
   watch(
     () => props.duration,
     (ms: number) => store.setDefaultDuration(ms),
     { immediate: true }
   )
 
-  // Only one mounted Toaster renders the regions (the stack is a global singleton).
   const toasterReg = registerToaster()
   const isActive = computed(() => toasterReg.isActive())
 
@@ -90,14 +87,9 @@
     removing: boolean
   }
 
-  // Local lifecycle list (newest first). It mirrors the store but keeps a toast
-  // around through its exit transition before dropping it from the DOM.
   const items = ref<ToastView[]>([])
   const removalTimers = new Map<string, ReturnType<typeof setTimeout>>()
 
-  // --- Height measurement (the stack lays out by real measured heights) ------
-  // Defined before the watch below: the immediate watch runs during setup and
-  // calls measure(), so it must already be initialized (no temporal-dead-zone).
   const cardEls = new Map<string, HTMLElement>()
   const heights = ref<Record<string, number>>({})
 
@@ -118,11 +110,6 @@
     if (changed) heights.value = nextHeights
   }
 
-  // This projection IS the entry the region renders (`item.entry` below), not
-  // just a change-detection key — so every field the template or the default
-  // slot reads has to be carried here. `closable` in particular: without it the
-  // per-toast override is dropped and every toast falls back to the Toaster's
-  // prop. (`onClose` is deliberately absent: the store owns invoking it.)
   watch(
     () =>
       store.toasts.map((t) => ({
@@ -148,7 +135,6 @@
             { entry: entry as ToastEntry, mounted: false, removing: false },
             ...items.value
           ]
-          // Flip to mounted next frame so the enter transition runs.
           nextTick(() => {
             const fresh = items.value.find((i) => i.entry.id === id)
             if (fresh) fresh.mounted = true
@@ -184,7 +170,6 @@
     removalTimers.forEach((t) => clearTimeout(t))
   })
 
-  // --- Group toasts by their effective corner (per-toast `position` ?? prop) -
   interface Region {
     position: ToastPosition
     all: ToastView[]
@@ -206,7 +191,6 @@
     }))
   })
 
-  // --- Hover (per corner): expand that region AND pause the auto-dismiss ------
   const hoveredPosition = ref<ToastPosition | null>(null)
   const isExpanded = (region: Region) =>
     props.expand || (hoveredPosition.value === region.position && region.live.length > 1)
@@ -255,8 +239,6 @@
     }
   }
 
-  // Per-toast geometry within its region (computed inline style — dynamic
-  // positioning, not a class preset).
   const toastStyle = (region: Region, item: ToastView, indexInAll: number): CSSProperties => {
     const pos = region.position
     const top = isTopPos(pos)
@@ -273,7 +255,6 @@
       transformOrigin: top ? 'top center' : 'bottom center'
     }
 
-    // Enter-from and exit-to: parked off the anchored edge, faded out.
     if (!item.mounted || item.removing) {
       return {
         ...base,

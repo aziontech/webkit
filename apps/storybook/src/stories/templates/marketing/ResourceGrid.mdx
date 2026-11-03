@@ -27,7 +27,7 @@ Built from `SectionModule`, `MediaSplit`, `CardGrid`, `Topic` and `Button`.
 
 ### Default
 
-The four Financial Services resources under the default Go Deeper eyebrow: two pages on the site and two blog posts that open in a new tab.
+The four Financial Services resources under the default Go Deeper eyebrow: two pages on the site and two blog posts that open in a new tab. Every row takes the height of its tallest card, so the four cards are the same size however long their copy runs. The whole card is the link: hovering anywhere on it lights the topic.
 
 <Canvas of={ResourceGridStories.Default} />
 
@@ -36,11 +36,20 @@ The four Financial Services resources under the default Go Deeper eyebrow: two p
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `eyebrow`, `title` and `description` fill the copy beside the grid.
-- `items[]` holds the cards: `title`, `description` and `href`. A full `http` link opens in a new tab, and a card without a title is skipped.
+- `items[]` holds the cards: `title`, `description` and `href`. A full `http` link opens in a new tab, and a card without a title is skipped. Four cards fill the grid; past four, the grid scrolls (see Scrollable below).
 - `action` adds a button under the copy. It is dropped when its label or link is missing.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={ResourceGridStories.DefaultJson} dark />
+  <Source
+    of={ResourceGridStories.DefaultJson}
+    dark
+  />
 </div>
+
+### Scrollable
+
+Six Technology resources. Past four cards, the band keeps the height of its copy and the grid scrolls inside a `ScrollArea`. Each row is as tall as its own cards, so the next row shows partway in under the fade and reads as more to come. Once the band stacks, below the `lg` breakpoint, every card shows and nothing scrolls. With four cards or fewer there is no scroll area at all.
+
+<Canvas of={ResourceGridStories.Scrollable} />

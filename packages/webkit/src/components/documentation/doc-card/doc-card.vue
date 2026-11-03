@@ -37,7 +37,6 @@
 
   const attrs = useAttrs()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-card')
 
   defineSlots<{
@@ -49,15 +48,12 @@
 
   const isLink = computed(() => props.href.length > 0)
 
-  // External: an absolute or protocol-relative URL, a mailto, or an explicit new tab.
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
   )
 </script>
 
 <template>
-  <!-- The inset is fixed at 24/20px, not a responsive step: the responsive token
-       peaked exactly where the grid packs the cells narrowest. -->
   <component
     :is="isLink ? 'a' : 'div'"
     v-bind="$attrs"
@@ -68,8 +64,6 @@
     :rel="isLink && target === '_blank' ? 'noreferrer' : undefined"
     class="group relative flex h-full flex-col bg-(--bg-surface) px-6 py-5 no-underline transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
   >
-    <!-- One 24px box for either glyph path, so a grid mixing a font glyph and a brand
-         mark keeps its titles on one line; the mark keeps its own colour. -->
     <span
       v-if="$slots['icon']"
       class="mb-(--spacing-md) flex size-6 items-center [&>svg]:size-6"
@@ -88,15 +82,12 @@
       >{{ overline }}</span
     >
     <span class="text-heading-xs text-(--text-default)">{{ title }}</span>
-    <!-- No copy, no element: an empty copy line would add its top gap as trailing space. -->
     <span
       v-if="$slots['default'] || label"
       class="mt-(--spacing-xxs) text-pretty text-body-sm text-(--text-muted) [&>*:first-child]:pt-0! [&_p]:text-body-sm!"
     >
       <slot>{{ label }}</slot>
     </span>
-    <!-- Foot of the cell, so every card's call-to-action lands on one line. A span,
-         never a nested anchor: the card is the link, and browsers un-nest nested anchors. -->
     <span
       v-if="link"
       class="mt-auto flex items-center gap-(--spacing-xxs) pt-(--spacing-sm) text-label-md text-(--text-link)"

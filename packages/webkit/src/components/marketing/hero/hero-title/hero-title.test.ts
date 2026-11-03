@@ -6,7 +6,7 @@ import * as stories from '../../../../../../../apps/storybook/src/stories/compon
 import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
 
-const { Default, Highlight, Centered, WithActions } = composeStories(stories)
+const { Default, Highlight, Centered, MobileCentered, WithActions } = composeStories(stories)
 
 const TESTID = 'marketing-hero-title'
 
@@ -51,6 +51,16 @@ describe('HeroTitle', () => {
     const { getByTestId } = render(HeroTitle, { props: { ...props, centered: true } })
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
+  })
+
+  it('marks the root mobile-centered only when mobileCentered is set', async () => {
+    const { getByTestId, rerender } = render(HeroTitle, { props })
+    expect(getByTestId(TESTID)).not.toHaveAttribute('data-mobile-centered')
+
+    await rerender({ ...props, mobileCentered: true })
+    const root = getByTestId(TESTID)
+    expect(root).toHaveAttribute('data-mobile-centered', 'true')
+    expect(root).not.toHaveAttribute('data-centered')
   })
 
   it('sets the headline size to large by default', () => {
@@ -205,12 +215,20 @@ describe('HeroTitle', () => {
       expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
     })
 
+    it('marks the MobileCentered story mobile-centered, not centered', () => {
+      const { getByTestId } = render(MobileCentered())
+      const root = getByTestId(TESTID)
+
+      expect(root).toHaveAttribute('data-mobile-centered', 'true')
+      expect(root).not.toHaveAttribute('data-centered')
+    })
+
     it('renders the WithActions story with both CTAs', () => {
       const { getAllByRole } = render(WithActions())
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
         'Start for free',
-        'Talk to sales'
+        'Talk to a specialist'
       ])
     })
   })
