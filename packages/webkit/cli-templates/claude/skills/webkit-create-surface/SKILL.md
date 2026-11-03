@@ -1,8 +1,8 @@
 ---
 name: webkit-create-surface
-description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited).
+description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-08-13
+last_updated: 2026-10-28
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -173,6 +173,43 @@ the endpoint cannot accept gets the red `invalid` error. Required is not an erro
 both on for one field, and nothing is judged while the reader is still typing. A request-level
 failure is a toast with a way to recover — never silent, and never a validation summary.
 
+## 6. Picking an existing resource
+
+Many create flows need a resource that may already exist: the application a workload serves, the
+firewall that protects it, the certificate on a domain, the function a rule runs. The reader either
+reuses one or makes one, and the form says which in one place.
+
+**A whole resource the reader may reuse or create gets its own band with an Existing / New choice.**
+
+- A `SegmentedButton` at the top of the band, `Existing <noun>` / `New <noun>`, full width.
+- **Existing is the default when at least one exists.** When none exist, there is no choice to
+  offer: the segment is not rendered and the band opens on the New fields.
+- **Existing** shows an inline picker: one selectable `Item` row per resource (icon, name,
+  description), the chosen row marked with `data-selected`, a trailing `pi-check`, and
+  `aria-pressed`. **New** shows the resource's own create fields in the same band.
+- Switching modes keeps both answers: going to New and back finds the same resource still chosen.
+
+**The picker is a long list**, so it follows the long-list rule in `/webkit-ux-heuristics`
+(Usability rules § 2 and § 3):
+
+- a search above the rows **when there are more than 7 resources**, matching name and description;
+- a fixed first batch, a `Load N more` footer while more remain, `Skeleton` rows in the shape of the
+  `Item` while a batch loads;
+- a no-match line that offers the other mode: `No firewall matches "api". Create one instead, or
+clear the search.`;
+- a value chosen beyond the first batch is shown on open, never hidden behind Load more;
+- the count in a `role="status"` region, so the result of every search and load is announced;
+- a required or invalid message sits **above** the rows, under the search, where it is seen before
+  the list is scanned.
+
+**A single field that references an existing resource stays a row with a `Select`** — a domain's
+certificate, a rule's function, an environment. It follows the same rule in the Select's own
+panel: search in `Select.Content`'s `#search` slot past 7 options, Load more in its `#footer`.
+
+Build the band and the picker once as shared components and pass the noun, the icon and the
+options. Every flow that reuses a resource then reads the same, and the one hand-made copy that
+would ship without search never exists.
+
 ## Checklist
 
 - [ ] First-level resource → a page at `/<module>/new`. Inside a resource → a drawer. Never a dialog.
@@ -189,3 +226,5 @@ failure is a toast with a way to recover — never silent, and never a validatio
 - [ ] The success toast names the resource and offers a way to open it.
 - [ ] One `submitting` flag locks the fieldset AND every control; released in `finally`.
 - [ ] Validation on submit only; amber `required` vs red `invalid`, never both.
+- [ ] A reusable resource gets an Existing / New band; Existing is the default when any exist, and the segment is absent when none do.
+- [ ] Every pick of an existing resource (inline picker or `Select`) has search past 7, Load more, a no-match line, and shows a pre-chosen value on open.

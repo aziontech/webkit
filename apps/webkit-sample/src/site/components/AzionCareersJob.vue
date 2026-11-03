@@ -228,20 +228,17 @@
        THE COLUMN IS START-ALIGNED, and that is the one place this page parts with the site's
        other heroes. A centred hero is right for a page whose headline IS its statement; a
        posting's headline is a label on a document the reader is about to read down the start
-       edge, and centring it puts the title on one vertical and every line under it on another.
-       Left-aligned, the trail, the facets, the h1 and the action all open on the band's own
-       boundary inset — the vertical `/site/pricing` and `/site/contact` already open their
-       start-aligned headlines on. That is NOT the body's copy vertical: a band is inset by
-       `--layout-boundary-inline` (the nav's own), the framed column's copy by `--spacing-xl`
-       from its rule, so the two sit ~25px apart at 1440 by design, not by drift. -->
+       edge, and centring it puts the title on one vertical and every line under it on another. -->
   <Hero
     kind="band"
-    max-width="site"
+    max-width="full"
     class="[--banner-offset:3.5rem]"
   >
     <!-- No `items-*`: a flex column stretches its children, so every row opens on the
          container's start edge and the actions row can still go full width on a phone. -->
-    <div class="flex flex-col gap-(--spacing-lg)">
+    <div
+      class="mx-auto flex w-full max-w-(--layout-measure-site) flex-col gap-(--spacing-lg) border-x border-transparent px-(--spacing-xl)"
+    >
       <!-- The trail leads now, where a start-aligned page puts it. Centred, it read as a
            caption under the headline; on the start edge it is the way back up, which is what
            it is. -->

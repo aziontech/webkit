@@ -52,8 +52,7 @@ export default {
     },
     {
       section: 'ArticleCards',
-      title:
-        'Trusted by market leaders in banking, e-commerce, technology, and other industries.',
+      title: 'Trusted by market leaders in banking, e-commerce, technology, and other industries.',
       items: [
         caseCard(
           'case-fourbank',

@@ -45,6 +45,16 @@ export const HOME_REASONS = [
   }
 ]
 
+export const HOME_WHY_AZION = {
+  section: 'FeatureTiles',
+  kind: 'artwork',
+  eyebrow: 'Why Azion',
+  title: 'From commit to observability, on one platform',
+  description:
+    'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
+  tiles: HOME_REASONS
+}
+
 const learnMore = (href) => [
   { label: 'Learn more', href, kind: 'outlined', size: 'medium', trailing: true }
 ]
@@ -258,19 +268,10 @@ export const HOME_PAGE = [
       'Always-on DDoS protection'
     ]
   },
-  {
-    section: 'FeatureTiles',
-    kind: 'artwork',
-    eyebrow: 'Why Azion',
-    title: 'From commit to observability, on one platform',
-    description:
-      'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
-    tiles: HOME_REASONS
-  },
+  HOME_WHY_AZION,
   HOME_SOLUTIONS_BAND,
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a market leader',
     items: MARKET_RECOGNITIONS
   },
   { section: 'ClientMosaic', cells: HOME_CLIENT_CELLS },

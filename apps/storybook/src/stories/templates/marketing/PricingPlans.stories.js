@@ -156,6 +156,7 @@ const priceProps = (plan) => {
     bound ? `:value="${priceName(plan)}[period].value"` : `value="${value}"`,
     `prefix="${prefix}"`,
     `suffix="${suffix}"`,
+    ...(bound ? ['animated'] : []),
     flag('show-prefix', Boolean(prefix)),
     flag('show-suffix', Boolean(suffix)),
     bound ? `:pricing-details="${priceName(plan)}[period].details"` : `pricing-details="${details}"`

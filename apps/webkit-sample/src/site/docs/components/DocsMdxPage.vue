@@ -6,7 +6,7 @@
   // designed object — bands, a hero, a card grid. A reading page is not: it is prose
   // with a few components in it, and an author should be able to write the whole thing
   // in one `.mdx` file and never touch a class. So everything below comes from
-  // `@aziontech/webkit-docs`: `DocProse` carries the type scale and rhythm,
+  // the documentation layer: `DocProse` carries the type scale and rhythm,
   // `DocMarkdown` parses the MDX subset and mounts the components it finds, and
   // `DocPageHeader` renders the title and deck the frontmatter already declared.
   //
@@ -27,15 +27,15 @@
   // and owns the scrolling, because the scroll container is the shell's — see
   // AzionDocsFirstDeploy.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import DocMarkdown from '@aziontech/webkit-docs/doc-markdown'
-  import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'
-  import DocPagination from '@aziontech/webkit-docs/doc-pagination'
-  import DocProse from '@aziontech/webkit-docs/doc-prose'
-  import { parseMdx } from '@aziontech/webkit-docs/mdx'
+  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocProse from '@aziontech/webkit/doc-prose'
   import { computed } from 'vue'
 
   import { useDocsCrumbNav } from '../lib/docs-crumb-nav.js'
   import { useDocsPageActions } from '../lib/docs-page-actions.js'
+  import { parseMdx } from '../lib/mdx.js'
+  import DocMarkdown from '../ui/DocMarkdown.vue'
 
   const props = defineProps({
     // The raw `.mdx` source, imported with `?raw`.

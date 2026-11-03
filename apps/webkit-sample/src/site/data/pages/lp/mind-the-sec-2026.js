@@ -28,32 +28,82 @@ const PRIMITIVES = [
   {
     label: 'Computação',
     items: [
-      product('ai ai-edge-functions', 'Functions', 'Execute código serverless mais perto dos usuários', '/site/products/functions'),
-      product('ai ai-durable-objects', 'Durable Objects', 'Computação stateful, distribuída globalmente', `${PT_PRODUCTS}durable-objects/`),
+      product(
+        'ai ai-edge-functions',
+        'Functions',
+        'Execute código serverless mais perto dos usuários',
+        '/site/products/functions'
+      ),
+      product(
+        'ai ai-durable-objects',
+        'Durable Objects',
+        'Computação stateful, distribuída globalmente',
+        `${PT_PRODUCTS}durable-objects/`
+      ),
       product(
         'ai ai-rules-engine',
         'Rules Engine',
         'Automatize o tratamento de requisições com regras programáveis',
         'https://www.azion.com/pt-br/documentacao/produtos/build/applications/rules-engine/'
       ),
-      product('ai ai-load-balancer', 'Load Balancer', 'Distribua o tráfego para performance e disponibilidade', '/site/products/load-balancer'),
-      product('ai ai-image-processor', 'Image Processor', 'Otimize e transforme imagens em tempo real', '/site/products/image-processor')
+      product(
+        'ai ai-load-balancer',
+        'Load Balancer',
+        'Distribua o tráfego para performance e disponibilidade',
+        '/site/products/load-balancer'
+      ),
+      product(
+        'ai ai-image-processor',
+        'Image Processor',
+        'Otimize e transforme imagens em tempo real',
+        '/site/products/image-processor'
+      )
     ]
   },
   {
     label: 'AI',
     items: [
-      product('ai ai-edge-ai', 'AI Inference', 'Execute modelos de AI mais perto dos usuários', '/site/products/ai-inference'),
-      product('ai ai-ai-gateway', 'AI Gateway', 'Proteja, gerencie e otimize o tráfego de AI', '/site/products/ai-gateway')
+      product(
+        'ai ai-edge-ai',
+        'AI Inference',
+        'Execute modelos de AI mais perto dos usuários',
+        '/site/products/ai-inference'
+      ),
+      product(
+        'ai ai-ai-gateway',
+        'AI Gateway',
+        'Proteja, gerencie e otimize o tráfego de AI',
+        '/site/products/ai-gateway'
+      )
     ]
   },
   {
     label: 'Dados',
     items: [
-      product('ai ai-edge-storage', 'Object Storage', 'Armazenamento escalável e durável para dados não estruturados', `${PT_PRODUCTS}object-storage/`),
-      product('ai ai-edge-sql', 'SQL Database', 'Banco de dados relacional para aplicações distribuídas', '/site/products/sql-database'),
-      product('ai ai-edge-kv', 'KV Store', 'Armazenamento chave-valor globalmente distribuído e de baixa latência', '/site/products/kv-store'),
-      product('ai ai-tiered-cache', 'Cache', 'Acelere a entrega e reduza a carga na origem', '/site/products/cache')
+      product(
+        'ai ai-edge-storage',
+        'Object Storage',
+        'Armazenamento escalável e durável para dados não estruturados',
+        `${PT_PRODUCTS}object-storage/`
+      ),
+      product(
+        'ai ai-edge-sql',
+        'SQL Database',
+        'Banco de dados relacional para aplicações distribuídas',
+        '/site/products/sql-database'
+      ),
+      product(
+        'ai ai-edge-kv',
+        'KV Store',
+        'Armazenamento chave-valor globalmente distribuído e de baixa latência',
+        '/site/products/kv-store'
+      ),
+      product(
+        'ai ai-tiered-cache',
+        'Cache',
+        'Acelere a entrega e reduza a carga na origem',
+        '/site/products/cache'
+      )
     ]
   },
   {
@@ -71,8 +121,18 @@ const PRIMITIVES = [
         'Proteja, gerencie e escale o tráfego de APIs',
         'https://www.azion.com/pt-br/documentacao/casos-de-uso/proteger-aplicacoes-e-redes/proteger-apis-publicas-contra-abuso/'
       ),
-      product('ai ai-bot-manager', 'Bot Manager', 'Detecte e bloqueie ameaças automatizadas instantaneamente', '/site/products/bot-manager'),
-      product('ai ai-edge-dns', 'DNS', 'Hospede zonas DNS autoritativas com confiabilidade global', '/site/products/edge-dns')
+      product(
+        'ai ai-bot-manager',
+        'Bot Manager',
+        'Detecte e bloqueie ameaças automatizadas instantaneamente',
+        '/site/products/bot-manager'
+      ),
+      product(
+        'ai ai-edge-dns',
+        'DNS',
+        'Hospede zonas DNS autoritativas com confiabilidade global',
+        '/site/products/edge-dns'
+      )
     ]
   }
 ]
@@ -139,27 +199,21 @@ export default {
           description:
             'Palco Tendências - Dia 15/09 às 12h. Julio Silvello, VP de Product Marketing, propõe segurança como primitiva da arquitetura agentic: programável e executada no mesmo plano do agente, não como camada posterior.',
           illustration: 'programmable-security',
-          actions: [
-            calendar('MHViZzM5ODgyMW5zZ3MwMDBoNDR2cm82dDQgd2FnbmVyLnNhbnRvc0Bhemlvbi5jb20')
-          ]
+          actions: [calendar('MHViZzM5ODgyMW5zZ3MwMDBoNDR2cm82dDQgd2FnbmVyLnNhbnRvc0Bhemlvbi5jb20')]
         },
         {
           title: 'Desafios da Operação de Segurança em Tempos de AI',
           description:
             'Painel Clientes - Dia 15/09 às 15h. Rafael Santos (CISO da Azion) debate com executivos de segurança da Exame, SENAC RS e iFood Pago sobre regulação, fraude, orçamento enxuto e governança de agentes autônomos.',
           illustration: 'stream-security-events-for-investigation-and-response',
-          actions: [
-            calendar('M2l0bXVmZGd0dTFpMnVwdWRvNXFlNjlldjMgd2FnbmVyLnNhbnRvc0Bhemlvbi5jb20')
-          ]
+          actions: [calendar('M2l0bXVmZGd0dTFpMnVwdWRvNXFlNjlldjMgd2FnbmVyLnNhbnRvc0Bhemlvbi5jb20')]
         },
         {
           title: 'PQC e mTLS: Protegendo APIs contra Ameaças Quânticas',
           description:
             'Palco Soluções - dia 15/09 às 16h30. Luis Artur Rossa, Principal PMM, mostra como ataques Harvest Now, Decrypt Later já interceptam tráfego hoje para quebrar quando o Dia Q chegar.',
           illustration: 'implement-api-gateway-security',
-          actions: [
-            calendar('NDJsMGxjN2IxYzB0YTZkNzFsMmZ2Zm1sZ20gd2FnbmVyLnNhbnRvc0Bhemlvbi5jb20')
-          ]
+          actions: [calendar('NDJsMGxjN2IxYzB0YTZkNzFsMmZ2Zm1sZ20gd2FnbmVyLnNhbnRvc0Bhemlvbi5jb20')]
         }
       ]
     },
@@ -253,7 +307,8 @@ export default {
       eyebrow: 'Proteger',
       title: 'Proteção nativa.',
       titleMuted: 'Sempre ativa.',
-      description: 'Ganhe proteção mais forte, menos exposição a ataques e menos sobrecarga operacional.',
+      description:
+        'Ganhe proteção mais forte, menos exposição a ataques e menos sobrecarga operacional.',
       actions: [{ label: 'Comece grátis', href: '/signup', kind: 'secondary' }],
       aside: { label: EXPERT, href: '/site/contact' }
     }

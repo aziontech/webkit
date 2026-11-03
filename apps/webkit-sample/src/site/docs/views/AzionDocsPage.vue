@@ -2,7 +2,7 @@
   // THE routed reading page — one view for every `.mdx` in `content/`.
   //
   // A documentation page is prose with components in it, which is most of a documentation
-  // site, so it is written as MDX and rendered end to end by `@aziontech/webkit-docs`. This
+  // site, so it is written as MDX and rendered end to end by the documentation layer. This
   // view is the wiring that MDX cannot express, and it is written ONCE: the sample used to
   // carry a routed view per page repeating all of it with three constants changed.
   //
@@ -22,13 +22,8 @@
   //
   // The trail and the previous/next pair are DERIVED FROM THE RAIL (see docs-pages.js), not
   // typed here: the tree already knows where a page sits and what is next to it.
-  import DocCta from '@aziontech/webkit-docs/doc-cta'
-  import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'
-  import { provideHeadingNav } from '@aziontech/webkit-docs/heading-nav'
-  import { scrollToHeading } from '@aziontech/webkit-docs/heading-scroll'
-  import { collectHeadings, parseMdx } from '@aziontech/webkit-docs/mdx'
-  import { scrollParent } from '@aziontech/webkit-docs/scroll-parent'
-  import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
+  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import { provideHeadingNav } from '@aziontech/webkit/use-heading-nav'
   import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -36,6 +31,11 @@
   import DocsMdxPage from '../components/DocsMdxPage.vue'
   import { docsPageChrome, docsPageSource, docsPageSourcePath } from '../lib/docs-pages.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
+  import { scrollToHeading } from '../lib/heading-scroll.js'
+  import { collectHeadings, parseMdx } from '../lib/mdx.js'
+  import { scrollParent } from '../lib/scroll-parent.js'
+  import { useScrollSpy } from '../lib/use-scroll-spy.js'
+  import DocCta from '../ui/DocCta.vue'
 
   const route = useRoute()
 

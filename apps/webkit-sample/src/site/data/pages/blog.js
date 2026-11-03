@@ -1,4 +1,11 @@
-import { BLOG_ALL, BLOG_CATEGORIES, BLOG_LABELS, BLOG_NEWSLETTER, BLOG_POSTS } from '../blog.js'
+import {
+  BLOG_ALL,
+  BLOG_CATEGORIES,
+  BLOG_HERO,
+  BLOG_LABELS,
+  BLOG_NEWSLETTER,
+  BLOG_POSTS
+} from '../blog.js'
 import { blogArticle, blogPostLink } from '../blog-articles.js'
 import { COMPANY_CLOSING } from '../product-pages.js'
 
@@ -61,6 +68,13 @@ const INDEX = ORDERED_POSTS.map((post) => {
 })
 
 export const BLOG_PAGE = [
+  {
+    section: 'Heroes',
+    kind: 'title-band-small',
+    eyebrow: BLOG_HERO.eyebrow,
+    title: BLOG_HERO.title,
+    description: BLOG_HERO.description
+  },
   { section: 'ArticleHighlight', anchor: 'articles', gap: 'small', fill: true, items: HIGHLIGHT },
   {
     section: 'ArticleIndex',

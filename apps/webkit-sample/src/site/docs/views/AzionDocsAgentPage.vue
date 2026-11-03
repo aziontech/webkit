@@ -17,12 +17,8 @@
   // they used to sit in a sticky bar of their own (see DocsAgentPage): `docs-nav.js` generates one row per agent from the same `AGENTS` list
   // this page reads, so the tree cannot name a tool that has no page and the reading order
   // walks the seven in the order the index offers them.
-  import DocCta from '@aziontech/webkit-docs/doc-cta'
-  import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'
-  import { provideHeadingNav } from '@aziontech/webkit-docs/heading-nav'
-  import { scrollToHeading } from '@aziontech/webkit-docs/heading-scroll'
-  import { scrollParent } from '@aziontech/webkit-docs/scroll-parent'
-  import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
+  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import { provideHeadingNav } from '@aziontech/webkit/use-heading-nav'
   import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -32,6 +28,10 @@
   import { agentBySlug } from '../lib/docs-agent-setup.js'
   import { docsPageChrome } from '../lib/docs-pages.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
+  import { scrollToHeading } from '../lib/heading-scroll.js'
+  import { scrollParent } from '../lib/scroll-parent.js'
+  import { useScrollSpy } from '../lib/use-scroll-spy.js'
+  import DocCta from '../ui/DocCta.vue'
 
   const route = useRoute()
 

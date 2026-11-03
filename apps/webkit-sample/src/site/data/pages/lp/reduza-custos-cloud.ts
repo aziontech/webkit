@@ -172,7 +172,10 @@ export default {
           name: 'Radar GigaOms para Plataformas de Edge.',
           jobTitle: '',
           firm: FIRMS.gigaom,
-          action: article('Ler artigo', 'azion-reconhecida-lider-de-mercado-fast-mover-relatorio-gigaom')
+          action: article(
+            'Ler artigo',
+            'azion-reconhecida-lider-de-mercado-fast-mover-relatorio-gigaom'
+          )
         },
         {
           tag: 'Reconhecimento',
@@ -198,7 +201,12 @@ export default {
       description:
         'A Azion adere a rigorosos padrões de segurança, disponibilidade e privacidade para que os clientes possam adotar nossos serviços com confiança.',
       actions: [
-        { label: 'Ver todas certificações', href: '/site/compliance', kind: 'outlined', trailing: true }
+        {
+          label: 'Ver todas certificações',
+          href: '/site/compliance',
+          kind: 'outlined',
+          trailing: true
+        }
       ],
       items: [
         {

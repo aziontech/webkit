@@ -39,15 +39,18 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     section: 'CompareCompetitors',
     eyebrow: 'Comparação',
     title: guide.comparison,
-    rival: guide.rival,
-    rows: guide.capabilities,
+    competitor: { name: guide.rival },
+    groups: [
+      {
+        title: 'Capacidades',
+        rows: guide.capabilities.map(({ rival, ...row }) => ({ ...row, competitor: rival }))
+      }
+    ],
     caption: guide.comparison,
     columnLabel: '',
-    supportLabels: {
-      full: 'Suporte completo',
-      partial: 'Suporte parcial',
-      none: 'Não disponível'
-    }
+    fullLabel: 'Suporte completo',
+    partialLabel: 'Suporte parcial',
+    noneLabel: 'Não disponível'
   },
   {
     section: 'MediaSplitBand',

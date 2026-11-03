@@ -1,14 +1,10 @@
-import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
-import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
-import g2 from '@aziontech/webkit/assets/g2-symbol-color.svg'
-import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
-import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 import monashees from '@aziontech/webkit/assets/monashees-extended-mono.svg'
 import monasheesReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
 import qualcomm from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'
 import qualcommReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
 
 import { COMPANY_CLOSING } from '../product-pages.js'
+import { MARKET_RECOGNITIONS } from './home.js'
 
 const ABOUT_PHOTOS = [
   {
@@ -55,33 +51,6 @@ const ABOUT_PHOTOS = [
   }
 ]
 
-const FIRMS = {
-  g2: { name: 'G2', logo: g2, logoLight: g2 },
-  gigaom: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
-  frost: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost }
-}
-
-export const MARKET_RECOGNITIONS = [
-  {
-    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
-    name: 'G2 Winter 2026 Reports',
-    jobTitle: '',
-    firm: FIRMS.g2
-  },
-  {
-    text: 'Named a Leader, and the only vendor whose capabilities meet every key criterion in the report.',
-    name: 'GigaOm Radar for Edge Platforms',
-    jobTitle: '',
-    firm: FIRMS.gigaom
-  },
-  {
-    text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
-    name: '2023 North American New Product Innovation Award',
-    jobTitle: '',
-    firm: FIRMS.frost
-  }
-]
-
 export const ABOUT_PAGE = [
   {
     section: 'Heroes',
@@ -109,7 +78,6 @@ export const ABOUT_PAGE = [
   },
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a market leader',
     items: MARKET_RECOGNITIONS
   },
   {

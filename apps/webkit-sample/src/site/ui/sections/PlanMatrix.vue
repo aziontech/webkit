@@ -1,13 +1,15 @@
 <script setup lang="ts">
-  import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Link from '@aziontech/webkit/link'
   import Overline from '@aziontech/webkit/overline'
+  import Popover from '@aziontech/webkit/popover'
   import SelectContent from '@aziontech/webkit/select-content'
   import SelectOption from '@aziontech/webkit/select-option'
   import Select from '@aziontech/webkit/select-root'
   import SelectTrigger from '@aziontech/webkit/select-trigger'
   import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
   import { useOptionSearch } from '../../composables/use-option-search'
@@ -36,7 +38,7 @@
     label: string
     /** Opens a block of rows: full contrast, ruled above. */
     group?: boolean
-    /** Definition of a term the label names. */
+    /** Definition of a term the label names, shown in a popover beside it. */
     hint?: string
     /** Status chip after the label. */
     tag?: string
@@ -70,9 +72,9 @@
     pickerLabel?: string
     /** Link closing the whole table. */
     link?: SiteLink | null
-    /** Screen-reader text of an included cell. */
+    /** Tooltip and screen-reader text of an included cell. */
     includedLabel?: string
-    /** Screen-reader text of a not-included cell. */
+    /** Tooltip and screen-reader text of a not-included cell. */
     notIncludedLabel?: string
   }
 
@@ -244,8 +246,24 @@
               >{{ labelHead(row.label)
               }}<span class="whitespace-nowrap"
                 >{{ labelTail(row.label)
-                }}<span class="ml-(--spacing-xxs) inline-flex align-middle"
-                  ><Hint :text="row.hint" /></span></span
+                }}<span class="-my-(--spacing-xxs) ml-(--spacing-xxs) inline-flex align-middle"
+                  ><Popover placement="auto">
+                    <Popover.Trigger>
+                      <IconButton
+                        kind="transparent"
+                        size="small"
+                        icon="pi pi-info-circle"
+                        :aria-label="`About ${row.label}`"
+                      />
+                    </Popover.Trigger>
+                    <Popover.Content>
+                      <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-sm)">
+                        <Popover.Title>{{ row.label }}</Popover.Title>
+                        <Popover.Description>{{ row.hint }}</Popover.Description>
+                      </div>
+                    </Popover.Content>
+                  </Popover></span
+                ></span
             ></template>
             <template v-else>{{ row.label }}</template>
             <span
@@ -267,18 +285,21 @@
           class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
         >
           <template v-if="row.values[planIndex] === true">
-            <i
-              class="pi pi-check text-body-sm text-(--success-contrast)"
-              aria-hidden="true"
-            />
+            <Tooltip :text="includedLabel">
+              <i
+                class="pi pi-check-circle text-body-md text-(--success-contrast)"
+                aria-hidden="true"
+              />
+            </Tooltip>
             <span class="sr-only">{{ includedLabel }}</span>
           </template>
           <template v-else-if="row.values[planIndex] === '—'">
-            <span
-              class="text-(--text-muted)"
-              aria-hidden="true"
-              >—</span
-            >
+            <Tooltip :text="notIncludedLabel">
+              <i
+                class="ai ai-circle-minus text-body-md text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </Tooltip>
             <span class="sr-only">{{ notIncludedLabel }}</span>
           </template>
           <span v-else-if="row.values[planIndex]">{{ row.values[planIndex] }}</span>

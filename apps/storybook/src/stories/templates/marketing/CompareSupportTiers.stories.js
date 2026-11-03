@@ -5,6 +5,7 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
+import Tooltip from '@aziontech/webkit/tooltip'
 import { ref } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
@@ -142,6 +143,7 @@ const IMPORTS = [
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import Select from '@aziontech/webkit/select'",
+  "import Tooltip from '@aziontech/webkit/tooltip'",
   "import { ref } from 'vue'",
   '',
   `const tiers = ${literal(TIERS)}`,
@@ -163,7 +165,8 @@ const components = {
   Select,
   'Select.Trigger': SelectTrigger,
   'Select.Content': SelectContent,
-  'Select.Option': SelectOption
+  'Select.Option': SelectOption,
+  Tooltip
 }
 
 const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="false">
@@ -252,11 +255,15 @@ const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="f
           class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
         >
           <template v-if="row.values[tierIndex] === true">
-            <i class="pi pi-check text-body-sm text-(--success-contrast)" aria-hidden="true" />
+            <Tooltip text="Included">
+              <i class="pi pi-check-circle text-body-md text-(--success-contrast)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Included</span>
           </template>
           <template v-else-if="row.values[tierIndex] === '—'">
-            <span class="text-(--text-muted)" aria-hidden="true">—</span>
+            <Tooltip text="Not included">
+              <i class="ai ai-circle-minus text-body-md text-(--text-muted)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Not included</span>
           </template>
           <span v-else-if="row.values[tierIndex]">{{ row.values[tierIndex] }}</span>
@@ -290,7 +297,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The tier-by-tier comparison on the Support page: one column per support tier, one band per service family, and what each tier includes on every row. It is the support counterpart of ComparePlans, which compares the pricing plans: the same real `table` with one `tbody` per band, the same three kinds of cell (a tick, an em dash, or the stated allowance, with `sr-only` text on the two glyphs), the same sticky header at `top-14` with an accent bar on the recommended tier, and the same narrow layout that folds to one tier picked with a `Select`. Where it differs: the first column is headed `Support`, each tier states who it is for under its name, and each band closes on its own link to the matching section of the pricing documentation instead of one link for the whole table. Built from `SectionModule`, `Select`, `Button`, `Overline` and `Link`.'
+          'The tier-by-tier comparison on the Support page: one column per support tier, one band per service family, and what each tier includes on every row. It is the support counterpart of ComparePlans, which compares the pricing plans: the same real `table` with one `tbody` per band, the same three kinds of cell (a check icon, a minus icon, or the stated allowance, with a tooltip and `sr-only` text on the two icons, as in CompareCompetitors), the same sticky header at `top-14` with an accent bar on the recommended tier, and the same narrow layout that folds to one tier picked with a `Select`. Where it differs: the first column is headed `Support`, each tier states who it is for under its name, and each band closes on its own link to the matching section of the pricing documentation instead of one link for the whole table. Built from `SectionModule`, `Select`, `Button`, `Overline`, `Tooltip` and `Link`.'
       },
       canvas: { sourceState: 'shown' }
     }

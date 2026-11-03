@@ -34,7 +34,10 @@ export default {
       title: 'Essa sessão é para empresas que:',
       columns: 4,
       items: [
-        { title: 'Têm aplicações web com tráfego (site, e-commerce, app web, API etc.)', description: '' },
+        {
+          title: 'Têm aplicações web com tráfego (site, e-commerce, app web, API etc.)',
+          description: ''
+        },
         { title: 'Utilizam cloud, data center próprio ou modelo híbrido', description: '' },
         {
           title:

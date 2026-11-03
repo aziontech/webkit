@@ -17,12 +17,13 @@ const byPath = (list) => new Map(list.map((entry) => [path(entry.href), entry]))
 const POSTS = byPath(BLOG_POSTS)
 const STORIES = byPath(SUCCESS_CASES)
 
-// An azion.com /lp/ link lands on the /site/lp page that rebuilds it; the competitor guides
-// are rebuilt from their pt-br versions, so the English slug is mapped onto those.
+const ENGLISH_GUIDES = ['cloudflare', 'vercel']
+
 const landingLink = (href) => {
   const slug = path(href).match(/\/lp\/([a-z0-9-]+)\/$/)?.[1]
   if (!slug) return null
   const vendor = slug.match(/^([a-z0-9]+)-to-azion-alternative-guide$/)?.[1]
+  if (ENGLISH_GUIDES.includes(vendor)) return { href: `/site/guides/${vendor}-alternative` }
   const target = vendor ? `guia-alternativa-a-${vendor}` : slug
   return hasLandingPage(target) ? { href: `/site/lp/${target}` } : null
 }

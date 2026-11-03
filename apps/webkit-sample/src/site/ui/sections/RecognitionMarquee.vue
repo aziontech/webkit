@@ -42,8 +42,8 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    eyebrow: '',
-    title: '',
+    eyebrow: 'Analysts',
+    title: 'Recognized as a market leader',
     ariaLabel: 'Analyst recognitions',
     anchor: ''
   })

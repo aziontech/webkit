@@ -102,15 +102,16 @@
   // leads: the reader who already knows they want the Console, the CLI or an agent
   // should not have to read four jobs first to find the way in.
   import Button from '@aziontech/webkit/button'
+  import DocCard from '@aziontech/webkit/doc-card'
+  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocProse from '@aziontech/webkit/doc-prose'
   import FrameBox from '@aziontech/webkit/frame-box'
   import TextureMaterial from '@aziontech/webkit/texture-material'
-  import DocCard from '@aziontech/webkit-docs/doc-card'
-  import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
-  import DocHeading from '@aziontech/webkit-docs/doc-heading'
-  import DocPagination from '@aziontech/webkit-docs/doc-pagination'
-  import DocProse from '@aziontech/webkit-docs/doc-prose'
   import CopyPromptButton from '@shared/ui/CopyPromptButton.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
+
+  import DocHeading from '../ui/DocHeading.vue'
 
   // Hero: ONE CONTROL, NOT A LISTING. The hero used to show the prompt — a two-tab
   // CodeBlock (`AI Prompt` / `CLI`) filling the band's right half. It spent half the

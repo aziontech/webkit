@@ -31,17 +31,14 @@
   // `DocTabs` also means the strip, the underline and the whole keyboard model are the
   // design system's.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCard from '@aziontech/webkit/doc-card'
+  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocProse from '@aziontech/webkit/doc-prose'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
-  import DocCallout from '@aziontech/webkit-docs/doc-callout'
-  import DocCard from '@aziontech/webkit-docs/doc-card'
-  import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
-  import DocHeading from '@aziontech/webkit-docs/doc-heading'
-  import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'
-  import DocPagination from '@aziontech/webkit-docs/doc-pagination'
-  import DocProse from '@aziontech/webkit-docs/doc-prose'
-  import DocTab from '@aziontech/webkit-docs/doc-tab'
-  import DocTabs from '@aziontech/webkit-docs/doc-tabs'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
 
   import {
@@ -61,6 +58,9 @@
   } from '../lib/docs-agent-setup.js'
   import { useDocsCrumbNav } from '../lib/docs-crumb-nav.js'
   import { useDocsPageActions } from '../lib/docs-page-actions.js'
+  import DocHeading from '../ui/DocHeading.vue'
+  import DocTab from '../ui/DocTab.vue'
+  import DocTabs from '../ui/DocTabs.vue'
 
   defineProps({
     // The ancestor trail, current page last — derived from the rail by the view.

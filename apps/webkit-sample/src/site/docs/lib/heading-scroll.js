@@ -26,9 +26,7 @@ export function scrollToHeading(container, root, id, event) {
   event?.preventDefault()
   const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   const top =
-    target.getBoundingClientRect().top -
-    container.getBoundingClientRect().top +
-    container.scrollTop
+    target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop
 
   container.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' })
   globalThis.history?.replaceState(null, '', `#${id}`)

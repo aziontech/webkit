@@ -21,7 +21,9 @@ const FAQ = [
     body: [
       {
         type: 'p' as const,
-        segments: [{ text: 'Seu sistema está sob ataque agora? Obtenha ajuda especializada imediata.' }]
+        segments: [
+          { text: 'Seu sistema está sob ataque agora? Obtenha ajuda especializada imediata.' }
+        ]
       },
       { type: 'p' as const, segments: [{ text: 'O que acontece a seguir:' }] },
       {

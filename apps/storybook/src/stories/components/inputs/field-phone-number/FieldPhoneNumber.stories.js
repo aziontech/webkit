@@ -37,7 +37,7 @@ const meta = {
     countries: {
       control: false,
       description:
-        'Countries offered by the dial-code Select. `mask` is a list when a country allows several lengths. Falls back to the built-in list, which ends with Other.',
+        'Countries offered by the dial-code Select. `mask` is a list when a country allows several lengths. Falls back to the built-in list.',
       table: { category: 'props', type: { summary: 'Country[]' } }
     },
     label: {

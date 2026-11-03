@@ -39,6 +39,7 @@ import LandingCache from '@site/views/LandingCache.vue'
 import LandingCareers from '@site/views/LandingCareers.vue'
 import LandingCareersHome from '@site/views/LandingCareersHome.vue'
 import LandingCareersJob from '@site/views/LandingCareersJob.vue'
+import LandingCloudflareAlternative from '@site/views/LandingCloudflareAlternative.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
@@ -74,6 +75,7 @@ import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
 import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
+import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
 import LandingWebApplicationFirewall from '@site/views/LandingWebApplicationFirewall.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
@@ -94,12 +96,10 @@ const MOVED = {
   '/site/web-apps': '/site/solutions/web-apps',
   '/site/technology': '/site/solutions/technology',
   '/site/retail': '/site/solutions/retail',
-  '/site/vercel-alternative-guide': '/site/lp/guia-alternativa-a-vercel',
+  '/site/vercel-alternative-guide': '/site/guides/vercel-alternative',
   '/site/guides': '/site/lp',
-  '/site/guides/vercel-alternative': '/site/lp/guia-alternativa-a-vercel',
   '/site/guides/akamai-alternative': '/site/lp/guia-alternativa-a-akamai',
   '/site/guides/aws-alternative': '/site/lp/guia-alternativa-a-aws',
-  '/site/guides/cloudflare-alternative': '/site/lp/guia-alternativa-a-cloudflare',
   '/site/guides/fastly-alternative': '/site/lp/guia-alternativa-a-fastly',
   '/site/products/applications': '/site/docs/applications',
   '/site/products/firewall': '/site/docs/firewall',
@@ -249,6 +249,16 @@ export const siteRoutes = [
   // file in data/pages/lp/, named after the azion.com page it translates.
   { path: '/site/lp', redirect: `/site/lp/${LANDING_PAGE_SLUGS[0]}` },
   {
+    path: '/site/guides/vercel-alternative',
+    name: 'site-vercel-alternative-guide',
+    component: LandingVercelAlternative
+  },
+  {
+    path: '/site/guides/cloudflare-alternative',
+    name: 'site-cloudflare-alternative-guide',
+    component: LandingCloudflareAlternative
+  },
+  {
     path: '/site/lp/:slug',
     name: 'site-lp',
     component: LandingLp,
@@ -391,7 +401,7 @@ export const siteRoutes = [
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   // A docs reading page COMPOSED in Vue: prose, but with a filtering tool picker and
   // cards carrying other vendors' real marks — neither of which MDX can express. Every
-  // block in it still comes from @aziontech/webkit-docs.
+  // block in it still comes from the documentation layer.
   {
     path: '/site/docs/agent-setup',
     name: 'site-docs-agent-setup',
@@ -409,7 +419,7 @@ export const siteRoutes = [
     beforeEnter: (to) => (agentBySlug(String(to.params.agent)) ? true : '/site/docs/agent-setup')
   },
   // EVERY OTHER DOCS PAGE, from one route and one view. A reading page is `.mdx` rendered by
-  // @aziontech/webkit-docs — the other half of the docs example, and the way most of a real
+  // the documentation layer — the other half of the docs example, and the way most of a real
   // documentation site is written — so the pages are files in `site/docs/content/` and the
   // route resolves the slug against that folder (see docs-pages.js). Adding a page is adding
   // the file and giving its row in the rail an `href`; no route, no view, no wiring.

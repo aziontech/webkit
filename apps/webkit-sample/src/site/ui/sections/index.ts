@@ -40,6 +40,7 @@ import QuoteBand from './QuoteBand.vue'
 import RecognitionMarquee from './RecognitionMarquee.vue'
 import ResourceGrid from './ResourceGrid.vue'
 import StatsBand from './StatsBand.vue'
+import StickyCarousel from './StickyCarousel.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
 import StoryLibrary from './StoryLibrary.vue'
 import SubjectLibrary from './SubjectLibrary.vue'
@@ -87,6 +88,7 @@ export const SECTIONS: Record<string, Component> = {
   RecognitionMarquee,
   ResourceGrid,
   StatsBand,
+  StickyCarousel,
   StickyScrollCode,
   StoryLibrary,
   SubjectLibrary,

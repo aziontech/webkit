@@ -140,7 +140,9 @@ export default {
         jobTitle: 'CTO na HeroSpark',
         client: registeredClient('HeroSpark')
       },
-      actions: [{ label: 'Clientes', href: '/site/success-cases', kind: 'outlined', trailing: true }]
+      actions: [
+        { label: 'Clientes', href: '/site/success-cases', kind: 'outlined', trailing: true }
+      ]
     },
     {
       section: 'MediaSplitStack',
