@@ -10,7 +10,7 @@ The company's investors as a row of linked marks under a centered title, like th
 
 On hover and keyboard focus the mark lifts and a "Visit website" line rises under it. Under reduced motion both stay put. Each mark carries a light and a dark logo, so it reads in either theme.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox` and `BentoGrid`.
+The band is the `InvestorMarks` component from `@aziontech/webkit/sections/investor-marks`, also reachable as `Sections.InvestorMarks`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `BentoGrid`.
 
 <p
   style={{
@@ -33,7 +33,7 @@ The two investors About runs: monashees+ and Qualcomm Ventures.
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `items[].logo` is the mark drawn on the dark theme, `logoLight` the one drawn on the light theme.
 - `items[].href` is the investor's website, opened in a new tab.
@@ -42,5 +42,8 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 <div className="sb-site-json">
-  <Source of={InvestorMarksStories.DefaultJson} dark />
+  <Source
+    of={InvestorMarksStories.DefaultJson}
+    dark
+  />
 </div>

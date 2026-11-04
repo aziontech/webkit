@@ -10,7 +10,7 @@ The compliance band of a solution page: a short statement that the platform meet
 
 Three columns on desktop, two on a phone. Retail, Financial Services and Technology use it.
 
-Built from `SectionModule`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.
+The band is the `ComplianceBadges` component from `@aziontech/webkit/sections/compliance-badges`, also reachable as `Sections.ComplianceBadges`; it composes `SectionModule`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.
 
 <p
   style={{
@@ -33,15 +33,18 @@ The five certifications those pages list, SOC 2 & 3, PCI DSS, LGPD, GDPR and CCP
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` fill the text side.
 - `certifications[]` takes a `label`, a `badge` image and its `alt` text. A badge without a label or an image is skipped.
-- `moreLink` is the closing cell; it needs both `label` and `href`.
+- `primaryAction` is the closing cell; it needs both `label` and `href`.
 - `ariaLabel` names the badge list for screen readers.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={ComplianceBadgesStories.DefaultJson} dark />
+  <Source
+    of={ComplianceBadgesStories.DefaultJson}
+    dark
+  />
 </div>
