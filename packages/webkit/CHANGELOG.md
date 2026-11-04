@@ -4,6 +4,18 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.8.0...@aziontech/webkit@5.9.0) (2026-11-04)
+
+
+### Features
+
+* **webkit:** add the spinning globe and brand globe scene assets ([#1134](https://github.com/aziontech/webkit/issues/1134)) ([25a7da1](https://github.com/aziontech/webkit/commit/25a7da16c3ec6f871d7b08e4fd8b0e5ac6c02a69))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-49561] center the DocUpdate link glyph and Topic icon on the first text line ([#1116](https://github.com/aziontech/webkit/issues/1116)) ([acf7dec](https://github.com/aziontech/webkit/commit/acf7dec13c3c529b650cfbfeed51f333db4750cb))
+
 ## [5.8.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.7.0...@aziontech/webkit@5.8.0) (2026-11-03)
 
 
