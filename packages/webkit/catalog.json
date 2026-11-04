@@ -1846,6 +1846,15 @@
         "aliases": [
           "isToggled"
         ]
+      },
+      {
+        "concept": "in-page anchor id",
+        "canonical": "anchor",
+        "aliases": [
+          "anchorId",
+          "sectionId",
+          "hash"
+        ]
       }
     ],
     "size": {

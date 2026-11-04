@@ -17,8 +17,20 @@ A component named `<name>` in category `<category>` lives at `packages/webkit/sr
     <name>-<part>.vue
 ```
 
+The `sections` category adds the registry compound on top of that layout (see [`compound-api.md`](./compound-api.md) § Registry compounds):
+
+```
+sections/
+  sections.vue            # the Sections root: renders { _id, props }[] through the registry
+  registry.ts             # export const registry = { 'use-cases': UseCases, … }; export type SectionId
+  index.ts                # export default Object.assign(Sections, { UseCases, …, registry })
+  <name>/                 # one folder per page section, a monolithic component named by its _id
+    <name>.vue
+    <name>.test.ts
+```
+
 - **One component per `.vue` file**, named in kebab; the file name is the canonical name (see [`naming.md`](./naming.md)).
-- **Category lives in the folder, never in the public import** (`@aziontech/webkit/<name>`, flat — see [`imports.md`](./imports.md)).
+- **Category lives in the folder, never in the public import** (`@aziontech/webkit/<name>`, flat — see [`imports.md`](./imports.md)). The single exception is `sections/`, whose public path keeps the prefix (`@aziontech/webkit/sections/<name>`) because the name is the site's section `_id`.
 - **Co-locate** what only this component uses (its composables, its `injection-key.ts`, its sub-components). Promote to [`src/composables/`](../../packages/webkit/src/composables/) only when a second component needs it.
 - **No per-component `package.json`** — exports are declared once in the root `packages/webkit/package.json#exports` (see [`compound-api.md`](./compound-api.md)).
 
