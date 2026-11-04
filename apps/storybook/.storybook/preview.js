@@ -93,7 +93,7 @@ export const parameters = {
           'Design Tokens',
           ['Color', 'Theme', 'Typography', 'Layout', 'Motion'],
           'Assets',
-          ['Illustrations', 'Logos', 'Icons']
+          ['Illustrations', 'Globe', 'Logos', 'Icons']
         ],
         'Components',
         [
