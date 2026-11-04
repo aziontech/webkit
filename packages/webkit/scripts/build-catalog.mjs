@@ -168,7 +168,7 @@ function bullets(section) {
 }
 
 function _readSpec(subpath) {
-  const specFile = resolve(SPECS_DIR, `${subpath}.md`)
+  const specFile = resolve(SPECS_DIR, `${subpath.split('/').pop()}.md`)
   if (!existsSync(specFile)) return null
   const { frontmatter, body } = parseSpecFile(specFile)
   if (!frontmatter) return null
@@ -233,6 +233,11 @@ function build() {
 
   function parentCompound(subpath) {
     if (subpath.endsWith('-root')) return null
+    const slash = subpath.indexOf('/')
+    if (slash > 0) {
+      const head = subpath.slice(0, slash)
+      return compoundRoots.includes(head) ? head : null
+    }
     for (const c of compoundByLength) {
       if (subpath !== c && subpath.startsWith(`${c}-`)) return c
     }
@@ -296,7 +301,7 @@ function build() {
             (s) =>
               s !== rootKey &&
               s !== subpath &&
-              s.startsWith(`${subpath}-`) &&
+              (s.startsWith(`${subpath}-`) || s.startsWith(`${subpath}/`)) &&
               parentCompound(s) === subpath
           )
           .map((s) => `${PKG_NAME}/${s}`)
