@@ -348,15 +348,10 @@ export const STORY_LIBRARY_SECTION = {
 const meta = {
   title: 'Templates/Marketing/Listings/StoryLibrary',
   excludeStories: ['STORY_LIBRARY_SECTION'],
-  tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'Every success story of a company as one library, with the controls to narrow it: a left-aligned title band, a search field and one select per facet (industry, solution and product) on one row, then a grid of cards and a button that reveals the next page. Each card is one link, named by its company: the client mark in a single ink, the story’s industry as an overline, its description and a “Read story” line that nudges its arrow on hover. The grid runs one column on phones, two from `sm` and three from `lg`, and the cell rules stop under the last row. Below `lg` the three selects collapse into a filter button beside the search field, with the applied filters as chips under it; the Success Cases page (/site/success-cases) reads the facets from the query string. When nothing matches, an empty state offers to clear every filter. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Button` and, when nothing matches, `EmptyState`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -368,10 +363,6 @@ export const Default = {
   ...editable(() => ({ components, setup, template: TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The library at rest, from lg up: no search and no facet applied, six stories across Retail, Tech and Media in a three-column grid, and the button that reveals the next page.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
@@ -381,10 +372,6 @@ export const NoResults = {
   ...editable(() => ({ components, setup, template: EMPTY_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The state when the search and the facets match no story: the grid gives way to an empty state whose action clears every filter.'
-      },
       source: { code: toSfc(EMPTY_IMPORTS, EMPTY_TEMPLATE) }
     }
   }

@@ -311,5 +311,15 @@
     "name": "network-map",
     "path": "src/components/content/network-map/network-map.vue",
     "limit": "6.5 KB"
+  },
+  {
+    "name": "spinning-globe",
+    "path": "src/assets/globe/spinning-globe.vue",
+    "limit": "7.5 KB"
+  },
+  {
+    "name": "brand-globe-scene",
+    "path": "src/assets/globe/brand-globe-scene.vue",
+    "limit": "16 KB"
   }
 ]

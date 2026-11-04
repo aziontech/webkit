@@ -1,0 +1,86 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ArticleIndexStories from './ArticleIndex.stories'
+
+<Meta title="Templates/Marketing/Listings/ArticleIndex" />
+
+# ArticleIndex
+
+Every article of a listing as one list, with the controls to narrow it on one row: an optional headline, a category picker, one dropdown per facet and a search field. Each control shows only when the page supplies it.
+
+Every article is a ruled row: its cover on the left; on the right its overline, headline, a two-line deck and, in the `byline` layout, the writers pinned to the foot. The `centered` layout centres the copy for rows with no byline. Each row is one link, named by its headline, and from `lg` up a "Read article" cue rises into its end on hover or keyboard focus. Category, facets and search combine, and when nothing matches an empty state offers to clear every filter. Below `lg` the controls stack and the cover sits over the copy.
+
+Built from `SectionModule`, `FrameBox`, `SegmentedButton`, `Select`, `InputText`, `Avatar` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### All Articles
+
+The Blog page's list at rest: All articles selected and no search, with the category picker and the search field, rows in the `byline` layout, and the button into the next page.
+
+<Canvas of={ArticleIndexStories.AllArticles} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band id for in-page links.
+- `items[]` are the articles, newest first. Each is a `key`, an `href`, an `image`, a `meta` overline, a `title`, a `description`, its `authors` (each a `name`), a `byline`, and the `categories` it is filed under.
+- `categories` are the segments of the category picker, `allLabel` the segment that shows every category, and `categoryLabel` its accessible name.
+- `search` sets the field's `placeholder` and `label`.
+- `rowLabel` is the cue revealed on a row under hover or focus, and `moreLabel` the button into the next page.
+- `ariaLabel` names the list for assistive tech.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ArticleIndexStories.AllArticlesJson}
+    dark
+  />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Resource Hub
+
+The Resource Hub's list: a headline beside three facet dropdowns (content type, category, industry) and no search, with rows in the `centered` layout, each a cover, its type and date, its headline and its deck.
+
+<Canvas of={ArticleIndexStories.ResourceHub} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band id for in-page links, and `title` the headline beside the filters.
+- `items[]` are the resources. Each is a `key`, an `href`, an `image`, a `meta` overline, a `title` and a `description`, with `facets` holding its value for each dropdown.
+- `facets[]` are the dropdowns, each a `key`, a `label`, an `allLabel` and its `options`.
+- `rowKind: 'centered'` centres the copy for rows with no byline.
+- `rowLabel` is the cue revealed on a row under hover or focus, and `moreLabel` the button into the next page.
+- `ariaLabel` names the list for assistive tech.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ArticleIndexStories.ResourceHubJson}
+    dark
+  />
+</div>
