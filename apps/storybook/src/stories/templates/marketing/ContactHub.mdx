@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ContactHubStories from './ContactHub.stories'
+
+<Meta title="Templates/Marketing/Content/ContactHub" />
+
+# ContactHub
+
+The band under the Contact title band. Sales and Support sit side by side, each with its scope in one sentence and the action that actually reaches that team. A row of self-serve channels follows under them.
+
+Support carries a second link to the system status page, so a reader can check for an incident before opening a ticket. The Contact page renders this band.
+
+Built from `SectionModule`, `FrameBox`, `CardGrid`, `CardGridCell`, `Topic` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+Sales and Support lanes over three self-serve channels: emergency attack mitigation, the Discord community and the documentation.
+
+<Canvas of={ContactHubStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `lanes[]` are the two teams side by side, each an `icon`, a `label` and a one-sentence `description`, with `actions[]` (`label`, `href`, `kind`, `trailing`) on its floor.
+- A lane's `status` (`label`, `href`) adds the system status link beside its actions.
+- `channels[]` are the self-serve links under the lanes, each an `icon`, a `title`, a `description` and an `href`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ContactHubStories.DefaultJson}
+    dark
+  />
+</div>

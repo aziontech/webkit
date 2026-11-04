@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as UseCasesStories from './UseCases.stories'
+
+<Meta title="Templates/Marketing/Use Cases/UseCases" />
+
+# UseCases
+
+The band a product page closes its argument with: one framed cell that names the product and links to its docs, beside the handful of things you would use it for.
+
+The title cell is the simplest variant of the media-and-title split: an overline, a headline, a one-line lead and a single "View docs" button pinned to the foot of the cell. The use cases sit in `CardGrid` frame cells that draw their own rules and corner marks, each a short title over one sentence.
+
+Built from `SectionModule`, `FrameBox`, `CardGrid`, `Topic`, `Overline` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+Four use cases of equal weight in a two-by-two set, each a short title over one sentence.
+
+<Canvas of={UseCasesStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the title cell.
+- `action` is the button pinned to the foot of the title cell, a `label`, an `href` and `trailing` for the chevron.
+- `items[]` are the four use cases, each an `icon`, a `title` and a `description`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={UseCasesStories.DefaultJson}
+    dark
+  />
+</div>

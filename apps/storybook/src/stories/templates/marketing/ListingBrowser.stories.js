@@ -10,6 +10,7 @@ import Table from '@aziontech/webkit/table'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -225,15 +226,11 @@ ${indent(TABLE, 2)}
 
 const meta = {
   title: 'Templates/Marketing/Listings/ListingBrowser',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'The full listing a ListingTable previews, with the controls to narrow it: a search field and one select per facet and for the order on one row, then every row under its group. It shares ListingTable’s anatomy — overline column headers, one link per row named by its first column, and a list of items below `sm` — and adds a group row in the overline face over each group’s rows, with a rule between groups. Below `lg` the controls stack. Careers uses it for its jobs list, grouped by department and narrowed by department and location. Group rows stay pinned under the site nav while their rows scroll, and every column after the first is set in the small overline face. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Table` and, on phones, `Item`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -245,11 +242,65 @@ export const OpenPositions = {
   ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Careers jobs list at rest: every department and location, newest first, with Engineering and Security as the groups shown.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'listing-browser',
+  props: {
+    title: 'Open positions',
+    columns: [
+      { key: 'role', label: 'Role', grow: 2 },
+      { key: 'team', label: 'Team and location', grow: 2 },
+      { key: 'type', label: 'Work type', align: 'end' }
+    ],
+    rows: GROUPS.flatMap((group) =>
+      group.rows.map(({ href, role, team, type }) => ({
+        href,
+        group: group.name,
+        values: { role, team, type },
+        facets: { area: [group.name], location: team.split(' · ')[1].split(' / ') }
+      }))
+    ),
+    groups: GROUPS.map((group) => group.name),
+    facets: [
+      {
+        key: 'area',
+        label: FACETS[0].label,
+        allLabel: FACETS[0].all,
+        options: FACETS[0].options.map((option) => ({ value: option, label: option }))
+      },
+      {
+        key: 'location',
+        label: FACETS[1].label,
+        allLabel: FACETS[1].all,
+        options: FACETS[1].options.map((option) => ({
+          value: option.split(', ')[0],
+          label: option
+        }))
+      }
+    ],
+    sorts: [
+      { value: 'newest', label: FACETS[2].options[0], by: '' },
+      { value: 'title', label: FACETS[2].options[1], by: 'role' }
+    ],
+    sortLabel: FACETS[2].label,
+    search: {
+      placeholder: 'Search by title, team, or location',
+      shortPlaceholder: 'Search positions',
+      label: 'Search positions'
+    },
+    empty: {
+      title: 'Nothing here yet',
+      description: 'No open positions match your search.',
+      action: 'View all open positions'
+    }
+  }
+}
+
+export const OpenPositionsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

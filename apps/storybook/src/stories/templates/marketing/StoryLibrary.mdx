@@ -1,0 +1,64 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as StoryLibraryStories from './StoryLibrary.stories'
+
+<Meta title="Templates/Marketing/Listings/StoryLibrary" />
+
+# StoryLibrary
+
+Every success story of a company as one library, with the controls to narrow it. A left-aligned title band sits over a search field and one select per facet (industry, solution and product) on one row, then a grid of cards and a button that reveals the next page.
+
+Each card is one link, named by its company: the client mark in a single ink, the story's industry as an overline, its description, and a "Read story" line whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Below `lg` the three selects collapse into a filter button beside the search field, with the applied filters as chips under it. When nothing matches, an empty state offers to clear every filter.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Button` and, when nothing matches, `EmptyState`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The library at rest, from `lg` up: no search and no facet applied, six stories across Retail, Tech and Media in a three-column grid, and the button that reveals the next page.
+
+<Canvas of={StoryLibraryStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band id for in-page links, and `title` is the band heading.
+- `items[]` are the stories, each a `key`, an `href`, a `client` with its `name` and `logo`, a `category` overline, a `description`, and `facets` listing its `industry`, `solution` and `product` values.
+- `facets[]` are the selects, each a `key`, a `label`, an `allLabel` and its `options`.
+- `search` sets the field's `placeholder`, `shortPlaceholder` and `label`; `empty` sets the empty state's `title` and `action`.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={StoryLibraryStories.StoryLibraryJson}
+    dark
+  />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### No Results
+
+The state when the search and the facets match no story: the grid gives way to an empty state whose action clears every filter.
+
+<Canvas of={StoryLibraryStories.NoResults} />

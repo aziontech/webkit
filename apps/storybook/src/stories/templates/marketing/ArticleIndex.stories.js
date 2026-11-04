@@ -11,7 +11,14 @@ import { ref } from 'vue'
 
 import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
-import { noMatches, quoted, searchScript, searchSlot, searchState } from '../../_shared/select-search'
+import {
+  noMatches,
+  quoted,
+  searchScript,
+  searchSlot,
+  searchState
+} from '../../_shared/select-search'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const ALL = 'All articles'
@@ -97,7 +104,16 @@ const FACETS = [
   {
     key: 'industry',
     label: 'Industry',
-    options: ['All industries', 'Financial', 'Fintech', 'EdTech', 'Retail', 'Tech', 'Education', 'Media']
+    options: [
+      'All industries',
+      'Financial',
+      'Fintech',
+      'EdTech',
+      'Retail',
+      'Tech',
+      'Education',
+      'Media'
+    ]
   }
 ]
 
@@ -135,7 +151,6 @@ const RESOURCES = [
       'Azion vs F5: one managed platform for every application. No appliances, no licensing matrix, and a path off BIG-IP one app at a time.'
   }
 ]
-
 
 const BASE_IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
@@ -376,17 +391,61 @@ const HUB_TEMPLATE = band({
   rows: list({ kind: 'centered', label: 'Resources', rows: RESOURCES })
 })
 
+const slugOf = (href) => href.split('/').filter(Boolean).pop()
+
+const prefixOf = (meta) => meta.split(' • ')[0]
+
+export const SITE_SECTION_BLOG = {
+  _id: 'article-index-blog',
+  props: {
+    anchor: 'posts',
+    items: ROWS.map(({ authors, ...row }) => ({
+      key: slugOf(row.href),
+      ...row,
+      authors: authors.map((name) => ({ name })),
+      categories: [prefixOf(row.meta)]
+    })),
+    categories: CATEGORIES.slice(1).map((category) => category.label),
+    allLabel: ALL,
+    categoryLabel: 'Category',
+    search: { placeholder: 'Search articles', label: 'Search articles' },
+    rowLabel: 'Read article',
+    moreLabel: 'Load more',
+    ariaLabel: 'Articles'
+  }
+}
+
+export const SITE_SECTION_RESOURCE_HUB = {
+  _id: 'article-index-resource-hub',
+  props: {
+    anchor: 'resources',
+    title: 'Explore all resources',
+    items: RESOURCES.map((resource) => ({
+      key: slugOf(resource.href),
+      ...resource,
+      categories: [],
+      facets: { contentType: [prefixOf(resource.meta)] }
+    })),
+    facets: FACETS.map(({ key, label, options: [allLabel, ...options] }) => ({
+      key,
+      label,
+      allLabel,
+      options
+    })),
+    rowKind: 'centered',
+    rowLabel: 'Read article',
+    moreLabel: 'Load more',
+    ariaLabel: 'Resources'
+  }
+}
+
 const meta = {
   title: 'Templates/Marketing/Listings/ArticleIndex',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION_BLOG', 'SITE_SECTION_RESOURCE_HUB'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
-      description: {
-        component:
-          'Every article of a listing as one list, with the controls to narrow it on one row: an optional headline, a category picker, one dropdown per facet and a search field, each shown only when the page supplies it. Every article is a ruled row with its cover on the left and, on the right, its overline, its headline, a two-line deck and, in the `byline` layout, the writers pinned to the foot of the copy; the `centered` layout centres the copy for rows with no byline. Each row is one link, named by its headline; the whole row is clickable with the pointer, and a “Read article” cue rises into its end on hover or keyboard focus from `lg` up. Category, facets and search intersect; until a filter applies, the list can leave out the articles a highlight band above already shows, and when nothing matches an empty state offers to clear every filter. Below `lg` the controls stack and the cover sits over the copy. The Blog page uses it for its posts and the Resource Hub for its resources. Built from `SectionModule`, `FrameBox`, `SegmentedButton`, `Select`, `InputText`, `Avatar`, `Button` and, when nothing matches, `EmptyState`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -398,24 +457,26 @@ export const AllArticles = {
   ...editable(() => ({ components, setup: blogSetup, template: BLOG_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Blog page’s list at rest: All articles selected and no search, with the category picker and the search field, rows in the `byline` layout, and the button into the next page.'
-      },
       source: { code: toSfc(BLOG_IMPORTS, BLOG_TEMPLATE) }
     }
   }
+}
+
+export const AllArticlesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_BLOG)
 }
 
 export const ResourceHub = {
   ...editable(() => ({ components, setup: hubSetup, template: HUB_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Resource Hub’s list: a headline beside three facet dropdowns (content type, category, industry) and no search, with rows in the `centered` layout, each a cover, its type and date, its headline and its deck.'
-      },
       source: { code: toSfc(HUB_IMPORTS, HUB_TEMPLATE) }
     }
   }
+}
+
+export const ResourceHubJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_RESOURCE_HUB)
 }
