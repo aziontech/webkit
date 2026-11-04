@@ -90,6 +90,29 @@ Anything slot-shaped stays a slot/sub-component; do not collapse it into a confi
 
 Repeated **data** is the one thing that earns props (`:data` + `:columns`) — hand-authoring N rows as elements is the wrong trade. That data-driven mode renders through the same sub-components (our markup / tokens / a11y); it does not bypass them.
 
+## Registry compounds — `Sections`
+
+The compound shape above is an **anatomy** compound: a root and the parts that live inside it, wired through `provide`/`inject`. There is a second, equally legitimate shape — the **registry compound** — used exactly once, for page sections (`@aziontech/webkit/sections`). It exists so a consumer can import one thing and assemble a whole page from JSON:
+
+```vue
+<script setup>
+import Sections from '@aziontech/webkit/sections'
+</script>
+
+<template>
+  <Sections :sections="page.sections" />            <!-- renders every { _id, props } in order -->
+  <Sections.UseCases v-bind="section.props" />      <!-- or one block, by hand -->
+</template>
+```
+
+What makes it a compound, and how it differs from the anatomy shape:
+
+- **The root is a dispatcher, not a container.** `sections.vue` takes one prop, `sections: SectionEntry[]` (`{ _id, props }`), and renders `<component :is="registry[entry._id]" v-bind="entry.props" />` per entry, skipping unknown ids. It `provide`s nothing; the blocks `inject` nothing. Each block is a complete, independent, props-only component (see [`.claude/docs/SECTIONS.md`](../docs/SECTIONS.md)).
+- **Members are the blocks, named by the PascalCase of their `_id`** (`UseCases`, `HeroBand`, `SiteFooter`), plus the typed `registry` keyed by the kebab `_id`. `registry.ts` owns the map and `export type SectionId = keyof typeof registry`; `index.ts` is `Object.assign(Sections, { UseCases, HeroBand, …, registry })`, so `Sections.UseCases` and `Sections.registry['use-cases']` are both typed by `vue-tsc`.
+- **Same wiring as every compound.** `"./sections"` → `index.ts` (the compound, leads the docs) and `"./sections-root"` → `sections.vue` (the tree-shakeable root). Every block keeps its own `"./sections/<name>"` entry as the tree-shaking path — the compound retains all of them through `Object.assign`, like `./table` retains every `Table.*`.
+- **No overlay vocabulary, no anatomy names.** A block is never a `Trigger`/`Content`; the member name is the block's `_id`, nothing invented.
+- **Adding a block is a three-line change**: the `"./sections/<name>"` export, the `registry.ts` entry, the `index.ts` member — and the block's line in the `## Sub-components` list of `.specs/sections.md`.
+
 ## When a sub-component earns its existence
 
 Interactivity alone does not justify a sub-component. A clickable row is `@click` fallthrough (or a `row-click` event in data-driven mode); a clickable cell is a `clickable` prop + composed content. A part becomes a sub-component only when it owns enough of its **own** markup, a11y, or state to stand alone (`SortButton`: glyph + three sort states + focus ring + touch target).
@@ -103,6 +126,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 - Do not invent a `Trigger` (or any overlay part name) on a component that has no `data-state="open|closed"`.
 - Do not turn a slot-shaped concern into a prop (config arrays of UI). Anatomy is elements; props are data + scalar config.
 - Do not require the consumer to wire shared state by hand when a context-aware sub-component can read it from `inject`.
+- Do not create a second registry compound by analogy with `Sections`; a registry compound is justified only by an external JSON contract that addresses components by id. Do not add `provide`/`inject` to `Sections` or make a block depend on being rendered through it.
 
 ## Enforcement
 
