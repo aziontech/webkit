@@ -16308,6 +16308,151 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg"
     },
+    "sections": {
+      "import": "@aziontech/webkit/sections",
+      "target": "./src/components/sections/sections/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/sections-root",
+      "subcomponents": [
+        "@aziontech/webkit/sections/use-cases"
+      ],
+      "category": "sections",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "sections",
+          "type": "SectionEntry[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The page's section entries, in render order; each is `{ _id, props }` where `_id` is a registry key and `props` is bound onto that block. Unknown ids are skipped."
+        }
+      ],
+      "purpose": "The one import that assembles a marketing page: `Sections` takes the page's `sections[]` JSON — a list of `{ _id, props }` entries — and renders each entry's page-section component with its props bound, in order. It is a registry compound, not an anatomy compound: the root is a dispatcher that provides nothing, every block (`Sections.UseCases`) is a complete, props-only component of its own, and the typed `registry` maps each site `_id` to its block. See `.claude/docs/SECTIONS.md` and `.claude/rules/compound-api.md` § Registry compounds.",
+      "useWhen": [
+        "In the site's page renderer: one `<Sections :sections=\"page.sections\" />` per page.",
+        "Anywhere a page is described as data and the blocks must come from one import."
+      ],
+      "avoidWhen": [
+        "For a single, hand-placed block → import it from `@aziontech/webkit/sections/<name>` (tree-shakeable) or reach it as `Sections.<Block>`.",
+        "For product-flow blocks (sign-up, onboarding, deploy success) → those are `templates`, not page sections."
+      ],
+      "related": [
+        "use-cases` — the first block in the registry; every block is listed under Sub-components.",
+        "section-container` / `section-gap` — the column and the gaps the page wraps the rendered blocks in."
+      ],
+      "bestPractices": [
+        "Keep `_id` strings identical to the block names; the registry is keyed by them and an unknown id renders nothing.",
+        "Give every entry a stable `_id` + props pair from the site JSON; do not pre-render blocks by hand and also pass them in `sections`.",
+        "Wrap the output in the page column (`section-container`) — the root draws no column of its own."
+      ]
+    },
+    "sections-root": {
+      "import": "@aziontech/webkit/sections-root",
+      "target": "./src/components/sections/sections/sections.vue",
+      "kind": "root",
+      "rootOf": "sections",
+      "treeShakeableImport": "@aziontech/webkit/sections-root",
+      "category": "sections",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "sections",
+          "type": "SectionEntry[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The page's section entries, in render order; each is `{ _id, props }` where `_id` is a registry key and `props` is bound onto that block. Unknown ids are skipped."
+        }
+      ],
+      "purpose": "The one import that assembles a marketing page: `Sections` takes the page's `sections[]` JSON — a list of `{ _id, props }` entries — and renders each entry's page-section component with its props bound, in order. It is a registry compound, not an anatomy compound: the root is a dispatcher that provides nothing, every block (`Sections.UseCases`) is a complete, props-only component of its own, and the typed `registry` maps each site `_id` to its block. See `.claude/docs/SECTIONS.md` and `.claude/rules/compound-api.md` § Registry compounds.",
+      "useWhen": [
+        "In the site's page renderer: one `<Sections :sections=\"page.sections\" />` per page.",
+        "Anywhere a page is described as data and the blocks must come from one import."
+      ],
+      "avoidWhen": [
+        "For a single, hand-placed block → import it from `@aziontech/webkit/sections/<name>` (tree-shakeable) or reach it as `Sections.<Block>`.",
+        "For product-flow blocks (sign-up, onboarding, deploy success) → those are `templates`, not page sections."
+      ],
+      "related": [
+        "use-cases` — the first block in the registry; every block is listed under Sub-components.",
+        "section-container` / `section-gap` — the column and the gaps the page wraps the rendered blocks in."
+      ],
+      "bestPractices": [
+        "Keep `_id` strings identical to the block names; the registry is keyed by them and an unknown id renders nothing.",
+        "Give every entry a stable `_id` + props pair from the site JSON; do not pre-render blocks by hand and also pass them in `sections`.",
+        "Wrap the output in the page column (`section-container`) — the root draws no column of its own."
+      ]
+    },
+    "sections/use-cases": {
+      "import": "@aziontech/webkit/sections/use-cases",
+      "target": "./src/components/sections/use-cases/use-cases.vue",
+      "kind": "subcomponent",
+      "parent": "sections",
+      "treeShakeableImport": "@aziontech/webkit/sections/use-cases",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline in the title cell, closed by the blinking cursor."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` in the title cell."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "One-line lead under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "UseCasesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "items",
+          "type": "UseCasesItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
+        }
+      ],
+      "purpose": "The \"what teams use it for\" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'use-cases', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `frame-box`, `overline`, `topic` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.",
+        "Whenever a page needs three to six short, icon-led use cases with one link out to the documentation."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For use cases that each link to their own page → use `use-case-links`.",
+        "Inside another band's cell → compose `topic` directly."
+      ],
+      "related": [
+        "topic` — the icon, title and description cell each use case is rendered with.",
+        "card-grid` — the frame grid this band lays its cells in.",
+        "sections` — the registry compound that renders this block from a page's `sections[]` JSON."
+      ],
+      "bestPractices": [
+        "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",
+        "Write `title` as the heading the page's outline needs; it is the band's `h2`.",
+        "Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as \"go\".",
+        "Leave `eyebrow` as the product name; it is the overline the reader scans first."
+      ]
+    },
     "svg/illustration-layers": {
       "import": "@aziontech/webkit/svg/illustration-layers",
       "target": "./src/svg/illustration-layers/illustration-layers.vue",

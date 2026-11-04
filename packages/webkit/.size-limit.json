@@ -321,5 +321,15 @@
     "name": "brand-globe-scene",
     "path": "src/assets/globe/brand-globe-scene.vue",
     "limit": "16 KB"
+  },
+  {
+    "name": "sections-root",
+    "path": "src/components/sections/sections/sections.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "use-cases",
+    "path": "src/components/sections/use-cases/use-cases.vue",
+    "limit": "8 KB"
   }
 ]
