@@ -323,13 +323,42 @@
     "limit": "16 KB"
   },
   {
-    "name": "sections-root",
-    "path": "src/components/sections/sections/sections.vue",
-    "limit": "8 KB"
-  },
-  {
     "name": "use-cases",
     "path": "src/components/sections/use-cases/use-cases.vue",
-    "limit": "8 KB"
+    "limit": "7 KB"
+  },
+  {
+    "name": "feature-scroll",
+    "path": "src/components/sections/feature-scroll/feature-scroll.vue",
+    "limit": "15 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "feature-tiles",
+    "path": "src/components/sections/feature-tiles/feature-tiles.vue",
+    "limit": "8 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "feature-widgets",
+    "path": "src/components/sections/feature-widgets/feature-widgets.vue",
+    "limit": "22 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "network-section",
+    "path": "src/components/sections/network-section/network-section.vue",
+    "limit": "26 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "stats-band",
+    "path": "src/components/sections/stats-band/stats-band.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "use-case-links",
+    "path": "src/components/sections/use-case-links/use-case-links.vue",
+    "limit": "5 KB"
   }
 ]

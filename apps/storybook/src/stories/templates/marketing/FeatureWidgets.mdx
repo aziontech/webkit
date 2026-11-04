@@ -10,7 +10,7 @@ A band that shows several ways in to the same product, each as a picture over a 
 
 On the site each cell holds a live fragment of the console that wakes on hover; here an `Illustration` stands in for it. The grid collapses to one column on a phone.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox`, `BentoGrid`, `Illustration`, `Button` and `ButtonHighlight`.
+The band is the `FeatureWidgets` component from `@aziontech/webkit/sections/feature-widgets`, also reachable as `Sections.FeatureWidgets`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `BentoGrid`, `Illustration`, `Button` and `ButtonHighlight`.
 
 <p
   style={{
@@ -33,14 +33,13 @@ The Functions "Get started" band: three cells, each a path from a prompt to a de
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `anchor` is the band's id for in-page links.
-- `eyebrow`, `title` and `description` make the section title; without a `title` the title is dropped. `titleKind` aligns it, and `actions` are the buttons under it.
-- `columns` is `2` or `3`, the cells per row from the medium breakpoint up.
-- `items` are the cells in reading order, each a `title` and a `description`.
-- A cell takes a `href` with a `linkLabel` for its outlined link, a `copy` with a `label` and the `text` to put on the clipboard for a highlighted button, or both.
-- A cell's `scene` is the console fragment it presents: a component and its props. It is set in the page's data file, not in JSON, so it is left out of the example.
+- `eyebrow`, `title` and `description` make the section title; without a `title` the title is dropped. `primaryAction` and `secondaryAction` are the buttons under it, each a `label`, an `href` and `trailing` for the chevron.
+- `columns` is `2`, `3` or `4`, the cells per row from the medium breakpoint up.
+- `items` are the cells in reading order, each a `title`, a `description` and the `illustration` shown above them.
+- A cell ends in either an `action` (a `label` and an `href`, rendered as an outlined link) or a `copy` (a `label` and the `text` to put on the clipboard, rendered as a highlighted button).
 
 Example:
 

@@ -10,7 +10,7 @@ A framed section that makes the case for Azion's distributed infrastructure: a h
 
 The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
 
-Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit.
+The band is the `NetworkSection` component from `@aziontech/webkit/sections/network-section`, also reachable as `Sections.NetworkSection`; it composes `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit. `kind` picks the floor: `outcomes` (the default) or `benefits`.
 
 <p
   style={{
@@ -33,14 +33,14 @@ The Home page and every solution page: four client outcomes, each a quote with i
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow` is the short overline above the headline.
 - `title` is the headline over the map.
 - `lead` is the overline sentence above the claims.
 - `claims` are the network figures drawn as pills.
 - `outcomes[]` fill the floor; four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
-- `logoTreatment` is `as-is`, `monochrome` or `knockout`. Empty means as-is.
+- `logoTreatment` is `as-is` or `monochrome` (one ink that follows the theme). Empty means as-is.
 
 Example:
 

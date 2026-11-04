@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: e1e4edd128b463ce3ed5d6610742029fd6f68ea562f47a066158527ff8b77032
+checksum: 61ed6a7fdbcc285eff6d37121c4f5174e5afca7c10abe79bab338b5ea351e23b
 ---
 
 # Sections — Component Spec
@@ -71,6 +71,12 @@ The root `Sections` (`sections/sections/sections.vue`) owns the loop: for each e
 
 Blocks are sibling components under `src/components/sections/`, each with its own spec, test and `./sections/<name>` export:
 
+- `../feature-scroll/feature-scroll.vue` — `Sections.FeatureScroll`, registered as `'feature-scroll'`; see `.specs/feature-scroll.md` for its props.
+- `../feature-tiles/feature-tiles.vue` — `Sections.FeatureTiles`, registered as `'feature-tiles'`; see `.specs/feature-tiles.md` for its props.
+- `../feature-widgets/feature-widgets.vue` — `Sections.FeatureWidgets`, registered as `'feature-widgets'`; see `.specs/feature-widgets.md` for its props.
+- `../network-section/network-section.vue` — `Sections.NetworkSection`, registered as `'network-section'`; see `.specs/network-section.md` for its props.
+- `../stats-band/stats-band.vue` — `Sections.StatsBand`, registered as `'stats-band'`; see `.specs/stats-band.md` for its props.
+- `../use-case-links/use-case-links.vue` — `Sections.UseCaseLinks`, registered as `'use-case-links'`; see `.specs/use-case-links.md` for its props.
 - `../use-cases/use-cases.vue` — `Sections.UseCases`, registered as `'use-cases'`; see `.specs/use-cases.md` for its props.
 
 ## Props
