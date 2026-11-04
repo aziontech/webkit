@@ -50,9 +50,11 @@ Tree-shaking path, when a consumer wants one block only: `import UseCases from '
 
 ```
 packages/webkit/src/components/sections/
-  sections.vue      # <Sections :sections>: v-for entry → <component :is="registry[entry._id]" v-bind="entry.props" />
-  registry.ts       # export const registry = { 'use-cases': UseCases, … }; export type SectionId = keyof typeof registry
-  index.ts          # export default Object.assign(Sections, { UseCases, …, registry })
+  sections/           # the compound is itself the component `sections` (spec .specs/sections.md, testid sections-sections)
+    sections.vue      # <Sections :sections>: v-for entry → <component :is="registry[entry._id]" v-bind="entry.props" />
+    registry.ts       # export type SectionRegistry = { 'use-cases': typeof UseCases, … }; export const registry: SectionRegistry; export type SectionId
+    index.ts          # Object.assign(Sections, { UseCases, …, registry }) as CompoundSections (explicit type, like every compound index)
+    sections.test.ts
   use-cases/
     use-cases.vue
     use-cases.test.ts
@@ -61,12 +63,14 @@ packages/webkit/src/components/sections/
 Exports in `packages/webkit/package.json`:
 
 ```jsonc
-"./sections": "./src/components/sections/index.ts",          // compound — leads the docs
-"./sections-root": "./src/components/sections/sections.vue", // tree-shakeable root
+"./sections": "./src/components/sections/sections/index.ts",          // compound — leads the docs
+"./sections-root": "./src/components/sections/sections/sections.vue", // tree-shakeable root
 "./sections/use-cases": "./src/components/sections/use-cases/use-cases.vue"
 ```
 
-`Sections` provides nothing and the blocks inject nothing: it is a dispatcher. Unknown `_id`s are skipped. Adding a block touches four lines: the export, the `registry.ts` entry, the `index.ts` member, and the block's line in `## Sub-components` of `.specs/sections.md`.
+`registry` and the compound carry explicit types (`SectionRegistry`, `CompoundSections`) because `vue-tsc` emits declarations: an inferred `{ 'use-cases': UseCases }` would leak the block's private `Props` interface and fail with TS4023/TS4082.
+
+`Sections` provides nothing and the blocks inject nothing: it is a dispatcher. Unknown `_id`s are skipped. Adding a block touches five lines: the export, the `SectionRegistry` key and the `registry` entry in `registry.ts`, the `index.ts` member (in `CompoundSections` and in the `Object.assign`), and the block's line in `## Sub-components` of `.specs/sections.md`.
 
 ## Storybook
 

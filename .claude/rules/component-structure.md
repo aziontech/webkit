@@ -21,13 +21,17 @@ The `sections` category adds the registry compound on top of that layout (see [`
 
 ```
 sections/
-  sections.vue            # the Sections root: renders { _id, props }[] through the registry
-  registry.ts             # export const registry = { 'use-cases': UseCases, … }; export type SectionId
-  index.ts                # export default Object.assign(Sections, { UseCases, …, registry })
+  sections/               # the registry compound, itself a component named `sections` (testid `sections-sections`)
+    sections.vue          # the Sections root: renders { _id, props }[] through the registry
+    registry.ts           # export const registry: SectionRegistry = { 'use-cases': UseCases, … }; export type SectionId
+    index.ts              # export default Object.assign(Sections, { UseCases, …, registry }) as CompoundSections
+    sections.test.ts
   <name>/                 # one folder per page section, a monolithic component named by its _id
     <name>.vue
     <name>.test.ts
 ```
+
+The root sits in its own `sections/sections/` folder, not loose under the category: every hook derives `<category>/<name>/<name>.vue` from the path, and a `.vue` directly under a category folder resolves to no spec and no testid.
 
 - **One component per `.vue` file**, named in kebab; the file name is the canonical name (see [`naming.md`](./naming.md)).
 - **Category lives in the folder, never in the public import** (`@aziontech/webkit/<name>`, flat — see [`imports.md`](./imports.md)). The single exception is `sections/`, whose public path keeps the prefix (`@aziontech/webkit/sections/<name>`) because the name is the site's section `_id`.
