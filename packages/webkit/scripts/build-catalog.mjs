@@ -168,7 +168,7 @@ function bullets(section) {
 }
 
 function _readSpec(subpath) {
-  const specFile = resolve(SPECS_DIR, `${subpath}.md`)
+  const specFile = resolve(SPECS_DIR, `${subpath.split('/').pop()}.md`)
   if (!existsSync(specFile)) return null
   const { frontmatter, body } = parseSpecFile(specFile)
   if (!frontmatter) return null
