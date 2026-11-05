@@ -35,8 +35,6 @@ export const CONCEPTS = [
     aliases: ['isToggled']
   },
   {
-    // The id a `#hash` link targets. A page section applies it to its own landmark (the
-    // inner SectionModule), not to the root, so `id` fallthrough cannot express it.
     concept: 'in-page anchor id',
     canonical: 'anchor',
     aliases: ['anchorId', 'sectionId', 'hash']
