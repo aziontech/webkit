@@ -10,7 +10,7 @@ A titled preview of a longer listing: a few linked rows in columns, and one outl
 
 Each row is one link, named by its first column. The whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.
+The band is the `ListingTable` component from `@aziontech/webkit/sections/listing-table`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.
 
 <p
   style={{
@@ -38,7 +38,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `title` heads the table; `anchor` gives the band an id for in-page links.
 - `columns` are the columns left to right, each a `key`, a `label`, and an optional `grow` (1, 2 or 3) and `align` (`start` or `end`). The first column names the row and the second describes it on phones.
 - `rows[]` are the linked rows, each an `href` and its `values` keyed by column.
-- `action` is the outlined button into the full listing, a `label` and an `href`. Leave it out for no button.
+- `primaryAction` is the outlined button into the full listing, a `label`, an `href` and `trailing` for the chevron. Leave it out for no button.
 
 Example:
 
