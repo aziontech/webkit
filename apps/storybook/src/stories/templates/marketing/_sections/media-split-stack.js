@@ -4,6 +4,8 @@ export const SOLUTIONS_SECTION = {
   _id: 'media-split-stack',
   props: {
     kind: 'media-end',
+    eyebrow: 'Solutions',
+    title: 'One platform for every workload you run',
     bands: [
       {
         image: '/marketing-components/illustrations/quick-start-with-templates.svg',

@@ -27,7 +27,7 @@ The band is the `MediaSplitStack` component from `@aziontech/webkit/sections/med
 
 ### Solutions
 
-The five solution areas Home stacks inside Why Azion, each a large, centered band with an outlined "Learn more" button. The first band shows an art file as an image; the others use `Illustration` scenes.
+The five solution areas Home stacks inside Why Azion, under an optional large, centered section title, each a large, centered band with an outlined "Learn more" button. The first band shows an art file as an image; the others use `Illustration` scenes.
 
 <Canvas of={MediaSplitStackStories.Solutions} />
 
@@ -36,6 +36,7 @@ The five solution areas Home stacks inside Why Azion, each a large, centered ban
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `kind` is `media-end`.
+- `eyebrow` and `title` make the section title, rendered large and centered. Both are optional: without a `title` the heading is left out and the stack stands alone, as on Home.
 - `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows), and an `illustration` name or an `image` with `imageAlt`.
 - A band without `action` has no button and no link. A band with no picture renders without its media cell.
 

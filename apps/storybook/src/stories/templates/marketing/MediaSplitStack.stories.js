@@ -45,7 +45,7 @@ export const Solutions = {
     docs: {
       description: {
         story:
-          'The five solution areas of Home: large, centered bands, every picture at the closing end, each with an outlined "Learn more" button.'
+          'The five solution areas of Home under an optional large, centered section title: large, centered bands, every picture at the closing end, each with an outlined "Learn more" button.'
       },
       source: { code: source(SOLUTIONS_SECTION) }
     }
