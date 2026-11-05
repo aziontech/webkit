@@ -16969,6 +16969,264 @@
         "Give each item either a registry `mark` or a `logo` URL with `clientName`, not both."
       ]
     },
+    "sections/closing-call-to-action": {
+      "import": "@aziontech/webkit/sections/closing-call-to-action",
+      "target": "./src/components/sections/closing-call-to-action/closing-call-to-action.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "ClosingCallToActionKind",
+          "default": "'split'",
+          "required": "false",
+          "doc": "Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline; not drawn in `primary`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "titleMuted",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Second line of the headline in muted ink; drawn in `split` only."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence: in the aside cell in `split`, under the headline in `panel`."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ClosingCallToActionAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "ClosingCallToActionAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `button`, `frame-box` and `texture-material`. `kind` picks the layout only: `split` sets the headline and the primary action in a raised lead cell beside an aside cell carrying the description and the secondary action, over a tall closing frame; `panel` sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. All three take the same copy and the same two actions.",
+      "useWhen": [
+        "To close a solution or product page on its one or two asks (`split`), or a page such as Careers on one action (`panel`), or a page that ends on its one loud ask (`primary`)."
+      ],
+      "avoidWhen": [
+        "For a newsletter sign-up close → use `closing-call-to-action-newsletter`.",
+        "For an ask in the middle of a page → compose `call-to-action` directly."
+      ],
+      "related": [
+        "call-to-action` — the framed band this section renders.",
+        "closing-call-to-action-newsletter` — the closing band whose ask is a subscribe form."
+      ],
+      "bestPractices": [
+        "Place it last on the page, right above `site-footer`, after a hatched `section-gap`.",
+        "Set `anchor: 'contact'` so the page's contact links scroll to the close.",
+        "In `split`, keep `title` and `titleMuted` to one short line each; `panel` and `primary` do not draw `titleMuted`, and `primary` does not draw `eyebrow`."
+      ]
+    },
+    "sections/closing-call-to-action-agents": {
+      "import": "@aziontech/webkit/sections/closing-call-to-action-agents",
+      "target": "./src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-agents",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "typedLead",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fixed opening of the typed line, before the typed word."
+        },
+        {
+          "name": "typedWords",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Closing sentence under the typed line, the same for every audience."
+        },
+        {
+          "name": "audiences",
+          "type": "ClosingCallToActionAgentsAudience[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more."
+        },
+        {
+          "name": "audiencesAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the audience switch."
+        },
+        {
+          "name": "lineAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the read-only field that shows an audience's copyable line."
+        }
+      ],
+      "purpose": "The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks the way in. Each audience carries an optional copyable line and its actions; under them, a line types its words one after another behind a blinking cursor, then a closing sentence, both the same for every audience so the band keeps its height when the switch changes. The hatched closing frame follows. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `segmented-button`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. The switch and the typed word are local state.",
+      "useWhen": [
+        "To close a developer page whose reader may be a person or the person's agent."
+      ],
+      "avoidWhen": [
+        "For a close on one or two link actions → use `closing-call-to-action` (`primary` for the same loud register without the switch).",
+        "For a newsletter sign-up → use `closing-call-to-action-newsletter`."
+      ],
+      "related": [
+        "closing-call-to-action` — the same close without the audience switch."
+      ],
+      "bestPractices": [
+        "Keep two audiences; the first one opens.",
+        "Keep each copyable line short enough to fit the field; the copy button copies exactly what it shows.",
+        "Keep `typedWords` to a few short words; screen readers and reduced motion get the whole list at once."
+      ]
+    },
+    "sections/closing-call-to-action-newsletter": {
+      "import": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
+      "target": "./src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "form",
+          "type": "ClosingCallToActionNewsletterForm",
+          "default": "—",
+          "required": "true",
+          "doc": "Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline on the lead side, closed by the blinking cursor."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The ask, rendered as the label of the email field; it also names the band."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The pitch, rendered as the band's large `h2` on the lead side."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored."
+        },
+        {
+          "name": "submitted",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site sent the address: the form gives way to `form.successMessage`."
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site could not send the address: `form.errorMessage` shows under the form."
+        }
+      ],
+      "events": [
+        {
+          "name": "submit",
+          "payload": "(event: SubmitEvent, values: Record<string, string>)",
+          "notes": "Fired on a valid submit, not while `loading`; `values` is `{ email }` with the trimmed address. The block never sends it."
+        }
+      ],
+      "purpose": "The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field-text`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.",
+      "useWhen": [
+        "To close the Blog or the Resource Hub on a newsletter subscription."
+      ],
+      "avoidWhen": [
+        "For a close on one or two link actions → use `closing-call-to-action`.",
+        "For a lead form with several fields → use `hero-form`."
+      ],
+      "related": [
+        "closing-call-to-action` — the closing band whose ask is a link action.",
+        "message` — renders the success and failure messages."
+      ],
+      "bestPractices": [
+        "Set `loading` while the address is sent, then `submitted` or `error` with the outcome.",
+        "Keep `description` to one sentence; it is set as the large headline.",
+        "Write `form.invalidMessage` with an example address so the fix is obvious."
+      ]
+    },
     "sections/code-split": {
       "import": "@aziontech/webkit/sections/code-split",
       "target": "./src/components/sections/code-split/code-split.vue",
@@ -17369,6 +17627,48 @@
       "bestPractices": [
         "Four or five certifications plus the link cell fill two rows of three.",
         "Give every badge an `alt` naming the certification; the pill repeats it for sighted readers."
+      ]
+    },
+    "sections/contact-hub": {
+      "import": "@aziontech/webkit/sections/contact-hub",
+      "target": "./src/components/sections/contact-hub/contact-hub.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/contact-hub",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "lanes",
+          "type": "ContactHubLane[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it."
+        },
+        {
+          "name": "channels",
+          "type": "ContactHubChannel[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
+        }
+      ],
+      "purpose": "The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic` and `button`. A lane can carry a second link to the system status page, so a reader can check for an incident before opening a ticket.",
+      "useWhen": [
+        "On the Contact page, to route a reader to the team or channel that answers them."
+      ],
+      "avoidWhen": [
+        "For a closing ask at the end of a page → use `closing-call-to-action`.",
+        "For a grid of product use cases → use `use-cases`."
+      ],
+      "related": [
+        "topic` — each self-serve channel is a linked topic.",
+        "use-cases` — the sibling band of icon-led topics."
+      ],
+      "bestPractices": [
+        "Keep two lanes so they split the frame evenly, and three channels for the three-column row.",
+        "Keep each lane's description to one sentence that states what that team handles.",
+        "Set `target: '_blank'` on a channel or status link that leaves the site."
       ]
     },
     "sections/faq-section": {
@@ -18145,6 +18445,171 @@
         "Keep `linkLabel` short; it is revealed under the mark on hover and read before the investor name."
       ]
     },
+    "sections/listing-browser": {
+      "import": "@aziontech/webkit/sections/listing-browser",
+      "target": "./src/components/sections/listing-browser/listing-browser.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/listing-browser",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page `id` of the band, the target of a `#hash` link."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline over the listing, rendered by the section title as its `h2` and naming the band."
+        },
+        {
+          "name": "columns",
+          "type": "ListingBrowserColumn[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones."
+        },
+        {
+          "name": "rows",
+          "type": "ListingBrowserRow[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Every row, in source order; each is `{ href, group, values, facets }` where `values` and `facets` are keyed by column and facet."
+        },
+        {
+          "name": "groups",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The groups the rows are listed under, in order; a group with no matching row is not shown."
+        },
+        {
+          "name": "facets",
+          "type": "ListingBrowserFacet[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The facet selects; each is `{ key, label, allLabel, options }` where `key` matches a row facet and seeds it from `?key=` in the URL, and every option is `{ value, label }`."
+        },
+        {
+          "name": "sorts",
+          "type": "ListingBrowserSort[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order."
+        },
+        {
+          "name": "sortAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the order select."
+        },
+        {
+          "name": "search",
+          "type": "ListingBrowserSearch",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The search field; `{ placeholder, shortPlaceholder, label }` where `shortPlaceholder` is used below the large breakpoint and `label` names the field. Omitted when absent."
+        },
+        {
+          "name": "empty",
+          "type": "ListingBrowserEmpty",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent."
+        }
+      ],
+      "purpose": "The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<key>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-browser', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `input-text`, `select`, `table`, `item`, `empty-state` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "For a listing a reader narrows by text and by a few facets, such as open positions grouped by department.",
+        "When every row links to its own page and the listing fits in the page JSON."
+      ],
+      "avoidWhen": [
+        "For a short, unfiltered preview of the same rows → use `listing-table`.",
+        "For a data table with sorting, selection and pagination inside the product → use `table`.",
+        "For a grid of linked topic cards → use `subject-library`."
+      ],
+      "related": [
+        "table` — the composed rows and cells the listing renders from the small breakpoint up.",
+        "item` — the list rows the listing renders below the small breakpoint.",
+        "empty-state` — the state shown when the search and facets match nothing."
+      ],
+      "bestPractices": [
+        "Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.",
+        "Give every row the facet values it carries under the facet's `key`, so the selects narrow it.",
+        "Keep `groups` in the order the reader scans; rows of a group not listed there are not shown.",
+        "Make the first entry of `sorts` the order the page is authored in, with an empty `by`."
+      ]
+    },
+    "sections/listing-table": {
+      "import": "@aziontech/webkit/sections/listing-table",
+      "target": "./src/components/sections/listing-table/listing-table.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/listing-table",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "columns",
+          "type": "ListingTableColumn[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones."
+        },
+        {
+          "name": "rows",
+          "type": "ListingTableRow[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ListingTableAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        }
+      ],
+      "purpose": "A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; the whole row is clickable with the pointer and the first column's link is the keyboard and screen-reader path. Below `sm` the same rows become a list of items, the first column as the title and the second as the description, with the button going full width.",
+      "useWhen": [
+        "To preview the latest entries of a listing (open roles, releases, events) with a way into the full list."
+      ],
+      "avoidWhen": [
+        "For a filterable or paginated listing → use `listing-browser`.",
+        "For a comparison of plans or features → use the pricing matrix."
+      ],
+      "related": [
+        "table` — the composition table the wide layout renders.",
+        "listing-browser` — the full listing this band links into."
+      ],
+      "bestPractices": [
+        "Keep three columns at most; the first names the row and the second describes it on phones.",
+        "Give the wide columns `grow: 2` and align a short trailing column to `end`.",
+        "Keep the preview to a handful of rows and point `primaryAction` at the full listing."
+      ]
+    },
     "sections/logo-wall-quote": {
       "import": "@aziontech/webkit/sections/logo-wall-quote",
       "target": "./src/components/sections/logo-wall-quote/logo-wall-quote.vue",
@@ -18508,6 +18973,57 @@
       "bestPractices": [
         "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",
         "Leave `duration` at `0` to let the strip pace itself (ten seconds per photo)."
+      ]
+    },
+    "sections/platform-directory": {
+      "import": "@aziontech/webkit/sections/platform-directory",
+      "target": "./src/components/sections/platform-directory/platform-directory.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/platform-directory",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline over the directory, rendered by the section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the directory's navigation landmark."
+        },
+        {
+          "name": "groups",
+          "type": "PlatformDirectoryGroup[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty."
+        }
+      ],
+      "purpose": "A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box` and `column-navigation` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On Home, right under the hero, to show every product the platform offers at a glance.",
+        "On a solution, product or pricing page that repeats the full product map."
+      ],
+      "avoidWhen": [
+        "For a handful of icon-led use cases → use `use-cases`.",
+        "For a site-wide navigation menu → use `navigation-menu`.",
+        "Inside another band's cell → compose `column-navigation` directly."
+      ],
+      "related": [
+        "column-navigation` — the named navigation landmark whose columns and rows this band fills.",
+        "section-title` — the headline over the directory."
+      ],
+      "bestPractices": [
+        "Keep to four groups; the directory fans out to four columns at the large breakpoint.",
+        "Give each item an `href`; an item without a title or a link is skipped, and a group left with no items is skipped too.",
+        "Set `ariaLabel` so the directory's navigation landmark is told apart from the site navigation."
       ]
     },
     "sections/pricing-plans": {
@@ -19079,6 +19595,106 @@
         "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",
         "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.",
         "Keep each subject's articles to a handful; the card grows with its list."
+      ]
+    },
+    "sections/template-gallery": {
+      "import": "@aziontech/webkit/sections/template-gallery",
+      "target": "./src/components/sections/template-gallery/template-gallery.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/template-gallery",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Paragraph under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "TemplateGalleryAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "TemplateGalleryAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "templates",
+          "type": "TemplateGalleryTemplate[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped."
+        },
+        {
+          "name": "deployLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+        },
+        {
+          "name": "templatesAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling wall of templates."
+        },
+        {
+          "name": "tickerLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the row of marks."
+        },
+        {
+          "name": "tickerMarks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty."
+        }
+      ],
+      "purpose": "The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On a solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming) to show the templates a reader can deploy right away.",
+        "Whenever a band pairs one pitch with a long, browsable list of deployable starters."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For a ticker of marks alone → compose `ticker` directly.",
+        "For a handful of icon-led use cases → use `use-cases`."
+      ],
+      "related": [
+        "media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
+        "ticker` — the row of framework and cloud marks that closes the band."
+      ],
+      "bestPractices": [
+        "Keep the wall to an even number of templates so the two columns end level.",
+        "Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.",
+        "Set `templatesAriaLabel` so the scrolling wall is announced by name."
       ]
     },
     "sections/use-case-links": {
