@@ -10,7 +10,7 @@ One claim beside its picture, on its own frame: copy on one side, the media on a
 
 The media cell sits on the small pixelate texture, fading toward the top. With `size="large"` the headline is set at `heading-xl` and centred beside the media. With one action the whole band links to it; with two the band stays unlinked and the reader picks a button.
 
-Built from `SectionModule` and a `framed` `MediaSplit`, with an `Illustration`, an image or a scene in the media slot.
+The band is the `MediaSplitBand` component from `@aziontech/webkit/sections/media-split-band`; it composes `SectionModule` and a `framed` `MediaSplit`, with a scene, an image or an `Illustration` in the media cell.
 
 <p
   style={{
@@ -37,8 +37,8 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `eyebrow`, `title` and `description` fill the copy cell.
 - `size` sets the type scale: `large` sets the headline at `heading-xl` and centres the copy beside the media; `medium` is the default.
-- The media is one of `scene` (a scene component, named by its webkit asset), `image` (`src`, `alt`, `width`, `height`) or `illustration` with `illustrationLabel`.
-- `actions` are optional: one makes the whole band a link to it, two leave the band unlinked.
+- The media is one of `scene` (`{ component }`, naming the webkit scene asset: `BrandGlobeScene` or `SpinningGlobe`), `image` (`src`, `alt`, `width`, `height`) or `illustration` with `illustrationAriaLabel`. When several are set, that order decides.
+- `primaryAction` and `secondaryAction` are optional, each a `label`, an `href`, an optional `target` and an optional `trailing` chevron: one makes the whole band a link to it, two leave the band unlinked.
 
 Example:
 

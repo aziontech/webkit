@@ -10,7 +10,7 @@ A looping row of analyst recognitions under a section title. Each card is a quot
 
 The loop pauses on hover and keyboard focus. Under reduced motion it stops, and the row scrolls by hand. Screen readers hear each card once: the copy that closes the loop is hidden from them.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox` and `Quote`, with the `animate-brand-marquee` utility.
+The band is the `RecognitionMarquee` component from `@aziontech/webkit/sections/recognition-marquee`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `Quote`, with the `animate-brand-marquee` utility.
 
 <p
   style={{
@@ -33,16 +33,19 @@ The seven recognitions Home runs, at twelve seconds per card. Each firm's logo h
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `title` is the section title.
+- `eyebrow` and `title` fill the section title.
 - `items[]` takes the quote `text`, `reportName`, `date`, `firmName` and the firm `logo`.
 - `logoLight` adds a color file for the light theme; without it, `logo` serves both.
-- Each card adds twelve seconds to one pass of the loop.
+- `duration` is how many seconds one full pass takes; left at `0`, each card adds twelve seconds.
 - `ariaLabel` names the scrolling region for screen readers.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={RecognitionMarqueeStories.DefaultJson} dark />
+  <Source
+    of={RecognitionMarqueeStories.DefaultJson}
+    dark
+  />
 </div>

@@ -1,275 +1,45 @@
-import Button from '@aziontech/webkit/button'
-import CallToAction from '@aziontech/webkit/call-to-action'
-import CardGrid from '@aziontech/webkit/card-grid'
-import FrameBox from '@aziontech/webkit/frame-box'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import SectionModule from '@aziontech/webkit/section-module'
+import SubjectLibrary from '@aziontech/webkit/sections/subject-library'
 
-import { editable } from '../../_shared/editable-content'
-import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
+import { SITE_SECTION } from './_sections/subject-library'
 
-const IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import CallToAction from '@aziontech/webkit/call-to-action'",
-  "import CardGrid from '@aziontech/webkit/card-grid'",
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'"
-]
+const IMPORT = "import SubjectLibrary from '@aziontech/webkit/sections/subject-library'"
 
-const components = {
-  Button,
-  CallToAction,
-  CardGrid,
-  FrameBox,
-  SectionContainer,
-  SectionGap,
-  SectionModule
-}
-
-const SUBJECTS = [
-  {
-    slug: 'api-security',
-    title: 'API Security',
-    description:
-      'Understand threat risks, follow an API Security checklist, and learn architecture best practices to protect your applications with maximum performance.',
-    articles: [
-      {
-        label: 'What is API Security?',
-        href: 'https://www.azion.com/en/learning/api/what-is-api-security/'
-      },
-      {
-        label: 'API Gateway vs. API Security',
-        href: 'https://www.azion.com/en/learning/api/api-gateway-vs-api-security/'
-      },
-      {
-        label: 'OWASP API Security Top 10',
-        href: 'https://www.azion.com/en/learning/api/owasp-api-security-top-10/'
-      },
-      {
-        label: 'OWASP Top 10 for LLMs',
-        href: 'https://www.azion.com/en/learning/api/owasp-top-10-for-llms/'
-      },
-      {
-        label: 'REST vs. GraphQL Security',
-        href: 'https://www.azion.com/en/learning/api/rest-vs-graphql-security/'
-      },
-      {
-        label: 'API Security Checklist',
-        href: 'https://www.azion.com/en/learning/api/api-security-checklist/'
-      },
-      {
-        label: 'API Security Best Practices',
-        href: 'https://www.azion.com/en/learning/api/api-security-best-practices/'
-      }
-    ]
-  },
-  {
-    slug: 'ai',
-    title: 'AI',
-    description:
-      'Learn the core concepts of Artificial Intelligence (AI), from machine learning and RAG to agents and inference.',
-    articles: [
-      {
-        label: 'What is Artificial Intelligence (AI)?',
-        href: 'https://www.azion.com/en/learning/ai/what-is-artificial-intelligence/'
-      },
-      {
-        label: 'What is Machine Learning?',
-        href: 'https://www.azion.com/en/learning/ai/what-is-machine-learning/'
-      },
-      { label: 'What is RAG?', href: 'https://www.azion.com/en/learning/ai/what-is-rag/' },
-      {
-        label: 'What is Vector Search?',
-        href: 'https://www.azion.com/en/learning/ai/what-is-vector-search/'
-      },
-      {
-        label: 'What are AI Agents?',
-        href: 'https://www.azion.com/en/learning/ai/what-are-ai-agents/'
-      },
-      {
-        label: 'Model Context Protocol (MCP)',
-        href: 'https://www.azion.com/en/learning/ai/model-context-protocol-mcp/'
-      },
-      {
-        label: 'What is AI Inference?',
-        href: 'https://www.azion.com/en/learning/ai/what-is-ai-inference/'
-      }
-    ]
-  },
-  {
-    slug: 'bots',
-    title: 'Bots',
-    description:
-      'Bots are automated software programs that perform repetitive tasks on websites and applications. While some bots like search engine crawlers are beneficial, malicious bots can cause significant harm to businesses in multiple ways.',
-    articles: [
-      { label: 'What is a Bot?', href: 'https://www.azion.com/en/learning/bots/what-is-a-bot/' },
-      {
-        label: 'What is a Bot Attack?',
-        href: 'https://www.azion.com/en/learning/bots/what-is-a-bot-attack/'
-      },
-      {
-        label: 'What is Bot Management?',
-        href: 'https://www.azion.com/en/learning/bots/what-is-bot-management/'
-      },
-      {
-        label: 'What is Credential Stuffing?',
-        href: 'https://www.azion.com/en/learning/bots/what-is-credential-stuffing/'
-      }
-    ]
-  },
-  {
-    slug: 'cdn',
-    title: 'CDN',
-    description:
-      'The primary goal of a CDN is to reduce latency and improve the speed at which static content is delivered by caching it on servers closer to the end-users',
-    articles: [
-      { label: 'What is a CDN?', href: 'https://www.azion.com/en/learning/cdn/what-is-a-cdn/' },
-      { label: 'What is Caching?', href: 'https://www.azion.com/en/learning/cdn/what-is-caching/' },
-      {
-        label: 'What is Micro Caching?',
-        href: 'https://www.azion.com/en/learning/cdn/what-is-micro-caching/'
-      },
-      {
-        label: 'What is Tiered Caching?',
-        href: 'https://www.azion.com/en/learning/cdn/what-is-tiered-caching/'
-      }
-    ]
-  }
-]
-
-const article = (link) =>
-  `<li>
-  <a
-    href="${link.href}"
-    class="text-body-sm text-(--text-muted) underline underline-offset-2 transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
-  >
-    ${link.label}
-  </a>
-</li>`
-
-const subjectCard = (subject) =>
-  `<FrameBox
-  id="${subject.slug}"
-  borders="none"
-  marks="all"
-  class="min-w-0 scroll-mt-(--spacing-xxl) bg-(--bg-canvas)"
->
-  <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-xl)">
-    <div class="flex flex-col gap-(--spacing-sm)">
-      <h3 class="m-0 text-balance text-heading-sm text-(--text-default)">
-        ${subject.title}
-      </h3>
-      <p class="m-0 text-pretty text-body-sm text-(--text-muted)">
-        ${subject.description}
-      </p>
-    </div>
-    <ul
-      role="list"
-      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
-    >
-${each(subject.articles, article, 3)}
-    </ul>
-  </div>
-</FrameBox>`
-
-const CLOSING_CELL = `<FrameBox
-  borders="none"
-  marks="all"
-  class="min-w-0 bg-(--bg-surface-raised) sm:col-span-2"
->
-  <CallToAction
-    kind="lead"
-    eyebrow="Next step"
-    class="h-full"
-    title="Put what you learned to work."
-    title-muted="On Azion."
-    description="Deploy your first application in minutes, or talk to an expert about your architecture."
-  >
-    <template #actions>
-      <Button
-        label="Start for free"
-        kind="secondary"
-        size="large"
-        href="/signup"
-      />
-      <Button
-        label="Talk to a specialist"
-        kind="outlined"
-        size="large"
-        href="/contact"
-        icon="pi pi-chevron-right"
-        icon-position="trailing"
-        animated
-      />
-    </template>
-  </CallToAction>
-</FrameBox>`
-
-const LIBRARY_TEMPLATE = inColumn(`<SectionModule
-  id="subjects"
-  :divided="false"
-  :padded="false"
-  class="scroll-mt-(--spacing-xxl)"
->
-  <FrameBox
-    flush
-    borders="y"
-    marks="none"
-  >
-    <CardGrid
-      kind="divider"
-      :columns="3"
-      :mobile-columns="1"
-    >
-${each(SUBJECTS, subjectCard, 3)}
-
-${indent(CLOSING_CELL, 3)}
-    </CardGrid>
-  </FrameBox>
-</SectionModule>`)
+const { body, script } = sectionMarkup('SubjectLibrary', SITE_SECTION.props)
 
 const meta = {
   title: 'Templates/Marketing/Listings/SubjectLibrary',
-  excludeStories: ['SITE_SECTION'],
+  component: SubjectLibrary,
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     docs: {
       canvas: { sourceState: 'shown' }
     }
-  }
+  },
+  args: SITE_SECTION.props
 }
 
 export default meta
 
+const Template = (args) => ({
+  components: { SectionContainer, SectionGap, SubjectLibrary },
+  setup() {
+    return { args }
+  },
+  template: inColumn('<SubjectLibrary v-bind="args" />')
+})
+
 export const Default = {
-  ...editable(() => ({ components, template: LIBRARY_TEMPLATE })),
+  render: Template,
   parameters: {
     docs: {
-      source: { code: toSfc(IMPORTS, LIBRARY_TEMPLATE) }
-    }
-  }
-}
-
-export const SITE_SECTION = {
-  _id: 'subject-library',
-  props: {
-    anchor: 'subjects',
-    subjects: SUBJECTS,
-    closing: {
-      eyebrow: 'Next step',
-      title: 'Put what you learned to work.',
-      titleMuted: 'On Azion.',
-      description:
-        'Deploy your first application in minutes, or talk to an expert about your architecture.',
-      actions: [
-        { label: 'Start for free', href: '/signup', kind: 'secondary' },
-        { label: 'Talk to a specialist', href: '/contact', kind: 'outlined', trailing: true }
-      ]
+      source: { code: toSfc([...COLUMN_IMPORTS, IMPORT, '', ...script], inColumn(body)) }
     }
   }
 }

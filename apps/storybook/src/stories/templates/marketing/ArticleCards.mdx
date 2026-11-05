@@ -10,7 +10,7 @@ A titled row of three article cards on one hairline grid with no gutter, stackin
 
 The media cell holds the article's cover. When the article has no cover, it holds the client's mark, drawn in one flat ink that follows the theme. On hover the card lifts to the raised surface and the media scales up slightly. The band closes every blog post with its related articles and every success story with its related stories.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`).
+The band is the `ArticleCards` component from `@aziontech/webkit/sections/article-cards`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`). `kind` places the heading: `left` (an article's closing row) or `centered` (a landing-page band). Every variant uses the one `_id`, `article-cards`.
 
 <p
   style={{
@@ -35,7 +35,7 @@ The blog post's closing band: three related posts, each with its cover image.
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `title` is the band heading, set at the left.
+- `kind` is `left`, and `title` is the band heading, set at the left.
 - `items[]` are the cards, each a `key`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`.
 - `ariaLabel` names the grid for assistive tech.
 
@@ -66,7 +66,7 @@ The Magalu story's closing band: the next three Retail stories in the library's 
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `title` is the band heading, set at the left.
+- `kind` is `left`, and `title` is the band heading, set at the left.
 - `items[]` are the cards, each a `key`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`. Success stories have no cover, so each card carries its `mark`.
 - `ariaLabel` names the grid for assistive tech.
 
@@ -97,7 +97,7 @@ The title centred and balanced over the cards under an overline, as a landing-pa
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind: 'centered'` centres the heading over the cards.
+- `kind` is `centered`: the heading is centred over the cards.
 - `eyebrow` and `title` make the heading.
 - `items[]` are the cards, each a `key`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`.
 - `ariaLabel` names the grid for assistive tech.

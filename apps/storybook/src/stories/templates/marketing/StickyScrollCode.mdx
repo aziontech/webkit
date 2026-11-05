@@ -10,7 +10,7 @@ A list of capabilities with the code that proves each one. The band pins under t
 
 Below `lg` it unpins into a plain list with the sample under each capability.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `CodeBlock`, `TextureMaterial` and `Button`.
+The band is the `StickyScrollCode` component from `@aziontech/webkit/sections/sticky-scroll-code`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `CodeBlock`, `TextureMaterial` and `Button`.
 
 <p
   style={{
@@ -33,15 +33,18 @@ The "Everything You Need to Build and Deploy" band for the Web Apps page: five c
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` fill the section title.
 - `items[]` are the capabilities in reading order, each a `title` and a `description`.
-- `items[].action` is the capability's own button, with `label` and `href`; it shows under the description while the capability is open.
-- `items[].code` is the one-file sample: `fileName`, `fileIcon`, `language` and the `code` itself.
+- `items[].action` is the capability's own button, with `label`, `href` and `trailing`; it shows under the description while the capability is open. Leave it out to drop the button.
+- `items[].code` is the one-file sample: `fileName`, `fileIcon`, `language`, the `code` itself and the `copyAriaLabel` that names its copy button.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={StickyScrollCodeStories.DefaultJson} dark />
+  <Source
+    of={StickyScrollCodeStories.DefaultJson}
+    dark
+  />
 </div>

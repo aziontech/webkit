@@ -10,6 +10,7 @@ export const COMPONENT_CATEGORIES = [
   'marketing',
   'navigation',
   'overlay',
+  'sections',
   'templates',
   'utils'
 ]

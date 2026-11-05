@@ -1846,6 +1846,15 @@
         "aliases": [
           "isToggled"
         ]
+      },
+      {
+        "concept": "in-page anchor id",
+        "canonical": "anchor",
+        "aliases": [
+          "anchorId",
+          "sectionId",
+          "hash"
+        ]
       }
     ],
     "size": {
@@ -16298,6 +16307,3518 @@
       "target": "./src/assets/logos/clients/zoop-extended-color.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg"
+    },
+    "sections/architecture-tabs": {
+      "import": "@aziontech/webkit/sections/architecture-tabs",
+      "target": "./src/components/sections/architecture-tabs/architecture-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/architecture-tabs",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence beside the headline."
+        },
+        {
+          "name": "position",
+          "type": "ArchitectureTabsPosition",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs."
+        },
+        {
+          "name": "tabs",
+          "type": "ArchitectureTabsTab[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The architectures, in order; each is `{ value, title, description, diagram }` where `diagram` is the name of the diagram drawn while the tab is active."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ArchitectureTabsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+      "useWhen": [
+        "To plot several architectures of one product, or one request across the platform, one diagram at a time."
+      ],
+      "avoidWhen": [
+        "For features shown by an illustration each → use `feature-tabs`.",
+        "For a scroll-driven walkthrough → use `feature-scroll`."
+      ],
+      "related": [
+        "media-tabs` — the timed tab row this section renders through.",
+        "diagram` — the named architecture diagram each tab draws."
+      ],
+      "bestPractices": [
+        "Keep to five tabs with `position` `top` or `bottom`, three with `left` or `right`; tabs past the limit are not rendered.",
+        "Give every tab a `diagram` from the diagram library and a stable `value`."
+      ]
+    },
+    "sections/article-body": {
+      "import": "@aziontech/webkit/sections/article-body",
+      "target": "./src/components/sections/article-body/article-body.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-body",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "article",
+          "type": "ArticleBodyArticle",
+          "default": "—",
+          "required": "true",
+          "doc": "The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`."
+        },
+        {
+          "name": "trail",
+          "type": "ArticleBodyCrumb[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`."
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The article as markdown; its `##` and `###` headings feed the outline."
+        },
+        {
+          "name": "banner",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the image over the masthead; the banner frame is omitted when empty."
+        },
+        {
+          "name": "share",
+          "type": "ArticleBodyShare",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`; the group is omitted when absent."
+        },
+        {
+          "name": "community",
+          "type": "ArticleBodyCommunity",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent."
+        },
+        {
+          "name": "copyPage",
+          "type": "ArticleBodyCopyPage",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent."
+        }
+      ],
+      "purpose": "The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the \"On this page\" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: blank-line separated blocks render as `##` / `###` headings (each with an id slugged from its text, feeding the outline), `-` lists and paragraphs. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button` and `doc-on-this-page`; copying to the clipboard is local behaviour.",
+      "useWhen": [
+        "To open every blog post and every success story page."
+      ],
+      "avoidWhen": [
+        "For a list of articles → use `article-index-blog`.",
+        "For a closing row of related articles → use `article-cards`."
+      ],
+      "related": [
+        "doc-prose` — the reading-measure typography the body renders in.",
+        "doc-on-this-page` — the outline rail fed by the body's headings."
+      ],
+      "bestPractices": [
+        "Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.",
+        "Mark the last breadcrumb entry `current`."
+      ]
+    },
+    "sections/article-cards": {
+      "import": "@aziontech/webkit/sections/article-cards",
+      "target": "./src/components/sections/article-cards/article-cards.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-cards",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "ArticleCardsKind",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Placement of the heading: `left` sets it at the start, `centered` centres it over the cards."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the heading."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band; the band renders no header when empty."
+        },
+        {
+          "name": "items",
+          "type": "ArticleCardsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The cards, in order; each is `{ key, href, title, description, meta, image?, mark? }`."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the card grid."
+        }
+      ],
+      "purpose": "A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `left` at the start (an article's closing row), `centered` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.",
+      "useWhen": [
+        "To close a blog post with its related articles, or a success story with its related stories.",
+        "To show three stories as a landing-page band under a centred heading."
+      ],
+      "avoidWhen": [
+        "For the full, filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.",
+        "For one featured article selected from a wall → use `article-highlight`."
+      ],
+      "related": [
+        "card-grid` — the frame grid the cards sit on.",
+        "article-highlight` — the blog's opening band."
+      ],
+      "bestPractices": [
+        "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",
+        "Keep the band to three cards so the frame row stays full."
+      ]
+    },
+    "sections/article-highlight": {
+      "import": "@aziontech/webkit/sections/article-highlight",
+      "target": "./src/components/sections/article-highlight/article-highlight.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-highlight",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "items",
+          "type": "ArticleHighlightItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`."
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the button into the selected article; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the wall of titles."
+        }
+      ],
+      "purpose": "The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state.",
+      "useWhen": [
+        "To open a blog or a resource page with its newest or most important articles."
+      ],
+      "avoidWhen": [
+        "For a closing row of related articles → use `article-cards`.",
+        "For the full list of articles → use `article-index-blog`."
+      ],
+      "related": [
+        "article-cards` — the closing row of related articles.",
+        "card-grid` — the frame grid the wall of titles sits on."
+      ],
+      "bestPractices": [
+        "Feature three or four articles; four fill the wall four across.",
+        "Give a `highlightImage` cropped for the panel when the cover does not read at that size."
+      ]
+    },
+    "sections/article-index-blog": {
+      "import": "@aziontech/webkit/sections/article-index-blog",
+      "target": "./src/components/sections/article-index-blog/article-index-blog.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-index-blog",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "items",
+          "type": "ArticleIndexBlogItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The articles, newest first; each is `{ key, href, image, meta, title, description, authors?, byline?, categories? }`."
+        },
+        {
+          "name": "categories",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Segments of the category picker after the show-all segment; the picker is omitted when empty."
+        },
+        {
+          "name": "allLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the first segment, which shows every category."
+        },
+        {
+          "name": "categoryLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the category picker."
+        },
+        {
+          "name": "search",
+          "type": "ArticleIndexBlogSearch",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+        },
+        {
+          "name": "rowLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read cue revealed at the end of a row under hover or focus."
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the load-more button under the list; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of articles."
+        }
+      ],
+      "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `input-text`, `avatar` and `button`; the selected category and the search term are local state.",
+      "useWhen": [
+        "For the blog's full list of posts, filtered by category and searched by text."
+      ],
+      "avoidWhen": [
+        "For a resource hub filtered by facet dropdowns, with centred rows and no byline → use `article-index-resource-hub`.",
+        "For a closing row of related articles → use `article-cards`."
+      ],
+      "related": [
+        "article-index-resource-hub` — the sibling listing with facet dropdowns.",
+        "article-highlight` — the band that opens the blog above this list."
+      ],
+      "bestPractices": [
+        "List the articles newest first; file every article under at least one of `categories`.",
+        "Keep the category list short enough to scroll on one row."
+      ]
+    },
+    "sections/article-index-resource-hub": {
+      "import": "@aziontech/webkit/sections/article-index-resource-hub",
+      "target": "./src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-index-resource-hub",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline beside the dropdowns, rendered as the band's `h2`."
+        },
+        {
+          "name": "items",
+          "type": "ArticleIndexResourceHubItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The resources, in order; each is `{ key, href, image, meta, title, description, facets? }`."
+        },
+        {
+          "name": "facets",
+          "type": "ArticleIndexResourceHubFacet[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The facet dropdowns, in order; each is `{ key, label, allLabel, options }`."
+        },
+        {
+          "name": "rowLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read cue revealed at the end of a row under hover or focus."
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the load-more button under the list; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of resources."
+        }
+      ],
+      "purpose": "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input-text` and `button`; the facet selections and each dropdown's option search are local state.",
+      "useWhen": [
+        "For a resource hub that mixes content types (e-books, posts, comparisons, stories), filtered by facet."
+      ],
+      "avoidWhen": [
+        "For the blog's list filtered by a category picker and a search field, with bylines → use `article-index-blog`.",
+        "For the success-story library with a card grid → use `story-library`."
+      ],
+      "related": [
+        "article-index-blog` — the sibling listing with a category picker and a search field.",
+        "story-library` — the card-grid library with search and facets."
+      ],
+      "bestPractices": [
+        "Give every item a `facets` entry per facet `key` it can be filtered by; an item without one never matches a selection on that facet.",
+        "Keep each facet's `options` to values some item carries."
+      ]
+    },
+    "sections/cli-terminal": {
+      "import": "@aziontech/webkit/sections/cli-terminal",
+      "target": "./src/components/sections/cli-terminal/cli-terminal.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/cli-terminal",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence beside the headline."
+        },
+        {
+          "name": "session",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The terminal session shown under the header, commands and their output verbatim, highlighted as bash; the band renders nothing when empty."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the session's copy button; empty keeps the code block's own."
+        },
+        {
+          "name": "primaryAction",
+          "type": "CliTerminalAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another. It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material` and `code-block`.",
+      "useWhen": [
+        "To close a product argument on how little it takes to ship from the terminal, like Functions and Workloads."
+      ],
+      "avoidWhen": [
+        "For a config file or handler beside the claim → use `code-split`.",
+        "For several capabilities, each with its own file → use `sticky-scroll-code`."
+      ],
+      "related": [
+        "code-block` — the terminal session the band shows.",
+        "code-split` — the sibling band with the sample beside the copy."
+      ],
+      "bestPractices": [
+        "Keep the session to a few commands and their output; comment the output lines so the copied text still runs.",
+        "Name the copy button with `copyAriaLabel` so a screen reader says what it copies."
+      ]
+    },
+    "sections/client-mosaic": {
+      "import": "@aziontech/webkit/sections/client-mosaic",
+      "target": "./src/components/sections/client-mosaic/client-mosaic.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the grid."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the link under every story."
+        },
+        {
+          "name": "stories",
+          "type": "ClientMosaicStory[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The story cells, in order; each is `{ logo, logoAlt, photo, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows."
+        },
+        {
+          "name": "logos",
+          "type": "ClientMosaicLogo[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+        }
+      ],
+      "purpose": "The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a \"read the case study\" link, and a mark cell carries only the client's linked logo on a chosen fill. The layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid` and `mini-button`.",
+      "useWhen": [
+        "On the home page, to show the best customer stories and a wall of marks in one band."
+      ],
+      "avoidWhen": [
+        "For three equal story columns → use `client-mosaic-columns`.",
+        "For a plain wall with one quote → use `logo-wall-quote`."
+      ],
+      "related": [
+        "bento-grid` — the grid the cells are laid in.",
+        "client-mosaic-columns` — the three-column sibling with brand-coloured faces."
+      ],
+      "bestPractices": [
+        "Two stories and six marks fill the four-column grid exactly.",
+        "Pick `fill` and `logoTreatment` together: a `knockout` mark reads on `white` or `primary`, a `monochrome` one on `canvas` or `surface`."
+      ]
+    },
+    "sections/client-mosaic-columns": {
+      "import": "@aziontech/webkit/sections/client-mosaic-columns",
+      "target": "./src/components/sections/client-mosaic-columns/client-mosaic-columns.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic-columns",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of stories."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label the mark face reveals on hover and the link's accessible name."
+        },
+        {
+          "name": "cells",
+          "type": "ClientMosaicColumnsCell[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+        }
+      ],
+      "purpose": "Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`.",
+      "useWhen": [
+        "When three stories deserve equal weight and their brands should colour the band."
+      ],
+      "avoidWhen": [
+        "For a mixed mosaic of stories and marks → use `client-mosaic`."
+      ],
+      "related": [
+        "client-mosaic` — the bento sibling.",
+        "logo-wall` — the single-mark wall each column's face is rendered with."
+      ],
+      "bestPractices": [
+        "Exactly three cells; the grid is three columns from the large breakpoint.",
+        "brand.base` and `brand.glow` are the client's colours and may be any CSS colour; set `brand.ink` to `'dark'` when the face is light enough that the link text must be dark."
+      ]
+    },
+    "sections/client-quotes": {
+      "import": "@aziontech/webkit/sections/client-quotes",
+      "target": "./src/components/sections/client-quotes/client-quotes.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/client-quotes",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the quote carousel."
+        },
+        {
+          "name": "items",
+          "type": "ClientQuotesItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ClientQuotesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button under the quotes; `{ label, href, trailing? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `quote-tabs` and `button`.",
+      "useWhen": [
+        "To let several customers speak in turn, one at a time, near the end of a page's argument."
+      ],
+      "avoidWhen": [
+        "For one quote beside a logo wall → use `logo-wall-quote`.",
+        "For a scrolling strip of analyst recognitions → use `recognition-marquee`."
+      ],
+      "related": [
+        "quote-tabs` — the tabbed quote carousel this band frames."
+      ],
+      "bestPractices": [
+        "Three to six items; the tabs need room for each client's mark.",
+        "Give each item either a registry `mark` or a `logo` URL with `clientName`, not both."
+      ]
+    },
+    "sections/closing-call-to-action": {
+      "import": "@aziontech/webkit/sections/closing-call-to-action",
+      "target": "./src/components/sections/closing-call-to-action/closing-call-to-action.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "ClosingCallToActionKind",
+          "default": "'split'",
+          "required": "false",
+          "doc": "Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline; not drawn in `primary`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "titleMuted",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Second line of the headline in muted ink; drawn in `split` only."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence: in the aside cell in `split`, under the headline in `panel`."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ClosingCallToActionAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "ClosingCallToActionAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `button`, `frame-box` and `texture-material`. `kind` picks the layout only: `split` sets the headline and the primary action in a raised lead cell beside an aside cell carrying the description and the secondary action, over a tall closing frame; `panel` sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. All three take the same copy and the same two actions.",
+      "useWhen": [
+        "To close a solution or product page on its one or two asks (`split`), or a page such as Careers on one action (`panel`), or a page that ends on its one loud ask (`primary`)."
+      ],
+      "avoidWhen": [
+        "For a newsletter sign-up close → use `closing-call-to-action-newsletter`.",
+        "For an ask in the middle of a page → compose `call-to-action` directly."
+      ],
+      "related": [
+        "call-to-action` — the framed band this section renders.",
+        "closing-call-to-action-newsletter` — the closing band whose ask is a subscribe form."
+      ],
+      "bestPractices": [
+        "Place it last on the page, right above `site-footer`, after a hatched `section-gap`.",
+        "Set `anchor: 'contact'` so the page's contact links scroll to the close.",
+        "In `split`, keep `title` and `titleMuted` to one short line each; `panel` and `primary` do not draw `titleMuted`, and `primary` does not draw `eyebrow`."
+      ]
+    },
+    "sections/closing-call-to-action-agents": {
+      "import": "@aziontech/webkit/sections/closing-call-to-action-agents",
+      "target": "./src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-agents",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "typedLead",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fixed opening of the typed line, before the typed word."
+        },
+        {
+          "name": "typedWords",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Closing sentence under the typed line, the same for every audience."
+        },
+        {
+          "name": "audiences",
+          "type": "ClosingCallToActionAgentsAudience[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more."
+        },
+        {
+          "name": "audiencesAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the audience switch."
+        },
+        {
+          "name": "lineAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the read-only field that shows an audience's copyable line."
+        }
+      ],
+      "purpose": "The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks the way in. Each audience carries an optional copyable line and its actions; under them, a line types its words one after another behind a blinking cursor, then a closing sentence, both the same for every audience so the band keeps its height when the switch changes. The hatched closing frame follows. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `segmented-button`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. The switch and the typed word are local state.",
+      "useWhen": [
+        "To close a developer page whose reader may be a person or the person's agent."
+      ],
+      "avoidWhen": [
+        "For a close on one or two link actions → use `closing-call-to-action` (`primary` for the same loud register without the switch).",
+        "For a newsletter sign-up → use `closing-call-to-action-newsletter`."
+      ],
+      "related": [
+        "closing-call-to-action` — the same close without the audience switch."
+      ],
+      "bestPractices": [
+        "Keep two audiences; the first one opens.",
+        "Keep each copyable line short enough to fit the field; the copy button copies exactly what it shows.",
+        "Keep `typedWords` to a few short words; screen readers and reduced motion get the whole list at once."
+      ]
+    },
+    "sections/closing-call-to-action-newsletter": {
+      "import": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
+      "target": "./src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "form",
+          "type": "ClosingCallToActionNewsletterForm",
+          "default": "—",
+          "required": "true",
+          "doc": "Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline on the lead side, closed by the blinking cursor."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The ask, rendered as the label of the email field; it also names the band."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The pitch, rendered as the band's large `h2` on the lead side."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored."
+        },
+        {
+          "name": "submitted",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site sent the address: the form gives way to `form.successMessage`."
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site could not send the address: `form.errorMessage` shows under the form."
+        }
+      ],
+      "events": [
+        {
+          "name": "submit",
+          "payload": "(event: SubmitEvent, values: Record<string, string>)",
+          "notes": "Fired on a valid submit, not while `loading`; `values` is `{ email }` with the trimmed address. The block never sends it."
+        }
+      ],
+      "purpose": "The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field-text`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.",
+      "useWhen": [
+        "To close the Blog or the Resource Hub on a newsletter subscription."
+      ],
+      "avoidWhen": [
+        "For a close on one or two link actions → use `closing-call-to-action`.",
+        "For a lead form with several fields → use `hero-form`."
+      ],
+      "related": [
+        "closing-call-to-action` — the closing band whose ask is a link action.",
+        "message` — renders the success and failure messages."
+      ],
+      "bestPractices": [
+        "Set `loading` while the address is sent, then `submitted` or `error` with the outcome.",
+        "Keep `description` to one sentence; it is set as the large headline.",
+        "Write `form.invalidMessage` with an example address so the fix is obvious."
+      ]
+    },
+    "sections/code-split": {
+      "import": "@aziontech/webkit/sections/code-split",
+      "target": "./src/components/sections/code-split/code-split.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/code-split",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "codeTabs",
+          "type": "CodeSplitTab[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the sample's copy button; empty keeps the code block's own."
+        },
+        {
+          "name": "primaryAction",
+          "type": "CodeSplitAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "CodeSplitAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The claim-beside-its-code band of a product page: a framed media split whose copy states the claim, with one or two large buttons under it, and whose media is a code sample on the pixelate texture, cut off by the frame's bottom rule. It is a page section — the site places it from a `{ _id: 'code-split', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `code-block` and `button`. One tab draws a filename bar; several draw a tab strip, and a tab that carries an `icon` shows that mark beside its label.",
+      "useWhen": [
+        "When the argument of a product page is a config file or a handler a developer can read, like Functions, Application Accelerator or AI Gateway."
+      ],
+      "avoidWhen": [
+        "For a terminal session under a headline → use `cli-terminal`.",
+        "For a run of capabilities, each with its own sample, pinned while the page scrolls → use `sticky-scroll-code`."
+      ],
+      "related": [
+        "media-split` — the copy-beside-media band this section renders through.",
+        "code-block` — the tabbed code sample in the media cell."
+      ],
+      "bestPractices": [
+        "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
+        "Give every tab a `code`; a tab without one is skipped.",
+        "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+      ]
+    },
+    "sections/compare-plans": {
+      "import": "@aziontech/webkit/sections/compare-plans",
+      "target": "./src/components/sections/compare-plans/compare-plans.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/compare-plans",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a hash link can target it."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader caption naming the table."
+        },
+        {
+          "name": "columnLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Heading of the feature column, shown from the large breakpoint up."
+        },
+        {
+          "name": "pickerAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the plan picker shown below the large breakpoint."
+        },
+        {
+          "name": "includedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a ticked cell."
+        },
+        {
+          "name": "excludedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a dashed cell."
+        },
+        {
+          "name": "plans",
+          "type": "ComparePlansPlan[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
+        },
+        {
+          "name": "sections",
+          "type": "ComparePlansSection[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ComparePlansAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — a tick, a dash, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline`, `hint`, `tag` and `link`.",
+      "useWhen": [
+        "On Pricing, under the plan cards, to show what every plan includes product by product."
+      ],
+      "avoidWhen": [
+        "To compare support tiers → use `compare-support-tiers`.",
+        "To compare Azion with a competitor → use `comparison-table`."
+      ],
+      "related": [
+        "pricing-plans` — the plan cards this matrix sits under.",
+        "compare-support-tiers` — the same matrix for the Support page."
+      ],
+      "bestPractices": [
+        "Give every plan a stable `id`; the narrow-screen picker selects by it.",
+        "Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+        "Give every row's `values` one entry per plan, in plan order."
+      ]
+    },
+    "sections/compare-support-tiers": {
+      "import": "@aziontech/webkit/sections/compare-support-tiers",
+      "target": "./src/components/sections/compare-support-tiers/compare-support-tiers.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/compare-support-tiers",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a hash link can target it."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader caption naming the table."
+        },
+        {
+          "name": "columnLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Heading of the service column, shown from the large breakpoint up."
+        },
+        {
+          "name": "pickerAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the tier picker shown below the large breakpoint."
+        },
+        {
+          "name": "includedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a ticked cell."
+        },
+        {
+          "name": "excludedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a dashed cell."
+        },
+        {
+          "name": "tiers",
+          "type": "CompareSupportTiersTier[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped."
+        },
+        {
+          "name": "sections",
+          "type": "CompareSupportTiersSection[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+        }
+      ],
+      "purpose": "The tier-by-tier comparison on the Support page: one column per support tier with its name, who it is for and its action button pinned in the header while the page scrolls, one band per service family with an overline and a title, and one row per service saying what each tier includes — a tick, a dash, or the allowance as text. Each band closes on its own link to the matching pricing documentation, the recommended tier carries an accent bar, and below the large breakpoint the table folds to one tier picked from a select. It is a page section — the site places it from a `{ _id: 'compare-support-tiers', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline` and `link`.",
+      "useWhen": [
+        "On the Support page, to show what each support tier includes service by service."
+      ],
+      "avoidWhen": [
+        "To compare platform plans → use `compare-plans`.",
+        "To compare Azion with a competitor → use `comparison-table`."
+      ],
+      "related": [
+        "compare-plans` — the same matrix for platform plans, with hints and tags on rows and one closing link."
+      ],
+      "bestPractices": [
+        "Give every tier a stable `id`; the narrow-screen picker selects by it.",
+        "Mark one tier `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+        "Give every row's `values` one entry per tier, in tier order."
+      ]
+    },
+    "sections/comparison-table": {
+      "import": "@aziontech/webkit/sections/comparison-table",
+      "target": "./src/components/sections/comparison-table/comparison-table.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/comparison-table",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader caption naming the table."
+        },
+        {
+          "name": "columnLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Heading of the capability column."
+        },
+        {
+          "name": "fullLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Tooltip and screen-reader text of a full-support cell."
+        },
+        {
+          "name": "partialLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Tooltip and screen-reader text of a partial-support cell."
+        },
+        {
+          "name": "noneLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Tooltip and screen-reader text of an unsupported cell."
+        },
+        {
+          "name": "competitor",
+          "type": "ComparisonTableCompetitor",
+          "default": "—",
+          "required": "true",
+          "doc": "The platform compared with Azion; `{ name, logo?, logoLight? }` where `logo` is the dark-theme file and `logoLight` the light-theme one."
+        },
+        {
+          "name": "groups",
+          "type": "ComparisonTableGroup[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`)."
+        }
+      ],
+      "purpose": "The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'comparison-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `brand`, `popover`, `icon-button` and `tooltip`.",
+      "useWhen": [
+        "On a \"Azion vs X\" page, to lay one competitor against Azion across a few categories of capabilities."
+      ],
+      "avoidWhen": [
+        "To compare Azion's own plans → use `compare-plans`.",
+        "To compare support tiers → use `compare-support-tiers`."
+      ],
+      "related": [
+        "compare-plans` — the plan-by-plan matrix of Pricing.",
+        "tooltip` — names each support glyph on hover and focus."
+      ],
+      "bestPractices": [
+        "Give every row a `definition`; the info popover is where a reader learns what the capability means.",
+        "Ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme); with one file it shows in both, with none the name shows as text.",
+        "Keep `caption` equal to the title; it is the table's accessible name."
+      ]
+    },
+    "sections/compliance-badges": {
+      "import": "@aziontech/webkit/sections/compliance-badges",
+      "target": "./src/components/sections/compliance-badges/compliance-badges.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/compliance-badges",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the badge list."
+        },
+        {
+          "name": "certifications",
+          "type": "ComplianceBadgesCertification[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ComplianceBadgesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The closing \"see more\" cell; `{ label, href }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a \"see more\" cell. It is a page section — the site places it from a `{ _id: 'compliance-badges', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.",
+      "useWhen": [
+        "On security, enterprise or pricing pages, to list the certifications and link to the compliance page."
+      ],
+      "avoidWhen": [
+        "For client logos → use `logo-wall-quote` or `client-mosaic`."
+      ],
+      "related": [
+        "media-split` — the copy-beside-media band this section renders through."
+      ],
+      "bestPractices": [
+        "Four or five certifications plus the link cell fill two rows of three.",
+        "Give every badge an `alt` naming the certification; the pill repeats it for sighted readers."
+      ]
+    },
+    "sections/contact-hub": {
+      "import": "@aziontech/webkit/sections/contact-hub",
+      "target": "./src/components/sections/contact-hub/contact-hub.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/contact-hub",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "lanes",
+          "type": "ContactHubLane[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it."
+        },
+        {
+          "name": "channels",
+          "type": "ContactHubChannel[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic."
+        }
+      ],
+      "purpose": "The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic` and `button`. A lane can carry a second link to the system status page, so a reader can check for an incident before opening a ticket.",
+      "useWhen": [
+        "On the Contact page, to route a reader to the team or channel that answers them."
+      ],
+      "avoidWhen": [
+        "For a closing ask at the end of a page → use `closing-call-to-action`.",
+        "For a grid of product use cases → use `use-cases`."
+      ],
+      "related": [
+        "topic` — each self-serve channel is a linked topic.",
+        "use-cases` — the sibling band of icon-led topics."
+      ],
+      "bestPractices": [
+        "Keep two lanes so they split the frame evenly, and three channels for the three-column row.",
+        "Keep each lane's description to one sentence that states what that team handles.",
+        "Set `target: '_blank'` on a channel or status link that leaves the site."
+      ]
+    },
+    "sections/faq-section": {
+      "import": "@aziontech/webkit/sections/faq-section",
+      "target": "./src/components/sections/faq-section/faq-section.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/faq-section",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the FAQ as its `h2` in the left column."
+        },
+        {
+          "name": "items",
+          "type": "FaqSectionItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The questions in display order; each is `{ question, answer }` where `answer` is markdown carrying paragraphs, bullet lists, links, bold and italic text."
+        }
+      ],
+      "purpose": "The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time. It is a page section — the site places it from a `{ _id: 'faq-section', props }` entry and binds `props` straight onto it — and it composes `section-module` and `faq`. An answer is a markdown string, so it can run to several paragraphs (split by a blank line) and `- ` bullet lists, and a sentence can carry a link, bold or italic text, all without a slot or `v-html`.",
+      "useWhen": [
+        "To answer the handful of questions a reader still has before the closing call to action."
+      ],
+      "avoidWhen": [
+        "For answers that need content beyond paragraphs, bullet lists and inline links (tables, images, code) → compose `faq` with its `answer` slot.",
+        "For a single highlighted question with an action → use `call-to-action`."
+      ],
+      "related": [
+        "faq` — the framed accordion band this section renders.",
+        "closing-call-to-action` — the band that usually follows it."
+      ],
+      "bestPractices": [
+        "Use one FAQ section per page and give it `anchor: 'faq'` so a page can link straight to it.",
+        "Keep an answer short; links use `[label](href)`, bold `**text**` and italic `*text*`.",
+        "Separate paragraphs with a blank line; start each bullet with `- ` and keep the list in its own block.",
+        "Absolute `https://` links open in a new tab; site-relative links stay in the tab."
+      ]
+    },
+    "sections/feature-scroll": {
+      "import": "@aziontech/webkit/sections/feature-scroll",
+      "target": "./src/components/sections/feature-scroll/feature-scroll.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-scroll",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "FeatureScrollItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The features, in order; each is `{ title, description, illustration, action? }` where `illustration` is a registry name and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step."
+        }
+      ],
+      "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the illustration stays pinned in a framed, textured stage with one small action under each step; below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `sticky-stack`, `texture-material` and `button`.",
+      "useWhen": [
+        "To walk through four to six capabilities of one product, each with a picture of its own."
+      ],
+      "avoidWhen": [
+        "For three reasons with no scroll story → use `feature-tiles`.",
+        "For code-led steps → use `sticky-scroll-code`."
+      ],
+      "related": [
+        "sticky-stack` — the scroll engine the large layout runs on.",
+        "media-tile` — the cell the small layout renders each feature with."
+      ],
+      "bestPractices": [
+        "Four to six items; the stack needs enough steps to earn the scroll.",
+        "Give every item an `illustration`; it is the pinned picture on large screens and the tile media on small ones.",
+        "Keep `action` to a short label such as \"Docs\" — it sits under the step copy at the small size."
+      ]
+    },
+    "sections/feature-tabs": {
+      "import": "@aziontech/webkit/sections/feature-tabs",
+      "target": "./src/components/sections/feature-tabs/feature-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-tabs",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the left section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "tabs",
+          "type": "FeatureTabsTab[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The features, in order, at most three; each is `{ title, description, illustration, illustrationLabel? }` where `illustration` is a registry name and `illustrationLabel` its accessible name."
+        },
+        {
+          "name": "primaryAction",
+          "type": "FeatureTabsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Small link under the frame; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
+        }
+      ],
+      "purpose": "The feature walkthrough band of a product page: a left-aligned section title over up to three tabs on one side and the active tab's illustration on the other, closed by a small link under the frame. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `illustration` and `mini-button`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+      "useWhen": [
+        "To walk through the two or three features behind one claim, one picture at a time, like Functions' Observability."
+      ],
+      "avoidWhen": [
+        "For architectures drawn as diagrams across the full width → use `architecture-tabs`.",
+        "For a scroll-driven walkthrough of more features → use `feature-scroll`."
+      ],
+      "related": [
+        "media-tabs` — the timed tabs this section renders through.",
+        "illustration` — the scene each tab shows."
+      ],
+      "bestPractices": [
+        "Keep to three tabs; tabs past the limit are not rendered.",
+        "Give every tab an `illustrationLabel` saying what its picture shows."
+      ]
+    },
+    "sections/feature-tiles": {
+      "import": "@aziontech/webkit/sections/feature-tiles",
+      "target": "./src/components/sections/feature-tiles/feature-tiles.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-tiles",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "FeatureTilesKind",
+          "default": "'artwork'",
+          "required": "false",
+          "doc": "Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "tiles",
+          "type": "FeatureTilesTile[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale."
+        }
+      ],
+      "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
+      "useWhen": [
+        "To state three or four reasons to buy, each with a picture, under a product or pricing argument."
+      ],
+      "avoidWhen": [
+        "For linked use cases → use `use-case-links`.",
+        "For a scroll-driven walkthrough with one screen per feature → use `feature-scroll`."
+      ],
+      "related": [
+        "media-tile` — the picture-over-copy cell each tile is rendered with.",
+        "feature-widgets` — the sibling band whose cells carry an action each."
+      ],
+      "bestPractices": [
+        "Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.",
+        "Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.",
+        "Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band."
+      ]
+    },
+    "sections/feature-widgets": {
+      "import": "@aziontech/webkit/sections/feature-widgets",
+      "target": "./src/components/sections/feature-widgets/feature-widgets.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-widgets",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the centered section title as its `h2`, and the accessible name of the band."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "FeatureWidgetsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the headline; `{ label, href, trailing? }`. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "FeatureWidgetsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "columns",
+          "type": "FeatureWidgetsColumns",
+          "default": "3",
+          "required": "false",
+          "doc": "Column count of the grid from the medium breakpoint up: `2`, `3` or `4`."
+        },
+        {
+          "name": "items",
+          "type": "FeatureWidgetsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard."
+        }
+      ],
+      "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is an illustration above a bold-led sentence and one affordance — a link button or a copy button that puts a prompt on the clipboard. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration` and `button-highlight`.",
+      "useWhen": [
+        "To offer the same outcome through two or three entry points (agent, console, terminal), each with its own next step."
+      ],
+      "avoidWhen": [
+        "For reasons without an action per cell → use `feature-tiles`.",
+        "For a long argument per feature → use `feature-scroll`."
+      ],
+      "related": [
+        "bento-grid` — the grid the cells are laid in.",
+        "button-highlight` — the copy affordance a cell renders when it carries `copy`."
+      ],
+      "bestPractices": [
+        "Give each item exactly one of `action` (a link) or `copy` (text to put on the clipboard).",
+        "Keep `copy.text` self-contained; it is what the reader pastes into their agent.",
+        "Set `anchor` when a hero button scrolls to this band."
+      ]
+    },
+    "sections/hero-band": {
+      "import": "@aziontech/webkit/sections/hero-band",
+      "target": "./src/components/sections/hero-band/hero-band.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/hero-band",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "HeroBandKind",
+          "default": "'title-band'",
+          "required": "false",
+          "doc": "Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy."
+        },
+        {
+          "name": "size",
+          "type": "HeroBandSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm of the band; `large` is the opening a product page leads with."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline."
+        },
+        {
+          "name": "highlight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Opening words of the headline, painted in the brand accent; reads as one sentence with `title`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Sentence under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "HeroBandAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "HeroBandAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+        },
+        {
+          "name": "carouselLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the client strip."
+        },
+        {
+          "name": "carouselMarks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the client marks on the band floor, in order; the strip renders only when it has marks."
+        },
+        {
+          "name": "illustration",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Registry name of the illustration set beside the copy in the `copy-beside-art` layout."
+        },
+        {
+          "name": "illustrationAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible description of the illustration."
+        },
+        {
+          "name": "headerOffset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the site header above the band, taken out of a band that fills a screen; any CSS length."
+        }
+      ],
+      "purpose": "The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`. `kind` picks the layout only: `centered` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, and `copy-beside-art` sets an illustration beside the copy; every layout takes the same copy, actions and client strip.",
+      "useWhen": [
+        "To open a home, solution, product, listing or contact page with its headline and main actions."
+      ],
+      "avoidWhen": [
+        "For a hero followed by a grid of arguments → use `hero-with-opening`.",
+        "For a hero with a topology scene under the copy → use `hero-copy-on-top-art`.",
+        "For a band inside the page column → use `section-module` or a sibling section."
+      ],
+      "related": [
+        "hero` — the band primitive every layout is rendered with.",
+        "hero-title` — the headline block rendered inside it."
+      ],
+      "bestPractices": [
+        "Use `title-band` with `size=\"large\"` for a product page and `size=\"medium\"` for a page whose bands start right under the headline.",
+        "Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.",
+        "Set `headerOffset` to the height of the site header so a band that fills a screen fills exactly the first screen with it."
+      ]
+    },
+    "sections/hero-copy-on-top-art": {
+      "import": "@aziontech/webkit/sections/hero-copy-on-top-art",
+      "target": "./src/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/hero-copy-on-top-art",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline."
+        },
+        {
+          "name": "highlight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Opening words of the headline, painted in the brand accent; reads as one sentence with `title`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Sentence under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "HeroCopyOnTopArtAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "HeroCopyOnTopArtAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+        },
+        {
+          "name": "levels",
+          "type": "HeroCopyOnTopArtLevel[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card."
+        }
+      ],
+      "purpose": "The opening band of a product page whose copy sits centered on top of a topology scene: the page `h1` with its overline, sentence and up to two actions over columns of status cards wired left to right. It is a page section — the site places it from a `{ _id: 'hero-copy-on-top-art', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button`, `flow` and `tag`. It is a separate section from `hero-band` because the scene is a data model of its own: levels of cards, each with a status and an optional focus.",
+      "useWhen": [
+        "To open a product page whose object is best shown as a small topology (domains feeding a workload that binds an application and a firewall)."
+      ],
+      "avoidWhen": [
+        "For an opening band with no scene → use `hero-band`.",
+        "For an opening band followed by a grid of arguments → use `hero-with-opening`."
+      ],
+      "related": [
+        "hero-band` — the sibling opening band with the same copy and actions and no scene.",
+        "flow` — the diagram primitive the scene is rendered with."
+      ],
+      "bestPractices": [
+        "Keep three levels of one or two cards so the scene fits the column on a tablet.",
+        "Mark exactly one card `lit`, the focus of the scene."
+      ]
+    },
+    "sections/hero-form": {
+      "import": "@aziontech/webkit/sections/hero-form",
+      "target": "./src/components/sections/hero-form/hero-form.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/hero-form",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "messages",
+          "type": "HeroFormMessages",
+          "default": "—",
+          "required": "true",
+          "doc": "Copy of the form outcomes: `{ missing, invalidEmail, success, error }`."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline."
+        },
+        {
+          "name": "highlight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Opening words of the headline, painted in the brand accent."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "HeroFormItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items."
+        },
+        {
+          "name": "formAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the field group, read as its legend."
+        },
+        {
+          "name": "fields",
+          "type": "HeroFormField[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`."
+        },
+        {
+          "name": "submitLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the submit button."
+        },
+        {
+          "name": "carouselLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the client strip."
+        },
+        {
+          "name": "carouselMarks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the client marks, in order; the strip renders only when there are marks."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site is sending the values: the button shows its loading state and a submit is ignored."
+        },
+        {
+          "name": "submitted",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site sent the values: the form gives way to `messages.success`."
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The site could not send the values: `messages.error` shows under the form."
+        }
+      ],
+      "events": [
+        {
+          "name": "submit",
+          "payload": "(event: SubmitEvent, values: Record<string, string>)",
+          "notes": "Fired on a valid submit, not while `loading`; `values` holds every field by `name`, trimmed, with a phone number prefixed by its dial code. The block never sends it."
+        }
+      ],
+      "purpose": "The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field-text`, `field-select`, `field-phone-number`, `field-textarea`, `button` and `message`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.",
+      "useWhen": [
+        "To open a page whose purpose is a lead form, such as Contact sales or Under attack."
+      ],
+      "avoidWhen": [
+        "For a newsletter sign-up with one email field → use `closing-call-to-action-newsletter`.",
+        "For an opening band with calls to action and no form → use `hero-band` or `hero-with-opening`."
+      ],
+      "related": [
+        "closing-call-to-action-newsletter` — the other form section; same `submit` and state contract.",
+        "message` — renders the success and failure messages."
+      ],
+      "bestPractices": [
+        "Give every field a unique `name`; it is the key of the submitted value.",
+        "Mark half-width fields in pairs so each row stays full.",
+        "Set `loading` while the values are sent, then `submitted` or `error` with the outcome."
+      ]
+    },
+    "sections/hero-with-opening": {
+      "import": "@aziontech/webkit/sections/hero-with-opening",
+      "target": "./src/components/sections/hero-with-opening/hero-with-opening.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/hero-with-opening",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty. A title longer than 45 characters widens the headline column."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Sentence under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "HeroWithOpeningAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "HeroWithOpeningAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+        },
+        {
+          "name": "items",
+          "type": "HeroWithOpeningItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items."
+        }
+      ],
+      "purpose": "The opening band of a product page followed straight by its arguments: a large centered title band with the page `h1`, overline, sentence and up to two actions, then a frame grid of three-column argument cells in the page column, closed by a hatched gap. It is a page section — the site places it from a `{ _id: 'hero-with-opening', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button`, `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap`. The grid starts at the hero floor with no gap, so the arguments read as the second half of the hero.",
+      "useWhen": [
+        "To open a product page that argues on three or six claims right under its headline."
+      ],
+      "avoidWhen": [
+        "For an opening band with no arguments → use `hero-band`.",
+        "For a reasons band further down the page → use `feature-tiles` or `use-cases`."
+      ],
+      "related": [
+        "hero-band` — the opening band without the argument grid.",
+        "topic` — the icon, heading and sentence each argument is rendered with."
+      ],
+      "bestPractices": [
+        "Use three or six items so every row of the grid is full.",
+        "Keep each item to a short title and one sentence.",
+        "A title longer than 45 characters widens the headline column so it breaks into two lines instead of three."
+      ]
+    },
+    "sections/investor-marks": {
+      "import": "@aziontech/webkit/sections/investor-marks",
+      "target": "./src/components/sections/investor-marks/investor-marks.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/investor-marks",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Line revealed under a mark on hover, and the start of each link's accessible name."
+        },
+        {
+          "name": "items",
+          "type": "InvestorMarksItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme."
+        }
+      ],
+      "purpose": "The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a \"visit website\" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `bento-grid`.",
+      "useWhen": [
+        "On the company page, to name the investors with their marks."
+      ],
+      "avoidWhen": [
+        "For client marks → use `client-mosaic` or `logo-wall-quote`."
+      ],
+      "related": [
+        "bento-grid` — the grid the marks are laid in."
+      ],
+      "bestPractices": [
+        "Give each item a `logoLight` when its mark needs a different file on the light theme; otherwise one `logo` serves both.",
+        "Keep `linkLabel` short; it is revealed under the mark on hover and read before the investor name."
+      ]
+    },
+    "sections/listing-browser": {
+      "import": "@aziontech/webkit/sections/listing-browser",
+      "target": "./src/components/sections/listing-browser/listing-browser.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/listing-browser",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page `id` of the band, the target of a `#hash` link."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline over the listing, rendered by the section title as its `h2` and naming the band."
+        },
+        {
+          "name": "columns",
+          "type": "ListingBrowserColumn[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones."
+        },
+        {
+          "name": "rows",
+          "type": "ListingBrowserRow[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Every row, in source order; each is `{ href, group, values, facets }` where `values` and `facets` are keyed by column and facet."
+        },
+        {
+          "name": "groups",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The groups the rows are listed under, in order; a group with no matching row is not shown."
+        },
+        {
+          "name": "facets",
+          "type": "ListingBrowserFacet[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The facet selects; each is `{ key, label, allLabel, options }` where `key` matches a row facet and seeds it from `?key=` in the URL, and every option is `{ value, label }`."
+        },
+        {
+          "name": "sorts",
+          "type": "ListingBrowserSort[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order."
+        },
+        {
+          "name": "sortAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the order select."
+        },
+        {
+          "name": "search",
+          "type": "ListingBrowserSearch",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The search field; `{ placeholder, shortPlaceholder, label }` where `shortPlaceholder` is used below the large breakpoint and `label` names the field. Omitted when absent."
+        },
+        {
+          "name": "empty",
+          "type": "ListingBrowserEmpty",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent."
+        }
+      ],
+      "purpose": "The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<key>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-browser', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `input-text`, `select`, `table`, `item`, `empty-state` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "For a listing a reader narrows by text and by a few facets, such as open positions grouped by department.",
+        "When every row links to its own page and the listing fits in the page JSON."
+      ],
+      "avoidWhen": [
+        "For a short, unfiltered preview of the same rows → use `listing-table`.",
+        "For a data table with sorting, selection and pagination inside the product → use `table`.",
+        "For a grid of linked topic cards → use `subject-library`."
+      ],
+      "related": [
+        "table` — the composed rows and cells the listing renders from the small breakpoint up.",
+        "item` — the list rows the listing renders below the small breakpoint.",
+        "empty-state` — the state shown when the search and facets match nothing."
+      ],
+      "bestPractices": [
+        "Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.",
+        "Give every row the facet values it carries under the facet's `key`, so the selects narrow it.",
+        "Keep `groups` in the order the reader scans; rows of a group not listed there are not shown.",
+        "Make the first entry of `sorts` the order the page is authored in, with an empty `by`."
+      ]
+    },
+    "sections/listing-table": {
+      "import": "@aziontech/webkit/sections/listing-table",
+      "target": "./src/components/sections/listing-table/listing-table.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/listing-table",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "columns",
+          "type": "ListingTableColumn[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones."
+        },
+        {
+          "name": "rows",
+          "type": "ListingTableRow[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ListingTableAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        }
+      ],
+      "purpose": "A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; the whole row is clickable with the pointer and the first column's link is the keyboard and screen-reader path. Below `sm` the same rows become a list of items, the first column as the title and the second as the description, with the button going full width.",
+      "useWhen": [
+        "To preview the latest entries of a listing (open roles, releases, events) with a way into the full list."
+      ],
+      "avoidWhen": [
+        "For a filterable or paginated listing → use `listing-browser`.",
+        "For a comparison of plans or features → use the pricing matrix."
+      ],
+      "related": [
+        "table` — the composition table the wide layout renders.",
+        "listing-browser` — the full listing this band links into."
+      ],
+      "bestPractices": [
+        "Keep three columns at most; the first names the row and the second describes it on phones.",
+        "Give the wide columns `grow: 2` and align a short trailing column to `end`.",
+        "Keep the preview to a handful of rows and point `primaryAction` at the full listing."
+      ]
+    },
+    "sections/logo-wall-quote": {
+      "import": "@aziontech/webkit/sections/logo-wall-quote",
+      "target": "./src/components/sections/logo-wall-quote/logo-wall-quote.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/logo-wall-quote",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the logo wall."
+        },
+        {
+          "name": "logos",
+          "type": "LogoWallQuoteLogo[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'`."
+        },
+        {
+          "name": "quote",
+          "type": "LogoWallQuoteQuote",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent."
+        },
+        {
+          "name": "primaryAction",
+          "type": "LogoWallQuoteAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-quote', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `logo-wall`, `quote` and `button`.",
+      "useWhen": [
+        "To prove adoption with marks and let one customer speak, early on a home or solution page."
+      ],
+      "avoidWhen": [
+        "For several quotes in turn → use `client-quotes`.",
+        "For marks with photos and stories in a mosaic → use `client-mosaic`."
+      ],
+      "related": [
+        "logo-wall` — the wall the marks are laid in, with the quote in its aside."
+      ],
+      "bestPractices": [
+        "Eight or nine logos fill the rectangle wall beside the aside.",
+        "Set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing."
+      ]
+    },
+    "sections/media-split-band": {
+      "import": "@aziontech/webkit/sections/media-split-band",
+      "target": "./src/components/sections/media-split-band/media-split-band.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/media-split-band",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Paragraph under the headline."
+        },
+        {
+          "name": "size",
+          "type": "MediaSplitBandSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media."
+        },
+        {
+          "name": "scene",
+          "type": "MediaSplitBandScene",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`."
+        },
+        {
+          "name": "image",
+          "type": "MediaSplitBandImage",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`."
+        },
+        {
+          "name": "illustration",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor an image is set."
+        },
+        {
+          "name": "illustrationAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the illustration; empty keeps it decorative."
+        },
+        {
+          "name": "primaryAction",
+          "type": "MediaSplitBandAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "MediaSplitBandAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked."
+        }
+      ],
+      "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
+      "useWhen": [
+        "To make one point beside one picture and move on (a values statement, a single product claim)."
+      ],
+      "avoidWhen": [
+        "For several claims stacked one after the other → use `media-split-stack`.",
+        "For a claim beside a code sample → use `code-split`."
+      ],
+      "related": [
+        "media-split` — the band primitive the section is rendered with.",
+        "media-split-stack` — the stacked sibling for a run of claims."
+      ],
+      "bestPractices": [
+        "Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.",
+        "Use `size=\"large\"` for a band that carries only its headline and description.",
+        "Give an `image` its `width` and `height` so the page reserves its box before it loads."
+      ]
+    },
+    "sections/media-split-stack": {
+      "import": "@aziontech/webkit/sections/media-split-stack",
+      "target": "./src/components/sections/media-split-stack/media-split-stack.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/media-split-stack",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "MediaSplitStackKind",
+          "default": "'media-end'",
+          "required": "false",
+          "doc": "Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty."
+        },
+        {
+          "name": "bands",
+          "type": "MediaSplitStackBand[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
+        }
+      ],
+      "purpose": "A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined \"learn more\" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.",
+      "useWhen": [
+        "To list the solution areas or the claims of a page, one large band each, with a link through to its own page."
+      ],
+      "avoidWhen": [
+        "For a single claim beside its media → use `media-split` directly.",
+        "For small reasons in a grid → use `feature-tiles`."
+      ],
+      "related": [
+        "band-stack` — the sticky run the bands pile up in.",
+        "media-split` — the band each entry renders through."
+      ],
+      "bestPractices": [
+        "Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.",
+        "Give every band an `action`; it is both the button and the link the whole band follows."
+      ]
+    },
+    "sections/network-section": {
+      "import": "@aziontech/webkit/sections/network-section",
+      "target": "./src/components/sections/network-section/network-section.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/network-section",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "NetworkSectionKind",
+          "default": "'outcomes'",
+          "required": "false",
+          "doc": "Which floor closes the band: `outcomes` renders the client quotes, `benefits` the icon-led topics."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "lead",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline-set line above the claims."
+        },
+        {
+          "name": "claims",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short figures rendered as chips under the lead, in order."
+        },
+        {
+          "name": "outcomes",
+          "type": "NetworkSectionOutcome[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
+        },
+        {
+          "name": "benefits",
+          "type": "NetworkSectionBenefit[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Topics for the `benefits` floor, in order; each is `{ icon, title, description }`."
+        }
+      ],
+      "purpose": "The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders four quotes, `benefits` three topics; the band above is the same.",
+      "useWhen": [
+        "To state the network's reach with figures and back it with either client results or product benefits."
+      ],
+      "avoidWhen": [
+        "For figures alone → use `stats-band`.",
+        "For a logo wall with one quote → use `logo-wall-quote`."
+      ],
+      "related": [
+        "network-map` — the animated map behind the copy.",
+        "quote` / `topic` — the two cell types the floor renders."
+      ],
+      "bestPractices": [
+        "Four short `claims`; they are chips, not sentences.",
+        "Four `outcomes` or three `benefits`, so the floor closes the grid.",
+        "Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark."
+      ]
+    },
+    "sections/photo-marquee": {
+      "import": "@aziontech/webkit/sections/photo-marquee",
+      "target": "./src/components/sections/photo-marquee/photo-marquee.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/photo-marquee",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Paragraph beside the headline."
+        },
+        {
+          "name": "descriptionWidth",
+          "type": "PhotoMarqueeDescriptionWidth",
+          "default": "'narrow'",
+          "required": "false",
+          "doc": "Width the description is capped at: `narrow` or `wide`."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling region."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Seconds one loop of the strip takes; `0` paces it at ten seconds per photo."
+        },
+        {
+          "name": "photos",
+          "type": "PhotoMarqueePhoto[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The photographs, in order; each is `{ src, alt, width, height }`."
+        }
+      ],
+      "purpose": "The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.",
+      "useWhen": [
+        "To show a place or a team in pictures without a grid."
+      ],
+      "avoidWhen": [
+        "For quotes → use `recognition-marquee`."
+      ],
+      "related": [
+        "recognition-marquee` — the sibling strip of quotes with the same loop."
+      ],
+      "bestPractices": [
+        "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",
+        "Leave `duration` at `0` to let the strip pace itself (ten seconds per photo)."
+      ]
+    },
+    "sections/platform-directory": {
+      "import": "@aziontech/webkit/sections/platform-directory",
+      "target": "./src/components/sections/platform-directory/platform-directory.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/platform-directory",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline over the directory, rendered by the section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the directory's navigation landmark."
+        },
+        {
+          "name": "groups",
+          "type": "PlatformDirectoryGroup[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty."
+        }
+      ],
+      "purpose": "A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box` and `column-navigation` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On Home, right under the hero, to show every product the platform offers at a glance.",
+        "On a solution, product or pricing page that repeats the full product map."
+      ],
+      "avoidWhen": [
+        "For a handful of icon-led use cases → use `use-cases`.",
+        "For a site-wide navigation menu → use `navigation-menu`.",
+        "Inside another band's cell → compose `column-navigation` directly."
+      ],
+      "related": [
+        "column-navigation` — the named navigation landmark whose columns and rows this band fills.",
+        "section-title` — the headline over the directory."
+      ],
+      "bestPractices": [
+        "Keep to four groups; the directory fans out to four columns at the large breakpoint.",
+        "Give each item an `href`; an item without a title or a link is skipped, and a group left with no items is skipped too.",
+        "Set `ariaLabel` so the directory's navigation landmark is told apart from the site navigation."
+      ]
+    },
+    "sections/pricing-plans": {
+      "import": "@aziontech/webkit/sections/pricing-plans",
+      "target": "./src/components/sections/pricing-plans/pricing-plans.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/pricing-plans",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a hash link can target it."
+        },
+        {
+          "name": "periods",
+          "type": "PricingPlansPeriod[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first."
+        },
+        {
+          "name": "periodsAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the billing-period toggle."
+        },
+        {
+          "name": "plans",
+          "type": "PricingPlansPlan[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped."
+        }
+      ],
+      "purpose": "The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `card-grid`, `card-pricing` and `button`; the picked period is local state.",
+      "useWhen": [
+        "At the top of Pricing, to lay the plans side by side with a price per billing period."
+      ],
+      "avoidWhen": [
+        "To compare plans feature by feature → use `compare-plans`."
+      ],
+      "related": [
+        "card-pricing` — the card each plan renders with.",
+        "compare-plans` — the matrix that sits under these cards."
+      ],
+      "bestPractices": [
+        "Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.",
+        "Highlight one plan; it is raised and is the only card that shows its tag.",
+        "Keep `features` to five or so short labels led by an icon."
+      ]
+    },
+    "sections/recognition-marquee": {
+      "import": "@aziontech/webkit/sections/recognition-marquee",
+      "target": "./src/components/sections/recognition-marquee/recognition-marquee.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/recognition-marquee",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling region."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Seconds one loop of the strip takes; `0` paces it at twelve seconds per item."
+        },
+        {
+          "name": "items",
+          "type": "RecognitionMarqueeItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme."
+        }
+      ],
+      "purpose": "The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.",
+      "useWhen": [
+        "To list analyst reports and awards on a page that needs third-party proof."
+      ],
+      "avoidWhen": [
+        "For office photos → use `photo-marquee`.",
+        "For customer quotes → use `client-quotes`."
+      ],
+      "related": [
+        "quote` — the signed card each recognition renders with.",
+        "photo-marquee` — the sibling strip of pictures with the same loop."
+      ],
+      "bestPractices": [
+        "Five to eight items; the loop needs enough width to read as continuous.",
+        "Leave `duration` at `0` to let the strip pace itself (twelve seconds per item)."
+      ]
+    },
+    "sections/resource-grid": {
+      "import": "@aziontech/webkit/sections/resource-grid",
+      "target": "./src/components/sections/resource-grid/resource-grid.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/resource-grid",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, which also names its region and the scroll area."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Lead sentence beside the grid."
+        },
+        {
+          "name": "items",
+          "type": "ResourceGridItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The resource cards, in order; each is `{ title, description?, href }`, and a card with no title is skipped."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ResourceGridAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button under the copy; dropped when its label or link is missing."
+        }
+      ],
+      "purpose": "A band that points readers to further reading on solution pages: an overline, a headline and a short lead with an optional button sit beside a two-column frame grid of linked resource cards, each a title and one sentence. A card whose link leaves the site opens in a new tab; past four cards the grid scrolls inside a fading scroll area so the band keeps its height. It is a page section — the site places it from a `{ _id: 'resource-grid', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `card-grid`, `topic`, `scroll-area` and `button`.",
+      "useWhen": [
+        "To close a solution page with documentation, articles and stories that go deeper into it."
+      ],
+      "avoidWhen": [
+        "For related articles with covers → use `article-cards`.",
+        "For linked use cases with media → use `use-case-links`."
+      ],
+      "related": [
+        "media-split` — the copy-beside-media band that owns the heading and the named region.",
+        "topic` — the linked title-and-sentence cell each card is rendered with."
+      ],
+      "bestPractices": [
+        "Keep four cards for a full grid; more than four scroll.",
+        "Give a card a full `http` link only when it leaves the site, so only those open in a new tab."
+      ]
+    },
+    "sections/site-footer": {
+      "import": "@aziontech/webkit/sections/site-footer",
+      "target": "./src/components/sections/site-footer/site-footer.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/site-footer",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "SiteFooterKind",
+          "default": "'site'",
+          "required": "false",
+          "doc": "Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Footer'",
+          "required": "false",
+          "doc": "Accessible name of the footer landmark."
+        },
+        {
+          "name": "home",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Destination of the Azion mark; the mark is not rendered when empty."
+        },
+        {
+          "name": "homeAriaLabel",
+          "type": "string",
+          "default": "'Azion home'",
+          "required": "false",
+          "doc": "Accessible name of the Azion mark link."
+        },
+        {
+          "name": "columns",
+          "type": "SiteFooterColumn[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`."
+        },
+        {
+          "name": "socials",
+          "type": "SiteFooterSocial[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab."
+        },
+        {
+          "name": "statusLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Line of the system status indicator; the indicator is not rendered when empty."
+        },
+        {
+          "name": "languages",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty."
+        },
+        {
+          "name": "languageAriaLabel",
+          "type": "string",
+          "default": "'Language'",
+          "required": "false",
+          "doc": "Accessible name of the language select, also its placeholder."
+        }
+      ],
+      "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The language select keeps its own value locally; its options are the labels the reader sees.",
+      "useWhen": [
+        "As the last block of every marketing page."
+      ],
+      "avoidWhen": [
+        "Inside the product console or the docs → compose `footer` directly.",
+        "For a closing ask above the footer → use `closing-call-to-action`."
+      ],
+      "related": [
+        "footer` — the composition footer this section fills.",
+        "closing-call-to-action` — the band that sits right above it."
+      ],
+      "bestPractices": [
+        "Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.",
+        "Keep four link columns so the grid fills at `md`.",
+        "Give every social link a `label` that names the network, since the button shows only the glyph."
+      ]
+    },
+    "sections/site-nav": {
+      "import": "@aziontech/webkit/sections/site-nav",
+      "target": "./src/components/sections/site-nav/site-nav.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/site-nav",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "home",
+          "type": "string",
+          "default": "'/'",
+          "required": "false",
+          "doc": "Where the Azion mark links."
+        },
+        {
+          "name": "menus",
+          "type": "SiteNavMenu[]",
+          "default": "—",
+          "required": "true",
+          "doc": "The mega-menus, in bar order; each is `{ value, label, columns }` where `columns` is an array of columns, each holding groups of `{ label, href?, items }` and each item `{ label, description?, href?, icon? }`."
+        },
+        {
+          "name": "links",
+          "type": "SiteNavLink[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Bar entries that open no panel, after the menus; each is `{ label, href }`."
+        },
+        {
+          "name": "contact",
+          "type": "SiteNavLink",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Contact link set in the bar from `xl` up and last in the sheet's tree; `{ label, href }`."
+        },
+        {
+          "name": "primaryAction",
+          "type": "SiteNavLink",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "SiteNavLink",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The login button beside it, in the bar and in the sheet footer; `{ label, href }`."
+        }
+      ],
+      "purpose": "The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state.",
+      "useWhen": [
+        "At the top of every marketing page, once."
+      ],
+      "avoidWhen": [
+        "For the Console's application header → use `global-header` directly.",
+        "For an in-page list of links → use `navigation-menu` or `menu` directly."
+      ],
+      "related": [
+        "global-header` — the bar primitive the navigation is rendered in.",
+        "navigation-menu` — the mega-menu the bar opens from `xl` up.",
+        "menu` — the drill-down tree the sheet carries below `xl`."
+      ],
+      "bestPractices": [
+        "Keep a panel to one, two or four columns; only the four-column panel is stretched to the page column.",
+        "Stack a short group under another in the same column (Platform under Observe) instead of adding a fifth column.",
+        "Give every entry an `href`; an entry without one links to `#`."
+      ]
+    },
+    "sections/stats-band": {
+      "import": "@aziontech/webkit/sections/stats-band",
+      "target": "./src/components/sections/stats-band/stats-band.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/stats-band",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "StatsBandItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+        }
+      ],
+      "purpose": "The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `big-numbers`, which owns the figures' scale and layout.",
+      "useWhen": [
+        "To state reach, scale or results in three to five figures right after a hero or a claim."
+      ],
+      "avoidWhen": [
+        "For figures that need a quote or a logo beside them → use `network-section` or `logo-wall-quote`.",
+        "For a single figure inside another band → use `big-numbers` directly."
+      ],
+      "related": [
+        "big-numbers` — the figure row this band frames.",
+        "network-section` — the band that pairs claims with client outcomes."
+      ],
+      "bestPractices": [
+        "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",
+        "Three to five items; more than that and the figures stop reading as a band."
+      ]
+    },
+    "sections/sticky-scroll-code": {
+      "import": "@aziontech/webkit/sections/sticky-scroll-code",
+      "target": "./src/components/sections/sticky-scroll-code/sticky-scroll-code.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/sticky-scroll-code",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "StickyScrollCodeItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the open item."
+        }
+      ],
+      "purpose": "The developer-capabilities band of a product page: a large section title over a sticky stack whose claims scroll past a pinned media frame, the open claim showing its one-file code sample on the pixelate texture and its own button under its description. It is a page section — the site places it from a `{ _id: 'sticky-scroll-code', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `sticky-stack`, `texture-material`, `code-block` and `button`. Which claim is open is scroll-driven state owned by `sticky-stack`.",
+      "useWhen": [
+        "To walk a developer through several capabilities, each proven by a short file, while the page scrolls."
+      ],
+      "avoidWhen": [
+        "For one claim beside one sample → use `code-split`.",
+        "For a walkthrough shown by illustrations → use `feature-scroll`."
+      ],
+      "related": [
+        "sticky-stack` — the pinned, scroll-driven run of claims this section renders through.",
+        "code-block` — the one-file sample each claim shows."
+      ],
+      "bestPractices": [
+        "Keep each sample short enough to read in the pinned frame.",
+        "Give every item a `code`; the item's `action` is optional and shows only while the item is open."
+      ]
+    },
+    "sections/story-library": {
+      "import": "@aziontech/webkit/sections/story-library",
+      "target": "./src/components/sections/story-library/story-library.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/story-library",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "items",
+          "type": "StoryLibraryItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The stories, in order; each is `{ key, href, client, category, description, facets? }`."
+        },
+        {
+          "name": "facets",
+          "type": "StoryLibraryFacet[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The facet selects, in order; each is `{ key, label, allLabel, options }`."
+        },
+        {
+          "name": "search",
+          "type": "StoryLibrarySearch",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+        },
+        {
+          "name": "empty",
+          "type": "StoryLibraryEmpty",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The no-match state's `title` and the `action` label of its clear-filters button."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read cue at the foot of each card, also the lead of its accessible name."
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the load-more button under the grid; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of stories."
+        }
+      ],
+      "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input-text`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.",
+      "useWhen": [
+        "To list every success story with search and facet filters."
+      ],
+      "avoidWhen": [
+        "For a closing row of three related stories → use `article-cards`.",
+        "For a filterable list of articles → use `article-index-blog` or `article-index-resource-hub`."
+      ],
+      "related": [
+        "article-index-resource-hub` — the sibling listing of articles with facet dropdowns.",
+        "empty-state` — the no-match state."
+      ],
+      "bestPractices": [
+        "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
+        "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet."
+      ]
+    },
+    "sections/subject-library": {
+      "import": "@aziontech/webkit/sections/subject-library",
+      "target": "./src/components/sections/subject-library/subject-library.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/subject-library",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page `id` of the band, the target of a `#hash` link."
+        },
+        {
+          "name": "subjects",
+          "type": "SubjectLibrarySubject[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped."
+        },
+        {
+          "name": "closing",
+          "type": "SubjectLibraryClosing",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-library', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `frame-box`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On the Learning Center index, to list every subject with the articles that teach it.",
+        "Whenever a page needs a grid of topic cards that each carry a short list of links, closed by one call to action."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For a filterable list of rows → use `listing-browser`.",
+        "Inside another band's cell → compose `frame-box` and `call-to-action` directly."
+      ],
+      "related": [
+        "call-to-action` — the `lead` band drawn in the closing cell.",
+        "card-grid` — the divider grid the subject cards sit in."
+      ],
+      "bestPractices": [
+        "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",
+        "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.",
+        "Keep each subject's articles to a handful; the card grows with its list."
+      ]
+    },
+    "sections/template-gallery": {
+      "import": "@aziontech/webkit/sections/template-gallery",
+      "target": "./src/components/sections/template-gallery/template-gallery.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/template-gallery",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Paragraph under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "TemplateGalleryAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "TemplateGalleryAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "templates",
+          "type": "TemplateGalleryTemplate[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped."
+        },
+        {
+          "name": "deployLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
+        },
+        {
+          "name": "templatesAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling wall of templates."
+        },
+        {
+          "name": "tickerLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the row of marks."
+        },
+        {
+          "name": "tickerMarks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty."
+        }
+      ],
+      "purpose": "The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On a solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming) to show the templates a reader can deploy right away.",
+        "Whenever a band pairs one pitch with a long, browsable list of deployable starters."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For a ticker of marks alone → compose `ticker` directly.",
+        "For a handful of icon-led use cases → use `use-cases`."
+      ],
+      "related": [
+        "media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
+        "ticker` — the row of framework and cloud marks that closes the band."
+      ],
+      "bestPractices": [
+        "Keep the wall to an even number of templates so the two columns end level.",
+        "Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.",
+        "Set `templatesAriaLabel` so the scrolling wall is announced by name."
+      ]
+    },
+    "sections/use-case-links": {
+      "import": "@aziontech/webkit/sections/use-case-links",
+      "target": "./src/components/sections/use-case-links/use-case-links.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/use-case-links",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "UseCaseLinksItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`."
+        }
+      ],
+      "purpose": "The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.",
+      "useWhen": [
+        "When every use case has its own page and the band's job is to route the reader there.",
+        "For three or six use cases of equal weight, in a three-column grid."
+      ],
+      "avoidWhen": [
+        "When the use cases carry no link and the band leads with one call to action → use `use-cases`.",
+        "For features with artwork → use `feature-tiles`."
+      ],
+      "related": [
+        "use-cases` — the sibling band with a title cell and one action instead of a link per case.",
+        "topic` — the linked icon-heading-sentence cell each use case is rendered with."
+      ],
+      "bestPractices": [
+        "Keep the count a multiple of three so the divider grid closes cleanly.",
+        "Give every item an `href`; a topic without one reads as a dead end in a band that promises links.",
+        "Keep `description` to one sentence; the row height follows the longest cell."
+      ]
+    },
+    "sections/use-cases": {
+      "import": "@aziontech/webkit/sections/use-cases",
+      "target": "./src/components/sections/use-cases/use-cases.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/use-cases",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline in the title cell, closed by the blinking cursor."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` in the title cell."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "One-line lead under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "UseCasesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "items",
+          "type": "UseCasesItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
+        }
+      ],
+      "purpose": "The \"what teams use it for\" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'use-cases', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `frame-box`, `overline`, `topic` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.",
+        "Whenever a page needs three to six short, icon-led use cases with one link out to the documentation."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For use cases that each link to their own page → use `use-case-links`.",
+        "Inside another band's cell → compose `topic` directly."
+      ],
+      "related": [
+        "topic` — the icon, title and description cell each use case is rendered with.",
+        "card-grid` — the frame grid this band lays its cells in."
+      ],
+      "bestPractices": [
+        "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",
+        "Write `title` as the heading the page's outline needs; it is the band's `h2`.",
+        "Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as \"go\".",
+        "Leave `eyebrow` as the product name; it is the overline the reader scans first."
+      ]
     },
     "svg/illustration-layers": {
       "import": "@aziontech/webkit/svg/illustration-layers",
