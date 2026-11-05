@@ -10,7 +10,7 @@ A band that walks through the features behind one claim, one at a time. Up to th
 
 The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs` and `MiniButton`.
+The band is the `FeatureTabs` component from `@aziontech/webkit/sections/feature-tabs`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs`, `Illustration` and `MiniButton`.
 
 <p
   style={{
@@ -27,20 +27,23 @@ Built from `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs` and `MiniBut
 
 ### Default
 
-The Observability band from Functions: Trace, Logs and Request path, each held for 5.2 seconds. Each tab shows one `Illustration` scene, picked by the `#media` slot's `index`.
+The Observability band from Functions: Trace, Logs and Request path, each held for 5.2 seconds. Each tab shows one `Illustration` scene, named by its `illustration`.
 
 <Canvas of={FeatureTabsStories.Default} />
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` make the section title.
 - `tabs` are up to three features, each a `title`, a `description`, an `illustration` name and its `illustrationLabel`.
-- `link` is the small button under the frame. Without a label or link it is dropped.
+- `primaryAction` is the small link under the frame, a `label`, an `href` and `trailing` for the chevron. Leave it out to drop the link.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={FeatureTabsStories.DefaultJson} dark />
+  <Source
+    of={FeatureTabsStories.DefaultJson}
+    dark
+  />
 </div>
