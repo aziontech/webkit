@@ -328,6 +328,41 @@
     "limit": "7 KB"
   },
   {
+    "name": "article-body",
+    "path": "src/components/sections/article-body/article-body.vue",
+    "limit": "37 KB"
+  },
+  {
+    "name": "article-cards",
+    "path": "src/components/sections/article-cards/article-cards.vue",
+    "limit": "4.7 KB"
+  },
+  {
+    "name": "article-highlight",
+    "path": "src/components/sections/article-highlight/article-highlight.vue",
+    "limit": "7.3 KB"
+  },
+  {
+    "name": "article-index-blog",
+    "path": "src/components/sections/article-index-blog/article-index-blog.vue",
+    "limit": "22 KB"
+  },
+  {
+    "name": "article-index-resource-hub",
+    "path": "src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
+    "limit": "27 KB"
+  },
+  {
+    "name": "resource-grid",
+    "path": "src/components/sections/resource-grid/resource-grid.vue",
+    "limit": "23 KB"
+  },
+  {
+    "name": "story-library",
+    "path": "src/components/sections/story-library/story-library.vue",
+    "limit": "28 KB"
+  },
+  {
     "name": "hero-band",
     "path": "src/components/sections/hero-band/hero-band.vue",
     "limit": "9.5 KB",
@@ -453,6 +488,11 @@
     "limit": "5 KB"
   },
   {
+    "name": "subject-library",
+    "path": "src/components/sections/subject-library/subject-library.vue",
+    "limit": "7.5 KB"
+  },
+  {
     "name": "recognition-marquee",
     "path": "src/components/sections/recognition-marquee/recognition-marquee.vue",
     "limit": "19 KB"
@@ -489,6 +529,11 @@
     "path": "src/components/sections/media-split-stack/media-split-stack.vue",
     "limit": "12 KB",
     "entryOnly": true
+  },
+  {
+    "name": "faq-section",
+    "path": "src/components/sections/faq-section/faq-section.vue",
+    "limit": "18 KB"
   },
   {
     "name": "site-footer",

@@ -16384,6 +16384,373 @@
         "Give every tab a `diagram` from the diagram library and a stable `value`."
       ]
     },
+    "sections/article-body": {
+      "import": "@aziontech/webkit/sections/article-body",
+      "target": "./src/components/sections/article-body/article-body.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-body",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "article",
+          "type": "ArticleBodyArticle",
+          "default": "—",
+          "required": "true",
+          "doc": "The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`."
+        },
+        {
+          "name": "trail",
+          "type": "ArticleBodyCrumb[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`."
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The article as markdown; its `##` and `###` headings feed the outline."
+        },
+        {
+          "name": "banner",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the image over the masthead; the banner frame is omitted when empty."
+        },
+        {
+          "name": "share",
+          "type": "ArticleBodyShare",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`; the group is omitted when absent."
+        },
+        {
+          "name": "community",
+          "type": "ArticleBodyCommunity",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent."
+        },
+        {
+          "name": "copyPage",
+          "type": "ArticleBodyCopyPage",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent."
+        }
+      ],
+      "purpose": "The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the \"On this page\" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: blank-line separated blocks render as `##` / `###` headings (each with an id slugged from its text, feeding the outline), `-` lists and paragraphs. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button` and `doc-on-this-page`; copying to the clipboard is local behaviour.",
+      "useWhen": [
+        "To open every blog post and every success story page."
+      ],
+      "avoidWhen": [
+        "For a list of articles → use `article-index-blog`.",
+        "For a closing row of related articles → use `article-cards`."
+      ],
+      "related": [
+        "doc-prose` — the reading-measure typography the body renders in.",
+        "doc-on-this-page` — the outline rail fed by the body's headings."
+      ],
+      "bestPractices": [
+        "Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.",
+        "Mark the last breadcrumb entry `current`."
+      ]
+    },
+    "sections/article-cards": {
+      "import": "@aziontech/webkit/sections/article-cards",
+      "target": "./src/components/sections/article-cards/article-cards.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-cards",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "ArticleCardsKind",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Placement of the heading: `left` sets it at the start, `centered` centres it over the cards."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the heading."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band; the band renders no header when empty."
+        },
+        {
+          "name": "items",
+          "type": "ArticleCardsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The cards, in order; each is `{ key, href, title, description, meta, image?, mark? }`."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the card grid."
+        }
+      ],
+      "purpose": "A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `left` at the start (an article's closing row), `centered` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.",
+      "useWhen": [
+        "To close a blog post with its related articles, or a success story with its related stories.",
+        "To show three stories as a landing-page band under a centred heading."
+      ],
+      "avoidWhen": [
+        "For the full, filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.",
+        "For one featured article selected from a wall → use `article-highlight`."
+      ],
+      "related": [
+        "card-grid` — the frame grid the cards sit on.",
+        "article-highlight` — the blog's opening band."
+      ],
+      "bestPractices": [
+        "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",
+        "Keep the band to three cards so the frame row stays full."
+      ]
+    },
+    "sections/article-highlight": {
+      "import": "@aziontech/webkit/sections/article-highlight",
+      "target": "./src/components/sections/article-highlight/article-highlight.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-highlight",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "items",
+          "type": "ArticleHighlightItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The highlight articles in wall order, the first selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`."
+        },
+        {
+          "name": "actionLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the button into the selected article; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the wall of titles."
+        }
+      ],
+      "purpose": "The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state.",
+      "useWhen": [
+        "To open a blog or a resource page with its newest or most important articles."
+      ],
+      "avoidWhen": [
+        "For a closing row of related articles → use `article-cards`.",
+        "For the full list of articles → use `article-index-blog`."
+      ],
+      "related": [
+        "article-cards` — the closing row of related articles.",
+        "card-grid` — the frame grid the wall of titles sits on."
+      ],
+      "bestPractices": [
+        "Feature three or four articles; four fill the wall four across.",
+        "Give a `highlightImage` cropped for the panel when the cover does not read at that size."
+      ]
+    },
+    "sections/article-index-blog": {
+      "import": "@aziontech/webkit/sections/article-index-blog",
+      "target": "./src/components/sections/article-index-blog/article-index-blog.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-index-blog",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "items",
+          "type": "ArticleIndexBlogItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The articles, newest first; each is `{ key, href, image, meta, title, description, authors?, byline?, categories? }`."
+        },
+        {
+          "name": "categories",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Segments of the category picker after the show-all segment; the picker is omitted when empty."
+        },
+        {
+          "name": "allLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the first segment, which shows every category."
+        },
+        {
+          "name": "categoryLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the category picker."
+        },
+        {
+          "name": "search",
+          "type": "ArticleIndexBlogSearch",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+        },
+        {
+          "name": "rowLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read cue revealed at the end of a row under hover or focus."
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the load-more button under the list; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of articles."
+        }
+      ],
+      "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `input-text`, `avatar` and `button`; the selected category and the search term are local state.",
+      "useWhen": [
+        "For the blog's full list of posts, filtered by category and searched by text."
+      ],
+      "avoidWhen": [
+        "For a resource hub filtered by facet dropdowns, with centred rows and no byline → use `article-index-resource-hub`.",
+        "For a closing row of related articles → use `article-cards`."
+      ],
+      "related": [
+        "article-index-resource-hub` — the sibling listing with facet dropdowns.",
+        "article-highlight` — the band that opens the blog above this list."
+      ],
+      "bestPractices": [
+        "List the articles newest first; file every article under at least one of `categories`.",
+        "Keep the category list short enough to scroll on one row."
+      ]
+    },
+    "sections/article-index-resource-hub": {
+      "import": "@aziontech/webkit/sections/article-index-resource-hub",
+      "target": "./src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/article-index-resource-hub",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline beside the dropdowns, rendered as the band's `h2`."
+        },
+        {
+          "name": "items",
+          "type": "ArticleIndexResourceHubItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The resources, in order; each is `{ key, href, image, meta, title, description, facets? }`."
+        },
+        {
+          "name": "facets",
+          "type": "ArticleIndexResourceHubFacet[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The facet dropdowns, in order; each is `{ key, label, allLabel, options }`."
+        },
+        {
+          "name": "rowLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read cue revealed at the end of a row under hover or focus."
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the load-more button under the list; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of resources."
+        }
+      ],
+      "purpose": "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input-text` and `button`; the facet selections and each dropdown's option search are local state.",
+      "useWhen": [
+        "For a resource hub that mixes content types (e-books, posts, comparisons, stories), filtered by facet."
+      ],
+      "avoidWhen": [
+        "For the blog's list filtered by a category picker and a search field, with bylines → use `article-index-blog`.",
+        "For the success-story library with a card grid → use `story-library`."
+      ],
+      "related": [
+        "article-index-blog` — the sibling listing with a category picker and a search field.",
+        "story-library` — the card-grid library with search and facets."
+      ],
+      "bestPractices": [
+        "Give every item a `facets` entry per facet `key` it can be filtered by; an item without one never matches a selection on that facet.",
+        "Keep each facet's `options` to values some item carries."
+      ]
+    },
     "sections/cli-terminal": {
       "import": "@aziontech/webkit/sections/cli-terminal",
       "target": "./src/components/sections/cli-terminal/cli-terminal.vue",
@@ -17002,6 +17369,56 @@
       "bestPractices": [
         "Four or five certifications plus the link cell fill two rows of three.",
         "Give every badge an `alt` naming the certification; the pill repeats it for sighted readers."
+      ]
+    },
+    "sections/faq-section": {
+      "import": "@aziontech/webkit/sections/faq-section",
+      "target": "./src/components/sections/faq-section/faq-section.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/faq-section",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the FAQ as its `h2` in the left column."
+        },
+        {
+          "name": "items",
+          "type": "FaqSectionItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The questions in display order; each is `{ question, answer }` where `answer` is markdown carrying paragraphs, bullet lists, links, bold and italic text."
+        }
+      ],
+      "purpose": "The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time. It is a page section — the site places it from a `{ _id: 'faq-section', props }` entry and binds `props` straight onto it — and it composes `section-module` and `faq`. An answer is a markdown string, so it can run to several paragraphs (split by a blank line) and `- ` bullet lists, and a sentence can carry a link, bold or italic text, all without a slot or `v-html`.",
+      "useWhen": [
+        "To answer the handful of questions a reader still has before the closing call to action."
+      ],
+      "avoidWhen": [
+        "For answers that need content beyond paragraphs, bullet lists and inline links (tables, images, code) → compose `faq` with its `answer` slot.",
+        "For a single highlighted question with an action → use `call-to-action`."
+      ],
+      "related": [
+        "faq` — the framed accordion band this section renders.",
+        "closing-call-to-action` — the band that usually follows it."
+      ],
+      "bestPractices": [
+        "Use one FAQ section per page and give it `anchor: 'faq'` so a page can link straight to it.",
+        "Keep an answer short; links use `[label](href)`, bold `**text**` and italic `*text*`.",
+        "Separate paragraphs with a blank line; start each bullet with `- ` and keep the list in its own block.",
+        "Absolute `https://` links open in a new tab; site-relative links stay in the tab."
       ]
     },
     "sections/feature-scroll": {
@@ -18210,6 +18627,68 @@
         "Leave `duration` at `0` to let the strip pace itself (twelve seconds per item)."
       ]
     },
+    "sections/resource-grid": {
+      "import": "@aziontech/webkit/sections/resource-grid",
+      "target": "./src/components/sections/resource-grid/resource-grid.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/resource-grid",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, which also names its region and the scroll area."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Lead sentence beside the grid."
+        },
+        {
+          "name": "items",
+          "type": "ResourceGridItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The resource cards, in order; each is `{ title, description?, href }`, and a card with no title is skipped."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ResourceGridAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button under the copy; dropped when its label or link is missing."
+        }
+      ],
+      "purpose": "A band that points readers to further reading on solution pages: an overline, a headline and a short lead with an optional button sit beside a two-column frame grid of linked resource cards, each a title and one sentence. A card whose link leaves the site opens in a new tab; past four cards the grid scrolls inside a fading scroll area so the band keeps its height. It is a page section — the site places it from a `{ _id: 'resource-grid', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `card-grid`, `topic`, `scroll-area` and `button`.",
+      "useWhen": [
+        "To close a solution page with documentation, articles and stories that go deeper into it."
+      ],
+      "avoidWhen": [
+        "For related articles with covers → use `article-cards`.",
+        "For linked use cases with media → use `use-case-links`."
+      ],
+      "related": [
+        "media-split` — the copy-beside-media band that owns the heading and the named region.",
+        "topic` — the linked title-and-sentence cell each card is rendered with."
+      ],
+      "bestPractices": [
+        "Keep four cards for a full grid; more than four scroll.",
+        "Give a card a full `http` link only when it leaves the site, so only those open in a new tab."
+      ]
+    },
     "sections/site-footer": {
       "import": "@aziontech/webkit/sections/site-footer",
       "target": "./src/components/sections/site-footer/site-footer.vue",
@@ -18459,6 +18938,147 @@
       "bestPractices": [
         "Keep each sample short enough to read in the pinned frame.",
         "Give every item a `code`; the item's `action` is optional and shows only while the item is open."
+      ]
+    },
+    "sections/story-library": {
+      "import": "@aziontech/webkit/sections/story-library",
+      "target": "./src/components/sections/story-library/story-library.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/story-library",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "items",
+          "type": "StoryLibraryItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The stories, in order; each is `{ key, href, client, category, description, facets? }`."
+        },
+        {
+          "name": "facets",
+          "type": "StoryLibraryFacet[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The facet selects, in order; each is `{ key, label, allLabel, options }`."
+        },
+        {
+          "name": "search",
+          "type": "StoryLibrarySearch",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+        },
+        {
+          "name": "empty",
+          "type": "StoryLibraryEmpty",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The no-match state's `title` and the `action` label of its clear-filters button."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Read cue at the foot of each card, also the lead of its accessible name."
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the load-more button under the grid; the button is omitted when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of stories."
+        }
+      ],
+      "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input-text`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.",
+      "useWhen": [
+        "To list every success story with search and facet filters."
+      ],
+      "avoidWhen": [
+        "For a closing row of three related stories → use `article-cards`.",
+        "For a filterable list of articles → use `article-index-blog` or `article-index-resource-hub`."
+      ],
+      "related": [
+        "article-index-resource-hub` — the sibling listing of articles with facet dropdowns.",
+        "empty-state` — the no-match state."
+      ],
+      "bestPractices": [
+        "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
+        "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet."
+      ]
+    },
+    "sections/subject-library": {
+      "import": "@aziontech/webkit/sections/subject-library",
+      "target": "./src/components/sections/subject-library/subject-library.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/subject-library",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page `id` of the band, the target of a `#hash` link."
+        },
+        {
+          "name": "subjects",
+          "type": "SubjectLibrarySubject[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped."
+        },
+        {
+          "name": "closing",
+          "type": "SubjectLibraryClosing",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-library', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `frame-box`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On the Learning Center index, to list every subject with the articles that teach it.",
+        "Whenever a page needs a grid of topic cards that each carry a short list of links, closed by one call to action."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For a filterable list of rows → use `listing-browser`.",
+        "Inside another band's cell → compose `frame-box` and `call-to-action` directly."
+      ],
+      "related": [
+        "call-to-action` — the `lead` band drawn in the closing cell.",
+        "card-grid` — the divider grid the subject cards sit in."
+      ],
+      "bestPractices": [
+        "Give every subject a unique `slug`; it is the card's `id`, so a `#slug` link lands on it.",
+        "Keep the subject count at a multiple of three plus one when `closing` is set, so the closing cell fills the last row exactly.",
+        "Keep each subject's articles to a handful; the card grows with its list."
       ]
     },
     "sections/use-case-links": {

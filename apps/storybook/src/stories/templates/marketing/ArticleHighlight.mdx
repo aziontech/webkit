@@ -8,9 +8,9 @@ import * as ArticleHighlightStories from './ArticleHighlight.stories'
 
 The band that opens a blog under its hero. One article is shown large, with its cover beside its category and date, headline, deck, read time and a button into it. Under it, a wall of the highlight articles acts as the selector.
 
-The wall is a tablist and the large article is its panel. On the page the band advances on its own and pauses under the pointer or keyboard focus; the arrow, Home and End keys move along the wall. Every article is also drawn invisibly under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. With four or more articles the wall runs four across. The Blog page uses it for its four newest posts.
+The wall is a tablist and the large article is its panel. Clicking a title swaps the panel, and the arrow, Home and End keys move the selection along the wall. Every article is also drawn invisibly under the panel, so the band keeps the height of its tallest article and never jumps when the selection changes. With four or more articles the wall runs four across. The Blog page uses it for its four newest posts.
 
-Built from `SectionModule`, `FrameBox`, `CardGrid` and `Button`.
+The band is the `ArticleHighlight` component from `@aziontech/webkit/sections/article-highlight`; it composes `SectionModule`, `FrameBox`, `CardGrid` and `Button`, and keeps the selection as local state.
 
 <p
   style={{
@@ -35,8 +35,9 @@ The Blog page's highlight at rest: the newest post selected with its highlight c
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
+- `anchor` is the band id for in-page links.
 - `items[]` are the highlight articles in wall order, the first selected on load. Each is a `key`, an `href`, an `image` cover, an optional `highlightImage` for the panel, a `meta` overline (category and date), a `title`, a `description` and a `readTime`.
-- `actionLabel` is the button into the selected article.
+- `actionLabel` is the button into the selected article; without it the button is left out.
 - `ariaLabel` names the wall of titles for assistive tech.
 
 Example:
