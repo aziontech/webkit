@@ -363,6 +363,26 @@
     "limit": "54 KB"
   },
   {
+    "name": "comparison-table",
+    "path": "src/components/sections/comparison-table/comparison-table.vue",
+    "limit": "22 KB"
+  },
+  {
+    "name": "compare-plans",
+    "path": "src/components/sections/compare-plans/compare-plans.vue",
+    "limit": "29 KB"
+  },
+  {
+    "name": "compare-support-tiers",
+    "path": "src/components/sections/compare-support-tiers/compare-support-tiers.vue",
+    "limit": "27 KB"
+  },
+  {
+    "name": "pricing-plans",
+    "path": "src/components/sections/pricing-plans/pricing-plans.vue",
+    "limit": "22 KB"
+  },
+  {
     "name": "feature-scroll",
     "path": "src/components/sections/feature-scroll/feature-scroll.vue",
     "limit": "15 KB",

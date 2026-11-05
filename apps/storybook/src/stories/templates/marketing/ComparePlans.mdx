@@ -14,7 +14,7 @@ On small screens the table shows one plan at a time, picked from a select in the
 
 For the Support page's tier comparison, use CompareSupportTiers.
 
-Built from `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`.
+The band is the `ComparePlans` component from `@aziontech/webkit/sections/compare-plans`; it composes `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`, and keeps the plan picked on small screens as local state.
 
 <p
   style={{
@@ -39,15 +39,19 @@ Hobby, Pro and Enterprise across four of the Pricing product sections. Each plan
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `plans` sets the columns: `name`, `highlighted` for the recommended plan, and an `action` button. A plan without a name is dropped.
+- `plans` sets the columns: an `id` the picker selects by, `name`, `highlighted` for the recommended plan, and an `action` button (`label`, `href`). The highlighted plan gets the secondary button, the others an outlined one. A plan without a name is dropped.
 - `sections` sets the product bands: `eyebrow`, `title`, `description` and `rows`.
-- `rows[].values` holds one cell per plan, in plan order: `✓` for included, `—` for not included, any other text as written, empty for a blank cell.
+- `rows[].values` holds one cell per plan, in plan order: `✓` (or `true`) for included, `—` for not included, any other text as written, empty for a blank cell.
 - `rows[].group` makes the row a group heading. `hint` adds a tooltip and `tag` adds a tag next to the label.
-- `includedLabel`, `excludedLabel` and `planPickerLabel` are the texts screen readers hear.
-- `footerLink` adds the closing link, which opens in a new tab.
+- `caption` names the table and `columnLabel` heads the feature column. `includedLabel`, `excludedLabel` and `pickerAriaLabel` are the texts screen readers hear.
+- `primaryAction` (`label`, `href`) adds the closing link, which opens in a new tab.
+- `anchor` sets the band's `id`, so a page can link to `#comparison`.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={ComparePlansStories.PlanMatrixJson} dark />
+  <Source
+    of={ComparePlansStories.PlanMatrixJson}
+    dark
+  />
 </div>
