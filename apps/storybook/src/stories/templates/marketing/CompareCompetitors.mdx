@@ -10,7 +10,7 @@ A table that compares Azion with one competitor, capability by capability, group
 
 Each category opens with a heading row. Each cell is a circle icon with a `Tooltip` naming the level: `pi-check-circle` for full support, `ai-circle-half` for partial and `ai-circle-minus` for none. A capability with a definition carries an info button that opens it in a `Popover`. Screen readers hear each value with its row and its column. The header row stays on screen while you scroll.
 
-The capability column takes 56% of the width on phones, 36% from `sm` and 40% from `lg`, and the two platform columns share the rest. Logos are 12px tall on phones and 24px from `sm`. Built from `SectionModule` and `SectionTitle`, with `Brand` for the Azion column, the competitor logo for the other, `Popover` with `IconButton` for the definitions, and `Tooltip` on the support icons.
+The capability column takes 56% of the width on phones, 36% from `sm` and 40% from `lg`, and the two platform columns share the rest. Logos are 12px tall on phones and 24px from `sm`. The band is the `ComparisonTable` component from `@aziontech/webkit/sections/comparison-table`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Brand` for the Azion column, `Popover` with `IconButton` for the definitions, and `Tooltip` on the support icons. Both comparisons below are the same component with different props, so both use `_id: 'comparison-table'`.
 
 <p
   style={{
@@ -41,8 +41,8 @@ All twenty-three rows of the Vercel comparison in seven categories, each with a 
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `eyebrow` and `title` head the section. `caption` names the table for screen readers.
-- `competitor` sets the other column: `name`, `logo`, and `logoLight` for the light theme. Without a logo the name shows as text.
+- `eyebrow` and `title` head the section; `title` also names the band, and without it no header renders. `caption` names the table for screen readers, and `columnLabel` heads the capability column.
+- `competitor` sets the other column and is required: `name`, `logo`, and `logoLight` for the light theme. With only `logo` it shows in both themes; without a logo the name shows as text.
 - `groups[]` holds one category each: a `title` and its `rows[]`.
 - Each row holds a `capability`, an optional `definition` shown in the popover, and an `azion` and a `competitor` level: `full`, `partial` or `none`. A missing level counts as `none`.
 - `fullLabel`, `partialLabel` and `noneLabel` are the texts for each level.
@@ -52,6 +52,15 @@ Example:
 <div className="sb-site-json">
   <Source
     of={CompareCompetitorsStories.AzionVsCloudflareJson}
+    dark
+  />
+</div>
+
+The Vercel comparison is the same entry with its own `competitor`, `title`, `caption` and `groups`:
+
+<div className="sb-site-json">
+  <Source
+    of={CompareCompetitorsStories.AzionVsVercelJson}
     dark
   />
 </div>
