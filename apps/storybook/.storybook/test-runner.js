@@ -128,6 +128,10 @@ module.exports = {
       .azion-light > body, .azion-dark > body {
         transition-duration: 1ms !important;
         transition-delay: 0ms !important;
+      }
+
+      [data-animated][data-phase] {
+        animation-delay: 0ms !important;
       }`
 
       document.head.appendChild(style)
