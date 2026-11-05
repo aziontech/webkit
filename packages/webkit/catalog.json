@@ -16453,6 +16453,155 @@
         "Name the copy button with `copyAriaLabel` so a screen reader says what it copies."
       ]
     },
+    "sections/client-mosaic": {
+      "import": "@aziontech/webkit/sections/client-mosaic",
+      "target": "./src/components/sections/client-mosaic/client-mosaic.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the grid."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label of the link under every story."
+        },
+        {
+          "name": "stories",
+          "type": "ClientMosaicStory[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The story cells, in order; each is `{ logo, logoAlt, photo, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows."
+        },
+        {
+          "name": "logos",
+          "type": "ClientMosaicLogo[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+        }
+      ],
+      "purpose": "The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a \"read the case study\" link, and a mark cell carries only the client's linked logo on a chosen fill. The layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid` and `mini-button`.",
+      "useWhen": [
+        "On the home page, to show the best customer stories and a wall of marks in one band."
+      ],
+      "avoidWhen": [
+        "For three equal story columns → use `client-mosaic-columns`.",
+        "For a plain wall with one quote → use `logo-wall-quote`."
+      ],
+      "related": [
+        "bento-grid` — the grid the cells are laid in.",
+        "client-mosaic-columns` — the three-column sibling with brand-coloured faces."
+      ],
+      "bestPractices": [
+        "Two stories and six marks fill the four-column grid exactly.",
+        "Pick `fill` and `logoTreatment` together: a `knockout` mark reads on `white` or `primary`, a `monochrome` one on `canvas` or `surface`."
+      ]
+    },
+    "sections/client-mosaic-columns": {
+      "import": "@aziontech/webkit/sections/client-mosaic-columns",
+      "target": "./src/components/sections/client-mosaic-columns/client-mosaic-columns.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic-columns",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list of stories."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label the mark face reveals on hover and the link's accessible name."
+        },
+        {
+          "name": "cells",
+          "type": "ClientMosaicColumnsCell[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+        }
+      ],
+      "purpose": "Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`.",
+      "useWhen": [
+        "When three stories deserve equal weight and their brands should colour the band."
+      ],
+      "avoidWhen": [
+        "For a mixed mosaic of stories and marks → use `client-mosaic`."
+      ],
+      "related": [
+        "client-mosaic` — the bento sibling.",
+        "logo-wall` — the single-mark wall each column's face is rendered with."
+      ],
+      "bestPractices": [
+        "Exactly three cells; the grid is three columns from the large breakpoint.",
+        "brand.base` and `brand.glow` are the client's colours and may be any CSS colour; set `brand.ink` to `'dark'` when the face is light enough that the link text must be dark."
+      ]
+    },
+    "sections/client-quotes": {
+      "import": "@aziontech/webkit/sections/client-quotes",
+      "target": "./src/components/sections/client-quotes/client-quotes.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/client-quotes",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the quote carousel."
+        },
+        {
+          "name": "items",
+          "type": "ClientQuotesItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ClientQuotesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button under the quotes; `{ label, href, trailing? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `quote-tabs` and `button`.",
+      "useWhen": [
+        "To let several customers speak in turn, one at a time, near the end of a page's argument."
+      ],
+      "avoidWhen": [
+        "For one quote beside a logo wall → use `logo-wall-quote`.",
+        "For a scrolling strip of analyst recognitions → use `recognition-marquee`."
+      ],
+      "related": [
+        "quote-tabs` — the tabbed quote carousel this band frames."
+      ],
+      "bestPractices": [
+        "Three to six items; the tabs need room for each client's mark.",
+        "Give each item either a registry `mark` or a `logo` URL with `clientName`, not both."
+      ]
+    },
     "sections/code-split": {
       "import": "@aziontech/webkit/sections/code-split",
       "target": "./src/components/sections/code-split/code-split.vue",
@@ -16521,6 +16670,73 @@
         "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
         "Give every tab a `code`; a tab without one is skipped.",
         "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+      ]
+    },
+    "sections/compliance-badges": {
+      "import": "@aziontech/webkit/sections/compliance-badges",
+      "target": "./src/components/sections/compliance-badges/compliance-badges.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/compliance-badges",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the badge list."
+        },
+        {
+          "name": "certifications",
+          "type": "ComplianceBadgesCertification[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ComplianceBadgesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The closing \"see more\" cell; `{ label, href }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a \"see more\" cell. It is a page section — the site places it from a `{ _id: 'compliance-badges', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.",
+      "useWhen": [
+        "On security, enterprise or pricing pages, to list the certifications and link to the compliance page."
+      ],
+      "avoidWhen": [
+        "For client logos → use `logo-wall-quote` or `client-mosaic`."
+      ],
+      "related": [
+        "media-split` — the copy-beside-media band this section renders through."
+      ],
+      "bestPractices": [
+        "Four or five certifications plus the link cell fill two rows of three.",
+        "Give every badge an `alt` naming the certification; the pill repeats it for sighted readers."
       ]
     },
     "sections/feature-scroll": {
@@ -17194,6 +17410,127 @@
         "A title longer than 45 characters widens the headline column so it breaks into two lines instead of three."
       ]
     },
+    "sections/investor-marks": {
+      "import": "@aziontech/webkit/sections/investor-marks",
+      "target": "./src/components/sections/investor-marks/investor-marks.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/investor-marks",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Line revealed under a mark on hover, and the start of each link's accessible name."
+        },
+        {
+          "name": "items",
+          "type": "InvestorMarksItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme."
+        }
+      ],
+      "purpose": "The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a \"visit website\" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `bento-grid`.",
+      "useWhen": [
+        "On the company page, to name the investors with their marks."
+      ],
+      "avoidWhen": [
+        "For client marks → use `client-mosaic` or `logo-wall-quote`."
+      ],
+      "related": [
+        "bento-grid` — the grid the marks are laid in."
+      ],
+      "bestPractices": [
+        "Give each item a `logoLight` when its mark needs a different file on the light theme; otherwise one `logo` serves both.",
+        "Keep `linkLabel` short; it is revealed under the mark on hover and read before the investor name."
+      ]
+    },
+    "sections/logo-wall-quote": {
+      "import": "@aziontech/webkit/sections/logo-wall-quote",
+      "target": "./src/components/sections/logo-wall-quote/logo-wall-quote.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/logo-wall-quote",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the logo wall."
+        },
+        {
+          "name": "logos",
+          "type": "LogoWallQuoteLogo[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'`."
+        },
+        {
+          "name": "quote",
+          "type": "LogoWallQuoteQuote",
+          "default": "undefined",
+          "required": "false",
+          "doc": "The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent."
+        },
+        {
+          "name": "primaryAction",
+          "type": "LogoWallQuoteAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-quote', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `logo-wall`, `quote` and `button`.",
+      "useWhen": [
+        "To prove adoption with marks and let one customer speak, early on a home or solution page."
+      ],
+      "avoidWhen": [
+        "For several quotes in turn → use `client-quotes`.",
+        "For marks with photos and stories in a mosaic → use `client-mosaic`."
+      ],
+      "related": [
+        "logo-wall` — the wall the marks are laid in, with the quote in its aside."
+      ],
+      "bestPractices": [
+        "Eight or nine logos fill the rectangle wall beside the aside.",
+        "Set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing."
+      ]
+    },
     "sections/media-split-band": {
       "import": "@aziontech/webkit/sections/media-split-band",
       "target": "./src/components/sections/media-split-band/media-split-band.vue",
@@ -17422,6 +17759,135 @@
         "Four short `claims`; they are chips, not sentences.",
         "Four `outcomes` or three `benefits`, so the floor closes the grid.",
         "Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark."
+      ]
+    },
+    "sections/photo-marquee": {
+      "import": "@aziontech/webkit/sections/photo-marquee",
+      "target": "./src/components/sections/photo-marquee/photo-marquee.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/photo-marquee",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Paragraph beside the headline."
+        },
+        {
+          "name": "descriptionWidth",
+          "type": "PhotoMarqueeDescriptionWidth",
+          "default": "'narrow'",
+          "required": "false",
+          "doc": "Width the description is capped at: `narrow` or `wide`."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling region."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Seconds one loop of the strip takes; `0` paces it at ten seconds per photo."
+        },
+        {
+          "name": "photos",
+          "type": "PhotoMarqueePhoto[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The photographs, in order; each is `{ src, alt, width, height }`."
+        }
+      ],
+      "purpose": "The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.",
+      "useWhen": [
+        "To show a place or a team in pictures without a grid."
+      ],
+      "avoidWhen": [
+        "For quotes → use `recognition-marquee`."
+      ],
+      "related": [
+        "recognition-marquee` — the sibling strip of quotes with the same loop."
+      ],
+      "bestPractices": [
+        "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",
+        "Leave `duration` at `0` to let the strip pace itself (ten seconds per photo)."
+      ]
+    },
+    "sections/recognition-marquee": {
+      "import": "@aziontech/webkit/sections/recognition-marquee",
+      "target": "./src/components/sections/recognition-marquee/recognition-marquee.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/recognition-marquee",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the scrolling region."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Seconds one loop of the strip takes; `0` paces it at twelve seconds per item."
+        },
+        {
+          "name": "items",
+          "type": "RecognitionMarqueeItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme."
+        }
+      ],
+      "purpose": "The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.",
+      "useWhen": [
+        "To list analyst reports and awards on a page that needs third-party proof."
+      ],
+      "avoidWhen": [
+        "For office photos → use `photo-marquee`.",
+        "For customer quotes → use `client-quotes`."
+      ],
+      "related": [
+        "quote` — the signed card each recognition renders with.",
+        "photo-marquee` — the sibling strip of pictures with the same loop."
+      ],
+      "bestPractices": [
+        "Five to eight items; the loop needs enough width to read as continuous.",
+        "Leave `duration` at `0` to let the strip pace itself (twelve seconds per item)."
       ]
     },
     "sections/site-footer": {

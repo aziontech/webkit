@@ -397,6 +397,47 @@
     "limit": "5 KB"
   },
   {
+    "name": "client-mosaic",
+    "path": "src/components/sections/client-mosaic/client-mosaic.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "client-mosaic-columns",
+    "path": "src/components/sections/client-mosaic-columns/client-mosaic-columns.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "client-quotes",
+    "path": "src/components/sections/client-quotes/client-quotes.vue",
+    "limit": "27 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "compliance-badges",
+    "path": "src/components/sections/compliance-badges/compliance-badges.vue",
+    "limit": "9 KB"
+  },
+  {
+    "name": "investor-marks",
+    "path": "src/components/sections/investor-marks/investor-marks.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "logo-wall-quote",
+    "path": "src/components/sections/logo-wall-quote/logo-wall-quote.vue",
+    "limit": "22 KB"
+  },
+  {
+    "name": "photo-marquee",
+    "path": "src/components/sections/photo-marquee/photo-marquee.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "recognition-marquee",
+    "path": "src/components/sections/recognition-marquee/recognition-marquee.vue",
+    "limit": "19 KB"
+  },
+  {
     "name": "code-split",
     "path": "src/components/sections/code-split/code-split.vue",
     "limit": "34 KB"
