@@ -10,7 +10,7 @@ The bar above every marketing page: the Azion mark, the four mega-menus (Solutio
 
 From `xl` the menus sit in the bar. Below it the bar keeps the menu button, the mark, `Login`, the call to action and the search trigger (`Login` steps out under 384px, where it would crowd the mark). The same menus open in a `Drawer`, where each mega-menu is a drill level behind a Back row, with `Login` and `Start for free` stacked full width at its foot.
 
-Built from `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`.
+The bar is the `SiteNav` component from `@aziontech/webkit/sections/site-nav`; it composes `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`, and keeps the sheet's open state and drill path as its own.
 
 <p
   style={{
@@ -36,9 +36,9 @@ The site’s own navigation. Each mega-menu lists its panel as `columns`, an arr
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `home` is where the Azion mark links.
-- `menus[]` are the mega-menus, each a `value`, a trigger `label` and `columns`: an array of columns, each holding groups of a `label` and `items[]` (`label`, `description`, optional `href` and `icon`).
+- `menus[]` are the mega-menus, each a `value`, a trigger `label` and `columns`: an array of columns, each holding groups of a `label`, an optional `href` for the group header, and `items[]` (`label`, `description`, optional `href` and `icon`; an item without `href` links to `#`). `menus` is required.
 - `links[]` are the bar entries that open no panel, each a `label` and an `href`.
-- `contact`, `login` and `cta` are the account actions, each a `label` and an `href`.
+- `contact` is the contact link, `secondaryAction` the login button and `primaryAction` the `Start for free` call to action, each a `label` and an `href`. Each is left out of the bar and the sheet when absent.
 
 Example:
 
