@@ -1,7 +1,7 @@
 # Test Architecture — Overview
 
 > **@aziontech/webkit monorepo** · snapshot of July 2026
-> Companion doc: [`OVERVIEW_LINT.md`](./OVERVIEW_LINT.md) (static-quality layers) · Deep audit: [`TESTING_AUDIT_2026-07-02.md`](./TESTING_AUDIT_2026-07-02.md)
+> Companion doc: [`OVERVIEW_LINT.md`](./OVERVIEW_LINT.md) (static-quality layers)
 
 ## TL;DR
 
@@ -9,10 +9,10 @@ Webkit ships **two complementary test layers**, both running in **real Chromium*
 
 | Layer                    | Tooling                                     | DOM                                          | Owns                                                                                           | CI workflow                                                                                 |
 | ------------------------ | ------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| **1. Functional / unit** | Vitest 4 browser mode + Playwright          | Unstyled (tokens load, no Tailwind pipeline) | Behavior, structure, events, v-model, ARIA, structural a11y                                    | `package-webkit-test.yml` (4 shards)                                                        |
+| **1. Functional / unit** | Vitest 4 browser mode + Playwright          | Unstyled (tokens load, no Tailwind pipeline) | Behavior, structure, events, v-model, ARIA, structural a11y                                    | `governance.yml` → `tests` (4 shards)                                                       |
 | **2. Visual regression** | Storybook test-runner + jest-image-snapshot | Fully styled (theme + Tailwind)              | Pixels, layout, color, typography — in a **6-mode matrix**: dark/light × desktop/tablet/mobile | `governance.yml` → `visual` (4 shards); baselines via `app-storybook-generate-baseline.yml` |
 
-Current numbers: **67 component test suites · 1362 tests passing · 1 skipped · ~97% of in-scope component roots covered** — over a library of ~150 components (roots + sub-components).
+Current numbers: **134 component test suites · 1362 tests passing · 1 skipped · ~97% of in-scope component roots covered** — over a library of ~210 component folders (roots + sub-components).
 
 The split is deliberate: **units prove it works, visual proves it looks right.** Neither layer pretends to do the other's job.
 
@@ -45,7 +45,7 @@ flowchart TB
     STORY -- "composeStories() — story IS the fixture" --> TEST
     STORY --> BUILD
 
-    ASSERT --> CI1["CI: package-webkit-test.yml<br/>4 shards + gate"]
+    ASSERT --> CI1["CI: governance.yml → tests<br/>4 shards + governance-check"]
     COMPARE --> CI2["CI: governance.yml → visual<br/>4 shards, diff artifacts on failure"]
 
     CI1 --> MERGE["PR mergeable"]
@@ -77,12 +77,12 @@ Consequence: **no mocks for layout, positioning, focus, or `<Teleport>` — ever
 
 ### 2.2 The stack
 
-| Piece         | File                                | What it does                                                                                                                                                                     |
-| ------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Runner config | `packages/webkit/vitest.config.ts`  | Vitest **4.1.9** browser mode: `provider: playwright()` (v4 factory), `headless: true`, single `chromium` instance, `retry: 2` in CI (0 local), includes `src/**/*.test.{ts,js}` |
-| Global setup  | `packages/webkit/src/test/setup.ts` | `cleanup()` after each test + **anchor-navigation guard** (prevents `<a href>` clicks from tearing down the test iframe, while `@click` handlers still fire)                     |
-| A11y helper   | `packages/webkit/src/test/axe.ts`   | `expectNoA11yViolations(container)` — runs **axe-core 4.10** and asserts zero violations                                                                                         |
-| Coverage      | `vitest.config.ts` → `coverage`     | V8 provider, `text` + `lcov`, **reporting-only** (no gate yet); measures `src/components/**`, excludes tests, stories, `.figma.ts`, barrels, presets                             |
+| Piece         | File                                | What it does                                                                                                                                                                      |
+| ------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runner config | `packages/webkit/vitest.config.ts`  | Vitest **4.1.12** browser mode: `provider: playwright()` (v4 factory), `headless: true`, single `chromium` instance, `retry: 2` in CI (0 local), includes `src/**/*.test.{ts,js}` |
+| Global setup  | `packages/webkit/src/test/setup.ts` | `cleanup()` after each test + **anchor-navigation guard** (prevents `<a href>` clicks from tearing down the test iframe, while `@click` handlers still fire)                      |
+| A11y helper   | `packages/webkit/src/test/axe.ts`   | `expectNoA11yViolations(container)` — runs **axe-core 4.12** and asserts zero violations                                                                                          |
+| Coverage      | `vitest.config.ts` → `coverage`     | V8 provider, `text` + `lcov`, **reporting-only** (no gate yet); measures `src/components/**`, excludes tests, stories, `.figma.ts`, barrels, presets                              |
 
 ### 2.3 Anatomy of a component test
 
@@ -146,7 +146,7 @@ Fixed by [`.claude/rules/testing.md`](../.claude/rules/testing.md); this is the 
 
 ### 2.5 The unstyled-DOM decision (and what axe checks)
 
-The unit environment **does not run the Tailwind pipeline** — components mount with token variables loaded but no utility CSS generated. This is intentional (audit §2.0, "Path B"):
+The unit environment **does not run the Tailwind pipeline** — components mount with token variables loaded but no utility CSS generated. This is intentional (the "Path B" decision; the audit that recorded it was not kept in the repo):
 
 - Unit assertions are about **behavior, structure, and ARIA** — none of them need pixels.
 - axe-core therefore runs **structural rules only**. Five visual/layout rules are explicitly disabled because they'd be meaningless without real styling: `color-contrast`, `color-contrast-enhanced`, `target-size`, `link-in-text-block`, `scrollable-region-focusable`.
@@ -243,34 +243,36 @@ Any run can be narrowed to a mode subset with the `VISUAL_MODES` env var — e.g
 
 ## 4. CI pipelines
 
-### 4.1 Functional suite — `.github/workflows/package-webkit-test.yml`
+The `tests` and `visual` jobs run inside the official Playwright container image `mcr.microsoft.com/playwright:v<version>-noble`, whose tag must match the `playwright` version in `pnpm-lock.yaml` (currently 1.62.0). Chromium, its system libraries and fonts come pre-installed in that image, so no `apt-get` step runs in CI. The `Storybook Regenerate Baseline` workflow uses the same image, so baselines and checks render identically.
+
+### 4.1 Functional suite — `.github/workflows/governance.yml` → `tests` job
 
 ```mermaid
 flowchart LR
-    T["PR / push → dev"] --> CH["changes job<br/>dorny/paths-filter"]
+    T["PR → main"] --> CH["changes job<br/>dorny/paths-filter"]
     CH -- "packages/webkit/** or apps/storybook/**" --> MX["matrix: shard 1–4<br/>fail-fast: false"]
     CH -- "nothing relevant" --> SKIP["skip (gate passes as skipped)"]
     MX --> S1["vitest run --shard=1/4"]
     MX --> S2["--shard=2/4"]
     MX --> S3["--shard=3/4"]
     MX --> S4["--shard=4/4"]
-    S1 --> G["Tests Gate<br/>fails unless success or skipped"]
+    S1 --> G["Governance Gate (governance-check)<br/>fails unless success or skipped"]
     S2 --> G
     S3 --> G
     S4 --> G
 ```
 
-- **4 shards** parallelize the ~150-component suite; `retry: 2` (from `vitest.config.ts`) absorbs the rare browser-launch flake.
-- Playwright Chromium only (`playwright install --with-deps chromium`), with the browser binary cached on `pnpm-lock.yaml` (`~/.cache/ms-playwright`).
-- The **gate job** (`test-check`) is the single required status — it passes when shards succeed _or_ the path filter skipped them.
+- **4 shards** parallelize the ~210-component suite; `retry: 2` (from `vitest.config.ts`) absorbs the rare browser-launch flake.
+- Chromium only, pre-installed in the Playwright container image; a cheap `playwright install chromium` step (no `--with-deps`, no `apt-get`) only downloads the browser if the image tag and the lockfile ever drift.
+- The final gate is **`governance-check`** ("Governance Gate"): it fails unless every upstream job, the shards included, succeeded or was skipped by the path filters.
 
 ### 4.2 Visual suite — `governance.yml` → `visual` job (+ `app-storybook-generate-baseline.yml` for baselines)
 
-- The PR/push check is the `visual` job in the ordered governance pipeline, gated by the `changes.outputs.visual` path filter and every upstream job (lint, types, builds, unit tests).
+- The PR check is the `visual` job in the ordered governance pipeline: it runs after `tests` and the other upstream jobs (`security`, `lint-canary`, `lint`, `types`, `build`, `storybook`), is skipped if any of them failed, and is gated by the `changes.outputs.visual` path filter.
 - **Sharded ×4** like the Vitest job (`strategy.matrix.shard`); each shard runs `test:visual:ci` with `VISUAL_SHARD=<i>/4` — jest splits the story _files_ across shards, and each shard shoots the full 6-mode matrix for its slice.
-- Steps per shard: install → cache/install Chromium → `storybook:build` → `test:visual:ci` against the static build.
+- Steps per shard: install → `storybook:build` → `test:visual:ci` against the static build (Chromium comes from the container image).
 - On failure: uploads `visual-diff-output-shard-<i>` (annotated diffs for every failing mode, 7-day retention) so reviewers see exactly which pixels moved.
-- Baseline regeneration is dispatch-only via `.github/workflows/app-storybook-generate-baseline.yml`: `update_baselines=true` runs `test:visual:update` (unsharded, 60-minute timeout) and uploads `visual-baselines-linux` to download and commit; the optional `modes` input (→ `VISUAL_MODES`) regenerates a subset.
+- Baseline regeneration is dispatch-only via `.github/workflows/app-storybook-generate-baseline.yml` (workflow name "Storybook Regenerate Baseline"): `update_baselines=true` runs `test:visual:update` (unsharded, 60-minute timeout) and uploads `visual-baselines-linux` to download and commit; the optional `modes` input (→ `VISUAL_MODES`) regenerates a subset.
 
 ### 4.3 Where the other gates sit
 
@@ -284,7 +286,7 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 
 1. `packages/webkit/package.json#files` negates test artifacts:
    ```json
-   "files": ["src", "!src/**/*.test.{ts,js}", "!src/test/**", "package.json"]
+   "files": ["src", "!src/**/*.test.{ts,js}", "!src/test/**", "cli-templates", "docs", "catalog.json", "package.json"]
    ```
 2. `pack:check` asserts it:
    ```bash
@@ -303,7 +305,7 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 | `enforce-test-exists.mjs`                                 | Claude Code PostToolUse hook | Warns when a root `.vue` is written without a co-located `<name>.test.ts`                                                    |
 | `component-scaffold` skill                                | Generator                    | Every new component is born with a starter test (render + testid override + axe) that the author expands to the full surface |
 | `validate-references.mjs`                                 | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a mistaken `@stories` alias instead of a relative path)                  |
-| `package-webkit-test.yml` gate                            | CI                           | No PR merges with a red shard                                                                                                |
+| `governance.yml` → `governance-check`                     | CI                           | No PR merges with a failed job or a red shard                                                                                |
 
 ---
 
@@ -331,6 +333,6 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 | axe **structural-only** in units                                      | full axe rule set                                              | contrast/target-size without real CSS would mislead; structural rules caught every real defect so far                                                                                                                                          |
 | **Snapshots at Storybook level**, per-platform baselines              | visual SaaS (Chromatic etc.) / cross-platform baselines        | self-hosted, zero external service; linux-only committed baselines eliminate font-rasterization noise                                                                                                                                          |
 | **Full 6-mode matrix per story** (dark/light × desktop/tablet/mobile) | single dark-desktop snapshot; per-story opt-in for extra modes | light tokens have full parity and responsive tokens reshape nearly every story below `md` — default-on coverage catches theme and layout regressions everywhere; stories narrow via `visual.modes` only for technical limits (capture ceiling) |
-| **4-shard CI matrix** + retry 2                                       | single job                                                     | ~150-component suite parallelizes; retries absorb browser-launch flakes without hiding real failures                                                                                                                                           |
+| **4-shard CI matrix** + retry 2                                       | single job                                                     | ~210-component suite parallelizes; retries absorb browser-launch flakes without hiding real failures                                                                                                                                           |
 | Coverage **reporting-only**                                           | coverage gate                                                  | signal first, ratchet later — the functional floor (10 surfaces) is the real gate                                                                                                                                                              |
 | Tests co-located, published-excluded                                  | separate `__tests__/` tree                                     | test lives with the component it proves; `files` negation + `pack:check` keep npm clean                                                                                                                                                        |
