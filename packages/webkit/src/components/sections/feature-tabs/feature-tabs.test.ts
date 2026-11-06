@@ -32,7 +32,14 @@ const tabs = [
 
 const band = (props: Record<string, unknown> = {}) =>
   render(FeatureTabs, {
-    props: { eyebrow: EYEBROW, title: TITLE, description: DESCRIPTION, tabs, primaryAction, ...props }
+    props: {
+      eyebrow: EYEBROW,
+      title: TITLE,
+      description: DESCRIPTION,
+      tabs,
+      primaryAction,
+      ...props
+    }
   })
 
 const tabButtons = (container: HTMLElement) =>
