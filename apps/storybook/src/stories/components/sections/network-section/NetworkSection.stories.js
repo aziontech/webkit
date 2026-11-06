@@ -151,6 +151,7 @@ const DEFAULT_MARKUP = `<NetworkSection
 export const Default = {
   render: Template,
   parameters: {
+    visual: { modes: ['dark-desktop', 'light-desktop', 'dark-mobile', 'light-mobile'] },
     docs: {
       description: {
         story:

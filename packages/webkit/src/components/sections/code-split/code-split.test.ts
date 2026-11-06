@@ -25,7 +25,7 @@ const markedTabs = [
     label: 'OpenAI SDK',
     value: 'openai-sdk',
     language: 'ts',
-    code: "const client = new OpenAI()",
+    code: 'const client = new OpenAI()',
     fileName: 'client.ts',
     icon: 'ai-cor ai-open'
   },

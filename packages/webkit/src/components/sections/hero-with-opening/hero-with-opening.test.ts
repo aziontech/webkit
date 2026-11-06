@@ -107,9 +107,9 @@ describe('HeroWithOpening', () => {
     const { getAllByTestId, getAllByRole } = band()
 
     expect(getAllByTestId(CELL_TESTID)).toHaveLength(items.length)
-    expect(getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())).toEqual(
-      items.map((item) => item.title)
-    )
+    expect(
+      getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())
+    ).toEqual(items.map((item) => item.title))
   })
 
   it('omits the grid and its gap when items is empty', () => {

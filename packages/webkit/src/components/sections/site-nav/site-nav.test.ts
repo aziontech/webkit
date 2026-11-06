@@ -146,7 +146,11 @@ describe('SiteNav', () => {
       { timeout: OPEN_TIMEOUT }
     )
     expect(entry.getAttribute('href')).toBe('/solutions/app-dev')
-    expect(body().getByRole('link', { name: /Retail/ }).getAttribute('href')).toBe('#')
+    expect(
+      body()
+        .getByRole('link', { name: /Retail/ })
+        .getAttribute('href')
+    ).toBe('#')
   })
 
   it('mirrors the column count of a panel on data-columns', async () => {
@@ -154,10 +158,9 @@ describe('SiteNav', () => {
 
     await userEvent.click(getByRole('button', { name: /Solutions/ }))
 
-    await waitFor(
-      () => expect(document.body.querySelector('[data-columns="2"]')).not.toBeNull(),
-      { timeout: OPEN_TIMEOUT }
-    )
+    await waitFor(() => expect(document.body.querySelector('[data-columns="2"]')).not.toBeNull(), {
+      timeout: OPEN_TIMEOUT
+    })
   })
 
   it('opens the sheet from the menu button with the tree projected from the menus', async () => {
