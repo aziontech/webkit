@@ -113,8 +113,8 @@ export const Types = {
   render: () => ({
     components: { MediaSplitStack },
     setup: () => ({
-      solutionBands: SOLUTIONS_SECTION.props.bands,
-      networkBands: ALTERNATING_SECTION.props.bands
+      solutionBands: withStoryAssets(SOLUTIONS_SECTION.props).bands,
+      networkBands: withStoryAssets(ALTERNATING_SECTION.props).bands
     }),
     template: TYPES_TEMPLATE
   }),

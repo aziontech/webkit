@@ -1,6 +1,6 @@
 import FeatureTiles from '@aziontech/webkit/sections/feature-tiles'
 
-import { withStoryAssets } from '../../../_shared/site-assets'
+import { withStoryAssets, withTemplateAssets } from '../../../_shared/site-assets'
 import { toSfc } from '../../../_shared/story-source'
 import { ARTWORK_SECTION } from '../../../templates/marketing/_sections/feature-tiles'
 
@@ -179,7 +179,7 @@ const TYPES_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
 
 /** @type {import('@storybook/vue3').StoryObj<typeof FeatureTiles>} */
 export const Types = {
-  render: () => ({ components: { FeatureTiles }, template: TYPES_TEMPLATE }),
+  render: () => ({ components: { FeatureTiles }, template: withTemplateAssets(TYPES_TEMPLATE) }),
   parameters: {
     docs: {
       controls: { disable: true },
