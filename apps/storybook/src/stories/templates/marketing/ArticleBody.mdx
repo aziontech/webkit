@@ -10,7 +10,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 
 Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `SectionContainer` instead of sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it.
 
-Built from `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Divider`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`.
+The band is the `ArticleBody` component from `@aziontech/webkit/sections/article-body`; it composes `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Divider`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
 
 <p
   style={{
@@ -27,7 +27,7 @@ Built from `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroT
 
 ### Success Story
 
-The Magalu success story under Success cases › Retail. A story has no author, so the byline is the date and read time alone, and it has no feed, so the share group drops the RSS action. The outline lists the three sections the prose opens with, the first one active.
+The Magalu success story under Success cases › Retail. A story has no author, so the byline is the date and read time alone. The outline lists the three sections the prose opens with, the first one active.
 
 <Canvas of={ArticleBodyStories.SuccessStory} />
 
@@ -35,13 +35,14 @@ The Magalu success story under Success cases › Retail. A story has no author, 
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
+- `eyebrow` is the overline above the headline.
 - `article` is the piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`.
 - `trail` is the breadcrumb, each a `label` and an `href`, the last entry marked `current`.
-- `body` is the article as markdown. Its `##` headings feed the "On this page" outline.
+- `body` is the article as markdown: headings, `-` lists and paragraphs separated by blank lines. Its `##` and `###` headings feed the "On this page" outline.
 - `banner` is the image over the masthead.
-- `share` labels the share group: `title`, `copyLink`, `shareX` and `shareLinkedIn`. An empty `copyFeed` drops the RSS action, as a success story has no feed.
+- `share` labels the share group: `title`, `copyLink`, `shareX` and `shareLinkedIn`. The X and LinkedIn links are built from `article.href`, which the copy-link button copies.
 - `community` is the community group: a `title` and `links`, each a `label`, an `href` and an `icon`.
-- `copyPage` is the split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`.
+- `copyPage` is the split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`. The main action copies the body; the `link` entry copies the article URL.
 
 Example:
 
