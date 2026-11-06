@@ -1,6 +1,6 @@
 import NetworkSection from '@aziontech/webkit/sections/network-section'
 
-import { withStoryAssets } from '../../../_shared/site-assets'
+import { withStoryAssets, withTemplateAssets } from '../../../_shared/site-assets'
 import { toSfc } from '../../../_shared/story-source'
 import { OUTCOMES_SECTION } from '../../../templates/marketing/_sections/network-section'
 
@@ -228,7 +228,7 @@ const TYPES_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
 
 /** @type {import('@storybook/vue3').StoryObj<typeof NetworkSection>} */
 export const Types = {
-  render: () => ({ components: { NetworkSection }, template: TYPES_TEMPLATE }),
+  render: () => ({ components: { NetworkSection }, template: withTemplateAssets(TYPES_TEMPLATE) }),
   parameters: {
     docs: {
       controls: { disable: true },
