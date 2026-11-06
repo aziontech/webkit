@@ -16308,6 +16308,493 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg"
     },
+    "sections/architecture-tabs": {
+      "import": "@aziontech/webkit/sections/architecture-tabs",
+      "target": "./src/components/sections/architecture-tabs/architecture-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/architecture-tabs",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence beside the headline."
+        },
+        {
+          "name": "position",
+          "type": "ArchitectureTabsPosition",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs."
+        },
+        {
+          "name": "tabs",
+          "type": "ArchitectureTabsTab[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The architectures, in order; each is `{ value, title, description, diagram }` where `diagram` is the name of the diagram drawn while the tab is active."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ArchitectureTabsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+      "useWhen": [
+        "To plot several architectures of one product, or one request across the platform, one diagram at a time."
+      ],
+      "avoidWhen": [
+        "For features shown by an illustration each → use `feature-tabs`.",
+        "For a scroll-driven walkthrough → use `feature-scroll`."
+      ],
+      "related": [
+        "media-tabs` — the timed tab row this section renders through.",
+        "diagram` — the named architecture diagram each tab draws."
+      ],
+      "bestPractices": [
+        "Keep to five tabs with `position` `top` or `bottom`, three with `left` or `right`; tabs past the limit are not rendered.",
+        "Give every tab a `diagram` from the diagram library and a stable `value`."
+      ]
+    },
+    "sections/cli-terminal": {
+      "import": "@aziontech/webkit/sections/cli-terminal",
+      "target": "./src/components/sections/cli-terminal/cli-terminal.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/cli-terminal",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence beside the headline."
+        },
+        {
+          "name": "session",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The terminal session shown under the header, commands and their output verbatim, highlighted as bash; the band renders nothing when empty."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the session's copy button; empty keeps the code block's own."
+        },
+        {
+          "name": "primaryAction",
+          "type": "CliTerminalAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another. It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material` and `code-block`.",
+      "useWhen": [
+        "To close a product argument on how little it takes to ship from the terminal, like Functions and Workloads."
+      ],
+      "avoidWhen": [
+        "For a config file or handler beside the claim → use `code-split`.",
+        "For several capabilities, each with its own file → use `sticky-scroll-code`."
+      ],
+      "related": [
+        "code-block` — the terminal session the band shows.",
+        "code-split` — the sibling band with the sample beside the copy."
+      ],
+      "bestPractices": [
+        "Keep the session to a few commands and their output; comment the output lines so the copied text still runs.",
+        "Name the copy button with `copyAriaLabel` so a screen reader says what it copies."
+      ]
+    },
+    "sections/code-split": {
+      "import": "@aziontech/webkit/sections/code-split",
+      "target": "./src/components/sections/code-split/code-split.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/code-split",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "codeTabs",
+          "type": "CodeSplitTab[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped."
+        },
+        {
+          "name": "copyAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the sample's copy button; empty keeps the code block's own."
+        },
+        {
+          "name": "primaryAction",
+          "type": "CodeSplitAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the copy; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "CodeSplitAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target? }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The claim-beside-its-code band of a product page: a framed media split whose copy states the claim, with one or two large buttons under it, and whose media is a code sample on the pixelate texture, cut off by the frame's bottom rule. It is a page section — the site places it from a `{ _id: 'code-split', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `code-block` and `button`. One tab draws a filename bar; several draw a tab strip, and a tab that carries an `icon` shows that mark beside its label.",
+      "useWhen": [
+        "When the argument of a product page is a config file or a handler a developer can read, like Functions, Application Accelerator or AI Gateway."
+      ],
+      "avoidWhen": [
+        "For a terminal session under a headline → use `cli-terminal`.",
+        "For a run of capabilities, each with its own sample, pinned while the page scrolls → use `sticky-scroll-code`."
+      ],
+      "related": [
+        "media-split` — the copy-beside-media band this section renders through.",
+        "code-block` — the tabbed code sample in the media cell."
+      ],
+      "bestPractices": [
+        "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
+        "Give every tab a `code`; a tab without one is skipped.",
+        "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+      ]
+    },
+    "sections/feature-scroll": {
+      "import": "@aziontech/webkit/sections/feature-scroll",
+      "target": "./src/components/sections/feature-scroll/feature-scroll.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-scroll",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "FeatureScrollItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The features, in order; each is `{ title, description, illustration, action? }` where `illustration` is a registry name and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step."
+        }
+      ],
+      "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the illustration stays pinned in a framed, textured stage with one small action under each step; below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `sticky-stack`, `texture-material` and `button`.",
+      "useWhen": [
+        "To walk through four to six capabilities of one product, each with a picture of its own."
+      ],
+      "avoidWhen": [
+        "For three reasons with no scroll story → use `feature-tiles`.",
+        "For code-led steps → use `sticky-scroll-code`."
+      ],
+      "related": [
+        "sticky-stack` — the scroll engine the large layout runs on.",
+        "media-tile` — the cell the small layout renders each feature with."
+      ],
+      "bestPractices": [
+        "Four to six items; the stack needs enough steps to earn the scroll.",
+        "Give every item an `illustration`; it is the pinned picture on large screens and the tile media on small ones.",
+        "Keep `action` to a short label such as \"Docs\" — it sits under the step copy at the small size."
+      ]
+    },
+    "sections/feature-tabs": {
+      "import": "@aziontech/webkit/sections/feature-tabs",
+      "target": "./src/components/sections/feature-tabs/feature-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-tabs",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the left section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "tabs",
+          "type": "FeatureTabsTab[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The features, in order, at most three; each is `{ title, description, illustration, illustrationLabel? }` where `illustration` is a registry name and `illustrationLabel` its accessible name."
+        },
+        {
+          "name": "primaryAction",
+          "type": "FeatureTabsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Small link under the frame; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
+        }
+      ],
+      "purpose": "The feature walkthrough band of a product page: a left-aligned section title over up to three tabs on one side and the active tab's illustration on the other, closed by a small link under the frame. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `illustration` and `mini-button`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+      "useWhen": [
+        "To walk through the two or three features behind one claim, one picture at a time, like Functions' Observability."
+      ],
+      "avoidWhen": [
+        "For architectures drawn as diagrams across the full width → use `architecture-tabs`.",
+        "For a scroll-driven walkthrough of more features → use `feature-scroll`."
+      ],
+      "related": [
+        "media-tabs` — the timed tabs this section renders through.",
+        "illustration` — the scene each tab shows."
+      ],
+      "bestPractices": [
+        "Keep to three tabs; tabs past the limit are not rendered.",
+        "Give every tab an `illustrationLabel` saying what its picture shows."
+      ]
+    },
+    "sections/feature-tiles": {
+      "import": "@aziontech/webkit/sections/feature-tiles",
+      "target": "./src/components/sections/feature-tiles/feature-tiles.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-tiles",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "FeatureTilesKind",
+          "default": "'artwork'",
+          "required": "false",
+          "doc": "Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "tiles",
+          "type": "FeatureTilesTile[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale."
+        }
+      ],
+      "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
+      "useWhen": [
+        "To state three or four reasons to buy, each with a picture, under a product or pricing argument."
+      ],
+      "avoidWhen": [
+        "For linked use cases → use `use-case-links`.",
+        "For a scroll-driven walkthrough with one screen per feature → use `feature-scroll`."
+      ],
+      "related": [
+        "media-tile` — the picture-over-copy cell each tile is rendered with.",
+        "feature-widgets` — the sibling band whose cells carry an action each."
+      ],
+      "bestPractices": [
+        "Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.",
+        "Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.",
+        "Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band."
+      ]
+    },
+    "sections/feature-widgets": {
+      "import": "@aziontech/webkit/sections/feature-widgets",
+      "target": "./src/components/sections/feature-widgets/feature-widgets.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/feature-widgets",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the centered section title as its `h2`, and the accessible name of the band."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "FeatureWidgetsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "First button under the headline; `{ label, href, trailing? }`. Omitted when absent."
+        },
+        {
+          "name": "secondaryAction",
+          "type": "FeatureWidgetsAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "columns",
+          "type": "FeatureWidgetsColumns",
+          "default": "3",
+          "required": "false",
+          "doc": "Column count of the grid from the medium breakpoint up: `2`, `3` or `4`."
+        },
+        {
+          "name": "items",
+          "type": "FeatureWidgetsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard."
+        }
+      ],
+      "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is an illustration above a bold-led sentence and one affordance — a link button or a copy button that puts a prompt on the clipboard. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration` and `button-highlight`.",
+      "useWhen": [
+        "To offer the same outcome through two or three entry points (agent, console, terminal), each with its own next step."
+      ],
+      "avoidWhen": [
+        "For reasons without an action per cell → use `feature-tiles`.",
+        "For a long argument per feature → use `feature-scroll`."
+      ],
+      "related": [
+        "bento-grid` — the grid the cells are laid in.",
+        "button-highlight` — the copy affordance a cell renders when it carries `copy`."
+      ],
+      "bestPractices": [
+        "Give each item exactly one of `action` (a link) or `copy` (text to put on the clipboard).",
+        "Keep `copy.text` self-contained; it is what the reader pastes into their agent.",
+        "Set `anchor` when a hero button scrolls to this band."
+      ]
+    },
     "sections/hero-band": {
       "import": "@aziontech/webkit/sections/hero-band",
       "target": "./src/components/sections/hero-band/hero-band.vue",
@@ -16805,6 +17292,138 @@
         "Give an `image` its `width` and `height` so the page reserves its box before it loads."
       ]
     },
+    "sections/media-split-stack": {
+      "import": "@aziontech/webkit/sections/media-split-stack",
+      "target": "./src/components/sections/media-split-stack/media-split-stack.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/media-split-stack",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "MediaSplitStackKind",
+          "default": "'media-end'",
+          "required": "false",
+          "doc": "Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty."
+        },
+        {
+          "name": "bands",
+          "type": "MediaSplitStackBand[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
+        }
+      ],
+      "purpose": "A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined \"learn more\" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.",
+      "useWhen": [
+        "To list the solution areas or the claims of a page, one large band each, with a link through to its own page."
+      ],
+      "avoidWhen": [
+        "For a single claim beside its media → use `media-split` directly.",
+        "For small reasons in a grid → use `feature-tiles`."
+      ],
+      "related": [
+        "band-stack` — the sticky run the bands pile up in.",
+        "media-split` — the band each entry renders through."
+      ],
+      "bestPractices": [
+        "Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.",
+        "Give every band an `action`; it is both the button and the link the whole band follows."
+      ]
+    },
+    "sections/network-section": {
+      "import": "@aziontech/webkit/sections/network-section",
+      "target": "./src/components/sections/network-section/network-section.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/network-section",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "NetworkSectionKind",
+          "default": "'outcomes'",
+          "required": "false",
+          "doc": "Which floor closes the band: `outcomes` renders the client quotes, `benefits` the icon-led topics."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty."
+        },
+        {
+          "name": "lead",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline-set line above the claims."
+        },
+        {
+          "name": "claims",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short figures rendered as chips under the lead, in order."
+        },
+        {
+          "name": "outcomes",
+          "type": "NetworkSectionOutcome[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
+        },
+        {
+          "name": "benefits",
+          "type": "NetworkSectionBenefit[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Topics for the `benefits` floor, in order; each is `{ icon, title, description }`."
+        }
+      ],
+      "purpose": "The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders four quotes, `benefits` three topics; the band above is the same.",
+      "useWhen": [
+        "To state the network's reach with figures and back it with either client results or product benefits."
+      ],
+      "avoidWhen": [
+        "For figures alone → use `stats-band`.",
+        "For a logo wall with one quote → use `logo-wall-quote`."
+      ],
+      "related": [
+        "network-map` — the animated map behind the copy.",
+        "quote` / `topic` — the two cell types the floor renders."
+      ],
+      "bestPractices": [
+        "Four short `claims`; they are chips, not sentences.",
+        "Four `outcomes` or three `benefits`, so the floor closes the grid.",
+        "Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark."
+      ]
+    },
     "sections/site-footer": {
       "import": "@aziontech/webkit/sections/site-footer",
       "target": "./src/components/sections/site-footer/site-footer.vue",
@@ -16965,6 +17584,218 @@
         "Keep a panel to one, two or four columns; only the four-column panel is stretched to the page column.",
         "Stack a short group under another in the same column (Platform under Observe) instead of adding a fifth column.",
         "Give every entry an `href`; an entry without one links to `#`."
+      ]
+    },
+    "sections/stats-band": {
+      "import": "@aziontech/webkit/sections/stats-band",
+      "target": "./src/components/sections/stats-band/stats-band.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/stats-band",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "StatsBandItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+        }
+      ],
+      "purpose": "The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `big-numbers`, which owns the figures' scale and layout.",
+      "useWhen": [
+        "To state reach, scale or results in three to five figures right after a hero or a claim."
+      ],
+      "avoidWhen": [
+        "For figures that need a quote or a logo beside them → use `network-section` or `logo-wall-quote`.",
+        "For a single figure inside another band → use `big-numbers` directly."
+      ],
+      "related": [
+        "big-numbers` — the figure row this band frames.",
+        "network-section` — the band that pairs claims with client outcomes."
+      ],
+      "bestPractices": [
+        "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",
+        "Three to five items; more than that and the figures stop reading as a band."
+      ]
+    },
+    "sections/sticky-scroll-code": {
+      "import": "@aziontech/webkit/sections/sticky-scroll-code",
+      "target": "./src/components/sections/sticky-scroll-code/sticky-scroll-code.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/sticky-scroll-code",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "StickyScrollCodeItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the open item."
+        }
+      ],
+      "purpose": "The developer-capabilities band of a product page: a large section title over a sticky stack whose claims scroll past a pinned media frame, the open claim showing its one-file code sample on the pixelate texture and its own button under its description. It is a page section — the site places it from a `{ _id: 'sticky-scroll-code', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `sticky-stack`, `texture-material`, `code-block` and `button`. Which claim is open is scroll-driven state owned by `sticky-stack`.",
+      "useWhen": [
+        "To walk a developer through several capabilities, each proven by a short file, while the page scrolls."
+      ],
+      "avoidWhen": [
+        "For one claim beside one sample → use `code-split`.",
+        "For a walkthrough shown by illustrations → use `feature-scroll`."
+      ],
+      "related": [
+        "sticky-stack` — the pinned, scroll-driven run of claims this section renders through.",
+        "code-block` — the one-file sample each claim shows."
+      ],
+      "bestPractices": [
+        "Keep each sample short enough to read in the pinned frame.",
+        "Give every item a `code`; the item's `action` is optional and shows only while the item is open."
+      ]
+    },
+    "sections/use-case-links": {
+      "import": "@aziontech/webkit/sections/use-case-links",
+      "target": "./src/components/sections/use-case-links/use-case-links.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/use-case-links",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "items",
+          "type": "UseCaseLinksItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`."
+        }
+      ],
+      "purpose": "The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it. It is a page section — the site places it from a `{ _id: 'use-case-links', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `card-grid` and `topic` rather than owning anatomy of its own.",
+      "useWhen": [
+        "When every use case has its own page and the band's job is to route the reader there.",
+        "For three or six use cases of equal weight, in a three-column grid."
+      ],
+      "avoidWhen": [
+        "When the use cases carry no link and the band leads with one call to action → use `use-cases`.",
+        "For features with artwork → use `feature-tiles`."
+      ],
+      "related": [
+        "use-cases` — the sibling band with a title cell and one action instead of a link per case.",
+        "topic` — the linked icon-heading-sentence cell each use case is rendered with."
+      ],
+      "bestPractices": [
+        "Keep the count a multiple of three so the divider grid closes cleanly.",
+        "Give every item an `href`; a topic without one reads as a dead end in a band that promises links.",
+        "Keep `description` to one sentence; the row height follows the longest cell."
+      ]
+    },
+    "sections/use-cases": {
+      "import": "@aziontech/webkit/sections/use-cases",
+      "target": "./src/components/sections/use-cases/use-cases.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/use-cases",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the headline in the title cell, closed by the blinking cursor."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` in the title cell."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "One-line lead under the headline."
+        },
+        {
+          "name": "primaryAction",
+          "type": "UseCasesAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+        },
+        {
+          "name": "items",
+          "type": "UseCasesItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
+        }
+      ],
+      "purpose": "The \"what teams use it for\" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'use-cases', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `frame-box`, `overline`, `topic` and `button` rather than owning any anatomy of its own.",
+      "useWhen": [
+        "On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.",
+        "Whenever a page needs three to six short, icon-led use cases with one link out to the documentation."
+      ],
+      "avoidWhen": [
+        "For a grid of features with artwork → use `feature-tiles`.",
+        "For use cases that each link to their own page → use `use-case-links`.",
+        "Inside another band's cell → compose `topic` directly."
+      ],
+      "related": [
+        "topic` — the icon, title and description cell each use case is rendered with.",
+        "card-grid` — the frame grid this band lays its cells in."
+      ],
+      "bestPractices": [
+        "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",
+        "Write `title` as the heading the page's outline needs; it is the band's `h2`.",
+        "Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as \"go\".",
+        "Leave `eyebrow` as the product name; it is the overline the reader scans first."
       ]
     },
     "svg/illustration-layers": {

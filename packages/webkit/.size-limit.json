@@ -323,6 +323,11 @@
     "limit": "16 KB"
   },
   {
+    "name": "use-cases",
+    "path": "src/components/sections/use-cases/use-cases.vue",
+    "limit": "7 KB"
+  },
+  {
     "name": "hero-band",
     "path": "src/components/sections/hero-band/hero-band.vue",
     "limit": "9.5 KB",
@@ -356,6 +361,73 @@
     "name": "site-nav",
     "path": "src/components/sections/site-nav/site-nav.vue",
     "limit": "54 KB"
+  },
+  {
+    "name": "feature-scroll",
+    "path": "src/components/sections/feature-scroll/feature-scroll.vue",
+    "limit": "15 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "feature-tiles",
+    "path": "src/components/sections/feature-tiles/feature-tiles.vue",
+    "limit": "8 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "feature-widgets",
+    "path": "src/components/sections/feature-widgets/feature-widgets.vue",
+    "limit": "22 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "network-section",
+    "path": "src/components/sections/network-section/network-section.vue",
+    "limit": "26 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "stats-band",
+    "path": "src/components/sections/stats-band/stats-band.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "use-case-links",
+    "path": "src/components/sections/use-case-links/use-case-links.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "code-split",
+    "path": "src/components/sections/code-split/code-split.vue",
+    "limit": "34 KB"
+  },
+  {
+    "name": "architecture-tabs",
+    "path": "src/components/sections/architecture-tabs/architecture-tabs.vue",
+    "limit": "19 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "sticky-scroll-code",
+    "path": "src/components/sections/sticky-scroll-code/sticky-scroll-code.vue",
+    "limit": "36 KB"
+  },
+  {
+    "name": "cli-terminal",
+    "path": "src/components/sections/cli-terminal/cli-terminal.vue",
+    "limit": "33 KB"
+  },
+  {
+    "name": "feature-tabs",
+    "path": "src/components/sections/feature-tabs/feature-tabs.vue",
+    "limit": "12 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "media-split-stack",
+    "path": "src/components/sections/media-split-stack/media-split-stack.vue",
+    "limit": "12 KB",
+    "entryOnly": true
   },
   {
     "name": "site-footer",
