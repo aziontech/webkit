@@ -16672,6 +16672,271 @@
         "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
       ]
     },
+    "sections/compare-plans": {
+      "import": "@aziontech/webkit/sections/compare-plans",
+      "target": "./src/components/sections/compare-plans/compare-plans.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/compare-plans",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a hash link can target it."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader caption naming the table."
+        },
+        {
+          "name": "columnLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Heading of the feature column, shown from the large breakpoint up."
+        },
+        {
+          "name": "pickerAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the plan picker shown below the large breakpoint."
+        },
+        {
+          "name": "includedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a ticked cell."
+        },
+        {
+          "name": "excludedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a dashed cell."
+        },
+        {
+          "name": "plans",
+          "type": "ComparePlansPlan[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
+        },
+        {
+          "name": "sections",
+          "type": "ComparePlansSection[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+        },
+        {
+          "name": "primaryAction",
+          "type": "ComparePlansAction",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."
+        }
+      ],
+      "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — a tick, a dash, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline`, `hint`, `tag` and `link`.",
+      "useWhen": [
+        "On Pricing, under the plan cards, to show what every plan includes product by product."
+      ],
+      "avoidWhen": [
+        "To compare support tiers → use `compare-support-tiers`.",
+        "To compare Azion with a competitor → use `comparison-table`."
+      ],
+      "related": [
+        "pricing-plans` — the plan cards this matrix sits under.",
+        "compare-support-tiers` — the same matrix for the Support page."
+      ],
+      "bestPractices": [
+        "Give every plan a stable `id`; the narrow-screen picker selects by it.",
+        "Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+        "Give every row's `values` one entry per plan, in plan order."
+      ]
+    },
+    "sections/compare-support-tiers": {
+      "import": "@aziontech/webkit/sections/compare-support-tiers",
+      "target": "./src/components/sections/compare-support-tiers/compare-support-tiers.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/compare-support-tiers",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a hash link can target it."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader caption naming the table."
+        },
+        {
+          "name": "columnLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Heading of the service column, shown from the large breakpoint up."
+        },
+        {
+          "name": "pickerAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the tier picker shown below the large breakpoint."
+        },
+        {
+          "name": "includedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a ticked cell."
+        },
+        {
+          "name": "excludedLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader text of a dashed cell."
+        },
+        {
+          "name": "tiers",
+          "type": "CompareSupportTiersTier[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped."
+        },
+        {
+          "name": "sections",
+          "type": "CompareSupportTiersSection[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
+        }
+      ],
+      "purpose": "The tier-by-tier comparison on the Support page: one column per support tier with its name, who it is for and its action button pinned in the header while the page scrolls, one band per service family with an overline and a title, and one row per service saying what each tier includes — a tick, a dash, or the allowance as text. Each band closes on its own link to the matching pricing documentation, the recommended tier carries an accent bar, and below the large breakpoint the table folds to one tier picked from a select. It is a page section — the site places it from a `{ _id: 'compare-support-tiers', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline` and `link`.",
+      "useWhen": [
+        "On the Support page, to show what each support tier includes service by service."
+      ],
+      "avoidWhen": [
+        "To compare platform plans → use `compare-plans`.",
+        "To compare Azion with a competitor → use `comparison-table`."
+      ],
+      "related": [
+        "compare-plans` — the same matrix for platform plans, with hints and tags on rows and one closing link."
+      ],
+      "bestPractices": [
+        "Give every tier a stable `id`; the narrow-screen picker selects by it.",
+        "Mark one tier `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+        "Give every row's `values` one entry per tier, in tier order."
+      ]
+    },
+    "sections/comparison-table": {
+      "import": "@aziontech/webkit/sections/comparison-table",
+      "target": "./src/components/sections/comparison-table/comparison-table.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/comparison-table",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the section title."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Screen-reader caption naming the table."
+        },
+        {
+          "name": "columnLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Heading of the capability column."
+        },
+        {
+          "name": "fullLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Tooltip and screen-reader text of a full-support cell."
+        },
+        {
+          "name": "partialLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Tooltip and screen-reader text of a partial-support cell."
+        },
+        {
+          "name": "noneLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Tooltip and screen-reader text of an unsupported cell."
+        },
+        {
+          "name": "competitor",
+          "type": "ComparisonTableCompetitor",
+          "default": "—",
+          "required": "true",
+          "doc": "The platform compared with Azion; `{ name, logo?, logoLight? }` where `logo` is the dark-theme file and `logoLight` the light-theme one."
+        },
+        {
+          "name": "groups",
+          "type": "ComparisonTableGroup[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`)."
+        }
+      ],
+      "purpose": "The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text, and a capability with a definition carries an info button that opens it in a popover. It is a page section — the site places it from a `{ _id: 'comparison-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `brand`, `popover`, `icon-button` and `tooltip`.",
+      "useWhen": [
+        "On a \"Azion vs X\" page, to lay one competitor against Azion across a few categories of capabilities."
+      ],
+      "avoidWhen": [
+        "To compare Azion's own plans → use `compare-plans`.",
+        "To compare support tiers → use `compare-support-tiers`."
+      ],
+      "related": [
+        "compare-plans` — the plan-by-plan matrix of Pricing.",
+        "tooltip` — names each support glyph on hover and focus."
+      ],
+      "bestPractices": [
+        "Give every row a `definition`; the info popover is where a reader learns what the capability means.",
+        "Ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme); with one file it shows in both, with none the name shows as text.",
+        "Keep `caption` equal to the title; it is the table's accessible name."
+      ]
+    },
     "sections/compliance-badges": {
       "import": "@aziontech/webkit/sections/compliance-badges",
       "target": "./src/components/sections/compliance-badges/compliance-badges.vue",
@@ -17826,6 +18091,61 @@
       "bestPractices": [
         "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",
         "Leave `duration` at `0` to let the strip pace itself (ten seconds per photo)."
+      ]
+    },
+    "sections/pricing-plans": {
+      "import": "@aziontech/webkit/sections/pricing-plans",
+      "target": "./src/components/sections/pricing-plans/pricing-plans.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sections/pricing-plans",
+      "category": "sections",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "In-page id set on the band so a hash link can target it."
+        },
+        {
+          "name": "periods",
+          "type": "PricingPlansPeriod[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first."
+        },
+        {
+          "name": "periodsAriaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the billing-period toggle."
+        },
+        {
+          "name": "plans",
+          "type": "PricingPlansPlan[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped."
+        }
+      ],
+      "purpose": "The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `card-grid`, `card-pricing` and `button`; the picked period is local state.",
+      "useWhen": [
+        "At the top of Pricing, to lay the plans side by side with a price per billing period."
+      ],
+      "avoidWhen": [
+        "To compare plans feature by feature → use `compare-plans`."
+      ],
+      "related": [
+        "card-pricing` — the card each plan renders with.",
+        "compare-plans` — the matrix that sits under these cards."
+      ],
+      "bestPractices": [
+        "Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.",
+        "Highlight one plan; it is raised and is the only card that shows its tag.",
+        "Keep `features` to five or so short labels led by an icon."
       ]
     },
     "sections/recognition-marquee": {

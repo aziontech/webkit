@@ -1,236 +1,23 @@
-import Button from '@aziontech/webkit/button'
-import CardGrid from '@aziontech/webkit/card-grid'
-import CardPricing from '@aziontech/webkit/card-pricing'
-import FrameBox from '@aziontech/webkit/frame-box'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import SectionModule from '@aziontech/webkit/section-module'
-import SegmentedButton from '@aziontech/webkit/segmented-button'
-import { ref } from 'vue'
+import PricingPlans from '@aziontech/webkit/sections/pricing-plans'
 
-import { editable } from '../../_shared/editable-content'
-import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
+import { SITE_SECTION } from './_sections/pricing-plans'
 
-const BILLING_PERIODS = [
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Annual', value: 'annual' }
-]
+const IMPORT = "import PricingPlans from '@aziontech/webkit/sections/pricing-plans'"
 
-const PLANS = [
-  {
-    id: 'hobby',
-    name: 'Hobby',
-    highlighted: false,
-    price: {
-      monthly: {
-        value: 'Free',
-        prefix: '',
-        suffix: '',
-        details: 'Free forever, no card required. Included limits reset every month.'
-      },
-      annual: {
-        value: 'Free',
-        prefix: '',
-        suffix: '',
-        details: 'Free forever, no card required. Included limits reset every month.'
-      }
-    },
-    featuresTitle: 'All features included.',
-    features: [
-      { icon: 'pi pi-globe', label: 'Global infrastructure' },
-      { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
-      { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'pi pi-image', label: 'Image Processor' },
-      { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
-    ],
-    action: { label: 'Start for free', kind: 'outlined', href: '/signup' }
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    highlighted: true,
-    tagLabel: 'Popular',
-    price: {
-      monthly: {
-        value: '25',
-        prefix: '$',
-        suffix: '/mo',
-        details:
-          'Billed monthly, cancel anytime. Usage past the included limits is charged on demand.'
-      },
-      annual: {
-        value: '20',
-        prefix: '$',
-        suffix: '/mo',
-        details: 'Billed annually, save 20%. Usage past the included limits is charged on demand.'
-      }
-    },
-    featuresTitle: 'All Hobby features, plus:',
-    features: [
-      { icon: 'ai ai-workloads', label: 'Additional workloads' },
-      { icon: 'ai ai-edge-application', label: 'Higher application limits' },
-      { icon: 'ai ai-store', label: 'More storage capacity' },
-      { icon: 'ai ai-waf-rules', label: 'Broader security coverage' },
-      { icon: 'pi pi-wallet', label: 'Configurable spend limit' }
-    ],
-    action: { label: 'Start with Pro', kind: 'secondary', href: '/signup' }
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    highlighted: false,
-    price: {
-      monthly: {
-        value: 'Custom',
-        prefix: '',
-        suffix: '',
-        details: 'Custom terms and payment schedule. Commit up front and save on usage.'
-      },
-      annual: {
-        value: 'Custom',
-        prefix: '',
-        suffix: '',
-        details: 'Custom terms and payment schedule. Commit up front and save on usage.'
-      }
-    },
-    featuresTitle: 'All Pro features, plus:',
-    features: [
-      { icon: 'pi pi-chart-line', label: 'On-demand pricing' },
-      { icon: 'pi pi-arrow-down', label: 'Cut costs with commitments' },
-      { icon: 'ai ai-layers', label: 'Capacity Reservation available' },
-      { icon: 'pi pi-calendar', label: 'Savings Plan available' },
-      { icon: 'ai ai-business-support', label: 'Advanced support available' }
-    ],
-    action: { label: 'Talk to a specialist', kind: 'outlined', href: '#contact' }
-  }
-]
-
-const quoted = (text) => `'${text.replaceAll("'", "\\'")}'`
-
-const variesByPeriod = ({ price }) =>
-  price.monthly.value !== price.annual.value || price.monthly.details !== price.annual.details
-
-const priceName = (plan) => `${plan.id}Price`
-
-const priceLine = (plan) =>
-  `const ${priceName(plan)} = {\n${BILLING_PERIODS.map(
-    ({ value: period }) =>
-      `  ${period}: {\n    value: ${quoted(plan.price[period].value)},\n    details: ${quoted(plan.price[period].details)}\n  }`
-  ).join(',\n')}\n}`
-
-const IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import CardGrid from '@aziontech/webkit/card-grid'",
-  "import CardPricing from '@aziontech/webkit/card-pricing'",
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
-  "import SegmentedButton from '@aziontech/webkit/segmented-button'",
-  "import { ref } from 'vue'",
-  '',
-  "const period = ref('monthly')",
-  '',
-  `const billingPeriods = [\n${BILLING_PERIODS.map(({ label, value }) => `  { label: ${quoted(label)}, value: ${quoted(value)} }`).join(',\n')}\n]`,
-  ...PLANS.filter(variesByPeriod).flatMap((plan) => ['', priceLine(plan)])
-]
-
-const components = {
-  Button,
-  CardGrid,
-  CardPricing,
-  FrameBox,
-  SectionContainer,
-  SectionGap,
-  SectionModule,
-  SegmentedButton
+const source = (section) => {
+  const { body, script } = sectionMarkup('PricingPlans', section.props)
+  return toSfc([...COLUMN_IMPORTS, IMPORT, '', ...script], inColumn(body))
 }
-
-const flag = (name, on) => (on ? name : `:${name}="false"`)
-
-const priceProps = (plan) => {
-  const { prefix, suffix, value, details } = plan.price.monthly
-  const bound = variesByPeriod(plan)
-  return [
-    bound ? `:value="${priceName(plan)}[period].value"` : `value="${value}"`,
-    `prefix="${prefix}"`,
-    `suffix="${suffix}"`,
-    flag('show-prefix', Boolean(prefix)),
-    flag('show-suffix', Boolean(suffix)),
-    bound ? `:pricing-details="${priceName(plan)}[period].details"` : `pricing-details="${details}"`
-  ]
-}
-
-const card = (plan) => {
-  const props = [
-    'aligned',
-    'slot-position="middle"',
-    'kind="transparent"',
-    `class="${plan.highlighted ? 'bg-(--bg-surface)' : 'bg-(--bg-canvas)'}"`,
-    `plan-title="${plan.name}"`,
-    ...priceProps(plan),
-    flag('show-tag', plan.highlighted),
-    ...(plan.tagLabel ? [`tag-label="${plan.tagLabel}"`] : []),
-    'action-label=""',
-    `data-testid="pricing-card-${plan.id}"`
-  ]
-  return `<CardPricing
-${props.map((prop) => `  ${prop}`).join('\n')}
->
-  <div class="flex flex-col gap-(--spacing-md)">
-    <p class="m-0 text-body-sm text-(--text-muted)">${plan.featuresTitle}</p>
-    <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
-${each(
-  plan.features,
-  (feature) => `<li class="flex items-start gap-(--spacing-sm)">
-  <i class="${feature.icon} mt-0.5 shrink-0 text-body-sm text-(--primary)" aria-hidden="true" />
-  <span class="text-body-sm text-(--text-default)">${feature.label}</span>
-</li>`,
-  3
-)}
-    </ul>
-  </div>
-
-  <template #actions>
-    <Button
-      label="${plan.action.label}"
-      kind="${plan.action.kind}"
-      size="large"
-      class="w-full"
-      href="${plan.action.href}"
-    />
-  </template>
-</CardPricing>`
-}
-
-const TEMPLATE = inColumn(`<SectionModule id="plans" :divided="false" :padded="false">
-  <FrameBox flush borders="y" marks="bottom">
-    <div class="flex justify-center border-b border-(--border-default) p-(--spacing-md)">
-      <SegmentedButton v-model="period" :options="billingPeriods" aria-label="Billing period" />
-    </div>
-    <CardGrid kind="divider" :columns="3">
-${each(PLANS, card, 3)}
-    </CardGrid>
-  </FrameBox>
-</SectionModule>`)
-
-const priceState = () =>
-  Object.fromEntries(
-    PLANS.filter(variesByPeriod).map((plan) => [
-      priceName(plan),
-      Object.fromEntries(
-        BILLING_PERIODS.map(({ value: period }) => [
-          period,
-          { value: plan.price[period].value, details: plan.price[period].details }
-        ])
-      )
-    ])
-  )
 
 const meta = {
   title: 'Templates/Marketing/Pricing/PricingPlans',
-  excludeStories: ['SITE_SECTION'],
+  component: PricingPlans,
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -242,160 +29,25 @@ const meta = {
 
 export default meta
 
+const Template = (args) => ({
+  components: { SectionContainer, SectionGap, PricingPlans },
+  setup() {
+    return { args }
+  },
+  template: inColumn('<PricingPlans v-bind="args" />')
+})
+
 export const Plans = {
-  ...editable(
-    () => ({
-      components,
-      setup: () => ({
-        period: ref('monthly'),
-        billingPeriods: BILLING_PERIODS,
-        ...priceState()
-      }),
-      template: TEMPLATE
-    }),
-    { billingPeriods: BILLING_PERIODS }
-  ),
+  render: Template,
+  args: SITE_SECTION.props,
   parameters: {
     docs: {
-      source: { code: toSfc(IMPORTS, TEMPLATE) }
+      description: {
+        story:
+          'Hobby, Pro and Enterprise. Only the Pro price changes with the toggle: 25 a month billed monthly, 20 billed annually. The Enterprise button points at the page contact band.'
+      },
+      source: { code: source(SITE_SECTION) }
     }
-  }
-}
-
-export const SITE_SECTION = {
-  _id: 'pricing-plans',
-  props: {
-    periods: [
-      {
-        label: 'Monthly',
-        value: 'monthly'
-      },
-      {
-        label: 'Annual',
-        value: 'annual'
-      }
-    ],
-    periodsAriaLabel: 'Billing period',
-    plans: [
-      {
-        name: 'Hobby',
-        highlighted: false,
-        prices: [
-          {
-            period: 'monthly',
-            value: 'Free',
-            prefix: '',
-            suffix: '',
-            details: ''
-          },
-          {
-            period: 'annual',
-            value: 'Free',
-            prefix: '',
-            suffix: '',
-            details: ''
-          }
-        ],
-        featuresTitle: 'All features available',
-        features: [
-          {
-            icon: 'pi pi-globe',
-            label: 'Global infrastructure'
-          },
-          {
-            icon: 'ai ai-edge-functions',
-            label: 'Serverless functions'
-          },
-          {
-            icon: 'ai ai-store',
-            label: 'Storage and databases'
-          }
-        ],
-        action: {
-          label: 'Start for free',
-          href: 'https://console.azion.com/signup?plan=hobby'
-        }
-      },
-      {
-        name: 'Pro',
-        highlighted: true,
-        prices: [
-          {
-            period: 'monthly',
-            value: '25',
-            prefix: '$',
-            suffix: '/mo',
-            details: 'Billed monthly, cancel anytime'
-          },
-          {
-            period: 'annual',
-            value: '20',
-            prefix: '$',
-            suffix: '/mo',
-            details: 'Billed annually, save 20%'
-          }
-        ],
-        featuresTitle: 'Scale beyond included usage',
-        features: [
-          {
-            icon: 'ai ai-workloads',
-            label: 'Additional workloads'
-          },
-          {
-            icon: 'ai ai-edge-application',
-            label: 'Higher application limits'
-          },
-          {
-            icon: 'ai ai-edge-storage',
-            label: 'More storage capacity'
-          }
-        ],
-        action: {
-          label: 'Start with Pro',
-          href: 'https://console.azion.com/signup?plan=pro&billing-cycle=monthly'
-        },
-        tagLabel: 'Popular'
-      },
-      {
-        name: 'Enterprise',
-        highlighted: false,
-        prices: [
-          {
-            period: 'monthly',
-            value: 'Custom',
-            prefix: '',
-            suffix: '',
-            details: 'Tailored to your usage and payment terms'
-          },
-          {
-            period: 'annual',
-            value: 'Custom',
-            prefix: '',
-            suffix: '',
-            details: 'Tailored to your usage and payment terms'
-          }
-        ],
-        featuresTitle: 'Choose your pricing model',
-        features: [
-          {
-            icon: 'pi pi-wave-pulse',
-            label: 'On-demand pricing'
-          },
-          {
-            icon: 'pi pi-arrow-down',
-            label: 'Lower costs with commitments'
-          },
-          {
-            icon: 'pi pi-objects-column',
-            label: 'Capacity Reservation available'
-          }
-        ],
-        action: {
-          label: 'Talk to a specialist',
-          href: '/en/contact/'
-        }
-      }
-    ]
   }
 }
 
