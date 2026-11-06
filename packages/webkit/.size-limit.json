@@ -313,6 +313,56 @@
     "limit": "6.5 KB"
   },
   {
+    "name": "spinning-globe",
+    "path": "src/assets/globe/spinning-globe.vue",
+    "limit": "7.5 KB"
+  },
+  {
+    "name": "brand-globe-scene",
+    "path": "src/assets/globe/brand-globe-scene.vue",
+    "limit": "16 KB"
+  },
+  {
+    "name": "hero-band",
+    "path": "src/components/sections/hero-band/hero-band.vue",
+    "limit": "9.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "hero-copy-on-top-art",
+    "path": "src/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue",
+    "limit": "23 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "hero-form",
+    "path": "src/components/sections/hero-form/hero-form.vue",
+    "limit": "131 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "hero-with-opening",
+    "path": "src/components/sections/hero-with-opening/hero-with-opening.vue",
+    "limit": "10 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "media-split-band",
+    "path": "src/components/sections/media-split-band/media-split-band.vue",
+    "limit": "11 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "site-nav",
+    "path": "src/components/sections/site-nav/site-nav.vue",
+    "limit": "54 KB"
+  },
+  {
+    "name": "site-footer",
+    "path": "src/components/sections/site-footer/site-footer.vue",
+    "limit": "36 KB"
+  },
+  {
     "name": "stepper",
     "path": "src/components/navigation/stepper/index.ts",
     "limit": "3 KB"
@@ -326,15 +376,5 @@
     "name": "stepper-step",
     "path": "src/components/navigation/stepper/stepper-step/stepper-step.vue",
     "limit": "2.5 KB"
-  },
-  {
-    "name": "spinning-globe",
-    "path": "src/assets/globe/spinning-globe.vue",
-    "limit": "7.5 KB"
-  },
-  {
-    "name": "brand-globe-scene",
-    "path": "src/assets/globe/brand-globe-scene.vue",
-    "limit": "16 KB"
   }
 ]

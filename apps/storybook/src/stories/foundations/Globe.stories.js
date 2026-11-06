@@ -5,7 +5,7 @@ import {
   CodeBlock,
   PageContainer,
   PageHeader,
-  PageSection
+  SectionHeader
 } from '../../foundations/components/layout/index.js'
 
 const DENSITIES = [
@@ -72,7 +72,7 @@ export const Library = {
       CodeBlock,
       PageContainer,
       PageHeader,
-      PageSection,
+      SectionHeader,
       SpinningGlobe
     },
     setup() {
@@ -92,7 +92,8 @@ export const Library = {
           sets it behind the Azion mark. Both are decorative and hidden from assistive technology.
         </PageHeader>
 
-        <PageSection title="Density" description="How many PoPs are lit. The globe always shows the whole world; density only decides how many points glow on it.">
+        <section class="mb-(--spacing-xxl)">
+          <SectionHeader title="Density" description="How many PoPs are lit. The globe always shows the whole world; density only decides how many points glow on it." />
           <div class="grid gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4">
             <figure v-for="[density, use] in DENSITIES" :key="density" :class="FRAME_CLASS">
               <div :class="STAGE_CLASS">
@@ -104,9 +105,10 @@ export const Library = {
               </figcaption>
             </figure>
           </div>
-        </PageSection>
+        </section>
 
-        <PageSection title="Region" description="Which part of the world has its PoPs lit, with the same names as the network map. Turn the globe with longitude so the region faces the viewer. The network has no PoPs in Asia or Oceania, so those two regions light nothing.">
+        <section class="mb-(--spacing-xxl)">
+          <SectionHeader title="Region" description="Which part of the world has its PoPs lit, with the same names as the network map. Turn the globe with longitude so the region faces the viewer. The network has no PoPs in Asia or Oceania, so those two regions light nothing." />
           <div class="grid gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3">
             <figure v-for="[region, longitude] in REGIONS" :key="region" :class="FRAME_CLASS">
               <div :class="STAGE_CLASS">
@@ -117,9 +119,10 @@ export const Library = {
               </figcaption>
             </figure>
           </div>
-        </PageSection>
+        </section>
 
-        <PageSection title="Brand globe scene" description="The bare globe turning behind the Azion mark, sized to its container. It is the media of the Careers values band.">
+        <section class="mb-(--spacing-xxl)">
+          <SectionHeader title="Brand globe scene" description="The bare globe turning behind the Azion mark, sized to its container, for use as the media of a band." />
           <figure :class="FRAME_CLASS">
             <div class="flex aspect-video w-full items-center justify-center">
               <BrandGlobeScene />
@@ -128,11 +131,12 @@ export const Library = {
               <code class="font-code text-code text-(--text-default)">BrandGlobeScene</code>
             </figcaption>
           </figure>
-        </PageSection>
+        </section>
 
-        <PageSection title="Using the globe" description="SpinningGlobe fills its nearest positioned ancestor, so give it a relative box with a size. BrandGlobeScene brings its own box and fills the cell it is placed in.">
+        <section class="mb-(--spacing-xxl)">
+          <SectionHeader title="Using the globe" description="SpinningGlobe fills its nearest positioned ancestor, so give it a relative box with a size. BrandGlobeScene brings its own box and fills the cell it is placed in." />
           <CodeBlock :content="USAGE_SAMPLE" language="html" />
-        </PageSection>
+        </section>
       </PageContainer>
     `
   })

@@ -1,16 +1,19 @@
-import { Canvas, Meta, Source } from '@storybook/blocks'
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
 
 import * as HeroWithOpeningStories from './HeroWithOpening.stories'
 
-<Meta title="Templates/Marketing/Heroes/HeroWithOpening" />
+<Meta
+  of={HeroWithOpeningStories}
+  name="Documentation"
+/>
 
-# HeroWithOpening
+<Title />
 
-The large title band with the sales arguments that open the page right under it. Each argument is an icon, a title and one sentence on a hairline frame grid, three to a row.
+The large title band with the sales arguments that open the page right under it. Each argument is an icon, a title and one sentence on a thin frame grid, three to a row.
 
-The grid starts at the hero’s floor with no hatched gap between them, so the arguments read as the hero’s second half. The hatched gap comes after the grid, before the next section.
+The grid starts at the hero floor with no hatched gap between them, so the arguments read as the second half of the hero. The hatched gap comes after the grid, before the next section.
 
-Built from `Hero`, `Hero.Title`, `Button`, `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid`, `Topic` and `SectionGap`.
+The band is the `HeroWithOpening` component from `@aziontech/webkit/sections/hero-with-opening`; it composes `Hero`, `Hero.Title`, `Button`, `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid`, `Topic` and `SectionGap`.
 
 <p
   style={{
@@ -27,17 +30,18 @@ Built from `Hero`, `Hero.Title`, `Button`, `SectionContainer`, `SectionModule`, 
 
 ### Six arguments
 
-Six arguments in two rows of three, for a page that argues on breadth. The headline is short, so it keeps the narrow column and breaks early.
+Two rows of three. Use six when the page argues on breadth.
 
 <Canvas of={HeroWithOpeningStories.SixArguments} />
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `eyebrow`, `title` and `description` fill the title band; `titleLength` is `short` or `long`, and `long` widens the headline's column so it breaks into two lines instead of three.
-- `actions[]` are the buttons under the copy, each a `label`, an `href` and a `kind`; `trailing` draws the animated chevron.
-- `items[]` are the six arguments, each an `icon`, a `title` and a `description`, three to a row.
+- `eyebrow` is the overline above the headline, and `title` is the page h1. The block renders nothing without a title. A title longer than 45 characters widens its column, so it breaks into two lines instead of three.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
+- `items` are the arguments in reading order. Three fill a row, so use three or six. Each takes an `icon` class, a short `title` and a one-sentence `description`.
 
 Example:
 
@@ -58,17 +62,16 @@ Example:
 
 ### Three arguments
 
-Three arguments in one row, for a page that argues on a few strong claims. The headline is long, so its column widens and it breaks into two lines instead of three.
+One row of three, for a page that argues on a few strong claims.
 
 <Canvas of={HeroWithOpeningStories.ThreeArguments} />
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `eyebrow`, `title` and `description` fill the title band; `titleLength` is `short` or `long`, and `long` widens the headline's column so it breaks into two lines instead of three.
-- `actions[]` are the buttons under the copy, each a `label`, an `href` and a `kind`; `trailing` draws the animated chevron.
-- `items[]` are the three arguments, each an `icon`, a `title` and a `description`, in one row.
+- `eyebrow`, `title`, `description` and the two actions work as in the six-argument example.
+- `items` are the arguments in reading order. Three fill a row, so use three or six.
 
 Example:
 

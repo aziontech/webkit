@@ -1,340 +1,30 @@
-import Button from '@aziontech/webkit/button'
-import Flow from '@aziontech/webkit/flow'
-import Hero from '@aziontech/webkit/hero'
-import Illustration from '@aziontech/webkit/illustration'
-import Tag from '@aziontech/webkit/tag'
+import HeroBand from '@aziontech/webkit/sections/hero-band'
+import HeroCopyOnTopArt from '@aziontech/webkit/sections/hero-copy-on-top-art'
 
-import { editable } from '../../_shared/editable-content'
-import { each, indent } from '../../_shared/markup'
+import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
+import {
+  CENTERED_SECTION,
+  COPY_BESIDE_ART_SECTION,
+  PIXEL_FLOOR_SECTION,
+  TITLE_BAND_CAROUSEL_SECTION,
+  TITLE_BAND_SECTION,
+  TITLE_BAND_SMALL_SECTION
+} from './_sections/hero-band'
+import { SITE_SECTION as COPY_ON_TOP_ART_SECTION } from './_sections/hero-copy-on-top-art'
 
-const BUTTON_IMPORT = "import Button from '@aziontech/webkit/button'"
-const FLOW_IMPORT = "import Flow from '@aziontech/webkit/flow'"
-const HERO_IMPORT = "import Hero from '@aziontech/webkit/hero'"
-const ILLUSTRATION_IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
-const TAG_IMPORT = "import Tag from '@aziontech/webkit/tag'"
+const HERO_BAND_IMPORT = "import HeroBand from '@aziontech/webkit/sections/hero-band'"
+const COPY_ON_TOP_ART_IMPORT =
+  "import HeroCopyOnTopArt from '@aziontech/webkit/sections/hero-copy-on-top-art'"
 
-const components = {
-  Button,
-  Flow,
-  'Flow.Anchor': Flow.Anchor,
-  'Flow.Node': Flow.Node,
-  'Flow.Parallel': Flow.Parallel,
-  Hero,
-  'Hero.Title': Hero.Title,
-  Illustration,
-  Tag
+const source = (tag, importLine, section) => {
+  const { body, script } = sectionMarkup(tag, section.props)
+  return toSfc([importLine, ...(script.length ? ['', ...script] : [])], body)
 }
-
-const CLIENT_STRIP = [
-  'global-fashion-group',
-  'herospark',
-  'itau',
-  'nzn',
-  'netshoes',
-  'caixa',
-  'agibank',
-  'prime-video',
-  'america-movil',
-  'gpa',
-  'fourbank'
-]
-
-const RETAIL_CLIENT_STRIP = [
-  'global-fashion-group',
-  'netshoes',
-  'dafiti',
-  'magalu',
-  'renner',
-  'gpa',
-  'america-movil',
-  'madeiramadeira',
-  'nzn'
-]
-
-const START_FREE = { label: 'Start for free', kind: 'secondary', href: '/signup' }
-const START_FREE_LOWER = { label: 'Start for free', kind: 'secondary', href: '/signup' }
-const SPECIALIST = {
-  label: 'Talk to a specialist',
-  kind: 'outlined',
-  href: '#contact',
-  trailing: true
-}
-const SPECIALIST_PAGE = {
-  label: 'Talk to a specialist',
-  kind: 'outlined',
-  href: '/contact',
-  trailing: true
-}
-const SPECIALIST_PLAIN = { label: 'Talk to a specialist', kind: 'outlined' }
-const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
-const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
-
-const marks = (names, depth) =>
-  `[\n${indent(names.map((name) => `'${name}'`).join(',\n'), depth + 1)}\n${indent(']', depth)}`
-
-const button = ({ label, kind, href, trailing }) =>
-  [
-    '<Button',
-    `  label="${label}"`,
-    `  kind="${kind}"`,
-    '  size="large"',
-    ...(href ? [`  href="${href}"`] : []),
-    ...(trailing
-      ? ['  icon="pi pi-chevron-right"', '  icon-position="trailing"', '  animated']
-      : []),
-    '/>'
-  ].join('\n')
-
-const actions = (buttons) => `<template #actions>\n${each(buttons, button, 1)}\n</template>`
-
-const WORKLOAD_LEVELS = [
-  [
-    {
-      eyebrow: 'Domain',
-      icon: 'ai ai-domains',
-      title: 'shop.example.com',
-      label: 'Public',
-      severity: 'info'
-    },
-    {
-      eyebrow: 'Domain',
-      icon: 'ai ai-domains',
-      title: 'api.example.com',
-      label: 'Public',
-      severity: 'info'
-    }
-  ],
-  [
-    {
-      eyebrow: 'Workload',
-      icon: 'ai ai-workloads',
-      title: 'shop-prod',
-      label: 'Live',
-      severity: 'success',
-      lit: true
-    }
-  ],
-  [
-    {
-      eyebrow: 'Application',
-      icon: 'ai ai-edge-application',
-      title: 'storefront',
-      label: 'Active',
-      severity: 'success'
-    },
-    {
-      eyebrow: 'Firewall',
-      icon: 'ai ai-edge-firewall',
-      title: 'shop-rules',
-      label: 'Active',
-      severity: 'success'
-    }
-  ]
-]
-
-const NODE_CLASS =
-  'flex w-full flex-col rounded-(--shape-card) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none'
-
-const LIT_NODE_CLASS = `${NODE_CLASS} relative border-(--primary) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:shadow-[-22px_0_44px_-16px_var(--accent),22px_0_44px_-16px_var(--primary),0_0_20px_-8px_var(--primary)] before:content-['']`
-
-const workloadNode = (node) => `<Flow.Node
-  unstyled
-  class="${node.lit ? LIT_NODE_CLASS : NODE_CLASS}"
->
-  <Flow.Anchor>
-    <div class="flex w-full items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)">
-      <i
-        class="${node.icon} shrink-0 text-label-sm leading-none text-(--text-muted)"
-        aria-hidden="true"
-      />
-      <span class="truncate text-label-sm text-(--text-muted)">${node.eyebrow}</span>
-      <Tag
-        class="ml-auto shrink-0"
-        severity="${node.severity}"
-        label="${node.label}"
-        size="small"
-      />
-    </div>
-  </Flow.Anchor>
-  <div class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)">
-    <span class="min-w-0 truncate text-label-sm text-(--text-default)">${node.title}</span>
-  </div>
-</Flow.Node>`
-
-const workloadLevel = (nodes) => `<Flow.Parallel
-  align="start"
-  class="min-w-0 flex-1 @4xl:min-w-[15rem]"
->
-${each(nodes, workloadNode, 1)}
-</Flow.Parallel>`
-
-const CENTERED_CAROUSEL_TEMPLATE = `<Hero
-  kind="screen"
-  align="center"
-  max-width="site"
-  texture="dots"
-  texture-fade="top"
-  carousel
-  carousel-label="Trusted by teams running critical workloads"
-  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
->
-  <Hero.Title
-    centered
-    max-width="xl"
-    highlight="Build and run applications"
-    title="globally, with no ops"
-    description="Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic."
-  >
-${indent(actions([START_FREE, SPECIALIST]), 2)}
-  </Hero.Title>
-</Hero>`
-
-const TITLE_BAND_TEMPLATE = `<Hero
-  kind="band"
-  max-width="5xl"
-  size="large"
->
-  <Hero.Title
-    centered
-    eyebrow="Cache"
-    eyebrow-prefix="//"
-    title="Deliver content fast, worldwide"
-    description="Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes."
-  >
-${indent(actions([START_FREE, DOCS]), 2)}
-  </Hero.Title>
-</Hero>`
-
-const TITLE_BAND_SMALL_TEMPLATE = `<Hero
-  kind="band"
-  max-width="5xl"
-  size="medium"
->
-  <Hero.Title
-    centered
-    eyebrow="Contact"
-    eyebrow-prefix="//"
-    title="Contact us"
-    description="Talk to sales about a new project, or reach support about one already running."
-  />
-</Hero>`
-
-const TITLE_BAND_CAROUSEL_TEMPLATE = `<Hero
-  kind="band"
-  max-width="5xl"
-  size="large"
-  carousel
-  carousel-label="Trusted by teams running critical workloads"
-  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
->
-  <Hero.Title
-    centered
-    eyebrow="Resources"
-    eyebrow-prefix="//"
-    title="Learning Center"
-    description="Practical knowledge to speed up, secure, and scale applications."
-  >
-${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
-  </Hero.Title>
-</Hero>`
-
-const PIXEL_FLOOR_TEMPLATE = `<Hero
-  kind="screen"
-  floor-texture="pixelate"
-  floor-texture-size="small"
-  max-width="full"
-  :bordered="false"
-  carousel
-  carousel-label="Trusted by teams running critical workloads"
-  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
-  class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
->
-  <Hero.Title
-    eyebrow="AI Inference"
-    eyebrow-prefix="//"
-    title="Build and deploy AI agents and applications in seconds"
-    description="Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local."
-  >
-${indent(actions([START_FREE, SPECIALIST_PLAIN]), 2)}
-  </Hero.Title>
-</Hero>`
-
-const COPY_BESIDE_ART_TEMPLATE = `<Hero
-  max-width="5xl"
-  kind="screen"
-  media-align="end"
-  carousel
-  carousel-label="Trusted by teams running critical workloads"
-  :carousel-marks="${marks(RETAIL_CLIENT_STRIP, 1)}"
-  offset="3.5rem"
->
-  <Hero.Title
-    max-width="xl"
-    mobile-centered
-    eyebrow="Application Performance and Reliability"
-    eyebrow-prefix="//"
-    title="Make your applications fast and always reliable"
-    description="Serve websites, web apps, and APIs from Azion's globally distributed infrastructure, keep them online when an origin fails, and cut origin load and egress costs during your biggest traffic peaks."
-  >
-${indent(actions([START_FREE, SPECIALIST]), 2)}
-  </Hero.Title>
-
-  <template #media>
-    <Illustration
-      name="improve-application-performance-and-reliability"
-      aria-label="A website served through Azion, scoring 99 on performance"
-      class="md:w-(--hero-art-width) md:max-w-none md:shrink-0 md:-me-(--hero-art-bleed)"
-      style="--hero-art-width: 161.45%; --hero-art-bleed: 35.73%"
-    />
-  </template>
-</Hero>`
-
-const COPY_ON_TOP_ART_TEMPLATE = `<Hero
-  kind="screen"
-  align="center"
-  max-width="site"
-  class="[--banner-offset:3.5rem]"
->
-  <Hero.Title
-    centered
-    max-width="xl"
-    eyebrow="Workloads"
-    eyebrow-prefix="//"
-    title="Put your application close to users in seconds"
-    description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick."
-  >
-${indent(actions([START_FREE_LOWER, DOCS]), 2)}
-  </Hero.Title>
-
-  <template #bottom>
-    <div class="@container">
-      <div
-        class="flex animate-content-enter justify-center pb-(--spacing-xxl) motion-reduce:animate-none [--content-enter-delay:120ms] @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
-      >
-        <Flow
-          align="center"
-          class="w-[40rem] shrink-0 @4xl:w-(--container-3xl) [&>div]:w-full"
-        >
-${each(WORKLOAD_LEVELS, workloadLevel, 5)}
-        </Flow>
-      </div>
-    </div>
-  </template>
-</Hero>`
 
 const meta = {
   title: 'Templates/Marketing/Heroes/Hero',
-  excludeStories: [
-    'CENTERED_CAROUSEL_SECTION',
-    'TITLE_BAND_SECTION',
-    'TITLE_BAND_SMALL_SECTION',
-    'TITLE_BAND_CAROUSEL_SECTION',
-    'PIXEL_FLOOR_SECTION',
-    'COPY_BESIDE_ART_SECTION',
-    'COPY_ON_TOP_ART_SECTION'
-  ],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -346,76 +36,43 @@ const meta = {
 
 export default meta
 
+const HeroBandTemplate = (args) => ({
+  components: { HeroBand },
+  setup() {
+    return { args }
+  },
+  template: '<HeroBand v-bind="args" />'
+})
+
+const CopyOnTopArtTemplate = (args) => ({
+  components: { HeroCopyOnTopArt },
+  setup() {
+    return { args }
+  },
+  template: '<HeroCopyOnTopArt v-bind="args" />'
+})
+
 export const CenteredCarousel = {
-  ...editable(() => ({ components, template: CENTERED_CAROUSEL_TEMPLATE })),
+  render: HeroBandTemplate,
+  args: CENTERED_SECTION.props,
   parameters: {
     docs: {
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_TEMPLATE) }
+      source: { code: source('HeroBand', HERO_BAND_IMPORT, CENTERED_SECTION) }
     }
-  }
-}
-
-export const CENTERED_CAROUSEL_SECTION = {
-  _id: 'hero-centered-carousel',
-  props: {
-    highlight: 'Build and run applications',
-    title: 'globally, with no ops',
-    description:
-      'Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.',
-    primaryAction: {
-      label: 'Start for free',
-      href: 'https://console.azion.com/signup/'
-    },
-    secondaryAction: {
-      label: 'Talk to a specialist',
-      href: 'https://www.azion.com/en/contact/'
-    },
-    carouselLabel: 'Trusted by teams running critical workloads',
-    carouselMarks: [
-      'global-fashion-group',
-      'herospark',
-      'itau',
-      'nzn',
-      'netshoes',
-      'caixa',
-      'agibank',
-      'prime-video',
-      'america-movil',
-      'gpa',
-      'fourbank'
-    ]
   }
 }
 
 export const CenteredCarouselJson = {
   tags: ['!dev'],
-  ...siteJsonStory(CENTERED_CAROUSEL_SECTION)
+  ...siteJsonStory(CENTERED_SECTION)
 }
 
 export const TitleBand = {
-  ...editable(() => ({ components, template: TITLE_BAND_TEMPLATE })),
+  render: HeroBandTemplate,
+  args: TITLE_BAND_SECTION.props,
   parameters: {
     docs: {
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
-    }
-  }
-}
-
-export const TITLE_BAND_SECTION = {
-  _id: 'hero-title-band',
-  props: {
-    eyebrow: 'Cache',
-    highlight: '',
-    title: 'Deliver content fast, worldwide',
-    description:
-      'Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes.',
-    primaryAction: {
-      label: 'Start for free',
-      href: 'https://console.azion.com/signup/'
-    },
-    secondaryAction: {
-      label: 'Docs',
-      href: 'https://www.azion.com/en/documentation/'
+      source: { code: source('HeroBand', HERO_BAND_IMPORT, TITLE_BAND_SECTION) }
     }
   }
 }
@@ -426,25 +83,16 @@ export const TitleBandJson = {
 }
 
 export const TitleBandSmall = {
-  ...editable(() => ({ components, template: TITLE_BAND_SMALL_TEMPLATE })),
+  render: HeroBandTemplate,
+  args: TITLE_BAND_SMALL_SECTION.props,
   parameters: {
     docs: {
       description: {
         story:
           'The title band at the medium height, for a page whose bands start right under the headline (Contact).'
       },
-      source: { code: toSfc([HERO_IMPORT], TITLE_BAND_SMALL_TEMPLATE) }
+      source: { code: source('HeroBand', HERO_BAND_IMPORT, TITLE_BAND_SMALL_SECTION) }
     }
-  }
-}
-
-export const TITLE_BAND_SMALL_SECTION = {
-  _id: 'hero-title-band-small',
-  props: {
-    eyebrow: 'Contact',
-    highlight: '',
-    title: 'Contact us',
-    description: 'Talk to sales about a new project, or reach support about one already running.'
   }
 }
 
@@ -454,43 +102,12 @@ export const TitleBandSmallJson = {
 }
 
 export const TitleBandCarousel = {
-  ...editable(() => ({ components, template: TITLE_BAND_CAROUSEL_TEMPLATE })),
+  render: HeroBandTemplate,
+  args: TITLE_BAND_CAROUSEL_SECTION.props,
   parameters: {
     docs: {
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_CAROUSEL_TEMPLATE) }
+      source: { code: source('HeroBand', HERO_BAND_IMPORT, TITLE_BAND_CAROUSEL_SECTION) }
     }
-  }
-}
-
-export const TITLE_BAND_CAROUSEL_SECTION = {
-  _id: 'hero-title-band',
-  props: {
-    eyebrow: 'Resources',
-    highlight: '',
-    title: 'Learning Center',
-    description: 'Practical knowledge to speed up, secure, and scale applications.',
-    primaryAction: {
-      label: 'See articles',
-      href: '#subjects'
-    },
-    secondaryAction: {
-      label: 'Talk to a specialist',
-      href: 'https://www.azion.com/en/contact/'
-    },
-    carouselLabel: 'Trusted by teams running critical workloads',
-    carouselMarks: [
-      'global-fashion-group',
-      'herospark',
-      'itau',
-      'nzn',
-      'netshoes',
-      'caixa',
-      'agibank',
-      'prime-video',
-      'america-movil',
-      'gpa',
-      'fourbank'
-    ]
   }
 }
 
@@ -500,43 +117,12 @@ export const TitleBandCarouselJson = {
 }
 
 export const PixelFloor = {
-  ...editable(() => ({ components, template: PIXEL_FLOOR_TEMPLATE })),
+  render: HeroBandTemplate,
+  args: PIXEL_FLOOR_SECTION.props,
   parameters: {
     docs: {
-      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], PIXEL_FLOOR_TEMPLATE) }
+      source: { code: source('HeroBand', HERO_BAND_IMPORT, PIXEL_FLOOR_SECTION) }
     }
-  }
-}
-
-export const PIXEL_FLOOR_SECTION = {
-  _id: 'hero-pixel-floor',
-  props: {
-    eyebrow: 'AI Inference',
-    title: 'Build and deploy AI agents and applications in seconds',
-    description:
-      'Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local.',
-    primaryAction: {
-      label: 'Start for free',
-      href: 'https://console.azion.com/signup'
-    },
-    secondaryAction: {
-      label: 'Talk to a specialist',
-      href: 'https://www.azion.com/en/contact/'
-    },
-    carouselLabel: 'Trusted by teams running critical workloads',
-    carouselMarks: [
-      'global-fashion-group',
-      'herospark',
-      'itau',
-      'nzn',
-      'netshoes',
-      'caixa',
-      'agibank',
-      'prime-video',
-      'america-movil',
-      'gpa',
-      'fourbank'
-    ]
   }
 }
 
@@ -546,41 +132,11 @@ export const PixelFloorJson = {
 }
 
 export const CopyBesideArt = {
-  ...editable(() => ({ components, template: COPY_BESIDE_ART_TEMPLATE })),
+  render: HeroBandTemplate,
+  args: COPY_BESIDE_ART_SECTION.props,
   parameters: {
     docs: {
-      source: {
-        code: toSfc([BUTTON_IMPORT, HERO_IMPORT, ILLUSTRATION_IMPORT], COPY_BESIDE_ART_TEMPLATE)
-      }
-    }
-  }
-}
-
-export const COPY_BESIDE_ART_SECTION = {
-  _id: 'hero-copy-beside-art',
-  props: {
-    eyebrow: 'AWS Alternative Comparison',
-    highlight: '',
-    title: 'AWS sells services. Your team becomes the integrator.',
-    description:
-      'Every capability is a separate service with its own setup, limits, and bill. Azion delivers one platform, distributed by default. One configuration, one bill, security included, and support in your language.',
-    illustration: 'global-network',
-    illustrationAlt: 'AWS sells services. Your team becomes the integrator.',
-    carouselMarks: [
-      'agibank',
-      'radware',
-      'america-movil',
-      'gpa',
-      'fourbank',
-      'global-fashion-group',
-      'herospark',
-      'itau',
-      'magalu'
-    ],
-    carouselLabel: 'Trusted by teams running critical workloads',
-    primaryAction: {
-      label: 'Talk to a specialist',
-      href: 'https://www.azion.com/en/contact/'
+      source: { code: source('HeroBand', HERO_BAND_IMPORT, COPY_BESIDE_ART_SECTION) }
     }
   }
 }
@@ -591,81 +147,14 @@ export const CopyBesideArtJson = {
 }
 
 export const CopyOnTopArt = {
-  ...editable(() => ({ components, template: COPY_ON_TOP_ART_TEMPLATE })),
+  render: CopyOnTopArtTemplate,
+  args: COPY_ON_TOP_ART_SECTION.props,
   parameters: {
     docs: {
       source: {
-        code: toSfc([BUTTON_IMPORT, FLOW_IMPORT, HERO_IMPORT, TAG_IMPORT], COPY_ON_TOP_ART_TEMPLATE)
+        code: source('HeroCopyOnTopArt', COPY_ON_TOP_ART_IMPORT, COPY_ON_TOP_ART_SECTION)
       }
     }
-  }
-}
-
-export const COPY_ON_TOP_ART_SECTION = {
-  _id: 'hero-copy-on-top-art',
-  props: {
-    eyebrow: 'Workloads',
-    title: 'Put your application close to users in seconds',
-    description:
-      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
-    primaryAction: {
-      label: 'Start for free',
-      href: 'https://console.azion.com/signup'
-    },
-    secondaryAction: {
-      label: 'Docs',
-      href: 'https://www.azion.com/en/documentation/'
-    },
-    levels: [
-      {
-        nodes: [
-          {
-            eyebrow: 'Domain',
-            icon: 'ai ai-domains',
-            title: 'shop.example.com',
-            label: 'Public',
-            severity: 'info'
-          },
-          {
-            eyebrow: 'Domain',
-            icon: 'ai ai-domains',
-            title: 'api.example.com',
-            label: 'Public',
-            severity: 'info'
-          }
-        ]
-      },
-      {
-        nodes: [
-          {
-            eyebrow: 'Workload',
-            icon: 'ai ai-workloads',
-            title: 'shop-prod',
-            label: 'Live',
-            severity: 'success',
-            lit: true
-          }
-        ]
-      },
-      {
-        nodes: [
-          {
-            eyebrow: 'Application',
-            icon: 'ai ai-edge-application',
-            title: 'storefront',
-            label: 'Active',
-            severity: 'success'
-          },
-          {
-            eyebrow: 'Firewall',
-            icon: 'ai ai-edge-firewall',
-            title: 'shop-rules',
-            label: 'Active',
-            severity: 'success'
-          }
-        ]
-      }
-    ]
   }
 }
 
