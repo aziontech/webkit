@@ -53,14 +53,55 @@ export default {
           edge: {
             maxAgeSeconds: 7200
           }
+        },
+        {
+          name: 'webkit-storybook-entry',
+          browser: {
+            maxAgeSeconds: 0
+          },
+          edge: {
+            maxAgeSeconds: 60
+          }
         }
       ],
       rules: {
         request: [
           {
-            name: 'Deliver Static Assets and Set Cache Policy',
+            name: 'Deliver Entry Documents Without Long Cache',
             description:
-              'Deliver static assets directly from storage and set cache policy',
+              'Deliver HTML, JSON indexes and unhashed manager bundles with a short cache so a deploy never leaves them pointing at missing chunks',
+            active: true,
+            criteria: [
+              [
+                {
+                  variable: '${uri}',
+                  conditional: 'if',
+                  operator: 'matches',
+                  argument: '(\\.(html|json)$)|^/sb-(manager|addons)/'
+                }
+              ]
+            ],
+            behaviors: [
+              {
+                type: 'set_connector',
+                attributes: {
+                  value: 'webkit-storybook'
+                }
+              },
+              {
+                type: 'set_cache_policy',
+                attributes: {
+                  value: 'webkit-storybook-entry'
+                }
+              },
+              {
+                type: 'deliver'
+              }
+            ]
+          },
+          {
+            name: 'Deliver Static Assets and Set Cache Policy',
+            description: 'Deliver static assets directly from storage and set cache policy',
             active: true,
             criteria: [
               [
@@ -69,7 +110,7 @@ export default {
                   conditional: 'if',
                   operator: 'matches',
                   argument:
-                    '\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|ttf|otf|woff|woff2|eot|pdf|doc|docx|xls|xlsx|ppt|pptx|mp4|webm|mp3|wav|ogg|css|js|json|xml|html|txt|csv|zip|rar|7z|tar|gz|webmanifest|map|md|yaml|yml)$'
+                    '\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|ttf|otf|woff|woff2|eot|pdf|doc|docx|xls|xlsx|ppt|pptx|mp4|webm|mp3|wav|ogg|css|js|xml|txt|csv|zip|rar|7z|tar|gz|webmanifest|map|md|yaml|yml)$'
                 }
               ]
             ],
@@ -93,8 +134,7 @@ export default {
           },
           {
             name: 'Redirect to index.html',
-            description:
-              'Handle all routes by rewriting to index.html for client-side routing',
+            description: 'Handle all routes by rewriting to index.html for client-side routing',
             active: true,
             criteria: [
               [
@@ -111,6 +151,12 @@ export default {
                 type: 'set_connector',
                 attributes: {
                   value: 'webkit-storybook'
+                }
+              },
+              {
+                type: 'set_cache_policy',
+                attributes: {
+                  value: 'webkit-storybook-entry'
                 }
               },
               {
