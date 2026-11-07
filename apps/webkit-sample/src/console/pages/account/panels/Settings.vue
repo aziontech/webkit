@@ -18,7 +18,7 @@
   import Section from '../../../components/page/Section.vue'
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
   import { emailOrOwner, fullNameFromEmail } from '../../../lib/data/greeting'
-  import { useFont } from '../../../lib/state/font.js'
+  import { useFont } from '@shared/lib/font.js'
 
   const route = useRoute()
   const { font, fonts } = useFont()

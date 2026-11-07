@@ -690,13 +690,11 @@ const SEARCH_ICON = `<template #iconLeft>
 
 const PAGE_TABS = `<div class="border-b border-(--border-default)">
   <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-    <div class="-ml-(--spacing-xs) min-w-0 flex-1">
-      <TabView v-model:value="activeTab">
-        <TabView.List>
-          <TabView.Item v-for="tab in tabs" :key="tab.value" :value="tab.value" :label="tab.label" />
-        </TabView.List>
-      </TabView>
-    </div>
+    <TabView v-model:value="activeTab" class="-ml-(--spacing-xs) min-w-0 flex-1">
+      <TabView.List>
+        <TabView.Item v-for="tab in tabs" :key="tab.value" :value="tab.value" :label="tab.label" />
+      </TabView.List>
+    </TabView>
   </div>
 </div>`
 
@@ -789,7 +787,7 @@ const NO_TABLES = `<div v-if="!selectedTable" class="flex flex-1 items-center ju
           </span>
         </template>
         <template #actions>
-          <Button label="Create Table" icon="pi pi-plus" kind="secondary" size="large" class="w-full md:w-auto" />
+          <Button label="Create Table" icon="pi pi-plus" kind="secondary" size="medium" class="w-full md:w-auto" />
         </template>
       </EmptyState>
     </template>

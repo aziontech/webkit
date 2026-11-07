@@ -23,19 +23,20 @@ const HEADING_SIZE_CLASS =
   'text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg'
 
 export const headingAction = ({ label, icon = 'pi pi-plus', click = '' }) =>
-  `<Button label="${label}" icon="${icon}" kind="outlined" size="large" class="w-full md:w-auto"${
+  `<Button label="${label}" icon="${icon}" kind="outlined" size="medium" class="w-full md:w-auto"${
     click ? ` @click="${click}"` : ''
   } />`
 
 const documentationAction = (href) =>
-  `<Button label="Documentation" icon="pi pi-book" kind="outlined" href="${href}" target="_blank" size="large" class="w-full md:w-auto" />`
+  `<Button label="Documentation" icon="pi pi-book" kind="outlined" href="${href}" target="_blank" size="medium" class="w-full md:w-auto" />`
 
 export const pageHeading = ({
   title,
   description,
   size = 'small',
   documentation = '',
-  actions = ''
+  actions = '',
+  titleId = ''
 }) => {
   const trailing = [documentation ? documentationAction(documentation) : '', actions]
     .filter(Boolean)
@@ -46,7 +47,7 @@ export const pageHeading = ({
   return `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-      <h1 data-size="${size}" class="${HEADING_SIZE_CLASS}">${title}</h1>
+      <h1${titleId ? ` id="${titleId}"` : ''} data-size="${size}" class="${HEADING_SIZE_CLASS}">${title}</h1>
     </div>
     <p class="text-pretty text-body-sm text-(--text-muted)">${description}</p>
   </div>${actionsBlock}
@@ -59,7 +60,72 @@ const slug = (title) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '')
 
-export const section = ({ title, hint, body }) => `<section
+const ANCHOR_BUTTON = (title) => `<button
+  type="button"
+  aria-label="Copy link to the ${title} section"
+  class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
+>
+  <i class="pi pi-link text-body-xs" aria-hidden="true" />
+</button>`
+
+const sectionIcon = (icon) =>
+  icon
+    ? `\n  <i class="${icon} shrink-0 text-body-sm leading-none text-(--text-muted)" aria-hidden="true" />`
+    : ''
+
+const sectionTitle = ({ title, icon, collapsible, regionId }) =>
+  collapsible
+    ? `<button
+  type="button"
+  :aria-expanded="${collapsible}"
+  aria-controls="${regionId}"
+  :data-state="${collapsible} ? 'open' : 'closed'"
+  class="group/disclosure -mx-(--spacing-xxs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) text-left text-[length:inherit] font-[inherit] leading-[inherit] transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+  @click="${collapsible} = !${collapsible}"
+>${sectionIcon(icon)}
+  ${title}
+  <i
+    class="pi pi-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
+    aria-hidden="true"
+  />
+</button>`
+    : `<span class="flex items-center gap-(--spacing-xs)">${sectionIcon(icon)}${icon ? `\n  ${title}\n` : title}</span>`
+
+const sectionHint = ({ hint, hintBinding }) => {
+  if (hintBinding) return `\n      <Hint :text="${hintBinding}" class="shrink-0" />`
+  return hint ? `\n      <Hint text="${hint}" class="shrink-0" />` : ''
+}
+
+const sectionRegion = ({ collapsible, regionId }) =>
+  collapsible
+    ? `<div
+    id="${regionId}"
+    :data-open="${collapsible} || null"
+    :inert="!${collapsible} || undefined"
+    :aria-hidden="!${collapsible} || undefined"
+    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+  >
+    <div data-collapsible class="min-w-0 data-collapsible:overflow-hidden">
+      <div
+        :data-open="${collapsible} || null"`
+    : `<div
+    data-open
+    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+  >
+    <div class="min-w-0 data-collapsible:overflow-hidden">
+      <div
+        data-open`
+
+export const section = ({
+  title,
+  hint = '',
+  hintBinding = '',
+  body,
+  anchor = true,
+  icon = '',
+  collapsible = '',
+  regionId = ''
+}) => `<section
   data-stacked
   class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
 >
@@ -67,27 +133,15 @@ export const section = ({ title, hint, body }) => `<section
     data-stacked
     class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
   >
-    <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-      <button
-        type="button"
-        aria-label="Copy link to the ${title} section"
-        class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-      >
-        <i class="pi pi-link text-body-xs" aria-hidden="true" />
-      </button>
-      <h2 id="${slug(title)}" class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)">
-        <span class="flex items-center gap-(--spacing-xs)">${title}</span>
-      </h2>
-      <Hint text="${hint}" class="shrink-0" />
+    <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">${
+      anchor ? `\n${indent(ANCHOR_BUTTON(title), 3)}` : ''
+    }
+      <h2${anchor ? ` id="${slug(title)}"` : ''} class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)">
+${indent(sectionTitle({ title, icon, collapsible, regionId }), 4)}
+      </h2>${sectionHint({ hint, hintBinding })}
     </div>
   </div>
-  <div
-    data-open
-    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-  >
-    <div class="min-w-0 overflow-hidden">
-      <div
-        data-open
+  ${sectionRegion({ collapsible, regionId })}
         class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
       >
 ${indent(body, 4)}
@@ -262,8 +316,9 @@ export const controlsHeader = ({
   placeholder,
   ariaLabel,
   filename,
-  refresh = REFRESH
-}) => `<header class="flex items-center gap-(--layout-group-gap)">
+  refresh = REFRESH,
+  when = ''
+}) => `<header${when ? ` v-if="${when}"` : ''} class="flex items-center gap-(--layout-group-gap)">
   <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
 ${indent(FILTER_TRIGGER, 2)}
 ${indent(searchField({ placeholder, ariaLabel }), 2)}
@@ -559,3 +614,80 @@ export const LIST_IMPORTS = [
 ]
 
 export const webkitImports = (lines) => [...new Set(lines)].sort()
+
+const creationHeader = ({ backLabel, email }) => `<GlobalHeader aria-label="Azion Console">
+  <GlobalHeader.Left>
+    <IconButton icon="pi pi-chevron-left" aria-label="${backLabel}" kind="outlined" size="small" />
+    <GlobalHeader.Brand>
+      <a
+        href="/home"
+        aria-label="Azion home"
+        class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+      >
+        <Brand kind="default" size="small" />
+      </a>
+    </GlobalHeader.Brand>
+    <Breadcrumb :items="breadcrumb" />
+  </GlobalHeader.Left>
+  <GlobalHeader.Middle />
+  <GlobalHeader.Right>
+    <button
+      type="button"
+      aria-label="Account settings"
+      class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+    >
+      <Avatar label="${email}" size="medium" kind="square" />
+    </button>
+  </GlobalHeader.Right>
+</GlobalHeader>`
+
+const createStart = (start) =>
+  start
+    ? `\n          <div class="flex min-w-0 items-center gap-(--spacing-sm)">\n${indent(start, 6)}\n          </div>`
+    : ''
+
+export const createPage = ({
+  backLabel,
+  email = 'myemail@azion.com',
+  title,
+  description,
+  titleId,
+  body,
+  start = '',
+  saveLabel
+}) => `<div class="flex h-dvh flex-col bg-(--bg-canvas)">
+${indent(creationHeader({ backLabel, email }))}
+
+  <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
+    <form class="flex min-h-full flex-col" aria-labelledby="${titleId}" novalidate @submit.prevent="submit">
+      <div class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
+${indent(pageHeading({ title, description, titleId }), 4)}
+
+        <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0" :disabled="submitting">
+          <legend class="sr-only">${title}</legend>
+${indent(body, 5)}
+        </fieldset>
+      </div>
+
+      <footer class="pointer-events-none sticky bottom-0 z-10 flex justify-center px-(--spacing-md) pt-(--spacing-xl) pb-(--spacing-lg)">
+        <div class="pointer-events-auto flex max-w-full items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-xs) pr-(--spacing-xs) pl-(--spacing-xs) shadow-lg">${createStart(
+          start
+        )}
+          <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+            <Button type="button" label="Cancel" kind="outlined" size="medium" :disabled="submitting" />
+            <Button label="${saveLabel}" kind="primary" size="medium" :loading="submitting" type="submit" />
+          </div>
+        </div>
+      </footer>
+    </form>
+  </main>
+</div>`
+
+export const CREATE_PAGE_IMPORTS = [
+  webkitImport('Avatar', 'avatar'),
+  webkitImport('Brand', 'brand'),
+  webkitImport('Breadcrumb', 'breadcrumb'),
+  webkitImport('Button', 'button'),
+  webkitImport('GlobalHeader', 'global-header'),
+  webkitImport('IconButton', 'icon-button')
+]

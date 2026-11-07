@@ -134,11 +134,15 @@ const stateBand = (
 ${indent(body)}
 </div>`
 
-const resourceLink = ({ label, href, tooltip, external = false }) =>
+const RESOURCE_LINK =
+  'group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+export const resourceLink = ({ label, href, tooltip, external = false }) =>
   `<Tooltip text="${tooltip}" class="min-w-0 shrink!">
   <a
     href="${href}"${external ? '\n    target="_blank"\n    rel="noopener noreferrer"' : ''}
-    class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+    data-link
+    class="${RESOURCE_LINK}"
   >
     <span class="truncate underline-offset-2 group-hover/link:underline">${label}</span>${
       external ? `\n    <span class="sr-only">{{ ' (opens in a new tab)' }}</span>` : ''
@@ -172,7 +176,7 @@ const domainOverflow = (listName, total) => `<Popover placement="bottom-start" w
         :href="\`https://\${domain}\`"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline"
+        class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
       >
         <span class="truncate">{{ domain }}</span>
         <i class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none" aria-hidden="true" />
@@ -263,38 +267,37 @@ const NARROW_ROW = 'flex min-h-7 min-w-0 items-center'
 const CLI_DOCS = 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
 
 export const APPLICATION = {
+  id: '4532109876',
   name: 'ecommerce-v2',
-  addresses: ['shop.shopco.com', 'y6u7i8o9p0.azion.run'],
-  deployment: '1213288756',
+  domain: 'y6u7i8o9p0.azion.run',
+  deployment: '1213284258',
   environment: 'Production',
   status: { label: 'Ready', severity: 'success' },
-  author: 'Isaque Böck',
-  deployedAgo: '1 month ago',
+  author: 'Gab Lisboa',
+  deployedAgo: '4 weeks ago',
   repository: 'shopco/ecommerce-v2',
   branch: 'develop',
   framework: { icon: 'ai-cor ai-nuxt', label: 'Nuxt' }
 }
 
 export const CLI_APPLICATION = {
+  id: '5120983746',
   name: 'analytics-edge',
-  addresses: ['z1x2c3v4b5.azion.run'],
-  deployment: '1213279760',
+  domain: 'z1x2c3v4b5.azion.run',
+  deployment: '1213275262',
   environment: 'Production',
   status: { label: 'Ready', severity: 'success' },
-  author: 'Marcus Grando',
-  deployedAgo: '3 weeks ago',
+  author: 'Herbert Júlio',
+  deployedAgo: '2 weeks ago',
   repository: '',
   branch: '',
   framework: { icon: 'ai-cor ai-next', label: 'Next.js' }
 }
 
-const domainCell = (domain, listName, total) =>
-  [siteLink(domain), ...(total > 1 ? [domainOverflow(listName, total)] : [])].join('\n')
-
 const sourceCell = (app) =>
   app.repository
     ? `<div class="flex min-w-0 items-center gap-(--spacing-xs)">
-  <i class="pi pi-github shrink-0 text-(--text-muted)" aria-hidden="true" />
+  <i class="ai ai-github shrink-0 text-(--text-muted)" aria-hidden="true" />
 ${indent(
   resourceLink({
     label: app.repository,
@@ -327,16 +330,14 @@ const applicationState = (app) =>
   <code class="${CODE}">azion deploy</code>
   via the CLI.`
 
-const applicationTemplate = (app) => {
-  const [domain] = app.addresses
-  const total = app.addresses.length
-  return summaryCard([
+const applicationTemplate = (app) =>
+  summaryCard([
     subjectBand(
       `<i class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
-${siteLink(domain)}`,
+${siteLink(app.domain)}`,
       `${VISIT}
 
-${actionsMenu('Application actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
+${actionsMenu('Application actions', [[COPY_URL], [SETTINGS]])}`
     ),
     factsBand('grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6', [
       fact({
@@ -351,8 +352,8 @@ ${actionsMenu('Application actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
       }),
       fact({
         cell: WIDE,
-        heading: labelWithAdd('Domains', 'div'),
-        body: domainCell(domain, 'addresses', total)
+        heading: label('Domains'),
+        body: siteLink(app.domain)
       }),
       fact({
         cell: WIDE,
@@ -386,7 +387,6 @@ ${actionsMenu('Application actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
 
 ${documentationButton(CLI_DOCS)}`)
   ])
-}
 
 const applicationSummary = (app) => ({
   template: applicationTemplate(app),
@@ -398,11 +398,8 @@ const applicationSummary = (app) => ({
     'IconButton',
     'StatusIndicator',
     'Tag',
-    'Tooltip',
-    ...(app.addresses.length > 1 ? ['Popover'] : [])
-  ],
-  script: app.addresses.length > 1 ? [declare('addresses', app.addresses)] : [],
-  state: () => (app.addresses.length > 1 ? { addresses: app.addresses } : {})
+    'Tooltip'
+  ]
 })
 
 export const APPLICATION_SUMMARY = applicationSummary(APPLICATION)
@@ -422,83 +419,95 @@ export const WORKLOAD = {
     'my-workload-1-alias-6.azion.run',
     'my-workload-1-alias-7.azion.run'
   ],
-  environments: [{ name: 'Production' }, { name: 'Stage' }],
-  createdOn: 'Aug 20',
+  environments: [{ name: 'Production' }, { name: 'Preview' }],
+  createdOn: 'Sep 22',
   owner: 'Robson Junior'
 }
 
-const ENVIRONMENT_MENU = `<Tooltip
-  text="Select an environment to see its deployment and settings, or add another one"
->
-  <Dropdown
-    placement="bottom-end"
-    @select="(event, value) => { if (value !== '__add-environment__') environment = value }"
+const ENVIRONMENT_MENU = `<div class="contents md:hidden">
+  <Tooltip
+    text="Select an environment to see its deployment and settings, or add another one"
   >
-    <Dropdown.Trigger>
-      <span
-        class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
-      >
-        <i class="ai ai-layers shrink-0 text-(--text-muted)" aria-hidden="true" />
-        <span class="truncate">{{ environment }}</span>
-        <i class="pi pi-chevron-down shrink-0 text-(--text-muted)" aria-hidden="true" />
-      </span>
-    </Dropdown.Trigger>
+    <Dropdown
+      placement="bottom-end"
+      @select="(event, value) => { if (value !== '__add-environment__') environment = value }"
+    >
+      <Dropdown.Trigger>
+        <span
+          class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
+        >
+          <i class="ai ai-layers shrink-0 text-(--text-muted)" aria-hidden="true" />
+          <span class="truncate">{{ environment }}</span>
+          <i class="pi pi-chevron-down shrink-0 text-(--text-muted)" aria-hidden="true" />
+        </span>
+      </Dropdown.Trigger>
 
-    <Dropdown.Group label="Environments">
-      <Dropdown.Option
-        v-for="option in environments"
-        :key="option.name"
-        :value="option.name"
-        :label="option.name"
-        :selected="option.name === environment"
-      />
-    </Dropdown.Group>
+      <Dropdown.Group label="Environments">
+        <Dropdown.Option
+          v-for="option in environments"
+          :key="option.name"
+          :value="option.name"
+          :label="option.name"
+          :selected="option.name === environment"
+        />
+      </Dropdown.Group>
 
-    <Dropdown.Group>
-      <Dropdown.Option value="__add-environment__" label="Add Environment">
-        <template #left>
-          <i class="pi pi-plus" aria-hidden="true" />
-        </template>
-      </Dropdown.Option>
-    </Dropdown.Group>
-  </Dropdown>
-</Tooltip>`
+      <Dropdown.Group>
+        <Dropdown.Option value="__add-environment__" label="Add Environment">
+          <template #left>
+            <i class="pi pi-plus" aria-hidden="true" />
+          </template>
+        </Dropdown.Option>
+      </Dropdown.Group>
+    </Dropdown>
+  </Tooltip>
+</div>`
 
 const DISC = 'M8 0a8 8 0 100 16A8 8 0 008 0z'
 
 const CHECK =
   'M11.53 5.47a.75.75 0 010 1.06l-4 4a.75.75 0 01-1.06 0l-2-2a.75.75 0 011.06-1.06L7 8.94l3.47-3.47a.75.75 0 011.06 0z'
 
-const POLICY_FIELDS = [
+const DASH = 'M4.25 8a.75.75 0 01.75-.75h6a.75.75 0 010 1.5H5A.75.75 0 014.25 8z'
+
+const SHARED_POLICIES = [
   { label: 'Binding policy', value: 'Strict' },
   { label: 'Deployment policy', value: 'Single' },
-  { label: 'Canary', value: 'Enabled', enabled: true },
-  { label: 'Skew protection', value: 'Enabled', enabled: true }
+  { label: 'Canary', value: 'Enabled', state: true },
+  { label: 'Skew protection', value: 'Enabled', state: true }
 ]
 
-const policyField = (field) => `<div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-  <span class="${LABEL}">${field.label}</span>
-  <span class="flex min-w-0 items-center gap-(--spacing-xxs)">${
-    field.enabled
-      ? `
+const stateMark = (enabled) => `
     <svg
-      class="h-(--size-4) w-(--size-4) shrink-0 text-(--success-contrast)"
+      class="h-(--size-4) w-(--size-4) shrink-0 ${enabled ? 'text-(--success-contrast)' : 'text-(--text-muted)'}"
       viewBox="0 0 16 16"
       fill="currentColor"
       fill-rule="evenodd"
       aria-hidden="true"
     >
-      <path d="${DISC} ${CHECK}" />
+      <path d="${DISC} ${enabled ? CHECK : DASH}" />
     </svg>`
-      : ''
+
+const policyField = (field) => `<div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  <span class="${LABEL}">${field.label}</span>
+  <span class="flex min-w-0 items-center gap-(--spacing-xxs)">${
+    field.state === undefined ? '' : stateMark(field.state)
   }
-    <span class="${VALUE}">
+    <span class="truncate text-body-sm ${field.state === false ? 'text-(--text-muted)' : 'text-(--text-default)'}">
       ${field.value}
     </span>
   </span>
 </div>`
 
-const DEPLOYMENT_FOOTER = `<Accordion
+const SETTINGS_LINK =
+  'group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+export const deploymentFooter = ({
+  name = 'magalu-storefront',
+  reach = '3 workloads',
+  others = ['workload_05', 'workload_09'],
+  fields = SHARED_POLICIES
+} = {}) => `<Accordion
   class="[--accordion-inset:var(--spacing-md)]"
   type="single"
   arrow-position="left"
@@ -514,18 +523,19 @@ const DEPLOYMENT_FOOTER = `<Accordion
 
       <div
         class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
-      >
-        <Tag label="Shared · 3 workloads" severity="warning" size="medium" class="shrink-0" />
+      >${
+        reach
+          ? `
+        <Tag label="Shared · ${reach}" severity="warning" size="medium" class="shrink-0" />`
+          : ''
+      }
         <Tooltip
           class="pointer-events-auto"
-          text="Open magalu-storefront in Build & Deployment settings"
+          text="Open ${name} in Build & Deployment settings"
         >
-          <a
-            href="/account/build-deployment"
-            class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
-          >
+          <a href="/account/build-deployment" class="${SETTINGS_LINK}">
             <span class="truncate underline-offset-2 group-hover/link:underline">
-              magalu-storefront
+              ${name}
             </span>
             <i class="pi pi-external-link shrink-0 text-body-xs leading-none" aria-hidden="true" />
           </a>
@@ -533,23 +543,32 @@ const DEPLOYMENT_FOOTER = `<Accordion
       </div>
     </div>
 
-    <Accordion.Content>
+    <Accordion.Content>${
+      reach
+        ? `
       <div class="px-(--spacing-md) pt-(--spacing-xs)">
         <Message
           severity="warning"
           size="small"
-          label="Deploying with this setting also publishes to workload_05, workload_09."
+          label="Deploying with this setting also publishes to ${others.join(', ')}."
         />
       </div>
-
+`
+        : ''
+    }
       <div
         class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4"
       >
-${each(POLICY_FIELDS, policyField, 4)}
+${each(fields, policyField, 4)}
       </div>
     </Accordion.Content>
   </Accordion.Item>
 </Accordion>`
+
+const DEPLOYMENT_FOOTER = deploymentFooter()
+
+const domainCell = (domain, listName, total) =>
+  [siteLink(domain), ...(total > 1 ? [domainOverflow(listName, total)] : [])].join('\n')
 
 const WORKLOAD_TEMPLATE = summaryCard([
   subjectBand(
@@ -593,22 +612,24 @@ ${actionsMenu('Workload actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
   stateBand(DEPLOYMENT_FOOTER, false)
 ])
 
+const WORKLOAD_PARTS = [
+  'Accordion',
+  'Avatar',
+  'Button',
+  'CardBox',
+  'CopyButton',
+  'Dropdown',
+  'IconButton',
+  'Message',
+  'Popover',
+  'StatusIndicator',
+  'Tag',
+  'Tooltip'
+]
+
 export const WORKLOAD_SUMMARY = {
   template: WORKLOAD_TEMPLATE,
-  parts: [
-    'Accordion',
-    'Avatar',
-    'Button',
-    'CardBox',
-    'CopyButton',
-    'Dropdown',
-    'IconButton',
-    'Message',
-    'Popover',
-    'StatusIndicator',
-    'Tag',
-    'Tooltip'
-  ],
+  parts: WORKLOAD_PARTS,
   vue: ['ref'],
   script: [
     declare('domains', WORKLOAD.domains),
@@ -620,6 +641,13 @@ export const WORKLOAD_SUMMARY = {
     environments: WORKLOAD.environments,
     environment: ref('Production')
   })
+}
+
+export const WORKLOAD_SUMMARY_IN_PAGE = {
+  template: WORKLOAD_TEMPLATE,
+  parts: WORKLOAD_PARTS,
+  script: [declare('domains', WORKLOAD.domains)],
+  state: () => ({ domains: WORKLOAD.domains })
 }
 
 export const FIREWALL = {
@@ -646,7 +674,7 @@ ${resourceLink({
   href: `/applications/${FIREWALL.application.id}`,
   tooltip: `Open ${FIREWALL.application.name} in Applications`
 })}`,
-    `<Button label="Rules Engine" kind="secondary" size="medium" icon="pi pi-sort-alt" />
+    `<Button label="Rules Engine" kind="secondary" size="medium" icon="ai ai-rules-engine" />
 
 ${actionsMenu('Firewall actions', [[COPY_ID], [SETTINGS]])}`
   ),

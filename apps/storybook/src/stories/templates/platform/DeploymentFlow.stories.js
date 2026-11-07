@@ -28,7 +28,7 @@ const repoChip = (text) => `<span
   class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
 >
   <i
-    class="pi pi-github text-[length:inherit] leading-none"
+    class="ai ai-github text-[length:inherit] leading-none"
     aria-hidden="true"
   />
   ${text}
@@ -52,7 +52,7 @@ const SPLASH = `<div
           class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
         >
           <i
-            class="pi pi-github text-body-lg"
+            class="ai ai-github text-body-lg"
             aria-hidden="true"
           />
         </span>
@@ -140,7 +140,7 @@ const flowStory = (logState, story) => {
 }
 
 const meta = {
-  title: 'Templates/Platform/Creation/CreationProgress',
+  title: 'Templates/Platform/Creation/DeploymentFlow',
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -149,7 +149,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The build logs a create flow streams while it deploys: a CardBox titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete SegmentedButton once it has failed, opening on a cloning splash and then streaming the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush ProgressBar. The console renders it on Create Application, Create Workload, Deploy Template in the Marketplace and the Async Deployment form, and the Deployment detail page shows the same step accordion inside its Deployment Logs disclosure. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from CardBox, StatusIndicator, SegmentedButton, Accordion, LogView, Spinner, Tag and ProgressBar.'
+          'The deploy flow card a create flow streams while it deploys: a CardBox titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete SegmentedButton once it has failed, opening on a cloning splash and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush ProgressBar. It is rendered by Create Application, Create Workload (titled Provisioning, with a Creating status and a Provisioning splash), Deploy Template at /deploy and the Async Deployment form; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from CardBox, StatusIndicator, SegmentedButton, Accordion, LogView, Spinner, Tag and ProgressBar.'
       },
       canvas: { sourceState: 'shown' }
     }

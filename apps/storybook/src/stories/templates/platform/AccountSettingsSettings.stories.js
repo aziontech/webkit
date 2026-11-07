@@ -78,7 +78,7 @@ const SOURCE_CONTROLS = [
   {
     key: 'github',
     name: 'Github',
-    icon: 'pi pi-github',
+    icon: 'ai ai-github',
     connected: true,
     tag: 'Active',
     description:
@@ -106,9 +106,9 @@ const SOURCE_CONTROLS = [
 ]
 
 const FONTS = [
-  { value: 'sora', label: 'Sora (Default)' },
+  { value: 'rubik', label: 'Rubik (Default)' },
+  { value: 'sora', label: 'Sora' },
   { value: 'inter', label: 'Inter' },
-  { value: 'rubik', label: 'Rubik' },
   { value: 'ibm-plex-sans', label: 'IBM Plex Sans' },
   { value: 'geist', label: 'Geist' },
   { value: 'roboto', label: 'Roboto' },
@@ -258,7 +258,7 @@ const SECTIONS = [
     body: flushCard([
       fieldRow(
         'Font family',
-        'The primary sans typeface across the console. Non-default faces load from Google Fonts.',
+        'The primary sans typeface across the console.',
         select({ model: 'font', options: 'fonts', ariaLabel: 'aria-label="Font family"' })
       ),
       fieldRow(
@@ -324,7 +324,7 @@ const IMPORTS = [
   declare('sourceControls', SOURCE_CONTROLS),
   declare('fonts', FONTS),
   declare('appearances', APPEARANCES),
-  "const font = ref('sora')",
+  "const font = ref('rubik')",
   "const theme = ref('system')"
 ]
 
@@ -350,7 +350,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The General panel of Account Settings (`/account`), as the console renders it inside the app shell: a small page heading over seven stacked sections, each a flush `CardBox` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `CardBox`, `Item`, `InputText`, `Textarea`, `Select`, `Switch`, `Tag`, `Hint` and `Button`.'
+          'The General panel of Account Settings (`/account`), as the console renders it inside the app shell: a small page heading over seven stacked sections, each a flush `CardBox` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account Name and Billing emails are filled from the signed-in email, falling back to the account owner (Gabriel Lisboa, gabriel.mendonca@azion.com) when the sign-in carried none, which is what this story shows; the Appearance font picker defaults to Rubik. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `CardBox`, `Item`, `InputText`, `Textarea`, `Select`, `Switch`, `Tag`, `Hint` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -368,7 +368,7 @@ export const Settings = {
       sourceControls: SOURCE_CONTROLS,
       fonts: FONTS,
       appearances: APPEARANCES,
-      font: ref('sora'),
+      font: ref('rubik'),
       theme: ref('system')
     }),
     template: TEMPLATE

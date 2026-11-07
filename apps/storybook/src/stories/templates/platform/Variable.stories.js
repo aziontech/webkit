@@ -1,12 +1,8 @@
+import Avatar from '@aziontech/webkit/avatar'
 import Button from '@aziontech/webkit/button'
+import CardBox from '@aziontech/webkit/card-box'
 import Checkbox from '@aziontech/webkit/checkbox'
 import CopyButton from '@aziontech/webkit/copy-button'
-import Dialog from '@aziontech/webkit/dialog'
-import DialogContent from '@aziontech/webkit/dialog-content'
-import DialogDescription from '@aziontech/webkit/dialog-description'
-import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-import DialogPortal from '@aziontech/webkit/dialog-portal'
-import DialogTitle from '@aziontech/webkit/dialog-title'
 import Drawer from '@aziontech/webkit/drawer'
 import DrawerClose from '@aziontech/webkit/drawer-close'
 import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -15,44 +11,49 @@ import DrawerPortal from '@aziontech/webkit/drawer-portal'
 import DrawerTitle from '@aziontech/webkit/drawer-title'
 import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
 import Dropdown from '@aziontech/webkit/dropdown'
-import EmptyState from '@aziontech/webkit/empty-state'
 import HelperText from '@aziontech/webkit/helper-text'
+import Hint from '@aziontech/webkit/hint'
 import IconButton from '@aziontech/webkit/icon-button'
-import InputGroup from '@aziontech/webkit/input-group'
+import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+import InputGroupRoot from '@aziontech/webkit/input-group-root'
 import InputText from '@aziontech/webkit/input-text'
-import Message from '@aziontech/webkit/message'
 import MultiSelect from '@aziontech/webkit/multi-select'
 import PanelContent from '@aziontech/webkit/panel-content'
 import PanelFooter from '@aziontech/webkit/panel-footer'
 import PanelHeader from '@aziontech/webkit/panel-header'
+import Popover from '@aziontech/webkit/popover'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
 import Switch from '@aziontech/webkit/switch'
-import TabView from '@aziontech/webkit/tab-view'
-import Table from '@aziontech/webkit/table'
-import Tag from '@aziontech/webkit/tag'
+import TableRoot from '@aziontech/webkit/table-root'
 import Textarea from '@aziontech/webkit/textarea'
 import Tooltip from '@aziontech/webkit/tooltip'
-import { computed, reactive, ref, useId, watch } from 'vue'
+import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
 import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
-import { declare as declareLiteral } from './_forms-markup'
+import {
+  declare,
+  DRAWER_SHELL_IMPORTS,
+  drawerShell,
+  headingAction,
+  pageHeading,
+  section
+} from './_forms-markup'
 
-const declare = (name, value, wrap) =>
-  declareLiteral(name, value, wrap).replace(/\[\n\s*\n\s*\]/g, '[]')
-
-const importLine = (name, path) => `import ${name} from '@aziontech/webkit/${path}'`
+const SECRET_MASK = '••••••••'
 
 const SECRET_HINT =
   'Secret values are hidden and write-only after saving. Once saved as a secret, this behavior cannot be changed.'
 
-const SECRET_MASK = '••••••••'
+const VIEW_OPTIONS = [
+  { label: 'Form', value: 'Form' },
+  { label: 'JSON', value: 'JSON' }
+]
 
-const ready = { label: 'Ready', severity: 'success', icon: 'pi pi-circle-fill' }
-const current = { label: 'Current', severity: 'success', icon: 'pi pi-circle-fill' }
-const archived = { label: 'Archived', severity: 'secondary', icon: '' }
+const FIELD_CLASS =
+  'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
-const GLOBAL_SCOPE = [{ label: 'Global', name: '' }]
+const DOCUMENTATION = 'https://www.azion.com/en/documentation/devtools/cli/'
 
 const VARIABLES = [
   {
@@ -60,166 +61,982 @@ const VARIABLES = [
     key: 'API_BASE_URL',
     value: 'https://api.example.com',
     secret: false,
-    lastVersion: { id: '1200481337', ...ready },
-    scope: GLOBAL_SCOPE,
+    scope: [{ type: 'global', id: '', name: '' }],
     lastEditor: 'Robson Junior',
-    lastModified: 'September 02, 2026, 10:14:08 AM'
+    lastEditorAvatar: '',
+    lastModified: '1 month ago'
   },
   {
     id: 'v-002',
     key: 'STRIPE_SECRET_KEY',
-    value: SECRET_MASK,
+    value: 'sk_live_51H8sX2eZv...',
     secret: true,
-    lastVersion: { id: '1200481344', ...ready },
-    scope: [{ label: 'Environment', name: 'Production' }],
+    scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
     lastEditor: 'Isaque Böck',
-    lastModified: 'August 17, 2026, 04:32:51 PM'
+    lastEditorAvatar: '',
+    lastModified: '2 months ago'
   },
   {
     id: 'v-003',
     key: 'FEATURE_FLAGS',
     value: 'checkout_v2,dark_mode',
     secret: false,
-    lastVersion: { id: '1200481351', ...ready },
-    scope: [{ label: 'Application', name: 'my-app-vue' }],
+    scope: [{ type: 'application', id: '1784552864', name: 'my-app-vue' }],
     lastEditor: 'Rafael Garbinatto',
-    lastModified: 'August 04, 2026, 09:05:17 AM'
+    lastEditorAvatar: '',
+    lastModified: '2 months ago'
   },
   {
     id: 'v-004',
     key: 'DATABASE_PASSWORD',
-    value: SECRET_MASK,
+    value: 'p4ssw0rd-r0t4t3d',
     secret: true,
-    lastVersion: { id: '1200481358', ...ready },
-    scope: [{ label: 'Firewall', name: 'edgeflow-production' }],
+    scope: [{ type: 'firewall', id: '5540117', name: 'edgeflow-production' }],
     lastEditor: 'Herbert Júlio',
-    lastModified: 'July 23, 2026, 11:47:39 AM'
+    lastEditorAvatar: '',
+    lastModified: '2 months ago'
   },
   {
     id: 'v-005',
     key: 'MAX_UPLOAD_MB',
     value: '25',
     secret: false,
-    lastVersion: { id: '1200481365', ...ready },
-    scope: GLOBAL_SCOPE,
+    scope: [{ type: 'global', id: '', name: '' }],
     lastEditor: 'Rafael Umman',
-    lastModified: 'June 27, 2026, 02:21:03 PM'
+    lastEditorAvatar: '',
+    lastModified: '3 months ago'
   }
 ]
 
-const VARIABLE_COLUMNS = [
+const COLUMNS = [
   { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true, hideable: false },
-  { accessorKey: 'value', header: 'Value', enableSorting: true, grow: 2 },
-  { accessorKey: 'lastVersion', header: 'Last Version', minWidth: 80 },
+  { accessorKey: 'id', header: 'ID', minWidth: 80 },
+  { accessorKey: 'value', header: 'Value', grow: 2 },
   { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
   { accessorKey: 'lastEditor', header: 'Last Editor', enableSorting: true, minWidth: 80 },
   { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
   { id: 'actions', kind: 'action', hideable: false }
 ]
 
-const VERSIONS = [
-  {
-    id: '1200481337',
-    isCurrent: true,
-    status: current,
-    lastEditor: 'Robson Junior',
-    lastModified: 'September 02, 2026, 10:14:08 AM'
-  },
-  {
-    id: '1200481330',
-    isCurrent: false,
-    status: archived,
-    lastEditor: 'Isaque Böck',
-    lastModified: 'August 11, 2026, 04:32:51 PM'
-  },
-  {
-    id: '1200481323',
-    isCurrent: false,
-    status: archived,
-    lastEditor: 'Rafael Garbinatto',
-    lastModified: 'July 14, 2026, 09:05:17 AM'
-  }
+const FILTER_FIELDS = [
+  { id: 'lastEditor', label: 'Author' },
+  { id: 'type', label: 'Type' },
+  { id: 'modified', label: 'Last Modified' }
 ]
 
-const VERSION_COLUMNS = [
-  { accessorKey: 'id', header: 'Version', enableSorting: true, principal: true, hideable: false },
-  { accessorKey: 'status', header: 'Status', minWidth: 104 },
-  { accessorKey: 'lastEditor', header: 'Last Editor', enableSorting: true, minWidth: 80 },
-  { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
-  { id: 'actions', kind: 'action', hideable: false }
+const SCOPE_TYPES = [
+  { type: 'global', label: 'Global', plural: '' },
+  { type: 'environment', label: 'Environment', plural: 'environments' },
+  { type: 'deployment', label: 'Deployment', plural: 'deployments' },
+  { type: 'application', label: 'Application', plural: 'applications' },
+  { type: 'firewall', label: 'Firewall', plural: 'firewalls' }
 ]
 
-const ENVIRONMENTS = [
-  { value: 'env-production', label: 'Production' },
-  { value: 'env-stage', label: 'Stage' },
-  { value: 'env-preview', label: 'Preview' }
-]
-
-const scopeOption = (type, label, plural, options, ids = []) => ({
-  type,
-  label,
-  placeholder: `Select ${plural}`,
-  plural,
-  enabled: ids.length > 0,
-  ids,
-  query: '',
-  options
-})
-
-const createScopes = ({ global = true, environments = [] } = {}) => [
-  { ...scopeOption('global', 'Global', '', []), placeholder: '', enabled: global },
-  scopeOption('environment', 'Environment', 'environments', ENVIRONMENTS, environments),
-  scopeOption('deployment', 'Deployment', 'deployments', [
+const SCOPE_OPTIONS = {
+  environment: [
+    { value: 'env-production', label: 'Production' },
+    { value: 'env-preview', label: 'Preview' },
+    { value: 'env-stage', label: 'Stage' }
+  ],
+  deployment: [
     { value: '1020655', label: 'workload_01' },
     { value: '1020828', label: 'workload_02' },
-    { value: '1021001', label: 'workload_03' }
-  ]),
-  scopeOption('application', 'Application', 'applications', [
-    { value: '1784552864', label: 'my-app-vue' },
-    { value: '2041778390', label: 'hello-edge' },
-    { value: '3344556677', label: 'edgeflow-site' }
-  ]),
-  scopeOption('firewall', 'Firewall', 'firewalls', [
+    { value: '1021001', label: 'workload_03' },
+    { value: '1021174', label: 'workload_04' }
+  ],
+  application: [
+    { value: '4410203040', label: 'azion-site' },
+    { value: '3344556677', label: 'edgeflow-site' },
+    { value: '8899001122', label: 'edgeflow-docs' },
+    { value: '9988776655', label: 'marketing-site' }
+  ],
+  firewall: [
     { value: '5540117', label: 'edgeflow-production' },
     { value: '5540118', label: 'edgeflow-staging' },
-    { value: '5540119', label: 'api-hardening' }
-  ])
+    { value: '5540119', label: 'api-hardening' },
+    { value: '5540120', label: 'checkout-shield' }
+  ]
+}
+
+const LIST_ROW_CLASS =
+  'flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+const COLUMN_ROW_CLASS =
+  'flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none'
+
+const FILTER_BUTTON = `<div class="flex shrink-0 items-center">
+  <Popover v-model:open="filterOpen" placement="bottom-start" class="shrink-0">
+    <Popover.Trigger class="relative">
+      <Button label="Filter" kind="outlined" size="medium" icon="pi pi-filter" />
+    </Popover.Trigger>
+    <Popover.Content>
+      <div class="flex flex-col">
+        <div class="relative overflow-hidden transition-[height] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none">
+          <div data-level="root" class="flex flex-col">
+            <div class="border-b border-(--border-default) p-(--spacing-xs)">
+              <InputText v-model="filterQuery" size="medium" class="w-full" placeholder="Filter by…" aria-label="Search filter fields">
+                <template #iconLeft>
+                  <i class="pi pi-search" aria-hidden="true" />
+                </template>
+              </InputText>
+            </div>
+            <div class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)">
+              <button
+                v-for="field in filterRows"
+                :key="field.id"
+                type="button"
+                data-filter-row
+                class="${LIST_ROW_CLASS}"
+                :aria-expanded="false"
+              >
+                <span class="grow truncate">{{ field.label }}</span>
+                <i class="pi pi-angle-right shrink-0 text-(--text-muted)" aria-hidden="true" />
+              </button>
+              <p v-if="!filterRows.length" class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)">
+                No match for “{{ filterQuery }}”.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Popover.Content>
+  </Popover>
+</div>`
+
+const SEARCH = `<InputText
+  v-model="search"
+  size="medium"
+  placeholder="Search variables"
+  aria-label="Search variables"
+  class="min-w-36 grow basis-(--container-2xs)"
+>
+  <template #iconLeft>
+    <i class="pi pi-search" aria-hidden="true" />
+  </template>
+</InputText>`
+
+const REFRESH = `<Tooltip text="Refresh" class="shrink-0">
+  <IconButton icon="pi pi-refresh" kind="outlined" size="medium" :loading="loading" ariaLabel="Refresh" @click="refresh" />
+</Tooltip>`
+
+const EXPORT = `<Tooltip text="Download CSV" class="shrink-0">
+  <IconButton
+    icon="pi pi-download"
+    kind="outlined"
+    size="medium"
+    :disabled="!table"
+    ariaLabel="Download CSV"
+    @click="table?.exportCsv({ filename: 'variables.csv' })"
+  />
+</Tooltip>`
+
+const COLUMNS_BUTTON = `<Popover v-model:open="columnsOpen" placement="bottom-end" class="shrink-0">
+  <Popover.Trigger>
+    <Tooltip text="Columns" :disabled="columnsOpen">
+      <IconButton icon="ai ai-column" kind="outlined" size="medium" ariaLabel="Columns" />
+    </Tooltip>
+  </Popover.Trigger>
+  <Popover.Content>
+    <div class="flex flex-col">
+      <div class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)">
+        <p class="text-label-md text-(--text-default)">Columns</p>
+      </div>
+      <div class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)">
+        <label
+          v-for="column in listedColumns"
+          :key="column.id"
+          class="${COLUMN_ROW_CLASS}"
+          :class="column.locked ? 'cursor-default text-(--text-muted)' : 'cursor-pointer text-(--text-default) hover:bg-(--bg-hover)'"
+        >
+          <Switch
+            :model-value="isVisible(column.id)"
+            :disabled="column.locked"
+            @update:model-value="(value) => setVisible(column.id, !!value)"
+          />
+          <span class="min-w-0 truncate">{{ column.label }}</span>
+          <span v-if="column.locked" class="ml-auto shrink-0 text-label-xs text-(--text-muted)">Always shown</span>
+        </label>
+      </div>
+      <div v-if="hiddenCount" class="border-t border-(--border-default) p-(--spacing-xxs)">
+        <Button label="Show all columns" kind="text" size="small" class="w-full" @click="showAll" />
+      </div>
+    </div>
+  </Popover.Content>
+</Popover>`
+
+const CONTROLS = `<header class="flex items-center gap-(--layout-group-gap)">
+  <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
+${indent(FILTER_BUTTON, 2)}
+${indent(SEARCH, 2)}
+  </div>
+  <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+${indent(REFRESH, 2)}
+${indent(EXPORT, 2)}
+${indent(COLUMNS_BUTTON, 2)}
+  </div>
+</header>`
+
+const ROW_ACTIONS = `<Dropdown placement="bottom-end">
+  <Dropdown.Trigger>
+    <Tooltip text="Row actions">
+      <IconButton icon="pi pi-ellipsis-h" kind="outlined" size="small" aria-label="Row actions" />
+    </Tooltip>
+  </Dropdown.Trigger>
+
+  <Dropdown.Group>
+    <Dropdown.Option value="edit" label="Edit">
+      <template #left>
+        <i class="pi pi-pencil" aria-hidden="true" />
+      </template>
+    </Dropdown.Option>
+    <Dropdown.Option value="duplicate" label="Clone">
+      <template #left>
+        <i class="pi pi-clone" aria-hidden="true" />
+      </template>
+    </Dropdown.Option>
+  </Dropdown.Group>
+
+  <Dropdown.Group>
+    <Dropdown.Option value="delete" label="Delete">
+      <template #left>
+        <i class="pi pi-trash" aria-hidden="true" />
+      </template>
+    </Dropdown.Option>
+  </Dropdown.Group>
+</Dropdown>`
+
+const TABLE = `<CardBox :padded="false">
+  <template #content>
+    <TableRoot
+      ref="table"
+      v-model:globalFilter="search"
+      v-model:columnVisibility="columnVisibility"
+      :data="variables"
+      :columns="columns"
+      row-key="id"
+      enable-sorting
+      paginated
+      :page-size="10"
+      :border="false"
+      :loading="loading"
+    >
+      <template #cell-key="{ value }">
+        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <i class="ai ai-variables shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
+          <span class="min-w-0 truncate">{{ value }}</span>
+        </div>
+      </template>
+
+      <template #cell-id="{ value }">
+        <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+          <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
+          <CopyButton v-if="value" kind="outlined" :value="value" aria-label="Copy variable ID" />
+        </div>
+      </template>
+
+      <template #cell-value="{ row }">
+        <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+          <span class="min-w-0 truncate">{{ displayValue(row) }}</span>
+          <CopyButton
+            v-if="!row.secret"
+            kind="outlined"
+            :value="row.value"
+            aria-label="Copy value"
+            class="ml-auto shrink-0"
+          />
+        </div>
+      </template>
+
+      <template #cell-lastEditor="{ row }">
+        <div v-if="row.lastEditor" class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <Avatar
+            :src="row.lastEditorAvatar || undefined"
+            :alt="row.lastEditor"
+            :label="row.lastEditor"
+            size="small"
+            kind="square"
+            class="shrink-0"
+          />
+          <span class="truncate text-body-sm text-(--text-default)">{{ row.lastEditor }}</span>
+        </div>
+        <span v-else class="text-body-sm text-(--text-muted)">—</span>
+      </template>
+
+      <template #cell-lastModified="{ value }">
+        <div v-if="value" class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
+        </div>
+      </template>
+
+      <template #cell-scope="{ value }">
+        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <span v-for="item in scopeSummary(value)" :key="item.label" class="truncate whitespace-nowrap">
+            {{ item.label }}
+            <span v-if="item.detail" class="text-(--text-muted)">{{ item.detail }}</span>
+          </span>
+        </div>
+      </template>
+
+      <template #cell-actions>
+${indent(ROW_ACTIONS, 4)}
+      </template>
+    </TableRoot>
+  </template>
+</CardBox>`
+
+const ENTRY_ROWS = `<div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+  <div v-for="(entry, index) in entries" :key="entry.id" class="flex min-w-0 flex-col gap-(--spacing-xs)">
+    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+      <InputGroupRoot
+        size="large"
+        :required="keyError(entry)?.kind === 'required'"
+        :invalid="keyError(entry)?.kind === 'invalid'"
+      >
+        <InputGroupAddon>
+          <label :for="fieldId(entry, 'key')" class="w-20">Key</label>
+        </InputGroupAddon>
+        <input
+          :id="fieldId(entry, 'key')"
+          :value="entry.key"
+          placeholder="MY_VARIABLE"
+          autocomplete="off"
+          spellcheck="false"
+          :aria-invalid="!!keyError(entry) || undefined"
+          :aria-describedby="keyError(entry) ? messageId(entry, 'key') : undefined"
+          :class="fieldClass"
+          class="text-label-code-sm"
+          @input="setKey(entry, $event.target.value)"
+          @paste="pasteIntoKey($event, index)"
+        />
+        <Tooltip v-if="canRemove" text="Remove variable">
+          <IconButton
+            icon="pi pi-trash"
+            kind="outlined"
+            size="large"
+            aria-label="Remove variable"
+            @click="removeEntry(index)"
+          />
+        </Tooltip>
+      </InputGroupRoot>
+
+      <InputGroupRoot size="large" :required="!!valueError(entry)">
+        <InputGroupAddon>
+          <label :for="fieldId(entry, 'value')" class="w-20">Value</label>
+        </InputGroupAddon>
+        <input
+          :id="fieldId(entry, 'value')"
+          v-model="entry.value"
+          :type="entry.secret && !entry.visible ? 'password' : 'text'"
+          :placeholder="entry.secret ? SECRET_MASK : 'my-variable-value'"
+          autocomplete="off"
+          spellcheck="false"
+          :aria-invalid="!!valueError(entry) || undefined"
+          :aria-describedby="valueError(entry) ? messageId(entry, 'value') : undefined"
+          :class="fieldClass"
+          class="text-label-sm"
+        />
+        <Tooltip v-if="entry.secret" :text="entry.visible ? 'Hide value' : 'Show value'">
+          <IconButton
+            :icon="entry.visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            kind="outlined"
+            size="large"
+            :aria-label="entry.visible ? 'Hide value' : 'Show value'"
+            :aria-pressed="entry.visible"
+            @click="entry.visible = !entry.visible"
+          />
+        </Tooltip>
+        <InputGroupAddon>
+          <Tooltip :text="secretTooltip(entry)">
+            <span class="flex items-center gap-(--spacing-xs)">
+              <label :for="fieldId(entry, 'secret')">Secret</label>
+              <Checkbox
+                v-model="entry.secret"
+                binary
+                :input-id="fieldId(entry, 'secret')"
+                :aria-label="secretAriaLabel(entry)"
+              />
+            </span>
+          </Tooltip>
+        </InputGroupAddon>
+      </InputGroupRoot>
+    </div>
+
+    <HelperText
+      v-if="keyError(entry)"
+      :id="messageId(entry, 'key')"
+      :kind="keyError(entry).kind"
+      :label="keyError(entry).message"
+    />
+    <HelperText
+      v-if="valueError(entry)"
+      :id="messageId(entry, 'value')"
+      :kind="valueError(entry).kind"
+      :label="valueError(entry).message"
+    />
+  </div>
+</div>`
+
+const VARIABLES_BODY = `<div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+  <div class="flex items-center gap-(--spacing-xs) self-end">
+    <Button label="Upload" icon="pi pi-upload" kind="outlined" size="medium" @click="fileInput?.click()" />
+    <input
+      ref="fileInput"
+      type="file"
+      accept=".env,.txt,text/plain"
+      class="sr-only"
+      tabindex="-1"
+      aria-hidden="true"
+      @change="onFilePicked"
+    />
+    <SegmentedButton v-model="view" :options="VIEW_OPTIONS" aria-label="Variables view" size="medium" />
+  </div>
+
+  <template v-if="view === 'Form'">
+${indent(ENTRY_ROWS, 2)}
+
+    <div>
+      <Button
+        label="Add variable"
+        icon="pi pi-plus"
+        kind="outlined"
+        size="medium"
+        :disabled="!canAdd"
+        @click="addEntry"
+      />
+    </div>
+
+    <HelperText label="Paste JSON or .env contents into an empty key field to create one row per variable." />
+  </template>
+
+  <template v-else>
+    <Textarea
+      v-model="jsonText"
+      aria-label="Variables JSON"
+      :invalid="!!jsonError"
+      :aria-describedby="jsonError ? formId + '-json-message' : undefined"
+    />
+    <HelperText>
+      Use a JSON object format, for example:
+      <code class="text-label-code-sm">{"API_URL":"https://example.com"}</code>
+    </HelperText>
+    <HelperText v-if="jsonError" :id="formId + '-json-message'" kind="invalid" :label="jsonError" />
+  </template>
+
+  <HelperText :label="SECRET_HINT" />
+  <HelperText v-if="submitted && noVariables" kind="required" label="Add at least one variable." />
+</div>`
+
+const SCOPE_BODY = `<div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+  <div v-for="scope in scopes" :key="scope.type" class="flex min-w-0 flex-col gap-(--spacing-xs)">
+    <InputGroupRoot size="large" :required="scopeError(scope)">
+      <InputGroupAddon>
+        <span class="w-20">{{ scope.label }}</span>
+      </InputGroupAddon>
+      <span
+        v-if="scope.type === 'global'"
+        class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
+      >
+        The entire account
+      </span>
+      <div v-else class="h-full min-w-0 flex-1">
+        <MultiSelect
+          v-model="scope.ids"
+          size="large"
+          :placeholder="scope.placeholder"
+          :display-value="scopeDisplay(scope)"
+          :disabled="!scope.enabled"
+          :required="scopeError(scope)"
+        >
+          <MultiSelect.Trigger
+            :aria-label="scope.placeholder"
+            :aria-describedby="scopeError(scope) ? formId + '-scope-' + scope.type : undefined"
+          />
+          <MultiSelect.Content>
+            <template #search>
+              <InputText v-model="scope.query" size="small" placeholder="Search" aria-label="Search" @keydown.stop>
+                <template #iconLeft>
+                  <i class="pi pi-search" aria-hidden="true" />
+                </template>
+              </InputText>
+            </template>
+            <MultiSelect.Option v-for="option in visibleScopeOptions(scope)" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </MultiSelect.Option>
+          </MultiSelect.Content>
+        </MultiSelect>
+      </div>
+      <InputGroupAddon>
+        <Switch
+          :model-value="scope.enabled"
+          :disabled="scope.type === 'global'"
+          :aria-label="'Enable ' + scope.label + ' scope'"
+          @update:model-value="(value) => setScopeEnabled(scope, value)"
+        />
+      </InputGroupAddon>
+    </InputGroupRoot>
+    <HelperText
+      v-if="scopeError(scope)"
+      :id="formId + '-scope-' + scope.type"
+      kind="required"
+      label="Select at least one resource for this scope."
+    />
+  </div>
+</div>`
+
+const DRAWER_BODY = `${section({
+  title: 'Variables',
+  hint: 'Store values your Functions read at runtime. Add one row per variable, or import a .env file.',
+  body: VARIABLES_BODY
+})}
+
+${section({
+  title: 'Scope',
+  hint: 'Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created.',
+  body: SCOPE_BODY
+})}`
+
+const drawer = (trigger = '') =>
+  drawerShell({
+    title: 'Create Variable',
+    description: 'Create one or more variables and define where they are available.',
+    size: 'medium',
+    open: 'drawerOpen',
+    trigger,
+    body: DRAWER_BODY
+  })
+
+const CREATE_TEMPLATE = drawer(
+  '<Button label="Create Variable" icon="pi pi-plus" kind="outlined" size="medium" class="w-full md:w-auto" />'
+)
+
+const LIST_TEMPLATE = `<div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
+  <main class="layout-column flex min-h-full flex-col">
+${indent(
+  pageHeading({
+    title: 'Variables',
+    size: 'medium',
+    description: "Configure variable names, values, and settings for use across Azion's products.",
+    documentation: DOCUMENTATION,
+    actions: headingAction({ label: 'Create Variable', click: 'drawerOpen = true' })
+  }),
+  2
+)}
+
+    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+${indent(CONTROLS, 4)}
+
+        <section class="flex min-h-0 flex-col">
+${indent(TABLE, 5)}
+        </section>
+      </section>
+    </section>
+  </main>
+
+${indent(drawer())}
+</div>`
+
+const EDITOR_SCRIPT = String.raw`const SECRET_MASK = '••••••••'
+const SECRET_HINT =
+  'Secret values are hidden and write-only after saving. Once saved as a secret, this behavior cannot be changed.'
+const VIEW_OPTIONS = [
+  { label: 'Form', value: 'Form' },
+  { label: 'JSON', value: 'JSON' }
+]
+const fieldClass =
+  '${FIELD_CLASS}'
+
+const formId = useId()
+const fieldId = (entry, part) => ${'`${formId}-${part}-${entry.id}`'}
+const messageId = (entry, part) => ${'`${fieldId(entry, part)}-message`'}
+
+let nextEntryId = 0
+const createEntry = (key = '', value = '', secret = false) => ({
+  id: (nextEntryId += 1),
+  key,
+  value,
+  secret,
+  visible: false
+})
+const isEmptyEntry = (entry) => !entry.key.trim() && !entry.value.trim()
+const formatKey = (value) =>
+  String(value ?? '')
+    .replace(/\s/g, '_')
+    .toUpperCase()
+
+const drawerOpen = ref(false)
+const submitting = ref(false)
+const submitted = ref(false)
+const entries = ref([createEntry()])
+const view = ref('Form')
+const jsonText = ref('{}')
+const jsonError = ref('')
+const fileInput = ref(null)
+
+const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
+const keyCounts = computed(() =>
+  filledEntries.value.reduce((counts, entry) => {
+    const key = entry.key.trim()
+    counts.set(key, (counts.get(key) ?? 0) + 1)
+    return counts
+  }, new Map())
+)
+const duplicatedKeys = computed(() =>
+  [...keyCounts.value].filter(([, count]) => count > 1).map(([key]) => key)
+)
+
+const keyError = (entry) => {
+  if (!submitted.value || isEmptyEntry(entry)) return null
+  const key = entry.key.trim()
+  if (!key) return { kind: 'required', message: 'Key is required.' }
+  if (!/^[A-Z0-9_]+$/.test(key))
+    return { kind: 'invalid', message: 'Use only uppercase letters, numbers, and underscores.' }
+  if (keyCounts.value.get(key) > 1)
+    return { kind: 'invalid', message: ${'`Duplicated key: ${duplicatedKeys.value.join(\', \')}`'} }
+  if (existingKeys.value.includes(key))
+    return { kind: 'invalid', message: ${'`${key} already exists in this list.`'} }
+  return null
+}
+const valueError = (entry) => {
+  if (!submitted.value || isEmptyEntry(entry) || entry.value.trim()) return null
+  return { kind: 'required', message: 'Value is required.' }
+}
+
+const noVariables = computed(() => filledEntries.value.length === 0)
+const isValid = computed(
+  () =>
+    !noVariables.value &&
+    filledEntries.value.every((entry) => !keyError(entry) && !valueError(entry))
+)
+const canAdd = computed(() => {
+  const last = entries.value.at(-1)
+  return Boolean(last?.key.trim() && last?.value.trim())
+})
+const canRemove = computed(() => entries.value.length > 1)
+
+const addEntry = async () => {
+  const entry = createEntry()
+  entries.value.push(entry)
+  await nextTick()
+  document.getElementById(fieldId(entry, 'key'))?.focus()
+}
+const removeEntry = (index) => {
+  if (canRemove.value) entries.value.splice(index, 1)
+}
+const setKey = (entry, value) => {
+  entry.key = formatKey(value)
+}
+
+const secretTooltip = (entry) =>
+  entry.secret ? 'The value is hidden and write-only.' : 'Mark as secret'
+const secretAriaLabel = (entry) => (entry.secret ? 'Unmark as secret' : 'Mark as secret')
+
+const unquote = (value) => {
+  const quote = value[0]
+  if ((quote === '"' || quote === "'") && value.length > 1 && value.at(-1) === quote) {
+    return value.slice(1, -1)
+  }
+  return value
+}
+const parseEnvFile = (content) => {
+  const parsed = []
+  const invalidLines = []
+  String(content ?? '')
+    .split(/\r?\n/)
+    .forEach((line, index) => {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) return
+      const declaration = trimmed.startsWith('export ') ? trimmed.slice(7).trim() : trimmed
+      const match = declaration.match(/^([A-Z0-9_]+)\s*=\s*(.*)$/)
+      if (!match) {
+        invalidLines.push(index + 1)
+        return
+      }
+      parsed.push({ key: match[1], value: unquote(match[2]) })
+    })
+  return { parsed, invalidLines }
+}
+const parseJsonObject = (content) => {
+  const parsed = JSON.parse(content)
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
+  return Object.entries(parsed)
+    .filter(([key]) => key.trim())
+    .map(([key, value]) => ({
+      key: formatKey(key),
+      value: typeof value === 'string' ? value : value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value)
+    }))
+}
+const parsePasted = (content) => {
+  const text = String(content ?? '').trim()
+  if (!text) return null
+  if (text.startsWith('{')) {
+    try {
+      const pairs = parseJsonObject(text)
+      return pairs?.length ? pairs : null
+    } catch {
+      return null
+    }
+  }
+  const { parsed, invalidLines } = parseEnvFile(text)
+  return invalidLines.length || !parsed.length ? null : parsed
+}
+const toEntries = (pairs, secrets = new Set()) =>
+  pairs.map((pair) => createEntry(pair.key, pair.value, secrets.has(pair.key)))
+
+const pasteIntoKey = (event, index) => {
+  if (!isEmptyEntry(entries.value[index])) return
+  const pairs = parsePasted(event.clipboardData?.getData('text/plain'))
+  if (!pairs) return
+  event.preventDefault()
+  entries.value.splice(index, 1, ...toEntries(pairs))
+}
+
+const onFilePicked = async (event) => {
+  const [file] = event.target.files ?? []
+  event.target.value = ''
+  if (!file) return
+  const { parsed, invalidLines } = parseEnvFile(await file.text())
+  if (!parsed.length && invalidLines.length) return
+  view.value = 'Form'
+  await nextTick()
+  entries.value = [...filledEntries.value, ...toEntries(parsed)]
+  if (!entries.value.length) entries.value = [createEntry()]
+}
+
+watch(view, (next) => {
+  if (next === 'JSON') {
+    jsonError.value = ''
+    jsonText.value = JSON.stringify(
+      Object.fromEntries(filledEntries.value.map((entry) => [entry.key.trim(), entry.value])),
+      null,
+      2
+    )
+    return
+  }
+  if (jsonError.value) return
+  const secrets = new Set(filledEntries.value.filter((entry) => entry.secret).map((entry) => entry.key.trim()))
+  const pairs = parseJsonObject(jsonText.value) ?? []
+  entries.value = pairs.length ? toEntries(pairs, secrets) : [createEntry()]
+})
+
+watch(jsonText, (text) => {
+  if (view.value !== 'JSON') return
+  try {
+    jsonError.value = parseJsonObject(text) ? '' : 'Variables must be a JSON object with key/value pairs.'
+  } catch {
+    jsonError.value = 'Variables must be valid JSON.'
+  }
+})
+
+${declare('scopeTypes', SCOPE_TYPES)}
+${declare('scopeOptions', SCOPE_OPTIONS)}
+const createScopes = () =>
+  scopeTypes.map((scope) => ({
+    ...scope,
+    placeholder: scope.plural ? ${'`Select ${scope.plural}`'} : '',
+    enabled: scope.type === 'global',
+    ids: [],
+    query: '',
+    options: scopeOptions[scope.type] ?? []
+  }))
+const scopes = reactive(createScopes())
+
+const setScopeEnabled = (scope, enabled) => {
+  if (scope.type === 'global') return
+  scope.enabled = enabled
+  scope.ids = enabled ? scope.options.map((option) => option.value) : []
+  scope.query = ''
+  scopes[0].enabled = !scopes.some((item) => item.type !== 'global' && item.enabled)
+}
+const scopeMissing = (scope) => scope.enabled && scope.type !== 'global' && scope.ids.length === 0
+const scopeError = (scope) => submitted.value && scopeMissing(scope)
+const scopeDisplay = (scope) => (ids) => {
+  if (!ids?.length) return ''
+  if (ids.length > 1) return ${'`Selected ${ids.length} ${scope.plural}`'}
+  return scope.options.find((option) => option.value === ids[0])?.label ?? ids[0]
+}
+const visibleScopeOptions = (scope) => {
+  const query = scope.query.trim().toLowerCase()
+  if (!query) return scope.options
+  return scope.options.filter((option) => option.label.toLowerCase().includes(query))
+}
+const scopePayload = () =>
+  scopes.flatMap((scope) => {
+    if (!scope.enabled) return []
+    if (scope.type === 'global') return [{ type: 'global', id: '', name: '' }]
+    return scope.ids.map((id) => ({
+      type: scope.type,
+      id,
+      name: scope.options.find((option) => option.value === id)?.label ?? id
+    }))
+  })
+
+watch(drawerOpen, (isOpen) => {
+  if (!isOpen) return
+  entries.value = [createEntry()]
+  view.value = 'Form'
+  jsonText.value = '{}'
+  jsonError.value = ''
+  submitted.value = false
+  Object.assign(scopes, createScopes())
+  submitting.value = false
+})
+
+const submit = async () => {
+  if (submitting.value) return
+  if (view.value === 'JSON') {
+    if (jsonError.value) return
+    view.value = 'Form'
+    await nextTick()
+  }
+  submitted.value = true
+  if (!isValid.value || scopes.some(scopeMissing)) return
+  submitting.value = true
+  await new Promise((resolve) => setTimeout(resolve, 900))
+  const scope = scopePayload()
+  const created = filledEntries.value.map((entry) => ({
+    key: entry.key.trim(),
+    value: entry.value,
+    secret: entry.secret,
+    scope
+  }))
+  onCreated(created)
+  submitting.value = false
+  drawerOpen.value = false
+}`
+
+const LIST_SCRIPT = String.raw`${declare('columns', COLUMNS)}
+${declare('filterFields', FILTER_FIELDS)}
+${declare('seed', VARIABLES)}
+
+const variables = ref([...seed])
+const existingKeys = computed(() => variables.value.map((variable) => variable.key))
+
+const search = ref('')
+const loading = ref(false)
+const table = ref(null)
+const columnVisibility = ref({ id: false })
+
+const refresh = () => {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 600)
+}
+
+const filterOpen = ref(false)
+const filterQuery = ref('')
+const filterRows = computed(() => {
+  const term = filterQuery.value.trim().toLowerCase()
+  return term ? filterFields.filter((field) => field.label.toLowerCase().includes(term)) : filterFields
+})
+
+const columnsOpen = ref(false)
+const listedColumns = columns
+  .filter((column) => column.kind !== 'action')
+  .map((column) => ({ id: column.accessorKey, label: column.header, locked: column.hideable === false }))
+const isVisible = (id) => columnVisibility.value[id] !== false
+const setVisible = (id, visible) => {
+  const next = { ...columnVisibility.value }
+  if (visible) delete next[id]
+  else next[id] = false
+  columnVisibility.value = next
+}
+const hiddenCount = computed(() => listedColumns.filter((column) => !isVisible(column.id)).length)
+const showAll = () => {
+  columnVisibility.value = {}
+}
+
+const displayValue = (row) => (row.secret ? SECRET_MASK : row.value)
+
+const scopeSummary = (scope) =>
+  scopeTypes
+    .map((entry) => ({
+      ...entry,
+      names: (scope ?? []).filter((item) => item.type === entry.type).map((item) => item.name)
+    }))
+    .filter((entry) => entry.names.length > 0)
+    .map((group) => ({
+      label: group.label,
+      detail:
+        group.type === 'global'
+          ? ''
+          : group.names.length === 1
+            ? group.names[0]
+            : ${'`${group.names.length} ${group.plural}`'}
+    }))
+
+const onCreated = (created) => {
+  variables.value = [
+    ...created.map((variable, index) => ({
+      ...variable,
+      id: ${'`v-${Date.now()}-${index}`'},
+      lastEditor: 'myemail',
+      lastEditorAvatar: '',
+      lastModified: 'just now'
+    })),
+    ...variables.value
+  ]
+}`
+
+const CREATE_SCRIPT = String.raw`const existingKeys = ref(${JSON.stringify(VARIABLES.map((variable) => variable.key)).replaceAll('"', "'").replaceAll(',', ', ')})
+const onCreated = () => {}`
+
+const LIST_IMPORTS = [
+  "import Avatar from '@aziontech/webkit/avatar'",
+  "import CardBox from '@aziontech/webkit/card-box'",
+  "import CopyButton from '@aziontech/webkit/copy-button'",
+  "import Dropdown from '@aziontech/webkit/dropdown'",
+  "import Popover from '@aziontech/webkit/popover'",
+  "import TableRoot from '@aziontech/webkit/table-root'"
 ]
 
-const editScopes = (variable) =>
-  createScopes(
-    variable.secret ? { global: false, environments: ['env-production'] } : { global: true }
-  ).map((scope) => Object.fromEntries(Object.entries(scope).filter(([key]) => key !== 'query')))
+const DRAWER_IMPORTS = [
+  ...DRAWER_SHELL_IMPORTS,
+  "import Checkbox from '@aziontech/webkit/checkbox'",
+  "import HelperText from '@aziontech/webkit/helper-text'",
+  "import Hint from '@aziontech/webkit/hint'",
+  "import IconButton from '@aziontech/webkit/icon-button'",
+  "import InputGroupAddon from '@aziontech/webkit/input-group-addon'",
+  "import InputGroupRoot from '@aziontech/webkit/input-group-root'",
+  "import InputText from '@aziontech/webkit/input-text'",
+  "import MultiSelect from '@aziontech/webkit/multi-select'",
+  "import SegmentedButton from '@aziontech/webkit/segmented-button'",
+  "import Switch from '@aziontech/webkit/switch'",
+  "import Textarea from '@aziontech/webkit/textarea'",
+  "import Tooltip from '@aziontech/webkit/tooltip'"
+]
 
-const EDIT_VARIABLE = {
-  id: 'v-001',
-  key: 'API_BASE_URL',
-  value: 'https://api.example.com',
-  secret: false
-}
+const VUE_LINE = "import { computed, nextTick, reactive, ref, useId, watch } from 'vue'"
 
-const EDIT_SECRET_VARIABLE = {
-  id: 'v-002',
-  key: 'STRIPE_SECRET_KEY',
-  value: '',
-  secret: true
-}
+const sortedImports = (lines) => [...new Set(lines)].sort((a, b) => a.localeCompare(b))
 
-const TABS = [
-  { value: 'configuration', label: 'Settings' },
-  { value: 'version-history', label: 'Version history' }
+const LIST_SOURCE = [
+  ...sortedImports([...LIST_IMPORTS, ...DRAWER_IMPORTS]).filter(
+    (line) => !line.includes('drawer-trigger')
+  ),
+  VUE_LINE,
+  '',
+  ...LIST_SCRIPT.split('\n'),
+  '',
+  ...EDITOR_SCRIPT.split('\n')
+]
+
+const CREATE_SOURCE = [
+  ...sortedImports(DRAWER_IMPORTS),
+  VUE_LINE,
+  '',
+  ...CREATE_SCRIPT.split('\n'),
+  '',
+  ...EDITOR_SCRIPT.split('\n')
 ]
 
 const components = {
+  Avatar,
   Button,
+  CardBox,
   Checkbox,
   CopyButton,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -231,13 +1048,12 @@ const components = {
   'Dropdown.Trigger': Dropdown.Trigger,
   'Dropdown.Group': Dropdown.Group,
   'Dropdown.Option': Dropdown.Option,
-  EmptyState,
   HelperText,
+  Hint,
   IconButton,
-  InputGroup,
-  'InputGroup.Addon': InputGroup.Addon,
+  InputGroupAddon,
+  InputGroupRoot,
   InputText,
-  Message,
   MultiSelect,
   'MultiSelect.Trigger': MultiSelect.Trigger,
   'MultiSelect.Content': MultiSelect.Content,
@@ -245,964 +1061,414 @@ const components = {
   PanelContent,
   PanelFooter,
   PanelHeader,
+  Popover,
+  'Popover.Trigger': Popover.Trigger,
+  'Popover.Content': Popover.Content,
   SegmentedButton,
   Switch,
-  TabView,
-  'TabView.List': TabView.List,
-  'TabView.Item': TabView.Item,
-  Table,
-  'Table.Search': Table.Search,
-  'Table.RefreshButton': Table.RefreshButton,
-  'Table.Export': Table.Export,
-  'Table.ColumnSelector': Table.ColumnSelector,
-  Tag,
+  TableRoot,
   Textarea,
   Tooltip
 }
 
-const INPUT_CLASS =
-  'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)'
-
-const PAGE_PADDING =
-  'px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md) md:px-(--spacing-xxl) md:pt-(--spacing-md) md:pb-(--spacing-xxl)'
-
-const heading = (
-  title,
-  description,
-  actions = ''
-) => `<header class="flex w-full flex-col items-center gap-(--spacing-md) md:min-h-16 md:flex-row md:justify-between">
-  <div class="flex w-full flex-col md:w-auto">
-${indent(title, 2)}
-    <p class="text-body-sm text-(--text-muted)">${description}</p>
-  </div>${
-    actions
-      ? `\n  <div class="flex w-full shrink-0 items-center justify-end gap-(--spacing-sm) md:w-auto">\n${indent(actions, 2)}\n  </div>`
-      : ''
+const unquote = (value) => {
+  const quote = value[0]
+  if ((quote === '"' || quote === "'") && value.length > 1 && value.at(-1) === quote) {
+    return value.slice(1, -1)
   }
-</header>`
-
-const formSection = (
-  title,
-  description,
-  body
-) => `<section class="flex w-full min-w-0 flex-wrap gap-(--spacing-xxl) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xxl) lg:flex-nowrap">
-  <div class="flex w-full min-w-0 flex-1 flex-col gap-(--spacing-xs) md:min-w-(--container-3xs)">
-    <h2 class="text-heading-sm text-(--text-default)">${title}</h2>
-    <p class="text-pretty text-body-sm text-(--text-muted)">${description}</p>
-  </div>
-  <div class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-xxl) max-md:gap-(--spacing-xl)">
-${indent(body, 2)}
-  </div>
-</section>`
-
-const actionBar = (
-  saveDisabled = ''
-) => `<footer class="flex h-16 w-full shrink-0 items-center border-t border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) md:px-(--spacing-xxl)">
-  <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
-    <Button label="Cancel" kind="outlined" size="large" />
-    <div class="grid max-md:flex-1">
-      <Button label="Save" kind="primary" size="large"${saveDisabled} @click="submit" />
-    </div>
-  </div>
-</footer>`
-
-const keyGroup = ({ editable }) => `<InputGroup size="large" :required="keyMissing(item)">
-  <InputGroup.Addon>
-    <label :for="formId + '-key-' + item.id" class="w-20">Key</label>
-  </InputGroup.Addon>
-  <input
-    :id="formId + '-key-' + item.id"
-    v-model="item.key"
-    placeholder="MY_VARIABLE"
-    autocomplete="off"
-    spellcheck="false"
-    :aria-required="keyMissing(item) || undefined"
-    :aria-describedby="keyMissing(item) ? formId + '-key-' + item.id + '-message' : undefined"
-    class="${INPUT_CLASS} text-label-code-sm"${
-      editable ? '\n    @paste="pasteKey($event, index)"' : ''
-    }
-  />${
-    editable
-      ? '\n  <IconButton v-if="canRemove(item)" icon="pi pi-trash" kind="outlined" size="large" aria-label="Remove variable" @click="removeEntry(index)" />'
-      : ''
-  }
-</InputGroup>`
-
-const valueGroup = ({ lockable }) => `<InputGroup size="large" :required="valueMissing(item)">
-  <InputGroup.Addon>
-    <label :for="formId + '-value-' + item.id" class="w-20">Value</label>
-  </InputGroup.Addon>
-  <span class="flex h-full min-w-0 flex-1 items-center gap-(--spacing-xxs) pr-(--spacing-xxs)">
-    <input
-      :id="formId + '-value-' + item.id"
-      v-model="item.value"
-      :type="item.secret && !item.visible ? 'password' : 'text'"
-      ${lockable ? `:placeholder="locked(item) ? '${SECRET_MASK}' : 'my-variable-value'"` : 'placeholder="my-variable-value"'}
-      autocomplete="off"
-      :aria-required="valueMissing(item) || undefined"
-      :aria-describedby="valueMissing(item) ? formId + '-value-' + item.id + '-message' : undefined"
-      class="${INPUT_CLASS} text-label-sm"
-    />
-    <IconButton
-      v-if="item.secret"
-      :icon="item.visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
-      kind="transparent"
-      size="small"
-      :aria-label="item.visible ? 'Hide value' : 'Show value'"
-      @click="item.visible = !item.visible"
-    />
-  </span>
-  <InputGroup.Addon>
-    <Tooltip :text="secretTooltip(item)">
-      <span class="flex items-center gap-(--spacing-xs)">
-        Secret
-        <Checkbox
-          v-model="item.secret"
-          binary
-          :input-id="formId + '-secret-' + item.id"${lockable ? '\n          :disabled="locked(item)"' : ''}
-          :aria-label="secretLabel(item)"
-        />
-      </span>
-    </Tooltip>
-  </InputGroup.Addon>
-</InputGroup>`
-
-const entryRows = ({ editable, lockable }) => `<div class="flex flex-col gap-(--spacing-sm)">
-  <div v-for="(item, index) in entries" :key="item.id" class="flex w-full flex-col gap-(--spacing-xs)">
-    <div class="flex flex-col gap-(--spacing-xxs)">
-${indent(keyGroup({ editable }), 3)}
-${indent(valueGroup({ lockable }), 3)}
-    </div>
-    <HelperText
-      v-if="keyMissing(item)"
-      :id="formId + '-key-' + item.id + '-message'"
-      kind="required"
-      label="Key is required."
-    />
-    <HelperText
-      v-if="valueMissing(item)"
-      :id="formId + '-value-' + item.id + '-message'"
-      kind="required"
-      label="Value is required."
-    />
-  </div>
-</div>`
-
-const EDITOR_TOOLBAR = `<div class="flex items-center gap-(--spacing-xs) self-end">
-  <Button label="Upload" icon="pi pi-upload" kind="outlined" size="medium" @click="fileInput?.click()" />
-  <input ref="fileInput" type="file" class="hidden" tabindex="-1" aria-hidden="true" @change="upload" />
-  <SegmentedButton v-model="view" :options="viewOptions" aria-label="Variables view" size="medium" />
-</div>`
-
-const ADD_EDITOR = `<div class="flex w-full flex-col gap-(--spacing-sm)">
-${indent(EDITOR_TOOLBAR)}
-  <div v-if="view === 'Form'" class="flex flex-col gap-(--spacing-sm)">
-${indent(entryRows({ editable: true, lockable: false }), 2)}
-    <div>
-      <Button label="Add variable" icon="pi pi-plus" kind="outlined" size="medium" :disabled="!canAdd" @click="addEntry" />
-    </div>
-  </div>
-  <Textarea v-else v-model="jsonText" aria-label="Variables JSON" class="min-h-(--container-3xs) font-code" />
-  <HelperText v-if="view === 'JSON'">
-    Use a JSON object format, for example:
-    <code class="text-label-code-sm">{"API_URL":"https://example.com"}</code>
-  </HelperText>
-  <HelperText v-else label="Paste JSON or .env contents into an empty key field to create one row per variable." />
-  <HelperText label="${SECRET_HINT}" />
-  <HelperText v-if="noVariables" kind="required" label="Add at least one variable." />
-</div>`
-
-const EDIT_EDITOR = `<div class="flex w-full flex-col gap-(--spacing-sm) sm:max-w-(--container-lg)">
-  <Message
-    v-if="renamed"
-    severity="warning"
-    :label="'Functions that read ' + variable.key + ' stop finding it once you save. Update them to the new key.'"
-  />
-${indent(entryRows({ editable: false, lockable: true }))}
-  <HelperText label="${SECRET_HINT}" />
-  <HelperText v-if="noVariables" kind="required" label="Add a key and a value." />
-</div>`
-
-const scopeRows = ({
-  editable
-}) => `<div v-for="scope in scopes" :key="scope.type" class="flex w-full flex-col gap-(--spacing-xxs)">
-  <InputGroup size="large"${editable ? ' :required="scopeMissing(scope)"' : ' disabled'}>
-    <InputGroup.Addon>
-      <span class="w-20">{{ scope.label }}</span>
-    </InputGroup.Addon>
-    <span
-      v-if="scope.type === 'global'"
-      class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
-    >
-      The entire account
-    </span>
-    <MultiSelect
-      v-else
-      v-model="scope.ids"
-      size="large"
-      :placeholder="scope.placeholder"
-      :display-value="scopeLabel(scope)"${
-        editable
-          ? '\n      :disabled="!scope.enabled"\n      :required="scopeMissing(scope)"'
-          : '\n      disabled'
-      }
-    >
-      <MultiSelect.Trigger :aria-label="scope.placeholder" />
-      <MultiSelect.Content>${
-        editable
-          ? `
-        <template #search>
-          <InputText v-model="scope.query" size="small" placeholder="Search" aria-label="Search" @keydown.stop>
-            <template #iconLeft>
-              <i class="pi pi-search" aria-hidden="true" />
-            </template>
-          </InputText>
-        </template>
-        <MultiSelect.Option v-for="option in visibleOptions(scope)" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </MultiSelect.Option>`
-          : `
-        <MultiSelect.Option v-for="option in scope.options" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </MultiSelect.Option>`
-      }
-      </MultiSelect.Content>
-    </MultiSelect>
-    <InputGroup.Addon>
-      <Switch${
-        editable
-          ? `
-        :model-value="scope.enabled"
-        :disabled="scope.type === 'global'"
-        :aria-label="'Enable ' + scope.label + ' scope'"
-        @update:model-value="(value) => setScope(scope, value)"`
-          : `
-        :model-value="scope.enabled"
-        disabled
-        :aria-label="'Enable ' + scope.label + ' scope'"`
-      }
-      />
-    </InputGroup.Addon>
-  </InputGroup>${
-    editable
-      ? `
-  <HelperText v-if="scopeMissing(scope)" kind="required" label="Select at least one resource for this scope." />`
-      : ''
-  }
-</div>`
-
-const CREATE_SCOPE = `<div class="flex w-full flex-col gap-(--spacing-sm) sm:max-w-(--container-lg)">
-${indent(scopeRows({ editable: true }))}
-</div>`
-
-const EDIT_SCOPE = `<div class="flex w-full sm:max-w-(--container-lg)">
-  <Message severity="info" label="Scope is set when the variable is created and cannot be changed." />
-</div>
-<div class="flex w-full flex-col gap-(--spacing-sm) sm:max-w-(--container-lg)">
-${indent(scopeRows({ editable: false }))}
-</div>`
-
-const CREATE_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
-  <div class="flex min-h-0 flex-1 flex-col overflow-auto">
-    <section class="flex w-full flex-1 flex-col ${PAGE_PADDING}">
-${indent(
-  heading(
-    '<h1 class="text-heading-sm text-(--text-default)">Create variable</h1>',
-    'Create one or more variables and define where they are available. Each selected scope gets its own variable.'
-  ),
-  3
-)}
-      <form class="mt-(--spacing-md) flex w-full grow flex-col gap-(--spacing-xxl) max-md:gap-(--spacing-xl)" aria-label="Create variable" novalidate @submit.prevent>
-${indent(
-  formSection(
-    'Variables',
-    'Store values your Functions read at runtime. Add one row per variable, or import a .env file.',
-    `<div class="flex w-full sm:max-w-(--container-lg)">\n${indent(ADD_EDITOR)}\n</div>`
-  ),
-  4
-)}
-${indent(
-  formSection(
-    'Scope',
-    'Define where these variables are available. Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Open the selector to narrow it down. Scope cannot be changed after the variable is created.',
-    CREATE_SCOPE
-  ),
-  4
-)}
-      </form>
-    </section>
-  </div>
-${indent(actionBar())}
-</div>`
-
-const VERSION_TABLE = `<Table :data="versions" :columns="versionColumns" row-key="id" border enable-sorting paginated :page-size="10">
-  <template #toolbar>
-    <Table.Search />
-    <Table.RefreshButton />
-    <Table.ColumnSelector />
-  </template>
-  <template #cell-id="{ value }">
-    <span class="whitespace-nowrap text-label-code-sm text-(--text-default)">{{ value }}</span>
-  </template>
-  <template #cell-status="{ value }">
-    <Tag :label="value.label" :severity="value.severity" :icon="value.icon" size="small" />
-  </template>
-  <template #cell-actions="{ row }">
-    <Dropdown placement="bottom-end" @select="(event, action) => runVersionAction(action, row)">
-      <Dropdown.Trigger>
-        <IconButton icon="pi pi-ellipsis-h" kind="outlined" size="small" aria-label="Row actions" />
-      </Dropdown.Trigger>
-      <Dropdown.Group>
-        <Dropdown.Option v-if="!row.isCurrent" value="revert" label="Revert to this version">
-          <template #left><i class="pi pi-history" aria-hidden="true" /></template>
-        </Dropdown.Option>
-        <Dropdown.Option value="copy" label="Copy version ID">
-          <template #left><i class="pi pi-copy" aria-hidden="true" /></template>
-        </Dropdown.Option>
-      </Dropdown.Group>
-    </Dropdown>
-  </template>
-</Table>
-<Dialog v-model:open="revertOpen" size="medium">
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogContent>
-      <PanelHeader>
-        <DialogTitle>Revert variable</DialogTitle>
-      </PanelHeader>
-      <PanelContent>
-        <DialogDescription>{{ revertDescription }}</DialogDescription>
-      </PanelContent>
-      <PanelFooter>
-        <div class="grid w-full gap-(--spacing-sm) md:flex md:justify-end">
-          <Button label="Cancel" kind="outlined" size="medium" @click="revertOpen = false" />
-          <Button label="Revert" kind="primary" size="medium" @click="revertOpen = false" />
-        </div>
-      </PanelFooter>
-    </DialogContent>
-  </DialogPortal>
-</Dialog>`
-
-const EDIT_TITLE = `<div class="flex flex-wrap items-center gap-(--spacing-xs)">
-  <h1 class="text-heading-sm text-(--text-default)">{{ variable.key }}</h1>
-  <Tag v-if="variable.secret" label="Secret" severity="secondary" icon="pi pi-lock" size="medium" />
-</div>`
-
-const EDIT_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
-  <div class="flex min-h-0 flex-1 flex-col overflow-auto">
-    <section class="flex w-full flex-1 flex-col ${PAGE_PADDING}">
-${indent(heading(EDIT_TITLE, 'Update the key, value, and secret behavior.'), 3)}
-      <div class="mt-(--spacing-md) flex w-full flex-1 flex-col gap-(--spacing-md)">
-        <TabView v-model:value="activeTab">
-          <TabView.List>
-            <TabView.Item v-for="tab in tabs" :key="tab.value" :value="tab.value" :label="tab.label" />
-          </TabView.List>
-        </TabView>
-        <form
-          v-if="activeTab === 'configuration'"
-          class="flex w-full grow flex-col gap-(--spacing-xxl) max-md:gap-(--spacing-xl)"
-          aria-label="Edit variable"
-          novalidate
-          @submit.prevent
-        >
-${indent(formSection('Variable', 'Store a value your Functions read at runtime.', EDIT_EDITOR), 5)}
-${indent(formSection('Scope', 'Define where this variable is available.', EDIT_SCOPE), 5)}
-        </form>
-        <div v-else class="flex w-full flex-col">
-${indent(VERSION_TABLE, 5)}
-        </div>
-      </div>
-    </section>
-  </div>
-${indent(`<div v-if="activeTab === 'configuration'" class="flex shrink-0">\n${indent(actionBar(' :disabled="unchanged"'))}\n</div>`)}
-</div>`
-
-const LIST_TABLE = `<Table
-  v-if="rows.length"
-  :data="rows"
-  :columns="columns"
-  row-key="id"
-  border
-  enable-sorting
-  paginated
-  :page-size="10"
->
-  <template #toolbar>
-    <Table.Search />
-    <Table.RefreshButton />
-    <Table.Export filename="Variables" />
-    <Table.ColumnSelector />
-  </template>
-  <template #cell-value="{ row }">
-    <span v-if="row.secret" class="truncate text-body-sm text-(--text-default)">{{ row.value }}</span>
-    <div v-else class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-      <span class="min-w-0 flex-1 truncate text-body-sm text-(--text-default)">{{ row.value }}</span>
-      <CopyButton kind="outlined" :value="row.value" aria-label="Copy value" />
-    </div>
-  </template>
-  <template #cell-lastVersion="{ value }">
-    <div class="flex items-center gap-(--spacing-sm) whitespace-nowrap">
-      <a href="#" class="text-label-code-sm text-(--text-default) underline underline-offset-2" @click.prevent.stop>{{ value.id }}</a>
-      <Tag :label="value.label" :severity="value.severity" :icon="value.icon" size="small" />
-    </div>
-  </template>
-  <template #cell-scope="{ value }">
-    <div class="flex flex-col gap-(--spacing-xxs)">
-      <span v-for="item in value" :key="item.label + item.name" class="whitespace-nowrap text-body-sm text-(--text-default)">
-        {{ item.label }}
-        <a v-if="item.name" href="#" class="text-(--text-default) underline underline-offset-2" @click.prevent.stop>{{ item.name }}</a>
-      </span>
-    </div>
-  </template>
-  <template #cell-actions>
-    <Dropdown placement="bottom-end">
-      <Dropdown.Trigger>
-        <IconButton icon="pi pi-ellipsis-h" kind="outlined" size="small" aria-label="Row actions" />
-      </Dropdown.Trigger>
-      <Dropdown.Group>
-        <Dropdown.Option value="delete" label="Delete">
-          <template #left><i class="pi pi-trash" aria-hidden="true" /></template>
-        </Dropdown.Option>
-      </Dropdown.Group>
-    </Dropdown>
-  </template>
-</Table>
-<EmptyState
-  v-else
-  title="No Variables yet"
-  description="Create your first variable to define reusable configuration values for platform resources."
-  bordered
->
-  <template #actions>
-    <Button label="Variable" icon="pi pi-plus" kind="outlined" size="large" />
-  </template>
-</EmptyState>`
-
-const LIST_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col overflow-auto bg-(--bg-canvas)">
-  <section class="flex w-full flex-1 flex-col ${PAGE_PADDING}">
-${indent(
-  heading(
-    '<h1 class="text-heading-sm text-(--text-default)">Variables</h1>',
-    "Define and manage variables that store configuration values across Azion's products.",
-    `<Button label="Get Help" kind="text" size="large" />\n<Button label="Variable" icon="pi pi-plus" kind="outlined" size="large" />`
-  ),
-  2
-)}
-    <div class="mt-(--spacing-md) flex w-full flex-1 flex-col">
-${indent(LIST_TABLE, 3)}
-    </div>
-  </section>
-</div>`
-
-const DRAWER_TEMPLATE = `<Drawer v-model:open="open" side="right" size="medium">
-  <DrawerTrigger>
-    <Button label="Variable" icon="pi pi-plus" kind="outlined" size="medium" />
-  </DrawerTrigger>
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerContent>
-      <form class="flex min-h-0 flex-1 flex-col" aria-label="Create variable" novalidate @submit.prevent>
-        <PanelHeader>
-          <DrawerTitle>Create variable</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <div class="flex w-full flex-col gap-(--spacing-xxl)">
-            <Message severity="info" :label="'Variables created here are scoped to the Application ' + scopeName + '.'" />
-${indent(ADD_EDITOR, 6)}
-          </div>
-        </PanelContent>
-        <PanelFooter>
-          <div class="ml-auto flex items-center gap-(--spacing-sm)">
-            <Button label="Cancel" kind="outlined" size="medium" @click="open = false" />
-            <Button label="Save" kind="primary" size="medium" @click="submit" />
-          </div>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </DrawerPortal>
-</Drawer>`
-
-const SECRET_HELPERS = String.raw`const secretTooltip = (item) => (item.secret ? 'The value is hidden and write-only.' : 'Mark as secret')
-const secretLabel = (item) => (item.secret ? 'Unmark as secret' : 'Mark as secret')`
-
-const ENTRY_LINES = String.raw`const formId = useId()
-let nextId = 0
-const createEntry = (key = '', value = '', secret = false) => ({
-  id: (nextId += 1),
-  key,
-  value,
-  secret,
-  visible: false
-})
-const submitted = ref(false)
-const isEmpty = (item) => !item.key.trim() && !item.value.trim()
-const keyMissing = (item) => submitted.value && !isEmpty(item) && !item.key.trim()
-const noVariables = computed(() => submitted.value && entries.value.every(isEmpty))`
-
-const EDITOR_LINES = String.raw`${ENTRY_LINES}
-const entries = ref([createEntry()])
-const view = ref('Form')
-const viewOptions = [
-  { label: 'Form', value: 'Form' },
-  { label: 'JSON', value: 'JSON' }
-]
-const jsonText = ref('{}')
-const fileInput = ref(null)
-const valueMissing = (item) => submitted.value && !isEmpty(item) && !item.value.trim()
-const canRemove = (item) => entries.value.length > 1 || !isEmpty(item)
-const canAdd = computed(() => {
-  const last = entries.value.at(-1)
-  return Boolean(last.key.trim() && last.value.trim())
-})
-${SECRET_HELPERS}
-
-const addEntry = () => entries.value.push(createEntry())
-const removeEntry = (index) => {
-  entries.value.splice(index, 1)
-  if (!entries.value.length) entries.value.push(createEntry())
+  return value
 }
 
-const parseEnv = (text) =>
-  text
+const formatKey = (value) =>
+  String(value ?? '')
+    .replace(/\s/g, '_')
+    .toUpperCase()
+
+const parseEnvFile = (content) => {
+  const parsed = []
+  const invalidLines = []
+  String(content ?? '')
     .split(/\r?\n/)
-    .map((line) => line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/))
-    .filter(Boolean)
-    .map(([, key, value]) => [key, value.trim().replace(/^(['"])(.*)\1$/, '$2')])
-const parseVariables = (text) => {
-  try {
-    const parsed = JSON.parse(text)
-    const isObject = parsed && typeof parsed === 'object' && !Array.isArray(parsed)
-    return isObject ? Object.entries(parsed).map(([key, value]) => [key, String(value)]) : []
-  } catch {
-    return parseEnv(text)
+    .forEach((line, index) => {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) return
+      const declaration = trimmed.startsWith('export ') ? trimmed.slice(7).trim() : trimmed
+      const match = declaration.match(/^([A-Z0-9_]+)\s*=\s*(.*)$/)
+      if (!match) {
+        invalidLines.push(index + 1)
+        return
+      }
+      parsed.push({ key: match[1], value: unquote(match[2]) })
+    })
+  return { parsed, invalidLines }
+}
+
+const jsonValue = (value) => {
+  if (typeof value === 'string') return value
+  if (value === null || value === undefined) return ''
+  if (typeof value === 'object') return JSON.stringify(value)
+  return String(value)
+}
+
+const parseJsonObject = (content) => {
+  const parsed = JSON.parse(content)
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
+  return Object.entries(parsed)
+    .filter(([key]) => key.trim())
+    .map(([key, value]) => ({ key: formatKey(key), value: jsonValue(value) }))
+}
+
+const parsePasted = (content) => {
+  const text = String(content ?? '').trim()
+  if (!text) return null
+  if (text.startsWith('{')) {
+    try {
+      const pairs = parseJsonObject(text)
+      return pairs?.length ? pairs : null
+    } catch {
+      return null
+    }
   }
-}
-const toEntries = (pairs, secrets = new Set()) =>
-  pairs.map(([key, value]) => createEntry(key, value, secrets.has(key)))
-
-const pasteKey = (event, index) => {
-  const pairs = parseVariables(event.clipboardData?.getData('text/plain') ?? '')
-  if (!pairs.length || entries.value[index].key.trim()) return
-  event.preventDefault()
-  entries.value.splice(index, 1, ...toEntries(pairs))
-}
-const upload = async (event) => {
-  const [file] = event.target.files ?? []
-  event.target.value = ''
-  if (!file) return
-  const pairs = parseVariables(await file.text())
-  if (!pairs.length) return
-  entries.value = [...entries.value.filter((item) => !isEmpty(item)), ...toEntries(pairs)]
+  const { parsed, invalidLines } = parseEnvFile(text)
+  return invalidLines.length || !parsed.length ? null : parsed
 }
 
-watch(view, (next) => {
-  const filled = entries.value.filter((item) => !isEmpty(item))
-  if (next === 'JSON') {
-    jsonText.value = JSON.stringify(Object.fromEntries(filled.map((item) => [item.key, item.value])), null, 2)
-    return
-  }
-  const pairs = parseVariables(jsonText.value)
-  const secrets = new Set(filled.filter((item) => item.secret).map((item) => item.key))
-  if (pairs.length) entries.value = toEntries(pairs, secrets)
-})`
+const createScopes = () =>
+  SCOPE_TYPES.map((scope) => ({
+    ...scope,
+    placeholder: scope.plural ? `Select ${scope.plural}` : '',
+    enabled: scope.type === 'global',
+    ids: [],
+    query: '',
+    options: SCOPE_OPTIONS[scope.type] ?? []
+  }))
 
-const SCOPE_LABEL_LINES = String.raw`const scopeLabel = (scope) => (ids) => {
-  if (!ids.length) return ''
-  if (ids.length > 1) return 'Selected ' + ids.length + ' ' + scope.plural
-  return scope.options.find((option) => option.value === ids[0])?.label ?? ids[0]
-}`
-
-const CREATE_SCOPE_LINES = String.raw`${SCOPE_LABEL_LINES}
-const scopeMissing = (scope) => submitted.value && scope.enabled && scope.type !== 'global' && !scope.ids.length
-const visibleOptions = (scope) =>
-  scope.options.filter((option) => option.label.toLowerCase().includes(scope.query.trim().toLowerCase()))
-const setScope = (scope, enabled) => {
-  scope.enabled = enabled
-  scope.ids = enabled ? scope.options.map((option) => option.value) : []
-  scopes[0].enabled = !scopes.some((item) => item.type !== 'global' && item.enabled)
-}
-
-const submit = () => {
-  submitted.value = true
-}`
-
-const editorImports = [
-  importLine('Button', 'button'),
-  importLine('Checkbox', 'checkbox'),
-  importLine('HelperText', 'helper-text'),
-  importLine('IconButton', 'icon-button'),
-  importLine('InputGroup', 'input-group'),
-  importLine('SegmentedButton', 'segmented-button'),
-  importLine('Textarea', 'textarea'),
-  importLine('Tooltip', 'tooltip')
-]
-
-const CREATE_SCRIPT = [
-  ...editorImports,
-  importLine('InputText', 'input-text'),
-  importLine('MultiSelect', 'multi-select'),
-  importLine('Switch', 'switch'),
-  "import { computed, reactive, ref, useId, watch } from 'vue'",
-  '',
-  declare('scopes', createScopes(), 'reactive'),
-  '',
-  EDITOR_LINES,
-  '',
-  CREATE_SCOPE_LINES
-]
-
-const DRAWER_SCRIPT = [
-  importLine('Drawer', 'drawer'),
-  importLine('DrawerClose', 'drawer-close'),
-  importLine('DrawerContent', 'drawer-content'),
-  importLine('DrawerOverlay', 'drawer-overlay'),
-  importLine('DrawerPortal', 'drawer-portal'),
-  importLine('DrawerTitle', 'drawer-title'),
-  importLine('DrawerTrigger', 'drawer-trigger'),
-  ...editorImports,
-  importLine('Message', 'message'),
-  importLine('PanelContent', 'panel-content'),
-  importLine('PanelFooter', 'panel-footer'),
-  importLine('PanelHeader', 'panel-header'),
-  "import { computed, ref, useId, watch } from 'vue'",
-  '',
-  'const open = ref(false)',
-  "const scopeName = 'my-app-vue'",
-  '',
-  EDITOR_LINES,
-  '',
-  String.raw`const submit = () => {
-  submitted.value = true
-  const filled = entries.value.filter((item) => !isEmpty(item))
-  if (filled.length && filled.every((item) => item.key.trim() && item.value.trim())) open.value = false
-}
-
-watch(open, (value) => {
-  if (!value) return
-  submitted.value = false
-  view.value = 'Form'
-  entries.value = [createEntry()]
-})`
-]
-
-const editScript = (variable, initialTab) => [
-  importLine('Button', 'button'),
-  importLine('Checkbox', 'checkbox'),
-  importLine('Dialog', 'dialog'),
-  importLine('DialogContent', 'dialog-content'),
-  importLine('DialogDescription', 'dialog-description'),
-  importLine('DialogOverlay', 'dialog-overlay'),
-  importLine('DialogPortal', 'dialog-portal'),
-  importLine('DialogTitle', 'dialog-title'),
-  importLine('Dropdown', 'dropdown'),
-  importLine('HelperText', 'helper-text'),
-  importLine('IconButton', 'icon-button'),
-  importLine('InputGroup', 'input-group'),
-  importLine('Message', 'message'),
-  importLine('MultiSelect', 'multi-select'),
-  importLine('PanelContent', 'panel-content'),
-  importLine('PanelFooter', 'panel-footer'),
-  importLine('PanelHeader', 'panel-header'),
-  importLine('Switch', 'switch'),
-  importLine('TabView', 'tab-view'),
-  importLine('Table', 'table'),
-  importLine('Tag', 'tag'),
-  importLine('Tooltip', 'tooltip'),
-  "import { computed, ref, useId } from 'vue'",
-  '',
-  declare('variable', variable),
-  declare('scopes', editScopes(variable)),
-  declare('tabs', TABS),
-  `const activeTab = ref('${initialTab}')`,
-  '',
-  declare('versions', VERSIONS),
-  declare('versionColumns', VERSION_COLUMNS),
-  '',
-  ENTRY_LINES,
-  String.raw`const entries = ref([createEntry(variable.key, variable.value, variable.secret)])
-const locked = (item) => variable.secret && item.key.trim() === variable.key
-const valueMissing = (item) => submitted.value && !isEmpty(item) && !item.value.trim() && !locked(item)
-const secretTooltip = (item) => {
-  if (locked(item)) return 'Saved as a secret. Delete the variable to change this.'
-  return item.secret ? 'The value is hidden and write-only.' : 'Mark as secret'
-}
-const secretLabel = (item) => {
-  if (locked(item)) return 'Secret locked'
-  return item.secret ? 'Unmark as secret' : 'Mark as secret'
-}
-const renamed = computed(() => {
-  const key = entries.value[0].key.trim()
-  return Boolean(key) && key !== variable.key
-})
-const unchanged = computed(() => {
-  const [item] = entries.value
-  const valueKept = item.value === variable.value || (item.secret && !item.value)
-  return item.key.trim() === variable.key && item.secret === variable.secret && valueKept
-})
-${SCOPE_LABEL_LINES}
-
-const submit = () => {
-  submitted.value = true
-}
-
-const revertOpen = ref(false)
-const selectedVersion = ref(null)
-const revertDescription = computed(
-  () =>
-    'This creates a new current version of ' +
-    variable.key +
-    ' using the values from ' +
-    (selectedVersion.value?.id ?? 'the selected version') +
-    '. The current version is preserved in history and the scope stays unchanged.'
-)
-const runVersionAction = (action, version) => {
-  if (action === 'copy') {
-    navigator.clipboard?.writeText(version.id)
-    return
-  }
-  selectedVersion.value = version
-  revertOpen.value = true
-}`
-]
-
-const LIST_SCRIPT = (rows) => [
-  importLine('Button', 'button'),
-  importLine('CopyButton', 'copy-button'),
-  importLine('Dropdown', 'dropdown'),
-  importLine('EmptyState', 'empty-state'),
-  importLine('IconButton', 'icon-button'),
-  importLine('Table', 'table'),
-  importLine('Tag', 'tag'),
-  '',
-  declare('columns', VARIABLE_COLUMNS),
-  '',
-  declare('rows', rows)
-]
-
-const useEditorBasics = (entries) => {
+const useCreateVariable = ({ existingKeys, onCreated }) => {
   const formId = useId()
-  const submitted = ref(false)
-  const isEmpty = (item) => !item.key.trim() && !item.value.trim()
-  const keyMissing = (item) => submitted.value && !isEmpty(item) && !item.key.trim()
-  const noVariables = computed(() => submitted.value && entries.value.every(isEmpty))
-  return { formId, submitted, isEmpty, keyMissing, noVariables }
-}
+  const fieldId = (entry, part) => `${formId}-${part}-${entry.id}`
+  const messageId = (entry, part) => `${fieldId(entry, part)}-message`
 
-const entryFactory = () => {
-  let nextId = 0
-  return (key = '', value = '', secret = false) => ({
-    id: (nextId += 1),
+  let nextEntryId = 0
+  const createEntry = (key = '', value = '', secret = false) => ({
+    id: (nextEntryId += 1),
     key,
     value,
     secret,
     visible: false
   })
-}
+  const isEmptyEntry = (entry) => !entry.key.trim() && !entry.value.trim()
 
-const scopeLabel = (scope) => (ids) => {
-  if (!ids.length) return ''
-  if (ids.length > 1) return `Selected ${ids.length} ${scope.plural}`
-  return scope.options.find((option) => option.value === ids[0])?.label ?? ids[0]
-}
-
-const parseEnv = (text) =>
-  text
-    .split(/\r?\n/)
-    .map((line) => line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/))
-    .filter(Boolean)
-    .map(([, key, value]) => [key, value.trim().replace(/^(['"])(.*)\1$/, '$2')])
-
-const parseVariables = (text) => {
-  try {
-    const parsed = JSON.parse(text)
-    const isObject = parsed && typeof parsed === 'object' && !Array.isArray(parsed)
-    return isObject ? Object.entries(parsed).map(([key, value]) => [key, String(value)]) : []
-  } catch {
-    return parseEnv(text)
-  }
-}
-
-const useAddEditor = () => {
-  const createEntry = entryFactory()
+  const drawerOpen = ref(false)
+  const submitting = ref(false)
+  const submitted = ref(false)
   const entries = ref([createEntry()])
   const view = ref('Form')
-  const viewOptions = [
-    { label: 'Form', value: 'Form' },
-    { label: 'JSON', value: 'JSON' }
-  ]
   const jsonText = ref('{}')
+  const jsonError = ref('')
   const fileInput = ref(null)
-  const basics = useEditorBasics(entries)
-  const { submitted, isEmpty } = basics
-  const valueMissing = (item) => submitted.value && !isEmpty(item) && !item.value.trim()
-  const canRemove = (item) => entries.value.length > 1 || !isEmpty(item)
+
+  const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
+  const keyCounts = computed(() =>
+    filledEntries.value.reduce((counts, entry) => {
+      const key = entry.key.trim()
+      counts.set(key, (counts.get(key) ?? 0) + 1)
+      return counts
+    }, new Map())
+  )
+  const duplicatedKeys = computed(() =>
+    [...keyCounts.value].filter(([, count]) => count > 1).map(([key]) => key)
+  )
+
+  const keyError = (entry) => {
+    if (!submitted.value || isEmptyEntry(entry)) return null
+    const key = entry.key.trim()
+    if (!key) return { kind: 'required', message: 'Key is required.' }
+    if (!/^[A-Z0-9_]+$/.test(key))
+      return { kind: 'invalid', message: 'Use only uppercase letters, numbers, and underscores.' }
+    if (keyCounts.value.get(key) > 1)
+      return { kind: 'invalid', message: `Duplicated key: ${duplicatedKeys.value.join(', ')}` }
+    if (existingKeys.value.includes(key))
+      return { kind: 'invalid', message: `${key} already exists in this list.` }
+    return null
+  }
+  const valueError = (entry) => {
+    if (!submitted.value || isEmptyEntry(entry) || entry.value.trim()) return null
+    return { kind: 'required', message: 'Value is required.' }
+  }
+
+  const noVariables = computed(() => filledEntries.value.length === 0)
+  const isValid = computed(
+    () =>
+      !noVariables.value &&
+      filledEntries.value.every((entry) => !keyError(entry) && !valueError(entry))
+  )
   const canAdd = computed(() => {
     const last = entries.value.at(-1)
-    return Boolean(last.key.trim() && last.value.trim())
+    return Boolean(last?.key.trim() && last?.value.trim())
   })
-  const secretTooltip = (item) =>
-    item.secret ? 'The value is hidden and write-only.' : 'Mark as secret'
-  const secretLabel = (item) => (item.secret ? 'Unmark as secret' : 'Mark as secret')
-  const addEntry = () => entries.value.push(createEntry())
-  const removeEntry = (index) => {
-    entries.value.splice(index, 1)
-    if (!entries.value.length) entries.value.push(createEntry())
+  const canRemove = computed(() => entries.value.length > 1)
+
+  const addEntry = async () => {
+    const entry = createEntry()
+    entries.value.push(entry)
+    await nextTick()
+    globalThis.document?.getElementById(fieldId(entry, 'key'))?.focus()
   }
+  const removeEntry = (index) => {
+    if (canRemove.value) entries.value.splice(index, 1)
+  }
+  const setKey = (entry, value) => {
+    entry.key = formatKey(value)
+  }
+
+  const secretTooltip = (entry) =>
+    entry.secret ? 'The value is hidden and write-only.' : 'Mark as secret'
+  const secretAriaLabel = (entry) => (entry.secret ? 'Unmark as secret' : 'Mark as secret')
+
   const toEntries = (pairs, secrets = new Set()) =>
-    pairs.map(([key, value]) => createEntry(key, value, secrets.has(key)))
-  const pasteKey = (event, index) => {
-    const pairs = parseVariables(event.clipboardData?.getData('text/plain') ?? '')
-    if (!pairs.length || entries.value[index].key.trim()) return
+    pairs.map((pair) => createEntry(pair.key, pair.value, secrets.has(pair.key)))
+
+  const pasteIntoKey = (event, index) => {
+    if (!isEmptyEntry(entries.value[index])) return
+    const pairs = parsePasted(event.clipboardData?.getData('text/plain'))
+    if (!pairs) return
     event.preventDefault()
     entries.value.splice(index, 1, ...toEntries(pairs))
   }
-  const upload = async (event) => {
+
+  const onFilePicked = async (event) => {
     const [file] = event.target.files ?? []
     event.target.value = ''
     if (!file) return
-    const pairs = parseVariables(await file.text())
-    if (!pairs.length) return
-    entries.value = [...entries.value.filter((item) => !isEmpty(item)), ...toEntries(pairs)]
+    const { parsed, invalidLines } = parseEnvFile(await file.text())
+    if (!parsed.length && invalidLines.length) return
+    view.value = 'Form'
+    await nextTick()
+    entries.value = [...filledEntries.value, ...toEntries(parsed)]
+    if (!entries.value.length) entries.value = [createEntry()]
   }
+
   watch(view, (next) => {
-    const filled = entries.value.filter((item) => !isEmpty(item))
     if (next === 'JSON') {
+      jsonError.value = ''
       jsonText.value = JSON.stringify(
-        Object.fromEntries(filled.map((item) => [item.key, item.value])),
+        Object.fromEntries(filledEntries.value.map((entry) => [entry.key.trim(), entry.value])),
         null,
         2
       )
       return
     }
-    const pairs = parseVariables(jsonText.value)
-    const secrets = new Set(filled.filter((item) => item.secret).map((item) => item.key))
-    if (pairs.length) entries.value = toEntries(pairs, secrets)
+    if (jsonError.value) return
+    const secrets = new Set(
+      filledEntries.value.filter((entry) => entry.secret).map((entry) => entry.key.trim())
+    )
+    const pairs = parseJsonObject(jsonText.value) ?? []
+    entries.value = pairs.length ? toEntries(pairs, secrets) : [createEntry()]
   })
+
+  watch(jsonText, (text) => {
+    if (view.value !== 'JSON') return
+    try {
+      jsonError.value = parseJsonObject(text)
+        ? ''
+        : 'Variables must be a JSON object with key/value pairs.'
+    } catch {
+      jsonError.value = 'Variables must be valid JSON.'
+    }
+  })
+
+  const scopes = reactive(createScopes())
+
+  const setScopeEnabled = (scope, enabled) => {
+    if (scope.type === 'global') return
+    scope.enabled = enabled
+    scope.ids = enabled ? scope.options.map((option) => option.value) : []
+    scope.query = ''
+    scopes[0].enabled = !scopes.some((item) => item.type !== 'global' && item.enabled)
+  }
+  const scopeMissing = (scope) =>
+    scope.enabled && scope.type !== 'global' && scope.ids.length === 0
+  const scopeError = (scope) => submitted.value && scopeMissing(scope)
+  const scopeDisplay = (scope) => (ids) => {
+    if (!ids?.length) return ''
+    if (ids.length > 1) return `Selected ${ids.length} ${scope.plural}`
+    return scope.options.find((option) => option.value === ids[0])?.label ?? ids[0]
+  }
+  const visibleScopeOptions = (scope) => {
+    const query = scope.query.trim().toLowerCase()
+    if (!query) return scope.options
+    return scope.options.filter((option) => option.label.toLowerCase().includes(query))
+  }
+  const scopePayload = () =>
+    scopes.flatMap((scope) => {
+      if (!scope.enabled) return []
+      if (scope.type === 'global') return [{ type: 'global', id: '', name: '' }]
+      return scope.ids.map((id) => ({
+        type: scope.type,
+        id,
+        name: scope.options.find((option) => option.value === id)?.label ?? id
+      }))
+    })
+
+  watch(drawerOpen, (isOpen) => {
+    if (!isOpen) return
+    entries.value = [createEntry()]
+    view.value = 'Form'
+    jsonText.value = '{}'
+    jsonError.value = ''
+    submitted.value = false
+    Object.assign(scopes, createScopes())
+    submitting.value = false
+  })
+
+  const submit = async () => {
+    if (submitting.value) return
+    if (view.value === 'JSON') {
+      if (jsonError.value) return
+      view.value = 'Form'
+      await nextTick()
+    }
+    submitted.value = true
+    if (!isValid.value || scopes.some(scopeMissing)) return
+    submitting.value = true
+    await new Promise((resolve) => setTimeout(resolve, 900))
+    const scope = scopePayload()
+    const created = filledEntries.value.map((entry) => ({
+      key: entry.key.trim(),
+      value: entry.value,
+      secret: entry.secret,
+      scope
+    }))
+    onCreated(created)
+    submitting.value = false
+    drawerOpen.value = false
+  }
+
   return {
-    ...basics,
-    createEntry,
+    SECRET_MASK,
+    SECRET_HINT,
+    VIEW_OPTIONS,
+    fieldClass: FIELD_CLASS,
+    formId,
+    fieldId,
+    messageId,
+    drawerOpen,
+    submitting,
+    submitted,
     entries,
     view,
-    viewOptions,
     jsonText,
+    jsonError,
     fileInput,
-    valueMissing,
-    canRemove,
+    keyError,
+    valueError,
+    noVariables,
     canAdd,
-    secretTooltip,
-    secretLabel,
+    canRemove,
     addEntry,
     removeEntry,
-    pasteKey,
-    upload
+    setKey,
+    secretTooltip,
+    secretAriaLabel,
+    pasteIntoKey,
+    onFilePicked,
+    scopes,
+    setScopeEnabled,
+    scopeError,
+    scopeDisplay,
+    visibleScopeOptions,
+    submit
+  }
+}
+
+const scopeSummary = (scope) =>
+  SCOPE_TYPES.map((entry) => ({
+    ...entry,
+    names: (scope ?? []).filter((item) => item.type === entry.type).map((item) => item.name)
+  }))
+    .filter((entry) => entry.names.length > 0)
+    .map((group) => ({
+      label: group.label,
+      detail:
+        group.type === 'global'
+          ? ''
+          : group.names.length === 1
+            ? group.names[0]
+            : `${group.names.length} ${group.plural}`
+    }))
+
+const listSetup = () => {
+  const variables = ref(VARIABLES.map((variable) => ({ ...variable })))
+  const existingKeys = computed(() => variables.value.map((variable) => variable.key))
+  const loading = ref(false)
+  const refresh = () => {
+    loading.value = true
+    setTimeout(() => {
+      loading.value = false
+    }, 600)
+  }
+  const filterQuery = ref('')
+  const filterRows = computed(() => {
+    const term = filterQuery.value.trim().toLowerCase()
+    return term
+      ? FILTER_FIELDS.filter((field) => field.label.toLowerCase().includes(term))
+      : FILTER_FIELDS
+  })
+  const columnVisibility = ref({ id: false })
+  const listedColumns = COLUMNS.filter((column) => column.kind !== 'action').map((column) => ({
+    id: column.accessorKey,
+    label: column.header,
+    locked: column.hideable === false
+  }))
+  const isVisible = (id) => columnVisibility.value[id] !== false
+  const setVisible = (id, visible) => {
+    const next = { ...columnVisibility.value }
+    if (visible) delete next[id]
+    else next[id] = false
+    columnVisibility.value = next
+  }
+  const hiddenCount = computed(() => listedColumns.filter((column) => !isVisible(column.id)).length)
+  const showAll = () => {
+    columnVisibility.value = {}
+  }
+  const onCreated = (created) => {
+    variables.value = [
+      ...created.map((variable, index) => ({
+        ...variable,
+        id: `v-${Date.now()}-${index}`,
+        lastEditor: 'myemail',
+        lastEditorAvatar: '',
+        lastModified: 'just now'
+      })),
+      ...variables.value
+    ]
+  }
+  return {
+    columns: COLUMNS,
+    variables,
+    search: ref(''),
+    loading,
+    refresh,
+    table: ref(null),
+    columnVisibility,
+    filterOpen: ref(false),
+    filterQuery,
+    filterRows,
+    columnsOpen: ref(false),
+    listedColumns,
+    isVisible,
+    setVisible,
+    hiddenCount,
+    showAll,
+    displayValue: (row) => (row.secret ? SECRET_MASK : row.value),
+    scopeSummary,
+    ...useCreateVariable({ existingKeys, onCreated })
   }
 }
 
 const createSetup = () => {
-  const editor = useAddEditor()
-  const scopes = reactive(createScopes())
-  const scopeMissing = (scope) =>
-    editor.submitted.value && scope.enabled && scope.type !== 'global' && !scope.ids.length
-  const visibleOptions = (scope) =>
-    scope.options.filter((option) =>
-      option.label.toLowerCase().includes(scope.query.trim().toLowerCase())
-    )
-  const setScope = (scope, enabled) => {
-    scope.enabled = enabled
-    scope.ids = enabled ? scope.options.map((option) => option.value) : []
-    scopes[0].enabled = !scopes.some((item) => item.type !== 'global' && item.enabled)
-  }
-  const submit = () => {
-    editor.submitted.value = true
-  }
-  return { ...editor, scopes, scopeLabel, scopeMissing, visibleOptions, setScope, submit }
-}
-
-const drawerSetup = () => {
-  const editor = useAddEditor()
-  const open = ref(false)
-  const submit = () => {
-    editor.submitted.value = true
-    const filled = editor.entries.value.filter((item) => !editor.isEmpty(item))
-    if (filled.length && filled.every((item) => item.key.trim() && item.value.trim())) {
-      open.value = false
-    }
-  }
-  watch(open, (value) => {
-    if (!value) return
-    editor.submitted.value = false
-    editor.view.value = 'Form'
-    editor.entries.value = [editor.createEntry()]
-  })
-  return { ...editor, open, scopeName: 'my-app-vue', submit }
-}
-
-const editSetup = (variable, initialTab) => () => {
-  const createEntry = entryFactory()
-  const entries = ref([createEntry(variable.key, variable.value, variable.secret)])
-  const basics = useEditorBasics(entries)
-  const { submitted, isEmpty } = basics
-  const locked = (item) => variable.secret && item.key.trim() === variable.key
-  const valueMissing = (item) =>
-    submitted.value && !isEmpty(item) && !item.value.trim() && !locked(item)
-  const secretTooltip = (item) => {
-    if (locked(item)) return 'Saved as a secret. Delete the variable to change this.'
-    return item.secret ? 'The value is hidden and write-only.' : 'Mark as secret'
-  }
-  const secretLabel = (item) => {
-    if (locked(item)) return 'Secret locked'
-    return item.secret ? 'Unmark as secret' : 'Mark as secret'
-  }
-  const renamed = computed(() => {
-    const key = entries.value[0].key.trim()
-    return Boolean(key) && key !== variable.key
-  })
-  const unchanged = computed(() => {
-    const [item] = entries.value
-    const valueKept = item.value === variable.value || (item.secret && !item.value)
-    return item.key.trim() === variable.key && item.secret === variable.secret && valueKept
-  })
-  const submit = () => {
-    submitted.value = true
-  }
-  const revertOpen = ref(false)
-  const selectedVersion = ref(null)
-  const revertDescription = computed(
-    () =>
-      `This creates a new current version of ${variable.key} using the values from ${
-        selectedVersion.value?.id ?? 'the selected version'
-      }. The current version is preserved in history and the scope stays unchanged.`
-  )
-  const runVersionAction = (action, version) => {
-    if (action === 'copy') {
-      navigator.clipboard?.writeText(version.id)
-      return
-    }
-    selectedVersion.value = version
-    revertOpen.value = true
-  }
-  return {
-    ...basics,
-    variable,
-    scopes: editScopes(variable),
-    tabs: TABS,
-    activeTab: ref(initialTab),
-    versions: VERSIONS,
-    versionColumns: VERSION_COLUMNS,
-    entries,
-    locked,
-    valueMissing,
-    secretTooltip,
-    secretLabel,
-    renamed,
-    unchanged,
-    scopeLabel,
-    submit,
-    revertOpen,
-    revertDescription,
-    runVersionAction
-  }
+  const existingKeys = ref(VARIABLES.map((variable) => variable.key))
+  return useCreateVariable({ existingKeys, onCreated: () => {} })
 }
 
 const meta = {
@@ -1215,7 +1481,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The v6 Variables screens of the console: the list, the create page, the edit page with its Settings and Version history tabs, and the scoped create drawer an Application or Firewall opens from its own Variables tab. Each variable is entered as a pair of `InputGroup` rows, a Key row with a Remove button and a Value row with a Secret checkbox, and every scope is an `InputGroup` joining its label, a `MultiSelect` of resources and an enable `Switch`. Built from `InputGroup`, `Checkbox`, `IconButton`, `SegmentedButton`, `MultiSelect`, `Switch`, `HelperText`, `Message`, `Tooltip`, `TabView`, `Table`, `Tag`, `CopyButton`, `Dropdown`, `EmptyState`, `Dialog`, `Drawer` and `Button`; the JSON view uses a webkit `Textarea` in place of the console code editor.'
+          'The Variables module of the console: the list page at /variables and the Create Variable drawer its heading action opens. Each variable is entered as a pair of `InputGroup` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroup` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. An account with no variables renders the ProductFirstUse template in place of the list. Built from `TableRoot`, `CardBox`, `CopyButton`, `Avatar`, `Dropdown`, `Popover`, `InputText`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `SegmentedButton`, `MultiSelect`, `Switch`, `HelperText`, `Hint` and `Button`; the JSON view is a webkit `Textarea`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -1227,32 +1493,16 @@ export default meta
 export const List = {
   render: () => ({
     components,
-    setup: () => ({ rows: VARIABLES, columns: VARIABLE_COLUMNS }),
+    setup: listSetup,
     template: LIST_TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'The Variables index: five variables in a bordered Table with search, reload, export and columns in its toolbar, secret values masked and plain values copyable.'
+          'The Variables page: the medium heading with Documentation and Create Variable, the filter, search, refresh, export and columns controls, and five variables in a flush card with secret values masked and plain values copyable. Create Variable opens the drawer, and a saved variable lands at the top of the table.'
       },
-      source: { code: toSfc(LIST_SCRIPT(VARIABLES), LIST_TEMPLATE) }
-    }
-  }
-}
-
-export const ListEmpty = {
-  render: () => ({
-    components,
-    setup: () => ({ rows: [], columns: VARIABLE_COLUMNS }),
-    template: LIST_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'No variables yet: the table gives way to the EmptyState with its create action.'
-      },
-      source: { code: toSfc(LIST_SCRIPT([]), LIST_TEMPLATE) }
+      source: { code: toSfc(LIST_SOURCE, LIST_TEMPLATE) }
     }
   }
 }
@@ -1267,78 +1517,9 @@ export const Create = {
     docs: {
       description: {
         story:
-          'The create page: Key and Value input groups with add and remove, the Form and JSON views, Upload, the Secret checkbox, and the five scope rows; Save flags only the fields still empty.'
+          'Closed until Create Variable opens it: one empty Key and Value pair, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Save flags the empty or malformed fields only after it is pressed.'
       },
-      source: { code: toSfc(CREATE_SCRIPT, CREATE_TEMPLATE) }
-    }
-  }
-}
-
-export const Edit = {
-  render: () => ({
-    components,
-    setup: editSetup(EDIT_VARIABLE, 'configuration'),
-    template: EDIT_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Editing a plain variable on the Settings tab: one Key and Value pair, the rename warning once the key changes, the read-only scope, and Save enabled only after a change.'
-      },
-      source: { code: toSfc(editScript(EDIT_VARIABLE, 'configuration'), EDIT_TEMPLATE) }
-    }
-  }
-}
-
-export const EditSecret = {
-  render: () => ({
-    components,
-    setup: editSetup(EDIT_SECRET_VARIABLE, 'configuration'),
-    template: EDIT_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Editing a stored secret: the Secret tag beside the key, a masked placeholder in place of the value, and the Secret checkbox locked.'
-      },
-      source: { code: toSfc(editScript(EDIT_SECRET_VARIABLE, 'configuration'), EDIT_TEMPLATE) }
-    }
-  }
-}
-
-export const VersionHistory = {
-  render: () => ({
-    components,
-    setup: editSetup(EDIT_VARIABLE, 'version-history'),
-    template: EDIT_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The Version history tab: each version with its state, and a row menu whose Revert to this version opens the closed-by-default revert dialog.'
-      },
-      source: { code: toSfc(editScript(EDIT_VARIABLE, 'version-history'), EDIT_TEMPLATE) }
-    }
-  }
-}
-
-export const ScopedDrawer = {
-  render: () => ({
-    components,
-    setup: drawerSetup,
-    template: DRAWER_TEMPLATE
-  }),
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        story:
-          'Closed until the Variable button opens it: the scoped create drawer an Application renders from its Variables tab, with the scope notice above the same variables editor.'
-      },
-      source: { code: toSfc(DRAWER_SCRIPT, DRAWER_TEMPLATE) }
+      source: { code: toSfc(CREATE_SOURCE, CREATE_TEMPLATE) }
     }
   }
 }

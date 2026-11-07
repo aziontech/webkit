@@ -5,59 +5,31 @@ import GlobalHeader from '@aziontech/webkit/global-header'
 import IconButton from '@aziontech/webkit/icon-button'
 
 import { toSfc } from '../../_shared/story-source'
+import { creationHeader, declare, HEADER_IMPORTS, headerComponents } from './_create-markup'
 
-const BREADCRUMB = [{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Create Zone' }]
+const components = headerComponents({ Avatar, Brand, Breadcrumb, GlobalHeader, IconButton })
 
-const IMPORTS = [
-  "import Avatar from '@aziontech/webkit/avatar'",
-  "import Brand from '@aziontech/webkit/brand'",
-  "import Breadcrumb from '@aziontech/webkit/breadcrumb'",
-  "import GlobalHeader from '@aziontech/webkit/global-header'",
-  "import IconButton from '@aziontech/webkit/icon-button'",
-  '',
-  'const breadcrumb = [',
-  "  { label: 'Edge DNS', href: '/edge-dns' },",
-  "  { label: 'Create Zone' }",
-  ']'
-]
-
-const components = {
-  Avatar,
-  Brand,
-  Breadcrumb,
-  GlobalHeader,
-  'GlobalHeader.Left': GlobalHeader.Left,
-  'GlobalHeader.Middle': GlobalHeader.Middle,
-  'GlobalHeader.Right': GlobalHeader.Right,
-  'GlobalHeader.Brand': GlobalHeader.Brand,
-  IconButton
+const story = ({ breadcrumb, backLabel, description }) => {
+  const template = creationHeader({ backLabel, crumbs: breadcrumb.length > 0 })
+  const imports = breadcrumb.length
+    ? [...HEADER_IMPORTS, '', declare('breadcrumb', breadcrumb)]
+    : HEADER_IMPORTS.filter(
+        (line) => !line.includes('breadcrumb') && (backLabel || !line.includes('icon-button'))
+      )
+  return {
+    render: () => ({
+      components,
+      setup: () => ({ breadcrumb }),
+      template
+    }),
+    parameters: {
+      docs: {
+        description: { story: description },
+        source: { code: toSfc(imports, template) }
+      }
+    }
+  }
 }
-
-const TEMPLATE = `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Left>
-    <IconButton icon="pi pi-chevron-left" aria-label="Back to Edge DNS" kind="outlined" size="small" />
-    <GlobalHeader.Brand>
-      <a
-        href="/home"
-        aria-label="Azion home"
-        class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-      >
-        <Brand kind="default" size="small" />
-      </a>
-    </GlobalHeader.Brand>
-    <Breadcrumb :items="breadcrumb" />
-  </GlobalHeader.Left>
-  <GlobalHeader.Middle />
-  <GlobalHeader.Right>
-    <button
-      type="button"
-      aria-label="Account settings"
-      class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-    >
-      <Avatar label="myemail@azion.com" size="medium" kind="square" />
-    </button>
-  </GlobalHeader.Right>
-</GlobalHeader>`
 
 const meta = {
   title: 'Templates/Platform/Creation/CreationHeader',
@@ -69,7 +41,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The focused-flow header that replaces the console shell on every create, edit and deploy page: a back IconButton, the Azion Brand and the Breadcrumb on the left, the signed-in Avatar on the right, and no sidebar. Create Zone, Create Team, Create Function and the application wizard all render it above their form. Built from `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb` and `Avatar`.'
+          'The focused-flow header that replaces the console shell on every create page: a back IconButton, the Azion Brand linking home and the Breadcrumb on the left, the signed-in Avatar on the right, and no sidebar. Create Zone, Create Database, Create Purge, Create Team, Create Organization, the ten generated `<module>/new` pages, Create Function, Create Workload, Create Application, the Creation Center, Deploy Template and Drop all render it. The wizards drop the back control and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb` and `Avatar`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -78,19 +50,23 @@ const meta = {
 
 export default meta
 
-export const Default = {
-  render: () => ({
-    components,
-    setup: () => ({ breadcrumb: BREADCRUMB }),
-    template: TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The Create Zone header: back to Edge DNS, the brand, a two-level crumb ending on the unlinked current page, and the account avatar.'
-      },
-      source: { code: toSfc(IMPORTS, TEMPLATE) }
-    }
-  }
-}
+export const Default = story({
+  breadcrumb: [{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Create Zone' }],
+  backLabel: 'Back to Edge DNS',
+  description:
+    'The Create Zone header: back to Edge DNS, the brand, a two-level crumb ending on the unlinked current page, and the account avatar.'
+})
+
+export const CreationCenter = story({
+  breadcrumb: [{ label: 'Creation Center', current: true }],
+  backLabel: 'Back to Home',
+  description:
+    'The Creation Center header at `/create`: the back control returns Home and the crumb is the single current page.'
+})
+
+export const Terminal = story({
+  breadcrumb: [],
+  backLabel: '',
+  description:
+    'Create Workload and Create Application once the last step is submitted: the provisioning and success screens keep only the brand and the avatar, with no back control and no crumb.'
+})

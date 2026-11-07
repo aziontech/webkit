@@ -1,4 +1,5 @@
 import Avatar from '@aziontech/webkit/avatar'
+import Button from '@aziontech/webkit/button'
 import CardBox from '@aziontech/webkit/card-box'
 import CopyButton from '@aziontech/webkit/copy-button'
 import DropdownGroup from '@aziontech/webkit/dropdown-group'
@@ -6,9 +7,11 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 import DropdownRoot from '@aziontech/webkit/dropdown-root'
 import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
 import IconButton from '@aziontech/webkit/icon-button'
+import InputText from '@aziontech/webkit/input-text'
 import PopoverContent from '@aziontech/webkit/popover-content'
 import PopoverRoot from '@aziontech/webkit/popover-root'
 import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+import Skeleton from '@aziontech/webkit/skeleton'
 import TableRoot from '@aziontech/webkit/table-root'
 import Tag from '@aziontech/webkit/tag'
 import Tooltip from '@aziontech/webkit/tooltip'
@@ -16,14 +19,18 @@ import Tooltip from '@aziontech/webkit/tooltip'
 import { toSfc } from '../../_shared/story-source'
 import {
   constLine,
+  DOMAIN_SCRIPT,
+  ROWS_SCRIPT,
   TABLE_CARD,
   TABLE_IMPORTS,
+  useDomainOverflow,
   WORKLOAD_COLUMNS,
   WORKLOAD_ROWS
 } from './_lists-markup'
 
 const components = {
   Avatar,
+  Button,
   CardBox,
   CopyButton,
   DropdownRoot,
@@ -31,20 +38,25 @@ const components = {
   DropdownOption,
   DropdownTrigger,
   IconButton,
+  InputText,
   PopoverRoot,
   PopoverContent,
   PopoverTrigger,
+  Skeleton,
   TableRoot,
   Tag,
   Tooltip
 }
 
-const importsFor = (rows) => [
+const script = (rows) => [
   ...TABLE_IMPORTS,
+  "import { ref } from 'vue'",
   '',
   constLine('columns', WORKLOAD_COLUMNS),
   '',
-  constLine('rows', rows)
+  ...(rows ? ROWS_SCRIPT : ['const rows = []']),
+  '',
+  ...DOMAIN_SCRIPT
 ]
 
 const meta = {
@@ -57,7 +69,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The resource table of a console list page: a data-driven `Table` inside a flush `CardBox`, with the console cell recipes composed into the per-column slots. The name cell leads with the module glyph; the ID cell pins a `CopyButton` to its right edge; the Domains cell is a left-truncating link with an external glyph and a `Tooltip` naming the destination, a +N `Tag` that opens the remaining domains in a `Popover`, and a copy button pinned right; Status is a `Tag`; Last Editor is an `Avatar` with the name; Last Modified is the relative time; and the trailing action cell is an `IconButton` opening the row’s `Dropdown`. Workloads and Applications render it; the bounded columns declare the console width floors (80 for fit columns, 104 for a chip column) and the Domains column takes the grow share. Built from `Table`, `CardBox`, `CopyButton`, `Tooltip`, `Tag`, `Popover`, `Avatar`, `Dropdown` and `IconButton`.'
+          'The resource table of a console list page: a borderless data-driven `Table` inside a flush `CardBox`, sorted and paginated ten rows at a time, with the console cell recipes composed into the per-column slots. The name cell leads with the module glyph and underlines on hover; the ID cell (hidden by default on the page) pins a `CopyButton` to its right edge; the Domains cell is a truncating link with an external glyph and a `Tooltip` naming the destination, a +N `Tag` that opens the remaining domains in a `Popover` (searchable past ten, loading ten more at a time behind `Skeleton` rows) and a copy button pinned right; Status is a `Tag`; Last Editor is an `Avatar` with the name; Last Modified is the relative time; and the trailing action cell is an `IconButton` opening the row `Dropdown`. Workloads renders it as shown; Applications, Functions, Connectors, Certificates, Edge DNS, Object Storage, Firewall and the other indexes swap the middle columns for their own data over the same name, ID, editor, modified and action recipes. Bounded columns declare the console width floors (80 for fit columns, 104 for a tag column) and the Domains column takes the grow share. Built from `Table`, `CardBox`, `CopyButton`, `Tooltip`, `Tag`, `Popover`, `InputText`, `Skeleton`, `Button`, `Avatar`, `Dropdown` and `IconButton`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -69,16 +81,16 @@ export default meta
 export const Default = {
   render: () => ({
     components,
-    setup: () => ({ rows: WORKLOAD_ROWS, columns: WORKLOAD_COLUMNS }),
+    setup: () => ({ rows: WORKLOAD_ROWS, columns: WORKLOAD_COLUMNS, ...useDomainOverflow() }),
     template: TABLE_CARD
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'Seven workloads, sorted and paginated by the Table itself; three rows carry extra domains behind the +N Tag.'
+          'The first page of Workloads: ten rows, workload_09 inactive, each carrying 7 to 70 extra domains behind its +N Tag.'
       },
-      source: { code: toSfc(importsFor(WORKLOAD_ROWS), TABLE_CARD) }
+      source: { code: toSfc(script(true), TABLE_CARD) }
     }
   }
 }
@@ -86,7 +98,7 @@ export const Default = {
 export const Empty = {
   render: () => ({
     components,
-    setup: () => ({ rows: [], columns: WORKLOAD_COLUMNS }),
+    setup: () => ({ rows: [], columns: WORKLOAD_COLUMNS, ...useDomainOverflow() }),
     template: TABLE_CARD
   }),
   parameters: {
@@ -94,7 +106,7 @@ export const Empty = {
       description: {
         story: 'No rows: the Table renders its own EmptyState in place of the body.'
       },
-      source: { code: toSfc(importsFor([]), TABLE_CARD) }
+      source: { code: toSfc(script(false), TABLE_CARD) }
     }
   }
 }

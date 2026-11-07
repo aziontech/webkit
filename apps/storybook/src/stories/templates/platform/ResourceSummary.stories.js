@@ -32,7 +32,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The console draws it on the Application, Workload and Firewall Overview tabs, each with its own facts and copy. Built from `CardBox`, `Button`, `IconButton`, `Dropdown`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Message` and `Tooltip`.'
+          'The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The console draws it on the Application, Workload and Firewall Overview tabs (ApplicationSummary, WorkloadSummary, FirewallSummary), each with its own facts and copy. Built from `CardBox`, `Button`, `IconButton`, `Dropdown`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Message` and `Tooltip`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -43,12 +43,12 @@ export default meta
 
 export const Application = story(
   APPLICATION_SUMMARY,
-  'The Application Overview summary for a Git-connected application: the latest deployment, its domains with the overflow popover, status, author, repository and branch, framework, and how a push deploys it.'
+  'The Application Overview summary for a Git-connected application: its Azion domain with Visit and the Copy URL and Settings actions, the latest deployment with its environment, the domain, status, who deployed it, repository and branch, framework, and how a push deploys it.'
 )
 
 export const Workload = story(
   WORKLOAD_SUMMARY,
-  'The Workload Overview summary: the domain with its aliases in the overflow popover, the environment switcher and actions, the custom domains, status, workload ID and creation, and the Deployment Settings band that expands into its policies.'
+  'The Workload Overview summary: the domain with its aliases in the overflow popover, the environment menu (shown below md only; from md up the breadcrumb carries the environment) and actions, the custom domains, status, workload ID and creation, and the shared Deployment Settings band that expands into its policies.'
 )
 
 export const Firewall = story(

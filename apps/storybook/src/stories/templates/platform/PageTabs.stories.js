@@ -47,13 +47,11 @@ const components = {
 
 const BAR_OPEN = `<div class="border-b border-(--border-default)">
   <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-    <div class="-ml-(--spacing-xs) min-w-0 flex-1">
-      <TabView v-model:value="activeTab">
-        <TabView.List>
-          <TabView.Item v-for="tab in tabs" :key="tab.value" :value="tab.value" :label="tab.label" />
-        </TabView.List>
-      </TabView>
-    </div>`
+    <TabView v-model:value="activeTab" class="-ml-(--spacing-xs) min-w-0 flex-1">
+      <TabView.List>
+        <TabView.Item v-for="tab in tabs" :key="tab.value" :value="tab.value" :label="tab.label" />
+      </TabView.List>
+    </TabView>`
 
 const DEFAULT_TEMPLATE = `${BAR_OPEN}
   </div>
@@ -62,7 +60,7 @@ const DEFAULT_TEMPLATE = `${BAR_OPEN}
 const WITH_ACTIONS_TEMPLATE = `${BAR_OPEN}
     <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
       <Tag severity="warning" size="small" label="2 changes" />
-      <Button label="Deploy" kind="primary" size="medium" icon="pi pi-cloud-upload" />
+      <Button label="Deploy" kind="outlined" size="medium" icon="pi pi-cloud-upload" />
     </div>
   </div>
 </div>`
@@ -77,7 +75,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Application, Workload, Firewall, Function and SQL Database detail pages open with it. Built from `TabView`, with `Button` and `Tag` in the trailing actions.'
+          'The second-level navigation bar of a resource detail page, as the console’s PageTabs renders it: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. The Application, Application Version, Workload, Firewall, WAF Rule Set, Function, SQL Database and Edge DNS zone detail pages open with it, and Billing uses it with its row held to the `layout-column` width. Built from `TabView`, with `Button` and `Tag` in the trailing actions.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -112,7 +110,7 @@ export const WithActions = {
     docs: {
       description: {
         story:
-          'The workload detail tabs with the actions the resource owns on the right: a staged-changes `Tag` and the medium Deploy button.'
+          'The workload detail tabs with the actions the resource owns on the right: the staged-changes `Tag` that appears once a setting is staged, and the outlined medium Deploy button.'
       },
       source: {
         code: toSfc(

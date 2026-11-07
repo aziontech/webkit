@@ -580,8 +580,6 @@ const onboardingPage = ({ step, title, description, body, live }) => {
                 novalidate
                 @submit.prevent="submitted = true"
               >
-                <button type="submit" class="sr-only" aria-hidden="true" tabindex="-1" />
-
                 <header class="flex flex-col gap-(--spacing-xs)">
                   <div class="flex flex-col gap-(--spacing-xxs)">
                     <p class="text-label-sm text-(--text-muted)">Step ${step} of 3</p>
@@ -610,7 +608,7 @@ ${step > 1 ? '                  <Button label="Back" kind="outlined" size="large
                     kind="primary"
                     size="large"
                     class="flex-1"
-                    @click="submitted = true"
+                    type="submit"
                   />
                 </div>
               </form>
@@ -965,9 +963,8 @@ ${indent(ADDRESS_CARD, 7)}
             label="Upgrade"
             kind="primary"
             size="medium"
-            @click="confirmUpgrade"
+            type="submit"
           />
-          <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Upgrade</button>
         </PanelFooter>
       </form>
     </DrawerContent>
@@ -1005,7 +1002,7 @@ ${indent(UPGRADE_DRAWER)}
 
 const PROFILE_BODY = `<div class="flex flex-col gap-(--spacing-lg)">
   <div class="flex flex-col gap-(--spacing-xs)">
-    <Label required>How are you planning to use Azion?</Label>
+    <Label :required="submitted && !usage">How are you planning to use Azion?</Label>
     <BoxGridSelection
       v-model="usage"
       :items="usageOptions"
@@ -1015,7 +1012,7 @@ const PROFILE_BODY = `<div class="flex flex-col gap-(--spacing-lg)">
   </div>
 
   <div class="flex flex-col gap-(--spacing-xs)">
-    <Label required>What best describes your role?</Label>
+    <Label :required="submitted && !role">What best describes your role?</Label>
     <BoxGridSelection
       v-model="role"
       :items="roleOptions"

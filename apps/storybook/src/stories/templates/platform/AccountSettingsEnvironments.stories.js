@@ -53,31 +53,31 @@ const ENVIRONMENTS = [
     id: 'env-production',
     name: 'Production',
     deploymentPolicy: 'single_version',
-    workloadsCount: 20,
+    workloadsCount: 24,
     robotsPolicy: 'preserve_origin',
     protectionLabel: '',
     branchLabel: 'Branch is main',
     lastModified: '2 days ago'
   },
   {
-    id: 'env-stage',
-    name: 'Stage',
-    deploymentPolicy: 'versioned_urls',
-    workloadsCount: 20,
-    robotsPolicy: 'noindex',
-    protectionLabel: '',
-    branchLabel: 'Branch starts with release/',
-    lastModified: '1 week ago'
-  },
-  {
     id: 'env-preview',
     name: 'Preview',
     deploymentPolicy: 'versioned_urls',
-    workloadsCount: 0,
+    workloadsCount: 25,
     robotsPolicy: 'noindex',
-    protectionLabel: 'IP allowlist · 1 range',
+    protectionLabel: '',
     branchLabel: '',
-    lastModified: '3 weeks ago'
+    lastModified: '1 week ago'
+  },
+  {
+    id: 'env-stage',
+    name: 'Stage',
+    deploymentPolicy: 'versioned_urls',
+    workloadsCount: 2,
+    robotsPolicy: 'noindex',
+    protectionLabel: '',
+    branchLabel: '',
+    lastModified: '2 days ago'
   }
 ]
 
@@ -280,7 +280,7 @@ export const Environments = {
     docs: {
       description: {
         story:
-          'Production, Stage and Preview with the Robots column hidden by default; Delete on Stage or Preview asks for the name first.'
+          'Production, Preview and Stage as the sample seeds them (24, 25 and 2 workloads), with the Robots column hidden by default; Delete on Preview or Stage asks for the name first.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }

@@ -7,9 +7,10 @@ import {
   SETTINGS_COMPONENTS
 } from './_resource-settings'
 
-const SCRIPT = resourceScript(FIREWALL_SETTINGS)
-const DEFAULT_TEMPLATE = resourceTemplate(FIREWALL_SETTINGS)
-const SAVING_TEMPLATE = resourceTemplate(FIREWALL_SETTINGS, { saving: true })
+const EDITED = { edits: { debugRules: true } }
+const SAVING = { edits: { debugRules: true }, saving: true }
+
+const TEMPLATE = resourceTemplate(FIREWALL_SETTINGS)
 
 const meta = {
   title: 'Templates/Platform/Forms/SettingsSaveBar',
@@ -21,7 +22,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The sticky commit bar a resource settings tab mounts once something is edited: an info glyph, the unsaved-changes label with an optional hint, and Discard beside Save, as a full-bleed band pinned to the bottom of the scroll region, edge to edge like the resource tab bar above it. Every Application, Workload and Firewall Settings tab ends with it. Built from `Button` over a plain sticky footer, inside the platform shell with `TabView`, above a column of `CardBox` rows.'
+          'The commit bar a settings page mounts once something is edited: a zero-height sticky strip at the bottom of the scroll region holding a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save, stacked under the label on small screens. It slides up on the first edit and back down when the save lands. Every Application, Workload and Firewall Settings tab, the generic resource settings page, Account Settings, Build & Deployment and the function and Edge DNS settings end with it. Built from `Button` inside a `Transition`, over the platform shell with `TabView` and a column of `CardBox` rows.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -33,16 +34,16 @@ export default meta
 export const Default = {
   render: () => ({
     components: SETTINGS_COMPONENTS,
-    setup: resourceSetup(FIREWALL_SETTINGS),
-    template: DEFAULT_TEMPLATE
+    setup: resourceSetup(FIREWALL_SETTINGS, EDITED),
+    template: TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'The bar on the Firewall Settings tab: scroll the tab and the band stays at the bottom edge until the last band passes above it.'
+          'The Firewall Settings tab after Debug Rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves.'
       },
-      source: { code: toSfc(SCRIPT, DEFAULT_TEMPLATE) }
+      source: { code: toSfc(resourceScript(FIREWALL_SETTINGS, EDITED), TEMPLATE) }
     }
   }
 }
@@ -50,8 +51,8 @@ export const Default = {
 export const Saving = {
   render: () => ({
     components: SETTINGS_COMPONENTS,
-    setup: resourceSetup(FIREWALL_SETTINGS),
-    template: SAVING_TEMPLATE
+    setup: resourceSetup(FIREWALL_SETTINGS, SAVING),
+    template: TEMPLATE
   }),
   parameters: {
     docs: {
@@ -59,7 +60,7 @@ export const Saving = {
         story:
           'While the save request is in flight: Save shows its loading state and Discard is disabled.'
       },
-      source: { code: toSfc(SCRIPT, SAVING_TEMPLATE) }
+      source: { code: toSfc(resourceScript(FIREWALL_SETTINGS, SAVING), TEMPLATE) }
     }
   }
 }

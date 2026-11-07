@@ -11,7 +11,7 @@ import DropdownRoot from '@aziontech/webkit/dropdown-root'
 import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
 import FieldInputGroup from '@aziontech/webkit/field-input-group'
 import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
-import FieldSelect from '@aziontech/webkit/field-select'
+import HelperText from '@aziontech/webkit/helper-text'
 import Hint from '@aziontech/webkit/hint'
 import IconButton from '@aziontech/webkit/icon-button'
 import Label from '@aziontech/webkit/label'
@@ -19,43 +19,46 @@ import Message from '@aziontech/webkit/message'
 import PanelContent from '@aziontech/webkit/panel-content'
 import PanelFooter from '@aziontech/webkit/panel-footer'
 import PanelHeader from '@aziontech/webkit/panel-header'
+import Select from '@aziontech/webkit/select'
 import Tooltip from '@aziontech/webkit/tooltip'
 import { computed, reactive, ref, watch } from 'vue'
 
 import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
-import { declare } from './_forms-markup'
+import { declare, DRAWER_SHELL_IMPORTS, drawerShell, fieldStack, section } from './_forms-markup'
 
 const DOMAIN_SUFFIX = '.azion.run'
 
 const ADD_ENVIRONMENT = '__add-environment__'
 
+const CREATE_ENVIRONMENT = '__create-environment__'
+
 const ENVIRONMENT_OPTIONS = [
   { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' },
-  { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' },
-  { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' }
+  { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' },
+  { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' }
 ]
 
 const POLICY_LABELS = { single_version: 'Single', versioned_urls: 'Versioned' }
 
-const CONNECTED_ENVIRONMENTS = ['Production', 'Stage']
+const WORKLOAD_ENVIRONMENTS = ['Production', 'Preview']
 
 const CERTIFICATE_OPTIONS = [
   { value: '', label: 'Azion (free)', subject: '' },
-  { value: 'edgeflow.com wildcard', label: 'edgeflow.com wildcard', subject: '*.edgeflow.com' },
-  { value: 'api.edgeflow.com', label: 'api.edgeflow.com', subject: 'api.edgeflow.com' },
-  { value: 'staging wildcard', label: 'staging wildcard', subject: '*.staging.edgeflow.com' },
-  { value: 'azion.design', label: 'azion.design', subject: 'azion.design' }
+  { value: 'cert-8801', label: 'edgeflow.com wildcard', subject: '*.edgeflow.com' },
+  { value: 'cert-8803', label: 'api.edgeflow.com', subject: 'api.edgeflow.com' },
+  { value: 'cert-8805', label: 'staging wildcard', subject: '*.staging.edgeflow.com' },
+  { value: 'cert-8802', label: 'azion.design', subject: 'azion.design' }
 ]
 
 const EDITING_DOMAIN = {
   kind: 'own',
   domain: 'www.edgeflow.com',
   environment: 'Production',
-  certificate: 'edgeflow.com wildcard'
+  certificate: 'cert-8801'
 }
 
-const kindOptions = (resource) => [
+const KIND_OPTIONS = [
   {
     value: 'free',
     label: 'Get a free Azion Domain',
@@ -64,51 +67,47 @@ const kindOptions = (resource) => [
   {
     value: 'own',
     label: 'Bring my own Domain',
-    description: `Use your own DNS and point it to your Azion ${resource}.`
+    description: 'Use your own DNS and point it to your Azion workload.'
   }
 ]
 
-const addDescription = (resource) =>
-  `A domain is what puts an environment on this ${resource}. Say where it answers, and name the address.`
+const ADD_DESCRIPTION =
+  'A domain is what puts an environment on this workload. Say where it answers, and name the address.'
 
 const EDIT_DESCRIPTION =
   'Change where it answers, the address, or the certificate it is served with.'
 
-const freeDomainNote = (resource) =>
-  `Your ${resource} is always accessible at an azion.run subdomain based on its name. Custom domains allow visitors to reach your project at your own domain.`
+const FREE_DOMAIN_NOTE =
+  'Your workload is always accessible at an azion.run subdomain based on its name. Custom domains allow visitors to reach your project at your own domain.'
 
 const blankForm = () => ({ kind: 'free', domain: '', environment: '', certificate: '' })
 
-const covers = (subject, host) =>
-  subject === host ||
-  (subject.startsWith('*.') &&
-    host.endsWith(subject.slice(1)) &&
-    !host.slice(0, -(subject.length - 1)).includes('.'))
+const subjectCovers = (subject, host) => {
+  const pattern = subject.toLowerCase()
+  if (!pattern) return false
+  if (pattern === host) return true
+  if (!pattern.startsWith('*.')) return false
+  const parent = pattern.slice(2)
+  return host.endsWith(`.${parent}`) && host.slice(0, -(parent.length + 1)).split('.').length === 1
+}
 
-const certificateFor = (host) => {
-  const covering = CERTIFICATE_OPTIONS.filter(
-    (option) => option.subject && covers(option.subject, host)
-  )
-  return (covering.find((option) => option.subject === host) ?? covering[0])?.value ?? ''
+const certificateForDomain = (host) => {
+  const name = host.trim().toLowerCase()
+  if (!name) return ''
+  const candidates = CERTIFICATE_OPTIONS.filter((option) => subjectCovers(option.subject, name))
+  const exact = candidates.find((option) => option.subject.toLowerCase() === name)
+  return (exact ?? candidates[0])?.value ?? ''
 }
 
 const DRAWER_IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import Drawer from '@aziontech/webkit/drawer'",
-  "import DrawerClose from '@aziontech/webkit/drawer-close'",
-  "import DrawerContent from '@aziontech/webkit/drawer-content'",
-  "import DrawerOverlay from '@aziontech/webkit/drawer-overlay'",
-  "import DrawerPortal from '@aziontech/webkit/drawer-portal'",
-  "import DrawerTitle from '@aziontech/webkit/drawer-title'",
+  ...DRAWER_SHELL_IMPORTS.filter((line) => !line.includes('drawer-trigger')),
   "import FieldInputGroup from '@aziontech/webkit/field-input-group'",
   "import FieldRadioBlock from '@aziontech/webkit/field-radio-block'",
-  "import FieldSelect from '@aziontech/webkit/field-select'",
+  "import HelperText from '@aziontech/webkit/helper-text'",
   "import Hint from '@aziontech/webkit/hint'",
   "import Label from '@aziontech/webkit/label'",
   "import Message from '@aziontech/webkit/message'",
-  "import PanelContent from '@aziontech/webkit/panel-content'",
-  "import PanelFooter from '@aziontech/webkit/panel-footer'",
-  "import PanelHeader from '@aziontech/webkit/panel-header'"
+  "import Select from '@aziontech/webkit/select'"
 ]
 
 const DROPDOWN_IMPORTS = [
@@ -120,53 +119,58 @@ const DROPDOWN_IMPORTS = [
 
 const VUE_IMPORT = "import { computed, reactive, ref, watch } from 'vue'"
 
-const formScript = ({ resource, editing }) => [
+const formScript = ({ editing }) => [
   'const open = ref(false)',
-  'const submitted = ref(false)',
-  'const certificateTouched = ref(false)',
+  'const submitting = ref(false)',
+  'const environmentSelectOpen = ref(false)',
+  `const certificateTouched = ref(${editing ? 'true' : 'false'})`,
   '',
-  `const domainSuffix = '${DOMAIN_SUFFIX}'`,
+  `const CREATE_ENVIRONMENT = '${CREATE_ENVIRONMENT}'`,
   declare('environmentOptions', ENVIRONMENT_OPTIONS),
   declare('policyLabels', POLICY_LABELS),
-  declare('connectedEnvironments', CONNECTED_ENVIRONMENTS),
+  declare('workloadEnvironments', WORKLOAD_ENVIRONMENTS),
   declare('certificateOptions', CERTIFICATE_OPTIONS),
-  declare('kindOptions', kindOptions(resource)),
+  declare('kindOptions', KIND_OPTIONS),
   ...(editing ? [declare('editingDomain', EDITING_DOMAIN)] : []),
   '',
   "const blankForm = () => ({ kind: 'free', domain: '', environment: '', certificate: '' })",
-  'const form = reactive(blankForm())',
+  `const form = reactive(${editing ? '{ ...editingDomain }' : 'blankForm()'})`,
+  "const errors = reactive({ domain: '', environment: '' })",
   '',
-  'const missing = (value) => submitted.value && !value.trim()',
-  'const covers = (subject, host) =>',
-  '  subject === host ||',
-  "  (subject.startsWith('*.') &&",
-  '    host.endsWith(subject.slice(1)) &&',
-  "    !host.slice(0, -(subject.length - 1)).includes('.'))",
-  'const certificateFor = (host) => {',
-  '  const covering = certificateOptions.filter((option) => option.subject && covers(option.subject, host))',
-  "  return (covering.find((option) => option.subject === host) ?? covering[0])?.value ?? ''",
+  'const environmentLabel = (value) =>',
+  "  environmentOptions.find((option) => option.value === value)?.label ?? ''",
+  'const certificateLabel = (value) =>',
+  "  certificateOptions.find((option) => option.value === value)?.label ?? ''",
+  '',
+  'const subjectCovers = (subject, host) => {',
+  '  const pattern = subject.toLowerCase()',
+  '  if (!pattern) return false',
+  '  if (pattern === host) return true',
+  "  if (!pattern.startsWith('*.')) return false",
+  '  const parent = pattern.slice(2)',
+  "  return host.endsWith(`.${parent}`) && host.slice(0, -(parent.length + 1)).split('.').length === 1",
   '}',
+  '',
+  'const certificateForDomain = (host) => {',
+  '  const name = host.trim().toLowerCase()',
+  "  if (!name) return ''",
+  '  const candidates = certificateOptions.filter((option) => subjectCovers(option.subject, name))',
+  '  const exact = candidates.find((option) => option.subject.toLowerCase() === name)',
+  "  return (exact ?? candidates[0])?.value ?? ''",
+  '}',
+  '',
+  'watch(open, (isOpen) => {',
+  '  if (!isOpen) return',
+  "  Object.assign(errors, { domain: '', environment: '' })",
+  '  submitting.value = false',
+  `  Object.assign(form, ${editing ? '{ ...editingDomain }' : 'blankForm()'})`,
+  `  certificateTouched.value = ${editing ? 'true' : 'false'}`,
+  '})',
   '',
   'const fullDomain = computed(() => {',
   '  const name = form.domain.trim()',
   "  if (!name) return ''",
-  "  return form.kind === 'free' ? name + domainSuffix : name",
-  '})',
-  '',
-  'const chosen = computed(() => environmentOptions.find((option) => option.value === form.environment))',
-  'const environmentHint = computed(() => {',
-  "  if (!chosen.value) return 'Where this domain answers. Pick one, or create it from here.'",
-  '  const policy = policyLabels[chosen.value.deploymentPolicy]',
-  '  return connectedEnvironments.includes(chosen.value.value)',
-  "    ? chosen.value.label + ' publishes with the Deployment Settings set to ' + policy + '.'",
-  `    : "This ${resource} doesn't publish into " + chosen.value.label + ' yet. Adding this domain connects it, served by the Deployment Settings set to ' + policy + '.'`,
-  '})',
-  '',
-  'const certificateHint = computed(() => {',
-  "  if (!form.certificate) return 'Served by the free Azion certificate, issued and renewed by the platform.'",
-  '  return certificateTouched.value',
-  "    ? 'Served with ' + form.certificate + '.'",
-  "    : form.certificate + ' already covers this address, so it is selected. Change it if another one should serve it.'",
+  `  return form.kind === 'free' ? \`\${name}${DOMAIN_SUFFIX}\` : name`,
   '})',
   '',
   'watch(',
@@ -176,68 +180,91 @@ const formScript = ({ resource, editing }) => [
   "      form.certificate = ''",
   '      return',
   '    }',
-  '    if (!certificateTouched.value) form.certificate = certificateFor(host.toLowerCase())',
+  '    if (certificateTouched.value) return',
+  '    form.certificate = certificateForDomain(host)',
   '  },',
   '  { immediate: true }',
   ')',
-  '',
-  ...(editing
-    ? [
-        'watch(open, (isOpen) => {',
-        '  if (!isOpen) return',
-        '  submitted.value = false',
-        '  certificateTouched.value = true',
-        '  Object.assign(form, { ...editingDomain })',
-        '})'
-      ]
-    : [
-        'watch(open, (isOpen) => {',
-        '  if (!isOpen) return',
-        '  submitted.value = false',
-        '  certificateTouched.value = false',
-        '  Object.assign(form, blankForm())',
-        '})'
-      ]),
   '',
   'const onCertificate = (value) => {',
   '  certificateTouched.value = true',
   '  form.certificate = value',
   '}',
   '',
+  'const certificateHint = computed(() => {',
+  '  if (!form.certificate) {',
+  "    return 'Served by the free Azion certificate, issued and renewed by the platform.'",
+  '  }',
+  '  const name = certificateLabel(form.certificate)',
+  '  return certificateTouched.value',
+  '    ? `Served with ${name}.`',
+  '    : `${name} already covers this address, so it is selected. Change it if another one should serve it.`',
+  '})',
+  '',
+  'const chosen = computed(() =>',
+  '  environmentOptions.find((option) => option.value === form.environment)',
+  ')',
+  '',
+  'const joinsWorkload = computed(',
+  '  () => Boolean(form.environment) && !workloadEnvironments.includes(form.environment)',
+  ')',
+  '',
+  'const environmentHint = computed(() => {',
+  "  if (!chosen.value) return 'Where this domain answers. Pick one, or create it from here.'",
+  '  const policy = policyLabels[chosen.value.deploymentPolicy]',
+  '  return joinsWorkload.value',
+  "    ? `This workload doesn't publish into ${chosen.value.label} yet. Adding this domain connects it, served by the Deployment Settings set to ${policy}.`",
+  '    : `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`',
+  '})',
+  '',
+  'const onEnvironmentModel = (value) => {',
+  '  if (value === CREATE_ENVIRONMENT) {',
+  '    environmentSelectOpen.value = false',
+  '    return',
+  '  }',
+  '  form.environment = value',
+  "  errors.environment = ''",
+  '}',
+  '',
+  'const validate = () => {',
+  "  errors.domain = form.domain.trim() ? '' : 'This field is required.'",
+  "  errors.environment = form.environment ? '' : 'This field is required.'",
+  '  return !errors.domain && !errors.environment',
+  '}',
+  '',
   'const submit = () => {',
-  '  submitted.value = true',
-  '  if (form.domain.trim() && form.environment) open.value = false',
+  '  if (submitting.value) return',
+  '  if (!validate()) return',
+  '  submitting.value = true',
+  '  setTimeout(() => {',
+  '    submitting.value = false',
+  '    open.value = false',
+  '  }, 600)',
   '}'
 ]
 
-const formState = ({ resource, editing }) => {
+const formState = ({ editing }) => {
   const open = ref(false)
-  const submitted = ref(false)
-  const certificateTouched = ref(false)
-  const form = reactive(blankForm())
-  const missing = (value) => submitted.value && !value.trim()
+  const submitting = ref(false)
+  const environmentSelectOpen = ref(false)
+  const certificateTouched = ref(Boolean(editing))
+  const form = reactive(editing ? { ...editing } : blankForm())
+  const errors = reactive({ domain: '', environment: '' })
+  const environmentLabel = (value) =>
+    ENVIRONMENT_OPTIONS.find((option) => option.value === value)?.label ?? ''
+  const certificateLabel = (value) =>
+    CERTIFICATE_OPTIONS.find((option) => option.value === value)?.label ?? ''
+  watch(open, (isOpen) => {
+    if (!isOpen) return
+    Object.assign(errors, { domain: '', environment: '' })
+    submitting.value = false
+    Object.assign(form, editing ? { ...editing } : blankForm())
+    certificateTouched.value = Boolean(editing)
+  })
   const fullDomain = computed(() => {
     const name = form.domain.trim()
     if (!name) return ''
-    return form.kind === 'free' ? name + DOMAIN_SUFFIX : name
-  })
-  const chosen = computed(() =>
-    ENVIRONMENT_OPTIONS.find((option) => option.value === form.environment)
-  )
-  const environmentHint = computed(() => {
-    if (!chosen.value) return 'Where this domain answers. Pick one, or create it from here.'
-    const policy = POLICY_LABELS[chosen.value.deploymentPolicy]
-    return CONNECTED_ENVIRONMENTS.includes(chosen.value.value)
-      ? `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
-      : `This ${resource} doesn't publish into ${chosen.value.label} yet. Adding this domain connects it, served by the Deployment Settings set to ${policy}.`
-  })
-  const certificateHint = computed(() => {
-    if (!form.certificate) {
-      return 'Served by the free Azion certificate, issued and renewed by the platform.'
-    }
-    return certificateTouched.value
-      ? `Served with ${form.certificate}.`
-      : `${form.certificate} already covers this address, so it is selected. Change it if another one should serve it.`
+    return form.kind === 'free' ? `${name}${DOMAIN_SUFFIX}` : name
   })
   watch(
     () => [fullDomain.value, form.kind],
@@ -246,35 +273,76 @@ const formState = ({ resource, editing }) => {
         form.certificate = ''
         return
       }
-      if (!certificateTouched.value) form.certificate = certificateFor(host.toLowerCase())
+      if (certificateTouched.value) return
+      form.certificate = certificateForDomain(host)
     },
     { immediate: true }
   )
-  watch(open, (isOpen) => {
-    if (!isOpen) return
-    submitted.value = false
-    certificateTouched.value = Boolean(editing)
-    Object.assign(form, editing ? { ...editing } : blankForm())
-  })
   const onCertificate = (value) => {
     certificateTouched.value = true
     form.certificate = value
   }
+  const certificateHint = computed(() => {
+    if (!form.certificate) {
+      return 'Served by the free Azion certificate, issued and renewed by the platform.'
+    }
+    const name = certificateLabel(form.certificate)
+    return certificateTouched.value
+      ? `Served with ${name}.`
+      : `${name} already covers this address, so it is selected. Change it if another one should serve it.`
+  })
+  const chosen = computed(() =>
+    ENVIRONMENT_OPTIONS.find((option) => option.value === form.environment)
+  )
+  const joinsWorkload = computed(
+    () => Boolean(form.environment) && !WORKLOAD_ENVIRONMENTS.includes(form.environment)
+  )
+  const environmentHint = computed(() => {
+    if (!chosen.value) return 'Where this domain answers. Pick one, or create it from here.'
+    const policy = POLICY_LABELS[chosen.value.deploymentPolicy]
+    return joinsWorkload.value
+      ? `This workload doesn't publish into ${chosen.value.label} yet. Adding this domain connects it, served by the Deployment Settings set to ${policy}.`
+      :`${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
+  })
+  const onEnvironmentModel = (value) => {
+    if (value === CREATE_ENVIRONMENT) {
+      environmentSelectOpen.value = false
+      return
+    }
+    form.environment = value
+    errors.environment = ''
+  }
+  const validate = () => {
+    errors.domain = form.domain.trim() ? '' : 'This field is required.'
+    errors.environment = form.environment ? '' : 'This field is required.'
+    return !errors.domain && !errors.environment
+  }
   const submit = () => {
-    submitted.value = true
-    if (form.domain.trim() && form.environment) open.value = false
+    if (submitting.value) return
+    if (!validate()) return
+    submitting.value = true
+    setTimeout(() => {
+      submitting.value = false
+      open.value = false
+    }, 600)
   }
   return {
     open,
-    form,
-    missing,
+    submitting,
+    environmentSelectOpen,
+    CREATE_ENVIRONMENT,
     environmentOptions: ENVIRONMENT_OPTIONS,
-    connectedEnvironments: CONNECTED_ENVIRONMENTS,
+    workloadEnvironments: WORKLOAD_ENVIRONMENTS,
     certificateOptions: CERTIFICATE_OPTIONS,
-    kindOptions: kindOptions(resource),
-    environmentHint,
-    certificateHint,
+    kindOptions: KIND_OPTIONS,
+    form,
+    errors,
+    environmentLabel,
+    certificateLabel,
     onCertificate,
+    certificateHint,
+    environmentHint,
+    onEnvironmentModel,
     submit
   }
 }
@@ -293,7 +361,7 @@ const components = {
   DropdownTrigger,
   FieldInputGroup,
   FieldRadioBlock,
-  FieldSelect,
+  HelperText,
   Hint,
   IconButton,
   Label,
@@ -301,118 +369,124 @@ const components = {
   PanelContent,
   PanelFooter,
   PanelHeader,
+  Select,
+  'Select.Trigger': Select.Trigger,
+  'Select.Content': Select.Content,
+  'Select.Option': Select.Option,
   Tooltip
 }
 
-const section = (title, hint, body) => `<section class="flex min-w-0 flex-col gap-(--spacing-md)">
-  <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-    <h2 class="text-balance text-heading-xxs text-(--text-default)">${title}</h2>
-    <Hint text="${hint}" />
-  </div>
-${indent(body)}
-</section>`
-
-const ENVIRONMENT_FIELD = `<FieldSelect
-  v-model="form.environment"
-  label="Environment"
-  input-id="domain-environment"
+const ENVIRONMENT_SELECT = `<Select
+  v-model:open="environmentSelectOpen"
+  :model-value="form.environment"
   size="large"
+  class="w-full"
   placeholder="Select an environment"
-  :options="environmentOptions"
-  :required="missing(form.environment)"
-  :helper-text="missing(form.environment) ? 'This field is required.' : environmentHint"
-/>`
+  :disabled="submitting"
+  :invalid="!!errors.environment"
+  :display-value="environmentLabel"
+  @update:model-value="onEnvironmentModel"
+>
+  <Select.Trigger id="domain-environment" aria-describedby="domain-environment-helper" />
+  <Select.Content>
+    <Select.Option v-for="option in environmentOptions" :key="option.value" :value="option.value">
+      {{ option.label }}
+    </Select.Option>
+    <template #footer>
+      <Select.Option :value="CREATE_ENVIRONMENT" class="w-full">
+        Create Environment
+      </Select.Option>
+    </template>
+  </Select.Content>
+</Select>`
 
-const domainFields = (resource) => `<div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+const ENVIRONMENT_FIELD = fieldStack({
+  label: 'Environment',
+  id: 'domain-environment',
+  required: '!!errors.environment',
+  description: '{{ environmentHint }}',
+  message: 'errors.environment',
+  control: ENVIRONMENT_SELECT
+})
+
+const DOMAIN_SOURCE_FIELD = `<div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+  <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
     <Label id="domain-source-label">Domain source</Label>
-    <div role="radiogroup" aria-labelledby="domain-source-label" class="flex min-w-0 flex-col gap-(--spacing-sm)">
-      <FieldRadioBlock
-        v-for="option in kindOptions"
-        :key="option.value"
-        v-model="form.kind"
-        :value="option.value"
-        name="domain-kind"
-        :input-id="'domain-kind-' + option.value"
-        :label="option.label"
-        :description="option.description"
-      />
-    </div>
   </div>
-
-  <FieldInputGroup
-    v-model="form.domain"
-    label="Domain"
-    input-id="domain-name"
-    placeholder="my-workload"
-    :required="missing(form.domain)"
-    :helper-text="missing(form.domain) ? 'This field is required.' : ''"
-  >
-    <template v-if="form.kind === 'free'" #right>${DOMAIN_SUFFIX}</template>
-  </FieldInputGroup>
-
-  <FieldSelect
-    v-if="form.kind === 'own'"
-    :model-value="form.certificate"
-    label="Certificate"
-    input-id="domain-certificate"
-    size="large"
-    :options="certificateOptions"
-    :helper-text="certificateHint"
-    @update:model-value="onCertificate"
-  />
-
-  <Message severity="info" label="${freeDomainNote(resource)}" />
+  <div role="radiogroup" aria-labelledby="domain-source-label" class="flex min-w-0 flex-col gap-(--spacing-sm)">
+    <FieldRadioBlock
+      v-for="option in kindOptions"
+      :key="option.value"
+      v-model="form.kind"
+      :value="option.value"
+      name="domain-kind"
+      :input-id="'domain-kind-' + option.value"
+      :label="option.label"
+      :description="option.description"
+      :disabled="submitting"
+    />
+  </div>
 </div>`
 
-const drawer = ({
-  resource,
-  title,
-  description,
-  save
-}) => `<Drawer v-model:open="open" side="right" size="medium">
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerContent>
-      <form class="flex min-h-0 flex-1 flex-col" aria-label="${title}" novalidate @submit.prevent="submit">
-        <PanelHeader>
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-            <DrawerTitle>${title}</DrawerTitle>
-            <p class="text-body-sm text-(--text-muted)">
-              ${description}
-            </p>
-          </div>
-          <DrawerClose />
-        </PanelHeader>
+const DOMAIN_FIELD = fieldStack({
+  component: 'FieldInputGroup',
+  label: 'Domain',
+  id: 'domain-name',
+  message: 'errors.domain',
+  attrs: `v-model="form.domain"
+placeholder="my-workload"
+:disabled="submitting"
+@update:model-value="errors.domain = ''"`,
+  slots: `<template v-if="form.kind === 'free'" #right>${DOMAIN_SUFFIX}</template>`
+})
 
-        <PanelContent>
-          <fieldset class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0">
-            <legend class="sr-only">${title}</legend>
-${indent(section('Environment', 'Where the domain answers.', ENVIRONMENT_FIELD), 6)}
-
+const CERTIFICATE_FIELD = `<template v-if="form.kind === 'own'">
 ${indent(
-  section(
-    'Domain',
-    'The address this workload answers on, where it comes from, and the certificate it is served with.',
-    domainFields(resource)
-  ),
-  6
+  fieldStack({
+    label: 'Certificate',
+    id: 'domain-certificate',
+    description: '{{ certificateHint }}',
+    control: `<Select
+  :model-value="form.certificate"
+  size="large"
+  class="w-full"
+  :disabled="submitting"
+  :display-value="certificateLabel"
+  @update:model-value="onCertificate"
+>
+  <Select.Trigger id="domain-certificate" aria-describedby="domain-certificate-helper" />
+  <Select.Content>
+    <Select.Option v-for="option in certificateOptions" :key="option.value" :value="option.value">
+      {{ option.label }}
+    </Select.Option>
+  </Select.Content>
+</Select>`
+  })
 )}
-          </fieldset>
-        </PanelContent>
+</template>`
 
-        <PanelFooter>
-          <div class="ml-auto flex items-center gap-(--spacing-sm)">
-            <Button label="${save}" kind="primary" size="medium" @click="submit" />
-          </div>
-          <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">${save}</button>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </DrawerPortal>
-</Drawer>`
+const DRAWER_BODY = `${section({
+  title: 'Environment',
+  hint: 'Where the domain answers.',
+  body: ENVIRONMENT_FIELD
+})}
 
-const ADD_DOMAIN_BUTTON = `<Button label="Add Domain" kind="outlined" size="medium" icon="pi pi-plus" @click="open = true" />`
+${section({
+  title: 'Domain',
+  hint: 'The address this workload answers on, where it comes from, and the certificate it is served with.',
+  body: `<div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+${indent(
+  [
+    DOMAIN_SOURCE_FIELD,
+    DOMAIN_FIELD,
+    CERTIFICATE_FIELD,
+    `<Message severity="info" label="${FREE_DOMAIN_NOTE}" />`
+  ].join('\n\n')
+)}
+</div>`
+})}`
+
+const ADD_DOMAIN_BUTTON = `<Button type="button" label="Add Domain" kind="outlined" size="medium" icon="pi pi-plus" @click="open = true" />`
 
 const ROW_ACTIONS = `<DropdownRoot placement="bottom-end" @select="(event, value) => onRowAction(value)">
   <DropdownTrigger>
@@ -445,7 +519,7 @@ const ENVIRONMENT_MENU = `<Tooltip text="Select an environment to see its deploy
     </DropdownTrigger>
     <DropdownGroup label="Environments">
       <DropdownOption
-        v-for="name in connectedEnvironments"
+        v-for="name in workloadEnvironments"
         :key="name"
         :value="name"
         :label="name"
@@ -462,7 +536,6 @@ const ENVIRONMENT_MENU = `<Tooltip text="Select an environment to see its deploy
 
 const VARIANTS = {
   addDomain: {
-    resource: 'workload',
     editing: null,
     title: 'Add Domain',
     save: 'Add Domain',
@@ -472,7 +545,6 @@ const VARIANTS = {
     setup: () => ({})
   },
   addEnvironment: {
-    resource: 'workload',
     editing: null,
     title: 'Add Environment',
     save: 'Add Environment',
@@ -502,7 +574,6 @@ const VARIANTS = {
     }
   },
   editDomain: {
-    resource: 'workload',
     editing: EDITING_DOMAIN,
     title: 'Edit Domain',
     save: 'Save Domain',
@@ -518,16 +589,6 @@ const VARIANTS = {
         if (value === 'edit') state.open.value = true
       }
     })
-  },
-  inApplication: {
-    resource: 'application',
-    editing: null,
-    title: 'Add Domain',
-    save: 'Add Domain',
-    trigger: ADD_DOMAIN_BUTTON,
-    imports: [],
-    script: [],
-    setup: () => ({})
   }
 }
 
@@ -538,11 +599,11 @@ const sortImports = (lines) =>
   })
 
 const templateFor = (variant) =>
-  `${variant.trigger}\n\n${drawer({
-    resource: variant.resource,
+  `${variant.trigger}\n\n${drawerShell({
     title: variant.title,
-    description: variant.editing ? EDIT_DESCRIPTION : addDescription(variant.resource),
-    save: variant.save
+    description: variant.editing ? EDIT_DESCRIPTION : ADD_DESCRIPTION,
+    saveLabel: variant.save,
+    body: DRAWER_BODY
   })}`
 
 const scriptFor = (variant) => [
@@ -584,7 +645,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Add Domain drawer, the pattern form every create drawer in the console follows: a panel header with the title and a one-line description, an Environment section and a Domain section each titled with a Hint, and one primary action in the footer that flags empty required fields only after it is pressed. It opens from Add Domain under Domains on the Workload Settings and Application Settings pages, from a domain row menu to edit it, and from Add Environment in the workload summary environment menu. Choosing Bring my own Domain drops the azion.run addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldSelect`, `FieldInputGroup` with its addon slot, `FieldRadioBlock` under a `Label`, `Hint`, `Message` and `Button`.'
+          'The Add Domain drawer of a workload, built on the console resource drawer: a panel header with the title and a one-line description, an Environment section and a Domain section each titled with a Hint, and one submit button in the footer that flags empty required fields only after it is pressed. It opens from Add Domain under Domains on the Workload Settings tab, from a domain row menu to edit it, and from Add Environment in the workload summary environment menu. The Environment select lists every environment, says when choosing one connects it to the workload, and ends in a Create Environment option. Choosing Bring my own Domain drops the azion.run addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldInputGroup`, `Label` and `HelperText` around `Select`, `FieldRadioBlock`, `Hint`, `Message` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -595,7 +656,7 @@ export default meta
 
 export const Default = story(
   VARIANTS.addDomain,
-  'Closed until the Add Domain button under a workload domains card opens it: a free azion.run address by default, with Environment and Domain flagged as required only after Add Domain is pressed empty.'
+  'Closed until the Add Domain button under a workload Domains card opens it: a free azion.run address by default, with Environment and Domain flagged as required only after Add Domain is pressed empty, and every field reset each time the drawer opens.'
 )
 
 export const AddEnvironment = story(
@@ -606,9 +667,4 @@ export const AddEnvironment = story(
 export const EditDomain = story(
   VARIANTS.editDomain,
   'Edit from a domain row menu: the drawer opens on www.edgeflow.com as a domain of its own, so the Certificate select shows with edgeflow.com wildcard and the footer saves the domain.'
-)
-
-export const InApplication = story(
-  VARIANTS.inApplication,
-  'Opened from Add Domain on the Application Settings page, where the copy speaks of the application instead of the workload.'
 )

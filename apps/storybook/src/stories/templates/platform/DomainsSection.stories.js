@@ -14,6 +14,8 @@ import TableRow from '@aziontech/webkit/table-row'
 import Tag from '@aziontech/webkit/tag'
 import Tooltip from '@aziontech/webkit/tooltip'
 
+import { computed } from 'vue'
+
 import { toSfc } from '../../_shared/story-source'
 
 const text = (value) => `'${value.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`
@@ -92,13 +94,20 @@ const TEMPLATE = `<CardBox :padded="false">
           <TableRow v-for="entry in domains" :key="entry.id">
             <TableCell principal :style="domainColumn">{{ entry.domain }}</TableCell>
             <TableCell :style="environmentColumn">
-              <Tag severity="secondary" size="small" rounded icon="ai ai-layers" :label="entry.environment" />
+              <Tag
+                v-if="entry.environment"
+                severity="secondary"
+                size="medium"
+                rounded
+                icon="ai ai-layers"
+                :label="entry.environment"
+              />
             </TableCell>
             <TableCell :style="policyColumn">
-              <Tag severity="secondary" size="small" rounded :label="entry.policy" />
+              <Tag v-if="entry.environment" severity="secondary" size="medium" rounded :label="entry.policy" />
             </TableCell>
             <TableCell :style="certificateColumn">
-              <Tag severity="secondary" size="small" rounded icon="pi pi-verified" :label="entry.certificate" />
+              <Tag severity="secondary" size="medium" rounded icon="pi pi-verified" :label="entry.certificate" />
             </TableCell>
             <TableCell kind="action">
               <DropdownRoot v-if="!entry.generated" placement="bottom-end">
@@ -129,8 +138,8 @@ const TEMPLATE = `<CardBox :padded="false">
       </TableRoot>
 
       <div class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)">
-        <span class="text-body-xs text-(--text-muted)">{{ domains.length }} domains</span>
-        <Button label="Add Domain" kind="outlined" size="medium" icon="pi pi-plus" />
+        <span class="text-body-xs text-(--text-muted)">{{ countLabel }}</span>
+        <Button type="button" label="Add Domain" kind="outlined" size="medium" icon="pi pi-plus" />
       </div>
     </div>
   </template>
@@ -152,10 +161,13 @@ const IMPORTS = [
   "import TableRow from '@aziontech/webkit/table-row'",
   "import Tag from '@aziontech/webkit/tag'",
   "import Tooltip from '@aziontech/webkit/tooltip'",
+  "import { computed } from 'vue'",
   '',
   ...Object.entries(COLUMNS).map(([name, value]) => declare(name, value)),
   '',
-  declare('domains', DOMAINS)
+  declare('domains', DOMAINS),
+  '',
+  'const countLabel = computed(() => `${domains.length} ${domains.length === 1 ? \'domain\' : \'domains\'}`)'
 ]
 
 const components = {
@@ -186,7 +198,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Domains card in a resource settings tab: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered under Domains on the Application Settings and Workload Settings pages. Built from `CardBox`, `Table`, `Tag`, `Dropdown`, `IconButton`, `Tooltip` and `Button`.'
+          'The Domains card in a resource settings tab: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of the Workload Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `CardBox`, `Table`, `Tag`, `Dropdown`, `IconButton`, `Tooltip` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -198,7 +210,11 @@ export default meta
 export const Default = {
   render: () => ({
     components,
-    setup: () => ({ ...COLUMNS, domains: DOMAINS }),
+    setup: () => ({
+      ...COLUMNS,
+      domains: DOMAINS,
+      countLabel: computed(() => `${DOMAINS.length} ${DOMAINS.length === 1 ? 'domain' : 'domains'}`)
+    }),
     template: TEMPLATE
   }),
   parameters: {

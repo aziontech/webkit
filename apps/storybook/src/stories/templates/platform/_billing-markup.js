@@ -385,8 +385,7 @@ ${indent(
             :disabled="submitting"
             @click="upgradeOpen = false"
           />
-          <Button class="w-full md:w-auto" label="Upgrade" kind="primary" size="medium" :loading="submitting" @click="submitUpgrade" />
-          <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Upgrade</button>
+          <Button class="w-full md:w-auto" label="Upgrade" kind="primary" size="medium" :loading="submitting" type="submit" />
         </PanelFooter>
       </form>
     </DrawerContent>
@@ -430,6 +429,13 @@ export const upgradeScript = (closeLines) => [
   ')',
   declare('stateOptions', STATE_OPTIONS),
   declare('cityOptions', CITY_OPTIONS),
+  'watch(upgradeOpen, (isOpen) => {',
+  '  if (!isOpen) return',
+  "  upgradePeriod.value = 'yearly'",
+  '  address.useAccountInformation = true',
+  '  Object.assign(address, accountAddress)',
+  '  submitting.value = false',
+  '})',
   '',
   'const submitUpgrade = () => {',
   '  if (submitting.value) return',
@@ -458,6 +464,13 @@ export const useUpgrade = (close) => {
     () => address.useAccountInformation,
     (useAccount) => Object.assign(address, useAccount ? ACCOUNT_ADDRESS : blankAddress())
   )
+  watch(upgradeOpen, (isOpen) => {
+    if (!isOpen) return
+    upgradePeriod.value = 'yearly'
+    address.useAccountInformation = true
+    Object.assign(address, ACCOUNT_ADDRESS)
+    submitting.value = false
+  })
   const submitUpgrade = () => {
     if (submitting.value) return
     submitting.value = true
@@ -501,10 +514,10 @@ export const PLAN_CARDS = [
     actionLabel: 'Current plan',
     featuresTitle: 'All Features Included.',
     features: [
-      { icon: 'pi pi-globe', label: 'Global infrastructure' },
+      { icon: 'ai ai-edge-nodes', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'pi pi-image', label: 'Image optimization' },
+      { icon: 'ai ai-image-processor', label: 'Image optimization' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     card: {
@@ -638,6 +651,9 @@ export const CHANGE_PLAN_SCRIPT = [
   'const pricedPlans = computed(() =>',
   '  planCards.map((plan) => ({ ...plan, ...plan.card[changePlanPeriod.value] }))',
   ')',
+  'watch(changePlanOpen, (isOpen) => {',
+  "  if (isOpen) changePlanPeriod.value = 'yearly'",
+  '})',
   'const choosePlan = (plan) => {',
   "  if (plan.action === 'upgrade') upgradeOpen.value = true",
   "  else if (plan.action === 'contact') changePlanOpen.value = false",
@@ -650,6 +666,9 @@ export const useChangePlan = (upgradeOpen) => {
   const pricedPlans = computed(() =>
     PLAN_CARDS.map((plan) => ({ ...plan, ...plan.card[changePlanPeriod.value] }))
   )
+  watch(changePlanOpen, (isOpen) => {
+    if (isOpen) changePlanPeriod.value = 'yearly'
+  })
   const choosePlan = (plan) => {
     if (plan.action === 'upgrade') upgradeOpen.value = true
     else if (plan.action === 'contact') changePlanOpen.value = false

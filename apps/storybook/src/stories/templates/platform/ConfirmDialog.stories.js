@@ -55,7 +55,7 @@ const dialog = ({ trigger, title, body, actions }) => `<Dialog v-model:open="ope
   <DialogPortal>
     <DialogOverlay />
     <DialogContent>
-      <PanelHeader>
+      <PanelHeader class="w-full">
         <DialogTitle>${title}</DialogTitle>
         <DialogClose />
       </PanelHeader>
@@ -64,10 +64,8 @@ const dialog = ({ trigger, title, body, actions }) => `<Dialog v-model:open="ope
           ${body}
         </DialogDescription>
       </PanelContent>
-      <PanelFooter>
-        <div class="grid w-full gap-(--spacing-sm) md:flex md:justify-end">
-${indent(actions, 5)}
-        </div>
+      <PanelFooter class="flex-col md:flex-row md:justify-end">
+${indent(actions, 4)}
       </PanelFooter>
     </DialogContent>
   </DialogPortal>
@@ -76,17 +74,34 @@ ${indent(actions, 5)}
 const CONFIRM_TEMPLATE = dialog({
   trigger: '<Button label="Remove domain" kind="outlined" size="medium" />',
   title: 'Remove domain',
-  body: 'my-workload-1.azion.run stops answering for this workload once you save. Traffic already pointed at it gets no response.',
-  actions: `<Button label="Cancel" kind="text" size="medium" @click="open = false" />
-<Button label="Remove Domain" kind="danger" size="medium" @click="open = false" />`
+  body: 'shop.example.com stops answering for this workload once you save. Traffic already pointed at it gets no response.',
+  actions: `<Button class="w-full md:w-auto" label="Cancel" kind="text" size="medium" @click="open = false" />
+<Button class="w-full md:w-auto" label="Remove Domain" kind="danger" size="medium" @click="open = false" />`
+})
+
+const REPURGE_TEMPLATE = dialog({
+  trigger: '<Button label="Repurge" kind="outlined" size="medium" />',
+  title: 'Repurge cached content?',
+  body: 'This purges the same 2 URLs from the Cache layer again. Each object is fetched from your origin on its next request.',
+  actions: `<Button class="w-full md:w-auto" label="Cancel" kind="text" size="medium" @click="open = false" />
+<Button class="w-full md:w-auto" label="Repurge" kind="primary" size="medium" @click="open = false" />`
 })
 
 const DISCARD_TEMPLATE = dialog({
   trigger: '<Button label="Leave page" kind="outlined" size="medium" />',
   title: 'Unsaved changes',
   body: "This page has changes you haven't saved. If you leave now, they're discarded.",
-  actions: `<Button label="Keep editing" kind="text" size="medium" @click="open = false" />
-<Button label="Discard changes" kind="danger" size="medium" @click="open = false" />`
+  actions: `<Button class="w-full md:w-auto" label="Keep editing" kind="text" size="medium" @click="open = false" />
+<Button class="w-full md:w-auto" label="Discard changes" kind="danger" size="medium" @click="open = false" />`
+})
+
+const SAVE_TEMPLATE = dialog({
+  trigger: '<Button label="Switch tab" kind="outlined" size="medium" />',
+  title: 'Unsaved changes',
+  body: "This page has changes that haven't been saved yet. Save them before you leave, or discard them and continue.",
+  actions: `<Button class="w-full md:w-auto" label="Keep editing" kind="text" size="medium" @click="open = false" />
+<Button class="w-full md:w-auto" label="Discard changes" kind="outlined" size="medium" @click="open = false" />
+<Button class="w-full md:w-auto" label="Save changes" kind="primary" size="medium" @click="open = false" />`
 })
 
 const meta = {
@@ -99,7 +114,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The console small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose kind says how destructive the outcome is (danger for a removal, primary for a commit). The Remove domain confirmation on a workload and on an application renders it, and the unsaved-changes guard shows the same shell when a dirty form is left. Built from `Dialog` with `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription` and `DialogClose`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`; closed by default behind a visible trigger.'
+          'The console small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose kind says how destructive the outcome is (danger for a removal, primary for a commit). The Remove domain confirmation on a workload’s Settings tab and the Repurge confirmation on Real-Time Purge render it, and the unsaved-changes guard shows the same shell when a dirty form is left (with a Save changes button when the form can be saved from there, as on the Firewall tabs). Built from `Dialog` with `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription` and `DialogClose`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`; closed by default behind a visible trigger.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -118,7 +133,7 @@ export const Confirm = {
     docs: {
       description: {
         story:
-          'Remove domain: a danger confirm button beside a text Cancel, with the description naming the domain and its consequence.'
+          'Remove domain on a workload: a danger confirm button beside a text Cancel, with the description naming the domain and its consequence.'
       },
       source: { code: toSfc(IMPORTS, CONFIRM_TEMPLATE) }
     }
@@ -135,9 +150,43 @@ export const DiscardChanges = {
     docs: {
       description: {
         story:
-          'The unsaved-changes guard: Keep editing returns to the form and Discard changes leaves it; the console adds a primary Save changes button when the form can be saved from here.'
+          'The unsaved-changes guard on a form that cannot be saved from the dialog: Keep editing returns to the form and the danger Discard changes leaves it.'
       },
       source: { code: toSfc(IMPORTS, DISCARD_TEMPLATE) }
+    }
+  }
+}
+
+export const Repurge = {
+  render: () => ({
+    components,
+    setup: () => ({ open: ref(false) }),
+    template: REPURGE_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Repurge on Real-Time Purge: a commit rather than a removal, so the confirm button is primary; the description counts what is purged again and from which layer.'
+      },
+      source: { code: toSfc(IMPORTS, REPURGE_TEMPLATE) }
+    }
+  }
+}
+
+export const SaveOrDiscard = {
+  render: () => ({
+    components,
+    setup: () => ({ open: ref(false) }),
+    template: SAVE_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The guard on a form that can be saved from the dialog, as when leaving a dirty Firewall tab: Discard changes drops to outlined and a primary Save changes saves before leaving.'
+      },
+      source: { code: toSfc(IMPORTS, SAVE_TEMPLATE) }
     }
   }
 }

@@ -166,7 +166,10 @@ export const parameters = {
             'Shell',
             [
               'PlatformShell',
+              'HomePage',
+              'ModuleOverview',
               'CreatePage',
+              'StepperCreatePage',
               'SummaryPage',
               'CodeEditor',
               'QueryEditor',

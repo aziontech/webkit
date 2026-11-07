@@ -10,7 +10,7 @@
 
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import { useFont } from '../../lib/state/font.js'
+  import { useFont } from '@shared/lib/font.js'
 
   const { font, fonts } = useFont()
   const { theme } = useTheme()

@@ -1,210 +1,346 @@
 import Button from '@aziontech/webkit/button'
 import CardBox from '@aziontech/webkit/card-box'
 import CodeBlock from '@aziontech/webkit/code-block'
-import CopyButton from '@aziontech/webkit/copy-button'
 import Item from '@aziontech/webkit/item'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
 import Tag from '@aziontech/webkit/tag'
-import { computed, ref } from 'vue'
+import Tooltip from '@aziontech/webkit/tooltip'
 
+import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
+import { blockScript, blockState, declare, getStarted } from './_summary-markup'
 
-const quoted = (text) => `'${text.replaceAll("'", "\\'")}'`
-
-const multiline = (text) =>
-  `\`${text.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\``
-
-const literal = (value, depth = 1) => {
-  const pad = '  '.repeat(depth)
-  const close = '  '.repeat(depth - 1)
-  if (Array.isArray(value)) {
-    return `[\n${value.map((entry) => `${pad}${literal(entry, depth + 1)}`).join(',\n')}\n${close}]`
-  }
-  if (typeof value === 'object') {
-    const entries = Object.entries(value).map(
-      ([key, entry]) => `${key}: ${literal(entry, depth + 1)}`
-    )
-    const inline = `{ ${entries.join(', ')} }`
-    return inline.length <= 96 && !inline.includes('\n')
-      ? inline
-      : `{\n${entries.map((entry) => `${pad}${entry}`).join(',\n')}\n${close}}`
-  }
-  if (typeof value === 'string') return value.includes('\n') ? multiline(value) : quoted(value)
-  return String(value)
-}
-
-const declare = (name, value) => `const ${name} = ${literal(value)}`
-
-const DOMAIN = 'my-storefront.map.azionedge.net'
 const DOCUMENTATION = 'https://www.azion.com/en/documentation/'
-const CLI_DOCUMENTATION = 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
 
-const RESOURCES = [
-  { kind: 'Workload', icon: 'ai ai-workloads', name: 'my-storefront', reference: '7f3a1c92' },
-  {
-    kind: 'Application',
-    icon: 'ai ai-edge-application',
-    name: 'my-storefront',
-    reference: '1848274'
-  },
-  { kind: 'Connector', icon: 'ai ai-edge-connectors', name: 'my-storefront', reference: '2201937' },
-  {
-    kind: 'Cache Settings',
-    icon: 'ai ai-tiered-cache',
-    name: 'my-storefront',
-    reference: '915502'
-  },
-  {
-    kind: 'Rules Engine rule',
-    icon: 'pi pi-sliders-h',
-    name: 'Serve from my-storefront',
-    reference: '1848274'
-  }
-]
+const LINK =
+  'group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
 
-const NEXT_STEPS = [
+const externalLink = (
+  label,
+  href
+) => `<Tooltip text="Open ${label} in a new tab" class="min-w-0 shrink!">
+  <a
+    href="${href}"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-link
+    class="${LINK}"
+  >
+    <span class="truncate underline-offset-2 group-hover/link:underline">
+      ${label}
+    </span>
+    <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
+    <i class="pi pi-external-link shrink-0 text-body-xs leading-none" aria-hidden="true" />
+  </a>
+</Tooltip>`
+
+const lead = ({ text, scope }) =>
+  scope
+    ? `<p class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
+  ${text}
+  into
+  <Tag label="${scope}" severity="secondary" icon="ai ai-github" />
+</p>`
+    : `<p class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
+  ${text}
+</p>`
+
+const domainCard = ({ title, domain, created, workloadId, repository, branch }) => `<CardBox>
+  <template #content>
+    <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
+      <a
+        href="https://${domain}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit ${domain} in a new tab"
+        class="relative flex aspect-16/10 w-full shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-canvas) sm:w-56 before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) motion-reduce:before:transition-none"
+      >
+        <span class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)">
+          <i class="pi pi-globe text-body-md leading-none text-(--text-default)" aria-hidden="true" />
+        </span>
+      </a>
+
+      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
+        <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+              <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
+                ${title}
+              </h2>
+              <Tag label="Live" severity="success" size="small" />
+            </div>
+            <span class="text-body-sm text-(--text-muted)">Created ${created}</span>
+          </div>
+
+          <Button
+            label="Visit site"
+            kind="outlined"
+            size="medium"
+            icon="pi pi-external-link"
+            icon-position="trailing"
+            href="https://${domain}"
+            target="_blank"
+          />
+        </div>
+
+        <ul class="flex flex-col gap-(--spacing-xs)">
+          <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <i class="ai ai-domains shrink-0 text-(--text-muted)" aria-hidden="true" />
+${indent(externalLink(domain, `https://${domain}`), 7)}
+            </span>
+            <a
+              href="/workloads/${workloadId}?name=${title}&tab=settings"
+              class="group/link inline-flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+            >
+              <i class="pi pi-plus-circle shrink-0 text-(--text-muted)" aria-hidden="true" />
+              <span class="truncate underline-offset-2 group-hover/link:underline">Add custom domain</span>
+            </a>
+          </li>
+          <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <i class="ai ai-github shrink-0 text-(--text-muted)" aria-hidden="true" />
+${indent(externalLink(repository, `https://github.com/${repository}`), 7)}
+            </span>
+            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+              <i class="ai ai-branch shrink-0 text-(--text-muted)" aria-hidden="true" />
+              <span class="truncate text-body-sm text-(--text-default)">${branch}</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+</CardBox>`
+
+const RESOURCES_SECTION = (title) => `<section class="flex flex-col gap-(--spacing-sm)">
+  <h2 class="text-label-md text-(--text-default)">${title}</h2>
+  <CardBox :padded="false">
+    <template #content>
+      <Item.List>
+        <Item v-for="resource in resources" :key="resource.key" size="small">
+          <Item.Media>
+            <span class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)">
+              <i :class="resource.icon" class="text-body-sm leading-none text-(--text-default)" aria-hidden="true" />
+            </span>
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ resource.name }}</Item.Title>
+            <Item.Description>
+              {{ resource.kind }} · {{ resource.reference }}
+            </Item.Description>
+          </Item.Content>
+          <Item.Actions>
+            <Tag
+              :label="resource.state === 'bound' ? 'Bound' : 'Created'"
+              :severity="resource.state === 'bound' ? 'info' : 'success'"
+              size="small"
+            />
+          </Item.Actions>
+        </Item>
+      </Item.List>
+    </template>
+  </CardBox>
+</section>`
+
+const NEXT_STEPS_SECTION = `<section class="flex flex-col gap-(--spacing-sm)">
+  <h2 class="text-label-md text-(--text-default)">Next steps</h2>
+  <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
+    <CardBox v-for="step in nextSteps" :key="step.title" :padded="false">
+      <template #content>
+        <component
+          :is="step.action ? 'button' : 'a'"
+          :type="step.action ? 'button' : undefined"
+          :href="step.href || undefined"
+          :target="step.external ? '_blank' : undefined"
+          :rel="step.external ? 'noopener noreferrer' : undefined"
+          class="group/step relative flex h-full w-full cursor-pointer flex-col gap-(--spacing-sm) rounded-(--shape-card) border-0 bg-transparent p-(--spacing-md) text-left text-inherit no-underline before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) motion-reduce:before:transition-none"
+        >
+          <span class="relative flex items-center justify-between gap-(--spacing-xs)">
+            <span class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)">
+              <i :class="step.icon" class="text-body-sm leading-none text-(--text-default)" aria-hidden="true" />
+            </span>
+            <i
+              :class="step.external ? 'pi pi-external-link' : 'pi pi-chevron-right'"
+              class="text-body-xs leading-none text-(--text-muted)"
+              aria-hidden="true"
+            />
+          </span>
+          <span class="relative flex flex-col gap-(--spacing-xxs)">
+            <span class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <span class="text-label-md text-(--text-default)">{{ step.title }}</span>
+              <Tag v-if="step.recommended" label="Recommended" severity="primary" size="small" />
+            </span>
+            <span class="text-pretty text-body-sm text-(--text-muted)">{{ step.description }}</span>
+          </span>
+        </component>
+      </template>
+    </CardBox>
+  </div>
+</section>`
+
+const MANAGE = '<Button class="w-full" label="Manage" kind="secondary" size="large" />'
+
+const page = ({
+  title,
+  leadText,
+  scope,
+  card,
+  resourcesTitle,
+  getStartedTemplate
+}) => `<div class="flex min-h-dvh flex-col bg-(--bg-canvas)">
+  <div class="flex min-h-full flex-1 flex-col pb-(--layout-section-gap)">
+    <div class="layout-column-form layout-boundary-inline flex min-w-0 flex-1 flex-col pt-(--layout-section-gap)">
+      <div class="layout-column-content my-auto flex flex-col gap-(--spacing-xl)">
+        <header class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-xxs)">
+          <h1 class="text-balance text-heading-lg text-(--text-default)">${title}</h1>
+${indent(lead({ text: leadText, scope }), 4)}
+        </header>
+
+        <div class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]">
+${indent([card, RESOURCES_SECTION(resourcesTitle), NEXT_STEPS_SECTION, getStartedTemplate, MANAGE].filter(Boolean).join('\n\n'), 5)}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`
+
+const DEFAULT_NEXT_STEPS = [
   {
     icon: 'pi pi-globe',
     title: 'Customize domain',
     description: 'Associate a custom domain and subdomains to Azion to handle user access.',
-    href: DOCUMENTATION
+    href: DOCUMENTATION,
+    external: true
   },
   {
     icon: 'pi pi-sitemap',
     title: 'Point traffic',
     description:
       'Redirect the traffic of a domain to Azion and take advantage of the distributed network.',
-    href: DOCUMENTATION
+    href: DOCUMENTATION,
+    external: true
   },
   {
     icon: 'pi pi-chart-line',
     title: 'View analytics',
     description: 'Gain powerful insights into your performance, availability, and security.',
-    href: DOCUMENTATION
+    href: DOCUMENTATION,
+    external: true
   }
 ]
 
-const PATHS = [
-  { label: 'Azion CLI', value: 'cli' },
-  { label: 'GitHub Actions', value: 'actions' }
-]
+const GIT_DEPLOYMENT = {
+  domain: 'k3x9q2m7wp.azion.run',
+  workloadId: '1482736015',
+  name: 'my-storefront',
+  repository: 'gab-az/my-storefront',
+  branch: 'main'
+}
 
-const CLI_STEPS = [
+const GIT_RESOURCES = [
   {
-    title: 'Install the Azion CLI',
-    description:
-      'Install it globally. It builds with your framework preset and ships straight to the edge.',
-    tabs: [
-      { label: 'npm', value: 'npm', language: 'bash', code: 'npm install -g azion' },
-      { label: 'yarn', value: 'yarn', language: 'bash', code: 'yarn global add azion' },
-      { label: 'pnpm', value: 'pnpm', language: 'bash', code: 'pnpm add -g azion' },
-      { label: 'brew', value: 'brew', language: 'bash', code: 'brew install azion' }
-    ]
+    key: 'workload',
+    kind: 'Workload',
+    icon: 'ai ai-workloads',
+    name: 'my-storefront',
+    reference: '1482736015'
   },
   {
-    title: 'Link your project',
-    description:
-      'Authenticate, then link the local project to this application so every deploy lands on it.',
-    tabs: [
-      {
-        label: 'Link',
-        value: 'link',
-        language: 'bash',
-        code: ['azion login', 'azion link \\', '  --name my-storefront'].join('\n')
-      }
-    ]
+    key: 'application',
+    kind: 'Application',
+    icon: 'ai ai-edge-application',
+    name: 'my-storefront',
+    state: 'created',
+    reference: '1739204418'
   },
   {
-    title: 'Deploy and visit your site',
-    description:
-      'Build and ship. The CLI prints the domain when it finishes, and sync reconciles azion.json with what Console shows.',
-    tabs: [
-      {
-        label: 'Deploy',
-        value: 'deploy',
-        language: 'bash',
-        code: ['azion deploy --auto --local', 'azion sync'].join('\n')
-      }
-    ]
+    key: 'connector',
+    kind: 'Connector',
+    icon: 'ai ai-edge-connectors',
+    name: 'my-storefront-storage',
+    reference: '1215583907'
+  },
+  {
+    key: 'storage',
+    kind: 'Storage',
+    icon: 'ai ai-edge-storage',
+    name: 'my-storefront-assets',
+    reference: '24 objects · 1.2 MB'
   }
 ]
 
-const WORKFLOW = [
-  'on:',
-  '  push:',
-  '    branches: [main]',
-  '',
-  'jobs:',
-  '  deploy:',
-  '    runs-on: ubuntu-latest',
-  '    steps:',
-  '      - uses: actions/checkout@v4',
-  '      - run: npm install -g azion',
-  '      - run: azion login --token ${{ secrets.AZION_PERSONAL_TOKEN }}',
-  '      - run: azion deploy --auto --local'
-].join('\n')
+const CLI_NAME = 'analytics-edge'
 
-const ACTIONS_STEPS = [
+const CLI_RESOURCES = [
   {
-    title: 'Store your personal token',
-    description:
-      'Create a personal token in Account Settings and keep it as the repository secret the workflow authenticates with.',
-    tabs: [
-      {
-        label: 'Secret',
-        value: 'secret',
-        language: 'bash',
-        code: ['gh secret set \\', '  AZION_PERSONAL_TOKEN'].join('\n')
-      }
-    ]
-  },
-  {
-    title: 'Add the deploy workflow',
-    description:
-      'One job that installs the CLI and deploys the build. Every push to the production branch runs it.',
-    tabs: [
-      {
-        label: 'azion-deploy.yml',
-        value: 'workflow',
-        fileName: '.github/workflows/azion-deploy.yml',
-        language: 'yaml',
-        code: WORKFLOW
-      }
-    ]
-  },
-  {
-    title: 'Push to deploy',
-    description:
-      'Every push to the production branch builds and ships. The deployment lands on the Overview tab as it runs.',
-    tabs: [{ label: 'Push', value: 'push', language: 'bash', code: 'git push origin main' }]
+    key: 'application',
+    kind: 'Application',
+    icon: 'ai ai-edge-application',
+    name: CLI_NAME,
+    state: 'created',
+    reference: '1650382274'
   }
 ]
 
-const IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import CardBox from '@aziontech/webkit/card-box'",
-  "import CodeBlock from '@aziontech/webkit/code-block'",
-  "import CopyButton from '@aziontech/webkit/copy-button'",
-  "import Item from '@aziontech/webkit/item'",
-  "import SegmentedButton from '@aziontech/webkit/segmented-button'",
-  "import Tag from '@aziontech/webkit/tag'",
-  "import { computed, ref } from 'vue'",
-  '',
-  declare('resources', RESOURCES),
-  declare('nextSteps', NEXT_STEPS),
-  declare('paths', PATHS),
-  declare('cliSteps', CLI_STEPS),
-  declare('actionsSteps', ACTIONS_STEPS),
-  '',
-  "const path = ref('cli')",
-  "const steps = computed(() => (path.value === 'actions' ? actionsSteps : cliSteps))"
+const DEPLOY_METHODS = [
+  {
+    icon: 'pi pi-cloud-upload',
+    title: 'Deploy this application',
+    description:
+      'Provision a workload for it and deploy, without leaving this flow. Azion names the domain, and you can change it after.',
+    action: true,
+    recommended: true
+  },
+  {
+    icon: 'ai ai-workloads',
+    title: 'Deploy using a new workload',
+    description:
+      'Name the workload, put a firewall in front of it, and compose the release yourself.',
+    href: `/workloads/new?application=${CLI_NAME}`
+  }
 ]
+
+const GIT_TEMPLATE = page({
+  title: 'Application deployed',
+  leadText: 'You deployed a new application.',
+  scope: 'gab-az',
+  card: domainCard({
+    title: GIT_DEPLOYMENT.name,
+    domain: GIT_DEPLOYMENT.domain,
+    created: 'just now',
+    workloadId: GIT_DEPLOYMENT.workloadId,
+    repository: GIT_DEPLOYMENT.repository,
+    branch: GIT_DEPLOYMENT.branch
+  }),
+  resourcesTitle: 'Resources created'
+})
+
+const GIT_BLOCK = {
+  parts: ['Button', 'CardBox', 'Item', 'Tag', 'Tooltip'],
+  script: [declare('resources', GIT_RESOURCES), '', declare('nextSteps', DEFAULT_NEXT_STEPS)],
+  state: () => ({ resources: GIT_RESOURCES, nextSteps: DEFAULT_NEXT_STEPS })
+}
+
+const CLI_GET_STARTED = getStarted(CLI_NAME)
+
+const CLI_TEMPLATE = page({
+  title: 'Application created',
+  leadText: 'The application layer is ready. Nothing serves it yet. Deploy it from Next steps.',
+  resourcesTitle: 'Resources created',
+  getStartedTemplate: CLI_GET_STARTED.template
+})
+
+const CLI_BLOCK = {
+  parts: ['Button', 'CardBox', 'Item', 'Tag'],
+  script: [declare('resources', CLI_RESOURCES), '', declare('nextSteps', DEPLOY_METHODS), ''],
+  state: () => ({ resources: CLI_RESOURCES, nextSteps: DEPLOY_METHODS })
+}
 
 const components = {
   Button,
   CardBox,
   CodeBlock,
-  CopyButton,
   Item,
   'Item.List': Item.List,
   'Item.Media': Item.Media,
@@ -213,139 +349,23 @@ const components = {
   'Item.Description': Item.Description,
   'Item.Actions': Item.Actions,
   SegmentedButton,
-  Tag
+  Tag,
+  Tooltip
 }
 
-const TEMPLATE = `<div class="min-h-dvh bg-(--bg-canvas)">
-  <main class="layout-form-create layout-boundary-inline py-(--layout-section-gap)">
-    <div class="flex w-full flex-col gap-(--spacing-xl)">
-      <header class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-xxs)">
-        <h1 class="text-balance text-heading-lg text-(--text-default)">Application deployed</h1>
-        <p class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
-          You deployed a new application into
-          <Tag label="aziontech" severity="secondary" icon="pi pi-github" />
-        </p>
-      </header>
-
-      <div class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]">
-        <CardBox>
-          <template #content>
-            <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-              <span class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)">
-                <i class="pi pi-globe leading-none text-(--text-default)" aria-hidden="true" />
-              </span>
-              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-                <span class="text-label-sm text-(--text-muted)">Domain</span>
-                <a
-                  href="https://${DOMAIN}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="w-fit max-w-full break-all text-label-md text-(--text-default) no-underline hover:underline"
-                >
-                  ${DOMAIN}
-                </a>
-              </div>
-              <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
-                <CopyButton kind="outlined" size="medium" value="${DOMAIN}" aria-label="Copy domain" />
-                <Button label="Visit" kind="outlined" size="medium" href="https://${DOMAIN}" target="_blank" />
-              </div>
-            </div>
-          </template>
-        </CardBox>
-
-        <CardBox title="Resources created" :padded="false">
-          <template #content>
-            <Item.List>
-              <Item v-for="resource in resources" :key="resource.kind + resource.reference" size="small">
-                <Item.Media>
-                  <span class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)">
-                    <i :class="resource.icon" class="leading-none text-(--text-default)" aria-hidden="true" />
-                  </span>
-                </Item.Media>
-                <Item.Content>
-                  <Item.Title>{{ resource.name }}</Item.Title>
-                  <Item.Description>{{ resource.kind }} · {{ resource.reference }}</Item.Description>
-                </Item.Content>
-                <Item.Actions>
-                  <Tag label="Created" severity="success" size="small" />
-                </Item.Actions>
-              </Item>
-            </Item.List>
-          </template>
-        </CardBox>
-
-        <CardBox title="Next steps" :padded="false">
-          <template #content>
-            <Item.List>
-              <Item v-for="step in nextSteps" :key="step.title" as-child size="small">
-                <a :href="step.href" target="_blank" rel="noopener" class="text-left no-underline">
-                  <Item.Media>
-                    <span class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)">
-                      <i :class="step.icon" class="leading-none text-(--text-default)" aria-hidden="true" />
-                    </span>
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ step.title }}</Item.Title>
-                    <Item.Description>{{ step.description }}</Item.Description>
-                  </Item.Content>
-                  <Item.Actions>
-                    <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
-                  </Item.Actions>
-                </a>
-              </Item>
-            </Item.List>
-          </template>
-        </CardBox>
-
-        <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-          <header class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <h2 class="text-balance text-heading-xs text-(--text-default)">Get started</h2>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                Two ways to build and deploy this application. Pick one and follow the steps, or read the
-                <a
-                  href="${CLI_DOCUMENTATION}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                >Azion CLI docs</a>.
-              </p>
-            </div>
-            <div class="flex w-full flex-wrap items-center gap-(--spacing-xs) md:w-auto md:shrink-0 md:flex-nowrap">
-              <SegmentedButton v-model="path" :options="paths" size="large" aria-label="Deploy with" />
-            </div>
-          </header>
-
-          <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
-            <div v-for="(step, index) in steps" :key="step.title" class="relative grid min-w-0">
-              <span
-                v-if="index > 0"
-                aria-hidden="true"
-                class="absolute right-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
-              />
-              <CardBox :padded="false">
-                <template #content>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--bg-surface-overlay) text-label-sm text-(--text-default)">
-                        {{ index + 1 }}
-                      </span>
-                      <h3 class="min-w-0 text-heading-xs text-(--text-default)">{{ step.title }}</h3>
-                    </div>
-                    <p class="text-pretty text-body-sm text-(--text-muted)">{{ step.description }}</p>
-                    <CodeBlock :tabs="step.tabs" :show-line-numbers="false" :copy-aria-label="'Copy the commands for ' + step.title" />
-                  </div>
-                </template>
-              </CardBox>
-            </div>
-          </div>
-        </div>
-
-        <Button label="Manage" kind="secondary" size="large" class="w-full" />
-      </div>
-    </div>
-  </main>
-</div>`
+const story = (blocks, template, description) => ({
+  render: () => ({
+    components,
+    setup: () => blockState(...blocks),
+    template
+  }),
+  parameters: {
+    docs: {
+      description: { story: description },
+      source: { code: toSfc(blockScript(...blocks), template) }
+    }
+  }
+})
 
 const meta = {
   title: 'Templates/Platform/Creation/DeploySuccess',
@@ -357,7 +377,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The screen the application wizard ends on once the first deployment is live: a heading with the Git scope as a Tag, the domain card with a copy control and a Visit button, the list of every resource the flow created, three next-step rows, the Get started band that walks the CLI or GitHub Actions path in three CodeBlock cards, and the Manage button. Create Application, Create Workload and Deploy Template all finish here. Built from `CardBox`, `Tag`, `CopyButton`, `Item`, `SegmentedButton`, `CodeBlock` and `Button`.'
+          'The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the workload name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the Azion CLI or GitHub Actions for an application made from the CLI; and the Manage button. Create Application, Create Workload (titled Workload deployed, with no scope) and Deploy Template at `/deploy` (titled Congratulations!) all render it. Built from `CardBox`, `Tag`, `Button`, `Tooltip`, `Item`, `SegmentedButton` and `CodeBlock`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -366,23 +386,14 @@ const meta = {
 
 export default meta
 
-export const Default = {
-  render: () => ({
-    components,
-    setup: () => {
-      const path = ref('cli')
-      const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : CLI_STEPS))
-      return { resources: RESOURCES, nextSteps: NEXT_STEPS, paths: PATHS, path, steps }
-    },
-    template: TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'A CLI-built application just deployed: five created resources, the default next steps, and the Get started band switching between the Azion CLI and GitHub Actions walkthroughs.'
-      },
-      source: { code: toSfc(IMPORTS, TEMPLATE) }
-    }
-  }
-}
+export const Default = story(
+  [GIT_BLOCK],
+  GIT_TEMPLATE,
+  'An application deployed from a Git repository: the scope Tag, the live deployment card on its generated Azion domain with the repository and branch, the four resources the flow created, and the default next steps that open the documentation.'
+)
+
+export const CliCreated = story(
+  [CLI_BLOCK, CLI_GET_STARTED],
+  CLI_TEMPLATE,
+  'An application made from the CLI that nothing serves yet: no deployment card, the application as its only resource, next steps that deploy it here (Recommended) or on a new workload, and Get started with the Azion CLI and GitHub Actions paths.'
+)

@@ -2,13 +2,11 @@ import Button from '@aziontech/webkit/button'
 import Drawer from '@aziontech/webkit/drawer'
 import DrawerClose from '@aziontech/webkit/drawer-close'
 import DrawerContent from '@aziontech/webkit/drawer-content'
-import DrawerDescription from '@aziontech/webkit/drawer-description'
 import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
 import DrawerPortal from '@aziontech/webkit/drawer-portal'
 import DrawerTitle from '@aziontech/webkit/drawer-title'
 import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
 import FieldInputGroup from '@aziontech/webkit/field-input-group'
-import FieldSelect from '@aziontech/webkit/field-select'
 import FieldText from '@aziontech/webkit/field-text'
 import FieldTextarea from '@aziontech/webkit/field-textarea'
 import HelperText from '@aziontech/webkit/helper-text'
@@ -19,11 +17,18 @@ import Link from '@aziontech/webkit/link'
 import PanelContent from '@aziontech/webkit/panel-content'
 import PanelFooter from '@aziontech/webkit/panel-footer'
 import PanelHeader from '@aziontech/webkit/panel-header'
-import { computed, reactive, ref } from 'vue'
+import Select from '@aziontech/webkit/select'
+import { computed, reactive, ref, watch } from 'vue'
 
-import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
-import { declare } from './_forms-markup'
+import {
+  declare,
+  DRAWER_SHELL_IMPORTS,
+  drawerShell,
+  fieldStack,
+  headingAction,
+  section
+} from './_forms-markup'
 
 const RECORD_TYPES = [
   {
@@ -69,67 +74,214 @@ const POLICY_TYPES = [
   { value: 'weighted', label: 'Weighted' }
 ]
 
-const RECORD_FORM = { name: '', type: undefined, ttl: 3600, value: '', description: '' }
+const BLANK_FORM = {
+  name: '',
+  type: 'A',
+  ttl: 3600,
+  value: '',
+  description: '',
+  policy: 'simple',
+  weight: 100
+}
 
-const POLICY_FORM = { ...RECORD_FORM, policy: undefined, weight: 100 }
+const selectControl = ({ model, id, ariaLabel, displayValue, options, item }) => `<Select
+  v-model="${model}"
+  size="large"
+  class="w-full"
+  :disabled="submitting"
+  :display-value="${displayValue}"
+>
+  <Select.Trigger id="${id}" aria-label="${ariaLabel}" />
+  <Select.Content>
+    <Select.Option v-for="${item} in ${options}" :key="${item}.value" :value="${item}.value">
+      {{ ${item}.label }}
+    </Select.Option>
+  </Select.Content>
+</Select>`
 
-const SETTINGS_HINT =
-  "Which IPs are associated with the domain and how Edge DNS should handle requests. The accepted value's format varies according to the chosen record type."
+const NAME_FIELD = fieldStack({
+  component: 'FieldInputGroup',
+  label: 'Name',
+  id: 'record-name',
+  description: 'Use @ to create a record for the root domain.',
+  message: 'errors.name',
+  attrs: `v-model="form.name"
+placeholder="subdomain"
+:disabled="submitting"
+@update:model-value="errors.name = ''"`,
+  slots: '<template #right>.edgeflow.com</template>'
+})
 
-const POLICY_HINT =
-  'How Edge DNS should deal with requests answered by this record. SIMPLE is standard resolution; WEIGHTED distributes answers across records by weight.'
+const TYPE_FIELD = fieldStack({
+  label: 'Record type',
+  id: 'record-type',
+  descriptionSlot: `<Link
+  label="Read more about record types"
+  size="medium"
+  href="https://www.azion.com/en/documentation/products/secure/edge-dns/"
+  target="_blank"
+/>`,
+  control: selectControl({
+    model: 'form.type',
+    id: 'record-type',
+    ariaLabel: 'Record type',
+    displayValue: 'typeLabel',
+    options: 'recordTypes',
+    item: 'type'
+  })
+})
 
-const SHELL_IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import Drawer from '@aziontech/webkit/drawer'",
-  "import DrawerClose from '@aziontech/webkit/drawer-close'",
-  "import DrawerContent from '@aziontech/webkit/drawer-content'",
-  "import DrawerDescription from '@aziontech/webkit/drawer-description'",
-  "import DrawerOverlay from '@aziontech/webkit/drawer-overlay'",
-  "import DrawerPortal from '@aziontech/webkit/drawer-portal'",
-  "import DrawerTitle from '@aziontech/webkit/drawer-title'",
-  "import DrawerTrigger from '@aziontech/webkit/drawer-trigger'",
-  "import HelperText from '@aziontech/webkit/helper-text'"
-]
+const TTL_FIELD = fieldStack({
+  label: 'TTL (seconds)',
+  id: 'record-ttl',
+  description: 'Time-to-live a response can be cached for on a resolver server.',
+  control: `<InputNumber
+  id="record-ttl"
+  v-model="form.ttl"
+  size="large"
+  class="w-full"
+  :min="0"
+  :disabled="submitting"
+  aria-label="TTL in seconds"
+/>`
+})
 
-const FIELD_IMPORTS = [
+const VALUE_FIELD = fieldStack({
+  component: 'FieldTextarea',
+  label: 'Value',
+  id: 'record-value',
+  description: '{{ selectedType.valueHelper }}',
+  message: 'errors.value',
+  attrs: `v-model="form.value"
+:placeholder="selectedType.placeholder"
+:disabled="submitting"
+@update:model-value="errors.value = ''"`
+})
+
+const DESCRIPTION_FIELD = fieldStack({
+  component: 'FieldText',
+  label: 'Description',
+  id: 'record-description',
+  description: 'An optional note to help identify this record.',
+  attrs: `v-model="form.description"
+size="large"
+placeholder="Optional description"
+:disabled="submitting"`
+})
+
+const POLICY_FIELD = fieldStack({
+  label: 'Policy type',
+  id: 'record-policy',
+  description:
+    'Simple is standard resolution. Weighted distributes answers across records by weight.',
+  control: selectControl({
+    model: 'form.policy',
+    id: 'record-policy',
+    ariaLabel: 'Policy type',
+    displayValue: 'policyLabelOf',
+    options: 'policyTypes',
+    item: 'policy'
+  })
+})
+
+const WEIGHT_FIELD = fieldStack({
+  label: 'Weight',
+  id: 'record-weight',
+  when: 'isWeighted',
+  description: 'Relative weight (0–255) for this record within the weighted set.',
+  control: `<InputNumber
+  id="record-weight"
+  v-model="form.weight"
+  size="large"
+  class="w-full"
+  :min="0"
+  :max="255"
+  :disabled="submitting"
+  aria-label="Weight"
+/>`
+})
+
+const fieldGroup = (fields) => `<div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+${fields
+  .join('\n\n')
+  .split('\n')
+  .map((line) => (line ? `  ${line}` : line))
+  .join('\n')}
+</div>`
+
+const TEMPLATE = drawerShell({
+  title: 'Add Record',
+  description: 'A new record in edgeflow.com, and how Edge DNS should answer requests for it.',
+  size: 'large',
+  trigger: headingAction({ label: 'Add Record' }),
+  body: [
+    section({
+      title: 'Settings',
+      hint: 'Which IPs are associated with the domain and how Edge DNS should handle requests.',
+      body: fieldGroup([NAME_FIELD, TYPE_FIELD, TTL_FIELD, VALUE_FIELD, DESCRIPTION_FIELD])
+    }),
+    section({
+      title: 'Policy',
+      hint: 'How Edge DNS should deal with requests answered by this record.',
+      body: fieldGroup([POLICY_FIELD, WEIGHT_FIELD])
+    })
+  ].join('\n\n')
+})
+
+const SCRIPT = [
+  ...DRAWER_SHELL_IMPORTS,
   "import FieldInputGroup from '@aziontech/webkit/field-input-group'",
-  "import FieldSelect from '@aziontech/webkit/field-select'",
   "import FieldText from '@aziontech/webkit/field-text'",
   "import FieldTextarea from '@aziontech/webkit/field-textarea'",
+  "import HelperText from '@aziontech/webkit/helper-text'",
+  "import Hint from '@aziontech/webkit/hint'",
   "import InputNumber from '@aziontech/webkit/input-number'",
   "import Label from '@aziontech/webkit/label'",
   "import Link from '@aziontech/webkit/link'",
-  "import PanelContent from '@aziontech/webkit/panel-content'",
-  "import PanelFooter from '@aziontech/webkit/panel-footer'",
-  "import PanelHeader from '@aziontech/webkit/panel-header'",
-  "import { computed, reactive, ref } from 'vue'"
-]
-
-const RECORD_TYPE_LINES = [
-  'const recordType = computed(() => recordTypes.find((type) => type.value === form.type) ?? recordTypes[0])'
-]
-
-const DEFAULT_IMPORTS = [
-  ...SHELL_IMPORTS,
-  ...FIELD_IMPORTS,
+  "import Select from '@aziontech/webkit/select'",
+  "import { computed, reactive, ref, watch } from 'vue'",
   '',
-  'const open = ref(false)',
-  declare('form', RECORD_FORM, 'reactive'),
   declare('recordTypes', RECORD_TYPES),
-  ...RECORD_TYPE_LINES
-]
-
-const SECTIONED_IMPORTS = [
-  ...SHELL_IMPORTS,
-  "import Hint from '@aziontech/webkit/hint'",
-  ...FIELD_IMPORTS,
   '',
-  'const open = ref(false)',
-  declare('form', POLICY_FORM, 'reactive'),
-  declare('recordTypes', RECORD_TYPES),
   declare('policyTypes', POLICY_TYPES),
-  ...RECORD_TYPE_LINES
+  '',
+  `const blankForm = () => (${declare('x', BLANK_FORM).slice('const x = '.length)})`,
+  '',
+  'const open = ref(false)',
+  'const form = reactive(blankForm())',
+  "const errors = reactive({ name: '', value: '' })",
+  'const submitting = ref(false)',
+  '',
+  'const selectedType = computed(',
+  '  () => recordTypes.find((type) => type.value === form.type) ?? recordTypes[0]',
+  ')',
+  "const isWeighted = computed(() => form.policy === 'weighted')",
+  '',
+  "const typeLabel = (value) => recordTypes.find((type) => type.value === value)?.label ?? ''",
+  "const policyLabelOf = (value) => policyTypes.find((policy) => policy.value === value)?.label ?? ''",
+  '',
+  'watch(open, (isOpen) => {',
+  '  if (!isOpen) return',
+  '  Object.assign(form, blankForm())',
+  "  errors.name = ''",
+  "  errors.value = ''",
+  '})',
+  '',
+  'const validate = () => {',
+  "  errors.name = form.name.trim() ? '' : 'This field is required.'",
+  "  errors.value = form.value.trim() ? '' : 'This field is required.'",
+  '  return !errors.name && !errors.value',
+  '}',
+  '',
+  'const submit = () => {',
+  '  if (submitting.value) return',
+  '  if (!validate()) return',
+  '  submitting.value = true',
+  '  setTimeout(() => {',
+  '    submitting.value = false',
+  '    open.value = false',
+  '  }, 800)',
+  '}'
 ]
 
 const components = {
@@ -137,13 +289,11 @@ const components = {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerOverlay,
   DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
   FieldInputGroup,
-  FieldSelect,
   FieldText,
   FieldTextarea,
   HelperText,
@@ -153,172 +303,58 @@ const components = {
   Link,
   PanelContent,
   PanelFooter,
-  PanelHeader
+  PanelHeader,
+  Select,
+  'Select.Trigger': Select.Trigger,
+  'Select.Content': Select.Content,
+  'Select.Option': Select.Option
 }
 
-const NAME_FIELD = `<FieldInputGroup
-  v-model="form.name"
-  label="Name"
-  input-id="record-name"
-  name="name"
-  placeholder="subdomain"
-  helper-text="Use @ to create a record for the root domain."
->
-  <template #right>.edgeflow.com</template>
-</FieldInputGroup>`
-
-const TYPE_FIELD = `<div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-  <FieldSelect
-    v-model="form.type"
-    label="Record type"
-    input-id="record-type"
-    size="large"
-    placeholder="Select a record type"
-    :options="recordTypes"
-  />
-  <HelperText>
-    <Link
-      label="Read more about record types"
-      size="medium"
-      href="https://www.azion.com/en/documentation/products/secure/edge-dns/"
-      target="_blank"
-    />
-  </HelperText>
-</div>`
-
-const TTL_FIELD = `<div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-  <Label for="record-ttl">TTL (seconds)</Label>
-  <InputNumber id="record-ttl" v-model="form.ttl" size="large" :min="0" aria-describedby="record-ttl-helper" />
-  <HelperText
-    id="record-ttl-helper"
-    label="Time-to-live a response can be cached for on a resolver server."
-  />
-</div>`
-
-const VALUE_FIELD = `<FieldTextarea
-  v-model="form.value"
-  label="Value"
-  input-id="record-value"
-  name="value"
-  :placeholder="recordType.placeholder"
-  :helper-text="recordType.valueHelper"
-/>`
-
-const DESCRIPTION_FIELD = `<FieldText
-  v-model="form.description"
-  label="Description"
-  input-id="record-description"
-  name="description"
-  size="large"
-  placeholder="Optional description"
-  helper-text="An optional note to help identify this record."
-/>`
-
-const POLICY_FIELD = `<FieldSelect
-  v-model="form.policy"
-  label="Policy type"
-  input-id="record-policy"
-  size="large"
-  placeholder="Select a policy"
-  :options="policyTypes"
-/>`
-
-const WEIGHT_FIELD = `<div v-if="form.policy === 'weighted'" class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-  <Label for="record-weight">Weight</Label>
-  <InputNumber
-    id="record-weight"
-    v-model="form.weight"
-    size="large"
-    :min="0"
-    :max="255"
-    aria-describedby="record-weight-helper"
-  />
-  <HelperText
-    id="record-weight-helper"
-    label="Relative weight (0–255) for this record within the weighted set."
-  />
-</div>`
-
-const RECORD_FIELDS = [NAME_FIELD, TYPE_FIELD, TTL_FIELD, VALUE_FIELD, DESCRIPTION_FIELD]
-
-const sectionBand = (
-  title,
-  hint,
-  fields
-) => `<section class="flex min-w-0 flex-col gap-(--spacing-md)">
-  <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-    <h2 class="text-heading-xxs text-(--text-default)">${title}</h2>
-    <Hint text="${hint}" />
-  </div>
-  <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-${indent(fields.join('\n\n'), 2)}
-  </div>
-</section>`
-
-const FLAT_FIELDS = `<fieldset class="m-0 flex min-w-0 flex-col gap-(--layout-group-gap) border-0 p-0">
-  <legend class="sr-only">Add Record</legend>
-${indent(RECORD_FIELDS.join('\n\n'))}
-</fieldset>`
-
-const SECTIONED_FIELDS = `<fieldset class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0">
-  <legend class="sr-only">Add Record</legend>
-${indent(sectionBand('Settings', SETTINGS_HINT, RECORD_FIELDS))}
-
-${indent(sectionBand('Policy', POLICY_HINT, [POLICY_FIELD, WEIGHT_FIELD]))}
-</fieldset>`
-
-const drawer = (content) => `<Drawer v-model:open="open" side="right" size="large">
-  <DrawerTrigger>
-    <Button label="Add Record" kind="outlined" size="large" icon="pi pi-plus" />
-  </DrawerTrigger>
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerContent>
-      <form
-        class="flex min-h-0 flex-1 flex-col"
-        aria-label="Add Record"
-        novalidate
-        @submit.prevent="open = false"
-      >
-        <PanelHeader>
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-            <DrawerTitle>Add Record</DrawerTitle>
-            <DrawerDescription>
-              A new record in edgeflow.com, and how Edge DNS should answer requests for it.
-            </DrawerDescription>
-          </div>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-${indent(content, 5)}
-        </PanelContent>
-        <PanelFooter>
-          <div class="ml-auto flex items-center gap-(--spacing-sm)">
-            <Button type="button" label="Cancel" kind="outlined" size="medium" @click="open = false" />
-            <Button label="Save" kind="primary" size="medium" />
-          </div>
-        </PanelFooter>
-      </form>
-    </DrawerContent>
-  </DrawerPortal>
-</Drawer>`
-
-const DEFAULT_TEMPLATE = drawer(FLAT_FIELDS)
-
-const SECTIONED_TEMPLATE = drawer(SECTIONED_FIELDS)
-
-const setupFor = (initialForm) => () => {
+const setup = () => {
+  const blankForm = () => ({ ...BLANK_FORM })
   const open = ref(false)
-  const form = reactive({ ...initialForm })
-  const recordType = computed(
+  const form = reactive(blankForm())
+  const errors = reactive({ name: '', value: '' })
+  const submitting = ref(false)
+  const selectedType = computed(
     () => RECORD_TYPES.find((type) => type.value === form.type) ?? RECORD_TYPES[0]
   )
+  const isWeighted = computed(() => form.policy === 'weighted')
+  const typeLabel = (value) => RECORD_TYPES.find((type) => type.value === value)?.label ?? ''
+  const policyLabelOf = (value) =>
+    POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
+  watch(open, (isOpen) => {
+    if (!isOpen) return
+    Object.assign(form, blankForm())
+    errors.name = ''
+    errors.value = ''
+  })
+  const validate = () => {
+    errors.name = form.name.trim() ? '' : 'This field is required.'
+    errors.value = form.value.trim() ? '' : 'This field is required.'
+    return !errors.name && !errors.value
+  }
+  const submit = () => {
+    if (submitting.value) return
+    if (!validate()) return
+    submitting.value = true
+    setTimeout(() => {
+      submitting.value = false
+      open.value = false
+    }, 800)
+  }
   return {
     open,
     form,
+    errors,
+    submitting,
     recordTypes: RECORD_TYPES,
     policyTypes: POLICY_TYPES,
-    recordType
+    selectedType,
+    isWeighted,
+    typeLabel,
+    policyLabelOf,
+    submit
   }
 }
 
@@ -332,7 +368,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The right-side form drawer every resource created inside another resource opens: a panel header with the title, a one-line description and the close button, a fieldset of field stacks in the scrolling content, and a footer with Cancel beside Save. Edge DNS Add Record, Add Domain, Add Variable and Create Environment are all built on it. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldInputGroup`, `FieldSelect`, `FieldText`, `FieldTextarea`, `InputNumber` under its own `Label` and `HelperText`, `Link`, `Hint` and `Button`.'
+          'The right-side form drawer every resource created or edited inside another resource opens: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `Section` bands in the scrolling content, each a heading with a `Hint` glyph over its stacked fields (a `Field` component whose helper carries the guidance or, after Save, the required message); and a footer with one primary submit action that shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Edge DNS Add Record, Add Domain, Create Environment, Create Variable, the Rules Engine rule, Deployment Settings, the deploy drawers, Device Groups, Functions Instances, Cache Settings, WAF Allowed Rules and the SQL table, column and row drawers are all built on it. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldInputGroup`, `FieldText`, `FieldTextarea`, `Label` and `HelperText` around `InputNumber` and `Select`, `Hint`, `Link` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -344,33 +380,16 @@ export default meta
 export const Default = {
   render: () => ({
     components,
-    setup: setupFor(RECORD_FORM),
-    template: DEFAULT_TEMPLATE
+    setup,
+    template: TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'Closed until the Add Record button opens it: the record form as one fieldset of field stacks, with the value placeholder and helper following the selected record type.'
+          'Closed until Add Record opens it, as the Edge DNS zone renders it: Name with the zone as an addon, Record type, TTL, Value with the placeholder and helper of the selected type, and Description under Settings; Policy type under Policy, with Weight appearing only for the weighted policy. Save on an empty form flags Name and Value as required.'
       },
-      source: { code: toSfc(DEFAULT_IMPORTS, DEFAULT_TEMPLATE) }
-    }
-  }
-}
-
-export const WithSections = {
-  render: () => ({
-    components,
-    setup: setupFor(POLICY_FORM),
-    template: SECTIONED_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The same drawer as the Edge DNS zone renders it: the fields grouped under Settings and Policy bands, each a heading with a Hint glyph, and the Weight field appearing only for the weighted policy.'
-      },
-      source: { code: toSfc(SECTIONED_IMPORTS, SECTIONED_TEMPLATE) }
+      source: { code: toSfc(SCRIPT, TEMPLATE) }
     }
   }
 }

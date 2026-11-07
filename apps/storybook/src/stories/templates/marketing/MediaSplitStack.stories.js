@@ -66,7 +66,8 @@ const SOLUTIONS_IMPORTS = [
   "import Illustration from '@aziontech/webkit/illustration'",
   "import MediaSplit from '@aziontech/webkit/media-split'",
   ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'"
+  "import SectionModule from '@aziontech/webkit/section-module'",
+  "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
 
 const ALTERNATING_IMPORTS = [
@@ -79,19 +80,12 @@ const ALTERNATING_IMPORTS = [
   "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
 
-const stack = (bands) =>
-  inColumn(`<SectionModule :divided="false" :padded="false">
-  <BandStack sticky flush>
-${bands}
-  </BandStack>
-</SectionModule>`)
-
 const solutionMedia = (solution) => `<Illustration name="${solution.illustration}" />`
 
 const solutionBand = (solution) => `<MediaSplit
   kind="media-end"
   :divided="true"
-  :heading-level="2"
+  :heading-level="3"
   align="center"
   size="large"
   media-fill="canvas"
@@ -118,7 +112,19 @@ ${indent(solutionMedia(solution), 2)}
   </template>
 </MediaSplit>`
 
-const SOLUTIONS_TEMPLATE = stack(each(SOLUTIONS, solutionBand, 2))
+const SOLUTIONS_TEMPLATE = inColumn(`<SectionTitle
+  kind="centered"
+  size="large"
+  eyebrow="Solutions"
+  title="One platform for every workload you run"
+  description="Modernize applications, run AI, protect APIs, and deliver media from the same infrastructure."
+/>
+
+<SectionModule :divided="false" :padded="false">
+  <BandStack sticky flush>
+${each(SOLUTIONS, solutionBand, 2)}
+  </BandStack>
+</SectionModule>`)
 
 const NETWORK_BANDS = [
   {
@@ -235,6 +241,10 @@ export const Solutions = {
 export const SITE_SECTION_SOLUTIONS = {
   _id: 'media-split-stack-solutions',
   props: {
+    eyebrow: 'Solutions',
+    title: 'One platform for every workload you run',
+    description:
+      'Modernize applications, run AI, protect APIs, and deliver media from the same infrastructure.',
     actionLabel: 'Learn more',
     bands: [
       {

@@ -135,6 +135,71 @@ const SETTINGS = [
     workloadNames: [],
     shared: false,
     lastModified: '2 months ago'
+  },
+  {
+    id: 's5',
+    name: 'analytics-canary',
+    system: false,
+    type: 'Default',
+    bindingPolicy: 'Strict',
+    deploymentPolicy: 'Versioned',
+    status: 'Active',
+    workloadsCount: 2,
+    workloadNames: ['workload_05', 'workload_06'],
+    shared: true,
+    lastModified: '2 months ago'
+  },
+  {
+    id: 's6',
+    name: 'auth-service-prod',
+    system: false,
+    type: 'Default',
+    bindingPolicy: 'Strict',
+    deploymentPolicy: 'Single',
+    status: 'Active',
+    workloadsCount: 0,
+    workloadNames: [],
+    shared: false,
+    lastModified: '2 months ago'
+  },
+  {
+    id: 's7',
+    name: 'marketing-site-prod',
+    system: false,
+    type: 'Default',
+    bindingPolicy: 'Flexible',
+    deploymentPolicy: 'Single',
+    status: 'Active',
+    workloadsCount: 0,
+    workloadNames: [],
+    shared: false,
+    lastModified: '3 months ago'
+  },
+  {
+    id: 's8',
+    name: 'status-page-stage',
+    system: false,
+    type: 'Default',
+    bindingPolicy: 'Strict',
+    deploymentPolicy: 'Single',
+    status: 'Inactive',
+    workloadsCount: 0,
+    workloadNames: [],
+    shared: false,
+    lastModified: '4 months ago'
+  },
+  {
+    id: 's9',
+    name: 'internal-tools-dev',
+    system: false,
+    type: 'Default',
+    bindingPolicy: 'Strict',
+    deploymentPolicy: 'Single',
+    status: 'Active',
+    workloadsCount: 0,
+    workloadNames: [],
+    shared: false,
+    lastModified: '5 months ago'
   }
 ]
 
@@ -170,12 +235,19 @@ const SETTING_OPTIONS = [
   shared('s8', 'status-page-stage', 'single_version', true),
   shared('s9', 'internal-tools-dev', 'single_version'),
   shared('s10', 'blog-platform-stage', 'versioned_urls'),
+  shared('s11', 'azion-site-prod', 'single_version'),
+  shared('s12', 'azion-site-preview', 'versioned_urls'),
+  shared('s13', 'azion-site-stage', 'versioned_urls'),
+  shared('s14', 'campaign-landing-prod', 'single_version'),
+  shared('s15', 'campaign-landing-preview', 'versioned_urls'),
+  shared('s16', 'azion-docs-prod', 'single_version'),
+  shared('s17', 'azion-docs-preview', 'versioned_urls'),
   own('ws-1020655', 'workload_01', 'single_version'),
-  own('ws-1020655-stage', 'workload_01-stage', 'versioned_urls'),
+  own('ws-1020655-preview', 'workload_01-preview', 'versioned_urls'),
   own('ws-1020828', 'workload_02', 'single_version'),
-  own('ws-1020828-stage', 'workload_02-stage', 'versioned_urls'),
+  own('ws-1020828-preview', 'workload_02-preview', 'versioned_urls'),
   own('ws-1021001', 'workload_03', 'single_version'),
-  own('ws-1021001-stage', 'workload_03-stage', 'versioned_urls')
+  own('ws-1021001-preview', 'workload_03-preview', 'versioned_urls')
 ]
 
 const settingName = (id) => SETTING_OPTIONS.find((option) => option.value === id)?.label ?? ''
@@ -201,11 +273,11 @@ const binding = (workloadId, name, production) => ({
       reach: production.reach
     },
     {
-      name: 'Stage',
+      name: 'Preview',
       deploymentPolicy: 'versioned_urls',
       policyLabel: 'Versioned',
-      settingsId: `ws-${workloadId}-stage`,
-      ownSettingsId: `ws-${workloadId}-stage`,
+      settingsId: `ws-${workloadId}-preview`,
+      ownSettingsId: `ws-${workloadId}-preview`,
       auto: true,
       reach: ''
     }
@@ -631,7 +703,7 @@ export const BuildDeployment = {
     docs: {
       description: {
         story:
-          'Strict and Single defaults, three workloads in the All workloads accordion, and five Deployment Settings led by Azion Default; change a default to raise the save bar.'
+          'Strict and Single defaults, three workloads with their Production and Preview environments in the All workloads accordion, and the first page of Deployment Settings led by Azion Default; change a default to raise the save bar.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }

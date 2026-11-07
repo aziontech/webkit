@@ -237,12 +237,11 @@ const flatten = (steps) =>
   steps.flatMap((step, index) => step.lines.map((line) => ({ ...line, id: `${index}-${line.id}` })))
 
 const glyph = (running) => `<span class="flex size-5 shrink-0 items-center justify-center">
-  <span
+  <i
     v-if="step.status === 'done'"
-    class="flex size-4 items-center justify-center rounded-full bg-(--success)"
-  >
-    <i class="pi pi-check text-[9px] leading-none text-(--success-contrast)" aria-hidden="true" />
-  </span>
+    class="pi pi-check-circle text-(--success-contrast)"
+    aria-hidden="true"
+  />
   <i
     v-else-if="step.status === 'failed'"
     class="pi pi-times-circle text-(--danger-contrast)"
@@ -299,7 +298,7 @@ ${indent(glyph(running), 4)}
         >
           <span
             :data-state="step.status"
-            class="shrink-0 text-label-sm text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
+            class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
           >
             {{ step.title }}
           </span>${
@@ -315,7 +314,7 @@ ${indent(glyph(running), 4)}
           }
           <span
             :data-state="step.status"
-            class="min-w-0 truncate text-body-xs text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast)"
+            class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
           >
             {{ step.description }}
           </span>
@@ -323,7 +322,7 @@ ${indent(glyph(running), 4)}
         <span class="ml-auto flex shrink-0 items-center">
           <span
             v-if="step.duration"
-            class="text-label-code-sm text-(--text-muted)"
+            class="text-label-code-md text-(--text-muted)"
           >
             {{ step.duration }}
           </span>
@@ -444,10 +443,11 @@ export const deploymentLogs = ({
   const doneCount = rows.filter((row) => row.status === 'done').length
   const totalLines = played.reduce((sum, step) => sum + step.logs.length, 0)
   const shownLines = rows.reduce((sum, row) => sum + row.lines.length, 0)
-  const progress = Math.round((shownLines / totalLines) * 100)
-  const totalSeconds = played
-    .slice(0, atIndex + 1)
-    .reduce((sum, step) => sum + (step.duration ?? 0), 0)
+  const progress = state === 'finished' ? 100 : Math.round((shownLines / totalLines) * 100)
+  const totalSeconds = (live ? played.slice(0, atIndex + 1) : played).reduce(
+    (sum, step) => sum + (step.duration ?? 0),
+    0
+  )
   const time = totalLabel || (totalSeconds > 0 ? formatDuration(totalSeconds) : '')
   const outcome =
     state === 'finished'

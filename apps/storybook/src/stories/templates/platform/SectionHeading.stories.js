@@ -1,17 +1,15 @@
 import Button from '@aziontech/webkit/button'
 import CopyButton from '@aziontech/webkit/copy-button'
-import Link from '@aziontech/webkit/link'
 
 import { toSfc } from '../../_shared/story-source'
 
 const COPY_BUTTON_IMPORT = "import CopyButton from '@aziontech/webkit/copy-button'"
-const DOCS = 'https://www.azion.com/en/documentation/'
 
 const anchorUrlFor = (id) => `${globalThis.location.href.split('#')[0]}#${id}`
 
 const anchorLine = (id) => `const anchorUrl = globalThis.location.href.split('#')[0] + '#${id}'`
 
-const components = { Button, CopyButton, Link }
+const components = { Button, CopyButton }
 
 const heading = ({
   id,
@@ -22,10 +20,14 @@ const heading = ({
   <div class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between">
     <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
       <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-        <h2 id="${id}" class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)">
+        <h2
+          id="${id}"
+          data-size="medium"
+          class="scroll-mt-(--spacing-xl) text-balance data-[size=medium]:text-heading-xs data-[size=medium]:text-(--text-default) data-[size=small]:text-label-md data-[size=small]:text-(--text-muted)"
+        >
           ${title}
         </h2>
-        <span class="shrink-0 opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none">
+        <span class="shrink-0 opacity-0 transition-opacity duration-150 ease-out group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none">
           <CopyButton
             :value="anchorUrl"
             kind="transparent"
@@ -48,7 +50,7 @@ const DEFAULT_TEMPLATE = heading({
   id: DEFAULT_ID,
   title: 'Payment information',
   description: 'Where invoices are sent, and whether the plan renews on its own.',
-  actions: `<Link label="Documentation" size="small" href="${DOCS}" target="_blank" />`
+  actions: '<Button label="Update" kind="outlined" size="medium" />'
 })
 
 const WITH_ACTIONS_ID = 'payment-methods'
@@ -69,7 +71,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The heading of one band inside a page: an h2 with a one-line description, a copy-link affordance that appears when the heading is hovered or focused, and the band’s own actions or documentation link on the right. Billing renders one above each of its cards and tables, and an application’s Get started block opens with one. Built from `CopyButton`, `Link` and `Button`; below `md` the actions drop under the copy.'
+          'The heading of one band inside a page, as the console’s SectionHeading renders it: an h2 at the medium size with a one-line description, a copy-link affordance that appears when the heading is hovered or focused, and the band’s own actions on the right. Billing renders one above each of its cards and tables, and an application’s Get started block opens with one (that one is its own GetStarted template). Built from `CopyButton` and `Button`; below `md` the actions drop under the copy and the row wraps.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -88,13 +90,13 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Title, description, the hover-revealed copy-link button and a Documentation link on the right.'
+          'The Billing payment-information heading: title, description, the hover-revealed copy-link button and the outlined Update action on the right.'
       },
       source: {
         code: toSfc(
           [
+            "import Button from '@aziontech/webkit/button'",
             COPY_BUTTON_IMPORT,
-            "import Link from '@aziontech/webkit/link'",
             '',
             anchorLine(DEFAULT_ID)
           ],
@@ -114,7 +116,7 @@ export const WithActions = {
   parameters: {
     docs: {
       description: {
-        story: 'The Billing payment-methods heading, with the medium add action on the right.'
+        story: 'The Billing payment-methods heading, with the outlined Add payment method action and its plus glyph on the right.'
       },
       source: {
         code: toSfc(

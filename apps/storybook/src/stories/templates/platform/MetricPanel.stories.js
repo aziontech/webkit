@@ -29,7 +29,7 @@ const sparkline = (series) => {
   const points = series
     .map((value, index) => {
       const y = HEIGHT - ((value - min) / (max - min)) * HEIGHT
-      return `${(index * step).toFixed(1)},${y.toFixed(1)}`
+      return `${(index * step).toFixed(2)},${y.toFixed(2)}`
     })
     .join(' ')
   return { points, area: `0,${HEIGHT} ${points} ${WIDTH},${HEIGHT}` }
@@ -90,7 +90,8 @@ const panelBody = ({
   value,
   unit,
   points,
-  area
+  area,
+  guard = ''
 }) => `<div class="flex min-w-0 flex-col gap-(--spacing-sm)">
   <div class="flex min-w-0 items-baseline justify-between gap-(--spacing-xs)">
     <h3 class="min-w-0 truncate text-label-md text-(--text-default)">${title}</h3>
@@ -98,7 +99,7 @@ const panelBody = ({
   </div>
   <p class="flex items-baseline gap-(--spacing-xxs)">
     <span class="text-heading-md text-(--text-default)">${value}</span>
-    <span class="text-body-sm text-(--text-muted)">${unit}</span>
+    <span${guard} class="text-body-sm text-(--text-muted)">${unit}</span>
   </p>
   <svg viewBox="0 0 ${WIDTH} ${HEIGHT}" preserveAspectRatio="none" class="h-16 w-full text-(--primary)" aria-hidden="true">
     <polygon :points="${area}" fill="currentColor" opacity="0.12" />
@@ -139,8 +140,8 @@ const DASHBOARD_IMPORTS = [
 
 const DASHBOARD_TEMPLATE = `<section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
   <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4">
-    <li v-for="metric in strip" :key="metric.label" class="grid">
-      <CardBox>
+    <li v-for="metric in strip" :key="metric.label" class="flex">
+      <CardBox class="w-full">
         <template #content>
           <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
             <Tooltip :text="metric.hint">
@@ -148,7 +149,7 @@ const DASHBOARD_TEMPLATE = `<section class="flex min-w-0 flex-col gap-(--layout-
             </Tooltip>
             <p class="flex items-baseline gap-(--spacing-xxs)">
               <span class="text-heading-lg text-(--text-default)">{{ metric.value }}</span>
-              <span class="text-body-md text-(--text-muted)">{{ metric.unit }}</span>
+              <span v-if="metric.unit" class="text-body-md text-(--text-muted)">{{ metric.unit }}</span>
             </p>
           </div>
         </template>
@@ -165,7 +166,8 @@ ${indentBy(
     value: '{{ panel.value }}',
     unit: '{{ panel.unit }}',
     points: 'panel.points',
-    area: 'panel.area'
+    area: 'panel.area',
+    guard: ' v-if="panel.unit"'
   }),
   4
 )}
@@ -184,7 +186,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A metric panel from the Observe dashboards: a CardBox with the metric’s name and its period on one line, the latest value set large beside its unit, and an inline SVG sparkline that fills the width and takes its stroke and fill from the primary token through currentColor. Real-Time Metrics and Edge Pulse render a KPI strip of four tiles above a two-column grid of these panels. Built from CardBox and Tooltip; the sparkline is plain SVG.'
+          'A metric panel from the Observe dashboards: a CardBox with the metric’s name and its period on one line, the latest value set large beside its unit, and an inline SVG sparkline that fills the width and takes its stroke and fill from the primary token through currentColor. Real-Time Metrics, each of its per-product dashboards, and Edge Pulse render a KPI strip of four tiles above a two-column grid of these panels; the whole page, with its heading and period filter, is the RealTimeMetrics template. Built from CardBox and Tooltip; the sparkline is plain SVG.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -220,7 +222,7 @@ export const Dashboard = {
     docs: {
       description: {
         story:
-          'The Real-Time Metrics layout: four KPI tiles, each label wrapped in a Tooltip with its hint, over the four panels in a two-column grid.'
+          'The Real-Time Metrics grid: four KPI tiles, each label wrapped in a Tooltip with its hint, over the four panels in a two-column grid.'
       },
       source: { code: toSfc(DASHBOARD_IMPORTS, DASHBOARD_TEMPLATE) }
     }
