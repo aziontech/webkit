@@ -13,6 +13,8 @@
     labels: Date[]
     series: { id: string; name: string; color?: string; values: number[] }[]
     format: (value: number) => string
+    emptyTitle?: string
+    emptyDescription?: string
   }
 
   interface Props {
@@ -54,6 +56,8 @@
     :series="report.series"
     kind="pie"
     :format-value="report.format"
+    :empty-title="report.emptyTitle ?? 'No data available'"
+    :empty-description="report.emptyDescription ?? 'Nothing was recorded in this period.'"
     :loading="loading"
     :refetching="refetching"
     :aria-label="report.label"
@@ -66,6 +70,8 @@
     orientation="horizontal"
     :format-value="report.format"
     :height="rankingHeight"
+    :empty-title="report.emptyTitle ?? 'No data available'"
+    :empty-description="report.emptyDescription ?? 'Nothing was recorded in this period.'"
     :loading="loading"
     :refetching="refetching"
   >
@@ -84,6 +90,8 @@
     :max="report.max"
     :format-value="report.format"
     :height="height"
+    :empty-title="report.emptyTitle ?? 'No data available'"
+    :empty-description="report.emptyDescription ?? 'Nothing was recorded in this period.'"
     :loading="loading"
     :refetching="refetching"
   >

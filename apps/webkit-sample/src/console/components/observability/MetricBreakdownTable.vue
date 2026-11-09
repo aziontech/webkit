@@ -9,6 +9,7 @@
     id: string
     header: string
     align?: 'start' | 'center' | 'end'
+    format?: (value: number) => string
   }
 
   interface ResolvedBreakdown {
@@ -20,6 +21,8 @@
     groups?: string[]
     groupOf?: (row: Record<string, unknown>) => string
     format: (value: number) => string
+    emptyTitle?: string
+    emptyDescription?: string
   }
 
   interface Props {
@@ -52,6 +55,13 @@
       ? props.report.rows
       : props.report.rows.filter((row) => props.report.groupOf(row) === group.value)
   )
+
+  const formattedFields = computed(() =>
+    props.report.fields.filter((field) => field.format || field.id === 'requests')
+  )
+
+  const formatCell = (field: BreakdownField, value: unknown) =>
+    (field.format ?? props.report.format)(Number(value))
 
   const columns = computed(() =>
     props.report.fields.map((field, index) => ({
@@ -110,20 +120,26 @@
           v-if="!report.rows.length"
           size="small"
           icon="pi pi-chart-line"
-          title="No data available"
-          description="Nothing was recorded in this period."
+          :title="report.emptyTitle ?? 'No data available'"
+          :description="report.emptyDescription ?? 'Nothing was recorded in this period.'"
         />
         <EmptyState
           v-else
           size="small"
           icon="pi pi-search"
           title="No matching rows"
-          description="Change the search or the status class."
+          :description="
+            groupOptions.length ? 'Change the search or the status class.' : 'Change the search.'
+          "
         />
       </template>
 
-      <template #cell-requests="{ row }">
-        <span class="tabular-nums">{{ report.format(row.requests) }}</span>
+      <template
+        v-for="field in formattedFields"
+        :key="field.id"
+        #[`cell-${field.id}`]="{ row }"
+      >
+        <span class="tabular-nums">{{ formatCell(field, row[field.id]) }}</span>
       </template>
     </TableRoot>
   </div>

@@ -164,6 +164,12 @@ export const NAV_FLAT = [
         path: '/real-time-metrics'
       },
       {
+        id: 'dashboards',
+        label: 'Dashboards',
+        icon: 'pi pi-chart-bar',
+        path: '/dashboards'
+      },
+      {
         id: 'real-time-events',
         label: 'Real-Time Events',
         icon: 'ai ai-real-time-events',
@@ -305,6 +311,12 @@ export const NAV_LEVELS = [
             }))
           }))
         ]
+      },
+      {
+        id: 'dashboards',
+        label: 'Dashboards',
+        icon: 'pi pi-chart-bar',
+        path: '/dashboards'
       },
       {
         id: 'real-time-events',

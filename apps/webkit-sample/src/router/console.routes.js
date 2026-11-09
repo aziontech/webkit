@@ -55,6 +55,7 @@ import ProductPreview from '@console/pages/lab/ProductPreview.vue'
 import DeployTemplate from '@console/pages/marketplace/DeployTemplate.vue'
 import Marketplace from '@console/pages/marketplace/Marketplace.vue'
 import DataStream from '@console/pages/observe/DataStream.vue'
+import Dashboards from '@console/pages/observe/Dashboards.vue'
 import EdgePulse from '@console/pages/observe/EdgePulse.vue'
 import RealTimeEvents from '@console/pages/observe/RealTimeEvents.vue'
 import RealTimeMetrics from '@console/pages/observe/RealTimeMetrics.vue'
@@ -192,6 +193,7 @@ export const consoleRoutes = [
   { path: '/real-time-events', name: 'real-time-events', component: RealTimeEvents },
   { path: '/real-time-metrics', name: 'real-time-metrics', component: RealTimeMetrics },
   { path: '/edge-pulse', name: 'edge-pulse', component: EdgePulse },
+  { path: '/dashboards', name: 'dashboards', component: Dashboards },
   { path: '/real-time-purge', name: 'real-time-purge', component: RealTimePurge },
   { path: '/real-time-purge/new', name: 'real-time-purge-new', component: CreatePurge },
   { path: '/edge-dns', name: 'edge-dns', component: EdgeDns },
