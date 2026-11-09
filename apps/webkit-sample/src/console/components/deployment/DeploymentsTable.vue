@@ -12,7 +12,6 @@
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
   import { environmentSeverity, statusMeta } from '../../lib/data/deployments'
-  import AuthorCell from '../list/AuthorCell.vue'
   import FilterButton from '../list/FilterButton.vue'
   import FilterChips from '../list/FilterChips.vue'
   import IdCell from '../list/IdCell.vue'
@@ -183,15 +182,12 @@
       />
     </template>
 
-    <template #cell-author="{ row }">
-      <AuthorCell
+    <template #cell-date="{ row }">
+      <LastModifiedCell
         :author="row.author"
         :avatar-src="row.authorAvatar"
+        :date="row.deployedAt"
       />
-    </template>
-
-    <template #cell-date="{ row }">
-      <LastModifiedCell :date="row.deployedAt" />
     </template>
 
     <template #cell-actions="{ row }">

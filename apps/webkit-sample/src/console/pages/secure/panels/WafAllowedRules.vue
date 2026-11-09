@@ -11,7 +11,6 @@
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
-  import AuthorCell from '../../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
   import ExportButton from '../../../components/list/ExportButton.vue'
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
@@ -56,7 +55,6 @@
     { accessorKey: 'path', header: 'Path', grow: 2 },
     { accessorKey: 'conditions', header: 'Conditions', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -284,15 +282,12 @@
                 />
               </template>
 
-              <template #cell-author="{ row }">
-                <AuthorCell
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell
                   :author="row.author"
                   :avatar-src="row.authorAvatar"
+                  :date="row.modifiedAt"
                 />
-              </template>
-
-              <template #cell-lastModified="{ row }">
-                <LastModifiedCell :date="row.modifiedAt" />
               </template>
             </TableRoot>
           </template>

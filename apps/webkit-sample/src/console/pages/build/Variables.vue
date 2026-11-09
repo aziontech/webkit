@@ -12,7 +12,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
-  import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
@@ -28,7 +27,7 @@
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN } from '../../lib/behavior/table-columns'
-  import { SECRET_MASK, scopeSummary } from '../../lib/behavior/variables-editor'
+  import { scopeSummary,SECRET_MASK } from '../../lib/behavior/variables-editor'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { VARIABLES } from '../../lib/data/variables'
   import { useSampleMode } from '../../lib/state/sample-mode'
@@ -55,7 +54,6 @@
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'scope', header: 'Scope', minWidth: FIT_COLUMN },
-    { accessorKey: 'lastEditor', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -302,15 +300,13 @@
                       />
                     </div>
                   </template>
-                  <template #cell-lastEditor="{ row }">
-                    <AuthorCell
+
+                  <template #cell-lastModified="{ row, value }">
+                    <LastModifiedCell
                       :author="row.lastEditor"
                       :avatar-src="row.lastEditorAvatar"
+                      :date="value"
                     />
-                  </template>
-
-                  <template #cell-lastModified="{ value }">
-                    <LastModifiedCell :date="value" />
                   </template>
 
                   <template #cell-scope="{ value }">

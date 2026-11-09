@@ -15,7 +15,7 @@
   import { useTheme } from '@shared/lib/theme.js'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  import { navTreeFor } from '../../lib/data/nav-tree'
+  import { NAV_GROUPS } from '../../lib/data/nav-tree'
   import { platformResources, searchPlatform } from '../../lib/data/search-index'
   import { SAMPLE_MODES } from '../../lib/state/sample-mode.js'
   import { nextPlanUp, useSamplePreset } from '../../lib/state/sample-preset.js'
@@ -68,9 +68,9 @@
 
   const userName = computed(() => props.name || props.user.split('@')[0])
 
-  const { planInfo, mode: sampleMode, navModel } = useSamplePreset()
+  const { planInfo, mode: sampleMode } = useSamplePreset()
 
-  const navGroups = computed(() => navTreeFor(navModel.value))
+  const navGroups = computed(() => NAV_GROUPS)
 
   const sidebarRef = ref(null)
 

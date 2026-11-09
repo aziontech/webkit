@@ -61,7 +61,7 @@ const MORE_GROUP = {
   ]
 }
 
-export const NAV_FLAT = [
+export const NAV_GROUPS = [
   {
     items: [
       { id: 'overview', label: 'Overview', icon: 'pi pi-home', path: '/home' },
@@ -158,134 +158,6 @@ export const NAV_FLAT = [
       },
       { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', path: '/edge-pulse' },
       {
-        id: 'real-time-metrics',
-        label: 'Real-Time Metrics',
-        icon: 'ai ai-real-time-metrics',
-        path: '/real-time-metrics'
-      },
-      {
-        id: 'real-time-events',
-        label: 'Real-Time Events',
-        icon: 'ai ai-real-time-events',
-        path: '/real-time-events'
-      },
-      {
-        id: 'real-time-purge',
-        label: 'Real-Time Purge',
-        icon: 'ai ai-real-time-purge',
-        path: '/real-time-purge'
-      }
-    ]
-  },
-  MORE_GROUP
-]
-
-export const NAV_LEVELS = [
-  {
-    items: [
-      { id: 'overview', label: 'Overview', icon: 'pi pi-home', path: '/home' },
-      { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
-      {
-        id: 'deployments',
-        label: 'Deployments',
-        icon: 'ai ai-deploy-pillar',
-        path: '/deployments'
-      }
-    ]
-  },
-  {
-    label: 'Build',
-    items: [
-      {
-        id: 'applications',
-        label: 'Applications',
-        icon: 'ai ai-edge-application',
-        path: '/applications'
-      },
-      {
-        id: 'functions',
-        label: 'Functions',
-        icon: 'ai ai-edge-functions',
-        path: '/functions'
-      },
-      { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
-      {
-        id: 'connectors',
-        label: 'Connectors',
-        icon: 'ai ai-edge-connectors',
-        path: '/connectors'
-      },
-      {
-        id: 'custom-pages',
-        label: 'Custom Pages',
-        icon: 'ai ai-custom-pages',
-        path: '/custom-pages'
-      }
-    ]
-  },
-  {
-    label: 'Secure',
-    items: [
-      {
-        id: 'firewall-module',
-        label: 'Firewall',
-        icon: 'ai ai-edge-firewall',
-        kind: 'drill',
-        href: '/firewall/overview',
-        groups: [
-          {
-            label: 'Firewall',
-            items: [
-              { id: 'firewall-overview', label: 'Overview', path: '/firewall/overview' },
-              { id: 'firewall', label: 'All Firewalls', path: '/firewall' },
-              {
-                id: 'network-lists',
-                label: 'Network Lists',
-                path: '/network-lists'
-              }
-            ]
-          }
-        ]
-      },
-      { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
-      { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', path: '/waf-rules' },
-      {
-        id: 'certificate-manager',
-        label: 'Certificate Manager',
-        icon: 'ai ai-certificate-manager',
-        path: '/certificates'
-      }
-    ]
-  },
-  {
-    label: 'Store',
-    items: [
-      {
-        id: 'object-storage',
-        label: 'Object Storage',
-        icon: 'ai ai-edge-storage',
-        path: '/object-storage'
-      },
-      {
-        id: 'sql-database',
-        label: 'SQL Database',
-        icon: 'ai ai-edge-sql',
-        path: '/sql-database',
-        tagValue: 'Preview'
-      }
-    ]
-  },
-  {
-    label: 'Observe',
-    items: [
-      {
-        id: 'data-stream',
-        label: 'Data Stream',
-        icon: 'ai ai-data-stream',
-        path: '/data-stream'
-      },
-      { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', path: '/edge-pulse' },
-      {
         id: 'real-time-metrics-module',
         label: 'Real-Time Metrics',
         icon: 'ai ai-real-time-metrics',
@@ -322,5 +194,3 @@ export const NAV_LEVELS = [
   },
   MORE_GROUP
 ]
-
-export const navTreeFor = (model) => (model === 'flat' ? NAV_FLAT : NAV_LEVELS)

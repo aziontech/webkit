@@ -13,7 +13,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
-  import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import DomainCell from '../../components/list/DomainCell.vue'
@@ -54,7 +53,6 @@
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'domain', header: 'Domain', enableSorting: true, grow: 3 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -335,15 +333,13 @@
                       size="medium"
                     />
                   </template>
-                  <template #cell-author="{ row }">
-                    <AuthorCell
+
+                  <template #cell-lastModified="{ row, value }">
+                    <LastModifiedCell
                       :author="row.author"
                       :avatar-src="row.authorAvatar"
+                      :date="value"
                     />
-                  </template>
-
-                  <template #cell-lastModified="{ value }">
-                    <LastModifiedCell :date="value" />
                   </template>
 
                   <template #cell-actions="{ row }">

@@ -73,7 +73,7 @@
         >
           <template #iconLeft>
             <i
-              class="pi pi-search"
+              class="pi pi-search text-body-xs"
               aria-hidden="true"
             />
           </template>

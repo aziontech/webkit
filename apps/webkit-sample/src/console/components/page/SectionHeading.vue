@@ -47,11 +47,11 @@
 <template>
   <header class="group/heading flex flex-col">
     <div
-      class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between"
+      class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
     >
       <div
         v-if="title || description || $slots.description"
-        class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+        class="flex min-w-0 grow flex-col gap-(--spacing-xxs)"
       >
         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
           <h2
@@ -84,7 +84,7 @@
       </div>
       <div
         v-if="documentation || $slots.actions"
-        class="flex w-full flex-wrap items-center gap-(--spacing-xs) md:w-auto md:shrink-0 md:flex-nowrap"
+        class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
       >
         <a
           v-if="documentation"

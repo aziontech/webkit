@@ -1,6 +1,7 @@
 <script setup>
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
+  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -205,53 +206,52 @@
             class="min-w-0 xl:flex-1"
           >
             <template #content>
-              <div class="grid grow grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-                <div
-                  v-for="metric in metrics"
-                  :key="metric.label"
-                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
-                >
-                  <div class="flex items-center gap-(--spacing-xs)">
-                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">
-                      {{ metric.label }}
-                    </span>
-                    <Tooltip :text="metric.hint">
-                      <i
-                        class="pi pi-info-circle text-body-sm text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </Tooltip>
-                  </div>
-                  <div class="flex items-center justify-between gap-(--spacing-sm)">
-                    <div class="flex min-w-0 items-baseline gap-(--spacing-xxs)">
-                      <Skeleton
-                        v-if="tenancyReloading"
-                        width="4.5rem"
-                        height="1.75rem"
-                      />
-                      <template v-else>
-                        <span class="text-big-number-sm tabular-nums text-(--text-default)">
-                          {{ metric.value }}
-                        </span>
-                        <span
-                          v-if="metric.unit"
-                          class="text-body-xs text-(--text-muted)"
-                          >{{ metric.unit }}</span
-                        >
-                      </template>
+              <div class="@container w-full grow">
+                <div class="grid h-full grid-cols-1 @sm:grid-cols-2 @3xl:grid-cols-4">
+                  <div
+                    v-for="metric in metrics"
+                    :key="metric.label"
+                    class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) @max-sm:nth-[n+2]:border-t @sm:@max-3xl:nth-[n+3]:border-t @sm:even:border-l @3xl:nth-[n+2]:border-l"
+                  >
+                    <div class="flex items-center gap-(--spacing-xs)">
+                      <span class="min-w-0 text-pretty text-label-sm text-(--text-default)">
+                        {{ metric.label }}
+                      </span>
+                      <Hint :text="metric.hint" />
                     </div>
+                    <div
+                      class="flex flex-wrap items-center justify-between gap-x-(--spacing-sm) gap-y-(--spacing-xs)"
+                    >
+                      <div class="flex shrink-0 items-baseline gap-(--spacing-xxs)">
+                        <Skeleton
+                          v-if="tenancyReloading"
+                          width="4.5rem"
+                          height="1.75rem"
+                        />
+                        <template v-else>
+                          <span class="text-big-number-sm tabular-nums text-(--text-default)">
+                            {{ metric.value }}
+                          </span>
+                          <span
+                            v-if="metric.unit"
+                            class="text-body-xs text-(--text-muted)"
+                            >{{ metric.unit }}</span
+                          >
+                        </template>
+                      </div>
 
-                    <Tag
-                      v-if="!tenancyReloading"
-                      size="small"
-                      :severity="metric.trend.direction === 'up' ? 'success' : 'danger'"
-                      class="shrink-0 tabular-nums"
-                      :icon="
-                        metric.trend.direction === 'up' ? 'pi pi-arrow-up' : 'pi pi-arrow-down'
-                      "
-                      :label="`${metric.trend.direction === 'up' ? '+' : '-'}${metric.trend.delta}`"
-                      :aria-label="`${metric.trend.direction === 'up' ? 'Up' : 'Down'} ${metric.trend.delta} versus the previous window`"
-                    />
+                      <Tag
+                        v-if="!tenancyReloading"
+                        size="small"
+                        :severity="metric.trend.direction === 'up' ? 'success' : 'danger'"
+                        class="shrink-0 tabular-nums"
+                        :icon="
+                          metric.trend.direction === 'up' ? 'pi pi-arrow-up' : 'pi pi-arrow-down'
+                        "
+                        :label="`${metric.trend.direction === 'up' ? '+' : '-'}${metric.trend.delta}`"
+                        :aria-label="`${metric.trend.direction === 'up' ? 'Up' : 'Down'} ${metric.trend.delta} versus the previous window`"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -312,17 +312,12 @@
             :class="panel.recent ? 'sm:col-span-2 lg:col-span-3 xl:col-span-2' : ''"
           >
             <h2
-              class="flex min-h-(--size-6) items-center gap-(--spacing-xs) text-label-sm text-(--text-default)"
+              class="flex min-h-(--size-6) items-center px-[calc(var(--spacing-md)+1px)] text-label-sm text-(--text-muted)"
             >
-              <span
-                v-if="panel.marked || panel.recent"
-                class="shrink-0"
-                aria-hidden="true"
-              />
               <RouterLink
                 v-if="panel.path"
                 :to="panel.path"
-                class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:text-(--text-default) hover:underline focus-visible:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
                 {{ panel.label }}
                 <i
@@ -462,7 +457,7 @@
 
               <p
                 v-else
-                class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+                class="px-[calc(var(--spacing-md)+1px)] py-(--spacing-sm) text-body-sm text-(--text-muted)"
               >
                 {{ emptyLine(panel) }}
               </p>

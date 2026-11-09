@@ -30,7 +30,6 @@ import Functions from '@console/pages/build/Functions.vue'
 import Variables from '@console/pages/build/Variables.vue'
 import DeploymentDetail from '@console/pages/deployments/DeploymentDetail.vue'
 import Deployments from '@console/pages/deployments/Deployments.vue'
-import Drop from '@console/pages/drop/Drop.vue'
 import CreateZone from '@console/pages/edge-dns/CreateZone.vue'
 import EdgeDns from '@console/pages/edge-dns/EdgeDns.vue'
 import EdgeDnsZoneDetail from '@console/pages/edge-dns/EdgeDnsZoneDetail.vue'
@@ -54,15 +53,14 @@ import ProductEmptyStates from '@console/pages/lab/ProductEmptyStates.vue'
 import ProductPreview from '@console/pages/lab/ProductPreview.vue'
 import DeployTemplate from '@console/pages/marketplace/DeployTemplate.vue'
 import Marketplace from '@console/pages/marketplace/Marketplace.vue'
+import CreatePurge from '@console/pages/observe/CreatePurge.vue'
 import DataStream from '@console/pages/observe/DataStream.vue'
 import EdgePulse from '@console/pages/observe/EdgePulse.vue'
 import RealTimeEvents from '@console/pages/observe/RealTimeEvents.vue'
 import RealTimeMetrics from '@console/pages/observe/RealTimeMetrics.vue'
-import CreatePurge from '@console/pages/observe/CreatePurge.vue'
 import RealTimePurge from '@console/pages/observe/RealTimePurge.vue'
 import CreateResource from '@console/pages/resources/CreateResource.vue'
 import CreationCenter from '@console/pages/resources/CreationCenter.vue'
-import ModuleOverview from '@console/pages/resources/ModuleOverview.vue'
 import ResourceSettings from '@console/pages/resources/ResourceSettings.vue'
 import Certificates from '@console/pages/secure/Certificates.vue'
 import Firewall from '@console/pages/secure/Firewall.vue'
@@ -126,12 +124,6 @@ export const consoleRoutes = [
   // other module create.
   { path: '/organizations/new', name: 'organizations-new', component: CreateOrganization },
   { path: '/dashboard', name: 'dashboard', component: Dashboard },
-  ...['workloads', 'applications', 'functions', 'firewall', 'object-storage'].map((module) => ({
-    path: `/${module}/overview`,
-    name: `${module}-overview`,
-    component: ModuleOverview,
-    props: { module }
-  })),
   { path: '/applications', name: 'applications', component: Applications },
   { path: '/marketplace', name: 'marketplace', component: Marketplace },
   { path: '/workloads', name: 'workloads', component: Workloads },
@@ -246,7 +238,6 @@ export const consoleRoutes = [
   { path: '/create', name: 'create', component: CreationCenter },
   // One surface, one gesture — a drop is the only way in, and everything after it is the
   // flow /create already hands a dropped project to (`/deploy?upload=…`).
-  { path: '/drop', name: 'drop', component: Drop },
   // The create page of every first-level resource that did not have one — Domains,
   // Functions, Connectors, Custom Pages, Firewall, WAF Rules, Certificate Manager,
   // Network Lists, Data Stream and Object Storage. Ten routes, generated from the one
