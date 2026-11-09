@@ -80,6 +80,27 @@ Every chart renders its own loading, empty and error state inside its own box: a
 size of the plot, an EmptyState, a danger Message. While a new range loads, set `refetching`
 and the previous render holds at reduced opacity instead of flashing a skeleton.
 
+### Empty states
+
+An empty chart keeps its box, so a dashboard does not reflow when a range comes back empty. The
+copy names the reason, because the reader's next step depends on it:
+
+<table>
+  <thead>
+    <tr><th>Why it is empty</th><th>Title</th><th>Description</th><th>Action (<code>#empty-actions</code>)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Nothing happened in the range</td><td>No requests in this range</td><td>Nothing reached this workload in the last hour.</td><td>None, or widen the range</td></tr>
+    <tr><td>The filters match nothing</td><td>No requests match these filters</td><td>Choose another host or widen the time range.</td><td>Clear filters</td></tr>
+    <tr><td>The source is not set up yet</td><td>No firewall on this workload</td><td>Threat metrics appear once a firewall protects the workload.</td><td>The setup action, such as Add firewall</td></tr>
+  </tbody>
+</table>
+
+Set `empty-title` and `empty-description` on Chart and DonutChart, and put at most one Button in
+`#empty-actions`. Use `#empty` only to replace the whole state. A StatTile with no value shows a
+dash; leave out its delta and trend rather than showing a zero. An error is not an empty range:
+set `error` so the reader knows to retry.
+
 ## Telemetry
 
 The design system ships no tracking. Instrument these events in your app:

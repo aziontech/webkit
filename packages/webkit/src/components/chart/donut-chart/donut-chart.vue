@@ -36,6 +36,8 @@
     error?: string
     /** Title of the empty state shown when every slice is zero. */
     emptyTitle?: string
+    /** Supporting line under the empty title: why the range is empty, or what to do next. */
+    emptyDescription?: string
     /** Shows the data table in place of the ring. The table is always present for assistive tech. */
     tableView?: boolean
     /** Accessible name of the chart. */
@@ -54,6 +56,7 @@
     refetching: false,
     error: '',
     emptyTitle: 'No data available',
+    emptyDescription: '',
     tableView: false,
     ariaLabel: ''
   })
@@ -71,6 +74,8 @@
     center(props: { total: number; active: ChartSeries | null }): unknown
     /** Replaces the default EmptyState. */
     empty(): unknown
+    /** Actions under the default EmptyState, such as a Clear filters button or a setup link. */
+    'empty-actions'(): unknown
     /** Replaces the default danger Message. */
     error(): unknown
   }>()
@@ -266,14 +271,24 @@
     </div>
     <div
       v-else-if="isEmpty"
-      class="flex flex-1 items-center justify-center"
+      :data-size="size"
+      class="flex flex-1 items-center justify-center data-[size=small]:min-h-32 data-[size=medium]:min-h-44 data-[size=large]:min-h-60"
     >
       <slot name="empty">
         <EmptyState
           :title="emptyTitle"
+          :description="emptyDescription"
+          icon="pi pi-chart-pie"
           size="small"
           :data-testid="`${testId}__empty`"
-        />
+        >
+          <template
+            v-if="$slots['empty-actions']"
+            #actions
+          >
+            <slot name="empty-actions" />
+          </template>
+        </EmptyState>
       </slot>
     </div>
     <table

@@ -248,6 +248,84 @@ describe('Chart', () => {
     expect(empty.getByTestId('chart-chart').hasAttribute('data-empty')).toBe(true)
   })
 
+  it('thins axis labels to the width it has, so neighbours never overlap', async () => {
+    const hours = Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, '0')}:00`)
+    const traffic: ChartSeries[] = [
+      { id: 'requests', name: 'Requests', values: hours.map((_, index) => 1000 + index * 40) }
+    ]
+    const at = (width: number, props: Record<string, unknown>, axis: 'x' | 'y') =>
+      render({
+        render: () =>
+          h('div', { style: `width: ${width}px` }, [
+            h(
+              Chart,
+              { series: traffic, labels: hours, ariaLabel: 'Requests', ...props },
+              { default: () => [h(ChartAxis, { kind: 'x', ticks: 24 }), h(ChartBar)] }
+            )
+          ])
+      }).container.querySelector(`[data-testid="chart-chart__axis-${axis}"]`) as globalThis.Element
+
+    const gapsClear = (axis: globalThis.Element) => {
+      const texts = [...axis.querySelectorAll('text')]
+      return texts.every((text, index) => {
+        if (index === 0) return true
+        const previous = texts[index - 1]
+        const gap = Number(text.getAttribute('x')) - Number(previous.getAttribute('x'))
+        return gap >= (previous.textContent?.trim().length ?? 0) * 7
+      })
+    }
+
+    const wide = at(1600, {}, 'x')
+    await vi.waitFor(() => expect(wide.querySelectorAll('text')).toHaveLength(24))
+
+    const narrow = at(320, {}, 'x')
+    await vi.waitFor(() => {
+      expect(narrow.querySelectorAll('text').length).toBeGreaterThan(1)
+      expect(narrow.querySelectorAll('text').length).toBeLessThan(24)
+    })
+    expect(gapsClear(narrow)).toBe(true)
+
+    const ranking = at(
+      240,
+      { orientation: 'horizontal', formatValue: (value: number) => `${value} requests` },
+      'x'
+    )
+    await vi.waitFor(() => {
+      expect(ranking.querySelectorAll('text').length).toBeGreaterThan(1)
+      expect(gapsClear(ranking)).toBe(true)
+    })
+  })
+
+  it('explains an empty range and offers the consumer actions', async () => {
+    const view = render(Chart, {
+      props: {
+        series: [{ id: 'a', name: 'A', values: [null, null] }],
+        labels,
+        ariaLabel: 'Threats vs requests',
+        emptyTitle: 'No requests match these filters',
+        emptyDescription: 'Choose another host or widen the time range.'
+      },
+      slots: { 'empty-actions': () => h('button', { type: 'button' }, 'Clear filters') }
+    })
+    expect(view.getByTestId('chart-chart__empty__title').textContent).toContain(
+      'No requests match these filters'
+    )
+    expect(view.getByTestId('chart-chart__empty__description').textContent).toContain(
+      'Choose another host or widen the time range.'
+    )
+    expect(view.getByTestId('chart-chart__empty__icon')).toBeTruthy()
+    expect(
+      view.getByTestId('chart-chart__empty__actions').querySelector('button')?.textContent
+    ).toBe('Clear filters')
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('renders no actions region when the consumer passes none', () => {
+    const view = mount({ series: [{ id: 'a', name: 'A', values: [null, null] }] })
+    expect(view.queryByTestId('chart-chart__empty__description')).toBeNull()
+    expect(view.queryByTestId('chart-chart__empty__actions')).toBeNull()
+  })
+
   it('holds the previous render while refetching', () => {
     const view = mount({ refetching: true })
     expect(view.getByTestId('chart-chart').hasAttribute('data-refetching')).toBe(true)

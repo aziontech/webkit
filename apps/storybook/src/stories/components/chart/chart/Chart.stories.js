@@ -1,3 +1,4 @@
+import Button from '@aziontech/webkit/button'
 import Chart, {
   ChartArea,
   ChartAxis,
@@ -155,6 +156,12 @@ const meta = {
         defaultValue: { summary: "'No data available'" }
       }
     },
+    emptyDescription: {
+      control: 'text',
+      description:
+        'Supporting line under the empty title: why the range is empty, or what to do next.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
     tableView: {
       control: 'boolean',
       description:
@@ -210,6 +217,12 @@ const meta = {
     empty: {
       control: false,
       description: 'Replaces the default EmptyState.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
+    },
+    'empty-actions': {
+      control: false,
+      description:
+        'Actions under the default EmptyState, such as a Clear filters button or a setup link.',
       table: { category: 'slots', type: { summary: 'VNode' } }
     }
   },
@@ -416,24 +429,70 @@ export const Loading = {
   )
 }
 
+const EMPTY_SERIES = [{ id: 'xss', name: 'WAF requests XSS attacks', values: [null, null, null] }]
+
+const EMPTY_PARTS = `
+    <Chart.Grid />
+    <Chart.Axis kind="y" />
+    <Chart.Axis kind="x" />
+    <Chart.Line />`
+
+const EMPTY_TEMPLATE = `<div class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-3">
+  <Chart
+    :series="series"
+    :labels="labels"
+    aria-label="Cross-site scripting threats"
+    empty-title="No requests in this range"
+    empty-description="Nothing reached this workload in the last hour."
+  >${EMPTY_PARTS}
+  </Chart>
+  <Chart
+    :series="series"
+    :labels="labels"
+    aria-label="Cross-site scripting threats"
+    empty-title="No requests match these filters"
+    empty-description="Choose another host or widen the time range."
+  >${EMPTY_PARTS}
+    <template #empty-actions>
+      <Button label="Clear filters" kind="outlined" size="small" />
+    </template>
+  </Chart>
+  <Chart
+    :series="series"
+    :labels="labels"
+    aria-label="Cross-site scripting threats"
+    empty-title="No firewall on this workload"
+    empty-description="Threat metrics appear once a firewall protects the workload."
+  >${EMPTY_PARTS}
+    <template #empty-actions>
+      <Button label="Add firewall" kind="secondary" size="small" icon="pi pi-plus" />
+    </template>
+  </Chart>
+</div>`
+
 export const Empty = {
-  render: Template,
-  args: { series: [{ id: 'xss', name: 'WAF requests XSS attacks', values: [null, null, null] }] },
+  render: () => ({
+    components: { ...components, Button },
+    setup: () => ({ labels: LABELS, series: EMPTY_SERIES }),
+    template: EMPTY_TEMPLATE
+  }),
   parameters: {
+    controls: { disable: true },
     docs: {
       description: {
         story:
-          'No series has a value in the range, so the plot renders an EmptyState instead of an empty frame.'
+          'No series has a value, so the plot renders an EmptyState at full plot height and the dashboard keeps its rhythm. Name the reason in the copy: nothing in the range, filters that match nothing (offer Clear filters), or a source that is not set up yet (offer the setup action).'
       },
       source: {
         code: toSfc(
-          script(
+          [
+            IMPORT,
+            "import Button from '@aziontech/webkit/button'",
+            '',
             declare('labels', LABELS),
-            declare('series', [
-              { id: 'xss', name: 'WAF requests XSS attacks', values: [null, null, null] }
-            ])
-          ),
-          markup(' aria-label="Threats vs requests"')
+            declare('series', EMPTY_SERIES)
+          ],
+          EMPTY_TEMPLATE
         )
       }
     }

@@ -69,6 +69,8 @@
     error?: string
     /** Title of the empty state shown when no series has a value. */
     emptyTitle?: string
+    /** Supporting line under the empty title: why the range is empty, or what to do next. */
+    emptyDescription?: string
     /** Shows the data table in place of the marks. The table is always present for assistive tech. */
     tableView?: boolean
     /** Accessible name of the chart when it is not inside a ChartCard with a title. */
@@ -90,6 +92,7 @@
     refetching: false,
     error: '',
     emptyTitle: 'No data available',
+    emptyDescription: '',
     tableView: false,
     ariaLabel: ''
   })
@@ -107,6 +110,8 @@
     default(): unknown
     /** Replaces the default EmptyState. */
     empty(): unknown
+    /** Actions under the default EmptyState, such as a Clear filters button or a setup link. */
+    'empty-actions'(): unknown
     /** Replaces the default danger Message. */
     error(): unknown
   }>()
@@ -450,9 +455,18 @@
       <slot name="empty">
         <EmptyState
           :title="emptyTitle"
+          :description="emptyDescription"
+          :icon="vertical ? 'pi pi-chart-line' : 'pi pi-chart-bar'"
           size="small"
           :data-testid="`${testId}__empty`"
-        />
+        >
+          <template
+            v-if="$slots['empty-actions']"
+            #actions
+          >
+            <slot name="empty-actions" />
+          </template>
+        </EmptyState>
       </slot>
     </div>
     <div

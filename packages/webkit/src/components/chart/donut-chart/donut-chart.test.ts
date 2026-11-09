@@ -109,6 +109,26 @@ describe('DonutChart', () => {
     expect(view.emitted('update:hiddenSeries')?.[0]).toEqual([['br']])
   })
 
+  it('explains an empty range and offers the consumer actions', async () => {
+    const view = mount(
+      {
+        series: [{ id: 'a', name: 'A', values: [0] }],
+        size: 'large',
+        emptyTitle: 'No threats match these filters',
+        emptyDescription: 'Choose another country or widen the time range.'
+      },
+      { 'empty-actions': () => h('button', { type: 'button' }, 'Clear filters') }
+    )
+    expect(view.getByTestId('chart-donut-chart__empty__description').textContent).toContain(
+      'Choose another country'
+    )
+    expect(view.getByTestId('chart-donut-chart__empty__icon')).toBeTruthy()
+    expect(
+      view.getByTestId('chart-donut-chart__empty__actions').querySelector('button')?.textContent
+    ).toBe('Clear filters')
+    await expectNoA11yViolations(view.container)
+  })
+
   it('renders exactly one state at a time', () => {
     const loading = mount({ loading: true })
     expect(loading.getByTestId('chart-donut-chart__skeleton')).toBeTruthy()
@@ -121,6 +141,7 @@ describe('DonutChart', () => {
 
     const empty = mount({ series: [{ id: 'a', name: 'A', values: [0] }] })
     expect(empty.getByTestId('chart-donut-chart__empty')).toBeTruthy()
+    expect(empty.queryByTestId('chart-donut-chart__empty__actions')).toBeNull()
     empty.unmount()
 
     const table = mount({ tableView: true })

@@ -213,3 +213,17 @@ export const Loading = {
     }
   }
 }
+
+export const Empty = {
+  render: Template,
+  args: { value: null, delta: null, deltaLabel: '', inverse: false, trend: [] },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'No value for the range: the tile keeps its size and shows a dash, announced as No value. Leave out the delta and the trend rather than showing a zero.'
+      },
+      source: { code: toSfc(IMPORT, '<StatTile label="Blocked threats" :value="null" />') }
+    }
+  }
+}

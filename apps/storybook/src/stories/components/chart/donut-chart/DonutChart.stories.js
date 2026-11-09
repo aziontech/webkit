@@ -1,3 +1,4 @@
+import Button from '@aziontech/webkit/button'
 import DonutChart from '@aziontech/webkit/donut-chart'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -101,6 +102,18 @@ const meta = {
         type: { summary: 'string' },
         defaultValue: { summary: "'No data available'" }
       }
+    },
+    emptyDescription: {
+      control: 'text',
+      description:
+        'Supporting line under the empty title: why the range is empty, or what to do next.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    'empty-actions': {
+      control: false,
+      description:
+        'Actions under the default EmptyState, such as a Clear filters button or a setup link.',
+      table: { category: 'slots', type: { summary: 'VNode' } }
     },
     tableView: {
       control: 'boolean',
@@ -240,16 +253,47 @@ export const Loading = {
 
 const EMPTY_SERIES = [{ id: 'none', name: 'Blocked threats', values: [0] }]
 
+const EMPTY_TEMPLATE = `<div class="grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-2">
+  <DonutChart
+    :series="series"
+    aria-label="Top WAF threat requests by country"
+    empty-title="No threats in this range"
+    empty-description="Nothing was blocked in the last 24 hours."
+  />
+  <DonutChart
+    :series="series"
+    aria-label="Top WAF threat requests by country"
+    empty-title="No threats match these filters"
+    empty-description="Choose another country or widen the time range."
+  >
+    <template #empty-actions>
+      <Button label="Clear filters" kind="outlined" size="small" />
+    </template>
+  </DonutChart>
+</div>`
+
 export const Empty = {
-  render: Template,
-  args: { series: EMPTY_SERIES },
+  render: () => ({
+    components: { DonutChart, Button },
+    setup: () => ({ series: EMPTY_SERIES }),
+    template: EMPTY_TEMPLATE
+  }),
   parameters: {
+    controls: { disable: true },
     docs: {
-      description: { story: 'Every slice is zero, so an EmptyState takes the ring.' },
+      description: {
+        story:
+          'Every slice is zero, so an EmptyState holds the ring footprint. Say why the range is empty; when filters caused it, offer Clear filters.'
+      },
       source: {
         code: toSfc(
-          [IMPORT, '', declare('series', EMPTY_SERIES)],
-          '<DonutChart :series="series" aria-label="Top WAF threat requests by country" />'
+          [
+            IMPORT,
+            "import Button from '@aziontech/webkit/button'",
+            '',
+            declare('series', EMPTY_SERIES)
+          ],
+          EMPTY_TEMPLATE
         )
       }
     }

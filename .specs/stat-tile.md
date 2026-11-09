@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: approved
-checksum: 3cfa7c53908150ed06032ab08d7a6fe4f71ee360ba253203fc157ff0c696f3aa
+checksum: 19a974d8f76aa5bf611354f312ab95d51d523f27b003dadda9ceb1014437f2dd
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-10-20
+last_updated: 2026-11-09
 ---
 
 # StatTile — Component Spec
@@ -130,6 +130,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - Sizes — composite: `small`, `medium`, `large`.
 - CountUp — a value that changes on a button press; excluded from visual regression because the count-up is timer driven, Default is its static sibling.
 - Loading — `loading`.
+- Empty — `value` null with no delta and no trend: the tile keeps its size and shows a dash, announced as No value.
 
 ## Constraints — DO NOT
 

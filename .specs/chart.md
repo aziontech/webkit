@@ -3,10 +3,10 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: 940005a3f0df65ace600feaff93e5cd0fae45e26220e95e216c5035b2fb43ae3
+checksum: bfb61a48c3767ac36055e7652b533dae2c0c87660f7909a12765242ff2999b83
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-10-20
+last_updated: 2026-11-09
 ---
 
 # Chart — Component Spec
@@ -159,6 +159,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | `refetching` | `boolean` | `false` | false | Holds the previous render at reduced opacity while new data loads. |
 | `error` | `string` | `''` | false | Error message; when set, the plot renders a danger Message instead of marks. |
 | `emptyTitle` | `string` | `'No data available'` | false | Title of the empty state shown when no series has a value. |
+| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the marks. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the chart when it is not inside a ChartCard with a title. |
 
@@ -182,11 +183,12 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 |---|---|---|
 | `default` | — | The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order. |
 | `empty` | — | Replaces the default EmptyState. |
+| `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error` | — | Replaces the default danger Message. |
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (Message), `empty` (EmptyState), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
+- Visual states: `default`, `loading` (Skeleton), `error` (Message), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active` on the root mirror the state; priority loading, then error, then empty, then marks
 - `data-orientation`: `vertical` | `horizontal`
 - `data-entered` on each mark flips after two animation frames to run its entrance transition
@@ -250,7 +252,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - MultiSeries — seven hosts, so the seventh folds into Other; legend with totals.
 - Horizontal — ordered horizontal bars with value labels (top countries).
 - Loading — `loading`.
-- Empty — no series values.
+- Empty — composite: the three reasons a range comes back empty, each with its own copy: nothing in the range, filters that match nothing (with a Clear filters action), and a source not set up yet (with a setup link).
 - Error — `error` set.
 - Refetching — `refetching`, the previous render held.
 - TableView — `tableView`, the accessible twin made visible.

@@ -3,10 +3,10 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: approved
-checksum: 93da2c4e5db7322bb554e604fb881bdf66af45c5ad62f2eb9cd1c077574a06bd
+checksum: 7c9333654dcef295b13574be4dd9f45e84926cda2ed400572e1ce5e6426e5a4b
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-10-20
+last_updated: 2026-11-09
 ---
 
 # DonutChart — Component Spec
@@ -72,6 +72,7 @@ const series = [
 | `refetching` | `boolean` | `false` | false | Holds the previous render at reduced opacity while new data loads. |
 | `error` | `string` | `''` | false | Error message; when set, a danger Message replaces the ring. |
 | `emptyTitle` | `string` | `'No data available'` | false | Title of the empty state shown when every slice is zero. |
+| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the ring. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the chart. |
 
@@ -95,11 +96,12 @@ const series = [
 |---|---|---|
 | `center` | `{ total: number; active: ChartSeries \| null }` | Replaces the center readout. |
 | `empty` | — | Replaces the default EmptyState. |
+| `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error` | — | Replaces the default danger Message. |
 
 ## States
 
-- Visual states: `default`, `loading` (circular Skeleton), `error` (Message), `empty` (EmptyState), `refetching`, `table-view`, `active` (a slice hovered or focused)
+- Visual states: `default`, `loading` (circular Skeleton), `error` (Message), `empty` (EmptyState with a chart icon, the title, the optional description and actions, holding the ring's footprint), `refetching`, `table-view`, `active` (a slice hovered or focused)
 - `data-kind`: `donut` | `pie`; `data-size`: `small` | `medium` | `large`
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view` mirror the state
 - `data-entered` on each slice flips after two animation frames to run the sweep
@@ -147,7 +149,7 @@ const series = [
 - Types — composite: `donut` and `pie` side by side.
 - Sizes — composite: `small`, `medium`, `large`.
 - Loading — `loading`.
-- Empty — every slice zero.
+- Empty — composite: every slice zero, once with the default copy and once filtered to nothing with a Clear filters action.
 
 ## Constraints — DO NOT
 

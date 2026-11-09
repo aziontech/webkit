@@ -26,6 +26,7 @@
   const LABEL_DROP = 18
   const LABEL_CHAR_WIDTH = 7
   const LABEL_GUTTER = 12
+  const LABEL_SPACING = 16
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__axis-${props.kind}`
@@ -40,11 +41,25 @@
     return text.length > limit ? `${text.slice(0, limit - 1)}…` : text
   }
 
+  const widest = (texts: string[]) =>
+    Math.max(0, ...texts.map((text) => text.length)) * LABEL_CHAR_WIDTH + LABEL_SPACING
+
+  const fitEvery = (count: number, span: number, texts: string[]) => {
+    if (count <= 1 || span <= 0) return 1
+    return Math.max(1, Math.ceil(widest(texts) / (span / (count - 1))))
+  }
+
   const categoryTicks = computed(() => {
     const layout = ctx.category.value
     const total = ctx.labels.value.length
-    const every = vertical.value ? Math.max(1, Math.ceil(total / Math.max(1, props.ticks))) : 1
-    return ctx.labels.value.flatMap((label, index) => {
+    const texts = ctx.labels.value.map((label) => truncate(ctx.formatLabel(label)))
+    const every = vertical.value
+      ? Math.max(
+          Math.ceil(total / Math.max(1, props.ticks)),
+          fitEvery(total, plot.value.width, texts)
+        )
+      : 1
+    return texts.flatMap((text, index) => {
       if (index % every !== 0) return []
       const at = layout.position(index)
       let anchor: 'start' | 'middle' | 'end' = 'middle'
@@ -52,17 +67,24 @@
         if (index === 0) anchor = 'start'
         else if (index === total - 1) anchor = 'end'
       }
-      return [{ key: index, at, anchor, text: truncate(ctx.formatLabel(label)) }]
+      return [{ key: index, at, anchor, text }]
     })
   })
 
-  const valueTicks = computed(() =>
-    ctx.valueTicks.value.map((tick) => ({
+  const valueTicks = computed(() => {
+    const ticks = ctx.valueTicks.value.map((tick) => ({
       key: tick,
       at: ctx.valueScale.value(tick),
       text: ctx.formatValue(tick)
     }))
-  )
+    if (vertical.value) return ticks
+    const every = fitEvery(
+      ticks.length,
+      plot.value.width,
+      ticks.map((tick) => tick.text)
+    )
+    return ticks.filter((_, index) => index % every === 0)
+  })
 
   const baseline = computed(() => Math.round(ctx.baseline.value) + 0.5)
 </script>

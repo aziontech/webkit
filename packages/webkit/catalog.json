@@ -2671,6 +2671,13 @@
           "doc": "Title of the empty state shown when no series has a value."
         },
         {
+          "name": "emptyDescription",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+        },
+        {
           "name": "tableView",
           "type": "boolean",
           "default": "false",
@@ -2707,6 +2714,11 @@
           "name": "empty",
           "scope": "—",
           "notes": "Replaces the default EmptyState."
+        },
+        {
+          "name": "empty-actions",
+          "scope": "—",
+          "notes": "Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it."
         },
         {
           "name": "error",
@@ -2851,6 +2863,13 @@
           "doc": "Title of the empty state shown when no series has a value."
         },
         {
+          "name": "emptyDescription",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+        },
+        {
           "name": "tableView",
           "type": "boolean",
           "default": "false",
@@ -2887,6 +2906,11 @@
           "name": "empty",
           "scope": "—",
           "notes": "Replaces the default EmptyState."
+        },
+        {
+          "name": "empty-actions",
+          "scope": "—",
+          "notes": "Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it."
         },
         {
           "name": "error",
@@ -3365,6 +3389,13 @@
           "doc": "Title of the empty state shown when every slice is zero."
         },
         {
+          "name": "emptyDescription",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+        },
+        {
           "name": "tableView",
           "type": "boolean",
           "default": "false",
@@ -3401,6 +3432,11 @@
           "name": "empty",
           "scope": "—",
           "notes": "Replaces the default EmptyState."
+        },
+        {
+          "name": "empty-actions",
+          "scope": "—",
+          "notes": "Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it."
         },
         {
           "name": "error",
