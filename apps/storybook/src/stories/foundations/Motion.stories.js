@@ -27,7 +27,8 @@ const TAILWIND_ANIMATE_SAFELIST = [
   'animate-popup-scale-out', 'animate-slide-in-left', 'animate-slide-out-left',
   'animate-slide-in-right', 'animate-slide-out-right',
   'animate-progress-indeterminate', 'animate-progress-indeterminate-short',
-  'animate-flow-dash'
+  'animate-flow-dash', 'animate-page-enter', 'animate-content-enter',
+  'animate-texture-wave-a', 'animate-texture-wave-b', 'animate-brand-marquee'
 ]
 
 const missingFromSafelist = Object.keys(animate)
