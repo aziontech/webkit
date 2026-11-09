@@ -229,6 +229,19 @@ defineSlots<{ default(): unknown }>()
     const r = parseVueSfc(sfc)
     assertEqual(r.props.map((p) => p.name).sort(), ['disabled', 'label'])
   })
+  test('parseVueSfc reads quoted kebab-case slot names', () => {
+    const sfc = `
+<script setup lang="ts">
+  defineSlots<{
+    empty(): unknown
+    'empty-actions'(): unknown
+    "header-right"?: () => unknown
+  }>()
+</script>
+<template><div /></template>`
+    const r = parseVueSfc(sfc)
+    assertEqual(r.slots.map((s) => s.name), ['empty', 'empty-actions', 'header-right'])
+  })
 })
 
 group('lib: animation extraction', () => {
