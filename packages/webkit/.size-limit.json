@@ -376,5 +376,85 @@
     "name": "stepper-step",
     "path": "src/components/navigation/stepper/stepper-step/stepper-step.vue",
     "limit": "2.5 KB"
+  },
+  {
+    "name": "chart",
+    "path": "src/components/chart/chart/index.ts",
+    "limit": "19.5 KB"
+  },
+  {
+    "name": "chart-root",
+    "path": "src/components/chart/chart/chart.vue",
+    "limit": "13.5 KB"
+  },
+  {
+    "name": "chart-line",
+    "path": "src/components/chart/chart/chart-line/chart-line.vue",
+    "limit": "2.75 KB"
+  },
+  {
+    "name": "chart-area",
+    "path": "src/components/chart/chart/chart-area/chart-area.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "chart-bar",
+    "path": "src/components/chart/chart/chart-bar/chart-bar.vue",
+    "limit": "3.25 KB"
+  },
+  {
+    "name": "chart-axis",
+    "path": "src/components/chart/chart/chart-axis/chart-axis.vue",
+    "limit": "1.75 KB"
+  },
+  {
+    "name": "chart-grid",
+    "path": "src/components/chart/chart/chart-grid/chart-grid.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "chart-crosshair",
+    "path": "src/components/chart/chart/chart-crosshair/chart-crosshair.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "chart-tooltip",
+    "path": "src/components/chart/chart/chart-tooltip/chart-tooltip.vue",
+    "limit": "1.75 KB"
+  },
+  {
+    "name": "chart-legend",
+    "path": "src/components/chart/chart/chart-legend/chart-legend.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "donut-chart",
+    "path": "src/components/chart/donut-chart/donut-chart.vue",
+    "limit": "12 KB"
+  },
+  {
+    "name": "stat-tile",
+    "path": "src/components/chart/stat-tile/stat-tile.vue",
+    "limit": "6 KB"
+  },
+  {
+    "name": "chart-card",
+    "path": "src/components/chart/chart-card/index.ts",
+    "limit": "4 KB"
+  },
+  {
+    "name": "chart-card-root",
+    "path": "src/components/chart/chart-card/chart-card.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "chart-card-drag-handle",
+    "path": "src/components/chart/chart-card/chart-card-drag-handle/chart-card-drag-handle.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "chart-card-resize-handle",
+    "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
+    "limit": "1.75 KB"
   }
 ]

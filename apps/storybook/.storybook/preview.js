@@ -115,7 +115,7 @@ export const parameters = {
               'Motion'
             ],
             'Semantic',
-            ['Theme', 'Typography'],
+            ['Theme', 'Data Viz', 'Typography'],
             'Responsive',
             ['Spacing', 'Layout']
           ],
@@ -136,6 +136,8 @@ export const parameters = {
             'Navigation',
             'Overlay'
           ],
+          'Chart',
+          ['Overview', 'Chart', 'DonutChart', 'StatTile', 'ChartCard'],
           'Marketing',
           'Documentation'
         ],
@@ -182,6 +184,13 @@ export const parameters = {
             'States',
             'Detail',
             'Observe',
+            [
+              'MetricPanel',
+              'TrafficDashboard',
+              'UsageDashboard',
+              'EdgeHealthDashboard',
+              'ThreatDashboard'
+            ],
             'Account'
           ],
           'Headers',

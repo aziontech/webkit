@@ -179,6 +179,12 @@ export const NAV_GROUPS = [
         ]
       },
       {
+        id: 'dashboards',
+        label: 'Dashboards',
+        icon: 'pi pi-chart-bar',
+        path: '/dashboards'
+      },
+      {
         id: 'real-time-events',
         label: 'Real-Time Events',
         icon: 'ai ai-real-time-events',

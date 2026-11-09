@@ -1,3 +1,5 @@
+import { RTM_GROUPS } from './real-time-metrics'
+
 export const METRIC_PERIODS = [
   { value: '1h', label: 'Last hour' },
   { value: '24h', label: 'Last 24 hours' },
@@ -10,68 +12,10 @@ export const DEFAULT_PERIOD = '24h'
 export const periodLabel = (value) =>
   METRIC_PERIODS.find((period) => period.value === value)?.label ?? 'Last 24 hours'
 
-export const METRIC_DASHBOARD_GROUPS = [
-  {
-    label: 'Build',
-    dashboards: [
-      {
-        id: 'applications',
-        label: 'Applications',
-        description: 'Requests, cache and errors across your applications.'
-      },
-      {
-        id: 'tiered-cache',
-        label: 'Tiered Cache',
-        description: 'Hits, misses and origin offload from the cache tiers.'
-      },
-      {
-        id: 'functions',
-        label: 'Functions',
-        description: 'Invocations, errors and duration of your functions.'
-      },
-      {
-        id: 'image-processor',
-        label: 'Image Processor',
-        description: 'Images processed and transformations served.'
-      }
-    ]
-  },
-  {
-    label: 'Secure',
-    dashboards: [
-      {
-        id: 'waf',
-        label: 'WAF',
-        description: 'Rule matches and threats held by the WAF.'
-      },
-      {
-        id: 'firewall',
-        label: 'Firewall',
-        description: 'Requests allowed, denied and rate limited by your firewalls.'
-      },
-      {
-        id: 'dns',
-        label: 'DNS',
-        description: 'Queries answered by your hosted zones.'
-      },
-      {
-        id: 'bot-manager',
-        label: 'Bot Manager',
-        description: 'Bot traffic classified and actions taken.'
-      }
-    ]
-  },
-  {
-    label: 'Observe',
-    dashboards: [
-      {
-        id: 'data-stream',
-        label: 'Data Stream',
-        description: 'Events collected and delivered to your endpoints.'
-      }
-    ]
-  }
-]
+export const METRIC_DASHBOARD_GROUPS = RTM_GROUPS.map((group) => ({
+  label: group.label,
+  dashboards: group.pages.map(({ id, label, description }) => ({ id, label, description }))
+}))
 
 export const METRIC_DASHBOARDS = METRIC_DASHBOARD_GROUPS.flatMap((group) => group.dashboards)
 
@@ -94,26 +38,6 @@ export const panel = (title, unit, period, [min, max]) => ({
   title,
   unit,
   series: seriesFor(`${title}:${period}`, 24, min, max)
-})
-
-export const metricsFor = (period) => ({
-  strip: [
-    { label: 'Requests', value: '48.2', unit: 'M', hint: 'Requests handled at the edge.' },
-    { label: 'Data Transferred', value: '6.4', unit: 'TB', hint: 'Bytes delivered to clients.' },
-    {
-      label: 'Bandwidth Saved',
-      value: '71',
-      unit: '%',
-      hint: 'Served from cache, not your origin.'
-    },
-    { label: 'Status 5xx', value: '0.03', unit: '%', hint: 'Share of responses that failed.' }
-  ],
-  panels: [
-    panel('Requests per second', 'req/s', period, [1200, 4800]),
-    panel('Data transferred', 'MB/s', period, [40, 210]),
-    panel('Cache hit ratio', '%', period, [78, 97]),
-    panel('Status codes 5xx', '%', period, [0, 0.4])
-  ]
 })
 
 export const pulseFor = (period) => ({
