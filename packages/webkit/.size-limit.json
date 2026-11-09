@@ -488,9 +488,25 @@
     "limit": "5 KB"
   },
   {
+    "name": "listing-browser",
+    "path": "src/components/sections/listing-browser/listing-browser.vue",
+    "limit": "63 KB"
+  },
+  {
+    "name": "platform-directory",
+    "path": "src/components/sections/platform-directory/platform-directory.vue",
+    "limit": "5 KB"
+  },
+  {
     "name": "subject-library",
     "path": "src/components/sections/subject-library/subject-library.vue",
     "limit": "7.5 KB"
+  },
+  {
+    "name": "template-gallery",
+    "path": "src/components/sections/template-gallery/template-gallery.vue",
+    "limit": "27 KB",
+    "entryOnly": true
   },
   {
     "name": "recognition-marquee",
@@ -536,8 +552,33 @@
     "limit": "18 KB"
   },
   {
+    "name": "contact-hub",
+    "path": "src/components/sections/contact-hub/contact-hub.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "listing-table",
+    "path": "src/components/sections/listing-table/listing-table.vue",
+    "limit": "55 KB"
+  },
+  {
     "name": "site-footer",
     "path": "src/components/sections/site-footer/site-footer.vue",
     "limit": "36 KB"
+  },
+  {
+    "name": "closing-call-to-action",
+    "path": "src/components/sections/closing-call-to-action/closing-call-to-action.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "closing-call-to-action-agents",
+    "path": "src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
+    "limit": "28.5 KB"
+  },
+  {
+    "name": "closing-call-to-action-newsletter",
+    "path": "src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
+    "limit": "15 KB"
   }
 ]
