@@ -7,18 +7,45 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: a716ec6379e5113ecfe2c4745928be5e5169a5d38083d3f47dde9b90c86cc99b
+checksum: a96476fc39b8abf1ee2c478fbaf189a9ce370d2439971581198461332c611d6e
 created: 2026-06-25
-last_updated: 2026-08-12
+last_updated: 2026-11-09
 ---
 
 # MultiSelect — Component Spec
 
 ## Purpose
 
-Select control specialised for choosing many options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Unlike `Select` (which toggles between single and multi via a `multiple` prop), MultiSelect is multi-only: `modelValue` is always an array and the indicator is always a checkbox.
+Select control specialised for choosing many options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Unlike `Select` (which toggles between single and multi via a `multiple` prop), MultiSelect is multi-only: `modelValue` is always an array and the indicator is always a checkbox.
 
 Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `InputText`/`Select` trigger visuals.
+
+## When to use
+
+- Choosing several values from a long list (regions, tags, permissions) in a compact field.
+- A filter whose selected values stay editable from the same dropdown.
+- Grouped options with icons or trailing tags, optionally with search.
+
+## When NOT to use
+
+- Only one value may be chosen → use `select`.
+- A labelled form field with helper/error text → use `field-select` with `multiple`.
+- A handful of options that fit on screen → use `field-checkbox` for each.
+- The user builds a subset and needs the chosen and remaining items side by side → use `pick-list`.
+
+## Related
+
+- `select` — single-choice counterpart; also accepts `multiple`.
+- `field-select` — labelled wrapper whose `multiple` prop covers multi-pick in forms.
+- `pick-list` — dual-list transfer for building larger subsets.
+- `checkbox` — the indicator every option row renders.
+
+## Best practices
+
+- `modelValue` is always an array; start it as `[]`, never `null`.
+- Pass `displayValue` to summarise long selections (e.g. "3 regions") instead of a list that overflows the trigger.
+- Keep each option's `value` stable and unique; selection is matched by value.
+- Put a search input in the `search` slot and a create action in the `footer` slot of `MultiSelect.Content`.
 
 ## Usage
 
@@ -52,7 +79,7 @@ const value = defineModel({ default: () => [] })
 ## Sub-components
 
 - `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label (comma-joined labels or count, see `displayValue`), and chevron-down. Mirrors `InputText` size/state visuals.
-- `multi-select-content/multi-select-content.vue` — Popover panel rendered via the native Popover API + CSS anchor positioning; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
+- `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm Dropdown puts around its group divider and CommandMenu puts between two bare groups. No hairline: unlike Dropdown, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, *every* option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 

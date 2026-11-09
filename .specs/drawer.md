@@ -4,16 +4,16 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 9ff68fe95159eb76ff5d31cd3c0915de99adc3ca9e09c919e592816c2866a18c
+checksum: 9d74e4e82e21f087d730969544b27fd2f71321c6518a41914f9b2a60ce307c45
 created: 2026-05-22
-last_updated: 2026-07-15
+last_updated: 2026-11-09
 ---
 
 # Drawer — Component Spec
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`.
+Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/drawer/`.
 
 ## When to use
 
@@ -34,6 +34,54 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
 - Trap focus while open and provide an obvious close affordance.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import Button from '@aziontech/webkit/button'
+import Drawer from '@aziontech/webkit/drawer'
+import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+import DrawerPortal from '@aziontech/webkit/drawer-portal'
+import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+import DrawerContent from '@aziontech/webkit/drawer-content'
+import DrawerTitle from '@aziontech/webkit/drawer-title'
+import DrawerDescription from '@aziontech/webkit/drawer-description'
+import DrawerClose from '@aziontech/webkit/drawer-close'
+import PanelHeader from '@aziontech/webkit/panel-header'
+import PanelContent from '@aziontech/webkit/panel-content'
+import PanelFooter from '@aziontech/webkit/panel-footer'
+
+const open = ref(false)
+</script>
+
+<template>
+  <Drawer v-model:open="open" side="right" size="medium">
+    <DrawerTrigger>
+      <Button label="Add origin" kind="primary" />
+    </DrawerTrigger>
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerContent>
+        <PanelHeader>
+          <DrawerTitle>Add origin</DrawerTitle>
+          <DrawerClose />
+        </PanelHeader>
+        <PanelContent>
+          <DrawerDescription>
+            Point the application at the server that holds the original content.
+          </DrawerDescription>
+        </PanelContent>
+        <PanelFooter>
+          <Button label="Cancel" kind="outlined" @click="open = false" />
+          <Button label="Save" kind="primary" />
+        </PanelFooter>
+      </DrawerContent>
+    </DrawerPortal>
+  </Drawer>
+</template>
+```
 
 ## Sub-components
 

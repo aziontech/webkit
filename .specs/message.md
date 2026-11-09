@@ -7,15 +7,42 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 8ca61e4ceb1c1714a37ed3723f8d642264cbe06ca309f7d37b95f4bdbea54724
+checksum: 8bfdd7d3b4ca2b3195728723f8cd77410fba73e3fa918263098a8ada4f14c0d6
 created: 2026-05-22
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 # Message — Component Spec
 
 ## Purpose
 
 Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button.
+
+## When to use
+
+- A status, warning or error that belongs to a page, section or form and should stay visible in context.
+- A notice with an inline link, or with one follow-up action (`actionLabel` or the `action` slot).
+
+## When NOT to use
+
+- A transient confirmation of an action → use `toast`.
+- Validation feedback under one form field → use `helper-text`.
+- An admonition inside documentation prose → use `doc-callout`.
+- A promotional band between page sections → use `banner`.
+
+## Related
+
+- `toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.
+- `helper-text` — field-level guidance and errors below an input.
+- `doc-callout` — docs admonition rendered on the `Message` surface.
+- `empty-state` — a full zero-data block, not a status banner.
+
+## Best practices
+
+- Pick `severity` by meaning. `error` is an alias of `danger`, and `danger` and `warning` render with `role="alert"`.
+- Use `label` for plain copy and the default slot when the copy needs inline links.
+- Use either the built-in action (`actionLabel` with `@action`) or the `action` slot, not both. The slot replaces the button.
+- Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
+- Use `size="small"` inside dense surfaces such as cards and drawers.
 
 ## Usage
 

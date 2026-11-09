@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 8c3d6de4328cc75a639243b7641df1f6a608b5aaef8d82b8d131ae39f2db70ef
+checksum: c970101505260a08b5e1ff82c0737e297e81f671b79517175f8a75383b05aa88
 created: 2026-08-21
-last_updated: 2026-08-26
+last_updated: 2026-11-09
 ---
 
 # DocProse — Component Spec

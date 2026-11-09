@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 9e2e526036aae654e8c39898ac3ee57127f97d8e7ba6ebaccf9526628dbdd56e
+checksum: 4af9ce45511272f8e8887ea5d3e041c93957e5bae281d2dd3b49ed7f1bb1fdec
 created: 2026-05-25
-last_updated: 2026-05-25
+last_updated: 2026-11-09
 ---
 
 # Breadcrumb Item — Component Spec
@@ -17,6 +17,41 @@ last_updated: 2026-05-25
 ## Purpose
 
 Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).
+
+## When to use
+
+- Composing a breadcrumb trail by hand inside `Breadcrumb.List`, one segment per ancestor plus the current page.
+- A single ancestor or current-page segment that must match the breadcrumb's muted / current styling and focus ring.
+
+## When NOT to use
+
+- The whole trail is known as data → use `breadcrumb` with `items`, which renders the segments for you.
+- It is a standalone text link in content or a page footer → use `link`.
+- It is a navigation row in an app menu → use `menu`.
+
+## Related
+
+- `breadcrumb` — the trail root; renders `breadcrumb-item` for each entry of `items` and re-exports it as `Breadcrumb.Item`.
+- `link` — a general-purpose link without the segment's ghost hover and current-page treatment.
+
+## Best practices
+
+- Set `current` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
+- Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.
+- Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.
+- `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
+
+## Usage
+
+```vue
+<script setup>
+import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+</script>
+
+<template>
+  <BreadcrumbItem label="Applications" href="/applications" show-icon icon="pi pi-box" />
+</template>
+```
 
 ## Props
 
@@ -33,7 +68,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 | Event | Payload | Notes |
 |---|---|---|
-| `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment is activated (link or button). `item` carries the segment's `label` and `href`. |
+| `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`. |
 
 ## Slots
 

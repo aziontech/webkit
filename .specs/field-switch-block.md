@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7168
   node_id: 2027:7168
-checksum: ff1e526b797056e7c98c868ddafad990a909c912b2e8c6eb8a5018821bf5a358
+checksum: bbef804d83a805d3ded4e00901ab2e28790ca0a25b2de6347a7b66fe64755a57
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 
 # Field Switch Block — Component Spec
@@ -17,6 +17,51 @@ last_updated: 2026-05-23
 ## Purpose
 
 Card-style boolean toggle with switch, label, description, and optional disabled helper badge inside a bordered block. Matches Figma FieldSwitchBlock (node 2027:7168).
+
+## When to use
+
+- A feature toggle that deserves its own card, with a description of what turning it on does.
+- A stack of independent feature toggles on a settings page where the enabled ones should stand out.
+
+## When NOT to use
+
+- An inline row is enough → use `field-switch`.
+- The options are picked now and applied on submit → use `field-checkbox-block`.
+- The toggle must show the Required tag → use `field-switch`.
+- Only one option of the group can be on → use `field-radio-block`.
+
+## Related
+
+- `field-switch` — inline row with the same props, plus `required`.
+- `field-checkbox-block` — the same card with a checkbox.
+- `field-radio-block` — the same card for a mutually exclusive choice.
+- `switch` — the bare control rendered inside the card.
+
+## Best practices
+
+- Bind with `v-model`; the value is a boolean and defaults to `false`.
+- The whole card is a `label` for the switch, so a click anywhere toggles it; `label` and `description` are plain strings.
+- `helperText` renders only while `disabled`, as a lock badge — use it to say why the feature is locked.
+- There is no `name`, `inputId`, or `required`; the switch is not a native form input, so read the bound value.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
+
+const tieredCache = ref(false)
+</script>
+
+<template>
+  <FieldSwitchBlock
+    v-model="tieredCache"
+    label="Tiered Cache"
+    description="Serve cache misses from a regional layer before reaching the origin."
+  />
+</template>
+```
 
 ## Props
 
@@ -43,7 +88,7 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `checked`, `highlighted` (card border)
 - `data-disabled` mirrors the `disabled` prop
 - `data-checked` mirrors toggled-on state
-- `data-highlighted` mirrors Figma card emphasis (on when checked and enabled, or off when disabled)
+- `data-highlighted` mirrors Figma card emphasis: on when checked and enabled, and also on when unchecked and disabled
 
 ## Motion & Animations
 
@@ -65,9 +110,9 @@ Card-style boolean toggle with switch, label, description, and optional disabled
 | border (muted)           | `var(--border-muted)`     |
 | border (highlighted)     | `var(--border-selected)`  |
 | border (helper)          | `var(--border-default)`   |
-| spacing                  | `var(--spacing-3)`        |
-| spacing (tight)          | `var(--spacing-1)`        |
-| spacing (helper gap)     | `var(--spacing-2)`        |
+| spacing                  | `var(--spacing-sm)`       |
+| spacing (tight)          | `var(--spacing-xxs)`      |
+| spacing (helper gap)     | `var(--spacing-xs)`       |
 | shape                    | `var(--shape-elements)`   |
 
 ## Theme gaps

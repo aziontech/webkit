@@ -2,21 +2,47 @@
 name: flow
 category: data
 structure: composition
-status: approved
+status: implemented
 spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: f9b00aaa1d27f16f6d41bb47cba3363e5eb00cccdd29c05625d4321e3f425b80
+checksum: ae2e65cf6f27408aa33f0aef0ccd7a988b5539616e70600c92ffbc6ecc2e8b07
 created: 2026-06-25
-last_updated: 2026-08-04
+last_updated: 2026-11-09
 ---
 
 # Flow — Component Spec
 
 ## Purpose
 
-Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `data-table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table.
+Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-anchor`). Use it to visualize pipelines, workflows, and step-by-step processes inside a data view; unlike `table` it expresses ordered/branching relationships rather than tabular records. Steps are written as direct children of `flow`; a `flow-parallel` between two steps fans out from the previous step and fans back into the next, and a `flow-parallel` at the start/end fans only inward/outward (no dangling stubs). A node can be styled (the default box) or `unstyled` so its slot content defines the entire node — a dot, a tall card, a multi-row card — while connectors still attach correctly, optionally at `flow-anchor` points inside the node. Connectors run port-to-port: a styled node renders a small square **connector port** just outside each of its edges, and a `flow-anchor` renders one outside the edge it attaches to, so a line always terminates on a visible attachment point instead of a bare edge (the port is the endpoint treatment — connectors carry no arrowheads). The port sits fully clear of the box rather than overlapping it, so neither the node's surface nor its focus ring crops it. A port is only rendered where a connector actually attaches: the leading child has no incoming connector and the trailing child no outgoing one, so those two edges show no port and the chain opens and closes on a node rather than on a stub. An `unstyled` node renders no ports, because its slot content owns its appearance; put a `flow-anchor` inside it to place ports on the parts a connector should touch. Design source (rewritten to our conventions, never inherited as-is): the kumo "Flow" component group at https://kumo-ui.com/components/flow/. Scope boundary: large diagrams pan via a native `overflow: auto` scroll container on the root — free 2D drag-pan is intentionally out of scope (it would require an external positioning library forbidden by `.claude/rules/dependencies.md`). The connector port is specified by the Figma frame in the frontmatter; the remaining tokens are inferred from intent and recorded in the Theme gaps table.
+
+## When to use
+
+- Showing an ordered pipeline or request path as steps joined by connectors — build → deploy → serve, or a request through a load balancer, a function and its bindings.
+- A step fans out to several parallel targets and (optionally) back in — wrap those steps in `Flow.Parallel`.
+- A node with custom content (a card with several rows) where connectors must touch specific parts — mark them with `Flow.Anchor`.
+
+## When NOT to use
+
+- One of the official architecture drawings, or a node-and-connector picture for a marketing page → use `diagram`.
+- Tabular records with no ordering between them → use `table`.
+- A numbered set of instructions in documentation → use `doc-steps`.
+
+## Related
+
+- `diagram` — marketing architecture drawings from a closed library or a one-off spec; `flow` is the in-product, hand-composed pipeline.
+- `doc-steps` — an ordered walkthrough of text steps joined by a rail, not connected nodes.
+- `table` — records without ordered or branching relationships.
+
+## Best practices
+
+- Write steps as direct children of `Flow` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.
+- Use `unstyled` when the slot content is the whole node, and put a `Flow.Anchor` (`type="end"` incoming, `type="start"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.
+- Mark a leaf that hangs off the chain with `terminal`; it receives a connector but sends none on.
+- Do not clip a node with `overflow-hidden` in a wrapping card — the connector ports sit outside the node's box and would disappear.
+- Let a wide flow scroll in its own container; the root is an `overflow: auto` region, and there is no drag-to-pan.
 
 ## Usage
 
@@ -86,7 +112,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `align` | `'start' \\| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
+| `align` | `'start' \| 'center'` | `'start'` | false | Vertical alignment of nodes within the diagram. |
 
 ## Events
 

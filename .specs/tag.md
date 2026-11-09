@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 91e02344ced4319f14cc42fc2e3d20d42fc5e83959dd774d967de8d91c73e2a5
+checksum: da564029271664dc9a96eadeb95584b1fbee76c5ad0129fd5943f7f624ac74b9
 created: 2026-05-22
-last_updated: 2026-07-16
+last_updated: 2026-11-09
 ---
 # Tag — Component Spec
 
@@ -57,7 +57,7 @@ import Tag from '@aziontech/webkit/tag'
 | `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | false | Pill shape when true. |
-| `icon` | `string` | `'undefined'` | false | PrimeIcons class for the leading icon. |
+| `icon` | `string` | `undefined` | false | PrimeIcons class for the leading icon. |
 
 ## Events
 

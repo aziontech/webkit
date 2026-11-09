@@ -2,14 +2,14 @@
 name: media-tabs
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
 checksum: 3f52f749cabe1cb771937f5e4a99c1d8137a15643c529bbf9776143481f3ae4b
 created: 2026-09-24
-last_updated: 2026-10-22
+last_updated: 2026-11-09
 ---
 
 # Media Tabs — Component Spec

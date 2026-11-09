@@ -2,14 +2,14 @@
 name: section-title
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 3
 checksum: 2abbe5034d936bf22adabc8ff83b9ca220952597bdfea9edc965c3fea32c8103
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
 created: 2026-08-11
-last_updated: 2026-10-23
+last_updated: 2026-11-09
 ---
 
 # Section Title — Component Spec

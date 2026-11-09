@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 276da7db99e5a69b643d2721dc1c3f82c657fb0ccb85052ff5a7b00b6abdfaf3
+checksum: c83a2657e88c3b79444a787d11ba94238a79df8a33f7c6a9727dd855a17d44c7
 created: 2026-07-13
-last_updated: 2026-07-13
+last_updated: 2026-11-09
 ---
 
 # Brand — Component Spec
@@ -17,6 +17,30 @@ last_updated: 2026-07-13
 ## Purpose
 
 The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
+
+## When to use
+
+- The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
+- `kind="reduced"` where space is tight (collapsed sidebar, mobile header).
+- `kind="extended"` in marketing layouts that carry the tagline.
+
+## When NOT to use
+
+- A customer or partner logo → use `logo-wall`.
+- A person's or organization's picture → use `avatar`.
+- A decorative product graphic → use `illustration`.
+
+## Related
+
+- `site-nav` and `site-footer` — compose Brand for the site chrome.
+- `avatar` — the picture or initials of a user, not the product mark.
+- `logo-wall` — third-party company marks.
+
+## Best practices
+
+- Choose the lockup with `kind` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
+- Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
+- For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 
 ## Usage
 

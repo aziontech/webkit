@@ -2,11 +2,11 @@
 name: texture-material
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: 39c3331d24e640a81ddf95f2734ae6217afec4b3afc2135027cb18135920fcd4
 created: 2026-09-23
-last_updated: 2026-10-19
+last_updated: 2026-11-09
 ---
 
 # Texture Material — Component Spec

@@ -4,9 +4,9 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 2c97ad82da3d4efcf717335ed42dc9d81a9f17c45da9c5880501b69a200bcbcd
+checksum: 1de6b4b99aa20e4bf4196fc89409cec794ba4f7456db90299564a55c872edafd
 created: 2026-05-22
-last_updated: 2026-07-22
+last_updated: 2026-11-09
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -16,6 +16,43 @@ figma:
 ## Purpose
 
 Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).
+
+## When to use
+
+- A standalone navigation link: a domain, a repository, a docs page, "View all".
+- An in-console navigation action ("Add custom domain") with `showIcon` set to false.
+
+## When NOT to use
+
+- A link inside a sentence → use a plain anchor with the text-link class.
+- An action that changes something instead of navigating → use `button`.
+- A compact marketing CTA with a brand-colored icon inside a card → use `mini-button`.
+
+## Related
+
+- `mini-button` — same anatomy in default text color with a brand-colored icon; `large` and `medium` only.
+- `button` — set `href` when a link must look like a button.
+- `breadcrumb` — a trail of links for hierarchical location.
+
+## Best practices
+
+- Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn More'`) are placeholders.
+- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); turn `showIcon` off for in-app destinations.
+- Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
+- `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
+
+## Usage
+
+```vue
+<script setup>
+import Link from '@aziontech/webkit/link'
+</script>
+
+<template>
+  <Link label="View documentation" href="https://www.azion.com/en/documentation/" target="_blank" />
+  <Link label="Add custom domain" href="/domains/create" size="medium" :show-icon="false" />
+</template>
+```
 
 ## Props
 

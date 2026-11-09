@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7582
   node_id: 2027:7582
-checksum: 31946bcc23a69391153c58621eed98cdc7247df91948af2c316e1f5203b2c752
+checksum: d65e1380f64a882d9148a94e79fb18c3a6420e3862a85b65c56361c07b24fd85
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 
 # Field Radio Block — Component Spec
@@ -17,6 +17,59 @@ last_updated: 2026-05-23
 ## Purpose
 
 Card-style radio option with selected border and background. Matches Figma FieldRadioBlock (node 2027:7582). Use for plan selection or choices that need visual weight.
+
+## When to use
+
+- A mutually exclusive choice where each option deserves a card with a label and description: plan, tier, deployment strategy.
+- The selected option should stand out: the card switches to the selected border and surface.
+
+## When NOT to use
+
+- A plain radio row is enough → use `field-radio`.
+- More than one option can be on → use `field-checkbox-block`.
+- The card needs an icon or trailing content such as a tag → use `box-grid-selection`.
+- The list is long → use `field-select`.
+
+## Related
+
+- `field-radio` — inline row with the same props.
+- `box-grid-selection` — selectable cards with an icon, a description, and a `tag` slot for trailing content.
+- `field-checkbox-block` — the same card for independent options.
+- `radio-button` — the bare control rendered inside the card.
+
+## Best practices
+
+- Render one `FieldRadioBlock` per option with the same `name` and the same `v-model`, each with its own string `value`.
+- The whole card is a `label` for the input, so a click anywhere selects it; `label` and `description` are plain strings with no slot for extra content.
+- `helperText` renders only while `disabled`, as a lock badge — use it to say why the option is unavailable.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+
+const plan = ref('pro')
+</script>
+
+<template>
+  <FieldRadioBlock
+    v-model="plan"
+    name="plan"
+    value="free"
+    label="Free"
+    description="For personal projects."
+  />
+  <FieldRadioBlock
+    v-model="plan"
+    name="plan"
+    value="pro"
+    label="Pro"
+    description="For teams running production workloads."
+  />
+</template>
+```
 
 ## Props
 
@@ -61,14 +114,14 @@ Card-style radio option with selected border and background. Matches Figma Field
 | typography (description) | `.text-body-xs`           |
 | typography (helper)      | `.text-body-xs`           |
 | surface                  | `var(--bg-surface)`       |
-| surface (selected)       | `var(--primary-selected)` |
+| surface (selected)       | `var(--bg-selected)`      |
 | text                     | `var(--text-default)`     |
 | text (muted)             | `var(--text-muted)`       |
 | border (muted)           | `var(--border-muted)`     |
 | border (selected)        | `var(--border-selected)`  |
 | border (helper)          | `var(--border-default)`   |
-| spacing                  | `var(--spacing-3)`        |
-| spacing (tight)          | `var(--spacing-1)`        |
+| spacing                  | `var(--spacing-sm)`       |
+| spacing (tight)          | `var(--spacing-xxs)`      |
 | shape                    | `var(--shape-elements)`   |
 
 ## Theme gaps

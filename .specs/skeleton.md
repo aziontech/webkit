@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 8b386405cb685ad4eafbf981fa27631dff0f7b1ae55f2bcca6ab05b90df18d89
+checksum: c056c427f80762efa22aa8ae6633ed892248d5034720231c88c5dcd3778ffff4
 created: 2026-06-23
-last_updated: 2026-07-28
+last_updated: 2026-11-09
 ---
 
 # Skeleton — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-07-28
 ## Purpose
 
 A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).
+
+## When to use
+
+- Content is loading and its final layout is known: text lines, cards, media blocks.
+- Avatar and icon placeholders, with `kind="circle"`.
+
+## When NOT to use
+
+- The duration is unknown and no layout is reserved → use `progress-bar` with `indeterminate`, or `spinner`.
+- Rows in a data-driven `table` → use the `table` `loading` prop, which renders aligned skeleton rows.
+- Loading finished with no data → use `empty-state`.
+- A settled state such as Active or Failed → use `status-indicator`.
+
+## Related
+
+- `progress-bar` — measured or indeterminate progress of a task, not a placeholder.
+- `spinner` — compact busy glyph for buttons and inline status.
+- `empty-state` — what replaces the skeleton when the request returns nothing.
+- `table` — its `loading` prop renders skeleton rows for you.
+
+## Best practices
+
+- Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.
+- For `kind="circle"`, set `width` and `height` to the same value.
+- The skeleton is `aria-hidden`. Mark the container you own with `aria-busy="true"` while it loads.
+- Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated="false"` only for static captures.
 
 ## Usage
 

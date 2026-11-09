@@ -4,12 +4,12 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: d60a84a840e994b6fcfe115ea0a263098f46363bbc50861d0760b8fb22fa59be
+checksum: 460cd8cd03abdc9a523de3003faa6d2dcc6e9776a11a1e636fc90f9d2bfe0e74
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-08-14
+last_updated: 2026-11-09
 ---
 
 # Progress Bar — Component Spec
@@ -21,6 +21,30 @@ determinate value within a range (`value` / `max`) or, when progress can't be
 measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder
 geometry) or `status-indicator` (discrete state), it expresses a continuous
 quantity.
+
+## When to use
+
+- A task with measurable progress: an upload, a build, a multi-step import.
+- A bar-shaped busy indicator at the top of a region when progress can't be measured (`indeterminate`).
+
+## When NOT to use
+
+- A placeholder for content that is still loading → use `skeleton`.
+- A busy state inside a button or another compact control → use `spinner` (or the control's own `loading` prop).
+- A discrete state with no quantity, such as Active or Failed → use `status-indicator`.
+
+## Related
+
+- `skeleton` — reserves the layout of loading content instead of showing task progress.
+- `spinner` — compact, always-indeterminate busy glyph.
+- `status-indicator` — labelled dot for a settled or transitional state.
+
+## Best practices
+
+- Pass `value` on the scale of `max`, for example `:value="3" :max="5"` for steps. Don't convert it to a percentage yourself.
+- Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.
+- There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.
+- The default is the thin `small` bar with `flat` corners. Use `shape="rounded"` and a larger `size` only when the bar stands alone.
 
 ## Usage
 
@@ -40,8 +64,8 @@ import ProgressBar from '@aziontech/webkit/progress-bar'
 |---|---|---|---|---|
 | `value` | `number` | `0` | false | Current progress, relative to `max`. |
 | `max` | `number` | `100` | false | Upper bound; percentage = `value / max * 100`. |
-| `shape` | `'rounded' \| 'flat'` | `'rounded'` | false | Track and fill corner-radius variant. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Bar height token. |
+| `shape` | `'rounded' \| 'flat'` | `'flat'` | false | Track and fill corner-radius variant. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Bar height token. |
 | `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
 
 ## Events

@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 61f0bfa3dd66961de163959526fd4905c25f762d2e35f5e7501c205b62eda98d
+checksum: 4de4075a39ed5e6d866e868e185d4d3af327a4da2a61c960884abe3d289a7b1b
 created: 2026-05-22
-last_updated: 2026-08-28
+last_updated: 2026-11-09
 ---
 
 # Card Pricing — Component Spec
@@ -26,6 +26,68 @@ The card carries **one** prose region — the pricing caveat, below the amount. 
 `aligned` makes a ROW of cards read as one comparison. Every region is content-sized by default, which is right for a single card and wrong for three side by side — a tier with a two-line caveat and a tier with none put their feature lists on different lines, and the reader has to re-find the row in every column. It reserves **three** lines for the caveat, in `lh` so the reservation follows the type token rather than a hard-coded height. Three is the design's 64px band expressed in whole lines of the region's own token (`body-md` is a 22px line box, so `3lh` is 66px; `2lh` is 44px and twenty short) — it shipped as `2lh`, and the shortfall stayed invisible until a tier's caveat ran to three lines at the region's then-256px measure, overflowed the band, and pushed that column's feature list 22px below the other two. Opt-in, because reserving empty lines is wrong for a lone card; set it on every card in the row. A caveat past three lines still pushes the row down, like any overflow.
 
 The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline.
+
+## When to use
+
+- One tier in a row of plans: plan name, price, billing caveat, one action and the tier's feature list.
+- A compact tier sized by its content (`slot-position="bottom"`), or a full tier whose action is pinned to the bottom so a row's buttons line up (`slot-position="middle"`).
+- A tier set on the surface behind it (`kind="transparent"`) inside a section that already draws the frame.
+
+## When NOT to use
+
+- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.
+- You need a feature-by-feature comparison across plans → use `compare-plans`.
+- You only need to show an amount, in a table cell or a summary → use `currency`.
+- The card holds general content rather than a price → use `card-box`.
+
+## Related
+
+- `currency` — typesets the amount inside the card; use it directly for prices outside a tier card.
+- `pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.
+- `compare-plans` — the matrix that sits under the plan cards.
+- `card-box` — generic bordered card with header, content and footer regions.
+
+## Best practices
+
+- In a row of tiers, set `aligned` on every card so each caveat reserves the same band and the feature lists start on one line.
+- Keep `pricing-details` to the billing caveat. A tier's positioning sentence goes in the default slot with the feature list.
+- The card emits no events, and the built-in button has no handler. To act on the click, fill the `actions` slot with your own `Button`.
+- Hide the symbol or the period with `:show-prefix="false"` / `:show-suffix="false"` (for example on a custom-quote tier) instead of clearing `prefix` / `suffix`.
+- Mark at most one card in a row with `show-tag` and `tag-label`.
+
+## Usage
+
+```vue
+<script setup>
+import Button from '@aziontech/webkit/button'
+import CardPricing from '@aziontech/webkit/card-pricing'
+
+const upgrade = () => {}
+</script>
+
+<template>
+  <CardPricing
+    plan-title="Pro"
+    value="20"
+    prefix="$"
+    suffix="/ mon"
+    pricing-details="Billed annually or $25/mo billed monthly."
+    slot-position="middle"
+    kind="contained"
+    tag-label="Popular"
+    show-tag
+    aligned
+  >
+    <ul>
+      <li>Unlimited applications</li>
+      <li>Real-time metrics</li>
+    </ul>
+    <template #actions>
+      <Button label="Upgrade to Pro" kind="secondary" size="large" @click="upgrade" />
+    </template>
+  </CardPricing>
+</template>
+```
 
 ## Props
 

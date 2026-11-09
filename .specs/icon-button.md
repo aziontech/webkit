@@ -4,15 +4,56 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 57e712b53b9a33dbf353ad453c5a8706f76bee3610fb4a8a62bb080bd68ab3d5
+checksum: 71a7716bbdbaaf54a58c51f6feb1b8025f18030fc393d4f9f3d0ebf0846ab0d9
 created: 2026-05-22
-last_updated: 2026-07-01
+last_updated: 2026-11-09
 ---
 # Icon Button — Component Spec
 
 ## Purpose
 
-Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/icon-button/`.
+Interactive control for user actions. Lives at `packages/webkit/src/components/actions/icon-button/`.
+
+## When to use
+
+- Compact actions in toolbars, table rows, card headers and overlay close controls where the glyph is widely understood (close, refresh, delete, more).
+- Swapping between two icons in place (copy to check, show to hide), with `iconTransition` animating the change.
+- An icon-only link: set `href` and it renders as an anchor.
+
+## When NOT to use
+
+- The action needs a visible label → use `button`.
+- Copying a value to the clipboard → use `copy-button`, which already wires the icon swap, the tooltip and the `copy` event.
+- Choosing one of a few mutually exclusive options → use `segmented-button`.
+
+## Related
+
+- `button` — labelled counterpart; sizes line up and its `text` kind matches `transparent` here.
+- `copy-button` — IconButton plus Tooltip with the clipboard write built in.
+- `tooltip` — wrap an IconButton to show its name on hover and focus.
+- `split-button` — uses an IconButton as its chevron menu toggle.
+
+## Best practices
+
+- `ariaLabel` is required and is the only accessible name; describe the action ("Delete domain"), not the glyph ("Trash").
+- Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
+- Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
+- Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
+- Use `iconClass` for glyph-level tweaks instead of styling the root.
+
+## Usage
+
+```vue
+<script setup>
+import IconButton from '@aziontech/webkit/icon-button'
+</script>
+
+<template>
+  <IconButton icon="pi pi-plus" aria-label="Add domain" />
+  <IconButton icon="pi pi-refresh" aria-label="Refresh" kind="transparent" size="medium" />
+  <IconButton icon="pi pi-trash" aria-label="Delete domain" kind="danger" size="small" />
+</template>
+```
 
 ## Props
 
@@ -48,7 +89,8 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
+| icon swap (enter / leave) | `transition-[transform,opacity] duration-moderate-01` / `transition-opacity duration-fast-02 ease-productive-exit` (`presets/icon-transition.js`) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none` |
 
 ## Tokens
 

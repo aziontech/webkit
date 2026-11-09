@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 60c3e2cda0fccf0c3cd76f3d64b88ea6708c78c7452f589884f4b9d5472d4b62
+checksum: c8a3ac4b0a9e0ea6c5328edbfb351d5508256d71281075589f566c918e1c7ee5
 created: 2026-07-01
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 
 # FieldInputGroup — Component Spec
@@ -17,6 +17,31 @@ last_updated: 2026-08-10
 ## Purpose
 
 Form field wrapper around `InputGroup` that composes `Label`, `InputGroup` (with its own middle `<input>` rendered internally), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldText`'s API and template shape verbatim, except the underlying primitive is `InputGroup` (fixed height, no `size` prop, side slots for icons/text) instead of `InputText`. Use it whenever a text input surrounded by prefix/suffix content needs a visible label or helper/error message.
+
+## When to use
+
+- A labeled text input with fixed content on either side: a protocol (`https://`), a domain suffix, a unit, an icon.
+- A labeled text input with a small control attached, such as a copy button in the `right` slot.
+
+## When NOT to use
+
+- There is no side content → use `field-text`.
+- The leading addon is a country dial code → use `field-phone-number`.
+- A trailing switch decides whether the value applies → use `field-text-switch`.
+- The field must be `small` or `large` → use `field-text`; this field has no `size`.
+
+## Related
+
+- `input-group` — the container this field wraps; use it directly for several addons or other sizes.
+- `field-text` — the same field shape without addons, with `size` and icon slots.
+- `field-phone-number` — the same shape with a dial-code select on the left.
+- `field-text-switch` — the same shape with a switch on the right.
+
+## Best practices
+
+- Keep `left` / `right` content short; each slot is wrapped in an addon cell and only renders when the slot is passed.
+- `required` paints the warning border and the required helper on first render — bind it to a submit state (`:required="submitted && !value"`), not as a bare attribute.
+- `invalid` sets the danger border on the whole group and `aria-invalid` on the input; pair it with a `helperText` message.
 
 ## Usage
 

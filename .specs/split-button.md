@@ -2,14 +2,14 @@
 name: split-button
 category: actions
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: ed48d496a5f7c61b7d4c353fd4985517567664a6cae6f9a770f245ecf4922ef4
+checksum: 18ad6b0786483abe7d731555c67b9aeef919d566c2db2360003a9aaa320614cf
 created: 2026-06-30
-last_updated: 2026-07-05
+last_updated: 2026-11-09
 ---
 
 # Split Button — Component Spec
@@ -17,6 +17,31 @@ last_updated: 2026-07-05
 ## Purpose
 
 A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`.
+
+## When to use
+
+- One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).
+- A "repeat the last choice" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked.
+
+## When NOT to use
+
+- A single action → use `button`.
+- A menu with no default action → use `dropdown`.
+- Picking one of a few visible, mutually exclusive options → use `segmented-button`.
+
+## Related
+
+- `button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.
+- `dropdown` — the overlay menu the toggle composes; use it alone when there is no default action.
+- `icon-button` — the chevron toggle segment.
+
+## Best practices
+
+- Give every `model` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.
+- Handle the default action in `@click` and the menu actions in `@item-click`; both receive `(event, item)`.
+- With `updateLabelOnSelect`, read the second argument of `click` (the mirrored item, `null` until one is picked) to run whichever action is active.
+- Set `loading` while the action runs: it disables both segments and keeps the menu closed.
+- Disable a single action with `disabled: true` on its model entry instead of removing it, so the menu does not shift.
 
 ## Usage
 

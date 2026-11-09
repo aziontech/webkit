@@ -2,14 +2,14 @@
 name: quote-carousel
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13136-296065
   node_id: 13136:296065
 checksum: d6339fe241d6212b2538e9d75d41138004b898d5615718df3a6c74374221c69e
 created: 2026-09-24
-last_updated: 2026-09-26
+last_updated: 2026-11-09
 ---
 
 # QuoteCarousel — Component Spec

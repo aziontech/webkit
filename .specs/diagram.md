@@ -2,11 +2,11 @@
 name: diagram
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: 8135dee436b0b53046ed830603f28d798e217af5735b7a4008e5fe8e41c428ea
 created: 2026-10-21
-last_updated: 2026-10-21
+last_updated: 2026-11-09
 ---
 
 # Diagram — Component Spec

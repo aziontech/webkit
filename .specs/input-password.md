@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 8d954bea6b4d34d91780e0d7fe195ce0e418a288603f60f9394e57a61582c7b8
+checksum: 2ad2e1ad5ecee7f1fa857f0472533798da8468750bdee066076e34b0cb66239a
 created: 2026-06-16
-last_updated: 2026-07-31
+last_updated: 2026-11-09
 ---
 
 # Input Password — Component Spec
@@ -19,6 +19,29 @@ last_updated: 2026-07-31
 Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `InputText` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer.
 
 Aligned with Figma frame `3714:10788` (Webkit / InputPassword). The token mapping was originally inferred from the `input-text` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside `FieldPassword` (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `InputText`'s borders and `InputText` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
+
+## When to use
+
+- A bare password field whose label and errors are laid out separately (an inline re-authentication prompt, a custom form row).
+- Any secret the user may need to check while typing (passwords, tokens); the built-in toggle reveals it as plain text.
+
+## When NOT to use
+
+- A password field with a label, helper or error text, or a requirements row → use `field-password`.
+- The value is not secret → use `input-text`.
+
+## Related
+
+- `field-password` — wraps this input with label, helper text, and the password-requirements chips.
+- `input-text` — plain-text field with the same borders, focus ring, and disabled treatment.
+- `field-text` — labelled plain-text field.
+
+## Best practices
+
+- Set `autocomplete="new-password"` on sign-up and password-change forms; keep the default `current-password` on login.
+- Leave `toggleable` on; turn it off only when you need the `iconRight` slot, which is ignored while the toggle is shown.
+- The field is a fixed 40px tall with no `size` prop; align it with `size="large"` siblings in the same row.
+- Give it an accessible name: a `label` whose `for` matches an `id` passed to the input, or `aria-label`.
 
 ## Usage
 

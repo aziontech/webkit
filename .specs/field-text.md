@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: af47b76804cf5e21e32bd45af5afd24bf7c15334224788d63e0edcee1d6d7c99
+checksum: 642def455fefbbeccdcf301219aa844a89c44eb6192c38bea5740832bb503665
 created: 2026-06-15
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 
 # Field Text — Component Spec
@@ -17,6 +17,33 @@ last_updated: 2026-08-10
 ## Purpose
 
 Form field for free-text input that composes `Label`, `InputText`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Aligned with Figma frame `536:22` (FieldText) and acts as the canonical wrapper for `InputText` in form contexts.
+
+## When to use
+
+- Single-line free text that needs a visible label or a helper/error message: names, emails, URLs, IDs.
+- Any `InputText` in a form context, including ones with a leading or trailing icon (`iconLeft` / `iconRight` slots).
+
+## When NOT to use
+
+- The text spans several lines → use `field-textarea`.
+- The value is a password → use `field-password`.
+- The input needs prefix or suffix content such as a protocol, a unit, or a button → use `field-input-group`.
+- The value is a phone number → use `field-phone-number`.
+
+## Related
+
+- `input-text` — the bare input this field wraps.
+- `field-input-group` — the same field shape with `left` / `right` addon slots.
+- `field-textarea` — multi-line sibling.
+- `helper-text` — the guidance/error row under the input.
+- `label` — the label row; its `hint` is not forwarded by this field.
+
+## Best practices
+
+- `required` paints the warning border and the required helper on first render — bind it to a submit state (`:required="submitted && !value"`), not as a bare attribute.
+- The helper row renders only when `helperText` is non-empty, also while `disabled`; on a failed validation swap the guidance for the message and set `invalid`.
+- `size` defaults to `medium`; match it to the sibling fields in the same form.
+- The field does not forward a `hint`; when the label needs one, compose `label` + `input-text` + `helper-text`.
 
 ## Usage
 

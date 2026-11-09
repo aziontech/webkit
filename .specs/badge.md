@@ -2,14 +2,14 @@
 name: badge
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
 checksum: 5b8184d8032f2b8b7d0ddb59fb16f70aac6340c048c5e0ec3cea229e73fa4304
 created: 2026-06-23
-last_updated: 2026-06-25
+last_updated: 2026-11-09
 ---
 # Badge — Component Spec
 

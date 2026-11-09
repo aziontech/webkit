@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: fae8447c685d8b651ee36f2670fa36535f91eca2b232c5118108baf549a03c6b
+checksum: 3b3269510fec5794372afdef034e8e5b23ec6c523a8e68ea67e941775f9f59bb
 created: 2026-05-22
-last_updated: 2026-07-30
+last_updated: 2026-11-09
 ---
 
 # Dialog — Component Spec
@@ -37,6 +37,54 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 - Trap focus, restore it on close, and close on Escape and overlay click.
 - One clear primary action; keep the body scannable.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import Button from '@aziontech/webkit/button'
+import Dialog from '@aziontech/webkit/dialog'
+import DialogTrigger from '@aziontech/webkit/dialog-trigger'
+import DialogPortal from '@aziontech/webkit/dialog-portal'
+import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+import DialogContent from '@aziontech/webkit/dialog-content'
+import DialogTitle from '@aziontech/webkit/dialog-title'
+import DialogDescription from '@aziontech/webkit/dialog-description'
+import DialogClose from '@aziontech/webkit/dialog-close'
+import PanelHeader from '@aziontech/webkit/panel-header'
+import PanelContent from '@aziontech/webkit/panel-content'
+import PanelFooter from '@aziontech/webkit/panel-footer'
+
+const open = ref(false)
+</script>
+
+<template>
+  <Dialog v-model:open="open" size="medium">
+    <DialogTrigger>
+      <Button label="Delete domain" kind="outlined" />
+    </DialogTrigger>
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogContent>
+        <PanelHeader>
+          <DialogTitle>Delete domain</DialogTitle>
+          <DialogClose />
+        </PanelHeader>
+        <PanelContent>
+          <DialogDescription>
+            The domain stops serving traffic immediately. This action cannot be undone.
+          </DialogDescription>
+        </PanelContent>
+        <PanelFooter>
+          <Button label="Cancel" kind="outlined" @click="open = false" />
+          <Button label="Delete" kind="danger" />
+        </PanelFooter>
+      </DialogContent>
+    </DialogPortal>
+  </Dialog>
+</template>
+```
 
 ## Sub-components
 
@@ -82,12 +130,11 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 ## Motion & Animations
 
-| Trigger      | Animation / Transition                    | Token    | Reduced-motion fallback         |
-| ------------ | ----------------------------------------- | -------- | ------------------------------- |
-| open/close   | `animate-fade-in`                         | semantic | `motion-reduce:animate-none`    |
-| open/close   | `animate-none`                            | semantic | `motion-reduce:animate-none`    |
-| open/close   | `animate-fade-out`                        | semantic | `motion-reduce:animate-none`    |
-| state change | `transition-colors duration-150 ease-out` | inline   | `motion-reduce:transition-none` |
+| Trigger | Animation / Transition | Token | Reduced-motion fallback |
+|---|---|---|---|
+| panel open / close | `translate`, `scale` and `opacity` transition, set inline per motion state (`presets/transitions.ts`) | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']` from `@aziontech/theme/animations` | `motion-reduce:transition-none` |
+| overlay open / close | `opacity` transition, set inline per motion state | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']` | `motion-reduce:transition-none` |
+| below `md` | the panel enters as a bottom sheet with the drawer's transition | `overlay/presets/bottom-sheet-transitions.js` | `motion-reduce:transition-none` |
 
 ## Tokens
 

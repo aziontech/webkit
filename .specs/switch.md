@@ -7,9 +7,9 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: ac8437bfa7867ea9f395f783c4c6635361be44fbdb7b6cbd7d5ea03863928f28
+checksum: 7e522a80938a84fe8db43692fddda202a32516388afe7f871340ba020194a420
 created: 2026-05-22
-last_updated: 2026-07-31
+last_updated: 2026-11-09
 ---
 
 # Switch — Component Spec
@@ -17,6 +17,34 @@ last_updated: 2026-07-31
 ## Purpose
 
 Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
+
+## When to use
+
+- An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).
+- A row that already names the setting outside the control, such as an `item` row whose title is the label.
+- A visibility or access toggle: `kind="privacy"` shows a closed lock when off and an open lock when on.
+
+## When NOT to use
+
+- The toggle needs its own label, description, or helper text in a form → use `field-switch`.
+- The toggle should sit in a bordered card with a description → use `field-switch-block`.
+- A text value that only applies while a feature is on → use `field-text-switch`.
+- The choice is submitted with a form instead of applied immediately → use `checkbox`.
+
+## Related
+
+- `field-switch` — switch with label, description, and disabled helper.
+- `field-switch-block` — card-style switch with label and description.
+- `field-text-switch` — text input with a trailing switch that enables it.
+- `checkbox` — boolean selection submitted with a form.
+- `item` — list row whose title names a bare switch.
+
+## Best practices
+
+- The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.
+- Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.
+- `focused` moves real focus and forces the ring; use it only to mirror an external focus state, never as decoration.
+- Keep `kind="default"` unless the setting is about visibility or access.
 
 ## Usage
 
@@ -57,7 +85,7 @@ const enabled = ref(false)
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
 - `data-focused` mirrors the `focused` prop and applies the same ring tokens as `:focus-visible`
-- `data-kind` mirrors the `type` prop (`default` | `privacy`)
+- `data-kind` mirrors the `kind` prop (`default` | `privacy`)
 - `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 
@@ -99,7 +127,7 @@ const enabled = ref(false)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`. The same ring is applied when `focused` is `true` (`data-[focused]` mirror).
 - Keyboard map: `Tab` focuses; `Space` / `Enter` toggles. When `disabled`, the native `<button disabled>` root is skipped by `Tab` and both keys are inert.
-- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `type="privacy"` is decorative — `aria-hidden="true"`.
+- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `kind="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically via `FieldSwitch`). The component still exposes a clickable root.

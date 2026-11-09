@@ -2,14 +2,14 @@
 name: input-group
 category: inputs
 structure: composition
-status: approved
+status: implemented
 spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 58464b4739d3177f09f8312f632be77da24509d8f97dc237c2f855427b73617a
+checksum: 4131554ea3a8f9077cd7d2878b26013da0f90a5f8ec66e6a83bd893352913ece
 created: 2026-07-01
-last_updated: 2026-07-22
+last_updated: 2026-11-09
 ---
 
 # InputGroup — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-07-22
 ## Purpose
 
 Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<InputText>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
+
+## When to use
+
+- A text input that needs static prefix or suffix content inside the same border (`https://`, `.com`, a currency symbol).
+- An input joined to a control: a search field with a trailing `button`, an amount with a leading currency `select`.
+
+## When NOT to use
+
+- The grouped input needs a visible label or helper/error text → use `field-input-group`.
+- The trailing control is a switch that enables the text value → use `field-text-switch`.
+- A phone number with a dial code → use `field-phone-number`.
+- A single input with only a decorative icon → use `input-text` and its `iconLeft` / `iconRight` slots.
+
+## Related
+
+- `field-input-group` — label, input group, and helper text, with `left` / `right` addon slots.
+- `field-phone-number` — input group with a dial-code select and a per-country mask.
+- `field-text-switch` — input group with a trailing switch that enables the input.
+- `input-text` — the single-field primitive with icon slots.
+
+## Best practices
+
+- Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
+- Set the same `size` on the group and on its child controls so heights line up.
+- `disabled`, `invalid`, and `required` style the group only; also set them on every child control they should affect.
+- The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
 
 ## Usage
 

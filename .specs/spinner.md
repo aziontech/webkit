@@ -4,19 +4,55 @@ category: utils
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 06ad61f947c3d7c2e5f5a59a659ddb90b1a771db9c278624abf90dd6de49f534
+checksum: 1edec34521c4e2d55edb0bf8410e250d90bab0f041ca62dad990b77d30653909
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-11-09
 ---
 # Spinner — Component Spec
 
 ## Purpose
 
-Shared visual utility used by other components. Migrated from the existing implementation at `packages/webkit/src/components/webkit/utils/spinner/`.
+Shared visual utility used by other components. Lives at `packages/webkit/src/components/utils/spinner/`.
+
+## When to use
+
+- An inline busy mark inside a row, log line or custom control that has no loading state of its own.
+- A small in-progress indicator next to text in a toast or status row.
+
+## When NOT to use
+
+- A button waiting on its action → set `loading` on `button`, `icon-button` or `button-highlight`.
+- Content that is still loading → use `skeleton`.
+- Progress you can measure → use `progress-bar`.
+- A status with a color and a label → use `status-indicator`.
+
+## Related
+
+- `skeleton` — reserves the shape of content while it loads.
+- `progress-bar` — determinate progress.
+- `button` — renders a Spinner itself when `loading` is set.
+
+## Best practices
+
+- It has no props: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).
+- It is `aria-hidden`; announce the busy state on the surrounding element (`aria-busy`, a live region or visible text).
+- The spin stops under reduced motion, so pair it with text when the wait matters.
+
+## Usage
+
+```vue
+<script setup>
+import Spinner from '@aziontech/webkit/spinner'
+</script>
+
+<template>
+  <Spinner class="size-4" />
+</template>
+```
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| _none_ | — | — | — | No props or slots; size and color come through `class` on the root. |
 
 ## Events
 
@@ -32,7 +68,9 @@ Shared visual utility used by other components. Migrated from the existing imple
 
 ## Motion & Animations
 
-_none_
+| Trigger | Animation / Transition | Token | Reduced-motion fallback |
+|---|---|---|---|
+| always (while mounted) | `animate-spin` | Tailwind core | `motion-reduce:animate-none` |
 
 ## Tokens
 

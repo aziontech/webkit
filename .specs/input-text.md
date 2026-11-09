@@ -2,11 +2,11 @@
 name: input-text
 category: inputs
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 2
-checksum: 2e9f27a6965b08931f6fbd69d5b1473d83975affbc0994c0e98369b008599e8b
+checksum: 4c0d0ba96a717eab3a35f2f3a0032b21986a5bffda8aa9fe33c1ad6b8486d4d4
 created: 2026-05-22
-last_updated: 2026-07-29
+last_updated: 2026-11-09
 ---
 
 # Input Text — Component Spec
@@ -37,6 +37,30 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 - Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
 - Set an appropriate `type`/`inputmode` for the content (email, url, …).
+
+## Usage
+
+```vue
+<script setup>
+import InputText from '@aziontech/webkit/input-text'
+import { ref } from 'vue'
+
+const domain = ref('')
+</script>
+
+<template>
+  <InputText
+    v-model="domain"
+    placeholder="example.com"
+    size="medium"
+    aria-label="Domain"
+  >
+    <template #iconLeft>
+      <i class="pi pi-globe" />
+    </template>
+  </InputText>
+</template>
+```
 
 ## Props
 

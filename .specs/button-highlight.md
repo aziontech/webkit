@@ -2,20 +2,44 @@
 name: button-highlight
 category: actions
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 83a39d29cf000f5e962a56f945bf1977f54bee2574ad3c9a2160ef76c396971b
+checksum: bab3c6f18eb80f8f11f865ee2acf8725d2ad690b6df8ad17e81b0a092d66397d
 created: 2026-06-01
-last_updated: 2026-07-13
+last_updated: 2026-11-09
 ---
 # Button Highlight — Component Spec
 
 ## Purpose
 
 Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `kind` axis.
+
+## When to use
+
+- The single entry point to an AI assistant or highlight flow (for example "Ask Azion") that must stand out from the actions around it.
+- A headline action in a header or marketing band where a primary `button` would blend in.
+
+## When NOT to use
+
+- A regular primary or secondary action → use `button`.
+- An icon-only control → use `icon-button`.
+- A default action with related alternatives in a menu → use `split-button`.
+
+## Related
+
+- `button` — the default action control; adds `kind`, `iconPosition`, `animated`, `type` and a `prefix` slot that this component does not have.
+- `icon-button` — icon-only action when there is no room for a label.
+
+## Best practices
+
+- Use at most one per view; the glow loses its meaning when it repeats.
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `pi pi-sparkles`).
+- It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
+- `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
+- The glow stops under reduced motion, so never use it to convey state.
 
 ## Usage
 
@@ -76,12 +100,12 @@ import ButtonHighlight from '@aziontech/webkit/button-highlight'
 | text (disabled) | `var(--text-disabled)` |
 | surface (disabled) | `var(--bg-disabled)` |
 | backdrop overlay | `var(--bg-backdrop)` |
-| gradient stop 1 | `var(--color-accent-900)` |
-| gradient stop 2 | `var(--color-accent-100)` |
-| gradient stop 3 | `var(--color-accent-600)` |
+| gradient stop 1 | `var(--color-brand-accent-900)` |
+| gradient stop 2 | `var(--color-brand-accent-100)` |
+| gradient stop 3 | `var(--color-brand-accent-600)` |
 | glow stop 1 (decorative) | `var(--color-base-white)` |
 | glow stop 2 (decorative) | `var(--color-blue-500)` |
-| glow stop 3 (decorative) | `var(--color-primary-500)` |
+| glow stop 3 (decorative) | `var(--color-brand-primary-500)` |
 | border | `var(--secondary-mask)` |
 | border width | `var(--border-width-default)` |
 | shape | `var(--shape-button)` |

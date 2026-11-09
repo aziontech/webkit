@@ -2,12 +2,12 @@
 name: frame-box
 category: layout
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: 6ac18126148bbed9d94771242149d9e77c7670178decb2126126b07200a4b649
 style_seam: true
 created: 2026-08-11
-last_updated: 2026-09-28
+last_updated: 2026-11-09
 ---
 
 # Frame Box — Component Spec

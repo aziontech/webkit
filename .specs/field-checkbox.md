@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7337
   node_id: 2027:7337
-checksum: d9682f511857e6a1bb77bb46dead2bb2d9bf8a6246ec6160430b97b93434700e
+checksum: 6697bd1e8bb981accbd07d90faf611fdad2846387e7f21cf4fe9282d4c2a87aa
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 
 # Field Checkbox — Component Spec
@@ -17,6 +17,54 @@ last_updated: 2026-05-23
 ## Purpose
 
 Inline checkbox field with leading control, label, optional description, and optional disabled helper badge. Matches Figma FieldCheckbox (node 2027:7337). Use for standalone consent checkboxes, agreement fields, or any isolated boolean choice within a form.
+
+## When to use
+
+- A single yes/no choice in a form that needs a visible label: a consent, an agreement, an opt-in.
+- A short list of independent options, one `FieldCheckbox` per option, each bound to its own `v-model`.
+- The option needs a `description` line under the label, or a lock badge (`helperText`) explaining why it is disabled.
+
+## When NOT to use
+
+- Each option should read as a bordered card that highlights when checked → use `field-checkbox-block`.
+- Toggling applies a setting immediately instead of on submit → use `field-switch`.
+- Only one option of a group can be picked → use `field-radio`.
+- The control sits in a row or cell that already labels it → use `checkbox`.
+
+## Related
+
+- `checkbox` — the bare control this field wraps; no label, description, or helper badge.
+- `field-checkbox-block` — the same props inside a bordered card; has no `required`.
+- `field-switch` — labeled boolean toggle for settings that take effect immediately.
+- `label` — renders the label text and the Required tag for this field.
+- `multi-select` — many options picked from a long list in a dropdown.
+
+## Best practices
+
+- Bind with `v-model`; the field emits `trueValue` when checked and `falseValue` when unchecked (defaults `true` / `false`).
+- `helperText` renders only while `disabled`, as a badge with a lock icon — use it to say why the option is locked, not for general guidance.
+- Omit `inputId` unless something outside the field must reference the input; the field generates one with `useId()` and links the label to it.
+- `required` adds the Required tag to the label and native `required` + `aria-required` to the input; pass `name` when the value is submitted through a native form or vee-validate.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import FieldCheckbox from '@aziontech/webkit/field-checkbox'
+
+const accepted = ref(false)
+</script>
+
+<template>
+  <FieldCheckbox
+    v-model="accepted"
+    name="terms"
+    label="I accept the terms of service"
+    description="You can review the terms at any time in Account settings."
+  />
+</template>
+```
 
 ## Props
 
@@ -31,6 +79,7 @@ Inline checkbox field with leading control, label, optional description, and opt
 | `label`       | `string`  | `''`        | false    | Primary label text.                               |
 | `description` | `string`  | `''`        | false    | Secondary description.                            |
 | `helperText`  | `string`  | `''`        | false    | Helper badge text shown when disabled.            |
+| `required`    | `boolean` | `false`     | false    | Adds the Required tag to the Label and sets native `required` + `aria-required` on the input. |
 
 ## Events
 
@@ -46,6 +95,7 @@ Inline checkbox field with leading control, label, optional description, and opt
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `checked`
 - `data-disabled` mirrors the `disabled` prop
+- `data-required` mirrors the `required` prop
 
 ## Motion & Animations
 
@@ -62,9 +112,9 @@ _none_
 | text (muted)             | `var(--text-muted)`     |
 | surface                  | `var(--bg-surface)`     |
 | border                   | `var(--border-default)` |
-| spacing                  | `var(--spacing-3)`      |
-| spacing (tight)          | `var(--spacing-1)`      |
-| spacing (helper gap)     | `var(--spacing-2)`      |
+| spacing                  | `var(--spacing-sm)`     |
+| spacing (tight)          | `var(--spacing-xxs)`    |
+| spacing (helper gap)     | `var(--spacing-xs)`     |
 | shape                    | `var(--shape-elements)` |
 
 ## Theme gaps

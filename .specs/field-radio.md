@@ -7,16 +7,70 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: 7c2c9aefb104e83323f6738af23f61fa086453ae20e8dd746fee5e675bab4b9c
+checksum: 8fc5db3f180ce93602b434f2086713de4f6421e9e835e0387b78b46b6be9ca60
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 
 # Field Radio — Component Spec
 
 ## Purpose
 
-Inline radio field with label, optional description, optional disabled helper badge, and trailing RadioButton. Matches Figma FieldRadio (node 2027:7554).
+Inline radio field with label, optional description, optional disabled helper badge, and a leading RadioButton. Matches Figma FieldRadio (node 2027:7554).
+
+## When to use
+
+- One choice out of a short list (roughly two to five options) where every option should stay visible.
+- Each option needs a label and, optionally, a `description` line.
+
+## When NOT to use
+
+- Options need visual weight as bordered cards → use `field-radio-block`.
+- The list is long or space is tight → use `field-select`.
+- Each option is an independent yes/no → use `field-checkbox`.
+- The control sits in a row or cell that already labels it → use `radio-button`.
+
+## Related
+
+- `radio-button` — the bare control this field wraps.
+- `field-radio-block` — the same props inside a bordered card that highlights when selected.
+- `field-select` — a labeled dropdown for longer lists.
+- `box-grid-selection` — a grid of selectable cards with icons and a trailing `tag` slot.
+
+## Best practices
+
+- Build a group by rendering one `FieldRadio` per option, all with the same `name` and the same `v-model`, each with its own `value`.
+- `modelValue` and `value` are strings; map numeric or object choices to string keys.
+- `helperText` renders only while `disabled`, as a lock badge — use it to say why the option is unavailable.
+- There is no `required` prop; put a group-level message near the options when a choice is mandatory.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import FieldRadio from '@aziontech/webkit/field-radio'
+
+const billing = ref('monthly')
+</script>
+
+<template>
+  <FieldRadio
+    v-model="billing"
+    name="billing"
+    value="monthly"
+    label="Monthly"
+    description="Billed every month."
+  />
+  <FieldRadio
+    v-model="billing"
+    name="billing"
+    value="yearly"
+    label="Yearly"
+    description="Billed once a year."
+  />
+</template>
+```
 
 ## Props
 
@@ -61,8 +115,8 @@ _none_
 | text (muted)             | `var(--text-muted)`     |
 | surface                  | `var(--bg-surface)`     |
 | border                   | `var(--border-default)` |
-| spacing                  | `var(--spacing-3)`      |
-| spacing (tight)          | `var(--spacing-1)`      |
+| spacing                  | `var(--spacing-sm)`     |
+| spacing (tight)          | `var(--spacing-xxs)`    |
 | shape                    | `var(--shape-elements)` |
 
 ## Theme gaps

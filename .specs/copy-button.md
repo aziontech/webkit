@@ -4,15 +4,40 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 5530c5669e227017fe27ed86aaa44b617b69a6c41e197f26ac7679382dc530f6
+checksum: ee3da62e9e6a867c2ba839ea1429f5a91e2f4f60fa85f1f398b9893e40569e97
 created: 2026-06-02
-last_updated: 2026-08-19
+last_updated: 2026-11-09
 ---
 # Copy Button — Component Spec
 
 ## Purpose
 
 Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`.
+
+## When to use
+
+- Next to a value the user will paste elsewhere: an ID, a domain, a token, a CLI command.
+- Inside key/value rows, terminal mocks and code samples that need a one-click copy.
+
+## When NOT to use
+
+- The action is anything other than copying → use `icon-button`.
+- A labelled "Copy" action in a form or dialog footer → use `button`.
+- A full code sample with its own copy control → use `code-block`.
+
+## Related
+
+- `icon-button` — the control it composes; `kind` and `size` are forwarded to it.
+- `tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.
+- `code-block` — already embeds a copy-button for its content.
+
+## Best practices
+
+- Pass the exact text in `value`; an empty `value` makes the click a no-op.
+- Localize `ariaLabel` and `copiedLabel`: each is both the accessible name and the tooltip text.
+- Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
+- The click stops propagation, so it is safe inside clickable rows and cards.
+- Keep the `transparent` / `small` defaults in dense rows.
 
 ## Props
 
@@ -46,7 +71,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` (via `IconButton`) | inline | `motion-reduce:transition-none` |
+| hover / active and icon swap | inherited from `IconButton` (`before:transition-opacity before:duration-fast-02`, icon enter/leave transition) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none` |
 | tooltip open / close | popup scale-in / scale-out, owned by the composed `Tooltip` (see `.specs/tooltip.md`) | `semantic/animations.js` | reduced-motion fallback handled by `Tooltip` |
 
 ## Tokens

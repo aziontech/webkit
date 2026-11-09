@@ -2,11 +2,11 @@
 name: ticker
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: e853a8ab2cd802be280cb287f535e186a51845357901fc74aa7c7246e06548fc
 created: 2026-09-23
-last_updated: 2026-10-21
+last_updated: 2026-11-09
 ---
 
 # Ticker — Component Spec

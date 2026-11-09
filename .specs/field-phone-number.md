@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 3365e106420e83bb53d3062cb6e45958dc7ee75a9f3210ec07dbf44b680e6aaf
+checksum: 9279b2cb5150bd50a7ca58951ff5ef5f4cb3fd9e72b0111e586244a4770b4b3e
 created: 2026-07-06
-last_updated: 2026-10-29
+last_updated: 2026-11-09
 ---
 
 # FieldPhoneNumber — Component Spec
@@ -17,6 +17,31 @@ last_updated: 2026-10-29
 ## Purpose
 
 Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` follows the selected country: it applies that country's mask as the user types and accepts exactly the lengths the country allows. A country may allow more than one length — a Brazilian landline (10 digits, `(11) 9999-9999`) and mobile (11 digits, `(11) 99999-9999`) both format correctly, the mask switching as the digits grow. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form everything it would otherwise derive by hand — the full number with its dial code and whether that number is complete — so no form re-implements per-country length rules.
+
+## When to use
+
+- International phone entry where the user picks a country and types the national number with that country's mask.
+- Forms that need the full E.164 number and whether it is complete, without per-country length rules in the form.
+
+## When NOT to use
+
+- The value may include characters the masks reject (extensions, free-form notes) → use `field-text`.
+- The input needs addons other than the dial code → use `input-group` and compose it yourself.
+
+## Related
+
+- `field-input-group` — the same field shape with free `left` / `right` addon slots.
+- `input-group` — the container this field renders around the dial-code select and the input.
+- `select` — the dial-code picker inside the group.
+- `field-text` — plain single-line text field.
+
+## Best practices
+
+- `v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.
+- Use `complete` from `update:phone` to decide `invalid` + `helperText` on submit; the field shows no incomplete-number message of its own.
+- `v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.
+- Passing `countries` replaces the built-in list; each entry needs `code`, `dialCode`, `mask`, and `label`.
+- `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Usage
 

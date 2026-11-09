@@ -4,15 +4,43 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: d20ace4b300432fc06d3f523751f6e93678f20c6f695a582838f80046729cbae
+checksum: 797ed122f1f6451d050b6018a4d9eeb08072edf7cceb9ec1f9af5aa0087786fa
 created: 2026-05-22
-last_updated: 2026-06-25
+last_updated: 2026-11-09
 ---
 # Checkbox — Component Spec
 
 ## Purpose
 
-Binary selection control. Supports single boolean (`binary: true`), single-value selection (matches `value` against `modelValue`), and array-based multi-select (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) without flipping `aria-checked` — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
+Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets `aria-checked="mixed"` — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
+
+## When to use
+
+- A bare boolean control whose label lives outside it: a table row-selection cell, an option row in a list, a settings matrix.
+- Picking several values from a short set: give each box its own `value` and bind them all to one array `v-model`.
+- A "select all" control over a partial selection: set `indeterminate` while only some children are checked.
+
+## When NOT to use
+
+- A form field that needs its own label, description, or helper text → use `field-checkbox`.
+- Each option needs a bordered card with a label and description → use `field-checkbox-block`.
+- An on/off setting that applies as soon as it flips → use `switch`.
+- Only one option of the set may be chosen → use `radio-button`.
+
+## Related
+
+- `field-checkbox` — the checkbox with label, description, and disabled helper; the default inside forms.
+- `field-checkbox-block` — the same control inside a card-style bordered option.
+- `switch` — on/off toggle for settings that take effect immediately.
+- `multi-select` — renders this checkbox in every option row; use it when the option list is long.
+- `table` — uses this checkbox for row selection and the select-all header.
+
+## Best practices
+
+- Set `binary` for a plain true/false value; without it the checkbox adds or removes its `value` in an array `modelValue`.
+- Give every checkbox an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label` (attributes land on the inner input).
+- `indeterminate` only changes the visual and sets `aria-checked="mixed"`; the parent computes it and decides what a click does.
+- Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable.
 
 ## Usage
 
@@ -46,7 +74,7 @@ const checked = defineModel({ default: false })
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (multi mode) or the matched value (single-value mode). |
+| `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
 
 ## Slots
 

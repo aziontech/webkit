@@ -2,14 +2,14 @@
 name: table
 category: data
 structure: composition
-status: approved
+status: implemented
 spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: c2eb35affa970ba69ae3a4e134db8673ebb415a603d46d2c27742ab85303e19c
+checksum: fce1fe314ba6d5cf6d3deb55bf7d437cf3b52c35406752ff078b7bc7b34553da
 created: 2026-06-16
-last_updated: 2026-08-24
+last_updated: 2026-11-09
 ---
 
 # Table — Component Spec
@@ -23,6 +23,34 @@ Composition primitives for building accessible, pixel-perfect data tables, in tw
 **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](../packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`).
 
 **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable).
+
+## When to use
+
+- Records with the same fields shown in rows and columns, where the reader compares, sorts, selects or acts on rows (resource lists, logs, usage breakdowns).
+- A list needs a toolbar for search, structured filters, column visibility, CSV export or refresh — the `Table.*` toolbar parts drive the table through context.
+- Server-backed data that pages, sorts or filters on the API: `manual-pagination`, `manual-sorting` and `manual-filtering` emit the state instead of slicing locally.
+
+## When NOT to use
+
+- A short titled preview of a longer listing on a marketing page → use `listing-table`.
+- A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.
+- Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
+- A grid of selectable cards or options → use `box-grid-selection`.
+
+## Related
+
+- `paginator` — the page strip; a data-driven table with `paginated` renders and wires it in the footer.
+- `listing-table` — marketing section that composes `table` for a linked preview of a list.
+- `empty-state` — the pattern behind the table's default `empty` slot; override the slot for resource-specific copy and actions.
+- `item` — list rows without a column structure.
+
+## Best practices
+
+- For repeated data, use data-driven mode: pass `data` + `columns` (any non-empty `columns` switches it on) and customize cells with the `cell-<columnId>` / `header-<columnId>` slots instead of composing N rows by hand. Compose `Table.Header` / `Table.Body` / `Table.Row` / `Table.Cell` only for small, static tables.
+- Give rows a stable id under `row-key` (default `'id'`); selection and `v-model:row-selection` are keyed by it.
+- Mark the row-actions column `kind: 'action'` so it pins to the trailing edge; give chip or short-token columns a `minWidth` rather than a fixed `width`.
+- Drive loading through the `loading` prop (skeleton rows, `aria-busy`) and keep the `empty` slot for no-data copy — do not swap the table for a spinner.
+- Place `Table.Search`, `Table.Filter`, `Table.ColumnSelector`, `Table.Export` and `Table.RefreshButton` in the `toolbar` slot with no `v-model` wiring — they read the table from context. `Table.Search` and `Table.ColumnSelector` act on the TanStack instance, so they need data-driven mode.
 
 ## Usage
 

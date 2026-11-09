@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 82ac0c058497e12cd2c5227a691ac0cc960b6b50425469d5e11a50e1f1075dee
+checksum: b6c1d19efc4bce7ba3134fd8fe8fc7c7ccc5bb2232a92a4b0a2e6c49c90186d6
 created: 2026-06-26
-last_updated: 2026-08-12
+last_updated: 2026-11-09
 ---
 
 # Dropdown — Component Spec
@@ -18,12 +18,43 @@ last_updated: 2026-08-12
 
 Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`.
 
+## When to use
+
+- A menu of actions opened from a button: row actions, an account menu, an overflow ("more") menu.
+- Options grouped under section labels, optionally with keyboard-shortcut hints.
+
+## When NOT to use
+
+- Choosing a value that a form submits → use `select` (or `field-select` with a label).
+- A primary action joined to a menu of alternatives → use `split-button`.
+- A searchable palette of commands → use `command-menu`.
+- Free-form or interactive content such as forms or filters → use `popover`.
+- Vertical application navigation → use `menu`.
+
+## Related
+
+- `split-button` — composes `Dropdown` for its chevron menu.
+- `select` — form control with a field trigger and a bound value.
+- `popover` — same trigger and anchoring model, with free-form content instead of option rows.
+- `command-menu` — modal ⌘K palette with search and filtering.
+
+## Best practices
+
+- Give every `Dropdown.Option` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.
+- `selected` is a display flag. The dropdown never sets it, so derive it from your own state.
+- Use the `command` prop or the `right` slot on an option, not both. A `command` shortcut is live only while the panel is open.
+- Add a `label` to each `Dropdown.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list.
+
 ## Usage
 
 ```vue
 <script setup>
 import Dropdown from '@aziontech/webkit/dropdown'
 import Button from '@aziontech/webkit/button'
+
+const onSelect = (event, value) => {
+  console.log(value)
+}
 </script>
 
 <template>
@@ -50,7 +81,7 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ```vue
 <script setup>
-import Dropdown from '@aziontech/webkit/dropdown'
+import Dropdown from '@aziontech/webkit/dropdown-root'
 import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
 import DropdownGroup from '@aziontech/webkit/dropdown-group'
 import DropdownOption from '@aziontech/webkit/dropdown-option'

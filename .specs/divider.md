@@ -2,14 +2,14 @@
 name: divider
 category: layout
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: 7e8dd444b7da361f73be212a825b4c051ce4424b161cba0321f113107f892692
+checksum: 8e7bca0a4b5c85bba4015036078852263ff3b80139cba6e6ab5c8067fa1ab495
 created: 2026-06-25
-last_updated: 2026-06-30
+last_updated: 2026-11-09
 ---
 
 # Divider — Component Spec
@@ -17,6 +17,28 @@ last_updated: 2026-06-30
 ## Purpose
 
 Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an "Or"-style label) when the default slot or `label` prop is set. Unlike `ScrollArea` it adds no scrolling behaviour; it is a purely decorative-yet-semantic boundary exposing `role="separator"`.
+
+## When to use
+
+- Separate groups of content inside a card, form, panel or menu.
+- An "Or" break between two alternative paths (social sign-in and email) with `label`.
+- A vertical rule between inline items in a toolbar or meta line.
+
+## When NOT to use
+
+- The break between two page sections → use `section-gap`.
+- A bounded region that scrolls → use `scroll-area`.
+
+## Related
+
+- `section-gap` — the frame that divides page sections, with its own rules and vertical air.
+- `scroll-area` — scrolling container; Divider adds no scrolling.
+
+## Best practices
+
+- Size a vertical divider through its wrapper (`flex h-4 items-center`); its own `h-full` beats a height class passed to it, and in an `items-center` row it collapses to zero height.
+- Keep `label` to a word or two; the default slot replaces it when you need inline markup.
+- Use it to separate groups, not to add spacing; it renders `role="separator"` with `aria-orientation`.
 
 ## Usage
 

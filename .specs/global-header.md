@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: fd6395bbdd0464bab36b19ec372bd6a109422bfe3ba35f7cae6201dcace5aef6
+checksum: f7c22fa7131bcbd8dbf29ea5726e7d023c2de17d66e5aae368c26185003592c9
 created: 2026-05-23
-last_updated: 2026-08-28
+last_updated: 2026-11-09
 ---
 # Global Header — Component Spec
 
@@ -24,6 +24,63 @@ A third placement, `app`, was removed in favour of that default. It insetted by 
 `site` is the marketing placement, for a page that is a FRAMED column rather than an app zone: the surface stays full bleed (the hairline and the fill run to the window edges, because a bar is chrome) while the regions are capped and centred, so the bar answers to the page under it at every width. It is one declaration, not a sub-component: `padding-inline: max(boundary, (100% - measure) / 2 + boundary)` — the cap and the boundary hand off to each other, so below the measure the boundary is the whole inset and the placement collapses to `content`. An uncapped bar over a capped page comes apart above the measure: the column stops growing and the bar does not, which on a 2560px window put the logo 684px to the left of the headline under it.
 
 The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), one rung wider than the page frame (`--layout-measure-site`, 1388px) that the hero, the sections and the footer share. A bar carries the brand at one end of the window and the account actions at the other, held apart by a navigation region in the middle: it wants the room a reading frame refuses, and held to the page's measure that middle region ran out of room on a laptop long before the page did. The two share one inset up to 1280 and part company only above the caps, by a fixed 92px from 1668 — half the 232px between the measures, less the boundary the bar keeps. It is the one band deliberately outside the frame, and the separate token is what keeps that exception reviewable in both directions.
+
+## When to use
+
+- The top bar of a console-style app: menu trigger and brand at the start, an optional nav or breadcrumb region, and trailing actions (create, help, account) at the end.
+- A bar above a content zone that sits beside a navigation rail — `kind="content"` insets its regions by the page boundary so they line up with the page below.
+- The bar of a framed marketing page — `kind="site"` keeps the surface full bleed but caps and centres the regions.
+
+## When NOT to use
+
+- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-nav`, which composes this header.
+- The navigation column at the side of the app → use `sidebar`.
+- An action row above a list of records → use the `toolbar` slot of `table`.
+
+## Related
+
+- `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
+- `navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Middle`.
+- `brand` — the Azion lockup to place inside `GlobalHeader.Brand`.
+- `platform-shell` — the console layout template that composes the header with the sidebar and the page.
+
+## Best practices
+
+- Keep the default `kind="content"` for app shells; use `kind="site"` only on framed marketing pages.
+- Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink; `GlobalHeader.Nav` is the same component as `GlobalHeader.Middle`.
+- Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
+- Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
+- Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
+
+## Usage
+
+```vue
+<script setup>
+import Brand from '@aziontech/webkit/brand'
+import Button from '@aziontech/webkit/button'
+import GlobalHeader from '@aziontech/webkit/global-header'
+import IconButton from '@aziontech/webkit/icon-button'
+</script>
+
+<template>
+  <GlobalHeader aria-label="Console header">
+    <GlobalHeader.Container>
+      <GlobalHeader.Left>
+        <IconButton icon="pi pi-bars" aria-label="Open navigation" kind="transparent" />
+      </GlobalHeader.Left>
+      <GlobalHeader.Brand>
+        <a href="/" aria-label="Azion home">
+          <Brand kind="default" size="small" />
+        </a>
+      </GlobalHeader.Brand>
+    </GlobalHeader.Container>
+    <GlobalHeader.Middle />
+    <GlobalHeader.Right>
+      <Button label="Create" kind="secondary" size="medium" icon="pi pi-plus-circle" />
+    </GlobalHeader.Right>
+  </GlobalHeader>
+</template>
+```
 
 ## Sub-components
 

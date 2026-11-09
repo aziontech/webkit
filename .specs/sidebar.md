@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: f591e17afcf143e2e5bf42fc6e924dc6b775d27d40f90dcc61ab2a1b60f7e6c1
+checksum: 0700ecadc9235f62e2c830ac8cb522da8105c715c29cb8c71b6d7d472301b004
 created: 2026-05-22
-last_updated: 2026-10-01
+last_updated: 2026-11-09
 ---
 # Sidebar — Component Spec
 
@@ -28,6 +28,33 @@ drift apart.
 Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the
 collapse trigger and the edge affordance. With neither set the component renders exactly as it
 always has, with the host owning the width — every existing consumer is unaffected.
+
+## When to use
+
+- The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.
+- The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
+- The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:collapsed` and persist them in the app.
+
+## When NOT to use
+
+- Adjacent work areas the reader resizes (editor beside a preview, a terminal under it) → use `resizable-panel`.
+- Horizontal top-level navigation with dropdown panels → use `navigation-menu`.
+- A temporary panel that slides over the page → use `drawer`.
+
+## Related
+
+- `menu` — the navigation rows, groups and drill levels that go in the sidebar's default slot.
+- `resizable-panel` — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
+- `global-header` — the top bar that usually sits above the sidebar in an app shell.
+- `platform-shell` — the console layout template that composes the header, the sidebar and the page.
+
+## Best practices
+
+- Put a `Menu` with `role="presentation"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.
+- Use `Menu.Group` for new navigation — `SidebarGroup` still works but is superseded.
+- Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.
+- When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.
+- Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.
 
 ## Usage
 

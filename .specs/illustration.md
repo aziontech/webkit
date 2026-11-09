@@ -2,14 +2,14 @@
 name: illustration
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 2
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
 checksum: 3c1f3eb46cfa62eddb90df3ca363e66a554f1e1db0fd75cd5c61856c6c702aed
 created: 2026-08-05
-last_updated: 2026-10-01
+last_updated: 2026-11-09
 ---
 
 # Illustration — Component Spec

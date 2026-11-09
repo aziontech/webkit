@@ -7,15 +7,97 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 398511d9fef99fc5cbc65f8fee93044ee33738a253482f6b39df574f928bb880
+checksum: 27cc2728e4545b3d7bbecfb895040f1803c79a10314294f94a564de5d0bccfdd
 created: 2026-05-22
-last_updated: 2026-08-05
+last_updated: 2026-11-09
 ---
 # Navigation Menu — Component Spec
 
 ## Purpose
 
-Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/navigation-menu/`.
+Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/navigation-menu/`.
+
+## When to use
+
+- A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).
+- A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.
+- Panel entries need a title plus a muted description line, a leading icon, or a featured "see all" link.
+
+## When NOT to use
+
+- It is the persistent vertical navigation of an app → use `sidebar` with `menu`.
+- It is a list of actions or options opened from a button → use `dropdown`.
+- It shows where the current page sits in a hierarchy → use `breadcrumb`.
+- It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu.
+
+## Related
+
+- `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
+- `global-header` — the bar layout this menu usually sits in.
+- `dropdown` — a single-trigger option menu, not a site-wide navigation bar.
+- `menu` — vertical, hierarchical navigation rows for a sidebar.
+
+## Best practices
+
+- Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model:value` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.
+- A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout="entry"`, an `href`, an optional `description` and `close-on-click`.
+- Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.
+- Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.
+- Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.
+
+## Usage
+
+```vue
+<script setup>
+import NavigationMenu from '@aziontech/webkit/navigation-menu'
+</script>
+
+<template>
+  <NavigationMenu aria-label="Primary" :delay="50" :close-delay="300">
+    <NavigationMenu.List>
+      <NavigationMenu.Item value="products">
+        <NavigationMenu.Trigger>
+          Products
+          <NavigationMenu.Icon>
+            <i class="pi pi-chevron-down" aria-hidden="true" />
+          </NavigationMenu.Icon>
+        </NavigationMenu.Trigger>
+        <NavigationMenu.Content>
+          <NavigationMenu.List label="Build">
+            <NavigationMenu.Item
+              layout="entry"
+              href="/products/functions"
+              description="Run serverless functions"
+              close-on-click
+            >
+              <template #icon>
+                <i class="ai ai-edge-functions" />
+              </template>
+              Functions
+            </NavigationMenu.Item>
+            <NavigationMenu.Item layout="entry" href="/products" featured close-on-click>
+              See all products
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+        </NavigationMenu.Content>
+      </NavigationMenu.Item>
+      <NavigationMenu.Item>
+        <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
+      </NavigationMenu.Item>
+    </NavigationMenu.List>
+
+    <NavigationMenu.Portal>
+      <NavigationMenu.Backdrop />
+      <NavigationMenu.Positioner side="bottom" align="start" :side-offset="12">
+        <NavigationMenu.Popup>
+          <NavigationMenu.Arrow />
+          <NavigationMenu.Viewport />
+        </NavigationMenu.Popup>
+      </NavigationMenu.Positioner>
+    </NavigationMenu.Portal>
+  </NavigationMenu>
+</template>
+```
 
 ## Sub-components
 
@@ -24,7 +106,7 @@ Helps users move between views or sections. Migrated from the existing implement
 - `navigation-menu-content.vue` — Public sub-component `navigation-menu-content`.
 - `navigation-menu-icon.vue` — Public sub-component `navigation-menu-icon`.
 - `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
-- `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`.
+- `navigation-menu-link.vue` — internal; not reachable through the compound, where `NavigationMenu.Link` is an alias of `NavigationMenuTrigger`.
 - `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`.
 - `navigation-menu-popup.vue` — Public sub-component `navigation-menu-popup`.
 - `navigation-menu-portal.vue` — Public sub-component `navigation-menu-portal`.
@@ -34,7 +116,15 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| Prop | Type | Default | Required | JSDoc |
+|---|---|---|---|---|
+| `defaultValue` | `NavigationMenuValue` | `null` | false | Uncontrolled initial open item value. |
+| `value` | `NavigationMenuValue` | `undefined` | false | Controlled open item (`v-model:value`). |
+| `delay` | `number` | `50` | false | Hover-open delay in milliseconds. |
+| `closeDelay` | `number` | `300` | false | Hover-close delay in milliseconds. |
+| `orientation` | `NavigationMenuOrientation` | `'horizontal'` | false | Menu orientation. |
+| `ariaLabel` | `string` | `'Main'` | false | Accessible name for the root navigation landmark. |
+| `as` | `string \| object` | `'nav'` | false | Polymorphic root element. |
 
 ## Events
 

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: e63b37d81836c498473d2036f253903a1491144b562aeb30b5110cfd0fabf22e
+checksum: 733b40b89ddd46f604b11964e643a6e2e0b076ac645bc8932940b48d06d73239
 created: 2026-07-13
-last_updated: 2026-07-13
+last_updated: 2026-11-09
 ---
 
 # Theme Switcher — Component Spec
@@ -17,6 +17,27 @@ last_updated: 2026-07-13
 ## Purpose
 
 A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with `v-model:value` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tab-view` (view navigation), it is a fixed three-way single-select over the theme modes.
+
+## When to use
+
+- The app-wide color mode picker in a header, footer, account menu or settings page.
+
+## When NOT to use
+
+- A general on/off preference → use `switch`.
+- Picking one of other mutually exclusive options → use `segmented-button`.
+- Moving between views or panels → use `tab-view`.
+
+## Related
+
+- `segmented-button` — the generic mutually exclusive option group, with labels and sizes.
+- `switch` — boolean toggle for a single setting.
+
+## Best practices
+
+- Bind with `v-model:value` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.
+- Persist the chosen mode on the app side so it survives a reload.
+- Localize `ariaLabel`; the segment names (System, Dark, Light) are fixed in the component.
 
 ## Usage
 
