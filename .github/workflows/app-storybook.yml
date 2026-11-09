@@ -70,3 +70,7 @@ jobs:
         working-directory: apps/storybook
         run: |
           azion deploy --local --debug
+
+      - name: Purge Cache
+        run: |
+          azion purge --wildcard "webkit.azion.app/*" --yes
