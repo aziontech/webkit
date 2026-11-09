@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: 9c8c2ce8e1bda9a5c7d2af95001fdc7073aa206b5f5a55c3910f1125258b3f45
+checksum: 28312067033289d207114f7f642887bfc03fbdaec109323aa0fcd88a3ecb675d
 created: 2026-06-15
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 
 # Label — Component Spec
@@ -17,6 +17,31 @@ last_updated: 2026-08-10
 ## Purpose
 
 Form-field label that pairs descriptive text with an optional required indicator and an optional hint. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word "(Required)" in muted text — replacing the older `Tag` badge for a lighter typographic signal. Setting `hint` appends a `Hint` glyph after the text, so a field name and its one-sentence explanation stay one component instead of a hand-built row.
+
+## When to use
+
+- Naming a bare input when you compose a field layout yourself.
+- Marking a field as required with the inline `* (Required)` indicator.
+- Attaching a one-sentence explanation to a field name with `hint`.
+
+## When NOT to use
+
+- A standard text, password, select, or textarea field → use `field-text`, `field-password`, `field-select`, or `field-textarea`, which render the label for you.
+- Guidance, error, or required messages under the input → use `helper-text`.
+- An info glyph with no field name next to it → use `hint`.
+
+## Related
+
+- `helper-text` — the line under the input; pairs with the label above it.
+- `hint` — the glyph the `hint` prop renders; use it alone when there is no label.
+- `field-text` — composes label, input, and helper text with the wiring done.
+
+## Best practices
+
+- Always set `for` to the input's id (`inputId` on the bare inputs) so clicking the label focuses the control.
+- `required` is visual only; also set `required` on the input so it carries `aria-required`.
+- Keep `hint` to one short sentence; it is revealed in a tooltip on hover or focus.
+- Pass the text through `label` or the default slot, not both; the slot wins.
 
 ## Usage
 

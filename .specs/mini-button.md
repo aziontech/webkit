@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: cd1c2d8be58133cabc3e908c3e07c4d0b6b045549aec4b94128e778748c00e2f
+checksum: 23339548b9aa00b1b03c2a211881b3d1b8a0a69de8b663f49a861c3917db8d9c
 created: 2026-06-01
-last_updated: 2026-06-01
+last_updated: 2026-11-09
 ---
 
 # Mini Button — Component Spec
@@ -17,6 +17,29 @@ last_updated: 2026-06-01
 ## Purpose
 
 Compact text action with an optional trailing external-link icon and a ghost hover surface. Use for secondary CTAs in dense layouts (cards, tables, toolbars) where a full `Button` is too heavy. Differs from `navigation/link` by using default body text color and a brand-colored icon.
+
+## When to use
+
+- A short secondary CTA ("Learn more") inside a card, feature tile or table where a full `button` is too heavy.
+- A marketing link that reads in body text color with a brand-colored icon.
+
+## When NOT to use
+
+- A standalone navigation link in product UI (a domain, a repository, a docs page) → use `link`.
+- The main action of a section → use `button`.
+- A link inside a sentence → use a plain anchor with the text-link class.
+
+## Related
+
+- `link` — same anatomy (label, trailing icon, ghost hover) in link color, with a `small` size; the default for standalone links.
+- `button` — full action control with kinds, loading and a button element.
+
+## Best practices
+
+- Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.
+- Replace the `'Learn More'` default `label` with text that says where the link goes.
+- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `showIcon` to false otherwise.
+- Only `large` and `medium` sizes exist.
 
 ## Usage
 

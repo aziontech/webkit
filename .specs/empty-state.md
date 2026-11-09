@@ -2,14 +2,14 @@
 name: empty-state
 category: feedback
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 2821e8fe5a4be7551d896027c5a4deafc20039a63784a988856f54d57adcdbf6
+checksum: eae568014640d5cfdbd5378fea5cf64c5214017f9d8b49472c8bfcd8b3fce518
 created: 2026-06-25
-last_updated: 2026-07-22
+last_updated: 2026-11-09
 ---
 
 # Empty State — Component Spec
@@ -17,6 +17,31 @@ last_updated: 2026-07-22
 ## Purpose
 
 Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
+
+## When to use
+
+- A list, table or section that has no items yet, with a first action that fills it.
+- A search or filter that returned nothing, with an action to clear it.
+
+## When NOT to use
+
+- The data is still loading → use `skeleton`.
+- An inline warning or error about content that is present → use `message`.
+- The empty body of a data-driven `table` → use the `table` `empty` slot, which already renders this block by default.
+
+## Related
+
+- `skeleton` — the loading placeholder shown before the empty state is known.
+- `message` — inline severity banner, not a zero-data block.
+- `table` — renders an empty-state block in its `empty` slot.
+- `button` — the usual content of the `actions` slot.
+
+## Best practices
+
+- `title` is required. Say what is missing ("No domains yet"), not that something went wrong.
+- Keep the `actions` slot to one primary action, plus an optional documentation link.
+- Use the `icon` prop for the standard featured-icon tile. Use the `icon` slot only for custom art, and omit both when the context already explains the state.
+- Use `bordered` when the block sits directly on the page. Leave it off inside a card or panel that already has a border, and use `size="small"` there.
 
 ## Usage
 

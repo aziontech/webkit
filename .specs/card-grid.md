@@ -2,12 +2,12 @@
 name: card-grid
 category: marketing
 structure: composition
-status: approved
+status: implemented
 spec_version: 2
 checksum: 2c0f1322478487bd51706a83e177d0911f7cf05570c7bd0dd735f0ca28094c7b
 style_seam: true
 created: 2026-09-23
-last_updated: 2026-09-24
+last_updated: 2026-11-09
 ---
 
 # Card Grid — Component Spec

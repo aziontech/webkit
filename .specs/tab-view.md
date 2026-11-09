@@ -7,15 +7,67 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 841b11eafda1509b27a6f13654b000bc440fb248c4f0b4b5cf863ed89bd166a6
+checksum: 7e56bffd6a6cc2b7289cf88b81c29114d314eae14ed01e08512e676076b32a56
 created: 2026-05-22
-last_updated: 2026-08-04
+last_updated: 2026-11-09
 ---
 # Tab View — Component Spec
 
 ## Purpose
 
-Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/tab-view/`.
+Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/tab-view/`.
+
+## When to use
+
+- A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).
+- The tab row may outgrow its container — `TabView.List` scrolls horizontally with edge fades instead of wrapping.
+- Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.
+
+## When NOT to use
+
+- Several sections may need to be open at once, or the content should expand inline → use `accordion`.
+- The tabs switch the media of a marketing band → use `media-tabs`.
+- It moves the reader between pages of the app → use `navigation-menu` or `sidebar`.
+
+## Related
+
+- `accordion` — stacked disclosure sections; more than one can be open and content expands below each header.
+- `media-tabs` — the marketing band that switches an illustration per tab.
+- `breadcrumb` — location in a hierarchy, not sibling views.
+
+## Best practices
+
+- Give each `TabView.Item` and its `TabView.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.
+- Drive the active tab with `v-model:value` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
+- `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
+- Use the item's `selected` prop only for a standalone `TabView.Item` outside a root; inside a root the selection comes from the root's value.
+- Put spacing between the list and the panels on `TabView.Content` (e.g. a top margin), not inside each panel.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import TabView from '@aziontech/webkit/tab-view'
+
+const active = ref('overview')
+</script>
+
+<template>
+  <TabView.Root v-model:value="active">
+    <TabView.List>
+      <TabView.Item value="overview" label="Overview" />
+      <TabView.Item value="settings" label="Settings" />
+      <TabView.Item value="logs" label="Logs" disabled />
+    </TabView.List>
+    <TabView.Content class="mt-(--spacing-md)">
+      <TabView.Panel value="overview">Overview content</TabView.Panel>
+      <TabView.Panel value="settings">Settings content</TabView.Panel>
+      <TabView.Panel value="logs">Logs content</TabView.Panel>
+    </TabView.Content>
+  </TabView.Root>
+</template>
+```
 
 ## Sub-components
 
@@ -25,7 +77,10 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| Prop | Type | Default | Required | JSDoc |
+|---|---|---|---|---|
+| `value` | `TabViewValue \| null` | `undefined` | false | Controlled active tab (`v-model:value`). |
+| `defaultValue` | `TabViewValue \| null` | `null` | false | Initial active tab when uncontrolled. |
 
 ## Events
 
@@ -42,15 +97,13 @@ Helps users move between views or sections. Migrated from the existing implement
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-state` values: `open` | `closed` (where applicable)
+- `data-state` values on panels: `active` | `inactive`
 - Responsive: the tab list (`TabView.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| open/close | `animate-fade-in` | semantic | `motion-reduce:animate-none` |
-| open/close | `animate-none` | semantic | `motion-reduce:animate-none` |
 | scroll edge fade appears / leaves | `animate-fade-in` / `animate-fade-out` | semantic | `motion-reduce:animate-none` |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 | panel change | the incoming panel slides in from the side being navigated toward (`translate-x-(--spacing-md)` / negative) while fading | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog | `motion-reduce:transition-none` |

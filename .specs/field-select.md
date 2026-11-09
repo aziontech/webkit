@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: 70b84c22a6fb6886cae5c21b6d25e29bc81d06be86ff7cbe6a49ddf1fe83440b
+checksum: fc015f399951d57ee3bfb1673f893921d84bbc5da0511ea65e79de1e022cf490
 created: 2026-07-22
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 
 # Field Select — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-08-10
 ## Purpose
 
 Form field wrapper for `Select` that composes `Label`, `Select` (with its `Trigger` + `Content` + `Option` sub-components), and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a select needs a visible label or helper/error message — mirroring `FieldText`'s role for text inputs. Options are supplied via a data prop (`options: { value, label }[]`) so the field owns the rendering; consumers who need slot-based composition can drop to the underlying `Select` compound directly.
+
+## When to use
+
+- Picking one value from a known list with a visible label or helper/error message: region, plan, runtime.
+- Picking several values from the list (`multiple`, which makes `v-model` an array).
+- Long lists where users type to find an option (`searchable`).
+
+## When NOT to use
+
+- Two to five options that should all stay visible → use `field-radio`.
+- The value is a phone number with a dial code → use `field-phone-number`.
+- The trigger must show a label that differs from the stored value → use `select` with `display-value`.
+
+## Related
+
+- `select` — the compound this field renders; use it directly for custom triggers or a `display-value` formatter.
+- `multi-select` — dedicated many-option picker with checkbox rows.
+- `field-radio` — visible list of mutually exclusive options.
+- `field-text` — the text-input sibling with the same Label → control → HelperText shape.
+
+## Best practices
+
+- Pass options as `{ value, label, disabled? }`. The trigger prints the selected `value` as a string, not its `label`, so choose values that read well or drop to `select`.
+- `searchable` filters the `options` prop only; when you render the default slot the search box is not shown.
+- `required` adds the Required tag, the warning border, and `aria-required` on the trigger — bind it to a submit state (`:required="submitted && !value"`), not as a bare attribute.
+- `searchPlaceholder` and `searchEmptyLabel` default to English (`'Search'`, `'No results found'`); pass translated copy in localized UIs.
 
 ## Usage
 

@@ -5,14 +5,91 @@ structure: composition
 status: implemented
 spec_version: 2
 created: 2026-05-24
-last_updated: 2026-05-24
-checksum: d588ed3d479cfb5ebe3ba9c8cfc4e02b4938f38cade6f6bc4c1ce9c68e98a4c8
+last_updated: 2026-11-09
+checksum: a355fcce96cf8bdd1a8d2563e4481a4f34581fae5f3bf19b3bff9fe0aa9c637a
 ---
 # Item — Component Spec
 
 ## Purpose
 
 Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `CardBox`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
+
+## When to use
+
+- A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.
+- A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card-box`.
+- A whole row that is one link or button — set `as-child` and pass a single `a` / `button` as the item's child.
+
+## When NOT to use
+
+- Records that share columns and need sorting, selection or paging → use `table`.
+- Hierarchical navigation rows in a sidebar → use `menu`.
+- A grid of selectable option cards → use `box-grid-selection`.
+- A single surface that frames arbitrary content → use `card-box`.
+
+## Related
+
+- `card-box` — the surface an `Item.List` sits in (with `:padded="false"`).
+- `table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
+- `menu` — navigation rows with nesting and drill levels.
+- `avatar` — the usual leading media for people rows inside `Item.Media`.
+
+## Best practices
+
+- Use `Item.Group` off-card and `Item.List` inside a `card-box` with `:padded="false"`; both force their child items' `kind` (`inline` in a group, `default` in a list), so do not set `kind` on rows inside them.
+- `Item.List` draws its own dividers — do not add `Item.Separator` inside it.
+- With `as-child`, pass exactly one child element; the row's hover, active and focus ring move onto it, so do not also put buttons inside that row.
+- Set `Item.Media` `kind="icon"` for a glyph and `kind="image"` for a picture; the frame sizes and clips the content.
+- Use `size="small"` for dense lists; `medium` is the default.
+
+## Usage
+
+```vue
+<script setup>
+import Button from '@aziontech/webkit/button'
+import CardBox from '@aziontech/webkit/card-box'
+import Item from '@aziontech/webkit/item'
+</script>
+
+<template>
+  <Item.Group>
+    <Item>
+      <Item.Header>Updated 2 hours ago</Item.Header>
+      <Item.Media kind="icon">
+        <i class="ai ai-edge-firewall" aria-hidden="true" />
+      </Item.Media>
+      <Item.Content>
+        <Item.Title>Firewall</Item.Title>
+        <Item.Description>Blocks requests that match your rules.</Item.Description>
+      </Item.Content>
+      <Item.Actions>
+        <Button label="Edit" kind="outlined" size="small" />
+      </Item.Actions>
+      <Item.Footer>3 rules active</Item.Footer>
+    </Item>
+    <Item.Separator />
+    <Item>
+      <Item.Content>
+        <Item.Title>Cache</Item.Title>
+        <Item.Description>Serves content from the edge.</Item.Description>
+      </Item.Content>
+    </Item>
+  </Item.Group>
+
+  <CardBox :padded="false">
+    <template #content>
+      <Item.List>
+        <Item>
+          <Item.Content>
+            <Item.Title>Domains</Item.Title>
+            <Item.Description>Link custom domains to Azion.</Item.Description>
+          </Item.Content>
+        </Item>
+      </Item.List>
+    </template>
+  </CardBox>
+</template>
+```
 
 ## Sub-components
 

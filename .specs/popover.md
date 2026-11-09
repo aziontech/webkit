@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 3a1864aa7aab1536ab016d700899fba5e7d691e9455a171bc66f96331dd15c47
+checksum: f662f46d2334c46521000ab46f488067f989a5c48620b0640f20f05b31f5adef
 created: 2026-06-30
-last_updated: 2026-07-22
+last_updated: 2026-11-09
 ---
 
 # Popover — Component Spec
@@ -17,6 +17,34 @@ last_updated: 2026-07-22
 ## Purpose
 
 Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+
+## When to use
+
+- Interactive content anchored to a trigger while the page stays usable: an inline form, a filter builder, a quick edit of one field.
+- Contextual detail or a light confirmation that needs buttons or links inside it.
+
+## When NOT to use
+
+- A short, non-interactive hint on hover or focus → use `tooltip`.
+- A list of actions or options to pick from → use `dropdown`.
+- Choosing a form value from a list → use `select`.
+- A blocking task that must be completed or cancelled first → use `dialog`.
+- A long form or a secondary workflow → use `drawer`.
+
+## Related
+
+- `tooltip` — plain text only and non-interactive; opens on hover and focus, not on click.
+- `dropdown` — same trigger and anchoring model, but renders option rows and emits `select`.
+- `dialog` — modal and centered, traps focus and locks scroll; the popover does neither.
+- `drawer` — edge-anchored modal panel for longer content.
+
+## Best practices
+
+- Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.
+- Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
+- Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
+- Use `placement="auto"` for triggers that can sit near a viewport edge.
+- Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
 ## Usage
 

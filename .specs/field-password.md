@@ -2,14 +2,14 @@
 name: field-password
 category: inputs
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
-checksum: 713291f3843578f4197bea2c70bae9d153b348f0e2ffd4811d75d68e58a40cc8
+checksum: cd1df5c0c198dd7c25c8235edefbfdb40c196566f6d8dbd46d28ef971fe484e1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
 created: 2026-06-17
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 
 # Field Password — Component Spec
@@ -19,6 +19,31 @@ last_updated: 2026-08-10
 Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.
 
 It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per rule, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that rule's `test`. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The row exposes exactly **two** levers and nothing else: a bare `requirements` attribute turns it on with the built-in rule set, and passing an array replaces that set with the consumer's own rules. Appearance is not configurable — a chip has two treatments, both fixed by the design. The field **evaluates** the rules against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: enabling the row (or supplying rules) is the trigger the app provides, and applying them to the bound value is derived render state, not business logic the field invents.
+
+## When to use
+
+- Password entry in login, sign-up, and password-change forms.
+- Sign-up or password-change flows that show which rules the new password meets (`requirements`).
+
+## When NOT to use
+
+- The value is not secret → use `field-text`.
+- The label and helper already live outside the control → use `input-password`.
+
+## Related
+
+- `input-password` — the bare input with the visibility toggle; owns no requirements row.
+- `field-text` — the same field shape for plain text.
+- `helper-text` — the guidance/error row under the input.
+- `label` — the label row.
+
+## Best practices
+
+- `autocomplete` defaults to `current-password`; set `new-password` on sign-up and password-change forms.
+- Turn on the rule chips with a bare `requirements`; to adjust them, pass an array built from `DEFAULT_PASSWORD_REQUIREMENTS` (`@aziontech/webkit/password-requirements`) filtered by each rule's `key`.
+- The chips only report; they never set `invalid`. Validate on submit and set `invalid` + `helperText` yourself.
+- The `iconRight` slot renders only when `toggleable` is `false`; the visibility toggle owns that position otherwise.
+- `required` paints the warning border and the required helper on first render — bind it to a submit state (`:required="submitted && !value"`), not as a bare attribute.
 
 ## Usage
 

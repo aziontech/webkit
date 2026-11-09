@@ -7,15 +7,53 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 13f4fed9da5a838e97b034a2878dc931a235f7c30add98f6a3c0ba45b390b993
+checksum: 636c595544b23c2314b17167817745d9cf60a2e93271d55701b74edf0391a0fd
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-11-09
 ---
 # Avatar — Component Spec
 
 ## Purpose
 
-Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/avatar/`.
+Displays content or metadata in the UI. Lives at `packages/webkit/src/components/avatar/`.
+
+## When to use
+
+- Identify a person next to their name: comment threads, member lists, "Last modified" cells, quotes.
+- The user entry in a header or account menu.
+
+## When NOT to use
+
+- The Azion logo → use `brand`.
+- A count or short status → use `badge`.
+- A loading placeholder → use `skeleton`.
+
+## Related
+
+- `badge` — overlay on an avatar to show a count.
+- `quote` — composes an avatar for the speaker.
+- `brand` — the product mark, not a person.
+
+## Best practices
+
+- Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
+- Set `alt` whenever you set `src`; without it the image's name falls back to the initials or "Avatar".
+- Content precedence is `src`, then `label`, then `icon` (default `pi pi-user`).
+- `size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
+
+## Usage
+
+```vue
+<script setup>
+import Avatar from '@aziontech/webkit/avatar'
+</script>
+
+<template>
+  <Avatar label="JD" />
+  <Avatar src="https://example.com/jane.jpg" alt="Jane Doe" size="large" />
+  <Avatar icon="pi pi-users" kind="square" size="small" />
+</template>
+```
 
 ## Props
 
@@ -24,9 +62,9 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 | `src` | `string` | `undefined` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
 | `alt` | `string` | `undefined` | false | Accessible description for the image. Use when `src` is set. |
 | `label` | `string` | `undefined` | false | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `undefined` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
-| `kind` | `AvatarKind` | `undefined` | false | Visual shape of the avatar container. |
-| `size` | `AvatarSize` | `undefined` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+| `icon` | `string` | `'pi pi-user'` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
+| `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
+| `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 
 ## Events
 

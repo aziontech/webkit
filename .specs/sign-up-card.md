@@ -4,22 +4,45 @@ category: templates
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 8546c90ed0e1d091dbeb418443804c9678c07732b4ae031d86a245bbe0bddbd8
+checksum: ea23e5d16f5207f5bd9135800ddd8044cc54c20b9bd21532b031cbf6cbc852b3
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-11-09
 ---
 # Sign Up Card — Component Spec
 
 ## Purpose
 
-Composed template block for a product flow. Migrated from the existing implementation at `packages/webkit/src/components/Templates/sign-up-card/`.
+Composed template block for a product flow. Lives at `packages/webkit/src/components/templates/sign-up-card/`.
+
+## When to use
+
+- The account-creation step: social sign-up (GitHub, Google), a work-email sign-up button, the legal links and a sign-in link for existing users.
+
+## When NOT to use
+
+- The account exists and you are collecting profile and usage details → use `onboarding-form`.
+- It is lead capture on a marketing page → use `hero-form`.
+- You need a different auth layout, such as a login form with fields → compose `card-box` with `field-text` and `field-password`.
+
+## Related
+
+- `onboarding-form` — the step after sign-up.
+- `card-box` — generic card for composing other auth screens.
+- `button` — the provider and email actions are Buttons.
+
+## Best practices
+
+- Handle each path through its own event (`github-click`, `google-click`, `email-click`). The card only emits; it doesn't navigate or sign anyone in.
+- Turn providers off with `:show-github="false"` / `:show-google="false"`; the divider is removed when both are off.
+- Set `terms-href`, `privacy-href` and `sign-in-href` to real URLs (the default is `'#'`). Those links also emit `terms-click`, `privacy-click` and `sign-in-click`; call `event.preventDefault()` in the handler for client-side routing.
+- The legal sentence and its link labels are fixed English copy with no props. When they must be localized, compose the screen from `card-box` and `button` instead.
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `title` | `string` | `'Sign Up for a Free Account'` | false | title. |
-| `subtitle` | `string` | `'US$ 300 credit to use over 12 months` | false | subtitle. |
+| `subtitle` | `string` | `'US$ 300 credit to use over 12 months, no credit card is required.'` | false | subtitle. |
 | `githubLabel` | `string` | `'Continue with Github'` | false | github Label. |
 | `googleLabel` | `string` | `'Continue with Google'` | false | google Label. |
 | `emailLabel` | `string` | `'Sign Up with Work Email'` | false | email Label. |
@@ -35,12 +58,12 @@ Composed template block for a product flow. Migrated from the existing implement
 
 | Event | Payload | Notes |
 |---|---|---|
-| `github-click` | `unknown` | — |
-| `google-click` | `unknown` | — |
-| `email-click` | `unknown` | — |
-| `sign-in-click` | `unknown` | — |
-| `terms-click` | `unknown` | — |
-| `privacy-click` | `unknown` | — |
+| `github-click` | `(event: MouseEvent)` | — |
+| `google-click` | `(event: MouseEvent)` | — |
+| `email-click` | `(event: MouseEvent)` | — |
+| `sign-in-click` | `(event: MouseEvent)` | — |
+| `terms-click` | `(event: MouseEvent)` | — |
+| `privacy-click` | `(event: MouseEvent)` | — |
 
 ## Slots
 

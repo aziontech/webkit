@@ -4,15 +4,64 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c6dee6430c8986bfb97f301f679cef6c4a30b4a606d04ec99f45d43f4c54ae2b
+checksum: 09de92d3219627f4f01beeb813a110e7b345a91d818c82cab6026792152f2f42
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 # Box Grid Selection — Component Spec
 
 ## Purpose
 
 Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers). Each option shows label, optional icon and description, with optional trailing content via the `tag` slot. Migrated from the legacy `box-grid-selection` core component into the webkit inputs layer.
+
+## When to use
+
+- One choice among a few options where each option needs a label plus an optional icon or one-line description: usage intent, role, plan tier.
+- Options laid out side by side as cards that wrap onto new rows, bound to one `v-model` value for the whole group.
+- A card needs small trailing content under its text, such as a price or a "Recommended" tag, through the `tag` slot.
+
+## When NOT to use
+
+- You place each card-style radio by hand, or the choice must submit through a native form `name` → use `field-radio-block`.
+- The options don't need card weight and read fine as inline rows → use `field-radio`.
+- There are more options than fit in a row or two, or the choice sits in a compact form → use `field-select`.
+- More than one option can be picked → use `field-checkbox-block`.
+
+## Related
+
+- `field-radio-block` — a single card-style radio with label, description and a disabled helper badge; compose several by hand with a shared `name`.
+- `field-radio` — inline labelled radio row for lighter choices.
+- `field-select` — dropdown for long option lists.
+- `field-checkbox-block` — card-style option for multiple selection.
+- `onboarding-form` — uses this component for its usage-intent question.
+
+## Best practices
+
+- Give every item a unique `value`; it is both the `v-model` payload and the render key.
+- Name the group by passing `aria-labelledby` or `aria-label` on the component: it renders a `role="radiogroup"` with no visible label of its own. Set an item's `ariaLabel` when its `label` alone is ambiguous.
+- `disabled` applies to the whole group; there is no per-item disabled state, so leave unavailable options out of `items`.
+- Use the `tag` slot for trailing content. The `default` slot replaces the whole card body (icon, label, description and `tag`), so use it only when the card needs a different layout.
+- Arrow keys move and select in one step, as in any radio group, so `update:modelValue` fires while a keyboard user browses. Don't trigger navigation or requests on every change.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
+
+const usage = ref()
+const items = [
+  { value: 'personal', label: 'Personal projects', icon: 'pi pi-user', description: 'Side projects and experiments.' },
+  { value: 'work', label: 'Work', icon: 'pi pi-briefcase', description: 'Applications for my company.' },
+  { value: 'study', label: 'Study', icon: 'pi pi-book', description: 'Learning the platform.' }
+]
+</script>
+
+<template>
+  <BoxGridSelection v-model="usage" :items="items" aria-label="How are you planning to use Azion?" />
+</template>
+```
 
 ## Props
 
@@ -45,7 +94,7 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| state change | `transition-colors duration-fast-02 ease-productive-entrance` | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none` |
 
 ## Tokens
 

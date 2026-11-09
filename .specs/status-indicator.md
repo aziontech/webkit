@@ -4,15 +4,41 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4ab2ac82b585199d71ca5890a5b70e84a68aaed136cd35dd62eb9d34d691e5aa
+checksum: 1d9df179a7e91f5221c6c1c8565fdca1b03aecadc8c88fcba3a2b6a1eb7c2ad7
 created: 2026-05-22
-last_updated: 2026-07-28
+last_updated: 2026-11-09
 ---
 # Status Indicator — Component Spec
 
 ## Purpose
 
-Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`.
+Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.
+
+## When to use
+
+- The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.
+- A transitional state such as Deploying or Propagating, with `loading`.
+
+## When NOT to use
+
+- A count or a very short label attached to another element → use `badge`.
+- A category or status chip with an optional icon → use `tag`.
+- A page or section notice with copy and actions → use `message`.
+- Measurable progress → use `progress-bar`.
+
+## Related
+
+- `badge` — filled count indicator, usually overlaid on an icon or avatar.
+- `tag` — labelled chip for categories and statuses.
+- `spinner` — replaces the dot while `loading` is true.
+- `progress-bar` — continuous progress instead of a discrete state.
+
+## Best practices
+
+- Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.
+- Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.
+- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis and swaps the dot for a spinner.
+- It is a non-interactive `role="status"` element with no click or keyboard behavior. Don't attach handlers to it.
 
 ## Usage
 

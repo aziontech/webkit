@@ -2,14 +2,14 @@
 name: section-gap
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 3
 checksum: 442c32e329fac1423db2e12c50918a8acaf5ec81afd1f9c3bec366a5c7b929aa
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-09-28
+last_updated: 2026-11-09
 ---
 
 # Section Gap — Component Spec

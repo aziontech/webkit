@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: e522891c6e0e0186fed8aff36e5189c3bf4034f8134ef01a0ed9115d44c42525
+checksum: 5491670ae7598f638d6f7c9da743de923e9322a9fcbbd0d42dcb78c41eaf9f47
 created: 2026-05-26
-last_updated: 2026-10-20
+last_updated: 2026-11-09
 ---
 
 # Log View — Component Spec
@@ -18,10 +18,37 @@ last_updated: 2026-10-20
 
 Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.
 
+## When to use
+
+- Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.
+- A log shell whose toolbar and footer vary by screen — compose `LogViewHeader`, `LogViewContent` and `LogViewFooter` in the order you need, or drop the ones you don't.
+- A log that is still loading from the server — set `loading` to show a spinner and `loading-label` in place of the body.
+
+## When NOT to use
+
+- Static, read-only code or configuration snippets → use `code-block`.
+- An animated terminal session on a marketing page → use `cli-terminal`.
+- Rows of structured records with columns, sorting or paging → use `table`.
+
+## Related
+
+- `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
+- `cli-terminal` — marketing band that plays a scripted terminal session.
+- `deploy-success` — the post-deploy screen that embeds `log-view` for the build log.
+
+## Best practices
+
+- Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`, `warning`); the type drives the line's rendering and the warnings filter.
+- Bind `v-model:search` and `v-model:warnings-only` when the app needs the filter state; otherwise leave them unbound and the header manages them.
+- Set `:border="false"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).
+- The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.
+- Use the header's `left` / `right` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar.
+
 ## Usage
 
 ```vue
 <script setup>
+import { ref } from 'vue'
 import LogView from '@aziontech/webkit/log-view'
 import LogViewHeader from '@aziontech/webkit/log-view-header'
 import LogViewContent from '@aziontech/webkit/log-view-content'
@@ -31,8 +58,8 @@ const lines = [
   { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },
   { id: '3', time: '13:47:42', type: 'warning', message: 'Bundle larger than recommended' }
 ]
-const search = ''
-const warningsOnly = false
+const search = ref('')
+const warningsOnly = ref(false)
 </script>
 
 <template>

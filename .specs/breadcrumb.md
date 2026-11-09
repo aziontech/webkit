@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 728bbd01a7023fbaeabf43380bb46a87440521f8eca7b39e4dd37618646c424e
+checksum: adc582ea5d0b4048a5159b5d0d99a3401531337105487985b383300cb7587e92
 created: 2026-05-25
-last_updated: 2026-07-30
+last_updated: 2026-11-09
 ---
 
 # Breadcrumb — Component Spec
@@ -17,6 +17,57 @@ last_updated: 2026-07-30
 ## Purpose
 
 Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).
+
+## When to use
+
+- A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).
+- The trail is known as data — pass `items` and let the component render the segments, separators and the collapse below `md`.
+- The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot.
+
+## When NOT to use
+
+- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.
+- It moves between sibling views of the same page → use `tab-view`.
+- It is the previous / next pair at the end of a docs page → use `doc-pagination`.
+
+## Related
+
+- `breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.
+- `navigation-menu` — top-level navigation with dropdown panels, not a location trail.
+- `link` — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling.
+
+## Best practices
+
+- Prefer `items`; only `items` mode collapses the middle segments into an overflow menu below `md`. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
+- Let the last entry be the current page — it is treated as current unless its `current` is set to `false`; give every ancestor an `href`.
+- Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
+- In slot mode, wrap each `Breadcrumb.Item` in an `li`: `Breadcrumb.List` is an `ol` and the item renders an `a` / `span`, while `Breadcrumb.Separator` is already an `li`.
+
+## Usage
+
+```vue
+<script setup>
+import Breadcrumb from '@aziontech/webkit/breadcrumb'
+</script>
+
+<template>
+  <Breadcrumb>
+    <Breadcrumb.List>
+      <li>
+        <Breadcrumb.Item label="Home" href="/" show-icon icon="pi pi-home" />
+      </li>
+      <Breadcrumb.Separator />
+      <li>
+        <Breadcrumb.Item label="Applications" href="/applications" />
+      </li>
+      <Breadcrumb.Separator />
+      <li>
+        <Breadcrumb.Item label="my-application" current />
+      </li>
+    </Breadcrumb.List>
+  </Breadcrumb>
+</template>
+```
 
 ## Sub-components
 

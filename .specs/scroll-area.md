@@ -6,15 +6,57 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: 98313759285c0f94d0da1cbfd85c3c96c3e7080bd44bda5803a94d93f02bd70a
+checksum: 0a0158b971afdaa194eb95b4f0ed69c887db4eb062b0ee7935642bd1ecc655b4
 created: 2026-05-22
-last_updated: 2026-10-20
+last_updated: 2026-11-09
 ---
 # Scroll Area — Component Spec
 
 ## Purpose
 
 Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it.
+
+## When to use
+
+- A region that must scroll inside a bounded box: a navigation list, a panel body, a wide table (`orientation="horizontal"`), a code region (`orientation="both"`).
+- A long list whose edges should fade while more content lies beyond them (`fade`).
+
+## When NOT to use
+
+- The region is one of several the reader resizes by dragging → use `resizable-panel`, with a ScrollArea inside a pane if its content overflows.
+- It is an application navigation rail → use `sidebar`, which already scrolls its items.
+- It is a code sample → use `code-block`, which already scrolls its lines.
+
+## Related
+
+- `sidebar` — scrolls its navigation inside a built-in ScrollArea.
+- `code-block` — runs its code lines in a ScrollArea with `orientation="both"`.
+- `resizable-panel` — draggable regions; each pane can hold a ScrollArea.
+
+## Best practices
+
+- Give it a bounded height, or a flex parent that constrains it. Without a limit the content never overflows and nothing scrolls.
+- The root is focusable (`tabindex` 0) and scrolls with the arrow keys, Page Up/Down and Home/End. Set `aria-label` when no visible heading names the region.
+- Pass `tabindex="-1"` only when the content is itself focusable and keyboard users can already reach all of it.
+- Match `orientation` to the overflow axis: `vertical` clips horizontal overflow, and `horizontal` clips vertical overflow.
+
+## Usage
+
+```vue
+<script setup>
+import ScrollArea from '@aziontech/webkit/scroll-area'
+</script>
+
+<template>
+  <ScrollArea aria-label="Recent activity" orientation="vertical" fade class="max-h-80">
+    <ul>
+      <li>Deploy finalized</li>
+      <li>Domain attached</li>
+      <li>Cache purged</li>
+    </ul>
+  </ScrollArea>
+</template>
+```
 
 ## Props
 

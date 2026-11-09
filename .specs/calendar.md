@@ -2,14 +2,14 @@
 name: calendar
 category: inputs
 structure: composition
-status: approved
+status: implemented
 spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 9cfa7dd5eee2ea794fb4b9d7568d9b46c8c016aaf0c7620f00d204e0def01d84
+checksum: e90cb9f7084533b611713d038e9154e2944bac868e0a4b0b7cddd27bd78cd109
 created: 2026-06-25
-last_updated: 2026-07-30
+last_updated: 2026-11-09
 ---
 
 # Calendar — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-07-30
 ## Purpose
 
 Date-range picker. A trigger button opens a popover that holds a month grid, Start/End date + time fields (suppressible with `show-fields`), an optional timezone selector, and an Apply action; it also offers a "Select Period" mode whose text input parses relative spans (`45m`, `12 hours`, `last month`, `yesterday`, `1/1 - 1/2`). When consumer-provided `presets` are supplied, the trigger splits into two side-by-side segments — a preset dropdown (left, `🕐 <label> ⌄`) that applies a preset range in one click, and the calendar (right, `📅 <range>`) that opens the grid for fine-tuning. Selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); a preset commits immediately. In period mode, once a span is applied the trigger shows the same two-segment shape — the relative token (e.g. `45m`) beside the concrete window it resolves to (e.g. `14:44 – 23:59`) — since a period selects a time interval rather than whole days. Date math uses the native `Date` API only — no date library; timezone is a selectable IANA label used for display formatting via `Intl` (the picker does not re-interpret `Date` objects across zones).
+
+## When to use
+
+- Picking a date range for analytics, logs, or billing windows, optionally with times and a timezone.
+- Offering one-click ranges ("Last 7 days") next to the grid through `presets`.
+- Relative time windows typed as text (`45m`, `last month`) with `period`.
+- A single date with `mode="single"`.
+
+## When NOT to use
+
+- Only a fixed list of named windows, with no custom range → use `select`.
+- A duration or count (retention days, TTL) rather than a date → use `input-number`.
+
+## Related
+
+- `select` — a fixed list of named periods without a grid.
+- `input-text` — the trigger and the Start/End fields share its heights, hover, and disabled treatment, so they align side by side.
+- `input-number` — numeric durations instead of dates.
+
+## Best practices
+
+- `modelValue` is committed only on Apply; read the final value from `update:modelValue` or `apply`, and set `:show-apply="false"` when every edit should commit at once.
+- Bind a `{ start, end }` object in range mode and a `Date` or `null` with `mode="single"`.
+- Bound the selectable days with `min` and `max` instead of validating after commit.
+- Pair `show-timezone` with `v-model:timezone`; the timezone changes display formatting only, not the `Date` values.
+- Prefer the `presets` prop; use the `presets` slot with `Calendar.Preset` only when preset content needs custom markup.
 
 ## Usage
 

@@ -2,14 +2,14 @@
 name: paginator
 category: data
 structure: composition
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: ef645d917b2d8e7473cedfbac7334eeb90033cf4904abdafb8cbe7211b078d5a
+checksum: c80bbcb440f5c1ddf747d9d7c356cdf57888fc979b7985cf46bac27b315ae1ac
 created: 2026-06-16
-last_updated: 2026-09-15
+last_updated: 2026-11-09
 ---
 
 # Paginator — Component Spec
@@ -17,6 +17,31 @@ last_updated: 2026-09-15
 ## Purpose
 
 Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Paginator renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](./table.md) component.
+
+## When to use
+
+- A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.
+- You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.
+- The page strip needs custom content (a different info line, extra controls) — compose `Paginator.Info`, `Paginator.Button` and `Paginator.PageSize` through the slots.
+
+## When NOT to use
+
+- The rows live in a data-driven `table` → set `paginated` on the table; it renders this paginator in its footer and wires it for you.
+- It is the previous / next pair at the end of a documentation page → use `doc-pagination`.
+- The content loads more as the reader scrolls or clicks "Load more" → use a `button` at the end of the list.
+
+## Related
+
+- `table` — renders a wired paginator in its footer when `paginated` is set.
+- `doc-pagination` — previous / next links between documentation pages, not numbered pages of a list.
+
+## Best practices
+
+- Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `selected` / `disabled` state and every click.
+- `page` is 1-based. Changing the page size through the selector emits `update:pageSize` and resets the page to `1`.
+- Keep `page-size-options` aligned with what your data source accepts; the default is `[10, 25, 50, 100]`.
+- Tune `sibling-count` (default `1`) instead of hiding buttons — it controls how many numbers sit on each side of the current page before the overflow ellipsis.
+- Set `aria-label` when a page carries more than one paginator, so each navigation landmark has a distinct name.
 
 ## Usage
 

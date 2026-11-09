@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=542-105
   node_id: 542:105
-checksum: cdf8a6625dba35fd003ae731f4a1a4f94471a84a8876d1ac7c9c515e6a2b8e13
+checksum: 116f75e64fde2687a8f4c28a60c8d9f0e203313a660f21a1c61f56f82d49f205
 created: 2026-05-23
-last_updated: 2026-06-23
+last_updated: 2026-11-09
 ---
 
 # Field Switch — Component Spec
@@ -17,6 +17,51 @@ last_updated: 2026-06-23
 ## Purpose
 
 Inline boolean toggle with switch on the leading edge, label, optional description, and optional disabled helper badge. Matches Figma FieldSwitch (node 542:105).
+
+## When to use
+
+- A setting that takes effect as soon as it is toggled (enable notifications, turn on caching) and needs a visible label.
+- The toggle needs a `description` line, or a lock badge (`helperText`) explaining why it is disabled.
+
+## When NOT to use
+
+- The choice only applies when the form is submitted (consent, agreement) → use `field-checkbox`.
+- The toggle should read as a bordered card → use `field-switch-block`.
+- The switch turns on a companion text value → use `field-text-switch`.
+- The row already labels the control → use `switch`.
+
+## Related
+
+- `switch` — the bare control; its `privacy` kind is not exposed by this field.
+- `field-switch-block` — the same toggle inside a bordered card; has no `required`.
+- `field-text-switch` — a text input whose trailing switch enables it.
+- `field-checkbox` — boolean choice applied on submit.
+
+## Best practices
+
+- Bind with `v-model`; the value is a boolean and defaults to `false`.
+- The control is a `role="switch"` button, not a native input: there is no `name` or `inputId`, so read the bound value instead of expecting it in native form data.
+- `helperText` renders only while `disabled`, as a lock badge — use it to say why the setting is locked.
+- `required` adds the Required tag to the label and `aria-required` to the switch; nothing validates it natively, so check it on submit.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import FieldSwitch from '@aziontech/webkit/field-switch'
+
+const notifications = ref(true)
+</script>
+
+<template>
+  <FieldSwitch
+    v-model="notifications"
+    label="Email notifications"
+    description="Send an email when a deployment finishes."
+  />
+</template>
+```
 
 ## Props
 
@@ -27,6 +72,7 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 | `label`       | `string`  | `''`        | false    | Primary label text.                               |
 | `description` | `string`  | `''`        | false    | Secondary description.                            |
 | `helperText`  | `string`  | `''`        | false    | Helper badge text shown when disabled.            |
+| `required`    | `boolean` | `false`     | false    | Adds the Required tag to the Label and sets `aria-required` on the switch. |
 
 ## Events
 
@@ -42,6 +88,7 @@ Inline boolean toggle with switch on the leading edge, label, optional descripti
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `checked`
 - `data-disabled` mirrors the `disabled` prop
+- `data-required` mirrors the `required` prop
 
 ## Motion & Animations
 
@@ -58,9 +105,9 @@ _none_
 | text (muted)             | `var(--text-muted)`     |
 | surface                  | `var(--bg-surface)`     |
 | border                   | `var(--border-default)` |
-| spacing                  | `var(--spacing-3)`      |
-| spacing (tight)          | `var(--spacing-1)`      |
-| spacing (helper gap)     | `var(--spacing-2)`      |
+| spacing                  | `var(--spacing-sm)`     |
+| spacing (tight)          | `var(--spacing-xxs)`    |
+| spacing (helper gap)     | `var(--spacing-xs)`     |
 | shape                    | `var(--shape-elements)` |
 
 ## Theme gaps

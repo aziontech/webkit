@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=602-890
   node_id: 602:890
-checksum: 00eae21becc3df4065ccef3a70c070753f92ddb032808096e021052764a2753d
+checksum: 434ecab4f8e39429e0da2b903191ba206ac3e8c3318e9e5b3ad96541c79bc9f7
 created: 2026-06-23
-last_updated: 2026-09-30
+last_updated: 2026-11-09
 ---
 
 # Field Textarea — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-09-30
 ## Purpose
 
 Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, 80px min-height, configurable resize axis via `resizable`) instead of `InputText`.
+
+## When to use
+
+- Multi-line free text with a visible label or helper/error message: descriptions, messages, notes.
+- Long values where the user may need to resize the field (`resizable`, default `vertical`).
+
+## When NOT to use
+
+- The value fits on one line → use `field-text`.
+- You need native textarea attributes such as `maxlength` or `rows` → use `textarea` with `label` and `helper-text`.
+- The label needs a `hint` → use `textarea` with `label` and `helper-text`.
+
+## Related
+
+- `textarea` — the bare control this field wraps; accepts native attributes through fallthrough.
+- `field-text` — single-line sibling.
+- `helper-text` — the guidance/error row under the textarea.
+- `label` — the label row.
+
+## Best practices
+
+- `required` paints the warning border and the required helper on first render — bind it to a submit state (`:required="submitted && !value"`), not as a bare attribute.
+- The field forwards no attributes other than `class`, so `maxlength`, `rows`, and similar native attributes passed to it are dropped.
+- When `inputId` is empty the id falls back to `name`, then to `useId()`; keep `name` unique on the page or pass `inputId`.
+- Use `resizable="none"` when the surrounding layout must not grow.
+- State limits ("Up to 500 characters.") in `helperText`; the field does not count characters.
 
 ## Usage
 

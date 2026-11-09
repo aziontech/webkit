@@ -2,11 +2,11 @@
 name: topic
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: 586a23f51caba773675aa8f27617096323f683cc58cf4a5a1e5ff690eae061f6
 created: 2026-09-24
-last_updated: 2026-10-22
+last_updated: 2026-11-09
 ---
 
 # Topic — Component Spec

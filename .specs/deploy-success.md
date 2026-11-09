@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3996-39125
   node_id: 3996:39125
-checksum: f5ddfcfc604b8e16c05bf7b04e8056e9d94ee3ab31e19015b8eb6b531f068196
+checksum: 9fc018f6b7fbf65b3cfc36eed8b05302d54cdc24182f56468814559e1b092634
 created: 2026-05-26
-last_updated: 2026-06-30
+last_updated: 2026-11-09
 ---
 
 # Deploy Success — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-06-30
 ## Purpose
 
 Full-page post-deploy success screen: an optional `GlobalHeader` with brand, a centered `CardBox` with a congratulations header (scope tag + visit link), the application name, an embedded `LogView` build log, an icon next-steps list, and a secondary "Manage" CTA.
+
+## When to use
+
+- The screen shown right after an application finishes deploying: a success header with the scope and a visit link, the build log, next steps and a manage action.
+- A post-deploy page whose regions need different content: replace them through the `success`, `logs`, `steps` and `actions` slots instead of rebuilding the layout.
+
+## When NOT to use
+
+- The confirmation follows a plan purchase or upgrade → use `plan-success`.
+- The deploy is still running and the log is live → use `log-view`.
+- The confirmation should not take the user off the current screen → use `toast`.
+
+## Related
+
+- `plan-success` — the same full-page success layout for the plans checkout, with numbered, non-interactive steps.
+- `log-view` — the build log embedded in the card; use it directly to show logs elsewhere.
+- `card-box` — the card shell that holds the header, log and steps.
+- `global-header` — the top bar rendered while `showHeader` is on.
+
+## Best practices
+
+- Always pass `steps` (required). Each step needs a `title`, a `description` and an Azion `icon` class.
+- Each step row is a button with no link of its own: handle `step-click` and route by its `index` argument.
+- Pass real `scope`, `app-name` and `visit-href` values; the defaults (`'mygithub-scope'`, `'myappname'`, `'#'`) are placeholders.
+- Set `:show-header="false"` when the page already has app chrome, or replace the bar with the `header` slot.
+- `disabled` turns off the visit link, the log toolbar, the step rows and the manage button together.
 
 ## Usage
 

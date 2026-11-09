@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7393
   node_id: 2027:7393
-checksum: dce502ad412797ab05d2d52feee202ab7cead94714322970f5b21043c628b4a0
+checksum: 9f6b9233b954e8913986928299baf31b7b81efaf30912334747f248e4c9c9dd5
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 
 # Field Checkbox Block — Component Spec
@@ -17,6 +17,52 @@ last_updated: 2026-05-23
 ## Purpose
 
 Card-style checkbox option with leading control, label, description, and optional disabled helper badge inside a bordered block. Matches Figma FieldCheckboxBlock (node 2027:7393). Use when each option benefits from a richer label and description rather than a plain checkbox row.
+
+## When to use
+
+- Several independent options where each needs weight — a label plus a description inside a bordered card (add-ons, features, permissions).
+- A stack of options where the checked ones should stand out: the card switches to the selected border and surface.
+
+## When NOT to use
+
+- A plain checkbox row is enough → use `field-checkbox`.
+- Only one option can be picked → use `field-radio-block`.
+- The card turns a setting on or off immediately → use `field-switch-block`.
+- The option must show the Required tag → use `field-checkbox`.
+
+## Related
+
+- `field-checkbox` — inline row with the same props, plus `required`.
+- `field-radio-block` — the same card for a mutually exclusive choice.
+- `field-switch-block` — the same card with a switch instead of a checkbox.
+- `checkbox` — the bare control rendered inside the card.
+
+## Best practices
+
+- Bind with `v-model`; the field emits `trueValue` when checked and `falseValue` when unchecked (defaults `true` / `false`).
+- The whole card is a `label` for the input, so a click anywhere toggles it; `label` and `description` are plain strings, so keep the label short and put the explanation in `description`.
+- `helperText` renders only while `disabled`, as a lock badge — use it to say why the option is unavailable.
+- There is no `required` prop; validate rules such as "pick at least one" at the form level.
+
+## Usage
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import FieldCheckboxBlock from '@aziontech/webkit/field-checkbox-block'
+
+const backups = ref(false)
+</script>
+
+<template>
+  <FieldCheckboxBlock
+    v-model="backups"
+    name="backups"
+    label="Automatic backups"
+    description="Daily snapshots, kept for 30 days."
+  />
+</template>
+```
 
 ## Props
 
@@ -47,7 +93,7 @@ Card-style checkbox option with leading control, label, description, and optiona
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `checked`, `highlighted` (card border)
 - `data-disabled` mirrors the `disabled` prop
 - `data-checked` mirrors toggled-on state
-- `data-highlighted` mirrors Figma card emphasis (on when checked and enabled, or off when disabled)
+- `data-highlighted` mirrors Figma card emphasis: on when checked and enabled, and also on when unchecked and disabled
 
 ## Motion & Animations
 
@@ -69,9 +115,9 @@ Card-style checkbox option with leading control, label, description, and optiona
 | border (muted)           | `var(--border-muted)`     |
 | border (highlighted)     | `var(--border-selected)`  |
 | border (helper)          | `var(--border-default)`   |
-| spacing                  | `var(--spacing-3)`        |
-| spacing (tight)          | `var(--spacing-1)`        |
-| spacing (helper gap)     | `var(--spacing-2)`        |
+| spacing                  | `var(--spacing-sm)`       |
+| spacing (tight)          | `var(--spacing-xxs)`      |
+| spacing (helper gap)     | `var(--spacing-xs)`       |
 | shape                    | `var(--shape-elements)`   |
 
 ## Theme gaps

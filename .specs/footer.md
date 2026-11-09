@@ -2,14 +2,14 @@
 name: footer
 category: layout
 structure: composition
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
 checksum: dbca05e2764d0a6c2c1e3c52cecc09f1aef52bb454a1eb66ac8859472edd9595
 created: 2026-08-10
-last_updated: 2026-10-13
+last_updated: 2026-11-09
 ---
 # Footer — Component Spec
 

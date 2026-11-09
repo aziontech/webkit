@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 092d3bc30e7a43aca8d92d9396c95bdb607fa4f830f99b02fa47b63fe12e16c7
+checksum: fe8b39a89ff4bf6c09c8b9cd0a1856e4d1e2f4ec6ffc2c861823e42f2afa7343
 created: 2026-05-22
-last_updated: 2026-08-24
+last_updated: 2026-11-09
 ---
 
 # Currency — Component Spec
@@ -16,6 +16,41 @@ last_updated: 2026-08-24
 Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string each screen spells its own way. The suffix carries the code typeface (`text-label-code-*`), which keeps the unit visually subordinate to the figure and aligns the whole set with the way the system typesets metered values.
 
 The size ladder is the house one (`small` / `medium` / `large`) and each step is a different reading distance: `small` is an amount inside a table row or a list cell, `medium` an amount stated as a fact on a card, `large` the headline figure of a pricing card. `large` bottom-aligns the suffix against the figure rather than centring it, because a 56px numeral centred against a 14px unit reads as two unrelated pieces of text.
+
+## When to use
+
+- Any monetary amount in the product: a price in a table row or list cell (`small`), an amount stated on a card (`medium`), the headline figure of a pricing card (`large`).
+- An amount followed by a period or unit (`/ mon`, `/ GB`) that should read as secondary to the figure.
+
+## When NOT to use
+
+- You need a full pricing tier with plan name, caveat and action → use `card-pricing`.
+- The headline figures are not money (throughput, uptime, points of presence) → use `big-numbers`.
+
+## Related
+
+- `card-pricing` — composes Currency for its price, `medium` or `large` depending on `slotPosition`.
+- `big-numbers` — display-scale figures for metrics that aren't money.
+- `stats-band` — page section of big figures with their own prefix and unit.
+
+## Best practices
+
+- Pass `value` already formatted as a string (`'1,250.00'`). The component does no number or locale formatting.
+- `prefix` defaults to `'$'`; set `prefix=""` to drop the symbol. The suffix renders only when `suffix` is set.
+- Pick `size` by reading distance, not by available space: `small` (the default) in tables and lists, `medium` on cards, `large` only for a headline price.
+- Don't restyle the parts with classes; each size takes its typography from the `text-amount-*` and `text-label-code-*` tokens.
+
+## Usage
+
+```vue
+<script setup>
+import Currency from '@aziontech/webkit/currency'
+</script>
+
+<template>
+  <Currency value="20" prefix="$" suffix="/ mon" size="medium" />
+</template>
+```
 
 ## Props
 

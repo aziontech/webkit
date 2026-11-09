@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: fd3e4011508e04daad7fe0d785e03cf4920adc237bbdbab1d6403a30f4102cd7
+checksum: 489bd20678d54e878f9b25ea2318d2bef0c9fc1d97cdbd59ba127b668604409b
 created: 2026-07-06
-last_updated: 2026-08-10
+last_updated: 2026-11-09
 ---
 
 # FieldTextSwitch — Component Spec
@@ -14,6 +14,31 @@ last_updated: 2026-08-10
 ## Purpose
 
 Form field wrapper that composes `Label`, an `InputGroup` (holding an internal `<input>` on the left and a `<Switch>` as the trailing child on the right), and `HelperText` into a single vertical stack. Use it when a text value is only meaningful while a boolean feature is enabled — e.g. "Custom domain" (text) + "Enabled" (switch), "Redirect URL" + "Follow redirects", "Cache key override" + "Override enabled". The switch owns the field's on/off state: when `enabled` is `false`, the internal text input is automatically inert (disabled tokens + native `disabled`), so a single glance answers "is this configured **and** on?". No Figma reference at draft time — tokens are inferred from `input-group`, `switch`, and `field-input-group`.
+
+## When to use
+
+- A text value that only applies while a feature is on: custom domain + enabled, redirect URL + follow redirects.
+- Showing "configured" and "on" in one row, so the switch and its value are read together.
+
+## When NOT to use
+
+- The toggle has no companion text value → use `field-switch`.
+- The text value always applies → use `field-text` or `field-input-group`.
+- The toggle needs a card with a description → use `field-switch-block`.
+
+## Related
+
+- `field-input-group` — the same field shape with free addon slots instead of the switch.
+- `field-switch` — labeled toggle without a text value.
+- `switch` — the control rendered in the trailing addon.
+- `input-group` — the container behind the input and the switch.
+
+## Best practices
+
+- Bind both `v-model` and `v-model:enabled`. `enabled` defaults to `false`, so an unbound field renders its input disabled.
+- `disabled` locks the input and the switch; `enabled=false` locks only the input. Turning the switch off does not clear `modelValue`.
+- Always pass `label`: the switch's accessible name is derived from it (`Toggle <label>`), falling back to `Toggle field`.
+- `required` applies to the text input, not the switch, and paints the warning state immediately — bind it to a submit state.
 
 ## Usage
 

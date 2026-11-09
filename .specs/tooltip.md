@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 803042cf5b98067d7634cb4e269d2f0c2cc0d929c5b322e28c3b00a65b821b2a
+checksum: e28796c9014fca80b84be0f89692f42369e3b6507e45361f50052f15285188b1
 created: 2026-06-02
-last_updated: 2026-08-19
+last_updated: 2026-11-09
 ---
 
 # Tooltip — Component Spec
@@ -18,11 +18,39 @@ last_updated: 2026-08-19
 
 Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead.
 
+## When to use
+
+- Naming an icon-only control on hover and focus.
+- Revealing the full text of a truncated label, or expanding an abbreviation.
+- One short, plain-text hint that the user can do without.
+
+## When NOT to use
+
+- The content has links, buttons or more than one line of structure → use `popover`.
+- An info glyph beside a field label or column header → use `hint`.
+- A glossed term inside documentation prose → use `doc-tooltip`.
+- Guidance or errors the user needs to complete a field → use `helper-text`.
+
+## Related
+
+- `popover` — click-opened, interactive, with a header, body and footer.
+- `hint` — the focusable info glyph that renders a `Tooltip` for you.
+- `doc-tooltip` — inline glossed term for docs pages.
+- `icon-button` — the most common trigger; it still needs its own `ariaLabel`.
+
+## Best practices
+
+- Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
+- Keep `text` to a few words. It renders as plain text, with no markup.
+- The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
+- Use `disabled` to suppress the tooltip. An empty `text` also blocks opening, but it reads as a bug.
+- Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
+
 ## Usage
 
 ```vue
 <script setup>
-import Tooltip from '@aziontech/webkit/overlay/tooltip'
+import Tooltip from '@aziontech/webkit/tooltip'
 import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
@@ -37,8 +65,8 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `text` | `string` | `''` | true | Plain text shown inside the tooltip. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | false | Anchor side relative to the trigger. |
+| `text` | `string` | — | true | Plain text shown inside the tooltip. |
+| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side relative to the trigger; `auto` picks the side with room. |
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
 | `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |

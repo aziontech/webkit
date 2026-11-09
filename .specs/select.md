@@ -2,23 +2,50 @@
 name: select
 category: inputs
 structure: composition
-status: draft
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: cf42bdc6fefb728173a25c37d3d2b75911c62474dcba8ff496c5629e85ed3d5d
+checksum: 765dc35c8d5b4621a5343853fa9e616a5e1557d2576ab8badac8b66d6492ad68
 created: 2026-06-15
-last_updated: 2026-08-12
+last_updated: 2026-11-09
 ---
 
 # Select — Component Spec
 
 ## Purpose
 
-Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
+Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
 
 Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
+
+## When to use
+
+- One value from a list too long to show inline (regions, runtimes, plans).
+- Options grouped under headings, with icons or trailing tags.
+- A list that needs a search box or a "Create new" action inside the panel.
+
+## When NOT to use
+
+- A select with a visible label and helper/error text in a form → use `field-select`.
+- The field is always multi-pick → use `multi-select`.
+- Two to five options that fit on screen → use `field-radio`, or `box-grid-selection` for cards.
+- The list triggers actions or navigation instead of holding a value → use `dropdown`.
+
+## Related
+
+- `field-select` — label, select, and helper text, with options passed as data through `options`.
+- `multi-select` — multi-only variant with checkbox rows and an array model.
+- `dropdown` — action menu that reports the chosen option as an event and holds no form value.
+- `input-group` — joins a select to an input, such as currency plus amount.
+
+## Best practices
+
+- Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.
+- Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
+- With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
+- Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
 
 ## Usage
 
@@ -48,7 +75,7 @@ const value = defineModel({ default: '' })
 ## Sub-components
 
 - `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals.
-- `select-content/select-content.vue` — Popover panel rendered via the native Popover API + CSS anchor positioning; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
+- `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm Dropdown puts around its group divider and CommandMenu puts between two bare groups. No hairline: unlike Dropdown, this panel separates groups by space alone.
 - `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, *every* option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 

@@ -7,21 +7,73 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 03eabe355411f4b00e0ade6ce5dffe0fa5e882a16f84c3b32a20145eb0b4a966
+checksum: 8262400399f5624e53a5a6f3523bc9ede57c6c9c72d4a8a2fe3394551be3a007
 created: 2026-05-22
-last_updated: 2026-10-22
+last_updated: 2026-11-09
 ---
 # Card Box — Component Spec
 
 ## Purpose
 
-Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/card-box/`.
+Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/card-box/`.
+
+## When to use
+
+- Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
+- Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
+- A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
+
+## When NOT to use
+
+- The surface sits above the page as a modal or a side sheet → use `dialog` or `drawer`.
+- It is one tier of a pricing comparison → use `card-pricing`.
+- It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
+- It is a single row of title, description, media and actions → use `item`.
+
+## Related
+
+- `item` — rows inside the card; with `padded` set to false, an `Item` list runs its dividers to the card edges.
+- `card-pricing` — pricing tier card with its own price hierarchy and action.
+- `card-grid` — responsive grid of cells for marketing pages.
+- `panel` — the layered shell behind overlays, not an in-page card.
+- `empty-state` — goes in the `content` slot when the card has no data yet.
+
+## Best practices
+
+- Put the body in the `content` slot. There is no `default` slot, so children passed without `#content` don't render.
+- Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-action`.
+- `header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
+- Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
+- The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
+
+## Usage
+
+```vue
+<script setup>
+import Button from '@aziontech/webkit/button'
+import CardBox from '@aziontech/webkit/card-box'
+</script>
+
+<template>
+  <CardBox title="Domains">
+    <template #header-action>
+      <Button label="Edit" kind="text" size="small" />
+    </template>
+    <template #content>
+      <p>Associate a custom domain to handle user access.</p>
+    </template>
+    <template #footer>
+      <Button label="Save" kind="primary" size="medium" />
+    </template>
+  </CardBox>
+</template>
+```
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `title` | `string` | `undefined` | false | Heading rendered in the header when the `header` slot is empty. |
+| `title` | `string` | `''` | false | Heading rendered in the header when the `header` slot is empty. |
 | `padded` | `boolean` | `true` | false | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers. |
 
 ## Events
@@ -47,7 +99,7 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| header action reveal | `transition-opacity` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 

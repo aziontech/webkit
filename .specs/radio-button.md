@@ -7,15 +7,73 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: db250d52942ba1c85e8a9025985d9740f8d01fc4424b930531cc9e733751de13
+checksum: 88c061595b00e10475f10ee3f79554926a9cfe95903581c91cc8b0f77ae41116
 created: 2026-05-22
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 # Radio Button — Component Spec
 
 ## Purpose
 
 Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Use `FieldRadio` or `FieldRadioBlock` for labeled layouts.
+
+## When to use
+
+- One choice from a small set of mutually exclusive options whose labels are laid out separately (a table row, a custom option row).
+- A custom radio layout that the `field-radio` and `field-radio-block` shapes do not cover.
+
+## When NOT to use
+
+- A radio option in a form that needs its own label, description, or helper text → use `field-radio`.
+- Options that need visual weight, such as plans or tiers → use `field-radio-block`, or `box-grid-selection` for a horizontal grid of cards.
+- More than one option may be selected → use `checkbox`.
+- The options are many or loaded from data → use `select`.
+
+## Related
+
+- `field-radio` — radio with label, description, and disabled helper; the default inside forms.
+- `field-radio-block` — card-style radio option with a selected border and background.
+- `box-grid-selection` — horizontal grid of selectable cards with its own model.
+- `checkbox` — the multi-pick counterpart.
+- `select` — single choice from a dropdown when the options do not fit inline.
+
+## Best practices
+
+- Bind every radio in a group to the same `v-model` and give them the same `name`; each one emits its own `value` when selected.
+- `value` and `modelValue` are strings; map numeric or object ids to strings before binding.
+- Give each radio an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label`.
+- Wrap the group in a `fieldset` with a `legend` so the question itself is announced.
+
+## Usage
+
+```vue
+<script setup>
+import RadioButton from '@aziontech/webkit/radio-button'
+import { ref } from 'vue'
+
+const billing = ref('monthly')
+</script>
+
+<template>
+  <fieldset>
+    <legend>Billing cycle</legend>
+    <RadioButton
+      v-model="billing"
+      name="billing"
+      value="monthly"
+      input-id="billing-monthly"
+      aria-label="Monthly"
+    />
+    <RadioButton
+      v-model="billing"
+      name="billing"
+      value="yearly"
+      input-id="billing-yearly"
+      aria-label="Yearly"
+    />
+  </fieldset>
+</template>
+```
 
 ## Props
 

@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 70c85ded32c0a1b7fea52b3e27e306f092a6d34cfc0f93553bce4d230a0d1c70
+checksum: 29b9e67a478e1ae10de6556a02710325f93b7ed98d9cdac8b0c15a9bc0f2fbda
 created: 2026-05-28
-last_updated: 2026-10-20
+last_updated: 2026-11-09
 ---
 
 
@@ -36,6 +36,34 @@ Regions render conditionally from tab data — the consumer does not pick a sepa
 | `graphql`, `gql` | **Operations.** A definition word opening the line (`query`, `mutation`, `fragment`, `type`, …), a `@directive` and a fragment's `on` are `keyword`; the operation name and every field called with arguments (`httpMetrics(`, `sum(`) are `function`; a `$variable`, a capitalised type name (`DateTime`), a number and `true` / `false` / `null` are `type`; quoted text is `string`; plain fields, aliases and argument names are `identifier`; brackets, `:`, `!`, `,` and `...` are `punctuation`. `#` runs to end of line as a `comment`. |
 | `markdown`, `md` | One `comment` token per line. Prose inside a code block (a markdown snippet, an agent prompt) is commentary, not code, so it takes the comment colour rather than being tokenised as identifiers. |
 | anything else, or unset | Flat — one `identifier` token per line, no highlighting. |
+
+## When to use
+
+- Read-only code in docs, API examples or configuration previews that readers copy from.
+- The same snippet in several languages, switched by tabs (one `tabs` entry per language).
+- Showing a change as a diff (`lineChanges`) or pointing at one line (`highlightedLine`) on the active tab.
+
+## When NOT to use
+
+- The content is build or deploy output with timestamps and log levels → use `log-view`.
+- It is a marketing band that pairs a claim with its code → use `code-split`, or `sticky-scroll-code` for several claims.
+- It is a terminal session of CLI commands on a product page → use `cli-terminal`.
+- You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
+
+## Related
+
+- `copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.
+- `log-view` — terminal-style viewer for CI and deploy logs.
+- `code-split` — page section built around one code sample.
+- `scroll-area` — the scroll container the code region runs in.
+
+## Best practices
+
+- Put the source on each tab's `code`. There is no top-level `code` prop, and a tab without a `value` or a `code` is dropped.
+- Set `language` on every tab. Only JavaScript/TypeScript, shell, HCL, GraphQL and Markdown are tokenised; anything else renders as flat text.
+- Use `default-value` for the initial tab, and `v-model:value` only when something outside the block must follow the selected tab.
+- Set `:copyable="false"` on decorative blocks, and `:border="false"` when the block sits inside a surface that already frames it.
+- Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.
 
 ## Usage
 
@@ -135,7 +163,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
-Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
+Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 

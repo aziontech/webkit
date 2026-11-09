@@ -2,14 +2,14 @@
 name: accordion
 category: content
 structure: composition
-status: draft
+status: implemented
 spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: ee1884fc16c8e518d06a2f1643a18741358a0c887c5136fc2bacb5dbba31e0ce
+checksum: ac888b312208ad68cee485461d8ad3bcb03a6b44ee093339714cdc54d1e3e59c
 created: 2026-06-26
-last_updated: 2026-07-15
+last_updated: 2026-11-09
 ---
 
 # Accordion — Component Spec
@@ -17,6 +17,32 @@ last_updated: 2026-07-15
 ## Purpose
 
 A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.
+
+## When to use
+
+- Long content splits into independent sections the reader scans by heading and opens on demand (settings groups, help topics, a details list).
+- The reader may want one section open at a time (`type="single"`) or to compare several side by side (`type="multiple"`).
+- Content should expand inline below its heading, pushing the rest of the page down.
+
+## When NOT to use
+
+- The panels are mutually exclusive views shown in the same place → use `tab-view`.
+- It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).
+- It is hierarchical navigation with expandable rows → use `menu`.
+
+## Related
+
+- `tab-view` — switches between panels in place; one panel visible, headers in a row.
+- `faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.
+- `menu` — expanding rows for navigation, not for revealing content.
+
+## Best practices
+
+- Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model:value` refer to it.
+- Bind `v-model:value` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
+- Set the trigger's `level` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
+- `Accordion.Content` applies no padding; pad the content you put inside it.
+- Set `size` and `arrow-position` on the root, not per item — they are provided to every item through context.
 
 ## Usage
 

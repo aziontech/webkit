@@ -7,15 +7,38 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/eeX71MMNcfqKHoXWemUacK/-UXE-7875--Azion-Plans?node-id=833-23321
   node_id: 833:23321
-checksum: dfa05f2633a7c654b71af0ac95378dc855c386a7cc4cb211b21398e3881d6da9
+checksum: 709e63cd2b8077ace25f83a841423902a490151bf7c691e8f97dbed8a352ba11
 created: 2026-05-25
-last_updated: 2026-05-25
+last_updated: 2026-11-09
 ---
 # Plan Success — Component Spec
 
 ## Purpose
 
 Full-page post-checkout success screen for the Azion Plans flow ([Figma 833:23321](https://www.figma.com/design/eeX71MMNcfqKHoXWemUacK/-UXE-7875--Azion-Plans?node-id=833-23321)): optional `GlobalHeader` with brand, centered `CardBox` with activation message, numbered next steps, and a primary deploy CTA.
+
+## When to use
+
+- The confirmation screen after a plan purchase or upgrade, with the activation message, numbered next steps and one primary action.
+
+## When NOT to use
+
+- The confirmation follows an application deploy and needs the build log and clickable steps → use `deploy-success`.
+- The confirmation should not take the user off the current screen → use `toast`.
+
+## Related
+
+- `deploy-success` — sibling success screen with a build log and clickable steps.
+- `onboarding-form` — the onboarding step earlier in the same flow.
+- `card-box` — the card shell that holds the message, steps and action.
+- `global-header` — the top bar rendered while `showHeader` is on.
+
+## Best practices
+
+- Always pass `steps` (required) as `{ title, description }` entries. They render as a numbered list with no interaction; if a step must link somewhere, replace the list with the `steps` slot.
+- Set `title` and `description` to the plan actually purchased; the default title names the Pro plan.
+- Handle `action-click` for the primary action, or replace the button with the `actions` slot.
+- Set `:show-header="false"` when the host page already renders a header, or replace it with the `header` slot.
 
 ## Props
 

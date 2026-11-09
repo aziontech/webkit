@@ -2,14 +2,14 @@
 name: chip
 category: inputs
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
 checksum: 1194d09ce8d1c672067cd8b2e6db398fd7ab016d4aa76b36271bb3621d5dd8a0
 created: 2026-06-23
-last_updated: 2026-09-28
+last_updated: 2026-11-09
 ---
 
 # Chip — Component Spec

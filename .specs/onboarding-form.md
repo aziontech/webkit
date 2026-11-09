@@ -4,15 +4,41 @@ category: templates
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c6c73f874d6491e31bf5840c601f591dfd22bfb720bfbd921d700a7f29de1fee
+checksum: ed8827dec58e016e8faab628989c9d8d918b11e709819b7d85ad9c8076f55372
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 # Onboarding Form — Component Spec
 
 ## Purpose
 
 Centered onboarding layout for post-signup flows, wrapped in `CardBox`: plan summary, usage intent (`BoxGridSelection`), full name (`InputText`), optional expert session (`FieldCheckbox`), primary continue action, and enterprise footer CTA. Composes existing webkit inputs and actions; consumers bind v-models for usage, name, and schedule preference.
+
+## When to use
+
+- The first screen after sign-up, collecting usage intent, full name and the onboarding-session preference before the first deploy.
+- A post-signup step that shows the selected plan with an action to change it.
+
+## When NOT to use
+
+- The user is creating the account (social sign-in, work email) → use `sign-up-card`.
+- It is a settings or create form in the console → compose `card-box` with `field-text`, `field-select` and the other field components.
+- The plan was just purchased and needs confirming → use `plan-success`.
+
+## Related
+
+- `sign-up-card` — the step before this one.
+- `box-grid-selection` — the usage-intent control; `usageItems` is passed straight to it.
+- `plan-success` — success screen shown after a plan checkout.
+- `deploy-success` — success screen shown after the first deploy.
+- `card-box` — the card shell the form sits in.
+
+## Best practices
+
+- Bind `v-model:usage-value`, `v-model:full-name` and `v-model:schedule-onboarding`. The template keeps no state of its own.
+- Treat `continue-click` as the submit handler: it fires when the form submits, from the Continue button or Enter in the name field.
+- `usage-required` and `full-name-required` only add the asterisk and `aria-required`. Validate in your handler and gate the button with `continue-disabled`.
+- Always pass `usage-items` (required). Replace the plan summary with the `plan` slot or the enterprise bar with the `footer` slot instead of hiding them.
 
 ## Props
 
@@ -49,7 +75,7 @@ Centered onboarding layout for post-signup flows, wrapped in `CardBox`: plan sum
 | `update:fullName` | `string` | v-model for full name. |
 | `update:scheduleOnboarding` | `boolean` | v-model for scheduling checkbox. |
 | `change-click` | `MouseEvent` | Fires when the plan change button is activated. |
-| `continue-click` | `MouseEvent` | Fires when the continue button is activated. |
+| `continue-click` | `MouseEvent` | Fires when the form submits (the runtime value is the submit event) — from the Continue button or Enter in the name field. |
 | `footer-link-click` | `MouseEvent` | Fires when the footer contact link is activated. |
 
 ## Slots

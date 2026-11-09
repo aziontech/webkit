@@ -7,15 +7,41 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-13804
   node_id: 3735:13804
-checksum: 46b488d9b12ac63202a315555ac7bb1d808d4e486ca30a1384cb8b1072abcd20
+checksum: 3b627b472d443c6e1a06da2182d75ab7e388e8bdf9fc8bb2898b5dcce0875c6d
 created: 2026-05-23
-last_updated: 2026-05-23
+last_updated: 2026-11-09
 ---
 # Platform Shell — Component Spec
 
 ## Purpose
 
-Application shell template for console-style layouts per [Webkit Example (Figma 3735:13804)](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-13804): a full-width `GlobalHeader` menubar, a persistent navigation column in the layout stack (typically `@aziontech/webkit/layout/sidebar`), a page heading region, `TabView` tabs in the main column, and scrollable panel content. The sidebar is not an overlay — it sits beside main content in a horizontal flex row below the header.
+Application shell template for console-style layouts per [Webkit Example (Figma 3735:13804)](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-13804): a full-width `GlobalHeader` menubar, a persistent navigation column in the layout stack (typically `@aziontech/webkit/sidebar`), a page heading region, `TabView` tabs in the main column, and scrollable panel content. The sidebar is not an overlay — it sits beside main content in a horizontal flex row below the header.
+
+## When to use
+
+- A console-style page frame: a top header bar, a fixed 320px navigation column, a page heading, and tabbed or plain main content that scrolls under the header.
+- A template or story that needs the full app chrome around the screen it demonstrates.
+
+## When NOT to use
+
+- The screen is a workspace whose regions the reader resizes (editor, terminal, preview) → use `resizable-panel`.
+- You need a scaled, inert picture of a console screen for a marketing band → use `shell-mockup`.
+- It is a marketing or site page → use `section-container`.
+
+## Related
+
+- `global-header` — the top bar; fill it through `header-left`, `header-middle` and `header-right`.
+- `sidebar` — the navigation column to place in the `sidebar` slot.
+- `tab-view` — the shell renders `TabView.Root` around the `tabs` slot.
+- `resizable-panel` — splittable workspace regions instead of a fixed navigation column.
+
+## Best practices
+
+- Use either the `tabs` slot or the default slot. When `tabs` is filled, the default slot is not rendered.
+- In the `tabs` slot, pass only `TabView.List` (with its `TabView.Item`s) and the tab content; the root is already rendered. Make `tab-default-value` match one of your item values (the default is `'tab-1'`).
+- The shell is full viewport height and scrolls the main column itself, so don't nest it inside another scrolling container.
+- Leave the `sidebar` slot empty for a full-width main column; the navigation column is not rendered without it.
+- Set `header-aria-label` when the default `'Global header'` doesn't name the app.
 
 ## Props
 
@@ -66,7 +92,7 @@ _none_
 
 - Root is a full-height layout; `GlobalHeader` renders `<header role="banner">`.
 - Main content is in `<main>`.
-- Navigation column is owned by slotted `layout/sidebar` (`<aside>` + `<nav>`).
+- The shell wraps the `sidebar` slot in its own `<aside>`; the slotted `sidebar` component renders its own `<aside>` + `<nav>` inside it.
 - Contrast and touch targets are owned by slotted header and navigation children.
 
 ## Stories (Storybook)

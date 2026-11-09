@@ -2,11 +2,11 @@
 name: pick-list
 category: data
 structure: composition
-status: approved
+status: implemented
 spec_version: 2
-checksum: ce0709f80b255bc6f602f95eccbd823179248bbde27b7bd616fe2d1a6d795f74
+checksum: 3812825685f3c54c96eed183d29d86238a12691ed896d92c8579ebc1af7a98d4
 created: 2026-06-25
-last_updated: 2026-06-30
+last_updated: 2026-11-09
 ---
 
 # Pick List — Component Spec
@@ -16,6 +16,31 @@ last_updated: 2026-06-30
 Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
 
 Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<PickList.Source>`, `<PickList.Controls>`, `<PickList.Target>` — and the context-aware `<PickList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked.
+
+## When to use
+
+- Building a subset from a pool where both the chosen and the remaining items stay visible (domains assigned to an application, members of a team).
+- Moving many items at once with move-all and multi-selection.
+- Lists that load separately, each with its own `loading` state.
+
+## When NOT to use
+
+- Picking a few values in a compact field → use `multi-select`.
+- Selecting rows of tabular data with columns, sorting, or pagination → use `table` with row selection.
+- A handful of fixed options → use `field-checkbox` for each.
+
+## Related
+
+- `multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.
+- `table` — row selection over tabular data.
+- `checkbox` — independent boolean or small-set multi-pick.
+
+## Best practices
+
+- Set `data-key` to a unique item field so rows keep stable keys across moves; without it rows are keyed by their index.
+- Set `title` on both `PickList.Source` and `PickList.Target`; it is the listbox's accessible name.
+- Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.
+- Set `:move-on-double-click="false"` when double-click should do something else; `item-double-click` still fires.
 
 ## Usage
 
@@ -86,7 +111,7 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `modelValue` | `[unknown[], unknown[]]` | `() => [[], []]` | false | Bound pair of lists as `[sourceItems, targetItems]` (v-model). |
-| `dataKey` | `string` | `''` | false | Item field that uniquely identifies a record; enables selection tracking and stable keys. |
+| `dataKey` | `string` | `''` | false | Item field used as each row's render key (falls back to the index). Selection is always tracked by index. |
 | `disabled` | `boolean` | `false` | false | Disables all selection and move controls and applies disabled tokens. |
 | `moveOnDoubleClick` | `boolean` | `true` | false | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
 

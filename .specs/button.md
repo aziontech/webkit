@@ -4,16 +4,46 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6bcdd94d8dcfc289eedfa534379a74a056ca75b6319c615e657514a8f9129e7d
+checksum: 5f54f9f762c21c79982165b01cb732a9a60b8f39c23541fe0c692e36e7daf7b6
 created: 2026-05-22
-last_updated: 2026-10-19
+last_updated: 2026-11-09
 ---
 
 # Button — Component Spec
 
 ## Purpose
 
-Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/button/`.
+Interactive control for user actions. Lives at `packages/webkit/src/components/actions/button/`.
+
+## When to use
+
+- Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.
+- Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `text`.
+- Submit or reset a form with `type="submit"` / `type="reset"`.
+- A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
+
+## When NOT to use
+
+- The control is icon-only → use `icon-button`.
+- One default action with related alternatives in an attached menu → use `split-button`.
+- A standalone navigation link with a trailing icon and a ghost hover → use `link`.
+- The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
+
+## Related
+
+- `icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind stands in for `text`.
+- `split-button` — joins a Button to a chevron menu of related actions.
+- `button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
+- `mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.
+- `segmented-button` — a group of mutually exclusive options, not a single action.
+
+## Best practices
+
+- Keep one `kind="primary"` per view or region; use `danger` only for destructive actions.
+- Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
+- Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
+- Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.
+- `label` is required and is the accessible name; never pass an empty string to get an icon-only control.
 
 ## Usage
 
@@ -74,7 +104,7 @@ import Button from '@aziontech/webkit/button'
 
 | Trigger                                            | Animation / Transition                                                                                                           | Token                                                  | Reduced-motion fallback         |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
-| state change                                       | `transition-colors duration-150 ease-out`                                                                                        | inline                                                 | `motion-reduce:transition-none` |
+| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
 | hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens

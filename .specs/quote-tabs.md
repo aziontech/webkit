@@ -2,14 +2,14 @@
 name: quote-tabs
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: c637a814bbe9c49a87249efffa70c5439ef8fb38536111cea77a919361fc25a4
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-10-01
+last_updated: 2026-11-09
 ---
 
 # Quote Tabs — Component Spec

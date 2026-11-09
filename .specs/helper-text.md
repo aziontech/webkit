@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: 234a4c7523258645ff2c343e58b02ca3ca826506b87017c99653a3f1943c9658
+checksum: 14d654e7eb44ef5aab4089b9109a6672cac0f6d46ca18770da4e0885b9f76667
 created: 2026-06-15
-last_updated: 2026-06-15
+last_updated: 2026-11-09
 ---
 
 # HelperText — Component Spec
@@ -17,6 +17,29 @@ last_updated: 2026-06-15
 ## Purpose
 
 Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it.
+
+## When to use
+
+- Guidance under a bare input you compose yourself (format hints, limits).
+- A validation error (`kind="invalid"`), a required reminder (`kind="required"`), or a locked-field notice (`kind="disabled"`) under a field.
+
+## When NOT to use
+
+- A standard form field → use `field-text` or another `field-*` wrapper, which renders the helper and wires it to the input.
+- The field name or required marker above the input → use `label`.
+- Feedback about a whole form or page rather than one field → use `message`.
+
+## Related
+
+- `label` — sits above the input; HelperText sits below it.
+- `field-text` — switches the helper `kind` from its own `invalid` and `disabled` props.
+- `message` — banner-level feedback with severity and an optional action.
+
+## Best practices
+
+- Give it an `id` and point the input's `aria-describedby` at it so screen readers read it with the field.
+- Pick `kind` from the field state: `invalid` for errors, `required` for a missing required value, `disabled` when the field is locked.
+- Keep it to one short line; `kind="disabled"` already prepends the lock icon, so do not add another.
 
 ## Usage
 

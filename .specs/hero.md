@@ -2,11 +2,11 @@
 name: hero
 category: marketing
 structure: composition
-status: approved
+status: implemented
 spec_version: 2
 checksum: 005ffce872d223073e8cdcaae8ffe3af6c7d6a12d43f067479f0de4d057095da
 created: 2026-09-22
-last_updated: 2026-10-23
+last_updated: 2026-11-09
 ---
 
 # Hero — Component Spec

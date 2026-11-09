@@ -2,11 +2,11 @@
 name: product-widget
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 checksum: 1033d8bec482f7e8f13fe1a5773a0bec7ea72b1a672c40a029a23a492927ad3a
 created: 2026-10-23
-last_updated: 2026-10-23
+last_updated: 2026-11-09
 ---
 
 # ProductWidget — Component Spec
