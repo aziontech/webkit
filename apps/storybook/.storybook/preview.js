@@ -182,6 +182,13 @@ export const parameters = {
             'States',
             'Detail',
             'Observe',
+            [
+              'MetricPanel',
+              'TrafficDashboard',
+              'UsageDashboard',
+              'EdgeHealthDashboard',
+              'ThreatDashboard'
+            ],
             'Account'
           ],
           'Headers',
