@@ -10,7 +10,7 @@ const IMPORT_ICON_BUTTON = "import IconButton from '@aziontech/webkit/icon-butto
 
 /** @type {import('@storybook/vue3').Meta<typeof CardBox>} */
 const meta = {
-  title: 'Components/Content/CardBox',
+  title: 'Components/Primitives/Content/CardBox',
   component: CardBox,
   tags: ['autodocs'],
   parameters: {
@@ -147,7 +147,8 @@ export const Header = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'An action rendered through the `header` slot stays visible, aligned to the end of the header.'
+        story:
+          'An action rendered through the `header` slot stays visible, aligned to the end of the header.'
       },
       source: { code: toSfc([IMPORT, IMPORT_ICON_BUTTON], HEADER_ACTION_TEMPLATE) }
     }

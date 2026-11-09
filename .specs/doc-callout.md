@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b255666b3b5f7ad78634c367e9bc3ee58415a7b53a17745da1cac144867768c9
+checksum: 6b1bfae5f1f00f6b4f9b463764799a4c24d11c1d825b5e65874c8c54f2e1964e
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-09-25
 ---
 
 # DocCallout — Component Spec
 
 ## Purpose
 
-The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and one row of inline prose, nothing else.
+The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 ## When to use
 
@@ -22,7 +22,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## When NOT to use
 
-- For a block that needs its own box — a list, a fenced sample, a card grid. Those belong outside the callout; its body is inline prose.
+- For a block that needs its own box — a fenced sample, a table, a card grid. Those belong outside the callout; its body is prose, at most a short list.
 - For an application-screen banner or a form error — use `Message` directly, which is what this composes.
 - As a section heading. A callout is an interruption, not structure.
 
@@ -34,7 +34,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 ## Best practices
 
 - Let the glyph and the tint carry the severity; do not restate it in the copy ("Warning: …").
-- Keep the body to inline prose — a sentence or two, links and inline code.
+- Keep the body short — a sentence or two, links and inline code. A list is fine when the aside enumerates actions; the callout lays it out itself, because `DocProse` stops at its edge.
 - Reach for `tip` when the aside claims nothing about stakes. Borrowing `check` for a friendly shortcut paints a shortcut the same green as a confirmed success.
 
 ## Usage
@@ -64,9 +64,9 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## Slots
 
-| Slot      | Scope | Notes                                                  |
-| --------- | ----- | ------------------------------------------------------ |
-| `default` | —     | The callout copy: inline prose, links and inline code. |
+| Slot      | Scope | Notes                                                                                                                                                                                                                                |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `default` | —     | The callout copy: prose with links and inline code, or paragraphs and a list, laid out by the callout since `DocProse` stops at its edge. The copy region is a flow container, so server-rendered block markup stays inside the box. |
 
 ## States
 

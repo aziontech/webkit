@@ -6,7 +6,7 @@ const IMPORT = "import IconButton from '@aziontech/webkit/icon-button'"
 
 /** @type {import('@storybook/vue3').Meta<typeof IconButton>} */
 const meta = {
-  title: 'Components/Actions/IconButton',
+  title: 'Components/Primitives/Actions/IconButton',
   component: IconButton,
   tags: ['autodocs'],
   parameters: {

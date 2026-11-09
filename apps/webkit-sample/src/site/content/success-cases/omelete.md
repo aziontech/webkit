@@ -21,7 +21,7 @@ By adopting the **Azion Platform**, Omelete not only moved its services to a dis
 With the **Azion Platform**, Omelete runs applications on a modern distributed architecture and optimizes its services using tools such as:
 
 - **Image Processor:** allows Omelete to optimize and manipulate website images in real time without compromising visual quality;
-- **Application Acceleration:** enables high-speed access to group websites, even on unstable networks, through protocol optimization and advanced request and response rules;
+- **Application Accelerator:** enables high-speed access to group websites, even on unstable networks, through protocol optimization and advanced request and response rules;
 - **Cache:** accelerates the delivery of static and dynamic content by keeping it cached within Azion’s infrastructure, closer to users.
 
 In addition to the performance gains enabled by the **Azion Platform**, the creation of **Applications** helped Omelete significantly reduce costs with its cloud provider by decreasing the number of requests processed by its origin infrastructure.
@@ -56,7 +56,7 @@ The result was impressive: **Applications improved the user experience by up to 
 
 During the event, traffic volumes reached **100× the average request volume** handled by Omelete’s servers in 2020 and **1,000× the average data transfer volume**, with a large share of requests delivered through Azion’s infrastructure.
 
-With a globally distributed network, Azion enabled Omelete to maximize its event promotion investments and remain online even during massive traffic spikes.
+With a globally distributed infrastructure, Azion enabled Omelete to maximize its event promotion investments and remain online even during massive traffic spikes.
 
 ## About Omelete
 

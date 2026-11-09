@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 8ca61e4ceb1c1714a37ed3723f8d642264cbe06ca309f7d37b95f4bdbea54724
+checksum: 41f90c659f1952c04a1432b96ff1468db9fd35ee99d6e2b57b958c7305252ba6
 created: 2026-05-22
-last_updated: 2026-08-10
+last_updated: 2026-10-23
 ---
 # Message — Component Spec
 
@@ -64,7 +64,7 @@ import Message from '@aziontech/webkit/message'
 | Slot | Scope | Notes |
 |---|---|---|
 | `action` | — | Custom action control; replaces the built-in Button when provided. |
-| `default` | — | Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty. |
+| `default` | — | Message copy. Inline content — plain text plus anchors, which the message region styles with the `.text-link` token — or flow content such as paragraphs and a list. The copy region is a flow container (a `div`, not a `p`), so block markup arriving from a server render stays inside it instead of being closed out beside the copy. Falls back to `label` when empty. |
 
 ## States
 

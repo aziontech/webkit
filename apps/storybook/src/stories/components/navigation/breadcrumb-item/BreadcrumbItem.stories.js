@@ -6,7 +6,7 @@ const IMPORT = "import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'"
 
 /** @type {import('@storybook/vue3').Meta<typeof BreadcrumbItem>} */
 const meta = {
-  title: 'Components/Navigation/BreadcrumbItem',
+  title: 'Components/Primitives/Navigation/BreadcrumbItem',
   component: BreadcrumbItem,
   tags: ['autodocs'],
   parameters: {

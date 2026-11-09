@@ -1,12 +1,15 @@
 import Button from '@aziontech/webkit/button'
 import CardGrid from '@aziontech/webkit/card-grid'
 import MediaSplit from '@aziontech/webkit/media-split'
+import ScrollArea from '@aziontech/webkit/scroll-area'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Topic from '@aziontech/webkit/topic'
 
-import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { editable } from '../../_shared/editable-content'
+import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -18,11 +21,16 @@ const IMPORTS = [
   "import Topic from '@aziontech/webkit/topic'"
 ]
 
+const VISIBLE_ITEMS = 4
+
+const SCROLLING_IMPORTS = [...IMPORTS, "import ScrollArea from '@aziontech/webkit/scroll-area'"]
+
 const components = {
   Button,
   CardGrid,
   'CardGrid.Cell': CardGrid.Cell,
   MediaSplit,
+  ScrollArea,
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -33,11 +41,11 @@ const FINANCIAL = {
   eyebrow: 'Go Deeper',
   title: 'Guides and Resources',
   description:
-    'Documentation, articles, and customer stories on building secure, compliant financial applications on distributed infrastructure.',
+    'Documentation, articles, and customer stories on building secure, compliant financial applications on a distributed architecture.',
   items: [
     {
-      title: 'New at Azion? Start your Azion journey seamlessly',
-      description: 'This documentation will guide you through your first steps with Azion.',
+      title: 'New to Azion? Start here',
+      description: 'A guide to your first steps with Azion.',
       href: '/docs'
     },
     {
@@ -48,15 +56,37 @@ const FINANCIAL = {
     {
       title: 'How Technology Can Help You Comply with Regulations for Fintech',
       description:
-        'Distributed infrastructure provides robust security, regulatory compliance, and intelligent monitoring for reliable, scalable operations.',
+        'Distributed infrastructure brings security, compliance, and monitoring together for reliable, scalable operations.',
       href: 'https://www.azion.com/en/blog/how-technology-can-help-comply-with-regulations-for-fintech/'
     },
     {
       title: 'How Justa is evolving its technology to meet modern digital demands',
       description:
-        'Discover how Justa uses the Azion Web Platform to optimize security and performance in PIX and QR Code transactions.',
+        'See how Justa uses the Azion Web Platform to improve security and performance in PIX and QR Code transactions.',
       href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/'
     }
+  ]
+}
+
+const TECHNOLOGY = {
+  eyebrow: 'Go Deeper',
+  title: 'Guides and Resources',
+  description:
+    'Documentation and articles on building, securing, and scaling modern applications on a distributed architecture.',
+  items: [
+    ...FINANCIAL.items.slice(0, 2),
+    {
+      title: 'Build modern applications with Functions',
+      description: 'Create serverless functions that run close to users.',
+      href: 'https://www.azion.com/en/documentation/products/build/edge-application/edge-functions/'
+    },
+    {
+      title: 'SQL Database for modern applications',
+      description:
+        'Build data-driven applications with SQL Database on a distributed architecture.',
+      href: 'https://www.azion.com/en/documentation/products/store/edge-sql/'
+    },
+    ...FINANCIAL.items.slice(2)
   ]
 }
 
@@ -64,20 +94,40 @@ const isExternal = (href) => /^https?:/.test(href)
 
 const resourceCard = (card) =>
   [
-    '<CardGrid.Cell',
-    '  kind="surface"',
-    '  :padded="false"',
-    '>',
+    '<CardGrid.Cell kind="surface">',
     '  <Topic',
     '    :heading-level="3"',
     `    title="${card.title}"`,
     `    description="${card.description}"`,
     `    href="${card.href}"`,
     ...(isExternal(card.href) ? ['    target="_blank"', '    rel="noopener noreferrer"'] : []),
-    '    class="h-full p-(--spacing-xl)"',
     '  />',
     '</CardGrid.Cell>'
   ].join('\n')
+
+const cardGrid = (resources, classes) => `<CardGrid
+  flush
+  kind="frame"
+  :columns="2"${classes ? `\n  class="${classes}"` : ''}
+>
+${each(resources.items, resourceCard, 1)}
+</CardGrid>`
+
+const resourceMedia = (resources) =>
+  resources.items.length > VISIBLE_ITEMS
+    ? `<div class="relative -mb-px flex w-full flex-col self-stretch">
+  <div class="flex min-h-0 flex-1 flex-col lg:absolute lg:inset-0">
+    <ScrollArea
+      aria-label="${resources.title}"
+      fade
+    >
+      <div class="pb-px">
+${indent(cardGrid(resources), 4)}
+      </div>
+    </ScrollArea>
+  </div>
+</div>`
+    : cardGrid(resources, 'w-full self-stretch sm:auto-rows-fr')
 
 const resourceGrid = (resources) =>
   inColumn(`<SectionModule
@@ -95,14 +145,7 @@ const resourceGrid = (resources) =>
     description="${resources.description}"
   >
     <template #media>
-      <CardGrid
-        flush
-        kind="frame"
-        :columns="2"
-        class="w-full self-stretch"
-      >
-${each(resources.items, resourceCard, 4)}
-      </CardGrid>
+${indent(resourceMedia(resources), 3)}
     </template>
     <template #actions>
       <Button
@@ -120,19 +163,15 @@ ${each(resources.items, resourceCard, 4)}
 </SectionModule>`)
 
 const FINANCIAL_TEMPLATE = resourceGrid(FINANCIAL)
+const SCROLLING_TEMPLATE = resourceGrid(TECHNOLOGY)
 
 const meta = {
   title: 'Templates/Marketing/Content/ResourceGrid',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The guides band of a solution page: a framed split whose copy points the reader at further reading, beside a two-column grid of four linked resource cards, each a title and one sentence. A card that leaves the site opens in a new tab. Financial Services and Technology render it. Built from `SectionModule`, `MediaSplit`, `CardGrid`, `Topic` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -141,14 +180,50 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: FINANCIAL_TEMPLATE }),
+  ...editable(() => ({ components, template: FINANCIAL_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Financial Services page’s four resources under the default `Go Deeper` eyebrow: the getting-started docs and the Learning Center on the site, and two blog articles that open in a new tab.'
-      },
       source: { code: toSfc(IMPORTS, FINANCIAL_TEMPLATE) }
     }
   }
+}
+
+export const Scrollable = {
+  ...editable(() => ({ components, template: SCROLLING_TEMPLATE })),
+  parameters: {
+    docs: {
+      source: { code: toSfc(SCROLLING_IMPORTS, SCROLLING_TEMPLATE) }
+    }
+  }
+}
+
+export const SITE_SECTION = {
+  _id: 'resource-grid',
+  props: {
+    title: 'Guides and Resources',
+    items: [
+      {
+        title: 'New to Azion? Start here',
+        description: 'A guide to your first steps with Azion.',
+        href: 'https://www.azion.com/en/documentation/products/azion-platform-overview/'
+      },
+      {
+        title: 'How Technology Can Help You Comply with Regulations for Fintech',
+        description:
+          'Distributed infrastructure brings security, compliance, and monitoring together for reliable, scalable operations.',
+        href: 'https://www.azion.com/en/blog/how-technology-can-help-comply-with-regulations-for-fintech/'
+      },
+      {
+        title: 'How Justa is evolving its technology to meet modern digital demands',
+        description:
+          'See how Justa uses the Azion Web Platform to improve security and performance in PIX and QR Code transactions.',
+        href: 'https://www.azion.com/en/blog/how-justa-has-been-evolving-its-technology-to-meet-modern-digital-demands/'
+      }
+    ]
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

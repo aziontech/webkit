@@ -40,7 +40,7 @@ Authoritative DNS servers have a throughput limit. Send more queries per second 
 
 DNS amplification multiplies the attack volume. An attacker spoofs the victim’s IP address and sends small DNS queries to open resolvers across the internet. Those resolvers send large responses to the spoofed address. The amplification ratio can reach 50 to 1, meaning a small botnet generates hundreds of gigabits per second of inbound traffic against a single target.
 
-**Defense:** Anycast routing distributes authoritative DNS across many locations simultaneously. When flood traffic arrives, it hits the nearest node rather than concentrating on a single server. That node absorbs what it can; the rest of the network keeps serving. [Azion’s Edge DNS](https://www.azion.com/en/documentation/products/secure/edge-dns/)runs authoritative resolution across Azion’s distributed network with [DDoS protection](https://www.azion.com/en/documentation/products/secure/firewall/ddos-protection/) built into the network layer, so flood traffic never reaches a single point of failure.
+**Defense:** Anycast routing distributes authoritative DNS across many locations simultaneously. When flood traffic arrives, it hits the nearest node rather than concentrating on a single server. That node absorbs what it can; the rest of the network keeps serving. [Azion’s Edge DNS](https://www.azion.com/en/documentation/products/secure/edge-dns/)runs authoritative resolution across Azion’s distributed infrastructure with [DDoS protection](https://www.azion.com/en/documentation/products/secure/firewall/ddos-protection/) built into the network layer, so flood traffic never reaches a single point of failure.
 
 ---
 
@@ -54,7 +54,7 @@ The firewall logged a DNS query. The SIEM ignored it. The data left.
 
 What makes this difficult to catch is that the traffic looks legitimate at the protocol level. DNS queries on port 53 are expected and allowed. The difference is in the pattern: tunneling traffic has unusually long subdomain strings, high query volume to a single domain, and character distributions that do not match real hostnames. Normal DNS traffic is short, goes to a small set of known domains, and subdomains look like real hostnames.
 
-**Defense:** Log port 53 traffic and look for anomalies in query length, frequency, and subdomain entropy. [Azion’s Real-Time Events](https://www.azion.com/en/documentation/products/observe/real-time-events/) captures DNS query data at the network edge, giving visibility into what is leaving the network before requests reach origin infrastructure. Blocking or rate-limiting outbound DNS to unknown resolvers reduces the channel’s availability for exfiltration entirely.
+**Defense:** Log port 53 traffic and look for anomalies in query length, frequency, and subdomain entropy. [Azion’s Real-Time Events](https://www.azion.com/en/documentation/products/observe/real-time-events/) captures DNS query data close to users, giving visibility into what is leaving the network before requests reach origin infrastructure. Blocking or rate-limiting outbound DNS to unknown resolvers reduces the channel’s availability for exfiltration entirely.
 
 ---
 
@@ -76,7 +76,7 @@ MFA and [DNSSEC](https://www.azion.com/en/documentation/products/guides/secure/a
 
 ## What Edge DNS covers
 
-[Azion’s Edge DNS](https://www.azion.com/en/documentation/products/secure/edge-dns/) runs authoritative DNS on Azion’s distributed network. DNSSEC is built in. DDoS protection absorbs flood traffic at the network layer before it concentrates on any single node. DNS query logs flow into [Real-Time Events](https://www.azion.com/en/documentation/products/observe/real-time-events/), so query volume, subdomain patterns, and resolution behavior are visible without additional tooling.
+[Azion’s Edge DNS](https://www.azion.com/en/documentation/products/secure/edge-dns/) runs authoritative DNS on Azion’s distributed infrastructure. DNSSEC is built in. DDoS protection absorbs flood traffic at the network layer before it concentrates on any single node. DNS query logs flow into [Real-Time Events](https://www.azion.com/en/documentation/products/observe/real-time-events/), so query volume, subdomain patterns, and resolution behavior are visible without additional tooling.
 
 All three attack surfaces, hijacking, flooding, and tunneling, are addressed from a single configuration.
 

@@ -15,7 +15,7 @@ Its previous architecture limited efficient scalability, especially as traffic a
 
 ## Solution
 
-To accelerate its digital transformation, Marisa adopted the Azion Platform, modernizing its architecture with distributed execution and granular control over how each request is processed.
+To accelerate its modernization, Marisa adopted the Azion Platform, modernizing its architecture with distributed execution and granular control over how each request is processed.
 
 Following a successful proof of concept, the company began operating its Applications on Azion’s distributed infrastructure, combining [advanced caching](https://www.azion.com/en/products/cache/) strategies, [application acceleration](https://www.azion.com/en/products/application-accelerator/), and programmable media processing.
 
@@ -56,4 +56,4 @@ The Azion Platform became a strategic component of Marisa’s digital architectu
 
 Marisa is Brazil’s largest women’s fashion and lingerie retail chain, with more than 70 years of history and 344 physical stores nationwide.
 
-Creator of the iconic slogan “De Mulher para Mulher” (“From Woman to Woman”), the company blends tradition and innovation, positioning itself as a comprehensive platform for women. Its initiatives include a women-focused marketplace, Mbank (financial services), Dark Stores, Sacola de Vantagens, Click & Collect, and Universo M, a content hub dedicated to fashion, beauty, health, well-being, and financial empowerment.
+Creator of the iconic slogan “De Mulher para Mulher” (“From Woman to Woman”), the company blends tradition and innovation, positioning itself as a comprehensive platform for women. Its initiatives include a women-focused marketplace, Mbank (financial services), Dark Stores, Sacola de Vantagens, Click & Collect, and Universo M, a content hub dedicated to fashion, beauty, health, well-being, and financial independence.

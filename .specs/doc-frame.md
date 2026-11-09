@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c64d4657c90e124a8dcd6b5bcea971344a6fc67dbd4931fe0f0071c9ae2580a9
+checksum: 10d8c643d6f04b11d0cc7ae7bdaf0c39ee40ea52ea1f750fe96aa4dbd9c024b6
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-09-25
 ---
 
 # DocFrame — Component Spec

@@ -90,8 +90,10 @@
               href: "https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&display=swap",
             },
           };
+          var path = location.pathname;
+          var onSite = path === "/site" || path.indexOf("/site/") === 0;
           var saved = localStorage.getItem("webkit-sample-font-face");
-          var font = FONTS[saved] ? saved : "rubik";
+          var font = onSite ? "sora" : FONTS[saved] ? saved : "rubik";
           var root = document.documentElement;
           root.style.setProperty("--app-font", FONTS[font].stack);
           root.setAttribute("data-font", font);

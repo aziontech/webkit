@@ -156,11 +156,11 @@
   >
     <Hero.Title
       centered
-      title="Trusted by Leading Companies"
+      title="Trusted by leading companies"
     >
       <template #actions>
         <Button
-          label="Start Free"
+          label="Start free"
           kind="secondary"
           size="large"
           @click="goSignup"
@@ -251,7 +251,7 @@
       <template #header>
         <SectionTitle
           kind="left"
-          title="Organizations shaping the future of the web with us"
+          title="Companies building on Azion"
         />
       </template>
 
@@ -509,7 +509,7 @@
       >
         <template #actions>
           <Button
-            label="Start Free"
+            label="Start free"
             kind="secondary"
             size="large"
             @click="goSignup"
@@ -517,7 +517,7 @@
         </template>
         <template #aside>
           <Button
-            label="Talk to our team"
+            label="Talk to an expert"
             kind="outlined"
             size="large"
             href="/site/contact"

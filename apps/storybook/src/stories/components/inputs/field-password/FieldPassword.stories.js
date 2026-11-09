@@ -11,7 +11,7 @@ const RULES_IMPORT =
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPassword>} */
 const meta = {
-  title: 'Components/Inputs/FieldPassword',
+  title: 'Components/Primitives/Inputs/FieldPassword',
   component: FieldPassword,
   tags: ['autodocs'],
   parameters: {

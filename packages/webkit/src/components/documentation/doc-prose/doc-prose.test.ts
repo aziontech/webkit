@@ -166,4 +166,25 @@ describe('DocProse', () => {
       await expectNoA11yViolations(container)
     })
   })
+
+  describe('the first-block reset stops at chrome', () => {
+    // Pixels belong to the visual gate; this asserts the contract in the class list.
+    const firstChildRules = (root: HTMLElement) =>
+      root.className.split(/\s+/).filter((cls) => cls.startsWith('[&>*:first-child'))
+
+    it('zeroes the margin of the first block at both levels, chrome included', () => {
+      const { getByTestId } = render(DocProse, { slots: { default: '<p>Body copy.</p>' } })
+      const rules = firstChildRules(getByTestId('documentation-doc-prose'))
+      expect(rules).toContain('[&>*:first-child]:mt-0!')
+      expect(rules).toContain('[&>*:first-child>*:first-child]:mt-0!')
+    })
+
+    it('zeroes the padding of the first block only when it is not chrome', () => {
+      const { getByTestId } = render(DocProse, { slots: { default: '<p>Body copy.</p>' } })
+      const rules = firstChildRules(getByTestId('documentation-doc-prose'))
+      expect(rules).toContain('[&>*:first-child:not([data-doc-chrome])]:pt-0!')
+      expect(rules).toContain('[&>*:first-child>*:first-child:not([data-doc-chrome])]:pt-0!')
+      expect(rules.filter((cls) => cls.endsWith(':pt-0!'))).toHaveLength(2)
+    })
+  })
 })

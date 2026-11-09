@@ -87,7 +87,7 @@
     {
       key: 'github',
       name: 'Github',
-      icon: 'pi pi-github',
+      icon: 'ai ai-github',
       connected: true,
       tag: 'Active',
       description:

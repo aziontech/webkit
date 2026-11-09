@@ -11,7 +11,6 @@ const GlobalHeader = GlobalHeaderRoot
 GlobalHeader.Container = GlobalHeaderContainer
 GlobalHeader.Left = GlobalHeaderLeft
 GlobalHeader.Middle = GlobalHeaderMiddle
-// Figma names the center region "Nav"; expose it as an alias without dropping Middle.
 GlobalHeader.Nav = GlobalHeaderMiddle
 GlobalHeader.Right = GlobalHeaderRight
 GlobalHeader.Brand = GlobalHeaderBrand

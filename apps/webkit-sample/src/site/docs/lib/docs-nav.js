@@ -2341,174 +2341,167 @@ export const docsNavSections = [
       {
         id: 'firewall',
         label: 'Firewall',
-        kind: 'drill',
-        href: '/site/docs/firewall',
-        groups: [
+        children: [
           {
-            label: 'Firewall',
-            items: [
+            id: 'firewall-overview',
+            label: 'Overview',
+            href: '/site/docs/firewall'
+          },
+          {
+            id: 'firewall-quickstart',
+            label: 'Quickstart'
+          },
+          {
+            id: 'firewall-how-it-works',
+            label: 'How it works'
+          },
+          {
+            id: 'firewall-waf',
+            label: 'WAF',
+            children: [
               {
-                id: 'firewall-overview',
-                label: 'Overview',
-                href: '/site/docs/firewall'
-              },
-              {
-                id: 'firewall-quickstart',
+                id: 'firewall-waf-quickstart',
                 label: 'Quickstart'
               },
               {
-                id: 'firewall-how-it-works',
-                label: 'How it works'
-              },
-              {
-                id: 'firewall-waf',
-                label: 'WAF',
-                children: [
-                  {
-                    id: 'firewall-waf-quickstart',
-                    label: 'Quickstart'
-                  },
-                  {
-                    id: 'firewall-waf-reference',
-                    label: 'Reference',
-                    children: [
-                      {
-                        id: 'firewall-waf-scoring-and-modes',
-                        label: 'Scoring and modes'
-                      },
-                      {
-                        id: 'firewall-waf-rules-set',
-                        label: 'Rule sets'
-                      },
-                      {
-                        id: 'firewall-waf-custom-allowed-rules',
-                        label: 'Exceptions'
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                id: 'firewall-network-shield',
-                label: 'Network Shield',
-                children: [
-                  {
-                    id: 'firewall-network-shield-quickstart',
-                    label: 'Quickstart'
-                  },
-                  {
-                    id: 'firewall-network-shield-reference',
-                    label: 'Reference',
-                    children: [
-                      {
-                        id: 'firewall-network-shield-list-matching',
-                        label: 'List matching'
-                      },
-                      {
-                        id: 'firewall-network-shield-network-lists',
-                        label: 'Network Lists'
-                      },
-                      {
-                        id: 'firewall-network-shield-reference-runtime-api',
-                        label: 'Runtime API',
-                        ref: true
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                id: 'firewall-bot-manager',
-                label: 'Bot Manager',
-                children: [
-                  {
-                    id: 'firewall-bot-manager-quickstart',
-                    label: 'Quickstart'
-                  },
-                  {
-                    id: 'firewall-bot-manager-reference',
-                    label: 'Reference',
-                    children: [
-                      {
-                        id: 'firewall-bot-manager-bot-scoring',
-                        label: 'Bot scoring'
-                      },
-                      {
-                        id: 'firewall-bot-manager-arguments',
-                        label: 'Arguments'
-                      },
-                      {
-                        id: 'firewall-bot-manager-logs',
-                        label: 'Logs'
-                      },
-                      {
-                        id: 'firewall-bot-manager-bot-manager-lite',
-                        label: 'Bot Manager Lite'
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                id: 'firewall-guides',
-                label: 'Guides and tutorials'
-              },
-              {
-                id: 'firewall-reference',
+                id: 'firewall-waf-reference',
                 label: 'Reference',
                 children: [
                   {
-                    id: 'firewall-functions',
-                    label: 'Functions for Firewall'
+                    id: 'firewall-waf-scoring-and-modes',
+                    label: 'Scoring and modes'
                   },
                   {
-                    id: 'firewall-functions-instances',
-                    label: 'Function instances for Firewall'
+                    id: 'firewall-waf-rules-set',
+                    label: 'Rule sets'
                   },
                   {
-                    id: 'firewall-rules-engine',
-                    label: 'Rules Engine for Firewall'
-                  },
-                  {
-                    id: 'firewall-reference-functions',
-                    label: 'Functions',
-                    ref: true,
-                    href: '/site/docs/functions'
+                    id: 'firewall-waf-custom-allowed-rules',
+                    label: 'Exceptions'
                   }
                 ]
+              }
+            ]
+          },
+          {
+            id: 'firewall-network-shield',
+            label: 'Network Shield',
+            children: [
+              {
+                id: 'firewall-network-shield-quickstart',
+                label: 'Quickstart'
               },
               {
-                id: 'firewall-limits',
-                label: 'Limits'
-              },
-              {
-                id: 'firewall-best-practices',
-                label: 'Best practices'
-              },
-              {
-                id: 'firewall-troubleshooting',
-                label: 'Troubleshooting'
-              },
-              {
-                id: 'firewall-glossary',
-                label: 'Glossary'
-              },
-              {
-                id: 'firewall-management',
-                label: 'Management',
+                id: 'firewall-network-shield-reference',
+                label: 'Reference',
                 children: [
                   {
-                    id: 'firewall-management-pricing',
-                    label: 'Pricing',
-                    ref: true
+                    id: 'firewall-network-shield-list-matching',
+                    label: 'List matching'
                   },
                   {
-                    id: 'firewall-management-changelog',
-                    label: 'Changelog',
-                    ref: true,
-                    href: '/site/docs/release-notes'
+                    id: 'firewall-network-shield-network-lists',
+                    label: 'Network Lists'
+                  },
+                  {
+                    id: 'firewall-network-shield-reference-runtime-api',
+                    label: 'Runtime API',
+                    ref: true
                   }
                 ]
+              }
+            ]
+          },
+          {
+            id: 'firewall-bot-manager',
+            label: 'Bot Manager',
+            children: [
+              {
+                id: 'firewall-bot-manager-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'firewall-bot-manager-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'firewall-bot-manager-bot-scoring',
+                    label: 'Bot scoring'
+                  },
+                  {
+                    id: 'firewall-bot-manager-arguments',
+                    label: 'Arguments'
+                  },
+                  {
+                    id: 'firewall-bot-manager-logs',
+                    label: 'Logs'
+                  },
+                  {
+                    id: 'firewall-bot-manager-bot-manager-lite',
+                    label: 'Bot Manager Lite'
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'firewall-guides',
+            label: 'Guides and tutorials'
+          },
+          {
+            id: 'firewall-reference',
+            label: 'Reference',
+            children: [
+              {
+                id: 'firewall-functions',
+                label: 'Functions for Firewall'
+              },
+              {
+                id: 'firewall-functions-instances',
+                label: 'Function instances for Firewall'
+              },
+              {
+                id: 'firewall-rules-engine',
+                label: 'Rules Engine for Firewall'
+              },
+              {
+                id: 'firewall-reference-functions',
+                label: 'Functions',
+                ref: true,
+                href: '/site/docs/functions'
+              }
+            ]
+          },
+          {
+            id: 'firewall-limits',
+            label: 'Limits'
+          },
+          {
+            id: 'firewall-best-practices',
+            label: 'Best practices'
+          },
+          {
+            id: 'firewall-troubleshooting',
+            label: 'Troubleshooting'
+          },
+          {
+            id: 'firewall-glossary',
+            label: 'Glossary'
+          },
+          {
+            id: 'firewall-management',
+            label: 'Management',
+            children: [
+              {
+                id: 'firewall-management-pricing',
+                label: 'Pricing',
+                ref: true
+              },
+              {
+                id: 'firewall-management-changelog',
+                label: 'Changelog',
+                ref: true,
+                href: '/site/docs/release-notes'
               }
             ]
           }

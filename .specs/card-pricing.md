@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 61f0bfa3dd66961de163959526fd4905c25f762d2e35f5e7501c205b62eda98d
+checksum: 9b9998f097a1266fe07008d5b0fd231f0014078e0abb52b5db9cc2e828586128
 created: 2026-05-22
-last_updated: 2026-08-28
+last_updated: 2026-10-29
 ---
 
 # Card Pricing — Component Spec
@@ -45,6 +45,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 | `showPrefix`         | `boolean`                      | `true`        | false    | show Prefix.                                                                                      |
 | `showSuffix`         | `boolean`                      | `true`        | false    | show Suffix.                                                                                      |
 | `actionLabel`        | `string`                       | `'Label'`     | false    | action Label.                                                                                     |
+| `animated`           | `boolean`                      | `false`       | false    | Rolls the price into place when value changes, such as on a billing-period toggle.                |
 
 ## Events
 

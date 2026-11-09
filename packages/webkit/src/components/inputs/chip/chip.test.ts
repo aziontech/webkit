@@ -1,12 +1,13 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/chip/Chip.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Chip from './chip.vue'
 
-const { Clickable, Default, Removable, Sizes, Types } = composeStories(stories)
+const { Clickable, Default, Removable, Selectable, Sizes, Types } = composeStories(stories)
 
 describe('Chip', () => {
   it('renders a <span> root carrying the default data-testid and default size', () => {
@@ -212,6 +213,170 @@ describe('Chip', () => {
       expect(root).not.toHaveAttribute('role')
       await fireEvent.click(root)
       expect(emitted().click).toBeUndefined()
+    })
+  })
+
+  describe('selectable', () => {
+    it('is a focusable toggle button that starts unpressed', () => {
+      const { getByTestId } = render(Chip, { props: { label: 'Env', selectable: true } })
+
+      const root = getByTestId('input-chip')
+      expect(root).toHaveAttribute('role', 'button')
+      expect(root).toHaveAttribute('tabindex', '0')
+      expect(root).toHaveAttribute('aria-pressed', 'false')
+      expect(root).not.toHaveAttribute('data-selected')
+    })
+
+    it('toggles on click, keeps the state, and emits update:selected with the new value', async () => {
+      const { getByTestId, emitted } = render(Chip, { props: { label: 'Env', selectable: true } })
+
+      const root = getByTestId('input-chip')
+      await fireEvent.click(root)
+
+      expect(root).toHaveAttribute('aria-pressed', 'true')
+      expect(root).toHaveAttribute('data-selected')
+      expect(emitted('update:selected')).toEqual([[true]])
+
+      await fireEvent.click(root)
+
+      expect(root).toHaveAttribute('aria-pressed', 'false')
+      expect(root).not.toHaveAttribute('data-selected')
+      expect(emitted('update:selected')).toEqual([[true], [false]])
+    })
+
+    it('still emits click with the event first and the label second', async () => {
+      const { getByTestId, emitted } = render(Chip, { props: { label: 'Env', selectable: true } })
+
+      await fireEvent.click(getByTestId('input-chip'))
+
+      expect(emitted('click')).toHaveLength(1)
+      expect(emitted('click')[0][0]).toBeInstanceOf(Event)
+      expect(emitted('click')[0][1]).toBe('Env')
+    })
+
+    it.each([['Enter'], [' ']])('toggles on %s from the keyboard', async (key) => {
+      const { getByTestId, emitted } = render(Chip, { props: { label: 'Env', selectable: true } })
+
+      const root = getByTestId('input-chip')
+      await fireEvent.keyDown(root, { key })
+
+      expect(root).toHaveAttribute('aria-pressed', 'true')
+      expect(emitted('update:selected')).toEqual([[true]])
+    })
+
+    it('round-trips a controlled v-model:selected', async () => {
+      const state = ref(true)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Chip, {
+            label: 'Env',
+            selectable: true,
+            selected: state.value,
+            'onUpdate:selected': (value: boolean) => {
+              state.value = value
+            }
+          })
+      })
+      const { getByTestId } = render(Host)
+
+      const root = getByTestId('input-chip')
+      expect(root).toHaveAttribute('aria-pressed', 'true')
+
+      await fireEvent.click(root)
+      expect(state.value).toBe(false)
+      expect(root).toHaveAttribute('aria-pressed', 'false')
+
+      state.value = true
+      await nextTick()
+      expect(root).toHaveAttribute('aria-pressed', 'true')
+      expect(root).toHaveAttribute('data-selected')
+    })
+
+    it('does not toggle or emit when disabled', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Env', selectable: true, disabled: true }
+      })
+
+      const root = getByTestId('input-chip')
+      expect(root).toHaveAttribute('aria-disabled', 'true')
+      expect(root).not.toHaveAttribute('tabindex')
+
+      await fireEvent.click(root)
+      await fireEvent.keyDown(root, { key: 'Enter' })
+
+      expect(root).toHaveAttribute('aria-pressed', 'false')
+      expect(emitted('update:selected')).toBeUndefined()
+      expect(emitted().click).toBeUndefined()
+    })
+
+    it('gives a non-selectable chip no toggle semantics', () => {
+      const { getAllByTestId } = render({
+        components: { Chip },
+        template: '<div><Chip label="Plain" /><Chip label="Pick" clickable /></div>'
+      })
+
+      for (const chip of getAllByTestId('input-chip')) {
+        expect(chip).not.toHaveAttribute('aria-pressed')
+        expect(chip).not.toHaveAttribute('data-selected')
+        expect(chip).not.toHaveAttribute('data-disabled')
+        expect(chip).not.toHaveAttribute('aria-disabled')
+      }
+    })
+
+    it('composes the Selectable story fixture as independent toggles', async () => {
+      const { getAllByTestId } = render(Selectable())
+
+      const chips = getAllByTestId('input-chip')
+      expect(chips.map((chip) => chip.getAttribute('aria-pressed'))).toEqual([
+        'true',
+        'false',
+        'false'
+      ])
+
+      await fireEvent.click(chips[1])
+      expect(chips.map((chip) => chip.getAttribute('aria-pressed'))).toEqual([
+        'true',
+        'true',
+        'false'
+      ])
+    })
+
+    it('has no a11y violations unpressed and pressed', async () => {
+      const { container, getByTestId } = render(Chip, {
+        props: { label: 'Env', selectable: true }
+      })
+      await expectNoA11yViolations(container)
+
+      await fireEvent.click(getByTestId('input-chip'))
+      expect(getByTestId('input-chip')).toHaveAttribute('aria-pressed', 'true')
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('disabled', () => {
+    it('suppresses click on a clickable chip', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Pick', clickable: true, disabled: true }
+      })
+
+      const root = getByTestId('input-chip')
+      expect(root).toHaveAttribute('data-disabled')
+      expect(root).toHaveAttribute('aria-disabled', 'true')
+
+      await fireEvent.click(root)
+      expect(emitted().click).toBeUndefined()
+    })
+
+    it('disables the remove control', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Env', removable: true, disabled: true }
+      })
+
+      const removeBtn = getByTestId('input-chip__remove')
+      expect(removeBtn).toBeDisabled()
+
+      await fireEvent.click(removeBtn)
+      expect(emitted('remove')).toBeUndefined()
     })
   })
 

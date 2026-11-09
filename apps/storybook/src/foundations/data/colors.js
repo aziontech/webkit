@@ -2,10 +2,10 @@
  * Color catalogs — primitives and theme layers from packages/theme/src/tokens/
  */
 export {
-  primitiveColorFamilies,
-  themeColorGroups,
   backgroundTokens,
-  textTokens,
   borderTokens,
-  playgroundColorTokens
+  playgroundColorTokens,
+  primitiveColorFamilies,
+  textTokens,
+  themeColorGroups
 } from '../utils/from-tokens.js'

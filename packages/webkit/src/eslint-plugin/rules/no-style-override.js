@@ -1,22 +1,14 @@
-// Flags class/style (static or bound) set directly on a webkit component tag: the DS
-// owns each component's appearance, and a consumer override defeats the tokens. The
-// consumer's own markup is never flagged. Escape hatches: catalog entry.styleSeam
-// (spec style_seam: true), the rule's options.allow (binding name or kebab subpath),
-// or a per-call-site eslint-disable. Fail-open: no catalog -> no bindings -> no-op.
-
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
 
 const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
 
-/** Returns { attr: 'class'|'style', bound } when the attribute is class/style, else null. */
 function styleAttr(attr) {
   if (!attr || attr.type !== 'VAttribute') return null
   if (!attr.directive) {
     const name = attr.key?.name
     return name === 'class' || name === 'style' ? { attr: name, bound: false } : null
   }
-  // directive: v-bind:class / :class / :style
   if (attr.key?.name?.name !== 'bind') return null
   const arg = attr.key?.argument
   const argName = arg && arg.type === 'VIdentifier' ? arg.name : null
@@ -34,9 +26,7 @@ export default {
       {
         type: 'object',
         properties: {
-          // Binding names (e.g. "CardBox") or kebab subpaths (e.g. "card-box") to exempt.
           allow: { type: 'array', items: { type: 'string' } },
-          // When false, only class/:class is flagged (style/:style allowed). Default true.
           checkStyle: { type: 'boolean' }
         },
         additionalProperties: false
@@ -56,8 +46,6 @@ export default {
     const allow = new Set(opts.allow || [])
     const checkStyle = opts.checkStyle !== false
 
-    // binding name -> { sub } for webkit component/root/subcomponent default imports that
-    // are NOT exempt (styleSeam / allow-listed).
     const bindings = new Map()
 
     const scriptVisitor = {
@@ -80,7 +68,6 @@ export default {
 
     function bindingForTag(rawName) {
       if (bindings.has(rawName)) return rawName
-      // dot-notation sub-component: <Table.Row> belongs to binding `Table`
       const dot = rawName.indexOf('.')
       if (dot > 0) {
         const base = rawName.slice(0, dot)

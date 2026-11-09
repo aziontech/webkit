@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import { Toaster, toast } from '@aziontech/webkit/toast'
+import { toast,Toaster } from '@aziontech/webkit/toast'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -27,7 +27,7 @@ const POSITIONS = [
 
 /** @type {import('@storybook/vue3').Meta<typeof Toaster>} */
 const meta = {
-  title: 'Components/Feedback/Toast',
+  title: 'Components/Primitives/Feedback/Toast',
   component: Toaster,
   tags: ['autodocs'],
   decorators: [

@@ -2,7 +2,6 @@ import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.sv
 import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
 import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
 import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-import BigNumbers from '@aziontech/webkit/big-numbers'
 import CardGrid from '@aziontech/webkit/card-grid'
 import FrameBox from '@aziontech/webkit/frame-box'
 import NetworkMap from '@aziontech/webkit/network-map'
@@ -13,7 +12,9 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 import Topic from '@aziontech/webkit/topic'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const BAND_IMPORTS = [
@@ -40,12 +41,7 @@ const BENEFITS_IMPORTS = [
   "import Topic from '@aziontech/webkit/topic'"
 ]
 
-const quoted = (text) => `'${text.replaceAll("'", "\\'")}'`
-
-const STATS_IMPORTS = ["import BigNumbers from '@aziontech/webkit/big-numbers'", ...BAND_IMPORTS]
-
 const components = {
-  BigNumbers,
   CardGrid,
   'CardGrid.Cell': CardGrid.Cell,
   FrameBox,
@@ -67,8 +63,8 @@ const setup = () => ({
 
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure, and scale workloads',
-  titleTail: '— without the complexity of managing or scaling it.',
+  title:
+    'One distributed infrastructure without the complexity of managing, securing and scaling it',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -90,7 +86,7 @@ const BENEFITS = [
     icon: 'pi pi-stopwatch',
     title: 'Low latency everywhere',
     description:
-      'Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app.'
+      'Compute, AI, databases, and security run in every data center, close to your users. Median global latency stays under 30 ms, with a built-in CDN and tiered caching for every app.'
   },
   {
     icon: 'pi pi-arrows-v',
@@ -98,13 +94,6 @@ const BENEFITS = [
     description:
       'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
   }
-]
-
-const FIGURES = [
-  { value: '7', suffix: 'x', label: 'faster pages' },
-  { value: '90', suffix: '%', label: 'lower cloud costs' },
-  { value: '40', suffix: 'x', label: 'more simultaneous connections' },
-  { value: '100', suffix: '%', label: 'OWASP Top 10 mitigation' }
 ]
 
 const MONOCHROME = 'brightness-0 [[data-theme=dark]_&]:invert'
@@ -148,8 +137,8 @@ const DESKTOP_MAP = `<NetworkMap
   :opacity="0.3"
   density="medium"
   :scale="1.3"
-  :offset-x="0.4"
-  :offset-y="-0.2"
+  :offset-x="0.5"
+  :offset-y="-0.22"
   class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
 />`
 
@@ -183,22 +172,21 @@ ${indent(DESKTOP_MAP, 2)}
           size="small"
           eyebrow="${NETWORK_BAND.eyebrow}"
           title="${NETWORK_BAND.title}"
-          description="${NETWORK_BAND.titleTail}"
-          class="relative [&_h2]:max-w-[27em] [&_h2]:text-heading-md! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] [&_h2+p]:text-heading-md [&_h2+p]:text-(--text-default)"
+          class="relative [&_h2]:max-w-(--container-lg)"
         />
 
 ${indent(MOBILE_MAP, 4)}
 
         <div class="relative flex flex-col gap-(--spacing-md)">
-          <p class="m-0 text-overline-sm text-(--text-muted)">
+          <p class="m-0 text-overline-md text-(--text-muted)">
             ${NETWORK_BAND.lead}
           </p>
 
-          <ul class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0">
+          <ul class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0">
 ${each(
   NETWORK_CLAIMS,
   (claim) => `<li
-  class="inline-flex h-7 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-sm) text-label-md text-(--text-default)"
+  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
 >
   ${claim}
 </li>`,
@@ -251,34 +239,16 @@ ${each(
 )}
 </CardGrid>`
 
-const figureLiteral = (figure) =>
-  `{ ${Object.entries(figure)
-    .map(([key, value]) => `${key}: ${quoted(value)}`)
-    .join(', ')} }`
-
-const STATS_FLOOR = `<BigNumbers
-  :items="[
-${FIGURES.map((figure) => `    ${figureLiteral(figure)}`).join(',\n')}
-  ]"
-  class="border-t border-(--border-default)"
-/>`
-
 const QUOTES_TEMPLATE = mapBand(OUTCOME_FLOOR)
 const BENEFITS_TEMPLATE = mapBand(BENEFIT_FLOOR)
-const STATS_TEMPLATE = mapBand(STATS_FLOOR)
 
 const meta = {
   title: 'Templates/Marketing/Network/NetworkSection',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION', 'BENEFITS_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The network argument as one framed section: an animated world map behind the claim (“Region: Earth.”), a lead line and four infrastructure claims as pills, then a floor that backs the claim up — client quotes, network benefits or figures, one story each. The title is set a step below the small size, held to 27em, with the closing clause on a line of its own, so the claim wraps in two lines over its clause and leaves the map clear. At every width the title holds the top of the band and the lead line, a muted overline, sits with the claims at the bottom; on tablets and phones the band is held taller than on desktop, so the map shows in the space between them. On phones the map is not a backdrop: it gets its own box between the title and the claims, bled to the frame’s edges and faded out at its top and bottom, so no line of copy ever sits on it. It is zoomed in and shifted right to frame the Atlantic: the Americas on the left, western Europe on the right, and only the edge of Africa. The map is two `NetworkMap`s, one behind the band from `md` up and one in its own box on phones. Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle` and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for the figures.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -287,40 +257,87 @@ const meta = {
 export default meta
 
 export const ClientQuotes = {
-  render: () => ({ components, setup, template: QUOTES_TEMPLATE }),
+  ...editable(() => ({ components, setup, template: QUOTES_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Home page and every solution page: four client outcomes as quotes with the figure highlighted, each signed by the client’s logo. Dafiti and Fourbank are drawn as one flat ink that follows the theme; MadeiraMadeira and Renner keep their brand colours.'
-      },
       source: { code: toSfc(QUOTES_IMPORTS, QUOTES_TEMPLATE) }
     }
   }
 }
 
+export const SITE_SECTION = {
+  _id: 'network-section',
+  props: {
+    eyebrow: 'Region: Earth.',
+    title:
+      'One distributed infrastructure without the complexity of managing, securing and scaling it',
+    lead: 'Built around your users. Distributed around your data.',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
+    ],
+    outcomes: [
+      {
+        logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+        logoAlt: 'Dafiti',
+        logoTreatment: 'monochrome',
+        text: '86% faster load times, with a 45% cost reduction in data transfer.',
+        highlights: ['86% faster load times', '45% cost reduction']
+      },
+      {
+        logo: '/marketing-components/clients/madeiramadeira.svg',
+        logoAlt: 'MadeiraMadeira',
+        logoTreatment: 'as-is',
+        text: '90% lower cloud costs and faster applications at scale.',
+        highlights: ['90% lower cloud costs']
+      },
+      {
+        logo: '/marketing-components/clients/renner-color.svg',
+        logoAlt: 'Renner',
+        logoTreatment: 'as-is',
+        text: '67% saved on data transfer, even during massive traffic spikes.',
+        highlights: ['67% saved']
+      },
+      {
+        logo: '/marketing-components/clients/fourbank.svg',
+        logoAlt: 'Fourbank',
+        logoTreatment: 'monochrome',
+        text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
+        highlights: ['DDoS mitigated']
+      }
+    ]
+  }
+}
+
+export const ClientQuotesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
+}
+
 export const Benefits = {
-  render: () => ({ components, template: BENEFITS_TEMPLATE }),
+  ...editable(() => ({ components, template: BENEFITS_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The AI Inference page: three network benefits on the floor, each an icon, a title and one sentence.'
-      },
       source: { code: toSfc(BENEFITS_IMPORTS, BENEFITS_TEMPLATE) }
     }
   }
 }
 
-export const Stats = {
-  render: () => ({ components, template: STATS_TEMPLATE }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The Our Network page: four figures on the floor, each a big number with its unit and a one-line caption.'
-      },
-      source: { code: toSfc(STATS_IMPORTS, STATS_TEMPLATE) }
-    }
+export const BENEFITS_SECTION = {
+  _id: 'network-section',
+  props: {
+    kind: 'benefits',
+    eyebrow: SITE_SECTION.props.eyebrow,
+    title: SITE_SECTION.props.title,
+    lead: SITE_SECTION.props.lead,
+    claims: SITE_SECTION.props.claims,
+    benefits: BENEFITS
   }
+}
+
+export const BenefitsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(BENEFITS_SECTION)
 }

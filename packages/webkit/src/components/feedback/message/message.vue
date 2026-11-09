@@ -50,7 +50,9 @@
   }>()
 
   const slots = defineSlots<{
+    /** Message copy: inline prose, or flow content such as paragraphs and a list. Falls back to label when empty. */
     default(): unknown
+    /** Custom action control; replaces the built-in Button when provided. */
     action(): unknown
   }>()
 
@@ -88,8 +90,6 @@
 
   const resolvedIcon = computed(() => props.icon || defaultIcons[normalizedSeverity.value])
 
-  // A trailing control (action button or close) brings its own inline padding, so the
-  // banner tightens its end edge to keep the optical inset even.
   const hasTrailingControl = computed(() =>
     Boolean(props.actionLabel || slots.action || props.closable)
   )
@@ -185,14 +185,14 @@
             aria-hidden="true"
           />
         </span>
-        <p
+        <div
           :data-size="size"
           class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
           :data-testid="`${testId}__content`"
         >
           <slot v-if="$slots['default']" />
           <template v-else>{{ label }}</template>
-        </p>
+        </div>
       </div>
       <slot name="action">
         <Button

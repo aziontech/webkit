@@ -1,9 +1,3 @@
-// Blocks a barrel import from the bare package — `import { Button } from '@aziontech/webkit'`
-// — which defeats tree-shaking (and today does not even resolve, since webkit publishes
-// no `.` export). Covers static imports, `export … from` re-exports, and dynamic
-// `import()`. Import each component from its own subpath instead. Type-only imports are
-// exempt (erased at build). Namespace imports / `export *` are flagged separately.
-
 import { isWebkitBare, loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 
@@ -32,9 +26,6 @@ export default {
     }
   },
   create(context) {
-    // Matching the bare package uses isWebkitBare() (catalog-independent), so this rule
-    // still fires when the catalog cannot be resolved. The catalog is used only to VERIFY
-    // that each guessed per-subpath import actually exists before offering the split fix.
     const catalog = loadCatalog(ctxCwd(context))
     const prefix = catalog.prefix
 
@@ -54,10 +45,6 @@ export default {
         }
         if (!named.length) return
 
-        // The split rewrites `{ Button }` → `@aziontech/webkit/button` by kebab-casing the
-        // imported name. That is a GUESS, so only offer the fix when EVERY guessed subpath
-        // is a real published export — otherwise the "fix" would emit an import that
-        // valid-import-path then rejects.
         const subs = named.map((s) => kebab(s.imported.name))
         const allResolve = catalog.available && subs.every((sub) => catalog.has(sub))
 
@@ -82,13 +69,11 @@ export default {
             : []
         })
       },
-      // `export * from '@aziontech/webkit'` re-exports the whole barrel.
       ExportAllDeclaration(node) {
         if (node.source && isWebkitBare(node.source.value)) {
           context.report({ node, messageId: 'namespace' })
         }
       },
-      // `export { Button } from '@aziontech/webkit'` is a barrel re-export.
       ExportNamedDeclaration(node) {
         if (!node.source || !isWebkitBare(node.source.value)) return
         const named = node.specifiers.filter((s) => s.type === 'ExportSpecifier')
@@ -97,7 +82,6 @@ export default {
         const example = `export { default as ${first.exported.name} } from '${prefix}${kebab(first.local.name)}'`
         context.report({ node, messageId: 'barrel', data: { example } })
       },
-      // Dynamic `import('@aziontech/webkit')` pulls the barrel at runtime.
       ImportExpression(node) {
         if (node.source?.type === 'Literal' && isWebkitBare(node.source.value)) {
           context.report({ node, messageId: 'namespace' })

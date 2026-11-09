@@ -223,6 +223,7 @@ const Template = (args) => ({
       <Hero.Title
         centered
         eyebrow="Infrastructure"
+        eyebrow-prefix="//"
         title="A global network built for fast applications"
         description="Run closer to users with low-latency delivery and stable routing."
       />
@@ -234,6 +235,7 @@ const DEFAULT_MARKUP = `<Hero max-width="7xl">
   <Hero.Title
     centered
     eyebrow="Infrastructure"
+    eyebrow-prefix="//"
     title="A global network built for fast applications"
     description="Run closer to users with low-latency delivery and stable routing."
   />
@@ -280,6 +282,7 @@ const SCREEN_TEMPLATE = `<Hero kind="screen" max-width="site">
   <Hero.Title
     centered
     eyebrow="Infrastructure"
+    eyebrow-prefix="//"
     title="A global network built for fast applications"
   />
 </Hero>`
@@ -302,6 +305,7 @@ export const Screen = {
 const MEDIA_TEMPLATE = `<Hero max-width="site">
   <Hero.Title
     eyebrow="Infrastructure"
+    eyebrow-prefix="//"
     title="A global network built for fast applications"
     description="Run closer to users with low-latency delivery and stable routing."
   />
@@ -328,6 +332,38 @@ export const Media = {
   }
 }
 
+const MEDIA_MOBILE_CENTERED_TEMPLATE = `<Hero max-width="site">
+  <Hero.Title
+    mobile-centered
+    eyebrow="Infrastructure"
+    eyebrow-prefix="//"
+    title="A global network built for fast applications"
+    description="Run closer to users with low-latency delivery and stable routing."
+  />
+
+  <template #media>
+    <div class="flex aspect-video w-full items-center justify-center text-center border border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-muted)">
+      Any asset — a screenshot, a diagram, a signup form
+    </div>
+  </template>
+</Hero>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Hero>} */
+export const MediaMobileCentered = {
+  render: () => ({ components, template: MEDIA_MOBILE_CENTERED_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    viewport: { defaultViewport: 'mobile' },
+    docs: {
+      description: {
+        story:
+          'The `media` band with `mobile-centered` on `Hero.Title`: beside the media from `md` up the copy keeps its start alignment, and below `md`, where the media stacks under it, the copy centers above it. Open the story on its own to see it at phone width.'
+      },
+      source: { code: toSfc(IMPORT, MEDIA_MOBILE_CENTERED_TEMPLATE) }
+    }
+  }
+}
+
 const BACKGROUND_TEMPLATE = `<Hero max-width="site">
   <template #background>
     <TextureMaterial kind="dots" size="medium" />
@@ -336,6 +372,7 @@ const BACKGROUND_TEMPLATE = `<Hero max-width="site">
   <Hero.Title
     centered
     eyebrow="Infrastructure"
+    eyebrow-prefix="//"
     title="A global network built for fast applications"
   />
 </Hero>`
@@ -405,6 +442,7 @@ const ASSET_WINDOWS_TEMPLATE = `<Hero
   <Hero.Title
     centered
     eyebrow="Infrastructure"
+    eyebrow-prefix="//"
     title="A global network built for fast applications"
     description="Run closer to users with low-latency delivery and stable routing."
   />
@@ -434,13 +472,13 @@ export const AssetWindows = {
 
 const ALIGN_TEMPLATE = `<div class="grid grid-cols-1 gap-(--spacing-md) lg:grid-cols-3">
   <Hero kind="screen" align="top" max-width="full" class="[--banner-offset:75dvh]">
-    <Hero.Title centered eyebrow="Top" title="Content at the top" />
+    <Hero.Title centered eyebrow="Top" eyebrow-prefix="//" title="Content at the top" />
   </Hero>
   <Hero kind="screen" align="center" max-width="full" class="[--banner-offset:75dvh]">
-    <Hero.Title centered eyebrow="Center" title="Content centered" />
+    <Hero.Title centered eyebrow="Center" eyebrow-prefix="//" title="Content centered" />
   </Hero>
   <Hero kind="screen" align="bottom" max-width="full" class="[--banner-offset:75dvh]">
-    <Hero.Title centered eyebrow="Bottom" title="Content at the bottom" />
+    <Hero.Title centered eyebrow="Bottom" eyebrow-prefix="//" title="Content at the bottom" />
   </Hero>
 </div>`
 
@@ -464,6 +502,7 @@ const PAGE_TEMPLATE = `<div>
     <Hero.Title
       centered
       eyebrow="Infrastructure"
+      eyebrow-prefix="//"
       title="A global network built for fast applications"
       description="Run closer to users with low-latency delivery and stable routing."
     />
@@ -513,6 +552,8 @@ const CAROUSEL_TEMPLATE = `<Hero
   class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
+    eyebrow="AI Inference"
+    eyebrow-prefix="//"
     title="Build and deploy AI agents and applications in seconds"
     description="Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality."
   />
@@ -546,6 +587,7 @@ const BANNERS_TEMPLATE = `<div>
 
     <Hero.Title
       eyebrow="#background"
+      eyebrow-prefix="//"
       title="The network behind the copy"
       description="A scene in the art half of the band, behind the copy."
     />
@@ -561,6 +603,7 @@ const BANNERS_TEMPLATE = `<div>
     <Hero.Title
       centered
       eyebrow="#top"
+      eyebrow-prefix="//"
       title="Closer to every user"
       description="A scene framed by the window on the band's top edge. The window clips it, so only the part it frames shows above the copy."
     />
@@ -569,6 +612,7 @@ const BANNERS_TEMPLATE = `<div>
   <Hero kind="screen" max-width="site">
     <Hero.Title
       eyebrow="#media"
+      eyebrow-prefix="//"
       title="Build on the framework you already use"
       description="A scene beside the copy. From md up the column splits in two; below md the scene stacks under the copy."
     />

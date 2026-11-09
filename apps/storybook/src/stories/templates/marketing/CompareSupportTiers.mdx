@@ -1,0 +1,50 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as CompareSupportTiersStories from './CompareSupportTiers.stories'
+
+<Meta title="Templates/Marketing/Comparison/CompareSupportTiers" />
+
+# CompareSupportTiers
+
+The tier-by-tier comparison on the Support page: one column per support tier, one band per service family, and what each tier includes on every row.
+
+It is the support counterpart of ComparePlans. It shares the same real `table` with one `tbody` per band, the same three kinds of cell (a check icon, a minus icon, or the stated allowance, with a tooltip and `sr-only` text on the two icons, as in CompareCompetitors), the same sticky header at `top-14` with an accent bar on the recommended tier, and the same narrow layout that folds to one tier picked with a `Select`. Where it differs: the first column is headed `Support`, each tier states who it is for under its name, and each band closes on its own link to the matching section of the pricing documentation.
+
+Built from `SectionModule`, `Select`, `Button`, `Overline`, `Tooltip` and `Link`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Tier Matrix
+
+Developer, Business, Enterprise and Mission-Critical across the Support band (self-service, technical support and first response time) and the Professional Services band. Developer is the free tier, so its button starts a free account; the other three hand off to the contact page, with Enterprise as the recommended tier. Narrow the canvas below 1024px to see the tier picker; it opens on Enterprise.
+
+<Canvas of={CompareSupportTiersStories.TierMatrix} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `tiers[]` are the columns in order, each an `id`, a `name`, a `description` of who it is for, `highlighted` for the recommended tier, and its `action` (`label`, `kind`, `href`).
+- `sections[]` are the bands, each an `eyebrow`, a `title`, the `link` that closes it, and its `rows`. A row is a `label` with one value per tier: `true` is a check icon, `—` is a minus icon, any other text is the allowance; `group: true` sets a row as a group heading.
+- `caption` is the table's screen-reader caption, `columnLabel` heads the first column, and `pickerLabel` names the tier picker below `lg`.
+- Every prop is optional; without them the block shows the Support page's tiers.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={CompareSupportTiersStories.TierMatrixJson}
+    dark
+  />
+</div>

@@ -23,6 +23,7 @@
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import ResourceLink from '../../components/resource/ResourceLink.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -122,6 +123,12 @@
     toast.success(`${row.name} deleted.`)
     pendingDelete.value = null
   }
+
+  const openConnector = (event, row) =>
+    router.push({
+      path: resourceSettingsPath('connectors', row.id),
+      query: { name: row.name, email: route.query.email || undefined }
+    })
 
   const onRowAction = (event, action, row) => {
     if (action === 'edit') {
@@ -287,7 +294,18 @@
                   :page-size="8"
                   :border="false"
                   :loading="loading"
+                  @row-click="openConnector"
                 >
+                  <template #cell-name="{ value }">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-edge-connectors shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+                    </div>
+                  </template>
+
                   <template #cell-id="{ value }">
                     <IdCell
                       :value="value"
@@ -299,11 +317,35 @@
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
                         :class="connectorMeta(row.type).icon"
-                        class="shrink-0 text-(--text-muted)"
+                        class="shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="truncate">{{ value }}</span>
                     </span>
+                  </template>
+
+                  <template #cell-address="{ row, value }">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        :class="row.type === 'storage' ? 'ai ai-edge-storage' : 'ai ai-domains'"
+                        class="shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <ResourceLink
+                        v-if="row.type === 'storage'"
+                        :label="value"
+                        :to="{
+                          path: `/object-storage/${value}`,
+                          query: { email: route.query.email || undefined, name: value }
+                        }"
+                        module="Object Storage"
+                      />
+                      <ResourceLink
+                        v-else
+                        :label="value"
+                        :href="`https://${value}`"
+                      />
+                    </div>
                   </template>
 
                   <template #cell-status="{ value }">

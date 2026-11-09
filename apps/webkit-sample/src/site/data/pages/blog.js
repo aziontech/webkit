@@ -1,9 +1,29 @@
-import { BLOG_ALL, BLOG_CATEGORIES, BLOG_FEATURED, BLOG_LABELS, BLOG_NEWSLETTER, BLOG_POSTS } from '../blog.js'
+import {
+  BLOG_ALL,
+  BLOG_CATEGORIES,
+  BLOG_HERO,
+  BLOG_LABELS,
+  BLOG_NEWSLETTER,
+  BLOG_POSTS
+} from '../blog.js'
 import { blogArticle, blogPostLink } from '../blog-articles.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 
-const HIGHLIGHT_SIDE = 4
+const HIGHLIGHT_KEYS = [
+  'ship-portfolio-two-commands-azion-cli',
+  'how-to-reduce-ai-agent-latency',
+  'cloudflare-alternatives-and-competitors',
+  'which-azion-plan-is-right-for-your-project'
+]
 
-const metaOf = (post) => [post.categories?.[0], post.date].filter(Boolean).join(' · ')
+const HIGHLIGHT_POSTS = HIGHLIGHT_KEYS.map((key) => BLOG_POSTS.find((post) => post.key === key))
+
+const ORDERED_POSTS = [
+  ...HIGHLIGHT_POSTS,
+  ...BLOG_POSTS.filter((post) => !HIGHLIGHT_KEYS.includes(post.key))
+]
+
+const metaOf = (post) => [post.categories?.[0], post.date].filter(Boolean).join(' • ')
 
 export const BLOG_CLOSING = {
   section: 'ClosingCallToAction',
@@ -21,21 +41,23 @@ export const BLOG_CLOSING = {
   }
 }
 
-const HIGHLIGHT = [BLOG_FEATURED, ...BLOG_POSTS.slice(0, HIGHLIGHT_SIDE)].map((post) => ({
+const HIGHLIGHT = HIGHLIGHT_POSTS.map((post) => ({
   key: post.key,
   href: blogPostLink(post).href,
   image: post.image,
-  meta: [post.categories?.[0], post.date].filter(Boolean).join(' • '),
+  highlightImage: post.highlightImage,
+  meta: metaOf(post),
   title: post.title,
   description: post.description,
   readTime: post.readTime
 }))
 
-const INDEX = BLOG_POSTS.map((post) => {
+const INDEX = ORDERED_POSTS.map((post) => {
   const article = blogArticle(post.key)
   return {
     key: post.key,
     href: blogPostLink(post).href,
+    image: post.image,
     title: post.title,
     description: post.description,
     categories: post.categories ?? [],
@@ -48,23 +70,22 @@ const INDEX = BLOG_POSTS.map((post) => {
 export const BLOG_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
-    eyebrow: 'Resources',
-    title: 'Blog',
-    description: 'Insights, industry trends',
-    actions: [{ label: 'See posts', href: '#posts', kind: 'secondary' }]
+    kind: 'title-band-small',
+    eyebrow: BLOG_HERO.eyebrow,
+    title: BLOG_HERO.title,
+    description: BLOG_HERO.description
   },
-  { section: 'ArticleHighlight', anchor: 'articles', items: HIGHLIGHT },
+  { section: 'ArticleHighlight', anchor: 'articles', gap: 'small', fill: true, items: HIGHLIGHT },
   {
     section: 'ArticleIndex',
     anchor: 'posts',
+    gap: 'small',
     items: INDEX,
     categories: BLOG_CATEGORIES,
     allLabel: BLOG_ALL,
-    leading: HIGHLIGHT_SIDE,
     search: { placeholder: BLOG_LABELS.search, label: 'Search articles' },
     moreLabel: BLOG_LABELS.loadMore,
-    empty: { title: 'No results found for these applied filters.', action: 'View all articles' }
+    empty: { title: 'No articles match these filters', action: 'View all articles' }
   },
-  BLOG_CLOSING
+  COMPANY_CLOSING
 ]

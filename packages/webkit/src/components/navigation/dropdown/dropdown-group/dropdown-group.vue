@@ -51,9 +51,6 @@
       :data-first="groupIndex === 0 || null"
       class="flex flex-col [&:not([data-first])]:mt-(--spacing-sm) [&:not([data-first])]:border-t [&:not([data-first])]:border-(--border-default) [&:not([data-first])]:pt-(--spacing-xs)"
     >
-      <!-- The divider sits on this root so it spans the panel's full inner width (the
-           panel carries only vertical padding); the rows' horizontal inset lives on the
-           content wrapper below. -->
       <div class="flex flex-col px-(--spacing-xxs)">
         <div
           v-if="hasLabel"

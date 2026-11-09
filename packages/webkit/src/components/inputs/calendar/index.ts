@@ -1,8 +1,3 @@
-/**
- * Compound API per `.claude/rules/compound-api.md`. A `.ts` file so vue-tsc emits the
- * adjacent `index.d.ts`; the explicit `CompoundCalendar` annotation makes declaration
- * emit reference the sub-component types instead of expanding the root's private `Props`.
- */
 import Calendar from './calendar.vue'
 import CalendarClear from './calendar-clear/calendar-clear.vue'
 import CalendarPreset from './calendar-preset/calendar-preset.vue'

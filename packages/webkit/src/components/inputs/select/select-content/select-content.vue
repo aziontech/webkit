@@ -21,8 +21,6 @@
 
   const root = ref<globalThis.HTMLDivElement | null>(null)
 
-  // Anchored below the trigger, flipping above when there is no room and shrinking to
-  // the free space when neither side fits; the width follows the trigger.
   const { panelStyle } = usePlacement({
     triggerRef: ctx.triggerRef,
     panelRef: root,
@@ -74,9 +72,6 @@
     const target = event.target as Node | null
     if (!el || !target) return
     if (el.contains(target)) return
-    // Bail when the pointer lands on the trigger — the trigger's own @click
-    // will toggle the state; closing here would race the reopen and either
-    // require a "double click" to close or emit update:open twice per press.
     const trigger = ctx.triggerRef.value
     if (trigger && trigger.contains(target)) return
     ctx.setOpen(false)
@@ -133,11 +128,6 @@
         >
           <slot name="search" />
         </div>
-        <!--
-          `group/options` lets a single option reserve the leading-icon column for
-          the whole list (see select-option). The vertical seam is one step up from
-          the row inset so the first/last row does not crowd the panel border.
-        -->
         <ScrollArea
           class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"

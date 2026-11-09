@@ -418,6 +418,7 @@
                           <TagListCell
                             :items="row.labels ?? []"
                             noun="labels"
+                            icon="pi pi-tag"
                           />
                         </Table.Cell>
 

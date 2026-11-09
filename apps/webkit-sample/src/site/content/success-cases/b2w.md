@@ -29,7 +29,7 @@ B2W uses Azion’s programmable Firewall to create and manage security rules aut
 
 This model allows each new deployment to be automatically validated by security policies, simplifying the CI/CD pipeline and strengthening B2W’s DevSecOps culture.
 
-In addition, B2W improved its observability practices by using Data Streaming to send real-time security events to its SIEM platform, providing a comprehensive view of the environment and enabling faster response to threats.
+In addition, B2W improved its observability practices by using Data Stream to send real-time security events to its SIEM platform, providing a comprehensive view of the environment and enabling faster response to threats.
 
 ## Results and Impacts
 

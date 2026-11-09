@@ -91,7 +91,7 @@
           >
             <router-link
               :to="{ path: '/account/build-deployment', query: { email } }"
-              class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+              class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
             >
               <span class="truncate underline-offset-2 group-hover/link:underline">
                 {{ settingsLabel }}

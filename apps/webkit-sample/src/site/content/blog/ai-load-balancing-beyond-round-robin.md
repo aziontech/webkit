@@ -4,7 +4,7 @@
 - The wrong algorithm creates *slowdowns that look like app bugs*.
 - Most outages are “gray failures” (partial degradation), not total downtime.
 - AI helps by predicting saturation, detecting anomalies, and steering traffic before users notice.
-- Edge-based load balancing (e.g., [Azion Load Balancer](https://www.azion.com/en/products/load-balancer/) + [Functions](https://www.azion.com/en/products/functions/)) enables low-latency, policy-driven routing close to users.
+- Distributed load balancing (e.g., [Azion Load Balancer](https://www.azion.com/en/products/load-balancer/) + [Functions](https://www.azion.com/en/products/functions/)) enables low-latency, policy-driven routing close to users.
 
 ## Why Round‑Robin Load Balancing Causes Incidents in Real Systems
 
@@ -50,7 +50,7 @@ Load balancers are connection brokers. They decide how efficiently the client’
 
 - **Keep-alive** reduces handshake overhead, but can also “stick” clients to a degraded node longer than you expect.
 - **HTTP/2 multiplexing** changes everything: one client connection can carry many concurrent streams. If you route that connection poorly, you just coupled a user’s entire session performance to one backend.
-- **HTTP/3 (QUIC)** reduces handshake latency and improves loss recovery, but introduces different congestion dynamics and makes edge termination more valuable.
+- **HTTP/3 (QUIC)** reduces handshake latency and improves loss recovery, but introduces different congestion dynamics and makes termination close to users more valuable.
 
 This is why distribution algorithms alone aren’t enough—**connection-level behavior can dominate tail latency**.
 
@@ -112,11 +112,11 @@ At this point the load balancer is part of your **availability strategy**, not a
 
 ## Where Azion’s infrastructure changes the game
 
-Traditional load balancers sit “near the origin,” which is convenient for the origin—but late for the user. Edge changes the geometry of failures and the speed of decisions.
+Traditional load balancers sit “near the origin,” which is convenient for the origin—but late for the user. Running close to users changes the geometry of failures and the speed of decisions.
 
 #### Decisions closer to users reduce RTT and speed up failover
 
-When routing decisions happen at the edge:
+When routing decisions happen close to users:
 
 - you can detect user-perceived degradation faster (because you see it where it occurs),
 - you can fail over without sending the user on a long round-trip to a struggling region,
@@ -129,8 +129,8 @@ That translates directly into business metrics: faster failover reduces abandonm
 This is where combining components matters:
 
 - [Azion Load Balancer](https://www.azion.com/en/documentation/products/secure/connectors/load-balancer/) handles routing and backend selection with the right primitives (health, weights, failover).
-- [Application Acceleration](https://www.azion.com/en/documentation/products/build/applications/application-accelerator/) improves protocol/TLS performance—optimizing handshakes, transport behavior, and end-to-end latency characteristics that classic L7 balancing often ignores.
-- [Functions](https://www.azion.com/en/documentation/products/build/applications/functions/) let you implement **custom routing logic at the edge**: per-path rules, tenant-aware steering, gradual rollouts, circuit breakers, dynamic weights, or “send this cohort to that region” policies—without waiting for origin-side changes.
+- [Application Accelerator](https://www.azion.com/en/documentation/products/build/applications/application-accelerator/) improves protocol/TLS performance—optimizing handshakes, transport behavior, and end-to-end latency characteristics that classic L7 balancing often ignores.
+- [Functions](https://www.azion.com/en/documentation/products/build/applications/functions/) let you implement **custom routing logic close to users**: per-path rules, tenant-aware steering, gradual rollouts, circuit breakers, dynamic weights, or “send this cohort to that region” policies—without waiting for origin-side changes.
 
 The key shift is architectural: you’re no longer limited to whatever a centralized load balancer supports. You can turn routing into software—executed close to users—so you can adapt faster than incidents evolve.
 
@@ -437,7 +437,7 @@ This design keeps the “smart decisions” near the user while still integratin
 
 1. **Collect**: latency + error + saturation per origin/region/cohort
 2. **Decide**: AI generates routing recommendations (with confidence + explanation)
-3. **Enforce**: edge policy updates weights/routes via controlled rollout
+3. **Enforce**: policy updates weights/routes via controlled rollout
 4. **Verify**: measure SLO impact; rollback automatically on regression
 
 The important part is that it’s a loop with verification, not a one-way “AI said so.”
@@ -455,9 +455,9 @@ If your goal is to reduce tail latency globally and prevent gray failures from b
 2. add outlier detection + slow-start + sane retries,
 3. then layer an AI loop for predictive steering.
 
-And if you want an implementation path that’s realistic in enterprise environments, one approach is combining [Azion Load Balancer](https://www.azion.com/en/documentation/products/secure/connectors/load-balancer/) **+** [Azion Functions](https://www.azion.com/en/documentation/products/build/applications/functions/) **+** [Azion Data Stream](https://www.azion.com/en/documentation/products/observe/data-stream/first-steps/) **(+** [WAF / Firewall](https://www.azion.com/en/documentation/products/secure/firewall/)**)** to build an adaptive, observable, policy-driven routing system at the edge.
+And if you want an implementation path that’s realistic in enterprise environments, one approach is combining [Azion Load Balancer](https://www.azion.com/en/documentation/products/secure/connectors/load-balancer/) **+** [Azion Functions](https://www.azion.com/en/documentation/products/build/applications/functions/) **+** [Azion Data Stream](https://www.azion.com/en/documentation/products/observe/data-stream/first-steps/) **(+** [WAF / Firewall](https://www.azion.com/en/documentation/products/secure/firewall/)**)** to build an adaptive, observable, policy-driven routing system close to users.
 
-## FAQ: Modern Load Balancing (Beyond Round‑Robin) + AI‑Assisted Edge Traffic Steering
+## FAQ: Modern Load Balancing (Beyond Round‑Robin) + AI‑Assisted Traffic Steering
 
 #### Is round‑robin load balancing “bad”?
 
@@ -562,7 +562,7 @@ Non-negotiable controls described in the post include:
 - “suggest then apply” rollout (human-in-the-loop → sandbox → guardrailed automation)
 - automatic rollback on SLO regression
 
-#### Why does edge-based load balancing improve reliability and latency?
+#### Why does distributed load balancing improve reliability and latency?
 
 When routing decisions happen **closer to users**:
 
@@ -573,11 +573,11 @@ When routing decisions happen **closer to users**:
 
 #### What makes Azion’s approach different?
 
-Azion is as an **edge traffic control plane**, combining:
+Azion is as a **traffic control plane**, combining:
 
 - **Azion Load Balancer** (routing, weights, failover primitives)
-- **Application Acceleration** (TLS/transport optimization; HTTP/2/HTTP/3 dynamics)
-- **Azion Functions** (custom routing logic at the edge: canaries, circuit breakers, tenant-aware steering, dynamic weights)
+- **Application Accelerator** (TLS/transport optimization; HTTP/2/HTTP/3 dynamics)
+- **Azion Functions** (custom routing logic close to users: canaries, circuit breakers, tenant-aware steering, dynamic weights)
 - **Azion Data Stream** (telemetry export to SIEM/observability)
 - Optionally: **WAF/Firewall** and **micro-caching** for burst absorption and abuse damping.
 
@@ -594,4 +594,4 @@ Move away from naive request-count distribution and adopt policies that reduce q
 1. Choose the right baseline algorithm (not default RR)
 2. Add outlier detection, **slow-start**, and **sane retries** (retry budgets)
 3. Layer an AI loop for predictive steering with guardrails, verification, and rollback
-4. For an implementation path at the edge: **Azion Load Balancer + Azion Functions + Azion Data Stream (+ WAF/Firewall)**.
+4. For an implementation path close to users: **Azion Load Balancer + Azion Functions + Azion Data Stream (+ WAF/Firewall)**.

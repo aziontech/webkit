@@ -1,11 +1,11 @@
 import Button from '@aziontech/webkit/button'
 import InputText from '@aziontech/webkit/input-text'
-import Tag from '@aziontech/webkit/tag'
 import MultiSelect from '@aziontech/webkit/multi-select'
-import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
 import MultiSelectContent from '@aziontech/webkit/multi-select-content'
 import MultiSelectGroup from '@aziontech/webkit/multi-select-group'
 import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
+import Tag from '@aziontech/webkit/tag'
 import { computed, ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -56,7 +56,7 @@ const BASIC_OPTIONS_LINES = [
 
 /** @type {import('@storybook/vue3').Meta<typeof MultiSelect>} */
 const meta = {
-  title: 'Components/Inputs/MultiSelect',
+  title: 'Components/Primitives/Inputs/MultiSelect',
   component: MultiSelect,
   subcomponents: {
     MultiSelectTrigger,

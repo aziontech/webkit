@@ -1,13 +1,4 @@
 #!/usr/bin/env node
-// CI gate for .claude/rules/bundle-budget.md. The package ships source (.vue/.ts), so
-// the stock size-limit presets can't measure it — this script IS the vue-aware gate:
-// each entry in .size-limit.json is compiled in isolation with Vite + @vitejs/plugin-vue
-// (vue externalized, minified), and the gzipped output is compared against its budget.
-// Budgets only ratchet DOWN — raising one requires a written justification in the PR.
-// Exit 1 on any over-budget entry; exit 0 when every entry fits.
-//
-// Coverage is intentionally per-entry (the heaviest/representative public paths), not
-// all 197 exports — entries not yet budgeted are listed so the gap is never silent.
 
 import { readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -30,17 +21,6 @@ function limitToBytes(limit) {
   return Math.round(parseFloat(m[1]) * mult)
 }
 
-/**
- * Gzipped bytes for one entry.
- *
- * By default this sums EVERY emitted chunk — the honest measure for a component whose
- * whole cost lands in the initial payload. An entry that deliberately code-splits (a
- * registry of `() => import(...)` behind a name prop) is different: its async chunks are
- * fetched only when the consumer names one, so summing them measures the size of the
- * whole library rather than what any consumer pays. Such an entry sets `entryOnly: true`
- * and is budgeted on its initial chunk, which is the number that must not regress — a
- * static import that collapses the code-splitting shows up immediately.
- */
 async function gzippedSize(entryPath, { entryOnly = false } = {}) {
   const result = await build({
     root: PKG,
@@ -74,7 +54,6 @@ for (const e of entries) {
   const { bytes: size, split } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
   const over = size > limit
   if (over) failures.push(e.name)
-  // Name the excluded chunks so an entryOnly budget can never quietly hide growth.
   const note = e.entryOnly ? `  · initial chunk only, ${split} async chunk(s) excluded` : ''
   console.log(
     `${over ? '✖' : '✓'} ${e.name.padEnd(18)} ${kb(size).padStart(10)}  (budget ${e.limit})${over ? '  OVER' : ''}${note}`

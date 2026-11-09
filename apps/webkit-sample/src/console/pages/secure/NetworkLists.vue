@@ -288,6 +288,16 @@
                   :border="false"
                   :loading="loading"
                 >
+                  <template #cell-name="{ value }">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-network-lists shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+                    </div>
+                  </template>
+
                   <template #cell-id="{ value }">
                     <IdCell
                       :value="value"

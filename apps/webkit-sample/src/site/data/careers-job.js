@@ -167,7 +167,7 @@ export const CAREERS_JOB_SECTIONS = [
  */
 export const CAREERS_JOB_FORM = {
   title: 'Do you want to work, teach and learn at Azion?',
-  description: 'Fill the form to apply for this position.',
+  description: 'Fill in the form to apply for this position.',
   submit: 'Submit application',
   fields: [
     { key: 'name', label: 'Name', kind: 'text', required: true, autocomplete: 'name' },

@@ -7,8 +7,6 @@
     type TextureMaterialSize
   } from '../texture-material/texture-material.vue'
 
-  // Loaded on demand: a band without a strip must not pay for the strip or its mark
-  // registry, and `hero-root` is budgeted for the band alone.
   const Ticker = defineAsyncComponent(() => import('../ticker/ticker.vue'))
 
   defineOptions({

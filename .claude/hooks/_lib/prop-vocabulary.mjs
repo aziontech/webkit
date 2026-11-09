@@ -33,6 +33,11 @@ export const CONCEPTS = [
     concept: 'primary two-way-bound value',
     canonical: 'modelValue',
     aliases: ['isToggled']
+  },
+  {
+    concept: 'in-page anchor id',
+    canonical: 'anchor',
+    aliases: ['anchorId', 'sectionId', 'hash']
   }
 ]
 

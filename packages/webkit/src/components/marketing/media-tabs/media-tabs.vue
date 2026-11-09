@@ -28,12 +28,18 @@
 
   /** What moves the selection as the reader points at a row. */
   export type MediaTabsSelectOn = 'hover' | 'click'
-  /** Height a row is held to, and so the height of the media column beside the stack. */
+  /** Which side of the media the tabs sit on. */
+  export type MediaTabsPosition = 'left' | 'right' | 'top' | 'bottom'
+  /** Height each row is held to beside the media, and the title scale of a row of tabs. */
   export type MediaTabsSize = 'small' | 'medium' | 'large'
 
   interface Props {
-    /** The tabs, in order, at most three; each item is a title, its description, and the image shown while it is active. Items past the third are not rendered. */
+    /** The tabs, in order, at most three when the position is left or right and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
     items?: MediaTabsItem[]
+    /** Which side of the media the tabs sit on. Below the large breakpoint every position stacks, with the active tab's media inside its row. */
+    position?: MediaTabsPosition
+    /** Height each row is held to, as a multiple of the band's own padding step: three, four and a half, six. In a row of tabs, small sets the title and description two steps down. */
+    size?: MediaTabsSize
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
     selectOn?: MediaTabsSelectOn
     /** Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
@@ -42,8 +48,6 @@
     autoPlayInterval?: number
     /** Advances a hairline along the active row's bottom edge while the timer runs. */
     showProgress?: boolean
-    /** Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack. */
-    size?: MediaTabsSize
     /** Texture the media column is grounded with; `none` leaves it bare. */
     texture?: TextureMaterialKind
     /** Pitch of the ground's tiling — how far apart its cells sit. */
@@ -54,11 +58,12 @@
 
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
+    position: 'left',
+    size: 'medium',
     selectOn: 'hover',
     autoPlay: true,
     autoPlayInterval: 5000,
     showProgress: true,
-    size: 'medium',
     texture: 'none',
     textureSize: 'medium',
     textureFade: 'vignette'
@@ -78,7 +83,7 @@
   const reducedMotion = usePreferredReducedMotion()
 
   const PROGRESS_TICK_MS = 100
-  const MAX_TABS = 3
+  const MAX_TABS = { vertical: 3, horizontal: 5 } as const
 
   const activeIndex = ref(0)
   const elapsed = ref(0)
@@ -90,7 +95,11 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-tabs'
   )
 
-  const tabs = computed(() => props.items.slice(0, MAX_TABS))
+  const orientation = computed(() =>
+    props.position === 'top' || props.position === 'bottom' ? 'horizontal' : 'vertical'
+  )
+
+  const tabs = computed(() => props.items.slice(0, MAX_TABS[orientation.value]))
 
   const hasItems = computed(() => tabs.value.length > 0)
 
@@ -184,10 +193,12 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
+    :data-position="position"
+    :data-orientation="orientation"
     :data-size="size"
     :data-select-on="selectOn"
     :data-autoplay="autoPlayRunning || null"
-    class="[--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
+    class="group/media-tabs [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
     @focusin="enterFocus"
@@ -195,14 +206,16 @@
   >
     <div
       v-if="hasItems"
-      class="flex flex-col lg:flex-row"
+      class="flex flex-col group-data-[position=left]/media-tabs:lg:flex-row group-data-[position=right]/media-tabs:lg:flex-row-reverse group-data-[position=bottom]/media-tabs:lg:flex-col-reverse"
     >
-      <ul class="flex flex-col lg:w-[calc(50%+var(--spacing-xl))] lg:shrink-0">
+      <ul
+        class="flex flex-col group-data-[orientation=horizontal]/media-tabs:lg:flex-row group-data-[orientation=vertical]/media-tabs:lg:w-[calc(50%+var(--spacing-xl))] group-data-[orientation=vertical]/media-tabs:lg:shrink-0"
+      >
         <li
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
-          class="group/row flex flex-col lg:min-h-(--media-tabs-row)"
+          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-l-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-l-0"
           @pointerenter="point($event, index)"
         >
           <FrameBox
@@ -211,8 +224,12 @@
             flush="top"
             class="relative flex flex-1 flex-col justify-center bg-(--bg-surface) transition-colors duration-moderate-01 ease-out group-data-[active]/row:bg-(--bg-surface-raised) before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 group-data-[active]/row:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
           >
-            <div class="flex flex-col gap-(--spacing-md) p-(--spacing-xl)">
-              <h3 class="m-0 text-heading-md text-(--text-default)">
+            <div
+              class="flex flex-col gap-(--spacing-md) p-(--spacing-xl) group-data-[orientation=horizontal]/media-tabs:lg:gap-(--spacing-xs) group-data-[orientation=horizontal]/media-tabs:lg:p-(--spacing-md) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:gap-(--spacing-xxs)"
+            >
+              <h3
+                class="m-0 text-heading-md text-(--text-default) group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-heading-xs"
+              >
                 <button
                   type="button"
                   :aria-current="isActive(index) ? 'true' : undefined"
@@ -224,14 +241,16 @@
                 </button>
               </h3>
 
-              <p class="m-0 text-body-md text-(--text-muted)">
+              <p
+                class="m-0 text-body-md text-(--text-muted) group-data-[orientation=horizontal]/media-tabs:lg:text-body-sm group-data-[orientation=horizontal]/media-tabs:group-data-[size=small]/media-tabs:lg:text-body-xs"
+              >
                 {{ item.description }}
               </p>
             </div>
 
             <div
               v-if="isActive(index)"
-              class="relative flex aspect-video min-h-[var(--media-tabs-media-min,0)] w-full items-center justify-center overflow-hidden bg-(--bg-canvas) lg:hidden"
+              class="relative flex aspect-video min-h-[var(--media-tabs-media-min,0)] w-full group-data-[orientation=horizontal]/media-tabs:aspect-auto items-center justify-center overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:hidden"
             >
               <slot
                 name="media"
@@ -262,8 +281,8 @@
       <FrameBox
         borders="all"
         marks="all"
-        :flush="['left', 'top']"
-        class="relative hidden overflow-hidden bg-(--bg-canvas) lg:block lg:min-w-0 lg:flex-1"
+        :flush="position === 'left' ? ['left', 'top'] : 'top'"
+        class="relative hidden overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:block lg:min-w-0 group-data-[orientation=vertical]/media-tabs:lg:flex-1"
       >
         <TextureMaterial
           :kind="texture"
@@ -272,25 +291,29 @@
         />
 
         <div
-          v-for="(item, index) in tabs"
-          :key="`${item.title}-${index}`"
-          :data-active="isActive(index) || null"
-          :aria-hidden="!isActive(index) || undefined"
-          class="absolute inset-0 z-10 flex translate-y-(--spacing-lg) items-center justify-center opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-[active]:translate-y-0 data-[active]:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
+          class="contents group-data-[orientation=horizontal]/media-tabs:grid group-data-[orientation=horizontal]/media-tabs:min-h-[var(--media-tabs-media-min-lg,24rem)]"
         >
-          <slot
-            name="media"
-            :item="item"
-            :index="index"
-            :active="isActive(index)"
+          <div
+            v-for="(item, index) in tabs"
+            :key="`${item.title}-${index}`"
+            :data-active="isActive(index) || null"
+            :aria-hidden="!isActive(index) || undefined"
+            class="z-10 col-start-1 row-start-1 flex min-w-0 group-data-[orientation=vertical]/media-tabs:absolute group-data-[orientation=vertical]/media-tabs:inset-0 translate-y-(--spacing-lg) items-center justify-center opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-[active]:translate-y-0 data-[active]:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none"
           >
-            <img
-              v-if="item.src"
-              :src="item.src"
-              :alt="item.alt ?? ''"
-              class="size-full object-cover"
-            />
-          </slot>
+            <slot
+              name="media"
+              :item="item"
+              :index="index"
+              :active="isActive(index)"
+            >
+              <img
+                v-if="item.src"
+                :src="item.src"
+                :alt="item.alt ?? ''"
+                class="size-full object-cover"
+              />
+            </slot>
+          </div>
         </div>
       </FrameBox>
     </div>

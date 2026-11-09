@@ -5,7 +5,6 @@
   import InputText from '@aziontech/webkit/input-text'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
@@ -23,6 +22,7 @@
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import WorkloadCell from '../../components/list/WorkloadCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import ResourceLink from '../../components/resource/ResourceLink.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -309,16 +309,19 @@
                   </template>
 
                   <template #cell-repository="{ value, row }">
-                    <Tag
+                    <div
                       v-if="value"
-                      severity="secondary"
-                      size="medium"
-                      icon="pi pi-github"
-                      rounded
-                      class="max-w-full"
+                      class="flex min-w-0 items-center gap-(--spacing-xs)"
                     >
-                      <span class="min-w-0 truncate">{{ value }}</span>
-                    </Tag>
+                      <i
+                        class="ai ai-github shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <ResourceLink
+                        :label="value"
+                        :href="`https://github.com/${value}`"
+                      />
+                    </div>
                     <button
                       v-else
                       type="button"

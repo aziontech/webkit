@@ -13,7 +13,7 @@ const defaultPricingDetails = 'Billed annually or $25/mo billed monthly.'
 
 /** @type {import('@storybook/vue3').Meta<typeof CardPricing>} */
 const meta = {
-  title: 'Components/Content/CardPricing',
+  title: 'Components/Primitives/Content/CardPricing',
   component: CardPricing,
   tags: ['autodocs'],
   parameters: {
@@ -168,6 +168,15 @@ const meta = {
         defaultValue: { summary: "'Label'" }
       }
     },
+    animated: {
+      control: 'boolean',
+      description: 'Rolls the price into place when value changes, such as on a billing-period toggle.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
     default: {
       control: false,
       description: 'Main content region, typically a feature list.',
@@ -193,7 +202,8 @@ const meta = {
     suffix: '/ mon',
     showPrefix: true,
     showSuffix: true,
-    actionLabel: 'Label'
+    actionLabel: 'Label',
+    animated: false
   }
 }
 
@@ -282,7 +292,7 @@ const ALIGNED_TEMPLATE = `<div class="grid grid-cols-[repeat(auto-fit,320px)] ga
     value="Free"
     prefix=""
     suffix=""
-    action-label="Start free"
+    action-label="Start for free"
   />
   <CardPricing
     aligned
@@ -302,7 +312,7 @@ const ALIGNED_TEMPLATE = `<div class="grid grid-cols-[repeat(auto-fit,320px)] ga
     value="Custom"
     prefix=""
     suffix=""
-    action-label="Contact sales"
+    action-label="Talk to a specialist"
   />
 </div>`
 
@@ -392,7 +402,7 @@ const SLOTS_TEMPLATE = `<CardPricing
     </li>
   </ul>
   <template #actions>
-    <Button label="Get started" kind="primary" size="large" class="w-full" />
+    <Button label="Start with Pro" kind="primary" size="large" class="w-full" />
   </template>
 </CardPricing>`
 

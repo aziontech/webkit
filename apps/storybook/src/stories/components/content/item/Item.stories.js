@@ -46,7 +46,7 @@ const itemSubcomponents = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Item>} */
 const meta = {
-  title: 'Components/Content/Item',
+  title: 'Components/Primitives/Content/Item',
   component: Item,
   subcomponents: {
     ItemGroup: Item.Group,

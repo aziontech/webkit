@@ -26,7 +26,7 @@
     href: ''
   })
 
-  const sourceIcon = computed(() => (props.source === 'gitlab' ? 'pi-gitlab' : 'pi-github'))
+  const sourceIcon = computed(() => (props.source === 'gitlab' ? 'pi pi-gitlab' : 'ai ai-github'))
 
   const isLink = computed(() => Boolean(props.href))
 </script>
@@ -37,7 +37,7 @@
     :href="isLink ? href : undefined"
     :target="isLink ? '_blank' : undefined"
     :rel="isLink ? 'noopener' : undefined"
-    class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) no-underline"
+    class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
   >
     <span
       class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -84,7 +84,7 @@
             class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
           >
             <i
-              :class="['pi', sourceIcon]"
+              :class="sourceIcon"
               class="text-[length:inherit] leading-none"
               aria-hidden="true"
             />

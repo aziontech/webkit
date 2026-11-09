@@ -42,7 +42,7 @@ GPA partnered with Azion to leverage its Web Platform, which provided:
 
 ## Why Azion
 
-Azion’s Web Platform enabled GPA to break free from the limitations of its legacy provider, achieving scalability, security, and performance that were previously unattainable. With localized support in Portuguese and a dedicated team, Azion ensured a smooth partnership that empowered GPA to focus on innovation while delivering outstanding customer experiences.
+Azion’s Web Platform enabled GPA to break free from the limitations of its legacy provider, achieving scalability, security, and performance that were previously unattainable. With localized support in Portuguese and a dedicated team, Azion ensured a smooth partnership that let GPA focus on innovation while delivering outstanding customer experiences.
 
 ## About GPA
 

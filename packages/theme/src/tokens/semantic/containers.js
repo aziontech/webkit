@@ -1,6 +1,3 @@
-// TODO: deprecated — substituído pelos tokens declarativos em
-// `containers.data.js` e pelo CSS gerado em `dist/globals.css` via
-// `src/scripts/build-tokens.mjs`. Remover quando consumers migrarem.
 const plugin = (() => {
   try {
     return require('tailwindcss/plugin')
@@ -9,10 +6,7 @@ const plugin = (() => {
   }
 })()
 
-/**
- * Generate semantic spacing style components
- * @returns {import('tailwindcss/plugin').Plugin}
- */
+/** @returns {import('tailwindcss/plugin').Plugin} */
 export const containers = () => {
   return plugin(({ addComponents, theme }) => {
     const mobile = {

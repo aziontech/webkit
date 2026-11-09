@@ -95,7 +95,7 @@
   >
     <template #content>
       <EmptyState
-        icon="pi pi-github"
+        icon="ai ai-github"
         size="medium"
         title="Connect a Git account"
         :description="`Azion copies ${source?.title ?? 'the template'} into a repository you own and deploys every push to it. Authorize once. The account stays available for the applications you create later.`"
@@ -105,7 +105,7 @@
           <Button
             type="button"
             label="Connect GitHub"
-            icon="pi pi-github"
+            icon="ai ai-github"
             kind="secondary"
             size="large"
             :loading="connecting"
@@ -154,7 +154,7 @@
               >
                 <template #iconLeft>
                   <i
-                    class="pi pi-github shrink-0 text-body-md leading-none text-(--text-default)"
+                    class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </template>

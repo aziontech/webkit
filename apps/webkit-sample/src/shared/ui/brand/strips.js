@@ -10,6 +10,8 @@
 // customer, and a name there is not something you build with.
 
 // The eleven the hero strip states, in the source's order.
+export const CLIENT_STRIP_LABEL = 'Proven on mission-critical workloads'
+
 export const CLIENT_STRIP = [
   'global-fashion-group',
   'herospark',

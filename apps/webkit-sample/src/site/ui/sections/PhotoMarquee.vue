@@ -2,6 +2,7 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import type { SectionTitleDescriptionWidth } from '@aziontech/webkit/section-title'
 
   defineOptions({ name: 'PhotoMarquee' })
 
@@ -23,6 +24,8 @@
     title: string
     /** The paragraph beside the headline. */
     description?: string
+    /** Column span of the paragraph: `wide` runs it across the middle column too. */
+    descriptionWidth?: SectionTitleDescriptionWidth
     /** Photos the band loops through, in order. */
     photos: MarqueePhoto[]
     /** Accessible name of the photo row. */
@@ -34,6 +37,7 @@
   withDefaults(defineProps<Props>(), {
     anchor: '',
     description: '',
+    descriptionWidth: 'narrow',
     ariaLabel: '',
     duration: 90
   })
@@ -50,6 +54,7 @@
         kind="horizontal"
         :title="title"
         :description="description"
+        :description-width="descriptionWidth"
       />
     </template>
 

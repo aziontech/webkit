@@ -1,6 +1,3 @@
-// Compound API (see .claude/rules/compound-api.md). The explicit CompoundTable
-// annotation makes declaration emit reference the sub-component types instead
-// of expanding the root's private Props.
 import Table from './table.vue'
 import TableAppliedFilters from './table-applied-filters/table-applied-filters.vue'
 import TableBody from './table-body/table-body.vue'

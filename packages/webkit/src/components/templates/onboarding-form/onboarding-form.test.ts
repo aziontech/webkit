@@ -27,14 +27,20 @@ describe('OnboardingForm', () => {
     expect(getByTestId('my-onboarding')).toBeTruthy()
   })
 
-  it('emits continue-click when the form is submitted (the continue button is type=submit)', async () => {
-    const { container, getByTestId, emitted } = render(OnboardingForm, { props: { usageItems } })
-    // the continue button is a submit button inside the form (@submit.prevent)
-    expect(getByTestId('templates-onboarding-form__continue')).toBeTruthy()
-    const form = container.querySelector('form')
-    expect(form).toBeTruthy()
-    await fireEvent.submit(form)
-    expect(emitted()['continue-click']).toBeTruthy()
+  it('emits continue-click once when the continue button is clicked', async () => {
+    const { getByTestId, emitted } = render(OnboardingForm, { props: { usageItems } })
+    const button = getByTestId('templates-onboarding-form__continue')
+    expect(button.getAttribute('type')).toBe('submit')
+    await fireEvent.click(button)
+    expect(emitted()['continue-click']).toHaveLength(1)
+  })
+
+  it('does not emit continue-click while continueDisabled', async () => {
+    const { getByTestId, emitted } = render(OnboardingForm, {
+      props: { usageItems, continueDisabled: true }
+    })
+    await fireEvent.click(getByTestId('templates-onboarding-form__continue'))
+    expect(emitted()['continue-click']).toBeUndefined()
   })
 
   it('has no structural a11y violations', async () => {

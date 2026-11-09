@@ -433,7 +433,7 @@ function extractSlots(script) {
     const t = rawLine.trim().replace(/;$/, '')
     if (depth === 0 && t) {
       // Match both slot syntaxes: `name(): T` and `name?: () => T`.
-      const sm = t.match(/^([a-zA-Z_][\w-]*)\s*\??\s*[:(]/)
+      const sm = t.match(/^['"]?([a-zA-Z_][\w-]*)['"]?\s*\??\s*[:(]/)
       if (sm) out.push({ name: sm[1] })
     }
     for (const ch of rawLine) {

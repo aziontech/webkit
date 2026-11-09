@@ -15,12 +15,8 @@
   //
   // The trail and Copy page are the MASTHEAD's, not the shell's — they used to be a sticky
   // bar of their own above the scroll (see DocsAgentSetup).
-  import DocCta from '@aziontech/webkit-docs/doc-cta'
-  import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'
-  import { provideHeadingNav } from '@aziontech/webkit-docs/heading-nav'
-  import { scrollToHeading } from '@aziontech/webkit-docs/heading-scroll'
-  import { scrollParent } from '@aziontech/webkit-docs/scroll-parent'
-  import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
+  import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'
+  import { provideHeadingNav } from '@aziontech/webkit/use-heading-nav'
   import { computed, ref } from 'vue'
 
   import DocsAgentSetup from '../components/DocsAgentSetup.vue'
@@ -28,6 +24,10 @@
   import { AGENT_SETUP_TOC } from '../lib/docs-agent-setup.js'
   import { docsPageChrome } from '../lib/docs-pages.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
+  import { scrollToHeading } from '../lib/heading-scroll.js'
+  import { scrollParent } from '../lib/scroll-parent.js'
+  import { useScrollSpy } from '../lib/use-scroll-spy.js'
+  import DocCta from '../ui/DocCta.vue'
 
   const HEADINGS = AGENT_SETUP_TOC
 

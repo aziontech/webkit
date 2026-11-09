@@ -87,7 +87,7 @@ You don’t need to decide this now. Start with the project you want to build to
 
 It doesn’t matter if you want to learn a new stack, update your resume, or finally get a personal project live. Pick an idea, use a template as your starting point, and try Azion Platform in practice.
 
-[Start free →](https://console.azion.com/signup?plan=hobby&billing-cycle=monthly)
+[Start for free →](https://console.azion.com/signup?plan=hobby&billing-cycle=monthly)
 
 ---
 

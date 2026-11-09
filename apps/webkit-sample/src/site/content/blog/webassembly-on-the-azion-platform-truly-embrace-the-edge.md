@@ -11,13 +11,13 @@ Historically, **JavaScript** has been the language of choice for standard web de
 
 ## Modernize Your Applications Using WebAssembly
 
-Today’s **hyper-connected economy** demands superior digital experiences and faster innovation. Running applications on a modern, distributed edge computing platform is a perfect path to realize that vision. However, most sophisticated applications are written in compiled languages to run on legacy infrastructures like the cloud or on-prem. These applications can’t run on the edge, which typically supports interpreted languages.
+Today’s **hyper-connected economy** demands superior digital experiences and faster innovation. Running applications on a modern, distributed platform is a perfect path to realize that vision. However, most sophisticated applications are written in compiled languages to run on legacy infrastructures like the cloud or on-prem. These applications can’t run close to users, which typically supports interpreted languages.
 
-So the question developers face is: how can they quickly [modernize legacy applications](https://www.azion.com/en/blog/app-modernization) to run on edge computing platforms?
+So the question developers face is: how can they quickly [modernize legacy applications](https://www.azion.com/en/blog/app-modernization) to run on distributed platforms?
 
 One option is to rewrite all applications in JavaScript. But this approach is risky, since it will incur significant resource costs in terms of time, money, and developer productivity. Further, as noted above, it may not even be possible to write some of these applications in JavaScript without sacrificing speed and security.
 
-WebAssembly provides a much better, simpler, and faster alternative to application modernization. With WASM, existing code only needs to be recompiled for the edge without any need to rewrite code in a new, unfamiliar language. This modernization process can be further accelerated by deploying these applications on the high-performance and secure NoOps [Azion Web Platform](https://www.azion.com/en/blog/the-benefits-of-edge-platform-in-practice-retail).
+WebAssembly provides a much better, simpler, and faster alternative to application modernization. With WASM, existing code only needs to be recompiled for a distributed architecture without any need to rewrite code in a new, unfamiliar language. This modernization process can be further accelerated by deploying these applications on the high-performance and secure NoOps [Azion Web Platform](https://www.azion.com/en/blog/the-benefits-of-edge-platform-in-practice-retail).
 
 ## How to Use WebAssembly on the Azion Platform
 
@@ -25,7 +25,7 @@ Let’s use a practical example to demonstrate how easily a legacy application c
 
 Image transformation is a critical component of e-commerce applications. It requires serious processing power to deliver proper quality images that preserve user experience while simultaneously improving performance and reducing bandwidth costs.
 
-Consider an image resizing code that was written in C to run on legacy infrastructures like a data center. This code, which was designed to run in a few locations, will invariably face performance and scalability issues. To solve those problems, you need to run the code on a hyper-distributed edge platform, where the images get processed closer to the user. But instead of rewriting that code in JavaScript, which could take months, you can use WASM to modernize this code in minutes so that it can run at the edge.
+Consider an image resizing code that was written in C to run on legacy infrastructures like a data center. This code, which was designed to run in a few locations, will invariably face performance and scalability issues. To solve those problems, you need to run the code on a hyper-distributed platform, where the images get processed closer to the user. But instead of rewriting that code in JavaScript, which could take months, you can use WASM to modernize this code in minutes so that it can run close to users.
 
 To run the example code on the Azion Web Platform, you first need to compile your original code into WASM format and then convert the obtained code into bytes. For this purpose, you can use a Shell script like this:
 
@@ -35,25 +35,25 @@ This step generates a byte code output that looks like this:
 
 <Frame src="https://www.azion.com/assets/content/blog/uploads/bytes.png" alt="" />
 
-The WASM code can now be directly invoked from an edge function, as shown below (you can follow the detailed instructions in our [documentation](https://www.azion.com/en/documentation/products/build/edge-application/edge-functions)).
+The WASM code can now be directly invoked from a function, as shown below (you can follow the detailed instructions in our [documentation](https://www.azion.com/en/documentation/products/build/edge-application/edge-functions)).
 
 <Frame src="https://www.azion.com/assets/content/blog/uploads/functions.png" alt="" />
 
-The edge function can now be instantiated and executed at every edge location on the Azion platform. And that’s it! In just a few minutes, you’ve brought your complete application from the centralized data center to the Azion edge, without compromising speed while simultaneously improving your application’s scalability, availability, and security.
+The function can now be instantiated and executed at every data center on the Azion platform. And that’s it! In just a few minutes, you’ve brought your complete application from the centralized data center to the Azion Platform, without compromising speed while simultaneously improving your application’s scalability, availability, and security.
 
-## Moving to the Edge Has Never Been Easier
+## Moving to a Distributed Architecture Has Never Been Easier
 
-In this blog post, we demonstrated how adopting WebAssembly can transform the way you build and run your applications faster and more effectively at the edge. But that’s just a small taste of what you can do with WASM on the Azion Web Platform.
+In this blog post, we demonstrated how adopting WebAssembly can transform the way you build and run your applications faster and more effectively close to users. But that’s just a small taste of what you can do with WASM on the Azion Web Platform.
 
-You can keep learning about all WASM possibilities for developing edge functions by checking our [documentation](https://www.azion.com/en/documentation/use-cases/webassembly-on-azion-platform). You can also [sign up for free](https://console.azion.com/signup/) to test these and all the other features we offer to power your business and help you build future-proof serverless applications.
+You can keep learning about all WASM possibilities for developing functions by checking our [documentation](https://www.azion.com/en/documentation/use-cases/webassembly-on-azion-platform). You can also [sign up for free](https://console.azion.com/signup/) to test these and all the other features we offer to power your business and help you build future-proof serverless applications.
 
 All new accounts include:
 
 - Full access to all products and features
-- Deploying your first edge application, which takes less than five seconds
+- Deploying your first application, which takes less than five seconds
 - Free onboarding session
 
-And if you still have any questions, don’t hesitate to [talk to our experts](https://www.azion.com/en/contact/). And be sure to follow us on [LinkedIn](https://www.linkedin.com/company/aziontech/mycompany/), [Instagram](https://www.instagram.com/aziontech/), and [YouTube](https://www.youtube.com/aziontech) for more insights into edge computing and our products.
+And if you still have any questions, don’t hesitate to [talk to our experts](https://www.azion.com/en/contact/). And be sure to follow us on [LinkedIn](https://www.linkedin.com/company/aziontech/mycompany/), [Instagram](https://www.instagram.com/aziontech/), and [YouTube](https://www.youtube.com/aziontech) for more insights into distributed architecture and our products.
 
 #### References
 

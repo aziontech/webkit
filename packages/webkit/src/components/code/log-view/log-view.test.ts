@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/code/log-view/LogView.stories'
@@ -139,6 +139,12 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { getAllByTestId } = render(Host)
       // Template: v-for line in ctx.filteredLines -> `${testId}__line`.
       expect(getAllByTestId('code-log-view__line')).toHaveLength(LINES.length)
+    })
+
+    it('exposes the log body as a polite live region', () => {
+      const { Host } = makeHost({})
+      const { getByRole } = render(Host)
+      expect(getByRole('log').getAttribute('aria-live')).toBe('polite')
     })
 
     it('reflects the injected line count and warning-tag label in the header', () => {
@@ -310,6 +316,42 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const footer = getByTestId('code-log-view__footer')
       expect(footer.tagName).toBe('FOOTER')
       expect(footer.textContent).toContain('Footer content')
+    })
+  })
+
+  describe('scroll fade: the log body fades the edges that still have lines beyond them', () => {
+    const FIXTURE_CSS = `[data-testid$='__body'][data-orientation='both'] { height: 80px; overflow: auto; }`
+    const MANY_LINES: LogViewLine[] = Array.from({ length: 40 }, (_, index) => ({
+      id: String(index),
+      time: '13:47:33',
+      type: 'text',
+      message: `Log line ${index}`
+    }))
+    let fixtureSheet: globalThis.HTMLStyleElement
+
+    beforeAll(() => {
+      fixtureSheet = document.createElement('style')
+      fixtureSheet.textContent = FIXTURE_CSS
+      document.head.appendChild(fixtureSheet)
+    })
+
+    afterAll(() => {
+      fixtureSheet.remove()
+    })
+
+    it('marks the log body with data-fade while lines overflow it', async () => {
+      const { Host } = makeHost({ lines: MANY_LINES })
+      const { container } = render(Host)
+      const log = container.querySelector('[data-testid$="__body"]') as globalThis.HTMLElement
+      await vi.waitFor(() => expect(log.hasAttribute('data-fade')).toBe(true))
+    })
+
+    it('does not render a hand-built fade overlay over the log body', async () => {
+      const { Host } = makeHost({ lines: MANY_LINES })
+      const { container, queryByTestId } = render(Host)
+      const log = container.querySelector('[data-testid$="__body"]') as globalThis.HTMLElement
+      await vi.waitFor(() => expect(log.hasAttribute('data-fade')).toBe(true))
+      expect(queryByTestId('code-log-view__content__fade-bottom')).toBeNull()
     })
   })
 

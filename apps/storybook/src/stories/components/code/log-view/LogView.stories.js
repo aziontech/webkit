@@ -26,7 +26,7 @@ const IMPORT = [
 
 /** @type {import('@storybook/vue3').Meta<typeof LogView>} */
 const meta = {
-  title: 'Components/Code/LogView',
+  title: 'Components/Primitives/Code/LogView',
   component: LogView,
   subcomponents: { LogViewHeader, LogViewContent },
   tags: ['autodocs'],

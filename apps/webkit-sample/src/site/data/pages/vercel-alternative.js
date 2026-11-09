@@ -1,3 +1,4 @@
+import { agentsClosing } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
 const TRUST_MARKS = [
@@ -53,42 +54,187 @@ const REASONS = [
   }
 ]
 
-const CAPABILITIES = [
+const CAPABILITY_GROUPS = [
   {
-    capability: 'Delivery, compute, storage, and security on one platform',
-    azion: 'full',
-    rival: 'partial'
+    title: 'Platform',
+    rows: [
+      {
+        capability: 'Delivery, compute, storage, and security on one platform',
+        definition:
+          'Delivery, compute, storage, and security run on one platform with one configuration model.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'Git-connected builds and preview deployments',
+        definition: 'Building from a Git push, with a preview URL for each branch before release.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Delivery rules changed without redeploying the application',
+        definition: 'Changing cache, routing, and header rules without shipping a new build.',
+        azion: 'full',
+        competitor: 'partial'
+      }
+    ]
   },
-  { capability: 'Git-connected builds and preview deployments', azion: 'full', rival: 'full' },
   {
-    capability: 'Delivery rules changed without redeploying the application',
-    azion: 'full',
-    rival: 'partial'
+    title: 'Compute',
+    rows: [
+      {
+        capability: 'JavaScript and WebAssembly runtime',
+        definition: 'Running application code close to users on web-standard APIs.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Cold-start-free function execution',
+        definition: 'Functions that answer the first request without a startup delay.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'AI inference on the platform',
+        definition: 'Running AI models on the provider’s network, close to users.',
+        azion: 'full',
+        competitor: 'partial'
+      }
+    ]
   },
-  { capability: 'JavaScript and WebAssembly runtime', azion: 'full', rival: 'full' },
-  { capability: 'Cold-start-free function execution', azion: 'full', rival: 'partial' },
-  { capability: 'AI inference on the platform', azion: 'full', rival: 'partial' },
-  { capability: 'Distributed key-value store', azion: 'full', rival: 'partial' },
-  { capability: 'S3-compatible object storage', azion: 'full', rival: 'partial' },
-  { capability: 'Distributed SQL database with vector search', azion: 'full', rival: 'none' },
-  { capability: 'Managed WAF for applications and APIs', azion: 'full', rival: 'full' },
-  { capability: 'API discovery and protection', azion: 'full', rival: 'partial' },
-  { capability: 'Bot management', azion: 'full', rival: 'full' },
-  { capability: 'DDoS protection included with delivery', azion: 'full', rival: 'full' },
-  { capability: 'Network-layer firewall', azion: 'full', rival: 'none' },
-  { capability: 'Tiered caching and origin offload', azion: 'full', rival: 'partial' },
-  { capability: 'Image and video optimization', azion: 'full', rival: 'partial' },
-  { capability: 'Authoritative DNS', azion: 'full', rival: 'full' },
-  { capability: 'Load balancing across multi-cloud origins', azion: 'full', rival: 'none' },
   {
-    capability: 'Accelerate and protect origins hosted elsewhere',
-    azion: 'full',
-    rival: 'none'
+    title: 'Storage',
+    rows: [
+      {
+        capability: 'Distributed key-value store',
+        definition:
+          'Low-latency reads for configuration, flags, and sessions replicated close to users.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'S3-compatible object storage',
+        definition: 'S3-compatible storage for files and objects.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'Distributed SQL database with vector search',
+        definition:
+          'A relational database replicated close to users, with similarity search for AI applications.',
+        azion: 'full',
+        competitor: 'none'
+      }
+    ]
   },
-  { capability: 'Real-time metrics and event search', azion: 'full', rival: 'full' },
-  { capability: 'Log streaming to third-party tools', azion: 'full', rival: 'full' },
-  { capability: 'Real-user monitoring', azion: 'full', rival: 'full' },
-  { capability: 'Published pay-as-you-go pricing', azion: 'full', rival: 'full' }
+  {
+    title: 'Security',
+    rows: [
+      {
+        capability: 'Managed WAF for applications and APIs',
+        definition: 'Managed rules that block attacks on applications and APIs.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'API discovery and protection',
+        definition: 'Finding the APIs you expose and applying security rules to each one.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'Bot management',
+        definition: 'Detecting and blocking automated traffic before it reaches the application.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'DDoS protection included with delivery',
+        definition:
+          'Absorbing volumetric and application-layer attacks without buying a separate product.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Network-layer firewall',
+        definition: 'Filtering traffic by IP, network, and location below the application layer.',
+        azion: 'full',
+        competitor: 'none'
+      }
+    ]
+  },
+  {
+    title: 'Delivery and networking',
+    rows: [
+      {
+        capability: 'Tiered caching and origin offload',
+        definition: 'Intermediate cache layers that cut the requests reaching your origin.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'Image and video optimization',
+        definition:
+          'Resizing, compressing, and converting media on delivery instead of at the origin.',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'Authoritative DNS',
+        definition: 'Hosting and answering the DNS records of your domains.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Load balancing across multi-cloud origins',
+        definition: 'Spreading traffic across origins on different cloud providers or on premises.',
+        azion: 'full',
+        competitor: 'none'
+      },
+      {
+        capability: 'Accelerate and protect origins hosted elsewhere',
+        definition:
+          'Putting delivery, caching, and security in front of an application that runs on another provider.',
+        azion: 'full',
+        competitor: 'none'
+      }
+    ]
+  },
+  {
+    title: 'Observability',
+    rows: [
+      {
+        capability: 'Real-time metrics and event search',
+        definition:
+          'Live traffic, performance, and security dashboards, with a query over the events of each request.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Log streaming to third-party tools',
+        definition: 'Sending logs in real time to your SIEM or data lake.',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Real-user monitoring',
+        definition: 'Measuring the performance users experience in the browser.',
+        azion: 'full',
+        competitor: 'full'
+      }
+    ]
+  },
+  {
+    title: 'Commercial',
+    rows: [
+      {
+        capability: 'Published pay-as-you-go pricing',
+        definition: 'Per-unit prices published up front, so you know what a month will cost.',
+        azion: 'full',
+        competitor: 'full'
+      }
+    ]
+  }
 ]
 
 const FAQ = [
@@ -96,7 +242,7 @@ const FAQ = [
     value: 'good-vercel-alternative',
     question: 'Is Azion a good Vercel alternative?',
     answer:
-      'Yes. Azion is a strong Vercel alternative for teams that want application delivery, distributed functions, object storage, key-value data, security, DNS, analytics, and observability on Azion Web Platform with cold-start-free scale.'
+      'Yes. Azion fits teams that want application delivery, distributed functions, object storage, key-value data, security, DNS, analytics, and observability on the Azion Web Platform, with cold-start-free scale.'
   },
   {
     value: 'projects-map',
@@ -160,12 +306,12 @@ export const VERCEL_ALTERNATIVE_PAGE = [
     kind: 'copy-beside-art',
     eyebrow: 'Alternative Guide',
     eyebrowPrefix: '//',
-    title: 'Vercel Alternative Guide: Moving to Azion',
+    title: 'Vercel alternative guide: moving to Azion',
     description:
       'Map Vercel projects, preview deployments, Functions, Blob, Edge Config, Firewall, and Web Analytics to Azion. Keep your Git-based build and preview workflow, run functions without cold starts, and move one project at a time before you switch the domain.',
     actions: [
-      { label: 'Start Free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a Specialist', href: '#contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     art: {
       name: 'azion-to-vercel',
@@ -176,11 +322,11 @@ export const VERCEL_ALTERNATIVE_PAGE = [
   { section: 'CapabilityGrid', items: REASONS },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
   {
-    section: 'ComparisonTable',
+    section: 'CompareCompetitors',
     eyebrow: 'Comparison',
     title: 'How Azion compares with Vercel',
-    rival: 'Vercel',
-    rows: CAPABILITIES,
+    competitor: { name: 'Vercel' },
+    groups: CAPABILITY_GROUPS,
     caption: 'Capability-by-capability comparison of Azion and Vercel.'
   },
   {
@@ -190,17 +336,8 @@ export const VERCEL_ALTERNATIVE_PAGE = [
       'Translate Vercel projects into Azion equivalents while keeping validation workflows predictable. Rebuild CDN behavior, redirects, rewrites, image optimization, Functions, AI integrations, storage, security rules, DNS, certificates, and observability before shifting production domains.',
     illustration: 'build-applications',
     illustrationLabel: 'Framework projects mapped through the platform to what each one serves',
-    actions: [{ label: 'See the guide', href: '/site/docs' }]
+    actions: [{ label: 'Read the guide', href: '/site/docs' }]
   },
   { section: 'FaqSection', items: FAQ },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    eyebrow: 'Secure',
-    title: 'Protected by default.',
-    titleMuted: 'Always on.',
-    description: 'Get stronger protection, less attack exposure, and less operational overhead.',
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Talk to our team', href: '/site/contact' }
-  }
+  agentsClosing('Build once. Run everywhere.')
 ]

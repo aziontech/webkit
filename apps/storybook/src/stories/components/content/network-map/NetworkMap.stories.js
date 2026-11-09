@@ -6,7 +6,7 @@ const IMPORT = "import NetworkMap from '@aziontech/webkit/network-map'"
 
 /** @type {import('@storybook/vue3').Meta<typeof NetworkMap>} */
 const meta = {
-  title: 'Components/Content/NetworkMap',
+  title: 'Components/Primitives/Content/NetworkMap',
   component: NetworkMap,
   tags: ['autodocs'],
   parameters: {

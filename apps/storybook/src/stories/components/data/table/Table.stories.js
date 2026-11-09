@@ -421,7 +421,7 @@ const makeStory =
 
 /** @type {import('@storybook/vue3').Meta<typeof Table>} */
 const meta = {
-  title: 'Components/Data/Table',
+  title: 'Components/Primitives/Data/Table',
   component: Table,
   subcomponents: {
     'Table.Header': TableHeader,

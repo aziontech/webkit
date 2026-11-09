@@ -93,14 +93,14 @@
            cap comes off, so the panel always states its full height and an over-long snippet
            shows up here as a slide that overflows its frame, which is a thing you can see.
            THE BACKSLASHES ARE LOAD-BEARING: Tailwind reads `_` in an arbitrary variant as a
-           SPACE, so the unescaped form compiles to `[data-testid^=data-code-block line]` — a
+           SPACE, so the unescaped form compiles to `[data-testid^=code-code-block line]` — a
            selector that matches nothing, emits no error, and leaves the panel exactly as it
            was. `\_\_` is what keeps the testid's own underscores. -->
       <CodeBlock
         :tabs="tabs()"
         animate-lines
         show-line-numbers
-        class="relative [&_[data-testid^=data-code-block\_\_line]]:text-label-code-lg [&_[data-testid=data-code-block\_\_content]]:max-h-none"
+        class="relative [&_[data-testid^=code-code-block\_\_line]]:text-label-code-lg [&_[data-testid=code-code-block\_\_content]]:max-h-none"
       />
     </div>
   </div>

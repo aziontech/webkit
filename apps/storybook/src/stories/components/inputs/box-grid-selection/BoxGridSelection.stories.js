@@ -1,7 +1,6 @@
-import { ref, watch } from 'vue'
-
 import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
 import Tag from '@aziontech/webkit/tag'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -58,7 +57,7 @@ const planItems = [
 
 /** @type {import('@storybook/vue3').Meta<typeof BoxGridSelection>} */
 const meta = {
-  title: 'Components/Inputs/BoxGridSelection',
+  title: 'Components/Primitives/Inputs/BoxGridSelection',
   component: BoxGridSelection,
   tags: ['autodocs'],
   parameters: {

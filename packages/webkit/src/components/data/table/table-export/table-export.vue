@@ -36,8 +36,6 @@
       (ctx ? `${ctx.testId}__export` : 'data-table__export')
   )
 
-  // Context-aware: the root serializes the visible/ordered columns + filtered
-  // rows and downloads (or emits `export` for a consumer to handle server-side).
   const onExport = (): void =>
     ctx?.exportCsv({ filename: props.filename || undefined, scope: props.scope })
 </script>

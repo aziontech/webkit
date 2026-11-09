@@ -120,7 +120,7 @@ The metrics for AI bot management are not the same ones you track for human traf
 
 Track the distribution of risk scores over time, too. What percentage of requests is classified as high suspicion? Does that number spike at certain hours or in certain regions? Search bots typically hit sitemaps and content pages. Training bots sweep more broadly. Agent bots concentrate access on specific endpoints. A bot behaving outside those patterns is worth investigating.
 
-Azion Web Platform provides real-time visibility into this traffic profile through [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) and [Data Stream](https://www.azion.com/en/products/data-stream/): bot distribution by type, top attack origins, risk scores, and SIEM export.
+Azion Web Platform provides real-time visibility into this traffic profile through [Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) and [Data Stream](https://www.azion.com/en/products/data-stream/): bot distribution by type, top attack origins, risk scores, and SIEM export.
 
 ## Does robots.txt still work?
 

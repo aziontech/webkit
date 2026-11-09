@@ -3,7 +3,6 @@ export interface TextSegment {
   match: boolean
 }
 
-/** Splits text into segments for optional search highlighting (case-insensitive). */
 export function splitTextByQuery(text: string, query: string): TextSegment[] {
   const needle = query.trim()
 

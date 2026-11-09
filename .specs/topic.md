@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: f350f65228f04be8091d3a65e8c06b6b9cdd13f425ccfb0b60c1e871a50e94f1
+checksum: 586a23f51caba773675aa8f27617096323f683cc58cf4a5a1e5ff690eae061f6
 created: 2026-09-24
-last_updated: 2026-10-15
+last_updated: 2026-10-22
 ---
 
 # Topic — Component Spec
@@ -42,6 +42,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
 - Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
+- A linked claim stretches its link over the nearest positioned ancestor, so the whole cell is the hover and click target, not just the copy. `CardGrid.Cell` and `BentoGrid.Cell` are positioned; a cell the page builds by hand needs `relative`, or every claim in the grid covers the band.
 
 ## Usage
 
@@ -87,6 +88,7 @@ import Topic from '@aziontech/webkit/topic'
 - `data-described` mirrors whether a description is rendered, from either the prop or the slot
 - `data-linked` present when the claim carries an `href`
 - The root element switches between `<a>` and `<div>` on the `href` data prop, never on an `as` string — so the whole claim is the target, not a control composed under it
+- A linked root lays an `::after` over its positioned cell, so hovering anywhere in the cell hovers the claim
 - The heading element follows `headingLevel`; its size does not change with it
 
 ## Motion & Animations
@@ -121,7 +123,7 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the linked root carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`. Without an `href` the topic holds no interactive control of its own.
+- Visible focus: the linked root draws an inset `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the whole cell it covers. Without an `href` the topic holds no interactive control of its own.
 - Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
 - ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and for the hovered headline — all against the fill the surrounding cell provides.

@@ -28,8 +28,6 @@
       (ctx ? `${ctx.testId}__search` : 'data-table__search')
   )
 
-  // Context-aware: reads and drives the table's global filter directly — no
-  // wiring needed by the consumer.
   const globalFilter = computed<string>(() => {
     const instance = ctx?.table.value
     return instance ? ((instance.getState().globalFilter as string | undefined) ?? '') : ''

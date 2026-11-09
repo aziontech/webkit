@@ -34,7 +34,7 @@ const IMPORT = [
 
 /** @type {import('@storybook/vue3').Meta<typeof Popover>} */
 const meta = {
-  title: 'Components/Overlay/Popover',
+  title: 'Components/Primitives/Overlay/Popover',
   component: Popover,
   tags: ['autodocs'],
   parameters: {

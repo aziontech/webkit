@@ -56,8 +56,6 @@
 
   provide(PaginatorInjectionKey, { testId: testId.value })
 
-  // When `total` is provided, the root renders and drives its own controls;
-  // otherwise it stays a pure layout landmark and the consumer fills the slots.
   const dataDriven = computed<boolean>(() => props.total !== undefined)
 
   const pageCount = computed<number>(() =>
@@ -90,7 +88,6 @@
     const page = (value: number): PageItem => ({ type: 'page', value, key: `page-${value}` })
     const more = (key: string): PageItem => ({ type: 'more', value: 0, key })
 
-    // first + last + current + 2 siblings + 2 ellipses
     const totalSlots = siblings * 2 + 5
     if (count <= totalSlots) return range(1, count).map(page)
 
@@ -130,7 +127,6 @@
 
   const onPageSizeChange = (value: number) => {
     emit('update:pageSize', value)
-    // Reset to the first page so the current page can never fall out of range.
     if (currentPage.value !== 1) {
       emit('update:page', 1)
     }

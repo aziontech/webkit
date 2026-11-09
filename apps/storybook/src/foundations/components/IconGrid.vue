@@ -1,7 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue';
-
 import InputText from '@aziontech/webkit/input-text';
+import { computed, ref } from 'vue';
 
 import ColoredIconPreview from './ColoredIconPreview.vue';
 
@@ -123,7 +122,7 @@ function isCopied(name) {
       <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
         <button
           v-for="icon in azionIcons"
-          :key="icon.name"
+          :key="icon.icon"
           class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-(--border-default) bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
@@ -151,7 +150,7 @@ function isCopied(name) {
       <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
         <button
           v-for="icon in filteredColorIcons"
-          :key="icon.name"
+          :key="icon.icon"
           class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-(--border-default) bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
@@ -179,7 +178,7 @@ function isCopied(name) {
       <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
         <button
           v-for="icon in primeIcons"
-          :key="icon.name"
+          :key="icon.icon"
           class="relative flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-md border border-(--border-default) bg-surface cursor-pointer transition-all duration-100 font-inherit text-inherit hover:border-primary hover:bg-primary/5"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"

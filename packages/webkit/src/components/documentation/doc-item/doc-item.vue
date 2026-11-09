@@ -38,7 +38,6 @@
 
   const attrs = useAttrs()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-item')
 
   defineSlots<{
@@ -48,15 +47,12 @@
 
   const isLink = computed(() => props.href.length > 0)
 
-  // External: an absolute or protocol-relative URL, a mailto, or an explicit new tab.
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
   )
 </script>
 
 <template>
-  <!-- data-doc-chrome stops DocProse at the row's edge: prose rules would restyle
-       the title and description as body copy. -->
   <Item
     v-bind="$attrs"
     role="listitem"
@@ -93,8 +89,6 @@
         <slot>{{ label }}</slot>
       </ItemDescription>
     </ItemContent>
-    <!-- A min-width, not a fixed width: ItemActions sets its own fit width, and a
-         fixed width beside it would fall to stylesheet order. -->
     <ItemActions
       v-if="isLink"
       class="h-8 min-w-8 justify-center self-center"

@@ -86,7 +86,7 @@ sections are the Storybook marketing templates (`Templates/Marketing/*`), ported
 | Analyst recognitions, client tiles, certifications | `RecognitionMarquee`, `ClientMosaic`, `ComplianceBadges` |
 | A row of stats (big numeral + unit + label) | `StatsBand` |
 | The network argument over the map | `NetworkSection`, `kind` by its floor: `quotes`, `benefits` or `stats` |
-| Plans, plan matrix, tier matrix, competitor table | `PricingPlans`, `ComparePlans`, `CompareSupportTiers`, `ComparisonTable` |
+| Plans, plan matrix, tier matrix, competitor table | `PricingPlans`, `ComparePlans`, `CompareSupportTiers`, `CompareCompetitors` |
 | Deployable templates over a stack ticker | `TemplateGallery` |
 | Linked guides | `ResourceGrid` |
 | A table or list of linked rows previewing a longer listing | `ListingTable` |

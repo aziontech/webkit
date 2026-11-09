@@ -32,7 +32,7 @@ If your blog or portfolio evolves into a commercial or production project, Pro p
 
 Upgrading from Hobby to Pro takes effect immediately and lets you continue using the projects you’ve already created on the Azion Platform. You don’t need to migrate to another platform or rebuild your application. Downgrades and cancellations take effect at the end of the current billing cycle.
 
-[Get Started With Pro →](https://console.azion.com/signup?plan=pro&billing-cycle=monthly)
+[Start with Pro →](https://console.azion.com/signup?plan=pro&billing-cycle=monthly)
 
 ## When to Consider Enterprise
 

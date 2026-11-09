@@ -7,7 +7,9 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Topic from '@aziontech/webkit/topic'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -32,31 +34,31 @@ const IMPORTS = [
   "import Topic from '@aziontech/webkit/topic'"
 ]
 
-const VECTORIZE = {
-  tag: 'Vectorize',
-  title: 'Perfect for AI Applications',
-  lead: 'You can use Vectorize to:',
-  href: '/docs/vectorize',
+const SQL_DATABASE = {
+  tag: 'SQL Database',
+  title: 'What teams use SQL Database for',
+  lead: 'Teams use it to:',
+  href: '/site/docs',
   cases: [
     {
       icon: 'pi pi-comments',
       title: 'RAG Applications',
-      description: 'Build topic-specific chatbots where the topical data lives in Vectorize.'
+      description: 'Build topic-specific chatbots with the topic data stored in SQL Database.'
     },
     {
       icon: 'pi pi-search',
       title: 'Search Applications',
-      description: 'Power search apps with vector similarity search capabilities.'
+      description: 'Power search with vector similarity queries on stored embeddings.'
     },
     {
       icon: 'pi pi-sync',
       title: 'AI Context Injection',
-      description: 'Enhance AI applications by injecting relevant context from vector embeddings.'
+      description: 'Give AI applications relevant context from vector embeddings.'
     },
     {
       icon: 'pi pi-globe',
-      title: 'Edge AI Workflows',
-      description: 'Combine vector storage with Workers AI for complete edge-based AI solutions.'
+      title: 'AI Workflows',
+      description: 'Pair stored embeddings with AI Inference to run RAG applications on Azion.'
     }
   ]
 }
@@ -71,7 +73,7 @@ const useCases = ({ tag, title, lead, href, cases }) =>
           <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">${title}</h2>
           <p class="m-0 mb-(--spacing-xl) text-body-md text-(--text-muted)">${lead}</p>
           <Button
-            label="View docs"
+            label="Docs"
             kind="secondary"
             size="large"
             href="${href}"
@@ -98,20 +100,15 @@ ${each(
   </FrameBox>
 </SectionModule>`)
 
-const VECTORIZE_TEMPLATE = useCases(VECTORIZE)
+const SQL_DATABASE_TEMPLATE = useCases(SQL_DATABASE)
 
 const meta = {
-  title: 'Templates/Marketing/Content/UseCases',
-  tags: ['autodocs'],
+  title: 'Templates/Marketing/Use Cases/UseCases',
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The band a product page closes its argument with: one framed cell that names the product and links to its docs, beside the handful of things you would use it for. The title cell is the simplest variant of the media-and-title split, an overline, a headline, a one-line lead and a single "View docs" button pinned to the foot of the cell, and the use cases sit in `CardGrid` frame cells that draw their own rules and corner marks, each a short title over one sentence. Built from `SectionModule`, `FrameBox`, `CardGrid`, `Topic`, `Overline` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -120,14 +117,26 @@ const meta = {
 export default meta
 
 export const Default = {
-  render: () => ({ components, template: VECTORIZE_TEMPLATE }),
+  ...editable(() => ({ components, template: SQL_DATABASE_TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Four use cases of equal weight in a two-by-two set, each a short title over one sentence.'
-      },
-      source: { code: toSfc(IMPORTS, VECTORIZE_TEMPLATE) }
+      source: { code: toSfc(IMPORTS, SQL_DATABASE_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'use-cases',
+  props: {
+    eyebrow: SQL_DATABASE.tag,
+    title: SQL_DATABASE.title,
+    description: SQL_DATABASE.lead,
+    action: { label: 'Docs', href: SQL_DATABASE.href, trailing: true },
+    items: SQL_DATABASE.cases
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

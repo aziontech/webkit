@@ -180,13 +180,6 @@
                 novalidate
                 @submit.prevent="next"
               >
-                <button
-                  type="submit"
-                  class="sr-only"
-                  aria-hidden="true"
-                  tabindex="-1"
-                />
-
                 <header class="flex flex-col gap-(--spacing-xs)">
                   <div class="flex flex-col gap-(--spacing-xxs)">
                     <p class="text-label-sm text-(--text-muted)">
@@ -234,7 +227,7 @@
                     size="large"
                     class="flex-1"
                     :loading="submitting"
-                    @click="next"
+                    type="submit"
                   />
                 </div>
               </form>

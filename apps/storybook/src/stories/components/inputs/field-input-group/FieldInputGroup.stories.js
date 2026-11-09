@@ -8,7 +8,7 @@ const IMPORT = "import FieldInputGroup from '@aziontech/webkit/field-input-group
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldInputGroup>} */
 const meta = {
-  title: 'Components/Inputs/FieldInputGroup',
+  title: 'Components/Primitives/Inputs/FieldInputGroup',
   component: FieldInputGroup,
   tags: ['autodocs'],
   parameters: {

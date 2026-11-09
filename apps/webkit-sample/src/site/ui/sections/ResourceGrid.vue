@@ -2,8 +2,10 @@
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
   import CardGrid from '@aziontech/webkit/card-grid-root'
   import MediaSplit from '@aziontech/webkit/media-split'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
   import SectionModule from '@aziontech/webkit/section-module'
   import Topic from '@aziontech/webkit/topic'
+  import { computed } from 'vue'
 
   import { useSiteLink } from '../../composables/use-site-link'
   import SectionAction from './SectionAction.vue'
@@ -20,13 +22,13 @@
     title: string
     /** One or two sentences under the title. */
     description?: string
-    /** Linked resource cards, two to a row; four fill the grid. */
+    /** Linked resource cards, two to a row; four fill the grid and the rest scroll. */
     items: SiteTopic[]
     /** Actions under the copy. */
     actions?: SiteAction[]
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     anchor: '',
     eyebrow: 'Go Deeper',
     description: '',
@@ -41,7 +43,12 @@
     ]
   })
 
+  const VISIBLE_ITEMS = 4
+
   const { follow } = useSiteLink()
+
+  const scrolls = computed(() => props.items.length > VISIBLE_ITEMS)
+  const scrollProps = computed(() => (scrolls.value ? { ariaLabel: props.title, fade: true } : {}))
 
   const isExternal = (href: string) => /^https?:/.test(href)
 </script>
@@ -63,28 +70,44 @@
       :description="description"
     >
       <template #media>
-        <div class="w-full self-stretch">
-          <CardGrid
-            flush
-            kind="frame"
-            :columns="2"
+        <div
+          :data-scrolls="scrolls || null"
+          class="group/resources relative flex w-full flex-col self-stretch data-[scrolls]:-mb-px"
+        >
+          <div
+            class="flex min-h-0 flex-1 flex-col group-data-[scrolls]/resources:lg:absolute group-data-[scrolls]/resources:lg:inset-0"
           >
-            <CardGridCell
-              v-for="item in items"
-              :key="item.title"
-              kind="surface"
+            <component
+              :is="scrolls ? ScrollArea : 'div'"
+              v-bind="scrollProps"
             >
-              <Topic
-                :heading-level="3"
-                :title="item.title"
-                :description="item.description"
-                :href="item.href ?? ''"
-                :target="isExternal(item.href ?? '') ? '_blank' : undefined"
-                :rel="isExternal(item.href ?? '') ? 'noopener noreferrer' : undefined"
-                @click="follow($event, item.href ?? '')"
-              />
-            </CardGridCell>
-          </CardGrid>
+              <div class="group-data-[scrolls]/resources:pb-px">
+                <CardGrid
+                  :data-balanced="!scrolls || null"
+                  flush
+                  kind="frame"
+                  :columns="2"
+                  class="data-[balanced]:sm:auto-rows-fr"
+                >
+                  <CardGridCell
+                    v-for="item in items"
+                    :key="item.title"
+                    kind="surface"
+                  >
+                    <Topic
+                      :heading-level="3"
+                      :title="item.title"
+                      :description="item.description"
+                      :href="item.href ?? ''"
+                      :target="isExternal(item.href ?? '') ? '_blank' : undefined"
+                      :rel="isExternal(item.href ?? '') ? 'noopener noreferrer' : undefined"
+                      @click="follow($event, item.href ?? '')"
+                    />
+                  </CardGridCell>
+                </CardGrid>
+              </div>
+            </component>
+          </div>
         </div>
       </template>
       <template

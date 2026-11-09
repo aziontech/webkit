@@ -1,12 +1,11 @@
-import { ref, watch } from 'vue'
-
 import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldRadioBlock>} */
 const meta = {
-  title: 'Components/Inputs/FieldRadioBlock',
+  title: 'Components/Primitives/Inputs/FieldRadioBlock',
   component: FieldRadioBlock,
   tags: ['autodocs'],
   parameters: {

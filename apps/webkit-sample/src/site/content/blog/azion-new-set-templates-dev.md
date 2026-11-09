@@ -1,4 +1,4 @@
-As the digital landscape expands, the need for smart, intuitive tools to simplify web application development is surging. To meet this demand, Azion is proud to unveil its new set of templates tailored to assist developers in creating, deploying, and managing a variety of web applications effectively and seamlessly integrating them with Azion’s Edge Computing Platform.
+As the digital environment expands, the need for smart, intuitive tools to simplify web application development is surging. To meet this demand, Azion is proud to unveil its new set of templates tailored to assist developers in creating, deploying, and managing a variety of web applications effectively and seamlessly integrating them with Azion’s Edge Computing Platform.
 
 In this blog post, we will delve into the advantages and use cases of each template. This insightful journey will assist developers in harnessing the potential of these robust tools for business growth.
 
@@ -18,7 +18,7 @@ With the MongoDB Atlas Boilerplate, various applications such as CMS, event and 
 
 ## Hexo Boilerplate
 
-This boilerplate is a template that empowers developers to quickly deploy new Hexo applications on the edge. This resource provides a streamlined development process that curbs technical complexities and optimizes build processes. The [Hexo Boilerplate](https://www.azion.com/en/documentation/products/guides/hexo-boilerplate/) is particularly helpful for managing a Hexo Single-Page Application (SPA) right from the edge, thanks to its automation-centric approach.
+This boilerplate is a template that lets developers quickly deploy new Hexo applications on the edge. This resource provides a streamlined development process that curbs technical complexities and optimizes build processes. The [Hexo Boilerplate](https://www.azion.com/en/documentation/products/guides/hexo-boilerplate/) is particularly helpful for managing a Hexo Single-Page Application (SPA) right from the edge, thanks to its automation-centric approach.
 
 Among the general benefits, the Hexo Boilerplate simplifies the development process with a ready-to-deploy project. Moreover, developers can gain hands-on experience with edge computing capabilities, and optimize Hexo application performance with the optimized build process provided by Azion’s platform. Besides these, an automated continuous deployment workflow is in place for easier application management.
 

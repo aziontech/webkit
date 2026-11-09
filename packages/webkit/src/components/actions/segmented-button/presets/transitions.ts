@@ -1,6 +1,5 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-/** Selection highlight pill — values read only from `animate.js`. */
 export const segmentedButtonIndicatorMotion = {
   slide: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const

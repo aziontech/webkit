@@ -48,6 +48,7 @@ export const createSurfaces = [
   { id: 'network-lists', label: 'Network list', surface: 'Page', path: '/network-lists/new' },
   { id: 'data-stream', label: 'Data stream', surface: 'Page', path: '/data-stream/new' },
   { id: 'object-storage', label: 'Bucket', surface: 'Page', path: '/object-storage/new' },
+  { id: 'real-time-purge', label: 'Purge', surface: 'Page', path: '/real-time-purge/new' },
 
   { id: 'record', label: 'DNS record', surface: 'Drawer', inside: 'a zone' },
   { id: 'rule', label: 'Create rule', surface: 'Drawer', inside: 'an application' },

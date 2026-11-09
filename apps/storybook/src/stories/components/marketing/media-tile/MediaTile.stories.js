@@ -314,3 +314,27 @@ export const Band = {
     }
   }
 }
+
+const PLACEHOLDER_TEMPLATE = `<MediaTile
+  title="${TITLE}"
+  description="${DESCRIPTION}"
+>
+  <template #media>
+    <Illustration />
+  </template>
+</MediaTile>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof MediaTile>} */
+export const Placeholder = {
+  render: () => ({ components: { Illustration, MediaTile }, template: PLACEHOLDER_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The tile with the library placeholder in its frame. An `Illustration` with no `name` draws the placeholder from the asset library, so a tile whose artwork has not been made yet keeps its frame and its caption in place. Swap the empty `Illustration` for a named scene or an image when the artwork lands.'
+      },
+      source: { code: toSfc(IMPORT, PLACEHOLDER_TEMPLATE) }
+    }
+  }
+}

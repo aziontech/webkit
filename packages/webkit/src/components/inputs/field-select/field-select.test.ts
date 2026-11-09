@@ -246,4 +246,223 @@ describe('FieldSelect', () => {
     const inner = getByTestId('input-field-select__select')
     expect(inner.getAttribute('data-mode')).toBe('multiple')
   })
+
+  describe('searchable', () => {
+    const CITIES = [
+      { value: 'sp', label: 'São Paulo' },
+      { value: 'rj', label: 'Rio de Janeiro' },
+      { value: 'bh', label: 'Belo Horizonte' },
+      { value: 'poa', label: 'Porto Alegre', disabled: true },
+      { value: 'rec', label: 'Recife' }
+    ]
+    const getSearch = () =>
+      document.body.querySelector('[data-testid="input-field-select__search"]') as HTMLInputElement
+    const visibleLabels = () =>
+      Array.from(document.body.querySelectorAll('[data-testid="input-field-select__option"]')).map(
+        (o) => o.textContent?.trim()
+      )
+    const activeLabel = () =>
+      document.body
+        .querySelector('[data-testid="input-field-select__option"][data-active]')
+        ?.textContent?.trim()
+
+    it('renders no search box unless searchable', async () => {
+      const { getByTestId } = render(FieldSelect, { props: { label: 'City', options: CITIES } })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      expect(getSearch()).toBeNull()
+    })
+
+    it('focuses the search and filters by word prefix ignoring accents', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      expect(document.activeElement).toBe(getSearch())
+
+      await fireEvent.update(getSearch(), 'sao')
+      expect(visibleLabels()).toEqual(['São Paulo'])
+
+      await fireEvent.update(getSearch(), 'ja')
+      expect(visibleLabels()).toEqual(['Rio de Janeiro'])
+    })
+
+    it('moves the highlight with the arrows, skips disabled options and keeps focus in the search', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      expect(activeLabel()).toBe('São Paulo')
+
+      await fireEvent.keyDown(getSearch(), { key: 'ArrowDown' })
+      await fireEvent.keyDown(getSearch(), { key: 'ArrowDown' })
+      await fireEvent.keyDown(getSearch(), { key: 'ArrowDown' })
+      expect(activeLabel()).toBe('Recife')
+      expect(document.activeElement).toBe(getSearch())
+      expect(getSearch().getAttribute('aria-activedescendant')).toBe(
+        document.body.querySelector('[data-active]')?.id
+      )
+
+      await fireEvent.keyDown(getSearch(), { key: 'ArrowDown' })
+      expect(activeLabel()).toBe('São Paulo')
+      await fireEvent.keyDown(getSearch(), { key: 'ArrowUp' })
+      expect(activeLabel()).toBe('Recife')
+    })
+
+    it('opens on the current value and picks the highlighted option on Enter', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true, modelValue: 'bh' }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      expect(activeLabel()).toBe('Belo Horizonte')
+
+      await fireEvent.keyDown(getSearch(), { key: 'ArrowUp' })
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+
+      expect(emitted()['update:modelValue']).toEqual([['rj']])
+      expect(getSearch()).toBeNull()
+      expect(document.activeElement).toBe(getByTestId('input-field-select__trigger'))
+    })
+
+    it('starts the search from a letter typed on the closed trigger', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.keyDown(getByTestId('input-field-select__trigger'), { key: 'r' })
+      expect(getSearch().value).toBe('r')
+      expect(visibleLabels()).toEqual(['Rio de Janeiro', 'Recife'])
+    })
+
+    it('closes on Escape and returns focus to the trigger', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.keyDown(getSearch(), { key: 'Escape' })
+      expect(getSearch()).toBeNull()
+      expect(document.activeElement).toBe(getByTestId('input-field-select__trigger'))
+    })
+
+    it('keeps the list open and toggles on Enter when multiple', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true, multiple: true, modelValue: [] }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toEqual([[['sp']]])
+      expect(getSearch()).not.toBeNull()
+    })
+
+    it('shows the empty label when nothing matches', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true, searchEmptyLabel: 'Nada' }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'xyz')
+      expect(visibleLabels()).toEqual([])
+      expect(
+        document.body.querySelector('[data-testid="input-field-select__search-empty"]')?.textContent
+      ).toContain('Nada')
+    })
+
+    it('closes on Tab and returns focus to the trigger', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.keyDown(getSearch(), { key: 'Tab' })
+      expect(getSearch()).toBeNull()
+      expect(document.activeElement).toBe(getByTestId('input-field-select__trigger'))
+    })
+
+    it('does not open or pick from a letter typed on a readonly trigger', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: {
+          label: 'City',
+          options: CITIES,
+          searchable: true,
+          readonly: true,
+          modelValue: 'sp'
+        }
+      })
+      await fireEvent.keyDown(getByTestId('input-field-select__trigger'), { key: 'r' })
+      expect(getSearch()).toBeNull()
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('renders no search box when the default slot fills the list', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', searchable: true },
+        slots: { default: '<div role="option">Custom</div>' }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      expect(getSearch()).toBeNull()
+    })
+
+    it('picks the highlighted option when values are objects', async () => {
+      const one = { id: 1 }
+      const two = { id: 2 }
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: {
+          label: 'Plan',
+          searchable: true,
+          options: [
+            { value: one, label: 'One' },
+            { value: two, label: 'Two' }
+          ]
+        }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'two')
+      expect(visibleLabels()).toEqual(['Two'])
+
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toEqual([[two]])
+    })
+
+    it('highlights the first enabled match when the first one is disabled', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: {
+          label: 'City',
+          searchable: true,
+          options: [
+            { value: 'opo', label: 'Porto', disabled: true },
+            { value: 'ptm', label: 'Portimão' }
+          ]
+        }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'port')
+      expect(activeLabel()).toBe('Portimão')
+
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toEqual([['ptm']])
+    })
+
+    it('highlights nothing when every match is disabled', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'alegre')
+      expect(visibleLabels()).toEqual(['Porto Alegre'])
+      expect(activeLabel()).toBeUndefined()
+
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('points aria-activedescendant at an id without whitespace', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: {
+          label: 'Country',
+          searchable: true,
+          options: [{ value: 'United Kingdom', label: 'United Kingdom' }]
+        }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      const id = getSearch().getAttribute('aria-activedescendant') ?? ''
+      expect(id).not.toMatch(/\s/)
+      expect(document.getElementById(id)?.textContent?.trim()).toBe('United Kingdom')
+    })
+  })
 })

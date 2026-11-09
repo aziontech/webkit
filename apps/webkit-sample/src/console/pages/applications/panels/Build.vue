@@ -140,7 +140,7 @@
                           aria-hidden="true"
                         />
                         <i
-                          class="pi pi-github"
+                          class="ai ai-github"
                           aria-hidden="true"
                         />
                         <ResourceLink

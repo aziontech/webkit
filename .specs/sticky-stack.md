@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 158f737f988aebdba9af7a6a915dacd7cec2c03ba2010ae5e807a4a00d941e43
+checksum: dc5f96fa2a454a32b469da265182392ce1cd4b805c05baa5e05a33e1ab5edcb6
 created: 2026-09-25
-last_updated: 2026-09-25
+last_updated: 2026-10-21
 ---
 
 # Sticky Stack — Component Spec
@@ -113,6 +113,8 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 | Slot | Scope | Notes |
 |---|---|---|
 | `media` | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays. |
+| `actions` | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty. |
+| `backdrop` | — | Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty. |
 
 ## States
 
@@ -122,6 +124,8 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 - `data-size` carries the size token, which is what sets the open claim's height and so the stack's height
 - `data-progress` is present on the root while `showProgress` is on
 - The media frame shows exactly one medium: the outgoing one leaves as the incoming one mounts
+- The backdrop is not part of the medium: it stays mounted across every change, under the medium that is leaving and the one arriving
+- A claim's description is held to `var(--container-sm)` so the measure stays short however wide the column is
 - Below `lg` the band does not pin: every claim is open, each with its own medium under it, and nothing moves
 - Empty: when `items` is empty the band renders nothing
 
@@ -131,6 +135,8 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 |---|---|---|---|
 | a claim opens or collapses as the scroll moves | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance` | inline (catalog duration + easing) | `motion-reduce:transition-none` |
 | a claim dims as it is read past | `transition-[color,opacity] duration-moderate-01 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| the open claim's description arrives, after its title | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-100` while open | inline (catalog duration + easing) | `motion-reduce:transition-none` |
+| the open claim's actions arrive, after its description | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-200` while open | inline (catalog duration + easing) | `motion-reduce:transition-none` |
 | the medium for the newly open claim arrives | `animate-fade-in` | semantic (fade-in) | `motion-reduce:animate-none` |
 | the medium for the claim just closed leaves | `animate-fade-out` | semantic (fade-out) | `motion-reduce:animate-none` |
 

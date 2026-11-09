@@ -6,7 +6,7 @@ const IMPORT = "import Divider from '@aziontech/webkit/divider'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Divider>} */
 const meta = {
-  title: 'Components/Layout/Divider',
+  title: 'Components/Primitives/Layout/Divider',
   component: Divider,
   tags: ['autodocs'],
   parameters: {

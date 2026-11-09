@@ -10,7 +10,9 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SplitButton from '@aziontech/webkit/split-button'
 import Tooltip from '@aziontech/webkit/tooltip'
 
+import { editable } from '../../_shared/editable-content'
 import { each, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -121,7 +123,7 @@ const PROSE = `<h2 id="challenge">Challenge</h2>
 
 <h2 id="solution">Solution</h2>
 <p>
-  Magalu counts on Azion’s platform to evolve its complex security posture through edge-native, real-time firewall and analytics solutions, empowering Magalu’s SOC squad with granular access control, a fine-grained bot management platform, automated threat blocking, and more.
+  Magalu counts on Azion’s platform to evolve its complex security posture through distributed, real-time firewall and analytics solutions, giving Magalu’s SOC squad granular access control, a fine-grained bot management platform, automated threat blocking, and more.
 </p>
 
 <h2 id="results-and-impact">Results and Impact</h2>
@@ -180,6 +182,8 @@ const TEMPLATE = `<SectionContainer max-width="site">
             :items="${arrayLiteral(TRAIL, 6)}"
           />
           <HeroTitle
+            eyebrow="Blog"
+            eyebrow-prefix="//"
             size="medium"
             max-width="2xl"
             title="${ARTICLE.title}"
@@ -248,18 +252,43 @@ ${each(COMMUNITY.links, communityLink, 8)}
   </SectionModule>
 </SectionContainer>`
 
+const markdownOf = (html) =>
+  html
+    .replace(/<h2 id="[^"]*">([^<]*)<\/h2>/g, '## $1\n\n')
+    .replace(/<p>\s*([\s\S]*?)\s*<\/p>/g, '$1\n\n')
+    .replace(
+      /<ul>\s*([\s\S]*?)\s*<\/ul>/g,
+      (_, items) => `${items.replace(/\s*<li>([\s\S]*?)<\/li>/g, '\n- $1').trim()}\n\n`
+    )
+    .replace(/\n\s*\n\s*/g, '\n\n')
+    .trim()
+
+export const SITE_SECTION = {
+  _id: 'article-body',
+  props: {
+    article: ARTICLE,
+    trail: TRAIL,
+    body: markdownOf(PROSE),
+    banner: '/media/blog/banner.svg',
+    share: {
+      title: SHARE.title,
+      copyLink: SHARE.actions[0].label,
+      copyFeed: '',
+      shareX: SHARE.actions[1].label,
+      shareLinkedIn: SHARE.actions[2].label
+    },
+    community: COMMUNITY,
+    copyPage: COPY_PAGE
+  }
+}
+
 const meta = {
-  title: 'Templates/Marketing/Content/ArticleBody',
-  tags: ['autodocs'],
+  title: 'Templates/Marketing/Articles/ArticleBody',
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The reading page of an article: a brand banner over a three-column grid, with the share, community and Copy page rail on the left, the breadcrumb, headline, byline and prose down the middle at a reading measure, and the “On this page” outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. It opens the page itself, so it carries its own `SectionContainer` rather than sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it. Built from `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Divider`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -268,14 +297,15 @@ const meta = {
 export default meta
 
 export const SuccessStory = {
-  render: () => ({ components, template: TEMPLATE }),
+  ...editable(() => ({ components, template: TEMPLATE })),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Magalu success story under Success cases › Retail. A story has no author, so the byline is the date and read time alone, and it has no feed, so the share group drops the RSS action. The outline lists the three sections the prose opens with, the first one active.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SuccessStoryJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

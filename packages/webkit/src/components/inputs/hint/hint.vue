@@ -33,8 +33,6 @@
     :text="text"
     :placement="placement"
   >
-    <!-- The glyph carries no action of its own: `.prevent` keeps a Hint rendered
-         inside a label from toggling the control that label points at. -->
     <button
       type="button"
       :data-testid="`${testId}__trigger`"

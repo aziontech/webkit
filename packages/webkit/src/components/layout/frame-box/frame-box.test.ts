@@ -108,6 +108,14 @@ describe('FrameBox', () => {
     expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(1)
   })
 
+  it('keeps a consumer-set data-hatch without drawing its own hatch layer', () => {
+    const { getByTestId } = render(FrameBox, { attrs: { 'data-hatch': 'lines' } })
+    const root = getByTestId(TESTID)
+
+    expect(root).toHaveAttribute('data-hatch', 'lines')
+    expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(0)
+  })
+
   it('treats a bare flush as the top side and drops that rule', () => {
     const { getByTestId } = render(FrameBox, { props: { flush: true } })
     const root = getByTestId(TESTID)

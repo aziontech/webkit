@@ -365,13 +365,6 @@
               novalidate
               @submit.prevent="signIn"
             >
-              <button
-                type="submit"
-                class="sr-only"
-                aria-hidden="true"
-                tabindex="-1"
-              />
-
               <header class="flex flex-col gap-(--spacing-xxs)">
                 <h1 class="text-heading-sm text-(--text-default)">Welcome back</h1>
                 <p class="text-body-sm text-(--text-muted)">Sign in to your account.</p>
@@ -485,7 +478,7 @@
                 size="large"
                 class="w-full"
                 :loading="verifying"
-                @click="signIn"
+                type="submit"
               />
             </form>
           </template>
@@ -504,13 +497,6 @@
               novalidate
               @submit.prevent="signUp"
             >
-              <button
-                type="submit"
-                class="sr-only"
-                aria-hidden="true"
-                tabindex="-1"
-              />
-
               <header class="flex flex-col gap-(--spacing-xxs)">
                 <h1 class="text-heading-sm text-(--text-default)">
                   Sign up for a free account
@@ -626,7 +612,7 @@
                 size="large"
                 class="w-full"
                 :loading="verifying"
-                @click="signUp"
+                type="submit"
               />
             </form>
           </template>

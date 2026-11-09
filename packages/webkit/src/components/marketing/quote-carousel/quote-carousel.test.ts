@@ -27,7 +27,6 @@ const ITEMS = [
   }
 ]
 
-// Marks are dynamic imports, so artwork lands a microtask-and-a-tick after mount.
 const markFor = (container: Element, name: string) =>
   waitFor(() => {
     const art = container.querySelector(`svg[data-mark="${name}"]`)

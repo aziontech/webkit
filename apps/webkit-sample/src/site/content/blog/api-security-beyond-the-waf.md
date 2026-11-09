@@ -1,6 +1,6 @@
 APIs have become the primary operating surface of modern software. Today, a failed API can interrupt checkout flows, prevent users from logging in, disrupt payments, break partner integrations, or stop AI-powered applications from functioning correctly.
 
-As organizations accelerated digital transformation, APIs evolved from integration mechanisms into the layer where business logic runs. Payment processing, account management, inventory systems, pricing engines, and digital experiences increasingly depend on APIs to operate.
+As organizations accelerated modernization, APIs evolved from integration mechanisms into the layer where business logic runs. Payment processing, account management, inventory systems, pricing engines, and digital experiences increasingly depend on APIs to operate.
 
 This shift changed the threat landscape as attackers increasingly target the APIs that expose critical business functions.. Credential stuffing campaigns abuse login endpoints, scrapers extract pricing and inventory data, automated bots attempt account takeovers, and excessive requests overwhelm backend services that were never designed for internet-scale traffic.
 

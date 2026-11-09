@@ -89,7 +89,7 @@ export const CAREERS_TOOLBAR = {
 /** What the source says when a filter pair matches nothing. Verbatim, including the action. */
 export const CAREERS_EMPTY = {
   title: 'Nothing here yet',
-  description: 'At this time, we do not have any open positions that match your search criteria.',
+  description: 'No open positions match your search.',
   action: 'View all open positions'
 }
 

@@ -1,4 +1,5 @@
 import { textsData } from '@aziontech/theme/texts'
+
 const spacingsData = {
   'spacing-xxl': { _: '2rem', sm: '4rem', xl: '6rem' },
   'spacing-xl': { _: '1.5rem', sm: '2rem', xl: '3rem' },

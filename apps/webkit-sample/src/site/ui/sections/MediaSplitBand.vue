@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit, { type MediaSplitOrientation } from '@aziontech/webkit/media-split'
+  import MediaSplit, {
+    type MediaSplitOrientation,
+    type MediaSplitSize
+  } from '@aziontech/webkit/media-split'
   import SectionModule from '@aziontech/webkit/section-module'
   import type { TextureMaterialKind } from '@aziontech/webkit/texture-material'
   import type { Component } from 'vue'
@@ -53,6 +56,10 @@
     orientation?: MediaSplitOrientation
     /** Texture painted under the media. */
     texture?: TextureMaterialKind
+    /** Type scale of the copy; large centres it beside the media. */
+    size?: MediaSplitSize
+    /** Link the whole band to a lone action; turn it off when the media holds controls of its own. */
+    linked?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -65,12 +72,16 @@
     scene: null,
     actions: () => [],
     orientation: 'horizontal',
-    texture: 'pixelate'
+    texture: 'pixelate',
+    size: 'medium',
+    linked: true
   })
 
   const { follow } = useSiteLink()
 
-  const bandHref = computed(() => (props.actions.length === 1 ? props.actions[0].href : ''))
+  const bandHref = computed(() =>
+    props.linked && props.actions.length === 1 ? props.actions[0].href : ''
+  )
 
   const buttons = computed<SiteAction[]>(() => {
     const [first, second] = props.actions
@@ -101,8 +112,8 @@
       framed
       :orientation="orientation"
       :media-href="bandHref"
-      align="top"
-      size="medium"
+      :align="size === 'large' ? 'center' : 'top'"
+      :size="size"
       media-fill="surface"
       :texture="texture"
       texture-size="small"

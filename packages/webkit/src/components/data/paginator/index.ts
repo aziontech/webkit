@@ -1,6 +1,3 @@
-// Compound API (see .claude/rules/compound-api.md). The explicit
-// CompoundPaginator annotation makes declaration emit reference the
-// sub-component types instead of expanding the root's private Props.
 import PaginationButton from './pagination-button/pagination-button.vue'
 import Paginator from './paginator.vue'
 import PaginatorInfo from './paginator-info/paginator-info.vue'

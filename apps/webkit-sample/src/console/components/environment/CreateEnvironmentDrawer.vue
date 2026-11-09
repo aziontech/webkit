@@ -57,7 +57,7 @@
   const submitting = ref(false)
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     Object.assign(form, blankForm())
     Object.assign(errors, { name: '', ipAllowlistCidrs: '', branchMatch: '' })
     submitting.value = false

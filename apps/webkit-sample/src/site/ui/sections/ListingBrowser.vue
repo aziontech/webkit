@@ -26,6 +26,7 @@
   import { computed, reactive } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import { useOptionSearch } from '../../composables/use-option-search'
   import { useSiteLink } from '../../composables/use-site-link'
   import type { ListingColumn } from './ListingTable.vue'
 
@@ -120,9 +121,11 @@
   })
 
   const ALL = 'all'
+  const SORT_KEY = 'sort'
 
   const route = useRoute()
   const { follow } = useSiteLink()
+  const { searchable, query, setQuery, narrow } = useOptionSearch()
 
   const seeded = (facet: ListingFacet) => {
     const requested = route.query[facet.key]
@@ -166,6 +169,11 @@
 
   const sortDisplay = (value: string) =>
     props.sorts.find((sort) => sort.value === value)?.label ?? ''
+
+  const matching = (facet: ListingFacet) =>
+    narrow(facet.key, facet.options, (option) => option.label)
+
+  const matchingSorts = computed(() => narrow(SORT_KEY, props.sorts, (sort) => sort.label))
 
   const nameKey = computed(() => props.columns[0]?.key ?? '')
   const detailKey = computed(() => props.columns[1]?.key ?? '')
@@ -246,17 +254,44 @@
             v-model="selection.facets[facet.key]"
             size="large"
             :display-value="facetLabel(facet)"
+            @update:open="setQuery(facet.key, '')"
           >
             <SelectTrigger :aria-label="facet.label" />
             <SelectContent>
+              <template
+                v-if="searchable(facet.options)"
+                #search
+              >
+                <InputText
+                  :model-value="query(facet.key)"
+                  size="small"
+                  placeholder="Search"
+                  :aria-label="`Search ${facet.label.toLowerCase()}`"
+                  @update:model-value="setQuery(facet.key, $event)"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
+              </template>
               <SelectOption :value="ALL">{{ facet.allLabel }}</SelectOption>
               <SelectOption
-                v-for="option in facet.options"
+                v-for="option in matching(facet)"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
               </SelectOption>
+              <p
+                v-if="!matching(facet).length"
+                role="status"
+                class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+              >
+                No results found
+              </p>
             </SelectContent>
           </Select>
         </div>
@@ -269,16 +304,43 @@
             v-model="selection.sort"
             size="large"
             :display-value="sortDisplay"
+            @update:open="setQuery(SORT_KEY, '')"
           >
             <SelectTrigger :aria-label="sortLabel" />
             <SelectContent>
+              <template
+                v-if="searchable(sorts)"
+                #search
+              >
+                <InputText
+                  :model-value="query(SORT_KEY)"
+                  size="small"
+                  placeholder="Search"
+                  :aria-label="`Search ${sortLabel.toLowerCase()}`"
+                  @update:model-value="setQuery(SORT_KEY, $event)"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
+              </template>
               <SelectOption
-                v-for="sort in sorts"
+                v-for="sort in matchingSorts"
                 :key="sort.value"
                 :value="sort.value"
               >
                 {{ sort.label }}
               </SelectOption>
+              <p
+                v-if="!matchingSorts.length"
+                role="status"
+                class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+              >
+                No results found
+              </p>
             </SelectContent>
           </Select>
         </div>

@@ -1,12 +1,11 @@
-import { ref, watch } from 'vue'
-
 import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldSwitchBlock>} */
 const meta = {
-  title: 'Components/Inputs/FieldSwitchBlock',
+  title: 'Components/Primitives/Inputs/FieldSwitchBlock',
   component: FieldSwitchBlock,
   tags: ['autodocs'],
   parameters: {

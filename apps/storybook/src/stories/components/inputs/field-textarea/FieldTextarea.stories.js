@@ -1,7 +1,6 @@
-import { ref } from 'vue'
-
 import Button from '@aziontech/webkit/button'
 import FieldTextarea from '@aziontech/webkit/field-textarea'
+import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -13,7 +12,7 @@ const withRef = (body, { initial = "''" } = {}) =>
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldTextarea>} */
 const meta = {
-  title: 'Components/Inputs/FieldTextarea',
+  title: 'Components/Primitives/Inputs/FieldTextarea',
   component: FieldTextarea,
   tags: ['autodocs'],
   parameters: {

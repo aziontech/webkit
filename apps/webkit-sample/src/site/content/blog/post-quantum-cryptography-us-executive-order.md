@@ -110,7 +110,7 @@ The first step is defining who will lead this transition internally. Then, map w
 
 Before setting a migration timeline, build an inventory of the organization’s connections. Knowing which systems use TLS is not enough. It is necessary to understand which ones can already negotiate post-quantum algorithms and which still depend on broader ecosystem support — browsers, APIs, libraries, proxies, load balancers.
 
-The bottleneck is rarely in the edge infrastructure. In many cases, it already supports ML-KEM. What determines whether a connection will actually negotiate post-quantum cryptography is support across the entire TLS chain.
+The bottleneck is rarely in the distributed infrastructure. In many cases, it already supports ML-KEM. What determines whether a connection will actually negotiate post-quantum cryptography is support across the entire TLS chain.
 
 That is where observability comes in. Features like [Real-Time Events](https://www.azion.com/en/products/real-time-events/) and [Data Stream](https://www.azion.com/en/products/data-stream/) from Azion show which TLS versions and key exchange algorithms are being negotiated on each connection. This allows teams to prioritize where migration can happen now and where technical dependencies still need to be resolved.
 

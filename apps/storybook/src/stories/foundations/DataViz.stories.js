@@ -4,7 +4,7 @@ import SemanticSwatchGroup from '../../foundations/components/SemanticSwatchGrou
 import { chartColorGroup } from '../../foundations/data/theme.js'
 
 export default {
-  title: 'Foundations/Design Tokens/Data Viz',
+  title: 'Foundations/Design Tokens/Semantic/Data Viz',
   parameters: {
     options: { showPanel: false },
     controls: { disable: true },

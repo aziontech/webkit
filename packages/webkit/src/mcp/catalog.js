@@ -1,25 +1,15 @@
-// Version-locked catalog loader for the webkit MCP server. Resolves catalog.json from
-// the CONSUMING project's node_modules so every answer matches the installed webkit
-// version. Fail-open: an unresolvable catalog reports `available: false` and queries
-// degrade to "not available" instead of crashing. WEBKIT_CATALOG_PATH overrides the
-// resolution (tests / monorepo dogfood). Mirrors the eslint-plugin loader pattern.
-
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
-// webkit publishes under a single name (`@aziontech/webkit`). The import PREFIX every
-// answer uses is read from the resolved catalog's own `package` field, so it always
-// matches the installed name.
 const CANDIDATE_PKGS = ['@aziontech/webkit']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
 
-/** True when `src` is a bare import of the webkit package name. */
 export function isWebkitBare(src) {
   return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
 }
 
-let cache = null // { path, value }
+let cache = null
 let warned = false
 
 function resolveCatalogPath(cwd) {
@@ -28,14 +18,10 @@ function resolveCatalogPath(cwd) {
   for (const pkg of CANDIDATE_PKGS) {
     try {
       return require.resolve(`${pkg}/catalog.json`)
-    } catch {
-      /* try next candidate */
-    }
+    } catch {}
     try {
       return join(dirname(require.resolve(`${pkg}/package.json`)), 'catalog.json')
-    } catch {
-      /* try next candidate */
-    }
+    } catch {}
   }
   return null
 }
@@ -43,8 +29,6 @@ function resolveCatalogPath(cwd) {
 function warnOnce(message) {
   if (warned) return
   warned = true
-  // MCP speaks JSON-RPC over stdio, so diagnostics MUST go to stderr — never stdout.
-  // Fail-open must not be silent: announce the disabled state once.
   process.stderr.write(`[webkit-mcp] ${message}\n`)
 }
 
@@ -73,7 +57,6 @@ function build(json) {
   const set = new Set(subpaths)
   const tokenRules = (json.tokenRules || []).map((r) => ({
     id: r.id,
-    // Compile WITHOUT the global flag so `.test()` is stateless.
     re: new RegExp(r.pattern, (r.flags || '').replace('g', '')),
     message: r.message
   }))
@@ -88,17 +71,12 @@ function build(json) {
     version: json.webkitVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
     tokenRules,
-    /** Positive token inventory: { cssVars, typography, groups }. */
     tokens: json.tokens || { cssVars: [], typography: [], groups: {} },
-    /** Canonical prop/event dictionary: { props, size, booleanPrefixes, negativeBooleans, events }. */
     vocabulary: json.vocabulary || null,
-    /** Every subpath key in the catalog, in declared order. */
     subpaths,
-    /** Raw import entries keyed by subpath. */
     imports,
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
-    /** Nearest published ancestor of a slash path, e.g. `table/x/y` → `table` if published. */
     nearestPublishedPrefix(sub) {
       if (!sub.includes('/')) return null
       const parts = sub.split('/')
@@ -108,7 +86,6 @@ function build(json) {
       }
       return null
     },
-    /** Up to 3 close published subpaths (edit distance ≤ 2), catches typos / singular↔plural. */
     suggestSubpaths(sub) {
       const scored = []
       for (const s of subpaths) {
@@ -166,13 +143,10 @@ export function loadCatalog(cwd) {
   return value
 }
 
-/** Test-only: clear the memoized catalog + warn latch (a single process may swap WEBKIT_CATALOG_PATH). */
 export function _resetCatalogCache() {
   cache = null
   warned = false
 }
 
-// Static defaults for callers without a loaded catalog. The loaded catalog's own
-// `.prefix` / `.bare` (derived from its `package` field) take precedence.
 export const WEBKIT_PREFIX = `${DEFAULT_PKG}/`
 export const WEBKIT_BARE = DEFAULT_PKG

@@ -16,7 +16,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    title: 'Frequently Asked Questions'
+    title: 'Frequently asked questions'
   })
 
   const { follow } = useSiteLink()

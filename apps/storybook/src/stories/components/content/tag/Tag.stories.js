@@ -6,7 +6,7 @@ const IMPORT = "import Tag from '@aziontech/webkit/tag'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Tag>} */
 const meta = {
-  title: 'Components/Content/Tag',
+  title: 'Components/Primitives/Content/Tag',
   component: Tag,
   tags: ['autodocs'],
   parameters: {

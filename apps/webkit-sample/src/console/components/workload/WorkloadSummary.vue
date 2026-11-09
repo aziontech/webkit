@@ -123,54 +123,56 @@
             @click="emit('visit')"
           />
 
-          <Tooltip
-            text="Select an environment to see its deployment and settings, or add another one"
-          >
-            <Dropdown
-              placement="bottom-end"
-              @select="(event, value) => onSelect(value)"
+          <div class="contents md:hidden">
+            <Tooltip
+              text="Select an environment to see its deployment and settings, or add another one"
             >
-              <Dropdown.Trigger>
-                <span
-                  class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
-                >
-                  <i
-                    class="ai ai-layers shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="truncate">{{ environmentLabel }}</span>
-                  <i
-                    class="pi pi-chevron-down shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </span>
-              </Dropdown.Trigger>
-
-              <Dropdown.Group label="Environments">
-                <Dropdown.Option
-                  v-for="option in environments"
-                  :key="option.name"
-                  :value="option.name"
-                  :label="option.name"
-                  :selected="option.name === environmentLabel"
-                />
-              </Dropdown.Group>
-
-              <Dropdown.Group>
-                <Dropdown.Option
-                  :value="ADD"
-                  label="Add Environment"
-                >
-                  <template #left>
+              <Dropdown
+                placement="bottom-end"
+                @select="(event, value) => onSelect(value)"
+              >
+                <Dropdown.Trigger>
+                  <span
+                    class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
+                  >
                     <i
-                      class="pi pi-plus"
+                      class="ai ai-layers shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
-                  </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-            </Dropdown>
-          </Tooltip>
+                    <span class="truncate">{{ environmentLabel }}</span>
+                    <i
+                      class="pi pi-chevron-down shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Dropdown.Trigger>
+
+                <Dropdown.Group label="Environments">
+                  <Dropdown.Option
+                    v-for="option in environments"
+                    :key="option.name"
+                    :value="option.name"
+                    :label="option.name"
+                    :selected="option.name === environmentLabel"
+                  />
+                </Dropdown.Group>
+
+                <Dropdown.Group>
+                  <Dropdown.Option
+                    :value="ADD"
+                    label="Add Environment"
+                  >
+                    <template #left>
+                      <i
+                        class="pi pi-plus"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Dropdown.Option>
+                </Dropdown.Group>
+              </Dropdown>
+            </Tooltip>
+          </div>
 
           <Dropdown
             placement="bottom-end"

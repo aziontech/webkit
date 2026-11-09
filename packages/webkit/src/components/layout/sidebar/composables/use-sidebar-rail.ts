@@ -62,9 +62,6 @@ const prefersReducedMotion = (): boolean => {
   return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-/** The steady-state enter/leave animation runs in CSS off the hidden checkbox's `:checked`
- *  state (see sidebar.vue). Only the drag-driven preview sliver still needs a JS-computed
- *  transition, because its width comes from a pointer gesture, not from that boolean. */
 const previewTransition = (): string => {
   if (prefersReducedMotion()) return 'none'
   return `width ${duration['moderate-02']} ${curve['expressive-entrance']}`

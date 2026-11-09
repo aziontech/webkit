@@ -1,13 +1,7 @@
 import { markRaw } from 'vue'
 
 import DiagramSet from '../../ui/diagram/DiagramSet.vue'
-import { LATENCY_ROUTING, MODEL_ROUTING, PROVIDER_FAILOVER } from '../diagrams.js'
-import {
-  PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
-  PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
-} from '../product-pages.js'
+import { PRODUCT_CLOSING, PRODUCT_DOCS, PRODUCT_HERO_ACTIONS } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
 const FEATURES = [
@@ -81,24 +75,9 @@ const USE_CASES = [
 ]
 
 const ROUTING_DIAGRAMS = [
-  {
-    value: 'availability',
-    spec: PROVIDER_FAILOVER,
-    ariaLabel:
-      'An AI app checks whether its provider is degraded; Claude Haiku 5.5 on Anthropic is degraded, so the call falls back to Claude Haiku 5.5 on Amazon Bedrock'
-  },
-  {
-    value: 'costs',
-    spec: MODEL_ROUTING,
-    ariaLabel:
-      'An AI app routes paid users to OpenAI GPT-5.5 with a fallback to Claude Opus 4.7, and everyone else to Kimi K2.6 or Gemma 4 depending on load'
-  },
-  {
-    value: 'latency',
-    spec: LATENCY_ROUTING,
-    ariaLabel:
-      'An AI app sends real-time tasks to Mistral 3 Small on AI Inference, under 30 ms, and other tasks to OpenAI GPT-5.5'
-  }
+  { value: 'availability', name: 'ai-gateway-provider-failover' },
+  { value: 'costs', name: 'ai-gateway-model-routing' },
+  { value: 'latency', name: 'ai-gateway-latency-routing' }
 ]
 
 const ROUTING_TABS = [
@@ -121,14 +100,44 @@ const reply = await client.chat.completions.create({
 
 console.log(reply.choices[0].message.content);`
 
-const CODE_FILES = [
+const COPILOT_CONFIG = `[
   {
-    label: 'client.ts',
-    value: 'client',
+    "name": "Azion AI Gateway",
+    "vendor": "customendpoint",
+    "apiKey": "\${input:chat.lm.secret.azion}",
+    "apiType": "chat-completions",
+    "models": [
+      {
+        "id": "general",
+        "name": "general",
+        "url": "https://YOUR_GATEWAY_DOMAIN/v1",
+        "toolCalling": true,
+        "streaming": true,
+        "maxInputTokens": 128000,
+        "maxOutputTokens": 16000
+      }
+    ]
+  }
+]`
+
+const CODE_AGENTS = [
+  {
+    label: 'OpenAI SDK',
+    value: 'openai-sdk',
     language: 'ts',
     code: CLIENT_SAMPLE,
     fileName: 'client.ts',
-    fileIcon: 'pi pi-code'
+    fileIcon: 'pi pi-code',
+    icon: 'ai-cor ai-open'
+  },
+  {
+    label: 'GitHub Copilot',
+    value: 'github-copilot',
+    language: 'json',
+    code: COPILOT_CONFIG,
+    fileName: 'chatLanguageModels.json',
+    fileIcon: 'ai ai-json',
+    icon: 'ai-cor ai-microsoft-copilot'
   }
 ]
 
@@ -199,7 +208,7 @@ export const AI_GATEWAY_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'AI Gateway',
     title: 'One gateway for all your AI applications',
     description:
@@ -220,7 +229,7 @@ export const AI_GATEWAY_PAGE = [
     tabs: ROUTING_TABS,
     tabsAriaLabel: 'Routing policies',
     scene: { component: markRaw(DiagramSet), props: { diagrams: ROUTING_DIAGRAMS } },
-    action: { label: 'Read the docs', href: PRODUCT_DOCS }
+    actions: [{ label: 'Docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }]
   },
   {
     section: 'UseCases',
@@ -228,21 +237,20 @@ export const AI_GATEWAY_PAGE = [
     title: 'What teams use AI Gateway for',
     description:
       'Put one gateway in front of every model your teams call, and decide routing, limits and logging in one place. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   {
     section: 'CodeSplit',
-    kind: 'default',
+    kind: 'agents',
     title: 'The shortest path to a production AI gateway',
     description:
       'Keep the OpenAI SDK you already use. Point it at your gateway and send a model alias. The gateway handles keys, routing, fallback, and logs.',
-    files: CODE_FILES,
+    agents: CODE_AGENTS,
     copyAriaLabel: 'Copy the gateway client sample',
     actions: [{ label: 'Read the guide', href: PRODUCT_DOCS }]
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('axur') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

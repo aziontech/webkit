@@ -5,9 +5,12 @@ import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
+import Tooltip from '@aziontech/webkit/tooltip'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const PRICING = 'https://www.azion.com/en/documentation/products/pricing/'
@@ -18,28 +21,28 @@ const TIERS = [
     name: 'Developer',
     description: 'Ideal for exploring the platform independently.',
     highlighted: false,
-    action: { label: 'Start Free', kind: 'outlined', href: '/signup' }
+    action: { label: 'Start for free', kind: 'outlined', href: '/signup' }
   },
   {
     id: 'business',
     name: 'Business',
     description: 'Ideal for teams that need support from specialists.',
     highlighted: false,
-    action: { label: 'Contact Us', kind: 'outlined', href: '/contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '/contact' }
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     description: 'Ideal for organizations that require advanced support and ongoing services.',
     highlighted: true,
-    action: { label: 'Contact Us', kind: 'secondary', href: '/contact' }
+    action: { label: 'Talk to a specialist', kind: 'secondary', href: '/contact' }
   },
   {
     id: 'mission-critical',
     name: 'Mission-Critical',
     description: 'Ideal for mission-critical operations that need priority and proactive support.',
     highlighted: false,
-    action: { label: 'Contact Us', kind: 'outlined', href: '/contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '/contact' }
   }
 ]
 
@@ -48,8 +51,8 @@ const heading = (label) => ({ label, group: true, values: ['', '', '', ''] })
 const SECTIONS = [
   {
     eyebrow: 'Support',
-    title: 'Get assistance when it matters most',
-    link: { label: 'See Pricing', href: `${PRICING}#support` },
+    title: 'Get help when it matters most',
+    link: { label: 'See pricing', href: `${PRICING}#support` },
     rows: [
       heading('Self-service support'),
       { label: 'Learning Center', values: [true, true, true, true] },
@@ -73,7 +76,7 @@ const SECTIONS = [
   {
     eyebrow: 'Professional Services',
     title: 'Move faster with specialist guidance',
-    link: { label: 'See Pricing', href: `${PRICING}#professional-services` },
+    link: { label: 'See pricing', href: `${PRICING}#professional-services` },
     rows: [
       {
         label: 'Integration Services',
@@ -141,6 +144,7 @@ const IMPORTS = [
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import Select from '@aziontech/webkit/select'",
+  "import Tooltip from '@aziontech/webkit/tooltip'",
   "import { ref } from 'vue'",
   '',
   `const tiers = ${literal(TIERS)}`,
@@ -162,7 +166,8 @@ const components = {
   Select,
   'Select.Trigger': SelectTrigger,
   'Select.Content': SelectContent,
-  'Select.Option': SelectOption
+  'Select.Option': SelectOption,
+  Tooltip
 }
 
 const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="false">
@@ -251,11 +256,15 @@ const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="f
           class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
         >
           <template v-if="row.values[tierIndex] === true">
-            <i class="pi pi-check text-body-sm text-(--success-contrast)" aria-hidden="true" />
+            <Tooltip text="Included">
+              <i class="pi pi-check-circle text-body-md text-(--success-contrast)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Included</span>
           </template>
           <template v-else-if="row.values[tierIndex] === '—'">
-            <span class="text-(--text-muted)" aria-hidden="true">—</span>
+            <Tooltip text="Not included">
+              <i class="ai ai-circle-minus text-body-md text-(--text-muted)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Not included</span>
           </template>
           <span v-else-if="row.values[tierIndex]">{{ row.values[tierIndex] }}</span>
@@ -281,17 +290,12 @@ const TEMPLATE = inColumn(`<SectionModule id="tiers" :divided="false" :padded="f
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/CompareSupportTiers',
-  tags: ['autodocs'],
+  title: 'Templates/Marketing/Comparison/CompareSupportTiers',
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The tier-by-tier comparison on the Support page: one column per support tier, one band per service family, and what each tier includes on every row. It is the support counterpart of ComparePlans, which compares the pricing plans: the same real `table` with one `tbody` per band, the same three kinds of cell (a tick, an em dash, or the stated allowance, with `sr-only` text on the two glyphs), the same sticky header at `top-14` with an accent bar on the recommended tier, and the same narrow layout that folds to one tier picked with a `Select`. Where it differs: the first column is headed `Support`, each tier states who it is for under its name, and each band closes on its own link to the matching section of the pricing documentation instead of one link for the whole table. Built from `SectionModule`, `Select`, `Button`, `Overline` and `Link`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -300,23 +304,39 @@ const meta = {
 export default meta
 
 export const TierMatrix = {
-  render: () => ({
-    components,
-    setup: () => ({
-      tiers: TIERS,
-      sections: SECTIONS,
-      visibleTier: ref(DEFAULT_TIER),
-      tierName
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({
+        tiers: TIERS,
+        sections: SECTIONS,
+        visibleTier: ref(DEFAULT_TIER),
+        tierName
+      }),
+      template: TEMPLATE
     }),
-    template: TEMPLATE
-  }),
+    { tiers: TIERS, sections: SECTIONS }
+  ),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Developer, Business, Enterprise and Mission-Critical across the Support band (self-service, technical support and first response time) and the Professional Services band. Developer is the free tier, so its button starts a free account; the other three hand off to the contact page, with Enterprise as the recommended tier. Narrow the canvas below 1024px to see the tier picker; it opens on Enterprise.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'compare-support-tiers',
+  props: {
+    tiers: TIERS,
+    sections: SECTIONS,
+    caption:
+      'Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers.',
+    columnLabel: 'Support',
+    pickerLabel: 'Tier being compared'
+  }
+}
+
+export const TierMatrixJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

@@ -66,7 +66,7 @@ In addition to speed, we are bringing more **transparency** to the deploy proces
 
 ## Building the Future of DX
 
-This update is part of a broader series of improvements we are making to the Azion platform to ensure we’re on the way to becoming the **fastest and most developer-friendly** web platform. We believe that by removing the friction of slow deploys, we empower you to build, test, and scale your applications at the **speed of thought**.
+This update is part of a broader series of improvements we are making to the Azion platform to ensure we’re on the way to becoming the **fastest and most developer-friendly** web platform. We believe that by removing the friction of slow deploys, we help you build, test, and scale your applications at the **speed of thought**.
 
 Deploy through the [Azion Console](https://console.azion.com/) or update your [Azion CLI](https://www.azion.com/en/documentation/products/azion-cli/overview/) to use the optimized publishing pipeline.
 

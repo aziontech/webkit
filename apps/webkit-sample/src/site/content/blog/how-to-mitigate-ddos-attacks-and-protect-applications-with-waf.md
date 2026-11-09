@@ -70,7 +70,7 @@ This means that during a volumetric DDoS attack, malicious traffic is filtered a
 
 Legitimate traffic proceeds directly to the origin, preserving performance even during large-scale attacks.
 
-This model distributes mitigation capacity across the global network. Instead of concentrating all processing load in a few locations, each data center absorbs its share of the attack, maintaining stable operations for legitimate users.
+This model distributes mitigation capacity across the global distributed infrastructure. Instead of concentrating all processing load in a few locations, each data center absorbs its share of the attack, maintaining stable operations for legitimate users.
 
 ## Case Study: GPA Mitigated a DDoS Attack and Protected 100+ Applications in 15 Days
 
@@ -119,6 +119,6 @@ If your team is experiencing unexplained latency issues, it may be worth looking
 
 Discover how Azion can help your organization implement real-time attack mitigation without compromising performance.
 
-[Request a Demo →](https://www.azion.com/en/contact/)
+[Talk to a specialist →](https://www.azion.com/en/contact/)
 
 Want to see this architecture in action? Watch the webinar [“How to Mitigate Attacks on Web Applications and APIs”](https://www.youtube.com/watch?v=T-AhMvttI2I) for a technical demonstration of distributed mitigation.

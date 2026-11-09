@@ -93,16 +93,8 @@
               size="medium"
               :loading="submitting"
               :disabled="saveDisabled"
-              @click="emit('submit')"
-            />
-            <button
               type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              {{ saveLabel }}
-            </button>
+            />
           </PanelFooter>
         </form>
       </DrawerContent>

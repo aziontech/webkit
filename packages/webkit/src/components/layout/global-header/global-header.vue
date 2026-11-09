@@ -39,11 +39,6 @@
 </script>
 
 <template>
-  <!-- Two placements, one bar. `content` (default) runs full bleed across its zone and insets
-       the regions by the page boundary token, so the first region opens on the page's own
-       vertical. `site` keeps the full-bleed surface but caps and centres the regions on the
-       header's own measure token, one rung wider than the page frame. One declaration does it:
-       max(boundary, (100% - measure) / 2 + boundary) collapses to `content` below the measure. -->
   <header
     v-bind="$attrs"
     role="banner"

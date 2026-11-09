@@ -1,10 +1,5 @@
 import type { Component } from 'vue'
 
-/**
- * Every name `<Ticker :marks>` accepts. A mark is an SFC drawn in `currentColor`, so
- * it needs no per-theme asset; loaders are dynamic imports, so a page carries only what it
- * names. An unregistered name is not an error — the carousel writes it as a wordmark.
- */
 export type BrandMarkLoader = () => Promise<{ default: Component }>
 
 export const brandMarks = {
@@ -73,7 +68,6 @@ export const brandMarks = {
 /** Every registered mark name. */
 export type BrandMarkName = keyof typeof brandMarks
 
-/** The company or project each mark belongs to, for the title and the wordmark fallback. */
 export const brandMarkLabels: Record<BrandMarkName, string> = {
   agibank: 'Agibank',
   'america-movil': 'América Móvil',
@@ -137,16 +131,13 @@ export const brandMarkLabels: Record<BrandMarkName, string> = {
   'workers-cloudflare': 'Cloudflare Workers'
 }
 
-/** Sorted mark names — the values `marks` accepts, for docs and stories. */
 export const brandMarkNames = Object.keys(brandMarks).sort() as BrandMarkName[]
 
-/** The loader for `name`, or `null` when nothing is registered under it. */
 export function resolveBrandMark(name: string): BrandMarkLoader | null {
   if (!Object.hasOwn(brandMarks, name)) return null
   return brandMarks[name as BrandMarkName]
 }
 
-/** The label for `name`; falls back to the name itself so an unregistered mark still reads. */
 export function brandMarkLabel(name: string): string {
   return brandMarkLabels[name as BrandMarkName] ?? name
 }

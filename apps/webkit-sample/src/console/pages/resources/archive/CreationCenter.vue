@@ -33,7 +33,7 @@
         {
           id: 'import',
           label: 'Import from GitHub',
-          icon: 'pi pi-github',
+          icon: 'ai ai-github',
           href: `${CREATION_CENTER_PATH}?method=import`
         },
         {

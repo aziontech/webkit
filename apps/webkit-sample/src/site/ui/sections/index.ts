@@ -1,6 +1,6 @@
 import type { Component } from 'vue'
 
-import Architectures from './Architectures.vue'
+import ArchitectureTabs from './ArchitectureTabs.vue'
 import ArticleBody from './ArticleBody.vue'
 import ArticleCards from './ArticleCards.vue'
 import ArticleHighlight from './ArticleHighlight.vue'
@@ -8,20 +8,24 @@ import ArticleIndex from './ArticleIndex.vue'
 import CapabilityGrid from './CapabilityGrid.vue'
 import ClientMosaic from './ClientMosaic.vue'
 import ClientQuotes from './ClientQuotes.vue'
+import CliTerminal from './CliTerminal.vue'
 import ClosingCallToAction from './ClosingCallToAction.vue'
 import CodeSplit from './CodeSplit.vue'
+import CompareCompetitors from './CompareCompetitors.vue'
 import ComparePlans from './ComparePlans.vue'
 import CompareSupportTiers from './CompareSupportTiers.vue'
-import ComparisonTable from './ComparisonTable.vue'
 import ComplianceBadges from './ComplianceBadges.vue'
 import ConsolePanel from './ConsolePanel.vue'
+import ContactHub from './ContactHub.vue'
 import FaqSection from './FaqSection.vue'
+import FeatureScroll from './FeatureScroll.vue'
 import FeatureTabs from './FeatureTabs.vue'
 import FeatureTiles from './FeatureTiles.vue'
+import FeatureWidgets from './FeatureWidgets.vue'
 import Heroes from './Heroes.vue'
 import HeroForm from './HeroForm.vue'
 import HeroWithOpening from './HeroWithOpening.vue'
-import IntegrationCode from './IntegrationCode.vue'
+import InvestorMarks from './InvestorMarks.vue'
 import ListingBrowser from './ListingBrowser.vue'
 import ListingTable from './ListingTable.vue'
 import LogoWallQuote from './LogoWallQuote.vue'
@@ -35,14 +39,15 @@ import QuoteBand from './QuoteBand.vue'
 import RecognitionMarquee from './RecognitionMarquee.vue'
 import ResourceGrid from './ResourceGrid.vue'
 import StatsBand from './StatsBand.vue'
+import StickyCarousel from './StickyCarousel.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
+import StoryLibrary from './StoryLibrary.vue'
 import SubjectLibrary from './SubjectLibrary.vue'
 import TemplateGallery from './TemplateGallery.vue'
 import UseCases from './UseCases.vue'
-import WidgetGrid from './WidgetGrid.vue'
 
 export const SECTIONS: Record<string, Component> = {
-  Architectures,
+  ArchitectureTabs,
   ArticleBody,
   ArticleCards,
   ArticleHighlight,
@@ -50,20 +55,24 @@ export const SECTIONS: Record<string, Component> = {
   CapabilityGrid,
   ClientMosaic,
   ClientQuotes,
+  CliTerminal,
   ClosingCallToAction,
   CodeSplit,
+  CompareCompetitors,
   ComparePlans,
   CompareSupportTiers,
-  ComparisonTable,
   ComplianceBadges,
   ConsolePanel,
+  ContactHub,
   FaqSection,
+  FeatureScroll,
   FeatureTabs,
   FeatureTiles,
-  HeroForm,
-  IntegrationCode,
+  FeatureWidgets,
   Heroes,
+  HeroForm,
   HeroWithOpening,
+  InvestorMarks,
   ListingBrowser,
   ListingTable,
   LogoWallQuote,
@@ -77,11 +86,12 @@ export const SECTIONS: Record<string, Component> = {
   RecognitionMarquee,
   ResourceGrid,
   StatsBand,
+  StickyCarousel,
   StickyScrollCode,
+  StoryLibrary,
   SubjectLibrary,
   TemplateGallery,
-  UseCases,
-  WidgetGrid
+  UseCases
 }
 
 export const HERO_SECTIONS = new Set([

@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, CardBox with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Message callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-07-21
+last_updated: 2026-10-19
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -509,7 +509,7 @@ Canonical pattern:
             <legend class="sr-only">Create function</legend>
             <!-- Approach A ItemGroup sections here; a nested Select uses !z-1004 -->
           </fieldset>
-          <!-- PanelFooter: Cancel + Save :loading="functionSubmitting" + sr-only submit -->
+          <!-- PanelFooter: Cancel + Save type="submit" :loading="functionSubmitting" -->
         </form>
       </DrawerContent>
     </DrawerPortal>
@@ -534,8 +534,8 @@ Rules:
   inside the child `z-1004`, a `Select.Content` in the parent `z-1002` (temporary overrides for the
   webkit `Drawer`/overlay-popup stacking bug).
 - Everything else follows the **Drawer form** rules: Approach A ItemGroup sections inside each drawer,
-  validation on submit only (`Item.Title` as the label, `HelperText` under the control), Enter submits via
-  an `sr-only` `<button type="submit">`.
+  validation on submit only (`Item.Title` as the label, `HelperText` under the control), Enter submits
+  through the Save `Button type="submit"`.
 
 ## Approach A — Cards + ItemGroups (grouped / settings forms)
 
@@ -882,16 +882,18 @@ active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native sa
 >
   <div class="mx-auto flex max-w-(--container-5xl) items-center justify-end gap-(--spacing-sm) px-(--spacing-xl) py-(--spacing-sm)">
     <Button type="button" label="Cancel" kind="outlined" size="medium" :disabled="submitting" @click="cancel" />
-    <Button label="Save" kind="primary" size="medium" :loading="submitting" @click="submit" />
+    <Button type="submit" label="Save" kind="primary" size="medium" :loading="submitting" />
   </div>
 </footer>
 ```
 
 Rules:
 
-- **Enter must submit.** The webkit `Button` renders a native `type="button"` and doesn't forward a
-  `type`, so drive `submit` from its `@click`; where the form is a drawer/dialog, add a hidden
-  `<button type="submit" class="sr-only">` inside the `<form>` so Enter still submits.
+- **Enter must submit.** Give the primary `Button` `type="submit"` and handle the save in the form's
+  `@submit.prevent` — never also in the Button's `@click`, or it runs twice. Every other `Button`
+  keeps the default `type="button"`. `disabled` and `loading` block the submit, Enter included. The
+  submit `Button` must sit inside the `<form>`: when the footer lives outside it, move the `<form>` up
+  to wrap the footer too. No hidden `sr-only` submit button.
 - **Lock off one flag.** `<fieldset :disabled="submitting">` + `:disabled="submitting"` on **every**
   control + Save `:loading="submitting"`; guard the handler and release in `finally` (this IS
   `/webkit-ui-states` Pattern 1 — the fieldset is the native lock, the per-control

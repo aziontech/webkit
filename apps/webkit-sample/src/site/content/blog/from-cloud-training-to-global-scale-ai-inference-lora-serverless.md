@@ -14,9 +14,9 @@ When inference runs in centralized datacenters, you stack:
 - **Queueing + cold-start patterns** under traffic spikes
 - **Token streaming sensitivity** (micro-stalls kill perceived responsiveness)
 
-### What changes with AI Inference on the edge?
+### What changes with AI Inference close to users?
 
-- **Decentralized infrastructures cut RTT by placing inference at the Edge Location (PoP)**, often reducing end-to-end latency by **up to ~85%** depending on geography and routing.
+- **Decentralized infrastructures cut RTT by placing inference at the data center**, often reducing end-to-end latency by **up to ~85%** depending on geography and routing.
 - **Resiliency becomes inherent**: a node failure doesn’t equal downtime, traffic reroutes across the mesh.
 
 If your KPI is “time-to-first-token” or “tokens/sec under load”, centralized inference becomes a bottleneck fast.
@@ -38,7 +38,7 @@ The operational complexity of managing hundreds of micro-sites makes the manual 
 
 ## 3. The Dilemma: Massive Training vs. Adaptive Inference (LoRA)
 
-It is technically inefficient and financially prohibitive to attempt training Large Language Models (LLMs) from scratch at the edge. The current successful architecture is **hybrid by design**:
+It is technically inefficient and financially prohibitive to attempt training Large Language Models (LLMs) from scratch close to users. The current successful architecture is **hybrid by design**:
 
 1. **Centralized Cloud:** Used for heavy training and the evolution of proprietary models.
 2. **Edge:** Used for fast inference and personalization.
@@ -67,7 +67,7 @@ In production, **standardization beats modularity** because your routing and fai
 Operating inference across hundreds of micro-sites requires three pillars of control:
 
 - **Total Automation:** Zero-touch deployment and monitoring.
-- **Real-Time Observability:** Tools like [Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) and [Events](https://www.azion.com/en/products/real-time-events/) enable measuring GPU saturation and user-perceived latency at every geographic location—not just server uptime. It’ s not “is the server up?”, but:
+- **Real-Time Observability:** Tools like [Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) and [Events](https://www.azion.com/en/products/real-time-events/) enable measuring GPU saturation and user-perceived latency at every geographic location—not just server uptime. It’ s not “is the server up?”, but:
   - GPU saturation
   - time-to-first-token
   - tokens/sec

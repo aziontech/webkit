@@ -59,7 +59,7 @@ const drawerStoryComponents = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Drawer>} */
 const meta = {
-  title: 'Components/Overlay/Drawer',
+  title: 'Components/Primitives/Overlay/Drawer',
   component: Drawer,
   subcomponents: {
     DrawerTrigger,

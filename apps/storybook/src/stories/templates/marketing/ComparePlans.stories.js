@@ -1,15 +1,19 @@
 import Button from '@aziontech/webkit/button'
-import Hint from '@aziontech/webkit/hint'
+import IconButton from '@aziontech/webkit/icon-button'
 import Link from '@aziontech/webkit/link'
 import Overline from '@aziontech/webkit/overline'
+import Popover from '@aziontech/webkit/popover'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import Tag from '@aziontech/webkit/tag'
+import Tooltip from '@aziontech/webkit/tooltip'
 import { ref } from 'vue'
 
+import { editable } from '../../_shared/editable-content'
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const PLANS = [
@@ -29,7 +33,7 @@ const PLANS = [
     id: 'enterprise',
     name: 'Enterprise',
     highlighted: false,
-    action: { label: 'Contact us', kind: 'outlined', href: '#contact' }
+    action: { label: 'Talk to a specialist', kind: 'outlined', href: '#contact' }
   }
 ]
 
@@ -37,7 +41,7 @@ const SECTIONS = [
   {
     eyebrow: 'Managed infrastructure',
     title: 'Azion Platform',
-    description: 'Running modern workloads on a global infrastructure.',
+    description: 'Run applications on a global distributed infrastructure.',
     rows: [
       { label: 'Global infrastructure', group: true, values: ['', '', ''] },
       { label: '100+ data centers', values: [true, true, true] },
@@ -97,7 +101,7 @@ const SECTIONS = [
   },
   {
     eyebrow: 'Build',
-    title: 'Azion Applications',
+    title: 'Applications',
     description: 'Build, run and scale applications globally.',
     rows: [
       { label: 'Applications', group: true, values: ['', '', ''] },
@@ -153,7 +157,7 @@ const SECTIONS = [
       { label: 'Images', values: ['5,000 / mo included', '10,000 / mo included', 'Custom'] },
       {
         label: 'AI Inference',
-        hint: 'Runs model inference on the same distributed network, close to the user.',
+        hint: 'Runs model inference on Azion’s distributed infrastructure, close to the user.',
         group: true,
         tag: 'Preview',
         values: ['', '', '']
@@ -167,7 +171,7 @@ const SECTIONS = [
   {
     eyebrow: 'Azion Platform',
     title: 'Compliance',
-    description: 'Compliance that protects your business.',
+    description: 'Audits and certifications for regulated workloads.',
     rows: [
       {
         label: 'PCI DSS 4.0.1 Level 1 Service Provider',
@@ -236,13 +240,15 @@ const literal = (value, depth = 0) => {
 
 const IMPORTS = [
   "import Button from '@aziontech/webkit/button'",
-  "import Hint from '@aziontech/webkit/hint'",
+  "import IconButton from '@aziontech/webkit/icon-button'",
   "import Link from '@aziontech/webkit/link'",
   "import Overline from '@aziontech/webkit/overline'",
+  "import Popover from '@aziontech/webkit/popover'",
   ...COLUMN_IMPORTS,
   "import SectionModule from '@aziontech/webkit/section-module'",
   "import Select from '@aziontech/webkit/select'",
   "import Tag from '@aziontech/webkit/tag'",
+  "import Tooltip from '@aziontech/webkit/tooltip'",
   "import { ref } from 'vue'",
   '',
   `const plans = ${literal(PLANS)}`,
@@ -260,9 +266,13 @@ const IMPORTS = [
 
 const components = {
   Button,
-  Hint,
+  IconButton,
   Link,
   Overline,
+  Popover,
+  ...Object.fromEntries(
+    ['Trigger', 'Content', 'Title', 'Description'].map((part) => [`Popover.${part}`, Popover[part]])
+  ),
   SectionContainer,
   SectionGap,
   SectionModule,
@@ -270,7 +280,8 @@ const components = {
   'Select.Trigger': SelectTrigger,
   'Select.Content': SelectContent,
   'Select.Option': SelectOption,
-  Tag
+  Tag,
+  Tooltip
 }
 
 const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padded="false">
@@ -351,7 +362,17 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
           class="border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
         >
           <span>
-            <template v-if="row.hint">{{ labelHead(row.label) }}<span class="whitespace-nowrap">{{ labelTail(row.label) }}<Hint :text="row.hint" class="ml-(--spacing-xxs) align-middle" /></span></template>
+            <template v-if="row.hint">{{ labelHead(row.label) }}<span class="whitespace-nowrap">{{ labelTail(row.label) }}<span class="-my-(--spacing-xxs) ml-(--spacing-xxs) inline-flex align-middle"><Popover placement="auto">
+              <Popover.Trigger>
+                <IconButton kind="transparent" size="small" icon="pi pi-info-circle" :aria-label="'About ' + row.label" />
+              </Popover.Trigger>
+              <Popover.Content>
+                <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-sm)">
+                  <Popover.Title>{{ row.label }}</Popover.Title>
+                  <Popover.Description>{{ row.hint }}</Popover.Description>
+                </div>
+              </Popover.Content>
+            </Popover></span></span></template>
             <template v-else>{{ row.label }}</template>
             <Tag
               v-if="row.tag"
@@ -369,11 +390,15 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
           class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
         >
           <template v-if="row.values[planIndex] === true">
-            <i class="pi pi-check text-body-sm text-(--success-contrast)" aria-hidden="true" />
+            <Tooltip text="Included">
+              <i class="pi pi-check-circle text-body-md text-(--success-contrast)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Included</span>
           </template>
           <template v-else-if="row.values[planIndex] === '—'">
-            <span class="text-(--text-muted)" aria-hidden="true">—</span>
+            <Tooltip text="Not included">
+              <i class="ai ai-circle-minus text-body-md text-(--text-muted)" aria-hidden="true" />
+            </Tooltip>
             <span class="sr-only">Not included</span>
           </template>
           <span v-else-if="row.values[planIndex]">{{ row.values[planIndex] }}</span>
@@ -397,17 +422,12 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
 </SectionModule>`)
 
 const meta = {
-  title: 'Templates/Marketing/Content/ComparePlans',
-  tags: ['autodocs'],
+  title: 'Templates/Marketing/Comparison/ComparePlans',
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
-    controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The plan-by-plan feature matrix that follows the plan cards on the Pricing page: one column per plan, one band per product, and the allowance each plan includes on every row. It is a real `table` with one `tbody` per product, so a screen reader announces each allowance with its row and its plan. A cell is a tick (included), an em dash (not included) or the stated allowance, and the two glyphs carry their meaning in `sr-only` text; a `Hint` defines the terms a row names but does not explain. The plan header is sticky at `top-14`, the height of the site’s sticky nav, with the recommended plan marked by an accent bar on its top edge. Below `lg` the matrix narrows to the feature column and one plan, picked with a `Select` in the header; the other columns are hidden, not duplicated, which is why the table is `table-auto` until `lg` and `table-fixed` from there. For the Support page’s tier comparison, use CompareSupportTiers. Built from `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -416,25 +436,124 @@ const meta = {
 export default meta
 
 export const PlanMatrix = {
-  render: () => ({
-    components,
-    setup: () => ({
-      plans: PLANS,
-      sections: SECTIONS,
-      visiblePlan: ref(DEFAULT_PLAN),
-      planName,
-      labelHead,
-      labelTail
+  ...editable(
+    () => ({
+      components,
+      setup: () => ({
+        plans: PLANS,
+        sections: SECTIONS,
+        visiblePlan: ref(DEFAULT_PLAN),
+        planName,
+        labelHead,
+        labelTail
+      }),
+      template: TEMPLATE
     }),
-    template: TEMPLATE
-  }),
+    { plans: PLANS, sections: SECTIONS }
+  ),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Hobby, Pro and Enterprise across four of the Pricing page’s nine product sections: Azion Platform, Azion Applications, Compliance, and Commit and Save, which between them use every kind of cell. The rows are data, so a page adds the other sections to `sections` without touching the markup. Each plan’s button repeats the action of its card above the matrix, and the closing row hands off to the on-demand rates. Narrow the canvas below 1024px to see the plan picker; it opens on Pro, the recommended plan.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'compare-plans',
+  props: {
+    caption: 'Feature and included-usage comparison across the plans.',
+    featureColumnLabel: 'Features',
+    planPickerLabel: 'Plan being compared',
+    includedLabel: 'Included',
+    excludedLabel: 'Not included',
+    plans: [
+      {
+        id: 'hobby',
+        name: 'Hobby',
+        highlighted: false,
+        action: {
+          label: 'Start for free',
+          href: 'https://console.azion.com/signup?plan=hobby'
+        }
+      },
+      {
+        id: 'pro',
+        name: 'Pro',
+        highlighted: true,
+        action: {
+          label: 'Start with Pro',
+          href: 'https://console.azion.com/signup?plan=pro&billing-cycle=monthly'
+        }
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        highlighted: false,
+        action: {
+          label: 'Talk to a specialist',
+          href: '/en/contact/'
+        }
+      }
+    ],
+    sections: [
+      {
+        eyebrow: 'Managed infrastructure',
+        title: 'Azion Platform',
+        description: 'Run applications on a global distributed infrastructure.',
+        rows: [
+          {
+            label: 'Global infrastructure',
+            group: true,
+            values: ['', '', '']
+          },
+          {
+            label: '100+ data centers',
+            values: ['✓', '✓', '✓']
+          },
+          {
+            label: 'Automatic routing with load balancing and failover',
+            values: ['✓', '✓', '✓']
+          },
+          {
+            label: 'Management',
+            group: true,
+            values: ['', '', '']
+          }
+        ]
+      },
+      {
+        eyebrow: 'Build',
+        title: 'Applications',
+        description: 'Build, run and scale applications globally.',
+        rows: [
+          {
+            label: 'Applications',
+            group: true,
+            values: ['', '', '']
+          },
+          {
+            label: 'Rules Engine',
+            values: ['✓', '✓', '✓']
+          },
+          {
+            label: 'Rules per application',
+            values: ['10 included', '20 included', 'Custom']
+          },
+          {
+            label: 'Redirects',
+            values: ['✓', '✓', '✓']
+          }
+        ]
+      }
+    ],
+    footerLink: {
+      label: 'See on-demand pricing',
+      href: '/en/documentation/products/pricing/'
+    }
+  }
+}
+
+export const PlanMatrixJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

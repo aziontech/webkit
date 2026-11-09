@@ -16,7 +16,7 @@ Banco de la Nación (BN) faced the challenge of ensuring a high-performance digi
 
 With Azion, Banco de la Nación adopted a **modern and resilient architecture**, unifying performance, cost efficiency, and security within a single infrastructure. Azion’s **distributed infrastructure**, with local presence in Peru, maximized cache efficiency and reduced reliance on origin infrastructure, lowering latency and optimizing regional traffic.
 
-Executing rules and policies directly at the edge centralized **routing, load balancing, and security**, enabling changes with high availability and no downtime. Dynamic traffic acceleration, combined with protocol optimizations and intelligent routing, reduced latency and TTFB even during peak access periods.
+Executing rules and policies close to users centralized **routing, load balancing, and security**, enabling changes with high availability and no downtime. Dynamic traffic acceleration, combined with protocol optimizations and intelligent routing, reduced latency and TTFB even during peak access periods.
 
 In addition, real-time image optimization reduced page weight, while DDoS protection ensured operational continuity against large-scale attacks. Together, these solutions ensured **seamless integration with the Págalo platform** and operational stability during periods of high demand.
 
@@ -32,7 +32,7 @@ Adopting Azion delivered measurable gains for both user experience and IT operat
 
 Banco de la Nación chose Azion for its ability to deliver high performance with cost efficiency at scale, unifying acceleration, caching, and security in a single platform.
 
-By executing rules and policies directly at the edge, with centralized orchestration and no downtime, the bank reduced its reliance on origin infrastructure, scaled predictably during peak periods, and optimized cloud data transfer costs.
+By executing rules and policies close to users, with centralized orchestration and no downtime, the bank reduced its reliance on origin infrastructure, scaled predictably during peak periods, and optimized cloud data transfer costs.
 
 ## **About** Banco de la Nación
 

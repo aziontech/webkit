@@ -24,23 +24,23 @@ lora_config = LoraConfig(
 financial_fraud_vlm = get_peft_model(qwen_vl_model, lora_config)
 ```
 
-The LoRA adapter is saved separately from the base model weights and loaded on top of the base model before serving inference — via PeftModel.from_pretrained() locally or deployed as a model variant in the inference service. In Azion AI Inference, the registered model already incorporates the adapter: the Edge Function calls the resulting endpoint without managing adapter loading directly.
+The LoRA adapter is saved separately from the base model weights and loaded on top of the base model before serving inference — via PeftModel.from_pretrained() locally or deployed as a model variant in the inference service. In Azion AI Inference, the registered model already incorporates the adapter: the function calls the resulting endpoint without managing adapter loading directly.
 
 ## How distributed architecture amplifies VLMs
 
 VLM models with LoRA fine-tuning require an execution layer that delivers real-time inference. Centralized architectures introduce network latency from round-trips that makes detection during a transaction impractical.
 
-Execution on a distributed architecture eliminates that round-trip by processing inference at global points of presence, close to the source of the request.
+Execution on a distributed architecture eliminates that round-trip by processing inference at global data centers, close to the source of the request.
 
 ## Comparison: fraud detection approaches
 
 | Aspect | Generic centralized model | VLM + LoRA on distributed architecture |
 |---|---|---|
-| Network latency | Round-trip to central data center | Processing at nearest point of presence |
+| Network latency | Round-trip to central data center | Processing at nearest data center |
 | Accuracy on specific documents | Low–medium | High (with per-document-type fine-tuning) |
 | Adaptation cost | High (full retraining) | Low (0.1–1% of parameters with LoRA) |
 | Data privacy | Data travels to external data center | Processing close to origin |
-| Scalability | Centralized | Distributed across points of presence |
+| Scalability | Centralized | Distributed across data centers |
 | Detection during transaction | Limited by network latency | Viable |
 | Best for | Retrospective batch analysis | Real-time prevention |
 
@@ -167,7 +167,7 @@ Do not use this approach when:
 - Fine-tuning parameter reduction: 99–99.9% fewer adjusted parameters with LoRA vs. full fine-tuning (Hu et al., ICLR 2022)
 - Recommended suspicion threshold: 0.3 as a starting point; calibrate based on false positive rate observed in production
 - Vector similarity for known patterns: threshold of 0.8 for matching confirmed prior cases
-- Network latency: eliminated the need for a round-trip to a central data center by processing at Azion Web Platform’s global points of presence
+- Network latency: eliminated the need for a round-trip to a central data center by processing at Azion Web Platform’s global data centers
 
 ## Common mistakes and fixes
 
@@ -209,7 +209,7 @@ E-commerce and marketplace
 
 1. Select the model: Use qwen-qwen25-vl-7b-instruct-awq in Azion Web Platform’s AI Inference
 2. Configure the vector store: Create the fraud_patterns database with confirmed fraud pattern vectors
-3. Implement the Edge Function: Use the code example above as a base
+3. Implement the function: Use the code example above as a base
 4. Define the system prompt: Configure FRAUD_DETECTION_PROMPT with instructions specific to the document type
 5. Calibrate thresholds: Adjust fraudProbability > 0.3 and threshold: 0.8 with real production data
 6. Configure observability: Add logging of processingTimeMs and scores for continuous monitoring
@@ -224,7 +224,7 @@ See the Azion AI Inference documentation for configuration details.
 
 **What is the difference between full fine-tuning and LoRA?** Full fine-tuning updates all model parameters, requiring large data volumes and computational power. LoRA inserts lightweight adapters into selected layers, keeping original weights frozen. Results on domain-specific tasks are comparable at a fraction of the cost.
 
-**Why process fraud detection on a distributed architecture instead of centralized?** Centralized architectures introduce network latency from round-trips that can make detection impractical during a transaction. Processing at global points of presence — close to the source of the request — eliminates that round-trip and enables real-time decisions.
+**Why process fraud detection on a distributed architecture instead of centralized?** Centralized architectures introduce network latency from round-trips that can make detection impractical during a transaction. Processing at global data centers — close to the source of the request — eliminates that round-trip and enables real-time decisions.
 
 **Can Qwen2.5-VL analyze any type of document?** The base Qwen2.5-VL has general visual analysis capability. For specific document types (bank checks, driver’s licenses, invoices), accuracy improves significantly with LoRA fine-tuning using representative data from that document type.
 
@@ -238,6 +238,6 @@ See the Azion AI Inference documentation for configuration details.
 
 **What happens if the model returns malformed JSON?** The try/catch block captures parsing errors and returns HTTP 500 with the error message. In production, implement fallback to manual review and logging of the raw model response for debugging.
 
-Does Azion support running VLMs on its platform? Yes. Azion AI Inference allows running models like Qwen2.5-VL AWQ at the global points of presence of Azion Web Platform. The Azion.AI.run(‘qwen-qwen25-vl-7b-instruct-awq’, {…}) call executes inference without a round-trip to a centralized data center.
+Does Azion support running VLMs on its platform? Yes. Azion AI Inference allows running models like Qwen2.5-VL AWQ at the global data centers of Azion Web Platform. The Azion.AI.run(‘qwen-qwen25-vl-7b-instruct-awq’, {…}) call executes inference without a round-trip to a centralized data center.
 
-How do I ensure privacy of sensitive documents in this pipeline? Processing at global points of presence keeps data close to its origin, reducing the transit of sensitive documents to central data centers. For more stringent privacy requirements, combine with zero-retention policies and ephemeral processing.
+How do I ensure privacy of sensitive documents in this pipeline? Processing at global data centers keeps data close to its origin, reducing the transit of sensitive documents to central data centers. For more stringent privacy requirements, combine with zero-retention policies and ephemeral processing.

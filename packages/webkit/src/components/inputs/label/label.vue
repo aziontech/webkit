@@ -57,8 +57,6 @@
       >
       (Required)
     </span>
-    <!-- The hint is the label's only focusable stop; it swallows its own click so
-         reaching for the explanation never toggles the control this label points at. -->
     <Hint
       v-if="hint"
       :text="hint"

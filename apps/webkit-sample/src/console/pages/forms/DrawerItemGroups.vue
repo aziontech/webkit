@@ -61,7 +61,7 @@
   }
 
   watch(drawerOpen, (open) => {
-    if (open) return
+    if (!open) return
     form.name = ''
     form.description = ''
     form.runtime = ''
@@ -390,16 +390,8 @@
                 kind="primary"
                 size="medium"
                 :loading="submitting"
-                @click="submit"
-              />
-              <button
                 type="submit"
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-              >
-                Create
-              </button>
+              />
             </PanelFooter>
           </form>
         </DrawerContent>

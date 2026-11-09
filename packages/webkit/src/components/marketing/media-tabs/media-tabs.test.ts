@@ -106,6 +106,12 @@ describe('MediaTabs', () => {
     expect(root.getAttribute('data-select-on')).toBe('click')
   })
 
+  it('defaults the size to medium', () => {
+    const { getByTestId } = render(MediaTabs, { props: { items: ITEMS, autoPlay: false } })
+
+    expect(getByTestId(TESTID).getAttribute('data-size')).toBe('medium')
+  })
+
   it('moves the active tab to the one a reader clicks', async () => {
     const { container, getAllByRole } = render(MediaTabs, {
       props: { items: ITEMS, autoPlay: false }
@@ -339,6 +345,73 @@ describe('MediaTabs', () => {
     expect(rowsOf(container)).toHaveLength(3)
     expect(container.textContent).not.toContain('A fourth claim')
   })
+
+  it('defaults the tabs to the left of the media', () => {
+    const { getByTestId } = render(MediaTabs, { props: { items: ITEMS, autoPlay: false } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-position', 'left')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-orientation', 'vertical')
+  })
+
+  it.each([
+    ['left', 'vertical'],
+    ['right', 'vertical'],
+    ['top', 'horizontal'],
+    ['bottom', 'horizontal']
+  ] as const)('maps position %s to the root and the %s axis', (position, orientation) => {
+    const { getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, position, autoPlay: false }
+    })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-position', position)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-orientation', orientation)
+  })
+
+  it.each([
+    ['left', 3],
+    ['right', 3],
+    ['top', 5],
+    ['bottom', 5]
+  ] as const)('renders at most %s-position limit of %s tabs', (position, limit) => {
+    const items = Array.from({ length: 6 }, (_, index) => ({
+      ...ITEMS[0],
+      title: `Use case ${index + 1}`
+    }))
+    const { container } = render(MediaTabs, { props: { items, position, autoPlay: false } })
+
+    expect(rowsOf(container)).toHaveLength(limit)
+    expect(container.textContent).not.toContain(`Use case ${limit + 1}`)
+  })
+
+  it.each(['top', 'bottom'] as const)(
+    'selects a tab on click and emits its index when the tabs are on the %s',
+    async (position) => {
+      const items = Array.from({ length: 5 }, (_, index) => ({
+        ...ITEMS[0],
+        title: `Use case ${index + 1}`
+      }))
+      const { container, emitted } = render(MediaTabs, {
+        props: { items, position, autoPlay: false }
+      })
+
+      await fireEvent.click(rowsOf(container)[4].querySelector('button') as HTMLElement)
+
+      expect(activeTitles(container)).toEqual(['Use case 5'])
+      expect(emitted()['tab-change']).toHaveLength(1)
+      expect(emitted()['tab-change'][0][1]).toBe(4)
+    }
+  )
+
+  it.each(['left', 'right', 'top', 'bottom'] as const)(
+    'has no a11y violations with the tabs on the %s',
+    async (position) => {
+      const { container } = render(MediaTabs, {
+        props: { items: ITEMS, position, autoPlay: false }
+      })
+
+      await expectNoA11yViolations(container)
+    }
+  )
 
   it('grounds the media column on the texture it is given', () => {
     const { container } = render(MediaTabs, {

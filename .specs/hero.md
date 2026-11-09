@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: approved
 spec_version: 2
-checksum: a22234248b768807348910e62f1e7bfce8d35f82edb313bf94dba52c17d44d6d
+checksum: 005ffce872d223073e8cdcaae8ffe3af6c7d6a12d43f067479f0de4d057095da
 created: 2026-09-22
-last_updated: 2026-10-01
+last_updated: 2026-10-23
 ---
 
 # Hero — Component Spec
@@ -128,7 +128,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 The root `Hero` owns the band — the full-bleed section, the capped column, the bottom rule, the backdrop and asset windows, and the one-screen height. `Hero.Title` owns the copy block placed in its default slot. There is no shared state between them: the band is a layout shell and the copy block is self-contained, so nothing is provided or injected and the consumer wires nothing. Member names mirror this component's anatomy; the band has no `data-state="open|closed"`, so it has no `Trigger` or `Content`.
 
 - `hero-title/hero-title.vue` — the page's leading statement: overline, `h1` with an optionally accented opening phrase, supporting paragraph and the actions row. Renders a `header`, so it carries the band's document outline.
-  - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot, running to the block's own width and set one step further from the headline than the rest of the block; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start. `size` (`HeroTitleSize` = `'medium' | 'large'`, `'large'`) — headline scale, medium steps one rung below large. `maxWidth` (`HeroTitleWidth` = `'lg' | 'xl' | '2xl' | '3xl' | '4xl'`, `'4xl'`) — width the whole block (headline, paragraph and actions) is capped at; beside a `media` slot the block is capped inside its half of the band. `sticky` (`boolean`, `false`) — keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up.
+  - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot, running to the block's own width and set one step further from the headline than the rest of the block; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor, wrapping to the block's width instead of overflowing it; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start. `mobileCentered` (`boolean`, `false`) — centre the whole block below `md` only, where a band with `media` stacks the copy above it; from `md` up the block keeps its start alignment. `size` (`HeroTitleSize` = `'medium' | 'large'`, `'large'`) — headline scale, medium steps one rung below large. `maxWidth` (`HeroTitleWidth` = `'lg' | 'xl' | '2xl' | '3xl' | '4xl'`, `'4xl'`) — width the whole block (headline, paragraph and actions) is capped at; beside a `media` slot the block is capped inside its half of the band. `sticky` (`boolean`, `false`) — keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up.
   - Events: _none_.
   - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width below `20rem` and laid out in a row above it.
 
@@ -200,6 +200,7 @@ _none_
 - Widths — composite story rendering the width keys side-by-side (justified: a cap is only legible when two are compared in one view)
 - Screen — the band filling one viewport (mutually-exclusive state of the `kind` prop)
 - Media — the band with the copy beside a media column (justified: the two-column split is a structural mode the default story cannot show)
+- MediaMobileCentered — the `media` band with `Hero.Title` `mobileCentered` set, opened at the mobile viewport (justified: the copy only re-aligns below `md`, where the media stacks under it, so the default `Media` story cannot show it)
 - Background — the band with a backdrop in its `background` slot (justified: the layering of backdrop beneath copy is the band's one non-obvious behaviour)
 - Backdrops — composite story rendering every `texture` value (justified: a texture is a multi-option axis, and the canonical composite story for it)
 - AssetWindows — the `top` and `bottom` slots filled (justified: the clipping windows and their `--banner-*` geometry cannot be read from the prop table)

@@ -22,8 +22,8 @@ export const SUPPORT_PAGE = [
     title: SUPPORT_HERO.title,
     description: SUPPORT_HERO.description,
     actions: [
-      { label: 'Start Free', href: '/signup', kind: 'secondary' },
-      { label: 'Contact Us', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'Start for free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
     carouselLabel: SUPPORT_HERO.carouselLabel,
     carouselMarks: SUPPORT_MARKS
@@ -33,7 +33,14 @@ export const SUPPORT_PAGE = [
   {
     section: 'ClientQuotes',
     quotes: quotesLedBy('contabilizei'),
-    actions: [{ label: 'Clients', href: '/site/success-cases', kind: 'secondary', trailing: true }]
+    actions: [
+      {
+        label: 'See customer stories',
+        href: '/site/success-cases',
+        kind: 'secondary',
+        trailing: true
+      }
+    ]
   },
   {
     section: 'FaqSection',
@@ -54,6 +61,6 @@ export const SUPPORT_PAGE = [
         trailing: true
       }
     ],
-    aside: { label: SUPPORT_CLOSING.aside.label, href: SUPPORT_CLOSING.aside.to }
+    aside: { label: SUPPORT_CLOSING.aside.label, href: SUPPORT_CLOSING.aside.to, external: true }
   }
 ]

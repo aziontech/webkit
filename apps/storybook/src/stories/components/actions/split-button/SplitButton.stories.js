@@ -22,7 +22,7 @@ const ITEMS = [
 
 /** @type {import('@storybook/vue3').Meta<typeof SplitButton>} */
 const meta = {
-  title: 'Components/Actions/SplitButton',
+  title: 'Components/Primitives/Actions/SplitButton',
   component: SplitButton,
   tags: ['autodocs'],
   parameters: {

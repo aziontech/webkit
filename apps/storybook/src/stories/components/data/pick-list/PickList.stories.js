@@ -77,7 +77,7 @@ const sourceFor = ({ root = [], source = [], target = [] } = {}) =>
 
 /** @type {import('@storybook/vue3').Meta<typeof PickList>} */
 const meta = {
-  title: 'Components/Data/PickList',
+  title: 'Components/Primitives/Data/PickList',
   component: PickList,
   subcomponents: { PickListSource, PickListTarget, PickListControls },
   tags: ['autodocs'],

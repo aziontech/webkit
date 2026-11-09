@@ -63,6 +63,8 @@
     eyebrow?: string
     /** Section title over the stack; empty renders the stack alone. */
     title?: string
+    /** Sentence under the section title. */
+    description?: string
     /** The stacked bands, top to bottom. */
     bands: StackBand[]
   }
@@ -71,7 +73,8 @@
     kind: 'solutions',
     anchor: '',
     eyebrow: '',
-    title: ''
+    title: '',
+    description: ''
   })
 
   const { follow } = useSiteLink()
@@ -106,9 +109,10 @@
     >
       <SectionTitle
         kind="centered"
-        :size="kind === 'solutions' ? 'large' : 'medium'"
+        size="large"
         :eyebrow="eyebrow"
         :title="title"
+        :description="description"
       />
     </template>
 
@@ -122,9 +126,9 @@
         :kind="kind === 'alternating' && index % 2 === 0 ? 'media-start' : 'media-end'"
         :divided="true"
         :heading-level="title ? 3 : 2"
-        :align="kind === 'solutions' ? 'center' : 'top'"
-        :size="kind === 'solutions' ? 'large' : 'medium'"
-        :media-fill="kind === 'solutions' ? 'canvas' : 'surface'"
+        align="center"
+        size="large"
+        media-fill="canvas"
         texture="pixelate"
         texture-size="small"
         texture-fade="top"

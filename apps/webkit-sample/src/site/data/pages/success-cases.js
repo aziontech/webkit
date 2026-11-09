@@ -1,20 +1,11 @@
-import { successCaseArticle, successCaseLink, successCaseSlug } from '../success-case-articles.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
+import { successCaseLink } from '../success-case-articles.js'
 import { FEATURED_CASES, SUCCESS_CASES } from '../success-cases.js'
 import { HOME_RECOGNITIONS } from './home.js'
 
 const unique = (values) => [...new Set(values)].sort((a, b) => a.localeCompare(b))
 
 const optionsOf = (values) => unique(values).map((value) => ({ value, label: value }))
-
-const PRODUCTS_SHOWN = 2
-
-const productsOf = (products) =>
-  [
-    ...products.slice(0, PRODUCTS_SHOWN),
-    ...(products.length > PRODUCTS_SHOWN ? [`+${products.length - PRODUCTS_SHOWN}`] : [])
-  ].join(' · ')
-
-const INDUSTRIES = unique(SUCCESS_CASES.map((story) => story.industry))
 
 const FEATURED_CELLS = FEATURED_CASES.map((story) => ({
   name: story.client.name,
@@ -25,40 +16,34 @@ const FEATURED_CELLS = FEATURED_CASES.map((story) => ({
   story: story.description
 }))
 
-const STORY_ROWS = SUCCESS_CASES.map((story) => ({
-  href: successCaseLink(story).href,
-  client: story.client,
-  group: story.industry,
-  values: {
-    story: successCaseArticle(successCaseSlug(story))?.title ?? story.client.name,
-    products: productsOf(story.products)
-  },
-  facets: {
-    industry: [story.industry],
-    solution: story.solutions,
-    product: story.products
+const STORY_ITEMS = SUCCESS_CASES.map((story) => {
+  const link = successCaseLink(story)
+  return {
+    key: story.key,
+    href: link.href,
+    external: link.external,
+    client: story.client,
+    category: story.industry,
+    description: story.description,
+    facets: {
+      industry: [story.industry],
+      solution: story.solutions,
+      product: story.products
+    }
   }
-}))
+})
 
-export const SUCCESS_CASES_CLOSING = {
-  section: 'ClosingCallToAction',
-  kind: 'split',
-  eyebrow: 'Build',
-  title: 'Build once.',
-  titleMuted: 'Run everywhere.',
-  description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
-  actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-  aside: { label: 'Talk to our team', href: '/site/contact' }
-}
+export const SUCCESS_CASES_CLOSING = COMPANY_CLOSING
 
 export const SUCCESS_CASES_PAGE = [
   {
     section: 'Heroes',
+    eyebrow: 'Customers',
     kind: 'title-band',
-    title: 'Trusted by Leading Companies',
+    title: 'Trusted by leading companies',
     actions: [
-      { label: 'See cases', href: '#cases', kind: 'secondary' },
-      { label: 'Talk to a Specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      { label: 'See customer stories', href: '#cases', kind: 'secondary' },
+      { label: 'Talk to sales', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
   {
@@ -70,15 +55,10 @@ export const SUCCESS_CASES_PAGE = [
     storyLabel: 'Read story'
   },
   {
-    section: 'ListingBrowser',
+    section: 'StoryLibrary',
     anchor: 'cases',
-    title: 'Organizations shaping the future of the web with us',
-    columns: [
-      { key: 'story', label: 'Story', grow: 3 },
-      { key: 'products', label: 'Products', grow: 2 }
-    ],
-    rows: STORY_ROWS,
-    groups: INDUSTRIES,
+    title: 'Companies building with Azion',
+    items: STORY_ITEMS,
     facets: [
       {
         key: 'industry',
@@ -100,19 +80,17 @@ export const SUCCESS_CASES_PAGE = [
       }
     ],
     search: {
-      placeholder: 'Search by company or product',
+      placeholder: 'Search by company or story',
       shortPlaceholder: 'Search stories',
       label: 'Search success stories'
     },
     empty: {
-      title: 'No results found for these applied filters.',
-      description: 'Try another industry, solution or product.',
+      title: 'No stories match these filters',
       action: 'View all success stories'
     }
   },
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a Market Leader',
     items: HOME_RECOGNITIONS
   },
   SUCCESS_CASES_CLOSING

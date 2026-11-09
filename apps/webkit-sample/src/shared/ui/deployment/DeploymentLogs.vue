@@ -539,17 +539,11 @@
                  glyph per row, in the same column down the list so the pipeline
                  reads as a column of states rather than as a stack of sentences. -->
             <span class="flex size-5 shrink-0 items-center justify-center">
-              <!-- Done: a filled disc, so a finished step registers as a solid
-                   mark at a glance rather than as a stroke among strokes. -->
-              <span
+              <i
                 v-if="stepStatus(i) === 'done'"
-                class="flex size-4 items-center justify-center rounded-full bg-(--success)"
-              >
-                <i
-                  class="pi pi-check text-[9px] leading-none text-(--success-contrast)"
-                  aria-hidden="true"
-                />
-              </span>
+                class="pi pi-check-circle text-(--success-contrast)"
+                aria-hidden="true"
+              />
               <i
                 v-else-if="stepStatus(i) === 'failed'"
                 class="pi pi-times-circle text-(--danger-contrast)"
@@ -585,7 +579,7 @@
             >
               <span
                 :data-state="stepStatus(i)"
-                class="shrink-0 text-label-sm text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
+                class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
               >
                 {{ step.title }}
               </span>
@@ -599,7 +593,7 @@
               />
               <span
                 :data-state="stepStatus(i)"
-                class="min-w-0 truncate text-body-xs text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast)"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
               >
                 {{ step.description }}
               </span>
@@ -609,7 +603,7 @@
             <span class="ml-auto flex shrink-0 items-center">
               <span
                 v-if="durationLabel(i)"
-                class="text-label-code-sm text-(--text-muted)"
+                class="text-label-code-md text-(--text-muted)"
               >
                 {{ durationLabel(i) }}
               </span>

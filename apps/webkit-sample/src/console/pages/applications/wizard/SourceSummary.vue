@@ -73,7 +73,7 @@
               class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
             >
               <i
-                class="pi pi-github text-body-md leading-none text-(--text-default)"
+                class="ai ai-github text-body-md leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </span>

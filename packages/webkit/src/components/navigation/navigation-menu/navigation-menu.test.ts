@@ -304,6 +304,24 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       expect(positioner()).not.toHaveAttribute('data-constrained')
     })
 
+    // Viewport-independent guard for the flip above: a trailing line box reads as growth here.
+    it('keeps the positioner box equal to the popup it carries, with no trailing line box', async () => {
+      const { getByRole } = renderTree(TALL_PANEL(6, 'position:fixed;left:8px;top:8px'))
+      await userEvent.click(getByRole('button', { name: /Solutions/ }))
+      const popup = await waitFor(() => body().getByTestId('navigation-menu__popup'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const p = positioner().getBoundingClientRect()
+          const q = popup.getBoundingClientRect()
+          expect(p.height).toBeCloseTo(q.height, 1)
+          expect(p.bottom).toBeCloseTo(q.bottom, 1)
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+    })
+
     // A page-column pin passes the column inset on x; on y it would drop the panel off its
     // trigger by that same amount, which is invisible until the inset exceeds the side offset.
     const PINNED_PANEL = `

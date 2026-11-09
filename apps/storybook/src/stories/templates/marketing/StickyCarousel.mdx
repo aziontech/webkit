@@ -1,0 +1,46 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as StickyCarouselStories from './StickyCarousel.stories'
+
+<Meta title="Templates/Marketing/Content/StickyCarousel" />
+
+# StickyCarousel
+
+A row of numbered cards that reads as a sequence. From `lg` up the band pins under the site header and the row slides sideways as the page scrolls, so every card passes through the frame before the page moves on. Below `lg`, and when the reader prefers reduced motion, the row scrolls sideways on its own and snaps card by card.
+
+Each card is numbered by its position, over the pixelated texture on a dark surface. The section title above the row is the standard one: overline, title and description.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox` and `TextureMaterial`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The Careers hiring process: five stages, from the role request to the offer letter.
+
+<Canvas of={StickyCarouselStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the section title.
+- `items[]` are the cards in reading order, each a `title` and a `description`; the number comes from the position.
+- `ariaLabel` names the row of cards for assistive tech.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={StickyCarouselStories.DefaultJson} dark />
+</div>

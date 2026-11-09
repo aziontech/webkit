@@ -1,14 +1,6 @@
-// Geometry for the "On this page" rail: one continuous path that indents with
-// the heading level; the active marker is a dash cut from that same path, which
-// is what lets it travel along the curve instead of across it.
-
-/** Horizontal offset per nesting level, in px. Matches the frame's 8px indent. */
 export const RAIL_INDENT = 8
-/** Vertical reach of the S-bend between two levels, in px. */
 export const RAIL_CURVE = 10
-/** Stroke width of the rail and of the active dash cut from it, in px. */
 export const RAIL_STROKE = 2
-/** Half the stroke, so the line sits on the pixel grid with its left edge at x=0. */
 const CRISP = RAIL_STROKE / 2
 
 /** One item's vertical extent and nesting level, relative to the list. */
@@ -36,14 +28,8 @@ export interface RailMeasurement {
   bands: RailSpan[]
 }
 
-/** The x the rail sits at for a heading level (2 is top level in a page body). */
 export const railX = (depth: number): number => (Math.max(2, depth) - 2) * RAIL_INDENT + CRISP
 
-/**
- * Build the rail path. Each level change is split into two half-curves meeting
- * on the band boundary, so the path length up to any band edge is that of a
- * whole number of commands and the active dash can be measured exactly.
- */
 export function buildRail(bands: RailBand[]): RailPath {
   const commands: string[] = []
   const boundaries: number[] = []
@@ -61,7 +47,6 @@ export function buildRail(bands: RailBand[]): RailPath {
     if (next && nextX !== x) {
       const reach = Math.min(RAIL_CURVE, (band.bottom - band.top) / 2, (next.bottom - next.top) / 2)
       commands.push(`L ${x} ${edge - reach}`)
-      // S-bend split at its midpoint (de Casteljau at t=0.5) so the join lands on the boundary.
       const mid = (x + nextX) / 2
       commands.push(
         `C ${x} ${edge - reach / 2} ${(3 * x + nextX) / 4} ${edge - reach / 4} ${mid} ${edge}`
@@ -80,7 +65,6 @@ export function buildRail(bands: RailBand[]): RailPath {
   return { commands, boundaries }
 }
 
-/** Measure each band's span along the built path, using a live path element as a ruler. */
 export function measureRail(
   probe: globalThis.SVGPathElement,
   commands: string[],

@@ -24,12 +24,14 @@
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import TagListCell from '../../components/list/TagListCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import ResourceLink from '../../components/resource/ResourceLink.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
+  import { CONNECTORS } from '../../lib/data/connectors'
   import { createResourcePath, resourceSettingsPath } from '../../lib/data/create-resources'
   import { CUSTOM_PAGES } from '../../lib/data/custom-pages'
   import { productFirstUse } from '../../lib/data/product-empty-states'
@@ -108,6 +110,21 @@
 
   const route = useRoute()
   const router = useRouter()
+
+  const openCustomPage = (event, row) =>
+    router.push({
+      path: resourceSettingsPath('custom-pages', row.id),
+      query: { name: row.name, email: route.query.email || undefined }
+    })
+
+  const connectorLink = (name) => {
+    const connector = CONNECTORS.find((item) => item.name === name)
+    if (!connector) return null
+    return {
+      path: resourceSettingsPath('connectors', connector.id),
+      query: { name, email: route.query.email || undefined }
+    }
+  }
 
   const create = () =>
     router.push({
@@ -291,7 +308,18 @@
                   :page-size="8"
                   :border="false"
                   :loading="loading"
+                  @row-click="openCustomPage"
                 >
+                  <template #cell-name="{ value }">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-custom-pages shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+                    </div>
+                  </template>
+
                   <template #cell-id="{ value }">
                     <IdCell
                       :value="value"
@@ -299,10 +327,23 @@
                     />
                   </template>
 
+                  <template #cell-connector="{ value }">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <i
+                        class="ai ai-edge-connectors shrink-0 text-body-lg text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <ResourceLink
+                        :label="value"
+                        :to="connectorLink(value)"
+                        module="Connectors"
+                      />
+                    </div>
+                  </template>
+
                   <template #cell-statusCodes="{ row }">
                     <TagListCell
                       :items="row.statuses"
-                      :visible="3"
                       noun="status codes"
                     />
                   </template>

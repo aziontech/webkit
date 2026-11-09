@@ -44,7 +44,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof GlobalHeader>} */
 const meta = {
-  title: 'Components/Layout/GlobalHeader',
+  title: 'Components/Primitives/Layout/GlobalHeader',
   component: GlobalHeader,
   subcomponents: {
     'GlobalHeader.Left': GlobalHeader.Left,

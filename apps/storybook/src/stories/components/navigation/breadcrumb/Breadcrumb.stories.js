@@ -15,7 +15,7 @@ const subcomponents = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Breadcrumb.Root>} */
 const meta = {
-  title: 'Components/Navigation/Breadcrumb',
+  title: 'Components/Primitives/Navigation/Breadcrumb',
   component: Breadcrumb.Root,
   subcomponents,
   tags: ['autodocs'],
@@ -150,7 +150,6 @@ export const Depths = {
   }
 }
 
-
 const LONG_LABEL = 'production-edge-application-with-a-very-long-configuration-name'
 
 const LONG_LABEL_LINES = [
@@ -185,4 +184,3 @@ export const LongLabel = {
     }
   }
 }
-

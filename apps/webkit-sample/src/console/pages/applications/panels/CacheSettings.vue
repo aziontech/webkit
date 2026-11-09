@@ -8,7 +8,7 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
@@ -148,6 +148,8 @@
 
   const openCreate = () => {
     editing.value = null
+    Object.assign(form, blankForm())
+    errors.name = ''
     createOpen.value = true
   }
 
@@ -172,13 +174,6 @@
   const topologyLabel = behaviorLabel(TIERED_CACHE_TOPOLOGIES)
   const methodsLabel = (values) => optionsLabel(CACHEABLE_METHODS, values)
   const deviceGroupsLabel = (values) => optionsLabel(deviceGroups.value, values)
-
-  watch(createOpen, (open) => {
-    if (open) return
-    editing.value = null
-    Object.assign(form, blankForm())
-    errors.name = ''
-  })
 
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'Name is required.'

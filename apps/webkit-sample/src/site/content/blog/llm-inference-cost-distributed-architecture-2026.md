@@ -37,7 +37,7 @@ The mistake most teams make is treating all three as one unit and deploying them
 Split the stack at that boundary and you get:
 
 - Sub-10ms preprocessing for auth, context injection, and prompt assembly before the request reaches the model
-- Response streaming from the closest point of presence, delivering tokens without an extra round-trip to origin
+- Response streaming from the closest data center, delivering tokens without an extra round-trip to origin
 - Distributed semantic caching: common completion patterns handled at the network layer, no model call required
 - Regional failover without re-architecting: route around degraded inference regions transparently
 
@@ -70,7 +70,7 @@ export default async function handler(request) {
 }
 ```
 
-This function runs across 300+ global points of presence with no cold starts. Auth, rate limiting, and cache lookups happen at the same location as the user. The inference origin only sees requests that need token generation. Everything else is handled before it arrives.
+This function runs across 300+ global data centers with no cold starts. Auth, rate limiting, and cache lookups happen at the same location as the user. The inference origin only sees requests that need token generation. Everything else is handled before it arrives.
 
 The throughput impact is real. Teams running this pattern report 40–60% reductions in requests that reach the inference origin, because semantic caching absorbs repeated or near-identical queries. For most production AI features (customer support, search, content generation), query distributions cluster around common intents far more than they appear to.
 
@@ -136,7 +136,7 @@ The other half is everything between the model and the user. That half is alread
 
 ---
 
-*Azion Web Platform runs distributed, cold-start-free execution across 300+ global points of presence. Azion Functions handle request preprocessing, caching, and response streaming without touching your inference infrastructure.* [See the docs →](https://www.azion.com/en/documentation/)
+*Azion Web Platform runs distributed, cold-start-free execution across 300+ global data centers. Azion Functions handle request preprocessing, caching, and response streaming without touching your inference infrastructure.* [See the docs →](https://www.azion.com/en/documentation/)
 
 ---
 
@@ -144,7 +144,7 @@ The other half is everything between the model and the user. That half is alread
 
 **Why is LLM inference still expensive even with cheaper models?** Cheaper models reduce cost per token, but network round-trip latency and over-provisioning stay constant regardless of model price. A user in São Paulo calling an inference endpoint in Virginia adds 100–180ms before a single token generates. To compensate, teams over-provision warm capacity, paying for idle compute around the clock. These infrastructure costs don’t appear on your inference bill but can exceed it at scale.
 
-**What is distributed AI inference?** Distributed AI inference separates request handling and response streaming from token generation. Auth, rate limiting, prompt assembly, and semantic caching run at global points of presence close to users, adding under 10ms of overhead. Only requests that miss the cache reach the inference origin for token generation. This cuts origin load by 40–60% and global p50 latency by up to 75% without changing the underlying model or inference provider.
+**What is distributed AI inference?** Distributed AI inference separates request handling and response streaming from token generation. Auth, rate limiting, prompt assembly, and semantic caching run at global data centers close to users, adding under 10ms of overhead. Only requests that miss the cache reach the inference origin for token generation. This cuts origin load by 40–60% and global p50 latency by up to 75% without changing the underlying model or inference provider.
 
 **How much does semantic caching reduce LLM inference costs?** Semantic caching at the network layer captures 20–40% cache hit rates in most production AI workloads. Customer support, search, and content generation applications see higher rates because query distributions cluster around common intents. Each cache hit eliminates one inference call entirely, cutting paid token generation proportionally.
 
@@ -152,6 +152,6 @@ The other half is everything between the model and the user. That half is alread
 
 **What is the infrastructure cost difference between centralized and distributed inference?** For a production AI feature serving 10 million requests per month from a global user base, centralized inference in a single region costs an estimated $12,000–18,000/month including over-provisioning for p95. Adding a distributed preprocessing layer drops that to $5,000–8,000/month while cutting p50 global latency from ~340ms to ~85ms.
 
-**Does distributed inference require changing my inference provider?** No. The distributed layer sits in front of your existing inference endpoint. Auth, rate limiting, semantic caching, and response streaming run at global points of presence. The inference origin stays unchanged. It just receives fewer requests because the cache absorbs repeat queries before they reach it.
+**Does distributed inference require changing my inference provider?** No. The distributed layer sits in front of your existing inference endpoint. Auth, rate limiting, semantic caching, and response streaming run at global data centers. The inference origin stays unchanged. It just receives fewer requests because the cache absorbs repeat queries before they reach it.
 
 **How does smaller model size affect the case for distributed inference?** As cost per token drops with smaller models, network overhead and over-provisioning become a larger share of total inference cost. A $0.001/1K token model running behind 180ms of avoidable network latency has a worse effective cost profile than a $0.003/1K token model with 20ms of overhead, because latency shows up as user churn and over-provisioning rather than as a line item on the inference bill. Model efficiency gains accelerate the case for fixing infrastructure inefficiency.

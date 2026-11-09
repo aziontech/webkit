@@ -1,10 +1,10 @@
+import Avatar from '@aziontech/webkit/avatar'
+import Button from '@aziontech/webkit/button'
 import Dropdown, {
   DropdownGroup,
   DropdownOption,
   DropdownTrigger
 } from '@aziontech/webkit/dropdown'
-import Avatar from '@aziontech/webkit/avatar'
-import Button from '@aziontech/webkit/button'
 import IconButton from '@aziontech/webkit/icon-button'
 import InputText from '@aziontech/webkit/input-text'
 import Tag from '@aziontech/webkit/tag'
@@ -33,7 +33,7 @@ const TAG_IMPORT = "import Tag from '@aziontech/webkit/tag'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Dropdown>} */
 const meta = {
-  title: 'Components/Navigation/Dropdown',
+  title: 'Components/Primitives/Navigation/Dropdown',
   component: Dropdown,
   subcomponents: { DropdownTrigger, DropdownGroup, DropdownOption },
   tags: ['autodocs'],

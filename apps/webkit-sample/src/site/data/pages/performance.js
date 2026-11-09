@@ -3,7 +3,7 @@ import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
 
-const HERO = {
+export const HERO = {
   eyebrow: 'Application Performance and Reliability',
   title: 'Make your applications fast and always reliable',
   description:
@@ -15,7 +15,7 @@ const CAPABILITIES = [
     icon: 'pi pi-sliders-h',
     title: 'Tune delivery, not your origin',
     description:
-      'Instantly change how each request is cached, routed, and answered without editing your application or waiting for the next release.'
+      'Change how each request is cached, routed, and answered without editing your application or waiting for the next release.'
   },
   {
     icon: 'pi pi-wallet',
@@ -27,7 +27,7 @@ const CAPABILITIES = [
     icon: 'pi pi-search',
     title: 'Detect anomalies instantly',
     description:
-      'Spot traffic spikes and error surges as they happen, so you can react before issues impact your business.'
+      'Spot traffic spikes and error surges as they happen, and react before they hurt your business.'
   }
 ]
 
@@ -47,8 +47,8 @@ const USE_CASES = {
         'Load Balancer spreads requests across two or more origins, shifts traffic away from any origin that fails, and supports primary and backup origins for active-passive setups.'
     },
     {
-      illustration: 'build-applications',
-      title: 'Image Processing',
+      illustration: 'multi-format-optimization-with-automatic-detection',
+      title: 'Image Processor',
       description:
         'Image Processor resizes, crops, and converts images on the fly to the size and format each page needs, and Azion caches every variant. You keep just one original per image.'
     },
@@ -73,7 +73,7 @@ const FAQ = [
     value: 'q1',
     question: 'How does Azion speed up an application that runs in one cloud region?',
     answer:
-      "Your users' requests reach Azion's distributed infrastructure first, not your origin. Azion serves cached content the way a CDN does and applies a wide range of protocol optimizations that make your application faster and more available."
+      "Your users' requests reach Azion's distributed infrastructure first, not your origin. Azion serves cached content the way a CDN does and applies protocol optimizations that make your application faster and more available."
   },
   {
     value: 'q2',
@@ -121,7 +121,7 @@ export const PERFORMANCE_PAGE = solutionPage({
   useCases: USE_CASES,
   stack: STACK,
   quotes: QUOTES,
-  primitivesTitle: 'All the Platform Primitives You Need',
+  primitivesTitle: 'Everything You Need to Run Fast',
   network: EARTH_NETWORK,
   faq: FAQ,
   cta: CTA

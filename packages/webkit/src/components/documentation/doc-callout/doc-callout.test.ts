@@ -1,6 +1,8 @@
 import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { createSSRApp, h } from 'vue'
+import { renderToString } from 'vue/server-renderer'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-callout/DocCallout.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -42,6 +44,28 @@ describe('DocCallout', () => {
     it('falls back to the label prop when the slot is empty', () => {
       const { getByText } = render(DocCallout, { props: { label: 'Fallback copy.' } })
       expect(getByText('Fallback copy.')).toBeInTheDocument()
+    })
+  })
+
+  describe('block content', () => {
+    it('keeps a paragraph and a list inside the copy once the server markup is parsed as HTML', async () => {
+      // MDX asides arrive as server-rendered markup; a copy region that is a p would be
+      // closed by the parser at the ul, pushing the list beside the text (see Message).
+      const app = createSSRApp({
+        render: () =>
+          h(DocCallout, { kind: 'note' }, () => [
+            h('p', 'It will be necessary to take the following actions:'),
+            h('ul', [h('li', 'Migrate to the new chain.'), h('li', 'No action for other kinds.')])
+          ])
+      })
+      const html = await renderToString(app)
+      const doc = new DOMParser().parseFromString(html, 'text/html')
+      const content = doc.querySelector('[data-testid="documentation-doc-callout__content"]')
+
+      expect(content).not.toBeNull()
+      expect(content?.querySelector('p')).not.toBeNull()
+      expect(content?.querySelector('ul')).not.toBeNull()
+      expect(content?.querySelectorAll('li')).toHaveLength(2)
     })
   })
 

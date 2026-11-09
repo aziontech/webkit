@@ -3,6 +3,7 @@ import { COMPLIANCE_CERTIFICATIONS, COMPLIANCE_PRIVACY_LINKS } from '../complian
 export const COMPLIANCE_PAGE = [
   {
     section: 'Heroes',
+    eyebrow: 'Conformidade',
     kind: 'centered-band',
     title: 'Certificações e conformidade da Azion',
     description:

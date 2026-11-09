@@ -1,14 +1,4 @@
-import { markRaw } from 'vue'
-
-import FunctionsStartScene from '../../ui/FunctionsStartScene.vue'
-import { cliBand } from '../cli-band.js'
-import { AGENT_PROMPT, START_TABS } from '../functions-start.js'
-import {
-  PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
-  PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
-} from '../product-pages.js'
+import { PRODUCT_CLOSING, PRODUCT_DOCS, PRODUCT_HERO_ACTIONS } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
 const IMPORT = 'import'
@@ -289,47 +279,30 @@ const FAQ = [
   }
 ]
 
-const START_TILES = START_TABS.map(({ value, title, description }) => ({
-  title,
-  description,
-  scene: { component: markRaw(FunctionsStartScene), props: { tab: value } },
-  ...(value === 'agents'
-    ? { copy: { label: 'Copy Prompt', text: AGENT_PROMPT } }
-    : { href: PRODUCT_DOCS })
-}))
-
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-carousel',
     eyebrow: 'Functions',
-    title: 'Instant serverless functions for modern applications',
-    description: 'Build and scale AI-powered applications on a globally integrated platform.',
+    title: 'Run code globally, with no cold starts',
+    description:
+      'Run JavaScript and TypeScript close to users, with data and AI Inference built in.',
     actions: PRODUCT_HERO_ACTIONS,
     carouselLabel: 'Built for your framework',
     carouselMarks: FRAMEWORK_MARKS
   },
   { section: 'CapabilityGrid', items: BENEFITS },
   {
-    section: 'WidgetGrid',
-    anchor: 'get-started',
-    eyebrow: 'Get started',
-    title: 'Start where you already work',
-    description:
-      'The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.',
-    actions: PRODUCT_HERO_ACTIONS,
-    columns: 3,
-    items: START_TILES
-  },
-  {
-    section: 'IntegrationCode',
-    title: 'Integrates with the',
-    emphasis: 'Azion Web Platform',
+    section: 'StickyScrollCode',
+    eyebrow: 'Integrations',
+    title: 'Integrates with the Azion Web Platform',
     description:
       'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
-    items: INTEGRATIONS,
-    samples: INTEGRATION_SAMPLES,
-    action: { label: 'Explore the runtime APIs', href: PRODUCT_DOCS }
+    items: INTEGRATIONS.map((item) => ({
+      ...item,
+      action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true }
+    })),
+    samples: INTEGRATION_SAMPLES
   },
   {
     section: 'UseCases',
@@ -337,16 +310,10 @@ export const FUNCTIONS_PAGE = [
     title: 'What teams use Functions for',
     description:
       'Run JavaScript and TypeScript in the request flow on Azion’s distributed infrastructure. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
-  cliBand({
-    title: 'Deploy your first function in two commands',
-    description:
-      'Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.'
-  }),
   PRODUCT_CLOSING
 ]

@@ -22,9 +22,9 @@ Protecting web applications and APIs from complex risks is a major challenge for
 - Build customized WAF rule sets to protect Quero-Quero’s APIs and web applications;
 - Adjust threat configuration and sensitivity levels with ease.
 
-In addition, Quero-Quero gains better visibility into network activity through a programmable security perimeter built with **Network Shield**, allowing its cybersecurity experts to analyze whether an attack correlates with other events recorded in the WAF or **Real-Time Manager**.
+In addition, Quero-Quero gains better visibility into network activity through a programmable security perimeter built with **Network Shield**, allowing its cybersecurity experts to analyze whether an attack correlates with other events recorded in the WAF or **Console**.
 
-Ensuring that Quero-Quero’s web and mobile e-commerce platform remains available 24/7 is another key requirement. To support this, the **Azion Platform** provides several capabilities, including content delivery through **Azion’s distributed network**, multi-layer security, and **Network Lists**.
+Ensuring that Quero-Quero’s web and mobile e-commerce platform remains available 24/7 is another key requirement. To support this, the **Azion Platform** provides several capabilities, including content delivery through **Azion’s distributed infrastructure**, multi-layer security, and **Network Lists**.
 
 Additionally, Quero-Quero implemented **Azion Origin Shield** to establish a security perimeter around its origin infrastructure, restricting origin access to authorized IP addresses within Azion’s network and blocking all other requests.
 
@@ -38,7 +38,7 @@ Ultimately, Quero-Quero has been able to guarantee **100% availability** of its 
 
 ## About Quero-Quero
 
-Quero-Quero is a retail company founded in 1967, composed of more than 300 stores across the states of Rio Grande do Sul, Santa Catarina, and Paraná. Its e-commerce platform was launched in 2019, marking the beginning of its digital transformation and accelerating its growth.
+Quero-Quero is a retail company founded in 1967, composed of more than 300 stores across the states of Rio Grande do Sul, Santa Catarina, and Paraná. Its e-commerce platform was launched in 2019, marking the beginning of its modernization and accelerating its growth.
 
 Today, the company offers more than 20 product categories through its online platform and is recognized as the **5th largest retailer in Brazil’s building supply industry**. Despite its rapid growth, focusing on smaller cities and maintaining close relationships with customers remains a key element of Quero-Quero’s success.
 

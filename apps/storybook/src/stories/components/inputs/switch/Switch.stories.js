@@ -1,6 +1,5 @@
-import { ref, watch } from 'vue'
-
 import Switch from '@aziontech/webkit/switch'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -8,7 +7,7 @@ const IMPORT = "import Switch from '@aziontech/webkit/switch'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Switch>} */
 const meta = {
-  title: 'Components/Inputs/Switch',
+  title: 'Components/Primitives/Inputs/Switch',
   component: Switch,
   tags: ['autodocs'],
   parameters: {

@@ -1,30 +1,38 @@
 <script setup>
-  import { ref } from 'vue'
+  import { computed } from 'vue'
 
-  defineProps({
+  import GroupHeader from './layout/GroupHeader.vue'
+  import TokenTable from './TokenTable.vue'
+
+  const props = defineProps({
     title: { type: String, required: true },
     description: { type: String, default: '' },
-    /** Array of { name, description, kind, on }. */
+    /** Array of { name, description, kind, on, light, dark }. */
     items: { type: Array, default: () => [] }
   })
 
-  const copiedKey = ref(null)
-  let copyTimeout = null
+  const UTILITY = { fill: 'bg-', text: 'text-', border: 'border-' }
+  const ROLE_PREFIX = [
+    [/^--bg-/, 'bg-'],
+    [/^--text-/, 'text-'],
+    [/^--border-/, 'border-'],
+    [/^--ring-color$/, 'ring-']
+  ]
 
-  function copyToClipboard(value) {
-    if (!value) return
-    navigator.clipboard?.writeText(value).catch(() => {})
-    copiedKey.value = value
-    if (copyTimeout) clearTimeout(copyTimeout)
-    copyTimeout = setTimeout(() => {
-      copiedKey.value = null
-    }, 1000)
+  function tailwindFor(item) {
+    const role = ROLE_PREFIX.find(([pattern]) => pattern.test(item.name))
+    return `${role ? role[1] : UTILITY[item.kind]}(${item.name})`
   }
 
-  // The live token is passed as a CSS custom property, then consumed by the
-  // token utilities below. Storybook's Tailwind runs with `important: true`, so
-  // the color has to be a utility (bg-/text-/border-(--…)) — inline styles
-  // would lose to the !important utilities on the same element.
+  const rows = computed(() =>
+    props.items.map((item) => ({
+      ...item,
+      tailwind: tailwindFor(item),
+      css: `var(${item.name})`,
+      raw: item.light === item.dark ? item.light : `${item.light} / ${item.dark}`
+    }))
+  )
+
   function swatchVars(item) {
     return {
       '--swatch-color': `var(${item.name})`,
@@ -32,7 +40,6 @@
     }
   }
 
-  // Swatch renders the live token, so it follows the Storybook theme toggle.
   function swatchKindClass(item) {
     if (item.kind === 'text') {
       return 'bg-(--swatch-on) text-(--swatch-color) border-2 border-solid border-(--border-muted)'
@@ -45,43 +52,29 @@
 </script>
 
 <template>
-  <section class="mb-(--spacing-xxl)">
-    <div class="mb-(--spacing-md)">
-      <h2
-        class="m-0 mb-(--spacing-xs) border-b border-solid border-(--border-default) pb-(--spacing-xs) text-overline-md! text-(--text-muted)"
-      >
-        {{ title }}
-      </h2>
-      <p v-if="description" class="m-0 max-w-(--container-3xl) text-body-sm text-(--text-muted)">
-        {{ description }}
-      </p>
-    </div>
+  <div class="mb-(--spacing-xl) last:mb-0">
+    <GroupHeader
+      :title="title"
+      :description="description"
+    />
 
-    <div class="overflow-hidden rounded-(--shape-card) border border-solid border-(--border-default) bg-(--bg-surface)">
-      <button
-        v-for="item in items"
-        :key="item.name"
-        type="button"
-        class="flex w-full items-center gap-(--spacing-md) border-b border-solid border-(--border-muted) px-(--spacing-md) py-(--spacing-sm) text-left last:border-b-0 hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
-        :title="copiedKey === item.name ? 'Copied!' : 'Copy CSS variable'"
-        @click="copyToClipboard(item.name)"
-      >
+    <TokenTable :rows="rows">
+      <template #sample="{ row }">
         <span
-          :style="swatchVars(item)"
+          :style="swatchVars(row)"
           :class="[
             'flex h-9 w-14 shrink-0 items-center justify-center rounded-(--shape-elements) font-code text-body-xs',
-            swatchKindClass(item)
+            swatchKindClass(row)
           ]"
         >
-          <span v-if="item.kind === 'text'">Aa</span>
+          <span v-if="row.kind === 'text'">Aa</span>
         </span>
-
-        <code class="w-(--container-3xs) shrink-0 truncate font-code text-body-sm text-(--text-default)">
-          {{ copiedKey === item.name ? 'Copied!' : item.name }}
-        </code>
-
-        <span class="text-body-sm text-(--text-muted)">{{ item.description }}</span>
-      </button>
-    </div>
-  </section>
+        <span
+          class="min-w-0 max-w-(--container-xs) truncate text-body-sm text-(--text-muted)"
+          :title="row.description"
+          >{{ row.description }}</span
+        >
+      </template>
+    </TokenTable>
+  </div>
 </template>

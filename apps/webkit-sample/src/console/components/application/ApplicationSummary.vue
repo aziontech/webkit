@@ -247,7 +247,7 @@
             <template v-if="repository">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-github shrink-0 text-(--text-muted)"
+                  class="ai ai-github shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <ResourceLink

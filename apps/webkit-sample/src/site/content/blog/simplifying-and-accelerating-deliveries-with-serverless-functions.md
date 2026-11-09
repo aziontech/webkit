@@ -1,6 +1,6 @@
 ## Introduction
 
-In an exponentially growing company, we need to ensure deliveries that are increasingly relevant in an ever shorter amount of time. By running [Edge Functions](https://www.azion.com/en/products/edge-functions/) we can easily write pieces of code that are crucial to your business, without needing to set up a whole server, security, and all those things we all are familiar with.
+In an exponentially growing company, we need to ensure deliveries that are increasingly relevant in an ever shorter amount of time. By running [Functions](https://www.azion.com/en/products/edge-functions/) we can easily write pieces of code that are crucial to your business, without needing to set up a whole server, security, and all those things we all are familiar with.
 
 Today, Azion’s Marketing team is responsible for all the company’s web pages. There are engineers working together with the team performing the orchestration of the pages. In this post we will look at two important problems solved using [serverless](https://www.azion.com/en/documentation/products/guides/serverless-functions/) JavaScript functions for large scale delivery.
 
@@ -19,11 +19,11 @@ We previously worked with a third party company that generated the data and page
 - Security;
 - Updates;
 
-With Azion Cells (JavaScript Functions) we have everything configured by default, besides natively running JavaScript code directly at the Edge. Because we have hundreds of servers spread across all Brazilian states we can guarantee scalability. Besides, our function runs as close as possible to the user.
+With Azion Cells (JavaScript Functions) we have everything configured by default, besides natively running JavaScript code close to users. Because we have hundreds of servers spread across all Brazilian states we can guarantee scalability. Besides, our function runs as close as possible to the user.
 
 As Azion has a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network)(Content Delivery Network) in its product catalog, we have an obligation to be always available. This automatically solves scalability problems. Because this architecture exists automatically, we have a secure environment against cracker attacks (if you don’t know the difference between hacker and cracker, [learn more here](https://www.educamaisbrasil.com.br/educacao/dicas/diferenca-entre-hacker-e-cracker)), such as [DDoS](https://owasp.org/www-community/attacks/Denial_of_Service), [Path Traverse](https://owasp.org/www-community/attacks/Path_Traversal), and other known attacks.
 
-Have a look at the code below to see an example of JavaScript running at the edge:
+Have a look at the code below to see an example of JavaScript running close to users:
 
 ```js
 var conf = {}
@@ -402,7 +402,7 @@ Incredible, right? But it’s not over yet, I’ll tell you right away how we pu
 
 ### Azion.com Sitemap
 
-We could write another post about this part, but I want to show how easy and important it is to use JavaScript on the edge. We are currently using [Jekyll](https://jekyllrb.com/) to work with [SSG](https://www.azion.com/en/learning/performance/when-to-use-ssr-or-ssg/) in some parts of Azion website, such as:
+We could write another post about this part, but I want to show how easy and important it is to use JavaScript close to users. We are currently using [Jekyll](https://jekyllrb.com/) to work with [SSG](https://www.azion.com/en/learning/performance/when-to-use-ssr-or-ssg/) in some parts of Azion website, such as:
 
 - [Documentation](https://www.azion.com/en/documentation/)
 - [Blog](https://www.azion.com/en/blog/)
@@ -509,7 +509,7 @@ And the output is:
     }
 ```
 
-There are 2 more json files from the blog and website (documentation is generated through the website). With these files published we can start using JavaScript Edge Functions to generate the final content.
+There are 2 more json files from the blog and website (documentation is generated through the website). With these files published we can start using JavaScript Functions to generate the final content.
 
 This sitemap.xml is not a file, it is generated without caching every time it is requested, so there is no danger of a new URL being created and not going into the sitemap.
 
@@ -625,4 +625,4 @@ It’s much simpler when you see it in practice, isn’t it?
 
 ## Considerations
 
-The fact that we don’t have all those concerns pointed out at the beginning of the post frees us up to be able to spend development time actually developing and delivering valuable features. This reduces the infrastructure cost and changes are made on demand. And we don’t have to worry about security issues, because all of this is already built into the package when using Azion Edge Functions.
+The fact that we don’t have all those concerns pointed out at the beginning of the post frees us up to be able to spend development time actually developing and delivering valuable features. This reduces the infrastructure cost and changes are made on demand. And we don’t have to worry about security issues, because all of this is already built into the package when using Azion Functions.

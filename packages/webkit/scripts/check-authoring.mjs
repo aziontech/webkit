@@ -1,37 +1,26 @@
 #!/usr/bin/env node
-// CI ratchet for the webkit construction + token standards (.claude/rules/), dependency-
-// free. Scans packages/webkit/src with the SAME engines the write-time hooks run
-// (authoring-checks + token-checks) and fails when a file introduces a violation that is
-// NOT already recorded in authoring-baseline.json. Existing debt is grandfathered
-// (frozen) so the gate lands without migrating everything; new code must comply — even
-// when pushed from an editor that never ran the hooks. Migrate a file → its baseline
-// entries disappear → prune with --update.
-//
-//   node scripts/check-authoring.mjs            # CI: fail on any NEW violation
-//   node scripts/check-authoring.mjs --update   # re-snapshot the baseline (deliberate)
 
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, relative, resolve } from 'node:path'
 
-import { scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
+import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
-// DS-internal engine (depends on .specs/): the same spec⇄code checks the PostToolUse
-// hook runs — no-invention, vocabulary, naming, defaults drift, testid, animations.
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
-// Storybook "Show code" checks — same engine as validate-story-source.
 import {
   checks as storyChecks,
   STORY_RE
 } from '../../../.claude/hooks/_lib/story-source-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES }
-// key → full message, for violations whose detail is computed at scan time
 const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const SRC = join(ROOT, 'packages/webkit/src')
+const PACKAGES = join(ROOT, 'packages')
+const SKIP_DIRS = new Set(['node_modules', 'dist', '.turbo', 'coverage'])
+const PROSE_COMMENT = CONTENT_CHECKS.find((c) => c.id === 'prose-comment')
 const STORIES = join(ROOT, 'apps/storybook/src')
 const BASELINE = join(SCRIPT_DIR, 'authoring-baseline.json')
 const WIP_PREFIX = 'packages/webkit/src/components/wip/'
@@ -40,8 +29,9 @@ function walk(dir) {
   const out = []
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, entry.name)
-    if (entry.isDirectory()) out.push(...walk(p))
-    else if (/\.(vue|ts|tsx|js|jsx|mjs|css|scss)$/.test(entry.name)) out.push(p)
+    if (entry.isDirectory()) {
+      if (!SKIP_DIRS.has(entry.name)) out.push(...walk(p))
+    } else if (/\.(vue|ts|tsx|js|jsx|mjs|css|scss)$/.test(entry.name)) out.push(p)
   }
   return out
 }
@@ -52,29 +42,26 @@ function currentViolations() {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (rel.startsWith(WIP_PREFIX)) continue
     const content = readFileSync(abs, 'utf-8')
-    // construction standards (defineModel, typed props/emits/slots, composables, @deprecated)
     if (/\.(vue|ts|js)$/.test(rel)) {
       for (const id of scanFile(rel, content)) keys.push(`${rel}::${id}`)
     }
-    // token discipline (hex/palette/raw typography/class presets/<style>/keyframes…) —
-    // the same checks validate-tokens runs at write time, so an editor push can't bypass them
     if (tokenChecksApply(rel)) {
       for (const id of scanTokens(content)) keys.push(`${rel}::token:${id}`)
     }
-    // spec ⇄ code compliance (no-invention, vocabulary, naming, testid, animations) —
-    // the same checks validate-spec-compliance runs post-write; skips files with no spec
-    // mapping and the legacy whitelist, exactly like the hook.
     if (rel.endsWith('.vue')) {
-      // requireSpec: deleting/renaming a spec surfaces as a violation instead of
-      // silently evaporating every baselined entry for that component.
       const result = collectSpecViolations(abs, ROOT, { requireSpec: true })
       if (result) {
         for (const v of result.violations) keys.push(`${rel}::spec:${v}`)
       }
     }
   }
-  // Storybook "Show code" discipline — the same checks validate-story-source runs at
-  // write time, over every *.stories.* file (existing debt frozen in the baseline).
+  for (const abs of walk(PACKAGES)) {
+    if (abs.startsWith(SRC + '/')) continue
+    const rel = relative(ROOT, abs).split('\\').join('/')
+    if (!PROSE_COMMENT.applies(rel)) continue
+    const n = PROSE_COMMENT.count(readFileSync(abs, 'utf-8'), rel)
+    for (let i = 0; i < n; i++) keys.push(`${rel}::prose-comment`)
+  }
   for (const abs of walk(STORIES)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (!STORY_RE.test(rel)) continue
@@ -107,9 +94,6 @@ try {
   process.exit(1)
 }
 
-// Multiset semantics: keys can repeat (one entry per occurrence). A SECOND violation of
-// an already-baselined id in the same file is therefore introduced (a plain Set would
-// let it evade); fixing one of two occurrences only shows as fixed.
 function counts(keys) {
   const m = new Map()
   for (const k of keys) m.set(k, (m.get(k) ?? 0) + 1)
@@ -143,7 +127,6 @@ if (introduced.length) {
     const id = k.slice(idx + 2)
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
-      // spec-compliance keys carry the full violation message
       console.error(`    [spec] ${id.slice(5)}`)
     } else if (id.startsWith('story:')) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)

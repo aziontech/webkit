@@ -1,6 +1,5 @@
-import { ref } from 'vue'
-
 import Textarea from '@aziontech/webkit/textarea'
+import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -12,7 +11,7 @@ const withRef = (body, { initial = "''" } = {}) =>
 
 /** @type {import('@storybook/vue3').Meta<typeof Textarea>} */
 const meta = {
-  title: 'Components/Inputs/Textarea',
+  title: 'Components/Primitives/Inputs/Textarea',
   component: Textarea,
   tags: ['autodocs'],
   parameters: {

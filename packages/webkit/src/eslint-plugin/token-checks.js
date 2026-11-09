@@ -1,8 +1,3 @@
-// Single source of truth for the DESIGN.md token-discipline checks. Consumed by:
-//   - .claude/hooks/validate-tokens.mjs           -> write-time gate (AI pipeline), baseline-diff
-//   - packages/webkit/scripts/check-authoring.mjs -> design-system CI ratchet (repo-wide)
-// Each check: { id, regex (global), message }. The regexes run over the whole file text.
-
 export const TOKEN_CHECKS = [
   {
     id: 'hex-color',
@@ -30,24 +25,18 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'typography-raw-length',
-    // Matches both v4 spellings of the arbitrary typography token (bracket and paren) —
-    // keying on the bracket alone let the paren spelling through the gate (ENG-47001).
     regex: /text-(?:\[length:var\(|\(length:)--text-/g,
     message:
       'Raw typography token. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, ...).'
   },
   {
     id: 'leading-raw',
-    // Any numeric step: in v4 a numeric leading suffix resolves to a spacing multiple,
-    // not the line-height it reads as. `none` stays out of the alternation (allowed on icons).
     regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|[[(])/g,
     message:
       'Raw leading-* class. Line-height is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'tracking-raw',
-    // `tightest` is not a step on the tracking scale — Tailwind emits nothing and the
-    // dead override reads as working code, so it is reported here.
     regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|[[(])/g,
     message:
       'Raw tracking-* class. Letter-spacing is part of the generated typography class (DESIGN.md); do not override.'
@@ -60,8 +49,6 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'legacy-color-util',
-    // The leading lookbehind excludes matches embedded inside a CSS variable name,
-    // so only the bare legacy utility class is caught.
     regex:
       /(?<![\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\b/g,
     message:
@@ -69,10 +56,6 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'zero-with-unit',
-    // The math-function lookbehind balances parens ONE level deep: a zero nested two or
-    // more calls in is reported here (as a bare-zero violation) instead of by
-    // zero-unit-in-calc. Keep in sync with ZERO_WITH_UNIT in
-    // packages/theme/src/scripts/zero-unit.mjs (theme sits below webkit; cannot import this).
     regex:
       /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)0(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
@@ -80,8 +63,6 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'zero-unit-in-calc',
-    // Same one-level nesting limit as zero-with-unit above; keep in sync with
-    // ZERO_UNIT_IN_MATH in packages/theme/src/scripts/zero-unit.mjs.
     regex:
       /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)(?<![\w.])0(?!rem)(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
@@ -89,11 +70,6 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'dead-token-shorthand',
-    // A malformed shorthand (whitespace inside the parens, or the bracket/paren order
-    // inverted) silently never styles the element and is a lint/type/build error nowhere
-    // else — chip's filled kind shipped transparent this way and its visual baselines
-    // encoded the bug as correct. The custom-property lookahead keeps this off ordinary
-    // subtraction and off nested var fallbacks. Raw-text scan: never QUOTE the pattern.
     regex: /-\((?=[^)]*--)[^)]*\s[^)]*\)|\[--\(/g,
     message:
       'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space inside the parens; an inverted `[--(token)]` emits an invalid value the browser discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
@@ -148,11 +124,6 @@ export const TOKEN_CHECKS = [
 
 export const TOKEN_MESSAGES = Object.fromEntries(TOKEN_CHECKS.map((c) => [c.id, c.message]))
 
-/**
- * Shared file filter (write-time hook + CI ratchet): component sources, excluding
- * tests — tests legitimately reference raw class strings, browser-serialized
- * lengths, and type-error suppressions as assertions.
- */
 export function tokenChecksApply(rel) {
   return (
     rel.startsWith('packages/webkit/src/components/') &&
@@ -161,10 +132,6 @@ export function tokenChecksApply(rel) {
   )
 }
 
-/**
- * All violated ids for a file's content, one entry PER MATCH — the ratchet's multiset
- * diff catches a second occurrence of an already-baselined id (boolean-per-file would not).
- */
 export function scanTokens(content) {
   const found = []
   for (const c of TOKEN_CHECKS) {

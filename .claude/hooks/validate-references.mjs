@@ -66,9 +66,6 @@ function resolveAziontechWorkspace(specifier) {
   return existsSync(join(ROOT, 'packages', wsName, 'package.json'))
 }
 
-// Vite path aliases the workspace apps declare, mirroring their `resolve.alias` map. Without
-// them a legitimate `@site/views/Foo.vue` reads as an uninstalled scoped package and is blocked.
-// Keep in sync with apps/webkit-sample/vite.config.js.
 const VITE_ALIASES = {
   '@shared': 'apps/webkit-sample/src/shared',
   '@site': 'apps/webkit-sample/src/site',
@@ -156,12 +153,11 @@ async function main() {
     if (/^(virtual:|vue|vue\/.*)$/.test(spec)) continue
     // node: prefix is always valid
     if (spec.startsWith('node:')) continue
+    if (spec === 'figma' && /\.figma\.(ts|js)$/.test(filePath)) continue
 
     let ok = false
     let reason = ''
 
-    // `@aziontech/webkit` and its subpaths only — NOT a sibling workspace whose name
-    // merely starts with it (`@aziontech/webkit-docs`), which resolves below.
     if (spec === '@aziontech/webkit' || spec.startsWith('@aziontech/webkit/')) {
       ok = resolveAziontechWebkit(spec)
       reason = 'no matching entry in packages/webkit/package.json#exports'

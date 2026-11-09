@@ -1,46 +1,26 @@
 <script setup>
-  /**
-   * SectionHeader - Section title with optional description
-   * Used for major sections within documentation pages
-   */
   defineProps({
+    /** Section title, rendered as the page's second heading level. */
     title: {
       type: String,
       required: true
     },
+    /** Optional lede under the title; the default slot replaces it when rich text is needed. */
     description: {
       type: String,
       default: ''
-    },
-    size: {
-      type: String,
-      default: 'sm',
-      validator: (v) => ['sm', 'md', 'lg'].includes(v)
-    },
-    marginBottom: {
-      type: String,
-      default: 'mb-4'
     }
   })
 </script>
 
 <template>
-  <div :class="marginBottom">
-    <h2
-      :class="[
-        'text-default m-0 mb-2',
-        {
-          'text-heading-sm': size === 'sm',
-          'text-heading-md': size === 'md',
-          'text-heading-lg': size === 'lg'
-        }
-      ]"
-    >
+  <div class="mb-(--spacing-lg) flex flex-col gap-(--spacing-xs)">
+    <h2 class="m-0 text-heading-lg text-(--text-default)">
       {{ title }}
     </h2>
     <p
       v-if="description || $slots.default"
-      class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed"
+      class="m-0 max-w-(--container-3xl) text-body-md text-(--text-muted)"
     >
       <slot>{{ description }}</slot>
     </p>

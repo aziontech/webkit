@@ -5,7 +5,10 @@
 import { SUCCESS_CASE_ARTICLE_META } from './success-case-article-meta.js'
 import { SUCCESS_CASES } from './success-cases.js'
 
-const BODIES = import.meta.glob('../content/success-cases/*.md', { query: '?raw', import: 'default' })
+const BODIES = import.meta.glob('../content/success-cases/*.md', {
+  query: '?raw',
+  import: 'default'
+})
 const bodyPath = (slug) => `../content/success-cases/${slug}.md`
 
 const RELATED_SHOWN = 3
@@ -29,6 +32,16 @@ export const successCaseLink = (story) =>
   successCaseArticle(successCaseSlug(story))
     ? { href: `/site/success-cases/${successCaseSlug(story)}`, external: false }
     : { href: story.href, external: true }
+
+/** A story as an ArticleCards card: headline, deck, date and its client mark. */
+export const successCaseCard = (story) => ({
+  key: story.key,
+  ...successCaseLink(story),
+  title: story.title,
+  description: story.description,
+  meta: `${story.date} • ${story.readTime}`,
+  mark: story.client
+})
 
 // The source prints no related stories, so the article closes on the library's own order:
 // the next stories in the same industry, then the ones after it in the library.

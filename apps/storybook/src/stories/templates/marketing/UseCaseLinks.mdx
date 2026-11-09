@@ -1,0 +1,46 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as UseCaseLinksStories from './UseCaseLinks.stories'
+
+<Meta title="Templates/Marketing/Use Cases/UseCaseLinks" />
+
+# UseCaseLinks
+
+A grid of use cases that points at the ways a product is applied, under a header with an overline, a headline and a description. Each cell is itself the link, so the band needs no buttons. Application Accelerator uses it.
+
+Built from `SectionModule`, `SectionTitle` and `CardGrid kind="divider"`, with a `Topic` per cell.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Topics
+
+Six linked cells from the Application Accelerator page. Each cell shows an arrow on its headline because it has a link.
+
+<Canvas of={UseCaseLinksStories.Topics} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` is the short overline above the headline.
+- `title` is the headline of the section.
+- `description` is the supporting sentence under the headline.
+- `items[]` are the use cases in reading order; three fill a row.
+- Each item takes an `icon` class, a `title`, a one-sentence `description` and the `href` the whole cell links to.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={UseCaseLinksStories.TopicsJson} dark />
+</div>

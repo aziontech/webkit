@@ -15,7 +15,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references · ratchet |
 | [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/default per concept | spec-compliance · ratchet |
 | [naming](./naming.md) | webkit | One kebab name across 6 surfaces | spec-compliance · story-source · ratchet |
-| [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
+| [imports](./imports.md) | webkit | Flat public name; category in the folder only (`sections/<name>` is the one prefixed path) | references · 5 lint rules |
 | [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
 | [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |
 | [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references · type-check (CI) |
@@ -42,7 +42,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
 | [testing](./testing.md) | webkit | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
-| [comments](./comments.md) | general | Comments rare + objective; ≤5-line blocks, ≤20% prose | authoring · ratchet · lint · review |
+| [comments](./comments.md) | general | No prose comments; API JSDoc + directives only | authoring · ratchet · lint · review |
 | [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · doc-standards (CI) |
 
 **Split:** 15 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 12 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).

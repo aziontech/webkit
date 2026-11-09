@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as FeatureWidgetsStories from './FeatureWidgets.stories'
+
+<Meta title="Templates/Marketing/Features/FeatureWidgets" />
+
+# FeatureWidgets
+
+A band that shows several ways in to the same product, each as a live fragment of the console over a short caption. Two or three cells share a row on a thin frame grid, and each cell can end in a link or a button that copies a prompt. The Functions page uses it for "Start where you already work".
+
+Hovering a cell wakes its fragment. The grid collapses to one column on a phone.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `BentoGrid`, `Button` and `ButtonHighlight`, with the site's product widgets as the cells' scenes.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The Functions "Get started" band: three cells, each a path from a prompt to a deployed function. Each cell floats a product widget, the console fragment of its path, over the caption.
+
+<Canvas of={FeatureWidgetsStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band's id for in-page links.
+- `eyebrow`, `title` and `description` make the section title; without a `title` the title is dropped. `titleKind` aligns it, and `actions` are the buttons under it.
+- `columns` is `2` or `3`, the cells per row from the medium breakpoint up.
+- `items` are the cells in reading order, each a `title` and a `description`.
+- A cell takes a `href` with a `linkLabel` for its outlined link, a `copy` with a `label` and the `text` to put on the clipboard for a highlighted button, or both.
+- A cell's `scene` is the console fragment it presents: a component and its props. It is set in the page's data file, not in JSON, so it is left out of the example.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={FeatureWidgetsStories.DefaultJson} dark />
+</div>

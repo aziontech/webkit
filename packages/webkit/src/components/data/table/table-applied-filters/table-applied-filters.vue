@@ -30,7 +30,6 @@
 
   const filters = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? [])
 
-  // Human-readable operator glyphs for the default chip label.
   const OPERATOR_LABELS: Record<FilterOperator, string> = {
     eq: '=',
     neq: '≠',
@@ -66,9 +65,6 @@
 </script>
 
 <template>
-  <!-- Exit motion lives here, not in Chip: Chip emits `remove` and stays mounted, and
-       here dropping a filter really does destroy the chip. Leaving chips are taken out
-       of flow so the survivors slide into the gap instead of jumping. -->
   <TransitionGroup
     v-bind="$attrs"
     tag="div"

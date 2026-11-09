@@ -25,7 +25,7 @@ With 90% of its student base focused on distance learning, the migration to the 
 
 The development of **Applications** to replace traditional CDN services was completed in just a few days and involved the implementation of the following products and modules:
 
-- **Application Acceleration**: used to accelerate multiple applications that integrate the EAD platform;
+- **Application Accelerator**: used to accelerate multiple applications that integrate the EAD platform;
 - **Functions**: to prevent leakage of specific content intended for enrolled students, UniCesumar implemented authentication and authorization features for access to systems and educational content;
 - **Firewall**: allows the university to create advanced protection rules to expand access control in real time, contributing to the availability of the learning platform during complex security events;
 - **Cache**: performs intelligent and manageable replication of educational content on Azion infrastructure, accelerating delivery performance and providing immediate speed gains without the need for additional provisioning.

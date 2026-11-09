@@ -31,7 +31,7 @@ In just six months using the **Azion Platform**, VTEX delivered **hundreds of bi
 Key results include:
 
 - Thousands of domains running applications on distributed infrastructure, elevating VTEX to a new level of scalability and operational automation;
-- Ultra-low latency through data processing on **Azion’s global distributed network**;
+- Ultra-low latency through data processing on **Azion’s global distributed infrastructure**;
 - High availability supported by multi-layer security and global DDoS mitigation centers;
 - Fast application load times with requests processed at the closest available location to the user.
 

@@ -27,6 +27,9 @@ import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
 import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
 import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
 import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
+import madeiramadeira from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
+import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-reversed.svg'
+import queroQuero from '@aziontech/webkit/assets/queroquero-extended-reversed.svg'
 
 import {
   AXUR,
@@ -41,8 +44,6 @@ import {
   MARISA,
   OMELETE,
   PANVEL,
-  PERNAMBUCANAS,
-  QUERO_QUERO,
   TODO_CARTOES,
   UNICESUMAR,
   UNINTER,
@@ -50,6 +51,9 @@ import {
 } from './clients.js'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
+
+const PERNAMBUCANAS = { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' }
+const QUERO_QUERO = { name: 'Quero-Quero', logo: queroQuero, artwork: 'light' }
 
 /** The three stories the source features above the library, in its order. */
 export const FEATURED_CASES = [
@@ -72,13 +76,13 @@ export const FEATURED_CASES = [
     href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/'
   },
   {
-    key: 'case-axur',
-    client: AXUR,
-    brand: { base: '#e65224', glow: '#ff5824' },
-    tag: 'Tech',
+    key: 'case-madeiramadeira',
+    client: { name: 'MadeiraMadeira', logo: madeiramadeira, artwork: 'light' },
+    brand: { base: '#ff9014', glow: '#ff9014' },
+    tag: 'Retail',
     description:
-      'Learn how moving AI inference from managed-infrastructure unlocked the fastest automatic takedown in the market.',
-    href: 'https://www.azion.com/en/success-case/axur-reduced-time-to-takedown-with-ai/'
+      'Faster product delivery and scalable infrastructure allowed MadeiraMadeira to support massive traffic growth during major e-commerce campaigns.',
+    href: 'https://www.azion.com/en/success-case/madeiramadeira/'
   }
 ]
 
@@ -111,7 +115,7 @@ export const SUCCESS_CASES = [
       'DDoS Protection'
     ],
     description:
-      'With Azion, Banco de la Nación achieved maximum performance efficiency, reducing latency and accelerating content delivery across Peru.',
+      'With Azion, Banco de la Nación reduced latency and accelerated content delivery across Peru.',
     href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/'
   },
   {
@@ -339,8 +343,8 @@ export const SUCCESS_CASES = [
     client: PERNAMBUCANAS,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
-    products: ['Edge Firewall', 'Data Stream'],
-    tags: ['Retail', 'Edge Firewall', 'Data Stream'],
+    products: ['Firewall', 'Data Stream'],
+    tags: ['Retail', 'Firewall', 'Data Stream'],
     description:
       'Pernambucanas increased visibility into security events and strengthened e-commerce protection with automated mitigation and observability capabilities.',
     href: 'https://www.azion.com/en/success-case/pernambucanas-built-a-robust-zero-trust-security-model-with-azions-platform/'
@@ -376,7 +380,7 @@ export const SUCCESS_CASES = [
       'Applications',
       'Functions',
       'Image Processor',
-      'Application Acceleration',
+      'Application Accelerator',
       'Tiered Cache',
       'Cache'
     ],
@@ -385,7 +389,7 @@ export const SUCCESS_CASES = [
       'Applications',
       'Functions',
       'Image Processor',
-      'Application Acceleration',
+      'Application Accelerator',
       'Tiered Cache',
       'Cache'
     ],
@@ -482,7 +486,7 @@ export const SUCCESS_CASES = [
     products: ['Applications', 'Intelligent DNS'],
     tags: ['Media', 'Applications', 'Intelligent DNS'],
     description:
-      'Discover how NZN leverages Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
+      'Discover how NZN uses Azion’s distributed infrastructure to improve performance, optimize content delivery, and enhance user experience in Brazil.',
     href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/'
   },
   {
@@ -523,10 +527,10 @@ export const SUCCESS_CASES = [
     client: byName('Agibank'),
     industry: 'Financial',
     solutions: ['Build', 'Secure', 'Observe'],
-    products: ['Firewall', 'Data Streaming'],
-    tags: ['Financial', 'Firewall', 'Data Streaming'],
+    products: ['Firewall', 'Data Stream'],
+    tags: ['Financial', 'Firewall', 'Data Stream'],
     description:
-      'Explore how Agi leverages Firewall and Data Streaming on the Azion Platform to enhance cybersecurity and ensure continuous service availability.',
+      'Explore how Agi uses Firewall and Data Stream on the Azion Platform to strengthen cybersecurity and keep services available.',
     href: 'https://www.azion.com/en/success-case/agibank/'
   },
   {

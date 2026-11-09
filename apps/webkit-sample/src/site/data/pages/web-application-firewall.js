@@ -1,15 +1,17 @@
 import { markRaw } from 'vue'
 
-import WafAllowedRuleFragment from '../../ui/mockup/widgets/WafAllowedRuleFragment.vue'
-import WafFirewallRuleFragment from '../../ui/mockup/widgets/WafFirewallRuleFragment.vue'
-import WafThreatFragment from '../../ui/mockup/widgets/WafThreatFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
   PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
+  PRODUCT_DOCS_ACTIONS,
+  PRODUCT_HERO_ACTIONS,
+  PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const WafAllowedRuleFragment = productWidget('waf-allowed-rule')
+const WafFirewallRuleFragment = productWidget('waf-firewall-rule')
+const WafThreatFragment = productWidget('waf-threat')
 
 const PILLARS = [
   {
@@ -21,13 +23,12 @@ const PILLARS = [
     icon: 'pi pi-gauge',
     title: 'Global performance',
     description:
-      'Azion uses globally distributed infrastructure to keep your applications secure and fast.'
+      'Protection runs on Azion’s distributed infrastructure, so applications stay secure and fast.'
   },
   {
     icon: 'ai ai-waf-rules',
     title: 'Low false positives',
-    description:
-      'Security rules that can automatically adapt to your application to stop only malicious traffic.'
+    description: 'Rules adapt to your application and stop only malicious traffic.'
   }
 ]
 
@@ -57,7 +58,7 @@ const USE_CASES = [
     icon: 'pi pi-sitemap',
     title: 'Secure multi-tenant applications at scale',
     description:
-      'Apply distributed protection across multi-tenant SaaS environments with security policies that scale automatically alongside traffic growth.',
+      'Apply policies across multi-tenant SaaS environments. They scale automatically as traffic grows.',
     href: '/site/solutions/technology'
   }
 ]
@@ -79,7 +80,7 @@ const FAQ = [
     value: 'existing-tools',
     question: 'Can I use WAF alongside my existing security tools?',
     answer:
-      'Yes. Azion WAF integrates with your existing security stack and can be deployed alongside CDNs, load balancers, and other security solutions. Unlike standalone WAFs, Azion operates as part of a unified security platform: combine WAF with Bot Manager, Network Shield, and custom Functions for comprehensive protection. Stream security events to your SIEM via Data Stream for centralized visibility across all tools.'
+      'Yes. Azion WAF integrates with your existing security stack and can be deployed alongside CDNs, load balancers, and other security solutions. Unlike standalone WAFs, Azion operates as part of a unified security platform: combine WAF with Bot Manager, Network Shield, and custom Functions for layered protection. Stream security events to your SIEM via Data Stream for centralized visibility across all tools.'
   },
   {
     value: 'vs-firewall',
@@ -91,19 +92,19 @@ const FAQ = [
     value: 'deploy-time',
     question: 'How long does it take to deploy and implement a WAF?',
     answer:
-      "Azion WAF can be deployed in under 30 minutes with no hardware provisioning or complex setup required. Simply configure your DNS to point to Azion's network, enable WAF protection in the console, and select your security rules. Start in Learning Mode to observe traffic patterns, tune sensitivity levels to eliminate false positives, then switch to Blocking Mode. Unlike traditional WAF solutions that take weeks or months to implement, Azion WAF provides immediate protection with minimal configuration."
+      'Azion WAF can be deployed in under 30 minutes with no hardware provisioning or complex setup required. Point your DNS to Azion, enable WAF protection in the console, and select your security rules. Start in Learning Mode to observe traffic patterns, tune sensitivity levels to eliminate false positives, then switch to Blocking Mode. Unlike traditional WAF solutions that take weeks or months to implement, Azion WAF provides immediate protection with minimal configuration.'
   },
   {
     value: 'owasp',
     question: 'Does Azion WAF protect against OWASP Top 10 vulnerabilities?',
     answer:
-      'Yes, Azion WAF provides comprehensive protection against all OWASP Top 10 threats including SQL injection, cross-site scripting (XSS), broken authentication, sensitive data exposure, XML external entities (XXE), broken access control, security misconfigurations, cross-site request forgery (CSRF), insecure deserialization, and components with known vulnerabilities. Our rule sets are continuously updated with the latest threat intelligence and zero-day vulnerability signatures to protect against emerging attacks.'
+      'Yes. Azion WAF protects against all OWASP Top 10 threats, including SQL injection, cross-site scripting (XSS), broken authentication, sensitive data exposure, XML external entities (XXE), broken access control, security misconfigurations, cross-site request forgery (CSRF), insecure deserialization, and components with known vulnerabilities. Rule sets are updated continuously with threat intelligence and zero-day signatures.'
   },
   {
     value: 'attack-types',
     question: "What types of attacks can Azion's security platform prevent?",
     answer:
-      "Azion's unified security platform, combining WAF, Bot Manager, and Network Shield, prevents a comprehensive range of attacks including SQL injection, cross-site scripting (XSS), XML external entities (XXE), remote file inclusion (RFI), local file inclusion (LFI), command injection, path traversal, cross-site request forgery (CSRF), server-side request forgery (SSRF), unsafe redirects, and zero-day exploits. For APIs, Azion WAF defends against injection attacks, broken object-level authorization (BOLA), excessive data exposure in requests, lack of rate limiting, broken function-level authorization (BFLA), unrestricted resource consumption, and server-side request forgery (SSRF). Bot Manager handles credential stuffing, scraping, and automation abuse. Network Shield provides network-layer DDoS protection. Our risk scoring detects both known attack signatures and anomalous behavior patterns."
+      "Azion's security platform combines WAF, Bot Manager, and Network Shield to prevent attacks including SQL injection, cross-site scripting (XSS), XML external entities (XXE), remote file inclusion (RFI), local file inclusion (LFI), command injection, path traversal, cross-site request forgery (CSRF), server-side request forgery (SSRF), unsafe redirects, and zero-day exploits. For APIs, Azion WAF defends against injection attacks, broken object-level authorization (BOLA), excessive data exposure in requests, lack of rate limiting, broken function-level authorization (BFLA), unrestricted resource consumption, and server-side request forgery (SSRF). Bot Manager handles credential stuffing, scraping, and automation abuse. Network Shield provides network-layer DDoS protection. Our risk scoring detects both known attack signatures and anomalous behavior patterns."
   },
   {
     value: 'cost',
@@ -123,28 +124,29 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'WAF',
-    title: 'Application and API protection you can control and trust',
-    description: 'Stop emerging threats globally without slowing your applications.',
+    title: 'Protect applications and APIs with rules you control',
+    description:
+      'Stop emerging threats on Azion’s distributed infrastructure without slowing your applications.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
-    title: 'Distributed protection across every request',
+    title: 'Protection applied to every request',
     description:
-      'Threat types, the firewall rule that runs them and the exceptions for trusted traffic live in one versioned configuration, deployed together.',
-    actions: PRODUCT_HERO_ACTIONS,
+      'Threat types, the firewall rule that runs them, and exceptions for trusted traffic live in one versioned configuration. They deploy together.',
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
         icon: 'ai ai-waf-rules',
-        title: 'Enable OWASP protection with customizable rules',
+        title: 'Turn on OWASP protection, tune the rules',
         description:
-          'Enable preset OWASP protections and tune sensitivity to reduce false positives while keeping applications available.',
+          'Start from preset OWASP protections, then tune sensitivity to cut false positives and keep applications available.',
         scene: { component: markRaw(WafThreatFragment) },
         href: PRODUCT_DOCS
       },
@@ -152,7 +154,7 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
         icon: 'ai ai-edge-firewall',
         title: 'Detect advanced threats with behavioral analysis',
         description:
-          'Analyze requests with behavioral patterns and threat signatures to detect zero-day vulnerabilities and OWASP Top 10 attacks. Use Learning Mode to validate protections before enforcement.',
+          'Behavioral patterns and threat signatures catch zero-day vulnerabilities and OWASP Top 10 attacks. Use Learning Mode to validate protections before you enforce them.',
         scene: { component: markRaw(WafFirewallRuleFragment) },
         href: PRODUCT_DOCS
       },
@@ -160,33 +162,9 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
         icon: 'pi pi-check-circle',
         title: 'Adapt protection to legitimate traffic',
         description:
-          'Create Custom Allowed Rules for trusted traffic patterns while blocking malicious requests before they reach your applications.',
+          'Create Custom Allowed Rules for trusted traffic patterns. Malicious requests are still blocked before they reach your applications.',
         scene: { component: markRaw(WafAllowedRuleFragment) },
         href: PRODUCT_DOCS
-      }
-    ]
-  },
-  {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Stream security events for investigation and response',
-        description:
-          'Send security events to SIEM, Splunk, Datadog, or analytics tools for fast visibility into suspicious traffic and application threats.',
-        href: PRODUCT_DOCS,
-        illustration: 'automate-threat-mitigation',
-        illustrationLabel: 'Security events passing along a line of response steps',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Extend protection with custom logic',
-        description:
-          'Write custom security rules with Functions to implement business-specific protections and automate mitigation workflows. Extend WAF behavior with your own detection logic or AI models.',
-        href: '/site/products/functions',
-        illustration: 'programmable-security',
-        illustrationLabel: 'A function inspecting a request before it reaches the application',
-        actions: [{ label: 'Functions', href: '/site/products/functions' }]
       }
     ]
   },
@@ -196,17 +174,10 @@ export const WEB_APPLICATION_FIREWALL_PAGE = [
     title: 'Protect critical applications and APIs',
     description:
       'Put WAF in front of any application or API and stop attacks on Azion’s distributed infrastructure, before they reach your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
-  {
-    ...PRODUCT_CLOSING,
-    eyebrow: 'Protect',
-    title: 'Protected by default.',
-    titleMuted: 'Always on.',
-    description: 'Get stronger protection, less attack exposure, and less operational overhead.'
-  }
+  PRODUCT_SECURITY_CLOSING
 ]

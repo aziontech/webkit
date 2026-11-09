@@ -1,12 +1,11 @@
-import { ref, watch } from 'vue'
-
 import FieldCheckboxBlock from '@aziontech/webkit/field-checkbox-block'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldCheckboxBlock>} */
 const meta = {
-  title: 'Components/Inputs/FieldCheckboxBlock',
+  title: 'Components/Primitives/Inputs/FieldCheckboxBlock',
   component: FieldCheckboxBlock,
   tags: ['autodocs'],
   parameters: {

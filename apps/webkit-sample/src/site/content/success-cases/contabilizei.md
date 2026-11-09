@@ -18,7 +18,7 @@ By enabling advanced policies in Cache, infrastructure experts at Contabilizei h
 
 “To reach this level of setup, we integrate with our deployment mechanisms so that objects that have changed with the new version of the software are specifically purged, preventing cache from cooling down”, adds Marcelo.
 
-Through **Functions**, Contabilizei is also able to optimize the delivery of requests at the Edge in order to save money and infrastructure resources, while improving application loading time and, consequently, the user experience.
+Through **Functions**, Contabilizei is also able to optimize the delivery of requests close to users in order to save money and infrastructure resources, while improving application loading time and, consequently, the user experience.
 
 ## Results and Impacts
 
@@ -28,7 +28,7 @@ With the use of Cache, data transferred and bandwidth usage were minimized by mo
 
 In terms of operational efficiency, the features of Azion’s platform allow the Contabilizei team to perform more complex tasks via API, such as creating a JavaScript function to deliver preflight requests, which generate thousands of hits in a row per request.
 
-Before creating preflight rules in the distributed layer, Contabilizei needed to keep several instances running in the front-end cluster to serve each user. With the preflight handshake done 100% at the edge, three fewer instances are needed in a cluster with high traffic volume, as it has considerably reduced the load on the origin infrastructure and also the costs with its cloud provider.
+Before creating preflight rules in the distributed layer, Contabilizei needed to keep several instances running in the front-end cluster to serve each user. With the preflight handshake done 100% close to users, three fewer instances are needed in a cluster with high traffic volume, as it has considerably reduced the load on the origin infrastructure and also the costs with its cloud provider.
 
 > *“I really like the depth of cache rules that I can apply at the edge. There are things that we would not be able to do using solutions from other vendors. In terms of performance, compliance to Contabilizei’s rules and delivery standards, we are very satisfied with Azion’s performance.”*
 >

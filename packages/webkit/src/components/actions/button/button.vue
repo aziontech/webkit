@@ -7,6 +7,7 @@
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
   export type ButtonIconPosition = 'leading' | 'trailing'
+  export type ButtonType = 'button' | 'submit' | 'reset'
 
   defineOptions({
     name: 'Button',
@@ -34,6 +35,8 @@
     href?: string
     /** Link target when `href` is set. */
     target?: ButtonTarget
+    /** Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. */
+    type?: ButtonType
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -45,7 +48,8 @@
     iconPosition: 'leading',
     animated: false,
     href: '',
-    target: '_self'
+    target: '_self',
+    type: 'button'
   })
 
   const emit = defineEmits<{
@@ -97,13 +101,9 @@
       'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
   }
 
-  // Disabled shows the not-allowed cursor. Interaction is blocked natively (`<button :disabled>`)
-  // and via the handleClick guard (anchor), so pointer-events stay on for the cursor to render.
   const disabledClasses =
     'cursor-not-allowed border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
-  // Loading reuses the disabled visual tokens (per design) but keeps the loading cursor
-  // and the spinner. Interaction stays blocked via handleClick.
   const loadingClasses =
     'cursor-wait border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
@@ -178,7 +178,7 @@
 
   <button
     v-else
-    type="button"
+    :type="type"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"

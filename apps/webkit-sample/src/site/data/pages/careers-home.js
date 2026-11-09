@@ -1,12 +1,17 @@
+import BrandGlobeScene from '@aziontech/webkit/assets/brand-globe-scene'
+import { markRaw } from 'vue'
+
 import { CAREERS_JOBS, jobFacets, jobId } from '../careers.js'
 import {
   CAREERS_HOME_HERO,
   CAREERS_JOBS_PATH,
-  CAREERS_JOIN,
   CAREERS_PHOTOS,
+  CAREERS_PROCESS,
   CAREERS_ROLES,
+  CAREERS_VISION,
   CAREERS_WORK
 } from '../careers-home.js'
+import { COMPANY_CLOSING } from '../product-pages.js'
 
 const LATEST_ROLES = CAREERS_JOBS.slice(0, CAREERS_ROLES.previewCount).map((job) => {
   const [team, location, arrangement, contract] = jobFacets(job)
@@ -31,11 +36,29 @@ export const CAREERS_HOME_PAGE = [
   },
   {
     section: 'PhotoMarquee',
+    gap: false,
     title: CAREERS_WORK.title,
     description: CAREERS_WORK.description,
+    descriptionWidth: 'wide',
     photos: CAREERS_PHOTOS,
     ariaLabel: 'Azion offices',
     duration: 60
+  },
+  {
+    section: 'MediaSplitBand',
+    eyebrow: CAREERS_VISION.eyebrow,
+    title: CAREERS_VISION.title,
+    description: CAREERS_VISION.description,
+    size: 'large',
+    scene: { component: markRaw(BrandGlobeScene) }
+  },
+  {
+    section: 'StickyCarousel',
+    eyebrow: CAREERS_PROCESS.eyebrow,
+    title: CAREERS_PROCESS.title,
+    description: CAREERS_PROCESS.description,
+    items: CAREERS_PROCESS.steps,
+    ariaLabel: 'Hiring process stages'
   },
   {
     section: 'ListingTable',
@@ -49,11 +72,5 @@ export const CAREERS_HOME_PAGE = [
     rows: LATEST_ROLES,
     action: { label: CAREERS_ROLES.action(CAREERS_JOBS.length), href: CAREERS_JOBS_PATH }
   },
-  {
-    section: 'ClosingCallToAction',
-    kind: 'split',
-    title: CAREERS_JOIN.title,
-    description: CAREERS_JOIN.description,
-    actions: [{ label: CAREERS_JOIN.action, href: CAREERS_JOBS_PATH, kind: 'secondary' }]
-  }
+  COMPANY_CLOSING
 ]

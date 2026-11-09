@@ -1,0 +1,47 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as ComplianceBadgesStories from './ComplianceBadges.stories'
+
+<Meta title="Templates/Marketing/Social Proof/ComplianceBadges" />
+
+# ComplianceBadges
+
+The compliance band of a solution page: a short statement that the platform meets audit requirements, next to a grid of certification badges and a link to the compliance page.
+
+Three columns on desktop, two on a phone. Retail, Financial Services and Technology use it.
+
+Built from `SectionModule`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The five certifications those pages list, SOC 2 & 3, PCI DSS, LGPD, GDPR and CCPA, plus a `See more` cell in the sixth slot.
+
+<Canvas of={ComplianceBadgesStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the text side.
+- `certifications[]` takes a `label`, a `badge` image and its `alt` text. A badge without a label or an image is skipped.
+- `moreLink` is the closing cell; it needs both `label` and `href`.
+- `ariaLabel` names the badge list for screen readers.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={ComplianceBadgesStories.DefaultJson} dark />
+</div>

@@ -12,10 +12,10 @@
   import SplitButton from '@aziontech/webkit/split-button'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import DocMarkdown from '@aziontech/webkit-docs/doc-markdown'
-  import { provideHeadingNav } from '@aziontech/webkit-docs/heading-nav'
-  import { collectHeadings, parseMdx } from '@aziontech/webkit-docs/mdx'
-  import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
+  import { provideHeadingNav } from '@aziontech/webkit/use-heading-nav'
+  import { collectHeadings, parseMdx } from '@site/docs/lib/mdx.js'
+  import { useScrollSpy } from '@site/docs/lib/use-scroll-spy.js'
+  import DocMarkdown from '@site/docs/ui/DocMarkdown.vue'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { useSiteLink } from '../../composables/use-site-link'
@@ -139,7 +139,12 @@
   const { activeId } = useScrollSpy(body, spyItems, { tripLine: 120 })
 
   const shareActions = computed(() => [
-    { label: props.share.copyLink, icon: 'pi pi-link', copy: pageUrl, copied: props.share.copiedLink },
+    {
+      label: props.share.copyLink,
+      icon: 'pi pi-link',
+      copy: pageUrl,
+      copied: props.share.copiedLink
+    },
     ...(props.share.copyFeed && props.share.feed
       ? [
           {
@@ -260,6 +265,8 @@
               @navigate="follow"
             />
             <HeroTitle
+              eyebrow="Blog"
+              eyebrow-prefix="//"
               size="medium"
               max-width="2xl"
               :title="article.title"

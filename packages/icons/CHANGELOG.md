@@ -10,6 +10,37 @@
 
 * bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
 
+## [4.4.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.3.0...@aziontech/icons@4.4.0) (2026-11-03)
+
+
+### Features
+
+* **icons:** add the ai-circle-half and ai-circle-minus support marks ([#1128](https://github.com/aziontech/webkit/issues/1128)) ([74d5bc9](https://github.com/aziontech/webkit/commit/74d5bc991a42a59e1bf629419ef3b50c6396a5da))
+
+
+### Code Refactoring
+
+* limit comments to API docs and tool directives across packages ([#1119](https://github.com/aziontech/webkit/issues/1119)) ([9886b44](https://github.com/aziontech/webkit/commit/9886b448d464fa41573a04e2f5231a964738125e))
+
+## [4.3.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.2.0...@aziontech/icons@4.3.0) (2026-10-23)
+
+
+### Features
+
+* **icons:** [ENG-48930] sync the product, git and brand icons from Figma ([#1074](https://github.com/aziontech/webkit/issues/1074)) ([b7943b4](https://github.com/aziontech/webkit/commit/b7943b4dde8ff11dd5c9d49abad589628228b8e9))
+
+
+### Tests
+
+* **storybook:** snapshot ticker Sizes in the dark theme only ([#1104](https://github.com/aziontech/webkit/issues/1104)) ([002ae91](https://github.com/aziontech/webkit/commit/002ae917d2d1e111b40d12172fc59273f0d60421))
+
+## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.1.1...@aziontech/icons@4.2.0) (2026-10-06)
+
+
+### Features
+
+* **icons:** add html, branch, graphql and terraform marks ([#1024](https://github.com/aziontech/webkit/issues/1024)) ([a30ba6b](https://github.com/aziontech/webkit/commit/a30ba6b33082a86b7a48af096c52112cf9d5e22d))
+
 ## [4.1.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.1.0...@aziontech/icons@4.1.1) (2026-08-28)
 
 

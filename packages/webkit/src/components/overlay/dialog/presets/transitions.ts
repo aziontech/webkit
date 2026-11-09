@@ -8,11 +8,6 @@ import {
 
 export type DialogMotionState = 'open' | 'closed'
 
-/**
- * Dialog motion presets — values read only from `animate.js` (`duration`, `curve`).
- * Applied via inline `transition` (Tailwind does not emit dynamic `duration-[…]` classes).
- */
-
 export type DialogMotionPhase = 'open' | 'close'
 
 export type DialogMotionTarget = 'panel' | 'overlay'
@@ -22,10 +17,6 @@ export type DialogMotionToken = {
   curve: string
 }
 
-/**
- * Dialog targets mapped to `duration` / `curve` primitives from animate.js.
- * Panel scales 0.98 → 1 and fades opacity 0 → 1; overlay fades opacity.
- */
 export const dialogMotion: Record<
   DialogMotionTarget,
   Record<DialogMotionPhase, DialogMotionToken>
@@ -52,13 +43,11 @@ const dialogExitDurationMs = Math.max(
   Number.parseInt(dialogDurations.overlayClose, 10)
 )
 
-/** Defers portal unmount until exit finishes (+ buffer for `paintClose` rAF). */
 export const DIALOG_EXIT_MS = Math.max(dialogExitDurationMs + 32, DRAWER_EXIT_MS + 32)
 
 const motionPhaseForState = (state: DialogMotionState): DialogMotionPhase =>
   state === 'open' ? 'open' : 'close'
 
-/** Inline transition for the active `data-state` (matches animate.js values in computed styles). */
 export const getDialogTransitionStyle = (
   state: DialogMotionState,
   target: DialogMotionTarget
@@ -67,11 +56,6 @@ export const getDialogTransitionStyle = (
   const { duration: transitionDuration, curve: transitionTimingFunction } =
     dialogMotion[target][phase]
   if (target === 'panel') {
-    // Tailwind v4 compiles `scale-*` / `translate-*` to the standalone `scale` /
-    // `translate` CSS properties, NOT the `transform` shorthand — so the panel must
-    // transition those (plus `opacity`). Transitioning `transform` alone leaves the
-    // desktop scale (and mobile translate) untweened, so the panel snaps open/closed
-    // instead of scaling. Mirrors the drawer preset's `translate` fix.
     const t = `${transitionDuration} ${transitionTimingFunction}`
     const transition = `translate ${t}, scale ${t}, opacity ${t}`
     return { transition }
@@ -82,7 +66,6 @@ export const getDialogTransitionStyle = (
   }
 }
 
-/** Mobile bottom sheet uses Drawer panel/overlay timing (transform-only on panel). */
 export const getDialogResponsiveTransitionStyle = (
   state: DialogMotionState,
   target: DialogMotionTarget,
@@ -93,7 +76,6 @@ export const getDialogResponsiveTransitionStyle = (
 export const dialogPanelTransitionClasses = [
   ...bottomSheetPanelStateClasses,
   ...bottomSheetPanelMotionClasses,
-  // Desktop (≥ md): centered scale + fade
   'md:origin-center',
   'md:translate-y-0',
   'md:scale-[0.9]',

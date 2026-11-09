@@ -23,7 +23,7 @@
     { id: 'frameworks', label: 'All Frameworks', kind: 'list', items: MORE_FRAMEWORKS }
   ]
 
-  const deployTemplate = (tpl) => {
+  const deployTemplate = (event, tpl) => {
     const target = deploySlugRoute(tpl.slug)
     router.push({ path: target.path, query: { ...target.query, email: userEmail.value } })
   }

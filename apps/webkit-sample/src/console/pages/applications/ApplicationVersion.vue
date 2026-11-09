@@ -508,6 +508,7 @@
               <ScrollArea
                 ref="scrollRef"
                 aria-label="Version settings"
+                fade
               >
                 <VersionWire
                   v-if="creating"

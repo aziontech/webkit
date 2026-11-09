@@ -1,6 +1,5 @@
-import { ref } from 'vue'
-
 import Calendar from '@aziontech/webkit/calendar'
+import { ref } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -81,7 +80,7 @@ const CLEARABLE_SOURCE = toSfc(
 
 /** @type {import('@storybook/vue3').Meta<typeof Calendar>} */
 const meta = {
-  title: 'Components/Inputs/Calendar',
+  title: 'Components/Primitives/Inputs/Calendar',
   component: Calendar,
   tags: ['autodocs'],
   parameters: {

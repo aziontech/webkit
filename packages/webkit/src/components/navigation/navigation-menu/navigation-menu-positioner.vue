@@ -117,8 +117,6 @@
 
   const positionerHidden = computed(() => !root.menuPopupMounted.value)
 
-  // The popup reads these caps (`max-w` / `max-h`); the viewport scrolls only while
-  // `data-constrained` is set, so an unconstrained morph never flashes a scrollbar.
   const constrained = computed(
     () => availableWidth.value !== null || availableHeight.value !== null
   )

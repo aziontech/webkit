@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 87127d1d244c485485066a664970df5fe28be552b60544da4b457570aa22334c
+checksum: 6bcdd94d8dcfc289eedfa534379a74a056ca75b6319c615e657514a8f9129e7d
 created: 2026-05-22
-last_updated: 2026-09-26
+last_updated: 2026-10-19
 ---
 
 # Button — Component Spec
@@ -14,6 +14,27 @@ last_updated: 2026-09-26
 ## Purpose
 
 Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/button/`.
+
+## Usage
+
+```vue
+<script setup>
+import Button from '@aziontech/webkit/button'
+</script>
+
+<template>
+  <Button label="Save" />
+  <Button label="Deploy" kind="secondary" icon="pi pi-upload" />
+  <Button
+    label="Read the docs"
+    kind="outlined"
+    href="https://www.azion.com/en/documentation/"
+    icon="pi pi-chevron-right"
+    icon-position="trailing"
+    animated
+  />
+</template>
+```
 
 ## Props
 
@@ -29,6 +50,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 | `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
 | `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
 | `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
+| `type`         | `'button' \| 'submit' \| 'reset'`                               | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.        |
 
 ## Events
 
@@ -46,6 +68,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 
 ## Motion & Animations
 
@@ -93,6 +116,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Large (size)
 - Icon
 - Disabled
+- Form submit (`type`) — `type` only acts inside a form, so this story renders one with a field, a reset and a submit Button
 
 ## Constraints — DO NOT
 

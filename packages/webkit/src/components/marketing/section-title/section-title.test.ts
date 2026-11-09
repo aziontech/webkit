@@ -2,11 +2,11 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/marketing/SectionTitle.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/section-title/SectionTitle.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
-const { Default, Kinds, Sizes, WithActions } = composeStories(stories)
+const { Default, Kinds, Sizes, WithActions, DescriptionWidths } = composeStories(stories)
 
 const TESTID = 'marketing-section-title'
 
@@ -24,8 +24,6 @@ describe('SectionTitle', () => {
     const { getByTestId } = render(SectionTitle, { props })
     const root = getByTestId(TESTID)
 
-    // flush="top" is subtracted from borders="y", so the header keeps only its bottom rule —
-    // the divider between the header and the section body.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
   })
@@ -57,6 +55,35 @@ describe('SectionTitle', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'medium')
   })
 
+  it.each(['small', 'medium'] as const)('reflects padding="%s" on data-padding', (padding) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, padding } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-padding', padding)
+  })
+
+  it('defaults to the medium padding', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-padding', 'medium')
+  })
+
+  it.each(['narrow', 'wide'] as const)(
+    'reflects descriptionWidth="%s" on data-description-width',
+    (descriptionWidth) => {
+      const { getByTestId } = render(SectionTitle, {
+        props: { ...props, kind: 'horizontal', descriptionWidth }
+      })
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-description-width', descriptionWidth)
+    }
+  )
+
+  it('defaults to the narrow description width', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-description-width', 'narrow')
+  })
+
   it.each(['small', 'medium', 'large'] as const)(
     'keeps the headline an h2 at size="%s"',
     (size) => {
@@ -78,8 +105,6 @@ describe('SectionTitle', () => {
 
       expect(heading).toHaveTextContent('Everything runs at the edge')
       expect(paragraph).toHaveTextContent('One platform.')
-      // Node.DOCUMENT_POSITION_FOLLOWING === 4: the description follows the headline, so the
-      // reading order matches the visual one in every layout — including the two-column one.
       expect(heading.compareDocumentPosition(paragraph) & 4).toBe(4)
     }
   )
@@ -183,8 +208,19 @@ describe('SectionTitle', () => {
       const { getAllByRole } = render(WithActions())
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
-        'Start building',
-        'Read the docs'
+        'Start for free',
+        'Docs'
+      ])
+    })
+
+    it('renders the DescriptionWidths story with one horizontal header per width', () => {
+      const { getAllByTestId } = render(DescriptionWidths())
+      const roots = getAllByTestId(TESTID)
+
+      expect(roots.map((el) => el.getAttribute('data-kind'))).toEqual(['horizontal', 'horizontal'])
+      expect(roots.map((el) => el.getAttribute('data-description-width'))).toEqual([
+        'narrow',
+        'wide'
       ])
     })
   })
@@ -195,7 +231,6 @@ describe('SectionTitle', () => {
       const root = getByTestId(TESTID)
 
       expect(root).toHaveAttribute('data-framed')
-      // the frame resolves to FrameBox, which carries the resolved side list
       expect(root).toHaveAttribute('data-borders')
     })
 

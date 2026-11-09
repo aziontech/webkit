@@ -6,7 +6,7 @@ const IMPORT = "import Label from '@aziontech/webkit/label'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Label>} */
 const meta = {
-  title: 'Components/Inputs/Label',
+  title: 'Components/Primitives/Inputs/Label',
   component: Label,
   tags: ['autodocs'],
   parameters: {

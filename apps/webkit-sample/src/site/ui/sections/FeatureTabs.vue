@@ -1,13 +1,14 @@
 <script setup lang="ts">
+  import type { CodeBlockTab } from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Illustration from '@aziontech/webkit/illustration'
   import MediaTabs from '@aziontech/webkit/media-tabs'
-  import MiniButton from '@aziontech/webkit/mini-button'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import { type Component, computed } from 'vue'
 
-  import { useSiteLink } from '../../composables/use-site-link'
+  import SectionAction from './SectionAction.vue'
   import type { SiteAction } from './types'
 
   defineOptions({ name: 'FeatureTabs' })
@@ -19,8 +20,10 @@
     title: string
     /** One sentence under the heading. */
     description: string
-    /** Illustration drawn for this tab when the band has no scene. */
+    /** Illustration drawn for this tab when it has no code and the band has no scene. */
     illustration?: string
+    /** Code file this tab opens as its media. */
+    code?: CodeBlockTab
   }
 
   interface SiteScene {
@@ -43,8 +46,10 @@
     scene?: SiteScene | null
     /** Milliseconds each tab holds before the next one opens. */
     interval?: number
-    /** Link under the frame. */
+    /** Button in the section title. */
     action?: SiteAction | null
+    /** Accessible name of the copy control on each code file. */
+    copyAriaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -54,14 +59,17 @@
     description: '',
     scene: null,
     interval: 5200,
-    action: null
+    action: null,
+    copyAriaLabel: 'Copy the code sample'
   })
-
-  const { follow } = useSiteLink()
 
   const items = computed(() =>
     props.tabs.map((tab) => ({ title: tab.title, description: tab.description }))
   )
+
+  const codeFiles = computed(() => props.tabs.map((tab) => (tab.code ? [tab.code] : [])))
+
+  const hasCode = computed(() => props.tabs.some((tab) => tab.code))
 </script>
 
 <template>
@@ -72,11 +80,18 @@
   >
     <template #header>
       <SectionTitle
-        kind="left"
+        kind="horizontal"
         :eyebrow="eyebrow"
         :title="title"
         :description="description"
-      />
+      >
+        <template
+          v-if="action"
+          #actions
+        >
+          <SectionAction :action="{ trailing: true, ...action }" />
+        </template>
+      </SectionTitle>
     </template>
 
     <FrameBox
@@ -84,16 +99,35 @@
       borders="y"
       marks="bottom"
     >
-      <div class="[--media-tabs-media-min:24rem]">
+      <div
+        :data-code="hasCode || null"
+        class="-mx-px [--media-tabs-media-min:24rem] data-[code]:[--media-tabs-media-min:30rem]"
+      >
         <MediaTabs
           :items="items"
-          size="small"
+          size="medium"
+          :texture="hasCode ? 'pixelate' : 'none'"
+          texture-size="small"
+          texture-fade="top"
           :auto-play-interval="interval"
         >
           <template #media="{ index, active }">
+            <div
+              v-if="codeFiles[index]?.length"
+              class="w-full min-w-0 p-(--spacing-xl)"
+            >
+              <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+                <CodeBlock
+                  :tabs="codeFiles[index]"
+                  show-line-numbers
+                  :animate-lines="active"
+                  :copy-aria-label="copyAriaLabel"
+                />
+              </div>
+            </div>
             <component
               :is="scene.component"
-              v-if="scene"
+              v-else-if="scene"
               v-bind="scene.props ?? {}"
               :tab="tabs[index]?.value"
               :active="active"
@@ -107,20 +141,6 @@
             </div>
           </template>
         </MediaTabs>
-      </div>
-
-      <div
-        v-if="action"
-        class="p-(--spacing-xl)"
-      >
-        <MiniButton
-          :label="action.label"
-          show-icon
-          :icon="action.icon || 'pi pi-angle-right'"
-          :href="action.href"
-          :target="action.external ? '_blank' : '_self'"
-          @click="follow($event, action.href)"
-        />
       </div>
     </FrameBox>
   </SectionModule>

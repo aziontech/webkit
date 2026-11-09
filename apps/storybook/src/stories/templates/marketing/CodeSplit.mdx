@@ -1,0 +1,105 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as CodeSplitStories from './CodeSplit.stories'
+
+<Meta title="Templates/Marketing/Solutions/CodeSplit" />
+
+# CodeSplit
+
+A claim beside the code that makes it true: copy on one side, a code sample on the other, on one frame. Product pages use it when the argument is a config or a handler a developer can read, like Functions and Application Accelerator.
+
+The code sits in a wrapper with its own radius, so the wrapper casts the shadow. The tabs are declared in the script, so the code stays verbatim.
+
+Built from `SectionModule`, a `framed` `MediaSplit` and `CodeBlock`, with buttons on the copy side.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+From the Functions page: a two-tab code sample on the pixelate texture, cut off by the frame's bottom rule, with two large actions. With two destinations the band is not a link itself, so the reader picks a button.
+
+<Canvas of={CodeSplitStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` and `description` are the copy beside the code.
+- `codeTabs` are the files, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`. A tab without `code` is skipped.
+- `copyAriaLabel` names the copy button for screen readers.
+- `primaryAction` and `secondaryAction` are the two buttons. A button without a label or link is dropped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={CodeSplitStories.DefaultJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Accelerator
+
+From the Application Accelerator page: the same band as Functions with one large button: a heading, a sentence and the button on one side, a one-file code sample on the pixelate texture on the other. With one tab, the sample shows a filename bar and no tabs.
+
+<Canvas of={CodeSplitStories.Accelerator} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` and `description` are the copy on the start side.
+- `codeTabs` are the files; one tab draws a filename bar instead of tabs.
+- `action` is the button. Without a label or link it is dropped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={CodeSplitStories.AcceleratorJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Agents
+
+From the AI Gateway page: the Accelerator band with one tab per coding agent. Each tab opens that agent's own file and carries the agent's mark beside its name, through the `tab-icon` slot of `CodeBlock`.
+
+<Canvas of={CodeSplitStories.Agents} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `kind` is `agents`.
+- `title` and `description` are the copy beside the code.
+- `agents` are the tabs, each a code file with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`, plus a `mark` naming the agent's logo.
+- `copyAriaLabel` names the copy button for screen readers.
+- `actions` are the buttons under the copy.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={CodeSplitStories.AgentsJson} dark />
+</div>

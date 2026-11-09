@@ -6,7 +6,7 @@ Many environments still run on provisioned capacity sized for peak demand, opera
 
 That’s rarely a pricing problem. It’s usually an architecture problem.
 
-This article applies a three-component Total Cost of Ownership (TCO) framework—adapted from Deloitte and AWS methodology—to compare centralized cloud environments with serverless edge execution models. The goal isn’t to declare a winner or predict exact savings. It’s to give teams a structured way to see where infrastructure cost actually comes from, which factors move it most, and how different operating models change the economics over time.
+This article applies a three-component Total Cost of Ownership (TCO) framework—adapted from Deloitte and AWS methodology—to compare centralized cloud environments with serverless distributed execution models. The goal isn’t to declare a winner or predict exact savings. It’s to give teams a structured way to see where infrastructure cost actually comes from, which factors move it most, and how different operating models change the economics over time.
 
 ---
 
@@ -56,11 +56,11 @@ Every request to an application hosted in a centralized region transfers data fr
 
 Infrastructure also costs money through the work required to run it. As application portfolios grow, teams take on responsibility not just for workloads but for everything surrounding them—capacity planning, scaling configuration, security controls, monitoring, patch management, and integration across delivery and security services. None of those activities look excessive in isolation. Together, they consume engineering hours month after month, and the cost shows up in places that don’t appear on the cloud invoice.
 
-## How Serverless Edge Changes the Equation
+## How Serverless Distributed Execution Changes the Equation
 
 If centralized architectures tend to generate cost through provisioned capacity, centralized delivery, and growing operational ownership, the question becomes: what changes when those assumptions change?
 
-Serverless edge platforms distribute execution and traffic handling across multiple locations closer to users, rather than concentrating everything in a handful of central regions. Workloads execute on demand, and only requests that genuinely require origin processing reach centralized infrastructure. That architectural difference affects all three TCO components—not because the pricing is inherently lower, but because less infrastructure needs to exist in the first place.
+Serverless distributed platforms distribute execution and traffic handling across multiple locations closer to users, rather than concentrating everything in a handful of central regions. Workloads execute on demand, and only requests that genuinely require origin processing reach centralized infrastructure. That architectural difference affects all three TCO components—not because the pricing is inherently lower, but because less infrastructure needs to exist in the first place.
 
 ### On-demand execution reduces idle capacity
 
@@ -79,7 +79,7 @@ For reference, the delivery path looks different between models:
 - **Centralized:** User → Cloud Region → Application → Response *(infrastructure provisioned continuously; origin handles most delivery)*
 - **Distributed:** User → Distributed Layer → Origin only when necessary → Response *(infrastructure scales to actual demand; origin processes a smaller share of traffic)*
 
-## Centralized Cloud vs. Serverless Edge Platforms
+## Centralized Cloud vs. Serverless Distributed Platforms
 
 Comparing architectures through infrastructure invoices alone rarely tells the full story.
 
@@ -87,7 +87,7 @@ As environments scale, engineering effort and operational ownership become incre
 
 This is where architecture starts influencing economics beyond pricing.
 
-The comparison below introduces how centralized cloud and serverless edge differ across the three TCO dimensions. The complete benchmark assumptions and cost calculations are available in the full framework.
+The comparison below introduces how centralized cloud and serverless distributed execution differ across the three TCO dimensions. The complete benchmark assumptions and cost calculations are available in the full framework.
 
 ### Development Cost
 
@@ -122,7 +122,7 @@ Rather than applying generic percentages, the full framework evaluates infrastru
 
 [Explore Infrastructure Evaluation Scenarios.](https://www.azion.com/en/lp/tco-centralized-cloud-vs-serverless-edge-platforms/)
 
-## When Serverless Edge Platforms Have the Highest Impact
+## When Serverless Distributed Platforms Have the Highest Impact
 
 Not every workload benefits equally, the impact depends on traffic behavior, application design, operational maturity, and cost structure. The highest ROI tends to appear when multiple conditions are present at once:
 
@@ -146,7 +146,7 @@ That change does not automatically make one architecture better than another.
 
 Many workloads continue benefiting from centralized environments depending on performance requirements, consistency models, operational maturity, and application design. But as systems grow, the assumptions behind centralized provisioning become increasingly relevant to cost.
 
-At that point, the comparison between centralized cloud and serverless edge becomes less about where workloads run and more about how infrastructure is consumed.
+At that point, the comparison between centralized cloud and serverless distributed execution becomes less about where workloads run and more about how infrastructure is consumed.
 
 Which raises a more useful question than simply asking whether one option is cheaper: Which architecture creates less cost for the way your organization actually operates?
 

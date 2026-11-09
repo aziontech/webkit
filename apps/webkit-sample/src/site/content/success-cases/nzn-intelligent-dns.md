@@ -8,15 +8,15 @@ NZN has focused squarely on providing users with amazing online news, content an
 
 ## Solution
 
-There are multiple ways to improve security and availability of NZN’s applications with Azion’s Edge. One of them is implementing Intelligent DNS, Azion’s authoritative DNS service, which allows customers to take their application availability, capacity and security to the next level.
+There are multiple ways to improve security and availability of NZN’s applications with Azion’s platform. One of them is implementing Intelligent DNS, Azion’s authoritative DNS service, which allows customers to take their application availability, capacity and security to the next level.
 
-NZN built hundreds of edge applications on Azion’s platform to deliver content from the edge, which is covered by advanced firewall rules. In addition, NZN replaced its legacy DNS service with Intelligent DNS domains to avoid lag times and DNS-based attacks.
+NZN built hundreds of applications on Azion’s platform to deliver content from Azion’s data centers, which are covered by advanced firewall rules. In addition, NZN replaced its legacy DNS service with Intelligent DNS domains to avoid lag times and DNS-based attacks.
 
 Easy to use, Intelligent DNS allows NZN’s infrastructure analysts to redistribute naked domains with high reliability, increasing its fault tolerance, security and performance regardless of its applications’ complexity, and offload DNS management to Azion to prevent compatibility issues.
 
 ## Results and impacts
 
-Intelligent DNS works together with a number of Azion best-of-breed solutions, including Edge Application and Edge Firewall, to help NZN improve content loading time by more than 60% in comparison to the cloud legacy architecture.
+Intelligent DNS works together with a number of Azion best-of-breed solutions, including Application and Firewall, to help NZN improve content loading time by more than 60% in comparison to the cloud legacy architecture.
 
 NZN created hundreds of records that give customized instructions on TTL (time to live) for millions of daily requests through a friendly and intuitive interface. As a result, all of NZN’s users have enhanced speed and response time in their first interactions.
 

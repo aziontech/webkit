@@ -163,7 +163,7 @@
     <template #cell-workloadName="{ value, row }">
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <i
-          class="ai ai-workloads shrink-0 text-(--text-default)"
+          class="ai ai-workloads shrink-0 text-body-lg text-(--text-muted)"
           aria-hidden="true"
         />
         <ResourceLink

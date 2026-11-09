@@ -21,7 +21,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Paginator>} */
 const meta = {
-  title: 'Components/Data/Paginator',
+  title: 'Components/Primitives/Data/Paginator',
   component: Paginator,
   subcomponents: {
     PaginationButton: Paginator.Button,

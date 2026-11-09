@@ -1,6 +1,3 @@
-// Compound API (see .claude/rules/compound-api.md). The explicit
-// CompoundPickList annotation makes declaration emit reference the
-// sub-component types instead of expanding the root's private Props.
 import PickList from './pick-list.vue'
 import PickListControls from './pick-list-controls/pick-list-controls.vue'
 import PickListSource from './pick-list-source/pick-list-source.vue'

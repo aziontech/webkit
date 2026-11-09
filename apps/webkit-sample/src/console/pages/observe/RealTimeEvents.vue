@@ -261,6 +261,10 @@
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
+  const documentEvent = ref(null)
+  watch(selectedEvent, (event) => {
+    if (event) documentEvent.value = event
+  })
 
   const LOG_MIN_WIDTH = 480
   const DOCUMENT_MIN_WIDTH = 348
@@ -672,10 +676,10 @@
           </template>
 
           <div
-            v-if="selectedEvent"
+            v-if="documentEvent"
             class="-m-(--spacing-md)"
           >
-            <EventDocument :event="selectedEvent" />
+            <EventDocument :event="documentEvent" />
           </div>
         </Sidebar>
       </section>
@@ -694,8 +698,8 @@
             </PanelHeader>
             <div class="min-h-0 flex-1 overflow-auto">
               <EventDocument
-                v-if="selectedEvent"
-                :event="selectedEvent"
+                v-if="documentEvent"
+                :event="documentEvent"
               />
             </div>
           </DrawerContent>

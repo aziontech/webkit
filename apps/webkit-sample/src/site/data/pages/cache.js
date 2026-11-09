@@ -1,50 +1,37 @@
 import { markRaw } from 'vue'
 
-import ApplicationCacheFragment from '../../ui/mockup/widgets/ApplicationCacheFragment.vue'
-import ApplicationFunctionFragment from '../../ui/mockup/widgets/ApplicationFunctionFragment.vue'
-import ApplicationRuleFragment from '../../ui/mockup/widgets/ApplicationRuleFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  foldList,
-  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
   PRODUCT_DOCS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const ApplicationCacheFragment = productWidget('application-cache')
+const ApplicationFunctionFragment = productWidget('application-function')
+const ApplicationRuleFragment = productWidget('application-rule')
 
 const PILLARS = [
   {
     icon: 'ai ai-content-delivery',
     title: 'Global content delivery close to users',
     description:
-      "Serve cached websites, APIs, and files from Azion's distributed architecture to reduce latency and absorb demand before it reaches your origin."
+      "Serve cached websites, APIs, and files from Azion's distributed architecture. Latency drops, and demand is absorbed before it reaches your origin."
   },
   {
     icon: 'ai ai-origin-accelerator',
     title: 'Faster responses with less origin work',
     description:
-      'Improve cache-hit performance while cutting repeated origin requests, infrastructure load, and bandwidth pressure during peak traffic.'
+      'Get faster cache hits and fewer repeated origin requests. Infrastructure load and bandwidth pressure stay low during peak traffic.'
   },
   {
     icon: 'pi pi-sync',
     title: 'Simple control over freshness',
     description:
-      'Configure TTLs, cache keys, stale content, and global purges so teams can keep content fast without complex CDN operations.'
+      'Set TTLs, cache keys, stale content, and global purges to keep content fresh and fast, without complex CDN operations.'
   }
-]
-
-const SURFACES = [
-  { icon: 'ai ai-azion-cli', label: 'Azion CLI' },
-  { icon: 'ai ai-azion-api', label: 'REST API' },
-  { icon: 'ai ai-azion', label: 'Console UI' },
-  { icon: 'ai ai-terraform', label: 'Terraform' }
-]
-
-const AVAILABILITY = [
-  { icon: 'ai ai-origin-shield', label: 'Stale cache' },
-  { icon: 'pi pi-link', label: 'Persistent connections' },
-  { icon: 'pi pi-cog', label: 'Protocol optimization' },
-  { icon: 'pi pi-check-circle', label: 'High availability' }
 ]
 
 const USE_CASES = [
@@ -83,7 +70,7 @@ const FAQ = [
     value: 'what-is',
     question: 'What is Azion Cache?',
     answer:
-      'Azion Cache is a distributed caching solution for accelerating websites and APIs. Key features include: lower origin traffic, fast cache-hit response times, tiered cache architecture, stale-while-revalidate support, and large file optimization. It improves Core Web Vitals and stabilizes latency during traffic spikes.'
+      'Azion Cache is a distributed cache for websites and APIs. It lowers origin traffic, returns cache hits fast, and supports tiered caching, stale-while-revalidate, and large file optimization. It improves Core Web Vitals and steadies latency during traffic spikes.'
   },
   {
     value: 'browser-vs-cdn',
@@ -142,13 +129,13 @@ const FAQ = [
     value: 'vs-cdn',
     question: 'What is the difference between Azion Cache and standard CDNs?',
     answer:
-      'Azion Cache is integrated with the Azion Web Platform, providing unified management for caching, security, and compute. Unlike standalone CDNs, it works with Functions for dynamic cache manipulation, WAF for protected caching, and Application Accelerator for advanced TTL control.'
+      'Azion Cache is part of the Azion Web Platform, so you manage caching, security, and compute in one place. Unlike standalone CDNs, it works with Functions to change cache behavior in code, WAF to protect cached content, and Application Accelerator for advanced TTL control.'
   },
   {
     value: 'integrations',
     question: 'How does Cache integrate with other Azion products?',
     answer:
-      'Cache integrates with Rules Engine for conditional caching policies, Application Accelerator for short TTLs, Image Processor for optimized image caching, and Functions for programmatic cache key manipulation. This unified approach reduces complexity compared to multi-vendor solutions.'
+      'Cache works with Rules Engine for conditional caching policies, Application Accelerator for short TTLs, Image Processor for optimized image caching, and Functions for programmatic cache key changes. One platform means fewer moving parts than a multi-vendor setup.'
   }
 ]
 
@@ -158,27 +145,27 @@ export const CACHE_PAGE = [
     kind: 'title-band',
     titleLength: 'short',
     eyebrow: 'Cache',
-    title: 'Accelerate content delivery globally',
+    title: 'Deliver content fast, worldwide',
     description:
-      'Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes.',
+      'Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes.',
     actions: PRODUCT_HERO_ACTIONS
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Every cache control in one application',
     description:
       'Cache settings, the rules that apply them and the functions that shape responses live inside the application, versioned and deployed with it.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
         icon: 'ai ai-tiered-cache',
         title: 'Cache settings you reuse',
         description:
-          'Set the edge TTL, stale cache and large file optimization once, then apply the same setting wherever the application needs it.',
+          'Set the CDN TTL, stale cache and large file optimization once, then reuse the setting wherever the application needs it.',
         scene: { component: markRaw(ApplicationCacheFragment) },
         href: PRODUCT_DOCS
       },
@@ -194,37 +181,9 @@ export const CACHE_PAGE = [
         icon: 'ai ai-edge-functions',
         title: 'Functions for the cases rules miss',
         description:
-          'Rewrite cache headers on the response in a few lines of JavaScript, running in every location before the response leaves.',
+          'Rewrite cache headers on the response in a few lines of JavaScript, running in every data center before the response leaves.',
         scene: { component: markRaw(ApplicationFunctionFragment) },
         href: PRODUCT_DOCS
-      }
-    ]
-  },
-  {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Configure smarter cache policies',
-        description: foldList(
-          'Set browser and edge TTLs, enable tiered cache, and keep content fresh with stale revalidation. Azion Web Platform helps improve hit ratio, lower latency, and reduce origin bandwidth.',
-          SURFACES
-        ),
-        href: PRODUCT_DOCS,
-        illustration: 'fastest-path-to-live-website',
-        illustrationLabel: 'A request served from cache, with the origin behind it',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'High-availability caching for critical traffic',
-        description: foldList(
-          'Use protocol optimizations, persistent connections, and stale cache to keep serving the latest cached responses during origin failures or revalidation, so websites and APIs stay fast.',
-          AVAILABILITY
-        ),
-        href: '/signup',
-        illustration: 'distributed-apis',
-        illustrationLabel: "One request fanning into the cache layer's content types",
-        actions: [{ label: 'Start Free', href: '/signup' }]
       }
     ]
   },
@@ -234,11 +193,10 @@ export const CACHE_PAGE = [
     title: 'What teams use Cache for',
     description:
       'Put Cache in front of any origin and serve repeat traffic from Azion’s distributed infrastructure, with the TTLs, cache keys and stale behavior you set. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

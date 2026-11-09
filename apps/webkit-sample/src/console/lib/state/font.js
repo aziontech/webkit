@@ -55,6 +55,8 @@ export const FONTS = [
 ]
 
 const DEFAULT_FONT = 'rubik'
+const SITE_FONT = 'sora'
+const SITE_PREFIX = '/site'
 const VALUES = FONTS.map((f) => f.value)
 
 const readStoredFont = () => {
@@ -82,18 +84,29 @@ const applyFont = (value) => {
   root.setAttribute('data-font', font.value)
 }
 
+const isSitePath = (path) => path === SITE_PREFIX || path.startsWith(`${SITE_PREFIX}/`)
+
+const onSite = ref(typeof location !== 'undefined' && isSitePath(location.pathname))
 const font = ref(readStoredFont())
+
+watch(onSite, (site) => applyFont(site ? SITE_FONT : font.value))
 
 watch(
   font,
   (value) => {
-    applyFont(value)
+    if (!onSite.value) applyFont(value)
     if (typeof localStorage === 'undefined') return
     if (value === DEFAULT_FONT) localStorage.removeItem(STORAGE_KEY)
     else localStorage.setItem(STORAGE_KEY, value)
   },
   { immediate: true }
 )
+
+export function installSiteFont(router) {
+  router.afterEach((to) => {
+    onSite.value = isSitePath(to.path)
+  })
+}
 
 export function useFont() {
   return { font, fonts: FONTS }

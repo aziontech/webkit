@@ -26,8 +26,7 @@ FlowNode.__docgenInfo = {
     },
     {
       name: 'terminal',
-      description:
-        'Ends its branch: the node receives an incoming connector but originates none.',
+      description: 'Ends its branch: the node receives an incoming connector but originates none.',
       type: { name: 'boolean' },
       defaultValue: { value: 'false' },
       required: false
@@ -79,7 +78,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Flow>} */
 const meta = {
-  title: 'Components/Data/Flow',
+  title: 'Components/Primitives/Data/Flow',
   component: Flow,
   subcomponents: { FlowNode, FlowParallel, FlowAnchor },
   tags: ['autodocs'],

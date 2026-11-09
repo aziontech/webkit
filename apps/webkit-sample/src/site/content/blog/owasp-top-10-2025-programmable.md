@@ -2,7 +2,7 @@ The traditional security perimeter has dissolved. Not only because attackers got
 
 That is why security can no longer live only at the origin. To meet the reality of 2026, teams need a programmable layer capable of enforcing policies, validating intent, and absorbing uncertainty before it becomes an incident.
 
-Azion was built for this shift: a web platform that enables companies to build, protect, and scale modern applications on a fully managed global infrastructure — combining distributed compute, serverless capabilities, and real-time observability ([Real-Time Metrics](https://www.azion.com/en/products/real-time-metrics/) & [Events](https://www.azion.com/en/products/real-time-events/)) as a unified approach, not as disconnected tools.
+Azion was built for this shift: a web platform that enables companies to build, protect, and scale modern applications on a fully managed global infrastructure — combining distributed compute, serverless capabilities, and real-time observability ([Real-Time Metrics](https://www.azion.com/en/documentation/platform/real-time-metrics/) & [Events](https://www.azion.com/en/products/real-time-events/)) as a unified approach, not as disconnected tools.
 
 > The OWASP Top 10:2025 consolidates the ten most critical risk categories for modern web applications. Compared to the 2021 edition, the new version expands its focus to architectural risks, supply chain, insecure design, and mishandling of exceptional conditions — reflecting the growing complexity of distributed applications. [WAFs](https://www.azion.com/en/products/web-application-firewall/) based on static rules do not cover this surface. A distributed security architecture is what consistently mitigates modern threats.
 

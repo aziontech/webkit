@@ -87,12 +87,7 @@
         context &&
         !isSelected.value &&
         'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
-      // Selected label stays `--text-default` (Figma). `--secondary-contrast` is the
-      // on-`--secondary` pair (black on dark / white on light) and only reads correctly
-      // against a solid `--secondary-selected` fill, which the pill is not.
       !isDisabled.value && context && isSelected.value && 'bg-transparent text-(--text-default)',
-      // Standalone (no TabView context): the item paints its own pill, so it carries the
-      // mask + hairline + xs shadow the List's indicator provides in the composed case.
       !context &&
         isSelected.value &&
         'border-(length:--border-width-default) border-(--border-muted) bg-(--secondary-mask) text-(--text-default) shadow-(--shadow-xs)',

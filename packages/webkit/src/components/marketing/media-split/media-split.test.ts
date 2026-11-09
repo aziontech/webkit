@@ -20,8 +20,6 @@ const FOLLOWING = 4
 const EVERY_CORNER = 'top-left top-right bottom-left bottom-right'
 const CELLS = [`${TESTID}__copy-cell`, `${TESTID}__media-cell`]
 
-// The cells are addressed by the grid's own derived testid, so the helper does not move
-// when the band gains or loses its registration frame.
 function columnsOf(container: HTMLElement): globalThis.Element[] {
   const grid = container.querySelector(`[data-testid="${TESTID}__cells"]`)
   return grid ? [...grid.children] : []
@@ -55,7 +53,6 @@ describe('MediaSplit', () => {
     const root = getByTestId(TESTID)
 
     expect(root.tagName).toBe('SECTION')
-    // the band is a named landmark; the name comes from its title, not from a wired id
     expect(getByRole('region', { name: TITLE })).toBe(root)
     expect(getByRole('heading', { level: 2 })).toHaveTextContent(TITLE)
   })

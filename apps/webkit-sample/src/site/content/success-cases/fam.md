@@ -31,7 +31,7 @@ To prevent DDoS attacks from affecting service performance and availability, the
 
 Three months after implementing the security capabilities of the **Azion Platform**, FAM monitored more than **1 million requests**, among which tens of thousands of cyber threats were automatically identified and blocked by **Azion WAF**.
 
-Because the first user interaction occurs on **Azion’s distributed network**, every request is inspected in real time by **DDoS Protection** mechanisms and the platform’s multi-layer security architecture, ensuring **100% service availability** for FAM’s academic platform.
+Because the first user interaction occurs on **Azion’s distributed infrastructure**, every request is inspected in real time by **DDoS Protection** mechanisms and the platform’s multi-layer security architecture, ensuring **100% service availability** for FAM’s academic platform.
 
 Migrating its domains to Azion also delivered performance improvements. Before reaching the backend, requests are evaluated by the platform and **90% are processed on the distributed infrastructure**, resulting in improved performance, reduced CPU and memory usage on origin servers, and lower network transfer costs.
 

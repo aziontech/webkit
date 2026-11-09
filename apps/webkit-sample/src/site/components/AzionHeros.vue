@@ -114,6 +114,7 @@
     <Hero.Title
       centered
       eyebrow="Page language"
+      eyebrow-prefix="//"
       highlight="Azion heroes."
       title="Every opening band, in one column."
       description="The hero is the first thing a page says and the last thing it is easy to compare. Here is the whole set, rendered by the component itself — the same props a page would pass, at the width a page would pass them."
@@ -146,18 +147,19 @@
         <Hero.Title
           centered
           eyebrow="Technology"
-          title="Build high-performance applications"
-          description="Develop modern applications with high-performance APIs and microservices on distributed infrastructure."
+          eyebrow-prefix="//"
+          title="Build fast applications and APIs"
+          description="Build applications, APIs, and microservices on Azion's distributed infrastructure, with low latency and no cold starts."
         >
           <template #actions>
             <Button
-              label="Start Free"
+              label="Start for free"
               kind="secondary"
               size="large"
               @click="goSignup"
             />
             <Button
-              label="Talk to a Specialist"
+              label="Talk to a specialist"
               kind="outlined"
               size="large"
             />
@@ -190,19 +192,19 @@
       >
         <Hero.Title
           centered
-          highlight="Distributed Infrastructure"
-          title="for Modern Workloads"
-          description="Networking, compute, AI, data, and security that autonomously scale up and down instantly. And it stays up when others go down."
+          highlight="Build and run"
+          title="applications globally"
+          description="Run code, data, AI, and security on one platform that scales up and down instantly and stays up when others go down."
         >
           <template #actions>
             <Button
-              label="Start Free"
+              label="Start for free"
               kind="secondary"
               size="large"
               @click="goSignup"
             />
             <Button
-              label="Talk to a Specialist"
+              label="Talk to a specialist"
               kind="outlined"
               size="large"
             />
@@ -233,18 +235,20 @@
         class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
       >
         <Hero.Title
-          title="Build and deploy AI agents and applications in seconds"
-          description="Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality."
+          eyebrow="AI Inference"
+          eyebrow-prefix="//"
+          title="Build and deploy AI agents in seconds"
+          description="Run AI models close to users on distributed infrastructure, with low-latency inference that scales and keeps data local."
         >
           <template #actions>
             <Button
-              label="Start Free"
+              label="Start for free"
               kind="secondary"
               size="large"
               @click="goSignup"
             />
             <Button
-              label="Talk to a Specialist"
+              label="Talk to a specialist"
               kind="outlined"
               size="large"
             />
@@ -282,8 +286,9 @@
         <Hero.Title
           centered
           eyebrow="Workloads"
-          title="Put your application on the edge in seconds"
-          description="Create one workload and it is live in every Azion location — no servers to size, no regions to pick."
+          eyebrow-prefix="//"
+          title="Put your application online in seconds"
+          description="Create one workload and it is live in every Azion data center. No servers to size, no regions to pick."
         />
       </Hero>
     </SectionModule>
@@ -311,12 +316,13 @@
       >
         <Hero.Title
           eyebrow="Web apps"
+          eyebrow-prefix="//"
           title="Ship from the framework you already use"
           description="Next, Nuxt, Astro, Remix and the rest build and deploy unchanged — the platform reads the project and picks the preset."
         >
           <template #actions>
             <Button
-              label="Start Free"
+              label="Start for free"
               kind="secondary"
               size="large"
               @click="goSignup"
@@ -369,8 +375,9 @@
         <Hero.Title
           centered
           eyebrow="Our network"
-          title="One network, every location"
-          description="Traffic lands at the nearest point of presence and stays on the platform's own backbone from there."
+          eyebrow-prefix="//"
+          title="One network, every data center"
+          description="Traffic lands at the nearest data center and stays on the platform's own backbone from there."
         />
       </Hero>
     </SectionModule>

@@ -55,9 +55,6 @@
     v-bind="$attrs"
     :data-testid="testId"
   >
-    <!-- The hover plate is pulled past the text by the row's own padding PLUS its 1px
-         border, which is what keeps the glyph on the heading's column. Leave the border
-         out of that sum and every row sits 1px right of the column it belongs to. -->
     <component
       :is="linked ? 'a' : 'div'"
       :href="linked ? href : undefined"
@@ -66,9 +63,6 @@
       class="group mx-[calc((var(--spacing-md)+1px)*-1)] flex min-h-(--size-11) items-center gap-[calc(var(--spacing-md)+var(--spacing-xxs))] rounded-(--shape-card) border border-transparent px-(--spacing-md) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) motion-reduce:transition-none"
       @click="onClick"
     >
-      <!-- The group condition goes INSIDE the bracket. Chaining two group variants
-           (group-data-[linked]:group-hover:) compiles to two separate ancestors and
-           only matches a row nested in a second group — silently never here. -->
       <i
         v-if="icon"
         :class="icon"

@@ -325,7 +325,7 @@
       class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
     >
       <div
-        class="layout-column-focused relative flex flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
+        class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
         <Transition
           @before-enter="onBeforeEnter"
@@ -356,7 +356,8 @@
         >
           <div
             :key="phase"
-            class="flex w-full flex-col items-center gap-(--spacing-xl) motion-reduce:transition-none! motion-reduce:transform-none!"
+            :data-phase="phase"
+            class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
           >
             <template v-if="phase === 'connect'">
               <GitProviderConnect
@@ -441,13 +442,12 @@
                           size="large"
                           :disabled="submitting"
                         >
-                          <InputText
+                          <input
                             id="repoName"
                             v-model="repoName"
-                            size="large"
                             :placeholder="repoPlaceholder"
-                            class="flex-1"
                             :disabled="submitting"
+                            class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
                           />
                           <InputGroupAddon v-if="usesGit">
                             <Tooltip text="Toggle repository visibility (public or private)">
@@ -586,6 +586,7 @@
                 :resources="createdResources"
                 :scope="scope"
                 :domain="provisioned?.workload?.domain ?? ''"
+                :deployment="provisioned"
                 @manage="manageWorkload"
               />
             </template>

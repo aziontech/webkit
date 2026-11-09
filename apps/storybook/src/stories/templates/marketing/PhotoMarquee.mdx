@@ -1,0 +1,47 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as PhotoMarqueeStories from './PhotoMarquee.stories'
+
+<Meta title="Templates/Marketing/Social Proof/PhotoMarquee" />
+
+# PhotoMarquee
+
+A looping row of photos under a section title, for showing places and people, like the offices on Careers. Every photo keeps its own proportions at one shared height, so portrait and landscape shots sit in the same row.
+
+The loop pauses on hover and keyboard focus. Under reduced motion it stops, and the row scrolls by hand. Screen readers hear each photo once: the copy that closes the loop is hidden from them.
+
+Built from `SectionModule`, `SectionTitle` and `FrameBox`, with the `animate-brand-marquee` utility.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The six office photos Careers runs, at ten seconds per photo.
+
+<Canvas of={PhotoMarqueeStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `photos[].src` is a path in the site's `public/` folder.
+- `width` and `height` set the photo's proportions.
+- `duration` is how many seconds one full pass takes.
+- A photo without `src` is skipped, and the band renders nothing when no photo is left.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={PhotoMarqueeStories.DefaultJson} dark />
+</div>

@@ -1,9 +1,3 @@
-// Blocks importing a @aziontech/webkit component that the installed catalog marks as
-// deprecated (spec frontmatter `deprecated: true`), and points at the replacement
-// (`replaced_by`). Steers consumers off a component before it is removed. Fires only when
-// the catalog actually flags a component as deprecated — none are today, so it is inert
-// until a deprecation lands.
-
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 

@@ -54,15 +54,18 @@
     :data-icon="icon ? true : null"
     :data-described="hasDescription || null"
     :data-linked="isLink || null"
-    class="group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:text-(--primary) data-[linked]:focus-visible:ring-2 data-[linked]:focus-visible:ring-(--ring-color) data-[linked]:focus-visible:ring-offset-2 data-[linked]:focus-visible:ring-offset-(--bg-canvas) data-[linked]:focus-visible:outline-none"
+    class="group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:text-(--primary) data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 data-[linked]:focus-visible:after:ring-inset data-[linked]:focus-visible:after:ring-(--ring-color)"
   >
-    <div class="flex items-baseline gap-(--spacing-xs)">
-      <i
+    <div class="flex items-start gap-(--spacing-xs)">
+      <span
         v-if="icon"
-        :class="icon"
-        aria-hidden="true"
-        class="shrink-0 text-heading-xs text-(--primary)"
-      />
+        class="flex h-lh shrink-0 items-center text-heading-xs text-(--primary)"
+      >
+        <i
+          :class="icon"
+          aria-hidden="true"
+        />
+      </span>
       <component
         :is="`h${headingLevel}`"
         class="m-0 text-balance text-heading-xs"

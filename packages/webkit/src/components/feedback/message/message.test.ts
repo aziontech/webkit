@@ -1,6 +1,8 @@
 import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { createSSRApp, h } from 'vue'
+import { renderToString } from 'vue/server-renderer'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/message/Message.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -15,6 +17,29 @@ const { Default } = composeStories(stories)
 const realTransition = { global: { stubs: { transition: false } } }
 
 describe('Message', () => {
+  describe('flow content', () => {
+    it('keeps a list inside the copy region once the server markup is parsed as HTML', async () => {
+      // A p cannot hold a list: the HTML parser closes it at the ul, which then lands
+      // beside the copy in the flex row and squeezes the text to zero width. Client
+      // rendering never shows this (Vue builds the DOM node by node), so the assertion
+      // goes through server-rendered markup parsed the way a browser parses a page.
+      const app = createSSRApp({
+        render: () =>
+          h(Message, { severity: 'info' }, () => [
+            h('p', 'Take the following actions:'),
+            h('ul', [h('li', 'Migrate the certificate.'), h('li', 'Update the device CAs.')])
+          ])
+      })
+      const html = await renderToString(app)
+      const doc = new DOMParser().parseFromString(html, 'text/html')
+      const content = doc.querySelector('[data-testid="feedback-message__content"]')
+
+      expect(content).not.toBeNull()
+      expect(content?.querySelector('ul')).not.toBeNull()
+      expect(content?.querySelectorAll('li')).toHaveLength(2)
+    })
+  })
+
   it('renders the root with the default testid, status role, and the label copy', () => {
     const { getByTestId } = render(Message, {
       props: { severity: 'info', label: 'Deployment finished.' }

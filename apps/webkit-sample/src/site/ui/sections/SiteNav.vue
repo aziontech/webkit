@@ -81,10 +81,8 @@
   const navPanel = ref<{ $el?: globalThis.HTMLElement } | null>(null)
 
   watch(navOpen, (open) => {
-    if (!open) {
-      navPath.value = []
-      return
-    }
+    if (!open) return
+    navPath.value = []
     globalThis.requestAnimationFrame(() => navPanel.value?.$el?.focus?.())
   })
 

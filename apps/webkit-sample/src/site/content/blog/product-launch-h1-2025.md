@@ -97,7 +97,7 @@ SQL Database is our serverless, fully ACID-compliant database, optimized for rea
 
 - The new SQL Database Shell CLI simplifies migrations from PostgreSQL, MySQL, and other platforms, reducing friction and accelerating adoption.
 - Expanded integrations with popular tools like Prisma and LangGraph, plus templates for Turso, Neon, Fauna, Drizzle ORM, MongoDB, and REST-compatible databases make onboarding and data operations effortless.
-- Open connectivity empowers you to integrate with any system or external tool, creating a flexible foundation for building and scaling distributed data services.
+- Open connectivity lets you integrate with any system or external tool, creating a flexible foundation for building and scaling distributed data services.
 
 ### Object Storage: Reduced Transfer Costs and Easier Adoption
 
@@ -120,7 +120,7 @@ With these launches and improvements, you can build and scale applications effic
 
 ---
 
-## Developer Experience: Empowering Builders at Every Step
+## Developer Experience: Tools for Builders at Every Step
 
 Azion’s commitment to developers goes far beyond infrastructure-we’re reimagining the entire developer journey, making it faster, easier, and more productive to build, test, and scale applications at the edge.
 
@@ -139,7 +139,7 @@ Our brand-new **API v4** is designed for today’s automation needs, with robust
 
 ### Frameworks, Tooling, and Marketplace: Build Your Way
 
-Whether you’re using Next.js, React, Vue, Angular, Gatsby, Astro, or another modern framework, Azion offers native support and optimized build pipelines. The new **Azion Bundler v5.1** delivers builds up to twice as fast, while our open-source CLI, templates, and DevTools empower you to automate, test, and deploy with confidence. Explore the Azion Marketplace for ready-to-use integrations across security, analytics, AI, and more.
+Whether you’re using Next.js, React, Vue, Angular, Gatsby, Astro, or another modern framework, Azion offers native support and optimized build pipelines. The new **Azion Bundler v5.1** delivers builds up to twice as fast, while our open-source CLI, templates, and DevTools help you automate, test, and deploy with confidence. Explore the Azion Marketplace for ready-to-use integrations across security, analytics, AI, and more.
 
 ### Open Standards, No Lock-In
 

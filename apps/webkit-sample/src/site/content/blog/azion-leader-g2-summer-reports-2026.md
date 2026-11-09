@@ -25,7 +25,7 @@ Modern threat landscapes demand security that’s unified, automated, and built 
 
 ### DDoS Protection — High Performer
 
-Recognition for helping organizations maintain availability and mitigate disruptive volumetric attacks through resilient filtering and traffic control.  [Explore DDoS Protection →](https://www.azion.com/en/products/ddos-protection/)
+Recognition for helping organizations maintain availability and mitigate disruptive volumetric attacks through resilient filtering and traffic control.  [Explore DDoS Protection →](https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/)
 
 ### Web Security — High Performer
 

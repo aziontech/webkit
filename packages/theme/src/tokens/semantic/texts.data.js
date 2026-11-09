@@ -1,30 +1,3 @@
-/**
- * Declarative text style tokens (mobile-first).
- *
- * Each entry is a bundle of CSS properties; each property is either a string
- * (static) or a breakpoint map `{ _, sm, md, lg, xl, 2xl }`. Values ported
- * from the legacy `texts.js` plugin — direction inverted from desktop-first
- * (max-width) to mobile-first (min-width).
- *
- * Optional `states` emits pseudo-class rules (e.g. `.text-link:hover`). Bundles
- * with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` preset.
- *
- * `textWrapStyle` — the LONGHAND, never the `textWrap` shorthand. `text-wrap: pretty`
- * is `text-wrap-mode: wrap` + `text-wrap-style: pretty`, so a typography utility
- * written that way does not just choose how lines break: it decides THAT the text
- * wraps, and it beats `truncate` / `whitespace-nowrap` on the same element (equal
- * specificity, and this utility sorts later). Every `truncate text-body-sm` in the
- * codebase therefore wrapped to two lines with an ellipsis that never appeared —
- * measurably, table rows grew from 48px to 56px wherever a cell's text was longer
- * than its column. The longhand keeps the balance/pretty intent and leaves wrapping
- * to whoever owns the element.
- *
- * Mapping used during the port:
- *   old `large`  (≤640) → `_`
- *   old `medium` (≤768) → `sm` (≥640)
- *   old `mobile` (default, applied >768) → `md` (≥768)
- */
-
 import { curve, duration } from '../primitives/animations/animate.js'
 import { fontFamily } from '../primitives/typography/font-family.js'
 import { fontSize } from '../primitives/typography/font-size.js'
@@ -51,26 +24,6 @@ export const textsData = {
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
-  // ── The amount ladder (Currency) ─────────────────────────────────────────
-  //
-  // The three sizes `Currency` typesets a monetary amount at, one per reading
-  // distance: `sm` inside a table row or list cell, `md` an amount stated as a fact on
-  // a card, `lg` the headline figure of a pricing card. Each MIRRORS the heading/label
-  // token it used to borrow (`text-label-lg`, `text-heading-md`, `text-heading-3xl`) —
-  // same size ramp, same leading, same weight — and adds the one thing that made
-  // borrowing wrong: the amount's negative tracking.
-  //
-  // `-0.08em` is PROPORTIONAL, and deliberately so, which is why it lives here and not
-  // in `tracking.js`. That scale is absolute (`rem`) on purpose so a step resolves to a
-  // fixed measure at any font size (see its docstring), and it therefore holds no
-  // `-0.08em`-equivalent step. A figure is the one place where the tracking has to
-  // scale WITH the glyphs: the Figma amount specifies −1.28px @16px, −1.92px @24px and
-  // −4.48px @56px, which is one ratio, not three steps. Expressing it as `em` is what
-  // makes a single declaration correct at all three sizes and at every breakpoint of
-  // `lg`'s responsive ramp.
-  //
-  // Dedicated tokens rather than tracking added to the borrowed ones: `text-heading-3xl`
-  // sets every hero headline in the system, and a hero is prose, not a numeral.
   'text-amount-lg': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
@@ -151,19 +104,19 @@ export const textsData = {
     fontSize: fontSize.base,
     lineHeight: leading.normal,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tight,
+    letterSpacing: tracking.tight
   },
   'text-label-md': {
     fontSize: fontSize.sm,
     lineHeight: leading.normal,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tight,
+    letterSpacing: tracking.tight
   },
   'text-label-sm': {
     fontSize: fontSize.xs,
     lineHeight: leading.normal,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tight,
+    letterSpacing: tracking.tight
   },
   'text-label-code-sm': {
     fontFamily: fontFamily.code,
@@ -274,7 +227,6 @@ export const textsData = {
     lineHeight: leading.tight,
     letterSpacing: tracking.normal
   },
-  /** Inline `<a>` in body/heading — inherits parent size; not the navigation Link component. */
   'text-link': {
     fontSize: 'inherit',
     lineHeight: 'inherit',

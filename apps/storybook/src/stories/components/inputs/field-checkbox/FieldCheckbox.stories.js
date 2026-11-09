@@ -7,7 +7,7 @@ const IMPORT = "import FieldCheckbox from '@aziontech/webkit/field-checkbox'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldCheckbox>} */
 const meta = {
-  title: 'Components/Inputs/FieldCheckbox',
+  title: 'Components/Primitives/Inputs/FieldCheckbox',
   component: FieldCheckbox,
   tags: ['autodocs'],
   parameters: {

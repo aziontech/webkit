@@ -22,7 +22,7 @@ Azion’s Web Platform puts computational power closer to the user, enabling dat
 - Have high availability when facing complex scenarios, like increased traffic spikes and cybersecurity issues;
 - Build reliable applications in a fast and simplified way.
 
-The CTO Izabela Anholett’s team included Head of IT Infrastructure Célio Rodrigues, one of the project leaders. Several edge-native Azion solutions, such as Applications and Firewall, were implemented in a few weeks. These enable everything from cache settings to the protection of the network and application layers, essential items for achieving coverage.
+The CTO Izabela Anholett’s team included Head of IT Infrastructure Célio Rodrigues, one of the project leaders. Several distributed Azion solutions, such as Applications and Firewall, were implemented in a few weeks. These enable everything from cache settings to the protection of the network and application layers, essential items for achieving coverage.
 
 As soon as the first Applications were built, EXAME’s team ran load tests using a Tribunal Superior Eleitoral (TSE, Superior Electoral Court) simulator, with data transfers up to 10 times what EXAME was used to get, a surprisingly positive result. “We carried out the first load tests with the TSE simulator, configuring a data transfer 10 times greater than what we usually receive, and the results were positively surprising”, explains Rodrigues.
 

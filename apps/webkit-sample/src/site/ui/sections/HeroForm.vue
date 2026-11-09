@@ -1,20 +1,24 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
+  import FieldPhoneNumber, { type PhoneNumber } from '@aziontech/webkit/field-phone-number'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
   import Hero from '@aziontech/webkit/hero-root'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import { toast } from '@aziontech/webkit/toast'
-  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+  import Topic from '@aziontech/webkit/topic'
+  import { CLIENT_STRIP, CLIENT_STRIP_LABEL } from '@shared/ui/brand/strips.js'
   import { computed, reactive, ref, useId } from 'vue'
 
   import { CONTACT_ROLES } from '../../data/contact.js'
   import SectionAction from './SectionAction.vue'
-  import type { SiteAction, SiteLink } from './types'
+  import type { SiteAction, SiteLink, SiteTopic } from './types'
 
   defineOptions({ name: 'HeroForm' })
+
+  /** Field set: contact asks for a role and a message; incident asks for a website, for a team under attack. */
+  export type HeroFormKind = 'contact' | 'incident'
 
   export interface HeroFormOption {
     /** Submitted value. */
@@ -34,12 +38,20 @@
     role: string
     /** Role select placeholder. */
     rolePlaceholder: string
+    /** Placeholder of the box that filters the roles. */
+    roleSearch: string
+    /** Shown in the role list when no role matches the search. */
+    roleSearchEmpty: string
     /** Company field label. */
     company: string
+    /** Website field label, on the incident form. */
+    website: string
     /** Phone field label. */
     phone: string
     /** Message field label. */
     message: string
+    /** Hint inside the empty message field. */
+    messagePlaceholder: string
     /** Submit button label. */
     submit: string
   }
@@ -49,6 +61,8 @@
     required: string
     /** Helper text on a malformed e-mail. */
     invalidEmail: string
+    /** Helper text on a phone number too short for its country. */
+    invalidPhone: string
     /** Toast title once the form is sent. */
     success: string
     /** Toast title when sending fails. */
@@ -60,8 +74,12 @@
   }
 
   interface Props {
+    /** Field set the form asks for. */
+    kind?: HeroFormKind
     /** In-page anchor for the band. */
     anchor?: string
+    /** Overline above the headline. */
+    eyebrow?: string
     /** The page's h1. */
     title: string
     /** Copy beside the form, or the part of it before the link. */
@@ -72,6 +90,8 @@
     descriptionAfter?: string
     /** Actions under the copy. */
     actions?: SiteAction[]
+    /** Benefits stacked under the copy, beside the form. */
+    highlights?: SiteTopic[]
     /** Client marks the floor strip runs; without marks the band has no strip. */
     carouselMarks?: string[]
     /** Overline above the client strip. */
@@ -89,13 +109,16 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'contact',
     anchor: '',
+    eyebrow: '',
     description: '',
     link: null,
     descriptionAfter: '',
     actions: () => [],
+    highlights: () => [],
     carouselMarks: () => CLIENT_STRIP,
-    carouselLabel: 'The teams our specialists work with',
+    carouselLabel: CLIENT_STRIP_LABEL,
     formLabel: '',
     roles: () => CONTACT_ROLES,
     country: 'US',
@@ -108,16 +131,21 @@
     lastName: 'Last name',
     email: 'E-mail',
     role: 'Role',
-    rolePlaceholder: 'Select your Role',
+    rolePlaceholder: 'Select your role',
+    roleSearch: 'Search roles',
+    roleSearchEmpty: 'No role found',
     company: 'Company',
+    website: 'Website',
     phone: 'Phone',
     message: 'Message',
+    messagePlaceholder: '',
     submit: 'Send'
   }
 
   const DEFAULT_MESSAGES: HeroFormMessages = {
     required: 'This field is required.',
     invalidEmail: 'Enter a valid e-mail address.',
+    invalidPhone: 'Enter a complete phone number.',
     success: 'Message sent.',
     error: 'Could not send the message.',
     errorDescription: 'Check your connection and try again.',
@@ -134,11 +162,13 @@
     email: '',
     role: '',
     company: '',
+    domain: '',
     mobilephone: '',
     message: ''
   })
 
   const phoneCountry = ref(props.country)
+  const phoneComplete = ref(false)
 
   const errors = reactive({
     firstname: '',
@@ -146,6 +176,7 @@
     email: '',
     role: '',
     company: '',
+    mobilephone: '',
     message: ''
   })
 
@@ -155,6 +186,7 @@
   const notice = computed(() => ({ ...DEFAULT_MESSAGES, ...(props.messages ?? {}) }))
   const legend = computed(() => props.formLabel || props.title)
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
+  const hasHighlights = computed(() => props.highlights.length > 0)
 
   const validate = () => {
     const required = notice.value.required
@@ -165,9 +197,16 @@
       : EMAIL.test(form.email.trim())
         ? ''
         : notice.value.invalidEmail
-    errors.role = form.role ? '' : required
-    errors.company = form.company.trim() ? '' : required
-    errors.message = form.message.trim() ? '' : required
+    const asksContact = props.kind === 'contact'
+    errors.role = !asksContact || form.role ? '' : required
+    errors.company = !asksContact || form.company.trim() ? '' : required
+    errors.mobilephone =
+      !asksContact || phoneComplete.value
+        ? ''
+        : form.mobilephone
+          ? notice.value.invalidPhone
+          : required
+    errors.message = !asksContact || form.message.trim() ? '' : required
     return Object.values(errors).every((message) => !message)
   }
 
@@ -185,6 +224,7 @@
         email: '',
         role: '',
         company: '',
+        domain: '',
         mobilephone: '',
         message: ''
       })
@@ -211,12 +251,17 @@
     :carousel-marks="carouselMarks"
     bottom-height="clamp(7rem,16dvh,14rem)"
   >
-    <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
+    <div
+      :data-highlights="hasHighlights || null"
+      class="group grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2 data-[highlights]:gap-y-(--spacing-xl) lg:data-[highlights]:grid-rows-[auto_1fr]"
+    >
       <div class="min-w-0">
         <HeroTitle
+          :eyebrow="eyebrow"
+          eyebrow-prefix="//"
           :title="title"
           max-width="lg"
-          sticky
+          :sticky="!hasHighlights"
         >
           {{ description }}
           <a
@@ -239,7 +284,24 @@
         </HeroTitle>
       </div>
 
-      <div class="min-w-0">
+      <ul
+        v-if="hasHighlights"
+        class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-lg) self-start p-0 lg:col-start-1 lg:row-start-2"
+      >
+        <li
+          v-for="item in highlights"
+          :key="item.title"
+        >
+          <Topic
+            :heading-level="2"
+            :icon="item.icon ?? ''"
+            :title="item.title"
+            :description="item.description"
+          />
+        </li>
+      </ul>
+
+      <div class="min-w-0 lg:group-data-[highlights]:col-start-2 lg:group-data-[highlights]:row-span-2 lg:group-data-[highlights]:row-start-1">
         <form
           novalidate
           class="flex flex-col gap-(--spacing-md)"
@@ -295,12 +357,16 @@
 
             <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2">
               <FieldSelect
+                v-if="kind === 'contact'"
                 v-model="form.role"
                 :label="copy.role"
                 :input-id="`${uid}-role`"
                 :placeholder="copy.rolePlaceholder"
                 size="large"
                 :options="roles"
+                searchable
+                :search-placeholder="copy.roleSearch"
+                :search-empty-label="copy.roleSearchEmpty"
                 :disabled="submitting"
                 :required="!!errors.role"
                 :helper-text="errors.role"
@@ -318,6 +384,17 @@
                 :helper-text="errors.company"
                 @update:model-value="errors.company = ''"
               />
+              <FieldText
+                v-if="kind === 'incident'"
+                v-model="form.domain"
+                :label="copy.website"
+                :input-id="`${uid}-website`"
+                name="domain"
+                type="url"
+                size="large"
+                autocomplete="url"
+                :disabled="submitting"
+              />
             </div>
 
             <FieldPhoneNumber
@@ -326,12 +403,20 @@
               :label="copy.phone"
               :input-id="`${uid}-phone`"
               name="mobilephone"
+              size="large"
               :disabled="submitting"
+              :required="!!errors.mobilephone && !form.mobilephone"
+              :invalid="!!errors.mobilephone && !!form.mobilephone"
+              :helper-text="errors.mobilephone"
+              @update:model-value="errors.mobilephone = ''"
+              @update:phone="(phone: PhoneNumber) => (phoneComplete = phone.complete)"
             />
 
             <FieldTextarea
+              v-if="kind === 'contact'"
               v-model="form.message"
               :label="copy.message"
+              :placeholder="copy.messagePlaceholder"
               :input-id="`${uid}-message`"
               name="message"
               :disabled="submitting"
@@ -341,21 +426,13 @@
             />
           </fieldset>
 
-          <div class="flex justify-start">
-            <button
-              type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              {{ copy.submit }}
-            </button>
+          <div class="flex flex-col">
             <Button
               :label="copy.submit"
-              kind="secondary"
+              kind="primary"
               size="large"
               :loading="submitting"
-              @click="submit"
+              type="submit"
             />
           </div>
         </form>

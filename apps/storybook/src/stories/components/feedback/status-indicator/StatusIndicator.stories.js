@@ -6,7 +6,7 @@ const IMPORT = "import StatusIndicator from '@aziontech/webkit/status-indicator'
 
 /** @type {import('@storybook/vue3').Meta<typeof StatusIndicator>} */
 const meta = {
-  title: 'Components/Feedback/StatusIndicator',
+  title: 'Components/Primitives/Feedback/StatusIndicator',
   component: StatusIndicator,
   tags: ['autodocs'],
   parameters: {

@@ -20,9 +20,9 @@ This approach enables Netshoes to design firewall rules at different levels and 
 - **protect mobile APIs**: with millions of users accessing the platform through smartphones, WAF plays a key role in protecting customer data regardless of the device used;
 - **prevent attacks targeting e-commerce applications**, including OWASP Top 10 vulnerabilities and zero-day threats.
 
-In addition to WAF rule sets managed by Netshoes’ security teams, observability and threat intelligence are reinforced through Azion Data Streaming and Network Lists.
+In addition to WAF rule sets managed by Netshoes’ security teams, observability and threat intelligence are reinforced through Azion Data Stream and Network Lists.
 
-Data Streaming integrates with leading SIEM platforms, providing real-time application logs and event data that help Netshoes continuously improve its security posture.
+Data Stream integrates with leading SIEM platforms, providing real-time application logs and event data that help Netshoes continuously improve its security posture.
 
 Network Lists simplify the management of IP addresses accessing the platform. Through the platform interface or APIs, Netshoes can create custom lists while also leveraging automatically updated threat intelligence feeds from Azion.
 
@@ -32,7 +32,7 @@ During the first half of 2020, Netshoes automatically blocked more than **4 mill
 
 Most of the mitigated attacks consisted of **SQL injection attempts** and **cross-site scripting (XSS)**, both among the most critical vulnerabilities listed in the OWASP Top 10.
 
-To support data-driven security strategies, Netshoes collected approximately **385 TB of application event logs** using Azion Data Streaming integrated with its SIEM platforms.
+To support data-driven security strategies, Netshoes collected approximately **385 TB of application event logs** using Azion Data Stream integrated with its SIEM platforms.
 
 Running workloads across Azion’s distributed infrastructure also significantly reduced the load on origin systems. Netshoes offloaded **84% of request processing**, representing more than **200 billion requests handled by Azion**, equivalent to around **18,000 requests per second**.
 
@@ -49,4 +49,4 @@ These gains are made possible by the multilayer security architecture of Azion�
 
 Netshoes is the largest sports lifestyle e-commerce platform in Latin America and one of Brazil’s most recognized digital brands. Founded in 2000, the company manages several online stores, including Zattini and Shoestock, as well as official online stores for the NBA and major Brazilian football clubs.
 
-Recognized as one of the top e-commerce companies in Brazil, Netshoes continues to invest heavily in digital transformation and technology innovation to scale its operations and deliver high-performance digital experiences.
+Recognized as one of the top e-commerce companies in Brazil, Netshoes continues to invest heavily in modernization and technology innovation to scale its operations and deliver high-performance digital experiences.

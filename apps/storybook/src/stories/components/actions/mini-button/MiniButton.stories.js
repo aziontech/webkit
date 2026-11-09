@@ -6,7 +6,7 @@ const IMPORT = "import MiniButton from '@aziontech/webkit/mini-button'"
 
 /** @type {import('@storybook/vue3').Meta<typeof MiniButton>} */
 const meta = {
-  title: 'Components/Actions/MiniButton',
+  title: 'Components/Primitives/Actions/MiniButton',
   component: MiniButton,
   tags: ['autodocs'],
   parameters: {
@@ -91,7 +91,7 @@ const meta = {
     }
   },
   args: {
-    label: 'Learn More',
+    label: 'Learn more',
     size: 'large',
     disabled: false,
     showIcon: true,
@@ -111,7 +111,7 @@ const Template = (args) => ({
   template: '<MiniButton v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<MiniButton size="large" label="Learn More" href="#" />'
+const DEFAULT_MARKUP = '<MiniButton size="large" label="Learn more" href="#" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof MiniButton>} */
 export const Default = {
@@ -125,8 +125,8 @@ export const Default = {
 }
 
 const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <MiniButton size="medium" label="Learn More" href="#" />
-  <MiniButton size="large" label="Learn More" href="#" />
+  <MiniButton size="medium" label="Learn more" href="#" />
+  <MiniButton size="large" label="Learn more" href="#" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof MiniButton>} */

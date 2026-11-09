@@ -1,3 +1,4 @@
+import { userEvent } from '@storybook/test'
 import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
@@ -6,7 +7,10 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Currency from './currency.vue'
 
-const { Default, Sizes } = composeStories(stories)
+const { Default, Sizes, Animated } = composeStories(stories)
+
+const nextFrames = () =>
+  new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
 
 describe('Currency', () => {
   it('renders the default testid on the root', () => {
@@ -109,6 +113,78 @@ describe('Currency', () => {
     const values = getAllByTestId('content-currency__value')
     expect(values).toHaveLength(3)
     values.forEach((v) => expect(v.textContent?.trim()).toBe('20'))
+  })
+
+  it('keeps the plain figure on a value change when animated is off', async () => {
+    const { getByTestId, queryByTestId, rerender } = render(Currency, { props: { value: '25' } })
+    await rerender({ value: '20' })
+    expect(queryByTestId('content-currency__roll')).toBeNull()
+    expect(getByTestId('content-currency__value').textContent?.trim()).toBe('20')
+  })
+
+  it('does not roll on mount when animated', () => {
+    const { getByTestId, queryByTestId } = render(Currency, {
+      props: { value: '25', animated: true }
+    })
+    expect(queryByTestId('content-currency__roll')).toBeNull()
+    expect(getByTestId('content-currency__value').textContent?.trim()).toBe('25')
+  })
+
+  it('rolls only the changed characters through the digits between old and new', async () => {
+    const { getByTestId, rerender } = render(Currency, { props: { value: '25', animated: true } })
+    await rerender({ value: '20', animated: true })
+    const roll = getByTestId('content-currency__roll')
+    expect(roll.getAttribute('aria-hidden')).toBe('true')
+    const strips = [...roll.children].map((column) =>
+      [...column.firstElementChild!.children].map((glyph) => glyph.textContent?.trim()).join('')
+    )
+    expect(strips).toEqual(['2', '012345'])
+  })
+
+  it('keeps the new value readable to assistive tech while the strips are hidden', async () => {
+    const { getByTestId, rerender } = render(Currency, { props: { value: '25', animated: true } })
+    await rerender({ value: '20', animated: true })
+    const value = getByTestId('content-currency__value')
+    expect(value.querySelector('.sr-only')?.textContent?.trim()).toBe('20')
+  })
+
+  it('flips every column to its landed position after the roll starts', async () => {
+    const { getByTestId, rerender } = render(Currency, { props: { value: '25', animated: true } })
+    await rerender({ value: '30', animated: true })
+    const roll = getByTestId('content-currency__roll')
+    expect(roll.querySelectorAll('[data-rolling]')).toHaveLength(0)
+    await nextFrames()
+    await nextFrames()
+    expect(roll.querySelectorAll('[data-rolling]')).toHaveLength(2)
+  })
+
+  it('flips a non-digit change straight from the old glyph to the new one', async () => {
+    const { getByTestId, rerender } = render(Currency, {
+      props: { value: 'Free', prefix: '', animated: true }
+    })
+    await rerender({ value: '25', prefix: '', animated: true })
+    const strips = [...getByTestId('content-currency__roll').children].map((column) =>
+      [...column.firstElementChild!.children].map((glyph) => glyph.textContent).join('|')
+    )
+    expect(strips).toEqual(['e|2', 'e|5'])
+  })
+
+  it('has no a11y violations while rolled', async () => {
+    const { container, rerender } = render(Currency, {
+      props: { value: '25', suffix: 'per month', animated: true }
+    })
+    await rerender({ value: '20', suffix: 'per month', animated: true })
+    await expectNoA11yViolations(container)
+  })
+
+  it('composes the Animated story and rolls when the period toggles', async () => {
+    const { getByRole, getByTestId } = render(Animated())
+    expect(getByTestId('content-currency__value').textContent?.trim()).toBe('25')
+    await userEvent.click(getByRole('radio', { name: 'Annual' }))
+    expect(getByTestId('content-currency__roll')).toBeTruthy()
+    expect(
+      getByTestId('content-currency__value').querySelector('.sr-only')?.textContent?.trim()
+    ).toBe('20')
   })
 
   it('mirrors the size prop onto the root as data-size, for every step', () => {

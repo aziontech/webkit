@@ -1,15 +1,51 @@
 export const CAREERS_HOME_HERO = {
   eyebrow: 'Careers',
   title: "Let's build together",
-  description:
-    'Azion is driven by innovation, reliability, and the ability to make transparent, forward-looking decisions and execute them with agility. Our success depends on the success of our customers.',
+  description: 'We build new things, keep them reliable, decide in the open, and move fast.',
   action: 'See roles'
 }
 
 export const CAREERS_WORK = {
   title: 'Work at Azion',
   description:
-    "At Azion, culture is how we live and work every day. The Azion Way of Life is built on the belief that high performance goes hand in hand with autonomy, authenticity, and enjoyment. We trust people to manage their own routines with balance and accountability, focusing on outcomes. We collaborate across countries and cultures to build solutions for the world. And we value originality, bold ideas, and the courage to challenge convention. That's why there's no dress code: what matters is what each person brings to the table, their ideas, energy, and integrity."
+    "The Azion Way of Life pairs high performance with autonomy, and with room to be yourself and enjoy the work. You manage your own routine, answer for your results, and work with teammates across countries and cultures. There's no dress code: we care about the ideas, energy, and integrity you bring."
+}
+
+export const CAREERS_VISION = {
+  eyebrow: 'Our values',
+  title: 'Four values shape every role at Azion',
+  description:
+    'Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers.'
+}
+
+export const CAREERS_PROCESS = {
+  eyebrow: 'How we hire',
+  title: 'Hiring process',
+  description: 'Every role goes through the same five stages, from the first request to the offer.',
+  steps: [
+    {
+      title: 'Role request',
+      description: 'A hiring manager requests a new role.'
+    },
+    {
+      title: 'Scope and posting',
+      description:
+        'We define the role’s scope, write the job description, and post the opening on selected channels.'
+    },
+    {
+      title: 'Recruiting and interviews',
+      description:
+        'We source and screen candidates, then schedule interviews and, when the role needs one, a technical assessment.'
+    },
+    {
+      title: 'Calibration',
+      description: 'Interviewers meet to compare feedback and choose the candidate.'
+    },
+    {
+      title: 'Offer letter',
+      description: 'We prepare the offer and send it to the chosen candidate.'
+    }
+  ]
 }
 
 // Served from public/careers; width and height are the files' own, so each slide reserves its box.
@@ -57,12 +93,6 @@ export const CAREERS_ROLES = {
   previewCount: 6,
   columns: { role: 'Role', team: 'Team and location', type: 'Work type' },
   action: (total) => `See all ${total} roles`
-}
-
-export const CAREERS_JOIN = {
-  title: 'Ready to join us?',
-  description: 'Explore our open positions and find the right fit for you.',
-  action: 'See all available jobs'
 }
 
 export const CAREERS_JOBS_PATH = '/site/careers/jobs'

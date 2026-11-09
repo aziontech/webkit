@@ -1,6 +1,5 @@
-import { ref, watch } from 'vue'
-
 import FieldSwitch from '@aziontech/webkit/field-switch'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -9,7 +8,7 @@ const REF_IMPORT = "import { ref } from 'vue'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldSwitch>} */
 const meta = {
-  title: 'Components/Inputs/FieldSwitch',
+  title: 'Components/Primitives/Inputs/FieldSwitch',
   component: FieldSwitch,
   tags: ['autodocs'],
   parameters: {

@@ -1,34 +1,35 @@
 import { markRaw } from 'vue'
 
-import BotManagerMetricsFragment from '../../ui/mockup/widgets/BotManagerMetricsFragment.vue'
-import BotManagerRuleFragment from '../../ui/mockup/widgets/BotManagerRuleFragment.vue'
-import BotManagerTrafficFragment from '../../ui/mockup/widgets/BotManagerTrafficFragment.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
-  PLATFORM_DIRECTORY,
-  PRODUCT_CLOSING,
   PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS
+  PRODUCT_DOCS_ACTIONS,
+  PRODUCT_HERO_ACTIONS,
+  PRODUCT_SECURITY_CLOSING
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
+
+const BotManagerMetricsFragment = productWidget('bot-manager-metrics')
+const BotManagerRuleFragment = productWidget('bot-manager-rule')
+const BotManagerTrafficFragment = productWidget('bot-manager-traffic')
 
 const PILLARS = [
   {
     icon: 'pi pi-lock',
     title: 'Stop fraud before it happens',
     description:
-      'Block credential stuffing, account takeovers, and payment fraud with intent-based detection to protect customer accounts and reduce financial losses.'
+      'Block credential stuffing, account takeover, and payment fraud with intent-based detection. Protect customer accounts and cut financial losses.'
   },
   {
     icon: 'pi pi-shield',
     title: 'Defend against brute-force attacks',
-    description:
-      'Use intelligent scoring and adaptive mitigation to make brute-force attacks costly and time-consuming.'
+    description: 'Scoring and adaptive mitigation make brute-force attacks costly and slow.'
   },
   {
     icon: 'pi pi-eye',
     title: 'Control scraping and crawling',
     description:
-      'Prevent unauthorized content extraction by distinguishing legitimate crawlers from malicious scrapers with granular policies.'
+      'Stop unauthorized content extraction. Granular policies tell legitimate crawlers from malicious scrapers.'
   }
 ]
 
@@ -104,13 +105,13 @@ const FAQ = [
     value: 'monitoring',
     question: 'How can I monitor and analyze bot traffic?',
     answer:
-      "Bot Manager provides comprehensive visibility through Azion's observability tools: Real-Time Metrics: view bot traffic distribution, CAPTCHA solve rates, top attacking IPs, geographic attack origins, and classification breakdowns Real-Time Events: access detailed logs for forensic analysis and pattern identification Data Stream: export logs to your SIEM, big data platforms, or stream processing tools These tools enable you to track attack trends, identify threat sources, calibrate detection rules, and continuously optimize your bot protection policies."
+      "Bot Manager gives you full visibility through Azion's monitoring tools: Real-Time Metrics: view bot traffic distribution, CAPTCHA solve rates, top attacking IPs, geographic attack origins, and classification breakdowns Real-Time Events: access detailed logs for forensic analysis and pattern identification Data Stream: export logs to your SIEM, big data platforms, or stream processing tools These tools enable you to track attack trends, identify threat sources, calibrate detection rules, and continuously optimize your bot protection policies."
   },
   {
     value: 'customize',
     question: 'Can I customize Bot Manager for my specific needs?',
     answer:
-      "Yes, Bot Manager is highly customizable to match your business requirements: Configure detection thresholds based on your risk tolerance Define different actions for different threat types Disable specific detection rules if they don't apply to your use case Integrate custom Network Lists for IP reputation scoring Use the Azion SDK for enhanced device identification Combine with other Azion security products (WAF, DDoS Protection, Network Shield) You can also use Real-Time Events to observe traffic patterns and calibrate rules before enforcing blocking actions, ensuring optimal protection without impacting legitimate users."
+      "Yes. Bot Manager is configurable to match your business requirements: Configure detection thresholds based on your risk tolerance Define different actions for different threat types Disable specific detection rules if they don't apply to your use case Integrate custom Network Lists for IP reputation scoring Use the Azion SDK for enhanced device identification Combine with other Azion security products (WAF, DDoS Protection, Network Shield) You can also use Real-Time Events to observe traffic patterns and calibrate rules before enforcing blocking actions, ensuring optimal protection without impacting legitimate users."
   }
 ]
 
@@ -118,7 +119,7 @@ export const BOT_MANAGER_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
-    titleLength: 'long',
+    titleLength: 'short',
     eyebrow: 'Bot Manager',
     title: 'Stop bots before they reach your applications',
     description:
@@ -127,20 +128,20 @@ export const BOT_MANAGER_PAGE = [
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'Bot defense inside the firewall',
     description:
       'The rule that sends a path to Bot Manager, the classification of every request and the dashboards that track it live in the firewall you already run.',
-    actions: PRODUCT_HERO_ACTIONS,
+    actions: PRODUCT_DOCS_ACTIONS,
     columns: 3,
     items: [
       {
         icon: 'pi pi-dollar',
         title: 'Reduce infrastructure costs',
         description:
-          'Block automated traffic before it reaches your origin to reduce bandwidth usage, compute consumption, and operational costs.',
+          'Block automated traffic before it reaches your origin and cut bandwidth, compute, and operating costs.',
         scene: { component: markRaw(BotManagerRuleFragment) },
         href: PRODUCT_DOCS
       },
@@ -148,41 +149,17 @@ export const BOT_MANAGER_PAGE = [
         icon: 'pi pi-users',
         title: 'Preserve legitimate user experience',
         description:
-          'Minimize false positives by accurately distinguishing humans and good bots from malicious automation.',
+          'Tell humans and good bots apart from malicious automation to keep false positives low.',
         scene: { component: markRaw(BotManagerTrafficFragment) },
         href: PRODUCT_DOCS
       },
       {
         icon: 'pi pi-chart-bar',
-        title: 'Gain visibility into bot traffic',
+        title: 'See bot traffic as it happens',
         description:
-          'Monitor bot behavior and attack trends with real-time analytics to continuously optimize your defenses.',
+          'Track bot behavior and attack trends in real time, and tune your defenses as they change.',
         scene: { component: markRaw(BotManagerMetricsFragment) },
         href: PRODUCT_DOCS
-      }
-    ]
-  },
-  {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Detect bots with precision',
-        description:
-          'Detect bots in real time with machine learning that evaluates device fingerprints, browser behavior, and network reputation. Use SDKs for web and mobile apps to reduce false positives.',
-        href: PRODUCT_DOCS,
-        illustration: 'programmable-security',
-        illustrationLabel: 'A request inspected and scored before it reaches the application',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
-      },
-      {
-        title: 'Flexible mitigation actions',
-        description:
-          'Choose from 7 mitigation actions: block, challenge, rate limit, redirect, custom HTML, random delay, and connection hold. Adjust enforcement by risk level to protect critical flows while preserving legitimate traffic.',
-        href: '/site/products/web-application-firewall',
-        illustration: 'automate-threat-mitigation',
-        illustrationLabel: 'Bot traffic passing along a line of response steps',
-        actions: [{ label: 'WAF', href: '/site/products/web-application-firewall' }]
       }
     ]
   },
@@ -192,17 +169,10 @@ export const BOT_MANAGER_PAGE = [
     title: 'Protect critical agentic applications and APIs',
     description:
       'Put Bot Manager in front of any login, checkout or API and stop malicious automation on Azion’s distributed infrastructure, before it reaches your origin. Teams use it to:',
-    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
     items: USE_CASES
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
-  {
-    ...PRODUCT_CLOSING,
-    eyebrow: 'Protect',
-    title: 'Protected by default.',
-    titleMuted: 'Always on.',
-    description: 'Get stronger protection, less attack exposure, and less operational overhead.'
-  }
+  PRODUCT_SECURITY_CLOSING
 ]

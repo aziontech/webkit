@@ -1,6 +1,8 @@
 import type { PageSection } from '../../ui/sections'
 import { type AlternativeGuide, TRUST_MARKS } from '../alternative-guides'
 
+const CONTACT = { label: 'Fale com um especialista', href: '/site/contact' }
+
 export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => [
   {
     section: 'Heroes',
@@ -9,18 +11,17 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     eyebrowPrefix: '//',
     title: guide.hero.title,
     description: guide.hero.description,
-    actions: [
-      { label: 'Comece Grátis', href: '/signup', kind: 'secondary' },
-      { label: 'Fale com um especialista', href: '#contact', kind: 'outlined', trailing: true }
-    ],
-    art: {
-      name: guide.hero.art,
-      alt: `A marca da Azion e a marca da ${guide.rival}, uma sobre a outra`
-    },
+    actions: [{ ...CONTACT, kind: 'secondary' }],
+    art: guide.hero.art
+      ? {
+          name: guide.hero.art,
+          alt: `A marca da Azion e a marca da ${guide.rival}, uma sobre a outra`
+        }
+      : null,
     carouselLabel: 'Empresas confiam',
     carouselMarks: TRUST_MARKS
   },
-  { section: 'CapabilityGrid', items: guide.reasons },
+  { section: 'CapabilityGrid', title: guide.why, items: guide.reasons },
   {
     section: 'ClientQuotes',
     quotes: guide.quotes,
@@ -35,36 +36,39 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
     ]
   },
   {
-    section: 'ComparisonTable',
-    eyebrow: guide.comparison.eyebrow,
-    title: guide.comparison.title,
-    rival: guide.rival,
-    rows: guide.capabilities,
-    caption: `Comparação de capacidades entre a Azion e a ${guide.rival}.`,
-    columnLabel: 'Capacidade',
-    supportLabels: {
-      full: 'Suporte completo',
-      partial: 'Suporte parcial',
-      none: 'Não disponível'
-    }
+    section: 'CompareCompetitors',
+    eyebrow: 'Comparação',
+    title: guide.comparison,
+    competitor: { name: guide.rival },
+    groups: [
+      {
+        title: 'Capacidades',
+        rows: guide.capabilities.map(({ rival, ...row }) => ({ ...row, competitor: rival }))
+      }
+    ],
+    caption: guide.comparison,
+    columnLabel: '',
+    fullLabel: 'Suporte completo',
+    partialLabel: 'Suporte parcial',
+    noneLabel: 'Não disponível'
   },
   {
     section: 'MediaSplitBand',
     title: guide.mapping.title,
     description: guide.mapping.description,
     illustration: 'build-applications',
-    actions: [{ label: 'Ver o guia', href: '/site/docs' }]
+    illustrationLabel: guide.mapping.illustrationLabel,
+    actions: [{ ...guide.mapping.action, external: true }]
   },
   { section: 'FaqSection', title: 'Perguntas Frequentes', items: guide.faq },
   {
     section: 'ClosingCallToAction',
     kind: 'split',
-    eyebrow: 'Secure',
-    title: 'Proteção nativa.',
-    titleMuted: 'Sempre ativa.',
+    title: 'Construa, execute e proteja aplicações',
+    titleMuted: 'em qualquer lugar.',
     description:
-      'Ganhe proteção mais forte, menos exposição a ataques e menos sobrecarga operacional.',
-    actions: [{ label: 'Comece Grátis', href: '/signup', kind: 'secondary' }],
-    aside: { label: 'Fale com nosso time', href: '/site/contact' }
+      'Tenha lançamentos mais rápidos, menor latência e menos infraestrutura para gerenciar desde o primeiro dia.',
+    actions: [{ label: 'Comece grátis', href: '/signup', kind: 'secondary' }],
+    aside: CONTACT
   }
 ]

@@ -6,7 +6,7 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT = "import Chip from '@aziontech/webkit/chip'"
 
 const meta = {
-  title: 'Components/Inputs/Chip',
+  title: 'Components/Primitives/Inputs/Chip',
   component: Chip,
   tags: ['autodocs'],
   parameters: {

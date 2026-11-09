@@ -2,7 +2,7 @@ import {
   CodeBlock,
   PageContainer,
   PageHeader,
-  SectionHeader
+  PageSection
 } from '../../foundations/components/layout/index.js'
 
 const FILES = import.meta.glob(
@@ -14,8 +14,16 @@ const NAME = /^(.+)-(extended|symbol)-(color|reversed|mono)\.(svg|png|webp)$/
 
 const GROUPS = [
   ['clients', 'Clients', 'Customers that run on Azion.'],
-  ['former', 'Former clients', 'Customers that no longer run on Azion; never on a current trust strip.'],
-  ['frameworks', 'Frameworks', 'What a workload is built with: frameworks, clouds, model providers, data tools.'],
+  [
+    'former',
+    'Former clients',
+    'Customers that no longer run on Azion; never on a current trust strip.'
+  ],
+  [
+    'frameworks',
+    'Frameworks',
+    'What a workload is built with: frameworks, clouds, model providers, data tools.'
+  ],
   ['standards', 'Standards', 'Specification bodies and formats a workload is written against.'],
   ['certifications', 'Certifications', 'Compliance badges.'],
   ['analysts', 'Analysts', 'Analyst firms that rank Azion.'],
@@ -63,7 +71,7 @@ export default {
 export const Library = {
   name: 'Library',
   render: () => ({
-    components: { CodeBlock, PageContainer, PageHeader, SectionHeader },
+    components: { CodeBlock, PageContainer, PageHeader, PageSection },
     setup() {
       return { SECTIONS, IMPORT_EXAMPLE, total: marks.length }
     },
@@ -75,23 +83,14 @@ export const Library = {
           The file name is the whole import path.
         </PageHeader>
 
-        <section class="mb-(--spacing-xxl)">
-          <SectionHeader
-            title="Naming"
-            description="type is extended (the full logo) or symbol (the mark alone). colormode is color (the brand's own colours, for a light surface), reversed (for a dark surface: white artwork, or the brand's own dark lockup) or mono (one dark ink). A brand has at most one file per combination."
-          />
-        </section>
+        <PageSection title="Naming" description="type is extended (the full logo) or symbol (the mark alone). colormode is color (the brand's own colours, for a light surface), reversed (for a dark surface: white artwork, or the brand's own dark lockup) or mono (one dark ink). A brand has at most one file per combination.">
+        </PageSection>
 
-        <section class="mb-(--spacing-xxl)">
-          <SectionHeader
-            title="Importing"
-            description="Import a mark by its file name, never by its folder. The client and competitor registries index the marks a page usually needs."
-          />
+        <PageSection title="Importing" description="Import a mark by its file name, never by its folder. The client and competitor registries index the marks a page usually needs.">
           <CodeBlock :content="IMPORT_EXAMPLE" language="javascript" />
-        </section>
+        </PageSection>
 
-        <section v-for="section in SECTIONS" :key="section.key" class="mb-(--spacing-xxl)">
-          <SectionHeader :title="section.title" :description="section.description" />
+        <PageSection v-for="section in SECTIONS" :key="section.key" :title="section.title" :description="section.description">
           <div class="grid gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4">
             <figure
               v-for="mark in section.marks"
@@ -107,7 +106,7 @@ export const Library = {
               <figcaption class="font-code text-code break-all text-(--text-muted)">{{ mark.file }}</figcaption>
             </figure>
           </div>
-        </section>
+        </PageSection>
       </PageContainer>
     `
   })

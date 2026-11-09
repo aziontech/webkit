@@ -37,9 +37,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-texture-material'
   )
 
-  // The 4x4 Bayer matrix. A rank is the sub-lattice that appears at that step of the
-  // ramp, so dots LEAVE as the density drops instead of dimming — dispersed ranks are
-  // what keep the sparse end scattered rather than striped.
   const BAYER = [
     [0, 8, 2, 10],
     [12, 4, 14, 6],
@@ -75,10 +72,10 @@
       class="absolute inset-0 overflow-hidden [background-color:color-mix(in_srgb,var(--primary)_11%,transparent)] [background-image:radial-gradient(circle_at_var(--texture-pool-a,var(--texture-pool-x,86%)_94%),color-mix(in_srgb,var(--primary)_74%,transparent)_0%,color-mix(in_srgb,var(--primary)_44%,transparent)_24%,color-mix(in_srgb,var(--primary)_18%,transparent)_52%,transparent_88%),radial-gradient(circle_at_var(--texture-pool-b,var(--texture-pool-x,98%)_8%),color-mix(in_srgb,var(--primary)_50%,transparent)_0%,color-mix(in_srgb,var(--primary)_20%,transparent)_28%,transparent_62%)] [mask-image:conic-gradient(at_var(--texture-cell)_var(--texture-cell),transparent_0_75%,black_75%_100%)] [mask-mode:alpha] [mask-position:var(--texture-cell)_var(--texture-cell)] [mask-size:var(--texture-pitch)_var(--texture-pitch)]"
     >
       <div
-        class="absolute inset-y-0 left-0 right-[calc(var(--texture-wave-shift)*-1)] animate-texture-wave-a will-change-transform [--texture-band:380px] [--texture-wave-shift:calc(var(--texture-band)/0.98481)] [background-image:repeating-linear-gradient(100deg,transparent_0,color-mix(in_srgb,var(--primary)_18%,transparent)_calc(var(--texture-band)*0.28),color-mix(in_srgb,var(--primary)_50%,transparent)_calc(var(--texture-band)*0.5),color-mix(in_srgb,var(--primary)_18%,transparent)_calc(var(--texture-band)*0.72),transparent_var(--texture-band))] motion-reduce:animate-none"
+        class="absolute inset-y-0 left-0 right-[calc(var(--texture-wave-shift)*-1)] animate-texture-wave-a will-change-transform [--texture-band:380px] [--texture-wave-shift:calc(var(--texture-band)/0.98481*var(--texture-wave-pace,1))] [background-image:repeating-linear-gradient(100deg,transparent_0,color-mix(in_srgb,var(--primary)_min(100%,calc(18%*var(--texture-wave-gain,1))),transparent)_calc(var(--texture-band)*0.28),color-mix(in_srgb,var(--primary)_min(100%,calc(50%*var(--texture-wave-gain,1))),transparent)_calc(var(--texture-band)*0.5),color-mix(in_srgb,var(--primary)_min(100%,calc(18%*var(--texture-wave-gain,1))),transparent)_calc(var(--texture-band)*0.72),transparent_var(--texture-band))] motion-reduce:animate-none"
       />
       <div
-        class="absolute inset-y-0 left-[calc(var(--texture-wave-shift)*-1)] right-0 animate-texture-wave-b will-change-transform [--texture-band:260px] [--texture-wave-shift:calc(var(--texture-band)/0.98481)] [background-image:repeating-linear-gradient(80deg,transparent_0,color-mix(in_srgb,var(--primary)_14%,transparent)_calc(var(--texture-band)*0.3),color-mix(in_srgb,var(--primary)_38%,transparent)_calc(var(--texture-band)*0.5),color-mix(in_srgb,var(--primary)_14%,transparent)_calc(var(--texture-band)*0.7),transparent_var(--texture-band))] motion-reduce:animate-none"
+        class="absolute inset-y-0 left-[calc(var(--texture-wave-shift)*-1)] right-0 animate-texture-wave-b will-change-transform [--texture-band:260px] [--texture-wave-shift:calc(var(--texture-band)/0.98481*var(--texture-wave-pace,1))] [background-image:repeating-linear-gradient(80deg,transparent_0,color-mix(in_srgb,var(--primary)_min(100%,calc(14%*var(--texture-wave-gain,1))),transparent)_calc(var(--texture-band)*0.3),color-mix(in_srgb,var(--primary)_min(100%,calc(38%*var(--texture-wave-gain,1))),transparent)_calc(var(--texture-band)*0.5),color-mix(in_srgb,var(--primary)_min(100%,calc(14%*var(--texture-wave-gain,1))),transparent)_calc(var(--texture-band)*0.7),transparent_var(--texture-band))] motion-reduce:animate-none"
       />
     </div>
   </div>

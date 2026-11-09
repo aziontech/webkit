@@ -6,7 +6,7 @@ const IMPORT = "import Badge from '@aziontech/webkit/badge'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Badge>} */
 const meta = {
-  title: 'Components/Content/Badge',
+  title: 'Components/Primitives/Content/Badge',
   component: Badge,
   tags: ['autodocs'],
   parameters: {

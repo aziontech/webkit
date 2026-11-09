@@ -43,8 +43,6 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-footer')
 
-  // Each band renders only when the consumer fills it, so a footer with links alone carries no
-  // empty framed rows.
   const hasStatusBar = computed(() => Boolean(slots.status || slots.language))
 
   const hasSignature = computed(() => Boolean(slots.brand || slots.tagline))
@@ -62,19 +60,9 @@
     :data-kind="kind"
     class="group flex w-full flex-col bg-(--bg-canvas)"
   >
-    <!-- Two placements, identical bands: `content` (default) runs them full bleed with no inset
-         of its own (every band already carries the boundary value); `site` caps them at the
-         site measure token, insets by the page boundary below it, and draws the frame. The
-         frame is site-only: full bleed, the rules would land on the zone's edges and the
-         gutters collapse to zero width while still painting borders. -->
     <div
       class="flex w-full items-stretch justify-center group-data-[kind=site]:border-b group-data-[kind=site]:border-b-(length:--border-width-default) group-data-[kind=site]:border-b-(--border-default)"
     >
-      <!-- Centred because between the measure (1388) and the gutter breakpoint (1536) the row
-           holds one capped child, which an unjustified flex row left-aligns by up to 148px. -->
-      <!-- The gutters turn on at the first breakpoint past the measure: below it the column is
-           the whole row, a gutter has no slack, and its border and marks paint on the column's
-           own edge. Move the breakpoint with the measure. -->
       <FrameBox
         v-if="kind === 'site'"
         key="gutter-start"
@@ -119,10 +107,6 @@
               class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
             >
               <slot name="brand" />
-              <!-- The gap only matters between md and the width that fits the tagline on one line,
-                 where a wrapped tagline would otherwise run into the brand. -->
-              <!-- Rendered only when filled: an empty paragraph is still a flex item and spends the
-                 row's gap, pushing a lone brand off centre (measured 12px at 768 to 1023). -->
               <p
                 v-if="slots.tagline"
                 class="text-heading-xl text-(--text-default) md:text-right"

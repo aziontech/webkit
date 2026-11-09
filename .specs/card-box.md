@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 1afca6d16383619faaefccea6da1ea7bc06d94701556d49d41930593f5b8165f
+checksum: 03eabe355411f4b00e0ade6ce5dffe0fa5e882a16f84c3b32a20145eb0b4a966
 created: 2026-05-22
-last_updated: 2026-07-13
+last_updated: 2026-10-22
 ---
 # Card Box — Component Spec
 
@@ -33,10 +33,11 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 | Slot | Scope | Notes |
 |---|---|---|
 | `header` | — | Replaces the default header layout (title + header-action). |
+| `header-action` | — | Actions aligned to the end of the default header; visible on header hover. |
 | `content` | — | Main card body. |
 | `footer` | — | Footer actions or metadata; omitted when empty. |
 
-> Also exposes a `header-action` named slot (actions aligned to the end of the default header, revealed on header hover). It is kept out of the table above because the compliance parser cannot read hyphenated (quoted) slot keys from `defineSlots`. There is no `default` slot — content goes through `content`.
+> There is no `default` slot — content goes through `content`.
 
 ## States
 

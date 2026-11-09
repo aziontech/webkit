@@ -16,13 +16,8 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
-import {
-  AKAMAI_GUIDE,
-  AWS_GUIDE,
-  CLOUDFLARE_GUIDE,
-  FASTLY_GUIDE
-} from '@site/data/alternative-guides'
 import { blogArticle } from '@site/data/blog-articles.js'
+import { hasLandingPage, LANDING_PAGE_SLUGS } from '@site/data/pages/lp'
 import { successCaseArticle } from '@site/data/success-case-articles.js'
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
@@ -30,12 +25,11 @@ import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
+import LandingAbout from '@site/views/LandingAbout.vue'
 import LandingAiGateway from '@site/views/LandingAiGateway.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
-import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
-import LandingApplications from '@site/views/LandingApplications.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
 import LandingBlog from '@site/views/LandingBlog.vue'
@@ -45,20 +39,21 @@ import LandingCache from '@site/views/LandingCache.vue'
 import LandingCareers from '@site/views/LandingCareers.vue'
 import LandingCareersHome from '@site/views/LandingCareersHome.vue'
 import LandingCareersJob from '@site/views/LandingCareersJob.vue'
+import LandingCloudflareAlternative from '@site/views/LandingCloudflareAlternative.vue'
 import LandingCompliance from '@site/views/LandingCompliance.vue'
 import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
+import LandingContactUnderAttack from '@site/views/LandingContactUnderAttack.vue'
 import LandingDataStream from '@site/views/LandingDataStream.vue'
-import LandingDdosProtection from '@site/views/LandingDdosProtection.vue'
 import LandingEdgeDns from '@site/views/LandingEdgeDns.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
-import LandingFirewall from '@site/views/LandingFirewall.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingGdpr from '@site/views/LandingGdpr.vue'
 import LandingImageProcessor from '@site/views/LandingImageProcessor.vue'
 import LandingKvStore from '@site/views/LandingKvStore.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
 import LandingLoadBalancer from '@site/views/LandingLoadBalancer.vue'
+import LandingLp from '@site/views/LandingLp.vue'
 import LandingNetworkShield from '@site/views/LandingNetworkShield.vue'
 import LandingObjectStorage from '@site/views/LandingObjectStorage.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
@@ -67,7 +62,8 @@ import LandingPerformance from '@site/views/LandingPerformance.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRealTimeEvents from '@site/views/LandingRealTimeEvents.vue'
-import LandingRealTimeMetrics from '@site/views/LandingRealTimeMetrics.vue'
+import LandingRecognitions from '@site/views/LandingRecognitions.vue'
+import LandingResourceHub from '@site/views/LandingResourceHub.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
@@ -75,6 +71,7 @@ import LandingSqlDatabase from '@site/views/LandingSqlDatabase.vue'
 import LandingStreaming from '@site/views/LandingStreaming.vue'
 import LandingSuccessCasePost from '@site/views/LandingSuccessCasePost.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
+import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
@@ -86,6 +83,8 @@ import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 // Every path this tree served before the pages were grouped. Kept so a link that is
 // already out — a bookmark, a deployed URL, an ad — still lands on the page it named.
 const MOVED = {
+  '/site/contact/support': '/site/contact',
+  '/site/contact/sales': '/site/contact',
   '/site/functions': '/site/products/functions',
   '/site/application-accelerator': '/site/products/application-accelerator',
   '/site/cache': '/site/products/cache',
@@ -96,7 +95,14 @@ const MOVED = {
   '/site/web-apps': '/site/solutions/web-apps',
   '/site/technology': '/site/solutions/technology',
   '/site/retail': '/site/solutions/retail',
-  '/site/vercel-alternative-guide': '/site/guides/vercel-alternative'
+  '/site/vercel-alternative-guide': '/site/guides/vercel-alternative',
+  '/site/guides/akamai-alternative': '/site/lp/guia-alternativa-a-akamai',
+  '/site/guides/aws-alternative': '/site/lp/guia-alternativa-a-aws',
+  '/site/guides/fastly-alternative': '/site/lp/guia-alternativa-a-fastly',
+  '/site/products/applications': '/site/docs/applications',
+  '/site/products/firewall': '/site/docs/firewall',
+  '/site/products/ddos-protection': '/site/docs/workloads',
+  '/site/products/real-time-metrics': '/site/docs/real-time-metrics'
 }
 
 export const siteRoutes = [
@@ -137,12 +143,6 @@ export const siteRoutes = [
   // A product page whose hero is the product: the workload's own deployment topology, drawn
   // with the diagram the console renders, dissolved into the band by a dither ramp.
   { path: '/site/products/workloads', name: 'site-workloads', component: LandingWorkloads },
-  // The Products mega-menu's Applications entry: the delivery logic a workload serves.
-  {
-    path: '/site/products/applications',
-    name: 'site-applications',
-    component: LandingApplications
-  },
   // The Products mega-menu's Object Storage entry.
   {
     path: '/site/products/object-storage',
@@ -168,19 +168,9 @@ export const siteRoutes = [
     component: LandingDataStream
   },
   {
-    path: '/site/products/ddos-protection',
-    name: 'site-ddos-protection',
-    component: LandingDdosProtection
-  },
-  {
     path: '/site/products/edge-dns',
     name: 'site-edge-dns',
     component: LandingEdgeDns
-  },
-  {
-    path: '/site/products/firewall',
-    name: 'site-firewall',
-    component: LandingFirewall
   },
   {
     path: '/site/products/image-processor',
@@ -206,11 +196,6 @@ export const siteRoutes = [
     path: '/site/products/real-time-events',
     name: 'site-real-time-events',
     component: LandingRealTimeEvents
-  },
-  {
-    path: '/site/products/real-time-metrics',
-    name: 'site-real-time-metrics',
-    component: LandingRealTimeMetrics
   },
   {
     path: '/site/products/sql-database',
@@ -256,28 +241,18 @@ export const siteRoutes = [
     component: LandingVercelAlternative
   },
   {
-    path: '/site/guides/akamai-alternative',
-    name: 'site-akamai-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: AKAMAI_GUIDE }
-  },
-  {
-    path: '/site/guides/aws-alternative',
-    name: 'site-aws-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: AWS_GUIDE }
-  },
-  {
     path: '/site/guides/cloudflare-alternative',
     name: 'site-cloudflare-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: CLOUDFLARE_GUIDE }
+    component: LandingCloudflareAlternative
   },
+
+  { path: '/site/lp', redirect: `/site/lp/${LANDING_PAGE_SLUGS[0]}` },
   {
-    path: '/site/guides/fastly-alternative',
-    name: 'site-fastly-alternative-guide',
-    component: LandingAlternativeGuide,
-    props: { guide: FASTLY_GUIDE }
+    path: '/site/lp/:slug',
+    name: 'site-lp',
+    component: LandingLp,
+    props: true,
+    beforeEnter: (to) => (hasLandingPage(String(to.params.slug)) ? true : '/site/home')
   },
 
   // ══ The rest of the site ══════════════════════════════════════════════════════════
@@ -295,24 +270,37 @@ export const siteRoutes = [
   // opens cannot name two different jobs. The header is per-posting; the description is the one
   // posting we read (stated in `site/data/careers-job.js`).
   { path: '/site/careers/:id', name: 'site-careers-job', component: LandingCareersJob },
-  // The contact page in the same shell: the pitch and its form side by side in the hero, the
-  // offices as a hairline grid, and the site's own closing CTA. The website nav's `Contact`
-  // entry points here — it used to be a bare `#contact` anchor onto the closing band.
   { path: '/site/contact', name: 'site-contact', component: LandingContact },
+  {
+    path: '/site/contact/under-attack',
+    name: 'site-contact-under-attack',
+    component: LandingContactUnderAttack
+  },
   // The Learning Center in the same shell: 16 subjects and 78 articles, read verbatim off
   // azion.com/en/learning. The Resources mega-menu's `Learning` entry points here.
   { path: '/site/learning', name: 'site-learning', component: LandingLearning },
-  // The partner programme page in the same shell, and the one composed ENTIRELY from the
-  // marketing components: its hero, its proof band and its three reasons are `hero`,
-  // `big-numbers` and `content-columns` configured, with nothing hand-drawn around them. The
-  // site nav does not link it, because azion.com's does not either.
+  // azion.com/en/resource-hub, read verbatim; its listing renders the blog's article rows.
+  { path: '/site/resource-hub', name: 'site-resource-hub', component: LandingResourceHub },
+  // The partner programme page in the same shell, laid out on the contact page: pitch and form
+  // side by side in the hero over the client strip, then `big-numbers`, `content-columns` and the
+  // framed `call-to-action` between hatched gaps — webkit sections only. The site nav does not
+  // link it, because azion.com's does not either.
   { path: '/site/partners', name: 'site-partners', component: LandingPartners },
+  // azion.com/en/about-us, read verbatim; the footer's Company `About` link points here.
+  { path: '/site/about', name: 'site-about', component: LandingAbout },
+  // azion.com/en/recognitions, read verbatim; the footer's Company `Recognition and Awards` link points here.
+  { path: '/site/recognitions', name: 'site-recognitions', component: LandingRecognitions },
   // The success-case library in the same shell: the first /site page whose body is a
   // filtered index rather than an argument — three featured stories, 35 in a hairline grid
   // behind three pickers, and the analyst recognitions. The site nav does not link it,
   // because azion.com's does not either: its Resources menu lists Blog, Resource Hub,
   // Partners and Marketplace, and reaches the library only from the footer.
   { path: '/site/success-cases', name: 'site-success-cases', component: LandingSuccessCases },
+  {
+    path: '/site/success-cases/embed',
+    name: 'site-success-cases-embed',
+    component: LandingSuccessCasesEmbed
+  },
   {
     path: '/site/success-cases/:slug',
     name: 'site-success-case-post',
@@ -357,7 +345,7 @@ export const siteRoutes = [
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   // A docs reading page COMPOSED in Vue: prose, but with a filtering tool picker and
   // cards carrying other vendors' real marks — neither of which MDX can express. Every
-  // block in it still comes from @aziontech/webkit-docs.
+  // block in it still comes from the documentation layer.
   {
     path: '/site/docs/agent-setup',
     name: 'site-docs-agent-setup',
@@ -375,7 +363,7 @@ export const siteRoutes = [
     beforeEnter: (to) => (agentBySlug(String(to.params.agent)) ? true : '/site/docs/agent-setup')
   },
   // EVERY OTHER DOCS PAGE, from one route and one view. A reading page is `.mdx` rendered by
-  // @aziontech/webkit-docs — the other half of the docs example, and the way most of a real
+  // the documentation layer — the other half of the docs example, and the way most of a real
   // documentation site is written — so the pages are files in `site/docs/content/` and the
   // route resolves the slug against that folder (see docs-pages.js). Adding a page is adding
   // the file and giving its row in the rail an `href`; no route, no view, no wiring.

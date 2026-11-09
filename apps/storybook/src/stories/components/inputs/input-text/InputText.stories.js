@@ -1,7 +1,6 @@
-import { ref, watch } from 'vue'
-
 import Button from '@aziontech/webkit/button'
 import InputText from '@aziontech/webkit/input-text'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -9,7 +8,7 @@ const IMPORT = "import InputText from '@aziontech/webkit/input-text'"
 
 /** @type {import('@storybook/vue3').Meta<typeof InputText>} */
 const meta = {
-  title: 'Components/Inputs/InputText',
+  title: 'Components/Primitives/Inputs/InputText',
   component: InputText,
   tags: ['autodocs'],
   parameters: {

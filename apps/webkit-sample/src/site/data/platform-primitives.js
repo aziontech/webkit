@@ -1,6 +1,6 @@
 export const PLATFORM_PRIMITIVES = [
   {
-    label: 'Compute',
+    label: 'Build',
     items: [
       {
         icon: 'ai ai-edge-functions',
@@ -52,7 +52,7 @@ export const PLATFORM_PRIMITIVES = [
     ]
   },
   {
-    label: 'Data',
+    label: 'Store',
     items: [
       {
         icon: 'ai ai-edge-storage',
@@ -81,7 +81,7 @@ export const PLATFORM_PRIMITIVES = [
     ]
   },
   {
-    label: 'Security',
+    label: 'Secure',
     items: [
       {
         icon: 'ai ai-edge-firewall',

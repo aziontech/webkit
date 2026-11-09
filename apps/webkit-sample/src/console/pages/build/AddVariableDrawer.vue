@@ -126,7 +126,7 @@
   }
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     editor.reset()
     Object.assign(scopes, createScopes(scopeOptions()))
     submitting.value = false

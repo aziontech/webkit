@@ -27,7 +27,7 @@ Turbocharge content delivery with caching and functions for ultrafast, global pe
 Modern digital businesses require more than just speed; they require an impenetrable defense. Azion has been recognized as a **High Performer** in four key security categories, highlighting our unified approach to protecting applications and networks.
 
 - [Web Application Firewall (WAF)](https://www.azion.com/en/products/web-application-firewall/)**:** Recognized for our ability to inspect traffic flow at the application level and block complex threats like SQL injections and Cross-Site Scripting (XSS).
-- [DDoS Protection](https://www.azion.com/en/products/ddos-protection/)**:** Acknowledged for our robust capacity to filter malicious traffic, limit flow, and maintain uptime during volumetric attacks that aim to overwhelm systems.
+- [DDoS Protection](https://www.azion.com/en/documentation/platform/workloads/ddos-protection/ddos-mitigation/)**:** Acknowledged for our robust capacity to filter malicious traffic, limit flow, and maintain uptime during volumetric attacks that aim to overwhelm systems.
 - [Bot Detection and Mitigation](https://www.azion.com/en/products/bot-manager/)**:** Commended for our advanced capabilities in distinguishing between human and bot activity, preventing account takeovers (ATO), web scraping, and API abuse.
 - [Web Security Software](https://www.azion.com/en/solutions/security-modernization/)**:** Validating our overall posture in securing web environments against a diverse landscape of cyber threats.
 

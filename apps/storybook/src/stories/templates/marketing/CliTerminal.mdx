@@ -1,0 +1,46 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as CliTerminalStories from './CliTerminal.stories'
+
+<Meta title="Templates/Marketing/CLI/CliTerminal" />
+
+# CliTerminal
+
+The Azion CLI band: a headline beside its description, with one outlined button to install the CLI, over a terminal window that types a real session on the pixelate texture. Product pages close their argument with it when the point is how little it takes to ship from the terminal, like Functions and Workloads.
+
+The window rises from the frame's foot as it enters the viewport and runs off the frame's bottom rule. With reduced motion the window is already in place and the finished session draws at once.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `TextureMaterial` and `Button`, with the terminal scene inside the frame.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Terminal
+
+From the Functions page: the two-command deploy. The terminal types `azion link`, then `azion deploy`, then curls the domain the CLI hands back. The Workloads page renders the same band with its own title and the `deployWorkload` session.
+
+<Canvas of={CliTerminalStories.Terminal} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` are the headline copy. The eyebrow defaults to `Azion CLI`.
+- `script` picks the recorded session: `deploy` for a function, `deployWorkload` for a workload.
+- `actions` are the buttons under the headline.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={CliTerminalStories.TerminalJson} dark />
+</div>

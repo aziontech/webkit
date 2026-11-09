@@ -191,4 +191,4 @@ For technology leaders responsible for platform reliability and technical risk, 
 
 The objective is not to eliminate latency entirely. The objective is ensuring that **p95 and p99 remain stable under demand**, so traffic surges become growth opportunities instead of revenue risks and checkout performance remains consistent when conversion matters most.
 
-[Talk to an Azion specialist about stabilizing checkout performance and protecting conversion during your next high-traffic event.](https://www.azion.com/en/contact/)
+[Talk to a specialist](https://www.azion.com/en/contact/)

@@ -1,3 +1,4 @@
+import { agentsClosing, salesClosing } from '../product-pages.js'
 import { NETWORK_OUTCOMES } from '../solutions.js'
 
 const DOCS = '/site/docs'
@@ -12,7 +13,7 @@ const useCaseBand = (useCase) => ({
   actions: [
     useCase.href
       ? { label: useCase.action, href: useCase.href, trailing: true }
-      : { label: 'Read Docs', href: DOCS, trailing: true }
+      : { label: 'Docs', href: DOCS, trailing: true }
   ]
 })
 
@@ -31,7 +32,8 @@ export function solutionPage(data) {
     primitivesTitle,
     network,
     faq,
-    cta
+    cta,
+    agents = false
   } = data
 
   return [
@@ -41,8 +43,13 @@ export function solutionPage(data) {
       title: hero.title,
       description: hero.description,
       actions: [
-        { label: 'Start Free', href: '/signup', kind: 'secondary' },
-        { label: 'Talk to a Specialist', href: '#contact', kind: 'outlined', trailing: true }
+        { label: 'Start for free', href: '/signup', kind: 'secondary' },
+        {
+          label: 'Talk to sales',
+          href: '/site/contact',
+          kind: 'outlined',
+          trailing: true
+        }
       ],
       items: capabilities
     },
@@ -84,21 +91,11 @@ export function solutionPage(data) {
       section: 'NetworkSection',
       eyebrow: network.eyebrow,
       title: network.title,
-      titleTail: network.titleTail,
       lead: network.lead,
       claims: network.claims,
       outcomes: NETWORK_OUTCOMES
     },
     faq && { section: 'FaqSection', items: faq },
-    {
-      section: 'ClosingCallToAction',
-      kind: 'split',
-      eyebrow: cta.eyebrow,
-      title: cta.title,
-      titleMuted: cta.titleMuted,
-      description: cta.description,
-      actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-      aside: { label: 'Talk to our team', href: '/site/contact' }
-    }
+    agents ? agentsClosing(`${cta.title} ${cta.titleMuted}`) : salesClosing(cta)
   ].filter(Boolean)
 }

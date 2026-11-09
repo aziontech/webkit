@@ -39,10 +39,6 @@
 
   const rootClasses = computed(() =>
     cn(
-      // The full-height cap is what makes the shell's overflow clipping real:
-      // unbounded, the shell grows to fit content and the body never scrolls
-      // (measured 771px inside a 400px container; capped it is 400px and
-      // scrolls). Dialog and Drawer already bound it from the outside.
       'flex w-full max-h-full flex-col overflow-hidden',
       'rounded-(--shape-card) border border-(length:--border-width-default)',
       'border-(--border-muted)',

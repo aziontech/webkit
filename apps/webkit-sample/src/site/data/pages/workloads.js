@@ -1,77 +1,69 @@
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 import { markRaw } from 'vue'
 
-import Diagram from '../../ui/diagram/Diagram.vue'
-import WorkloadDeployFragment from '../../ui/mockup/widgets/WorkloadDeployFragment.vue'
-import WorkloadDeploymentsWidget from '../../ui/mockup/widgets/WorkloadDeploymentsWidget.vue'
-import WorkloadDomainFragment from '../../ui/mockup/widgets/WorkloadDomainFragment.vue'
-import WorkloadOverviewWidget from '../../ui/mockup/widgets/WorkloadOverviewWidget.vue'
-import WorkloadsConsoleScene from '../../ui/mockup/WorkloadsConsoleScene.vue'
-import WorkloadTopologyScene from '../../ui/WorkloadTopologyScene.vue'
-import { cliBand } from '../cli-band.js'
-import { PLATFORM_REQUEST_PATH } from '../diagrams.js'
+import DiagramSet from '../../ui/diagram/DiagramSet.vue'
+import { productWidget } from '../../ui/product-widget'
 import {
   PRODUCT_CLOSING,
-  PRODUCT_DIRECTORY,
   PRODUCT_DOCS,
-  PRODUCT_GROUPS,
+  PRODUCT_DOCS_ACTIONS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
-const BENEFITS = [
+const WorkloadDeployFragment = productWidget('workload-deploy')
+const WorkloadDomainFragment = productWidget('workload-domain')
+const WorkloadRolloutRowsWidget = productWidget('workload-rollout-rows')
+const WorkloadTopologyFlowWidget = productWidget('workload-topology-flow')
+
+const PILLARS = [
   {
+    icon: 'ai ai-edge-nodes',
     title: 'Close to your users, by default',
     description:
-      'One create puts the workload in every Azion location. There is no region to pick, no replica to add, and no traffic manager to keep in step.'
+      'One create puts the workload in every Azion data center. There is no region to pick, no replica to add, and no traffic manager to keep in step.'
   },
   {
-    title: 'No cold starts',
+    icon: 'ai ai-edge-functions',
+    title: 'No cold starts, no capacity to buy',
     description:
-      'Azion Runtime starts an isolate per request, so there is nothing to pre-warm and no first-request penalty to design around.'
+      'Azion Runtime starts an isolate per request, so nothing is pre-warmed and a launch day scales the same way an ordinary Tuesday does.'
   },
   {
-    title: 'Scale without pre-provisioning',
-    description:
-      'Concurrency is not capacity you buy in advance. A launch day scales the same way an ordinary Tuesday does.'
-  },
-  {
+    icon: 'ai ai-certificate-manager',
     title: 'Certificates that renew themselves',
     description:
       'The workload domain ships with TLS on, and a custom domain gets a Let’s Encrypt certificate issued and renewed for you.'
-  },
-  {
-    title: 'Roll out gradually, roll back fast',
-    description:
-      'Move a share of traffic to a new deployment and watch the metrics first. If errors rise, return to the deployment that was serving before.'
-  },
-  {
-    title: 'Run it locally first',
-    description:
-      'The Azion CLI runs your application against the same runtime on your machine, so what you test is what the workload serves.'
   }
 ]
 
 const USE_CASES = [
   {
+    icon: 'ai ai-edge-application',
     title: 'Serve a web application',
     description:
-      'Point a domain at an application and let every location answer it. Static assets, server-rendered pages and API routes all come from the same workload.'
+      'Point a domain at an application and let every data center answer it. Static assets, server-rendered pages and API routes all come from the same workload.',
+    href: PRODUCT_DOCS
   },
   {
+    icon: 'ai ai-origin-shield',
     title: 'Front an origin you already have',
     description:
-      'Keep the infrastructure you run today. The workload terminates TLS, applies the rules, caches what it can, and forwards only what it has to.'
+      'Keep the infrastructure you run today. The workload terminates TLS, applies the rules, caches what it can, and forwards only what it has to.',
+    href: PRODUCT_DOCS
   },
   {
+    icon: 'ai ai-git-branch',
     title: 'Split traffic across environments',
     description:
-      'Give staging its own hostname on the same application, or point a second workload at a new deployment and move traffic to it when you are ready.'
+      'Give staging its own hostname on the same application, or point a second workload at a new deployment and move traffic to it when you are ready.',
+    href: PRODUCT_DOCS
   },
   {
+    icon: 'ai ai-edge-firewall',
     title: 'Protect what you expose',
     description:
-      'Bind a firewall to the workload and every request that reaches the hostname passes WAF, rate limiting and network lists before anything else runs.'
+      'Bind a firewall to the workload and every request that reaches the hostname passes WAF, rate limiting and network lists before anything else runs.',
+    href: '/site/docs/firewall'
   }
 ]
 
@@ -110,7 +102,7 @@ const FAQ = [
     value: 'rollout',
     question: 'How do rollouts and rollbacks work?',
     answer:
-      'A deployment binds the workload to an application. Promote a new deployment to every location at once, or move a share of traffic to it and watch the metrics first. If errors rise, roll back to the deployment that was serving before.'
+      'A deployment binds the workload to an application. Promote a new deployment to every data center at once, or move a share of traffic to it and watch the metrics first. If errors rise, roll back to the deployment that was serving before.'
   },
   {
     value: 'firewall',
@@ -126,121 +118,84 @@ const FAQ = [
   }
 ]
 
+const ARCHITECTURE_DIAGRAMS = [
+  {
+    value: 'request-path',
+    name: 'workloads',
+    ariaLabel:
+      'A user request is routed to the nearest data center and reaches the workload; a cache hit is served from cache close to the user and a miss goes to the origin'
+  },
+  { value: 'isolates', name: 'workloads-isolate-per-request' },
+  { value: 'rollout', name: 'workloads-gradual-rollout' },
+  { value: 'security', name: 'workloads-security' }
+]
+
+const ARCHITECTURE_TABS = [
+  {
+    value: 'request-path',
+    title: 'Request path',
+    description:
+      'Routing sends each request to the nearest data center, where the workload answers it.'
+  },
+  {
+    value: 'isolates',
+    title: 'Isolate per request',
+    description:
+      'Every request gets its own isolate, so nothing is pre-warmed and nothing is reserved.'
+  },
+  {
+    value: 'rollout',
+    title: 'Gradual rollout',
+    description:
+      'Move a share of traffic to a new deployment, and return to the old one if errors rise.'
+  },
+  {
+    value: 'security',
+    title: 'Security on the workload',
+    description: 'A bound firewall filters every request before the application runs.'
+  }
+]
+
+export const WORKLOAD_ARCHITECTURE_BAND = {
+  section: 'ArchitectureTabs',
+  anchor: 'architecture',
+  eyebrow: 'Architecture',
+  title: 'How a workload answers a request',
+  description:
+    'Routing sends each request to the nearest data center, where Azion Runtime starts an isolate for it.',
+  position: 'bottom',
+  tabs: ARCHITECTURE_TABS,
+  scene: { component: markRaw(DiagramSet), props: { diagrams: ARCHITECTURE_DIAGRAMS } },
+  action: { label: 'Read the architecture', href: PRODUCT_DOCS, trailing: true }
+}
+
 export const WORKLOADS_PAGE = [
   {
     section: 'Heroes',
     kind: 'copy-on-top-art',
     eyebrow: 'Workloads',
-    title: 'Put your application on the edge in seconds',
+    title: 'Put your application close to users in seconds',
     description:
-      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion location — no servers to size, no regions to pick.',
+      'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no regions to pick.',
     actions: PRODUCT_HERO_ACTIONS,
-    carouselMarks: CLIENT_STRIP,
-    scene: { component: markRaw(WorkloadTopologyScene) },
-    scenePlacement: 'bottom'
+    scene: { component: WorkloadTopologyFlowWidget }
   },
-  { section: 'CapabilityGrid', items: BENEFITS },
+  { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
-    section: 'ConsolePanel',
-    anchor: 'overview',
-    eyebrow: 'Console',
-    title: 'Everything a workload is, on one screen',
-    description:
-      'The domain and status of a workload, the topology it serves through, and the deploy flow that ships it.',
-    scene: { component: markRaw(WorkloadOverviewWidget), props: { fade: 'bottom' } },
-    tabs: [
-      {
-        value: 'overview',
-        title: 'Overview'
-      },
-      {
-        value: 'topology',
-        title: 'Topology'
-      },
-      {
-        value: 'deploy',
-        title: 'Deploy flow'
-      }
-    ],
-    crop: 0.1,
-    action: { label: 'Open the console', href: '/signup' }
-  },
-  {
-    section: 'MediaSplitBand',
-    eyebrow: 'Architecture',
-    title: 'Serverless from the ground up: isolates, not containers',
-    description:
-      'A workload does not reserve a container per deployment. Azion Runtime runs your code in an isolate — a sandbox measured in kilobytes rather than gigabytes — so one location holds thousands of them and starts another the moment a request arrives.',
-    orientation: 'vertical',
-    texture: 'none',
-    scene: {
-      component: markRaw(Diagram),
-      props: {
-        spec: PLATFORM_REQUEST_PATH,
-        label:
-          'A user request passes routing into an Azion data center, where Firewall, Applications, Cache, Application Accelerator, Functions and Image Processor run, then Tiered Cache and Load Balancer before the origin'
-      }
-    },
-    actions: [{ label: 'Read the architecture', href: PRODUCT_DOCS }]
-  },
-  { section: 'CapabilityGrid', items: USE_CASES },
-  {
-    section: 'FeatureTabs',
-    anchor: 'console',
-    eyebrow: 'Console',
-    title: 'Run it from the console',
-    description:
-      'Everything a workload is lives on one screen: the list that answers traffic, the topology behind it, and the domains it is served on.',
-    tabs: [
-      {
-        value: 'list',
-        title: 'Every workload in one list',
-        description:
-          'Search, filter and reach any workload, with its status and domains on the same row.'
-      },
-      {
-        value: 'topology',
-        title: 'Read the deployment topology',
-        description:
-          'The domains, the application and the firewall a workload serves, drawn as one chain.'
-      },
-      {
-        value: 'domains',
-        title: 'Domains and TLS, handled',
-        description:
-          'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.'
-      }
-    ],
-    scene: { component: markRaw(WorkloadsConsoleScene) },
-    action: { label: 'Start free', href: '/signup' }
-  },
-  {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Go fast, or slow',
-        description:
-          'Promote a deployment to every location at once, or move a share of traffic to it and watch the metrics first. If errors rise, roll back to the deployment that was serving before — from the same screen that shipped it.',
-        href: PRODUCT_DOCS,
-        scene: { component: markRaw(WorkloadDeploymentsWidget), props: { fade: 'bottom' } },
-        actions: [{ label: 'Deployment strategies', href: PRODUCT_DOCS }]
-      }
-    ]
-  },
-  {
-    section: 'WidgetGrid',
+    section: 'FeatureWidgets',
     anchor: 'built-in',
     eyebrow: 'Built in',
     title: 'The parts you never assemble',
     description:
       'Every workload ships with the operational pieces an application needs, working from the first deploy.',
+    actions: PRODUCT_DOCS_ACTIONS,
+    columns: 3,
     items: [
       {
         icon: 'pi pi-cloud-upload',
         title: 'Deploys that report themselves',
         description:
-          'Build, upload and propagation run as one pipeline, and the workload shows each step as it lands in every location.',
+          'Build, upload and propagation run as one pipeline, and the workload shows each step as it lands in every data center.',
         scene: { component: markRaw(WorkloadDeployFragment) },
         href: PRODUCT_DOCS
       },
@@ -251,17 +206,27 @@ export const WORKLOADS_PAGE = [
           'Every domain answers with a certificate that is issued and renewed for you, from the generated hostname to your own.',
         scene: { component: markRaw(WorkloadDomainFragment) },
         href: PRODUCT_DOCS
+      },
+      {
+        icon: 'pi pi-undo',
+        title: 'Versions you promote or roll back',
+        description:
+          'Every deployment stays on the list. Promote a preview to production, or return to the version that was serving before.',
+        scene: { component: markRaw(WorkloadRolloutRowsWidget) },
+        href: PRODUCT_DOCS
       }
     ]
   },
-  { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
-  { ...PRODUCT_DIRECTORY, groups: PRODUCT_GROUPS },
-  { section: 'FaqSection', items: FAQ },
-  cliBand({
-    script: 'deployWorkload',
-    title: 'Deploy your first workload in two commands',
+  {
+    section: 'UseCases',
+    eyebrow: 'Use Cases',
+    title: 'What teams run on Workloads',
     description:
-      'Link a project, deploy it, and curl the domain the CLI hands back. The first deploy creates the workload; every one after that updates it.'
-  }),
+      'Put a workload in front of any application and serve it from Azion’s distributed infrastructure, with the domains, certificates and deployments you set. Teams use it to:',
+    action: { label: 'Docs', href: PRODUCT_DOCS, trailing: true },
+    items: USE_CASES
+  },
+  { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
+  { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

@@ -17,7 +17,7 @@ Use these criteria to compare vendors in a way that’s practical and defensible
 
 1. **Coverage scope:** L3/L4 plus application-layer (L7) and DNS
 2. **Time to mitigate:** detection-to-mitigation time and automation level
-3. **Deployment model:** always-on vs. on-demand; edge-native vs. centralized scrubbing
+3. **Deployment model:** always-on vs. on-demand; distributed vs. centralized scrubbing
 4. **Scalability:** ability to absorb attack traffic without degrading user experience
 5. **Cost predictability:** whether attack traffic can trigger surprise charges
 6. **Routing security:** protections against spoofing and routing risks (e.g., BGP hygiene)
@@ -88,7 +88,7 @@ If DNS availability and attacks are in scope for your threat model, Azion’s DN
 **Akamai Prolexic** is proven for large enterprises and managed scrubbing. **Azion** tends to win on:
 
 - **always-on + unmetered** positioning (simpler to adopt broadly)
-- edge-native programmability and fast automated response
+- distributed programmability and fast automated response
 - streamlined operational model without needing a complex scrubbing-center workflow
 
 If you want “enterprise-grade outcomes” without enterprise complexity, Azion is a strong alternative.
@@ -101,7 +101,7 @@ If you want “enterprise-grade outcomes” without enterprise complexity, Azion
 
 - multi-cloud,
 - hybrid,
-- or need consistent edge protection independent of where origins live.
+- or need consistent distributed protection independent of where origins live.
 
 Azion is built to protect applications and APIs closer to the user—without tying protection quality to a single cloud ecosystem.
 
@@ -124,7 +124,7 @@ If you need DDoS resilience that extends beyond “web acceleration + security,�
 **Imperva** is a strong enterprise security suite with solid DDoS and WAF offerings. Azion stands out with:
 
 - rapid automated mitigation (under 3 seconds)
-- edge-native controls + SDN mitigation
+- distributed controls + SDN mitigation
 - unmetered model that reduces the financial blast radius of attacks
 
 ---
@@ -137,7 +137,7 @@ If you need DDoS resilience that extends beyond “web acceleration + security,�
 | Unmetered mitigation | **Yes** | Varies by plan/usage | Typically enterprise | Not generally “unmetered” | Varies | Varies |
 | Layers covered | **L3-L7** | L3–L7 | L3–L7 | L3–L7 (AWS scope) | Strong web/app focus | L3–L7 |
 | Avg mitigation speed | **< 3 seconds** | Seconds | Fast (managed) | Fast (AWS) | Fast | Fast |
-| SDN automated diversion/scrubbing | **Yes** | Yes | Yes | N/A (AWS infra) | Edge-native | Yes |
+| SDN automated diversion/scrubbing | **Yes** | Yes | Yes | N/A (AWS infra) | Distributed | Yes |
 | MANRS-style routing security emphasis | **Yes** | Some controls | Yes | AWS routing scope | Not core focus | Varies |
 | DNS DDoS protection | **Yes** | Yes | Yes | Route 53 scope | Varies | Yes |
 

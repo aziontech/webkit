@@ -48,7 +48,7 @@
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
   watch(open, (isOpen) => {
-    if (isOpen) return
+    if (!isOpen) return
     Object.assign(form, blankForm())
     errors.name = ''
     errors.value = ''

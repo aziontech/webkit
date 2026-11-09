@@ -10,7 +10,7 @@
  * owns pixels. See docs/TESTING_AUDIT_2026-07-02.md §2.0.
  *
  * Baseline naming: the dark-desktop pass keeps the bare story id
- * (`components-actions-button--default.png`) so pre-matrix baselines stay
+ * (`components-primitives-actions-button--default.png`) so pre-matrix baselines stay
  * valid; every other mode is suffixed (`…--default--light-mobile.png`).
  *
  * Baselines are per-platform (font rasterization differs across OSes):
@@ -72,6 +72,28 @@ async function awaitImages(page) {
   )
 }
 
+async function awaitVideos(page) {
+  await page.evaluate(() =>
+    Promise.all(
+      Array.from(document.querySelectorAll('video'), async (video) => {
+        video.pause()
+        if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) return
+        if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+          await new Promise((resolve) => {
+            video.addEventListener('loadeddata', resolve, { once: true })
+            video.addEventListener('error', resolve, { once: true })
+          })
+        }
+        if (video.currentTime === 0) return
+        await new Promise((resolve) => {
+          video.addEventListener('seeked', resolve, { once: true })
+          video.currentTime = 0
+        })
+      })
+    )
+  )
+}
+
 /** @type {import('@storybook/test-runner').TestRunnerConfig} */
 module.exports = {
   setup() {
@@ -121,6 +143,7 @@ module.exports = {
     await waitForPageReady(page)
     await page.evaluate(() => document.fonts.ready)
     await awaitImages(page)
+    await awaitVideos(page)
 
     const failures = []
     try {
@@ -133,6 +156,7 @@ module.exports = {
 
         await page.evaluate(() => document.fonts.ready)
         await awaitImages(page)
+        await awaitVideos(page)
 
         const image = await page.locator('#storybook-root').screenshot({ animations: 'disabled' })
         try {

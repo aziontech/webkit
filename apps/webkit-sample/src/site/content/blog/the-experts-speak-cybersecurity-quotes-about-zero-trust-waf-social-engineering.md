@@ -48,12 +48,12 @@ If there is a cybersecurity model that can adequately address the increasing sop
 - “Zero Trust is not a technology; it’s a security philosophy that rewires how we think about access.” ― Neil MacDonald, EVP & senior distinguished analyst at Gartner
 - “If the old model of security was an inflexible moat and castle, Zero Trust is a modern city where people and commerce flow freely while individual buildings, dwellings, assets, etc. have their own security systems allowing only authorized individuals to enter and access only the floors and resources they need to live, work, and play.” ― Stephanie Balaouras​, VP, Group Director, Forrester
 
-## Azion’s Cybersecurity at the Edge
+## Azion’s Cybersecurity Close to Users
 
-Azion’s Edge Computing Platform stands out for having been created based on the principles of Zero Trust and Security by Design. It provides a comprehensive security stack specifically designed to function at the edge. Moreover, it holds several of the most stringent compliance certifications in the market, such as PCI DSS v4.0, SOC 2 Type 2, and SOC 3.
+Azion’s platform stands out for having been created based on the principles of Zero Trust and Security by Design. It provides a comprehensive security stack specifically designed to function close to users. Moreover, it holds several of the most stringent compliance certifications in the market, such as PCI DSS v4.0, SOC 2 Type 2, and SOC 3.
 
 Azion [was recognized](/site/blog/azion-celebrates-achievements-2023) by several renowned international entities for its exceptional performance in the context of edge security. These recognitions include being designated as a Market Leader and Fast Mover in the GigaOm Radar report, as well as receiving the Santander X Global Challenge — Cyberprotect the Future award.
 
-Among its standout solutions, [Azion’s WAF](https://www.azion.com/en/products/web-application-firewall/) deserves mention for its ability to neutralize even threats that have breached the defenses of several major cloud and edge computing vendors in the market. This is mainly due to its strength and flexibility, which are provided by its programmable security features.
+Among its standout solutions, [Azion’s WAF](https://www.azion.com/en/products/web-application-firewall/) deserves mention for its ability to neutralize even threats that have breached the defenses of several major cloud and distributed architecture vendors in the market. This is mainly due to its strength and flexibility, which are provided by its programmable security features.
 
-Do you want to know more about how to take your applications’ security to a new level at the edge? [Contact our experts now](https://www.azion.com/en/contact/) or [register to try our platform for free](https://console.azion.com/signup/).
+Do you want to know more about how to take your applications’ security to a new level close to users? [Contact our experts now](https://www.azion.com/en/contact/) or [register to try our platform for free](https://console.azion.com/signup/).

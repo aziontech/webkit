@@ -31,7 +31,6 @@
 
   const attrs = useAttrs()
 
-  // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-card-group')
 </script>
 

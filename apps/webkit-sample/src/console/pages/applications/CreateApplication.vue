@@ -841,6 +841,7 @@
         :lead="outcomeLead"
         :domain="outcomeDomain"
         :live="!form.domainHost.trim()"
+        :deployment="provisioned"
         :next-steps="isScratch || !published ? scratchNextSteps : []"
         :source="flowId === 'cli' ? 'cli' : 'git'"
         :application-name="provisioned?.application?.name ?? form.name"

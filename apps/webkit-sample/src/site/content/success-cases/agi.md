@@ -16,7 +16,7 @@ To support this strategy, Agi relies on the **Azion Platform**, whose security c
 
 ## Solution
 
-The partnership between Agi and Azion began in 2018, when Agi implemented **Firewall** to control access to its applications directly at the edge. Extensible and programmable, **Firewall** allows Agi’s Information Security specialists to create rules that:
+The partnership between Agi and Azion began in 2018, when Agi implemented **Firewall** to control access to its applications close to users. Extensible and programmable, **Firewall** allows Agi’s Information Security specialists to create rules that:
 
 - protect against attacks from the network to application layers (3 to 7);
 - monitor, block, and apply penalties based on behavioral patterns;
@@ -27,7 +27,7 @@ During the COVID-19 pandemic, when the volume of **DDoS attack traffic increased
 
 Azion’s DDoS Protection relies on a globally distributed infrastructure with multiple mitigation centers and a specialized security response team capable of handling large-scale and sophisticated attacks.
 
-To further strengthen threat mitigation capabilities, Agi adopted **Data Streaming** to:
+To further strengthen threat mitigation capabilities, Agi adopted **Data Stream** to:
 
 - monitor and mitigate threats in real time;
 - send security data to its **SIEM (Security Information and Event Management)** platform; and
@@ -39,7 +39,7 @@ Integrating Azion’s capabilities into its security architecture also helped Ag
 
 Since the beginning of the partnership, **Firewall** has automatically detected and blocked tens of thousands of threats, protecting Agi’s origin infrastructure and ensuring secure access for its customers.
 
-With **Data Streaming**, Agi collects real-time data from security events across selected domains and sends this information to its SIEM platform for analysis and fraud mitigation.
+With **Data Stream**, Agi collects real-time data from security events across selected domains and sends this information to its SIEM platform for analysis and fraud mitigation.
 
 Beyond providing protection and valuable insights for observability practices, Azion ensures **100% of user requests are handled on distributed infrastructure**, making Agi’s defensive architecture more robust and less susceptible to risk.
 

@@ -29,17 +29,10 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-resizable-panel'
   )
 
-  // THE GROUP IS A REGISTRY, KEYED BY ELEMENT. A handle has to answer one question —
-  // which pane do I move — and the honest source for it is the DOM: the pane before me,
-  // or the pane after me. Keying the registry by the pane's own element is what lets the
-  // handle walk `previousElementSibling` and get a real answer, with no ordered array to
-  // keep in step with a v-if, a v-for, or the order the children happened to mount in.
   const panes = new Map<globalThis.HTMLElement, ResizablePanelPaneApi>()
 
   const orientation = computed(() => props.orientation)
 
-  // The Map itself is deliberately NOT reactive — it is a lookup, read once per event —
-  // so membership changes are published as a counter instead.
   const revision = ref(0)
 
   provide(ResizablePanelInjectionKey, {

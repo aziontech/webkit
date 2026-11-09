@@ -58,6 +58,7 @@ import DataStream from '@console/pages/observe/DataStream.vue'
 import EdgePulse from '@console/pages/observe/EdgePulse.vue'
 import RealTimeEvents from '@console/pages/observe/RealTimeEvents.vue'
 import RealTimeMetrics from '@console/pages/observe/RealTimeMetrics.vue'
+import CreatePurge from '@console/pages/observe/CreatePurge.vue'
 import RealTimePurge from '@console/pages/observe/RealTimePurge.vue'
 import CreateResource from '@console/pages/resources/CreateResource.vue'
 import CreationCenter from '@console/pages/resources/CreationCenter.vue'
@@ -192,6 +193,7 @@ export const consoleRoutes = [
   { path: '/real-time-metrics', name: 'real-time-metrics', component: RealTimeMetrics },
   { path: '/edge-pulse', name: 'edge-pulse', component: EdgePulse },
   { path: '/real-time-purge', name: 'real-time-purge', component: RealTimePurge },
+  { path: '/real-time-purge/new', name: 'real-time-purge-new', component: CreatePurge },
   { path: '/edge-dns', name: 'edge-dns', component: EdgeDns },
   { path: '/edge-dns/new', name: 'edge-dns-new', component: CreateZone },
   { path: '/edge-dns/:id', name: 'edge-dns-zone-detail', component: EdgeDnsZoneDetail },

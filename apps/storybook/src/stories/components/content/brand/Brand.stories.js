@@ -6,7 +6,7 @@ const IMPORT = "import Brand from '@aziontech/webkit/brand'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Brand>} */
 const meta = {
-  title: 'Components/Content/Brand',
+  title: 'Components/Primitives/Content/Brand',
   component: Brand,
   tags: ['autodocs'],
   parameters: {
@@ -44,7 +44,8 @@ const meta = {
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
-      description: 'Size token; sets the lockup height while width scales to preserve each kind’s aspect ratio.',
+      description:
+        'Size token; sets the lockup height while width scales to preserve each kind’s aspect ratio.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium' | 'large'" },
@@ -110,7 +111,8 @@ export const Sizes = {
     docs: {
       controls: { disable: true },
       description: {
-        story: 'The lockup at each size token — small (16px), medium (24px), and large (32px) tall — with width scaling to preserve the aspect ratio.'
+        story:
+          'The lockup at each size token — small (16px), medium (24px), and large (32px) tall — with width scaling to preserve the aspect ratio.'
       },
       source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }

@@ -1,6 +1,5 @@
-import { ref, watch } from 'vue'
-
 import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -12,7 +11,7 @@ const IMPORT = "import ThemeSwitcher from '@aziontech/webkit/theme-switcher'"
 const V_MODEL_SCRIPT = ["import { ref } from 'vue'", IMPORT, '', "const theme = ref('system')"]
 
 const meta = {
-  title: 'Components/Inputs/ThemeSwitcher',
+  title: 'Components/Primitives/Inputs/ThemeSwitcher',
   component: ThemeSwitcher,
   tags: ['autodocs'],
   parameters: {
@@ -30,7 +29,10 @@ const meta = {
       control: 'select',
       options: ['system', 'dark', 'light'],
       description: 'Selected theme mode. Bind with v-model:value.',
-      table: { type: { summary: "'system' | 'dark' | 'light'" }, defaultValue: { summary: "'system'" } }
+      table: {
+        type: { summary: "'system' | 'dark' | 'light'" },
+        defaultValue: { summary: "'system'" }
+      }
     },
     disabled: {
       control: 'boolean',
@@ -79,7 +81,10 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Controlled theme switcher; defaults to the system mode. Click a segment and the highlight slides to it.' },
+      description: {
+        story:
+          'Controlled theme switcher; defaults to the system mode. Click a segment and the highlight slides to it.'
+      },
       source: { code: toSfc(V_MODEL_SCRIPT, '<ThemeSwitcher v-model:value="theme" />') }
     }
   }
@@ -90,7 +95,10 @@ export const Disabled = {
   args: { disabled: true },
   parameters: {
     docs: {
-      description: { story: 'The whole control is disabled and applies disabled tokens; no segment can be selected.' },
+      description: {
+        story:
+          'The whole control is disabled and applies disabled tokens; no segment can be selected.'
+      },
       source: { code: toSfc(V_MODEL_SCRIPT, '<ThemeSwitcher v-model:value="theme" disabled />') }
     }
   }
