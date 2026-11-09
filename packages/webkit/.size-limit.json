@@ -328,6 +328,41 @@
     "limit": "7 KB"
   },
   {
+    "name": "article-body",
+    "path": "src/components/sections/article-body/article-body.vue",
+    "limit": "37 KB"
+  },
+  {
+    "name": "article-cards",
+    "path": "src/components/sections/article-cards/article-cards.vue",
+    "limit": "4.7 KB"
+  },
+  {
+    "name": "article-highlight",
+    "path": "src/components/sections/article-highlight/article-highlight.vue",
+    "limit": "7.3 KB"
+  },
+  {
+    "name": "article-index-blog",
+    "path": "src/components/sections/article-index-blog/article-index-blog.vue",
+    "limit": "22 KB"
+  },
+  {
+    "name": "article-index-resource-hub",
+    "path": "src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
+    "limit": "27 KB"
+  },
+  {
+    "name": "resource-grid",
+    "path": "src/components/sections/resource-grid/resource-grid.vue",
+    "limit": "23 KB"
+  },
+  {
+    "name": "story-library",
+    "path": "src/components/sections/story-library/story-library.vue",
+    "limit": "28 KB"
+  },
+  {
     "name": "hero-band",
     "path": "src/components/sections/hero-band/hero-band.vue",
     "limit": "9.5 KB",
@@ -361,6 +396,26 @@
     "name": "site-nav",
     "path": "src/components/sections/site-nav/site-nav.vue",
     "limit": "54 KB"
+  },
+  {
+    "name": "comparison-table",
+    "path": "src/components/sections/comparison-table/comparison-table.vue",
+    "limit": "22 KB"
+  },
+  {
+    "name": "compare-plans",
+    "path": "src/components/sections/compare-plans/compare-plans.vue",
+    "limit": "29 KB"
+  },
+  {
+    "name": "compare-support-tiers",
+    "path": "src/components/sections/compare-support-tiers/compare-support-tiers.vue",
+    "limit": "27 KB"
+  },
+  {
+    "name": "pricing-plans",
+    "path": "src/components/sections/pricing-plans/pricing-plans.vue",
+    "limit": "22 KB"
   },
   {
     "name": "feature-scroll",
@@ -433,6 +488,27 @@
     "limit": "5 KB"
   },
   {
+    "name": "listing-browser",
+    "path": "src/components/sections/listing-browser/listing-browser.vue",
+    "limit": "63 KB"
+  },
+  {
+    "name": "platform-directory",
+    "path": "src/components/sections/platform-directory/platform-directory.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "subject-library",
+    "path": "src/components/sections/subject-library/subject-library.vue",
+    "limit": "7.5 KB"
+  },
+  {
+    "name": "template-gallery",
+    "path": "src/components/sections/template-gallery/template-gallery.vue",
+    "limit": "27 KB",
+    "entryOnly": true
+  },
+  {
     "name": "recognition-marquee",
     "path": "src/components/sections/recognition-marquee/recognition-marquee.vue",
     "limit": "19 KB"
@@ -471,8 +547,38 @@
     "entryOnly": true
   },
   {
+    "name": "faq-section",
+    "path": "src/components/sections/faq-section/faq-section.vue",
+    "limit": "18 KB"
+  },
+  {
+    "name": "contact-hub",
+    "path": "src/components/sections/contact-hub/contact-hub.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "listing-table",
+    "path": "src/components/sections/listing-table/listing-table.vue",
+    "limit": "55 KB"
+  },
+  {
     "name": "site-footer",
     "path": "src/components/sections/site-footer/site-footer.vue",
     "limit": "36 KB"
+  },
+  {
+    "name": "closing-call-to-action",
+    "path": "src/components/sections/closing-call-to-action/closing-call-to-action.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "closing-call-to-action-agents",
+    "path": "src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
+    "limit": "28.5 KB"
+  },
+  {
+    "name": "closing-call-to-action-newsletter",
+    "path": "src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
+    "limit": "15 KB"
   }
 ]

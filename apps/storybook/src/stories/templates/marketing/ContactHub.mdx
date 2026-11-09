@@ -10,7 +10,7 @@ The band under the Contact title band. Sales and Support sit side by side, each 
 
 Support carries a second link to the system status page, so a reader can check for an incident before opening a ticket. The Contact page renders this band.
 
-Built from `SectionModule`, `FrameBox`, `CardGrid`, `CardGridCell`, `Topic` and `Button`.
+The band is the `ContactHub` component from `@aziontech/webkit/sections/contact-hub`; it composes `SectionModule`, `FrameBox`, `CardGrid`, `CardGridCell`, `Topic` and `Button`.
 
 <p
   style={{
@@ -35,9 +35,9 @@ Sales and Support lanes over three self-serve channels: emergency attack mitigat
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `lanes[]` are the two teams side by side, each an `icon`, a `label` and a one-sentence `description`, with `actions[]` (`label`, `href`, `kind`, `trailing`) on its floor.
-- A lane's `status` (`label`, `href`) adds the system status link beside its actions.
-- `channels[]` are the self-serve links under the lanes, each an `icon`, a `title`, a `description` and an `href`.
+- `lanes[]` are the two teams side by side, each an `icon`, a `title` and a one-sentence `description`, with an `action` (`label`, `href`, `trailing`) on its floor.
+- A lane's `statusLink` (`label`, `href`, `target`) adds the system status link beside its action.
+- `channels[]` are the self-serve links under the lanes, each an `icon`, a `title`, a `description`, an `href` and an optional `target` (`_blank` opens a new tab).
 
 Example:
 

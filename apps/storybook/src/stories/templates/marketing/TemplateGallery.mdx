@@ -10,7 +10,7 @@ The templates band of a solution page. Copy on one side invites the reader to st
 
 Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming use it.
 
-Built from `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker`.
+The band is the `TemplateGallery` component from `@aziontech/webkit/sections/template-gallery`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker`.
 
 <p
   style={{
@@ -33,17 +33,20 @@ The Retail page's band, with its storefront description and the first eight depl
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` fill the copy.
-- `actions[]` are the two buttons under the copy: `Start for free` and `Talk to a specialist`.
-- `templates[]` fill the wall: `title`, `description`, `icon` and the deploy `href`. Turn on `invertInDark` for a mark that ships in dark ink only.
-- `deployLabel` is the label of the button on each card.
+- `primaryAction` and `secondaryAction` are the two buttons under the copy (`Start for free` and `Talk to a specialist`), each a `label`, an `href` and `trailing` for the chevron.
+- `templates[]` fill the wall: `title`, `description`, `icon` and the deploy `href`. Turn on `invertInDark` for a mark that ships in dark ink only. A template without a title is skipped.
+- `deployLabel` is the label of the button on each card; a card without an `href` shows no button.
 - `templatesAriaLabel` names the wall for screen readers.
 - `tickerLabel` and `tickerMarks` fill the row of marks. An unknown name renders as a wordmark.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={TemplateGalleryStories.DefaultJson} dark />
+  <Source
+    of={TemplateGalleryStories.DefaultJson}
+    dark
+  />
 </div>
