@@ -236,7 +236,6 @@ const columns = [
   { accessorKey: 'argumentsText', header: 'Arguments', principal: true, hideable: false, grow: 3 },
   { accessorKey: 'typeLabel', header: 'Type', enableSorting: true, minWidth: 136 },
   { accessorKey: 'layerLabel', header: 'Layer', enableSorting: true, minWidth: 80 },
-  { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: 80 },
   { accessorKey: 'lastModified', header: 'Purged', enableSorting: true, minWidth: 80 },
   { id: 'actions', kind: 'action', hideable: false }
 ]
@@ -582,22 +581,17 @@ ${indent(ARGUMENTS_CELL, 4)}
           <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
         </template>
 
-        <template #cell-author="{ row }">
-          <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <Avatar
-              :src="row.authorAvatar || undefined"
-              :alt="row.author"
-              :label="row.author"
-              size="small"
-              kind="square"
-              class="shrink-0"
-            />
-            <span class="truncate text-body-sm text-(--text-default)">{{ row.author }}</span>
-          </div>
-        </template>
-
         <template #cell-lastModified="{ row }">
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+            <Tooltip v-if="row.author" :text="row.author">
+              <Avatar
+                :src="row.authorAvatar || undefined"
+                :alt="row.author"
+                :label="row.author"
+                size="small"
+                kind="square"
+              />
+            </Tooltip>
             <span class="truncate text-body-sm text-(--text-muted)">{{ relativeTime(row.modifiedAt) }}</span>
           </div>
         </template>
@@ -717,7 +711,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Real-Time Purge history as the console renders it at /real-time-purge: the medium page heading with its Create Purge action, the list controls (the Filter popover over Type, Layer, Last Editor and Purged, the argument search, Refresh, Download CSV and the Columns panel), the applied-filter chips, and the purges of the last 30 days in a flush table. The Arguments cell shows the first URL, cache key or wildcard expression with a +N Tag that opens the rest in a Popover and a copy button pinned right; Type is a rounded secondary Tag, Layer plain text, Last Editor an Avatar with the name and Purged the relative time. Each row’s menu offers Repurge, which asks in a confirm Dialog before queuing the same purge again, and Edit and Purge, which opens the create page with the purge prefilled. A search or filter that matches nothing shows the table’s empty state, and an account with no purges shows the No purges yet card. Built from `Button`, `Badge`, `Popover`, `InputText`, `Avatar`, `CalendarRoot`, `IconButton`, `Tooltip`, `Switch`, `Chip`, `CardBox`, `TableRoot`, `Tag`, `CopyButton`, `Dropdown`, `EmptyState`, `Dialog` and its parts with `PanelHeader`, `PanelContent` and `PanelFooter`.'
+          'The Real-Time Purge history as the console renders it at /real-time-purge: the medium page heading with its Create Purge action, the list controls (the Filter popover over Type, Layer, Last Editor and Purged, the argument search, Refresh, Download CSV and the Columns panel), the applied-filter chips, and the purges of the last 30 days in a flush table. The Arguments cell shows the first URL, cache key or wildcard expression with a +N Tag that opens the rest in a Popover and a copy button pinned right; Type is a rounded secondary Tag, Layer plain text and Purged the editor’s Avatar, named on its Tooltip, beside the relative time. Each row’s menu offers Repurge, which asks in a confirm Dialog before queuing the same purge again, and Edit and Purge, which opens the create page with the purge prefilled. A search or filter that matches nothing shows the table’s empty state, and an account with no purges shows the No purges yet card. Built from `Button`, `Badge`, `Popover`, `InputText`, `Avatar`, `CalendarRoot`, `IconButton`, `Tooltip`, `Switch`, `Chip`, `CardBox`, `TableRoot`, `Tag`, `CopyButton`, `Dropdown`, `EmptyState`, `Dialog` and its parts with `PanelHeader`, `PanelContent` and `PanelFooter`.'
       },
       canvas: { sourceState: 'shown' }
     }

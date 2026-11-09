@@ -345,8 +345,8 @@ const MAIN_SETTINGS = `<form class="flex min-h-full flex-col" aria-label="Main s
   <div
     class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
   >
-    <header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+    <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
           <h1 class="text-balance text-heading-xs text-(--text-default)">Settings</h1>
         </div>

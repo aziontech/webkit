@@ -113,7 +113,6 @@ const COLUMNS = [
   { accessorKey: 'id', header: 'ID', minWidth: 80 },
   { accessorKey: 'value', header: 'Value', grow: 2 },
   { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
-  { accessorKey: 'lastEditor', header: 'Last Editor', enableSorting: true, minWidth: 80 },
   { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
   { id: 'actions', kind: 'action', hideable: false }
 ]
@@ -347,23 +346,17 @@ const TABLE = `<CardBox :padded="false">
         </div>
       </template>
 
-      <template #cell-lastEditor="{ row }">
-        <div v-if="row.lastEditor" class="flex min-w-0 items-center gap-(--spacing-xs)">
-          <Avatar
-            :src="row.lastEditorAvatar || undefined"
-            :alt="row.lastEditor"
-            :label="row.lastEditor"
-            size="small"
-            kind="square"
-            class="shrink-0"
-          />
-          <span class="truncate text-body-sm text-(--text-default)">{{ row.lastEditor }}</span>
-        </div>
-        <span v-else class="text-body-sm text-(--text-muted)">—</span>
-      </template>
-
-      <template #cell-lastModified="{ value }">
+      <template #cell-lastModified="{ row, value }">
         <div v-if="value" class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <Tooltip v-if="row.lastEditor" :text="row.lastEditor">
+            <Avatar
+              :src="row.lastEditorAvatar || undefined"
+              :alt="row.lastEditor"
+              :label="row.lastEditor"
+              size="small"
+              kind="square"
+            />
+          </Tooltip>
           <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
         </div>
       </template>

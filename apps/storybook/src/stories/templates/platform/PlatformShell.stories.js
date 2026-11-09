@@ -27,14 +27,14 @@ import {
 } from './_shell-markup'
 
 const LIST_MAIN = `<main class="layout-column flex min-h-full flex-col">
-  <header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <h1 class="text-balance text-heading-sm text-(--text-default)">Workloads</h1>
       </div>
       <p class="text-pretty text-body-sm text-(--text-muted)">View and manage your workloads.</p>
     </div>
-    <div class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap">
+    <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full">
       <Button
         label="Documentation"
         icon="pi pi-book"
@@ -155,7 +155,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The console’s application shell, as AppLayout and AppSidebar render it: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the Azion mark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb from the second level on, the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the mark. Every signed-in console screen renders it, from the Workloads and Applications lists to a workload’s Overview, Deployments and Settings tabs, the module overviews and Home. Built from `Sidebar`, `Brand`, `Menu`, `CommandMenu`, `Dropdown`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `TabView`, `Select`, `Tag`, `InputText` and `CardBox`; the page bodies here are stand-ins, the real ones are the ModuleList, SummaryPage and ModuleOverview templates.'
+          'The console’s application shell, as AppLayout and AppSidebar render it: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the Azion mark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb from the second level on, the search affordance, the Create button, the Agent button and the account avatar. The search is a 32px field-shaped button while the bar’s content box is at least `--container-2xl` (752px) wide and an outlined IconButton below it; below `md` the rail becomes a Drawer opened from the hamburger that leads the mark. Every signed-in console screen renders it, from the Workloads and Applications lists to a workload’s Overview, Deployments and Settings tabs and Home. Built from `Sidebar`, `Brand`, `Menu`, `CommandMenu`, `Dropdown`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `TabView`, `Select`, `Tag`, `InputText` and `CardBox`; the page bodies here are stand-ins, the real ones are the ModuleList and SummaryPage templates.'
       },
       canvas: { sourceState: 'shown' }
     }

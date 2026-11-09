@@ -90,8 +90,8 @@ export const pageHeading = ({ title, description = '', titleId = '', size = 'sma
   const lead = description
     ? `\n    <p class="text-pretty text-body-sm text-(--text-muted)">\n${indent(description, 3)}\n    </p>`
     : ''
-  return `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  return `<header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1${id} data-size="${size}" class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg">${title}</h1>
     </div>${lead}

@@ -835,8 +835,8 @@ const ACTIONS_STEPS = [
 
 const GET_STARTED_TEMPLATE = `<div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
   <header class="group/heading flex flex-col">
-    <div class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between">
-      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
+      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
           <h2 class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)">
             Get started
@@ -853,7 +853,7 @@ const GET_STARTED_TEMPLATE = `<div class="@container flex min-w-0 flex-col gap-(
           >.
         </p>
       </div>
-      <div class="flex w-full flex-wrap items-center gap-(--spacing-xs) md:w-auto md:shrink-0 md:flex-nowrap">
+      <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full">
         <SegmentedButton v-model="path" :options="PATHS" size="large" aria-label="Deploy with" />
       </div>
     </div>

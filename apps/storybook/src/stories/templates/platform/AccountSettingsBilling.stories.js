@@ -173,8 +173,8 @@ const sectionHeading = ({
   description,
   action
 }) => `<header class="group/heading flex flex-col">
-  <div class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between">
-    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
+    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
       <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
         <h2
           id="${id}"
@@ -195,7 +195,7 @@ const sectionHeading = ({
       </div>
       <p class="text-pretty text-body-sm text-(--text-muted)">${description}</p>
     </div>
-    <div class="flex w-full flex-wrap items-center gap-(--spacing-xs) md:w-auto md:shrink-0 md:flex-nowrap">
+    <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full">
 ${indent(action, 3)}
     </div>
   </div>

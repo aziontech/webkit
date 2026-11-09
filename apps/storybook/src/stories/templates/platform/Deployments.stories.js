@@ -24,7 +24,6 @@ import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 import {
   APPLIED_CHIPS,
-  authorCell,
   constLine,
   controlsRow,
   DATE_FILTER_SCRIPT,
@@ -33,17 +32,16 @@ import {
   exportButton,
   formatDateRange,
   idCell,
+  lastModifiedCell,
   LIST_COMPONENT_IMPORTS,
   listPage,
   listStateScript,
   mergeImports,
   pageHeading,
-  relativeCell,
   rowActions,
   searchField,
   useListPage,
-  withinRange
-} from './_lists-markup'
+  withinRange} from './_lists-markup'
 
 const components = {
   Avatar,
@@ -75,7 +73,6 @@ const COLUMNS = [
   { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 80 },
   { accessorKey: 'workloadName', header: 'Workload', enableSorting: true, grow: 2 },
   { accessorKey: 'environment', header: 'Environment', enableSorting: true, minWidth: 136 },
-  { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: 80 },
   { accessorKey: 'date', header: 'Deployed', enableSorting: true, minWidth: 80 },
   { id: 'actions', kind: 'action', hideable: false }
 ]
@@ -306,8 +303,7 @@ ${indent(idCell('deployment'), 4)}
         <template #cell-environment="{ value }">
           <Tag :label="value" severity="secondary" size="medium" rounded />
         </template>
-${indent(authorCell('author'), 4)}
-${indent(relativeCell('date'), 4)}
+${indent(lastModifiedCell('date', 'author'), 4)}
 ${indent(
   rowActions({
     tooltip: 'Deployment actions',

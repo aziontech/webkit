@@ -1117,8 +1117,8 @@ const TOPOLOGY_NODE = `<div
 </div>`
 
 const TOPOLOGY = `<div class="flex flex-col gap-(--layout-group-gap)">
-  <header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <h1 class="text-balance text-heading-xs text-(--text-default)">Deployment topology</h1>
       </div>

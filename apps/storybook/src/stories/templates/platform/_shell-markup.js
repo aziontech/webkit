@@ -105,10 +105,83 @@ export const NAV_GROUPS = [
       { id: 'data-stream', label: 'Data Stream', icon: 'ai ai-data-stream', path: '/data-stream' },
       { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', path: '/edge-pulse' },
       {
-        id: 'real-time-metrics',
+        id: 'real-time-metrics-module',
         label: 'Real-Time Metrics',
         icon: 'ai ai-real-time-metrics',
-        path: '/real-time-metrics'
+        kind: 'drill',
+        href: '/real-time-metrics',
+        groups: [
+          { items: [{ id: 'real-time-metrics', label: 'Overview', path: '/real-time-metrics' }] },
+          {
+            label: 'Build',
+            items: [
+              {
+                id: 'rtm-applications',
+                label: 'Applications',
+                path: '/real-time-metrics',
+                query: { dashboard: 'applications' }
+              },
+              {
+                id: 'rtm-tiered-cache',
+                label: 'Tiered Cache',
+                path: '/real-time-metrics',
+                query: { dashboard: 'tiered-cache' }
+              },
+              {
+                id: 'rtm-functions',
+                label: 'Functions',
+                path: '/real-time-metrics',
+                query: { dashboard: 'functions' }
+              },
+              {
+                id: 'rtm-image-processor',
+                label: 'Image Processor',
+                path: '/real-time-metrics',
+                query: { dashboard: 'image-processor' }
+              }
+            ]
+          },
+          {
+            label: 'Secure',
+            items: [
+              {
+                id: 'rtm-waf',
+                label: 'WAF',
+                path: '/real-time-metrics',
+                query: { dashboard: 'waf' }
+              },
+              {
+                id: 'rtm-firewall',
+                label: 'Firewall',
+                path: '/real-time-metrics',
+                query: { dashboard: 'firewall' }
+              },
+              {
+                id: 'rtm-dns',
+                label: 'DNS',
+                path: '/real-time-metrics',
+                query: { dashboard: 'dns' }
+              },
+              {
+                id: 'rtm-bot-manager',
+                label: 'Bot Manager',
+                path: '/real-time-metrics',
+                query: { dashboard: 'bot-manager' }
+              }
+            ]
+          },
+          {
+            label: 'Observe',
+            items: [
+              {
+                id: 'rtm-data-stream',
+                label: 'Data Stream',
+                path: '/real-time-metrics',
+                query: { dashboard: 'data-stream' }
+              }
+            ]
+          }
+        ]
       },
       {
         id: 'real-time-events',
@@ -175,7 +248,11 @@ export const BREADCRUMB = [{ label: 'Workloads', href: '/workloads' }, { label: 
 
 const leaves = (items) =>
   items.flatMap((item) =>
-    item.groups ? leaves(item.groups.flatMap((group) => group.items)) : [item]
+    item.groups
+      ? leaves(item.groups.flatMap((group) => group.items))
+      : item.children
+        ? leaves(item.children)
+        : [item]
   )
 
 const PALETTE_GROUPS = NAV_GROUPS.flatMap((group, groupIndex) => {
@@ -192,7 +269,7 @@ const PALETTE_GROUPS = NAV_GROUPS.flatMap((group, groupIndex) => {
     run = []
   }
   for (const item of group.items) {
-    if (item.groups) {
+    if (item.groups || item.children) {
       flush()
       blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })
     } else run.push(item)
@@ -377,7 +454,11 @@ export const scriptLines = ({
   '',
   'const leaves = (items) =>',
   '  items.flatMap((item) =>',
-  '    item.groups ? leaves(item.groups.flatMap((group) => group.items)) : [item]',
+  '    item.groups',
+  '      ? leaves(item.groups.flatMap((group) => group.items))',
+  '      : item.children',
+  '        ? leaves(item.children)',
+  '        : [item]',
   '  )',
   '',
   'const paletteGroups = navGroups.flatMap((group, groupIndex) => {',
@@ -394,7 +475,7 @@ export const scriptLines = ({
   '    run = []',
   '  }',
   '  for (const item of group.items) {',
-  '    if (item.groups) {',
+  '    if (item.groups || item.children) {',
   '      flush()',
   '      blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })',
   '    } else run.push(item)',
@@ -680,7 +761,10 @@ const HEADER_ACTIONS = `<span class="contents @min-[47rem]:hidden">
   <Avatar label="${USER_EMAIL}" size="medium" kind="square" />
 </button>`
 
-const header = (withBreadcrumb, crumb) => `<GlobalHeader aria-label="Azion Console" class="@container">
+const header = (
+  withBreadcrumb,
+  crumb
+) => `<GlobalHeader aria-label="Azion Console" class="@container">
   <GlobalHeader.Left class="justify-start!">
 ${indent([MOBILE_NAV, ...(withBreadcrumb || crumb ? [crumbTrail(crumb)] : [])].join('\n\n'), 2)}
   </GlobalHeader.Left>
@@ -990,7 +1074,12 @@ export const AGENT_PROMO = {
   description: 'Give your editor a prompt that teaches it to build and deploy here.'
 }
 
-export const promoCard = ({ title, description, logos, navigates = false }) => `<CardBox :padded="false" class="w-full">
+export const promoCard = ({
+  title,
+  description,
+  logos,
+  navigates = false
+}) => `<CardBox :padded="false" class="w-full">
   <template #content>
     <button
       type="button"

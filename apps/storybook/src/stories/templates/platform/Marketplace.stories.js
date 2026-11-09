@@ -425,8 +425,8 @@ const SEARCH_ICON = `<template #iconLeft>
   <i class="pi pi-search" aria-hidden="true" />
 </template>`
 
-const PAGE_HEADING = `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+const PAGE_HEADING = `<header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1 class="text-balance text-heading-sm text-(--text-default)">Marketplace</h1>
     </div>
@@ -434,7 +434,7 @@ const PAGE_HEADING = `<header class="flex flex-col gap-(--spacing-md) md:flex-ro
       Find, test, and deploy software that runs anywhere.
     </p>
   </div>
-  <div class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap">
+  <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full">
     <Button
       label="Documentation"
       icon="pi pi-book"

@@ -99,7 +99,6 @@ export const WORKLOAD_COLUMNS = [
   { accessorKey: 'id', header: 'ID', minWidth: 80 },
   { accessorKey: 'domain', header: 'Domains', grow: 2 },
   { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-  { accessorKey: 'owner', header: 'Last Editor', enableSorting: true, minWidth: 80 },
   { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
   { id: 'actions', kind: 'action', hideable: false }
 ]
@@ -1162,14 +1161,11 @@ ${indent(DOMAIN_POPOVER, 5)}
       <template #cell-status="{ value }">
         <Tag :label="value" :severity="value === 'Live' ? 'success' : 'secondary'" size="medium" />
       </template>
-      <template #cell-owner="{ value }">
+      <template #cell-lastModified="{ row, value }">
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-          <Avatar :alt="value" :label="value" size="small" kind="square" class="shrink-0" />
-          <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
-        </div>
-      </template>
-      <template #cell-lastModified="{ value }">
-        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+          <Tooltip v-if="row.owner" :text="row.owner">
+            <Avatar :alt="row.owner" :label="row.owner" size="small" kind="square" />
+          </Tooltip>
           <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
         </div>
       </template>
@@ -1197,6 +1193,27 @@ ${indent(DOMAIN_POPOVER, 5)}
             </DropdownOption>
           </DropdownGroup>
         </DropdownRoot>
+      </template>
+      <template #empty>
+        <EmptyState
+          size="medium"
+          title="No workloads yet"
+          description="Create a workload to serve your applications on your domains."
+        >
+          <template #actions>
+            <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+              <Button label="Create Workload" icon="pi pi-plus" kind="secondary" size="small" />
+              <Button
+                label="Docs"
+                icon="pi pi-book"
+                kind="outlined"
+                size="small"
+                href="https://www.azion.com/en/documentation/products/build/edge-application/workloads/"
+                target="_blank"
+              />
+            </div>
+          </template>
+        </EmptyState>
       </template>
     </TableRoot>
   </template>
@@ -1227,6 +1244,7 @@ export const TABLE_IMPORTS = [
   "import DropdownOption from '@aziontech/webkit/dropdown-option'",
   "import DropdownRoot from '@aziontech/webkit/dropdown-root'",
   "import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'",
+  "import EmptyState from '@aziontech/webkit/empty-state'",
   "import IconButton from '@aziontech/webkit/icon-button'",
   "import InputText from '@aziontech/webkit/input-text'",
   "import PopoverContent from '@aziontech/webkit/popover-content'",
@@ -1247,15 +1265,11 @@ export const idCell = (resource) => `<template #cell-id="{ value }">
   </div>
 </template>`
 
-export const authorCell = (key) => `<template #cell-${key}="{ value }">
+export const lastModifiedCell = (key, author) => `<template #cell-${key}="{ row, value }">
   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-    <Avatar :alt="value" :label="value" size="small" kind="square" class="shrink-0" />
-    <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
-  </div>
-</template>`
-
-export const relativeCell = (key) => `<template #cell-${key}="{ value }">
-  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+    <Tooltip v-if="row.${author}" :text="row.${author}">
+      <Avatar :alt="row.${author}" :label="row.${author}" size="small" kind="square" />
+    </Tooltip>
     <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
   </div>
 </template>`
@@ -1296,15 +1310,15 @@ export const pageHeading = ({ title, description, size = 'medium', docs = '', ac
       ? `<Button label="${action}" icon="pi pi-plus" kind="outlined" size="medium" class="w-full md:w-auto" />`
       : ''
   ].filter(Boolean)
-  return `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  return `<header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1 class="text-balance ${heading} text-(--text-default)">${title}</h1>
     </div>
     <p class="text-pretty text-body-sm text-(--text-muted)">${description}</p>
   </div>${
     actions.length
-      ? `\n  <div class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap">\n${indent(actions.join('\n'), 2)}\n  </div>`
+      ? `\n  <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full">\n${indent(actions.join('\n'), 2)}\n  </div>`
       : ''
   }
 </header>`

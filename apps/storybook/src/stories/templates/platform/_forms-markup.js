@@ -231,10 +231,10 @@ export const pageHeading = ({
     .filter(Boolean)
     .join('\n')
   const actionsBlock = trailing
-    ? `\n  <div class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap">\n${indent(trailing, 2)}\n  </div>`
+    ? `\n  <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full">\n${indent(trailing, 2)}\n  </div>`
     : ''
-  return `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  return `<header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1 data-size="${size}" class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg">${title}</h1>
     </div>${text ? `\n    <p class="text-pretty text-body-sm text-(--text-muted)">${text}</p>` : ''}

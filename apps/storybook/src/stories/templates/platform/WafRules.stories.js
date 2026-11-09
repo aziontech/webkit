@@ -24,7 +24,6 @@ import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 import {
   APPLIED_CHIPS,
-  authorCell,
   constLine,
   controlsRow,
   DATE_FILTER_SCRIPT,
@@ -34,17 +33,16 @@ import {
   exportButton,
   formatDateRange,
   idCell,
+  lastModifiedCell,
   LIST_COMPONENT_IMPORTS,
   listPage,
   listStateScript,
   mergeImports,
   pageHeading,
-  relativeCell,
   rowActions,
   searchField,
   useListPage,
-  withinRange
-} from './_lists-markup'
+  withinRange} from './_lists-markup'
 
 const components = {
   Avatar,
@@ -73,11 +71,10 @@ const components = {
 const COLUMNS = [
   { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
   { accessorKey: 'id', header: 'ID', minWidth: 80 },
-  { accessorKey: 'mode', header: 'Mode', enableSorting: true, minWidth: 104 },
+  { accessorKey: 'mode', header: 'Mode', enableSorting: true, minWidth: 80 },
   { accessorKey: 'threatLabels', header: 'Threat Types', grow: 3 },
   { accessorKey: 'sensitivity', header: 'Sensitivity', enableSorting: true, minWidth: 80 },
   { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-  { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: 80 },
   { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
   { id: 'actions', kind: 'action', hideable: false }
 ]
@@ -279,33 +276,35 @@ const TABLE = `<section class="flex min-h-0 flex-col">
         </template>
 ${indent(idCell('WAF rule set'), 4)}
         <template #cell-mode="{ value }">
-          <Tag :label="value" :severity="value === 'Blocking' ? 'danger' : 'info'" size="medium" />
+          <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
         </template>
         <template #cell-threatLabels="{ row }">
           <span v-if="!row.threatLabels.length" class="text-body-sm text-(--text-muted)">—</span>
-          <span v-else class="relative flex w-full min-w-0 items-center gap-(--spacing-xs)">
-            <span
-              data-wrap
-              class="flex min-w-0 items-center gap-(--spacing-xxs) data-wrap:flex-1 data-wrap:flex-wrap data-wrap:py-(--spacing-xxs) data-wrap:contain-inline-size"
-            >
-              <Tag
-                v-for="(item, index) in row.threatLabels"
-                :key="index"
-                severity="secondary"
-                size="medium"
-                rounded
-                class="min-w-0 max-w-full"
-              >
-                <span class="min-w-0 truncate">{{ item }}</span>
-              </Tag>
-            </span>
+          <span v-else class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+            <span class="min-w-0 truncate text-body-sm text-(--text-default)">{{ row.threatLabels[0] }}</span>
+            <PopoverRoot v-if="row.threatLabels.length > 1" placement="bottom-start" width="small">
+              <PopoverTrigger @click.stop>
+                <Tag :label="'+' + (row.threatLabels.length - 1)" severity="secondary" size="small" class="shrink-0 cursor-pointer" />
+              </PopoverTrigger>
+              <PopoverContent @click.stop>
+                <div class="flex max-h-(--container-xs) flex-col overflow-auto overscroll-contain p-(--spacing-xxs)">
+                  <p class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)">
+                    {{ row.threatLabels.length }} threat types
+                  </p>
+                  <span
+                    v-for="item in row.threatLabels"
+                    :key="item"
+                    class="truncate px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default)"
+                  >{{ item }}</span>
+                </div>
+              </PopoverContent>
+            </PopoverRoot>
           </span>
         </template>
         <template #cell-status="{ value }">
           <Tag :label="value" :severity="value === 'Active' ? 'success' : 'secondary'" size="medium" />
         </template>
-${indent(authorCell('author'), 4)}
-${indent(relativeCell('lastModified'), 4)}
+${indent(lastModifiedCell('lastModified', 'author'), 4)}
 ${indent(
   rowActions({
     tooltip: 'Actions',
@@ -356,7 +355,17 @@ const EMPTY_CARD = `<section class="flex min-h-0 flex-1 items-center justify-cen
           </span>
         </template>
         <template #actions>
-          <Button label="Create WAF Rule Set" kind="secondary" size="large" icon="pi pi-plus" />
+          <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+            <Button label="Create WAF Rule Set" icon="pi pi-plus" kind="secondary" size="small" />
+            <Button
+              label="Docs"
+              icon="pi pi-book"
+              kind="outlined"
+              size="small"
+              href="https://www.azion.com/en/documentation/products/secure/edge-firewall/web-application-firewall/"
+              target="_blank"
+            />
+          </div>
         </template>
       </EmptyState>
     </template>
@@ -405,7 +414,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The WAF Rules index under Secure: the ModuleList page with the WAF rule set columns and the in-list empty card every console index now keeps. Mode is a danger Tag for Blocking and an info Tag for Learning; Threat Types is the wrapping tag-list cell, every threat a rounded secondary `Tag` that wraps onto further lines instead of collapsing into a +N; Sensitivity is plain text; Status is a success or secondary `Tag`. The filter offers Mode, Sensitivity, Status and Last Modified, the table pages eight at a time and the row menu (Edit, Clone, then Delete) sits behind an Actions Tooltip. When the account has no rule sets left but is not a first-use account, the controls and chips step aside and a dashed `EmptyState` inside a `CardBox` (glyph in a stacked frame, a Create action) holds the page, so the list survives its last row being deleted; Certificates, Network Lists, Edge DNS, Object Storage, Connectors, Custom Pages, Firewall, Functions, SQL Database, Data Stream and Real-Time Purge render the same card with their own noun. Built from the ListControls and ResourceTable recipes plus `EmptyState`.'
+          'The WAF Rules index under Secure: the ModuleList page with the WAF rule set columns and the in-list empty card every console index now keeps. Status is the one chip in the row, a success or secondary `Tag`; Mode and Sensitivity are plain text; Threat Types shows the first threat as text and a +N `Tag` that opens a `Popover` listing all of them; Last Modified is the editor’s `Avatar`, named on its `Tooltip`, beside the relative time. The filter offers Mode, Sensitivity, Status and Last Modified, the table pages eight at a time and the row menu (Edit, Clone, then Delete) sits behind an Actions Tooltip. When the account has no rule sets left but is not a first-use account, the controls and chips step aside and a dashed `EmptyState` inside a `CardBox` (glyph in a stacked frame, then a small secondary Create and a small outlined Docs on one row) holds the page, so the list survives its last row being deleted; Certificates, Network Lists, Edge DNS, Object Storage, Connectors, Custom Pages, Firewall, Functions, SQL Database, Data Stream and Real-Time Purge render the same card with their own noun. Built from the ListControls and ResourceTable recipes plus `EmptyState`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -424,7 +433,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Five rule sets, three blocking and two learning, with their threat types wrapping inside the Threat Types column.'
+          'Five rule sets, three blocking and two learning: each row leads its Threat Types with the first threat and a +N that opens the rest.'
       },
       source: { code: toSfc(SCRIPT, DEFAULT_TEMPLATE) }
     }

@@ -9,6 +9,7 @@ import DropdownGroup from '@aziontech/webkit/dropdown-group'
 import DropdownOption from '@aziontech/webkit/dropdown-option'
 import DropdownRoot from '@aziontech/webkit/dropdown-root'
 import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+import EmptyState from '@aziontech/webkit/empty-state'
 import IconButton from '@aziontech/webkit/icon-button'
 import InputText from '@aziontech/webkit/input-text'
 import PopoverContent from '@aziontech/webkit/popover-content'
@@ -59,6 +60,7 @@ const components = {
   DropdownGroup,
   DropdownOption,
   DropdownTrigger,
+  EmptyState,
   IconButton,
   InputText,
   PopoverRoot,
@@ -73,14 +75,14 @@ const components = {
 
 const APPLIED = { owner: ['Robson Junior', 'Isaque Böck'], status: ['Live'] }
 
-const PAGE_HEADING = `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+const PAGE_HEADING = `<header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1 class="text-balance text-heading-sm text-(--text-default)">Workloads</h1>
     </div>
     <p class="text-pretty text-body-sm text-(--text-muted)">View and manage your workloads.</p>
   </div>
-  <div class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap">
+  <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full">
     <Button
       label="Documentation"
       icon="pi pi-book"
@@ -186,7 +188,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The canonical first-level list page: a medium page heading with the module name and its one-line description, the Documentation and Create actions on the medium step (full width below md), then the controls row, the applied-filter chips and the resource table, laid out with the console page column and section rhythm. The controls are wired to the table: the filters narrow the rows and send the table back to its first page, the search drives the table’s global filter, the columns panel drives its column visibility, Refresh puts it in its loading state and Download CSV exports it. Workloads is plotted here; Applications, Functions, Connectors, Custom Pages, Variables, Certificates, Network Lists, Firewall, Edge DNS, Object Storage, SQL Database, Data Stream (`/data-stream`) and Real-Time Purge take this shape with their own columns (WAF Rules and Deployments have their own templates for the cells and states they add). Composed from the ListControls and ResourceTable templates, with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm.'
+          'The canonical first-level list page: a medium page heading with the module name and its one-line description, the Documentation and Create actions on the medium step (on a phone they stack below the copy, each at full width), then the controls row, the applied-filter chips and the resource table, laid out with the console page column and section rhythm. The controls are wired to the table: the filters narrow the rows and send the table back to its first page, the search drives the table’s global filter, the columns panel drives its column visibility, Refresh puts it in its loading state and Download CSV exports it. Workloads is plotted here; Applications, Functions, Connectors, Custom Pages, Variables, Certificates, Network Lists, Firewall, Edge DNS, Object Storage, SQL Database, Data Stream (`/data-stream`) and Real-Time Purge take this shape with their own columns (WAF Rules and Deployments have their own templates for the cells and states they add). Composed from the ListControls and ResourceTable templates, with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm.'
       },
       canvas: { sourceState: 'shown' }
     }

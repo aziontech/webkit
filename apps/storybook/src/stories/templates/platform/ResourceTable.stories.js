@@ -6,6 +6,7 @@ import DropdownGroup from '@aziontech/webkit/dropdown-group'
 import DropdownOption from '@aziontech/webkit/dropdown-option'
 import DropdownRoot from '@aziontech/webkit/dropdown-root'
 import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+import EmptyState from '@aziontech/webkit/empty-state'
 import IconButton from '@aziontech/webkit/icon-button'
 import InputText from '@aziontech/webkit/input-text'
 import PopoverContent from '@aziontech/webkit/popover-content'
@@ -37,6 +38,7 @@ const components = {
   DropdownGroup,
   DropdownOption,
   DropdownTrigger,
+  EmptyState,
   IconButton,
   InputText,
   PopoverRoot,
@@ -69,7 +71,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The resource table of a console list page: a borderless data-driven `Table` inside a flush `CardBox`, sorted and paginated ten rows at a time, with the console cell recipes composed into the per-column slots. The name cell leads with the module glyph and underlines on hover; the ID cell (hidden by default on the page) pins a `CopyButton` to its right edge; the Domains cell is a truncating link with an external glyph and a `Tooltip` naming the destination, a +N `Tag` that opens the remaining domains in a `Popover` (searchable past ten, loading ten more at a time behind `Skeleton` rows) and a copy button pinned right; Status is a `Tag`; Last Editor is an `Avatar` with the name; Last Modified is the relative time; and the trailing action cell is an `IconButton` opening the row `Dropdown`. Workloads renders it as shown; Applications, Functions, Connectors, Certificates, Edge DNS, Object Storage, Firewall and the other indexes swap the middle columns for their own data over the same name, ID, editor, modified and action recipes. Bounded columns declare the console width floors (80 for fit columns, 104 for a tag column) and the Domains column takes the grow share. Built from `Table`, `CardBox`, `CopyButton`, `Tooltip`, `Tag`, `Popover`, `InputText`, `Skeleton`, `Button`, `Avatar`, `Dropdown` and `IconButton`.'
+          'The resource table of a console list page: a borderless data-driven `Table` inside a flush `CardBox`, sorted and paginated ten rows at a time, with the console cell recipes composed into the per-column slots. The name cell leads with the module glyph and underlines on hover; the ID cell (hidden by default on the page) pins a `CopyButton` to its right edge; the Domains cell is a truncating link with an external glyph and a `Tooltip` naming the destination, a +N `Tag` that opens the remaining domains in a `Popover` (searchable past ten, loading ten more at a time behind `Skeleton` rows) and a copy button pinned right; Status is a `Tag`; Last Modified is the editor’s `Avatar`, named on its `Tooltip`, beside the relative time; and the trailing action cell is an `IconButton` opening the row `Dropdown`. Workloads renders it as shown; Applications, Functions, Connectors, Certificates, Edge DNS, Object Storage, Firewall and the other indexes swap the middle columns for their own data over the same name, ID, Last Modified and action recipes. Bounded columns declare the console width floors (80 for fit columns, 104 for a tag column) and the Domains column takes the grow share. Built from `Table`, `CardBox`, `CopyButton`, `Tooltip`, `Tag`, `Popover`, `InputText`, `Skeleton`, `Button`, `Avatar`, `Dropdown` and `IconButton`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -104,7 +106,8 @@ export const Empty = {
   parameters: {
     docs: {
       description: {
-        story: 'No rows: the Table renders its own EmptyState in place of the body.'
+        story:
+          'No workloads: the Table’s empty slot holds a medium EmptyState with a small secondary Create Workload and a small outlined Docs button in place of the body.'
       },
       source: { code: toSfc(script(false), TABLE_CARD) }
     }

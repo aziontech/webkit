@@ -204,8 +204,8 @@ const HEADING_SIZES = {
 }
 
 export const pageHeading = ({ title, description, size = 'small', titleId = '', actions = '' }) =>
-  `<header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
-  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  `<header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
+  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <h1${titleId ? ` id="${titleId}"` : ''} class="text-balance ${HEADING_SIZES[size]} text-(--text-default)">
         ${title}
@@ -217,7 +217,7 @@ export const pageHeading = ({ title, description, size = 'small', titleId = '', 
   </div>${
     actions
       ? `
-  <div class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap">
+  <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full">
 ${indent(actions, 2)}
   </div>`
       : ''
@@ -228,8 +228,8 @@ export const headingAction = ({ label, icon, click }) =>
   `<Button label="${label}" icon="${icon}" kind="outlined" size="medium" class="w-full md:w-auto" @click="${click}" />`
 
 export const sectionHeading = (title, bottom = '') => `<header class="group/heading flex flex-col">
-  <div class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between">
-    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
+    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
       <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
         <h2 class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)">${title}</h2>
       </div>
