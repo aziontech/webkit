@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 262dd362b134331379b1c8100c2cb23dd45f72225a9955ebdcd53e5411a5937a
+checksum: 6ef433b0732d21f58a46603b24eaa4c8681bba15a883b5bd69fdb396a4880ea8
 ---
 # FaqSection — Component Spec
 
@@ -39,7 +39,7 @@ The frequently asked questions band near the end of a landing page: the heading 
 
 ```vue
 <script setup>
-import FaqSection from '@aziontech/webkit/sections/faq-section'
+import FaqSection from '@aziontech/webkit/faq-section'
 </script>
 
 <template>

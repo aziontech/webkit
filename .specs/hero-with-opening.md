@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 2407d36acdbc38c4ede8d937edb7b50be9612f5fd96ef64d17ae3d34a76ccd97
+checksum: 1929d412afe6f61a95f7615ccb40420dcf3836bc5e58120e035d1b5bf483eb97
 ---
 # HeroWithOpening — Component Spec
 
@@ -38,7 +38,7 @@ The opening band of a product page followed straight by its arguments: a large c
 
 ```vue
 <script setup>
-import HeroWithOpening from '@aziontech/webkit/sections/hero-with-opening'
+import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
 </script>
 
 <template>

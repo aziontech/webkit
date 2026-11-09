@@ -1,6 +1,6 @@
-# Page sections — `@aziontech/webkit/sections/<name>`
+# Page sections — `@aziontech/webkit/<name>`
 
-A **page section** is a complete marketing block (a hero, a FAQ band, a pricing grid, the site footer) that the marketing site places on a page from JSON. Every section is a webkit component under `packages/webkit/src/components/sections/<name>/`, published on its own at `@aziontech/webkit/sections/<name>`. This document is the convention; the rules it leans on are [`imports.md`](../rules/imports.md) § Page sections and [`component-structure.md`](../rules/component-structure.md).
+A **page section** is a complete marketing block (a hero, a FAQ band, a pricing grid, the site footer) that the marketing site places on a page from JSON. Every section is a webkit component under `packages/webkit/src/components/sections/<name>/`, published on its own at `@aziontech/webkit/<name>`. This document is the convention; the rules it leans on are [`imports.md`](../rules/imports.md) § Marketing — primitives and page sections and [`component-structure.md`](../rules/component-structure.md).
 
 ## The contract with the site
 
@@ -21,13 +21,13 @@ Two names are the **same string**, on purpose:
 |---|---|
 | `_id` in the site JSON | `use-cases` |
 | component name, folder, spec (`.specs/use-cases.md`), testid `sections-use-cases` | `use-cases` |
-| public path `@aziontech/webkit/sections/use-cases`, import binding | `use-cases` → `UseCases` |
+| public path `@aziontech/webkit/use-cases`, import binding | `use-cases` → `UseCases` |
 
 The site imports the blocks it uses and binds each entry's `props` onto its block. Mapping `_id` to component is the site's own concern; the package ships no registry and no dispatcher.
 
 ```vue
 <script setup>
-import UseCases from '@aziontech/webkit/sections/use-cases'
+import UseCases from '@aziontech/webkit/use-cases'
 </script>
 
 <template>
@@ -57,12 +57,12 @@ packages/webkit/src/components/sections/
 One export per block in `packages/webkit/package.json`, and one `.size-limit.json` budget:
 
 ```jsonc
-"./sections/use-cases": "./src/components/sections/use-cases/use-cases.vue"
+"./use-cases": "./src/components/sections/use-cases/use-cases.vue"
 ```
 
 ## Storybook
 
-- **Data module as the single source.** The site JSON of a section lives in `apps/storybook/src/stories/templates/marketing/_sections/<id>.js` (`export const SITE_SECTION = { _id, props }`). The template story (`Templates/Marketing/…`), the component story (`Components/Sections/<Pascal>`) and the MDX page all import it; nothing duplicates the copy.
+- **Data module as the single source.** The site JSON of a section lives in `apps/storybook/src/stories/templates/marketing/_sections/<id>.js` (`export const SITE_SECTION = { _id, props }`). The template story (`Templates/Marketing/…`), the component story (`Components/Marketing/Sections/<Pascal>`, under `stories/components/marketing/sections/<name>/`) and the MDX page all import it; nothing duplicates the copy.
 - **Template story** renders the component: `args: SITE_SECTION.props`, a `Template` whose `setup()` returns `{ args }` and whose template is `inColumn('<UseCases v-bind="args" />')`. Its "Show code" is built with `sectionMarkup(tag, props)` from `_shared/section-source.js` + `toSfc(...)`, so the snippet is a runnable SFC with concrete props and the big arrays as `<script setup>` consts (never `v-bind="args"` in the snippet — see [`storybook-source.md`](../rules/storybook-source.md)). When the data carries the site's image URLs (`/marketing-components/…`), the story's `args` go through `withStoryAssets` from `_shared/site-assets.js`, which swaps them for the package assets on the canvas only; the snippet and the `*Json` block keep the site URLs.
 - **`*Json` docs stories** (`siteJsonStory(SITE_SECTION)`, `tags: ['!dev']`) stay, so the MDX keeps printing the JSON block.
 - **Component story** is the one `/component-create` generates; point its `args` at the same `_sections/<id>.js`.
@@ -70,10 +70,10 @@ One export per block in `packages/webkit/package.json`, and one `.size-limit.jso
 ## Authoring a section through the pipeline
 
 1. Read the section's template story: `SITE_SECTION.props` → the Props table; nested shapes → exported types; the `TEMPLATE` const → the component template; the story's `setup()` → local state.
-2. Write `.specs/<name>.md` from `.specs/_template.md`: `category: sections`, `structure: monolithic`, `status: draft`, no `checksum`, no `figma:`; drop `## Sub-components`; Events and Slots tables are `_none_`; `## Usage` imports `@aziontech/webkit/sections/<name>`; the Constraints block verbatim. Then run `spec-validator`.
+2. Write `.specs/<name>.md` from `.specs/_template.md`: `category: sections`, `structure: monolithic`, `status: draft`, no `checksum`, no `figma:`; drop `## Sub-components`; Events and Slots tables are `_none_`; `## Usage` imports `@aziontech/webkit/<name>`; the Constraints block verbatim. Then run `spec-validator`.
    - The spec parser reads the first `interface …Props {` block line by line: never inline an object type in `Props`, never name a helper type `*Props`.
    - `Motion & Animations: _none_` is only valid when the file carries no `transition-*` / `animate-*` at all; otherwise list each class, and each must exist in the catalog's animations.
-3. `/component-create <name>`: the export key is `./sections/<name>`; the template is transcribed from the story with relative imports; there is no `figma:` block, so the Code Connect step is a documented skip.
+3. `/component-create <name>`: the export key is the flat `./<name>`; the template is transcribed from the story with relative imports; there is no `figma:` block, so the Code Connect step is a documented skip.
 4. Expand the test to the floor in [`testing.md`](../rules/testing.md): fallback testid and consumer override, the band's landmark is named by its title, one cell per item in order, action link `href`, nothing rendered when an optional part is absent, `kind` → `data-kind`, `expectNoA11yViolations` per kind; stateful blocks add their behaviour (tab switching, filtering, load-more, form validation).
 5. Rewrite the template story onto the component, add the `.size-limit.json` budget for the block, regenerate `catalog.json`. A block that composes `Illustration` (or another component whose registry is split into async chunks) is budgeted with `entryOnly: true`, like the existing `illustration`-based entries.
 

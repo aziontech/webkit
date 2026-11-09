@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 2ab06eef5fc96bd3a86d184170f5051ee69a67a2e268e2d80a215c8cddf26ca5
+checksum: cc98318cb7f3014ba2e80fe72c0b93eb0b9001ce27c5329c12654a797a5d9ea1
 ---
 # ArticleBody — Component Spec
 
@@ -37,7 +37,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 
 ```vue
 <script setup>
-import ArticleBody from '@aziontech/webkit/sections/article-body'
+import ArticleBody from '@aziontech/webkit/article-body'
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import CodeSplit from '@aziontech/webkit/sections/code-split'
+import CodeSplit from '@aziontech/webkit/code-split'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { ACCELERATOR_SECTION, AGENTS_SECTION, SITE_SECTION } from './_sections/code-split'
 
-const IMPORT = "import CodeSplit from '@aziontech/webkit/sections/code-split'"
+const IMPORT = "import CodeSplit from '@aziontech/webkit/code-split'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('CodeSplit', section.props)

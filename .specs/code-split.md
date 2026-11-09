@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 5ab526149e796e0ac47c3ecfd331733cd6629788810a1aafe793987f7af9fec4
+checksum: aa1c1344907c152d9193467787e2be303aec4cbe8bee3ead579f78d48f4580e2
 ---
 # CodeSplit — Component Spec
 
@@ -38,7 +38,7 @@ The claim-beside-its-code band of a product page: a framed media split whose cop
 
 ```vue
 <script setup>
-import CodeSplit from '@aziontech/webkit/sections/code-split'
+import CodeSplit from '@aziontech/webkit/code-split'
 </script>
 
 <template>

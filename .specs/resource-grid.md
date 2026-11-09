@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 0e6e6078b25eaf3aabe0c73482f6dcfee340cb7945501abb580dea87762c3d19
+checksum: ddd7bd611574e7a4af6d017511a97b09f59bdb9acf74c077d11a2ecbcea55541
 ---
 # ResourceGrid — Component Spec
 
@@ -37,7 +37,7 @@ A band that points readers to further reading on solution pages: an overline, a 
 
 ```vue
 <script setup>
-import ResourceGrid from '@aziontech/webkit/sections/resource-grid'
+import ResourceGrid from '@aziontech/webkit/resource-grid'
 </script>
 
 <template>
