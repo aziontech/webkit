@@ -10,7 +10,7 @@ A band that plots several architectures of one product, one at a time. Up to fiv
 
 The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs` and `Diagram`.
+The band is the `ArchitectureTabs` component from `@aziontech/webkit/sections/architecture-tabs`; it composes `SectionModule`, `SectionTitle`, `Button`, `FrameBox`, `MediaTabs` and `Diagram`.
 
 <p
   style={{
@@ -27,19 +27,19 @@ Built from `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs` and `Diagram
 
 ### Default
 
-The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws one of webkit's named diagrams (`ai-gateway`, `ai-gateway-provider-failover`, `ai-gateway-model-routing`, `ai-gateway-latency-routing`, `ai-gateway-response-cache`), picked by the `#media` slot's `index`.
+The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws one of webkit's named diagrams (`ai-gateway`, `ai-gateway-provider-failover`, `ai-gateway-model-routing`, `ai-gateway-latency-routing`, `ai-gateway-response-cache`), named by each tab's `diagram`.
 
 <Canvas of={ArchitectureTabsStories.Default} />
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` make the section title.
 - `position` is the side of the diagram the tabs sit on: `top` (the default), `bottom`, `left` or `right`. Left and right hold up to three tabs.
-- `tabs` are up to five architectures, each a `value`, a `title` and a `description`.
-- `scene` is the diagram set the tabs open: a component and its props, set in the page's data file, not in JSON, so it is left out of the example. The `value` of a tab picks its diagram.
-- `link` is the small button under the frame. Without a label or link it is dropped.
+- `tabs` are up to five architectures, each a `value`, a `title`, a `description` and the `diagram` name it draws.
+- `primaryAction` is the large button in the section title, a `label`, an `href` and `trailing`. Leave it out to drop the button.
+- `anchor` is the band's id for in-page links.
 
 Example:
 
@@ -58,7 +58,7 @@ The base Azion architecture the website bundle plots: Request path, Security fir
 
 ##### Use it on the site
 
-The page data imports the whole band as `PLATFORM_ARCHITECTURE_BAND` from `site/data/product-architectures.js`. Its JSON, without the scene:
+The same `architecture-tabs` entry, with an `anchor` and one product's starter diagram per tab:
 
 <div className="sb-site-json">
   <Source
