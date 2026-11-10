@@ -6,25 +6,37 @@ real source files in a registry, a CLI that copies screens, examples as files. W
 both on AI tooling (catalog, MCP, skills, rules, lint, `doctor`); the gaps are content and structure.
 
 Updated 2026-11-10, after the team merged the existing components and templates into
-`feat/webkit-ai-ready` (`f9562602`). Stages run in order; each one closes with its exit criteria.
+`feat/webkit-ai-ready` (`f9562602`). Stages 1 to 14 run in order, each closing with its exit
+criteria; stage 0 (close the branch: CI green, baselines, overlapping PRs) runs **last**, because
+the Storybook-based checks it would fix are rebuilt on the new model along the way.
 
 ## Decisions already taken
 
-| Topic              | Decision                                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Naming             | shadcn/Radix vocabulary (`pagination`, `tabs`, `card`, `alert`, `radio-group`…), the names models know best. |
-| Breaking changes   | One direct major (v6) with a migration guide and a codemod; no aliases.                                      |
-| Screens (blocks)   | One canonical block per screen; states are props or example data, not numbered copies.                       |
-| Repeated fragments | Promoted to exported components (page header, section header, setting row, save bar, confirm dialog).        |
-| Form fields        | One `Field` wrapper around any control replaces the `field-*` family.                                        |
-| Pattern guidelines | Cloudscape depth: purpose, when / when not, building blocks, do / don't, copy, accessibility.                |
-| Collections        | `useCollection` for client and server data, filters in the URL, saved preferences.                           |
-| Charts             | Our own chart family (started: `Chart`, `BarList`, `DonutChart`, `SparkChart`, `StatTile`, `Tracker`).       |
-| Languages          | Built-in messages in en and pt-BR, right-to-left supported.                                                  |
-| Missing components | Ordered by Cloudscape's list. Generative-AI components are a stage of their own.                             |
-| Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                          |
-| CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                            |
-| Who builds         | AI agents, end to end, through the flow in stage 3. AI evaluation of screens runs at the end (stage 12).     |
+| Topic              | Decision                                                                                                                         |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| Naming             | shadcn/Radix vocabulary (`pagination`, `tabs`, `card`, `alert`, `radio-group`…), the names models know best.                     |
+| Breaking changes   | One direct major (v6) with a migration guide and a codemod; no aliases.                                                          |
+| Screens (blocks)   | One canonical block per screen; states are props or example data, not numbered copies.                                           |
+| Repeated fragments | Promoted to exported components (page header, section header, setting row, save bar, confirm dialog).                            |
+| Form fields        | One `Field` wrapper around any control replaces the `field-*` family.                                                            |
+| Pattern guidelines | Cloudscape depth: purpose, when / when not, building blocks, do / don't, copy, accessibility.                                    |
+| Collections        | `useCollection` for client and server data, filters in the URL, saved preferences.                                               |
+| Charts             | Our own chart family (started: `Chart`, `BarList`, `DonutChart`, `SparkChart`, `StatTile`, `Tracker`).                           |
+| Languages          | Built-in messages in en and pt-BR, right-to-left supported.                                                                      |
+| Missing components | Ordered by Cloudscape's list. Generative-AI components are a stage of their own.                                                 |
+| Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                                              |
+| CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                |
+| Who builds         | AI agents, end to end, through the flow in stage 3. AI evaluation of screens runs at the end (stage 12).                         |
+| Who decides        | The head of design opens every request and approves every merge; agents do everything in between.                                |
+| Development area   | Material for developing WebKit lives in `.claude/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship. |
+| Surfaces           | Every export is `product`, `marketing` or `docs`; nothing on the marketing or docs surface may disappear unrecorded.             |
+
+## Done since the merge review
+
+| What                                                                                                                                                                                                                                                                                                                                                                                   | Where      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Development area: `ui-craft` moved to `.claude/skills/ui-craft` (mandatory review for every new or changed component, example and block); process docs moved to `.claude/docs/` and out of the npm package; root `AGENTS.md`/`CLAUDE.md` for contributors of any agent; `test/standards/ai-bundle-boundary` keeps the two areas apart. `webkit-usage` is now the consumer entry point. | `0eb23f3a` |
+| Surfaces: `surface` on every catalog export; `list_components` filters by it; `suggest_component` ranks product components first outside marketing requests; `scripts/marketing-inventory.json` (468 items) and `marketing:check` block any marketing or docs item from leaving unrecorded.                                                                                            | `ef745ec5` |
 
 ## Review of the merge (2026-11-10)
 
@@ -48,7 +60,7 @@ What the merge did not change, and where it is handled:
 | Components adapt to the viewport (`sm:`/`md:`/`lg:` ~440 uses) but only 4 files use container queries, so a component inside a drawer or split view lays out for the window, not its box.                                                                             | 4     |
 | `catalog.json` is now 7.5 MB (was 4.3 MB); the ESLint plugin and the MCP parse it whole.                                                                                                                                                                              | 5     |
 
-## Stage 0 — Close the current branch
+## Stage 0 — Close the branch (runs last, after stage 14)
 
 | #   | Item                         | Detail                                                                                                                                                                                                                                                                                                                                                                             |
 | --- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -59,6 +71,9 @@ What the merge did not change, and where it is handled:
 | 0.4 | Address autofill             | WebKit now hides fields without `autocomplete` from password managers. Account Settings address fields should set `postal-code`, `address-line1`, `address-line2`; check with the real 1Password extension.                                                                                                                                                                        |
 | 0.5 | Card-brand hex               | Three account patterns keep 5 `no-hardcoded-color` findings (card-brand plate). Swap for a token or asset, then `patterns:check --update`.                                                                                                                                                                                                                                         |
 | 0.6 | Hook tests failing on `main` | `node .claude/hooks/__tests__/run.mjs`: "legacy button is whitelisted" and "new component without spec blocks". Fix and run them in CI — stage 3 relies on these hooks.                                                                                                                                                                                                            |
+
+Visual baselines (0.3) are taken on the new model (Playwright over `examples/` and `blocks/`, stage
+10), not on Storybook. Re-check every row against the code before running this stage.
 
 Exit: PR merged to `main` and released.
 
@@ -85,6 +100,9 @@ packages/webkit/
 - `build-catalog.mjs` and `scripts/lib/patterns.mjs` read `blocks/` and `examples/` only.
 - CI rule: nothing under `packages/` reads or imports from `apps/`.
 - Blocks and examples run through the same lint, type-check and Vitest as components.
+- The 44 marketing template stories (`templates/marketing/`) move to `blocks/marketing/` with
+  `surface: marketing` and join the marketing inventory, so the site's page compositions survive
+  the end of Storybook.
 - Categories by task, as in Cloudscape: `auth`, `account`, `create`, `view`, `detail`, `edit`,
   `delete`, `dashboard`, `settings`, `shell`, `states`.
 
@@ -109,11 +127,12 @@ Exit: v6 released; the codemod migrates a copy of the console with zero manual e
 
 ## Stage 3 — AI-only implementation flow
 
-Everything after this stage is built by agents. The flow must make a correct component the only
-path through CI, so no human review is needed for quality — humans only press merge.
+Everything after this stage is built by agents. The flow makes a correct component the only path
+through CI. The **head of design** is the only human in it: they open the request and approve the
+merge.
 
-1. **Request.** An issue from a template: intent, benchmark links (Cloudscape `.md`, shadcn page),
-   where it is used in the console, acceptance criteria.
+1. **Request (head of design).** An issue from a template: intent, benchmark links (Cloudscape
+   `.md`, shadcn page), where it is used in the console, acceptance criteria, surface.
 2. **Research and spec.** Contributor skill `/webkit-new` (on top of `spec-create`,
    `structure-decide`, `reuse-audit`) reads the benchmarks through their `llms.txt`/registry, checks
    the catalog for reuse, and writes `.specs/<name>.md` as `draft`.
@@ -125,15 +144,21 @@ path through CI, so no human review is needed for quality — humans only press 
 5. **Machine gates (CI).** Unit + a11y (axe) + keyboard, RTL and locale snapshots, visual tests at
    5 viewports, size and runtime budgets, type coverage, spec ↔ code checksum, catalog and docs
    regenerated, naming check.
-6. **Usage check.** A fresh agent session gets an intent-only prompt that needs the new component
+6. **`ui-craft` review.** The contributor skill runs its full progression on the component, its
+   examples and every block that uses it; findings are fixed or listed in the PR.
+7. **Usage check.** A fresh agent session gets an intent-only prompt that needs the new component
    and must pick it through the MCP; the result must pass `webkit doctor`.
-7. **PR.** Generated description with the gate results; auto-merge when green, release-please ships.
+8. **PR and approval (head of design).** Generated description with the gate results, the
+   `ui-craft` report and screenshots (light, dark, RTL, mobile, wide). The head of design approves;
+   the merge and release-please do the rest. A rejection goes back to step 2 or 4 with their
+   comments, never to a human fix.
 
 Also in this stage: the spec template gains `Internationalization`, `Right-to-left`, `Responsive`
 and `Performance` sections; a block flow (`/webkit-new-block`) mirrors the component one; changes to
 existing components go through the same gates plus a changeset that feeds the codemod.
 
-Exit: one new component and one new block delivered by the flow with no human edits.
+Exit: one new component and one new block delivered by the flow with no human edits, opened and
+approved by the head of design.
 
 ## Stage 4 — Cross-cutting quality
 
@@ -210,6 +235,17 @@ Clone `aziontech/azion-console-kit` (and check `aziontech/azion-new-console`) an
 component and screen that WebKit does not cover yet — known candidates: the new Events interface,
 Rules Engine, AI Chat. For each: what it is, where it is used, the WebKit equivalent if any, and
 whether it becomes a component, a block or stays product code. New items enter through stage 3.
+
+## Stage 14 — Migrate the marketing site to the new WebKit
+
+Move the site to the new major with the smallest change possible: no re-implementation.
+
+- Run `npx @aziontech/webkit migrate v6` (stage 2 codemod) on the site and apply the
+  `renamed` map of `scripts/marketing-inventory.json`.
+- Every entry under `removed` that the site still uses becomes a row here (what, where it is used,
+  what replaces it) and is built through stage 3 before the site upgrades.
+- Check: the site builds, its pages render the same in light, dark and mobile (visual diff against
+  the current production), and `marketing:check` is green.
 
 ## How to keep it current
 
