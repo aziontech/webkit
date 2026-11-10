@@ -30,7 +30,10 @@ const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 export function renameSubpath(subpath, components) {
   for (const [from, rule] of Object.entries(components)) {
     if (subpath === from) return rule.to
-    if (subpath.startsWith(`${from}-`)) return rule.to + subpath.slice(from.length)
+  }
+  for (const [from, rule] of Object.entries(components)) {
+    const alreadyNew = subpath === rule.to || subpath.startsWith(`${rule.to}-`)
+    if (subpath.startsWith(`${from}-`) && !alreadyNew) return rule.to + subpath.slice(from.length)
   }
   return subpath
 }
@@ -38,16 +41,20 @@ export function renameSubpath(subpath, components) {
 function renameBinding(name, components) {
   for (const rule of Object.values(components)) {
     if (name === rule.from) return rule.binding
-    if (name.startsWith(rule.from) && /^[A-Z]/.test(name.slice(rule.from.length))) {
-      return rule.binding + name.slice(rule.from.length)
-    }
+  }
+  for (const rule of Object.values(components)) {
+    const alreadyNew =
+      name === rule.binding ||
+      (name.startsWith(rule.binding) && /^[A-Z]/.test(name.slice(rule.binding.length)))
+    const isChild = name.startsWith(rule.from) && /^[A-Z]/.test(name.slice(rule.from.length))
+    if (isChild && !alreadyNew) return rule.binding + name.slice(rule.from.length)
   }
   return name
 }
 
 function webkitImports(source) {
   const out = []
-  const re = /import\s+([\s\S]*?)\s+from\s+(['"])@aziontech\/webkit\/([^'"]+)\2/g
+  const re = /import\s+([\w$\s{},*]+?)\s+from\s+(['"])@aziontech\/webkit\/([^'"]+)\2/g
   for (const m of source.matchAll(re)) {
     const clause = m[1]
     const names = []
@@ -105,9 +112,13 @@ function renameAttributes(attrs, rules) {
         new RegExp(`(\\s)(@|v-on:)update:${name}(?=[\\s=/>])`, 'g'),
         `$1$2update:${toKebab}`
       )
+      const inverts = rule.values && rule.values.true === 'false' && rule.values.false === 'true'
       out = out.replace(
-        new RegExp(`(\\s)(:|v-bind:)${name}(?=\\s*=)`, 'g'),
-        (all, sp, bind) => `${sp}${bind}${toKebab}`
+        new RegExp(`(\\s)(:|v-bind:)${name}(\\s*=\\s*)(["'])([^"']*)\\4`, 'g'),
+        (all, sp, bind, eq, q, expr) =>
+          inverts
+            ? `${sp}${bind}${toKebab}${eq}${q}!(${expr})${q}`
+            : `${sp}${bind}${toKebab}${eq}${q}${expr}${q}`
       )
       out = out.replace(
         new RegExp(`(\\s)${name}(\\s*=\\s*)(["'])([^"']*)\\3`, 'g'),
@@ -167,7 +178,10 @@ export function migrateSource(source, migration) {
   for (const [binding, subpath] of bindingToSubpath) {
     const rules = props[subpath]
     if (!rules) continue
-    const tagRe = new RegExp(`<(${escapeRe(binding)}|${escapeRe(kebab(binding))})(?=[\\s/>])`, 'g')
+    const tagRe = new RegExp(
+      `<(${escapeRe(binding)}(?:\\.Root)?|${escapeRe(kebab(binding))})(?=[\\s/>])`,
+      'g'
+    )
     let result = ''
     let cursor = 0
     for (const m of out.matchAll(tagRe)) {

@@ -57,6 +57,34 @@ test('migrateSource rewrites imports, bindings, kebab tags and props', () => {
   assert.ok(changes.length >= 4)
 })
 
+test('migrateSource is idempotent and handles the cases found migrating this repository', () => {
+  const v6 = [
+    '<script setup>',
+    "import { ref } from 'vue'",
+    "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
+    "import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'",
+    "import Tabs from '@aziontech/webkit/tabs'",
+    "import ShellMockup from '@aziontech/webkit/shell-mockup'",
+    "import Input from '@aziontech/webkit/input'",
+    '</script>',
+    '<template>',
+    '  <DropdownMenu><DropdownMenuTrigger /></DropdownMenu>',
+    '  <Tabs.Root v-model:value="tab" />',
+    '  <ShellMockup :still="paused" />',
+    '  <Input />',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(v6, migration)
+  assert.match(source, /import DropdownMenu from '@aziontech\/webkit\/dropdown-menu'/)
+  assert.match(source, /<DropdownMenu><DropdownMenuTrigger \/><\/DropdownMenu>/)
+  assert.match(source, /<Tabs\.Root v-model="tab" \/>/)
+  assert.match(source, /<ShellMockup :animated="!\(paused\)" \/>/)
+  assert.equal(migrateSource(source, migration).source, source)
+  assert.equal(renameSubpath('input-text', loadMigration(6).components), 'input')
+  assert.equal(renameSubpath('input', loadMigration(6).components), 'input')
+  assert.equal(renameSubpath('input-group', loadMigration(6).components), 'input-group')
+})
+
 test('migrateSource lists removed components as manual work and leaves other code alone', () => {
   const sfc =
     "<script setup>\nimport FieldText from '@aziontech/webkit/field-text'\nconst Message = 1\n</script>"
