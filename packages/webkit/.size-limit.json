@@ -695,5 +695,100 @@
     "name": "severity-tag",
     "path": "src/components/content/severity-tag/severity-tag.vue",
     "limit": "1.25 KB"
+  },
+  {
+    "name": "help-panel",
+    "path": "src/components/content/help-panel/index.ts",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "help-panel-root",
+    "path": "src/components/content/help-panel/help-panel.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "help-panel-header",
+    "path": "src/components/content/help-panel/help-panel-header/help-panel-header.vue",
+    "limit": "0.75 KB"
+  },
+  {
+    "name": "help-panel-section",
+    "path": "src/components/content/help-panel/help-panel-section/help-panel-section.vue",
+    "limit": "0.75 KB"
+  },
+  {
+    "name": "help-panel-links",
+    "path": "src/components/content/help-panel/help-panel-links/help-panel-links.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "help-panel-tutorial",
+    "path": "src/components/content/help-panel/help-panel-tutorial/help-panel-tutorial.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "help-panel-task",
+    "path": "src/components/content/help-panel/help-panel-task/help-panel-task.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "key-value-pairs",
+    "path": "src/components/content/key-value-pairs/index.ts",
+    "limit": "2 KB"
+  },
+  {
+    "name": "key-value-pairs-root",
+    "path": "src/components/content/key-value-pairs/key-value-pairs.vue",
+    "limit": "0.75 KB"
+  },
+  {
+    "name": "key-value-pairs-item",
+    "path": "src/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "key-value-pairs-group",
+    "path": "src/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue",
+    "limit": "0.75 KB"
+  },
+  {
+    "name": "tree",
+    "path": "src/components/data/tree/tree.vue",
+    "limit": "5.5 KB"
+  },
+  {
+    "name": "field-time",
+    "path": "src/components/inputs/field-time/field-time.vue",
+    "limit": "8 KB"
+  },
+  {
+    "name": "file-dropzone",
+    "path": "src/components/inputs/file-dropzone/file-dropzone.vue",
+    "limit": "3.5 KB"
+  },
+  {
+    "name": "field-file-upload",
+    "path": "src/components/inputs/field-file-upload/field-file-upload.vue",
+    "limit": "12.5 KB"
+  },
+  {
+    "name": "slider",
+    "path": "src/components/inputs/slider/slider.vue",
+    "limit": "2.75 KB"
+  },
+  {
+    "name": "wizard",
+    "path": "src/components/navigation/wizard/index.ts",
+    "limit": "6.25 KB"
+  },
+  {
+    "name": "wizard-root",
+    "path": "src/components/navigation/wizard/wizard.vue",
+    "limit": "5.5 KB"
+  },
+  {
+    "name": "wizard-step",
+    "path": "src/components/navigation/wizard/wizard-step/wizard-step.vue",
+    "limit": "1.5 KB"
   }
 ]
