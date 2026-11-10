@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import MediaSplitBand from '@aziontech/webkit/sections/media-split-band'
+import MediaSplitBand from '@aziontech/webkit/media-split-band'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/media-split-band'
 
-const IMPORT = "import MediaSplitBand from '@aziontech/webkit/sections/media-split-band'"
+const IMPORT = "import MediaSplitBand from '@aziontech/webkit/media-split-band'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('MediaSplitBand', section.props)

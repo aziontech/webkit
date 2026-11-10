@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: d2358bf611f4037f7f9afc8a7c8bef9f91573f8483bef89b70ba31832e6331df
+checksum: a559b3db852e3571d57ad87f83c621b55fa23225cf952e42b816307500e1482d
 ---
 # HeroCopyOnTopArt — Component Spec
 
@@ -37,7 +37,7 @@ The opening band of a product page whose copy sits centered on top of a topology
 
 ```vue
 <script setup>
-import HeroCopyOnTopArt from '@aziontech/webkit/sections/hero-copy-on-top-art'
+import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
 </script>
 
 <template>
