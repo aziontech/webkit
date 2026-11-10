@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 841b11eafda1509b27a6f13654b000bc440fb248c4f0b4b5cf863ed89bd166a6
+checksum: ffb0f8386cbffeeba78a205aa577411e7f906f19228a20e0d7982f5c74e582d4
 created: 2026-05-22
-last_updated: 2026-08-04
+last_updated: 2026-11-10
 ---
 # Tab View — Component Spec
 
@@ -19,13 +19,17 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Sub-components
 
-- `tab-view-item.vue` — Public sub-component `tab-view-item`.
-- `tab-view-list.vue` — Public sub-component `tab-view-list`.
+- `tab-view-item.vue` — Public sub-component `tab-view-item`. Reads the root's `kind` from context and mirrors it on `data-kind`; a standalone item (no root) renders the `default` look.
+- `tab-view-list.vue` — Public sub-component `tab-view-list`. Reads the root's `kind` from context and mirrors it on `data-kind`, on the tablist and on its active indicator.
 - `tab-view-panel.vue` — Public sub-component `tab-view-panel`.
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| Prop | Type | Default | Required | JSDoc |
+|---|---|---|---|---|
+| `kind` | `TabViewKind` (`'default' \| 'underline'`) | `'default'` | false | Visual variant. `default` slides a filled pill (mask + hairline + `--shadow-xs`) under the active tab. `underline` draws a `--border-strong` bar under the active tab, on a `--border-default` hairline baseline spanning the list, for the higher-contrast look of page-level section tabs. Set once on the root; the list and every item read it from context. |
+| `value` | `TabViewValue \| null` | `undefined` | false | Controlled active tab (`v-model:value`). |
+| `defaultValue` | `TabViewValue \| null` | `null` | false | Initial active tab when uncontrolled. |
 
 ## Events
 
@@ -42,6 +46,7 @@ Helps users move between views or sections. Migrated from the existing implement
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- `data-kind` values (root, list, indicator, item): `default` | `underline`. With `underline`, the list reserves `--spacing-xxs` below the tabs for the bar, idle tabs stay `--text-muted` and turn `--text-default` on hover (with the `--bg-hover` fill), and the active tab is `--text-default` with no fill; the bar slides to the active tab with the same motion as the `default` pill.
 - `data-state` values: `open` | `closed` (where applicable)
 - Responsive: the tab list (`TabView.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
@@ -66,6 +71,8 @@ Helps users move between views or sections. Migrated from the existing implement
 | height (tab item) | `var(--size-8)` — 32 px, applied as `h-(--size-8)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
+| underline bar (`kind="underline"`) | `var(--border-strong)` |
+| underline baseline (`kind="underline"`) | `var(--border-default)` at `var(--border-width-default)` |
 
 ## Theme gaps
 
@@ -85,6 +92,7 @@ Helps users move between views or sections. Migrated from the existing implement
 ## Stories (Storybook)
 
 - Default
+- Underline — the same tabs with `kind="underline"`; required because `kind` is a variant axis and the underline look is a distinct rendered state.
 - Scrollable — many tabs in a width-constrained container; justified because the horizontal-scroll (mobile) behavior of `TabView.List` is a distinct rendered state that the Default story (few tabs, no overflow) does not exercise.
 - Standalone — a `TabView.Item` outside a `TabView.Root`, selected / idle / disabled; justified because a context-free item reads its own `selected` prop and paints the pill itself (mask + hairline + `--shadow-xs`) rather than sitting on the List's sliding indicator, which no composed story renders.
 

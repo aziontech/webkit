@@ -136,7 +136,6 @@
   "packages/webkit/src/components/navigation/tab-view/tab-view-panel.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/tab-view/tab-view-panel.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/tab-view/tab-view-root.vue::spec:Animation classes in spec but missing in .vue: animate-fade-in, animate-fade-out",
-  "packages/webkit/src/components/navigation/tab-view/tab-view-root.vue::spec:Props in .vue not in spec: value, defaultValue",
   "packages/webkit/src/components/navigation/tab-view/tab-view-root.vue::spec:defineOptions.name \"TabViewRoot\" must equal \"TabView\"",
   "packages/webkit/src/components/navigation/tab-view/tab-view-root.vue::token:js-class-preset",
   "packages/webkit/src/components/overlay/composables/use-overlay-mobile.js::composable-js",
