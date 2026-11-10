@@ -174,6 +174,21 @@ const meta = {
           'The Credentials panel of Account Settings (`/account/credentials`): a page heading with Documentation and Create Credential, the list controls row, and a flush table of API tokens with a copy button on each token and a row menu that revokes it. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `TableRoot`, `CardBox`, `CopyButton`, `Tag`, `Dropdown`, `Popover`, `Switch`, `Tooltip`, `IconButton`, `InputText` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'credentials',
+        'api tokens',
+        'personal tokens',
+        'api keys',
+        'access tokens',
+        'token list',
+        'revoke token',
+        'credenciais',
+        'tokens de api',
+        'chaves de api'
+      ],
+      skills: ['webkit-lists', 'webkit-tables']
     }
   }
 }

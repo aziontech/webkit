@@ -200,7 +200,7 @@ test('searchComponents finds a component by substring', () => {
 })
 
 test('getUsageExample synthesizes a runnable SFC with the tree-shakeable import', () => {
-  const res = getUsageExample(catalog, 'button')
+  const res = getUsageExample(catalog, 'button', { fromStory: false })
   assert.equal(res.found, true)
   assert.match(res.sfc, /<script setup>/)
   assert.match(res.sfc, /import Button from '@aziontech\/webkit\/button'/)
@@ -236,7 +236,7 @@ test('validateUsage does NOT flag a sibling package as an invalid webkit import'
 })
 
 test('getUsageExample binds an empty literal for a required array prop (never prop="text")', () => {
-  const res = getUsageExample(catalog, 'box-grid-selection')
+  const res = getUsageExample(catalog, 'box-grid-selection', { fromStory: false })
   assert.equal(res.found, true)
   // items: BoxGridSelectionItem[] is required and non-scalar → :items="[]", not items="text"
   assert.match(res.sfc, /:items="\[\]"/)
@@ -322,4 +322,28 @@ test('no MCP answer carries the spec status', () => {
   assert.equal('status' in getComponent(catalog, 'button'), false)
   assert.ok(listComponents(catalog).components.every((c) => !('status' in c)))
   assert.ok(Object.values(catalog.imports).every((e) => !('status' in e)))
+})
+
+test('getComponent carries the agent docs and story examples (D2)', () => {
+  const ft = getComponent(catalog, 'field-text')
+  assert.ok(ft.purpose)
+  assert.ok(ft.useWhen.length > 0)
+  assert.ok(ft.avoidWhen.length > 0)
+  assert.ok(ft.examples.length > 0)
+  assert.match(ft.examples[0].sfc, /@aziontech\/webkit\/field-text/)
+})
+
+test('every exported component has purpose, when to use and when not to use', async () => {
+  const { missingComponentDocs } = await import('../../scripts/lib/component-docs.mjs')
+  assert.deepEqual(missingComponentDocs(catalog.imports), [])
+  assert.deepEqual(
+    missingComponentDocs({ x: { kind: 'component', purpose: 'p', useWhen: ['a'], avoidWhen: [] } }),
+    ['x: When NOT to use']
+  )
+})
+
+test('getUsageExample prefers the real story example when there is one', () => {
+  const res = getUsageExample(catalog, 'field-text')
+  assert.match(res.source, /^story /)
+  assert.match(res.sfc, /<template>/)
 })

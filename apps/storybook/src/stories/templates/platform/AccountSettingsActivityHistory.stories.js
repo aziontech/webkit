@@ -148,6 +148,21 @@ const meta = {
           'The Activity History panel of Account Settings (`/account/activity`): a page heading with Documentation, the list controls row, and a flush, read-only audit table whose category reads as a severity tag. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `TableRoot`, `CardBox`, `Tag`, `Popover`, `Switch`, `Tooltip`, `IconButton`, `InputText` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'activity history',
+        'audit log',
+        'activity log',
+        'audit trail',
+        'account activity',
+        'event history',
+        'user actions log',
+        'histórico de atividades',
+        'log de auditoria',
+        'registro de atividades'
+      ],
+      skills: ['webkit-lists', 'webkit-tables']
     }
   }
 }

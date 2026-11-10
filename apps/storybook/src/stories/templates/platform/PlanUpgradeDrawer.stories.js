@@ -65,6 +65,21 @@ const meta = {
           'The Upgrade to Pro checkout drawer, opened from the Billing page’s Upgrade to Pro card and from Continue with Pro in the Change plan drawer: what the plan includes beside a Charged summary with its own Monthly or Yearly switch, the Payment Method card and the billing address, over a Cancel and Upgrade footer. Built from `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `CardBox`, `SegmentedButton`, `Divider`, `Link`, `FieldText`, `FieldSelect`, `FieldCheckbox`, `Message` and `Button`; the Visa plate is the console’s inline brand mark.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'upgrade to pro',
+        'upgrade plan',
+        'plan upgrade',
+        'checkout',
+        'checkout drawer',
+        'upgrade drawer',
+        'purchase plan',
+        'fazer upgrade',
+        'assinar plano',
+        'finalizar compra'
+      ],
+      skills: ['webkit-form', 'webkit-errors', 'webkit-microcopy']
     }
   }
 }

@@ -114,6 +114,22 @@ const meta = {
           'The canonical first-level list page: a page heading with the module name, its one-line description, a Documentation button and the large Create action, over the controls row, the applied-filter chips and the resource table, laid out on the canvas with the console page column and section rhythm. Workloads, Applications, Connectors and every other module index take this shape. Composed from the ListControls and ResourceTable templates: `Button`, `Badge`, `InputText`, `IconButton`, `Tooltip`, `Chip`, `CardBox`, `Table`, `CopyButton`, `Tag`, `Popover`, `Avatar` and `Dropdown`, with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'list',
+        'list page',
+        'resource list',
+        'module list',
+        'index page',
+        'resources index',
+        'list with filters',
+        'workloads list',
+        'listagem',
+        'lista de recursos',
+        'página de listagem'
+      ],
+      skills: ['webkit-lists', 'webkit-tables']
     }
   }
 }

@@ -149,6 +149,22 @@ const meta = {
           'The console’s application shell: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot, as the console’s AppSidebar does (the Azion mark, the ⌘K palette, the navigation groups and the account menu with the theme switch at its foot) and a content zone on the right whose global header carries the breadcrumb from the second level on, the search affordance, the Create button, the Agent button and the account avatar; below `md` the rail becomes a Drawer opened from the hamburger that leads the mark. Every signed-in console screen renders it, from the Workloads and Applications lists to a workload’s Overview, Deployments and Settings tabs. Built from `Sidebar`, `Brand`, `Menu`, `CommandMenu`, `Dropdown`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Kbd`, `Drawer` and, per page, `TabView`, `InputText` and `CardBox`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'platform shell',
+        'console shell',
+        'app shell',
+        'sidebar layout',
+        'navigation rail',
+        'dashboard layout',
+        'admin layout',
+        'app layout with sidebar',
+        'estrutura do console',
+        'layout com menu lateral',
+        'menu lateral'
+      ],
+      skills: ['webkit-navigation', 'webkit-layout']
     }
   }
 }

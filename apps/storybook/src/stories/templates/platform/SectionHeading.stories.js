@@ -72,6 +72,18 @@ const meta = {
           'The heading of one band inside a page: an h2 with a one-line description, a copy-link affordance that appears when the heading is hovered or focused, and the band’s own actions or documentation link on the right. Billing renders one above each of its cards and tables, and an application’s Get started block opens with one. Built from `CopyButton`, `Link` and `Button`; below `md` the actions drop under the copy.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'section heading',
+        'section title',
+        'h2 with copy link',
+        'anchor heading',
+        'subheading with actions',
+        'título da seção',
+        'cabeçalho de seção'
+      ],
+      skills: ['webkit-layout']
     }
   }
 }

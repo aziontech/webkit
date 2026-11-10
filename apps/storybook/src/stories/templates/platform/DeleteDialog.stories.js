@@ -155,6 +155,22 @@ const meta = {
           'The destructive confirmation every console list uses for Delete: a warning `Message`, a sentence naming what goes with the resource and a Help Center link, then a prompt that shows the resource name as a click-to-copy chip and an input the user must match before Delete enables. Workloads, Applications and the other resource indexes open it from the row Delete action. Built from `Dialog` with its trigger, portal, overlay, content, title and close parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Message`, `Tooltip`, `InputText` and `Button`; closed by default behind a visible danger trigger.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'delete',
+        'delete dialog',
+        'delete confirmation',
+        'delete resource',
+        'type to confirm',
+        'destructive confirmation',
+        'remove resource',
+        'excluir',
+        'confirmar exclusão',
+        'excluir recurso',
+        'apagar'
+      ],
+      skills: ['webkit-ux-heuristics', 'webkit-microcopy']
     }
   }
 }

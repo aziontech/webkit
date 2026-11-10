@@ -80,6 +80,20 @@ const meta = {
           'The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Application, Workload, Firewall, Function and SQL Database detail pages open with it. Built from `TabView`, with `Button` and `Tag` in the trailing actions.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'page tabs',
+        'resource tabs',
+        'detail tabs',
+        'tab bar',
+        'tabs with deploy button',
+        'second-level navigation',
+        'abas',
+        'abas do recurso',
+        'navegação por abas'
+      ],
+      skills: ['webkit-navigation']
     }
   }
 }

@@ -37,6 +37,20 @@ const meta = {
           'The SQL Database detail page under its Tables and Editor tabs, as the console renders it at /sql-database/:id. Each tab pairs a resizable, collapsible `Sidebar` (the tables list, or the query history) with a working pane: the selected table as a hand-built data grid with typed column headers, a Data and Definition switch, and a pager footer; or the SQL editor, its Results band and a `PaginatorRoot`. The SQL Quick Templates drawer opens from the editor toolbar. Built from `TabView`, `Sidebar`, `InputText`, `IconButton`, `Tooltip`, `Dropdown`, `SegmentedButton`, `Checkbox`, `TableRoot`, `Tag`, `CardBox`, `EmptyState`, `Message`, `Textarea`, `PaginatorRoot`, `Button`, `Drawer` and its parts with `PanelHeader` and `PanelContent`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'sql database',
+        'database tables',
+        'database detail',
+        'table schema',
+        'data grid',
+        'sql templates',
+        'banco de dados',
+        'banco de dados sql',
+        'tabelas do banco'
+      ],
+      skills: ['webkit-tables', 'webkit-layout', 'webkit-ui-states']
     }
   }
 }

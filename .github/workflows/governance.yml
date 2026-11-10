@@ -262,7 +262,7 @@ jobs:
         run: pnpm --filter @aziontech/webkit run spec-status
 
       - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
-        run: pnpm --filter @aziontech/webkit run patterns:check --warn-intents
+        run: pnpm --filter @aziontech/webkit run patterns:check
 
       - name: Cited names (G2) — skills, rules and patterns only cite exports that exist
         run: pnpm --filter @aziontech/webkit run cited-names

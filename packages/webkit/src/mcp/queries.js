@@ -149,6 +149,7 @@ export function getComponent(catalog, name) {
     props: e.props ?? [],
     events: e.events ?? [],
     slots: e.slots ?? [],
+    examples: e.examples ?? [],
     allowedClasses: allowedClassesFor(e)
   }
 }
@@ -360,10 +361,25 @@ function exampleProps(props) {
   })
 }
 
-export function getUsageExample(catalog, name) {
+export function getUsageExample(catalog, name, { fromStory = true } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const comp = getComponent(catalog, name)
   if (!comp.found) return comp
+
+  if (fromStory && comp.examples.length) {
+    const [example] = comp.examples
+    return {
+      ok: true,
+      available: true,
+      found: true,
+      name: comp.name,
+      binding: comp.binding,
+      source: `story ${example.name}`,
+      sfc: example.sfc,
+      otherExamples: comp.examples.slice(1).map((ex) => ex.name),
+      note: 'Taken from the component story (the same SFC as Storybook "Show code"). get_component returns every example.'
+    }
+  }
 
   const tree = comp.treeShakeableImport
   const binding = pascalCase(subpathOf(catalog, tree))

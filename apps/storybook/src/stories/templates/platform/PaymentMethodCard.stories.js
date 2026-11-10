@@ -33,6 +33,20 @@ const meta = {
           'The Payment Method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `CardBox`, `FieldText`, `FieldSelect`, `Message` and `Button`; the Visa plate is the console’s inline brand mark, since webkit ships no card-brand asset.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'payment method',
+        'credit card form',
+        'card on file',
+        'change card',
+        'update payment method',
+        'card details',
+        'método de pagamento',
+        'cartão de crédito',
+        'dados do cartão'
+      ],
+      skills: ['webkit-form', 'webkit-errors']
     }
   }
 }

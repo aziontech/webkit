@@ -102,6 +102,20 @@ const meta = {
           'The two surfaces a project passes through when it is dragged onto the console: the dashed drop target that fills the page while a folder hovers over it, and the full-page Initializing screen that lists the received files with a Spinner while the deployment is set up. Home and the create flow render both from ProjectDropZone and ProjectInitializing. Built from Spinner, Vue’s Transition and plain elements on theme tokens.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'drop zone',
+        'drag and drop upload',
+        'upload project',
+        'folder upload',
+        'initializing project',
+        'file drop',
+        'arrastar e soltar',
+        'enviar projeto',
+        'upload de arquivos'
+      ],
+      skills: ['webkit-ui-states', 'webkit-motion-polish']
     }
   }
 }

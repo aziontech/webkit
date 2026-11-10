@@ -287,6 +287,20 @@ const meta = {
           'The settings band: an h2 with a `Hint` glyph that carries the one-sentence guidance, over or beside a flush card of settings rows, each a title and description with its control on the right. Every settings tab in the console is a column of these, from an application’s Settings and Cache Settings tabs to Account Settings. Built from `Hint`, `CardBox` and `Item` rows holding `InputText`, `Switch` and `Select`; the split layout puts the heading in a sticky aside from `md` up and stacks below it.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'settings section',
+        'settings band',
+        'collapsible section',
+        'section with card',
+        'grouped settings',
+        'advanced settings',
+        'seção de configurações',
+        'seção recolhível',
+        'grupo de configurações'
+      ],
+      skills: ['webkit-form', 'webkit-layout']
     }
   }
 }

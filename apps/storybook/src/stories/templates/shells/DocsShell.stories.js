@@ -159,6 +159,21 @@ const meta = {
           'The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `Menu` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `Menu`, `ScrollArea`, `ThemeSwitcher` and `Footer`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'docs shell',
+        'documentation layout',
+        'docs page layout',
+        'documentation site',
+        'docs sidebar',
+        'on this page outline',
+        'knowledge base layout',
+        'layout da documentação',
+        'página de documentação',
+        'estrutura da documentação'
+      ],
+      skills: ['webkit-layout', 'webkit-navigation']
     }
   }
 }

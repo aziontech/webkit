@@ -60,6 +60,22 @@ const meta = {
           'The resource table of a console list page: a data-driven `Table` inside a flush `CardBox`, with the console cell recipes composed into the per-column slots. The name cell leads with the module glyph; the ID cell pins a `CopyButton` to its right edge; the Domains cell is a left-truncating link with an external glyph and a `Tooltip` naming the destination, a +N `Tag` that opens the remaining domains in a `Popover`, and a copy button pinned right; Status is a `Tag`; Last Editor is an `Avatar` with the name; Last Modified is the relative time; and the trailing action cell is an `IconButton` opening the row’s `Dropdown`. Workloads and Applications render it; the bounded columns declare the console width floors (80 for fit columns, 104 for a chip column) and the Domains column takes the grow share. Built from `Table`, `CardBox`, `CopyButton`, `Tooltip`, `Tag`, `Popover`, `Avatar`, `Dropdown` and `IconButton`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'resource table',
+        'data table',
+        'table',
+        'sortable table',
+        'paginated table',
+        'table with copy id',
+        'listing table',
+        'tabela de listagem',
+        'tabela',
+        'tabela de recursos',
+        'tabela paginada'
+      ],
+      skills: ['webkit-tables', 'webkit-ui-states']
     }
   }
 }

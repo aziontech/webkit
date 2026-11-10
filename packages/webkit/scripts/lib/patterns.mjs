@@ -108,7 +108,7 @@ export function patternFromModule(mod, { file, repoRoot }) {
   return { id: patternIdFromTitle(title), entry }
 }
 
-export async function buildPatterns(repoRoot) {
+export async function withStoryServer(repoRoot, fn) {
   const storybookRoot = resolve(repoRoot, 'apps/storybook')
   const [{ createServer }, { default: vue }] = await Promise.all([
     import('vite'),
@@ -123,31 +123,82 @@ export async function buildPatterns(repoRoot) {
     appType: 'custom',
     optimizeDeps: { noDiscovery: true, include: [] }
   })
-  const patterns = {}
-  const errors = []
   try {
-    for (const file of listPatternStories(repoRoot)) {
-      try {
-        const mod = await server.ssrLoadModule(file)
-        const built = patternFromModule(mod, { file, repoRoot })
-        if (!built) {
-          errors.push(`${relative(repoRoot, file)}: no export carries parameters.docs.source.code`)
-          continue
-        }
-        if (patterns[built.id]) {
-          errors.push(`${relative(repoRoot, file)}: pattern id "${built.id}" is already taken`)
-          continue
-        }
-        patterns[built.id] = built.entry
-      } catch (err) {
-        errors.push(`${relative(repoRoot, file)}: ${String(err?.message || err).split('\n')[0]}`)
-      }
-    }
+    return await fn((file) => server.ssrLoadModule(file))
   } finally {
     await server.close()
+  }
+}
+
+export async function buildPatterns(repoRoot, load) {
+  const patterns = {}
+  const errors = []
+  for (const file of listPatternStories(repoRoot)) {
+    try {
+      const mod = await load(file)
+      const built = patternFromModule(mod, { file, repoRoot })
+      if (!built) {
+        errors.push(`${relative(repoRoot, file)}: no export carries parameters.docs.source.code`)
+        continue
+      }
+      if (patterns[built.id]) {
+        errors.push(`${relative(repoRoot, file)}: pattern id "${built.id}" is already taken`)
+        continue
+      }
+      patterns[built.id] = built.entry
+    } catch (err) {
+      errors.push(`${relative(repoRoot, file)}: ${String(err?.message || err).split('\n')[0]}`)
+    }
   }
   if (errors.length) {
     throw new Error(`Could not build patterns:\n  ${errors.join('\n  ')}`)
   }
   return Object.fromEntries(Object.entries(patterns).sort(([a], [b]) => a.localeCompare(b)))
+}
+
+export const EXAMPLES_PER_COMPONENT = 3
+export const EXAMPLE_MAX_CHARS = 8000
+
+function walkStories(dir, out = []) {
+  if (!existsSync(dir)) return out
+  for (const e of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )) {
+    const p = join(dir, e.name)
+    if (e.isDirectory()) walkStories(p, out)
+    else if (e.isFile() && e.name.endsWith('.stories.js')) out.push(p)
+  }
+  return out
+}
+
+export function componentSubpathForTitle(title, knownSubpaths) {
+  const last = kebab(
+    String(title || '')
+      .split('/')
+      .pop() || ''
+  )
+  if (knownSubpaths.has(last)) return last
+  if (knownSubpaths.has(`sections/${last}`)) return `sections/${last}`
+  return null
+}
+
+export async function buildComponentExamples(repoRoot, load, knownSubpaths) {
+  const examples = {}
+  const files = walkStories(join(repoRoot, 'apps/storybook/src/stories/components'))
+  for (const file of files) {
+    const mod = await load(file)
+    const sub = componentSubpathForTitle(mod.default?.title, knownSubpaths)
+    if (!sub || examples[sub]) continue
+    const list = Object.entries(mod)
+      .filter(([name, story]) => name !== 'default' && story && typeof story === 'object')
+      .map(([name, story]) => ({
+        name,
+        summary: storyText(story, 'story'),
+        sfc: story.parameters?.docs?.source?.code || ''
+      }))
+      .filter((ex) => ex.sfc && ex.sfc.length <= EXAMPLE_MAX_CHARS)
+      .slice(0, EXAMPLES_PER_COMPONENT)
+    if (list.length) examples[sub] = list
+  }
+  return examples
 }

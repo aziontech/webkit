@@ -152,6 +152,21 @@ const meta = {
           'The build logs a create flow streams while it deploys: a CardBox titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete SegmentedButton once it has failed, opening on a cloning splash and then streaming the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush ProgressBar. The console renders it on Create Application, Create Workload, Deploy Template in the Marketplace and the Async Deployment form, and the Deployment detail page shows the same step accordion inside its Deployment Logs disclosure. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from CardBox, StatusIndicator, SegmentedButton, Accordion, LogView, Spinner, Tag and ProgressBar.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'deployment progress',
+        'build logs',
+        'deploy logs',
+        'creation progress',
+        'deployment status',
+        'build pipeline',
+        'deploy failed',
+        'progresso do deploy',
+        'logs de build',
+        'status da implantação'
+      ],
+      skills: ['webkit-ui-states', 'webkit-errors']
     }
   }
 }

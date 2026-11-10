@@ -70,6 +70,21 @@ const meta = {
           'The code editor page as the console draws a function: the platform shell with the Functions breadcrumb, then the Code and Settings tabs, an editor toolbar whose SegmentedButton switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a ResizablePanel with the collapsible schema editor on the left and the form fields on the right. The console embeds Monaco for both editors; this template stands each in with a flush `Textarea` in the same pane. The page content is the FunctionEditor template, placed in the shell.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'code editor',
+        'code editor page',
+        'function code editor',
+        'editor page',
+        'code and arguments editor',
+        'split editor',
+        'monaco editor',
+        'editor de código',
+        'página do editor',
+        'editar código'
+      ],
+      skills: ['webkit-layout', 'webkit-navigation']
     }
   }
 }

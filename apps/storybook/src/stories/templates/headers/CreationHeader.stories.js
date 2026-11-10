@@ -32,6 +32,21 @@ const meta = {
           'The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back button, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. The back button returns to the list the flow started from and is omitted when there is nowhere to go back to. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Avatar` and `Brand`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'creation header',
+        'focused shell header',
+        'create flow header',
+        'flow header with back button',
+        'header without sidebar',
+        'edit flow header',
+        'deploy flow header',
+        'cabeçalho de criação',
+        'cabeçalho de fluxo',
+        'barra com botão voltar'
+      ],
+      skills: ['webkit-navigation', 'webkit-layout']
     }
   }
 }

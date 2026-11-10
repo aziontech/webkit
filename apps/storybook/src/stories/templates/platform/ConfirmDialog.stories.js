@@ -102,6 +102,21 @@ const meta = {
           'The console small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose kind says how destructive the outcome is (danger for a removal, primary for a commit). The Remove domain confirmation on a workload and on an application renders it, and the unsaved-changes guard shows the same shell when a dirty form is left. Built from `Dialog` with `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription` and `DialogClose`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`; closed by default behind a visible trigger.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'confirm dialog',
+        'confirmation dialog',
+        'confirmation modal',
+        'are you sure dialog',
+        'unsaved changes dialog',
+        'discard changes',
+        'remove domain confirmation',
+        'diálogo de confirmação',
+        'modal de confirmação',
+        'descartar alterações'
+      ],
+      skills: ['webkit-ux-heuristics', 'webkit-microcopy']
     }
   }
 }

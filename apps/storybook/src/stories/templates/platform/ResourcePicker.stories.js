@@ -254,6 +254,20 @@ const meta = {
           'The card a create flow uses to bind one resource to another: a SegmentedButton chooses between an existing resource and a new one, then either a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads, or a single required name field. The workload wizard binds its application with it, and the function flow picks its host the same way. Built from `CardBox`, `SegmentedButton`, `FieldText`, `InputText`, `Item`, `Skeleton` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'resource picker',
+        'select existing or new',
+        'choose resource',
+        'bind resource',
+        'searchable picker',
+        'pick application',
+        'seletor de recurso',
+        'escolher recurso',
+        'existente ou novo'
+      ],
+      skills: ['webkit-form', 'webkit-ui-states']
     }
   }
 }

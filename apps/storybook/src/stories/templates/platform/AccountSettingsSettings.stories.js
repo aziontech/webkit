@@ -353,6 +353,22 @@ const meta = {
           'The General panel of Account Settings (`/account`), as the console renders it inside the app shell: a small page heading over seven stacked sections, each a flush `CardBox` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `CardBox`, `Item`, `InputText`, `Textarea`, `Select`, `Switch`, `Tag`, `Hint` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'account settings',
+        'general account settings',
+        'company information',
+        'organization settings',
+        'login settings',
+        'danger zone',
+        'account preferences',
+        'configurações da conta',
+        'dados da empresa',
+        'configurações gerais da conta',
+        'ajustes da conta'
+      ],
+      skills: ['webkit-form', 'webkit-errors', 'webkit-layout']
     }
   }
 }

@@ -360,6 +360,21 @@ const meta = {
           'The screen the application wizard ends on once the first deployment is live: a heading with the Git scope as a Tag, the domain card with a copy control and a Visit button, the list of every resource the flow created, three next-step rows, the Get started band that walks the CLI or GitHub Actions path in three CodeBlock cards, and the Manage button. Create Application, Create Workload and Deploy Template all finish here. Built from `CardBox`, `Tag`, `CopyButton`, `Item`, `SegmentedButton`, `CodeBlock` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'deploy success',
+        'deployment successful',
+        'deployed',
+        'success page',
+        'deployment complete',
+        'next steps after deploy',
+        'wizard finish',
+        'deploy concluído',
+        'sucesso do deploy',
+        'aplicação publicada'
+      ],
+      skills: ['webkit-ui-states', 'webkit-microcopy']
     }
   }
 }

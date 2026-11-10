@@ -81,6 +81,21 @@ const meta = {
           'The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Hobby, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Hobby. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. Built from `Drawer`, `PanelHeader`, `PanelContent`, `SegmentedButton`, `CardPricing` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'change plan',
+        'plan selection',
+        'pricing plans drawer',
+        'choose plan',
+        'switch plan',
+        'monthly or yearly plans',
+        'compare plans',
+        'mudar plano',
+        'trocar plano',
+        'escolher plano'
+      ],
+      skills: ['webkit-microcopy', 'webkit-ux-heuristics']
     }
   }
 }

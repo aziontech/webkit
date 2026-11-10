@@ -63,6 +63,22 @@ const meta = {
           'The query editor page as the console draws a SQL database: the platform shell with the SQL Database breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run Query, Prettify and Templates toolbar, the editor, and the Results band over its paginator; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch. The page content is the SqlDatabase template, placed in the shell.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'query editor',
+        'sql editor',
+        'run query',
+        'query results',
+        'sql query page',
+        'query history',
+        'sql code editor',
+        'código sql',
+        'editor de consultas',
+        'editor sql',
+        'executar consulta'
+      ],
+      skills: ['webkit-layout', 'webkit-tables']
     }
   }
 }

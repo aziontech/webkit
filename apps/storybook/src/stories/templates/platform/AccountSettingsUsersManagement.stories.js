@@ -204,6 +204,25 @@ const meta = {
           'The Users management panel of Account Settings (`/account/users`): a page heading with Documentation and Invite User, the list controls row, and a flush table of teammates with an avatar name cell, role and status tags, and a row menu that removes a user. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `TableRoot`, `CardBox`, `Avatar`, `Tag`, `Dropdown`, `Popover`, `Switch`, `Tooltip`, `IconButton`, `InputText` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'users',
+        'users management',
+        'users list',
+        'team members',
+        'members list',
+        'invite user',
+        'invite teammate',
+        'manage users',
+        'remove user',
+        'usuários',
+        'gestão de usuários',
+        'lista de usuários',
+        'convidar usuário',
+        'membros'
+      ],
+      skills: ['webkit-lists', 'webkit-tables']
     }
   }
 }

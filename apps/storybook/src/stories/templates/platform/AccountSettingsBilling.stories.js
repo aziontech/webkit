@@ -515,6 +515,25 @@ const meta = {
           'The Billing and plan panel of Account Settings (`/account/billing`): a large page heading with the last update stamp and a refresh action, Bills and Payment Methods tabs, then on Bills the Subscription Plan and Upgrade to Pro cards over the invoice table, and on Payment Methods the payment information and the card table. Change Plan and Upgrade to Pro open their drawers, which start closed. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `TabView`, `CardBox`, `Tag`, `TableRoot`, `Currency`, `EmptyState`, `StatusIndicator`, `CopyButton`, `Drawer`, `CardPricing`, `SegmentedButton` and the field components.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'billing',
+        'billing page',
+        'invoices',
+        'bills',
+        'subscription plan',
+        'payment methods',
+        'credit cards',
+        'current plan',
+        'plan and billing',
+        'cobrança',
+        'faturas',
+        'faturamento',
+        'métodos de pagamento',
+        'plano de assinatura'
+      ],
+      skills: ['webkit-tables', 'webkit-lists']
     }
   }
 }

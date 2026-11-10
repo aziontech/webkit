@@ -346,6 +346,21 @@ const meta = {
           'The page a first-level resource is created on: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading over a flush CardBox of field rows, and a floating sticky bar carrying a leading slot plus Cancel and Save. Create Zone, Create Team and every other top-level create page share it. Fields flag required or invalid only after Save is clicked. Built from `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar`, `Hint`, `CardBox`, `Item`, `InputText`, `HelperText`, `Switch` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'create page',
+        'create resource page',
+        'create zone',
+        'full page create form',
+        'top-level create page',
+        'new resource form',
+        'creation page',
+        'página de criação',
+        'criar recurso',
+        'formulário de criação'
+      ],
+      skills: ['webkit-create-surface', 'webkit-form', 'webkit-errors']
     }
   }
 }

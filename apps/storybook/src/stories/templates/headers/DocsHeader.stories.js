@@ -32,6 +32,20 @@ const meta = {
           'The documentation bar: a `GlobalHeader` in its default `content` placement, so it runs full bleed across the window and opens on the page boundary. Start: the navigation trigger below `lg`, the brand with the Docs tag, and the section links from `lg`. End: search, GitHub, then Console. Search leads the end cluster in every channel, so it sits at the start of the buttons wherever the reader is. The sample widens the search into a field carrying the ⌘K shortcut once the bar is wide enough; the control is an icon button below that, and an icon button here. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'docs header',
+        'documentation header',
+        'docs top bar',
+        'documentation navbar',
+        'docs navigation bar',
+        'header with search and github',
+        'cabeçalho da documentação',
+        'barra da documentação',
+        'menu da documentação'
+      ],
+      skills: ['webkit-navigation', 'webkit-layout']
     }
   }
 }

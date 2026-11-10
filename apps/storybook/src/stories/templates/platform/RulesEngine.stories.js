@@ -478,6 +478,21 @@ const meta = {
           'The Rules Engine rule form, the console’s richest form: a large right-side drawer opened from the Add Rule action with General, Phase, Criteria, Behaviors and Status sections. Required fields show their required state only after Save is pressed with them empty, never on first render. Criteria are groups of variable, operator and argument rows joined by And or Or, read as If / Or across groups; behaviors are a Then list whose rows change their argument field with the behavior picked. The Rules Engine tab of an application and of a firewall opens it. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldText`, `FieldSelect`, `FieldRadioBlock`, `FieldSwitchBlock`, `SegmentedButton`, `CardBox`, `Divider`, `Hint`, `IconButton`, `Tooltip` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'rules engine',
+        'rule form',
+        'add rule',
+        'criteria and behaviors',
+        'if then rules',
+        'conditional rules',
+        'rule builder',
+        'motor de regras',
+        'criar regra',
+        'regras condicionais'
+      ],
+      skills: ['webkit-form', 'webkit-errors', 'webkit-create-surface']
     }
   }
 }

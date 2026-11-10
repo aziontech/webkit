@@ -35,6 +35,19 @@ const meta = {
           'The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The console draws it on the Application, Workload and Firewall Overview tabs, each with its own facts and copy. Built from `CardBox`, `Button`, `IconButton`, `Dropdown`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Message` and `Tooltip`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'resource summary',
+        'summary card',
+        'overview card',
+        'resource facts',
+        'status card',
+        'resumo do recurso',
+        'cartão de resumo',
+        'visão geral'
+      ],
+      skills: ['webkit-layout']
     }
   }
 }

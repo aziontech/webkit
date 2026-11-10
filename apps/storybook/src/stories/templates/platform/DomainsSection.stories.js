@@ -189,6 +189,20 @@ const meta = {
           'The Domains card in a resource settings tab: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered under Domains on the Application Settings and Workload Settings pages. Built from `CardBox`, `Table`, `Tag`, `Dropdown`, `IconButton`, `Tooltip` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'domains section',
+        'domains card',
+        'domains table',
+        'resource domains',
+        'domain list in settings',
+        'hostnames',
+        'seção de domínios',
+        'domínios do recurso',
+        'lista de domínios'
+      ],
+      skills: ['webkit-tables']
     }
   }
 }

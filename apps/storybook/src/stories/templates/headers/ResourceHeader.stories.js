@@ -36,6 +36,21 @@ const meta = {
           'The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and the breadcrumb from the second level. End: search first, then Create, the Agent button and the account avatar. The first level of a resource names itself with its own page, so the bar carries the brand alone; the second level adds the module and the resource name as a breadcrumb. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` it widens the search into a field with the ⌘K shortcut. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'console header',
+        'app header',
+        'resource header',
+        'header with breadcrumb',
+        'header with search and avatar',
+        'platform top bar',
+        'signed-in header',
+        'cabeçalho do console',
+        'cabeçalho da plataforma',
+        'barra superior do app'
+      ],
+      skills: ['webkit-navigation', 'webkit-layout']
     }
   }
 }

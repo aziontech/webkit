@@ -79,6 +79,18 @@ const meta = {
           'The heading that opens a console page: an h1 sized by the page level, a one-line description, and the actions the page owns on the right, starting with a Documentation link to the product docs. First-level lists such as Workloads render it at the medium size with the create action; settings sub-pages such as an application’s Settings tab render it small with no actions. Built from `Button` and `Tag`; below `md` the row stacks and every action spans the full width.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'page heading',
+        'page title',
+        'page header with actions',
+        'heading with documentation link',
+        'list page heading',
+        'título da página',
+        'cabeçalho da página'
+      ],
+      skills: ['webkit-layout']
     }
   }
 }

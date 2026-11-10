@@ -276,6 +276,20 @@ const meta = {
           'The production checklist on a workload overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Rendered on the Workload Overview page. Built from `CardBox`, `Item`, `Tag`, `IconButton`, `Drawer`, the `Panel` parts and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'production checklist',
+        'go-live checklist',
+        'checklist',
+        'setup progress',
+        'launch steps',
+        'onboarding checklist',
+        'checklist de produção',
+        'lista de verificação',
+        'passos para produção'
+      ],
+      skills: ['webkit-ui-states', 'webkit-microcopy']
     }
   }
 }

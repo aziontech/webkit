@@ -136,6 +136,20 @@ const meta = {
           'The settings row: an `Item` whose content carries the title and description and whose actions slot holds the control, capped to the control measure, or a switch at its natural width, or a wide control stacked under the copy. Account Settings, Application Settings and the Firewall settings tabs list these rows inside a flush `CardBox`. Built from `CardBox`, `Item`, `InputText`, `Select`, `Switch`, `Textarea` and `HelperText`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'field row',
+        'settings row',
+        'setting with control',
+        'label and input row',
+        'switch row',
+        'settings card rows',
+        'field validation message',
+        'linha de configuração',
+        'linha de campo'
+      ],
+      skills: ['webkit-form', 'webkit-errors']
     }
   }
 }

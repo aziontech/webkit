@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url'
 
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
-import { buildPatterns } from './lib/patterns.mjs'
+import { missingComponentDocs } from './lib/component-docs.mjs'
+import { buildComponentExamples, buildPatterns, withStoryServer } from './lib/patterns.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -329,6 +330,14 @@ async function build() {
     imports[subpath] = entry
   }
 
+  const { patterns, examples } = await withStoryServer(REPO_ROOT, async (load) => ({
+    patterns: await buildPatterns(REPO_ROOT, load),
+    examples: await buildComponentExamples(REPO_ROOT, load, subpathSet)
+  }))
+  for (const [subpath, list] of Object.entries(examples)) {
+    if (imports[subpath]) imports[subpath].examples = list
+  }
+
   return {
     package: PKG_NAME,
     webkitVersion: pkg.version,
@@ -337,7 +346,7 @@ async function build() {
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
     imports,
-    patterns: await buildPatterns(REPO_ROOT)
+    patterns
   }
 }
 
@@ -389,6 +398,14 @@ function buildTokens() {
 }
 
 const catalog = await build()
+const missingDocs = missingComponentDocs(catalog.imports)
+if (missingDocs.length) {
+  process.stderr.write(
+    `✖ ${missingDocs.length} exported component(s) without agent docs in .specs/<name>.md:\n  ${missingDocs.join('\n  ')}\n` +
+      'Every exported component needs ## Purpose, ## When to use and ## When NOT to use in its spec.\n'
+  )
+  process.exit(1)
+}
 writeFileSync(OUT_PATH, JSON.stringify(catalog, null, 2) + '\n', 'utf-8')
 const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
 process.stdout.write(

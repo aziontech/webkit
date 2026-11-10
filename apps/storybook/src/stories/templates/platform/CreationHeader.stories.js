@@ -72,6 +72,19 @@ const meta = {
           'The focused-flow header that replaces the console shell on every create, edit and deploy page: a back IconButton, the Azion Brand and the Breadcrumb on the left, the signed-in Avatar on the right, and no sidebar. Create Zone, Create Team, Create Function and the application wizard all render it above their form. Built from `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb` and `Avatar`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'create page header',
+        'create zone header',
+        'wizard header',
+        'header with back and breadcrumb',
+        'creation flow top bar',
+        'focused page header',
+        'cabeçalho da página de criação',
+        'cabeçalho do assistente'
+      ],
+      skills: ['webkit-navigation']
     }
   }
 }

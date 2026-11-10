@@ -325,6 +325,23 @@ const meta = {
           'The Teams and permissions panel of Account Settings (`/account/teams`): a page heading with Documentation and Create Team, the list controls row, and a flush table of teams whose permissions cell shows the first grant and a +N popover listing the rest; the row menu duplicates a team or opens the type-to-confirm delete dialog. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `TableRoot`, `CardBox`, `Avatar`, `Tag`, `Popover`, `Dropdown`, `Dialog`, `Message`, `Switch`, `Tooltip`, `IconButton`, `InputText` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'teams and permissions',
+        'teams',
+        'permissions',
+        'roles and permissions',
+        'access control',
+        'team list',
+        'create team',
+        'user groups',
+        'times e permissões',
+        'permissões',
+        'controle de acesso',
+        'equipes'
+      ],
+      skills: ['webkit-lists', 'webkit-tables']
     }
   }
 }

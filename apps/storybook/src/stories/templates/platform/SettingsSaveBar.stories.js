@@ -24,6 +24,19 @@ const meta = {
           'The sticky commit bar a resource settings tab mounts once something is edited: an info glyph, the unsaved-changes label with an optional hint, and Discard beside Save, as a full-bleed band pinned to the bottom of the scroll region, edge to edge like the resource tab bar above it. Every Application, Workload and Firewall Settings tab ends with it. Built from `Button` over a plain sticky footer, inside the platform shell with `TabView`, above a column of `CardBox` rows.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'save bar',
+        'unsaved changes bar',
+        'sticky save bar',
+        'discard and save',
+        'commit bar',
+        'barra de salvar',
+        'alterações não salvas',
+        'salvar alterações'
+      ],
+      skills: ['webkit-form', 'webkit-ux-heuristics']
     }
   }
 }

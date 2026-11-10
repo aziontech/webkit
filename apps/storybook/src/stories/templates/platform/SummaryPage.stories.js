@@ -1394,6 +1394,21 @@ const meta = {
           'The Overview tab of a resource detail page as the console draws it: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The Application Overview follows it with Get started for an application made from the CLI, the Workload Overview with the production checklist and the deployment topology, and the Firewall Overview stops at the summary. The Deployment page sits in the same shell without tabs: a status banner, the Deployment Details card with its Deployment Settings footer, and the collapsible Deployment Logs card. Built from the platform shell, `TabView`, `CardBox`, `Dropdown`, `Popover`, `Accordion`, `Flow`, `Item`, `Drawer`, `Message`, `LogView`, `CodeBlock` and `SegmentedButton`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'overview page',
+        'resource overview',
+        'detail page',
+        'summary page',
+        'deployment detail',
+        'application overview',
+        'deployment failed',
+        'página de visão geral',
+        'detalhe do recurso',
+        'página de resumo'
+      ],
+      skills: ['webkit-layout', 'webkit-navigation', 'webkit-ui-states']
     }
   }
 }

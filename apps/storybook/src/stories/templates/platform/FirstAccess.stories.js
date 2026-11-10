@@ -115,6 +115,21 @@ const meta = {
           'The first screen a brand-new account sees on Home: a greeting under a centred headline, the command prompt as a read-only InputText carrying a search glyph and a Kbd hint for the palette shortcut, and three doors (ship something new, add a domain, onboard an agent), each a flush CardBox with an Illustration stage, a title, a description and its own action. The console renders it as HomeEmptyState until the account owns its first resource. Built from CardBox, Illustration, InputText, Kbd and Button.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'first access',
+        'home empty state',
+        'new account home',
+        'welcome screen',
+        'first run',
+        'brand-new account',
+        'getting started home',
+        'primeiro acesso',
+        'tela de boas-vindas',
+        'home vazia'
+      ],
+      skills: ['webkit-ui-states', 'webkit-microcopy']
     }
   }
 }

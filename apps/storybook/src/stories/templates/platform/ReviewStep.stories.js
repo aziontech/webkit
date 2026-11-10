@@ -130,6 +130,19 @@ const meta = {
           'The last step of a stepped create flow, read back before Create: a band listing every field and the API property it posts as, a band stating where the resource runs as a single Message, and a band of the resources that can reference it with the field each one carries. Create Function and the generic resource wizard render it as their Review step. Built from `CardBox`, `Item`, `Hint`, `Message` and `Tag`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'review step',
+        'review and create',
+        'confirm before create',
+        'wizard review',
+        'summary before submit',
+        'revisar',
+        'etapa de revisão',
+        'revisão antes de criar'
+      ],
+      skills: ['webkit-create-surface', 'webkit-microcopy']
     }
   }
 }

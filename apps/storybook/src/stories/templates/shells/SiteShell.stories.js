@@ -126,6 +126,19 @@ const meta = {
           'The marketing site shell: a sticky `GlobalHeader` in its `site` placement (see Templates › Headers › SiteHeader), one `Hero` band opening the page, every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched gaps, a closing frame that draws no rule of its own, and the `Footer` in its `site` placement closing the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous; the hairline above the footer is the mirror of the hero’s top rule, so the frame turns the corner instead of stopping at it. The footer’s social buttons are small, the brand mark leads the social row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it, and row two sizes its bands by content, so the row never wraps while the status pair still has room. Built from `GlobalHeader`, `Hero`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers`, `TextureMaterial` and `Footer`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'site shell',
+        'marketing site layout',
+        'landing page layout',
+        'website layout',
+        'marketing page frame',
+        'layout do site',
+        'estrutura do site',
+        'página de marketing'
+      ],
+      skills: ['webkit-layout']
     }
   }
 }

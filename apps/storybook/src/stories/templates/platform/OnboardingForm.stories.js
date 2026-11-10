@@ -1316,6 +1316,25 @@ const meta = {
           'The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `CardBox` with a flat `ProgressBar`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the console the new organization will open into. The console shows one step at a time; each story here is one of the three. Built from `FieldText`, `BoxGridSelection` under a `Label` with a `HelperText`, `FieldSwitchBlock`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `SegmentedButton`, `FieldSelect`, `FieldCheckbox`, `Link` and `Message`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'onboarding',
+        'onboarding form',
+        'signup onboarding',
+        'create organization',
+        'organization setup',
+        'choose plan step',
+        'multi-step onboarding',
+        'onboarding wizard',
+        'welcome flow',
+        'first access setup',
+        'cadastro da organização',
+        'criar organização',
+        'onboarding da conta'
+      ],
+      skills: ['webkit-form', 'webkit-errors', 'webkit-microcopy'],
+      steps: ['organization', 'plan', 'profile']
     }
   }
 }

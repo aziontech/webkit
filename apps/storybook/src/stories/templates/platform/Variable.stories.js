@@ -1218,6 +1218,23 @@ const meta = {
           'The v6 Variables screens of the console: the list, the create page, the edit page with its Settings and Version history tabs, and the scoped create drawer an Application or Firewall opens from its own Variables tab. Each variable is entered as a pair of `InputGroup` rows, a Key row with a Remove button and a Value row with a Secret checkbox, and every scope is an `InputGroup` joining its label, a `MultiSelect` of resources and an enable `Switch`. Built from `InputGroup`, `Checkbox`, `IconButton`, `SegmentedButton`, `MultiSelect`, `Switch`, `HelperText`, `Message`, `Tooltip`, `TabView`, `Table`, `Tag`, `CopyButton`, `Dropdown`, `EmptyState`, `Dialog`, `Drawer` and `Button`; the JSON view uses a webkit `Textarea` in place of the console code editor.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'variables',
+        'environment variables',
+        'env vars',
+        'secrets',
+        'create variable',
+        'edit variable',
+        'variables list',
+        'version history',
+        'variáveis',
+        'variáveis de ambiente',
+        'segredos',
+        'criar variável'
+      ],
+      skills: ['webkit-lists', 'webkit-form', 'webkit-create-surface']
     }
   }
 }

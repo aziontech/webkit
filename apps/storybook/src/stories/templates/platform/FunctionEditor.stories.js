@@ -35,6 +35,20 @@ const meta = {
           'The function detail page: Code and Settings tabs, and on Code a toolbar whose SegmentedButton switches between the Code document and the Arguments document, with the runtime hint beside it. Arguments carries a field count with Add field and Remove form over a resizable split, the JSON schema on the left and the fields on the right as a card of rows that each expand into their Name, Type, Label, Description, Required, Default and per-type constraint settings, or an EmptyState when the form has none; Settings stacks the General, Runtime, Execution environment and Status sections over the unsaved-changes bar. The console embeds a Monaco editor for the code and the schema; this template stands each in with a flush `Textarea` in the same pane. The Functions detail page renders it. Built from `TabView`, `SegmentedButton`, `ResizablePanel` and its panes and handle, `Textarea`, `CardBox`, `Item`, `Tag`, `IconButton`, `Tooltip`, `InputText`, `Select`, `Switch`, `HelperText`, `EmptyState`, `Link`, `Hint`, `FieldRadioBlock` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'function editor',
+        'edge function',
+        'function detail',
+        'function arguments',
+        'json schema arguments',
+        'function settings',
+        'editor de função',
+        'argumentos da função',
+        'detalhe da função'
+      ],
+      skills: ['webkit-form', 'webkit-layout']
     }
   }
 }

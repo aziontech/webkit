@@ -568,6 +568,21 @@ const meta = {
           'The Build & Deployment panel of Account Settings (`/account/build-deployment`): a page heading with Documentation and Create Deployment Settings, a closable info message, then three stacked sections: the new-workload defaults form (with the unsaved-changes bar), the All workloads accordion that binds each environment to a Deployment Setting, and the Deployment Settings table with its list controls and a type-to-confirm delete. The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `CardBox`, `Item`, `Select`, `Switch`, `Accordion`, `TableRoot`, `Tag`, `Tooltip`, `Dropdown`, `Popover`, `Dialog`, `Message`, `Hint`, `InputText`, `IconButton` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'build and deployment',
+        'build deployment settings',
+        'deployment settings',
+        'deployment defaults',
+        'deploy configuration',
+        'workload deployment defaults',
+        'build settings',
+        'configurações de build',
+        'configurações de deploy',
+        'implantação'
+      ],
+      skills: ['webkit-form', 'webkit-tables', 'webkit-ux-heuristics']
     }
   }
 }

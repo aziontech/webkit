@@ -128,8 +128,9 @@ async function main() {
     {
       title: 'Get a webkit component API',
       description:
-        'Full API for one component: props, events, slots, sub-components, structure, and ' +
-        'compound-root info. Returns fuzzy suggestions when the name is unknown.',
+        'Full API for one component: purpose, when to use / when not to use, props, events, ' +
+        'slots, sub-components, structure, compound-root info, runnable examples taken from its ' +
+        'stories and the classes allowed on its tag. Returns fuzzy suggestions when the name is unknown.',
       inputSchema: {
         name: z.string().describe('Component name (kebab-case), e.g. "button" or "table".')
       }

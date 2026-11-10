@@ -187,6 +187,21 @@ const meta = {
           'A metric panel from the Observe dashboards: a CardBox with the metric’s name and its period on one line, the latest value set large beside its unit, and an inline SVG sparkline that fills the width and takes its stroke and fill from the primary token through currentColor. Real-Time Metrics and Edge Pulse render a KPI strip of four tiles above a two-column grid of these panels. Built from CardBox and Tooltip; the sparkline is plain SVG.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'metrics',
+        'metric panel',
+        'metrics dashboard',
+        'kpi tiles',
+        'sparkline',
+        'real-time metrics',
+        'analytics dashboard',
+        'métricas',
+        'painel de métricas',
+        'indicadores'
+      ],
+      skills: ['webkit-data-viz']
     }
   }
 }

@@ -186,6 +186,21 @@ const meta = {
           'The block a product list renders before the account owns any of that resource: a flush CardBox holding an EmptyState (the product icon, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, with two wide promo cards below it for Marketplace templates and agent onboarding. The console renders it on Workloads, Applications, Functions and every other product list that is still empty. Built from CardBox, EmptyState, Item, Button, InputGroup, InputText, CopyButton and Link.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'empty state',
+        'empty list',
+        'first use',
+        'no resources yet',
+        'create first resource',
+        'product empty state',
+        'zero state',
+        'estado vazio',
+        'lista vazia',
+        'primeiro uso'
+      ],
+      skills: ['webkit-ui-states', 'webkit-microcopy']
     }
   }
 }

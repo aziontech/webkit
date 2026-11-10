@@ -30,6 +30,21 @@ const meta = {
           'The console bar for the signed-out and onboarding screens: sign in, sign up, password recovery and the first-run steps. A `GlobalHeader` in its default `content` placement with the brand at the start and one outlined Documentation button at the end. There is no navigation, no search and no account control, because there is no session to act on yet. Built from `GlobalHeader`, `Button` and `Brand`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'auth header',
+        'signed-out header',
+        'login page header',
+        'onboarding header',
+        'public console header',
+        'header without navigation',
+        'logged-out top bar',
+        'cabeçalho de login',
+        'cabeçalho deslogado',
+        'barra do topo sem navegação'
+      ],
+      skills: ['webkit-navigation', 'webkit-layout']
     }
   }
 }

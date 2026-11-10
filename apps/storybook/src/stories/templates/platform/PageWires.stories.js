@@ -267,6 +267,20 @@ const meta = {
           'The skeleton wires the console paints while a page is still arriving: the Home overview, the first-access Home, and the whole shell while an expired session signs out. Each one is the real page’s grid drawn with Skeleton bands inside the same CardBox frames, so nothing shifts when the content lands. Built from Skeleton, CardBox and Item.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'page skeleton',
+        'loading skeleton',
+        'skeleton screen',
+        'page loading state',
+        'wireframe loading',
+        'session expired',
+        'carregando',
+        'esqueleto de carregamento',
+        'tela de carregamento'
+      ],
+      skills: ['webkit-ui-states']
     }
   }
 }

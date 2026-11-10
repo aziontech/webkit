@@ -161,8 +161,5 @@
   "packages/webkit/src/components/overlay/popover/popover-title/popover-title.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/overlay/popover/popover-trigger/popover-trigger.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/overlay/popover/popover.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
-  "packages/webkit/src/components/overline/overline.vue::runtime-define-props",
-  "packages/webkit/src/components/overline/overline.vue::slot-without-defineslots",
-  "packages/webkit/src/components/overline/overline.vue::spec:Spec file missing: .specs/overline.md",
   "packages/webkit/src/components/utils/spinner/spinner.vue::spec:data-testid fallback \"'utils-spinner'\" not found in <script setup>. Expected: ?? 'utils-spinner'"
 ]

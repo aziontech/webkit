@@ -26,6 +26,21 @@ const meta = {
           'The Settings tab of a resource, the same for every one: the platform shell with the resource breadcrumb, the full-bleed tab bar, then a small page heading over stacked settings bands, each a heading with a `Hint` glyph over a flush `CardBox` of field rows, in the form column, with the full-bleed commit band pinned to the bottom of the scroll region. Application, Workload and Firewall all take this shape. Built from the platform shell, `TabView`, `CardBox`, `Item`, `InputText`, `Switch`, `Tag`, `Tooltip`, `Link`, `Hint` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'settings page',
+        'resource settings',
+        'settings tab',
+        'application settings',
+        'workload settings',
+        'firewall settings',
+        'edit settings',
+        'página de configurações',
+        'configurações do recurso',
+        'aba de configurações'
+      ],
+      skills: ['webkit-form', 'webkit-errors', 'webkit-layout']
     }
   }
 }

@@ -335,6 +335,21 @@ const meta = {
           'The right-side form drawer every resource created inside another resource opens: a panel header with the title, a one-line description and the close button, a fieldset of field stacks in the scrolling content, and a footer with Cancel beside Save. Edge DNS Add Record, Add Domain, Add Variable and Create Environment are all built on it. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldInputGroup`, `FieldSelect`, `FieldText`, `FieldTextarea`, `InputNumber` under its own `Label` and `HelperText`, `Link`, `Hint` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'form drawer',
+        'side drawer form',
+        'add record',
+        'add item drawer',
+        'edit drawer',
+        'dns record form',
+        'nested resource form',
+        'gaveta de formulário',
+        'adicionar registro',
+        'formulário lateral'
+      ],
+      skills: ['webkit-create-surface', 'webkit-form', 'webkit-errors']
     }
   }
 }

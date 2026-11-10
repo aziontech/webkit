@@ -34,6 +34,20 @@ const meta = {
           'The onboarding block for an application made from the CLI: a section heading with a toggle between the Azion CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. The console renders it under the summary on the Application Overview tab and at the end of the create wizard, on the deploy success screen. Built from `SegmentedButton`, `CardBox` and `CodeBlock`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'get started',
+        'cli setup steps',
+        'github actions setup',
+        'onboarding steps',
+        'deploy with cli',
+        'numbered steps with code',
+        'primeiros passos',
+        'como começar',
+        'passos de configuração'
+      ],
+      skills: ['webkit-microcopy']
     }
   }
 }

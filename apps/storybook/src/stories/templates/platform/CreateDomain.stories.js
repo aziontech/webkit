@@ -584,6 +584,22 @@ const meta = {
           'The Add Domain drawer, the pattern form every create drawer in the console follows: a panel header with the title and a one-line description, an Environment section and a Domain section each titled with a Hint, and one primary action in the footer that flags empty required fields only after it is pressed. It opens from Add Domain under Domains on the Workload Settings and Application Settings pages, from a domain row menu to edit it, and from Add Environment in the workload summary environment menu. Choosing Bring my own Domain drops the azion.run addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldSelect`, `FieldInputGroup` with its addon slot, `FieldRadioBlock` under a `Label`, `Hint`, `Message` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'create domain',
+        'add domain',
+        'create domain form',
+        'add domain drawer',
+        'edit domain',
+        'new domain',
+        'create drawer',
+        'custom domain',
+        'criar domínio',
+        'adicionar domínio',
+        'novo domínio'
+      ],
+      skills: ['webkit-create-surface', 'webkit-form', 'webkit-errors']
     }
   }
 }

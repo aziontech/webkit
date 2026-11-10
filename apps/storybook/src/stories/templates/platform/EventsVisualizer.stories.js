@@ -50,6 +50,21 @@ const meta = {
           'The Real-Time Events page as the console draws it: the platform shell with Real-Time Events active, then the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'real-time events',
+        'events visualizer',
+        'event explorer',
+        'log explorer',
+        'logs viewer',
+        'request logs',
+        'events search',
+        'eventos em tempo real',
+        'visualizador de eventos',
+        'explorador de logs'
+      ],
+      skills: ['webkit-data-viz', 'webkit-tables', 'webkit-ui-states']
     }
   }
 }

@@ -240,6 +240,20 @@ const meta = {
           'The Environments panel of Account Settings (`/account/environments`): a page heading with Documentation and Create Environment, a closable info message on how deployment policies pair with Deployment Settings, the list controls row, and a flush table of environments with policy tags, muted empty cells and a row menu whose Delete opens the type-to-confirm dialog (Production cannot be deleted). The panels are switched from the Settings drill-down of the console sidebar, which the Shell templates own. Built from `TableRoot`, `CardBox`, `Message`, `Tag`, `Dropdown`, `Dialog`, `Popover`, `Switch`, `Tooltip`, `IconButton`, `InputText` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'environments',
+        'environments list',
+        'production stage preview',
+        'deployment environments',
+        'deployment policies',
+        'create environment',
+        'ambientes',
+        'lista de ambientes',
+        'ambientes de deploy'
+      ],
+      skills: ['webkit-lists', 'webkit-tables']
     }
   }
 }

@@ -89,6 +89,20 @@ const meta = {
           'The row every console list page opens with: a Filter button that carries a count Badge once filters narrow the list, the search field beside it, and on the right the refresh, download and columns IconButtons behind Tooltips, with the applied-filter Chips wrapping onto the line below. Workloads, Applications and every other resource index render it between the page heading and the table card. Built from `Button`, `Badge`, `InputText`, `IconButton`, `Tooltip`, `Chip` and, for the columns panel, `Popover` and `Switch`; every control sits on the medium step of the console size ladder, one step under the large heading action. The published `Table` ships the same row as context-aware parts (`Table.Filter`, `Table.Search`, `Table.AppliedFilters`, `Table.RefreshButton`, `Table.Export`, `Table.ColumnSelector`); this template documents the console’s current hand-composed row.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'list controls',
+        'filter bar',
+        'search and filter',
+        'table toolbar',
+        'filter chips',
+        'column visibility',
+        'filtros',
+        'barra de filtros',
+        'busca e filtro'
+      ],
+      skills: ['webkit-lists']
     }
   }
 }

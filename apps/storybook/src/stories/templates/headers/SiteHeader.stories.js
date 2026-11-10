@@ -32,6 +32,21 @@ const meta = {
           'The marketing bar: a sticky `GlobalHeader` in its `site` placement. The surface runs to the window edges while the regions are capped at the bar’s own measure and centred, so the bar answers to the framed page under it. Start: the navigation trigger below `xl` and the brand. Middle: the navigation, from `xl`. End: Contact from `xl`, then Login and Start for free, with search last. The mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.'
       },
       canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'site header',
+        'marketing header',
+        'website header',
+        'landing page header',
+        'marketing navbar',
+        'site navigation bar',
+        'mega menu header',
+        'cabeçalho do site',
+        'menu do site',
+        'cabeçalho de marketing'
+      ],
+      skills: ['webkit-navigation', 'webkit-layout']
     }
   }
 }
