@@ -161,7 +161,7 @@ const TEMPLATE = `<div class="flex h-dvh flex-col bg-(--bg-canvas)">
         aria-label="Account settings"
         class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
       >
-        <Avatar label="myemail@azion.com" size="medium" kind="square" />
+        <Avatar label="myemail@example.com" size="medium" kind="square" />
       </button>
     </GlobalHeader.Right>
   </GlobalHeader>

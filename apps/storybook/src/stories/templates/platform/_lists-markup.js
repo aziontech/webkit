@@ -46,9 +46,9 @@ const workload = (n, { extra = 0, status = 'Live', owner, lastModified }) => {
 export const WORKLOAD_ROWS = [
   workload(1, { extra: 3, owner: 'Robson Junior', lastModified: 'Just now' }),
   workload(2, { owner: 'Isaque Böck', lastModified: '2 weeks ago' }),
-  workload(3, { extra: 2, owner: 'Rafael Garbinatto', lastModified: '1 month ago' }),
+  workload(3, { extra: 2, owner: 'Sam Castro', lastModified: '1 month ago' }),
   workload(4, { owner: 'Herbert Júlio', lastModified: '2 months ago' }),
-  workload(5, { status: 'Inactive', owner: 'Rafael Umman', lastModified: '2 months ago' }),
+  workload(5, { status: 'Inactive', owner: 'Alex Moreira', lastModified: '2 months ago' }),
   workload(6, { extra: 5, owner: 'Marcus Grando', lastModified: '3 months ago' }),
   workload(7, { owner: 'Bruno Germano', lastModified: '4 months ago' })
 ]

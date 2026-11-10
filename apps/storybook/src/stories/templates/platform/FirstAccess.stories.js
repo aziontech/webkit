@@ -72,7 +72,7 @@ const TEMPLATE = `<main class="layout-column layout-boundary flex min-h-screen f
   <div class="my-auto flex w-full flex-col gap-(--layout-section-gap) py-(--spacing-xl)">
     <div class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-(--spacing-lg)">
       <div class="flex flex-col items-center gap-(--spacing-xs)">
-        <p class="text-center text-body-md text-(--text-muted)">Good morning, Gabriel</p>
+        <p class="text-center text-body-md text-(--text-muted)">Good morning, Jordan</p>
         <h1 class="text-balance text-center text-heading-lg text-(--text-default)">Let's build on Azion.</h1>
       </div>
       <div class="flex w-full max-w-(--container-2xl) flex-col items-stretch">

@@ -889,7 +889,7 @@ const FINISHED_DEPLOYMENT = {
     severity: 'success',
     label: `Live at https://${DEPLOYMENT_DOMAIN} — published to my-app (production) in 1m 1s.`
   },
-  author: 'Rafael Garbinatto',
+  author: 'Sam Castro',
   createdOn: 'September 26, 2026, 09:59:16 AM',
   createdAgo: '1 week ago',
   duration: '1m 1s',

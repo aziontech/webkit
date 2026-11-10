@@ -82,7 +82,7 @@ const VARIABLES = [
     secret: false,
     lastVersion: { id: '1200481351', ...ready },
     scope: [{ label: 'Application', name: 'my-app-vue' }],
-    lastEditor: 'Rafael Garbinatto',
+    lastEditor: 'Sam Castro',
     lastModified: 'August 04, 2026, 09:05:17 AM'
   },
   {
@@ -102,7 +102,7 @@ const VARIABLES = [
     secret: false,
     lastVersion: { id: '1200481365', ...ready },
     scope: GLOBAL_SCOPE,
-    lastEditor: 'Rafael Umman',
+    lastEditor: 'Alex Moreira',
     lastModified: 'June 27, 2026, 02:21:03 PM'
   }
 ]
@@ -136,7 +136,7 @@ const VERSIONS = [
     id: '1200481323',
     isCurrent: false,
     status: archived,
-    lastEditor: 'Rafael Garbinatto',
+    lastEditor: 'Sam Castro',
     lastModified: 'July 14, 2026, 09:05:17 AM'
   }
 ]

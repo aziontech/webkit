@@ -176,7 +176,7 @@ const AVATAR_BUTTON = `<button
       aria-label="Account settings"
       class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
     >
-      <Avatar label="gabriel@azion.com" size="medium" kind="square" />
+      <Avatar label="jordan.silva@example.com" size="medium" kind="square" />
     </button>`
 
 export const AUTH_HEADER_IMPORTS = [

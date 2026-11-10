@@ -53,6 +53,7 @@ CLAUDE.md
 # Claude Code — personal state and runtime caches (ignored)
 # Versioned in .claude/: settings.json, agents/, hooks/, commands/, skills/, rules/, docs/
 .claude/settings.local.json
+.claude/launch.json
 .claude/sessions/
 .claude/projects/
 .claude/file-history/

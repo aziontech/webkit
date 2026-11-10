@@ -100,7 +100,7 @@ const literal = (value, depth = 0) => {
 
 const declare = (name, value) => `const ${name} = ${literal(value)}`
 
-const EMAIL = 'myemail@azion.com'
+const EMAIL = 'myemail@example.com'
 const WORKSPACE_NAME = 'My Workspace'
 
 const ACCENTS = [

@@ -85,21 +85,21 @@ export const TABLES = [
         __k: 'row-1',
         id: 1,
         name: 'Ada Lovelace',
-        email: 'ada@azion.com',
+        email: 'ada@example.com',
         created_at: '2026-07-21 08:15:00'
       },
       {
         __k: 'row-2',
         id: 2,
         name: 'Alan Turing',
-        email: 'alan@azion.com',
+        email: 'alan@example.com',
         created_at: '2026-07-21 08:15:01'
       },
       {
         __k: 'row-3',
         id: 3,
         name: 'Grace Hopper',
-        email: 'grace@azion.com',
+        email: 'grace@example.com',
         created_at: null
       }
     ]
@@ -161,21 +161,21 @@ export const SELECT_RESULT = {
       __k: 1,
       id: 1,
       name: 'Ada Lovelace',
-      email: 'ada@azion.com',
+      email: 'ada@example.com',
       created_at: '2026-07-21 08:15:00'
     },
     {
       __k: 2,
       id: 2,
       name: 'Alan Turing',
-      email: 'alan@azion.com',
+      email: 'alan@example.com',
       created_at: '2026-07-21 08:15:01'
     },
     {
       __k: 3,
       id: 3,
       name: 'Grace Hopper',
-      email: 'grace@azion.com',
+      email: 'grace@example.com',
       created_at: '2026-07-21 08:15:02'
     }
   ]
@@ -195,9 +195,9 @@ const SQL_TEMPLATES = [
     description: 'Insert sample user records into the users table',
     icon: 'pi pi-plus-circle',
     sql: `INSERT INTO users (name, email) VALUES
-  ('Ada Lovelace', 'ada@azion.com'),
-  ('Alan Turing', 'alan@azion.com'),
-  ('Grace Hopper', 'grace@azion.com');`
+  ('Ada Lovelace', 'ada@example.com'),
+  ('Alan Turing', 'alan@example.com'),
+  ('Grace Hopper', 'grace@example.com');`
   },
   {
     id: 'select-all',

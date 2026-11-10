@@ -351,7 +351,7 @@ ${indent(
         <dl class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4">
           <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
             <dt class="text-label-sm text-(--text-muted)">Billing email</dt>
-            <dd class="truncate text-label-lg text-(--text-default)">maria.silva@azion.com</dd>
+            <dd class="truncate text-label-lg text-(--text-default)">maria.silva@example.com</dd>
           </div>
           <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
             <dt class="text-label-sm text-(--text-muted)">Auto-renewal</dt>

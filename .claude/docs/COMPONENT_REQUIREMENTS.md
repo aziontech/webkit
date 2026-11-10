@@ -397,7 +397,7 @@ If your component needs Vue Router:
 1. **Check if already installed:**
 
    ```bash
-   grep "vue-router" /Users/robson.junior/dev/webkit/packages/webkit/package.json
+   grep "vue-router" packages/webkit/package.json
    ```
 
 2. **If not installed, add it:**

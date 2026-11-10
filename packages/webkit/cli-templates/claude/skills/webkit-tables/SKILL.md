@@ -401,7 +401,7 @@ identical:
 - **`relativeTime(date)`** is a small formatter you own in your app — "just now" / "N min ago" /
   "N hours ago" / "N days ago" / "N weeks/months/years ago" (return `''` for empty/unparseable input so a
   missing date renders nothing). It is app logic, not a webkit component.
-- **The avatar identifies the modifier**; the name (humanize an email: `maria.silva@azion.com` →
+- **The avatar identifies the modifier**; the name (humanize an email: `maria.silva@example.com` →
   `Maria Silva`) lives on the `Tooltip`, so there is no separate name column.
 - Do **not**: render the raw absolute date; keep a separate "Last Modified By"/"Author" column beside this
   cell (two avatars per row).

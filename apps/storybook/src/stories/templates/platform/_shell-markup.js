@@ -21,7 +21,7 @@ import { ref } from 'vue'
 
 import { each, indent } from '../../_shared/markup'
 
-const USER_EMAIL = 'myemail@azion.com'
+const USER_EMAIL = 'myemail@example.com'
 const USER_NAME = 'myemail'
 export const DOCS_HREF =
   'https://www.azion.com/en/documentation/products/build/edge-application/workloads/'

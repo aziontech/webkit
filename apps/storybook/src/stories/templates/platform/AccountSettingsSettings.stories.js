@@ -29,11 +29,11 @@ import {
 } from './_account-markup'
 
 const FORM = {
-  accountName: 'Gabriel Lisboa',
+  accountName: 'Jordan Silva',
   clientId: '9757a',
   companyName: '',
   companyId: '',
-  billingEmails: 'gabriel.mendonca@azion.com',
+  billingEmails: 'billing@example.com',
   postalCode: '00000-000',
   country: 'br',
   state: 'rs',

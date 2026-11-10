@@ -463,7 +463,7 @@ const GROUPS_WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<Dropdown :open="true">
 
   <DropdownGroup label="Account">
     <template #top>
-      <span class="text-label-sm text-(--text-muted)">Signed in as ib@azion.com</span>
+      <span class="text-label-sm text-(--text-muted)">Signed in as jordan.silva@example.com</span>
     </template>
 
     <DropdownOption value="profile" label="Profile" command="⌘P" />

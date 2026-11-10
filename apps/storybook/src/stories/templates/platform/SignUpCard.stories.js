@@ -309,7 +309,7 @@ const SIGN_UP_PAGE = `<div class="flex w-full flex-col items-center gap-(--spaci
             input-id="signup-email"
             name="email"
             size="large"
-            placeholder="myemail@azion.com"
+            placeholder="myemail@example.com"
             :required="submitted && !email.trim()"
             :helper-text="submitted && !email.trim() ? 'This field is required.' : ''"
           />
@@ -378,7 +378,7 @@ const LOGIN_FORM = `<form
         input-id="login-email"
         name="email"
         size="large"
-        placeholder="myemail@azion.com"
+        placeholder="myemail@example.com"
         :required="submitted && !email.trim()"
         :helper-text="submitted && !email.trim() ? 'This field is required.' : ''"
       />
@@ -438,7 +438,7 @@ const LOGIN_FORM = `<form
         input-id="reset-email"
         name="reset-email"
         size="large"
-        placeholder="myemail@azion.com"
+        placeholder="myemail@example.com"
         :required="submitted && !resetEmail.trim()"
         :helper-text="submitted && !resetEmail.trim() ? 'This field is required.' : ''"
       />
@@ -537,7 +537,7 @@ const CHECK_INBOX_PAGE = `<CardBox class="w-full max-w-(--container-sm)" :padded
       <header class="flex flex-col gap-(--spacing-xxs)">
         <h1 class="text-heading-sm text-(--text-default)">Check your inbox</h1>
         <p class="text-body-sm text-(--text-muted)">
-          We sent a verification link to myemail@azion.com. Check your inbox or spam folder and follow the instructions.
+          We sent a verification link to myemail@example.com. Check your inbox or spam folder and follow the instructions.
         </p>
       </header>
 

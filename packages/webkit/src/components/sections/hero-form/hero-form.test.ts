@@ -105,7 +105,7 @@ describe('HeroForm', () => {
     const { getByLabelText, getByRole, emitted } = band()
 
     await userEvent.type(getByLabelText(/First name/, { selector: 'input' }), 'Ada')
-    await userEvent.type(getByLabelText(/Work email/, { selector: 'input' }), ' ada@azion.com ')
+    await userEvent.type(getByLabelText(/Work email/, { selector: 'input' }), ' ada@example.com ')
     await userEvent.type(getByLabelText(/How can we help/, { selector: 'textarea' }), 'Hi')
     await userEvent.click(getByRole('button', { name: SUBMIT }))
 
@@ -115,7 +115,7 @@ describe('HeroForm', () => {
     expect(calls[0][1]).toEqual({
       firstname: 'Ada',
       lastname: '',
-      email: 'ada@azion.com',
+      email: 'ada@example.com',
       domain: '',
       message: 'Hi'
     })
@@ -177,7 +177,7 @@ describe('HeroForm', () => {
     const { getByLabelText, getByRole, emitted } = band({ loading: true })
 
     await userEvent.type(getByLabelText(/First name/, { selector: 'input' }), 'Ada')
-    await userEvent.type(getByLabelText(/Work email/, { selector: 'input' }), 'ada@azion.com')
+    await userEvent.type(getByLabelText(/Work email/, { selector: 'input' }), 'ada@example.com')
     getByRole('button', { name: SUBMIT }).closest('form')?.requestSubmit()
     await userEvent.click(getByRole('button', { name: SUBMIT }))
 

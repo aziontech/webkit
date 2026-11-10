@@ -33,7 +33,7 @@ const ACTIVITY = [
     id: 'a-1',
     action: 'Signed in',
     category: 'Auth',
-    user: 'gabriel@cerne.digital',
+    user: 'jordan.silva@example.com',
     ip: '189.6.44.12',
     date: 'October 04, 2026, 03:37:40 AM'
   },
@@ -41,7 +41,7 @@ const ACTIVITY = [
     id: 'a-2',
     action: 'Updated billing email',
     category: 'Billing',
-    user: 'gabriel@cerne.digital',
+    user: 'jordan.silva@example.com',
     ip: '189.6.44.12',
     date: 'October 03, 2026, 09:37:40 AM'
   },
@@ -49,15 +49,15 @@ const ACTIVITY = [
     id: 'a-3',
     action: 'Created credential “CI / CD Pipeline”',
     category: 'Security',
-    user: 'rafael.umman@azion.com',
+    user: 'alex.moreira@example.com',
     ip: '201.17.88.3',
     date: 'October 02, 2026, 09:37:40 AM'
   },
   {
     id: 'a-4',
-    action: 'Invited marina.costa@azion.com',
+    action: 'Invited bia.santos@example.com',
     category: 'Users',
-    user: 'gabriel@cerne.digital',
+    user: 'jordan.silva@example.com',
     ip: '189.6.44.12',
     date: 'September 28, 2026, 09:37:40 AM'
   },
@@ -65,7 +65,7 @@ const ACTIVITY = [
     id: 'a-5',
     action: 'Deployed vue-3-teste',
     category: 'Deploy',
-    user: 'lucas.pereira@azion.com',
+    user: 'leo.prado@example.com',
     ip: '177.92.10.55',
     date: 'September 26, 2026, 09:37:40 AM'
   }

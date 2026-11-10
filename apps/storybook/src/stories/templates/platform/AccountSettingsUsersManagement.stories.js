@@ -37,48 +37,48 @@ import {
 const USERS = [
   {
     id: 'u-1',
-    name: 'Gabriel Lisboa',
-    email: 'gabriel@cerne.digital',
+    name: 'Jordan Silva',
+    email: 'jordan.silva@example.com',
     role: 'Owner',
     status: 'Active',
     lastActive: 'Just now'
   },
   {
     id: 'u-2',
-    name: 'Rafael Umman',
-    email: 'rafael.umman@azion.com',
+    name: 'Alex Moreira',
+    email: 'alex.moreira@example.com',
     role: 'Admin',
     status: 'Active',
     lastActive: '2 hours ago'
   },
   {
     id: 'u-3',
-    name: 'Marina Costa',
-    email: 'marina.costa@azion.com',
+    name: 'Bia Santos',
+    email: 'bia.santos@example.com',
     role: 'Developer',
     status: 'Active',
     lastActive: 'Yesterday'
   },
   {
     id: 'u-4',
-    name: 'Lucas Pereira',
-    email: 'lucas.pereira@azion.com',
+    name: 'Leo Prado',
+    email: 'leo.prado@example.com',
     role: 'Developer',
     status: 'Pending',
     lastActive: '—'
   },
   {
     id: 'u-5',
-    name: 'Ana Rodrigues',
-    email: 'ana.rodrigues@azion.com',
+    name: 'Clara Ramos',
+    email: 'clara.ramos@example.com',
     role: 'Viewer',
     status: 'Active',
     lastActive: '3 days ago'
   },
   {
     id: 'u-6',
-    name: 'Carlos Mendes',
-    email: 'carlos.mendes@azion.com',
+    name: 'Davi Rocha',
+    email: 'davi.rocha@example.com',
     role: 'Viewer',
     status: 'Inactive',
     lastActive: '2 months ago'

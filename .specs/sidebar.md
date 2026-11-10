@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 434457591d1b05795ef6294eda599ce002692b420b0b5576e42c5b11d8e1a651
+checksum: f591e17afcf143e2e5bf42fc6e924dc6b775d27d40f90dcc61ab2a1b60f7e6c1
 created: 2026-05-22
 last_updated: 2026-10-01
 ---
@@ -101,9 +101,9 @@ const accountMenuOpen = ref(false)
 
     <template #footer>
       <SidebarFooter class="flex items-center gap-(--spacing-xs)">
-        <Avatar kind="square" size="small" src="/avatar.jpg" alt="Rafael Umman" />
+        <Avatar kind="square" size="small" src="/avatar.jpg" alt="Alex Moreira" />
         <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">
-          Rafael Umman
+          Alex Moreira
         </span>
         <Dropdown v-model:open="accountMenuOpen" placement="top-end">
           <Dropdown.Trigger>
