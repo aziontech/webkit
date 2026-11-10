@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import BarList from '@aziontech/webkit/bar-list'
   import Chart from '@aziontech/webkit/chart'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import { computed } from 'vue'
@@ -47,6 +48,10 @@
       : []
   }))
 
+  const items = computed(() =>
+    props.report.series.map((entry) => ({ id: entry.id, name: entry.name, value: entry.values[0] }))
+  )
+
   const rankingHeight = computed(() => Math.max(props.height, ranking.value.labels.length * 32))
 </script>
 
@@ -54,12 +59,20 @@
   <DonutChart
     v-if="report.type === 'pie'"
     :series="report.series"
-    kind="pie"
     :format-value="report.format"
     :empty-title="report.emptyTitle ?? 'No data available'"
     :empty-description="report.emptyDescription ?? 'Nothing was recorded in this period.'"
     :loading="loading"
     :refetching="refetching"
+    :aria-label="report.label"
+  />
+
+  <BarList
+    v-else-if="report.type === 'bar-list'"
+    :items="items"
+    :format-value="report.format"
+    :empty-title="report.emptyTitle ?? 'No data available'"
+    :loading="loading"
     :aria-label="report.label"
   />
 
@@ -102,10 +115,7 @@
       v-if="form === 'bar'"
       :stacked="report.series.length > 1"
     />
-    <Chart.Area
-      v-else-if="report.series.length === 1"
-      curve="monotone"
-    />
+    <Chart.Area v-else-if="report.series.length === 1" />
     <Chart.Line v-else />
     <Chart.Crosshair />
     <Chart.Tooltip />

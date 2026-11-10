@@ -53,7 +53,7 @@ export const THREAT_REPORTS = [
   },
   {
     id: 'threats-by-family',
-    type: 'ordered-bar',
+    type: 'bar-list',
     label: 'Threats by attack family',
     description: 'Blocked requests, broken down by the attack family the WAF matched.',
     aggregation: 'sum',
@@ -72,7 +72,7 @@ export const THREAT_REPORTS = [
   },
   {
     id: 'threats-by-country',
-    type: 'pie',
+    type: 'bar-list',
     label: 'Threats by country',
     description: 'Blocked requests, broken down by the country they came from.',
     aggregation: 'sum',
@@ -161,5 +161,10 @@ export const THREAT_ATTENTION = [
 export const resolveThreatFigures = (period, { empty = false } = {}) =>
   THREAT_FIGURES.map((entry) => resolveSummary(entry, period, { empty }))
 
+const resolveThreatReport = (report, period, empty) =>
+  report.type === 'bar-list'
+    ? { ...resolveReport({ ...report, type: 'ordered-bar' }, period, { empty }), type: report.type }
+    : resolveReport(report, period, { empty })
+
 export const resolveThreatReports = (period, { empty = false } = {}) =>
-  THREAT_REPORTS.map((report) => resolveReport(report, period, { empty }))
+  THREAT_REPORTS.map((report) => resolveThreatReport(report, period, empty))

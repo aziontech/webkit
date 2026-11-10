@@ -100,9 +100,8 @@
             <ChartCard.Title>Needs attention</ChartCard.Title>
             <Hint text="Settings and traffic on your workloads that ask for a decision." />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Controls v-if="!loading">
             <Tag
-              v-if="!loading && THREAT_ATTENTION.length"
               :label="`${THREAT_ATTENTION.length} open`"
               severity="secondary"
               size="small"
@@ -130,14 +129,6 @@
               />
             </div>
           </div>
-
-          <EmptyState
-            v-else-if="!THREAT_ATTENTION.length"
-            title="Nothing needs attention"
-            description="Every firewall blocks what it logs and no workload shows a threat spike."
-            icon="pi pi-check-circle"
-            size="small"
-          />
 
           <Item.List v-else>
             <Item

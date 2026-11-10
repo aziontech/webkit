@@ -1,9 +1,17 @@
 <script setup>
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import Select from '@aziontech/webkit/select'
   import { computed, onScopeDispose, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ActivityOutcomesDashboard from '../../components/dashboards/ActivityOutcomesDashboard.vue'
+  import CustomDashboard from '../../components/dashboards/CustomDashboard.vue'
   import EdgeHealthDashboard from '../../components/dashboards/EdgeHealthDashboard.vue'
+  import ExecutiveSummaryDashboard from '../../components/dashboards/ExecutiveSummaryDashboard.vue'
+  import FunnelDashboard from '../../components/dashboards/FunnelDashboard.vue'
+  import HealthScoreDashboard from '../../components/dashboards/HealthScoreDashboard.vue'
+  import ProjectStatusDashboard from '../../components/dashboards/ProjectStatusDashboard.vue'
+  import ScanResultsDashboard from '../../components/dashboards/ScanResultsDashboard.vue'
+  import SpendDashboard from '../../components/dashboards/SpendDashboard.vue'
   import ThreatDashboard from '../../components/dashboards/ThreatDashboard.vue'
   import TrafficDashboard from '../../components/dashboards/TrafficDashboard.vue'
   import UsageDashboard from '../../components/dashboards/UsageDashboard.vue'
@@ -13,15 +21,57 @@
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import { comparisonLabel, RTM_DEFAULT_PERIOD, RTM_PERIODS } from '../../lib/data/real-time-metrics'
+  import {
+    comparisonLabel,
+    RTM_DEFAULT_PERIOD,
+    RTM_PERIODS
+  } from '../../lib/data/real-time-metrics'
   import { useSampleMode } from '../../lib/state/sample-mode'
 
-  const VIEWS = [
-    { label: 'Traffic', value: 'traffic', component: TrafficDashboard },
-    { label: 'Usage', value: 'usage', component: UsageDashboard },
-    { label: 'Edge health', value: 'health', component: EdgeHealthDashboard },
-    { label: 'Threats', value: 'threats', component: ThreatDashboard }
+  const VIEW_GROUPS = [
+    {
+      label: 'Platform',
+      views: [
+        { label: 'Traffic', value: 'traffic', component: TrafficDashboard },
+        { label: 'Usage', value: 'usage', component: UsageDashboard },
+        { label: 'Edge health', value: 'health', component: EdgeHealthDashboard },
+        { label: 'Health score', value: 'score', component: HealthScoreDashboard }
+      ]
+    },
+    {
+      label: 'Security',
+      views: [
+        { label: 'Threats', value: 'threats', component: ThreatDashboard },
+        { label: 'Activity outcomes', value: 'activity', component: ActivityOutcomesDashboard },
+        { label: 'Scan results', value: 'scans', component: ScanResultsDashboard }
+      ]
+    },
+    {
+      label: 'Business',
+      views: [
+        {
+          label: 'Executive summary',
+          value: 'summary',
+          component: ExecutiveSummaryDashboard,
+          ownPeriod: true
+        },
+        { label: 'Spend', value: 'spend', component: SpendDashboard, ownPeriod: true },
+        { label: 'Funnel and cohorts', value: 'funnel', component: FunnelDashboard },
+        {
+          label: 'Project status',
+          value: 'project',
+          component: ProjectStatusDashboard,
+          ownPeriod: true
+        }
+      ]
+    },
+    {
+      label: 'Yours',
+      views: [{ label: 'Custom', value: 'custom', component: CustomDashboard }]
+    }
   ]
+
+  const VIEWS = VIEW_GROUPS.flatMap((group) => group.views)
 
   const route = useRoute()
   const router = useRouter()
@@ -34,7 +84,7 @@
 
   const active = computed(() => VIEWS.find((entry) => entry.value === view.value) ?? VIEWS[0])
 
-  const viewOptions = VIEWS.map(({ label, value }) => ({ label, value }))
+  const viewLabel = (value) => VIEWS.find((entry) => entry.value === value)?.label ?? ''
 
   const filters = ref({ period: [RTM_DEFAULT_PERIOD] })
 
@@ -82,20 +132,46 @@
       <PageHeading
         size="medium"
         title="Dashboards"
-        description="Traffic, usage, health and threats across every workload, in one place."
+        description="Traffic, security and business views across every workload, plus a layout of your own."
       />
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <ControlsHeader>
             <div class="flex min-w-0 grow flex-wrap items-center gap-(--spacing-xs)">
-              <SegmentedButton
-                v-model="view"
-                :options="viewOptions"
-                size="medium"
-                aria-label="Dashboard"
-              />
+              <div class="w-full min-w-0 sm:w-(--container-3xs)">
+                <Select
+                  v-model="view"
+                  size="medium"
+                  :display-value="viewLabel"
+                >
+                  <Select.Trigger aria-label="Dashboard">
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-chart-bar text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group
+                      v-for="group in VIEW_GROUPS"
+                      :key="group.label"
+                      :label="group.label"
+                    >
+                      <Select.Option
+                        v-for="option in group.views"
+                        :key="option.value"
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </Select.Option>
+                    </Select.Group>
+                  </Select.Content>
+                </Select>
+              </div>
               <FilterButton
+                v-if="!active.ownPeriod"
                 v-model="filters"
                 :fields="filterFields"
                 size="medium"
@@ -110,6 +186,7 @@
           </ControlsHeader>
 
           <FilterChips
+            v-if="!active.ownPeriod"
             v-model="filters"
             :fields="filterFields"
           />
