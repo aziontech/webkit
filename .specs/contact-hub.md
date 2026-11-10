@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: b255e88847a413b4d3028ae4509f68ac866f6816dfff47f7f246a1c64b0e2855
+checksum: 2d8e39974295440e86995b3ab82a9defae99d770b64470a8cce56e9c3b935db0
 ---
 # ContactHub — Component Spec
 
@@ -38,7 +38,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ```vue
 <script setup>
-import ContactHub from '@aziontech/webkit/sections/contact-hub'
+import ContactHub from '@aziontech/webkit/contact-hub'
 </script>
 
 <template>

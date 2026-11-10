@@ -110,6 +110,7 @@ export const parameters = {
             'Overlay'
           ],
           'Marketing',
+          ['Primitives', 'Sections'],
           'Documentation'
         ],
         'Documentation',

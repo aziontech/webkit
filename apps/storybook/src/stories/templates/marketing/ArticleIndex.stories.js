@@ -1,7 +1,7 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ArticleIndexBlog from '@aziontech/webkit/sections/article-index-blog'
-import ArticleIndexResourceHub from '@aziontech/webkit/sections/article-index-resource-hub'
+import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
+import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -10,9 +10,9 @@ import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION as BLOG_SECTION } from './_sections/article-index-blog'
 import { SITE_SECTION as HUB_SECTION } from './_sections/article-index-resource-hub'
 
-const BLOG_IMPORT = "import ArticleIndexBlog from '@aziontech/webkit/sections/article-index-blog'"
+const BLOG_IMPORT = "import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'"
 const HUB_IMPORT =
-  "import ArticleIndexResourceHub from '@aziontech/webkit/sections/article-index-resource-hub'"
+  "import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'"
 
 const source = (tag, importLine, section) => {
   const { body, script } = sectionMarkup(tag, section.props)

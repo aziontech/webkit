@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 95f76980d63a0f9184828fd679629af5d41d4533750d4a3b47b52873d9f3bb65
+checksum: f8513e04075a2fe110234f0050f2c06d5a72c80a91a0267984859b5018ed2d44
 ---
 # ArticleCards — Component Spec
 
@@ -38,7 +38,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 ```vue
 <script setup>
-import ArticleCards from '@aziontech/webkit/sections/article-cards'
+import ArticleCards from '@aziontech/webkit/article-cards'
 </script>
 
 <template>

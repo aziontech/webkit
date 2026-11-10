@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 1a596e8146d43f11383db69da63fb34d6baa68468499fc5dbf326a16ad4e4650
+checksum: bec7eb932c25838565c15b94b8681c9eaa9ef92a2ce3214f53ed350bd8b4b7a7
 ---
 # SiteFooter — Component Spec
 
@@ -38,7 +38,7 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ```vue
 <script setup>
-import SiteFooter from '@aziontech/webkit/sections/site-footer'
+import SiteFooter from '@aziontech/webkit/site-footer'
 </script>
 
 <template>

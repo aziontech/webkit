@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 2bf47b32b74d821d54472639380b1812fc668abc10fa135aee2fadbebba78958
+checksum: b37467c8f3882bd035f55b6dbcbf85eae17774ac5bde875546bf68fcd223b703
 ---
 # PhotoMarquee — Component Spec
 
@@ -35,7 +35,7 @@ The office band of the careers page: a horizontal section title over a framed st
 
 ```vue
 <script setup>
-import PhotoMarquee from '@aziontech/webkit/sections/photo-marquee'
+import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 </script>
 
 <template>

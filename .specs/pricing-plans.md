@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: a00ae78546849f329a8278c0ba3009de577aafab1d47e8bc9d6401490c07049a
+checksum: f72a44423323afc439eb49780ea6468299a77e01bb71ab21004df804c4a5dffb
 ---
 
 # PricingPlans — Component Spec
@@ -38,7 +38,7 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 
 ```vue
 <script setup>
-import PricingPlans from '@aziontech/webkit/sections/pricing-plans'
+import PricingPlans from '@aziontech/webkit/pricing-plans'
 </script>
 
 <template>

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: e49f812c82de151c56ce12411d5df21f73298ece9e87c29ff7b2d12e0c49271d
+checksum: ce7c487445a9511dbe73d8f7da51da01178e613c8527acc46bc2d64ed33501a8
 ---
 # MediaSplitStack — Component Spec
 
@@ -37,7 +37,7 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ```vue
 <script setup>
-import MediaSplitStack from '@aziontech/webkit/sections/media-split-stack'
+import MediaSplitStack from '@aziontech/webkit/media-split-stack'
 </script>
 
 <template>

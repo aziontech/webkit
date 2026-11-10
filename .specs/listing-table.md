@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 11fb5b29f5b8aba08a9697ddf0ad7934830bcf5b84595405495495a35f4a75bd
+checksum: f654d6db0b46e54995d3d58fd8137b28708342d68090c10791acd3815e9b7053
 ---
 # ListingTable — Component Spec
 
@@ -38,7 +38,7 @@ A titled preview of a longer listing: a few linked rows in columns, and one outl
 
 ```vue
 <script setup>
-import ListingTable from '@aziontech/webkit/sections/listing-table'
+import ListingTable from '@aziontech/webkit/listing-table'
 </script>
 
 <template>

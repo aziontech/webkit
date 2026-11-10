@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: e53578c225df915857825a15ee48c610817d5c77b940c27b43f47de5e8e46cd0
+checksum: 8001bc84ee368f2af54e01f6e5f87eba550612d83222cbbb5ec36c9d6993870a
 ---
 # InvestorMarks — Component Spec
 
@@ -35,7 +35,7 @@ The investors band: a centered section title over a two-column bento grid where 
 
 ```vue
 <script setup>
-import InvestorMarks from '@aziontech/webkit/sections/investor-marks'
+import InvestorMarks from '@aziontech/webkit/investor-marks'
 </script>
 
 <template>
