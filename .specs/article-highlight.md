@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: daf8d704063b1509cbf69e68e1e3e4ea3fcb41642136f8e51b84796c9a6e370a
+checksum: 61e5c8962f75afc6352c140b0b5f8ce638be4e516d411d78a2a2c3cfa951f244
 ---
 # ArticleHighlight — Component Spec
 
@@ -37,7 +37,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ```vue
 <script setup>
-import ArticleHighlight from '@aziontech/webkit/sections/article-highlight'
+import ArticleHighlight from '@aziontech/webkit/article-highlight'
 </script>
 
 <template>

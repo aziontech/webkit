@@ -10,7 +10,7 @@ Every article of a listing as one list, with the controls to narrow it on one ro
 
 Every article is a ruled row: its cover on the left; on the right its overline, headline, a two-line deck and, on the Blog, the writers pinned to the foot. The Resource Hub's rows have no byline and centre their copy. Each row is one link, named by its headline, and from `lg` up a "Read article" cue rises into its end on hover or keyboard focus. The controls combine, and when nothing matches the list and its button are left out. Below `lg` the controls stack and the cover sits over the copy.
 
-The two listings take different data, so they are two components. The Blog list is the `ArticleIndexBlog` component from `@aziontech/webkit/sections/article-index-blog`; it composes `SectionModule`, `FrameBox`, `SegmentedButton`, `InputText`, `Avatar` and `Button`. The Resource Hub list is the `ArticleIndexResourceHub` component from `@aziontech/webkit/sections/article-index-resource-hub`; it composes `SectionModule`, `FrameBox`, `Select`, `InputText` and `Button`. The selections and the search are local state in each.
+The two listings take different data, so they are two components. The Blog list is the `ArticleIndexBlog` component from `@aziontech/webkit/article-index-blog`; it composes `SectionModule`, `FrameBox`, `SegmentedButton`, `InputText`, `Avatar` and `Button`. The Resource Hub list is the `ArticleIndexResourceHub` component from `@aziontech/webkit/article-index-resource-hub`; it composes `SectionModule`, `FrameBox`, `Select`, `InputText` and `Button`. The selections and the search are local state in each.
 
 <p
   style={{

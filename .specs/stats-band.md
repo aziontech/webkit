@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 2c2aa65b6343079ebee8fcb663c6aa21f8d501882702ba0e981a433610ccea40
+checksum: e11d507ff431cc111ce19bad8a1a62791eca2ba9b51978b2c627118eae53ca72
 ---
 # StatsBand — Component Spec
 
@@ -37,7 +37,7 @@ The proof-by-numbers band of a marketing page: a framed row of big figures, each
 
 ```vue
 <script setup>
-import StatsBand from '@aziontech/webkit/sections/stats-band'
+import StatsBand from '@aziontech/webkit/stats-band'
 </script>
 
 <template>
