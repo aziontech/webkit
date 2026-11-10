@@ -32,24 +32,24 @@
     "hash": "43bca3da2779b9921117254110e77475468a19a56a4b4048a40a6bc2865c77bf"
    },
    {
-    "name": ".edge/storage/assets/CreateFunction-FnoiXA_o.js",
-    "hash": "87e0db1c2cea6e9b1aba0f6690c5d2f90949668ff327796590bc79bc01a637f3"
+    "name": ".edge/storage/assets/CreateFunction-D157ltSr.js",
+    "hash": "0f93a4cb09b63a9b601f61123972446f41233288dd02193a0b3a0b2b37f94c31"
    },
    {
-    "name": ".edge/storage/assets/Diagrams-CVv9IzYl.js",
-    "hash": "09f1063e0d3f20f2753116b54479119697812c6cd34c84e66af5369927b5a13f"
+    "name": ".edge/storage/assets/Diagrams-CL1fq32W.js",
+    "hash": "9a7eb63df063d13073424f47dd1b9a70dcce611215240f7e08f6b195f25b9b3d"
    },
    {
     "name": ".edge/storage/assets/Diagrams-cxuNUvjT.css",
     "hash": "08b43688e32b662cefb4716c5ccc38dfa45cf8e6a57786224a4de40374b53e46"
    },
    {
-    "name": ".edge/storage/assets/FunctionCodeEditor.vue_vue_type_script_setup_true_lang-DU-hah3f.js",
-    "hash": "84f9577f36241b6dea87d71e3a563c614c1569812d9262630b6c4ee38df92ead"
+    "name": ".edge/storage/assets/FunctionCodeEditor.vue_vue_type_script_setup_true_lang-ByywwWpg.js",
+    "hash": "0ea6521ac3aaa7b5dcccf49dc46fbbb7beafce095adeff64fb0961fee2943a7f"
    },
    {
-    "name": ".edge/storage/assets/FunctionDetail-BynbZB3B.js",
-    "hash": "b30ad6d5d734aefbacc57f37456096835c733913ebc6b2f554c3191be4beb315"
+    "name": ".edge/storage/assets/FunctionDetail-DaXiMW3L.js",
+    "hash": "9c3e41a0cbe832ec5cbc225954f5f7887dc239058d4eae170272903416e8bce4"
    },
    {
     "name": ".edge/storage/assets/abap-DLDM7-KI.js",
@@ -68,8 +68,8 @@
     "hash": "4f1cd3a19d57d235dc94effd5e2c161212692b6398b108b994527f8c1d8e66b4"
    },
    {
-    "name": ".edge/storage/assets/agibank-Ce2a43KP.js",
-    "hash": "cd6596cb5fa57aa31a7f9d0a739454e58cec0e31952eb2a75b01d8a00ac473c4"
+    "name": ".edge/storage/assets/agibank-CA8JUyHO.js",
+    "hash": "5d27f0ec4f0837f372527b9cace6471041009b6de2c2f00c02345f6c5f14f1e4"
    },
    {
     "name": ".edge/storage/assets/agibank-extended-color-CnoFRBx0.svg",
@@ -104,12 +104,12 @@
     "hash": "d62488f08528fc2c11cfb418ed727e6ce5648ec3eec275974638c82565ccd8ea"
    },
    {
-    "name": ".edge/storage/assets/ai-gateway-latency-routing-B4LiewLT.js",
-    "hash": "ad2e4d1dce81fe475b731d58ddc5dd941f4bc1b57c2805198a8eff37bfbd5d00"
+    "name": ".edge/storage/assets/ai-gateway-latency-routing-4iNYAIfq.js",
+    "hash": "f5eadbace497a31abc8236d6351ae9d1d143e8105d1d6958470101e07f81ba35"
    },
    {
-    "name": ".edge/storage/assets/ai-gateway-model-routing-DabP2SFM.js",
-    "hash": "4f203b7da10c9a37543c5de1a64247dc5b5c6974e0d7c79f4346a049b00fb9a4"
+    "name": ".edge/storage/assets/ai-gateway-model-routing-DKSzKJbK.js",
+    "hash": "f34999f82f598911804715f1b633891979f0417865b989fc0badd6cc3c28baed"
    },
    {
     "name": ".edge/storage/assets/ai-gateway-provider-failover-CuJ589Gh.js",
@@ -124,24 +124,24 @@
     "hash": "f85343992e58c9c40d5d1a8981783199f7de9742124568282ea3b8974c7d451b"
    },
    {
-    "name": ".edge/storage/assets/ai-inference-function-fragment-DN1Esd_k.js",
-    "hash": "333c8c278ba3b7878cfcef4dbea680a5d587b10d17fc75b98c46dce34aad56d3"
+    "name": ".edge/storage/assets/ai-inference-function-fragment-D0J9AlET.js",
+    "hash": "31416d4dac2ec8849e2037c1a04b7cd79c62b0484e317897464815753a9f2789"
    },
    {
-    "name": ".edge/storage/assets/ai-inference-model-fragment-BI7ngbwb.js",
-    "hash": "8a8b6420e2fea2a4203b0528c6b6b5006a2f1e1fb7e167607884b0a50c8c7cc3"
+    "name": ".edge/storage/assets/ai-inference-model-fragment-D_vu67wk.js",
+    "hash": "2959ddaad03cfc8430e7b34112b4569b3a148623b2d8f07014fb90d389621b3c"
    },
    {
-    "name": ".edge/storage/assets/ai-inference-template-fragment-DWusVX2U.js",
-    "hash": "9452669074f2289fae234269fb5278f5c232e9a00ec2193012538a9ebcb76f09"
+    "name": ".edge/storage/assets/ai-inference-template-fragment-BvapKp4F.js",
+    "hash": "0c0a9ed4b0eb21cb69afc900a3d754fb76d099a901a0b930c2d3632da866a2f4"
    },
    {
     "name": ".edge/storage/assets/ai-load-balancing-beyond-round-robin-VFkR5Ddc.js",
     "hash": "ca18c7671049bd9b6e70dd10c4d7ac25367a60029c3b1c23b255068c449e576b"
    },
    {
-    "name": ".edge/storage/assets/ai-versioning-BbU1GJLo.js",
-    "hash": "2f7553a58b965742da38214c4190728fa51b78987b0ab2b80a558c6f4be4ac0f"
+    "name": ".edge/storage/assets/ai-versioning-CebxBmFA.js",
+    "hash": "bb5749ba9eccc11fbde1b5fcf2a51986096655140478c468176a50c0547a070d"
    },
    {
     "name": ".edge/storage/assets/akamai-extended-color-DFaqXWJc.svg",
@@ -156,28 +156,28 @@
     "hash": "44993ec773f2153ea605b3482cdfbb244661d0167f960e79c164f1aec6f1c70a"
    },
    {
-    "name": ".edge/storage/assets/alternative-guide-CwqxWtwB.js",
-    "hash": "1f4482134c2482a52fd45a3bfea98b1e20f589dca2370651ef965fa6fa33e404"
+    "name": ".edge/storage/assets/alternative-guide-JiP4e2u_.js",
+    "hash": "c17ba7a4d379d0e8a8e6c5ec2d90689d6162898ea227f7f73f7fe1dd4bcaf0ce"
    },
    {
-    "name": ".edge/storage/assets/america-movil-CeqfckB5.js",
-    "hash": "2a8f5200ff1adad751570f735f6803bd73f0411a9b07f29d960e3433452ccea7"
+    "name": ".edge/storage/assets/america-movil-Bb9jKEf4.js",
+    "hash": "fc8350a599dd676f829ef8943709dc69664a415854fbabe28b9a13709ec2e8b5"
    },
    {
     "name": ".edge/storage/assets/americamovil-extended-color-DWQ7PDp_.svg",
     "hash": "e6afd542494717f97eadb7eaefa821d6f49289e2e6592617fb5aad4d1310eaa4"
    },
    {
-    "name": ".edge/storage/assets/angular-B4ZLfVDw.js",
-    "hash": "2a4defd5bb78d014142746db8f012e60330c2ab73e18947d3eb9ed817e7395e8"
+    "name": ".edge/storage/assets/angular-B5fU34I0.js",
+    "hash": "00ed9167d2791f780c645a342b8738419187a1c9d6d88d7410c85eb9b327408d"
    },
    {
     "name": ".edge/storage/assets/announcing-graphql-for-increased-observability-1lPobMUj.js",
     "hash": "e9982072e33e5d41578e36a0324945dd748eba73447c1b146b0c70cc006fd189"
    },
    {
-    "name": ".edge/storage/assets/anthropic-BhOgLzya.js",
-    "hash": "794fb6eb2c87c998d2aaf289d49baa712012f5b36b7e0b1c80f921d7a82a199e"
+    "name": ".edge/storage/assets/anthropic-CqKiF2iZ.js",
+    "hash": "49b290d6fd684f8c36945c89bd548364a711b21a0710b8247d1bd219c779aaca"
    },
    {
     "name": ".edge/storage/assets/apex-DNDY2TF8.js",
@@ -200,56 +200,56 @@
     "hash": "f9670e3d3d1e6e680f53b4b68bc312b131f8a4d73abde40e392ebf25f9e02373"
    },
    {
-    "name": ".edge/storage/assets/application-accelerator-cookie-fragment-DrSXITRS.js",
-    "hash": "d76a2e54c09ed2f11d9bbc01ade46d793f6d626eddacaa9c6c4b621b93a87d03"
+    "name": ".edge/storage/assets/application-accelerator-cookie-fragment-C2BsLw9_.js",
+    "hash": "20f5427218e70ba30de1d095011ed853e8a55585bf848638743430df8960a157"
    },
    {
-    "name": ".edge/storage/assets/application-accelerator-method-fragment-DjgUMEYu.js",
-    "hash": "0f9b7157dc7839be98b7da44e89a0a201aea1cf42c5507bdf1cfdcefa6cfba1f"
+    "name": ".edge/storage/assets/application-accelerator-method-fragment-CpF6ClGT.js",
+    "hash": "1b0d00ade5ccadc8cfd86597c18817d1d6010034c69577d6eed4ad5fcc35bfcb"
    },
    {
-    "name": ".edge/storage/assets/application-accelerator-query-string-fragment-iT4UVFXl.js",
-    "hash": "2c25069e94eb44702be9b2f0ca1c1bab618cfe2d285ee43b129dabec6d6bfaa9"
+    "name": ".edge/storage/assets/application-accelerator-query-string-fragment-BkI9BFd8.js",
+    "hash": "8b457b0fed599c92cbb89fae84feb858edbdc51e2bdcbe575be570f2271ea9a4"
    },
    {
-    "name": ".edge/storage/assets/application-cache-fragment-j67xpLlX.js",
-    "hash": "1613d0bd3866d5857dace338b6d985885bf4488a54cf995216d6869a3b5431b4"
+    "name": ".edge/storage/assets/application-cache-fragment-DqrZOpun.js",
+    "hash": "796a8e20d8650cd75c638ebfa4c918dd1789a9e5d25922ded878de78b924f383"
    },
    {
-    "name": ".edge/storage/assets/application-function-fragment-CpF9kQLG.js",
-    "hash": "c7e17ef6fcb72c0dc5cd9884a441bf4c7f0332ce9cd11a237eba1f6431558bdb"
+    "name": ".edge/storage/assets/application-function-fragment-V3qm02BR.js",
+    "hash": "5ad3f42ac63e97c9b6426300af670e1f90cf977ce622bf93ffd1d9675deace1f"
    },
    {
-    "name": ".edge/storage/assets/application-rule-fragment-pFsAzY0y.js",
-    "hash": "e81b7c96d223299ba2e0e4023b841ac5fdba75cc3b80f354a398f1c67ee10b9d"
+    "name": ".edge/storage/assets/application-rule-fragment-CLBTy0nI.js",
+    "hash": "4c74e503836a48db68579af6069b5a43b5455845d7e2fca9f5972d0ed5b2ade7"
    },
    {
-    "name": ".edge/storage/assets/application-version-widget-DnEzs8Y5.js",
-    "hash": "8ba79cfb448d17ec60e3d3b92167db6bdda9385d9b1fc3266558397e1a2986f6"
+    "name": ".edge/storage/assets/application-version-widget-O5pzBeII.js",
+    "hash": "295babecf2e77db3e1f17bcf54bd689eb0c887dcd7a5f1094f06dc23ed7e2707"
    },
    {
-    "name": ".edge/storage/assets/applications-create-method-fragment-K5me7D9w.js",
-    "hash": "9b1f5b728d522f62c37d5d6d1d21795cdf855546aebf1242103a2a8e7d36e6c4"
+    "name": ".edge/storage/assets/applications-create-method-fragment-BcgQJGg-.js",
+    "hash": "3328abff55fa0991c62bf674bacaea5beea2203f2e18f4ee5f90263af30a8b6e"
    },
    {
-    "name": ".edge/storage/assets/applications-device-group-fragment-DUR7I2WK.js",
-    "hash": "86d707acd30081b9bf13e848ffdcba2d59a0239f462be3fb66dac0913842ceb5"
+    "name": ".edge/storage/assets/applications-device-group-fragment-Y0tA3pru.js",
+    "hash": "ba06513b6246bf0640f2141810b175faf2d85e769ee62a92bf71f3429bcbe1c1"
    },
    {
-    "name": ".edge/storage/assets/applications-rule-phases-fragment-CPTpaEMu.js",
-    "hash": "cd54168be0a96368fa328bedb9119a07cb1fd42029606455f4d0194ed519ac03"
+    "name": ".edge/storage/assets/applications-rule-phases-fragment-BtNvLp7y.js",
+    "hash": "cec488800732d5ea53e9f01a9e1e57296940d19331f22a2486a038017a721331"
    },
    {
-    "name": ".edge/storage/assets/applications-rules-ChFmSdTL.js",
-    "hash": "94a72deddf85feed8453b1e0ed095727b76d5016f098ea36a2e2b4d4de33f172"
+    "name": ".edge/storage/assets/applications-rules-CulIuk3e.js",
+    "hash": "a8e0c1df9dc06e7881a94bfbd9175375158e520876a3a7005fee8b14dc1fe566"
    },
    {
     "name": ".edge/storage/assets/applications-xBtFx_Xn.js",
     "hash": "813cc2377167eb5aee52d33e034f8bc98c45bad09ce1a80c3bdd750fb65345d7"
    },
    {
-    "name": ".edge/storage/assets/astro-h63MH0w1.js",
-    "hash": "29083e41a41d0af0514444f925b17ece327656d30f437633e11a18a68ed16f5e"
+    "name": ".edge/storage/assets/astro-BkkK5MiX.js",
+    "hash": "581067a261cec089123c9255d195ce405ec3c680a25a7c08780740bc94d6d136"
    },
    {
     "name": ".edge/storage/assets/automate-threat-mitigation-R3o9ct6y.svg",
@@ -260,16 +260,12 @@
     "hash": "ac0954ffb20707a51fc2ca52c2877d88ed9e1ca6eed858eea88eb69e31d4197c"
    },
    {
-    "name": ".edge/storage/assets/aws-ChoEllQD.js",
-    "hash": "41c86323d642e5056d5e6005a57fb18f47960c19a5d84af7280fe6ac3fb23e14"
+    "name": ".edge/storage/assets/aws-l0YGcYbK.js",
+    "hash": "d64ba369ce67bc0a0e7e48f450da5bae754dccb3ac83f93a0f2660c1d274be46"
    },
    {
     "name": ".edge/storage/assets/axur-CwmhpGFJ.js",
     "hash": "72a108cbb64b66eb39407d54ded0032c797bdce905133cd8f1a769639cc2b0a6"
-   },
-   {
-    "name": ".edge/storage/assets/axur-DsKBxB9E.js",
-    "hash": "86c1b6adf9b4c9a89d500361716936bc124f5cbac858b8e2cb7feba4ec156d09"
    },
    {
     "name": ".edge/storage/assets/axur-extended-mono-DkXfvXi3.svg",
@@ -280,12 +276,16 @@
     "hash": "31ef8b35d95954375888c94b205482acfd0c56942b9ddd067142526528e55ef5"
    },
    {
+    "name": ".edge/storage/assets/axur-iKsAiOLE.js",
+    "hash": "7e1c8194b998fad109a0c980cc964581a24d274ad9feb4b7d5dcfc95afd65303"
+   },
+   {
     "name": ".edge/storage/assets/azcli-Y6nb8tq_.js",
     "hash": "3f4b30f5868a270c5c45e5d31f292c4d8e0f09f5c6c3086c33633c26dbb6c8f5"
    },
    {
-    "name": ".edge/storage/assets/azion-404-Cx8v2uAm.js",
-    "hash": "4deb0617e1663ed0b900d2bc46a5029a5db84e1421953253dd90fcaf4c6665fd"
+    "name": ".edge/storage/assets/azion-404-Dp6xQgpw.js",
+    "hash": "696dcf2941e830fc47c2e28105228e6fc56c9f68fe5a54f51842ff793b7af16c"
    },
    {
     "name": ".edge/storage/assets/azion-achieves-soc-3-compliance-D8vMfA_D.js",
@@ -364,8 +364,8 @@
     "hash": "4c733bcb4fc57f02be4a3abc53a834410bb48ebfff85f8aa340d9b796b5bbec3"
    },
    {
-    "name": ".edge/storage/assets/azion-scale-up-B8NFRF9-.js",
-    "hash": "19c272be10b361795ca6c733f6c19e854074e910d5755b45fba28107657a2583"
+    "name": ".edge/storage/assets/azion-scale-up-BfkBi1P8.js",
+    "hash": "c2ff4551f2b45676fea834221fdc148eb43e90ecfe2967014ade005cb9b421eb"
    },
    {
     "name": ".edge/storage/assets/azion-to-akamai-BU1XU3ZT.svg",
@@ -420,8 +420,8 @@
     "hash": "cd281c98426bce23be8be8c772d6468771f9174917212bea04d94b15a7ceb739"
    },
    {
-    "name": ".edge/storage/assets/azure-Cslw6S1V.js",
-    "hash": "36b9d7b4e8d20411a2841640fcf5c03c7657af1c32a139ea47b022381f8f308c"
+    "name": ".edge/storage/assets/azure-DPcWi7tJ.js",
+    "hash": "46d2e3bb565bb685dd571382d82d718a78efaf3bbd2593ac87ba2265fc27a042"
    },
    {
     "name": ".edge/storage/assets/b2w-B4QiO0VC.js",
@@ -452,24 +452,24 @@
     "hash": "4a3d4d4148e84ec7c6bebe88fed9b7094306af23d1e94713a43b385a53e97a2c"
    },
    {
-    "name": ".edge/storage/assets/bot-lineup-DhUgJPKj.js",
-    "hash": "85b2be418cb4bf3c735dc537f266923bdfbb04e28fa3b430fde52a3778bf92f1"
+    "name": ".edge/storage/assets/bot-lineup-B7bYO4G2.js",
+    "hash": "6e6b18a7410f0171b1d9d30116d4dd3c171df7f55b6d92186dc979d0726387d8"
    },
    {
     "name": ".edge/storage/assets/bot-manager-CqJMkG1c.js",
     "hash": "5d2f7b958dfba3c1969c21b116e72b3f073ba53d8d5f070cc1bbd2150e2c8951"
    },
    {
-    "name": ".edge/storage/assets/bot-manager-metrics-fragment-BqejVBBV.js",
-    "hash": "e4cba9906034ec326d0da509b1a820c3c5fd9d49df506698d44344be65d2ccc7"
+    "name": ".edge/storage/assets/bot-manager-metrics-fragment-Dw1QTbl5.js",
+    "hash": "2fd5789e642bfc249ab79373ba008d15a6066fedc3ecac2be88d8d6bc0f02ba9"
    },
    {
-    "name": ".edge/storage/assets/bot-manager-rule-fragment-dj8POXQ5.js",
-    "hash": "9158c030c7adbc438586f2001d17aa4d0d20e3ab8e402b756ae0b05092c8095e"
+    "name": ".edge/storage/assets/bot-manager-rule-fragment-DW3OeSxy.js",
+    "hash": "4b70164b4bb9d8bd3dc2301c613b5bbf2161dd2dcb095be8898a0cd27ab71cda"
    },
    {
-    "name": ".edge/storage/assets/bot-manager-traffic-fragment-3awL7VVU.js",
-    "hash": "0005433794ad9fd6419e7415d2c2f8edc2f45e8939e920dfb4bc2a9da2a03e45"
+    "name": ".edge/storage/assets/bot-manager-traffic-fragment-KH039Fd5.js",
+    "hash": "207247b3818d1a2dd146114248d2e2150148f0c6cd1244c270b0b9af987b8d67"
    },
    {
     "name": ".edge/storage/assets/branches-D4T6Qpss.svg",
@@ -496,8 +496,8 @@
     "hash": "212c310e554cdeb80eb7b16e1a60e83cc51212c673a3c19c930e35a3dbbd4978"
    },
    {
-    "name": ".edge/storage/assets/build-terminal-2KSjzYbi.js",
-    "hash": "65cb340aabc3131ce24cc0ef7ff7415aafd6da31ea67d38c692937a248ae1366"
+    "name": ".edge/storage/assets/build-terminal-oxfHAFCd.js",
+    "hash": "ed43a5b145c8d99e78bd25cac6d8e370d25f8a3f7ba725bbbdabc37e1548b10b"
    },
    {
     "name": ".edge/storage/assets/building-modern-serverless-runtimes-DjPdYW_5.js",
@@ -508,12 +508,12 @@
     "hash": "bcef5c9d1b723e8afc397d42c5da7f3402114f3d1318d9aa0594dae6a736e194"
    },
    {
-    "name": ".edge/storage/assets/cache-ttl-CeF_XFx-.js",
-    "hash": "659a3eb152f5fa2d50002421fef84157c6cd811d5eed7220f2fd36e40c4aa6a1"
+    "name": ".edge/storage/assets/cache-ttl-BWtpvL9Q.js",
+    "hash": "d929434804e8aeb2ef9ac0146b04d68fb7efffab11f9d430fefaad08c7554adf"
    },
    {
-    "name": ".edge/storage/assets/caixa-DvNqgr7p.js",
-    "hash": "e92d7d89233aba740efaca2e1f6e23728798881350ad616bf3ce7356d63970f7"
+    "name": ".edge/storage/assets/caixa-Csa27o0u.js",
+    "hash": "fc31cef517ebbc37f706216065dc8170230175997289e2426b501b86d2e33557"
    },
    {
     "name": ".edge/storage/assets/cameligo-Bf6VGUru.js",
@@ -524,8 +524,8 @@
     "hash": "6f18295c52b53e284830d613f4c5baea807d005c0a4937ce101e565b42e5b814"
    },
    {
-    "name": ".edge/storage/assets/certificates-chain-yFLZUqGm.js",
-    "hash": "cbffbb370849a6408437cb3b573dd5c1ba90069adb1fb5513164237589c07ced"
+    "name": ".edge/storage/assets/certificates-chain-DPZXMhXQ.js",
+    "hash": "7ab53571ac33f6f21c2f6689462aa7e8f2fbdfb8cd84f05c493f2bf4d93a99c5"
    },
    {
     "name": ".edge/storage/assets/challenges-of-BGP-when-building-global-edge-network-BNz_uGUz.js",
@@ -540,16 +540,16 @@
     "hash": "4ff982cb63b31e395a84f5bd63d89c813663835f2bee5c07efa2445abeb9a113"
    },
    {
-    "name": ".edge/storage/assets/cli-terminal-deploy-widget-C-NuFy9f.js",
-    "hash": "eea95584a8d4ff5d4fcb682c352b4acf60ab74601e70419a304c2c408ab2cce0"
+    "name": ".edge/storage/assets/cli-terminal-deploy-widget-Dcnohrzq.js",
+    "hash": "144dc63ab61a4eaa2a0435087634570b2a5d489cce9969a0dcf42defee26c946"
    },
    {
-    "name": ".edge/storage/assets/cli-terminal-start-widget-DGxhy-kf.js",
-    "hash": "700d667dd548f8851d6c0d857c2843ad0fb57ce24dcb7d1abb32202aeb2b5722"
+    "name": ".edge/storage/assets/cli-terminal-start-widget-CvrdSy-0.js",
+    "hash": "7fd75bdde593cd34aa53a6544e5b21e58e011242e19fe0ffdc7f80b10d09b315"
    },
    {
-    "name": ".edge/storage/assets/cli-terminal.vue_vue_type_script_setup_true_lang-DJdIKvgn.js",
-    "hash": "58f4ca2db6ca4d3358815e119210da55753098d7d2339b50eb83d340c01f4989"
+    "name": ".edge/storage/assets/cli-terminal.vue_vue_type_script_setup_true_lang-BTVIpOnd.js",
+    "hash": "fdfebc1974b9a76193b0c7c593d141dcb1db3ad8bb6383f110f1dcbd3dd8944d"
    },
    {
     "name": ".edge/storage/assets/clojure-Dnu-v4kV.js",
@@ -584,8 +584,8 @@
     "hash": "a43287318409fb8fccf9a7d31914ebff0dd98689c74ff9af4c7843816c0ccb5c"
    },
    {
-    "name": ".edge/storage/assets/coca-cola-B0kVhII3.js",
-    "hash": "afd452eda8d05b0d7e2a4e5742a67461d23ca6eb3ace450293360cba1cab3532"
+    "name": ".edge/storage/assets/coca-cola-CCOPyiYx.js",
+    "hash": "7b9b02c5eb91960e392f8c5c9237e6eb32a7e46de563cd4a4d48832bda183fbc"
    },
    {
     "name": ".edge/storage/assets/cocacola-extended-color-CMwNDp8h.svg",
@@ -620,8 +620,8 @@
     "hash": "d873ea6ca197a5c68b09cbc0e4c915f2766aac9906ad1bfdd2c183f3c5c165b8"
    },
    {
-    "name": ".edge/storage/assets/connectors-link-DnzPUE-j.js",
-    "hash": "60a95f757c321c045f02eb21385624b93c05e0b4dd90bbc1fb9e8463c279ac33"
+    "name": ".edge/storage/assets/connectors-link-g8bRK5AI.js",
+    "hash": "a3b8e696a109ee433950e9444206dd80214f193c2b6b3969802fb258127e7671"
    },
    {
     "name": ".edge/storage/assets/console-kit-building-a-new-interface-C846ZZL2.js",
@@ -632,16 +632,16 @@
     "hash": "22e4a97999d2fcd743e84cdd97d6b571ccc55ea1ea238b9c612ec3d4f2531693"
    },
    {
+    "name": ".edge/storage/assets/contabilizei-C9fU_aa0.js",
+    "hash": "d00ca65f93fda7947511cfc3fbcf704eaf49fbda49730873d78d00bf918f50b7"
+   },
+   {
     "name": ".edge/storage/assets/contabilizei-extended-color-CMjt7C21.svg",
     "hash": "b9e7d6e6ca6d312e73d37a14ef388cd398c51e774c9c39caad09955c26f6ac6c"
    },
    {
     "name": ".edge/storage/assets/contabilizei-extended-reversed-Z-3c46n3.svg",
     "hash": "eddd33de962073a47f1b3138f99c95edf78c621d5bb3c0a3e91e600536f38e20"
-   },
-   {
-    "name": ".edge/storage/assets/contabilizei-tuVRgetB.js",
-    "hash": "c3376d2f57b1e75507fc79282a7abb8d2ba476becc8f3272706049fd254bf792"
    },
    {
     "name": ".edge/storage/assets/content-and-media-delivery-Csw_-1pt.js",
@@ -704,8 +704,8 @@
     "hash": "2b0dfe00af737873cfc0b0233ac59b60b758245b970f2e0ab426b1c58dfb99c5"
    },
    {
-    "name": ".edge/storage/assets/cssMode-DW3CMlwh.js",
-    "hash": "da2f9446e3a3ec63bbfe0eb64cc8c895deced3f4217446a1de9dc2a8847b9d7f"
+    "name": ".edge/storage/assets/cssMode-BOiea9l9.js",
+    "hash": "81d98be218a16d318983788a6016137eebd3bd6d5912483dd175051dab1fbd41"
    },
    {
     "name": ".edge/storage/assets/csu-digital-extended-color-C9XglmZs.svg",
@@ -720,8 +720,8 @@
     "hash": "f9bc5f098e370d4c239a729331714e804ce64b5f724395db594b657ca44af8e5"
    },
    {
-    "name": ".edge/storage/assets/custom-pages-status-KJ9T3GEY.js",
-    "hash": "e16935d796999082d11e79e3b0768a75ba40e4db5efe6170d2ccb4546a6b02a7"
+    "name": ".edge/storage/assets/custom-pages-status-Dd1wYGFV.js",
+    "hash": "aa2a87befb70afe09c5c015d2ffdc4686f9fc4257e05d6ffbac5fb3c243f29ee"
    },
    {
     "name": ".edge/storage/assets/custom-rules-mitigation-CzgQCWPG.svg",
@@ -736,12 +736,12 @@
     "hash": "5018d8b490f4babd935592c8dbd457723c219e0468c7a663555dc843aa1e9a9a"
    },
    {
-    "name": ".edge/storage/assets/dafiti-hrErqTns.js",
-    "hash": "b6da1a63dfc3801678ae3cd8ace80717ca971d77f5848ce9171f3d4973b4b9de"
+    "name": ".edge/storage/assets/dafiti-CAMGwRse.js",
+    "hash": "68a3b74a2c6a5702b6d893a3f9bbe29c2c3b8d8e59039defd7d7861a569b6dac"
    },
    {
-    "name": ".edge/storage/assets/dafiti-qyLkIpUW.js",
-    "hash": "ec3206e5cbe0d61702e1f459d2ff5be6dd6f537a4df96dece4ecc3528f3460a3"
+    "name": ".edge/storage/assets/dafiti-hrErqTns.js",
+    "hash": "b6da1a63dfc3801678ae3cd8ace80717ca971d77f5848ce9171f3d4973b4b9de"
    },
    {
     "name": ".edge/storage/assets/dafiti-security-b367-mJo.js",
@@ -756,36 +756,36 @@
     "hash": "964c85b05978eb7028f257380bb9992748dad06d202fe79b5855151224fe0a90"
    },
    {
-    "name": ".edge/storage/assets/data-stream-connector-fragment-DZwRJ-22.js",
-    "hash": "4aa2b3d1dcaae7b736a0dad46402d7503128ddf4096654ab7dd4328e47a7ea59"
+    "name": ".edge/storage/assets/data-stream-connector-fragment-DfC7rLO1.js",
+    "hash": "3a2c13dd063bb1925f2f3ffa4a2c927152aa08eda631b483824fd55b0576853c"
    },
    {
-    "name": ".edge/storage/assets/data-stream-sampling-fragment-DvvOxpXS.js",
-    "hash": "d1411bc32b157e2353c214f13e11b933a3414a318f76fc201f07a8dcb342113e"
+    "name": ".edge/storage/assets/data-stream-sampling-fragment-D2xrVaVX.js",
+    "hash": "1e2594a6038b68034ae59ac3bbf5325d13f9b3e409bd28c85ebd8f08985b7ba3"
    },
    {
-    "name": ".edge/storage/assets/data-stream-source-fragment-hnZzOwEZ.js",
-    "hash": "717c7630ad472f198bda24dc0d931dea757bb0de0c613abfd476204615b0c453"
+    "name": ".edge/storage/assets/data-stream-source-fragment-vMlgiKap.js",
+    "hash": "f5815d4d59a10b057c0ebc368e47a13c8cd32557e33e40b2b13978a8437f0ff5"
    },
    {
-    "name": ".edge/storage/assets/ddos-firewall-modules-fragment-Dpc8bl0W.js",
-    "hash": "04828827f0f0dc9a8c3323b866ca65c1b368377b2c12f2a1269f55f443451056"
+    "name": ".edge/storage/assets/ddos-firewall-modules-fragment-D5KKJ297.js",
+    "hash": "141f3bdc1a40d1b5eaaafad596b3f40e306c26cb07f6a953c035fdb216a51545"
    },
    {
-    "name": ".edge/storage/assets/ddos-flood-DcfrN9IY.js",
-    "hash": "de435e56f65511adf913f152124d12d7e56149264e155c734d89ec5311d348d5"
+    "name": ".edge/storage/assets/ddos-flood-DgPWdbh4.js",
+    "hash": "1670e25b19ee68c7f4e473c9e1c4d37ba4150741d663fcf0496a0133b8a781f7"
    },
    {
-    "name": ".edge/storage/assets/ddos-http-events-fragment-C9T6gq_l.js",
-    "hash": "79c881ef6cd06fc7b8e08e0b938da3f6437d61d71a942b314d0f153426948278"
+    "name": ".edge/storage/assets/ddos-http-events-fragment-BZZyTCes.js",
+    "hash": "40a5779b657194bbe3ba2782e2bc008b90ae2c470b907799668513dcad02898e"
    },
    {
     "name": ".edge/storage/assets/ddos-protection-DTE55Gvc.js",
     "hash": "35c7fa741d83206762ec38be1f9403c6a5e4527abba72e1a800aa9f08b5a5b0f"
    },
    {
-    "name": ".edge/storage/assets/ddos-requests-metric-fragment-v8aOKIZl.js",
-    "hash": "aa67b1c7858d5669cbee9120e838f05499d1028147f022a589f85c60c1a30fc5"
+    "name": ".edge/storage/assets/ddos-requests-metric-fragment-DN-yEbl2.js",
+    "hash": "d6d2de83a348fd4e3eba2e0b6c4b84a1cf49e1686838b5711bc4228fd94e1b06"
    },
    {
     "name": ".edge/storage/assets/deploy-secure-mcp-server-BXta37Pc.svg",
@@ -796,8 +796,8 @@
     "hash": "87fdd03669f344e5dd6c4f42212685178fb2f33a406f658b53d3df6c0772a1cd"
    },
    {
-    "name": ".edge/storage/assets/deployments-release-BCi2xOwj.js",
-    "hash": "c9f538a99eb3ac9f68e0873244917bc07dc1bcdbd7b614b147d36d30e67ecd97"
+    "name": ".edge/storage/assets/deployments-release-D46lM-4T.js",
+    "hash": "d39a9d8b3afbc6757681e3adc1419d6bf6876780edfbfa62de4b068457e26c1e"
    },
    {
     "name": ".edge/storage/assets/descentralized-evolution-latin-america-BmIJmIXb.js",
@@ -848,8 +848,8 @@
     "hash": "d9520993ebb6dc4747f3ae091f72400068c805256e9c35c21ddd907b37c4508b"
    },
    {
-    "name": ".edge/storage/assets/dns-lookup-BM9gffnO.js",
-    "hash": "6f2c8740dbd21b802e75058d63a47d7f533071b183b7ee7f92b0247e7b38c385"
+    "name": ".edge/storage/assets/dns-lookup-C0fXPRt5.js",
+    "hash": "f15c5ba33e9e65a9f608a4258354b9dbcbe5723d13389f18eda142ed9955179b"
    },
    {
     "name": ".edge/storage/assets/dns-protection-BdvLHOBY.svg",
@@ -868,8 +868,8 @@
     "hash": "08cdbcc91df91457ccbf55aefaa741ebb2bcb486f276e4f6af938d15787642eb"
    },
    {
-    "name": ".edge/storage/assets/docusaurus-DEQ-oF6s.js",
-    "hash": "71c6fce58ccdd35f16611d283c1d47bb76f5561ff53faa9fd5f91e7e1799964b"
+    "name": ".edge/storage/assets/docusaurus-Bdr7rSUu.js",
+    "hash": "7b10a4b4d95aa12d12655ba3ea2dde0850d92318d847dcd522194ac97574cd1b"
    },
    {
     "name": ".edge/storage/assets/docusaurus-symbol-mono-D9AbRvJp.svg",
@@ -888,8 +888,8 @@
     "hash": "5af78348c682f0533e812fe333b9876694b806a38737784fb690a5fe64b9c19b"
    },
    {
-    "name": ".edge/storage/assets/drizzle-BFEerIdx.js",
-    "hash": "990b7110391d6dcf34e32d916a43e3253efd7822d01efc25924c5ac852881663"
+    "name": ".edge/storage/assets/drizzle-Cpu7X7ec.js",
+    "hash": "c5862751b97547a4db7252231b2e2cb7edd23b59a35db7ea0db5afd839950531"
    },
    {
     "name": ".edge/storage/assets/ecl-BEgZUVRK.js",
@@ -904,16 +904,16 @@
     "hash": "93167386e8a940d0bcea3f7e128d73774f9945a80b5569b24e3be06ae5088b61"
    },
    {
-    "name": ".edge/storage/assets/edge-dns-dnssec-fragment-BsS42RXd.js",
-    "hash": "5b0af78fbdc778869769ba47e745b47dfabeadd2f4378ca41193c53ae2f2f6c0"
+    "name": ".edge/storage/assets/edge-dns-dnssec-fragment-B5OTKbJx.js",
+    "hash": "815728658a285f83f12d10345067f3a3c9fdb47ebb2bb40eaa7a806fc8d78ff8"
    },
    {
-    "name": ".edge/storage/assets/edge-dns-nameserver-fragment-BSOK-mNR.js",
-    "hash": "4b1b2fb46351ac3e163b271ce9efef5f54d2cdb91ad14f0bd4a918d8da1067d4"
+    "name": ".edge/storage/assets/edge-dns-nameserver-fragment-B0sYbf4N.js",
+    "hash": "3267b7febae24a61737659e783e72a398d9335b74e7e83080f05664b1f93e717"
    },
    {
-    "name": ".edge/storage/assets/edge-dns-record-fragment-CaSP-OVM.js",
-    "hash": "ad08eb28833a3d04f805d7365b1f0967fe4502933f5fd7db17ab8bf56b4867c1"
+    "name": ".edge/storage/assets/edge-dns-record-fragment-CKm0WJEd.js",
+    "hash": "306a5b4725e6dff838509699debf80bdb8b67c4f341db1cb46d918d79a2a27c8"
    },
    {
     "name": ".edge/storage/assets/edge-traffic-routing-for-extending-SDN-to-the-public-internet-B3JPQ014.js",
@@ -924,12 +924,12 @@
     "hash": "3173692fb8afb62f7d5a5152ed3f46002d25935555277fc122b72cba9d84a183"
    },
    {
-    "name": ".edge/storage/assets/elastic-D5NdvSf7.js",
-    "hash": "9eeba7db5ddd6438b9b341deabbfcaddb24c80ba391d4fa7bbd79d4d31345151"
+    "name": ".edge/storage/assets/elastic-D6PPBLm7.js",
+    "hash": "808eace6cbc86df63ad0b38a6ee6c1c52f6eeaf4e2200bf5ff481044c6d452a2"
    },
    {
-    "name": ".edge/storage/assets/eleventy-CGDk_ePL.js",
-    "hash": "b59afb5a89776f3120479448d91719a6aba7134aa3ffd01e5e248bf42a7b8bfe"
+    "name": ".edge/storage/assets/eleventy-DmZSKGEt.js",
+    "hash": "6884f5447b0fb8c81c0e6266f684b038616655d94b37ecc43cf7b77b07fe7596"
    },
    {
     "name": ".edge/storage/assets/eleventy-symbol-mono-DH5rEhRr.svg",
@@ -952,12 +952,12 @@
     "hash": "d9df0ae274472e6e33ffff2f587df49d4cc615715f09219acc768e4bf1e35e2a"
    },
    {
-    "name": ".edge/storage/assets/equinix-CTR6WGlF.js",
-    "hash": "3b30f3e0cc8f4d1ddda09e55cc03e19e3e051565879f602c0412113f0da5f12b"
+    "name": ".edge/storage/assets/equinix-1EtuIf7A.js",
+    "hash": "5f130bd74b7374f6d4993bd369d037286a2552b34f70e7df4b3f01b1e58906d3"
    },
    {
-    "name": ".edge/storage/assets/exame-D6wTN6qh.js",
-    "hash": "9c1ff08d7c7dadee197bf9839bf976501302ca0f21971c8750719ecda84db75a"
+    "name": ".edge/storage/assets/exame-CUVqgZw6.js",
+    "hash": "9ddd84c68e600c9a08cd400358c4afdde1eefc085fdbf92a124a63fc17eec032"
    },
    {
     "name": ".edge/storage/assets/exame-U5j-lvZI.js",
@@ -996,20 +996,20 @@
     "hash": "827107f1230b7edf7ab1cbb809436aeacd6ca5591647fe5fc4a3ee8446233411"
    },
    {
-    "name": ".edge/storage/assets/firewall-function-fragment-CTZin7Bq.js",
-    "hash": "d46b66478f7dd57158fe3a4e8436b25067fc6e0528e7658635fe30a92f82670b"
+    "name": ".edge/storage/assets/firewall-function-fragment-hRujLEQD.js",
+    "hash": "5001ee8f2fbafe30b62617377aa31e43a4e4663052b60163c9d1b72a0aaa4ba7"
    },
    {
-    "name": ".edge/storage/assets/firewall-modules-fragment-DC5ISJuH.js",
-    "hash": "cdd479c98caf9ddc6f8c1eb8791f89f1a610dbe20ff9b2c5765af6ba0a87cefb"
+    "name": ".edge/storage/assets/firewall-modules-fragment-BF_HNrmR.js",
+    "hash": "11b1628ff8c11d41505b741212a7fd38f3c26d5d77fc8f140a6fce05b0b213bb"
    },
    {
     "name": ".edge/storage/assets/firewall-q2Dby-La.js",
     "hash": "2433c2365a60b94e02ade8cf1886be006f1de835ccfa6f0447a0e5c9d761d2b8"
    },
    {
-    "name": ".edge/storage/assets/firewall-rules-order-fragment-Dnb4YfxX.js",
-    "hash": "6f86f84742c5417513f1d0a262fc40b361190f914524b4e297282f818f855d35"
+    "name": ".edge/storage/assets/firewall-rules-order-fragment-o_KlrDaq.js",
+    "hash": "25ec11b6b81cc336e6e17977a83cc7bd0a74fe567b0a40a5deee3180f77d9f27"
    },
    {
     "name": ".edge/storage/assets/five-cases-of-it-transformation-with-edge-computing-WuG-sUKS.js",
@@ -1020,8 +1020,8 @@
     "hash": "af3886462a2dbb4d9795503e6383d2be678197e9141b2683852a7921dc17b5b7"
    },
    {
-    "name": ".edge/storage/assets/forrester-a-QQap8J.js",
-    "hash": "bc1e7821c8e3682face1323d70f56bd1454c134e606589be401ceb9d1884bca1"
+    "name": ".edge/storage/assets/forrester-CYYgEkhe.js",
+    "hash": "589d3b58e1700e5438b64e2d1821300a3f4efd800ddb02fd94641e7c38db8148"
    },
    {
     "name": ".edge/storage/assets/forrester-extended-color-DbpJRKOZ.svg",
@@ -1032,8 +1032,8 @@
     "hash": "d20c5e6be4d4a42f685e3fc6ba55643a0b137166c51ac058fa50068714433d94"
    },
    {
-    "name": ".edge/storage/assets/fourbank-BXFT_q10.js",
-    "hash": "48a86b3f12cedc6848fbc3bf8c5c14b733db8ec48f20484aa9c9f7fcdaea3f6f"
+    "name": ".edge/storage/assets/fourbank-DFx3N2OP.js",
+    "hash": "6c455e32bae3f94f7e20ce79d23ac86ab3a70fe4a6ff4e7bd3f2ffbbfd596818"
    },
    {
     "name": ".edge/storage/assets/fourbank-HpDXTfHi.js",
@@ -1048,20 +1048,20 @@
     "hash": "d709235fe91fa093a974ddc92c7e9d38395e3968b1013b31d78e25f221f3ed84"
    },
    {
-    "name": ".edge/storage/assets/free-technical-session-DghzVi9r.js",
-    "hash": "15210457ded8f2d60d71258c5d9cf4155e45db66068c0f9c6f3ec960d9db6f1a"
+    "name": ".edge/storage/assets/free-technical-session-fEFZOBKJ.js",
+    "hash": "06b119920f29608525c81b5eb7b103fa2aa7bb11495af1047522d9981b4340e9"
    },
    {
-    "name": ".edge/storage/assets/freemarker2-ucoMsZJU.js",
-    "hash": "2e632e0cd243a79ced1a2933d9381d73a8961c59eaa62b1c21763288038997a3"
+    "name": ".edge/storage/assets/freemarker2-DB8Hj39q.js",
+    "hash": "d6ccc741e0e3a58844f192d59041df502517c174eb6c9a1d615f23f2a57ca778"
    },
    {
     "name": ".edge/storage/assets/from-cloud-training-to-global-scale-ai-inference-lora-serverless-DQA5RNmP.js",
     "hash": "9762fec48cd6ecc2895ba01403f18d75f7c57e03e8ab7e1d6bb54b77fe87ca11"
    },
    {
-    "name": ".edge/storage/assets/frost-and-sullivan-CWZ-zk9W.js",
-    "hash": "30f9865277fb5e60abd9e17571275c91ef67aa2f1e23e13c96e8977bf490806a"
+    "name": ".edge/storage/assets/frost-and-sullivan-CuHwXKMa.js",
+    "hash": "802c0d2e51731c30edf024f8939b372611999e9c5b82682f9f621c8bfe792150"
    },
    {
     "name": ".edge/storage/assets/frost-and-sullivan-extended-color-DY7xNCSj.svg",
@@ -1076,44 +1076,44 @@
     "hash": "565180d384812570db91c746f066365edc2bee861ce7006179f759dbf166a936"
    },
    {
-    "name": ".edge/storage/assets/function-code-fragment-B5o-naoS.js",
-    "hash": "eda869244ad306bbf317a7418e25f7c1a173e50974bd540139a35437d4088291"
+    "name": ".edge/storage/assets/function-code-fragment-BfD1_LWg.js",
+    "hash": "636f7227f4ad17c8c41eed7521cc3f47e87543b39f15cd75fd2bf7ac29da980a"
    },
    {
-    "name": ".edge/storage/assets/function-code-fragment.vue_vue_type_script_setup_true_lang-CtPhPgw-.js",
-    "hash": "756b2da84bb6e7896c2692a68e3570ca05b7ef32f8b4a24b44ab58c6e23d1425"
+    "name": ".edge/storage/assets/function-code-fragment.vue_vue_type_script_setup_true_lang-DW5oKRMZ.js",
+    "hash": "da626d097b8b7dd3c91c2147ed9218b5c9ed84a3f97ce394eb753321f0dc0a23"
    },
    {
     "name": ".edge/storage/assets/functions-DT0zJX14.js",
     "hash": "5fef158ec8d2025a56c3f8aa65d32dd1bfbda08dd2743acfffc5410c58399642"
    },
    {
-    "name": ".edge/storage/assets/functions-invoke-kaXI6a3N.js",
-    "hash": "5fb829247da78b8d5331d3ea7212e2f2cb2d4d637e37f473ba007017fae56327"
+    "name": ".edge/storage/assets/functions-invoke-B_nF-6iN.js",
+    "hash": "960b97ce052d2d0610eee3ddbb6f8d063cce8124f9c0488c6c86aeb4c231044c"
    },
    {
-    "name": ".edge/storage/assets/functions-start-widget-DQoNWyl6.js",
-    "hash": "8235b70068261fcf32f974bd490ecd12f6205423b6c35162efa169cfa2c49591"
+    "name": ".edge/storage/assets/functions-start-widget-uac6YUC2.js",
+    "hash": "e243ab795ee4a11ec6777a18335fa288d1c03f8c95175ce2d43324f876aee38e"
    },
    {
-    "name": ".edge/storage/assets/g2-D5smYWOc.js",
-    "hash": "e9e60f6a3aaf3aa11133f528a4e42a9958cf288e4a8febcb623012759b595165"
+    "name": ".edge/storage/assets/g2-CsfywCZQ.js",
+    "hash": "c414a0045296c6a63884fb1024a4f0ce12fef513c14552b3becf5a89d86d67e9"
    },
    {
-    "name": ".edge/storage/assets/gartner-B-cgh8ks.js",
-    "hash": "bd96837bfd842e90b8b0116ea0879c8c27e374cb5140adb145b1c0c831a7dedc"
+    "name": ".edge/storage/assets/gartner-B2-_iHQG.js",
+    "hash": "13ba74386652fdb52a740baebd282a7a735b33299b58f8deea831aae3618ee54"
    },
    {
     "name": ".edge/storage/assets/gated-form-C5EoZ2gF.js",
     "hash": "49fe93c9d47def905341243902a189c794136f90a05ec1fe8495771c5734ba65"
    },
    {
-    "name": ".edge/storage/assets/gatsby-Dqtuz4tY.js",
-    "hash": "c837db8365af6c12b5609f717694519274c7cb1e081cedc2bab4edeaf34964c1"
+    "name": ".edge/storage/assets/gatsby-CpEXa9fq.js",
+    "hash": "672b3e8341ef3d9f9e9adcef489567d55464f60ea2825daf4e604589ecd4553a"
    },
    {
-    "name": ".edge/storage/assets/gcp-6XEBejai.js",
-    "hash": "4c120157d7c0f12607a54f00af4c6d5bf4e8541e6ec42bc47404607811d32c10"
+    "name": ".edge/storage/assets/gcp-tY9GrE7N.js",
+    "hash": "9eff23e38578561b631dd628df9ddfe3d51bf95853b6f8ebdcc451d7319e14fc"
    },
    {
     "name": ".edge/storage/assets/gdpr-symbol-color-DhVX8vFL.svg",
@@ -1140,20 +1140,20 @@
     "hash": "506b8d728d0f28d59c9bb961323e754e34c525821acaad7b58d13f9fd044c4c8"
    },
    {
-    "name": ".edge/storage/assets/gigaom-qmB0pS1m.js",
-    "hash": "2c876474d20063c1085dab70aaa4b37c7f9d21e465f6792ce78b89bfa9c5c789"
+    "name": ".edge/storage/assets/gigaom-_0SH6qZA.js",
+    "hash": "32996352b5e30a863a479cc3b6fc86a98d07592e555e013827a419f4e15fe785"
    },
    {
-    "name": ".edge/storage/assets/github-Uf1--n5D.js",
-    "hash": "868284f0297d4637cece280ff86df6ce4ad916fe73da49a4b2dfdf7b1063391f"
+    "name": ".edge/storage/assets/github-5Tcy1rs5.js",
+    "hash": "42037eae10a2374b342ce41714d4ac448c964aaaa8b45006b761394a03ae23f6"
    },
    {
     "name": ".edge/storage/assets/github-symbol-mono-Ca4fpRmP.svg",
     "hash": "da87d7b9b06bf9f5b96f5a5ec3bbf96df5127811c0dfdda1246ff21a0edd28d5"
    },
    {
-    "name": ".edge/storage/assets/global-fashion-group-BcRHlRt6.js",
-    "hash": "dc7ddf6999b9b5b58ba28f87e0da0fdd2106725af777fdf3a35cc54cbbe2a032"
+    "name": ".edge/storage/assets/global-fashion-group-B6PXqskc.js",
+    "hash": "d7d9beb855c0d51e32cb8a3efac319db1a3b1cf24a9f728a189861ba6b31724a"
    },
    {
     "name": ".edge/storage/assets/global-network-B8smzU08.svg",
@@ -1172,10 +1172,6 @@
     "hash": "ac55fb7f102bfef591b18ce0b2ce25d2b803951c8473464dc752aeb038a1e33f"
    },
    {
-    "name": ".edge/storage/assets/gpa-_8e4UlQb.js",
-    "hash": "b46210d007401ab9e6238b8f228dc964de1c8905fa211a424235f09e1672df31"
-   },
-   {
     "name": ".edge/storage/assets/gpa-extended-color-3hVba0wK.svg",
     "hash": "2953f5087eb7414f599cf710b60c50c98dea0c5de50c63aaf7dc23c61c1aaab1"
    },
@@ -1188,84 +1184,88 @@
     "hash": "174407a7c565880ba42c6d0800a34ffb17ea8bb60a83d06d1bd51564e00d1d52"
    },
    {
-    "name": ".edge/storage/assets/grafana-CcoSyaRB.js",
-    "hash": "24dd4a8b40d3264a980207691fb592950f12b94a70e8fc1e5e70931ded600edf"
+    "name": ".edge/storage/assets/gpa-r6QTYqag.js",
+    "hash": "dc91d2a1bfcd67b17a964e6d332185e6566e795f647e2872647b8b7dd14811d4"
+   },
+   {
+    "name": ".edge/storage/assets/grafana-BEiNWW59.js",
+    "hash": "ab3bb9d06ed9d91e8fa9d34363a866477cf79db139d96438bb6ecdb0aa995203"
+   },
+   {
+    "name": ".edge/storage/assets/graphql-BFq5JLul.js",
+    "hash": "fb6d78df17389380a09f700176785fb933e392e3af7eb1555a713ef5fab46a91"
    },
    {
     "name": ".edge/storage/assets/graphql-BxJiqAUM.js",
     "hash": "2d97898ecd77bf1d9a78f24c5ed6c6d1ccb8144f9c805db610d741dabd0b49aa"
    },
    {
-    "name": ".edge/storage/assets/graphql-YAPIwqwg.js",
-    "hash": "6f5a1a0b88e35dcc9f6e912beb5168d1b9c47d6f09d8db64c470fa63c404c33f"
-   },
-   {
     "name": ".edge/storage/assets/grendene-extended-color-B82zmbjD.svg",
     "hash": "2e53c97f01554e24c662b09a977843215b01546f1418c76c67aef203bb46ad24"
    },
    {
-    "name": ".edge/storage/assets/groq-DFHV3l3F.js",
-    "hash": "2dff8dc61a4c74607cfa732d15ad2fb76e7d37d5155b1d03ca5e15f063d33c82"
+    "name": ".edge/storage/assets/groq-Di9TB2Hp.js",
+    "hash": "22c4fc67c79b75b375c8088a2f5612fba9948fff416ae75bda6fcf246ba4fae7"
    },
    {
     "name": ".edge/storage/assets/gru-airport-extended-color-BK8jDj7c.svg",
     "hash": "50d03fbc70e105ad5834e845d2b0460070f158866d9330ee9c743fe4accb9ce1"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-akamai-8016PEUp.js",
-    "hash": "86f837d767e7e6186588a64a62adada2bc3b93bfd2e9836aacaac81aa96ae6ad"
+    "name": ".edge/storage/assets/guia-alternativa-a-akamai-DS2852uy.js",
+    "hash": "87552925683c70b2fac5b2f46d7ed05f077a2683944d4b1c12bdd09b38ada6ec"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-aws-D1z1NUzT.js",
-    "hash": "77e97570a9145fc7862ab2c0f17f07ad9bb83dd4b93aeb95a705b60f9276a660"
+    "name": ".edge/storage/assets/guia-alternativa-a-aws-Dj70An5D.js",
+    "hash": "5e6fc0a8f855c3acd47ba2aab5afa5532d3aebfdae509d4bb8a576e7cf03c805"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-cloudflare-BMV5Ewq-.js",
-    "hash": "4e17c36bfadba9e2ab13ed25c69afa5f54cd67e1620f8942b9d96ea329927c5c"
+    "name": ".edge/storage/assets/guia-alternativa-a-cloudflare-BlFrnI_P.js",
+    "hash": "9441a815102cf9e515037c2dfc6d863bd7f0f025e9b919896003b5b06bd5252e"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-f5-DrEks8Vp.js",
-    "hash": "977270876165200adea72c7b8e460bb4500ef4684d2e33b3373d824e0c8470ae"
+    "name": ".edge/storage/assets/guia-alternativa-a-f5-DtbSr2mK.js",
+    "hash": "c51526918a97d841715bb128c82cd3f62875c106a89e3e334579fb9ef8e91c76"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-fastly-oAhUaSxY.js",
-    "hash": "898be4c57cfc6e27b0c33741c74132c8432a5ffb30986cef2504bb86113ea7c8"
+    "name": ".edge/storage/assets/guia-alternativa-a-fastly-D-PI1p5G.js",
+    "hash": "3b71f0a15f0f7a30785615133b1340b491ffdb30c105dda5805876fb844c1ed5"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-imperva-DqkV6SD4.js",
-    "hash": "e453ed89611cb52177fe71e67e91ed3044ca29bdc67e6c140bdd09c5c4988a51"
+    "name": ".edge/storage/assets/guia-alternativa-a-imperva-BEl9KUoJ.js",
+    "hash": "53185c2864098ebac8fb409e6b5ce943e96f32e02cafc5d7d813a3af1d004500"
    },
    {
-    "name": ".edge/storage/assets/guia-alternativa-a-vercel-Bgcc60KU.js",
-    "hash": "9dd223ba913abe046cd6843abca6810370d4382724ba8bf9fe069ff880ed92ec"
+    "name": ".edge/storage/assets/guia-alternativa-a-vercel-BpNodEmN.js",
+    "hash": "525fe48ea7e837c73c752689283eab1b8a40da6fa511890303e0fa4027dde60c"
    },
    {
-    "name": ".edge/storage/assets/handlebars-CWrrGAx_.js",
-    "hash": "37be625e3ed8a1870899ab138976fbd39627282bd8bccbe88776b443be5b4294"
+    "name": ".edge/storage/assets/handlebars-n2Bz3jj3.js",
+    "hash": "82b6cbbc36905ded6e4ec2476791fd1c0fcd00c7387ab1df9f61f1cd870819a7"
    },
    {
     "name": ".edge/storage/assets/hcl-DtV1sZF8.js",
     "hash": "320b8dd7d0a90e47baa62b20b8f00090524fb985873a3f057681f1eaea16a05f"
    },
    {
-    "name": ".edge/storage/assets/herospark-BIBP8k5Z.js",
-    "hash": "2f2a7074f7ba9888c06a36f133f3507f365df98722c33813694965cbec9482f9"
-   },
-   {
     "name": ".edge/storage/assets/herospark-BZVp2oqb.js",
     "hash": "64215fbb9fde7a81035345a5e26eebfab3e268e168665dced149f0e888c7da35"
+   },
+   {
+    "name": ".edge/storage/assets/herospark-DtwgVWD1.js",
+    "hash": "1d04037cf5c3f0898085cb609420fb5eb85d9423ab8d00f068e9874176b85424"
    },
    {
     "name": ".edge/storage/assets/herospark-security-CFNIWT5p.js",
     "hash": "9e65221b15dbeb0d33f07b0a65e3a3ce2387499e4b8774b9a2528f8f31710330"
    },
    {
-    "name": ".edge/storage/assets/hexo-DWP1578E.js",
-    "hash": "357bc2224a4d0013eadc3c154ee3849526556fbc8a98f94c3cb3f4eab136a9c8"
+    "name": ".edge/storage/assets/hexo-D2310qBm.js",
+    "hash": "1a2089f9701e9252a7842817001623d29eb5be9a273e62725cd46f332edab12f"
    },
    {
-    "name": ".edge/storage/assets/hono-D64smcGC.js",
-    "hash": "b69aa2fb5eb0d080a4503da00e7777b5b500dbb6360f1882dd4c5317092d623e"
+    "name": ".edge/storage/assets/hono-Bwg9vPfc.js",
+    "hash": "05391e9469a35c32bbd4bc4b9bbdc862cec179adc026995ce10a4e2e4c0add78"
    },
    {
     "name": ".edge/storage/assets/how-a-unified-waap-platform-reduces-soc-risk-DxIIW0z9.js",
@@ -1316,20 +1316,20 @@
     "hash": "c30dbadf22cedbe146bfa22fac4e6f64ef5b1ad67c9bf5b86c5595d4737d79cf"
    },
    {
-    "name": ".edge/storage/assets/html-DPnO835-.js",
-    "hash": "0c2f167731a9bcbede4d4698ed0a2820f53d244af469c4c550a0b9ec74c12631"
+    "name": ".edge/storage/assets/html-CHfEJ4Sp.js",
+    "hash": "3bf02944e9e6d9afca759620dda6de91b2b64caa37c7c27afb707df517db90de"
    },
    {
     "name": ".edge/storage/assets/html.worker-DhJ4VZMp.js",
     "hash": "d68967e3fdcb1e6a9e3222a1f7dbc249427313d41e118a94779afbeea1d4468f"
    },
    {
-    "name": ".edge/storage/assets/htmlMode-BkT0bWQV.js",
-    "hash": "89c2aabee967ce8b65b61dd4ccae236e96102650dbe41a24e2b5eae64c270089"
+    "name": ".edge/storage/assets/htmlMode-O50bf7CP.js",
+    "hash": "b4516f5f2489ac7b111223b43ce50536129c8b4f9549ab40df3d528b3c164d40"
    },
    {
-    "name": ".edge/storage/assets/hugo-BPez0sXC.js",
-    "hash": "0da61a8b6bf35b0fb4c620e3ac8c11e5f597fad7afc447420d5418185050fb5c"
+    "name": ".edge/storage/assets/hugo-CXvxMlZY.js",
+    "hash": "3a0d75791e8bba982c559a8080f36dafe97bb6463eb4f368d0d6d25b118f0989"
    },
    {
     "name": ".edge/storage/assets/ibero-DrDC43w1.js",
@@ -1356,20 +1356,20 @@
     "hash": "93898fe314c4afd0afaf0d117daef58c103b9b4ded5f963d1eb1ee1b5ddbefd5"
    },
    {
-    "name": ".edge/storage/assets/image-processor-events-fragment-CyWQgcCE.js",
-    "hash": "e132e24a51691bc7fcf95299732435ab4c275b2acdf06989563884824b2e4afc"
+    "name": ".edge/storage/assets/image-processor-events-fragment-Blv8SQD7.js",
+    "hash": "74f6e954881868475710816b008136e66b935d211dde72bb4fdebbde2a453bad"
    },
    {
-    "name": ".edge/storage/assets/image-processor-module-fragment-BKzDSomG.js",
-    "hash": "ce7da4be2ba68fd446b504e21eb84c66f274210ce205bc37cee441a68131e2fa"
+    "name": ".edge/storage/assets/image-processor-module-fragment-C6N7HG5z.js",
+    "hash": "0f11e13cdfcd6ff529b696fdb2b380fa585090855db49d7d8527eb12006638b0"
    },
    {
-    "name": ".edge/storage/assets/image-processor-rule-fragment-CANlMsF9.js",
-    "hash": "35325084400b5448024b6ba9eb1c7bd72d41448f76a2755806e7f4f74277cad7"
+    "name": ".edge/storage/assets/image-processor-rule-fragment-QrgBYBoS.js",
+    "hash": "3a364decd64453fcdda57490bba2526bce3a10f4c527ad66df4d1a59034b8a53"
    },
    {
-    "name": ".edge/storage/assets/image-variants-D5tuxgeF.js",
-    "hash": "7577937f4c6ee55e244191c9be1f7c5fd294ee8d48d4448cbad5a26e26135ba7"
+    "name": ".edge/storage/assets/image-variants-B9qvOYw8.js",
+    "hash": "d1c13e6610a0aca5f991e51815d69f477f1374f1e891189fb19967771899196d"
    },
    {
     "name": ".edge/storage/assets/implement-api-gateway-security-CInsWL2N.js",
@@ -1392,16 +1392,16 @@
     "hash": "1d6db6e206d1141d9108b7cea6e5ca1306cb3d2188103fffe5b60ff119c5e298"
    },
    {
-    "name": ".edge/storage/assets/index--J-RtExA.css",
-    "hash": "f57c318ed4314fedb13f6d19e6af8e75a18d219b8e1acde6dc6a248ed1df30a9"
+    "name": ".edge/storage/assets/index-C6Tncni8.css",
+    "hash": "630f40bc3bb21ce1b4c11e3b58a528a54c616791b7010316edfe983b6a258b7c"
    },
    {
-    "name": ".edge/storage/assets/index-CLoulzZy.js",
-    "hash": "ef193783e0403508386fce82fafb9038503c4643d1ff47197cda17207e1a7bdf"
+    "name": ".edge/storage/assets/index-DvPtozUI.js",
+    "hash": "e96591f22713a9c43a798642083911034c5350c5c015ebcd7c0e36383385767c"
    },
    {
-    "name": ".edge/storage/assets/infra-workloads-pQtClq9x.js",
-    "hash": "dbd5bbbd05e6bb61e3866058819991b169ef49d403f54c55e51eda9539649217"
+    "name": ".edge/storage/assets/infra-workloads-hPFNVKTu.js",
+    "hash": "cb5a112ebc0a6c5c3a3ad05d33f7cfd515cd848bd3198abf5a84393ca7facb0a"
    },
    {
     "name": ".edge/storage/assets/infrastructure-as-code-BRdqA2l6.svg",
@@ -1412,8 +1412,8 @@
     "hash": "9a9394d5069fccd19f487647640beae13cf2b7460beb9183d74541f41fa55b97"
    },
    {
-    "name": ".edge/storage/assets/infrastructure-monoculture-D4_t9MqP.js",
-    "hash": "daada2f4044649a60f6e5c81c173f422fec11832fefc389e2ebbeb10c889285c"
+    "name": ".edge/storage/assets/infrastructure-monoculture-C1NQc5zh.js",
+    "hash": "633b98a08d293e4360acf09979e5dfd9304b696e808e7eb942b8093baa49fe09"
    },
    {
     "name": ".edge/storage/assets/ini-Kd9XrMLS.js",
@@ -1440,16 +1440,16 @@
     "hash": "b7dcda3a66496c86b2b689007e754637e0eaef3a284488e86ac514390ab30004"
    },
    {
+    "name": ".edge/storage/assets/itau-BuY9QHbL.js",
+    "hash": "a2fcc2b5d758f93e780719dbe5c090637771937e23e7c4a275435067e5112435"
+   },
+   {
     "name": ".edge/storage/assets/itau-extended-color-CqUW-yqp.svg",
     "hash": "dddf647a478c59fbbbc3362a45138a630d1ba9765a7f9ff49e287473796505b6"
    },
    {
     "name": ".edge/storage/assets/itau-extended-reversed-BV5EofDT.webp",
     "hash": "0fb00a532cc5a13996d70e221efb7e158157c7f202d62f9dc37ac1a0dda46eaf"
-   },
-   {
-    "name": ".edge/storage/assets/itau-mxNvLJn4.js",
-    "hash": "f19ed105ab04bcca30d72724fb7b34df4c41ac0e876102ae28671ef50a37da6f"
    },
    {
     "name": ".edge/storage/assets/itau-symbol-color-CN4DzANk.svg",
@@ -1460,8 +1460,8 @@
     "hash": "068b283644e8e824c93a9266b408c24b35dc42763c671b37e890f7b3221457c7"
    },
    {
-    "name": ".edge/storage/assets/jekyll-FTH1SHYv.js",
-    "hash": "d9b464c5aea51bf5ebae2fd1d61c7ee98c26a6f2c6185dbf1072ab04c5e0a44c"
+    "name": ".edge/storage/assets/jekyll-CEfFqeKQ.js",
+    "hash": "74903d40a2f1451f6308bbd6d273301e4a2ac216c037cc1e76d4708d4b83b846"
    },
    {
     "name": ".edge/storage/assets/jekyll-symbol-mono-DjcBKl-s.svg",
@@ -1472,20 +1472,20 @@
     "hash": "177b13c24bcca6fecd8741e31ffe1c6a17d324bad90c3341800961721080d7bf"
    },
    {
-    "name": ".edge/storage/assets/jsonMode-Do9A4XpH.js",
-    "hash": "eb1df9c6edcd55b212df6c7eae090c45c71fc5340453d2b3e6f818a4f56a17d5"
+    "name": ".edge/storage/assets/jsonMode-By3-PZcJ.js",
+    "hash": "37adbb7d91a1747fd79791753e811642d9a99822c96b4f89638177de946c0077"
    },
    {
     "name": ".edge/storage/assets/julia-cl7-CwDS.js",
     "hash": "61fbb523b7b1477d099b2a1b2191882f11332aec5a3fbf4cfdf2ef30c9e4b87b"
    },
    {
-    "name": ".edge/storage/assets/kafka-BbpDK_3T.js",
-    "hash": "c46da7aba18484b7a23172694c1fc6e6aabb289a918fa812a25ce39c1ac26389"
-   },
-   {
     "name": ".edge/storage/assets/kafka-extended-mono-D-OvTzI5.svg",
     "hash": "4868c8b1f381f53bd7de62329d53d0b74f22cd513a8b379c414aaa045e4ab68f"
+   },
+   {
+    "name": ".edge/storage/assets/kafka-odWZNlZ-.js",
+    "hash": "13959315fb55e0bdbbcf1ac2b64d9c968d5b68aeb76f97c9d27a2b10db3ecc93"
    },
    {
     "name": ".edge/storage/assets/kotlin-s7OhZKlX.js",
@@ -1496,16 +1496,16 @@
     "hash": "3f415cf76bf37b2fabf4a969c0d5609a7c7c405d829344724611c0b50143ba93"
    },
    {
-    "name": ".edge/storage/assets/kv-store-function-fragment-BGcYXII-.js",
-    "hash": "f2d652d795ded959653ab411f008133c4a7661c95967f79b9de9009679d8cd0c"
+    "name": ".edge/storage/assets/kv-store-function-fragment-CJloHqe6.js",
+    "hash": "603986d1af8b1fb2e787780c30234820d4034ae1fb9a62b50e857ba54fb9e7e2"
    },
    {
-    "name": ".edge/storage/assets/kv-store-key-fragment-BEdaM4V3.js",
-    "hash": "a9a9d32c724133f04c93cc0e7c9ba1a1c32b3d80185836554bf2541b5d726114"
+    "name": ".edge/storage/assets/kv-store-key-fragment-DF4HqnIt.js",
+    "hash": "dfb107cf21812519b4395c0c9306a12d6423735a86d6fde366ed3d7bd1415ea0"
    },
    {
-    "name": ".edge/storage/assets/kv-store-security-list-fragment-DkfYES67.js",
-    "hash": "a2abadfb75d3db46d431c8de225c1d5ef8c4f336c657c1667fdfb31b8ac89135"
+    "name": ".edge/storage/assets/kv-store-security-list-fragment-CjK-RNgr.js",
+    "hash": "2920b6ce062cd63ce7d1f1afd2cc6e84306b160b4c6b7698bf265e743ae7d2b6"
    },
    {
     "name": ".edge/storage/assets/launch-week-build-and-scale-DZgXHuR6.js",
@@ -1516,12 +1516,12 @@
     "hash": "7cc6222c6271e69bd3fce7ef5a1bcfc649b69cef56c29d7115220bfc8c97cc41"
    },
    {
-    "name": ".edge/storage/assets/lb-rotor-CUsYBNSU.js",
-    "hash": "934c31a30db0598a79ecfa4bd5f76a6a694e0b7ab4fe153817fd8a4ae3e6101a"
+    "name": ".edge/storage/assets/lb-rotor-CescQtJ0.js",
+    "hash": "2275951e3d93ce3f2ad9a397959f4f7737eb75ee8cdcdd135cb52afec2e6dc1e"
    },
    {
-    "name": ".edge/storage/assets/legacy-switch.vue_vue_type_script_setup_true_lang-BCXlaevv.js",
-    "hash": "402cbe7e7550e1837506da71b4c828025d60dbb2c14f8993850f42ac4a58b97b"
+    "name": ".edge/storage/assets/legacy-switch.vue_vue_type_script_setup_true_lang-Bu3BD1pH.js",
+    "hash": "137db0a42bb97a983ea59e88de8c383cc9a736afe13ae2b103da4cd31045c815"
    },
    {
     "name": ".edge/storage/assets/less-9HpZscsL.js",
@@ -1536,8 +1536,8 @@
     "hash": "a5d0f97e69657abc58bf936e6adb5129c503e0df5eec1d5d46cb85b2142526d0"
    },
    {
-    "name": ".edge/storage/assets/liquid-BTKR66Ud.js",
-    "hash": "6fe829553bacd49dd9ddb778ea673ac8d15dbc3bb4a29e73e600ce93acbef78c"
+    "name": ".edge/storage/assets/liquid-DZudqcEM.js",
+    "hash": "8e116246705b0c59609ea3c3b8e05cc07398fa629c3e2cb0b5eb09c5f820e06d"
    },
    {
     "name": ".edge/storage/assets/live-debugging-CT3bqrSA.svg",
@@ -1556,16 +1556,16 @@
     "hash": "045883611ba4486ac860b8729c8b04e6cf7c2f6d6174ea61d591a007eb9abf96"
    },
    {
-    "name": ".edge/storage/assets/load-balancer-address-fragment-DDq3kR6i.js",
-    "hash": "95a8115aab6653b224d2aa136c6c0a8431f1df9caa4ae5ab19a6a2d16e99b5c5"
+    "name": ".edge/storage/assets/load-balancer-address-fragment-CtiNReCq.js",
+    "hash": "27a4fbe394a9d60647d7d130b803cdc029aa558742022995b9fc4ca8ecaa96fe"
    },
    {
-    "name": ".edge/storage/assets/load-balancer-method-fragment-B50WaV0H.js",
-    "hash": "84142ff3fddcf5205ed426afedec02da4b1a1d40212a71143c5508edfe01dfe5"
+    "name": ".edge/storage/assets/load-balancer-method-fragment-DzOzJS0M.js",
+    "hash": "f9b45b4485eb593c6f5dd83ae0a4833a1ce1e2883742da6d122611e88fcfe9d8"
    },
    {
-    "name": ".edge/storage/assets/load-balancer-origins-fragment-CiMCj6A1.js",
-    "hash": "54694591e22071dcac5488c5f51ee55938d44a5bb0f1da66cfcbf42008362926"
+    "name": ".edge/storage/assets/load-balancer-origins-fragment-B3Ce6pGh.js",
+    "hash": "c2a54efb0a492eb579934f95112ec70364df94c9e6845ea9f2a10eafa3762d22"
    },
    {
     "name": ".edge/storage/assets/locaweb-extended-color-UIJ16Lxk.svg",
@@ -1580,8 +1580,8 @@
     "hash": "239da882d4cf46da1211b84881100c35e562e754c4c76d37d2e6f7b8657b93b7"
    },
    {
-    "name": ".edge/storage/assets/lspLanguageFeatures-CtXAJ-vv.js",
-    "hash": "101d06e132abc79c759922c1078d90a6c36394526984fb5bf0e3381544167b92"
+    "name": ".edge/storage/assets/lspLanguageFeatures-DfA3msxx.js",
+    "hash": "c5b5700117dd5a8bef51a3b831de8c1321b746eaa659e90994a76c57c2fc769f"
    },
    {
     "name": ".edge/storage/assets/lua-Cyyb5UIc.js",
@@ -1596,8 +1596,8 @@
     "hash": "f753a7c5e48e240f55a0fab04d967ad33997346e2f14125e4149bc001643a9ed"
    },
    {
-    "name": ".edge/storage/assets/madeiramadeira-DkCWCmZK.js",
-    "hash": "9f34bb81f6807dcae275d68cdf2da04148dbd27c9a8def031db4de6c7d4e7ad0"
+    "name": ".edge/storage/assets/madeiramadeira-CkyNEUep.js",
+    "hash": "f59c6a03b8a3641ce3b900670d238de5399f14618d7653758931289343065242"
    },
    {
     "name": ".edge/storage/assets/madeiramadeira-extended-color-7zApmtZG.svg",
@@ -1608,8 +1608,8 @@
     "hash": "ba345447967c6d015580f9183926ec03b368ba8f96be65cbc5811869018e4455"
    },
    {
-    "name": ".edge/storage/assets/magalu-CpihUGJh.js",
-    "hash": "21ecb0bbe6715a5594e1aaa8264b339b20126ece43c7084ce37d63952d44dce2"
+    "name": ".edge/storage/assets/magalu-BYUqLQig.js",
+    "hash": "1b77c618ea60530abde17347e7c244e4048ac65ecad28c254527f44d056c56b4"
    },
    {
     "name": ".edge/storage/assets/magalu-ffiMtdfL.js",
@@ -1632,8 +1632,8 @@
     "hash": "b3dd9610369662dcc669ad828767b6c9dff7395acb2eafb1d665e89a62d7641c"
    },
    {
-    "name": ".edge/storage/assets/mark-WGjw7wTc.js",
-    "hash": "5ab3ced01a5e1ff38050ca3754c8ceae196923e09e569ee30b21e2d943024f2e"
+    "name": ".edge/storage/assets/mark-CGo0bpGm.js",
+    "hash": "2c139a6b8df8caefb0e8486c8a0e185a530bfa96225d839254174947b9cbc11a"
    },
    {
     "name": ".edge/storage/assets/markdown-BFxVWTOG.js",
@@ -1644,20 +1644,20 @@
     "hash": "a4295f102c561cfe0db25e289e1a5225ab68cb1e111d34e52f93019fa0048662"
    },
    {
-    "name": ".edge/storage/assets/mdx-8ScfoNmk.js",
-    "hash": "a1078da1a44100e0cc6dffbb193aea844fc65dd770b2b610aac27c1600965dea"
+    "name": ".edge/storage/assets/mdx-CA5Mh8Zz.js",
+    "hash": "a3a4190cfe539319bc23ca87b4a68cab0464c326847001dfece54740c1bb5e6f"
    },
    {
     "name": ".edge/storage/assets/meliuz-extended-color-BkaFtV5s.svg",
     "hash": "cf7cf276d2003b6d48f8adb51ea58cebd26c777b82c7d92f488d7e46e80bd3e3"
    },
    {
-    "name": ".edge/storage/assets/metrics-gauge-4pMfZ64r.js",
-    "hash": "6fc11f33e29173b4365534cdacbcf02738e27fa0716dc6a126df349ac2dff603"
+    "name": ".edge/storage/assets/metrics-gauge-Dq4iy5Ct.js",
+    "hash": "b22d72b334cf9a934d19799c6516065743c823b28e4cf58417bb24d4b770f7d0"
    },
    {
-    "name": ".edge/storage/assets/mind-the-sec-2026-B3XFWP3_.js",
-    "hash": "4cca7561e14690fbf38eb346b4bc649f3ff86853c7e91e9094619ec3bc10ba7a"
+    "name": ".edge/storage/assets/mind-the-sec-2026-nqBSe1bP.js",
+    "hash": "e2537671d1751b40ae44c0fdf4049ac774b6b3f08862193b5ffadfe97f565b24"
    },
    {
     "name": ".edge/storage/assets/mips-CiqrrVzr.js",
@@ -1680,16 +1680,16 @@
     "hash": "8762ee3fcc212f1df40f07f9d2b5df7e1674f71e4c7bc88f28f4aec427464832"
    },
    {
-    "name": ".edge/storage/assets/mockup-cursor.vue_vue_type_script_setup_true_lang-6N8lT5TC.js",
-    "hash": "c0869850a1b5f37401d40fcbee62a717085794aa776df8e2a49cea8ebc519ad5"
+    "name": ".edge/storage/assets/mockup-cursor.vue_vue_type_script_setup_true_lang-DEEQsblT.js",
+    "hash": "91d804d56c6768e07e6ea0099b926c4fd402d7092622f2913ec51a863b25d669"
    },
    {
-    "name": ".edge/storage/assets/mockup-elevator.vue_vue_type_script_setup_true_lang-Iz9wLLdh.js",
-    "hash": "620c092dd7c6ef7ef5b566d7cbba92b0ea81ae5c7e69f6d1c196c842f70dc7c3"
+    "name": ".edge/storage/assets/mockup-elevator.vue_vue_type_script_setup_true_lang-CePN0b9w.js",
+    "hash": "eb53806dff11ac99d77987cbbf5799680bfaf385de3442feb32cb1ea9c8a550c"
    },
    {
-    "name": ".edge/storage/assets/mockup-select.vue_vue_type_script_setup_true_lang-DICPEmjz.js",
-    "hash": "be3111c0acb3fe23fdb2a748b292c38233e2348297209e490048cb42b513c638"
+    "name": ".edge/storage/assets/mockup-select.vue_vue_type_script_setup_true_lang-CufqtI2e.js",
+    "hash": "0eb9687da63adbd343eeaa9f30059e872ef9423f75bdfde0033375ee4caf715c"
    },
    {
     "name": ".edge/storage/assets/models-and-lora-CF-ufP8Y.svg",
@@ -1708,16 +1708,16 @@
     "hash": "89cd0a98e97f94f40525d982dabc8b3796624c690fd00f973dd8e950775a4fbd"
    },
    {
+    "name": ".edge/storage/assets/monaco-editor-BgO5TaaK.js",
+    "hash": "c49ef0c251b826141f85642d2c9a3891f7e8b559d0a47d65525fda636ec904aa"
+   },
+   {
     "name": ".edge/storage/assets/monaco-editor-CB2SckMT.css",
     "hash": "a6b24d2af5586778c5495ab84d56247ca1a5c64e30d3fb7fee1bf5ab85092510"
    },
    {
-    "name": ".edge/storage/assets/monaco-editor-CVDMbCeg.js",
-    "hash": "4e09d2421c3ee8ca489fd2c3122a410933bd6d29ec2c36cc7556dae894ab8064"
-   },
-   {
-    "name": ".edge/storage/assets/monaco-editor.vue_vue_type_script_setup_true_lang-DptWJq-6.js",
-    "hash": "b653f9b14c159332c447e94a56ed1e60460461dacd5f3b8461fe06ce10c5a3a7"
+    "name": ".edge/storage/assets/monaco-editor.vue_vue_type_script_setup_true_lang-DhURNx4z.js",
+    "hash": "5a258728e955967f1086e7616472e14129a5ad9a2391c47c2a6b9286c0594058"
    },
    {
     "name": ".edge/storage/assets/monashees-extended-mono-axUulyPb.svg",
@@ -1752,8 +1752,8 @@
     "hash": "405a108d3bfe9ffef8ff6e46d68a72b30d9bc0066144293401c23801491d6287"
    },
    {
-    "name": ".edge/storage/assets/netshoes-DLfv1Jah.js",
-    "hash": "001a504caf0cf6b85a11b7a9e64133a4aa6d29de2dac0484d9087e8d18a69a49"
+    "name": ".edge/storage/assets/netshoes-Dz3ZXzpI.js",
+    "hash": "ee33f27d7297a4bc3d3cc32461dfc1d995f139a0067a30a30985e7a056f50880"
    },
    {
     "name": ".edge/storage/assets/netshoes-extended-color-DJJae5o6.svg",
@@ -1768,8 +1768,8 @@
     "hash": "3ed23f110efa999bd72a5d0fa17f224a023ee18e60792a037daeab9e4e397b40"
    },
    {
-    "name": ".edge/storage/assets/network-lists-gate-CObcaT1b.js",
-    "hash": "39e49197ec9bfab8426bddc82c652883557994690800798de4b218e4f78aaf11"
+    "name": ".edge/storage/assets/network-lists-gate-2xWuN-Cu.js",
+    "hash": "090ebd9030b564d41eacc8f3a2a4377cae2295055c5bfcfdce595e2107e751f1"
    },
    {
     "name": ".edge/storage/assets/network-lists-rules-engine-DTL1v1-i.svg",
@@ -1780,16 +1780,16 @@
     "hash": "5b1c5e54f7191b65fc4ce4214e2f4d947897eaa9c3807d63ba6e5085fad3f118"
    },
    {
-    "name": ".edge/storage/assets/network-shield-ip-list-fragment-B77jSemf.js",
-    "hash": "e7f77c4d7f4625c363f544654cde8bc78585d62f4127734d7f84dec4ffe620e2"
+    "name": ".edge/storage/assets/network-shield-ip-list-fragment-DLHVEas6.js",
+    "hash": "fe7ea17aa2e67f3ab560fbc921d644f3e6287bc43c233f7e177dc74229aa7ccb"
    },
    {
-    "name": ".edge/storage/assets/network-shield-lists-fragment-d99SRMrl.js",
-    "hash": "3595129d4e8e03d1100976a8f06da237a528182c06e839ae7c6270a83610cb07"
+    "name": ".edge/storage/assets/network-shield-lists-fragment-DffUenkO.js",
+    "hash": "bfa68226fbd4aca34af35f00f49102bcbe781f3be8209f3dd24a291cc32fce89"
    },
    {
-    "name": ".edge/storage/assets/network-shield-rule-fragment-B0WJeKBQ.js",
-    "hash": "c3979c08b4c4253beaeca9ec103575117e23e5ee25c6c6a5456691b8f41a754e"
+    "name": ".edge/storage/assets/network-shield-rule-fragment-CYdFkiI3.js",
+    "hash": "dc98a9a330f6c3b52fa2d20a17ee5ce1d3659d9a6a37a94b04b6f05012df73ee"
    },
    {
     "name": ".edge/storage/assets/network-shield-wVm1NFIU.js",
@@ -1804,8 +1804,8 @@
     "hash": "2445e3db12f0b3076db79c452f23be8cd42157ddb7a386131990d196d610caba"
    },
    {
-    "name": ".edge/storage/assets/nextjs-3U7zK3BN.js",
-    "hash": "8cc444dd5ab2c5f17823d33f7540dc1db587dddab0eaa0d4a079af1d44cebaef"
+    "name": ".edge/storage/assets/nextjs-Co7pVPAh.js",
+    "hash": "e8d396cab20137247af4fce5ff8a13b0bba6a1b75c2f2ba2be58892d84ae8ca0"
    },
    {
     "name": ".edge/storage/assets/no-idle-no-waste-BIOW6D0P.svg",
@@ -1816,20 +1816,20 @@
     "hash": "47f06c40742d468a9730f6dabcba42ac99e0c2869c5d5af340ab834f7d0107aa"
    },
    {
-    "name": ".edge/storage/assets/nodejs-wiRI0HgD.js",
-    "hash": "68bd779f6469ae493a1589ddb2c6e7a4c60dfec03e1acc886bbac6a3b6b237b6"
+    "name": ".edge/storage/assets/nodejs-BYwcKO5s.js",
+    "hash": "55be131d946a1a0c2ec3a19e688d86aa9d4bbce467b6afcca5464ef4cc853cab"
    },
    {
-    "name": ".edge/storage/assets/nuxt-Cjgu_8mf.js",
-    "hash": "33888e38ed1c166c871855a287cf3e08b287989fc9bcba803e34b0c2766544d5"
+    "name": ".edge/storage/assets/nuxt-1lD41fdn.js",
+    "hash": "e5d231bae6603ca2d4cda0973b7bde5f772c1d435a014e1fd35a348333bdea8e"
+   },
+   {
+    "name": ".edge/storage/assets/nzn-CEmYgxIh.js",
+    "hash": "134c4ea9978c3d5fbc959855102715a7b58b447fd7d19fc111230068d8825293"
    },
    {
     "name": ".edge/storage/assets/nzn-D9UJwUUK.js",
     "hash": "a10cc5e14097b56587d5085e785e1b198b4bfec076f0c55ef3d407d046a060dc"
-   },
-   {
-    "name": ".edge/storage/assets/nzn-DI71O214.js",
-    "hash": "9e73dc648bb8924f68b1698a10c963b5fe25e23f6f39c7d29369dbc2ed1e6c8a"
    },
    {
     "name": ".edge/storage/assets/nzn-extended-color-vRaz90W2.svg",
@@ -1848,24 +1848,24 @@
     "hash": "971d7a4dde0aa99e4d802df17f364d7000e2a40011fc77fd11c6960def0692d4"
    },
    {
-    "name": ".edge/storage/assets/object-storage-access-fragment-BM3eQs5B.js",
-    "hash": "9025e40bc1723485f67a60a2decaabef98e02ee9e6436147bdd024178326cc4f"
+    "name": ".edge/storage/assets/object-storage-access-fragment-B1sLjhqT.js",
+    "hash": "c08d3aa765115cb3d69268feb8f841402ae49e0960437fcc913a448494a55421"
    },
    {
-    "name": ".edge/storage/assets/object-storage-browser-fragment-C6HfM5zp.js",
-    "hash": "dede2344e97ee30042b5f5fd746091715e07e05e15aaed156f819af411e5e097"
+    "name": ".edge/storage/assets/object-storage-browser-fragment-BqRzE8_7.js",
+    "hash": "c455cf3c1dc1c5a896cabf9c1f99227a81ecb732ebd4d43b807572fa921fe2c1"
    },
    {
-    "name": ".edge/storage/assets/object-storage-bucket-B1f-DFH3.js",
-    "hash": "dfbb0225e0fba9a290d4d069b070de99d8d7ffcb60b6a104d02dc9171fa17d1e"
+    "name": ".edge/storage/assets/object-storage-bucket-D9te0rwn.js",
+    "hash": "b16fc4a0ae78f6a3d57f8ea0e756d79b51d439123ef17c87cf082bd8c2da242d"
    },
    {
-    "name": ".edge/storage/assets/object-storage-buckets-fragment-DX0DoUn2.js",
-    "hash": "5a7f9ab41ece430768dc9f6f57c0e1c50a1d0b22f64e31f774440927d072d8c4"
+    "name": ".edge/storage/assets/object-storage-buckets-fragment-4wyt5Jbk.js",
+    "hash": "420c5fbde3c126d535e7c92cd20eda317bdffec3cfe689f0ab097da43dac7574"
    },
    {
-    "name": ".edge/storage/assets/object-storage-form-BWo0Usic.js",
-    "hash": "f5a5c9d093636a953d6d2bc0ce075b3c5245838681635e27f675c13604c57714"
+    "name": ".edge/storage/assets/object-storage-form-ulFaewAt.js",
+    "hash": "9a5828ba12ee320bd47d9b676d64d3e247ec134c923242b1c71293e92c7a7fde"
    },
    {
     "name": ".edge/storage/assets/object-storage-general-availability-BXmgJQvo.js",
@@ -1876,8 +1876,8 @@
     "hash": "7ae25d077de6322e417a27e7b680f5a1ea424d7d6fbdaa6f6c77b208b0318b95"
    },
    {
-    "name": ".edge/storage/assets/observe-stream-DljNOVeQ.js",
-    "hash": "afcdb8474aca87dd4791b957422edf1ef97a988b4979f5ffbbab030feacb1ac3"
+    "name": ".edge/storage/assets/observe-stream-C_W5hdbA.js",
+    "hash": "41f1f149b322cf8e53e563b95e2871d882dba0fbe4f58dcb5919bf19c13cf986"
    },
    {
     "name": ".edge/storage/assets/omelete-extended-color-BN1GU-O4.svg",
@@ -1892,16 +1892,16 @@
     "hash": "3b7f2b6ee65f230371574b731ff74e710d9f1cd2fac3465ba2ca85c9ec01ac23"
    },
    {
-    "name": ".edge/storage/assets/openai-BNsM8m8D.js",
-    "hash": "4f356de46a035cb77826377de08275e1dafdc1ccb02e721533e4e3a6769d04bc"
+    "name": ".edge/storage/assets/openai-CiRSMfE2.js",
+    "hash": "ff042cba834740d0f87b7e2edf6923571e6f881d72474a6e40d18eae213e9050"
    },
    {
     "name": ".edge/storage/assets/optimize-operations-at-scale-azion-enterprise-plan-r2a3NECz.js",
     "hash": "4a1e05d349e3554714d47823648183805dcdbc81710a6e3fae3fb936794598ac"
    },
    {
-    "name": ".edge/storage/assets/orchestrator-scale-C5HAPCL8.js",
-    "hash": "615c0d63e5617e89bb2f61ca5fc185564bed6506fc2716d0609083072226814b"
+    "name": ".edge/storage/assets/orchestrator-scale-CoUBZ8Xi.js",
+    "hash": "edd79fc6c96cb9d921f60b1e23141d477fb617a10e5006327bb88414bf152e32"
    },
    {
     "name": ".edge/storage/assets/owasp-top-10-2025-programmable-YHyYfb3E.js",
@@ -1976,8 +1976,8 @@
     "hash": "87e7136ee9bda36c3349525e7675bec3c00ca7212bd5e6e409fd0363eee67173"
    },
    {
-    "name": ".edge/storage/assets/platform-edge-BZSZUKDh.js",
-    "hash": "b5461d87195cb61c340c6649f5c055333c55b7ec4192360e8ce28b741c7dc6af"
+    "name": ".edge/storage/assets/platform-edge-BT6vRhki.js",
+    "hash": "3b5c2f010aa98b4e3ce9357c7de76378143ddf20b88f1f80650af836cc07a56d"
    },
    {
     "name": ".edge/storage/assets/polyfills-for-edge-compatibility-DBVSRgkP.js",
@@ -2004,8 +2004,8 @@
     "hash": "a3402af946a2b988b2aa77ff8025caef9124eb9a24d0d9dec72ebc3f8e7ac739"
    },
    {
-    "name": ".edge/storage/assets/preact-pQDiDU04.js",
-    "hash": "ed6ee770cf5beaf5bd6da6c5251224ea21af0697ec57e80e6936827d02be6b3f"
+    "name": ".edge/storage/assets/preact-DGOX7fdn.js",
+    "hash": "9857a2074c30857cdb8375a40de6dca91d89392a9904b7e2d82f166e71cf6bcb"
    },
    {
     "name": ".edge/storage/assets/prevent-checkout-failures-high-traffic-ecommerce-events-B77N1pya.js",
@@ -2020,8 +2020,8 @@
     "hash": "572dfd3d5c3a0f002d3b3781f66485920a62e73026b3a7baa2f8895ab69a8b86"
    },
    {
-    "name": ".edge/storage/assets/prime-video-CvesACyM.js",
-    "hash": "0443c3abb9c967357d8ac0a327196dc47eefba2a8f814b7a7ab3c4a2bca1e49d"
+    "name": ".edge/storage/assets/prime-video-B1XUaqsJ.js",
+    "hash": "8b1929e068be415921970cfbd9b88ad81b341e61a790c35d1801e9ea8e1110ff"
    },
    {
     "name": ".edge/storage/assets/primeicons-Cqeuj6_0.woff2",
@@ -2084,8 +2084,8 @@
     "hash": "20c8fb8eb1e1769f4d5bb26b9af44630ec6723f3e04fd3709f4dbe24ebf20c8d"
    },
    {
-    "name": ".edge/storage/assets/python-B0twit0O.js",
-    "hash": "30ea35cc958c38ccfffe9c89f62101bc6687f98e63c74eaf206e5e282d054257"
+    "name": ".edge/storage/assets/python-Cw3ws-oY.js",
+    "hash": "223820c505d8b5f48997985d40d371cc04364dfafe3b1a1e7811f4ff36724b2b"
    },
    {
     "name": ".edge/storage/assets/qsharp-Bw9ernYp.js",
@@ -2120,12 +2120,16 @@
     "hash": "e46ea2652f4ed64d4b6b490a83f6b106e6c0990f86d6be612acb89e679008516"
    },
    {
-    "name": ".edge/storage/assets/qwik--K6CoOei.js",
-    "hash": "dd9c7bf81228a0e82ab77e09f45541870267f3bc965a6c6ac7837e7da8eb83e1"
+    "name": ".edge/storage/assets/qwik-Ckyto3OX.js",
+    "hash": "205abc78ef15bd24f173bb5d495750e699e5f67d0e3e952a94a06c3926314d91"
    },
    {
     "name": ".edge/storage/assets/r-j7ic8hl3.js",
     "hash": "e0db707253b6f89320eea9fc757532d8fc967c4bfac17d3ce8e69ff8468103dc"
+   },
+   {
+    "name": ".edge/storage/assets/radware-DEw4xq9S.js",
+    "hash": "4fdfbfac590efa3867a893fc3770f6767004bd8a25d2218775832044a5622d38"
    },
    {
     "name": ".edge/storage/assets/radware-extended-color-DD1Zz9Na.svg",
@@ -2136,20 +2140,16 @@
     "hash": "f5edfba958351dff55860f57561548cf613bb8d13e565bf6655374edcb05cd0a"
    },
    {
-    "name": ".edge/storage/assets/radware-s2c1auGg.js",
-    "hash": "aa4d12527bfd2477468ecd336de2f9439e52d100f45b03c93ecb6a6921db665c"
-   },
-   {
-    "name": ".edge/storage/assets/razor-C-uZ60_Z.js",
-    "hash": "7365711b18a8bd9d513027f52f3b4199e51199e055ec7519cce88933f0f87fb2"
+    "name": ".edge/storage/assets/razor-Psi9QLGb.js",
+    "hash": "d322e989972eb8ff6f4e4d0c966975bf5cb263a680563b52d4d06ff9c26dea9d"
    },
    {
     "name": ".edge/storage/assets/rbs-extended-mono-BofwO7FX.svg",
     "hash": "c823735435c829f8c801dce6a0cd9a38f288c8c574f7d5726aca2b7f3f6dfcb9"
    },
    {
-    "name": ".edge/storage/assets/react-Wzn64d_6.js",
-    "hash": "ff1bee1f3fd1c8eb74883999547191f236408125796ac756fe778c3bf01b0f1a"
+    "name": ".edge/storage/assets/react-BumeiHsB.js",
+    "hash": "881014b03397a9e5c7d2203c325de4fe4878d098df83ae659167af5a7258e6f7"
    },
    {
     "name": ".edge/storage/assets/react-symbol-mono-Csk0hWo_.svg",
@@ -2168,36 +2168,36 @@
     "hash": "1ce8be1e13dbaebe9f1062f66cef5623d6776864de72daa7e01d96c80dfe5fe0"
    },
    {
-    "name": ".edge/storage/assets/real-time-events-filter-fragment-BTcb9WrE.js",
-    "hash": "4d19fba430d7ea353b6bd9c545537231f5237bc2ebeb6dfe137d4ec9066dd66a"
+    "name": ".edge/storage/assets/real-time-events-filter-fragment-B-EhfJDn.js",
+    "hash": "9f3e1a2b7b1122844b96421f75cbf1c1f2e412f2a46ecfed866eb2710bb53bb1"
    },
    {
     "name": ".edge/storage/assets/real-time-events-general-availability-Db8B9TfD.js",
     "hash": "91f2b6769abfb5752e68e3e092a7c737b900ad27e4e78224b64eaa9382ee5bdb"
    },
    {
-    "name": ".edge/storage/assets/real-time-events-log-fragment-CAA5LiiY.js",
-    "hash": "f3cfb68af44c45387b925c1b9f9e74df99f3f8ce8b963e9aad54e277bebe5075"
+    "name": ".edge/storage/assets/real-time-events-log-fragment-Dj2qaFku.js",
+    "hash": "38a27de30b49d7df7e58647b0fdd45854ed40bce741d5d53b0e64c562bae8c0d"
    },
    {
-    "name": ".edge/storage/assets/real-time-events-volume-fragment-DY5BQCYp.js",
-    "hash": "cc5f8107e0df54492ed8b70e5e09eeafb43baef1b3edf40d0e2c24156b013db9"
+    "name": ".edge/storage/assets/real-time-events-volume-fragment-D55WqIo_.js",
+    "hash": "1164ab5c11ec40588e765b3c43bfaa4d253c65da7ad8ec455f110ae9cd31ee7d"
    },
    {
     "name": ".edge/storage/assets/real-time-metrics-CruicNE8.js",
     "hash": "0dd1fe249040d69acd92bbd0aabce27590fca46715548f7b8bcb4586e2886fe3"
    },
    {
-    "name": ".edge/storage/assets/real-time-metrics-dashboard-fragment-DJstTkeE.js",
-    "hash": "e211cf32f507c4a5b80f4bad8d82b25a2326e7ff0ece5862f00d672233fc4edf"
+    "name": ".edge/storage/assets/real-time-metrics-dashboard-fragment-DpRBiQTz.js",
+    "hash": "c0677b961cf453ea6181a55c27f4306cd1b3b8c46f3552fffd23d7b323d25e94"
    },
    {
-    "name": ".edge/storage/assets/real-time-metrics-filter-fragment-D-YRxjmt.js",
-    "hash": "91d1d2c907b3a75ed3ebf12bc0484b44d9e89baa19a5860559535bb9218fe68a"
+    "name": ".edge/storage/assets/real-time-metrics-filter-fragment-QYmFtn7w.js",
+    "hash": "e438b89fe600488364c7b12578c2ebe03bbaaaeee02b14b54907980c4c568259"
    },
    {
-    "name": ".edge/storage/assets/real-time-metrics-panel-fragment-DCAWV9-L.js",
-    "hash": "b01732e6b57d49bb3015e9291e3723c9037a6ea7fffa09b00864447b9386532d"
+    "name": ".edge/storage/assets/real-time-metrics-panel-fragment-DT--wJqt.js",
+    "hash": "8b0fbcf88d5daf1b6e8c5adf47acd6e243243244512a84cfc13f6fd7d7b36765"
    },
    {
     "name": ".edge/storage/assets/recent-waf-bypass-attack-does-not-affect-azion-web-application-firewall-CSY6LkoA.js",
@@ -2216,20 +2216,24 @@
     "hash": "1febde45332967e43c33847417451f16873fec7beb59ca7e5c99ebbf478850d2"
    },
    {
-    "name": ".edge/storage/assets/reduza-custos-cloud-C8Df1HSJ.js",
-    "hash": "f21a0e5f3f6bfe86c25f0acaf4d827ece50061f732a0f13b7b639c82336e6500"
+    "name": ".edge/storage/assets/reduza-custos-cloud-C4QoiMSd.js",
+    "hash": "0f045dd2a8e2306f2ba826f5976670b3d3658edd4f039c9e33989cd7c4261f4c"
    },
    {
-    "name": ".edge/storage/assets/registry-CB-9Vk83.js",
-    "hash": "2709ff9b92a1c430cec9d529d1f9d22f67c547d294b9704d7e990e2e4d7086a4"
+    "name": ".edge/storage/assets/registry-dncqkgW-.js",
+    "hash": "5f3ae5495d7123053f7d04614c8c571e21a67c5b7aa4744e3ec8320a43c8d2da"
    },
    {
     "name": ".edge/storage/assets/remember-zero-day-attacks-blocked-by-azion-waf-DG3Iq2Yc.js",
     "hash": "1e5d477673985eff27386cedeb4a5d6d1088c702ed8ef7cc756498a63c4ce013"
    },
    {
-    "name": ".edge/storage/assets/remix-CcHE0KyN.js",
-    "hash": "c109625fc038831ce6d6a658a15d8c0f8fc9aa69634eac8868f70f9ca463787a"
+    "name": ".edge/storage/assets/remix-CQJYDtOw.js",
+    "hash": "8a30a96264cc0b78b83db737ec672032a66a389b3df994da02c64c627dc46249"
+   },
+   {
+    "name": ".edge/storage/assets/renner-BO36wPAV.js",
+    "hash": "3cdd96eb411804f9761d7d76b028d5d1b90c02c4bc17379775aacd0171e673e3"
    },
    {
     "name": ".edge/storage/assets/renner-extended-color-DKk0ZC0s.svg",
@@ -2238,10 +2242,6 @@
    {
     "name": ".edge/storage/assets/renner-gWMOcKG9.js",
     "hash": "ad2e1215e4e5ecb6e42d67339acdb6ac550bbf4e00d4715cbb9fc4cf7fed4e0d"
-   },
-   {
-    "name": ".edge/storage/assets/renner-jIn4XIHD.js",
-    "hash": "6fed515c57502cb715a22b70d9807d4d804d29b109c212d8920ad80bac4e9562"
    },
    {
     "name": ".edge/storage/assets/replicated-reads-BRJIozTE.svg",
@@ -2320,16 +2320,16 @@
     "hash": "f7d4473d30028381dac09eba75ebd0f91d7c2697fc7847f0c870ff679bafc169"
    },
    {
-    "name": ".edge/storage/assets/secure-ddos-form-B5SFBdeC.js",
-    "hash": "c3441f0b68245b3351cc6ab46487b2d69869f671b220533be0e415b1411d2b02"
+    "name": ".edge/storage/assets/secure-ddos-form-CyWsYU8C.js",
+    "hash": "ef07d058f97bf743ba894b0796b131f889722428032d9d12df17cbcaae0da177"
    },
    {
-    "name": ".edge/storage/assets/secure-mock-page-DrPm3JEF.js",
-    "hash": "6942d5be960fbe08b65b2390d0bf7a48e554f44307c159a46f383da841276f3c"
+    "name": ".edge/storage/assets/secure-mock-page-CMnUPr5y.js",
+    "hash": "a5dfc079d0b355f5e81ad830b98faeeb92d4f8d4ea80074a3856889786661068"
    },
    {
-    "name": ".edge/storage/assets/secure-shield-D9ql4STE.js",
-    "hash": "58ad8666edd3220d2869ff258453fe17050f4c2c95d7c9893bd8cbcf917f5400"
+    "name": ".edge/storage/assets/secure-shield-GWnNtqGf.js",
+    "hash": "b26f7b1f5b36d900c1ad09ae2fb2529a039d0d78e6b4d47508762d93bbe6defc"
    },
    {
     "name": ".edge/storage/assets/security-applications-apis-ai-agents-Bcym-64_.js",
@@ -2344,12 +2344,12 @@
     "hash": "3d82ac76ee937936f00f8e98d80f3b28108786b0721e20a6a29bfa8b5f94848e"
    },
    {
-    "name": ".edge/storage/assets/shell-mockup-part.vue_vue_type_script_setup_true_lang-CtW4tu-s.js",
-    "hash": "a7edd42893085bedb2302d07b72357abfc0abcf767314966d628984ac7251c96"
+    "name": ".edge/storage/assets/shell-mockup-part.vue_vue_type_script_setup_true_lang-D3juCiE1.js",
+    "hash": "13406519e186607bf56e13a23022dcc5cfd350841e033e4f08b28b843f451351"
    },
    {
-    "name": ".edge/storage/assets/shell-mockup.vue_vue_type_script_setup_true_lang-B0WXZ3Rd.js",
-    "hash": "469696b188ddb3cb1929f533a6a834df819dd91ac13cddb5456256a9197c9b8f"
+    "name": ".edge/storage/assets/shell-mockup.vue_vue_type_script_setup_true_lang-Bv1qaTSN.js",
+    "hash": "e6d3b91e8fc3be4e191f8b6661a352a74caf554f59e148376dfc6af4165bbf26"
    },
    {
     "name": ".edge/storage/assets/ship-portfolio-two-commands-azion-cli-B6iTTnIk.js",
@@ -2384,20 +2384,20 @@
     "hash": "4574684bdec32007c6af86867ded3b578e9b008813adc127dc28851b8704808d"
    },
    {
-    "name": ".edge/storage/assets/sql-database-query-fragment-DbjHwX50.js",
-    "hash": "359f6219fc7cf1ccd0d6694aa086247ec2de70e50c16afcd873507ce253083a6"
+    "name": ".edge/storage/assets/sql-database-query-fragment-yK8PAaFh.js",
+    "hash": "25f7f44fb4ea2b51e8a0b07d92a421758657bde1e9fb826445ba3aee934ca1fa"
    },
    {
-    "name": ".edge/storage/assets/sql-database-row-fragment-Cv0v87Fo.js",
-    "hash": "f6c2c1957f4d71213d30ab7cf076e4633bb3baf1871726c76fadfc57bfa548d6"
+    "name": ".edge/storage/assets/sql-database-row-fragment-DkB_Yupk.js",
+    "hash": "11836f23ecaa5cae6d601a3c9c160dea7e48ab41625eb0062f79726a0c49e1b1"
    },
    {
-    "name": ".edge/storage/assets/sql-database-table-fragment-Baw_Nlio.js",
-    "hash": "3f59443d65c6d58113c9f7a89c9fe2f6e9a3b9615958ef7be383cf8ae4a2cbe1"
+    "name": ".edge/storage/assets/sql-database-table-fragment-Xk6XhgE5.js",
+    "hash": "a1287570cbc7081bd93fe96b1ecc8b8b54491e978b436282e56dacffc81452e9"
    },
    {
-    "name": ".edge/storage/assets/sqlite-CWkMwlC5.js",
-    "hash": "8a2723e89d746ec301125cb105a95909421ad02a36256e322fe28de6c5803036"
+    "name": ".edge/storage/assets/sqlite-BJEqzSZd.js",
+    "hash": "d795ec3cfd6973b5ce579143abcca0dea5aaad76b0742085fc8e514b69b029c9"
    },
    {
     "name": ".edge/storage/assets/st-CHwy0fLd.js",
@@ -2412,8 +2412,8 @@
     "hash": "9e959725c14e0bb43a0843e1121a8bfeece9ac2ad197cf025018b731eb5840cb"
    },
    {
-    "name": ".edge/storage/assets/store-replicas-BzttgnhF.js",
-    "hash": "ca7025533eea0f5b20cf02a981e8b9355283a168b4634560c4fcd69da2ddf8f7"
+    "name": ".edge/storage/assets/store-replicas-D__qloHQ.js",
+    "hash": "3714f49269be96937059a06a1478b8e9c4d4d8a867f5a888f2ad2eae54299521"
    },
    {
     "name": ".edge/storage/assets/stream-security-events-for-investigation-and-response-CZLL9uDm.js",
@@ -2444,24 +2444,24 @@
     "hash": "843cafe09e573283e7179676cfa2dd5de873167a91df5af7cc691db57b83a962"
    },
    {
-    "name": ".edge/storage/assets/terraform-BCLpqh9L.js",
-    "hash": "c2d8cb8fff1bba2b5770279b0bdb9a775dfe6c22890f2481678871a39a6ad8cf"
+    "name": ".edge/storage/assets/terraform-D4zziR7S.js",
+    "hash": "b1d24b2c7e7497829af21486111deb623ba49b0b4a084a44cda19a1efc47ddd6"
    },
    {
     "name": ".edge/storage/assets/terraform-provider-v4-ai-powered-DzET6rjT.js",
     "hash": "14c4fd33ea2081bc02117c03c5a7ee72f186e29da4187ffde4d7a52febf0f5c3"
    },
    {
-    "name": ".edge/storage/assets/teste-web-application-firewall-D_zzhk6a.js",
-    "hash": "89c88bc126418071d338daa69eebd3fd48648a9b807f9e48269779e4648586f1"
+    "name": ".edge/storage/assets/teste-web-application-firewall-1gtN2dIL.js",
+    "hash": "6c1a218de36e6a490adcd79a37dce3ddcea5b44bf4f3714de01be07a9cc61bf2"
    },
    {
     "name": ".edge/storage/assets/the-experts-speak-cybersecurity-quotes-about-zero-trust-waf-social-engineering-CoTK8ZJF.js",
     "hash": "aea4dd74ddecc727a86d4b005702529f45384e19104e9d035c6fc0fd7c41f25b"
    },
    {
-    "name": ".edge/storage/assets/ticker-Dkgxj2PL.js",
-    "hash": "179564af64fae89266457575fa3f96992f9d8b0e14a8d327886c2f243bab3810"
+    "name": ".edge/storage/assets/ticker-BQzd4caq.js",
+    "hash": "92ddb0587112f0c2d35b4c7bc40334046af6a8c1aee40003dd4af6f071b6ac34"
    },
    {
     "name": ".edge/storage/assets/todo-Dq5-4O_S.js",
@@ -2484,8 +2484,8 @@
     "hash": "061267351f7f5aa65df4f991ecd66d131668e1312fd66973c97983431074ce28"
    },
    {
-    "name": ".edge/storage/assets/tsMode-DBcywsTK.js",
-    "hash": "be3a7def0b9eb1d8bd92cf14a3083e72a429e7ccf42beaba00c6f18b3752a2f0"
+    "name": ".edge/storage/assets/tsMode-D0AYUkIi.js",
+    "hash": "cee47df3c8cc1d85dd4e384e014388b711a190539f81ec209ceb27a3a3e7bdd9"
    },
    {
     "name": ".edge/storage/assets/twig-Csy3S7wG.js",
@@ -2496,8 +2496,8 @@
     "hash": "97b103f7c25745723d0521ad4f97862bedbc08ff79e040e91497547ed607aed1"
    },
    {
-    "name": ".edge/storage/assets/under-attack-mitigation-L48hT61c.js",
-    "hash": "239caff33968726d9f06866d9c24d4743b5381b7d42374c3d80241d91a304004"
+    "name": ".edge/storage/assets/under-attack-mitigation-eoL7j4QL.js",
+    "hash": "d29c8833e4ae976ccc3868c9c2edc7073d1411e9a91070f23549c51b5da0e260"
    },
    {
     "name": ".edge/storage/assets/understanding-agentic-ai-infrastructure-DJon_B3v.js",
@@ -2544,24 +2544,24 @@
     "hash": "2208349a62f48c558879a9bd50a139ec8f7d39bd7a670ee60f0762672f3043a2"
    },
    {
-    "name": ".edge/storage/assets/use-scene-script-D-eTSMoI.js",
-    "hash": "375551c7a3fa4d6873131f305943028e2112e7a05a700f8cd00769af01a05671"
+    "name": ".edge/storage/assets/use-scene-script-Dq77quE5.js",
+    "hash": "ed1de9ee180dfd6c0110c375ec33a1984c259668dd76b76a8fbe27e7886b961b"
    },
    {
-    "name": ".edge/storage/assets/variables-keys-DvLZl8yH.js",
-    "hash": "083545d35b2e7f1e2a4ca9ca19329e8850dc6e9c40c26ca050a6fa8243a2efa1"
+    "name": ".edge/storage/assets/variables-keys-C-73WHEa.js",
+    "hash": "03df931c5f76482fe74e00f83a8e51d8978995d9549397540e4760773429438d"
    },
    {
     "name": ".edge/storage/assets/vb-Db0cS2oM.js",
     "hash": "a5cbcbcef70a7e3e9d75e400823e4f136f7ac8c0ad2d803974fad04cee1f135c"
    },
    {
-    "name": ".edge/storage/assets/vite-DqM1mpAi.js",
-    "hash": "31261ddc06a0a60764f9dfba29debcfe5bb0ee4828c2c09b4e6b0260e0cebb70"
+    "name": ".edge/storage/assets/vite-CBV0_69_.js",
+    "hash": "18954c744521e7b55e2d83b35ed55404759f0932dddc140d760ca6c5f153a519"
    },
    {
-    "name": ".edge/storage/assets/vitepress-BGm7F1GT.js",
-    "hash": "f0674ff2ca3dcb484f5d0e29ffd0c9b619da787caf4a18119aaac1caf46ac90f"
+    "name": ".edge/storage/assets/vitepress-CWpKvXsB.js",
+    "hash": "8db633bf7657d19a38c73e6b56129ddcb48f72f23e33b42049ea7c1b85bb8902"
    },
    {
     "name": ".edge/storage/assets/vlm-domain-adaptation-for-fraud-detection-CSjer7vO.js",
@@ -2572,20 +2572,20 @@
     "hash": "4d2c0f489afb0cc98a4a1e86fdace1ea73efce703345a8a45a50731e1b828d4e"
    },
    {
-    "name": ".edge/storage/assets/vue-BCkhM9Vf.js",
-    "hash": "a48bfe5498c1d6f0d1fca57ed1e9530f9392505498fb5175f6984661e4f13b45"
+    "name": ".edge/storage/assets/vue-UI2CwoTV.js",
+    "hash": "652d7f447ee7c9f42e328ccf70f3787e0b9eb579f30790d4409d653d7abdc31a"
    },
    {
-    "name": ".edge/storage/assets/waf-allowed-rule-fragment-RaBwxIzF.js",
-    "hash": "248d6e83b74415a7974401ad362fe864f72c672865d54ebf6aeab3b2c0ad33fc"
+    "name": ".edge/storage/assets/waf-allowed-rule-fragment-Bl0smxEd.js",
+    "hash": "96a687bae5b72dd15326ecbcba4b920d978b968519d5bf8f2786bb815c84213f"
    },
    {
-    "name": ".edge/storage/assets/waf-firewall-rule-fragment-3AeceLq2.js",
-    "hash": "989b834ce4e713c444434c1cb518aa539576a63faa3bc139cf918b5a0d730a0f"
+    "name": ".edge/storage/assets/waf-firewall-rule-fragment-wchiQOZj.js",
+    "hash": "37ae8142d59fc71bfa9415223643971ef6f9f42511088e0061d5267028e107fd"
    },
    {
-    "name": ".edge/storage/assets/waf-threat-fragment-CSDpkNZG.js",
-    "hash": "bda6657a919038163b508022f46d7e49c7a8ab3182f298a03f0eb4f2aae48010"
+    "name": ".edge/storage/assets/waf-threat-fragment-zq7C7Sol.js",
+    "hash": "d9b479a0bebc50fbe1a228f7d108d0cd699ffd050bf2c5ed8ee3e01aca3439e1"
    },
    {
     "name": ".edge/storage/assets/web-application-firewall-D4AmzOUY.js",
@@ -2636,52 +2636,52 @@
     "hash": "da9e7a6ee73fdf177f8f22faa776d654e95f5288b0dc5f46a039f0ff82c975ec"
    },
    {
-    "name": ".edge/storage/assets/workers-cloudflare-Die05yHK.js",
-    "hash": "133c52b89a2762fdaca78c68771db136ee3e79b907c56bca0e5ccda68d07d789"
+    "name": ".edge/storage/assets/workers-BwUGBeuO.js",
+    "hash": "8c25e02d534027eabd81162e55842a7cb79b81b722d6fa62d61185eb6c287e27"
    },
    {
-    "name": ".edge/storage/assets/workers-yY_D9XbE.js",
-    "hash": "52e37243b13f494f2eadcd1bb1a1786a297ff0e17caed709389013bd0886b66e"
+    "name": ".edge/storage/assets/workers-cloudflare-2xOy2JB-.js",
+    "hash": "06bf300ee32ec0dcfe858c8034fe82250f242cfcba3d775a74c7bb6946decf27"
    },
    {
-    "name": ".edge/storage/assets/workload-deploy-fragment-DiZrCRaI.js",
-    "hash": "727eb2585b206b172b0eba1824457d188c95c4ffb65c23337c81dbe539c7679b"
+    "name": ".edge/storage/assets/workload-deploy-fragment-Dz1EMS-P.js",
+    "hash": "738388798c4bd369260265a880769770375fd627fd521e7698d057db4c8d761e"
    },
    {
-    "name": ".edge/storage/assets/workload-deploy-logs-widget-DHJrqxO7.js",
-    "hash": "62bda3db3129d07774d81eb7ac14ced06162b019cb5b3e7373078fc29825d0bd"
+    "name": ".edge/storage/assets/workload-deploy-logs-widget-BLP-jxGw.js",
+    "hash": "61100d6ee291ebdb1922330b521cd1c3ec48553f98bf2aaebbafe54c9fe1cfb1"
    },
    {
-    "name": ".edge/storage/assets/workload-deployments-widget-DOVKKnL0.js",
-    "hash": "dce416c8ca448548fd6659a82c1b8f9dfcd53b8384f1c55a801ce395680d7d51"
+    "name": ".edge/storage/assets/workload-deployments-widget-BP9veJy3.js",
+    "hash": "71df176e834e5e01c585f7befdd2bbca8816406c02eca470fc3203b574f42015"
    },
    {
-    "name": ".edge/storage/assets/workload-domain-fragment-BWH1V35f.js",
-    "hash": "b3248dd3097068fb93e20e5e4febd7522ec0f22cecbb8142e91b9f53b8344773"
+    "name": ".edge/storage/assets/workload-domain-fragment-DAlx8mzz.js",
+    "hash": "f6f4694c478bc5532c1151f53404110d42939e3a2f55a9b13c0cf6c0e5767728"
    },
    {
-    "name": ".edge/storage/assets/workload-domains-widget-DfKVVF2o.js",
-    "hash": "dc09838d9ff9854216828060ae66b1b3c00e7e0e0b0c28f65df97481a2ba33c0"
+    "name": ".edge/storage/assets/workload-domains-widget-BB5AaIsl.js",
+    "hash": "310466599c626b22355bf6f904f59605f75ae45fc1981605c60f4180c8034d90"
    },
    {
-    "name": ".edge/storage/assets/workload-overview-widget-DkZlzX8f.js",
-    "hash": "c955d4d213fbba72655942af04b81dab57d57f14ca32b0bdc83b8d0e2b4e79b7"
+    "name": ".edge/storage/assets/workload-overview-widget-Na5FPHPW.js",
+    "hash": "5a3014a70477d512c473d7d7945d536ab922601f5c165742351fd11eb86d420c"
    },
    {
-    "name": ".edge/storage/assets/workload-rollout-rows-widget-CK8nuke-.js",
-    "hash": "af54deaaf6d888703544b31a11b0974a9a6bc2896348327261aa4781d2b9e7ed"
+    "name": ".edge/storage/assets/workload-rollout-rows-widget-C4_SJih9.js",
+    "hash": "a4bc95ae1809965002651dd378d097041f9c99a6b8d9df7b08942277260616b0"
    },
    {
-    "name": ".edge/storage/assets/workload-topology-chain-widget-u6ZeZFAl.js",
-    "hash": "387a45d55c7f1c59d396f960ccaf41598f951dca1aab71414578491be8bd946a"
+    "name": ".edge/storage/assets/workload-topology-chain-widget-CMBpYGhP.js",
+    "hash": "0edf17a6b722915f981532b4650476b687cc2a84e27dd4e0e095b546461d437b"
    },
    {
-    "name": ".edge/storage/assets/workload-topology-flow-widget-b1SusQeQ.js",
-    "hash": "a18f44b815e77c169d6de10f35e9b79aad9edfe92a94190b45c99b984fc02672"
+    "name": ".edge/storage/assets/workload-topology-flow-widget-B-FCvZrl.js",
+    "hash": "f629bbb824db6ee4c73f302b867efe21031d841d5c22c10626fb1329dde9fcc2"
    },
    {
-    "name": ".edge/storage/assets/workload-topology-widget-oiSPfuOr.js",
-    "hash": "3428f3ec2a2ffc105177a4d9dc69616f7263574a515db9b7b1cea36cb406b8d4"
+    "name": ".edge/storage/assets/workload-topology-widget-vFOQk6W-.js",
+    "hash": "da4a28f1137e780e9f16c24348b1024961e22fbe551d84b7e02ec9c3739cd6c6"
    },
    {
     "name": ".edge/storage/assets/workloads-Dmx_ghgB.js",
@@ -2696,20 +2696,20 @@
     "hash": "f2dbac42c778ba02150fcbc6c64ed97a0af9f130e17bc4d2ca98301be359f083"
    },
    {
-    "name": ".edge/storage/assets/workloads-list-widget-B8bUaZkD.js",
-    "hash": "128c93e5a46d9bff5f9ee99132167ea9ad60354384ae22de743117b9f6dd1170"
+    "name": ".edge/storage/assets/workloads-list-widget-D9hrnY61.js",
+    "hash": "0c82de4400e2013817a359a56003c9ba8741e8348d3c0190b7761255f2c63a43"
    },
    {
     "name": ".edge/storage/assets/workloads-security-DzweGGpZ.js",
     "hash": "40d874ad80cacba4da9c24a03882b00ed50536687ac733d0d841cf2a45cf419d"
    },
    {
-    "name": ".edge/storage/assets/xml-yWvsT5Br.js",
-    "hash": "855de82fd2f6e110bdeea7f4bc3aec2c1a812772efc40dcd6edbfcb774f6f60a"
+    "name": ".edge/storage/assets/xml-DOISWg5P.js",
+    "hash": "4d209f5d3bb5da626c058aaf22a8de8e63fb86d7fb799d5a9ba105996aa00699"
    },
    {
-    "name": ".edge/storage/assets/yaml-D4Xp1gVq.js",
-    "hash": "af1562a2bb8db2f12e05137f395a63617590f64c25f1039f6dcb91fa73645ae1"
+    "name": ".edge/storage/assets/yaml-Bok1TgeJ.js",
+    "hash": "8e3f5b0b50725fdb22596686eacb12401bb99e72c0d635769ed8d12183d00f24"
    },
    {
     "name": ".edge/storage/assets/zoop-CjDIF6h-.js",
@@ -2801,7 +2801,7 @@
    },
    {
     "name": ".edge/storage/index.html",
-    "hash": "69db7d1b69632c87966b8e979debc3f3bfd9aaa4a89b1b9b86d50da4cb23856f"
+    "hash": "0c1e42e645a8e36d72045f7295011076846a441c0522079c7d7c024cd21f4bf0"
    },
    {
     "name": ".edge/storage/quotes/README.md",
