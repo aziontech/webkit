@@ -49,9 +49,6 @@
     "webkit/no-style-override": 6,
     "webkit/no-hardcoded-color": 1
   },
-  "platform/account/sign-up-card": {
-    "webkit/no-style-override": 1
-  },
   "platform/creation/creation-progress": {
     "webkit/no-style-override": 1
   },
