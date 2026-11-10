@@ -48,32 +48,6 @@ const meta = {
       description: 'Placeholder forwarded to the `InputText`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
-    type: {
-      control: 'select',
-      options: ['text', 'email', 'number'],
-      description: 'Native input type forwarded to the `InputText`.',
-      table: {
-        category: 'props',
-        type: { summary: "'text' | 'email' | 'number'" },
-        defaultValue: { summary: "'text'" }
-      }
-    },
-    autocomplete: {
-      control: 'text',
-      description:
-        'Native `autocomplete` hint forwarded to the `InputText`. When empty, the attribute is omitted.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
-    },
-    spellcheck: {
-      control: 'boolean',
-      description:
-        'Native `spellcheck` forwarded to the `InputText`. When unset, the attribute is omitted and the browser default applies.',
-      table: {
-        category: 'props',
-        type: { summary: 'boolean | undefined' },
-        defaultValue: { summary: 'undefined' }
-      }
-    },
     helperText: {
       control: 'text',
       description:

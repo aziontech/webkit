@@ -7321,20 +7321,6 @@
           "doc": "Native `maxlength` — maximum number of characters allowed."
         },
         {
-          "name": "autocomplete",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Native `autocomplete` hint (`email`, `username`, `off`, …). When empty, the attribute is omitted."
-        },
-        {
-          "name": "spellcheck",
-          "type": "boolean | undefined",
-          "default": "undefined",
-          "required": "false",
-          "doc": "Native `spellcheck`. When unset, the attribute is omitted and the browser default applies; pass `false` for slugs, IDs and domains."
-        },
-        {
           "name": "size",
           "type": "'small' | 'medium' | 'large'",
           "default": "'medium'",
@@ -7405,8 +7391,7 @@
       ],
       "bestPractices": [
         "Prefer the `field-*` wrapper when you need a label, helper text, or validation message.",
-        "Set an appropriate `type`/`inputmode` for the content (email, url, …).",
-        "Set `autocomplete` so the browser can offer saved values, and `:spellcheck=\"false\"` for slugs, IDs, and domains."
+        "Set an appropriate `type`/`inputmode` for the content (email, url, …)."
       ]
     },
     "input-group": {
@@ -7788,27 +7773,6 @@
           "default": "''",
           "required": "false",
           "doc": "Placeholder forwarded to the `InputText`."
-        },
-        {
-          "name": "type",
-          "type": "'text' | 'email' | 'number'",
-          "default": "'text'",
-          "required": "false",
-          "doc": "Native input type forwarded to the `InputText`."
-        },
-        {
-          "name": "autocomplete",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Native `autocomplete` hint forwarded to the `InputText`. When empty, the attribute is omitted."
-        },
-        {
-          "name": "spellcheck",
-          "type": "boolean | undefined",
-          "default": "undefined",
-          "required": "false",
-          "doc": "Native `spellcheck` forwarded to the `InputText`. When unset, the attribute is omitted and the browser default applies."
         },
         {
           "name": "helperText",

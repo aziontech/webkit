@@ -238,25 +238,4 @@ describe('InputText', () => {
       expect(getAllByTestId('input-text')).toHaveLength(3)
     })
   })
-  describe('native hints', () => {
-    it('omits autocomplete and spellcheck when the props are unset', () => {
-      const { getByTestId } = render(InputText)
-      const input = getByTestId('input-text') as HTMLInputElement
-      expect(input.hasAttribute('autocomplete')).toBe(false)
-      expect(input.hasAttribute('spellcheck')).toBe(false)
-    })
-
-    it('forwards autocomplete to the native input', () => {
-      const { getByTestId } = render(InputText, { props: { autocomplete: 'email' } })
-      expect(getByTestId('input-text').getAttribute('autocomplete')).toBe('email')
-    })
-
-    it.each([
-      [false, 'false'],
-      [true, 'true']
-    ])('renders spellcheck=%s as the attribute "%s"', (spellcheck, expected) => {
-      const { getByTestId } = render(InputText, { props: { spellcheck } })
-      expect(getByTestId('input-text').getAttribute('spellcheck')).toBe(expected)
-    })
-  })
 })
