@@ -15,6 +15,7 @@ import { illustration } from '../tokens/theme/illustration.js'
 import { primary } from '../tokens/theme/primary.js'
 import { ring } from '../tokens/theme/ring.js'
 import { secondary } from '../tokens/theme/secondary.js'
+import { severity } from '../tokens/theme/severity.js'
 import { surfaces } from '../tokens/theme/surfaces.js'
 import { text } from '../tokens/theme/text.js'
 import { assertResolvedRefs, isTokenRef } from './refs.js'
@@ -106,7 +107,8 @@ const compileVariant = (variant, unresolved) => {
   Object.assign(
     vars,
     resolveGroup(illustration[variant], surfacesResolved, variant, unresolved, semanticResolved),
-    resolveGroup(chart[variant], surfacesResolved, variant, unresolved, semanticResolved)
+    resolveGroup(chart[variant], surfacesResolved, variant, unresolved, semanticResolved),
+    resolveGroup(severity[variant], surfacesResolved, variant, unresolved, semanticResolved)
   )
   return vars
 }

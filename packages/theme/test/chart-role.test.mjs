@@ -13,6 +13,7 @@ const CHROME = [
   '--chart-tooltip-bg',
   '--chart-tooltip-text',
   '--chart-tooltip-muted',
+  '--chart-tooltip-border',
   '--chart-status-success',
   '--chart-status-warning',
   '--chart-status-danger',

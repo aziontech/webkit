@@ -1068,15 +1068,16 @@
   --chart-axis: #D1D1D1;
   --chart-label: #535353;
   --chart-crosshair: #535353;
-  --chart-tooltip-bg: #141414;
-  --chart-tooltip-text: #FAFAFA;
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-text: #141414;
+  --chart-tooltip-muted: #535353;
+  --chart-tooltip-border: #D1D1D1;
   --chart-status-success: #0A2916;
   --chart-status-warning: #312602;
   --chart-status-danger: #5B0B0B;
   --chart-status-info: #003066;
   --chart-series-2: #005FCC;
   --chart-series-5: #625BD5;
-  --chart-tooltip-muted: #B2B2B2;
   --chart-sequential-1: #CCE4FF;
   --chart-sequential-2: #99C9FF;
   --chart-sequential-3: #66ADFF;
@@ -1087,6 +1088,11 @@
   --chart-diverging-negative: #B71515;
   --chart-diverging-neutral: #ECECEC;
   --chart-diverging-positive: #005FCC;
+  --severity-critical: #B71515;
+  --severity-high: #D94A03;
+  --severity-medium: #947105;
+  --severity-low: #005FCC;
+  --severity-info: #808080;
 }
 
 [data-theme=dark], .dark, .azion.azion-dark {
@@ -1194,15 +1200,16 @@
   --chart-axis: #2B2B2B;
   --chart-label: #999999;
   --chart-crosshair: #999999;
-  --chart-tooltip-bg: #FAFAFA;
-  --chart-tooltip-text: #000000;
+  --chart-tooltip-bg: #141414;
+  --chart-tooltip-text: #FAFAFA;
+  --chart-tooltip-muted: #999999;
+  --chart-tooltip-border: #2B2B2B;
   --chart-status-success: #52E086;
   --chart-status-warning: #F7BD08;
   --chart-status-danger: #F3A5A5;
   --chart-status-info: #66ADFF;
   --chart-series-2: #0072F5;
   --chart-series-5: #756FE5;
-  --chart-tooltip-muted: #535353;
   --chart-sequential-1: #001833;
   --chart-sequential-2: #003066;
   --chart-sequential-3: #004799;
@@ -1213,6 +1220,11 @@
   --chart-diverging-negative: #E74B4B;
   --chart-diverging-neutral: #2B2B2B;
   --chart-diverging-positive: #3392FF;
+  --severity-critical: #E74B4B;
+  --severity-high: #FF8E4D;
+  --severity-medium: #F7BD08;
+  --severity-low: #3392FF;
+  --severity-info: #999999;
 }
 
 @property --illustration-rim-angle {
