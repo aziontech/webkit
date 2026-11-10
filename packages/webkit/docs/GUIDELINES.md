@@ -3,7 +3,7 @@
 > This is the one-page digest. The **complete styleguide** — every code standard in full
 > detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md). The
 > **end-to-end process map** (creation → release, adoption → enforcement) is
-> [`PROCESS.md`](./PROCESS.md).
+> [`PROCESS.md`](https://github.com/aziontech/webkit/blob/main/.claude/docs/PROCESS.md) (in the repository).
 
 One page to **see every pattern** you need, whether you are:
 

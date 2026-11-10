@@ -21,7 +21,7 @@ Pick the path by what you are about to do.
    `search_patterns`, then `get_pattern`. Copy the SFC and change only the content. Do not build the
    screen from scratch.
 3. A single piece: `suggest_component`, then `get_component`.
-4. Follow the `webkit-ui-craft` skill, which points to the skill for each case.
+4. Follow the `webkit-usage` skill, which points to the skill for each case.
 5. Before you hand it over: `npx @aziontech/webkit doctor` and the `webkit-ui-verify` skill.
 
 Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,

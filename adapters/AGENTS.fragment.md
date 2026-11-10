@@ -69,7 +69,7 @@ runs axe + screenshots), and taste is a review concern.
 
 ### Skills — invoke for how to build UI well
 
-Start with `webkit-ui-craft` (the umbrella that routes the rest). Get structure and states right
+Start with `webkit-usage` (the entry point that routes the rest). Get structure and states right
 before any polish:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Message, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`

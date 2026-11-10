@@ -11,6 +11,19 @@ Thanks for working on Webkit. This document covers how to propose changes that p
   - [`migration.md`](./.claude/rules/migration.md) — never inherit, always rewrite.
   - [`no-invention.md`](./.claude/rules/no-invention.md) — the spec is the contract.
 
+## Where things live
+
+Development material and the material WebKit ships to apps never mix:
+
+- **Ships to apps** (in the npm package): `packages/*`, plus the AI bundle at the root — `skills/`,
+  `rules/` (`scope: general`) and `adapters/`.
+- **For WebKit development only**: `.claude/` (agents, commands, hooks, contributor rules and skills
+  such as the mandatory `ui-craft` review, and the process docs `PROCESS.md`, `DOC_LINTS.md`,
+  `OVERVIEW_LINT.md`, `OVERVIEW_TESTS.md`, `GOVERNANCE_IMPLEMENTATION.md`), `.specs/`,
+  `apps/storybook/`, `lint-canaries/` and `.github/`.
+
+Agents of any vendor start at the root [`AGENTS.md`](./AGENTS.md).
+
 ## Local setup
 
 ```bash

@@ -19,7 +19,7 @@ packages/webkit/src/
 ├── svg/, images/, styles/, vite/
 ```
 
-Component creation under `components/**` is **always** driven by the pipeline at [`../../.claude/`](../../.claude/) — see [`../../.claude/commands/component-create.md`](../../.claude/commands/component-create.md). The end-to-end process (creation → release, adoption → enforcement) is mapped in [`docs/PROCESS.md`](./docs/PROCESS.md).
+Component creation under `components/**` is **always** driven by the pipeline at [`../../.claude/`](../../.claude/) — see [`../../.claude/commands/component-create.md`](../../.claude/commands/component-create.md). The end-to-end process (creation → release, adoption → enforcement) is mapped in [`.claude/docs/PROCESS.md`](../../.claude/docs/PROCESS.md).
 
 ## 2) Files agents must NOT edit without explicit human approval
 

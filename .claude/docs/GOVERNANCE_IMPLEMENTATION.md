@@ -11,7 +11,7 @@
 
 This document details the implementation of the governance pipeline for the `@aziontech/webkit` Vue 3 component library. The pipeline enforces code quality, security, accessibility, and type safety standards on every commit and CI/CD run.
 
-The construction standards themselves (props, styling, testing, …) are catalogued in [`STYLEGUIDE.md`](./STYLEGUIDE.md) and digested in [`GUIDELINES.md`](./GUIDELINES.md); the full process map is [`PROCESS.md`](./PROCESS.md). This document covers the **tooling**: what runs, where it runs, and why each piece exists.
+The construction standards themselves (props, styling, testing, …) are catalogued in [`STYLEGUIDE.md`](../../packages/webkit/docs/STYLEGUIDE.md) and digested in [`GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md); the full process map is [`PROCESS.md`](./PROCESS.md). This document covers the **tooling**: what runs, where it runs, and why each piece exists.
 
 ---
 

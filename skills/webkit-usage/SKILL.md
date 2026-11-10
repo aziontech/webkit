@@ -1,9 +1,9 @@
 ---
 name: webkit-usage
-description: Consume the @aziontech/webkit design system correctly. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — how to find the right component, import it with the flat path, style with @aziontech/theme tokens, and keep bundles small.
+description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — start a screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-07-22
+last_updated: 2026-11-10
 enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-performance]
 ---
 
@@ -12,6 +12,28 @@ enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-p
 ## Overview
 
 `@aziontech/webkit` is the Azion design system: a set of themed, accessible Vue 3 components. This project depends on it. When you build or review UI here, reach for a webkit component first, import it with the flat path, and style with `@aziontech/theme` tokens. This skill is the paste-safe reference for doing that right.
+
+## Start here: a screen begins from a pattern
+
+Before composing anything, ask the `webkit` MCP whether the screen already exists: `search_patterns`
+with the screen in plain words ("login", "account settings", "delete confirmation"), then
+`get_pattern` with the best id. Copy that SFC and change only the content. Only when no pattern fits,
+compose from components (below). A marketing band is a page section, not a pattern (rule
+`webkit-sections`).
+
+## Which skill for which task
+
+Structure and states first, polish last:
+
+- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
+  empty, error, async) · `/webkit-form` · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
+  (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation`
+- **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
+- **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
+- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
+- **Polish:** `/webkit-motion-polish` → `/webkit-impeccable-polish`
+- **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
+- **Adopting WebKit in an existing app:** `/webkit-ds-adoption`
 
 ## How to find a component
 

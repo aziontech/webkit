@@ -1,21 +1,25 @@
 ---
-name: webkit-ui-craft
-description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
+name: ui-craft
+description: Contributor review gate for WebKit itself — required on every new or changed component, example and block before its PR opens. Umbrella for UI taste and PRO UX on @aziontech/webkit. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
 status: active
 last_updated: 2026-11-10
-scope: general
-enforced_by: [webkit-prefer-over-custom, webkit-tokens, webkit-accessibility, ui-verify]
+scope: webkit
+enforced_by: [review]
 ---
 
-# Skill: webkit-ui-craft
+# Skill: ui-craft
 
 ## Purpose
 
-Make UI built **on top of** `@aziontech/webkit` + `@aziontech/theme` look and feel like the design
-system intended: technical, minimal, polished, PRO-UX-first. This is the **map** to a pack of focused
-skills — it carries the shared principles and routes each task to the skill that owns the detail. It
-is for **consuming** apps (composing screens from shipped components and tokens), not for authoring
-webkit primitives.
+Make what WebKit ships — components, their examples, and the blocks (screens) agents copy — look and
+feel like the design system intended: technical, minimal, polished, PRO-UX-first. This is the **map**
+to a pack of focused skills — it carries the shared principles and routes each review to the skill
+that owns the detail.
+
+**Audience: people and agents developing WebKit.** It lives in `.claude/skills/` and does not ship to
+consuming projects (they start from `webkit-usage`). Every new or changed component, example or block
+runs the full progression below before its PR opens; the findings go into the PR description. The
+child skills are the consumer skills at the repository root: read them from `skills/<name>/SKILL.md`.
 
 ## Start here: a screen begins from a pattern
 
@@ -28,9 +32,10 @@ pattern (rule `webkit-sections`).
 
 ## How to use
 
-- `/webkit-ui-craft` — apply the principles below to all UI work in this conversation and route to the
+- `/ui-craft` — apply the principles below to all UI work in this conversation and route to the
   right child skill for the task at hand.
-- `/webkit-ui-craft <file>` — run the progression as a review: structure (`/webkit-ux-heuristics` →
+- `/ui-craft <file>` — run the progression as a review (mandatory for a new or changed component,
+  example or block): structure (`/webkit-ux-heuristics` →
   `/webkit-ui-states` → `/webkit-form` → `/webkit-create-surface` → `/webkit-errors` →
   `/webkit-tables` → `/webkit-lists` → `/webkit-navigation` → `/webkit-layout` →
   `/webkit-microcopy`) →

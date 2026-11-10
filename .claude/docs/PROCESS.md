@@ -390,8 +390,8 @@ installed [`catalog.json`](../catalog.json), never from training data.
 
 **Building your own components?** The `general` construction standards apply to any Vue
 code and ship in the `init` bundle — the one-page digest is
-[`GUIDELINES.md`](./GUIDELINES.md) Part A, the full detail is
-[`STYLEGUIDE.md`](./STYLEGUIDE.md).
+[`GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md) Part A, the full detail is
+[`STYLEGUIDE.md`](../../packages/webkit/docs/STYLEGUIDE.md).
 
 </details>
 
@@ -567,5 +567,5 @@ a non-webkit repo can adopt the pack with one command.
 | CI                               | [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) + [`scripts/check-authoring.mjs`](../scripts/check-authoring.mjs)                                 |
 | Invariant test                   | [`test/standards/invariant.test.mjs`](../test/standards/invariant.test.mjs)                                                                                                       |
 | Consumer toolkit                 | [`src/cli/`](../src/cli/) · [`src/mcp/`](../src/mcp/) · [`src/eslint-plugin/`](../src/eslint-plugin/) · [`catalog.json`](../catalog.json) — docs in [`docs/toolkit/`](./toolkit/) |
-| Consumer pattern digest          | [`GUIDELINES.md`](./GUIDELINES.md) (one page) → [`STYLEGUIDE.md`](./STYLEGUIDE.md) (full detail)                                                                                  |
+| Consumer pattern digest          | [`GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md) (one page) → [`STYLEGUIDE.md`](../../packages/webkit/docs/STYLEGUIDE.md) (full detail)                                                                                  |
 | Every lint in the stack          | [`DOC_LINTS.md`](./DOC_LINTS.md) — wrong ❌ vs correct ✅ per check                                                                                                               |
