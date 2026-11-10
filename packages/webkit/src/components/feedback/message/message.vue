@@ -187,7 +187,7 @@
         </span>
         <div
           :data-size="size"
-          class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
+          class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:[--text-link-color:currentColor] [&_a]:[--text-link-hover:currentColor] [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
           :data-testid="`${testId}__content`"
         >
           <slot v-if="$slots['default']" />
