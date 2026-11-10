@@ -12,7 +12,7 @@ checksum: 348c56a4f46e50ce60df6e3e797f6f78aecc05052d7e5fefbe79f25713fb522d
 
 ## Purpose
 
-The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders four quotes, `benefits` three topics; the band above is the same.
+The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes, `benefits` the topics, and either floor takes one column per entry — two at least, four at most; the band above is the same.
 
 ## When to use
 
@@ -31,7 +31,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 ## Best practices
 
 - Four short `claims`; they are chips, not sentences.
-- Four `outcomes` or three `benefits`, so the floor closes the grid.
+- Two to four `outcomes` or `benefits`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
 - Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark.
 
 ## Usage
@@ -64,8 +64,8 @@ import NetworkSection from '@aziontech/webkit/network-section'
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
 | `lead` | `string` | `''` | false | Overline-set line above the claims. |
 | `claims` | `string[]` | `[]` | false | Short figures rendered as chips under the lead, in order. |
-| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
-| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order; each is `{ icon, title, description }`. |
+| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
+| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`. |
 
 ## Events
 

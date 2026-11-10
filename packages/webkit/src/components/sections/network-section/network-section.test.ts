@@ -153,6 +153,40 @@ describe('NetworkSection', () => {
     expect(queryAllByRole('img')).toHaveLength(0)
   })
 
+  it.each([
+    [1, '2'],
+    [2, '2'],
+    [3, '3'],
+    [4, '4'],
+    [5, '4']
+  ])('sets the outcomes floor columns from %i outcomes to %s', (count, columns) => {
+    const { container } = band({
+      kind: 'outcomes',
+      outcomes: Array.from({ length: count }, (_, index) => ({
+        ...outcomes[0],
+        logoAlt: `Client ${index}`
+      }))
+    })
+
+    expect(container.querySelector('[data-columns]')?.getAttribute('data-columns')).toBe(columns)
+  })
+
+  it.each([
+    [2, '2'],
+    [3, '3'],
+    [4, '4']
+  ])('sets the benefits floor columns from %i benefits to %s', (count, columns) => {
+    const { container } = band({
+      kind: 'benefits',
+      benefits: Array.from({ length: count }, (_, index) => ({
+        ...benefits[0],
+        title: `Benefit ${index}`
+      }))
+    })
+
+    expect(container.querySelector('[data-columns]')?.getAttribute('data-columns')).toBe(columns)
+  })
+
   it('renders the band without a floor when outcomes is empty', () => {
     const { container, getByRole, queryAllByRole } = band({ kind: 'outcomes', outcomes: [] })
 

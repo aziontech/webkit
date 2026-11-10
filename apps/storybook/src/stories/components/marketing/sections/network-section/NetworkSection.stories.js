@@ -21,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders four quotes, `benefits` three topics; the band above is the same."
+          "The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes, `benefits` the topics, and either floor takes one column per entry — two at least, four at most; the band above is the same."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -78,7 +78,7 @@ const meta = {
     outcomes: {
       control: 'object',
       description:
-        "Client results for the `outcomes` floor, in order; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent.",
+        "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent.",
       table: {
         category: 'props',
         type: { summary: 'NetworkSectionOutcome[]' },
@@ -88,7 +88,7 @@ const meta = {
     benefits: {
       control: 'object',
       description:
-        'Topics for the `benefits` floor, in order; each is `{ icon, title, description }`.',
+        'Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`.',
       table: {
         category: 'props',
         type: { summary: 'NetworkSectionBenefit[]' },
@@ -234,7 +234,7 @@ export const Types = {
       controls: { disable: true },
       description: {
         story:
-          'Both floors stacked: the `outcomes` kind closes the band with four client quotes, the `benefits` kind with three icon-led topics. The map, title, lead and claims above are the same in both.'
+          'Both floors stacked: the `outcomes` kind closes the band with four client quotes, the `benefits` kind with three icon-led topics — each floor sets its columns from its entry count. The map, title, lead and claims above are the same in both.'
       },
       source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
     }
