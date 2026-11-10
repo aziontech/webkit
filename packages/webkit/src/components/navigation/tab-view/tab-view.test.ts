@@ -13,7 +13,7 @@ import TabViewList from './tab-view-list.vue'
 import TabViewPanel from './tab-view-panel.vue'
 import TabViewRoot from './tab-view-root.vue'
 
-const { Default } = composeStories(stories)
+const { Default, Underline } = composeStories(stories)
 
 // A realistic composed tab tree wired through the dot-notation sub-components.
 // Uncontrolled (default-value) unless a test overrides via v-model.
@@ -21,10 +21,11 @@ const Tree = defineComponent({
   components: { TabView, TabViewList, TabViewItem, TabViewContent, TabViewPanel },
   props: {
     defaultValue: { type: String, default: 'tab-1' },
-    disableSecond: { type: Boolean, default: false }
+    disableSecond: { type: Boolean, default: false },
+    kind: { type: String, default: undefined }
   },
   template: `
-    <TabView :default-value="defaultValue" data-testid="tv">
+    <TabView :kind="kind" :default-value="defaultValue" data-testid="tv">
       <TabViewList>
         <TabViewItem value="tab-1" label="First" />
         <TabViewItem value="tab-2" label="Second" :disabled="disableSecond" />
@@ -354,6 +355,64 @@ describe('TabView (composition)', () => {
       const label = withSlot.getByTestId('navigation-tab-view-item__label')
       expect(label.textContent).toContain('FromSlot')
       expect(label.textContent).not.toContain('FromProp')
+    })
+  })
+
+  describe('kind — set on the root, read by list, indicator and items through context', () => {
+    const kindCarriers = (
+      getByTestId: (id: string) => HTMLElement,
+      getAllByRole: (role: string) => HTMLElement[]
+    ) => [
+      getByTestId('tv'),
+      getByTestId('tv__list'),
+      getByTestId('tv__list__indicator'),
+      ...getAllByRole('tab')
+    ]
+
+    it('defaults to kind="default" on every part', () => {
+      const { getByTestId, getAllByRole } = render(Tree)
+      kindCarriers(getByTestId, getAllByRole).forEach((el) =>
+        expect(el.getAttribute('data-kind')).toBe('default')
+      )
+    })
+
+    it('mirrors kind="underline" on every part with no wiring on the list or items', () => {
+      const { getByTestId, getAllByRole } = render(Tree, { props: { kind: 'underline' } })
+      kindCarriers(getByTestId, getAllByRole).forEach((el) =>
+        expect(el.getAttribute('data-kind')).toBe('underline')
+      )
+    })
+
+    it('follows a kind change on the root', async () => {
+      const { getByTestId, getAllByRole, rerender } = render(Tree, { props: { kind: 'default' } })
+      await rerender({ kind: 'underline' })
+      kindCarriers(getByTestId, getAllByRole).forEach((el) =>
+        expect(el.getAttribute('data-kind')).toBe('underline')
+      )
+    })
+
+    it('keeps selection, panels and keyboard behaving the same under kind="underline"', async () => {
+      const { getByRole, getByText } = render(Tree, { props: { kind: 'underline' } })
+      const first = getByRole('tab', { name: 'First' })
+      await fireEvent.click(getByRole('tab', { name: 'Third' }))
+      expect(getByRole('tab', { name: 'Third' }).getAttribute('aria-selected')).toBe('true')
+      expect(getByText('Content three')).toBeTruthy()
+
+      first.focus()
+      await fireEvent.keyDown(getByRole('tablist'), { key: 'Home' })
+      expect(first.getAttribute('aria-selected')).toBe('true')
+    })
+
+    it('leaves a standalone Item on the default look', () => {
+      const { getByRole } = render(TabViewItem, { props: { label: 'Alone', selected: true } })
+      expect(getByRole('tab', { name: 'Alone' }).getAttribute('data-kind')).toBe('default')
+    })
+
+    it('renders the Underline story with the active tab selected and no a11y violations', async () => {
+      const { container, getByRole } = render(Underline)
+      expect(getByRole('tab', { name: 'Build' }).getAttribute('aria-selected')).toBe('true')
+      expect(getByRole('tablist').getAttribute('data-kind')).toBe('underline')
+      await expectNoA11yViolations(container)
     })
   })
 

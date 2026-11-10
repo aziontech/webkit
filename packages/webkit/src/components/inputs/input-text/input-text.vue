@@ -111,7 +111,7 @@
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted) text-label-sm"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -136,7 +136,7 @@
 
     <span
       v-if="hasIconRight"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted) text-label-sm"
       aria-hidden="true"
     >
       <slot name="iconRight" />

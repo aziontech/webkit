@@ -25,7 +25,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Text link with an optional trailing icon and a ghost hover surface for navigating between views or sections.'
+          'Text link with an optional trailing icon that underlines on hover and focus, for navigating between views or sections.'
       },
       canvas: { sourceState: 'shown' }
     }

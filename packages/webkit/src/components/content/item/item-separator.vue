@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { ItemInjectionKey } from './injection-key'
+  import { ItemInjectionKey, ItemListMemberInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'ItemSeparator',
@@ -10,6 +10,7 @@
 
   const attrs = useAttrs()
   const ctx = inject(ItemInjectionKey)
+  const isListMember = inject(ItemListMemberInjectionKey, false)
 
   const testId = computed(
     () =>
@@ -20,7 +21,7 @@
 <template>
   <div
     v-bind="$attrs"
-    role="separator"
+    :role="isListMember ? 'none' : 'separator'"
     data-slot="item-separator"
     :data-testid="testId"
     class="my-0 h-px w-full shrink-0 bg-(--border-muted)"

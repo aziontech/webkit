@@ -139,6 +139,7 @@ export const parameters = {
           'Chart',
           ['Overview', 'Chart', 'DonutChart', 'StatTile', 'ChartCard'],
           'Marketing',
+          ['Primitives', 'Sections'],
           'Documentation'
         ],
         'Documentation',

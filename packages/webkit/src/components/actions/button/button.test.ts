@@ -37,6 +37,52 @@ describe('Button', () => {
     })
   })
 
+  describe('attribute forwarding', () => {
+    it('gives the button the consumer aria-label as its accessible name', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Import' },
+        attrs: { 'aria-label': 'Import repository' }
+      })
+      expect(getByRole('button', { name: 'Import repository' }).tagName).toBe('BUTTON')
+    })
+
+    it('gives the anchor the consumer aria-label as its accessible name', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Import', href: '/import' },
+        attrs: { 'aria-label': 'Import repository' }
+      })
+      expect(getByRole('link', { name: 'Import repository' }).tagName).toBe('A')
+    })
+
+    it('lands id, aria-describedby, name and form on the native button', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Save' },
+        attrs: { id: 'save', 'aria-describedby': 'save-hint', name: 'intent', form: 'settings' }
+      })
+      const node = getByRole('button', { name: 'Save' })
+      expect(node.id).toBe('save')
+      expect(node.getAttribute('aria-describedby')).toBe('save-hint')
+      expect(node.getAttribute('name')).toBe('intent')
+      expect(node.getAttribute('form')).toBe('settings')
+    })
+
+    it('keeps its own disabled state when the consumer passes a conflicting aria-disabled', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Save', disabled: true },
+        attrs: { 'aria-disabled': 'false' }
+      })
+      expect(getByRole('button', { name: 'Save' }).getAttribute('aria-disabled')).toBe('true')
+    })
+
+    it('has no axe violations with a consumer aria-label', async () => {
+      const { container } = render(Button, {
+        props: { label: 'Import' },
+        attrs: { 'aria-label': 'Import repository' }
+      })
+      await expectNoA11yViolations(container)
+    })
+  })
+
   describe('click emission', () => {
     it('emits click with a MouseEvent when active', async () => {
       const { getByRole, emitted } = render(Button, { props: { label: 'Go' } })

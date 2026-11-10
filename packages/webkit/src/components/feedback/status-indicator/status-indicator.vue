@@ -1,22 +1,21 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Spinner from '../../utils/spinner/spinner.vue'
-
-  export type StatusIndicatorSeverity =
-    'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'
-
   defineOptions({
     name: 'StatusIndicator',
     inheritAttrs: false
   })
 
+  /** Severity token driving the status dot color. */
+  export type StatusIndicatorSeverity =
+    'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'
+
   interface Props {
-    /** severity. */
+    /** Severity token driving the status dot color. */
     severity?: StatusIndicatorSeverity
-    /** Shows loading state and disables activation. */
+    /** Pulses the dot while the status is still in progress. */
     loading?: boolean
-    /** Visible label text. */
+    /** Visible label text naming the status, in sentence case. */
     label?: string
   }
 
@@ -41,25 +40,20 @@
     :data-testid="testId"
     :data-severity="severity"
     :data-loading="loading || null"
-    class="group inline-flex items-center gap-(--spacing-3) rounded-(--shape-elements) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+    class="inline-flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
   >
-    <Spinner
-      v-if="loading"
-      class="size-3 shrink-0 text-(--text-default)"
-      :data-testid="`${testId}__spinner`"
-    />
     <span
-      v-else
       aria-hidden="true"
       :data-testid="`${testId}__dot`"
       :data-severity="severity"
-      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-contrast) data-[severity=info]:bg-(--info-contrast) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-contrast) data-[severity=alt]:bg-(--primary) data-[severity=danger]:bg-(--danger-contrast)"
+      :data-loading="loading || null"
+      class="size-2.5 shrink-0 rounded-full data-[loading]:animate-pulse motion-reduce:animate-none data-[severity=success]:bg-(--success-contrast) data-[severity=info]:bg-(--info-contrast) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-contrast) data-[severity=alt]:bg-(--primary) data-[severity=danger]:bg-(--danger-contrast)"
     />
     <span
-      class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"
+      class="whitespace-nowrap"
       :data-testid="`${testId}__label`"
     >
-      {{ loading ? `${label}...` : label }}
+      {{ label }}
     </span>
   </div>
 </template>

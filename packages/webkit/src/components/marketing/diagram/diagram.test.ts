@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/diagram/Diagram.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/primitives/diagram/Diagram.stories'
 import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Diagram, { type DiagramName } from './diagram.vue'

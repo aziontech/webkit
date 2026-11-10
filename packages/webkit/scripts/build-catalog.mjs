@@ -231,11 +231,18 @@ function build() {
   })
   const compoundByLength = [...compoundRoots].sort((a, b) => b.length - a.length)
 
+  function compoundDir(c) {
+    const target = exportsMap[`./${c}-root`] || exportsMap[`./${c}`] || ''
+    return target.match(/^\.\/src\/components\/[^/]+\//)?.[0] ?? ''
+  }
+
   function parentCompound(subpath) {
     if (subpath.endsWith('-root')) return null
     if (compoundRoots.includes(subpath)) return null
+    const target = exportsMap[`./${subpath}`] || ''
     for (const c of compoundByLength) {
-      if (subpath !== c && subpath.startsWith(`${c}-`)) return c
+      if (subpath !== c && subpath.startsWith(`${c}-`) && target.startsWith(compoundDir(c)))
+        return c
     }
     return null
   }

@@ -298,7 +298,7 @@ const ICONS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
   </FieldText>
   <FieldText v-model="trailing" label="With trailing icon" placeholder="example.com">
     <template #iconRight>
-      <i class="pi pi-times" />
+      <i class="pi pi-verified" />
     </template>
   </FieldText>
   <FieldText v-model="both" label="With both icons" placeholder="example.com">
@@ -306,7 +306,7 @@ const ICONS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
       <i class="pi pi-globe" />
     </template>
     <template #iconRight>
-      <i class="pi pi-times" />
+      <i class="pi pi-verified" />
     </template>
   </FieldText>
 </div>`

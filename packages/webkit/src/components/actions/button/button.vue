@@ -65,6 +65,12 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'actions-button')
 
+  const forwardedAttrs = computed(() => {
+    const rest = { ...attrs }
+    delete rest['class']
+    return rest
+  })
+
   const isInactive = computed(() => props.disabled || props.loading)
 
   const isAnchor = computed(() => Boolean(props.href))
@@ -144,6 +150,7 @@
 <template>
   <a
     v-if="isAnchor"
+    v-bind="forwardedAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -178,6 +185,7 @@
 
   <button
     v-else
+    v-bind="forwardedAttrs"
     :type="type"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"

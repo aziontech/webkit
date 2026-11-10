@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 41f90c659f1952c04a1432b96ff1468db9fd35ee99d6e2b57b958c7305252ba6
+checksum: 96b7be56555a365efc15cea21f4bcc6356e8389cae1524783af4ceb97b9dd379
 created: 2026-05-22
-last_updated: 2026-10-23
+last_updated: 2026-11-10
 ---
 # Message — Component Spec
 
@@ -82,7 +82,7 @@ import Message from '@aziontech/webkit/message'
 |---|---|
 | message typography (small) | `.text-label-sm` — 12px |
 | message typography (medium) | `.text-label-md` — 14px |
-| inline link (anchor inside the message) | `.text-link` |
+| inline link (anchor inside the message) | `.text-link` with its color set to `currentColor` (the message copy color), told apart by the underline, so it keeps AAA (7:1) contrast on every severity surface |
 | leading icon glyph | `.text-label-md` — 14px at both sizes; the icon does not scale with the banner |
 | leading icon box | `size-3.5` — 14px, matching the glyph so the row height is stable |
 | leading icon alignment | the icon and the copy share an `items-start` block, and the icon rides an alignment box the height of the copy's line box (`h-5.25` medium / `h-4.5` small) — so it centers on the **first** line and stays there when the copy wraps, instead of drifting to the middle of the block |
