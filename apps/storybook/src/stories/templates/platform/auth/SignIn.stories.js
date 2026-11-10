@@ -1,38 +1,10 @@
-import Brand from '@aziontech/webkit/brand'
-import Button from '@aziontech/webkit/button'
-import CardBox from '@aziontech/webkit/card-box'
-import Divider from '@aziontech/webkit/divider'
-import FieldPassword from '@aziontech/webkit/field-password'
-import FieldText from '@aziontech/webkit/field-text'
-import GlobalHeader from '@aziontech/webkit/global-header'
-import IconButton from '@aziontech/webkit/icon-button'
-import Tag from '@aziontech/webkit/tag'
-import Tooltip from '@aziontech/webkit/tooltip'
 import { computed, ref } from 'vue'
 
-import { indent } from '../../_shared/markup'
-import { toSfc } from '../../_shared/story-source'
+import { indent } from '../../../_shared/markup'
+import { toSfc } from '../../../_shared/story-source'
+import { authColumn, components, footer, providerButtons, SHELL_IMPORTS } from '../_auth-markup'
 
-const SHELL_IMPORTS = [
-  "import Brand from '@aziontech/webkit/brand'",
-  "import Button from '@aziontech/webkit/button'",
-  "import CardBox from '@aziontech/webkit/card-box'",
-  "import GlobalHeader from '@aziontech/webkit/global-header'"
-]
-
-const SIGN_UP_IMPORTS = [
-  ...SHELL_IMPORTS,
-  "import Divider from '@aziontech/webkit/divider'",
-  "import FieldPassword from '@aziontech/webkit/field-password'",
-  "import FieldText from '@aziontech/webkit/field-text'",
-  "import { ref } from 'vue'",
-  '',
-  "const email = ref('')",
-  "const password = ref('')",
-  'const submitted = ref(false)'
-]
-
-const LOGIN_IMPORTS = [
+const SIGN_IN_IMPORTS = [
   ...SHELL_IMPORTS,
   "import Divider from '@aziontech/webkit/divider'",
   "import FieldPassword from '@aziontech/webkit/field-password'",
@@ -111,9 +83,7 @@ const LOGIN_IMPORTS = [
   '}'
 ]
 
-const CHECK_INBOX_IMPORTS = SHELL_IMPORTS
-
-const loginState = () => {
+const signInState = () => {
   const step = ref('email')
   const returnStep = ref('email')
   const submitted = ref(false)
@@ -201,157 +171,12 @@ const loginState = () => {
   }
 }
 
-const authColumn = (body) => `<div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-  <GlobalHeader aria-label="Azion Console" class="shrink-0">
-    <GlobalHeader.Brand>
-      <a
-        href="/site/home"
-        aria-label="Azion home"
-        class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-      >
-        <Brand kind="default" size="small" />
-      </a>
-    </GlobalHeader.Brand>
-    <GlobalHeader.Middle />
-    <GlobalHeader.Right>
-      <Button label="Documentation" kind="outlined" size="medium" icon="pi pi-book" href="/site/docs" />
-    </GlobalHeader.Right>
-  </GlobalHeader>
-
-  <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
-    <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
-      <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-        <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
-${indent(body, 5)}
-        </div>
-      </div>
-    </div>
-  </main>
-</div>`
-
-const signupFlow = (body) =>
-  authColumn(`<div class="flex w-full flex-col items-center">
-${indent(body)}
-</div>`)
-
-const TERMS_COPY = `By continuing, I agree to Azion's
-<a
-  class="text-link"
-  href="https://www.azion.com/en/documentation/agreements/customer-agreement/"
-  target="_blank"
-  rel="noopener noreferrer"
->terms of service</a>
-and
-<a
-  class="text-link"
-  href="https://www.azion.com/en/documentation/agreements/privacy-policy/"
-  target="_blank"
-  rel="noopener noreferrer"
->privacy policy</a>.`
-
-const footer = (prompt, action, href, termsCondition = '') => `<div
-  class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
->
-  <div class="flex items-center justify-center gap-(--spacing-xs)">
-    <p class="text-body-xs text-(--text-default)">${prompt}</p>
-    <a class="text-link text-body-xs" href="${href}">${action}</a>
-  </div>
-
-  <p${termsCondition ? `\n    v-if="${termsCondition}"` : ''}
-    class="text-center text-body-xs text-(--text-muted)${termsCondition ? ' motion-reduce:transition-none' : ''}"
-  >
-${indent(TERMS_COPY, 2)}
-  </p>
-</div>`
-
-const providerButtons = (wrapperClass) => `<div class="${wrapperClass}">
-  <Button
-    type="button"
-    label="Continue with Google"
-    kind="outlined"
-    size="large"
-    icon="ai-cor ai-google"
-    class="w-full"
-  />
-  <Button
-    type="button"
-    label="Continue with GitHub"
-    kind="outlined"
-    size="large"
-    icon="pi pi-github"
-    class="w-full"
-  />
-</div>`
-
-const SIGN_UP_PAGE = `<div class="flex w-full flex-col items-center gap-(--spacing-md)">
-  <CardBox class="w-full max-w-(--container-sm)" :padded="false">
-    <template #content>
-      <form
-        class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
-        aria-label="Sign up for a free account"
-        novalidate
-        @submit.prevent="submitted = true"
-      >
-        <button type="submit" class="sr-only" aria-hidden="true" tabindex="-1" />
-        <header class="flex flex-col gap-(--spacing-xxs)">
-          <h1 class="text-heading-sm text-(--text-default)">Sign Up for a Free Account</h1>
-          <p class="text-body-sm text-(--text-muted)">
-            US$ 300 credit to use over 12 months, no credit card is required.
-          </p>
-        </header>
-
-        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
-          <legend class="sr-only">Account credentials</legend>
-
-          <FieldText
-            v-model="email"
-            label="Work Email"
-            input-id="signup-email"
-            name="email"
-            size="large"
-            placeholder="myemail@azion.com"
-            :required="submitted && !email.trim()"
-            :helper-text="submitted && !email.trim() ? 'This field is required.' : ''"
-          />
-
-          <FieldPassword
-            v-model="password"
-            label="Password"
-            input-id="signup-password"
-            name="password"
-            autocomplete="new-password"
-            placeholder="Create a password"
-            requirements
-            :required="submitted && !password"
-            :helper-text="submitted && !password ? 'This field is required.' : ''"
-          />
-        </fieldset>
-
-        <Button label="Sign up" kind="primary" size="large" class="w-full" @click="submitted = true" />
-
-        <Divider label="or" />
-
-        <div class="relative">
-${indent(
-  providerButtons(
-    'flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none'
-  ),
-  5
-)}
-        </div>
-      </form>
-    </template>
-  </CardBox>
-
-${indent(footer('Already have an account?', 'Sign in', '/login'))}
-</div>`
-
 const IDENTITY_ROW_CLASS =
   'flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none'
 
 const STEP_CLASS = 'motion-reduce:transition-none motion-reduce:transform-none'
 
-const LOGIN_FORM = `<form
+const SIGN_IN_FORM = `<form
   class="flex flex-col gap-(--spacing-lg)"
   aria-label="Sign in to your account"
   novalidate
@@ -377,6 +202,8 @@ const LOGIN_FORM = `<form
         label="Email"
         input-id="login-email"
         name="email"
+        type="email"
+        autocomplete="username"
         size="large"
         placeholder="myemail@azion.com"
         :required="submitted && !email.trim()"
@@ -437,6 +264,8 @@ const LOGIN_FORM = `<form
         label="Email"
         input-id="reset-email"
         name="reset-email"
+        type="email"
+        autocomplete="email"
         size="large"
         placeholder="myemail@azion.com"
         :required="submitted && !resetEmail.trim()"
@@ -493,13 +322,12 @@ const LOGIN_FORM = `<form
         />
       </div>
 
-      <Tag
+      <div
         v-if="step === 'email'"
-        label="Last used"
-        severity="info"
-        size="small"
         class="absolute right-(--spacing-sm) top-0 -translate-y-1/2 motion-reduce:transition-none"
-      />
+      >
+        <Tag label="Last used" severity="info" size="small" />
+      </div>
     </div>
 
     <div class="relative">
@@ -517,13 +345,13 @@ ${indent(providerButtons('flex flex-col gap-(--spacing-sm) motion-reduce:transit
   </div>
 </form>`
 
-const LOGIN_PAGE = `<CardBox class="w-full max-w-(--container-sm)" :padded="false">
+const SIGN_IN_PAGE = `<CardBox class="w-full max-w-(--container-sm)" :padded="false">
   <template #content>
     <div class="p-(--spacing-lg)">
       <div
         class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
       >
-${indent(LOGIN_FORM, 4)}
+${indent(SIGN_IN_FORM, 4)}
       </div>
     </div>
   </template>
@@ -531,56 +359,10 @@ ${indent(LOGIN_FORM, 4)}
 
 ${footer("Don't have an account?", 'Sign up', '/signup', "step === 'email' || step === 'password'")}`
 
-const CHECK_INBOX_PAGE = `<CardBox class="w-full max-w-(--container-sm)" :padded="false">
-  <template #content>
-    <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
-      <header class="flex flex-col gap-(--spacing-xxs)">
-        <h1 class="text-heading-sm text-(--text-default)">Check your inbox</h1>
-        <p class="text-body-sm text-(--text-muted)">
-          We sent a verification link to myemail@azion.com. Check your inbox or spam folder and follow the instructions.
-        </p>
-      </header>
-
-      <div class="flex flex-col gap-(--spacing-xs)">
-        <div class="flex items-center gap-(--spacing-xs)">
-          <p class="text-body-sm text-(--text-default)">Didn't receive the email?</p>
-          <a class="text-link text-body-sm" href="#" @click.prevent>Resend Email</a>
-        </div>
-        <div class="flex items-center gap-(--spacing-xs)">
-          <p class="text-body-sm text-(--text-default)">Already opened it?</p>
-          <a class="text-link text-body-sm" href="#" @click.prevent>Verify my email</a>
-        </div>
-      </div>
-
-      <Button label="Return to sign in" kind="secondary" size="large" class="w-full" />
-    </div>
-  </template>
-</CardBox>`
-
-const SIGN_UP_TEMPLATE = signupFlow(SIGN_UP_PAGE)
-
-const LOGIN_TEMPLATE = authColumn(LOGIN_PAGE)
-
-const CHECK_INBOX_TEMPLATE = signupFlow(CHECK_INBOX_PAGE)
-
-const components = {
-  Brand,
-  Button,
-  CardBox,
-  Divider,
-  FieldPassword,
-  FieldText,
-  GlobalHeader,
-  'GlobalHeader.Brand': GlobalHeader.Brand,
-  'GlobalHeader.Middle': GlobalHeader.Middle,
-  'GlobalHeader.Right': GlobalHeader.Right,
-  IconButton,
-  Tag,
-  Tooltip
-}
+const SIGN_IN_TEMPLATE = authColumn(SIGN_IN_PAGE)
 
 const meta = {
-  title: 'Templates/Platform/Account/SignUpCard',
+  title: 'Templates/Platform/Auth/SignIn',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -589,7 +371,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The signed-out screens of the console, frame included: a full-height page with the signed-out `GlobalHeader` (the `Brand` and a Documentation button) over a centred column that holds one `CardBox` and the prompt and terms under it. The console renders it at /login, /signup and /signup/verify. Fields are `FieldText` and `FieldPassword`, whose required state and helper appear only after the primary action is pressed on an empty field; the rest is `Button`, `Divider`, `IconButton` in a `Tooltip` and a `Tag`.'
+          'The /login screen of the console, frame included: a full-height page with the signed-out `GlobalHeader` over a centred column that holds one `CardBox` and the sign-up prompt and terms under it. One card walks the whole flow — email, password, reset request, the inbox confirmation and the new-password step. Every result is shown in the card — there is no toast.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -598,49 +380,19 @@ const meta = {
 
 export default meta
 
-export const SignUp = {
+export const SignIn = {
   render: () => ({
     components,
-    setup: () => ({ email: ref(''), password: ref(''), submitted: ref(false) }),
-    template: SIGN_UP_TEMPLATE
+    setup: signInState,
+    template: SIGN_IN_TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'The /signup screen: work email and password with its requirements, the Sign up action, the Google and GitHub buttons under an “or” divider, and the sign-in prompt and terms under the card.'
+          'The whole step machine wired: email with the Last used tag, then password with Forgot your password?, which leads to the reset request, the inbox confirmation and the new-password step.'
       },
-      source: { code: toSfc(SIGN_UP_IMPORTS, SIGN_UP_TEMPLATE) }
-    }
-  }
-}
-
-export const Login = {
-  render: () => ({
-    components,
-    setup: loginState,
-    template: LOGIN_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The /login screen with its whole step machine wired: email with the Last used tag, then password with Forgot your password?, which leads to the reset request, the inbox confirmation and the new-password step.'
-      },
-      source: { code: toSfc(LOGIN_IMPORTS, LOGIN_TEMPLATE) }
-    }
-  }
-}
-
-export const CheckInbox = {
-  render: () => ({ components, template: CHECK_INBOX_TEMPLATE }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The /signup/verify screen: where the verification link went, the resend and already-opened prompts, and a secondary Return to sign in action.'
-      },
-      source: { code: toSfc(CHECK_INBOX_IMPORTS, CHECK_INBOX_TEMPLATE) }
+      source: { code: toSfc(SIGN_IN_IMPORTS, SIGN_IN_TEMPLATE) }
     }
   }
 }

@@ -153,6 +153,7 @@ export const parameters = {
             'States',
             'Detail',
             'Observe',
+            'Auth',
             'Account'
           ],
           'Headers',
