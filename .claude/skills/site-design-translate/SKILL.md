@@ -82,7 +82,7 @@ sections are the Storybook marketing templates (`Templates/Marketing/*`), ported
 | A row of tiles (picture over caption) | `FeatureTiles` |
 | Tabs, one feature at a time | `FeatureTabs` |
 | Copy beside code | `CodeSplit`; capabilities pinned beside their code, `StickyScrollCode` |
-| Client testimonials | `ClientQuotes` with `quotesLedBy('<client>')` (site `data/solutions.js`) led by the source's quoted client; one quote alone, `QuoteBand`; marks beside one quote, `LogoWallQuote` |
+| Client testimonials — one quote, marks beside a quote, or a carousel | Always `ClientQuotes`, led by the source's quoted client (`quotesLedBy('<client>')` from site `data/solutions.js`, or `quoteWall(lead)` on a landing page); the source's heading goes in its `eyebrow` / `title`. Never `QuoteBand`, a bare `Quote`, or a logo wall beside a quote |
 | Analyst recognitions, client tiles, certifications | `RecognitionMarquee`, `ClientMosaic`, `ComplianceBadges` |
 | A row of stats (big numeral + unit + label) | `StatsBand` |
 | The network argument over the map | `NetworkSection`, `kind` by its floor: `quotes`, `benefits` or `stats` |
