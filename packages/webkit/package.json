@@ -111,7 +111,8 @@
     "blocks",
     "examples",
     "catalog.json",
-    "package.json"
+    "package.json",
+    "MIGRATION-v6.md"
   ],
   "sideEffects": [
     "**/*.vue",
