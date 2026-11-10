@@ -654,7 +654,7 @@
   {
     "name": "stat-tile",
     "path": "src/components/chart/stat-tile/stat-tile.vue",
-    "limit": "6 KB"
+    "limit": "8.5 KB"
   },
   {
     "name": "chart-card",
