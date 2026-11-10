@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import SegmentedButton from '../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import CardPricing from '../../content/card-pricing/card-pricing.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
@@ -134,7 +134,7 @@
           v-if="hasToggle"
           class="flex justify-center border-b border-(--border-default) p-(--spacing-md)"
         >
-          <SegmentedButton
+          <ToggleGroup
             v-model="period"
             :options="periods"
             :aria-label="periodsAriaLabel || undefined"

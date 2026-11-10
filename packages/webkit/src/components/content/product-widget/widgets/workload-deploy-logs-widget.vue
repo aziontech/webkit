@@ -4,9 +4,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import Divider from '../../../layout/divider/divider.vue'
+  import Separator from '../../../layout/separator/separator.vue'
   import Tag from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
@@ -107,7 +107,7 @@
   >
     <div class="flex h-full flex-col justify-center p-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox
+        <Card
           :padded="false"
           class="w-full"
         >
@@ -142,7 +142,7 @@
                     :key="resource.key"
                     :style="rowDelay(index)"
                   >
-                    <Divider v-if="index" />
+                    <Separator v-if="index" />
                     <div
                       class="flex items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm)"
                     >
@@ -179,7 +179,7 @@
                   active-at="build"
                   label="Logs"
                   :controls="false"
-                  :progress-bar="false"
+                  :progress="false"
                   :steps="STEPS"
                   :interval="interval"
                   @finished="onFinished"
@@ -187,7 +187,7 @@
               </div>
             </Transition>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

@@ -3,7 +3,7 @@
 
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Table from '../../../data/table/index'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Tag from '../../../tag/tag.vue'
   import Accordion from '../../accordion/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -175,7 +175,7 @@
                       >
                         <Table.Cell class="w-24 flex-none! gap-(--spacing-xxs)">
                           <span class="w-12 shrink-0 [&>span]:w-full">
-                            <InputText
+                            <Input
                               :model-value="String(index + 1)"
                               size="small"
                               :disabled="index === 0"

@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: fcba6749068e5cab7697fc8048ccc9d4070b66144fccc8ed56e1c2ea948d55cc
+checksum: 2271ad85c4238f733799f1155bdfc9219006b4df31b6722abd9bac07500dfd25
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -151,7 +151,7 @@ on unmount, so the consumer never counts tasks or numbers them by hand.
   - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
   - `data-testid` fallback: `content-help-panel-section`.
-- `help-panel-links/help-panel-links.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Divider`.
+- `help-panel-links/help-panel-links.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
   - Props: `title?: string` (default `'Learn more'` — the heading over the links).
   - Slot: `default` — `Link` items, one per destination.
   - `data-testid` fallback: `content-help-panel-links`.
@@ -219,8 +219,8 @@ _No events — the panel is content; opening, closing and tutorial actions belon
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                              |
-| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Slot      | Scope | Notes                                                                                                                                                  |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `default` | —     | The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Tutorial`, `HelpPanel.Links` — in reading order. Not rendered while `loading`. |
 
 ## States
@@ -240,53 +240,53 @@ name.
 
 The three task markers, and what each one renders:
 
-| `data-status` | Marker                                                 | Title ink                | Screen-reader word |
-| ------------- | ------------------------------------------------------ | ------------------------ | ------------------ |
-| `upcoming`    | outlined in `--border-default`, muted, shows its number | `var(--text-muted)`      | `Not started`      |
-| `current`     | outlined in `--secondary`, shows its number            | `var(--text-default)`    | `Current task`     |
-| `complete`    | filled `--secondary`, `pi pi-check` glyph              | `var(--text-default)`    | `Complete`         |
+| `data-status` | Marker                                                  | Title ink             | Screen-reader word |
+| ------------- | ------------------------------------------------------- | --------------------- | ------------------ |
+| `upcoming`    | outlined in `--border-default`, muted, shows its number | `var(--text-muted)`   | `Not started`      |
+| `current`     | outlined in `--secondary`, shows its number             | `var(--text-default)` | `Current task`     |
+| `complete`    | filled `--secondary`, `pi pi-check` glyph               | `var(--text-default)` | `Complete`         |
 
 The tutorial's progress line reads `<complete> of <total> complete`, counting registered tasks whose
 `status` is `complete`. It is derived; the consumer never passes the counts.
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                     | Token (see `.claude/docs/DESIGN.md` § Animations)        | Reduced-motion fallback                            |
-| ----------------------------- | ---------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------- |
-| task `status` change          | `transition-colors` on the task marker and the task title  | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                    |
-| `loading` placeholder shimmer | `Skeleton` component (owns its own shimmer)                | component                                                | handled by `Skeleton` (suppressed under reduced motion) |
+| Trigger                       | Animation / Transition                                    | Token (see `.claude/docs/DESIGN.md` § Animations)        | Reduced-motion fallback                                 |
+| ----------------------------- | --------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------- |
+| task `status` change          | `transition-colors` on the task marker and the task title | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                         |
+| `loading` placeholder shimmer | `Skeleton` component (owns its own shimmer)               | component                                                | handled by `Skeleton` (suppressed under reduced motion) |
 
 ## Tokens
 
-| Region                                   | Token (DESIGN.md)           |
-| ---------------------------------------- | --------------------------- |
-| typography (header title)                | `.text-heading-xs`          |
-| typography (header description)          | `.text-body-sm`             |
-| typography (section / links / tutorial title) | `.text-heading-xxs`    |
-| typography (section prose, task instructions) | `.text-body-sm`        |
-| typography (tutorial description)        | `.text-body-sm`             |
-| typography (tutorial progress line)      | `.text-label-sm`            |
-| typography (task title)                  | `.text-label-md`            |
-| typography (task marker number)          | `.text-label-sm`            |
-| typography (inline anchors in prose)     | `.text-link`                |
-| title ink                                | `var(--text-default)`       |
-| description / progress / muted ink       | `var(--text-muted)`         |
-| marker surface (upcoming, current)       | `var(--bg-surface)`         |
-| marker border (upcoming)                 | `var(--border-default)`     |
-| marker border (current, complete)        | `var(--secondary)`          |
-| marker surface (complete)                | `var(--secondary)`          |
-| marker ink (complete)                    | `var(--secondary-contrast)` |
-| shape (marker)                           | `var(--radius-full)`        |
-| padding (root)                           | `var(--spacing-md)`         |
-| gap (between panel parts)                | `var(--spacing-lg)`         |
-| gap (title to body, inside a part)       | `var(--spacing-xs)`         |
-| gap (between paragraphs, between tasks)  | `var(--spacing-sm)`         |
-| gap (between links, marker to title)     | `var(--spacing-xxs)`        |
+| Region                                        | Token (DESIGN.md)           |
+| --------------------------------------------- | --------------------------- |
+| typography (header title)                     | `.text-heading-xs`          |
+| typography (header description)               | `.text-body-sm`             |
+| typography (section / links / tutorial title) | `.text-heading-xxs`         |
+| typography (section prose, task instructions) | `.text-body-sm`             |
+| typography (tutorial description)             | `.text-body-sm`             |
+| typography (tutorial progress line)           | `.text-label-sm`            |
+| typography (task title)                       | `.text-label-md`            |
+| typography (task marker number)               | `.text-label-sm`            |
+| typography (inline anchors in prose)          | `.text-link`                |
+| title ink                                     | `var(--text-default)`       |
+| description / progress / muted ink            | `var(--text-muted)`         |
+| marker surface (upcoming, current)            | `var(--bg-surface)`         |
+| marker border (upcoming)                      | `var(--border-default)`     |
+| marker border (current, complete)             | `var(--secondary)`          |
+| marker surface (complete)                     | `var(--secondary)`          |
+| marker ink (complete)                         | `var(--secondary-contrast)` |
+| shape (marker)                                | `var(--radius-full)`        |
+| padding (root)                                | `var(--spacing-md)`         |
+| gap (between panel parts)                     | `var(--spacing-lg)`         |
+| gap (title to body, inside a part)            | `var(--spacing-xs)`         |
+| gap (between paragraphs, between tasks)       | `var(--spacing-sm)`         |
+| gap (between links, marker to title)          | `var(--spacing-xxs)`        |
 
 ## Theme gaps
 
-| Figma variable                         | Temporary primitive                                                                                    | Follow-up                                                                                          |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| Figma variable                         | Temporary primitive                                                                                      | Follow-up                                                                                          |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | — (documentation gap, not a token gap) | `var(--radius-full)` — ships in the theme and is what `stepper` and `doc-step` already use for their dot | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a full circle` |
 
 ## Accessibility (WCAG 2.1 AA)

@@ -1,6 +1,6 @@
 ---
 name: webkit-microcopy
-description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Message explains impact, Popover defines, Tag states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate, Application not Edge Application, and no `edge` as a prefix or a location), navigation and IA naming, and copy that survives every breakpoint.
+description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Alert explains impact, Popover defines, Tag states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate, Application not Edge Application, and no `edge` as a prefix or a location), navigation and IA naming, and copy that survives every breakpoint.
 status: active
 last_updated: 2026-08-20
 scope: general
@@ -44,9 +44,9 @@ them.
 | ------------------------------------------ | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | **Em dash and en dash** (`—`, `–`)         | Splices two thoughts into one unreadable line, and reads as unfinished editing           | A period, a comma, or a colon. Two sentences are two sentences                      |
 | **Ampersand** (`&`)                        | Not a word; noise in a label                                                             | `and`                                                                               |
-| **Parentheses in labels**                  | Flattens hierarchy: the aside competes with the name of the field                        | Move the aside to the field description, or to a `Message` above the group          |
+| **Parentheses in labels**                  | Flattens hierarchy: the aside competes with the name of the field                        | Move the aside to the field description, or to a `Alert` above the group            |
 | **Bold inside running text**               | Emphasis mid sentence fights the typography scale and reads as shouting                  | One idea per sentence. If it deserves prominence it deserves its own heading or tag |
-| **Feedback or consequence in a label**     | The reader has to parse a warning while looking for the field name                       | `Message` before the inputs it governs                                              |
+| **Feedback or consequence in a label**     | The reader has to parse a warning while looking for the field name                       | `Alert` before the inputs it governs                                                |
 | **Exclamation marks and decorative emoji** | Infrastructure product, technical register                                               | State the fact                                                                      |
 | **`please`, `sorry`, `oops`, `whoops`**    | Padding, and it apologizes instead of resolving                                          | Say what happened and what to do next                                               |
 | **`simply`, `just`, `easy`, `quick`**      | Tells the reader their difficulty is their fault                                         | Delete the word; the sentence is already shorter                                    |
@@ -94,7 +94,7 @@ anything the reader needs in order to answer appears before the input, never ins
 | ------------------------------------------ | ------------------------------------------ | ----------------------------------------- | --------------------------------------------------------------------------------------------- |
 | The name of an input                       | `Label`                                    | 1 to 3 words, no punctuation              | `Version`                                                                                     |
 | A constraint or format the value must meet | field description / `HelperText`           | One short sentence, with a period         | `Lowercase letters, numbers, and hyphens.`                                                    |
-| Why this input exists, or what it affects  | `Message` above the group                  | 1 to 2 sentences                          | `This connector is shared. Changing its version affects every deployment that references it.` |
+| Why this input exists, or what it affects  | `Alert` above the group                    | 1 to 2 sentences                          | `This connector is shared. Changing its version affects every deployment that references it.` |
 | A definition, or how a feature works       | `Tooltip` / `Popover` on a help affordance | A short paragraph, optionally a docs link | What a deployment topology is                                                                 |
 | The state of an object                     | `Tag` / `Badge` / `StatusIndicator`        | 1 to 2 words, never a sentence            | `Active release`, `Draft`                                                                     |
 | The result of something the user did       | `Toast`                                    | One sentence, past tense, with a period   | `Deployment created.`                                                                         |
@@ -104,10 +104,10 @@ anything the reader needs in order to answer appears before the input, never ins
 Three consequences worth stating on their own, because each one is a real defect when skipped:
 
 - **A repeated per row aside is a message, not a decoration.** When the same caveat would appear as a
-  tag or a suffix on several rows, it belongs once, as a `Message` above them. Repeating it per row
+  tag or a suffix on several rows, it belongs once, as a `Alert` above them. Repeating it per row
   is visual clutter that the reader learns to skip.
 - **Never compress a long explanation into a label.** If it does not fit in three words, it is not a
-  label. Give it a help affordance with a `Popover`, or a `Message` above the section.
+  label. Give it a help affordance with a `Popover`, or a `Alert` above the section.
 - **Optionality is not a parenthetical.** Required fields carry the required indicator. If a field's
   optionality must be said, the description says it: `Optional.` Never `Version (optional)`.
 
@@ -286,12 +286,12 @@ let it breathe wider. Never write long and rely on truncation.
 ## Review checklist
 
 - [ ] No em dash, en dash, or ampersand anywhere in the interface strings.
-- [ ] No parentheses, colon, or feedback text in any label; asides moved to description, `Message`, or
+- [ ] No parentheses, colon, or feedback text in any label; asides moved to description, `Alert`, or
       `Popover`.
 - [ ] No bold inside running text.
 - [ ] Sentence case throughout, with `Azion`, product and entity names, and acronyms correct.
 - [ ] Every explanation appears before the input it governs, not inside it.
-- [ ] A repeated per row caveat was consolidated into one `Message`.
+- [ ] A repeated per row caveat was consolidated into one `Alert`.
 - [ ] One word per concept, checked against the verb and noun tables, including the settled renames.
 - [ ] Every button names a real action, verb first, three words or fewer; `Cancel` is `Cancel`.
 - [ ] The create button is `Create <object>` at module level, `Add <Product Module>` inside a

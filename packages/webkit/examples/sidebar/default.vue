@@ -2,21 +2,21 @@
   import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarHeader from '@aziontech/webkit/sidebar-header'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Kbd from '@aziontech/webkit/kbd'
   import Avatar from '@aziontech/webkit/avatar'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Dropdown from '@aziontech/webkit/dropdown'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import CommandMenu from '@aziontech/webkit/command-menu'
-  import CommandMenuInput from '@aziontech/webkit/command-menu-input'
-  import CommandMenuList from '@aziontech/webkit/command-menu-list'
-  import CommandMenuGroup from '@aziontech/webkit/command-menu-group'
-  import CommandMenuItem from '@aziontech/webkit/command-menu-item'
-  import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'
-  import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import Command from '@aziontech/webkit/command'
+  import CommandInput from '@aziontech/webkit/command-input'
+  import CommandList from '@aziontech/webkit/command-list'
+  import CommandGroup from '@aziontech/webkit/command-group'
+  import CommandItem from '@aziontech/webkit/command-item'
+  import CommandSeparator from '@aziontech/webkit/command-separator'
+  import CommandEmpty from '@aziontech/webkit/command-empty'
   import Menu from '@aziontech/webkit/menu'
   import MenuBack from '@aziontech/webkit/menu-back'
   import MenuGroup from '@aziontech/webkit/menu-group'
@@ -42,7 +42,7 @@
           @click="paletteOpen = true"
           @keydown.enter="paletteOpen = true"
         >
-          <InputText
+          <Input
             model-value=""
             placeholder="Search"
             size="large"
@@ -62,47 +62,47 @@
                 >K</Kbd
               ></template
             >
-          </InputText>
+          </Input>
         </div>
 
-        <CommandMenu v-model:open="paletteOpen">
-          <CommandMenuInput placeholder="Search navigation and commands" />
-          <CommandMenuList>
-            <CommandMenuGroup heading="Build">
-              <CommandMenuItem value="nav:applications">
+        <Command v-model:open="paletteOpen">
+          <CommandInput placeholder="Search navigation and commands" />
+          <CommandList>
+            <CommandGroup heading="Build">
+              <CommandItem value="nav:applications">
                 <template #prefix
                   ><i
                     class="ai ai-edge-application"
                     aria-hidden="true"
                 /></template>
                 Applications
-              </CommandMenuItem>
-              <CommandMenuItem value="nav:variables">
+              </CommandItem>
+              <CommandItem value="nav:variables">
                 <template #prefix
                   ><i
                     class="ai ai-variables"
                     aria-hidden="true"
                 /></template>
                 Variables
-              </CommandMenuItem>
-            </CommandMenuGroup>
+              </CommandItem>
+            </CommandGroup>
 
-            <CommandMenuSeparator />
+            <CommandSeparator />
 
-            <CommandMenuGroup heading="Account">
-              <CommandMenuItem value="cmd:settings">
+            <CommandGroup heading="Account">
+              <CommandItem value="cmd:settings">
                 <template #prefix
                   ><i
                     class="pi pi-cog"
                     aria-hidden="true"
                 /></template>
                 Account Settings
-              </CommandMenuItem>
-            </CommandMenuGroup>
+              </CommandItem>
+            </CommandGroup>
 
-            <CommandMenuEmpty>No navigation or command matches your search.</CommandMenuEmpty>
-          </CommandMenuList>
-        </CommandMenu>
+            <CommandEmpty>No navigation or command matches your search.</CommandEmpty>
+          </CommandList>
+        </Command>
       </SidebarHeader>
     </template>
     <Menu role="presentation">
@@ -199,19 +199,19 @@
         <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
           >Alex Moreira</span
         >
-        <Dropdown
+        <DropdownMenu
           v-model:open="accountMenuOpen"
           placement="top-end"
         >
-          <DropdownTrigger>
+          <DropdownMenuTrigger>
             <IconButton
               icon="pi pi-ellipsis-v"
               aria-label="Account menu"
               kind="outlined"
               size="small"
             />
-          </DropdownTrigger>
-          <DropdownGroup>
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
             <template #top>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
@@ -220,17 +220,17 @@
                 >
               </div>
             </template>
-            <DropdownOption
+            <DropdownMenuOption
               value="settings"
               label="Account Settings"
             />
-            <DropdownOption
+            <DropdownMenuOption
               value="personal-tokens"
               label="Personal Tokens"
             />
-          </DropdownGroup>
-          <DropdownGroup>
-            <DropdownOption
+          </DropdownMenuGroup>
+          <DropdownMenuGroup>
+            <DropdownMenuOption
               value="logout"
               label="Log Out"
             >
@@ -239,9 +239,9 @@
                   class="pi pi-sign-out"
                   aria-hidden="true"
               /></template>
-            </DropdownOption>
-          </DropdownGroup>
-        </Dropdown>
+            </DropdownMenuOption>
+          </DropdownMenuGroup>
+        </DropdownMenu>
       </SidebarFooter>
     </template>
   </Sidebar>

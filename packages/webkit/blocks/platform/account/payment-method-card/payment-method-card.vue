@@ -1,9 +1,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import { reactive, ref } from 'vue'
 
   const countryOptions = [
@@ -29,7 +29,7 @@
 </script>
 
 <template>
-  <CardBox
+  <Card
     title="Payment Method"
     :padded="false"
   >
@@ -130,7 +130,7 @@
                 inputmode="numeric"
               />
             </div>
-            <Message
+            <Alert
               severity="info"
               size="small"
               label="Sensitive data is handled by a PCI-compliant payment partner."
@@ -159,5 +159,5 @@
         </template>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

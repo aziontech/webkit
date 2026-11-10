@@ -1,0 +1,60 @@
+<script setup>
+  import DropdownMenu, {
+    DropdownMenuGroup,
+    DropdownMenuOption,
+    DropdownMenuTrigger
+  } from '@aziontech/webkit/dropdown-menu'
+  import Avatar from '@aziontech/webkit/avatar'
+  import IconButton from '@aziontech/webkit/icon-button'
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-(--spacing-lg) items-center">
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <IconButton
+          icon="pi pi-ellipsis-h"
+          aria-label="More actions"
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuGroup>
+        <DropdownMenuOption
+          value="edit"
+          label="Edit"
+        />
+        <DropdownMenuOption
+          value="duplicate"
+          label="Duplicate"
+        />
+        <DropdownMenuOption
+          value="delete"
+          label="Delete"
+        />
+      </DropdownMenuGroup>
+    </DropdownMenu>
+
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Avatar
+          label="IB"
+          aria-label="Account menu"
+          class="cursor-pointer"
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuGroup label="Account">
+        <DropdownMenuOption
+          value="profile"
+          label="Profile"
+        />
+        <DropdownMenuOption
+          value="settings"
+          label="Settings"
+        />
+        <DropdownMenuOption
+          value="signout"
+          label="Sign out"
+        />
+      </DropdownMenuGroup>
+    </DropdownMenu>
+  </div>
+</template>

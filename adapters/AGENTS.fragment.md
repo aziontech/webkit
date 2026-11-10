@@ -68,14 +68,14 @@ runs axe + screenshots), and taste is a review concern.
   `--layout-group-gap`) — never a hand-rolled `max-w-*` page cap (rule `webkit-page-layout`).
 - **Forms that browsers understand.** E-mail fields set `type="email"` and `autocomplete`
   (`username` to sign in, `email` to sign up); passwords `current-password` / `new-password`; paste is
-  never blocked. Auth screens never toast: every outcome is one `Message` inside the card.
+  never blocked. Auth screens never toast: every outcome is one `Alert` inside the card.
 
 ### Skills — invoke for how to build UI well
 
 Start with `webkit-usage` (the entry point that routes the rest). Get structure and states right
 before any polish:
 
-- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Message, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`
+- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Alert, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`
 - **Layout:** `/webkit-layout` (the page container system: measure, boundary, rhythm — a page never writes its own `mx-auto max-w-*`)
 - **Words:** `/webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography hierarchy, spacing rhythm)

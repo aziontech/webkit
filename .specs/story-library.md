@@ -6,13 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 4cb797aa066809e8e6a07782014c5a2e7b290415fed7be34f0af20faf1003702
+checksum: 00a8ba401959d61439806815f8b5e83633f4f59070140b4a6063f862c02195ea
 ---
+
 # StoryLibrary — Component Spec
 
 ## Purpose
 
-Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input-text`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.
+Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.
 
 ## When to use
 
@@ -37,7 +38,7 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ```vue
 <script setup>
-import StoryLibrary from '@aziontech/webkit/story-library'
+  import StoryLibrary from '@aziontech/webkit/story-library'
 </script>
 
 <template>
@@ -58,7 +59,12 @@ import StoryLibrary from '@aziontech/webkit/story-library'
       }
     ]"
     :facets="[
-      { key: 'industry', label: 'Industry', allLabel: 'All industries', options: [{ value: 'Retail', label: 'Retail' }] }
+      {
+        key: 'industry',
+        label: 'Industry',
+        allLabel: 'All industries',
+        options: [{ value: 'Retail', label: 'Retail' }]
+      }
     ]"
     :search="{ placeholder: 'Search by company or story', label: 'Search success stories' }"
     :empty="{ title: 'No stories match these filters.', action: 'View all success stories' }"
@@ -68,17 +74,17 @@ import StoryLibrary from '@aziontech/webkit/story-library'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title` | `string` | `''` | false | Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty. |
-| `items` | `StoryLibraryItem[]` | `[]` | false | The stories, in order; each is `{ key, href, client, category, description, facets? }`. |
-| `facets` | `StoryLibraryFacet[]` | `[]` | false | The facet selects, in order; each is `{ key, label, allLabel, options }`. |
-| `search` | `StoryLibrarySearch` | `undefined` | false | The search field's `placeholder` and accessible `label`; the field is omitted when absent. |
-| `empty` | `StoryLibraryEmpty` | `undefined` | false | The no-match state's `title` and the `action` label of its clear-filters button. |
-| `linkLabel` | `string` | `''` | false | Read cue at the foot of each card, also the lead of its accessible name. |
-| `moreLabel` | `string` | `''` | false | Label of the load-more button under the grid; the button is omitted when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
+| Prop        | Type                  | Default     | Required | JSDoc                                                                                           |
+| ----------- | --------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------- |
+| `anchor`    | `string`              | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                  |
+| `title`     | `string`              | `''`        | false    | Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty. |
+| `items`     | `StoryLibraryItem[]`  | `[]`        | false    | The stories, in order; each is `{ key, href, client, category, description, facets? }`.         |
+| `facets`    | `StoryLibraryFacet[]` | `[]`        | false    | The facet selects, in order; each is `{ key, label, allLabel, options }`.                       |
+| `search`    | `StoryLibrarySearch`  | `undefined` | false    | The search field's `placeholder` and accessible `label`; the field is omitted when absent.      |
+| `empty`     | `StoryLibraryEmpty`   | `undefined` | false    | The no-match state's `title` and the `action` label of its clear-filters button.                |
+| `linkLabel` | `string`              | `''`        | false    | Read cue at the foot of each card, also the lead of its accessible name.                        |
+| `moreLabel` | `string`              | `''`        | false    | Label of the load-more button under the grid; the button is omitted when empty.                 |
+| `ariaLabel` | `string`              | `''`        | false    | Accessible name of the list of stories.                                                         |
 
 ## Events
 
@@ -97,26 +103,26 @@ import StoryLibrary from '@aziontech/webkit/story-library'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover fill of a card and of its read cue | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover nudge of the read arrow | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                                  | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ---------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover fill of a card and of its read cue | `transition-colors duration-fast-02 ease-productive-entrance`          | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| hover nudge of the read arrow            | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| card fill | hover `var(--bg-surface-raised)` |
-| rules | `var(--border-default)` |
+| Region                          | Token (DESIGN.md)                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------- |
+| card fill                       | hover `var(--bg-surface-raised)`                                                      |
+| rules                           | `var(--border-default)`                                                               |
 | overline, description, read cue | `text-overline-sm` / `text-body-sm`, `var(--text-muted)`, hover `var(--text-default)` |
-| no-match text | `text-label-sm`, `var(--text-muted)` |
-| focus ring | `var(--ring-color)` |
+| no-match text                   | `text-label-sm`, `var(--text-muted)`                                                  |
+| focus ring                      | `var(--ring-color)`                                                                   |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

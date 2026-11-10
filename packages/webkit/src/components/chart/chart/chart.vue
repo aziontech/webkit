@@ -12,8 +12,8 @@
     watch
   } from 'vue'
 
+  import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import Message from '../../feedback/message/message.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import {
     categoryLayout,
@@ -64,7 +64,7 @@
     loading?: boolean
     /** Holds the previous render at reduced opacity while new data loads. */
     refetching?: boolean
-    /** Error message; when set, the plot renders a danger Message instead of marks. */
+    /** Error message; when set, the plot renders a danger Alert instead of marks. */
     error?: string
     /** Title of the empty state shown when no series has a value. */
     emptyTitle?: string
@@ -111,7 +111,7 @@
     empty(): unknown
     /** Actions under the default EmptyState, such as a Clear filters button or a setup link. */
     'empty-actions'(): unknown
-    /** Replaces the default danger Message. */
+    /** Replaces the default danger Alert. */
     error(): unknown
   }>()
 
@@ -436,7 +436,7 @@
       class="col-start-1 row-start-1 flex items-center justify-center p-(--spacing-md)"
     >
       <slot name="error">
-        <Message
+        <Alert
           severity="danger"
           :label="error"
           :data-testid="`${testId}__error`"

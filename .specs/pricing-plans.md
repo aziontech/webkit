@@ -6,14 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: f72a44423323afc439eb49780ea6468299a77e01bb71ab21004df804c4a5dffb
+checksum: 4cc61db0fb6a4ec39cffc2306e01a8b0c5eaf7de8a16aa7368a0c73e394293b2
 ---
 
 # PricingPlans — Component Spec
 
 ## Purpose
 
-The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `card-grid`, `card-pricing` and `button`; the picked period is local state.
+The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state.
 
 ## When to use
 
@@ -38,7 +38,7 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 
 ```vue
 <script setup>
-import PricingPlans from '@aziontech/webkit/pricing-plans'
+  import PricingPlans from '@aziontech/webkit/pricing-plans'
 </script>
 
 <template>
@@ -55,7 +55,13 @@ import PricingPlans from '@aziontech/webkit/pricing-plans'
         highlighted: true,
         tagLabel: 'Popular',
         prices: [
-          { period: 'monthly', value: '25', prefix: '$', suffix: '/mo', details: 'Billed monthly.' },
+          {
+            period: 'monthly',
+            value: '25',
+            prefix: '$',
+            suffix: '/mo',
+            details: 'Billed monthly.'
+          },
           { period: 'annual', value: '20', prefix: '$', suffix: '/mo', details: 'Billed annually.' }
         ],
         featuresTitle: 'All Hobby features, plus:',
@@ -69,12 +75,12 @@ import PricingPlans from '@aziontech/webkit/pricing-plans'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `periods` | `PricingPlansPeriod[]` | `[]` | false | The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first. |
-| `periodsAriaLabel` | `string` | `''` | false | Accessible name of the billing-period toggle. |
-| `plans` | `PricingPlansPlan[]` | `[]` | false | The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped. |
+| Prop               | Type                   | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ---------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`           | `string`               | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                                   |
+| `periods`          | `PricingPlansPeriod[]` | `[]`    | false    | The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first.                                                                                                                                                                                                         |
+| `periodsAriaLabel` | `string`               | `''`    | false    | Accessible name of the billing-period toggle.                                                                                                                                                                                                                                                                                              |
+| `plans`            | `PricingPlansPlan[]`   | `[]`    | false    | The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped. |
 
 ## Events
 
@@ -97,30 +103,30 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (features) | `.text-body-sm` |
-| features title text | `var(--text-muted)` |
-| feature text | `var(--text-default)` |
-| feature glyph | `var(--primary)` |
-| raised card fill | `var(--bg-surface)` |
-| card fill | `var(--bg-canvas)` |
-| toggle rule | `var(--border-default)` |
-| rhythm | `var(--spacing-sm)` / `var(--spacing-md)` |
+| Region                | Token (DESIGN.md)                         |
+| --------------------- | ----------------------------------------- |
+| typography (features) | `.text-body-sm`                           |
+| features title text   | `var(--text-muted)`                       |
+| feature text          | `var(--text-default)`                     |
+| feature glyph         | `var(--primary)`                          |
+| raised card fill      | `var(--bg-surface)`                       |
+| card fill             | `var(--bg-canvas)`                        |
+| toggle rule           | `var(--border-default)`                   |
+| rhythm                | `var(--spacing-sm)` / `var(--spacing-md)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by the composed `segmented-button` and `button`.
-- Keyboard map: `Tab` reaches the toggle and each card's button; the toggle's arrow-key map is `segmented-button`'s.
+- Visible focus: owned by the composed `toggle-group` and `button`.
+- Keyboard map: `Tab` reaches the toggle and each card's button; the toggle's arrow-key map is `toggle-group`'s.
 - ARIA: the toggle is named by `periodsAriaLabel`; each plan is a `card-pricing` article with its name as `h3`; the features are a list and their glyphs are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `segmented-button`, which carries its own fallback; this band adds no motion.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group`, which carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the toggle and the buttons are `large`.
 
 ## Stories (Storybook)

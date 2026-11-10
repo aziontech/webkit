@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -36,7 +36,7 @@
 </script>
 
 <template>
-  <InputText
+  <Input
     size="small"
     v-bind="$attrs"
     :data-testid="testId"
@@ -51,5 +51,5 @@
         aria-hidden="true"
       />
     </template>
-  </InputText>
+  </Input>
 </template>

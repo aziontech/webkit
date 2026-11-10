@@ -1,6 +1,6 @@
 import Avatar from '@aziontech/webkit/avatar'
 import Button from '@aziontech/webkit/button'
-import CardBox from '@aziontech/webkit/card-box'
+import Card from '@aziontech/webkit/card'
 import Item from '@aziontech/webkit/item'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -41,7 +41,7 @@ const itemSubcomponents = {
   ItemActions: Item.Actions,
   Button,
   Avatar,
-  CardBox
+  Card
 }
 
 /** @type {import('@storybook/vue3').Meta<typeof Item>} */
@@ -75,7 +75,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Versatile flex row for title, description, media, and actions. Compose sub-components to reorder or omit regions; use ItemGroup for gapped off-card lists and ItemList (inside a CardBox with padded=false) for divided in-card lists.'
+          'Versatile flex row for title, description, media, and actions. Compose sub-components to reorder or omit regions; use ItemGroup for gapped off-card lists and ItemList (inside a Card with padded=false) for divided in-card lists.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -543,7 +543,7 @@ export const WithGroup = {
 
 const WITH_LIST_IMPORTS = [
   "import Item from '@aziontech/webkit/item'",
-  "import CardBox from '@aziontech/webkit/card-box'",
+  "import Card from '@aziontech/webkit/card'",
   "import Button from '@aziontech/webkit/button'"
 ]
 
@@ -560,7 +560,7 @@ const WITH_LIST_ROW = `      <Item>
         </Item.Actions>
       </Item>`
 
-const WITH_LIST_MARKUP = `<CardBox :padded="false" class="w-full">
+const WITH_LIST_MARKUP = `<Card :padded="false" class="w-full">
   <template #content>
     <Item.List>
 ${WITH_LIST_ROW}
@@ -568,7 +568,7 @@ ${WITH_LIST_ROW}
 ${WITH_LIST_ROW}
     </Item.List>
   </template>
-</CardBox>`
+</Card>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Item>} */
 export const WithList = {
@@ -578,7 +578,7 @@ export const WithList = {
       return { args }
     },
     template: `
-      <CardBox :padded="false" class="w-full">
+      <Card :padded="false" class="w-full">
         <template #content>
           <ItemList>
             <Item v-bind="args" v-for="n in 3" :key="n">
@@ -595,14 +595,14 @@ export const WithList = {
             </Item>
           </ItemList>
         </template>
-      </CardBox>
+      </Card>
     `
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'ItemList is the in-card list: placed inside a CardBox with padded=false, rows are separated by full-width dividers and sit flush to the card edges.'
+          'ItemList is the in-card list: placed inside a Card with padded=false, rows are separated by full-width dividers and sit flush to the card edges.'
       },
       source: { code: toSfc(WITH_LIST_IMPORTS, WITH_LIST_MARKUP) }
     }
@@ -611,7 +611,7 @@ export const WithList = {
 
 const AS_CHILD_LIST_IMPORTS = [
   "import Item from '@aziontech/webkit/item'",
-  "import CardBox from '@aziontech/webkit/card-box'"
+  "import Card from '@aziontech/webkit/card'"
 ]
 
 const AS_CHILD_LIST_ROW = `      <Item as-child>
@@ -627,7 +627,7 @@ const AS_CHILD_LIST_ROW = `      <Item as-child>
         </a>
       </Item>`
 
-const AS_CHILD_LIST_MARKUP = `<CardBox :padded="false" class="w-full">
+const AS_CHILD_LIST_MARKUP = `<Card :padded="false" class="w-full">
   <template #content>
     <Item.List>
 ${AS_CHILD_LIST_ROW}
@@ -635,14 +635,14 @@ ${AS_CHILD_LIST_ROW}
 ${AS_CHILD_LIST_ROW}
     </Item.List>
   </template>
-</CardBox>`
+</Card>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Item>} */
 export const WithListAsChild = {
   render: () => ({
     components: itemSubcomponents,
     template: `
-      <CardBox :padded="false" class="w-full">
+      <Card :padded="false" class="w-full">
         <template #content>
           <ItemList>
             <Item as-child v-for="n in 3" :key="n">
@@ -659,7 +659,7 @@ export const WithListAsChild = {
             </Item>
           </ItemList>
         </template>
-      </CardBox>
+      </Card>
     `
   }),
   parameters: {

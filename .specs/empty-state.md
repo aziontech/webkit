@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: eae568014640d5cfdbd5378fea5cf64c5214017f9d8b49472c8bfcd8b3fce518
+checksum: eaf2ab7c500ab31384394ecdd0cd40454ca160911b59b7acb36b11207f92ebf0
 created: 2026-06-25
 last_updated: 2026-11-09
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Message`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
+Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Alert`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
 
 ## When to use
 
@@ -47,9 +47,9 @@ Centered placeholder shown when a resource list or section has no content yet. S
 
 ```vue
 <script setup>
-import EmptyState from '@aziontech/webkit/empty-state'
-import Button from '@aziontech/webkit/button'
-import MiniButton from '@aziontech/webkit/mini-button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Button from '@aziontech/webkit/button'
+  import MiniButton from '@aziontech/webkit/mini-button'
 </script>
 
 <template>
@@ -60,10 +60,21 @@ import MiniButton from '@aziontech/webkit/mini-button'
   >
     <template #actions>
       <div class="flex gap-(--spacing-3)">
-        <Button kind="secondary" label="Secondary Item" />
-        <Button kind="outlined" label="Create Item" />
+        <Button
+          kind="secondary"
+          label="Secondary Item"
+        />
+        <Button
+          kind="outlined"
+          label="Create Item"
+        />
       </div>
-      <MiniButton label="View Documentation" icon="pi pi-arrow-right" size="medium" href="#" />
+      <MiniButton
+        label="View Documentation"
+        icon="pi pi-arrow-right"
+        size="medium"
+        href="#"
+      />
     </template>
   </EmptyState>
 </template>
@@ -71,13 +82,13 @@ import MiniButton from '@aziontech/webkit/mini-button'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `—` | true | Primary heading announcing the empty resource. |
-| `description` | `string` | `''` | false | Supporting body copy below the title. |
-| `icon` | `string` | `''` | false | PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
-| `bordered` | `boolean` | `false` | false | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background. |
+| Prop          | Type                  | Default    | Required | JSDoc                                                                                                                                                                                                                                                                 |
+| ------------- | --------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `string`              | `—`        | true     | Primary heading announcing the empty resource.                                                                                                                                                                                                                        |
+| `description` | `string`              | `''`       | false    | Supporting body copy below the title.                                                                                                                                                                                                                                 |
+| `icon`        | `string`              | `''`       | false    | PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                  |
+| `size`        | `'small' \| 'medium'` | `'medium'` | false    | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
+| `bordered`    | `boolean`             | `false`    | false    | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background.                                                                                                                                                        |
 
 ## Events
 
@@ -85,10 +96,10 @@ import MiniButton from '@aziontech/webkit/mini-button'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `icon` | — | Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders. |
-| `actions` | — | Action area below the description; consumer composes buttons and the documentation link. |
+| Slot      | Scope | Notes                                                                                                                                                                                                                |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icon`    | —     | Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders. |
+| `actions` | —     | Action area below the description; consumer composes buttons and the documentation link.                                                                                                                             |
 
 ## States
 
@@ -102,34 +113,34 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| title typography | per-`size` — see harmonic scale below |
-| description typography | per-`size` — see harmonic scale below |
-| surface (bordered) | `var(--bg-surface)` |
-| border (bordered) | `var(--border-default)` (dashed, `var(--border-width-default)`) |
-| title text | `var(--text-default)` |
-| description text | `var(--text-muted)` |
-| adornment tile surface | `var(--bg-surface)` |
-| adornment tile border | `var(--border-default)` |
-| adornment decorative layers | `var(--bg-canvas)` · `var(--border-strong)` |
-| adornment shape | `var(--shape-card)` · `var(--shape-elements)` |
-| adornment icon | `var(--text-default)` |
-| shape (bordered) | `var(--shape-button)` |
-| spacing (title gap) | `var(--spacing-xs)` |
-| spacing (actions gap) | `var(--spacing-xs)` |
+| Region                      | Token (DESIGN.md)                                               |
+| --------------------------- | --------------------------------------------------------------- |
+| title typography            | per-`size` — see harmonic scale below                           |
+| description typography      | per-`size` — see harmonic scale below                           |
+| surface (bordered)          | `var(--bg-surface)`                                             |
+| border (bordered)           | `var(--border-default)` (dashed, `var(--border-width-default)`) |
+| title text                  | `var(--text-default)`                                           |
+| description text            | `var(--text-muted)`                                             |
+| adornment tile surface      | `var(--bg-surface)`                                             |
+| adornment tile border       | `var(--border-default)`                                         |
+| adornment decorative layers | `var(--bg-canvas)` · `var(--border-strong)`                     |
+| adornment shape             | `var(--shape-card)` · `var(--shape-elements)`                   |
+| adornment icon              | `var(--text-default)`                                           |
+| shape (bordered)            | `var(--shape-button)`                                           |
+| spacing (title gap)         | `var(--spacing-xs)`                                             |
+| spacing (actions gap)       | `var(--spacing-xs)`                                             |
 
 ### Harmonic scale (per `size`)
 
 Every axis steps up one rung per size on a single harmonic ramp. The title climbs the **heading** scale (`heading` tokens only — never `body`); the description climbs the **body** scale one rung below it, so the pair stays in proportion at every size.
 
-| Axis | `small` | `medium` |
-|---|---|---|
-| title typography | `.text-heading-xxs` (14px) | `.text-heading-sm` (14 → 18px) |
-| description typography | `.text-body-xs` (12px) | `.text-body-sm` (14px) |
-| adornment tile | `size-8` (32px) | `size-10` (40px) |
-| padding (x · y) | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
-| stack gap | `var(--spacing-4)` | `var(--spacing-6)` |
+| Axis                   | `small`                                 | `medium`                                 |
+| ---------------------- | --------------------------------------- | ---------------------------------------- |
+| title typography       | `.text-heading-xxs` (14px)              | `.text-heading-sm` (14 → 18px)           |
+| description typography | `.text-body-xs` (12px)                  | `.text-body-sm` (14px)                   |
+| adornment tile         | `size-8` (32px)                         | `size-10` (40px)                         |
+| padding (x · y)        | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
+| stack gap              | `var(--spacing-4)`                      | `var(--spacing-6)`                       |
 
 ## Theme gaps
 

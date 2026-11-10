@@ -1492,14 +1492,14 @@ Feat(webkit): add table export            → type must be lower-case
 feature(webkit): add table export         → "feature" is not in the enum; use feat
 feat(Webkit): add table export            → scope must be lower-case
 fix(webkit):                              → subject is required
-fix(webkit): correct the paginator focus ring so that it stays visible in dark mode and in high-contrast themes
+fix(webkit): correct the pagination focus ring so that it stays visible in dark mode and in high-contrast themes
                                           → header over 100 chars (111)
 ```
 
 **✅ Correct**
 
 ```text
-fix(webkit): correct paginator focus ring
+fix(webkit): correct pagination focus ring
 feat(webkit): [ENG-1231] add table export
 chore: bump tooling
 docs: describe compound API exports

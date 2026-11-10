@@ -14,7 +14,7 @@ const helperText = helperLayer.type === 'INSTANCE' ? helperLayer.findText('label
 const helper = helperText && helperText.type === 'TEXT' ? helperText.textContent.trim() : ''
 
 const group = instance.findInstance('InputGroup')
-const input = group.type === 'INSTANCE' ? group.findInstance('InputText') : undefined
+const input = group.type === 'INSTANCE' ? group.findInstance('Input') : undefined
 const placeholder = input && input.type === 'INSTANCE' ? input.getString('placeholder') : ''
 
 export default {

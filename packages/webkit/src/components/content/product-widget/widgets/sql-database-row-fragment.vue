@@ -3,9 +3,9 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import Checkbox from '../../../inputs/checkbox/checkbox.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -129,7 +129,7 @@
               />
               <span class="truncate text-heading-xxs text-(--text-default)">users</span>
             </span>
-            <SegmentedButton
+            <ToggleGroup
               model-value="data"
               :options="VIEWS"
               aria-label="Table view"
@@ -142,7 +142,7 @@
             class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
           >
             <span class="flex min-w-0 flex-1">
-              <InputText
+              <Input
                 model-value=""
                 size="medium"
                 placeholder="Filter by id, name, email… or ask AI"
@@ -154,7 +154,7 @@
                     aria-hidden="true"
                   />
                 </template>
-              </InputText>
+              </Input>
             </span>
             <span class="ml-auto flex items-center gap-(--spacing-xs)">
               <IconButton

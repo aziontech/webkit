@@ -2,12 +2,12 @@
   import BarList from '@aziontech/webkit/bar-list'
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import Input from '@aziontech/webkit/input'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
@@ -292,7 +292,7 @@
                 icon="pi pi-arrow-up-right"
                 size="small"
               />
-              <SegmentedButton
+              <ToggleGroup
                 v-model="form"
                 :options="forms"
                 size="small"
@@ -307,26 +307,26 @@
                 aria-label="Expand Matched requests over time"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Matched requests over time"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -412,26 +412,26 @@
                 aria-label="Expand Blocked requests by attack category"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Blocked requests by attack category"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -475,26 +475,26 @@
                 aria-label="Expand Blocked requests by country"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Blocked requests by country"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -539,33 +539,33 @@
                 aria-label="Expand Top source IPs by blocked requests"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Top source IPs by blocked requests"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
           <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
             <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
               <div class="min-w-36 grow basis-(--container-3xs)">
-                <InputText
+                <Input
                   v-model="search"
                   size="medium"
                   placeholder="Search addresses, networks or attacks"
@@ -577,7 +577,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </div>
             </div>
             <TableRoot

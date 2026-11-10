@@ -48,7 +48,7 @@ describe('DocCallout', () => {
   describe('block content', () => {
     it('keeps a paragraph and a list inside the copy once the server markup is parsed as HTML', async () => {
       // MDX asides arrive as server-rendered markup; a copy region that is a p would be
-      // closed by the parser at the ul, pushing the list beside the text (see Message).
+      // closed by the parser at the ul, pushing the list beside the text (see Alert).
       const app = createSSRApp({
         render: () =>
           h(DocCallout, { kind: 'note' }, () => [

@@ -3,7 +3,7 @@
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -160,7 +160,7 @@
           data-phase="form"
           class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
         >
-          <CardBox class="w-full">
+          <Card class="w-full">
             <template #content>
               <div class="flex flex-col gap-(--spacing-lg)">
                 <div class="flex flex-col gap-(--spacing-xxs)">
@@ -235,7 +235,7 @@
                 :disabled="!canDeploy"
               />
             </template>
-          </CardBox>
+          </Card>
 
           <Button
             label="Browse Templates"

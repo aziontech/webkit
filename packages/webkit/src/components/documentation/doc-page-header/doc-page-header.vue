@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Divider from '../../layout/divider/divider.vue'
+  import Separator from '../../layout/separator/separator.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -148,7 +148,7 @@
           aria-hidden="true"
           class="mx-(--spacing-xxs) hidden h-4 items-center md:flex"
         >
-          <Divider orientation="vertical" />
+          <Separator orientation="vertical" />
         </span>
         <Tooltip :text="action.tip ?? ''">
           <Button

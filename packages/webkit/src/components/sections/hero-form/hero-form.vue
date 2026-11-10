@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Message from '../../feedback/message/message.vue'
+  import Alert from '../../feedback/alert/alert.vue'
   import { defaultCountries } from '../../inputs/field-phone-number/countries'
   import FieldPhoneNumber from '../../inputs/field-phone-number/field-phone-number.vue'
   import FieldSelect, { type FieldSelectValue } from '../../inputs/field-select/field-select.vue'
@@ -53,13 +53,13 @@
 
   /** Copy of the form outcomes. */
   export type HeroFormMessages = {
-    /** Message under a required field submitted empty. */
+    /** Alert under a required field submitted empty. */
     missing: string
-    /** Message under an email field holding a malformed address. */
+    /** Alert under an email field holding a malformed address. */
     invalidEmail: string
-    /** Message shown in place of the form once the site reports the values were sent. */
+    /** Alert shown in place of the form once the site reports the values were sent. */
     success: string
-    /** Message shown under the form when the site reports the values could not be sent. */
+    /** Alert shown under the form when the site reports the values could not be sent. */
     error: string
   }
 
@@ -231,7 +231,7 @@
         </ul>
 
         <div class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <Message
+          <Alert
             v-if="submitted"
             severity="success"
             :label="messages.success"
@@ -326,7 +326,7 @@
               />
             </div>
 
-            <Message
+            <Alert
               v-if="error"
               severity="danger"
               :label="messages.error"

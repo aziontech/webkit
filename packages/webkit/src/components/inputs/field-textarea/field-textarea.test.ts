@@ -17,7 +17,7 @@ const NATIVE = CONTROL // same element: the native <textarea>
 describe('FieldTextarea', () => {
   it('renders the root with the default data-testid and stacks its parts', () => {
     const { getByTestId } = render(FieldTextarea, {
-      props: { label: 'Message', helperText: 'Helper' }
+      props: { label: 'Alert', helperText: 'Helper' }
     })
 
     expect(getByTestId(ROOT)).toBeTruthy()
@@ -29,7 +29,7 @@ describe('FieldTextarea', () => {
 
   it('honors a consumer-provided data-testid on the root and its suffixed parts', () => {
     const { getByTestId } = render(FieldTextarea, {
-      props: { label: 'Message', helperText: 'Helper' },
+      props: { label: 'Alert', helperText: 'Helper' },
       attrs: { 'data-testid': 'my-field' }
     })
 
@@ -45,13 +45,13 @@ describe('FieldTextarea', () => {
   })
 
   it('omits the helper row when there is no helper text', () => {
-    const { queryByTestId } = render(FieldTextarea, { props: { label: 'Message' } })
+    const { queryByTestId } = render(FieldTextarea, { props: { label: 'Alert' } })
     expect(queryByTestId(`${ROOT}__helper`)).toBeNull()
   })
 
   it('renders the helper text content when helperText is provided', () => {
     const { getByTestId } = render(FieldTextarea, {
-      props: { label: 'Message', helperText: 'Up to 500 characters.' }
+      props: { label: 'Alert', helperText: 'Up to 500 characters.' }
     })
     expect(getByTestId(`${ROOT}__helper__text`).textContent?.trim()).toBe('Up to 500 characters.')
   })
@@ -65,7 +65,7 @@ describe('FieldTextarea', () => {
       [{ disabled: true, invalid: true, required: true }, 'disabled']
     ])('maps %o to HelperText kind=%s', (state, kind) => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', helperText: 'Helper', ...state }
+        props: { label: 'Alert', helperText: 'Helper', ...state }
       })
       expect(getByTestId(`${ROOT}__helper`)).toHaveAttribute('data-kind', kind)
     })
@@ -73,7 +73,7 @@ describe('FieldTextarea', () => {
 
   describe('v-model / update:modelValue', () => {
     it('emits update:modelValue with the typed value when the user types', async () => {
-      const { getByTestId, emitted } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId, emitted } = render(FieldTextarea, { props: { label: 'Alert' } })
 
       await fireEvent.update(getByTestId(NATIVE), 'hello world')
 
@@ -83,7 +83,7 @@ describe('FieldTextarea', () => {
     })
 
     it('emits the latest value on each subsequent input', async () => {
-      const { getByTestId, emitted } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId, emitted } = render(FieldTextarea, { props: { label: 'Alert' } })
       const control = getByTestId(NATIVE)
 
       await fireEvent.update(control, 'first')
@@ -97,7 +97,7 @@ describe('FieldTextarea', () => {
 
     it('reflects the modelValue prop on the underlying textarea', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', modelValue: 'prefilled body' }
+        props: { label: 'Alert', modelValue: 'prefilled body' }
       })
       expect(getByTestId(NATIVE)).toHaveValue('prefilled body')
     })
@@ -106,7 +106,7 @@ describe('FieldTextarea', () => {
       // Disabled relies on the native `disabled` attribute to stop real typing;
       // a programmatic value dispatch bypasses that guard, so asserting a non-emit
       // would be a false positive. Ground the actual mechanism instead.
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message', disabled: true } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert', disabled: true } })
       expect(getByTestId(NATIVE)).toBeDisabled()
     })
   })
@@ -114,7 +114,7 @@ describe('FieldTextarea', () => {
   describe('label / id / aria wiring', () => {
     it('wires the label to the textarea via matching for/id from inputId', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', inputId: 'message-field' }
+        props: { label: 'Alert', inputId: 'message-field' }
       })
       // The Label sub-component renders a <label> as its own root, carrying the testid.
       const label = getByTestId(`${ROOT}__label`) as HTMLLabelElement
@@ -127,14 +127,14 @@ describe('FieldTextarea', () => {
 
     it('falls back to name for the textarea id when no inputId is given', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', name: 'the-message' }
+        props: { label: 'Alert', name: 'the-message' }
       })
       expect((getByTestId(NATIVE) as HTMLTextAreaElement).id).toBe('the-message')
     })
 
     it('points aria-describedby at the helper element when a helper is shown', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', helperText: 'We need this.', inputId: 'msg' }
+        props: { label: 'Alert', helperText: 'We need this.', inputId: 'msg' }
       })
       const control = getByTestId(NATIVE) as HTMLTextAreaElement
       const helper = getByTestId(`${ROOT}__helper`)
@@ -144,20 +144,20 @@ describe('FieldTextarea', () => {
     })
 
     it('drops aria-describedby when no helper is rendered', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert' } })
       expect(getByTestId(NATIVE).getAttribute('aria-describedby')).toBeNull()
     })
 
     it('forwards the name attribute onto the native textarea', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', name: 'message' }
+        props: { label: 'Alert', name: 'message' }
       })
       expect(getByTestId(NATIVE)).toHaveAttribute('name', 'message')
     })
 
     it('reflects the placeholder prop onto the native textarea', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', placeholder: 'Write your message' }
+        props: { label: 'Alert', placeholder: 'Write your message' }
       })
       expect(getByTestId(NATIVE)).toHaveAttribute('placeholder', 'Write your message')
     })
@@ -165,7 +165,7 @@ describe('FieldTextarea', () => {
 
   describe('required', () => {
     it('sets native required + aria-required on the textarea and data-required on the root', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message', required: true } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert', required: true } })
       const control = getByTestId(NATIVE) as HTMLTextAreaElement
 
       expect(control.required).toBe(true)
@@ -174,7 +174,7 @@ describe('FieldTextarea', () => {
     })
 
     it('does not set data-required or aria-required by default', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert' } })
       expect(getByTestId(ROOT)).not.toHaveAttribute('data-required')
       expect(getByTestId(NATIVE)).not.toHaveAttribute('aria-required')
     })
@@ -183,14 +183,14 @@ describe('FieldTextarea', () => {
   describe('invalid', () => {
     it('sets aria-invalid on the textarea and data-invalid on the root', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', invalid: true, helperText: 'Not valid.' }
+        props: { label: 'Alert', invalid: true, helperText: 'Not valid.' }
       })
       expect(getByTestId(NATIVE).getAttribute('aria-invalid')).toBe('true')
       expect(getByTestId(ROOT).getAttribute('data-invalid')).toBe('true')
     })
 
     it('does not set data-invalid or aria-invalid by default', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert' } })
       expect(getByTestId(ROOT)).not.toHaveAttribute('data-invalid')
       expect(getByTestId(NATIVE)).not.toHaveAttribute('aria-invalid')
     })
@@ -198,34 +198,34 @@ describe('FieldTextarea', () => {
 
   describe('disabled', () => {
     it('disables the native textarea and marks data-disabled on the root', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message', disabled: true } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert', disabled: true } })
       expect(getByTestId(NATIVE)).toBeDisabled()
       expect(getByTestId(ROOT).getAttribute('data-disabled')).toBe('true')
     })
 
     it('renders the lock icon inside the helper when disabled with helper text', () => {
       const { getByTestId } = render(FieldTextarea, {
-        props: { label: 'Message', disabled: true, helperText: 'This field is locked.' }
+        props: { label: 'Alert', disabled: true, helperText: 'This field is locked.' }
       })
       expect(getByTestId(`${ROOT}__helper__icon`)).toBeTruthy()
       expect(getByTestId(`${ROOT}__helper`)).toHaveAttribute('data-kind', 'disabled')
     })
 
     it('does not set data-disabled by default', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert' } })
       expect(getByTestId(ROOT)).not.toHaveAttribute('data-disabled')
     })
   })
 
   describe('readonly', () => {
     it('marks the native textarea readonly and sets data-readonly on the root', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message', readonly: true } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert', readonly: true } })
       expect((getByTestId(NATIVE) as HTMLTextAreaElement).readOnly).toBe(true)
       expect(getByTestId(ROOT)).toHaveAttribute('data-readonly')
     })
 
     it('does not set data-readonly by default', () => {
-      const { getByTestId } = render(FieldTextarea, { props: { label: 'Message' } })
+      const { getByTestId } = render(FieldTextarea, { props: { label: 'Alert' } })
       expect(getByTestId(ROOT)).not.toHaveAttribute('data-readonly')
     })
   })
@@ -233,7 +233,7 @@ describe('FieldTextarea', () => {
   describe('accessibility', () => {
     it('has no a11y violations in the default labelled + helper state', async () => {
       const { container } = render(FieldTextarea, {
-        props: { label: 'Message', helperText: 'Up to 500 characters.', inputId: 'a11y-default' }
+        props: { label: 'Alert', helperText: 'Up to 500 characters.', inputId: 'a11y-default' }
       })
       await expectNoA11yViolations(container)
     })
@@ -241,7 +241,7 @@ describe('FieldTextarea', () => {
     it('has no a11y violations in the invalid state', async () => {
       const { container } = render(FieldTextarea, {
         props: {
-          label: 'Message',
+          label: 'Alert',
           invalid: true,
           modelValue: 'some text',
           helperText: 'This value is not valid.',
@@ -253,7 +253,7 @@ describe('FieldTextarea', () => {
 
     it('has no a11y violations in the disabled state', async () => {
       const { container } = render(FieldTextarea, {
-        props: { label: 'Message', disabled: true, helperText: 'Locked.', inputId: 'a11y-disabled' }
+        props: { label: 'Alert', disabled: true, helperText: 'Locked.', inputId: 'a11y-disabled' }
       })
       await expectNoA11yViolations(container)
     })

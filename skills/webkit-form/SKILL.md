@@ -1,6 +1,6 @@
 ---
 name: webkit-form
-description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, CardBox with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Message callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
+description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
 last_updated: 2026-10-19
 scope: general
@@ -21,7 +21,7 @@ toasts request errors) — this skill owns **layout, labels, grouping, validatio
 
 There are **two ways to lay out a form**, and both are first-class:
 
-- **Approach A — Cards + ItemGroups.** Sections are a flush `CardBox` wrapping an `Item.List`; every
+- **Approach A — Cards + ItemGroups.** Sections are a flush `Card` wrapping an `Item.List`; every
   field is one `Item` row (name/guidance on the left, control on the right). This is the default for
   **grouped, settings-style, or list-like** forms — an account settings page, a resource's config or
   create page, a create drawer.
@@ -59,7 +59,7 @@ input only when no `Field*` fits.
   association**, the on-field `HelperText`, and the `required` / `invalid` a11y wiring (`aria-required` /
   `aria-invalid` / `aria-describedby`) that this skill otherwise asks you to wire by hand. Using it means
   the accessible-name / error-association rules below are satisfied **by construction**.
-- **Loose (`InputText`, `InputNumber`, `Textarea`, `Select`, `Checkbox`, `RadioButton`, `Switch`,
+- **Loose (`Input`, `NumberInput`, `Textarea`, `Select`, `Checkbox`, `RadioButton`, `Switch`,
   `InputGroup`, …):** the bare control, no label/helper/validation shell. Use one only when the matching
   `Field*` genuinely doesn't fit — a composed `Select` inside a custom row, a control in an `Item.Actions`
   cell, a bespoke layout the `Field*` wrapper can't express. When you do, **you** own the label
@@ -81,7 +81,7 @@ use it; if it truly doesn't, drop to the loose control and wire the a11y yoursel
 
 <!-- ⚠️ Loose — only when no Field* fits; now YOU wire the label + aria-describedby -->
 <Label for="app-name">Application name</Label>
-<InputText
+<Input
   id="app-name"
   v-model="form.name"
   aria-describedby="app-name-help"
@@ -135,7 +135,7 @@ if a form seems to need a different rhythm, it's in the wrong container.
 
 ### Hierarchy (top → down, never inverted)
 
-form title (`text-heading-*` — `PageHeading size="medium"` on a page, a `CardBox` title / `text-heading-sm`
+form title (`text-heading-*` — `PageHeading size="medium"` on a page, a `Card` title / `text-heading-sm`
 in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
 → section overline (`text-overline-sm`) or sub-heading (`text-heading-xs`) → **field label** (`Label`,
 which carries the required tag) → control → **helper** (`HelperText` — guidance, or the required/invalid
@@ -170,31 +170,31 @@ contexts** in Azion products:
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
 
-- **CardBox with independent saves.** Long configuration pages split into multiple `CardBox` sections
+- **Card with independent saves.** Long configuration pages split into multiple `Card` sections
   where **each card owns its own save**, so the user commits changes in parts instead of one giant
   submit. Approach A inside each card.
 
 **Save model follows partitioning, not the container type.** A form that is one logical unit has **one
 save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several overline-titled
 sections, like Account Settings; the sections group the topic, not the save). A form deliberately split
-into independently-committed cards — the **CardBox with independent saves** type — has **one save per
+into independently-committed cards — the **Card with independent saves** type — has **one save per
 card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
 
-### Example — CardBox with its own save
+### Example — Card with its own save
 
 A self-contained settings card (one of possibly several on the page, each committing independently): the
-card's name is the `CardBox` **`title`** (it renders in the card header), then a short description at the
+card's name is the `Card` **`title`** (it renders in the card header), then a short description at the
 top of the body, the fields, an optional inline note, and the card's **own save in the footer**.
-`CardBox`'s footer is centered by default, so a full-width `justify-between` child puts a "Learn more"
+`Card`'s footer is centered by default, so a full-width `justify-between` child puts a "Learn more"
 link on the left and Save on the right. Canonical pattern:
 
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import Select from '@aziontech/webkit/select'
   import { reactive, ref } from 'vue'
 
@@ -209,7 +209,7 @@ link on the left and Save on the right. Canonical pattern:
 </script>
 
 <template>
-  <CardBox
+  <Card
     title="Azion Toolbar"
     class="w-full"
   >
@@ -259,11 +259,11 @@ link on the left and Save on the right. Canonical pattern:
           </div>
         </div>
 
-        <Message severity="info">
+        <Alert severity="info">
           To use the toolbar in production your team members need the Chrome extension, or
           <a href="/docs/toolbar">enable the toolbar for that domain</a>
           in the toolbar menu.
-        </Message>
+        </Alert>
       </div>
     </template>
 
@@ -282,7 +282,7 @@ link on the left and Save on the right. Canonical pattern:
         />
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>
 ```
 
@@ -302,8 +302,8 @@ Canonical pattern:
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import InputText from '@aziontech/webkit/input-text'
-  import Message from '@aziontech/webkit/message'
+  import Input from '@aziontech/webkit/input'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -336,7 +336,7 @@ Canonical pattern:
 
         <!-- compact modal body: --spacing-md between blocks -->
         <PanelContent class="flex flex-col gap-(--spacing-md)">
-          <Message
+          <Alert
             severity="warning"
             label="Once confirmed, this action can't be reversed."
           />
@@ -350,7 +350,7 @@ Canonical pattern:
           >
             To confirm, type "{{ phrase }}" in the box below:
           </label>
-          <InputText
+          <Input
             id="confirm-delete"
             v-model="confirmation"
             autocomplete="off"
@@ -539,7 +539,7 @@ Rules:
 
 ## Approach A — Cards + ItemGroups (grouped / settings forms)
 
-Each section is a flush `CardBox` (`:padded="false"`) whose body is an `Item.List`. `Item.List` draws
+Each section is a flush `Card` (`:padded="false"`) whose body is an `Item.List`. `Item.List` draws
 the dividers between rows automatically, so every field reads as a divided row inside one box: the
 field's name + guidance on the left (`Item.Content`), the control on the right (`Item.Actions`).
 Multiple sections stack, each with a small `OVERLINE` title above its card.
@@ -557,16 +557,16 @@ Canonical pattern:
 
 ```vue
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
   import Item from '@aziontech/webkit/item'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
   <section class="flex flex-col gap-(--spacing-sm)">
     <p class="px-(--spacing-xs) text-overline-sm text-(--text-muted)">General</p>
-    <CardBox :padded="false">
+    <Card :padded="false">
       <template #content>
         <Item.List>
           <Item
@@ -585,7 +585,7 @@ Canonical pattern:
                    `required` (a prompt, NOT an error); a filled-but-malformed value
                    is red `invalid`. Emptiness picks the state — never both at once. -->
               <div class="flex w-full max-w-(--container-xl) flex-col gap-(--spacing-xs)">
-                <InputText
+                <Input
                   v-model="form.name"
                   size="large"
                   class="w-full"
@@ -606,14 +606,14 @@ Canonical pattern:
           </Item>
         </Item.List>
       </template>
-    </CardBox>
+    </Card>
   </section>
 </template>
 ```
 
 Rules:
 
-- **`CardBox :padded="false"` + `Item.List`** — one box, dividers from the list, no box-in-box.
+- **`Card :padded="false"` + `Item.List`** — one box, dividers from the list, no box-in-box.
 - **Every `Item` is `size="small"`.** Consistent across the whole form.
 - **`Item.Title` is the label; the control takes an `aria-label`.** Name in `Item.Title`, guidance in
   `Item.Description`, control on the right in `Item.Actions class="flex-1 justify-end"`. No `<Label>`
@@ -623,7 +623,7 @@ Rules:
   `flex flex-col gap-(--spacing-xs)` column — capped at `max-w-(--container-xl)` (576px) so the
   control column stays a legible field width on wide pages — and render a `<HelperText>` **below** it, shown only
   after a failed submit and linked to the control via `aria-describedby`. This is still the field saying
-  what it needs, on the field — **not** a summary block or a `Message` callout. `Item.Description` stays
+  what it needs, on the field — **not** a summary block or a `Alert` callout. `Item.Description` stays
   as the always-on guidance on the left.
 - **Required is NOT an error — pick the state by what failed.** An empty required field is a _prompt_:
   `<HelperText kind="required">` (amber) + the control's `:required` (amber). A field whose value is
@@ -641,21 +641,21 @@ Rules:
 ### Section title — an OVERLINE above the card
 
 When a settings surface is split into topic sections (a multi-Card ItemGroup — the Account Settings
-pattern), **each section is titled by an `OVERLINE` above its flush `CardBox`**, not by the card's own
-header. The `<section>` stacks the overline over the card with `--spacing-sm` (12px); the `CardBox` stays
+pattern), **each section is titled by an `OVERLINE` above its flush `Card`**, not by the card's own
+header. The `<section>` stacks the overline over the card with `--spacing-sm` (12px); the `Card` stays
 `:padded="false"` and header-less (content only). This keeps the topic label lightweight and lets the
 card read as a single divided block of rows.
 
 ```vue
 <section class="flex flex-col gap-(--spacing-sm)">
   <p class="px-(--spacing-xs) text-overline-sm text-(--text-muted)">General</p>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <Item.List>
         <!-- Item rows … -->
       </Item.List>
     </template>
-  </CardBox>
+  </Card>
 </section>
 ```
 
@@ -663,13 +663,13 @@ Rules:
 
 - **The section title is `text-overline-sm text-(--text-muted)`** with `px-(--spacing-xs)`
   inset so it aligns with the card's content; `--spacing-sm` gap to the card (per the spacing macro rule).
-- **The card is header-less** (`:padded="false"`, only `#content`). Don't also set a `CardBox` `title` —
+- **The card is header-less** (`:padded="false"`, only `#content`). Don't also set a `Card` `title` —
   the overline is the section title; a card header would double it.
 - **A dangerous section** (Danger Zone) reuses the pattern with the danger tokens: overline in
-  `text-(--danger-contrast)` above a `CardBox class="border-(--danger-border) bg-(--danger)"`.
-- **Overline vs `CardBox` title — pick by role.** An **OVERLINE above** the card titles a _section of a
-  larger page_ (multi-Card ItemGroup). A **`CardBox` `title`** (in the card header) names a _self-contained
-  card that is the form_ — the "CardBox with its own save" / Contained form. Never use both on one card.
+  `text-(--danger-contrast)` above a `Card class="border-(--danger-border) bg-(--danger)"`.
+- **Overline vs `Card` title — pick by role.** An **OVERLINE above** the card titles a _section of a
+  larger page_ (multi-Card ItemGroup). A **`Card` `title`** (in the card header) names a _self-contained
+  card that is the form_ — the "Card with its own save" / Contained form. Never use both on one card.
 
 ## Approach B — Fields separated (short focused forms)
 
@@ -725,7 +725,7 @@ Available wrappers (ask the webkit MCP `suggest_component`, or read
 
 Rules:
 
-- **Never a bare `InputText` / `Textarea` next to a floating `<p>` "label".** Use the `field-*`
+- **Never a bare `Input` / `Textarea` next to a floating `<p>` "label".** Use the `field-*`
   wrapper. A placeholder is **not** a label — it vanishes on input and is not a reliable accessible name.
 - **The helper region is the guidance region.** Feed it the field's guidance; on a failed submit swap it
   for the message and flip the state — `:required` (amber, `kind=required`) for an empty field,
@@ -767,14 +767,14 @@ Rules:
 ## Grouping — a real `<fieldset>` + `<legend>`
 
 Each section is a **group of related controls**. Give it programmatic grouping with a native
-`<fieldset>` and an `sr-only` `<legend>` (the visible section title — the `OVERLINE` or `CardBox title`
+`<fieldset>` and an `sr-only` `<legend>` (the visible section title — the `OVERLINE` or `Card title`
 — already names it, so it isn't drawn twice). A `<fieldset>` also disables its whole subtree in one
 attribute, which is how you lock the scope on submit.
 
 ```vue
 <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0" :disabled="submitting">
   <legend class="sr-only">Account settings</legend>
-  <!-- sections: CardBox + Item.List (Approach A) OR stacked field-* (Approach B) -->
+  <!-- sections: Card + Item.List (Approach A) OR stacked field-* (Approach B) -->
 </fieldset>
 ```
 
@@ -813,7 +813,7 @@ there. `FieldText` forwards `type`, `autocomplete` and `spellcheck` to its `<inp
 
 Validation runs **on submit, once** — not on every keystroke, not on blur. The **feedback is the
 field's own state plus an on-field `HelperText`** — there is **no separate error-summary block and no
-`Message` callout** for field validation; the field says what it needs, where it is.
+`Alert` callout** for field validation; the field says what it needs, where it is.
 
 **Required is not an error.** Two failure kinds, two states:
 
@@ -879,16 +879,16 @@ Rules:
   pass `:invalid`); in an **ItemGroup** it is a `<HelperText>` rendered under the control, its `kind`
   matching the failure (`required` amber / `invalid` red — see Approach A). Either way it is
   `aria-describedby`-linked to the control and appears only after a failed submit.
-- **No custom error-summary block** (`role="alert"` list of links) and **no `Message` callout** for
+- **No custom error-summary block** (`role="alert"` list of links) and **no `Alert` callout** for
   field validation. Those were removed on purpose: the field's own state + its `HelperText` is the feedback.
 - **Never `toast` a field error.** Missing/invalid input stays on the field. Toast is for
   request/API failures only (see `/webkit-ui-states`).
 
-> **A server rejection scoped to one field is a different case**, and it is the one place a `Message`
+> **A server rejection scoped to one field is a different case**, and it is the one place a `Alert`
 > is right. The value is not malformed — the API rejected it (a referenced object was deleted, a name
-> is already taken), so it takes **both** surfaces: a `Message` inside that field's own section _and_
+> is already taken), so it takes **both** surfaces: a `Alert` inside that field's own section _and_
 > the field's red `invalid` state (never the amber `required` prompt — the value is present). On a
-> long form, scroll-anchor the erroring section. The full placement table — field, section `Message`,
+> long form, scroll-anchor the erroring section. The full placement table — field, section `Alert`,
 > toast, auth card, background-job toast — is **`/webkit-errors`**.
 
 ## Submission — native submit, one locked scope, sticky actions
@@ -899,11 +899,11 @@ re-derive it**. Save shows `:loading`, and **every field the action reads takes 
 flag**. On a long form, the actions live in a **sticky bar** so Save/Cancel are always reachable.
 
 **Bind `:disabled` on the controls, not only the `<fieldset>`.** A native `<fieldset :disabled>` blocks
-_interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `field-*`, `InputText`)
+_interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `field-*`, `Input`)
 render their **disabled visual** from their own `disabled` prop — a fieldset alone leaves them looking
 active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native safety net **and** pass
 `:disabled="submitting"` to each control (`field-*` forward it to their inner input). Multi-save forms
-(CardBox with independent saves) bind each card's controls to _that card's_ flag.
+(Card with independent saves) bind each card's controls to _that card's_ flag.
 
 ```vue
 <footer
@@ -947,7 +947,7 @@ creation date, an e-mail that only support can change — is **read-only**, not 
 
 - `readonly` keeps the value in `var(--text-default)`, focusable and copyable, and the field renders
   **transparent with a dashed border and no hover**, so it never looks editable next to the fields
-  that are. `FieldText`, `InputText` and `Textarea` share that look.
+  that are. `FieldText`, `Input` and `Textarea` share that look.
 - Say **why** in the helper text (who owns the value, and how to change it if that is possible).
 - **`disabled` is something else:** a control that is temporarily unavailable (a submit lock, a
   dependency not met). It greys the value out and drops it from the tab order. Never use it for a
@@ -1018,12 +1018,12 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## References
 
-- Field wrappers, `Label`, `HelperText`, `Item`, `CardBox`, `Select`, `Button` import paths: ask the
+- Field wrappers, `Label`, `HelperText`, `Item`, `Card`, `Select`, `Button` import paths: ask the
   webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
   every key is a real subpath.
 - Companion skills: `/webkit-ux-heuristics` (states + inline error placement), `/webkit-ui-states`
   (lock-the-scope + toast for request errors), and `/webkit-errors` (where every failure goes: the
-  field, a section `Message`, a toast, the auth card — including the signed-out screens, which never
+  field, a section `Alert`, a toast, the auth card — including the signed-out screens, which never
   toast).
 - Token catalog (spacing, colour, shape, typography): the `@aziontech/theme` tokens (the `--*` CSS
   variables it ships; the webkit MCP lists them).
@@ -1033,12 +1033,12 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 ## Definition of Done
 
 - [ ] Every control is a complete `Field*` (`FieldText`, `FieldTextarea`, `FieldPassword`, `FieldRadioBlock`,
-      `FieldSwitch`, …) unless no `Field*` fits; a loose input (`InputText`, `Select`, …) is used only as
+      `FieldSwitch`, …) unless no `Field*` fits; a loose input (`Input`, `Select`, …) is used only as
       the fallback, and then the label + `aria-describedby` are wired by hand.
-- [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / CardBox with
+- [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
       Dialog, or an ItemGroup — single block _or_ multiple overline-titled sections); one save per card only
-      for the CardBox-with-independent-saves type.
+      for the Card-with-independent-saves type.
 - [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
       `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
       quick-add; the child wires its new resource back into the parent on save; every layer is stacked
@@ -1047,8 +1047,8 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
 - [ ] Hierarchy is not inverted: title → description → section title → field label → control → helper.
 - [ ] Section titling matches role: a multi-Card ItemGroup titles each section with an `OVERLINE`
-      (`text-overline-sm`) above a header-less flush `CardBox`; a self-contained card that _is_ the form
-      uses the `CardBox` `title` in its header. Never both on one card.
+      (`text-overline-sm`) above a header-less flush `Card`; a self-contained card that _is_ the form
+      uses the `Card` `title` in its header. Never both on one card.
 - [ ] The form uses **one** layout: Cards + ItemGroups (`Item.List`, every `Item` `size="small"`) or
       Fields separated (`field-*` stacked) — not a mix within a section.
 - [ ] Field naming matches the type: in an **ItemGroup**, `Item.Title` is the label and the control
@@ -1063,7 +1063,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       message (the `field-*` helper row in Fields separated; a `<HelperText>` under the control in an
       ItemGroup), bound to the error and cleared on edit. Required-but-empty uses the amber `required`
       state/`kind` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`kind`;
-      never both on one field. No error-summary block, no `Message` callout for field validation.
+      never both on one field. No error-summary block, no `Alert` callout for field validation.
 - [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
       e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
       error; submit is never pre-disabled.

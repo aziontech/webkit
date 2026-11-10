@@ -3,8 +3,8 @@
 
   import FieldRadioBlock from '../../../inputs/field-radio-block/field-radio-block.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
@@ -182,7 +182,7 @@
                   for="data-stream-sampling-rate"
                   label="Sampling Rate (%)"
                 />
-                <InputNumber
+                <NumberInput
                   id="data-stream-sampling-rate"
                   :model-value="frame.rate"
                   :min="0"

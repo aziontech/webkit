@@ -6,13 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 364474d3316daf76692cf2596769c59a3fcdce82ff696b317b984d1c54e82033
+checksum: e83ba1f91806f35924e84e06c0687c9094d5fe1ef74f77d931645d438f5c9ed8
 ---
+
 # ArticleIndexBlog — Component Spec
 
 ## Purpose
 
-Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `input-text`, `avatar` and `button`; the selected category and the search term are local state.
+Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar` and `button`; the selected category and the search term are local state.
 
 ## When to use
 
@@ -37,7 +38,7 @@ Every article of the blog as one ruled list, with the controls to narrow it on o
 
 ```vue
 <script setup>
-import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
+  import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
 </script>
 
 <template>
@@ -69,17 +70,17 @@ import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `items` | `ArticleIndexBlogItem[]` | `[]` | false | The articles, newest first; each is `{ key, href, image, meta, title, description, authors?, byline?, categories? }`. |
-| `categories` | `string[]` | `[]` | false | Segments of the category picker after the show-all segment; the picker is omitted when empty. |
-| `allLabel` | `string` | `''` | false | Label of the first segment, which shows every category. |
-| `categoryLabel` | `string` | `''` | false | Accessible name of the category picker. |
-| `search` | `ArticleIndexBlogSearch` | `undefined` | false | The search field's `placeholder` and accessible `label`; the field is omitted when absent. |
-| `rowLabel` | `string` | `''` | false | Read cue revealed at the end of a row under hover or focus. |
-| `moreLabel` | `string` | `''` | false | Label of the load-more button under the list; the button is omitted when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the list of articles. |
+| Prop            | Type                     | Default     | Required | JSDoc                                                                                                                 |
+| --------------- | ------------------------ | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `anchor`        | `string`                 | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                        |
+| `items`         | `ArticleIndexBlogItem[]` | `[]`        | false    | The articles, newest first; each is `{ key, href, image, meta, title, description, authors?, byline?, categories? }`. |
+| `categories`    | `string[]`               | `[]`        | false    | Segments of the category picker after the show-all segment; the picker is omitted when empty.                         |
+| `allLabel`      | `string`                 | `''`        | false    | Label of the first segment, which shows every category.                                                               |
+| `categoryLabel` | `string`                 | `''`        | false    | Accessible name of the category picker.                                                                               |
+| `search`        | `ArticleIndexBlogSearch` | `undefined` | false    | The search field's `placeholder` and accessible `label`; the field is omitted when absent.                            |
+| `rowLabel`      | `string`                 | `''`        | false    | Read cue revealed at the end of a row under hover or focus.                                                           |
+| `moreLabel`     | `string`                 | `''`        | false    | Label of the load-more button under the list; the button is omitted when empty.                                       |
+| `ariaLabel`     | `string`                 | `''`        | false    | Accessible name of the list of articles.                                                                              |
 
 ## Events
 
@@ -98,28 +99,28 @@ import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover fill of a row | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| read cue rising in on hover or focus | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                              | Animation / Transition                                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover fill of a row                  | `transition-colors duration-fast-02 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| read cue rising in on hover or focus | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| row fill | hover `var(--bg-hover)` |
-| cover cell | `var(--bg-surface)`, rule `var(--border-default)` |
-| headline | `text-heading-sm`, `var(--text-default)` |
+| Region                 | Token (DESIGN.md)                                        |
+| ---------------------- | -------------------------------------------------------- |
+| row fill               | hover `var(--bg-hover)`                                  |
+| cover cell             | `var(--bg-surface)`, rule `var(--border-default)`        |
+| headline               | `text-heading-sm`, `var(--text-default)`                 |
 | overline, deck, byline | `text-overline-sm` / `text-body-sm`, `var(--text-muted)` |
-| read cue | `text-overline-md`, `var(--text-default)` |
-| avatar ring | `var(--bg-canvas)` |
-| focus ring | `var(--ring-color)` |
+| read cue               | `text-overline-md`, `var(--text-default)`                |
+| avatar ring            | `var(--bg-canvas)`                                       |
+| focus ring             | `var(--ring-color)`                                      |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

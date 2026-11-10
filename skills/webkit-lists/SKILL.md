@@ -85,7 +85,7 @@ A heading, then three nested bands, and nothing else:
                operation over the rows a filter selected), and is omitted when there is
                none. -->
           <ControlsHeader>
-            <InputText
+            <Input
               v-model="search"
               size="medium"
               placeholder="Search applications..."
@@ -97,7 +97,7 @@ A heading, then three nested bands, and nothing else:
                   class="pi pi-search"
                   aria-hidden="true"
               /></template>
-            </InputText>
+            </Input>
           </ControlsHeader>
 
           <FilterBar
@@ -106,7 +106,7 @@ A heading, then three nested bands, and nothing else:
           />
 
           <section class="flex min-h-0 flex-col">
-            <CardBox :padded="false">
+            <Card :padded="false">
               <template #content>
                 <Table
                   v-model:pagination="pagination"
@@ -121,7 +121,7 @@ A heading, then three nested bands, and nothing else:
                   @row-click="open"
                 />
               </template>
-            </CardBox>
+            </Card>
           </section>
         </section>
       </section>
@@ -371,7 +371,7 @@ its columns and nothing else.
 - A first-level module index **opens with a `PageHeading`** (`size="medium"`) carrying the module's
   create action — the breadcrumb starts at the second level, so nothing else names the page.
 - **The heading's action is the page's only `large` control; the whole controls row is `medium`.**
-- `CardBox :padded="false"` + `Table :border="false"` — never a padded card around a bordered table.
+- `Card :padded="false"` + `Table :border="false"` — never a padded card around a bordered table.
 - **Search runs inside the table** (`v-model:globalFilter`); **filters narrow `:data` outside it**. Never
   route a membership filter through an operator builder — `is one of` on every row is a control with one
   option.
@@ -416,8 +416,8 @@ Close with `List sound` or `N gaps — fix before polish`.
 - `/webkit-navigation` — the shell the page sits in and how its nav row is activated.
 - `/webkit-ui-states` — the loading skeleton, and the two different empty states (no rows vs no matches).
 - `/webkit-microcopy` — field labels, the empty-state sentence, the search placeholder.
-- Components used here, all resolvable through the MCP or the catalog: `Table`, `CardBox`, `Popover`,
-  `Chip`, `InputText`, `Button`, `EmptyState`, `Avatar`, `Tooltip`.
+- Components used here, all resolvable through the MCP or the catalog: `Table`, `Card`, `Popover`,
+  `Chip`, `Input`, `Button`, `EmptyState`, `Avatar`, `Tooltip`.
 
 ## Definition of Done
 

@@ -2,9 +2,9 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import SegmentedButton from '../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import Avatar from '../../avatar/avatar.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
 
@@ -135,7 +135,7 @@
             v-if="categories.length > 0"
             class="min-w-0 overflow-x-auto"
           >
-            <SegmentedButton
+            <ToggleGroup
               v-model="category"
               :options="options"
               :aria-label="categoryLabel || undefined"
@@ -147,7 +147,7 @@
             v-if="search"
             class="w-full shrink-0 lg:w-(--container-3xs)"
           >
-            <InputText
+            <Input
               v-model="query"
               size="medium"
               type="text"
@@ -157,7 +157,7 @@
               <template #iconLeft>
                 <i class="pi pi-search text-(--text-muted)" />
               </template>
-            </InputText>
+            </Input>
           </div>
         </div>
       </FrameBox>

@@ -8,9 +8,9 @@
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
-  import TabView from '../../../navigation/tab-view/index.js'
+  import Tabs from '../../../navigation/tabs/index.js'
   import Tag, { type TagSeverity } from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -174,19 +174,19 @@
         <div
           class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
         >
-          <TabView
+          <Tabs
             value="overview"
             class="-ml-(--spacing-xs) min-w-0 flex-1"
           >
-            <TabView.List>
-              <TabView.Item
+            <Tabs.List>
+              <Tabs.Item
                 v-for="tab in TABS"
                 :key="tab.value"
                 :value="tab.value"
                 :label="tab.label"
               />
-            </TabView.List>
-          </TabView>
+            </Tabs.List>
+          </Tabs>
           <Button
             label="Deploy"
             kind="outlined"
@@ -202,7 +202,7 @@
           class="relative flex flex-col gap-(--spacing-xl) px-(--spacing-lg) pt-(--spacing-lg) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
         >
           <ShellMockupPart :order="1">
-            <CardBox :padded="false">
+            <Card :padded="false">
               <template #content>
                 <div
                   class="flex min-h-14 items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-xs)"
@@ -324,14 +324,14 @@
                   </span>
                 </div>
               </template>
-            </CardBox>
+            </Card>
           </ShellMockupPart>
 
           <div ref="topologyRef">
             <ShellMockupPart :order="2">
               <div class="flex flex-col gap-(--layout-group-gap)">
                 <h2 class="m-0 text-heading-xs text-(--text-default)">Deployment topology</h2>
-                <CardBox
+                <Card
                   :padded="false"
                   class="overflow-hidden bg-(--bg-surface-raised)"
                 >
@@ -447,7 +447,7 @@
                       </div>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </ShellMockupPart>
           </div>

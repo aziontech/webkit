@@ -1,17 +1,17 @@
 import Avatar from '@aziontech/webkit/avatar'
-import CommandMenu from '@aziontech/webkit/command-menu'
-import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'
-import CommandMenuGroup from '@aziontech/webkit/command-menu-group'
-import CommandMenuInput from '@aziontech/webkit/command-menu-input'
-import CommandMenuItem from '@aziontech/webkit/command-menu-item'
-import CommandMenuList from '@aziontech/webkit/command-menu-list'
-import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'
-import Dropdown from '@aziontech/webkit/dropdown'
-import DropdownGroup from '@aziontech/webkit/dropdown-group'
-import DropdownOption from '@aziontech/webkit/dropdown-option'
-import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+import Command from '@aziontech/webkit/command'
+import CommandEmpty from '@aziontech/webkit/command-empty'
+import CommandGroup from '@aziontech/webkit/command-group'
+import CommandInput from '@aziontech/webkit/command-input'
+import CommandItem from '@aziontech/webkit/command-item'
+import CommandList from '@aziontech/webkit/command-list'
+import CommandSeparator from '@aziontech/webkit/command-separator'
+import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 import IconButton from '@aziontech/webkit/icon-button'
-import InputText from '@aziontech/webkit/input-text'
+import Input from '@aziontech/webkit/input'
 import Kbd from '@aziontech/webkit/kbd'
 import Menu from '@aziontech/webkit/menu'
 import MenuBack from '@aziontech/webkit/menu-back'
@@ -30,25 +30,25 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT_SIDEBAR = "import Sidebar from '@aziontech/webkit/sidebar'"
 const IMPORT_HEADER = "import SidebarHeader from '@aziontech/webkit/sidebar-header'"
 const IMPORT_FOOTER = "import SidebarFooter from '@aziontech/webkit/sidebar-footer'"
-const IMPORT_INPUT_TEXT = "import InputText from '@aziontech/webkit/input-text'"
+const IMPORT_INPUT_TEXT = "import Input from '@aziontech/webkit/input'"
 const IMPORT_KBD = "import Kbd from '@aziontech/webkit/kbd'"
 const IMPORT_AVATAR = "import Avatar from '@aziontech/webkit/avatar'"
 const IMPORT_ICON_BUTTON = "import IconButton from '@aziontech/webkit/icon-button'"
-const IMPORT_DROPDOWN = "import Dropdown from '@aziontech/webkit/dropdown'"
-const IMPORT_DROPDOWN_TRIGGER = "import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'"
-const IMPORT_DROPDOWN_GROUP = "import DropdownGroup from '@aziontech/webkit/dropdown-group'"
-const IMPORT_DROPDOWN_OPTION = "import DropdownOption from '@aziontech/webkit/dropdown-option'"
-const IMPORT_COMMAND_MENU = "import CommandMenu from '@aziontech/webkit/command-menu'"
-const IMPORT_COMMAND_MENU_INPUT =
-  "import CommandMenuInput from '@aziontech/webkit/command-menu-input'"
-const IMPORT_COMMAND_MENU_LIST = "import CommandMenuList from '@aziontech/webkit/command-menu-list'"
-const IMPORT_COMMAND_MENU_GROUP =
-  "import CommandMenuGroup from '@aziontech/webkit/command-menu-group'"
-const IMPORT_COMMAND_MENU_ITEM = "import CommandMenuItem from '@aziontech/webkit/command-menu-item'"
+const IMPORT_DROPDOWN = "import DropdownMenu from '@aziontech/webkit/dropdown-menu'"
+const IMPORT_DROPDOWN_TRIGGER =
+  "import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'"
+const IMPORT_DROPDOWN_GROUP =
+  "import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'"
+const IMPORT_DROPDOWN_OPTION =
+  "import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'"
+const IMPORT_COMMAND_MENU = "import Command from '@aziontech/webkit/command'"
+const IMPORT_COMMAND_MENU_INPUT = "import CommandInput from '@aziontech/webkit/command-input'"
+const IMPORT_COMMAND_MENU_LIST = "import CommandList from '@aziontech/webkit/command-list'"
+const IMPORT_COMMAND_MENU_GROUP = "import CommandGroup from '@aziontech/webkit/command-group'"
+const IMPORT_COMMAND_MENU_ITEM = "import CommandItem from '@aziontech/webkit/command-item'"
 const IMPORT_COMMAND_MENU_SEPARATOR =
-  "import CommandMenuSeparator from '@aziontech/webkit/command-menu-separator'"
-const IMPORT_COMMAND_MENU_EMPTY =
-  "import CommandMenuEmpty from '@aziontech/webkit/command-menu-empty'"
+  "import CommandSeparator from '@aziontech/webkit/command-separator'"
+const IMPORT_COMMAND_MENU_EMPTY = "import CommandEmpty from '@aziontech/webkit/command-empty'"
 const IMPORT_MENU = "import Menu from '@aziontech/webkit/menu'"
 const IMPORT_MENU_BACK = "import MenuBack from '@aziontech/webkit/menu-back'"
 const IMPORT_MENU_GROUP = "import MenuGroup from '@aziontech/webkit/menu-group'"
@@ -62,21 +62,21 @@ const sidebarStoryComponents = {
   Sidebar,
   SidebarHeader,
   SidebarFooter,
-  InputText,
+  Input,
   Kbd,
   Avatar,
   IconButton,
-  Dropdown,
-  DropdownTrigger,
-  DropdownGroup,
-  DropdownOption,
-  CommandMenu,
-  CommandMenuInput,
-  CommandMenuList,
-  CommandMenuGroup,
-  CommandMenuItem,
-  CommandMenuSeparator,
-  CommandMenuEmpty,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuOption,
+  Command,
+  CommandInput,
+  CommandList,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+  CommandEmpty,
   Menu,
   MenuBack,
   MenuGroup,
@@ -92,7 +92,7 @@ const sampleImage =
 const HEADER_SLOT = `<template #header>
     <SidebarHeader>
       <div class="cursor-pointer [&_input]:cursor-pointer" @click="paletteOpen = true" @keydown.enter="paletteOpen = true">
-        <InputText
+        <Input
           model-value=""
           placeholder="Search"
           size="large"
@@ -102,35 +102,35 @@ const HEADER_SLOT = `<template #header>
         >
           <template #iconLeft><i class="pi pi-search" aria-hidden="true" /></template>
           <template #iconRight><Kbd meta size="small">K</Kbd></template>
-        </InputText>
+        </Input>
       </div>
 
-      <CommandMenu v-model:open="paletteOpen">
-        <CommandMenuInput placeholder="Search navigation and commands" />
-        <CommandMenuList>
-          <CommandMenuGroup heading="Build">
-            <CommandMenuItem value="nav:applications">
+      <Command v-model:open="paletteOpen">
+        <CommandInput placeholder="Search navigation and commands" />
+        <CommandList>
+          <CommandGroup heading="Build">
+            <CommandItem value="nav:applications">
               <template #prefix><i class="ai ai-edge-application" aria-hidden="true" /></template>
               Applications
-            </CommandMenuItem>
-            <CommandMenuItem value="nav:variables">
+            </CommandItem>
+            <CommandItem value="nav:variables">
               <template #prefix><i class="ai ai-variables" aria-hidden="true" /></template>
               Variables
-            </CommandMenuItem>
-          </CommandMenuGroup>
+            </CommandItem>
+          </CommandGroup>
 
-          <CommandMenuSeparator />
+          <CommandSeparator />
 
-          <CommandMenuGroup heading="Account">
-            <CommandMenuItem value="cmd:settings">
+          <CommandGroup heading="Account">
+            <CommandItem value="cmd:settings">
               <template #prefix><i class="pi pi-cog" aria-hidden="true" /></template>
               Account Settings
-            </CommandMenuItem>
-          </CommandMenuGroup>
+            </CommandItem>
+          </CommandGroup>
 
-          <CommandMenuEmpty>No navigation or command matches your search.</CommandMenuEmpty>
-        </CommandMenuList>
-      </CommandMenu>
+          <CommandEmpty>No navigation or command matches your search.</CommandEmpty>
+        </CommandList>
+      </Command>
     </SidebarHeader>
   </template>`
 
@@ -173,26 +173,26 @@ const FOOTER_SLOT = `<template #footer>
     <SidebarFooter class="flex items-center gap-(--spacing-xs)">
       <Avatar kind="square" size="small" src="${sampleImage}" alt="Alex Moreira" />
       <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">Alex Moreira</span>
-      <Dropdown v-model:open="accountMenuOpen" placement="top-end">
-        <DropdownTrigger>
+      <DropdownMenu v-model:open="accountMenuOpen" placement="top-end">
+        <DropdownMenuTrigger>
           <IconButton icon="pi pi-ellipsis-v" aria-label="Account menu" kind="outlined" size="small" />
-        </DropdownTrigger>
-        <DropdownGroup>
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup>
           <template #top>
             <div class="flex min-w-0 flex-col">
               <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
               <span class="truncate text-body-xs text-(--text-muted)">rafael.umman@example.com</span>
             </div>
           </template>
-          <DropdownOption value="settings" label="Account Settings" />
-          <DropdownOption value="personal-tokens" label="Personal Tokens" />
-        </DropdownGroup>
-        <DropdownGroup>
-          <DropdownOption value="logout" label="Log Out">
+          <DropdownMenuOption value="settings" label="Account Settings" />
+          <DropdownMenuOption value="personal-tokens" label="Personal Tokens" />
+        </DropdownMenuGroup>
+        <DropdownMenuGroup>
+          <DropdownMenuOption value="logout" label="Log Out">
             <template #right><i class="pi pi-sign-out" aria-hidden="true" /></template>
-          </DropdownOption>
-        </DropdownGroup>
-      </Dropdown>
+          </DropdownMenuOption>
+        </DropdownMenuGroup>
+      </DropdownMenu>
     </SidebarFooter>
   </template>`
 

@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import InputText from '@aziontech/webkit/input-text'
+import Input from '@aziontech/webkit/input'
 import ShellMockup from '@aziontech/webkit/shell-mockup'
 import Table from '@aziontech/webkit/table'
 import Tag from '@aziontech/webkit/tag'
@@ -9,7 +9,7 @@ import { toSfc } from '../../../_shared/story-source'
 const components = {
   ShellMockup,
   Button,
-  InputText,
+  Input,
   Table,
   Tag,
   'ShellMockup.Part': ShellMockup.Part,
@@ -23,7 +23,7 @@ const components = {
 const IMPORT = [
   "import ShellMockup from '@aziontech/webkit/shell-mockup'",
   "import Button from '@aziontech/webkit/button'",
-  "import InputText from '@aziontech/webkit/input-text'",
+  "import Input from '@aziontech/webkit/input'",
   "import Table from '@aziontech/webkit/table'",
   "import Tag from '@aziontech/webkit/tag'"
 ]
@@ -249,7 +249,7 @@ const BODY = `<div class="flex flex-col gap-(--spacing-md) p-(--spacing-lg)">
   </ShellMockup.Part>
   <ShellMockup.Part :order="1">
     <div class="flex items-center gap-(--spacing-sm)">
-      <InputText placeholder="Search workloads" size="small" />
+      <Input placeholder="Search workloads" size="small" />
       <Tag label="3 active" severity="success" size="small" />
     </div>
   </ShellMockup.Part>

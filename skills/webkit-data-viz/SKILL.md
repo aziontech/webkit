@@ -40,7 +40,7 @@ Never guess an import path or a hex value. Resolve both from the contract:
   `Chart.Tooltip`, `Chart.Legend`), `@aziontech/webkit/donut-chart`, `@aziontech/webkit/stat-tile`
   and `@aziontech/webkit/chart-card` already carry the palette, the tooltip, the legend, the keyboard
   model, the table twin and the state surface. Use them before adding a charting library.
-- **Other components** (`Skeleton`, `EmptyState`, `Message`, `CardBox`, `StatusIndicator`): ask the
+- **Other components** (`Skeleton`, `EmptyState`, `Alert`, `Card`, `StatusIndicator`): ask the
   **webkit MCP** — `suggest_component` in plain words ("empty state", "stat card") — or read the
   `imports` keys in **`node_modules/@aziontech/webkit/catalog.json`**. A subpath that is not a key
   there does not exist.
@@ -81,7 +81,7 @@ const seriesColors = () => SERIES.map((s) => read(s.slice(4, -1)))
 A chart fetches, so it owns the full state surface, rendered **in the chart's own box** (never a
 blank rectangle): **loading** → `Skeleton` sized to the chart area, reserving the layout so it doesn't
 reflow; **empty** → `EmptyState` ("No requests in this window", + a range/filter action); **error** →
-a `Message severity="danger"` with what failed and a retry. The trigger comes from the consuming app's
+a `Alert severity="danger"` with what failed and a retry. The trigger comes from the consuming app's
 data layer; webkit ships the rendering of each state. Full matrix in `/webkit-ui-states`.
 
 ## Numbers — tabular figures, deltas read good or bad
@@ -146,7 +146,7 @@ above rather than eyeballing one mode.
 - `--chart-status-*` means status only — never a categorical accent; series slots follow
   declaration order and never cycle.
 - Every chart renders loading, empty, and error inside its own box (`Skeleton` / `EmptyState` /
-  `Message`) — no blank async rectangle.
+  `Alert`) — no blank async rectangle.
 - `tabular-nums` on every figure that stacks in a column or updates in place.
 - Pick the form and the palette kind with the generic `dataviz` skill **before** mapping onto tokens.
 
@@ -162,7 +162,7 @@ For `/webkit-data-viz <file>`, list gaps grouped by chart. Each:
 
 ✗ TrafficChart.vue:88  v-if="data.length" with no empty/error branch
   state: Empty + Error missing — a failed or empty range renders a blank canvas.
-  fix: Skeleton sized to the chart box while loading; EmptyState + Message severity="danger" (retry).
+  fix: Skeleton sized to the chart box while loading; EmptyState + Alert severity="danger" (retry).
 ```
 
 End with: `charts token-mapped + complete` or `N gaps — fix before ship`.
@@ -172,7 +172,7 @@ End with: `charts token-mapped + complete` or `N gaps — fix before ship`.
 - [ ] Every color is a `--chart-*` token; the palette kind (chosen with the generic `dataviz` skill)
       is realized via the role; status tokens used for status only.
 - [ ] SVG marks pass `var()` directly; canvas marks re-read computed tokens on a `data-theme` change.
-- [ ] Loading (`Skeleton`), empty (`EmptyState`), and error (`Message`) render in the chart's box.
+- [ ] Loading (`Skeleton`), empty (`EmptyState`), and error (`Alert`) render in the chart's box.
 - [ ] `tabular-nums` on every stacked/updating figure.
 - [ ] Verified in light and dark (`/webkit-ui-verify` screenshots both).
 - [ ] Form and palette chosen with the generic `dataviz` skill before token mapping.

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 765dc35c8d5b4621a5343853fa9e616a5e1557d2576ab8badac8b66d6492ad68
+checksum: ea35d42795b4004eeaf2792898d9bba3ecf4693722200c3daf4c8341c90602d1
 created: 2026-06-15
 last_updated: 2026-11-10
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-10
 
 ## Purpose
 
-Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
+Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
 
 Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
@@ -30,7 +30,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 - A select with a visible label and helper/error text in a form → use `field-select`.
 - The field is always multi-pick → use `multi-select`.
-- Two to five options that fit on screen → use `field-radio`, or `box-grid-selection` for cards.
+- Two to five options that fit on screen → use `field-radio`, or `radio-cards` for cards.
 - The list triggers actions or navigation instead of holding a value → use `dropdown`.
 
 ## Related
@@ -51,13 +51,17 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ```vue
 <script setup>
-import Select from '@aziontech/webkit/select'
+  import Select from '@aziontech/webkit/select'
 
-const value = defineModel({ default: '' })
+  const value = defineModel({ default: '' })
 </script>
 
 <template>
-  <Select v-model="value" size="medium" placeholder="Select an option">
+  <Select
+    v-model="value"
+    size="medium"
+    placeholder="Select an option"
+  >
     <Select.Trigger />
     <Select.Content>
       <Select.Group label="Group A">
@@ -65,7 +69,11 @@ const value = defineModel({ default: '' })
         <Select.Option value="opt-2">Option 2</Select.Option>
       </Select.Group>
       <Select.Group label="Group B">
-        <Select.Option value="opt-3" icon="pi pi-heart">Option 3</Select.Option>
+        <Select.Option
+          value="opt-3"
+          icon="pi pi-heart"
+          >Option 3</Select.Option
+        >
       </Select.Group>
     </Select.Content>
   </Select>
@@ -74,39 +82,39 @@ const value = defineModel({ default: '' })
 
 ## Sub-components
 
-- `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals.
+- `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `Input` size/state visuals.
 - `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
-- `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm Dropdown puts around its group divider and CommandMenu puts between two bare groups. No hairline: unlike Dropdown, this panel separates groups by space alone.
-- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, *every* option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
+- `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
+- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string \| number \| unknown[]` | `undefined` | false | Two-way bound selection. Scalar in single mode; array in multi mode. |
-| `multiple` | `boolean` | `false` | false | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array. |
-| `open` | `boolean` | `undefined` | false | Controlled open state for the dropdown. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `placeholder` | `string` | `undefined` | false | Trigger placeholder shown when no option is selected. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `InputText`. |
-| `disabled` | `boolean` | `false` | false | Disables the trigger and prevents opening; applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
-| `required` | `boolean` | `false` | false | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `InputText`. The label's Required tag is owned by the wrapping form-field, not by this component. |
-| `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
-| `displayValue` | `(value: unknown) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`. |
+| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                              |
+| -------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `modelValue`   | `string \| number \| unknown[]`  | `undefined` | false    | Two-way bound selection. Scalar in single mode; array in multi mode.                                                                                                                                               |
+| `multiple`     | `boolean`                        | `false`     | false    | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array.                                                                                                |
+| `open`         | `boolean`                        | `undefined` | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                                                                                   |
+| `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                                                                              |
+| `placeholder`  | `string`                         | `undefined` | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                              |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                         |
+| `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                          |
+| `required`     | `boolean`                        | `false`     | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
+| `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                   |
+| `displayValue` | `(value: unknown) => string`     | `undefined` | false    | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`.                                                                                                           |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload   | Notes                                                         |
+| ------------------- | --------- | ------------------------------------------------------------- |
 | `update:modelValue` | `unknown` | Fires when an option is selected (single) or toggled (multi). |
-| `update:open` | `boolean` | Fires when the dropdown opens or closes. |
+| `update:open`       | `boolean` | Fires when the dropdown opens or closes.                      |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it). |
+| Slot      | Scope | Notes                                                                                               |
+| --------- | ----- | --------------------------------------------------------------------------------------------------- |
+| `default` | —     | Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it). |
 
 ## States
 
@@ -119,46 +127,46 @@ const value = defineModel({ default: '' })
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| dropdown open / close (on `SelectContent` only) | popup scale-in / scale-out semantic utilities from `animations.js` | semantic (150ms in / 110ms out · cubic-bezier) | reduced-motion fallback via the matching `motion-reduce` utility |
-| trigger state change (border/ring/bg) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                                         | Animation / Transition                                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                          |
+| ----------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ---------------------------------------------------------------- |
+| dropdown open / close (on `SelectContent` only) | popup scale-in / scale-out semantic utilities from `animations.js` | semantic (150ms in / 110ms out · cubic-bezier)    | reduced-motion fallback via the matching `motion-reduce` utility |
+| trigger state change (border/ring/bg)           | `transition-colors duration-150 ease-out`                          | inline (matches catalog)                          | `motion-reduce:transition-none`                                  |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (trigger, option label) | `.text-label-sm` |
-| typography (group heading) | `.text-label-sm` + `text-(--text-muted)` |
-| surface (trigger) | `var(--bg-surface)` |
-| surface (trigger disabled) | `var(--bg-disabled)` |
-| surface (panel) | `var(--bg-surface-raised)` |
-| surface (option hover) | `var(--bg-hover)` |
-| surface (option selected) | `var(--bg-selected)` |
-| text | `var(--text-default)` |
-| text (placeholder, group heading) | `var(--text-muted)` |
-| text (disabled) | `var(--text-disabled)` |
-| border (default) | `var(--border-default)` |
-| border (hover) | `var(--border-strong)` |
-| border (invalid) | `var(--danger-border)` |
-| border (required) | `var(--warning-border)` |
-| ring (focus) | `var(--ring-color)` |
-| ring (invalid focus) | `var(--danger)` |
-| spacing (trigger horizontal padding) | `var(--spacing-sm)` |
-| spacing (panel list padding.x) | `var(--spacing-xxs)` |
-| spacing (panel list padding.y) | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
-| spacing (between groups) | `var(--spacing-sm)` |
-| option leading column | `size-4` (16px), reserved for every option when any option has a glyph |
-| spacing (option padding) | `var(--spacing-xs)` |
-| spacing (option gap) | `var(--spacing-xs)` |
-| shape | `var(--shape-elements)` |
-| shadow (panel) | `var(--shadow-xs)` |
+| Region                               | Token (DESIGN.md)                                                                                                               |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| typography (trigger, option label)   | `.text-label-sm`                                                                                                                |
+| typography (group heading)           | `.text-label-sm` + `text-(--text-muted)`                                                                                        |
+| surface (trigger)                    | `var(--bg-surface)`                                                                                                             |
+| surface (trigger disabled)           | `var(--bg-disabled)`                                                                                                            |
+| surface (panel)                      | `var(--bg-surface-raised)`                                                                                                      |
+| surface (option hover)               | `var(--bg-hover)`                                                                                                               |
+| surface (option selected)            | `var(--bg-selected)`                                                                                                            |
+| text                                 | `var(--text-default)`                                                                                                           |
+| text (placeholder, group heading)    | `var(--text-muted)`                                                                                                             |
+| text (disabled)                      | `var(--text-disabled)`                                                                                                          |
+| border (default)                     | `var(--border-default)`                                                                                                         |
+| border (hover)                       | `var(--border-strong)`                                                                                                          |
+| border (invalid)                     | `var(--danger-border)`                                                                                                          |
+| border (required)                    | `var(--warning-border)`                                                                                                         |
+| ring (focus)                         | `var(--ring-color)`                                                                                                             |
+| ring (invalid focus)                 | `var(--danger)`                                                                                                                 |
+| spacing (trigger horizontal padding) | `var(--spacing-sm)`                                                                                                             |
+| spacing (panel list padding.x)       | `var(--spacing-xxs)`                                                                                                            |
+| spacing (panel list padding.y)       | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
+| spacing (between groups)             | `var(--spacing-sm)`                                                                                                             |
+| option leading column                | `size-4` (16px), reserved for every option when any option has a glyph                                                          |
+| spacing (option padding)             | `var(--spacing-xs)`                                                                                                             |
+| spacing (option gap)                 | `var(--spacing-xs)`                                                                                                             |
+| shape                                | `var(--shape-elements)`                                                                                                         |
+| shadow (panel)                       | `var(--shadow-xs)`                                                                                                              |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -169,7 +177,7 @@ const value = defineModel({ default: '' })
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
-- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `InputText`).
+- Touch target ≥40×40 px on `size="large"`; smaller sizes are documented as dense-layout-only (consistent with `Input`).
 
 ## Stories (Storybook)
 

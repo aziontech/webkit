@@ -1,13 +1,13 @@
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldPassword from '@aziontech/webkit/field-password'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
   import { reactive, ref } from 'vue'
 
@@ -154,7 +154,7 @@
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
               >
-                <CardBox
+                <Card
                   v-if="screen === 'signin'"
                   key="signin"
                   class="w-full"
@@ -181,7 +181,7 @@
                         leave-to-class="-translate-y-2 opacity-0"
                       >
                         <div v-if="cardNotice">
-                          <Message
+                          <Alert
                             :severity="cardNotice.severity"
                             size="small"
                           >
@@ -212,7 +212,7 @@
                                 @click="cardNotice.retry()"
                               />
                             </template>
-                          </Message>
+                          </Alert>
                         </div>
                       </Transition>
 
@@ -228,7 +228,7 @@
                             label="Email"
                             :required="!!errors.signinEmail && !signin.email.trim()"
                           />
-                          <InputText
+                          <Input
                             id="auth-signin-email"
                             v-model="signin.email"
                             type="email"
@@ -280,9 +280,9 @@
                       />
                     </form>
                   </template>
-                </CardBox>
+                </Card>
 
-                <CardBox
+                <Card
                   v-else
                   key="signup"
                   class="w-full"
@@ -310,7 +310,7 @@
                         leave-to-class="-translate-y-2 opacity-0"
                       >
                         <div v-if="cardNotice">
-                          <Message
+                          <Alert
                             :severity="cardNotice.severity"
                             size="small"
                           >
@@ -341,7 +341,7 @@
                                 @click="cardNotice.retry()"
                               />
                             </template>
-                          </Message>
+                          </Alert>
                         </div>
                       </Transition>
 
@@ -357,7 +357,7 @@
                             label="Work email"
                             :required="!!errors.signupEmail && !signup.email.trim()"
                           />
-                          <InputText
+                          <Input
                             id="auth-signup-email"
                             v-model="signup.email"
                             type="email"
@@ -410,7 +410,7 @@
                       />
                     </form>
                   </template>
-                </CardBox>
+                </Card>
               </Transition>
             </div>
 

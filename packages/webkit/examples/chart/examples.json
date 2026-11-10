@@ -39,7 +39,7 @@
     },
     {
       "name": "ErrorState",
-      "summary": "The request failed. A danger Message takes the plot; the card around it keeps its title and controls.",
+      "summary": "The request failed. A danger Alert takes the plot; the card around it keeps its title and controls.",
       "file": "error-state.vue"
     },
     {

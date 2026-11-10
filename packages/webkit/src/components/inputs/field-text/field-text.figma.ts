@@ -25,7 +25,7 @@ const helperText = helperLayer.type === 'INSTANCE' ? helperLayer.findText('label
 const helper =
   showHelper && helperText && helperText.type === 'TEXT' ? helperText.textContent.trim() : ''
 
-const input = instance.findInstance('InputText')
+const input = instance.findInstance('Input')
 const placeholder = input.type === 'INSTANCE' ? input.getString('placeholder') : ''
 const iconLeft = input.type === 'INSTANCE' ? input.getBoolean('hasIconLeft') : false
 const iconRight = input.type === 'INSTANCE' ? input.getBoolean('hasIconRight') : false

@@ -4,7 +4,7 @@
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -248,26 +248,26 @@
               <Hint text="Every task in the project, by its current status." />
             </span>
             <ChartCard.Controls>
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Completion"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="link"
                     label="Copy link"
                   />
-                  <Dropdown.Option
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -314,26 +314,26 @@
                 :icon="behind.icon"
                 size="small"
               />
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Sprint burndown"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="link"
                     label="Copy link"
                   />
-                  <Dropdown.Option
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -371,26 +371,26 @@
               <Hint text="Dated checkpoints to launch, oldest first." />
             </span>
             <ChartCard.Controls>
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Milestones"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="link"
                     label="Copy link"
                   />
-                  <Dropdown.Option
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content :flush="!loading && milestones.length > 0">
@@ -463,26 +463,26 @@
                 severity="secondary"
                 size="small"
               />
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for At risk"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="link"
                     label="Copy link"
                   />
-                  <Dropdown.Option
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content :flush="!loading && atRisk.length > 0">
@@ -542,26 +542,26 @@
               <Hint text="Tasks per owner. Overdue counts open tasks past their due date." />
             </span>
             <ChartCard.Controls>
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Owners"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="link"
                     label="Copy link"
                   />
-                  <Dropdown.Option
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content>

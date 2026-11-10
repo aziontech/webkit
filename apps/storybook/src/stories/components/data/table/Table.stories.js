@@ -1,7 +1,7 @@
-import Dropdown from '@aziontech/webkit/dropdown'
-import DropdownGroup from '@aziontech/webkit/dropdown-group'
-import DropdownOption from '@aziontech/webkit/dropdown-option'
-import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 import IconButton from '@aziontech/webkit/icon-button'
 import Table from '@aziontech/webkit/table'
 import TableBody from '@aziontech/webkit/table-body'
@@ -18,10 +18,10 @@ const components = {
   Table,
   Tag,
   IconButton,
-  Dropdown,
-  DropdownTrigger,
-  DropdownGroup,
-  DropdownOption,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuOption,
   // Compound sub-components registered under their dot-notation names so they
   // resolve in Storybook's runtime-compiled string templates: Vue compiles
   // `<Table.Header>` to `resolveComponent("Table.Header")`, an exact-name lookup
@@ -131,7 +131,7 @@ const floorColumns = [
 ]
 
 // One shared, immutable action list — built once, reused by every row's menu.
-// Split into two groups so the navigation `<Dropdown>` renders the divider
+// Split into two groups so the navigation `<DropdownMenu>` renders the divider
 // between the safe actions and the destructive `Delete`.
 const rowActionGroups = [
   [
@@ -167,21 +167,21 @@ const CELL_SLOTS = `
           <span class="sr-only">Actions</span>
         </template>
         <template #cell-actions="{ row }">
-          <Dropdown @select="({ value }) => args.onRowAction({ id: row.id, action: { value } })">
-            <DropdownTrigger>
+          <DropdownMenu @select="({ value }) => args.onRowAction({ id: row.id, action: { value } })">
+            <DropdownMenuTrigger>
               <IconButton icon="pi pi-ellipsis-v" aria-label="Row actions" kind="transparent" size="small" />
-            </DropdownTrigger>
-            <DropdownGroup v-for="(group, gi) in rowActionGroups" :key="gi">
-              <DropdownOption
+            </DropdownMenuTrigger>
+            <DropdownMenuGroup v-for="(group, gi) in rowActionGroups" :key="gi">
+              <DropdownMenuOption
                 v-for="option in group"
                 :key="option.value"
                 :value="option.value"
                 :label="option.label"
               >
                 <template #left><i :class="option.icon" aria-hidden="true" /></template>
-              </DropdownOption>
-            </DropdownGroup>
-          </Dropdown>
+              </DropdownMenuOption>
+            </DropdownMenuGroup>
+          </DropdownMenu>
         </template>
 `
 
@@ -231,16 +231,16 @@ const SOURCE_CELL_SLOTS = `  <template #cell-name="{ row, value }">
     <span class="sr-only">Actions</span>
   </template>
   <template #cell-actions="{ row }">
-    <Dropdown @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
-      <DropdownTrigger>
+    <DropdownMenu @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
+      <DropdownMenuTrigger>
         <IconButton icon="pi pi-ellipsis-v" aria-label="Row actions" kind="transparent" size="small" />
-      </DropdownTrigger>
-      <DropdownGroup v-for="(group, gi) in rowActionGroups" :key="gi">
-        <DropdownOption v-for="option in group" :key="option.value" :value="option.value" :label="option.label">
+      </DropdownMenuTrigger>
+      <DropdownMenuGroup v-for="(group, gi) in rowActionGroups" :key="gi">
+        <DropdownMenuOption v-for="option in group" :key="option.value" :value="option.value" :label="option.label">
           <template #left><i :class="option.icon" aria-hidden="true" /></template>
-        </DropdownOption>
-      </DropdownGroup>
-    </Dropdown>
+        </DropdownMenuOption>
+      </DropdownMenuGroup>
+    </DropdownMenu>
   </template>`
 
 const dataDrivenSource = (args) => {
@@ -299,10 +299,10 @@ const SNIPPET_IMPORTS = [
   "import Table from '@aziontech/webkit/table'",
   "import Tag from '@aziontech/webkit/tag'",
   "import IconButton from '@aziontech/webkit/icon-button'",
-  "import Dropdown from '@aziontech/webkit/dropdown'",
-  "import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'",
-  "import DropdownGroup from '@aziontech/webkit/dropdown-group'",
-  "import DropdownOption from '@aziontech/webkit/dropdown-option'",
+  "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
+  "import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'",
+  "import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'",
+  "import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'",
   "import { ref } from 'vue'"
 ]
 
@@ -514,7 +514,7 @@ const meta = {
     },
     paginated: {
       control: 'boolean',
-      description: 'Render a Paginator in the footer and slice the rows by page.',
+      description: 'Render a Pagination in the footer and slice the rows by page.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
     },
     pageSize: {
@@ -988,7 +988,7 @@ export const CompactHeaderWithStickyColumn = {
     docs: {
       description: {
         story:
-          'A compact header (`header-kind="compact"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No paginator.'
+          'A compact header (`header-kind="compact"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No pagination.'
       },
       source: {
         code: dataDrivenSnippet(

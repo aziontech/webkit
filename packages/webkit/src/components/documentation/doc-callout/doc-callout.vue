@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Message from '../../feedback/message/message.vue'
+  import Alert from '../../feedback/alert/alert.vue'
 
   defineOptions({ name: 'DocCallout', inheritAttrs: false })
 
@@ -42,7 +42,7 @@
 </script>
 
 <template>
-  <Message
+  <Alert
     v-bind="$attrs"
     data-doc-block
     data-doc-chrome
@@ -61,5 +61,5 @@
     >
       <slot>{{ label }}</slot>
     </div>
-  </Message>
+  </Alert>
 </template>

@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -54,7 +54,7 @@
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     :data-complete="complete || null"
   >
@@ -122,7 +122,7 @@
         </Item>
       </div>
     </template>
-  </CardBox>
+  </Card>
 
   <Drawer
     v-model:open="open"

@@ -49,7 +49,7 @@
     },
     {
       "name": "WithList",
-      "summary": "ItemList is the in-card list: placed inside a CardBox with padded=false, rows are separated by full-width dividers and sit flush to the card edges.",
+      "summary": "ItemList is the in-card list: placed inside a Card with padded=false, rows are separated by full-width dividers and sit flush to the card edges.",
       "file": "with-list.vue"
     },
     {

@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 4131554ea3a8f9077cd7d2878b26013da0f90a5f8ec66e6a83bd893352913ece
+checksum: 31b4f0fb59e4e8ed4d5747bfc07a55487fb6a4bbdbecf92977f5492688a09fe8
 created: 2026-07-01
 last_updated: 2026-11-09
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<InputText>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
+Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
 
 ## When to use
 
@@ -28,14 +28,14 @@ Composition container that joins an input primitive with any number of adjacent 
 - The grouped input needs a visible label or helper/error text → use `field-input-group`.
 - The trailing control is a switch that enables the text value → use `field-text-switch`.
 - A phone number with a dial code → use `field-phone-number`.
-- A single input with only a decorative icon → use `input-text` and its `iconLeft` / `iconRight` slots.
+- A single input with only a decorative icon → use `input` and its `iconLeft` / `iconRight` slots.
 
 ## Related
 
 - `field-input-group` — label, input group, and helper text, with `left` / `right` addon slots.
 - `field-phone-number` — input group with a dial-code select and a per-country mask.
 - `field-text-switch` — input group with a trailing switch that enables the input.
-- `input-text` — the single-field primitive with icon slots.
+- `input` — the single-field primitive with icon slots.
 
 ## Best practices
 
@@ -122,21 +122,21 @@ packages/webkit/src/components/inputs/input-group/
 
 Public members of the compound:
 
-| Member | Attached name | Standalone export | Purpose |
-|---|---|---|---|
-| Root | — (the compound itself) | `@aziontech/webkit/input-group-root` | The container. Orchestrates borders, seams, focus ring, and states. |
-| `<InputGroup.Addon>` | `Addon` | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `R$`) rendered with the darker `--bg-canvas` fill and muted text. |
+| Member               | Attached name           | Standalone export                     | Purpose                                                                                                                      |
+| -------------------- | ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                          |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `R$`) rendered with the darker `--bg-canvas` fill and muted text. |
 
 ## Props
 
 Root props:
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`InputText`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
-| `invalid` | `boolean` | `false` | false | Renders the error border and sets `aria-invalid="true"` on the root. |
-| `required` | `boolean` | `false` | false | Renders the required (warning) border and sets `aria-required="true"` on the root. |
-| `disabled` | `boolean` | `false` | false | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `InputText`). |
+| Prop       | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                                                                                             |
+| ---------- | -------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned.                                      |
+| `invalid`  | `boolean`                        | `false`    | false    | Renders the error border and sets `aria-invalid="true"` on the root.                                                                                                                                                                                                              |
+| `required` | `boolean`                        | `false`    | false    | Renders the required (warning) border and sets `aria-required="true"` on the root.                                                                                                                                                                                                |
+| `disabled` | `boolean`                        | `false`    | false    | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (mirrors how `FieldText` disables `Input`). |
 
 `InputGroup.Addon` props: _none_ — the sub-component is a pure presentational span whose content is the default slot. `v-bind="$attrs"` on its root lets the consumer pass `data-testid`, `aria-hidden`, `class` (merged via `cn`), etc.
 
@@ -146,19 +146,19 @@ Root props:
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<InputText>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
+| Slot      | Scope | Notes                                                                                                                                                                                                                                                                                                                                                                                                          |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
 
 ## States
 
 - Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
 - `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`)
-- Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `InputText` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
+- Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `Input` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
 - `data-invalid` mirrors the `invalid` prop; sets `aria-invalid="true"`
 - `data-required` mirrors the `required` prop; sets `aria-required="true"`
 - `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
-- Border semantics mirror `input-text` (independent, not compound):
+- Border semantics mirror `input` (independent, not compound):
   - `data-invalid` → `var(--danger-border)`
   - `data-required` → `var(--warning-border)`
 - Hover (only when not focus-within, not invalid, not required, not disabled): `border-(--border-strong)`
@@ -168,43 +168,43 @@ Root props:
   - `[&>*:first-child]:rounded-l-(--shape-elements)` and `[&>*:not(:first-child)]:rounded-l-none`
   - `[&>*:last-child]:rounded-r-(--shape-elements)` and `[&>*:not(:last-child)]:rounded-r-none`
   - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
-  - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the *inner-facing* border only
+  - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus-within / invalid / required state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                                                | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------------------------------ | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover / focus-within / invalid / required state change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| root surface | `var(--bg-surface)` |
-| root border (default) | `var(--border-default)` |
-| root border (hover) | `var(--border-strong)` |
-| root border (invalid) | `var(--danger-border)` |
-| root border (required) | `var(--warning-border)` |
-| root surface (disabled) | `var(--bg-disabled)` |
-| root text (disabled) | `var(--text-disabled)` |
-| root border width | `border` (Tailwind utility) |
-| root shape | `var(--shape-elements)` |
-| root height (small) | `h-7` (Tailwind utility) |
-| root height (medium) | `h-8` (Tailwind utility) |
-| root height (large) | `h-10` (Tailwind utility) |
-| focus ring | `var(--ring-color)` |
-| focus ring offset | `var(--bg-canvas)` |
-| child seam | `border-r border-(color:--border-default)` (applied via `[&>*:not(:last-child)]:border-r`) |
-| addon surface | `var(--bg-canvas)` |
-| addon text | `var(--text-muted)` |
-| addon padding.x | `var(--spacing-md)` |
-| addon typography | `.text-label-sm` |
+| Region                  | Token (DESIGN.md)                                                                          |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| root surface            | `var(--bg-surface)`                                                                        |
+| root border (default)   | `var(--border-default)`                                                                    |
+| root border (hover)     | `var(--border-strong)`                                                                     |
+| root border (invalid)   | `var(--danger-border)`                                                                     |
+| root border (required)  | `var(--warning-border)`                                                                    |
+| root surface (disabled) | `var(--bg-disabled)`                                                                       |
+| root text (disabled)    | `var(--text-disabled)`                                                                     |
+| root border width       | `border` (Tailwind utility)                                                                |
+| root shape              | `var(--shape-elements)`                                                                    |
+| root height (small)     | `h-7` (Tailwind utility)                                                                   |
+| root height (medium)    | `h-8` (Tailwind utility)                                                                   |
+| root height (large)     | `h-10` (Tailwind utility)                                                                  |
+| focus ring              | `var(--ring-color)`                                                                        |
+| focus ring offset       | `var(--bg-canvas)`                                                                         |
+| child seam              | `border-r border-(color:--border-default)` (applied via `[&>*:not(:last-child)]:border-r`) |
+| addon surface           | `var(--bg-canvas)`                                                                         |
+| addon text              | `var(--text-muted)`                                                                        |
+| addon padding.x         | `var(--spacing-md)`                                                                        |
+| addon typography        | `.text-label-sm`                                                                           |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

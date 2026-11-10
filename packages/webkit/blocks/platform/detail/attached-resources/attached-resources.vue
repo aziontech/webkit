@@ -1,10 +1,10 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import Card from '@aziontech/webkit/card'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
   import TableRoot from '@aziontech/webkit/table-root'
   import TableBody from '@aziontech/webkit/table-body'
@@ -49,7 +49,7 @@
 </script>
 
 <template>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <div class="flex min-w-0 flex-col">
         <TableRoot :border="false">
@@ -98,11 +98,11 @@
                 />
               </TableCell>
               <TableCell kind="action">
-                <DropdownRoot
+                <DropdownMenuRoot
                   v-if="!entry.generated"
                   placement="bottom-end"
                 >
-                  <DropdownTrigger>
+                  <DropdownMenuTrigger>
                     <Tooltip text="Row actions">
                       <IconButton
                         icon="pi pi-ellipsis-h"
@@ -111,9 +111,9 @@
                         :aria-label="`Actions for ${entry.domain}`"
                       />
                     </Tooltip>
-                  </DropdownTrigger>
-                  <DropdownGroup>
-                    <DropdownOption
+                  </DropdownMenuTrigger>
+                  <DropdownMenuGroup>
+                    <DropdownMenuOption
                       value="edit"
                       label="Edit"
                     >
@@ -122,10 +122,10 @@
                           class="pi pi-pencil"
                           aria-hidden="true"
                       /></template>
-                    </DropdownOption>
-                  </DropdownGroup>
-                  <DropdownGroup>
-                    <DropdownOption
+                    </DropdownMenuOption>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuOption
                       value="delete"
                       label="Delete"
                     >
@@ -134,9 +134,9 @@
                           class="pi pi-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownOption>
-                  </DropdownGroup>
-                </DropdownRoot>
+                    </DropdownMenuOption>
+                  </DropdownMenuGroup>
+                </DropdownMenuRoot>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -156,5 +156,5 @@
         </div>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

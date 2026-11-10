@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: cd1df5c0c198dd7c25c8235edefbfdb40c196566f6d8dbd46d28ef971fe484e1
+checksum: b618ed2fab45e977edcb4f9802d7411a5ab475838fea37449cba45277437caf5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-3212&m=dev
   node_id: 2027:3212
@@ -16,9 +16,9 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.
+Form field for password input that composes `Label`, `PasswordInput`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `PasswordInput` in form contexts, mirroring the `FieldText` pattern.
 
-It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per rule, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that rule's `test`. This is the "strength meter" surface that `InputPassword` deliberately does not own — the bare input stays the field only. The row exposes exactly **two** levers and nothing else: a bare `requirements` attribute turns it on with the built-in rule set, and passing an array replaces that set with the consumer's own rules. Appearance is not configurable — a chip has two treatments, both fixed by the design. The field **evaluates** the rules against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: enabling the row (or supplying rules) is the trigger the app provides, and applying them to the bound value is derived render state, not business logic the field invents.
+It also owns the **password-requirements row**: a captioned, wrapping set of rule chips rendered under the field, one chip per rule, each switching to a satisfied treatment (check glyph + success tokens) as soon as the bound value satisfies that rule's `test`. This is the "strength meter" surface that `PasswordInput` deliberately does not own — the bare input stays the field only. The row exposes exactly **two** levers and nothing else: a bare `requirements` attribute turns it on with the built-in rule set, and passing an array replaces that set with the consumer's own rules. Appearance is not configurable — a chip has two treatments, both fixed by the design. The field **evaluates** the rules against the value it already owns, so the chips track what is typed with no recomputation on the consumer's side. This stays inside `.claude/rules/component-states.md`: enabling the row (or supplying rules) is the trigger the app provides, and applying them to the bound value is derived render state, not business logic the field invents.
 
 ## When to use
 
@@ -28,11 +28,11 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 ## When NOT to use
 
 - The value is not secret → use `field-text`.
-- The label and helper already live outside the control → use `input-password`.
+- The label and helper already live outside the control → use `password-input`.
 
 ## Related
 
-- `input-password` — the bare input with the visibility toggle; owns no requirements row.
+- `password-input` — the bare input with the visibility toggle; owns no requirements row.
 - `field-text` — the same field shape for plain text.
 - `helper-text` — the guidance/error row under the input.
 - `label` — the label row.
@@ -87,17 +87,17 @@ It also owns the **password-requirements row**: a captioned, wrapping set of rul
 
 | Prop                | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                         |
 | ------------------- | ----------------------------------------------- | -------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`        | `string`                                        | `''`                 | false    | Two-way bound value of the underlying `InputPassword`.                                                                                                                                                                                                                                                                                                                                        |
+| `modelValue`        | `string`                                        | `''`                 | false    | Two-way bound value of the underlying `PasswordInput`.                                                                                                                                                                                                                                                                                                                                        |
 | `label`             | `string`                                        | `''`                 | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                                                                                                                       |
-| `placeholder`       | `string`                                        | `''`                 | false    | Placeholder forwarded to the `InputPassword`.                                                                                                                                                                                                                                                                                                                                                 |
+| `placeholder`       | `string`                                        | `''`                 | false    | Placeholder forwarded to the `PasswordInput`.                                                                                                                                                                                                                                                                                                                                                 |
 | `helperText`        | `string`                                        | `''`                 | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say.                                                                                                      |
-| `maxLength`         | `number \| undefined`                           | `undefined`          | false    | Native `maxlength` forwarded to the `InputPassword`.                                                                                                                                                                                                                                                                                                                                          |
+| `maxLength`         | `number \| undefined`                           | `undefined`          | false    | Native `maxlength` forwarded to the `PasswordInput`.                                                                                                                                                                                                                                                                                                                                          |
 | `disabled`          | `boolean`                                       | `false`              | false    | Disables the input; a supplied `helperText` switches to `kind="disabled"` (lock icon).                                                                                                                                                                                                                                                                                                        |
 | `readonly`          | `boolean`                                       | `false`              | false    | Marks the input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                                                                                                                                            |
 | `required`          | `boolean`                                       | `false`              | false    | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                                                                                                                             |
 | `invalid`           | `boolean`                                       | `false`              | false    | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input.                                                                                                                                                                                                                                                                                                  |
-| `toggleable`        | `boolean`                                       | `true`               | false    | Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.                                                                                                                                                                                                                                          |
-| `autocomplete`      | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false    | Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows.                                                                                                                                                                                                                                                                        |
+| `toggleable`        | `boolean`                                       | `true`               | false    | Forwards to `PasswordInput`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.                                                                                                                                                                                                                                          |
+| `autocomplete`      | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false    | Forwarded to the `PasswordInput` for password-manager hints. Use `new-password` for sign-up and password-change flows.                                                                                                                                                                                                                                                                        |
 | `inputId`           | `string`                                        | `''`                 | false    | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring.                                                                                                                                                                                                                                                                                                      |
 | `name`              | `string`                                        | `''`                 | false    | HTML name for the underlying input (form + vee-validate integration).                                                                                                                                                                                                                                                                                                                         |
 | `requirements`      | `boolean \| PasswordRequirement[]`              | `false`              | false    | Enables the password-requirements row. `true` (a bare attribute) renders the built-in rule set; an array replaces that set entirely, one chip per entry. Each rule carries a `test` the field evaluates against the current value; a satisfied rule renders the check glyph + success tokens, otherwise the muted treatment. `false` or an empty array omits the whole row, caption included. |
@@ -115,14 +115,14 @@ The built-in set, in the design's order: `length` (`8-128 characters`), `upperca
 
 | Event               | Payload  | Notes                                                                |
 | ------------------- | -------- | -------------------------------------------------------------------- |
-| `update:modelValue` | `string` | Re-emitted from the underlying `InputPassword` on every input event. |
+| `update:modelValue` | `string` | Re-emitted from the underlying `PasswordInput` on every input event. |
 
 ## Slots
 
 | Slot        | Scope | Notes                                                                                                                                                         |
 | ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `iconLeft`  | —     | Forwarded to the underlying `InputPassword#iconLeft` slot.                                                                                                    |
-| `iconRight` | —     | Forwarded to the underlying `InputPassword#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled. |
+| `iconLeft`  | —     | Forwarded to the underlying `PasswordInput#iconLeft` slot.                                                                                                    |
+| `iconRight` | —     | Forwarded to the underlying `PasswordInput#iconRight` slot. Only honored when `toggleable=false` — the visibility toggle occupies this position when enabled. |
 
 ## States
 
@@ -140,7 +140,7 @@ The built-in set, in the design's order: `length` (`8-128 characters`), `upperca
 | requirement chip flipping between unsatisfied and satisfied (background + text) | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                                                                           | inline | `motion-reduce:transition-none` |
 | check glyph entering/leaving a chip (box width + slide-in)                      | `transition-[width,margin,translate,opacity] duration-fast-02 ease-productive-entrance` — the glyph box goes `w-0 opacity-0 -translate-x-1` to `w-[14px] opacity-100 translate-x-0` on `data-validated` | inline | `motion-reduce:transition-none` |
 | requirements row height when the widened chips rewrap                           | `transition-[height] duration-fast-02 ease-productive-entrance` on the row root, height pinned to the measured inner wrap (`useElementSize`)                                                            | inline | `motion-reduce:transition-none` |
-| field chrome (border/ring/bg)                                                   | — owned by the underlying `InputPassword`                                                                                                                                                               | —      | —                               |
+| field chrome (border/ring/bg)                                                   | — owned by the underlying `PasswordInput`                                                                                                                                                               | —      | —                               |
 
 **The glyph is always in the DOM; its box animates from zero.** An unsatisfied chip still
 reserves no visible space (the box is `w-0` with no margin), and the chip widens smoothly as
@@ -177,7 +177,7 @@ the prop, never by composing it.
 | requirement chip (satisfied) — text                                 | `var(--text-default)`                        |
 | requirement chip (satisfied) — check glyph                          | inherits `var(--text-default)` from the chip |
 
-(Typography and color tokens of the field itself are owned by the children — `Label`, `InputPassword`, `HelperText` — and not redeclared here.)
+(Typography and color tokens of the field itself are owned by the children — `Label`, `PasswordInput`, `HelperText` — and not redeclared here.)
 
 ## Theme gaps
 
@@ -197,7 +197,7 @@ the prop, never by composing it.
 - The satisfied state is carried by a **shape** change (the `pi pi-check` glyph appears) in addition to the color change, so it does not rely on color alone (WCAG 1.4.1). The glyph itself is `aria-hidden="true"`, matching how `HelperText` treats its lock icon.
 - **Known gap:** the per-chip satisfied/unsatisfied distinction is conveyed visually (glyph + tokens) but is not announced as text, because naming it needs microcopy ("met" / "not met") that the design does not define. It is deliberately not invented here; adding it is a follow-up that must ship the copy as a localizable prop.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including all derived states. Both requirement-chip treatments clear it in both themes: unsatisfied `var(--text-muted)` on `var(--bg-placeholder)`, satisfied `var(--text-default)` on `var(--success)`.
-- Touch target: the underlying `InputPassword` owns the ≥40×40 px hit area for both the input and the visibility toggle button. The requirement chips are not interactive and so carry no touch-target minimum.
+- Touch target: the underlying `PasswordInput` owns the ≥40×40 px hit area for both the input and the visibility toggle button. The requirement chips are not interactive and so carry no touch-target minimum.
 
 ## Stories (Storybook)
 
@@ -206,7 +206,7 @@ the prop, never by composing it.
 - Invalid — `invalid: true` with a sample `helperText`; documents the danger-tokened helper and invalid input border, and that the chips are untouched by it.
 - Disabled — `disabled: true` with an explicit `helperText`; documents the disabled input tokens and the lock-icon helper the copy earns (with no `helperText` the row is absent).
 - Toggle — composite story with `toggleable=true` (default) and `toggleable=false` side by side; documents the toggle pass-through.
-- Icons — documents the `#iconLeft` slot forwarded to the underlying `InputPassword` (with `pi pi-lock`).
+- Icons — documents the `#iconLeft` slot forwarded to the underlying `PasswordInput` (with `pi pi-lock`).
 - Requirements — justification: the requirements row is a two-state axis (satisfied / not) that no single-value story can show. This composite renders one empty field beside one seeded with a partially-satisfying value, which is the only way to document both chip treatments at rest plus the wrapping behaviour; both fields use the bare `requirements` attribute, so the story is also the reference for the built-in rule set.
 - CustomRequirements — justification: the prop's second form (an array replacing the built-in set) cannot be shown by the arg-driven stories, because a RegExp / predicate is not expressible in a Storybook control. This composite documents the two customization paths side by side — the built-in set filtered by a rule's stable `key` plus an appended consumer rule, and a fully replaced localized set with a matching `requirementsTitle` — and makes it visible that customizing _which_ rules appear never changes how a chip looks.
 

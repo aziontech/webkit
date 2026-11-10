@@ -4,8 +4,8 @@
   import StatusIndicator, {
     type StatusIndicatorSeverity
   } from '../../../feedback/status-indicator/status-indicator.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Input from '../../../inputs/input/input.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
@@ -136,7 +136,7 @@
     <div class="flex h-full flex-col gap-(--spacing-md) p-(--spacing-lg)">
       <ShellMockupPart :order="0">
         <div class="flex items-center gap-(--spacing-sm)">
-          <InputText
+          <Input
             model-value=""
             size="medium"
             placeholder="Search workloads"
@@ -149,7 +149,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
           <span class="ml-auto inline-flex shrink-0">
             <Button
               label="Create Workload"
@@ -165,7 +165,7 @@
         :order="1"
         class="min-h-0 flex-1"
       >
-        <CardBox
+        <Card
           :padded="false"
           class="h-full overflow-hidden"
         >
@@ -222,7 +222,7 @@
               </div>
             </ShellMockupPart>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

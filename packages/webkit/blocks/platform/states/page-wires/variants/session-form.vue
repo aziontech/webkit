@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Skeleton from '@aziontech/webkit/skeleton'
 
   const navGroups = [
@@ -128,7 +128,7 @@
                   width="7rem"
                   height="1rem"
                 />
-                <CardBox :padded="false">
+                <Card :padded="false">
                   <template #content>
                     <div
                       v-for="(field, index) in formRows"
@@ -155,7 +155,7 @@
                       </div>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </div>
           </div>

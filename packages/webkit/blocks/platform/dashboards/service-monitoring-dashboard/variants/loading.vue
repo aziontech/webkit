@@ -4,7 +4,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -469,7 +469,7 @@
               <Hint text="Time to the first byte, by percentile, across every service." />
             </span>
             <ChartCard.Controls>
-              <SegmentedButton
+              <ToggleGroup
                 v-model="latencyWindow"
                 :options="windows"
                 size="small"
@@ -504,7 +504,7 @@
               <Hint text="Share of responses with a 4xx or 5xx status, across every service." />
             </span>
             <ChartCard.Controls>
-              <SegmentedButton
+              <ToggleGroup
                 v-model="errorWindow"
                 :options="windows"
                 size="small"

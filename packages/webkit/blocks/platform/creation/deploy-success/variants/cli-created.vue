@@ -1,9 +1,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Item from '@aziontech/webkit/item'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
@@ -174,7 +174,7 @@ jobs:
           >
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Resources created</h2>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item
@@ -209,13 +209,13 @@ jobs:
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
               <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
-                <CardBox
+                <Card
                   v-for="step in nextSteps"
                   :key="step.title"
                   :padded="false"
@@ -261,7 +261,7 @@ jobs:
                       </span>
                     </component>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </section>
 
@@ -293,7 +293,7 @@ jobs:
                   <div
                     class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
                   >
-                    <SegmentedButton
+                    <ToggleGroup
                       v-model="path"
                       :options="PATHS"
                       size="large"
@@ -315,7 +315,7 @@ jobs:
                     class="absolute right-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
                   />
                   <div class="flex min-w-0 flex-1">
-                    <CardBox
+                    <Card
                       :padded="false"
                       class="w-full"
                     >
@@ -344,7 +344,7 @@ jobs:
                           </div>
                         </div>
                       </template>
-                    </CardBox>
+                    </Card>
                   </div>
                 </div>
               </div>

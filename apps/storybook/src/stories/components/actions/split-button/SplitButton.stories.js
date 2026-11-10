@@ -41,7 +41,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes the navigation Dropdown to present the rest.'
+          'A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes the navigation DropdownMenu to present the rest.'
       },
       canvas: { sourceState: 'shown' }
     }

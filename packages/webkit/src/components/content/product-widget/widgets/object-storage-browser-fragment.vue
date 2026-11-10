@@ -4,9 +4,9 @@
   import SplitButton from '../../../actions/split-button/split-button.vue'
   import Avatar from '../../../avatar/avatar.vue'
   import TableRoot from '../../../data/table/table.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Breadcrumb from '../../../navigation/breadcrumb/breadcrumb.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -189,7 +189,7 @@
       class="relative py-(--spacing-xs)"
     >
       <ShellMockupPart :order="0">
-        <CardBox :padded="false">
+        <Card :padded="false">
           <template #content>
             <TableRoot
               :data="rows"
@@ -209,7 +209,7 @@
                     </span>
                   </div>
 
-                  <InputText
+                  <Input
                     model-value=""
                     size="large"
                     placeholder="Search in folder"
@@ -222,7 +222,7 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
 
                   <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
                     <Breadcrumb
@@ -278,7 +278,7 @@
               </template>
             </TableRoot>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
 
       <MockupCursor

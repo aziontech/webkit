@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 0152033f07bf815f1b85e5550d45b94428fc6099a104f746fc8e7bf8e1ede1fe
+checksum: ecd19d7776f6b4ba0de63cc4c6d303bb9271342cef7c496f3f8e6361df9a10b4
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -19,7 +19,7 @@ step, Next becomes the submit action. It owns the order, which steps can be reac
 goes. The consumer owns the fields, the validation and the request.
 
 It differs from its siblings by owning the **whole flow**. `stepper` is only the rail and leaves layout,
-actions and gating to the caller. `tab-view` switches between peer views that have no order and no
+actions and gating to the caller. `tabs` switches between peer views that have no order and no
 completion.
 
 ## When to use
@@ -35,7 +35,7 @@ completion.
 - A short form that fits one screen. A wizard adds clicks without adding clarity → use a plain form
   inside `drawer` or a create page.
 - A confirmation or a single decision → use `dialog`.
-- Peer views with no order and no completion → use `tab-view`.
+- Peer views with no order and no completion → use `tabs`.
 - A custom multi-step layout where the caller needs its own actions or a different arrangement → compose
   `stepper` + `stepper-step` directly.
 - Numbered instructions inside documentation → use `doc-steps` + `doc-step`.
@@ -44,7 +44,7 @@ completion.
 
 - `stepper` — the rail this component composes. Reach for it alone when the footer and gating must be
   your own.
-- `tab-view` — unordered peer views with no completion state.
+- `tabs` — unordered peer views with no completion state.
 - `dialog` — a single, short decision on an overlay.
 - `drawer` — a single-step create or edit form beside the page.
 - `message` — the inline error to show inside a step when Next is blocked.
@@ -162,6 +162,7 @@ The root composes, and does not re-implement:
 
   An `optional` step shows the word `Optional` in the `Stepper.Step` default slot. The rail's `v-model`
   is the active index as a string, and a rail activation writes `Number(value)` back to `activeStep`.
+
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
   - Cancel is `kind="text"`, at the start of the footer.
@@ -213,25 +214,25 @@ folder only):
 
 ## Props
 
-| Prop          | Type      | Default    | Required | JSDoc                                                                                                                      |
-| ------------- | --------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `submitLabel` | `string`  | `'Create'` | false    | Label of the primary action on the last step, where Next becomes the submit action.                                        |
+| Prop          | Type      | Default    | Required | JSDoc                                                                                                                  |
+| ------------- | --------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `submitLabel` | `string`  | `'Create'` | false    | Label of the primary action on the last step, where Next becomes the submit action.                                    |
 | `loading`     | `boolean` | `false`    | false    | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
-| `ariaLabel`   | `string`  | `''`       | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                                |
+| `ariaLabel`   | `string`  | `''`       | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                             |
 
 ## v-model
 
-| Model                | Type     | Default | Emits                | Notes                                                                                                                                                                                                                                                                                          |
-| -------------------- | -------- | ------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:activeStep` | `number` | `0`     | `update:activeStep`  | Zero-based index of the step on screen, two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. |
+| Model                | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                                       |
+| -------------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:activeStep` | `number` | `0`     | `update:activeStep` | Zero-based index of the step on screen, two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. |
 
 ## Events
 
-| Event    | Payload                             | Notes                                                                                                                                                                                                                                                                                                                                                                                 |
-| -------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event    | Payload                             | Notes                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `next`   | `(event: MouseEvent, step: number)` | Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to `activeStep`. Not fired by Previous or by rail jumps, which only go back. |
-| `submit` | `(event: MouseEvent)`               | Fired when the primary action is activated on the last step. The wizard changes no state. The consumer starts the request and binds `loading`. Not fired while `loading`.                                                                                                                                                                                                             |
-| `cancel` | `(event: MouseEvent)`               | Fired when Cancel is activated. The wizard changes no state, and the consumer decides where to go. Not fired while `loading`.                                                                                                                                                                                                                                                          |
+| `submit` | `(event: MouseEvent)`               | Fired when the primary action is activated on the last step. The wizard changes no state. The consumer starts the request and binds `loading`. Not fired while `loading`.                                                                                                                                                                                                                  |
+| `cancel` | `(event: MouseEvent)`               | Fired when Cancel is activated. The wizard changes no state, and the consumer decides where to go. Not fired while `loading`.                                                                                                                                                                                                                                                              |
 
 ## Slots
 
@@ -253,15 +254,15 @@ folder only):
 
 State matrix:
 
-| State                | Trigger                             | Renders                                                                                                                                                                       |
-| -------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| first step           | `activeStep === 0`                  | Previous is not rendered. The footer shows Cancel at the start and Next at the end.                                                                                            |
-| middle step          | `0 < activeStep < N − 1`            | Cancel, Previous and Next.                                                                                                                                                     |
-| last step            | `activeStep === N − 1`              | The primary action reads `submitLabel` and emits `submit`.                                                                                                                     |
-| single step          | `N === 1`                           | Previous is not rendered, and the primary action is the submit action from the start.                                                                                         |
-| loading              | `loading`                           | The primary `Button` gets `loading` (spinner + `aria-busy`, click suppressed). Cancel and Previous are `disabled`, and every `Stepper.Step` is `disabled`.                 |
-| next blocked         | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                        |
-| below `md`           | viewport under the `md` breakpoint  | The rail is not displayed (`max-md:hidden`). The step header's `Step n of N` overline and title act as the compact progress line above the content. The footer stays below. |
+| State        | Trigger                               | Renders                                                                                                                                                                     |
+| ------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| first step   | `activeStep === 0`                    | Previous is not rendered. The footer shows Cancel at the start and Next at the end.                                                                                         |
+| middle step  | `0 < activeStep < N − 1`              | Cancel, Previous and Next.                                                                                                                                                  |
+| last step    | `activeStep === N − 1`                | The primary action reads `submitLabel` and emits `submit`.                                                                                                                  |
+| single step  | `N === 1`                             | Previous is not rendered, and the primary action is the submit action from the start.                                                                                       |
+| loading      | `loading`                             | The primary `Button` gets `loading` (spinner + `aria-busy`, click suppressed). Cancel and Previous are `disabled`, and every `Stepper.Step` is `disabled`.                  |
+| next blocked | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                       |
+| below `md`   | viewport under the `md` breakpoint    | The rail is not displayed (`max-md:hidden`). The step header's `Step n of N` overline and title act as the compact progress line above the content. The footer stays below. |
 
 Layout at `md` and up: a row with the rail column (`md:w-(--container-3xs) md:shrink-0`) on the start
 side and the content column (`min-w-0 flex-1`) beside it. The content column stacks the active step,
@@ -270,53 +271,53 @@ separated from the content by a top border.
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                                                                                                                                                                           | Token (see `.claude/docs/DESIGN.md` § Animations)                         | Reduced-motion fallback                       |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------- |
-| active step content enters    | Vue `<Transition>` in `wizard-step.vue`: enter-from `opacity-0`, enter-active `transition-opacity`. There is no leave transition: the outgoing step's content unmounts at once, so two steps never stack. | inline · `duration-moderate-01` · `ease-productive-entrance` (catalog tokens) | `motion-reduce:transition-none` (instant swap) |
-| rail status change            | owned by the composed `Stepper` (connector fill, disc, colors). The wizard adds no classes.                                                                                                                       | component                                                                 | handled inside `Stepper`                      |
-| submit in progress            | owned by the composed `Button` (`loading` spinner)                                                                                                                                                               | component                                                                 | handled inside `Button` (`aria-hidden` glyph) |
+| Trigger                    | Animation / Transition                                                                                                                                                                                    | Token (see `.claude/docs/DESIGN.md` § Animations)                             | Reduced-motion fallback                        |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------- |
+| active step content enters | Vue `<Transition>` in `wizard-step.vue`: enter-from `opacity-0`, enter-active `transition-opacity`. There is no leave transition: the outgoing step's content unmounts at once, so two steps never stack. | inline · `duration-moderate-01` · `ease-productive-entrance` (catalog tokens) | `motion-reduce:transition-none` (instant swap) |
+| rail status change         | owned by the composed `Stepper` (connector fill, disc, colors). The wizard adds no classes.                                                                                                               | component                                                                     | handled inside `Stepper`                       |
+| submit in progress         | owned by the composed `Button` (`loading` spinner)                                                                                                                                                        | component                                                                     | handled inside `Button` (`aria-hidden` glyph)  |
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)          |
-| --------------------------------- | -------------------------- |
-| typography (step counter)         | `.text-overline-xs`        |
-| typography (step heading)         | `.text-heading-sm`         |
-| typography (step description)     | `.text-body-sm`            |
-| typography (Optional, header)     | `.text-body-sm`            |
-| typography (Optional, rail)       | `.text-body-xs`            |
-| counter ink                       | `var(--text-muted)`        |
-| heading ink                       | `var(--text-default)`      |
-| description ink                   | `var(--text-muted)`        |
-| Optional ink                      | `var(--text-muted)`        |
-| footer divider                    | `var(--border-default)`    |
-| rail column width (md+)           | `var(--container-3xs)`     |
-| spacing (rail ↔ content, md+)     | `var(--spacing-xxl)`       |
-| spacing (counter ↔ heading ↔ description) | `var(--spacing-xxs)` |
-| spacing (header ↔ step content)   | `var(--spacing-lg)`        |
-| spacing (step content ↔ footer)   | `var(--spacing-xl)`        |
-| spacing (footer top padding)      | `var(--spacing-md)`        |
-| spacing (between footer buttons)  | `var(--spacing-xs)`        |
-| spacing (title ↔ Optional)        | `var(--spacing-xs)`        |
-| ring (composed controls)          | `var(--ring-color)`        |
-| ring offset (composed controls)   | `var(--bg-canvas)`         |
+| Region                                    | Token (DESIGN.md)       |
+| ----------------------------------------- | ----------------------- |
+| typography (step counter)                 | `.text-overline-xs`     |
+| typography (step heading)                 | `.text-heading-sm`      |
+| typography (step description)             | `.text-body-sm`         |
+| typography (Optional, header)             | `.text-body-sm`         |
+| typography (Optional, rail)               | `.text-body-xs`         |
+| counter ink                               | `var(--text-muted)`     |
+| heading ink                               | `var(--text-default)`   |
+| description ink                           | `var(--text-muted)`     |
+| Optional ink                              | `var(--text-muted)`     |
+| footer divider                            | `var(--border-default)` |
+| rail column width (md+)                   | `var(--container-3xs)`  |
+| spacing (rail ↔ content, md+)             | `var(--spacing-xxl)`    |
+| spacing (counter ↔ heading ↔ description) | `var(--spacing-xxs)`    |
+| spacing (header ↔ step content)           | `var(--spacing-lg)`     |
+| spacing (step content ↔ footer)           | `var(--spacing-xl)`     |
+| spacing (footer top padding)              | `var(--spacing-md)`     |
+| spacing (between footer buttons)          | `var(--spacing-xs)`     |
+| spacing (title ↔ Optional)                | `var(--spacing-xs)`     |
+| ring (composed controls)                  | `var(--ring-color)`     |
+| ring offset (composed controls)           | `var(--bg-canvas)`      |
 
 ## Theme gaps
 
-| Figma variable                                                  | Temporary primitive                                                                                                                                                       | Follow-up                                                                                                                                                                                     |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| — (no Figma frame; authored from the brief, Mode B)             | —                                                                                                                                                                         | `TODO: link a Figma frame and a .figma.ts Code Connect mapping once the design exists`                                                                                                        |
-| — (copy gap, not a token gap)                                   | Fixed English strings: `Cancel`, `Previous`, `Next`, `Step {n} of {N}`, `Optional`. Only the submit label is a prop (`submitLabel`).                                       | `TODO: open question — add label props (cancelLabel, previousLabel, nextLabel) or adopt a package i18n strategy before approval; not added here because the brief did not state them`        |
-| — (behavior open question)                                      | Rail jumps go **backward only**. Steps after the active one are disabled even when visited before, so every forward move passes through the cancelable `next` gate.         | `TODO: open question — Cloudscape allows forward jumps to visited steps; supporting that needs the rail to expose an activation event so the jump can fire next, which Stepper does not today` |
-| — (behavior open question)                                      | The step heading is a fixed `<h2>`.                                                                                                                                         | `TODO: open question — a heading-level prop if the wizard sits under a page h1 plus section h2`                                                                                              |
-| — (behavior open question)                                      | A blocked `next` does not set the rail step to `state="error"`. The error shows only inside the step.                                                                     | `TODO: open question — expose a per-step error flag (for example on Wizard.Step) so the rail can mirror it`                                                                                  |
-| — (documentation gap)                                           | The Constraints block cites `packages/theme/src/tokens/semantic/animations.js`, which does not exist in this tree. The catalog lives in `primitives/animations/animate.js`. The wizard uses no keyframe utility, so it is unaffected. | `TODO: align the template's Constraints path with the real catalog location (template-wide change, separate PR)`                                                                              |
+| Figma variable                                      | Temporary primitive                                                                                                                                                                                                                   | Follow-up                                                                                                                                                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| — (no Figma frame; authored from the brief, Mode B) | —                                                                                                                                                                                                                                     | `TODO: link a Figma frame and a .figma.ts Code Connect mapping once the design exists`                                                                                                         |
+| — (copy gap, not a token gap)                       | Fixed English strings: `Cancel`, `Previous`, `Next`, `Step {n} of {N}`, `Optional`. Only the submit label is a prop (`submitLabel`).                                                                                                  | `TODO: open question — add label props (cancelLabel, previousLabel, nextLabel) or adopt a package i18n strategy before approval; not added here because the brief did not state them`          |
+| — (behavior open question)                          | Rail jumps go **backward only**. Steps after the active one are disabled even when visited before, so every forward move passes through the cancelable `next` gate.                                                                   | `TODO: open question — Cloudscape allows forward jumps to visited steps; supporting that needs the rail to expose an activation event so the jump can fire next, which Stepper does not today` |
+| — (behavior open question)                          | The step heading is a fixed `<h2>`.                                                                                                                                                                                                   | `TODO: open question — a heading-level prop if the wizard sits under a page h1 plus section h2`                                                                                                |
+| — (behavior open question)                          | A blocked `next` does not set the rail step to `state="error"`. The error shows only inside the step.                                                                                                                                 | `TODO: open question — expose a per-step error flag (for example on Wizard.Step) so the rail can mirror it`                                                                                    |
+| — (documentation gap)                               | The Constraints block cites `packages/theme/src/tokens/semantic/animations.js`, which does not exist in this tree. The catalog lives in `primitives/animations/animate.js`. The wizard uses no keyframe utility, so it is unaffected. | `TODO: align the template's Constraints path with the real catalog location (template-wide change, separate PR)`                                                                               |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: every focusable control is a composed `Button` or `Stepper.Step` and carries their
   ring: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2
-  focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic focus target
+focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic focus target
   (`tabindex="-1"`), not a control, so it is out of the Tab order and draws no ring.
 - Keyboard map:
   - `Tab` order: the enabled rail steps (those before the active one), then the step content, then the
@@ -352,7 +353,7 @@ separated from the content by a top border.
 - Loading — the flow parked on its last step with `loading` set: the submit action shows its spinner,
   and Cancel, Previous and the rail are disabled.
 - Validation — a flow whose first step has a required name field. The `next` handler calls
-  `event.preventDefault()` while the field is empty and shows an inline `Message` (`severity="danger"`)
+  `event.preventDefault()` while the field is empty and shows an inline `Alert` (`severity="danger"`)
   inside the step. Justified beyond the canonical set because cancelable `next` is this component's
   documented gating contract, and it only shows through a handler.
 

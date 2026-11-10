@@ -15,7 +15,7 @@
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
@@ -255,7 +255,7 @@
           :data-testid="`${testId}__toolbar`"
           class="grid gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] lg:items-center"
         >
-          <InputText
+          <Input
             v-if="search"
             v-model="query"
             size="large"
@@ -266,7 +266,7 @@
             <template #iconLeft>
               <i class="pi pi-search text-(--text-muted)" />
             </template>
-          </InputText>
+          </Input>
           <Select
             v-for="facet in facets"
             :key="facet.key"

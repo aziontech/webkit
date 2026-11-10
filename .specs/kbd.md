@@ -4,15 +4,16 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0d5200dbd6defbad67007e7b66555b33baf207acbb9dda2c23a22e8b059c73d1
+checksum: 678dc6e5dab11da549ceb26a44d9430fa5a85c4e46030c28dd194809cbe06b7d
 created: 2026-07-23
 last_updated: 2026-07-24
 ---
+
 # Kbd — Component Spec
 
 ## Purpose
 
-Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, Ctrl elsewhere), so consumers never hardcode platform symbols. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command-menu`).
+Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, Ctrl elsewhere), so consumers never hardcode platform symbols. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
 
 ## When to use
 
@@ -26,7 +27,7 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 ## Related
 
-- `command-menu` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.
+- `command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.
 - `badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys.
 
 ## Best practices
@@ -39,7 +40,7 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 ```vue
 <script setup>
-import Kbd from '@aziontech/webkit/kbd'
+  import Kbd from '@aziontech/webkit/kbd'
 </script>
 
 <template>
@@ -49,13 +50,13 @@ import Kbd from '@aziontech/webkit/kbd'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `meta` | `boolean` | `false` | false | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). |
-| `ctrl` | `boolean` | `false` | false | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere). |
-| `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
-| `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
+| Prop    | Type                  | Default    | Required | JSDoc                                                                            |
+| ------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------- |
+| `meta`  | `boolean`             | `false`    | false    | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere).            |
+| `ctrl`  | `boolean`             | `false`    | false    | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere).                 |
+| `shift` | `boolean`             | `false`    | false    | Prepend the Shift modifier glyph (⇧).                                            |
+| `alt`   | `boolean`             | `false`    | false    | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere).               |
+| `size`  | `'small' \| 'medium'` | `'medium'` | false    | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
 
 ## Events
 
@@ -63,9 +64,9 @@ import Kbd from '@aziontech/webkit/kbd'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`). |
+| Slot      | Scope | Notes                                                                             |
+| --------- | ----- | --------------------------------------------------------------------------------- |
+| `default` | —     | The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`). |
 
 ## States
 
@@ -79,17 +80,17 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (medium) | `.text-overline-md` + `leading-none` |
-| typography (small) | `.text-overline-sm` + `leading-none` |
-| surface | `var(--bg-surface)` |
-| label | `var(--text-default)` |
-| border (keycap outline + thicker bottom edge) | `var(--border-default)` |
-| shape | `var(--shape-elements)` |
-| elevation (keycap lift) | `var(--shadow-sm)` |
-| spacing (medium) | `var(--spacing-xs)` horizontal padding |
-| spacing (small) | `var(--spacing-xs)` horizontal padding |
+| Region                                        | Token (DESIGN.md)                      |
+| --------------------------------------------- | -------------------------------------- |
+| typography (medium)                           | `.text-overline-md` + `leading-none`   |
+| typography (small)                            | `.text-overline-sm` + `leading-none`   |
+| surface                                       | `var(--bg-surface)`                    |
+| label                                         | `var(--text-default)`                  |
+| border (keycap outline + thicker bottom edge) | `var(--border-default)`                |
+| shape                                         | `var(--shape-elements)`                |
+| elevation (keycap lift)                       | `var(--shadow-sm)`                     |
+| spacing (medium)                              | `var(--spacing-xs)` horizontal padding |
+| spacing (small)                               | `var(--spacing-xs)` horizontal padding |
 
 ## Theme gaps
 

@@ -3,8 +3,8 @@
 
   import FieldRadio from '../../../inputs/field-radio/field-radio.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
@@ -139,7 +139,7 @@
           label="Max Age"
           required
         />
-        <InputNumber
+        <NumberInput
           id="browser-max-age"
           :model-value="600"
           size="medium"
@@ -177,7 +177,7 @@
             label="Max Age"
             required
           />
-          <InputNumber
+          <NumberInput
             id="cache-max-age"
             :model-value="3600"
             size="medium"
@@ -225,7 +225,7 @@
             for="cache-offset"
             label="Offset (KB)"
           />
-          <InputNumber
+          <NumberInput
             id="cache-offset"
             :model-value="1024"
             size="medium"

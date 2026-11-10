@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: c056c427f80762efa22aa8ae6633ed892248d5034720231c88c5dcd3778ffff4
+checksum: e361bd65be2a5d4d3486cf2157a4db5902f92aa5bded9718167963f65640c429
 created: 2026-06-23
 last_updated: 2026-11-09
 ---
@@ -25,14 +25,14 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 ## When NOT to use
 
-- The duration is unknown and no layout is reserved → use `progress-bar` with `indeterminate`, or `spinner`.
+- The duration is unknown and no layout is reserved → use `progress` with `indeterminate`, or `spinner`.
 - Rows in a data-driven `table` → use the `table` `loading` prop, which renders aligned skeleton rows.
 - Loading finished with no data → use `empty-state`.
 - A settled state such as Active or Failed → use `status-indicator`.
 
 ## Related
 
-- `progress-bar` — measured or indeterminate progress of a task, not a placeholder.
+- `progress` — measured or indeterminate progress of a task, not a placeholder.
 - `spinner` — compact busy glyph for buttons and inline status.
 - `empty-state` — what replaces the skeleton when the request returns nothing.
 - `table` — its `loading` prop renders skeleton rows for you.
@@ -48,23 +48,30 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 ```vue
 <script setup>
-import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/webkit/skeleton'
 </script>
 
 <template>
-  <Skeleton width="240px" height="100px" />
-  <Skeleton kind="circle" width="100px" height="100px" />
+  <Skeleton
+    width="240px"
+    height="100px"
+  />
+  <Skeleton
+    kind="circle"
+    width="100px"
+    height="100px"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'shape' \| 'circle'` | `'shape'` | false | Geometry: a rounded rectangular block (`shape`) or a circle. |
-| `width` | `string` | `'100%'` | false | CSS width (any length). |
-| `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
+| Prop       | Type                  | Default   | Required | JSDoc                                                        |
+| ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------ |
+| `kind`     | `'shape' \| 'circle'` | `'shape'` | false    | Geometry: a rounded rectangular block (`shape`) or a circle. |
+| `width`    | `string`              | `'100%'`  | false    | CSS width (any length).                                      |
+| `height`   | `string`              | `'1rem'`  | false    | CSS height (any length); for a circle, set equal to `width`. |
+| `animated` | `boolean`             | `true`    | false    | Shimmer while loading; suppressed under reduced motion.      |
 
 ## Events
 
@@ -82,17 +89,17 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                    | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations)                                                                      | Reduced-motion fallback                                                        |
+| -------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`primitives/animations/animate.js`) + `@keyframes shimmer` (`primitives/animations/keyframes.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| fill | `var(--bg-placeholder)` |
-| shimmer sweep | `var(--bg-placeholder-highlight)` |
-| shape radius (`shape`) | `var(--shape-elements)` |
+| Region                 | Token (DESIGN.md)                 |
+| ---------------------- | --------------------------------- |
+| fill                   | `var(--bg-placeholder)`           |
+| shimmer sweep          | `var(--bg-placeholder-highlight)` |
+| shape radius (`shape`) | `var(--shape-elements)`           |
 
 `--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 

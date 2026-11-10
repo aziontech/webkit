@@ -3,7 +3,7 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 9c52c7fc6ede91507804a4e6e68c9bd2f405191a45a2e1451cf1cd178dfa1251
+checksum: 31a060a930f0e3951252219cccd35402182560614ae519444f023c15d45e3671
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -32,7 +32,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 ## Related
 
 - `table` — many subjects, one row each; KeyValuePairs describes one subject.
-- `card-box` — the surface a KeyValuePairs usually sits in; KeyValuePairs brings no surface of its own.
+- `card` — the surface a KeyValuePairs usually sits in; KeyValuePairs brings no surface of its own.
 - `copy-button` — the trailing copy affordance for IDs and keys inside a value.
 - `status-indicator`, `tag` — status and category values.
 - `link` — a value that navigates (a domain, a linked resource).
@@ -54,28 +54,41 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 
 ```vue
 <script setup>
-import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
-import CopyButton from '@aziontech/webkit/copy-button'
-import Hint from '@aziontech/webkit/hint'
-import Link from '@aziontech/webkit/link'
-import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import Hint from '@aziontech/webkit/hint'
+  import Link from '@aziontech/webkit/link'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <KeyValuePairs :columns="2" aria-label="Workload details">
+  <KeyValuePairs
+    :columns="2"
+    aria-label="Workload details"
+  >
     <KeyValuePairs.Group title="General">
       <KeyValuePairs.Item label="Workload ID">
         <span>1752167890</span>
-        <CopyButton value="1752167890" aria-label="Copy workload ID" />
+        <CopyButton
+          value="1752167890"
+          aria-label="Copy workload ID"
+        />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Status">
-        <StatusIndicator severity="success" label="Active" />
+        <StatusIndicator
+          severity="success"
+          label="Active"
+        />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
     </KeyValuePairs.Group>
     <KeyValuePairs.Group title="Networking">
       <KeyValuePairs.Item label="Domain">
-        <Link label="shop.example.com" href="https://shop.example.com" size="small" />
+        <Link
+          label="shop.example.com"
+          href="https://shop.example.com"
+          size="small"
+        />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Region">
         <template #info>
@@ -93,9 +106,9 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
 
 ```vue
 <script setup>
-import KeyValuePairs from '@aziontech/webkit/key-value-pairs-root'
-import KeyValuePairsItem from '@aziontech/webkit/key-value-pairs-item'
-import KeyValuePairsGroup from '@aziontech/webkit/key-value-pairs-group'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs-root'
+  import KeyValuePairsItem from '@aziontech/webkit/key-value-pairs-item'
+  import KeyValuePairsGroup from '@aziontech/webkit/key-value-pairs-group'
 </script>
 ```
 
@@ -135,11 +148,11 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `columns` | `1 \| 2 \| 3 \| 4` | `1` | false | Columns at full width; collapses to one column below `md` and to two at `md` when set to 3 or 4. |
-| `loading` | `boolean` | `false` | false | Replaces every value with a skeleton while the data loads; labels stay visible. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the list when no visible heading names it. |
+| Prop        | Type               | Default | Required | JSDoc                                                                                            |
+| ----------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `columns`   | `1 \| 2 \| 3 \| 4` | `1`     | false    | Columns at full width; collapses to one column below `md` and to two at `md` when set to 3 or 4. |
+| `loading`   | `boolean`          | `false` | false    | Replaces every value with a skeleton while the data loads; labels stay visible.                  |
+| `ariaLabel` | `string`           | `''`    | false    | Accessible name of the list when no visible heading names it.                                    |
 
 ## Events
 
@@ -149,9 +162,9 @@ Read-only display; interactive values (links, copy buttons) emit their own event
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | `KeyValuePairs.Item` children, or `KeyValuePairs.Group` children — one shape per instance. |
+| Slot      | Scope | Notes                                                                                      |
+| --------- | ----- | ------------------------------------------------------------------------------------------ |
+| `default` | —     | `KeyValuePairs.Item` children, or `KeyValuePairs.Group` children — one shape per instance. |
 
 ## States
 
@@ -162,11 +175,11 @@ Read-only display; interactive values (links, copy buttons) emit their own event
 - Responsive columns (viewport breakpoints):
 
   | `columns` | below `md` | `md` | `lg` and up |
-  |---|---|---|---|
-  | 1 | 1 | 1 | 1 |
-  | 2 | 1 | 2 | 2 |
-  | 3 | 1 | 2 | 3 |
-  | 4 | 1 | 2 | 4 |
+  | --------- | ---------- | ---- | ----------- |
+  | 1         | 1          | 1    | 1           |
+  | 2         | 1          | 2    | 2           |
+  | 3         | 1          | 2    | 3           |
+  | 4         | 1          | 2    | 4           |
 
 - No `disabled`, `invalid`, `readonly`, `error`, `open` states: the component is read-only and fetches nothing. An error loading the facts is the page's surface (e.g. `message`), not this component's.
 
@@ -178,25 +191,25 @@ The loading shimmer belongs to the composed `Skeleton`, which already suppresses
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| key (`<dt>`) | `.text-body-sm`, `var(--text-muted)` |
-| value (`<dd>`) | `.text-body-sm`, `var(--text-default)` |
-| empty-value marker | `.text-body-sm`, `var(--text-muted)` |
-| group title | `.text-heading-xxs`, `var(--text-default)` |
-| grid gap (column / row) | `var(--spacing-lg)` / `var(--spacing-md)` |
-| key → value gap | `var(--spacing-xxs)` |
-| inline value components gap | `var(--spacing-xs)` |
-| group title → items gap; items inside a group | `var(--spacing-sm)` |
-| info slot gap after label | `var(--spacing-xxs)` |
+| Region                                        | Token (DESIGN.md)                          |
+| --------------------------------------------- | ------------------------------------------ |
+| key (`<dt>`)                                  | `.text-body-sm`, `var(--text-muted)`       |
+| value (`<dd>`)                                | `.text-body-sm`, `var(--text-default)`     |
+| empty-value marker                            | `.text-body-sm`, `var(--text-muted)`       |
+| group title                                   | `.text-heading-xxs`, `var(--text-default)` |
+| grid gap (column / row)                       | `var(--spacing-lg)` / `var(--spacing-md)`  |
+| key → value gap                               | `var(--spacing-xxs)`                       |
+| inline value components gap                   | `var(--spacing-xs)`                        |
+| group title → items gap; items inside a group | `var(--spacing-sm)`                        |
+| info slot gap after label                     | `var(--spacing-xxs)`                       |
 
-Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `break-words`, so composed values line up on one row and long unbroken IDs or URLs wrap instead of overflowing the cell. No surface, border or shape tokens — the container (`card-box`, a page band) supplies them.
+Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `break-words`, so composed values line up on one row and long unbroken IDs or URLs wrap instead of overflowing the cell. No surface, border or shape tokens — the container (`card`, a page band) supplies them.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -116,7 +116,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 | Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts                                                                | `/webkit-ui-states`         |
 | Structure  | Accessible forms: fieldset/legend, submit-time required/invalid                                                                           | `/webkit-form`              |
 | Structure  | Where a create lives: page vs drawer, the Advanced band, the commit bar                                                                   | `/webkit-create-surface`    |
-| Structure  | Where a failure goes: the field, a section Message, a toast, the auth card                                                                | `/webkit-errors`            |
+| Structure  | Where a failure goes: the field, a section Alert, a toast, the auth card                                                                  | `/webkit-errors`            |
 | Structure  | Data tables: data-driven `<Table :data :columns>`, toolbar, internal scroll, cell recipes — and the cross-resource link every screen uses | `/webkit-tables`            |
 | Structure  | The index page around the table: one band, search vs filters, the chip filter bar                                                         | `/webkit-lists`             |
 | Structure  | The two console shells; one GlobalHeader; user always visible                                                                             | `/webkit-navigation`        |

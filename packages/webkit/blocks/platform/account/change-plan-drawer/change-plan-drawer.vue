@@ -1,8 +1,8 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import CardPricing from '@aziontech/webkit/card-pricing'
-  import Divider from '@aziontech/webkit/divider'
+  import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -14,11 +14,11 @@
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import Link from '@aziontech/webkit/link'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, reactive, ref, watch } from 'vue'
 
   const changePlanOpen = ref(false)
@@ -272,7 +272,7 @@
             <DrawerDescription class="w-full">
               Compare what each tier includes before moving the account onto it.
             </DrawerDescription>
-            <SegmentedButton
+            <ToggleGroup
               v-model="changePlanPeriod"
               :options="billingPeriods"
               aria-label="Billing period"
@@ -392,7 +392,7 @@
                   </ul>
                 </div>
                 <div class="flex flex-col gap-(--spacing-xs)">
-                  <Divider />
+                  <Separator />
                   <div
                     v-for="link in pricingLinks"
                     :key="link.label"
@@ -409,10 +409,10 @@
                 </div>
               </aside>
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                <CardBox :padded="false">
+                <Card :padded="false">
                   <template #header>
                     <p class="text-label-lg text-(--text-default)">Charged</p>
-                    <SegmentedButton
+                    <ToggleGroup
                       v-model="upgradePeriod"
                       :options="billingPeriods"
                       aria-label="Billing period"
@@ -439,7 +439,7 @@
                           </span>
                         </div>
                       </div>
-                      <Divider />
+                      <Separator />
                       <div
                         class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
                       >
@@ -455,8 +455,8 @@
                       </div>
                     </div>
                   </template>
-                </CardBox>
-                <CardBox
+                </Card>
+                <Card
                   title="Payment Method"
                   :padded="false"
                 >
@@ -563,7 +563,7 @@
                               inputmode="numeric"
                             />
                           </div>
-                          <Message
+                          <Alert
                             severity="info"
                             size="small"
                             label="Sensitive data is handled by a PCI-compliant payment partner."
@@ -594,8 +594,8 @@
                       </template>
                     </div>
                   </template>
-                </CardBox>
-                <CardBox
+                </Card>
+                <Card
                   title="Address information"
                   :padded="false"
                 >
@@ -658,7 +658,7 @@
                       />
                     </fieldset>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </div>
           </PanelContent>

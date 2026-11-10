@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: approved
-checksum: 6c02678af768bd21a64cd92315389f261fb468d6fbd74be48aff55624ee68f91
+checksum: 144ae7e523d1b50b7de3b62c999f65a93cbea93931bfe83fd1c4b2b4b888182c
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-10-20
@@ -23,13 +23,13 @@ The box a dashboard chart lives in: a header with the title, the description and
 ## When NOT to use
 
 - A KPI figure → use `stat-tile`, which is its own surface.
-- A general content card with no chart → use `card-box`.
+- A general content card with no chart → use `card`.
 - A chart inline in a page section with its own heading → render `chart` alone.
 
 ## Related
 
 - `chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.
-- `card-box` — the general-purpose card; ChartCard shares its surface tokens.
+- `card` — the general-purpose card; ChartCard shares its surface tokens.
 - `dropdown` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
 
 ## Best practices
@@ -44,22 +44,29 @@ The box a dashboard chart lives in: a header with the title, the description and
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import ChartCard from '@aziontech/webkit/chart-card'
+  import { ref } from 'vue'
+  import ChartCard from '@aziontech/webkit/chart-card'
 
-const span = ref(6)
-const height = ref(552)
+  const span = ref(6)
+  const height = ref(552)
 </script>
 
 <template>
   <div class="grid grid-cols-12 gap-(--spacing-md)">
-    <ChartCard v-model:span="span" v-model:height="height" draggable resizable>
+    <ChartCard
+      v-model:span="span"
+      v-model:height="height"
+      draggable
+      resizable
+    >
       <ChartCard.Header>
         <ChartCard.DragHandle />
         <ChartCard.Title>Threats vs requests</ChartCard.Title>
         <ChartCard.Controls>Sum</ChartCard.Controls>
       </ChartCard.Header>
-      <ChartCard.Description>Requests WAF analyzed, split into blocked, logged and allowed.</ChartCard.Description>
+      <ChartCard.Description
+        >Requests WAF analyzed, split into blocked, logged and allowed.</ChartCard.Description
+      >
       <ChartCard.Content>Chart goes here</ChartCard.Content>
       <ChartCard.Footer>Last 24 hours</ChartCard.Footer>
       <ChartCard.ResizeHandle />
@@ -72,9 +79,9 @@ Tree-shaking alternative:
 
 ```vue
 <script setup>
-import ChartCard from '@aziontech/webkit/chart-card-root'
-import ChartCardHeader from '@aziontech/webkit/chart-card-header'
-import ChartCardContent from '@aziontech/webkit/chart-card-content'
+  import ChartCard from '@aziontech/webkit/chart-card-root'
+  import ChartCardHeader from '@aziontech/webkit/chart-card-header'
+  import ChartCardContent from '@aziontech/webkit/chart-card-content'
 </script>
 ```
 
@@ -135,38 +142,38 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `draggable` | `boolean` | `false` | false | Shows the drag handle and lets the card be dragged to a new position. |
-| `resizable` | `boolean` | `false` | false | Shows the resize handle. |
-| `minSpan` | `number` | `3` | false | Fewest grid columns the card may span. |
-| `maxSpan` | `number` | `12` | false | Most grid columns the card may span. |
-| `minHeight` | `number` | `240` | false | Smallest height in pixels the resize handle allows. |
-| `maxHeight` | `number` | `960` | false | Largest height in pixels the resize handle allows. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the card when it has no title. |
+| Prop        | Type      | Default | Required | JSDoc                                                                 |
+| ----------- | --------- | ------- | -------- | --------------------------------------------------------------------- |
+| `draggable` | `boolean` | `false` | false    | Shows the drag handle and lets the card be dragged to a new position. |
+| `resizable` | `boolean` | `false` | false    | Shows the resize handle.                                              |
+| `minSpan`   | `number`  | `3`     | false    | Fewest grid columns the card may span.                                |
+| `maxSpan`   | `number`  | `12`    | false    | Most grid columns the card may span.                                  |
+| `minHeight` | `number`  | `240`   | false    | Smallest height in pixels the resize handle allows.                   |
+| `maxHeight` | `number`  | `960`   | false    | Largest height in pixels the resize handle allows.                    |
+| `ariaLabel` | `string`  | `''`    | false    | Accessible name of the card when it has no title.                     |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:span` | `number` | `6` | `update:span` | Grid columns the card spans, applied as `--chart-card-span` and capped by the grid's `--chart-grid-columns`. |
-| `v-model:height` | `number \| undefined` | `undefined` | `update:height` | Height in pixels, applied as `--chart-card-height`; absent means the content decides. |
+| Model            | Type                  | Default     | Emits           | Notes                                                                                                        |
+| ---------------- | --------------------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
+| `v-model:span`   | `number`              | `6`         | `update:span`   | Grid columns the card spans, applied as `--chart-card-span` and capped by the grid's `--chart-grid-columns`. |
+| `v-model:height` | `number \| undefined` | `undefined` | `update:height` | Height in pixels, applied as `--chart-card-height`; absent means the content decides.                        |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `move` | `(event: KeyboardEvent, direction: 'up' \| 'down' \| 'left' \| 'right')` | An arrow key on the drag handle; the page moves the card in its own order. |
-| `drag-start` | `(event: DragEvent)` | Native drag began from the handle; the page records the source. |
-| `drag-end` | `(event: DragEvent)` | Native drag ended, dropped or cancelled. |
-| `resize-start` | `(event: PointerEvent)` | A pointer resize began on the handle. |
-| `resize-end` | `(event: PointerEvent \| KeyboardEvent)` | A resize finished: pointer released, or a keyboard nudge committed. |
+| Event          | Payload                                                                  | Notes                                                                      |
+| -------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| `move`         | `(event: KeyboardEvent, direction: 'up' \| 'down' \| 'left' \| 'right')` | An arrow key on the drag handle; the page moves the card in its own order. |
+| `drag-start`   | `(event: DragEvent)`                                                     | Native drag began from the handle; the page records the source.            |
+| `drag-end`     | `(event: DragEvent)`                                                     | Native drag ended, dropped or cancelled.                                   |
+| `resize-start` | `(event: PointerEvent)`                                                  | A pointer resize began on the handle.                                      |
+| `resize-end`   | `(event: PointerEvent \| KeyboardEvent)`                                 | A resize finished: pointer released, or a keyboard nudge committed.        |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The parts: Header, Description, Content, Footer, ResizeHandle. |
+| Slot      | Scope | Notes                                                          |
+| --------- | ----- | -------------------------------------------------------------- |
+| `default` | —     | The parts: Header, Description, Content, Footer, ResizeHandle. |
 
 ## States
 
@@ -177,29 +184,29 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| dragging dim | `transition-opacity duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| handle hover / focus | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger              | Animation / Transition                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| dragging dim         | `transition-opacity duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| handle hover / focus | `transition-colors duration-fast-02 ease-productive-entrance`  | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
 
 A pointer resize follows the pointer 1:1 with no transition; it is direct manipulation, not motion.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| surface | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
-| title | `.text-label-md`, `var(--text-default)` |
-| description, footer | `.text-body-sm`, `var(--text-muted)` |
-| handles | `var(--text-muted)`, `var(--bg-hover)`, `var(--shape-button)` |
-| spacing | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)` |
-| focus | `var(--ring-color)` |
+| Region              | Token (DESIGN.md)                                                 |
+| ------------------- | ----------------------------------------------------------------- |
+| surface             | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
+| title               | `.text-label-md`, `var(--text-default)`                           |
+| description, footer | `.text-body-sm`, `var(--text-muted)`                              |
+| handles             | `var(--text-muted)`, `var(--bg-hover)`, `var(--shape-button)`     |
+| spacing             | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`     |
+| focus               | `var(--ring-color)`                                               |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -9,7 +9,7 @@ export default {
   parameters: {
     layout: "padded",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `CardBox`, `Table`, `Tag`, `Dropdown`, `IconButton`, `Tooltip` and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "An attached-resources card in a resource settings tab, here its domains: a borderless table of the addresses the resource answers on, each with its environment, deployment policy and certificate as medium rounded tags and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `Table`, `Tag`, `DropdownMenu`, `IconButton`, `Tooltip` and `Button`." } },
     webkit: {"block":"platform/detail/attached-resources","intents":["domains section","domains card","domains table","resource domains","domain list in settings","hostnames","seção de domínios","domínios do recurso","lista de domínios","attached resources","related resources table","recursos vinculados"],"skills":["webkit-tables"],"primary":"Default"}
   }
 }

@@ -3,8 +3,8 @@
 
   import {
     getTabViewPanelTransitionStyle,
-    type TabViewSlideDirection
-  } from '../../../navigation/tab-view/presets/transitions'
+    type TabsSlideDirection
+  } from '../../../navigation/tabs/presets/transitions'
   import { asRange, asSingle, sameDay, startOfDay } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
 
@@ -44,7 +44,7 @@
   const viewYear = computed(() => viewDate.value.getFullYear())
   const viewMonth = computed(() => viewDate.value.getMonth())
 
-  const slideDirection = ref<TabViewSlideDirection>(null)
+  const slideDirection = ref<TabsSlideDirection>(null)
   const transitioning = ref(false)
 
   const monthsKey = computed(() => `${viewYear.value}-${viewMonth.value}`)

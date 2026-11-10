@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import Divider from '../../layout/divider/divider.vue'
+  import Separator from '../../layout/separator/separator.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
   import { formatCompact, formatSignedPercent, isFiniteNumber } from '../_lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
@@ -189,7 +189,7 @@
         size="medium"
         class="opacity-30"
       />
-      <Divider class="absolute inset-x-0 top-0" />
+      <Separator class="absolute inset-x-0 top-0" />
       <Tag
         severity="secondary"
         size="small"

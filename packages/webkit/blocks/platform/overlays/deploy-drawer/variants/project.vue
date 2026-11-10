@@ -2,8 +2,8 @@
   import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import Divider from '@aziontech/webkit/divider'
+  import Card from '@aziontech/webkit/card'
+  import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -13,9 +13,9 @@
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import Hint from '@aziontech/webkit/hint'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -264,13 +264,13 @@
                       data-open="true"
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <template
                             v-for="(row, index) in resources"
                             :key="row.key"
                           >
-                            <Divider v-if="index" />
+                            <Separator v-if="index" />
                             <Item
                               kind="inline"
                               size="small"
@@ -327,7 +327,7 @@
                                       <p class="text-label-sm text-(--text-muted)">
                                         {{ versionSummary(row) }}
                                       </p>
-                                      <InputText
+                                      <Input
                                         v-if="row.total > row.versions.length"
                                         size="medium"
                                         placeholder="Search versions"
@@ -339,7 +339,7 @@
                                             aria-hidden="true"
                                           />
                                         </template>
-                                      </InputText>
+                                      </Input>
                                     </div>
 
                                     <div
@@ -417,7 +417,7 @@
                               </Item.Actions>
                             </Item>
                             <template v-if="row.owner">
-                              <Divider />
+                              <Separator />
                               <Accordion
                                 type="single"
                                 collapsible
@@ -507,7 +507,7 @@
                                                     <p class="text-label-sm text-(--text-muted)">
                                                       {{ versionSummary(dependency) }}
                                                     </p>
-                                                    <InputText
+                                                    <Input
                                                       v-if="
                                                         dependency.total >
                                                         dependency.versions.length
@@ -522,7 +522,7 @@
                                                           aria-hidden="true"
                                                         />
                                                       </template>
-                                                    </InputText>
+                                                    </Input>
                                                   </div>
 
                                                   <div
@@ -618,7 +618,7 @@
                             </template>
                           </template>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -684,7 +684,7 @@
                         </div>
                       </div>
 
-                      <Message
+                      <Alert
                         v-if="sharedWith.length"
                         severity="warning"
                         size="small"

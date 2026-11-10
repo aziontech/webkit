@@ -4,7 +4,7 @@ The last ask at the end of a landing page, after a hatched gap. A closing frame 
 
 Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is its own component too, `ClosingCallToActionAgents` from `@aziontech/webkit/closing-call-to-action-agents`, since it carries an audience switch and a typed line; it composes `CallToAction` in its `primary` register with `SegmentedButton`, `InputGroup`, `CopyButton` and `Button`.
+The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is its own component too, `ClosingCallToActionAgents` from `@aziontech/webkit/closing-call-to-action-agents`, since it carries an audience switch and a typed line; it composes `CallToAction` in its `primary` register with `ToggleGroup`, `InputGroup`, `CopyButton` and `Button`.
 
 ## Stories
 
@@ -117,7 +117,7 @@ Site JSON: [`site-primary.json`](./site-primary.json)
 
 ### Agents
 
-The close for a reader who may be a person or an agent. It is the `primary` register, so it shares its canvas ground and the pixelated wave. One centred ask, with a small `SegmentedButton` under the title that switches the way in: For humans offers the sign-up and a specialist, For agents hands over a prompt that connects the Azion MCP server, which works in any client. Each way carries an optional copyable line and its actions, then the closing frame follows.
+The close for a reader who may be a person or an agent. It is the `primary` register, so it shares its canvas ground and the pixelated wave. One centred ask, with a small `ToggleGroup` under the title that switches the way in: For humans offers the sign-up and a specialist, For agents hands over a prompt that connects the Azion MCP server, which works in any client. Each way carries an optional copyable line and its actions, then the closing frame follows.
 
 Example: [`site-agents.vue`](./site-agents.vue)
 

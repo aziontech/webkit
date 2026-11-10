@@ -4,7 +4,7 @@
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
   import Button from '@aziontech/webkit/button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import { computed, ref } from 'vue'
 
   const value = ref([])
@@ -39,7 +39,7 @@
       <MultiSelectTrigger />
       <MultiSelectContent>
         <template #search>
-          <InputText
+          <Input
             v-model="search"
             size="small"
             placeholder="Search"
@@ -50,7 +50,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
         </template>
         <MultiSelectOption
           v-for="o in filtered"

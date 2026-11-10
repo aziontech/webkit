@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Switch from '@aziontech/webkit/switch'
   import { reactive } from 'vue'
@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <Item.List>
         <Item size="small">
@@ -59,5 +59,5 @@
         </Item>
       </Item.List>
     </template>
-  </CardBox>
+  </Card>
 </template>

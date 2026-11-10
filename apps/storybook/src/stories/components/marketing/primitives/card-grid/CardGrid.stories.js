@@ -171,7 +171,7 @@ const DIVIDER_COLOR_TEMPLATE = `<CardGrid kind="divider" divider-color="muted" :
 </CardGrid>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CardGrid>} */
-export const DividerColor = {
+export const SeparatorColor = {
   render: () => ({ components: { CardGrid }, template: DIVIDER_COLOR_TEMPLATE }),
   parameters: {
     controls: { disable: true },

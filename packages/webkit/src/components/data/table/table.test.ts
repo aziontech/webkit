@@ -420,7 +420,7 @@ describe('Table (composition + data-driven)', () => {
       })
       const { getByTestId } = render(Tree)
 
-      // TableSearch forwards its testid down to the InputText native input.
+      // TableSearch forwards its testid down to the Input native input.
       const input = getByTestId('data-table__search') as HTMLInputElement
       expect(input.getAttribute('placeholder')).toBe('Find')
 
@@ -438,7 +438,7 @@ describe('Table (composition + data-driven)', () => {
       expect(bodyCells).not.toContain('Charlie')
     })
 
-    // `size` is bound BEFORE v-bind="$attrs" on the inner InputText, so the
+    // `size` is bound BEFORE v-bind="$attrs" on the inner Input, so the
     // default is a default rather than a hard-code. Bound after, it would
     // clobber the consumer's value and a search field could never sit level
     // with a row of large toolbar controls.

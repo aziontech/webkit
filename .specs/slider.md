@@ -3,7 +3,7 @@ name: slider
 category: inputs
 structure: monolithic
 status: implemented
-checksum: dcb5be737b85c858cc69a8347669b3336a555ae082b892df072ef6731c1a7162
+checksum: 66fb4fae28a1dc6520d71e4d2149c6e041be551be92d8af460cb4522d2e1ce03
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -13,7 +13,7 @@ last_updated: 2026-11-10
 
 ## Purpose
 
-Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Label` and `HelperText`, the same way `switch` and `input-number` are composed.
+Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Label` and `HelperText`, the same way `switch` and `number-input` are composed.
 
 ## When to use
 
@@ -23,19 +23,19 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 
 ## When NOT to use
 
-- The user must type an exact number, or the range is unbounded → use `input-number`.
-- The choice is between a handful of named options (1h / 24h / 7d) → use `segmented-button`.
+- The user must type an exact number, or the range is unbounded → use `number-input`.
+- The choice is between a handful of named options (1h / 24h / 7d) → use `toggle-group`.
 - An on/off setting → use `switch`.
-- Showing progress or a read-only quantity the user cannot change → use `progress-bar`.
+- Showing progress or a read-only quantity the user cannot change → use `progress`.
 - Selecting a range with two thumbs (from–to) — not supported by this component.
 
 ## Related
 
-- `input-number` — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.
+- `number-input` — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.
 - `label` — names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).
 - `helper-text` — description or error message under the slider in a field layout.
-- `segmented-button` — a few discrete, named choices instead of a continuous range.
-- `progress-bar` — displays a fraction; it is not interactive.
+- `toggle-group` — a few discrete, named choices instead of a continuous range.
+- `progress` — displays a fraction; it is not interactive.
 
 ## Best practices
 
@@ -51,10 +51,10 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import Slider from '@aziontech/webkit/slider'
+  import { ref } from 'vue'
+  import Slider from '@aziontech/webkit/slider'
 
-const threshold = ref(40)
+  const threshold = ref(40)
 </script>
 
 <template>
@@ -73,29 +73,29 @@ const threshold = ref(40)
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `min` | `number` | `0` | false | Lowest selectable value; the left end of the track. |
-| `max` | `number` | `100` | false | Highest selectable value; the right end of the track. |
-| `step` | `number` | `1` | false | Increment between selectable values, used by dragging and the arrow keys. |
-| `disabled` | `boolean` | `false` | false | Disables interaction, removes the control from the tab order and applies the disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Keeps the control focusable but prevents the value from changing. |
-| `invalid` | `boolean` | `false` | false | Applies the danger tokens and sets aria-invalid. |
-| `ariaLabel` | `string` | `''` | false | Accessible name when no visible label is associated with the slider. |
-| `ticks` | `boolean` | `false` | false | Shows a tick mark at every step when the range has at most 21 positions. |
-| `referenceValues` | `number[]` | `[]` | false | Values marked and labelled under the track; entries outside min and max are ignored. |
-| `unit` | `string` | `''` | false | Text appended verbatim to the reference labels and to the announced value. |
+| Prop              | Type       | Default | Required | JSDoc                                                                                         |
+| ----------------- | ---------- | ------- | -------- | --------------------------------------------------------------------------------------------- |
+| `min`             | `number`   | `0`     | false    | Lowest selectable value; the left end of the track.                                           |
+| `max`             | `number`   | `100`   | false    | Highest selectable value; the right end of the track.                                         |
+| `step`            | `number`   | `1`     | false    | Increment between selectable values, used by dragging and the arrow keys.                     |
+| `disabled`        | `boolean`  | `false` | false    | Disables interaction, removes the control from the tab order and applies the disabled tokens. |
+| `readonly`        | `boolean`  | `false` | false    | Keeps the control focusable but prevents the value from changing.                             |
+| `invalid`         | `boolean`  | `false` | false    | Applies the danger tokens and sets aria-invalid.                                              |
+| `ariaLabel`       | `string`   | `''`    | false    | Accessible name when no visible label is associated with the slider.                          |
+| `ticks`           | `boolean`  | `false` | false    | Shows a tick mark at every step when the range has at most 21 positions.                      |
+| `referenceValues` | `number[]` | `[]`    | false    | Values marked and labelled under the track; entries outside min and max are ignored.          |
+| `unit`            | `string`   | `''`    | false    | Text appended verbatim to the reference labels and to the announced value.                    |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model` | `number` | `0` | `update:modelValue` | Current value via `defineModel<number>({ default: 0 })`. Emitted on every native `input` event (drag frame or key press) as `valueAsNumber`. Never emitted while `disabled` or `readonly`. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                      |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model` | `number` | `0`     | `update:modelValue` | Current value via `defineModel<number>({ default: 0 })`. Emitted on every native `input` event (drag frame or key press) as `valueAsNumber`. Never emitted while `disabled` or `readonly`. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event    | Payload  | Notes                                                                                                                                                                                                                                                                                                                                                                                                        |
+| -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `change` | `number` | Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `.claude/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`. |
 
 ## Slots
@@ -112,46 +112,46 @@ const threshold = ref(40)
 - Track and thumb are styled only through arbitrary pseudo-element variants on the native input (`appearance-none`, `[&::-webkit-slider-runnable-track]:…`, `[&::-webkit-slider-thumb]:appearance-none …`, `[&::-moz-range-track]:…`, `[&::-moz-range-thumb]:…`) — no extra track/thumb elements, no `<style>` block.
 - Geometry: the native input is 40 px tall (`h-10`, the hit area) and full width; the track is 4 px tall and centred; the thumb is 16×16 px.
 - Ticks (`ticks`) and reference marks (`referenceValues`) render in an `aria-hidden` row under the track. Each mark is positioned at the thumb-centre position for its value — `thumb/2 + (100% - thumb) × fraction` — so marks line up with the thumb at both ends; the fraction is passed per mark through an inline custom property. Every reference value also draws a tick. Reference labels read `{value}{unit}`; the first label is start-aligned, the last end-aligned, the rest centred on their mark.
-- Attribute routing (as in `input-number`): consumer `class` merges onto the root wrapper; every other attribute (`id`, `name`, `aria-labelledby`, `aria-describedby`, …) is forwarded to the native input so a `Label for` and a `HelperText` association reach the focusable element. `data-testid` is read from attrs and applied to the root.
+- Attribute routing (as in `number-input`): consumer `class` merges onto the root wrapper; every other attribute (`id`, `name`, `aria-labelledby`, `aria-describedby`, …) is forwarded to the native input so a `Label for` and a `HelperText` association reach the focusable element. `data-testid` is read from attrs and applied to the root.
 - `data-testid`: root fallback `input-slider`; native input `${testId}__input`; each reference label `${testId}__reference`.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                                   | Animation / Transition                                                                     | Token (see `.claude/docs/DESIGN.md` § Animations)              | Reduced-motion fallback         |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------- |
 | thumb hover / focus / state colour change | `transition-colors duration-fast-02 ease-productive-entrance` on the thumb pseudo-elements | motion primitives (`duration-fast-02` · `productive-entrance`) | `motion-reduce:transition-none` |
 
 The fill and the thumb position are not animated: they track the pointer every frame, and an eased fill would lag behind the thumb.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| track — background | `var(--bg-surface)` |
-| track — border | `var(--border-default)` |
-| track — shape | `var(--shape-elements)` |
-| fill | `var(--accent)` |
-| thumb — fill | `var(--bg-surface)` |
-| thumb — border | `var(--accent)` |
-| thumb — shape | `var(--shape-elements)` |
-| thumb (hover) — overlay | `var(--bg-hover)` |
-| focus-visible ring (on the thumb) | `var(--ring-color)` |
-| focus ring offset | `var(--bg-canvas)` |
-| tick mark | `var(--border-strong)` |
-| reference label — typography | `.text-label-sm` |
-| reference label — colour | `var(--text-muted)` |
-| fill + thumb border (invalid) | `var(--danger)` |
-| track border (invalid) | `var(--danger-border)` |
-| fill + thumb border (readonly) | `var(--text-muted)` |
-| track (disabled) | `var(--bg-disabled)` |
-| fill + thumb border + tick + label (disabled) | `var(--text-disabled)` |
-| marks row gap | `var(--spacing-xxs)` |
+| Region                                        | Token (DESIGN.md)       |
+| --------------------------------------------- | ----------------------- |
+| track — background                            | `var(--bg-surface)`     |
+| track — border                                | `var(--border-default)` |
+| track — shape                                 | `var(--shape-elements)` |
+| fill                                          | `var(--accent)`         |
+| thumb — fill                                  | `var(--bg-surface)`     |
+| thumb — border                                | `var(--accent)`         |
+| thumb — shape                                 | `var(--shape-elements)` |
+| thumb (hover) — overlay                       | `var(--bg-hover)`       |
+| focus-visible ring (on the thumb)             | `var(--ring-color)`     |
+| focus ring offset                             | `var(--bg-canvas)`      |
+| tick mark                                     | `var(--border-strong)`  |
+| reference label — typography                  | `.text-label-sm`        |
+| reference label — colour                      | `var(--text-muted)`     |
+| fill + thumb border (invalid)                 | `var(--danger)`         |
+| track border (invalid)                        | `var(--danger-border)`  |
+| fill + thumb border (readonly)                | `var(--text-muted)`     |
+| track (disabled)                              | `var(--bg-disabled)`    |
+| fill + thumb border + tick + label (disabled) | `var(--text-disabled)`  |
+| marks row gap                                 | `var(--spacing-xxs)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

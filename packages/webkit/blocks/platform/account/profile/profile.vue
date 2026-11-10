@@ -1,8 +1,8 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Hint from '@aziontech/webkit/hint'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
@@ -189,7 +189,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -202,7 +202,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.accountName"
                                       size="large"
                                       class="w-full"
@@ -224,7 +224,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.clientId"
                                       size="large"
                                       class="w-full"
@@ -238,7 +238,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -283,7 +283,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -296,7 +296,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.companyName"
                                       size="large"
                                       class="w-full"
@@ -319,7 +319,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.companyId"
                                       size="large"
                                       class="w-full"
@@ -355,7 +355,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -400,7 +400,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -410,7 +410,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.postalCode"
                                       size="large"
                                       class="w-full"
@@ -466,7 +466,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.address"
                                       size="large"
                                       class="w-full"
@@ -484,7 +484,7 @@
                               <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                 <Item.Actions class="w-full">
                                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="form.apartment"
                                       size="large"
                                       class="w-full"
@@ -498,7 +498,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -543,7 +543,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -597,7 +597,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -642,7 +642,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item
@@ -687,7 +687,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -732,7 +732,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -812,7 +812,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -857,7 +857,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -880,7 +880,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>

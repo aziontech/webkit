@@ -29,7 +29,7 @@
     },
     {
       "name": "FilterExample",
-      "summary": "A filter builder composed from `Popover` + `Select` + `InputText` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:dismissible=\"false\"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.",
+      "summary": "A filter builder composed from `Popover` + `Select` + `Input` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:dismissible=\"false\"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.",
       "file": "filter-example.vue"
     }
   ]

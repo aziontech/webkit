@@ -2,7 +2,7 @@
   import Accordion from '@aziontech/webkit/accordion'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
+  import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import { ref } from 'vue'
 
@@ -259,7 +259,7 @@
         </Accordion.Content>
       </Accordion.Item>
     </Accordion>
-    <ProgressBar
+    <Progress
       :value="55"
       :max="100"
       size="small"

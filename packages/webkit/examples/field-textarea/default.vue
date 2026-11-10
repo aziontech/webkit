@@ -8,7 +8,7 @@
 <template>
   <FieldTextarea
     v-model="value"
-    label="Message"
+    label="Alert"
     placeholder="Write your message"
     helper-text="Up to 500 characters."
   />

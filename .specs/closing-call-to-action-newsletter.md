@@ -6,8 +6,9 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: a8a81b4f9472e45f745839e37af45f9d15b8c7f4cec3a2ada3730b683bd49515
+checksum: b3fd6636bf664ef930e254e45fc09c4c0bed8c2de3262c666e4def0744f72dab
 ---
+
 # ClosingCallToActionNewsletter — Component Spec
 
 ## Purpose
@@ -38,25 +39,25 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ```vue
 <script setup>
-import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
-import { ref } from 'vue'
+  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+  import { ref } from 'vue'
 
-const loading = ref(false)
-const submitted = ref(false)
-const error = ref(false)
+  const loading = ref(false)
+  const submitted = ref(false)
+  const error = ref(false)
 
-const onSubmit = async (event, values) => {
-  loading.value = true
-  error.value = false
-  try {
-    await fetch('/newsletter', { method: 'POST', body: JSON.stringify(values) })
-    submitted.value = true
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
+  const onSubmit = async (event, values) => {
+    loading.value = true
+    error.value = false
+    try {
+      await fetch('/newsletter', { method: 'POST', body: JSON.stringify(values) })
+      submitted.value = true
+    } catch {
+      error.value = true
+    } finally {
+      loading.value = false
+    }
   }
-}
 </script>
 
 <template>
@@ -83,21 +84,21 @@ const onSubmit = async (event, values) => {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `form` | `ClosingCallToActionNewsletterForm` | `—` | true | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. |
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline on the lead side, closed by the blinking cursor. |
-| `title` | `string` | `''` | false | The ask, rendered as the label of the email field; it also names the band. |
-| `description` | `string` | `''` | false | The pitch, rendered as the band's large `h2` on the lead side. |
-| `loading` | `boolean` | `false` | false | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored. |
-| `submitted` | `boolean` | `false` | false | The site sent the address: the form gives way to `form.successMessage`. |
-| `error` | `boolean` | `false` | false | The site could not send the address: `form.errorMessage` shows under the form. |
+| Prop          | Type                                | Default | Required | JSDoc                                                                                                                      |
+| ------------- | ----------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `form`        | `ClosingCallToActionNewsletterForm` | `—`     | true     | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. |
+| `anchor`      | `string`                            | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                             |
+| `eyebrow`     | `string`                            | `''`    | false    | Overline on the lead side, closed by the blinking cursor.                                                                  |
+| `title`       | `string`                            | `''`    | false    | The ask, rendered as the label of the email field; it also names the band.                                                 |
+| `description` | `string`                            | `''`    | false    | The pitch, rendered as the band's large `h2` on the lead side.                                                             |
+| `loading`     | `boolean`                           | `false` | false    | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored.        |
+| `submitted`   | `boolean`                           | `false` | false    | The site sent the address: the form gives way to `form.successMessage`.                                                    |
+| `error`       | `boolean`                           | `false` | false    | The site could not send the address: `form.errorMessage` shows under the form.                                             |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event    | Payload                                                | Notes                                                                                                                     |
+| -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | `submit` | `(event: SubmitEvent, values: Record<string, string>)` | Fired on a valid submit, not while `loading`; `values` is `{ email }` with the trimmed address. The block never sends it. |
 
 ## Slots
@@ -109,8 +110,8 @@ const onSubmit = async (event, values) => {
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
 - `invalid`: an empty field shows `form.requiredMessage`, a malformed address `form.invalidMessage`, under the field; typing clears it; nothing is emitted
 - `loading` (prop): the field is disabled, the button shows its loading state and a submit emits nothing
-- `submitted` (prop): the form is replaced by a success `Message` with `form.successMessage`
-- `error` (prop): a danger `Message` with `form.errorMessage` shows under the form, which stays editable
+- `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`
+- `error` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 
 ## Motion & Animations
 
@@ -118,19 +119,19 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| form surface | `var(--bg-surface)` |
-| headline | `.text-heading-lg`, `var(--text-default)` |
-| ask | `.text-heading-sm`, `var(--text-default)` |
-| texture strip | `var(--bg-canvas)`, `var(--border-default)` |
-| rhythm | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)`, `var(--spacing-sm)` |
+| Region        | Token (DESIGN.md)                                                                                        |
+| ------------- | -------------------------------------------------------------------------------------------------------- |
+| form surface  | `var(--bg-surface)`                                                                                      |
+| headline      | `.text-heading-lg`, `var(--text-default)`                                                                |
+| ask           | `.text-heading-sm`, `var(--text-default)`                                                                |
+| texture strip | `var(--bg-canvas)`, `var(--border-default)`                                                              |
+| rhythm        | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)`, `var(--spacing-sm)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

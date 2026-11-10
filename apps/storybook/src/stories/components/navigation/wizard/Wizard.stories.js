@@ -1,7 +1,7 @@
 import FieldSelect from '@aziontech/webkit/field-select'
 import FieldSwitch from '@aziontech/webkit/field-switch'
 import FieldText from '@aziontech/webkit/field-text'
-import Message from '@aziontech/webkit/message'
+import Alert from '@aziontech/webkit/alert'
 import Wizard, { WizardStep } from '@aziontech/webkit/wizard'
 import { ref, watch } from 'vue'
 
@@ -10,13 +10,13 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT = "import Wizard from '@aziontech/webkit/wizard'"
 const FIELD_TEXT_IMPORT = "import FieldText from '@aziontech/webkit/field-text'"
 const FIELD_SELECT_IMPORT = "import FieldSelect from '@aziontech/webkit/field-select'"
-const MESSAGE_IMPORT = "import Message from '@aziontech/webkit/message'"
+const MESSAGE_IMPORT = "import Alert from '@aziontech/webkit/alert'"
 const FIELD_SWITCH_IMPORT = "import FieldSwitch from '@aziontech/webkit/field-switch'"
 const VUE_IMPORT = "import { ref } from 'vue'"
 
 const components = {
   Wizard,
-  Message,
+  Alert,
   'Wizard.Step': WizardStep,
   FieldText,
   FieldSelect,
@@ -154,7 +154,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A multi-step create flow in one surface: the step rail on the start side, the current step's header and fields in the content column, and a footer with Cancel, Previous and Next, where Next becomes the submit action on the last step. The wizard owns the order, which steps can be reached and where focus goes; the consumer owns the fields, the validation and the request. Reach for Stepper alone when the footer and gating must be your own, and TabView for peer views with no order."
+          "A multi-step create flow in one surface: the step rail on the start side, the current step's header and fields in the content column, and a footer with Cancel, Previous and Next, where Next becomes the submit action on the last step. The wizard owns the order, which steps can be reached and where focus goes; the consumer owns the fields, the validation and the request. Reach for Stepper alone when the footer and gating must be your own, and Tabs for peer views with no order."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -341,7 +341,7 @@ export const Loading = {
 const VALIDATION_TEMPLATE = `<Wizard v-model:active-step="step" aria-label="Create resource" submit-label="Create" @next="onNext">
   <Wizard.Step title="Name and region" description="Name the resource and choose where it runs.">
     <div class="flex flex-col gap-(--spacing-md)">
-      <Message v-if="nameMissing" severity="danger" label="Enter a name to continue." />
+      <Alert v-if="nameMissing" severity="danger" label="Enter a name to continue." />
       <FieldText v-model="name" label="Name" required :invalid="nameMissing" />
       <FieldSelect v-model="region" label="Region" :options="regions" />
     </div>
@@ -399,7 +399,7 @@ export const Validation = {
     docs: {
       description: {
         story:
-          'The first step requires a name. The next handler calls event.preventDefault() while the field is empty, so the wizard stays on the step and an inline danger Message says what to fix.'
+          'The first step requires a name. The next handler calls event.preventDefault() while the field is empty, so the wizard stays on the step and an inline danger Alert says what to fix.'
       },
       source: {
         code: toSfc(

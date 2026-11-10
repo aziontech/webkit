@@ -49,7 +49,7 @@
     },
     {
       "name": "CompactHeaderWithStickyColumn",
-      "summary": "A compact header (`header-kind=\"compact\"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No paginator.",
+      "summary": "A compact header (`header-kind=\"compact\"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No pagination.",
       "file": "compact-header-with-sticky-column.vue"
     },
     {

@@ -61,7 +61,7 @@ width, or a state did not verify the screen.
   alone.
 - **States, forced.** Do not wait for the happy path to be the only path. Force **loading** (throttle
   or delay the request), **empty** (make it return no data), and **error** (make the request fail), and
-  confirm each renders per `webkit-ui-states` — a `Skeleton`, an `EmptyState`, a `Message` — never a
+  confirm each renders per `webkit-ui-states` — a `Skeleton`, an `EmptyState`, a `Alert` — never a
   blank or broken screen. Intercept with `page.route()` to force empty/error without touching the app:
 
 ```js
@@ -167,7 +167,7 @@ Route: /workloads
 [✗] States     empty fetch → blank panel, no EmptyState rendered
 [✓] Interaction dialog traps + restores focus; success toast appears
 
-fix: pass :label to <Message>; darken the pill text token; add EmptyState to the no-data branch.
+fix: pass :label to <Alert>; darken the pill text token; add EmptyState to the no-data branch.
 ```
 
 End with: `verified — ship` or `N findings — fix before ship`.

@@ -247,9 +247,9 @@ test('validateUsage does NOT flag a sibling package as an invalid webkit import'
 })
 
 test('getUsageExample binds an empty literal for a required array prop (never prop="text")', () => {
-  const res = getUsageExample(catalog, 'box-grid-selection', { fromStory: false })
+  const res = getUsageExample(catalog, 'radio-cards', { fromStory: false })
   assert.equal(res.found, true)
-  // items: BoxGridSelectionItem[] is required and non-scalar → :items="[]", not items="text"
+  // items: RadioCardsItem[] is required and non-scalar → :items="[]", not items="text"
   assert.match(res.sfc, /:items="\[\]"/)
   assert.doesNotMatch(res.sfc, /items="text"/)
 })
@@ -316,7 +316,7 @@ test('getPattern returns the SFC, components, skills and steps; variants by name
   assert.equal(p.variant, 'Login')
   assert.match(p.sfc, /<script setup>/)
   assert.match(p.sfc, /autocomplete="username"/)
-  assert.ok(p.components.includes('InputText'))
+  assert.ok(p.components.includes('Input'))
   assert.deepEqual(p.steps, ['email', 'password', 'reset', 'sent', 'new-password'])
   assert.ok(p.skills.includes('webkit-errors'))
   const v = getPattern(catalog, 'platform/auth', { variant: 'IncorrectCredentials' })

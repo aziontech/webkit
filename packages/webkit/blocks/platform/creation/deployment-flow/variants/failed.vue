@@ -1,9 +1,9 @@
 <script setup>
   import Accordion from '@aziontech/webkit/accordion'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -244,13 +244,13 @@
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     class="w-full"
   >
     <template #header>
       <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
-      <SegmentedButton
+      <ToggleGroup
         v-model="logView"
         :options="logViews"
         class="shrink-0"
@@ -371,5 +371,5 @@
         </LogView>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

@@ -1,0 +1,51 @@
+{
+  "component": "dropdown",
+  "title": "Components/Primitives/Navigation/DropdownMenu",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default dropdown with a single unlabeled group of six options and no left/right affordances. Click the trigger to open; controls drive placement, offset, and disabled.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Two labeled groups (`Account`, `Workspace`) separated by an automatic top divider on the second group. One option carries a `command` hint, another is `selected` — the central anatomy of this component.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Panel forced open (`open=\"true\"`) showing each spec-declared option state side-by-side: `default`, `selected`, and `disabled`. The `hover` and `focus-visible` states are interactive — focus an option with the keyboard (`Down` / `Up`) or hover with the pointer to see them.",
+      "file": "states.vue"
+    },
+    {
+      "name": "Placements",
+      "summary": "All four explicit `placement` values side-by-side. Click each trigger to see how the panel anchors against it. Panels are teleported to `body` and positioned with `position: fixed` against the trigger's bounding rect — no external positioning runtime.",
+      "file": "placements.vue"
+    },
+    {
+      "name": "AutoPlacement",
+      "summary": "`placement=\"auto\"` lets the dropdown choose the best-fitting corner at open time. The four triggers below all use the same prop value — each resolves to a different placement based on the available space around them. The resolved value is reflected in `data-placement` on the open panel.",
+      "file": "auto-placement.vue"
+    },
+    {
+      "name": "OptionAffordances",
+      "summary": "Panel forced open showing every option affordance: plain label, `command` keyboard hint, `left` icon slot, `right` content slot (with a `Tag`), `selected` state, and `disabled` state. The `command` prop and the `right` slot are mutually exclusive — pick one per option.",
+      "file": "option-affordances.vue"
+    },
+    {
+      "name": "WithTopAndBottomSlots",
+      "summary": "Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
+      "file": "with-top-and-bottom-slots.vue"
+    },
+    {
+      "name": "GroupsWithTopAndBottomSlots",
+      "summary": "Two groups each using the `top` and `bottom` slots — a per-section caption above the options and a footer action below. Different from the root `top`/`bottom` (which are sticky outside the scroll area), group-level slots render inline within the section.",
+      "file": "groups-with-top-and-bottom-slots.vue"
+    },
+    {
+      "name": "CustomTriggers",
+      "summary": "`DropdownMenu.Trigger` is abstract — it wires `aria-haspopup`/`aria-expanded`/`aria-controls` and the open/close click onto whatever element you put inside its default slot. Here it wraps an `IconButton` (row actions) and an `Avatar` (account menu).",
+      "file": "custom-triggers.vue"
+    }
+  ]
+}

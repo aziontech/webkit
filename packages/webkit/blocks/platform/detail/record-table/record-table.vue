@@ -3,18 +3,18 @@
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Chip from '@aziontech/webkit/chip'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import ItemActions from '@aziontech/webkit/item-actions'
   import ItemContent from '@aziontech/webkit/item-content'
   import ItemDescription from '@aziontech/webkit/item-description'
@@ -25,7 +25,7 @@
   import PopoverRoot from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import Switch from '@aziontech/webkit/switch'
-  import TabView from '@aziontech/webkit/tab-view'
+  import Tabs from '@aziontech/webkit/tabs'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -345,19 +345,19 @@
       <div class="border-b border-(--border-default)">
         <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
           <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-            <TabView
+            <Tabs
               v-model:value="activeTab"
               class="w-full"
             >
-              <TabView.List>
-                <TabView.Item
+              <Tabs.List>
+                <Tabs.Item
                   v-for="tab in tabs"
                   :key="tab.value"
                   :value="tab.value"
                   :label="tab.label"
                 />
-              </TabView.List>
-            </TabView>
+              </Tabs.List>
+            </Tabs>
           </div>
         </div>
       </div>
@@ -422,7 +422,7 @@
                         data-open
                         class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                       >
-                        <CardBox :padded="false">
+                        <Card :padded="false">
                           <template #content>
                             <ItemList>
                               <ItemRoot size="small">
@@ -436,7 +436,7 @@
                                 <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                   <ItemActions class="w-full">
                                     <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                      <InputText
+                                      <Input
                                         v-model="settings.name"
                                         size="large"
                                         class="w-full"
@@ -469,7 +469,7 @@
                                 <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                                   <ItemActions class="w-full">
                                     <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                      <InputText
+                                      <Input
                                         v-model="settings.domain"
                                         size="large"
                                         class="w-full"
@@ -494,7 +494,7 @@
                               </ItemRoot>
                             </ItemList>
                           </template>
-                        </CardBox>
+                        </Card>
                       </div>
                     </div>
                   </div>
@@ -545,7 +545,7 @@
                         data-open
                         class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                       >
-                        <CardBox :padded="false">
+                        <Card :padded="false">
                           <template #content>
                             <ItemList>
                               <ItemRoot size="small">
@@ -565,7 +565,7 @@
                                           :key="ns"
                                         >
                                           <div class="flex flex-1 font-code">
-                                            <InputText
+                                            <Input
                                               :model-value="ns"
                                               size="large"
                                               class="w-full"
@@ -591,7 +591,7 @@
                               </ItemRoot>
                             </ItemList>
                           </template>
-                        </CardBox>
+                        </Card>
                       </div>
                     </div>
                   </div>
@@ -640,7 +640,7 @@
                         data-open
                         class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                       >
-                        <CardBox :padded="false">
+                        <Card :padded="false">
                           <template #content>
                             <ItemList>
                               <ItemRoot size="small">
@@ -676,7 +676,7 @@
                                       <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
                                         <InputGroupRoot class="w-full">
                                           <div class="flex flex-1 font-code">
-                                            <InputText
+                                            <Input
                                               :model-value="key.value"
                                               size="large"
                                               class="w-full"
@@ -697,7 +697,7 @@
                               </template>
                             </ItemList>
                           </template>
-                        </CardBox>
+                        </Card>
                       </div>
                     </div>
                   </div>
@@ -746,7 +746,7 @@
                         data-open
                         class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                       >
-                        <CardBox :padded="false">
+                        <Card :padded="false">
                           <template #content>
                             <ItemList>
                               <ItemRoot size="small">
@@ -767,7 +767,7 @@
                               </ItemRoot>
                             </ItemList>
                           </template>
-                        </CardBox>
+                        </Card>
                       </div>
                     </div>
                   </div>
@@ -966,7 +966,7 @@
 
                                 <template v-else>
                                   <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                                    <InputText
+                                    <Input
                                       v-model="query"
                                       size="medium"
                                       class="w-full"
@@ -987,7 +987,7 @@
                                           aria-hidden="true"
                                         />
                                       </template>
-                                    </InputText>
+                                    </Input>
                                   </div>
 
                                   <div
@@ -1092,7 +1092,7 @@
                     </PopoverRoot>
                   </div>
                   <div class="flex min-w-36 grow basis-(--container-2xs)">
-                    <InputText
+                    <Input
                       v-model="search"
                       size="medium"
                       placeholder="Search records"
@@ -1105,7 +1105,7 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </InputText>
+                    </Input>
                   </div>
                 </div>
                 <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -1257,7 +1257,7 @@
                   </span>
                 </TransitionGroup>
               </div>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <TableRoot
                     ref="tableRef"
@@ -1317,8 +1317,8 @@
                       <span class="min-w-0 truncate">{{ value || '—' }}</span>
                     </template>
                     <template #cell-actions>
-                      <DropdownRoot placement="bottom-end">
-                        <DropdownTrigger>
+                      <DropdownMenuRoot placement="bottom-end">
+                        <DropdownMenuTrigger>
                           <Tooltip text="Row actions">
                             <IconButton
                               icon="pi pi-ellipsis-h"
@@ -1327,9 +1327,9 @@
                               aria-label="Row actions"
                             />
                           </Tooltip>
-                        </DropdownTrigger>
-                        <DropdownGroup>
-                          <DropdownOption
+                        </DropdownMenuTrigger>
+                        <DropdownMenuGroup>
+                          <DropdownMenuOption
                             value="edit"
                             label="Edit"
                           >
@@ -1338,10 +1338,10 @@
                                 class="pi pi-pencil"
                                 aria-hidden="true"
                             /></template>
-                          </DropdownOption>
-                        </DropdownGroup>
-                        <DropdownGroup>
-                          <DropdownOption
+                          </DropdownMenuOption>
+                        </DropdownMenuGroup>
+                        <DropdownMenuGroup>
+                          <DropdownMenuOption
                             value="delete"
                             label="Delete"
                           >
@@ -1350,13 +1350,13 @@
                                 class="pi pi-trash"
                                 aria-hidden="true"
                             /></template>
-                          </DropdownOption>
-                        </DropdownGroup>
-                      </DropdownRoot>
+                          </DropdownMenuOption>
+                        </DropdownMenuGroup>
+                      </DropdownMenuRoot>
                     </template>
                   </TableRoot>
                 </template>
-              </CardBox>
+              </Card>
             </section>
           </section>
         </div>

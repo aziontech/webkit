@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: 8fc5db3f180ce93602b434f2086713de4f6421e9e835e0387b78b46b6be9ca60
+checksum: a292a40a00f4a3653a2d1fb2f322e181f97a33377d6cc3dccaf1b4dbe09e5c5e
 created: 2026-05-23
 last_updated: 2026-11-09
 ---
@@ -35,7 +35,7 @@ Inline radio field with label, optional description, optional disabled helper ba
 - `radio-button` — the bare control this field wraps.
 - `field-radio-block` — the same props inside a bordered card that highlights when selected.
 - `field-select` — a labeled dropdown for longer lists.
-- `box-grid-selection` — a grid of selectable cards with icons and a trailing `tag` slot.
+- `radio-cards` — a grid of selectable cards with icons and a trailing `tag` slot.
 
 ## Best practices
 
@@ -48,10 +48,10 @@ Inline radio field with label, optional description, optional disabled helper ba
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldRadio from '@aziontech/webkit/field-radio'
+  import { ref } from 'vue'
+  import FieldRadio from '@aziontech/webkit/field-radio'
 
-const billing = ref('monthly')
+  const billing = ref('monthly')
 </script>
 
 <template>

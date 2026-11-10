@@ -16,11 +16,11 @@ import ChartCard, {
   ChartCardResizeHandle,
   ChartCardTitle
 } from '@aziontech/webkit/chart-card'
-import Dropdown, {
-  DropdownGroup,
-  DropdownOption,
-  DropdownTrigger
-} from '@aziontech/webkit/dropdown'
+import DropdownMenu, {
+  DropdownMenuGroup,
+  DropdownMenuOption,
+  DropdownMenuTrigger
+} from '@aziontech/webkit/dropdown-menu'
 import Hint from '@aziontech/webkit/hint'
 import IconButton from '@aziontech/webkit/icon-button'
 import Tag from '@aziontech/webkit/tag'
@@ -49,10 +49,10 @@ const components = {
   'Chart.Crosshair': ChartCrosshair,
   'Chart.Tooltip': ChartTooltip,
   'Chart.Legend': ChartLegend,
-  Dropdown,
-  DropdownTrigger,
-  DropdownGroup,
-  DropdownOption,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuOption,
   Hint,
   IconButton,
   Tag
@@ -263,16 +263,16 @@ const CONTROLS_TEMPLATE = `<ChartCard class="max-w-(--container-3xl)">
     <ChartCard.Controls>
       <Tag label="Sum" severity="secondary" icon="pi pi-calculator" />
       <Tag label="+12.40%" severity="danger" />
-      <Dropdown>
-        <DropdownTrigger>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
           <IconButton kind="transparent" size="small" icon="pi pi-ellipsis-h" aria-label="More options" />
-        </DropdownTrigger>
-        <DropdownGroup>
-          <DropdownOption value="copy-query" label="Copy query" />
-          <DropdownOption value="export-csv" label="Export CSV" />
-          <DropdownOption value="mean-line" label="Show mean line" />
-        </DropdownGroup>
-      </Dropdown>
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup>
+          <DropdownMenuOption value="copy-query" label="Copy query" />
+          <DropdownMenuOption value="export-csv" label="Export CSV" />
+          <DropdownMenuOption value="mean-line" label="Show mean line" />
+        </DropdownMenuGroup>
+      </DropdownMenu>
     </ChartCard.Controls>
   </ChartCard.Header>
   <ChartCard.Content>
@@ -305,7 +305,7 @@ export const WithControls = {
           [
             IMPORT,
             CHART_IMPORT,
-            "import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'",
+            "import DropdownMenu, { DropdownMenuGroup, DropdownMenuOption, DropdownMenuTrigger } from '@aziontech/webkit/dropdown-menu'",
             "import Hint from '@aziontech/webkit/hint'",
             "import IconButton from '@aziontech/webkit/icon-button'",
             "import Tag from '@aziontech/webkit/tag'",

@@ -4,7 +4,7 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 1
-checksum: de38c8f218df6bb708fd8b86415dfc9e9d6001b13f9abcc4125f876f9fde0088
+checksum: 8b7771472e2b54ee608388ddbe78bdeb837c8ebb68ee104ad52d86a0725ed4a9
 created: 2026-09-22
 last_updated: 2026-09-22
 ---
@@ -30,15 +30,15 @@ component with a different job (a compact progress ribbon), not a prop on this o
 ## When NOT to use
 
 - Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.
-- Progress with no discrete, nameable steps (a percentage, an upload) → use `progress-bar`.
-- Switching between peer views that are not ordered and have no completion → use `tab-view`.
+- Progress with no discrete, nameable steps (a percentage, an upload) → use `progress`.
+- Switching between peer views that are not ordered and have no completion → use `tabs`.
 - A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow`.
 
 ## Related
 
 - `doc-steps` — the same numbered-dot shape for prose; static, never current, never navigable.
-- `tab-view` — peer views with no order and no completion.
-- `progress-bar` — continuous progress with no named steps.
+- `tabs` — peer views with no order and no completion.
+- `progress` — continuous progress with no named steps.
 - `flow` — a machine's stages, reported rather than navigated.
 
 ## Best practices

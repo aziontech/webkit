@@ -3,7 +3,7 @@
   "name": "DetailsPage",
   "title": "Templates/Platform/Detail/DetailsPage",
   "surface": "product",
-  "summary": "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `CardBox`, `Button`, `IconButton`, `Dropdown`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Message` and `Tooltip`.",
+  "summary": "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `Card`, `Button`, `IconButton`, `DropdownMenu`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Alert` and `Tooltip`.",
   "preview": {
     "layout": "padded",
     "background": "dark"

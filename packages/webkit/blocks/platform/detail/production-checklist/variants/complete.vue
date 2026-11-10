@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
@@ -42,7 +42,7 @@
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     :data-complete="complete || null"
   >
@@ -109,5 +109,5 @@
         </Item>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import InputText from '@aziontech/webkit/input-text'
+import Input from '@aziontech/webkit/input'
 import Label from '@aziontech/webkit/label'
 import Popover, {
   PopoverClose,
@@ -53,7 +53,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Anchored, non-modal overlay: a consumer-supplied trigger opens a floating panel whose contents are composed by part (`PopoverHeader`, `PopoverTitle`, `PopoverDescription`, `PopoverClose`, a free-form body, and `PopoverFooter`). It leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. Follows the same trigger-opens-panel pattern as `Dropdown`.'
+          'Anchored, non-modal overlay: a consumer-supplied trigger opens a floating panel whose contents are composed by part (`PopoverHeader`, `PopoverTitle`, `PopoverDescription`, `PopoverClose`, a free-form body, and `PopoverFooter`). It leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. Follows the same trigger-opens-panel pattern as `DropdownMenu`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -482,7 +482,7 @@ const filterComponents = {
   SelectTrigger,
   SelectContent,
   SelectOption,
-  InputText,
+  Input,
   Label,
   Button
 }
@@ -519,7 +519,7 @@ const FILTER_TEMPLATE = `<Popover v-model:open="open" :dismissible="false" width
           </Select>
         </div>
         <div class="min-w-0 flex-1">
-          <InputText size="small" v-model="value" placeholder="Value" />
+          <Input size="small" v-model="value" placeholder="Value" />
         </div>
       </div>
     </div>
@@ -535,7 +535,7 @@ const FILTER_SCRIPT = [
   "import { ref } from 'vue'",
   "import Popover, {\n  PopoverTrigger,\n  PopoverContent,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverDescription,\n  PopoverClose,\n  PopoverFooter\n} from '@aziontech/webkit/popover'",
   "import Select, { SelectTrigger, SelectContent, SelectOption } from '@aziontech/webkit/select'",
-  "import InputText from '@aziontech/webkit/input-text'",
+  "import Input from '@aziontech/webkit/input'",
   "import Label from '@aziontech/webkit/label'",
   "import Button from '@aziontech/webkit/button'",
   '',
@@ -600,7 +600,7 @@ export const FilterExample = {
       controls: { disable: true },
       description: {
         story:
-          'A filter builder composed from `Popover` + `Select` + `InputText` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:dismissible="false"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.'
+          'A filter builder composed from `Popover` + `Select` + `Input` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:dismissible="false"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.'
       },
       source: { code: toSfc(FILTER_SCRIPT, FILTER_TEMPLATE) }
     }

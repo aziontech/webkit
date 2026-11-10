@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Message from '../../feedback/message/message.vue'
+  import Alert from '../../feedback/alert/alert.vue'
   import FieldText from '../../inputs/field-text/field-text.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -20,13 +20,13 @@
     placeholder: string
     /** Label of the submit button. */
     submitLabel: string
-    /** Message shown in place of the form once the site reports the address was sent. */
+    /** Alert shown in place of the form once the site reports the address was sent. */
     successMessage: string
-    /** Message shown under the form when the site reports the address could not be sent. */
+    /** Alert shown under the form when the site reports the address could not be sent. */
     errorMessage?: string
-    /** Message shown under the field when it is submitted empty. */
+    /** Alert shown under the field when it is submitted empty. */
     requiredMessage: string
-    /** Message shown under the field when the address is malformed. */
+    /** Alert shown under the field when the address is malformed. */
     invalidMessage: string
   }
 
@@ -142,7 +142,7 @@
               >
                 {{ title }}
               </p>
-              <Message
+              <Alert
                 severity="success"
                 :label="form.successMessage"
               />
@@ -185,7 +185,7 @@
                   />
                 </div>
               </form>
-              <Message
+              <Alert
                 v-if="error && form.errorMessage"
                 severity="danger"
                 :label="form.errorMessage"

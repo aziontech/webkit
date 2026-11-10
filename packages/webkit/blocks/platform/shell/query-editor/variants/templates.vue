@@ -4,30 +4,30 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
-  import CommandMenu from '@aziontech/webkit/command-menu'
+  import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
-  import Message from '@aziontech/webkit/message'
-  import PaginatorRoot from '@aziontech/webkit/paginator-root'
+  import Alert from '@aziontech/webkit/alert'
+  import PaginationRoot from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TabView from '@aziontech/webkit/tab-view'
+  import Tabs from '@aziontech/webkit/tabs'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -742,21 +742,21 @@ LIMIT 3;`
               </a>
             </div>
 
-            <CommandMenu
+            <Command
               v-model:open="paletteOpen"
               @select="onPaletteSelect"
             >
-              <CommandMenu.Input
+              <Command.Input
                 placeholder="Search resources, pages and commands"
                 @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
               />
-              <CommandMenu.List>
-                <CommandMenu.Group
+              <Command.List>
+                <Command.Group
                   v-if="!paletteQuery"
                   key="recents"
                   heading="Recents"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="row in recentRows"
                     :key="row.key"
                     :value="'res:' + row.key"
@@ -771,20 +771,20 @@ LIMIT 3;`
                     <template #suffix>
                       <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
                     </template>
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator
+                <Command.Separator
                   v-if="!paletteQuery"
                   key="recents-rule"
                 />
 
-                <CommandMenu.Group
+                <Command.Group
                   v-for="group in paletteGroups"
                   :key="group.key"
                   :heading="group.heading"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="item in group.items"
                     :key="item.id"
                     :value="'nav:' + item.id"
@@ -799,13 +799,13 @@ LIMIT 3;`
                       />
                     </template>
                     {{ item.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator key="commands-rule" />
+                <Command.Separator key="commands-rule" />
 
-                <CommandMenu.Group heading="Actions">
-                  <CommandMenu.Item
+                <Command.Group heading="Actions">
+                  <Command.Item
                     v-for="command in actionCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -817,11 +817,11 @@ LIMIT 3;`
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Group heading="Account">
-                  <CommandMenu.Item
+                <Command.Group heading="Account">
+                  <Command.Item
                     v-for="command in accountCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -833,14 +833,12 @@ LIMIT 3;`
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Empty
-                  >No resource, page or command matches your search.</CommandMenu.Empty
-                >
-              </CommandMenu.List>
-            </CommandMenu>
+                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
+              </Command.List>
+            </Command>
           </div>
         </template>
 
@@ -863,8 +861,8 @@ LIMIT 3;`
               kind="square"
             />
             <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <Dropdown placement="top-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="top-end">
+              <DropdownMenu.Trigger>
                 <Tooltip text="Account menu">
                   <IconButton
                     icon="pi pi-ellipsis-v"
@@ -873,15 +871,15 @@ LIMIT 3;`
                     size="small"
                   />
                 </Tooltip>
-              </Dropdown.Trigger>
-              <Dropdown.Group>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
                 <template #top>
                   <div class="flex min-w-0 flex-col">
                     <span class="truncate text-label-md text-(--text-default)">alex</span>
                     <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
                   </div>
                 </template>
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="settings"
                   label="Account Settings"
                 >
@@ -891,8 +889,8 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="personal-tokens"
                   label="Personal Tokens"
                 >
@@ -902,9 +900,9 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
@@ -916,9 +914,9 @@ LIMIT 3;`
                     aria-label="Theme"
                   />
                 </div>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="home"
                   label="Home Page"
                 >
@@ -928,8 +926,8 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="changelog"
                   label="Changelog"
                 >
@@ -939,8 +937,8 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="feedback"
                   label="Feedback"
                 >
@@ -950,8 +948,8 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="docs"
                   label="Docs"
                 >
@@ -961,10 +959,10 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="logout"
                   label="Log out"
                 >
@@ -974,9 +972,9 @@ LIMIT 3;`
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
                   <Button
                     label="Upgrade to Pro"
@@ -991,8 +989,8 @@ LIMIT 3;`
                     />
                   </div>
                 </div>
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </div>
         </template>
       </Sidebar>
@@ -1131,19 +1129,19 @@ LIMIT 3;`
               class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <TabView
+                <Tabs
                   v-model:value="activeTab"
                   class="w-full"
                 >
-                  <TabView.List>
-                    <TabView.Item
+                  <Tabs.List>
+                    <Tabs.Item
                       v-for="tab in tabs"
                       :key="tab.value"
                       :value="tab.value"
                       :label="tab.label"
                     />
-                  </TabView.List>
-                </TabView>
+                  </Tabs.List>
+                </Tabs>
               </div>
             </div>
           </div>
@@ -1186,7 +1184,7 @@ LIMIT 3;`
                         </Tooltip>
                       </div>
                     </div>
-                    <InputText
+                    <Input
                       v-model="tableSearch"
                       size="medium"
                       class="w-full"
@@ -1199,7 +1197,7 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </InputText>
+                    </Input>
                   </div>
                 </template>
                 <div>
@@ -1238,8 +1236,8 @@ LIMIT 3;`
                         />
                         <span class="min-w-0 truncate">{{ table.name }}</span>
                       </button>
-                      <Dropdown placement="bottom-end">
-                        <Dropdown.Trigger>
+                      <DropdownMenu placement="bottom-end">
+                        <DropdownMenu.Trigger>
                           <Tooltip text="Table actions">
                             <IconButton
                               icon="pi pi-ellipsis-h"
@@ -1248,9 +1246,9 @@ LIMIT 3;`
                               aria-label="Table actions"
                             />
                           </Tooltip>
-                        </Dropdown.Trigger>
-                        <Dropdown.Group>
-                          <Dropdown.Option
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Group>
+                          <DropdownMenu.Option
                             value="delete"
                             label="Delete table"
                           >
@@ -1259,9 +1257,9 @@ LIMIT 3;`
                                 class="pi pi-trash"
                                 aria-hidden="true"
                             /></template>
-                          </Dropdown.Option>
-                        </Dropdown.Group>
-                      </Dropdown>
+                          </DropdownMenu.Option>
+                        </DropdownMenu.Group>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </div>
@@ -1273,7 +1271,7 @@ LIMIT 3;`
                 v-if="!selectedTable"
                 class="flex flex-1 items-center justify-center p-(--spacing-md)"
               >
-                <CardBox class="w-full max-w-(--container-2xl)">
+                <Card class="w-full max-w-(--container-2xl)">
                   <template #content>
                     <div
                       class="flex flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
@@ -1318,7 +1316,7 @@ LIMIT 3;`
                       </EmptyState>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
               </div>
 
               <div
@@ -1337,7 +1335,7 @@ LIMIT 3;`
                       selectedTable.name
                     }}</span>
                   </div>
-                  <SegmentedButton
+                  <ToggleGroup
                     v-model="tableView"
                     :options="tableViewOptions"
                     aria-label="Table view"
@@ -1352,7 +1350,7 @@ LIMIT 3;`
                     class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
                   >
                     <div class="flex min-w-0 flex-1 md:max-w-(--container-lg)">
-                      <InputText
+                      <Input
                         v-model="rowFilter"
                         size="medium"
                         class="w-full"
@@ -1365,7 +1363,7 @@ LIMIT 3;`
                             aria-hidden="true"
                           />
                         </template>
-                      </InputText>
+                      </Input>
                     </div>
                     <div class="ml-auto flex items-center gap-(--spacing-xs)">
                       <Button
@@ -1553,7 +1551,7 @@ LIMIT 3;`
                       icon="pi pi-plus"
                     />
                   </div>
-                  <CardBox :padded="false">
+                  <Card :padded="false">
                     <template #content>
                       <TableRoot
                         :data="schemaRows"
@@ -1576,7 +1574,7 @@ LIMIT 3;`
                         </template>
                       </TableRoot>
                     </template>
-                  </CardBox>
+                  </Card>
                 </div>
               </div>
             </div>
@@ -1600,7 +1598,7 @@ LIMIT 3;`
                 <template #header>
                   <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
                     <span class="text-heading-xxs text-(--text-default)">Query history</span>
-                    <InputText
+                    <Input
                       v-model="historySearch"
                       size="medium"
                       class="w-full"
@@ -1613,7 +1611,7 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </InputText>
+                    </Input>
                   </div>
                 </template>
                 <div>
@@ -1640,7 +1638,7 @@ LIMIT 3;`
                       >
                         {{ oneLine(item.sql) }}
                       </button>
-                      <Dropdown
+                      <DropdownMenu
                         placement="bottom-end"
                         @select="
                           (event, value) =>
@@ -1649,7 +1647,7 @@ LIMIT 3;`
                               : deleteHistory(event, item)
                         "
                       >
-                        <Dropdown.Trigger>
+                        <DropdownMenu.Trigger>
                           <Tooltip text="Query actions">
                             <IconButton
                               icon="pi pi-ellipsis-h"
@@ -1658,9 +1656,9 @@ LIMIT 3;`
                               aria-label="Query actions"
                             />
                           </Tooltip>
-                        </Dropdown.Trigger>
-                        <Dropdown.Group>
-                          <Dropdown.Option
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Group>
+                          <DropdownMenu.Option
                             value="run"
                             label="Run query"
                           >
@@ -1669,8 +1667,8 @@ LIMIT 3;`
                                 class="pi pi-play"
                                 aria-hidden="true"
                             /></template>
-                          </Dropdown.Option>
-                          <Dropdown.Option
+                          </DropdownMenu.Option>
+                          <DropdownMenu.Option
                             value="delete"
                             label="Delete query"
                           >
@@ -1679,9 +1677,9 @@ LIMIT 3;`
                                 class="pi pi-trash"
                                 aria-hidden="true"
                             /></template>
-                          </Dropdown.Option>
-                        </Dropdown.Group>
-                      </Dropdown>
+                          </DropdownMenu.Option>
+                        </DropdownMenu.Group>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </div>
@@ -1738,7 +1736,7 @@ LIMIT 3;`
                 >
                   <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
                   <div class="flex ml-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
-                    <InputText
+                    <Input
                       v-model="resultSearch"
                       size="medium"
                       class="w-full"
@@ -1752,10 +1750,10 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </InputText>
+                    </Input>
                   </div>
                   <div class="ml-auto flex items-center gap-(--spacing-xs)">
-                    <SegmentedButton
+                    <ToggleGroup
                       v-model="resultView"
                       :options="resultViewOptions"
                       aria-label="Result view"
@@ -1814,7 +1812,7 @@ LIMIT 3;`
                     v-else-if="results && results.type === 'message'"
                     class="p-(--spacing-md)"
                   >
-                    <Message
+                    <Alert
                       severity="success"
                       :label="results.text"
                     />
@@ -1831,7 +1829,7 @@ LIMIT 3;`
                 </div>
 
                 <div class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)">
-                  <PaginatorRoot
+                  <PaginationRoot
                     :total="filteredResultRows.length"
                     :page-size="50"
                     :page-size-options="[10, 25, 50, 100]"
@@ -1863,7 +1861,7 @@ LIMIT 3;`
 
               <PanelContent>
                 <div class="flex flex-col gap-(--spacing-md)">
-                  <InputText
+                  <Input
                     v-model="templateQuery"
                     size="large"
                     class="w-full"
@@ -1876,7 +1874,7 @@ LIMIT 3;`
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
 
                   <div
                     v-if="filteredTemplates.length"
@@ -1968,8 +1966,8 @@ LIMIT 3;`
                 <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
                   >alex</span
                 >
-                <Dropdown placement="top-end">
-                  <Dropdown.Trigger>
+                <DropdownMenu placement="top-end">
+                  <DropdownMenu.Trigger>
                     <Tooltip text="Account menu">
                       <IconButton
                         icon="pi pi-ellipsis-v"
@@ -1978,8 +1976,8 @@ LIMIT 3;`
                         size="small"
                       />
                     </Tooltip>
-                  </Dropdown.Trigger>
-                  <Dropdown.Group>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Group>
                     <template #top>
                       <div class="flex min-w-0 flex-col">
                         <span class="truncate text-label-md text-(--text-default)">alex</span>
@@ -1988,7 +1986,7 @@ LIMIT 3;`
                         >
                       </div>
                     </template>
-                    <Dropdown.Option
+                    <DropdownMenu.Option
                       value="settings"
                       label="Account Settings"
                     >
@@ -1998,8 +1996,8 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="personal-tokens"
                       label="Personal Tokens"
                     >
@@ -2009,9 +2007,9 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
@@ -2023,9 +2021,9 @@ LIMIT 3;`
                         aria-label="Theme"
                       />
                     </div>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="home"
                       label="Home Page"
                     >
@@ -2035,8 +2033,8 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="changelog"
                       label="Changelog"
                     >
@@ -2046,8 +2044,8 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="feedback"
                       label="Feedback"
                     >
@@ -2057,8 +2055,8 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="docs"
                       label="Docs"
                     >
@@ -2068,10 +2066,10 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="logout"
                       label="Log out"
                     >
@@ -2081,9 +2079,9 @@ LIMIT 3;`
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
                     >
@@ -2100,8 +2098,8 @@ LIMIT 3;`
                         />
                       </div>
                     </div>
-                  </Dropdown.Group>
-                </Dropdown>
+                  </DropdownMenu.Group>
+                </DropdownMenu>
               </div>
             </template>
           </Sidebar>

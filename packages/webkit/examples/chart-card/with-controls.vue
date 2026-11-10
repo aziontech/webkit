@@ -1,11 +1,11 @@
 <script setup>
   import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
-  import Dropdown, {
-    DropdownGroup,
-    DropdownOption,
-    DropdownTrigger
-  } from '@aziontech/webkit/dropdown'
+  import DropdownMenu, {
+    DropdownMenuGroup,
+    DropdownMenuOption,
+    DropdownMenuTrigger
+  } from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
@@ -50,30 +50,30 @@
           label="+12.40%"
           severity="danger"
         />
-        <Dropdown>
-          <DropdownTrigger>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
             <IconButton
               kind="transparent"
               size="small"
               icon="pi pi-ellipsis-h"
               aria-label="More options"
             />
-          </DropdownTrigger>
-          <DropdownGroup>
-            <DropdownOption
+          </DropdownMenuTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuOption
               value="copy-query"
               label="Copy query"
             />
-            <DropdownOption
+            <DropdownMenuOption
               value="export-csv"
               label="Export CSV"
             />
-            <DropdownOption
+            <DropdownMenuOption
               value="mean-line"
               label="Show mean line"
             />
-          </DropdownGroup>
-        </Dropdown>
+          </DropdownMenuGroup>
+        </DropdownMenu>
       </ChartCard.Controls>
     </ChartCard.Header>
     <ChartCard.Content>

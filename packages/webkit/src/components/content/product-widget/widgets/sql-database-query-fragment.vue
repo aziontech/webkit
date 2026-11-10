@@ -3,10 +3,10 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import TableRoot from '../../../data/table/table.vue'
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -170,7 +170,7 @@
             >
               <span class="shrink-0 text-heading-xxs text-(--text-default)">Results</span>
               <span class="ml-(--spacing-sm) flex min-w-0 flex-1">
-                <InputText
+                <Input
                   model-value=""
                   size="medium"
                   placeholder="Search"
@@ -183,10 +183,10 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </span>
               <span class="ml-auto flex items-center gap-(--spacing-xs)">
-                <SegmentedButton
+                <ToggleGroup
                   model-value="table"
                   :options="VIEWS"
                   aria-label="Result view"

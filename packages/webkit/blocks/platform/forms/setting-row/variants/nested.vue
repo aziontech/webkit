@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
@@ -39,7 +39,7 @@
 </script>
 
 <template>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <Item.List>
         <Item size="small">
@@ -220,5 +220,5 @@
         </Item>
       </Item.List>
     </template>
-  </CardBox>
+  </Card>
 </template>

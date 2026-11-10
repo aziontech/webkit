@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 2
-checksum: 2c0f1322478487bd51706a83e177d0911f7cf05570c7bd0dd735f0ca28094c7b
+checksum: 783d579e3f214322b7e6a4bfbee7b733b6e828c98acdb76109e701be8ac20670
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-09
@@ -27,7 +27,7 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 
 - For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.
 - For a single framed box → use `frame-box`.
-- For one card with a header, content and footer → use `card-box`.
+- For one card with a header, content and footer → use `card`.
 - For the band that wraps the grid → use `section-module`.
 - For tabular data a reader scans row by row → use `table`.
 
@@ -38,7 +38,7 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 - `section-module` — the band whose body holds this grid.
 - `section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.
 - `frame-box` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.
-- `card-box` — a padded card surface, the usual child of a `gap` grid.
+- `card` — a padded card surface, the usual child of a `gap` grid.
 
 ## Best practices
 
@@ -53,8 +53,8 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 
 ```vue
 <script setup>
-import CardGrid from '@aziontech/webkit/card-grid'
-import Topic from '@aziontech/webkit/topic'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -90,8 +90,8 @@ Tree-shaking alternative — the standalone root and cell from their own entries
 
 ```vue
 <script setup>
-import CardGrid from '@aziontech/webkit/card-grid-root'
-import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGrid from '@aziontech/webkit/card-grid-root'
+  import CardGridCell from '@aziontech/webkit/card-grid-cell'
 </script>
 ```
 
@@ -107,13 +107,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `CardGridKind` | `'gap'` | false | Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks. |
-| `columns` | `CardGridColumns` | `3` | false | How many columns the grid fans out to at the large breakpoint. |
-| `mobileColumns` | `CardGridMobileColumns` | `1` | false | How many columns the grid holds below the small breakpoint. |
-| `dividerColor` | `CardGridDividerColor` | `'default'` | false | Weight of the hairline rules in the `divider` register. |
-| `flush` | `boolean` | `false` | false | In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. |
+| Prop            | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                              |
+| --------------- | ----------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`          | `CardGridKind`          | `'gap'`     | false    | Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks.                                                                                 |
+| `columns`       | `CardGridColumns`       | `3`         | false    | How many columns the grid fans out to at the large breakpoint.                                                                                                                                                                     |
+| `mobileColumns` | `CardGridMobileColumns` | `1`         | false    | How many columns the grid holds below the small breakpoint.                                                                                                                                                                        |
+| `dividerColor`  | `CardGridDividerColor`  | `'default'` | false    | Weight of the hairline rules in the `divider` register.                                                                                                                                                                            |
+| `flush`         | `boolean`               | `false`     | false    | In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. |
 
 ## Events
 
@@ -121,9 +121,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The cells, in reading order. In the `frame` register they are `CardGrid.Cell` elements; in the `divider` register each cell fills its own background. |
+| Slot      | Scope | Notes                                                                                                                                                 |
+| --------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The cells, in reading order. In the `frame` register they are `CardGrid.Cell` elements; in the `divider` register each cell fills its own background. |
 
 ## States
 
@@ -143,20 +143,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| hairline rule | `var(--border-default)` |
-| hairline rule, muted | `var(--border-muted)` |
-| cell surface (`kind="surface"`) | `var(--bg-surface)` |
-| cell surface (`kind="canvas"`) | `var(--bg-canvas)` |
-| gutter | `var(--spacing-md)` |
-| spacing (cell padding) | `var(--spacing-xl)` |
+| Region                          | Token (DESIGN.md)       |
+| ------------------------------- | ----------------------- |
+| hairline rule                   | `var(--border-default)` |
+| hairline rule, muted            | `var(--border-muted)`   |
+| cell surface (`kind="surface"`) | `var(--bg-surface)`     |
+| cell surface (`kind="canvas"`)  | `var(--bg-canvas)`      |
+| gutter                          | `var(--spacing-md)`     |
+| spacing (cell padding)          | `var(--spacing-xl)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

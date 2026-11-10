@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: e20d600f75d4a530e21e8a1313a918c34e379a733f49e4fdbe681bce11079480
+checksum: 11d125a5f047833a1e6a2dd7d9fe8a2a63bf2a5e23db3ffb272c8cf0fedc3135
 created: 2026-08-22
 last_updated: 2026-08-22
 ---
@@ -22,12 +22,12 @@ The previous / next pair that closes a documentation page. Each side is a link c
 
 ## When NOT to use
 
-- To page through a data set — that is `Paginator`, which walks pages of rows and owns a page number. This links two neighbouring documents and knows nothing about a total.
+- To page through a data set — that is `Pagination`, which walks pages of rows and owns a page number. This links two neighbouring documents and knows nothing about a total.
 - On a page with no reading order (a reference index, a landing page): a next link that points somewhere arbitrary is worse than none.
 
 ## Related
 
-- `Paginator` — the data counterpart; numbered pages over a collection, not two named documents.
+- `Pagination` — the data counterpart; numbered pages over a collection, not two named documents.
 - `DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages.
 
 ## Best practices

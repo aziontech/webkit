@@ -4,10 +4,11 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 25c3719bced5f251f7b565f3cb6c70dcbee26f479a1e791ec9a99c1ff6b814e8
+checksum: c25d1272ebc2243af5ff9992e82e3b1e84d96cf2b249b924dc00df4e4abef0d2
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
+
 # Panel — Component Spec
 
 ## Purpose
@@ -24,13 +25,13 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 - The surface has to open over the page and trap focus → use `dialog`.
 - The surface slides in from a screen edge → use `drawer`.
 - Rich content anchored to a trigger that leaves the page interactive → use `popover`.
-- A card in the page layout, with header, content and footer slots → use `card-box`.
+- A card in the page layout, with header, content and footer slots → use `card`.
 
 ## Related
 
 - `dialog` — renders a `Panel` inside `DialogContent`; compose the `Panel*` regions directly in it.
 - `drawer` — renders a `Panel` inside `DrawerContent`; there `PanelContent` scrolls through a `ScrollArea`.
-- `card-box` — in-page card with header, content and footer slots. `Panel` is the elevated overlay shell, with a large shadow and max-width presets.
+- `card` — in-page card with header, content and footer slots. `Panel` is the elevated overlay shell, with a large shadow and max-width presets.
 
 ## Best practices
 
@@ -43,11 +44,11 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
-import Panel from '@aziontech/webkit/panel'
-import PanelHeader from '@aziontech/webkit/panel-header'
-import PanelContent from '@aziontech/webkit/panel-content'
-import PanelFooter from '@aziontech/webkit/panel-footer'
+  import Button from '@aziontech/webkit/button'
+  import Panel from '@aziontech/webkit/panel'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
 </script>
 
 <template>
@@ -61,8 +62,14 @@ import PanelFooter from '@aziontech/webkit/panel-footer'
       </p>
     </PanelContent>
     <PanelFooter>
-      <Button label="Cancel" kind="outlined" />
-      <Button label="Save" kind="primary" />
+      <Button
+        label="Cancel"
+        kind="outlined"
+      />
+      <Button
+        label="Save"
+        kind="primary"
+      />
     </PanelFooter>
   </Panel>
 </template>
@@ -76,10 +83,10 @@ import PanelFooter from '@aziontech/webkit/panel-footer'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `size` | `PanelSize` | `'medium'` | false | Max width of the panel shell. |
-| `sizeAtMd` | `boolean` | `false` | false | When true, the `size` max-width applies from `md` up only (dialog mobile bottom sheet). |
+| Prop       | Type        | Default    | Required | JSDoc                                                                                   |
+| ---------- | ----------- | ---------- | -------- | --------------------------------------------------------------------------------------- |
+| `size`     | `PanelSize` | `'medium'` | false    | Max width of the panel shell.                                                           |
+| `sizeAtMd` | `boolean`   | `false`    | false    | When true, the `size` max-width applies from `md` up only (dialog mobile bottom sheet). |
 
 ## Events
 
@@ -87,9 +94,9 @@ import PanelFooter from '@aziontech/webkit/panel-footer'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
@@ -102,20 +109,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

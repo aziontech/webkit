@@ -3,7 +3,7 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Tag from '../../../tag/tag.vue'
   import Badge from '../../badge/badge.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -183,7 +183,7 @@
               class="pointer-events-none absolute -top-2 -right-2 min-w-5"
             />
           </span>
-          <InputText
+          <Input
             model-value=""
             size="medium"
             placeholder="Search events, hosts, paths or addresses"
@@ -196,7 +196,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
           <IconButton
             icon="pi pi-refresh"
             kind="outlined"

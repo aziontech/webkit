@@ -5,9 +5,9 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldText from '@aziontech/webkit/field-text'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Stepper from '@aziontech/webkit/stepper'
   import { computed, nextTick, ref } from 'vue'
@@ -308,7 +308,7 @@
                       </header>
 
                       <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                        <InputText
+                        <Input
                           v-model="query"
                           size="large"
                           class="w-full"
@@ -421,7 +421,7 @@
                       </div>
                     </section>
 
-                    <CardBox
+                    <Card
                       v-else
                       :padded="false"
                       title="How do you want to start?"
@@ -463,7 +463,7 @@
                           </Item>
                         </Item.List>
                       </template>
-                    </CardBox>
+                    </Card>
                   </div>
                 </div>
               </fieldset>

@@ -1,14 +1,14 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldText from '@aziontech/webkit/field-text'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
+  import Progress from '@aziontech/webkit/progress'
   import { computed, ref } from 'vue'
 
   import { primitives } from '@aziontech/theme/colors'
@@ -153,12 +153,12 @@
         class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
       >
         <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
-          <CardBox
+          <Card
             :padded="false"
             class="w-full"
           >
             <template #content>
-              <ProgressBar
+              <Progress
                 :value="1"
                 :max="3"
                 size="small"
@@ -231,7 +231,7 @@
 
                         <div class="flex flex-col gap-(--spacing-xs)">
                           <Label>Organization mark</Label>
-                          <BoxGridSelection
+                          <RadioCards
                             v-model="accent"
                             :items="accents"
                             aria-label="Organization mark"
@@ -250,7 +250,7 @@
                                 }}</span>
                               </span>
                             </template>
-                          </BoxGridSelection>
+                          </RadioCards>
                           <HelperText
                             label="Generated from the organization's name. Select its color."
                           />
@@ -273,7 +273,7 @@
                 </form>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
 
         <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-mr-(--spacing-xl)">

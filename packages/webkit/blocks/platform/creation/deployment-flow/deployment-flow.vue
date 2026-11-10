@@ -1,10 +1,10 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     class="w-full"
   >
@@ -79,5 +79,5 @@
         </div>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

@@ -6,3 +6,7 @@ packages/webkit/catalog.json
 # `prettier --write` must never "fix" them. The canary runner itself bypasses
 # this file with --ignore-path=/dev/null.
 lint-canaries/
+
+# Generated from packages/webkit/blocks and examples (apps/storybook/scripts/gen-block-stories.mjs).
+apps/storybook/src/stories/blocks/
+apps/storybook/src/stories/site/

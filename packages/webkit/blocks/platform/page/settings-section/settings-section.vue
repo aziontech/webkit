@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
   import Select from '@aziontech/webkit/select'
@@ -74,7 +74,7 @@
             data-open
             class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
           >
-            <CardBox :padded="false">
+            <Card :padded="false">
               <template #content>
                 <Item.List>
                   <Item size="small">
@@ -151,7 +151,7 @@
                   </Item>
                 </Item.List>
               </template>
-            </CardBox>
+            </Card>
           </div>
         </div>
       </div>

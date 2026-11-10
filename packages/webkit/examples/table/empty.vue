@@ -2,10 +2,10 @@
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Dropdown from '@aziontech/webkit/dropdown'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import { ref } from 'vue'
 
   const rows = []
@@ -61,20 +61,20 @@
       <span class="sr-only">Actions</span>
     </template>
     <template #cell-actions="{ row }">
-      <Dropdown @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
-        <DropdownTrigger>
+      <DropdownMenu @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
+        <DropdownMenuTrigger>
           <IconButton
             icon="pi pi-ellipsis-v"
             aria-label="Row actions"
             kind="transparent"
             size="small"
           />
-        </DropdownTrigger>
-        <DropdownGroup
+        </DropdownMenuTrigger>
+        <DropdownMenuGroup
           v-for="(group, gi) in rowActionGroups"
           :key="gi"
         >
-          <DropdownOption
+          <DropdownMenuOption
             v-for="option in group"
             :key="option.value"
             :value="option.value"
@@ -85,9 +85,9 @@
                 :class="option.icon"
                 aria-hidden="true"
             /></template>
-          </DropdownOption>
-        </DropdownGroup>
-      </Dropdown>
+          </DropdownMenuOption>
+        </DropdownMenuGroup>
+      </DropdownMenu>
     </template>
   </Table>
 </template>

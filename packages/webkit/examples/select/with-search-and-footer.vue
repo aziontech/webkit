@@ -1,7 +1,7 @@
 <script setup>
   import Select from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import { computed, ref } from 'vue'
 
   const value = ref('')
@@ -36,7 +36,7 @@
       <Select.Trigger />
       <Select.Content>
         <template #search>
-          <InputText
+          <Input
             v-model="search"
             size="small"
             placeholder="Search"
@@ -47,7 +47,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
         </template>
         <Select.Option
           v-for="o in filtered"

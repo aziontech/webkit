@@ -1,6 +1,6 @@
 <script setup>
   import BarList from '@aziontech/webkit/bar-list'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -296,7 +296,7 @@
         </ChartCard>
       </div>
 
-      <CardBox
+      <Card
         title="Open incidents"
         :padded="false"
       >
@@ -374,7 +374,7 @@
             />
           </div>
         </template>
-      </CardBox>
+      </Card>
     </main>
   </div>
 </template>

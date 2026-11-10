@@ -6,8 +6,9 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 7fcef4a0ed7c677a4b4862fc5804d70dfc584be96a15684f3c500e403c5ee6ef
+checksum: 7f925f252f55181847377dc5ec80486911e89c58768ed60ed5f348cb8495901c
 ---
+
 # HeroForm — Component Spec
 
 ## Purpose
@@ -38,24 +39,24 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 ```vue
 <script setup>
-import HeroForm from '@aziontech/webkit/hero-form'
-import { ref } from 'vue'
+  import HeroForm from '@aziontech/webkit/hero-form'
+  import { ref } from 'vue'
 
-const loading = ref(false)
-const submitted = ref(false)
-const error = ref(false)
+  const loading = ref(false)
+  const submitted = ref(false)
+  const error = ref(false)
 
-const onSubmit = async (event, values) => {
-  loading.value = true
-  error.value = false
-  try {
-    const response = await fetch('/contact', { method: 'POST', body: JSON.stringify(values) })
-    submitted.value = response.ok
-    error.value = !response.ok
-  } finally {
-    loading.value = false
+  const onSubmit = async (event, values) => {
+    loading.value = true
+    error.value = false
+    try {
+      const response = await fetch('/contact', { method: 'POST', body: JSON.stringify(values) })
+      submitted.value = response.ok
+      error.value = !response.ok
+    } finally {
+      loading.value = false
+    }
   }
-}
 </script>
 
 <template>
@@ -63,7 +64,13 @@ const onSubmit = async (event, values) => {
     eyebrow="Sales"
     title="Talk to our sales team"
     description="Get a custom demo, plan your migration, and explore plans and pricing built for your company."
-    :items="[{ icon: 'ai ai-edge-ai', title: 'Build AI applications', description: 'Run AI agents and inference close to your users.' }]"
+    :items="[
+      {
+        icon: 'ai ai-edge-ai',
+        title: 'Build AI applications',
+        description: 'Run AI agents and inference close to your users.'
+      }
+    ]"
     form-aria-label="Contact sales"
     :fields="[
       { name: 'firstname', kind: 'text', label: 'First name', half: true, required: true },
@@ -86,27 +93,27 @@ const onSubmit = async (event, values) => {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `messages` | `HeroFormMessages` | `—` | true | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. |
-| `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent. |
-| `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Sentence under the headline. |
-| `items` | `HeroFormItem[]` | `[]` | false | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
-| `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |
-| `fields` | `HeroFormField[]` | `[]` | false | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`. |
-| `submitLabel` | `string` | `''` | false | Label of the submit button. |
-| `carouselLabel` | `string` | `''` | false | Overline above the client strip. |
-| `carouselMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the strip renders only when there are marks. |
-| `loading` | `boolean` | `false` | false | The site is sending the values: the button shows its loading state and a submit is ignored. |
-| `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to `messages.success`. |
-| `error` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |
+| Prop            | Type               | Default | Required | JSDoc                                                                                                                               |
+| --------------- | ------------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`      | `HeroFormMessages` | `—`     | true     | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`.                                                             |
+| `eyebrow`       | `string`           | `''`    | false    | Short overline above the headline.                                                                                                  |
+| `highlight`     | `string`           | `''`    | false    | Opening words of the headline, painted in the brand accent.                                                                         |
+| `title`         | `string`           | `''`    | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty.                                                      |
+| `description`   | `string`           | `''`    | false    | Sentence under the headline.                                                                                                        |
+| `items`         | `HeroFormItem[]`   | `[]`    | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
+| `formAriaLabel` | `string`           | `''`    | false    | Accessible name of the field group, read as its legend.                                                                             |
+| `fields`        | `HeroFormField[]`  | `[]`    | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`.                      |
+| `submitLabel`   | `string`           | `''`    | false    | Label of the submit button.                                                                                                         |
+| `carouselLabel` | `string`           | `''`    | false    | Overline above the client strip.                                                                                                    |
+| `carouselMarks` | `string[]`         | `[]`    | false    | Registry names of the client marks, in order; the strip renders only when there are marks.                                          |
+| `loading`       | `boolean`          | `false` | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                         |
+| `submitted`     | `boolean`          | `false` | false    | The site sent the values: the form gives way to `messages.success`.                                                                 |
+| `error`         | `boolean`          | `false` | false    | The site could not send the values: `messages.error` shows under the form.                                                          |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event    | Payload                                                | Notes                                                                                                                                                                 |
+| -------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `submit` | `(event: SubmitEvent, values: Record<string, string>)` | Fired on a valid submit, not while `loading`; `values` holds every field by `name`, trimmed, with a phone number prefixed by its dial code. The block never sends it. |
 
 ## Slots
@@ -118,8 +125,8 @@ const onSubmit = async (event, values) => {
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
 - `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; editing the field clears it; nothing is emitted
 - `loading` (prop): the button shows its loading state and a submit emits nothing; `data-loading` on the root
-- `submitted` (prop): the form is replaced by a success `Message` with `messages.success`; `data-submitted` on the root
-- `error` (prop): a danger `Message` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
+- `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`; `data-submitted` on the root
+- `error` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
 
 ## Motion & Animations
@@ -128,15 +135,15 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region | Token (DESIGN.md)                                                                   |
+| ------ | ----------------------------------------------------------------------------------- |
 | rhythm | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

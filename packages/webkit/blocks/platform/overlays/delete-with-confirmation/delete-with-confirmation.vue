@@ -7,8 +7,8 @@
   import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import InputText from '@aziontech/webkit/input-text'
-  import Message from '@aziontech/webkit/message'
+  import Input from '@aziontech/webkit/input'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -66,7 +66,7 @@
         </PanelHeader>
         <PanelContent>
           <div class="flex flex-col gap-(--spacing-md)">
-            <Message
+            <Alert
               severity="warning"
               label="Once confirmed, this action can't be reversed."
             />
@@ -116,7 +116,7 @@
               </Tooltip>
               <span>in the box below:</span>
             </p>
-            <InputText
+            <Input
               v-model="confirmation"
               :aria-labelledby="confirmLabelId"
               autocomplete="off"

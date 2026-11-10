@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import type { LogViewLine } from '../../../code/log-view/injection-key'
   import LogView from '../../../code/log-view/log-view.vue'
   import LogViewContent from '../../../code/log-view/log-view-content.vue'
-  import ProgressBar from '../../../feedback/progress-bar/progress-bar.vue'
+  import Progress from '../../../feedback/progress/progress.vue'
   import Tag from '../../../tag/tag.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import Accordion from '../../accordion/index'
@@ -335,7 +335,7 @@
 
         <template v-if="controls && settled">
           <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
-          <SegmentedButton
+          <ToggleGroup
             v-model="view"
             :options="views"
             size="medium"
@@ -454,7 +454,7 @@
       </LogViewContent>
     </LogView>
 
-    <ProgressBar
+    <Progress
       v-if="progressBar && !settled"
       :value="progress"
       :max="100"

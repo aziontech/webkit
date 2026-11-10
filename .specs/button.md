@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 5f54f9f762c21c79982165b01cb732a9a60b8f39c23541fe0c692e36e7daf7b6
+checksum: 07e16358a7ea8cd31a3db79548336d7395169fcc1e0565d881a165ff3ed09cd0
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
@@ -35,7 +35,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - `split-button` — joins a Button to a chevron menu of related actions.
 - `button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
 - `mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.
-- `segmented-button` — a group of mutually exclusive options, not a single action.
+- `toggle-group` — a group of mutually exclusive options, not a single action.
 
 ## Best practices
 
@@ -49,12 +49,16 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
   <Button label="Save" />
-  <Button label="Deploy" kind="secondary" icon="pi pi-upload" />
+  <Button
+    label="Deploy"
+    kind="secondary"
+    icon="pi pi-upload"
+  />
   <Button
     label="Read the docs"
     kind="outlined"
@@ -80,7 +84,7 @@ import Button from '@aziontech/webkit/button'
 | `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
 | `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
 | `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
-| `type`         | `'button' \| 'submit' \| 'reset'`                               | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.        |
+| `type`         | `'button' \| 'submit' \| 'reset'`                              | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
 
 ## Events
 
@@ -102,10 +106,10 @@ import Button from '@aziontech/webkit/button'
 
 ## Motion & Animations
 
-| Trigger                                            | Animation / Transition                                                                                                           | Token                                                  | Reduced-motion fallback         |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
-| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
-| hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
+| Trigger                                            | Animation / Transition                                                                                                           | Token                                                  | Reduced-motion fallback                |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| hover / active (state layer fade)                  | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                              | `@aziontech/theme` semantic duration + curve           | `motion-reduce:before:transition-none` |
+| hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none`        |
 
 ## Tokens
 

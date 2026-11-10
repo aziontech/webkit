@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeading (the crumb names it) opening on a controls row over a flush borderless CardBox table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tab-view.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeading (the crumb names it) opening on a controls row over a flush borderless Card table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tabs.
 status: active
 last_updated: 2026-08-13
 scope: general
@@ -46,7 +46,7 @@ every webkit primitive the same way:
   published subpath. If a subpath is not a key there, it does not exist.
 
 The primitives you compose the shells from — `sidebar` (+ `sidebar-header`, `sidebar-group`,
-`sidebar-footer`), `global-header`, `breadcrumb`, `tab-view` — all resolve this way. **There is no
+`sidebar-footer`), `global-header`, `breadcrumb`, `tabs` — all resolve this way. **There is no
 `@aziontech/webkit/app-layout` and no `@aziontech/webkit/creation-header`:** the two shells are
 components _you_ compose in your own app (shown below), not webkit imports — never copy a dead import
 for them.
@@ -320,10 +320,10 @@ came to do — **narrow the list, or add to it**:
            sit right (where a control belongs); the table follows. -->
       <header class="flex items-center gap-(--layout-group-gap)">
         <div class="flex min-w-0 grow items-center gap-(--layout-group-gap)">
-          <!-- Hoisted out of the card, so it is a plain InputText bound to the
+          <!-- Hoisted out of the card, so it is a plain Input bound to the
                table's global filter — `Table.Search` is context-aware and only
                works INSIDE `<Table>`. -->
-          <InputText
+          <Input
             v-model="search"
             size="large"
             placeholder="Search..."
@@ -343,10 +343,10 @@ came to do — **narrow the list, or add to it**:
         </div>
       </header>
 
-      <!-- The Table lives in a flush, borderless CardBox: the card supplies the
+      <!-- The Table lives in a flush, borderless Card: the card supplies the
            frame, so the table is edge-to-edge (padded=false) and border-free. -->
       <section class="flex min-h-0 flex-col">
-        <CardBox :padded="false">
+        <Card :padded="false">
           <template #content>
             <Table
               v-model:globalFilter="search"
@@ -356,7 +356,7 @@ came to do — **narrow the list, or add to it**:
               :border="false"
             />
           </template>
-        </CardBox>
+        </Card>
       </section>
     </main>
   </AppShell>
@@ -367,10 +367,10 @@ came to do — **narrow the list, or add to it**:
   second one is a duplicate that only pushes the data down.
 - **The controls live OUT of the table, not in its `#toolbar`.** They belong to the **page** — the
   create button acts on the module, not on the table — and hoisting them keeps the card a frame around
-  data only. The trade is that the search field must be a plain `InputText` bound to
+  data only. The trade is that the search field must be a plain `Input` bound to
   `v-model:globalFilter`, because `Table.Search` only resolves inside `<Table>`.
 - **The controls row and the table are ONE band**, stacked at the group step — not two sections.
-- **The table is framed by the card, not itself:** `CardBox :padded="false"` + `Table :border="false"`
+- **The table is framed by the card, not itself:** `Card :padded="false"` + `Table :border="false"`
   — the card is the only border, so the table sits edge-to-edge.
 - **`Documentation` is a first-level affordance only.** It introduces the module. An internal level is
   already inside the module, so it carries only the action that level can perform; reference material
@@ -411,19 +411,19 @@ row above the table to put it on except the controls row, which is where narrowi
            border, and it does not scroll. NO PageHeading on this page. -->
       <div class="border-b border-(--border-default) pr-(--spacing-lg) pl-(--spacing-sm)">
         <div class="flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-          <TabView
+          <Tabs
             v-model:value="activeTab"
             class="min-w-0 flex-1"
           >
-            <TabView.List>
-              <TabView.Item
+            <Tabs.List>
+              <Tabs.Item
                 v-for="tab in tabs"
                 :key="tab.value"
                 :value="tab.value"
                 :label="tab.label"
               />
-            </TabView.List>
-          </TabView>
+            </Tabs.List>
+          </Tabs>
 
           <!-- The page's action, trailing the tabs. `min-h-8` RESERVES a medium
                button's height for the tab that renders nothing here, so switching
@@ -460,7 +460,7 @@ row above the table to put it on except the controls row, which is where narrowi
 - **The row is `items-center`, not `items-end`.** A 32px `size="medium"` button centres against the
   30px tab items; aligning their bottoms makes the button overhang by 2px and forces a hand-written
   `mb-*` to undo.
-- **`min-w-0 flex-1` on the `TabView`** lets the tab list shrink (and scroll horizontally on a narrow
+- **`min-w-0 flex-1` on the `Tabs`** lets the tab list shrink (and scroll horizontally on a narrow
   viewport) instead of pushing the action off the row.
 - **Reserve the action's height (`min-h-8`)** on the wrapper, not on the row: a row's own padding
   counts against a min-height, so a floor there never binds. Without the reservation the row is
@@ -494,7 +494,7 @@ Each tab renders one of two bodies:
 - **A list tab** → the list pattern above (controls row + flush borderless `Table`), with its create
   action **on the tab row**.
 - **A settings tab** → the `ItemGroup` form: `--spacing-sm`-titled sections (`text-heading-xxs`) each
-  over a flush `CardBox` + `Item.List`, committed as **one block** by a single Save bar pinned below
+  over a flush `Card` + `Item.List`, committed as **one block** by a single Save bar pinned below
   the scroll region (see `webkit-form` and `webkit-ui-states`).
 
 ## Breadcrumb — first level and second-level resource nav
@@ -547,7 +547,7 @@ Four rules hold across every row:
 - **The content inset is `--spacing-md`** — the header's edge padding. Take it from your shell (applied
   once); a page that runs a full-bleed tab bar re-applies `p-(--spacing-md)` on its own content
   region. Never a bespoke `p-(--spacing-lg)` page inset.
-- **A list table lives in a flush, borderless `CardBox`.** `CardBox :padded="false"` +
+- **A list table lives in a flush, borderless `Card`.** `Card :padded="false"` +
   `Table :border="false"`; the card is the only border. Never ship a bare bordered table, never wrap
   the table in a padded card. Where a page does carry a `PageHeading`, it sits **out** of the card,
   `--spacing-lg` above it — never buried in the card's `#header`.
@@ -618,7 +618,7 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - [ ] The breadcrumb names the location on every level; crumb links navigate, the last crumb is current.
 - [ ] Shells are composed from the webkit primitives (`global-header` / `sidebar` / `breadcrumb` via the
       MCP / catalog), not hand-rolled, and there is no dead `@aziontech/webkit/app-layout` import.
-- [ ] Content inset is `--spacing-md` (from the shell); a table sits in a flush borderless `CardBox`,
+- [ ] Content inset is `--spacing-md` (from the shell); a table sits in a flush borderless `Card`,
       and any `PageHeading` is out of the card, `--spacing-lg` above it. No bespoke `lg` page inset.
 - [ ] A first-level module list has no `PageHeading` — it opens on the controls row (narrowing left,
       module actions right) over the table.

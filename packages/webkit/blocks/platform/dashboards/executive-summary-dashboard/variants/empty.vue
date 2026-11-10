@@ -1,13 +1,13 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
+  import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -296,7 +296,7 @@
         </section>
 
         <div class="flex min-w-0 flex-col gap-(--spacing-md) xl:col-span-4">
-          <CardBox :title="quarter + ' goals'">
+          <Card :title="quarter + ' goals'">
             <template #content>
               <ul
                 v-if="loading"
@@ -338,7 +338,7 @@
                       size="small"
                     />
                   </div>
-                  <ProgressBar
+                  <Progress
                     :value="goal.current"
                     :max="goal.target"
                     size="small"
@@ -370,9 +370,9 @@
                 description="Progress appears once the quarter reports its first month."
               />
             </template>
-          </CardBox>
+          </Card>
 
-          <CardBox
+          <Card
             title="Commentary"
             :padded="false"
           >
@@ -437,7 +437,7 @@
                 description="Leads add notes here when they review the quarter."
               />
             </template>
-          </CardBox>
+          </Card>
         </div>
       </div>
     </main>

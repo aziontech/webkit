@@ -27,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Form field for free-text input that composes `Label`, `InputText`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Acts as the canonical wrapper for `InputText` in form contexts.'
+          'Form field for free-text input that composes `Label`, `Input`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Acts as the canonical wrapper for `Input` in form contexts.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -35,7 +35,7 @@ const meta = {
   argTypes: {
     modelValue: {
       control: 'text',
-      description: 'Two-way bound value of the underlying `InputText`.',
+      description: 'Two-way bound value of the underlying `Input`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     label: {
@@ -45,14 +45,14 @@ const meta = {
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder forwarded to the `InputText`.',
+      description: 'Placeholder forwarded to the `Input`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     type: {
       control: 'select',
       options: ['text', 'email', 'number'],
       description:
-        'Native input type, forwarded to the `<input>` through `InputText`. Use `email` for e-mail fields so mobile keyboards and autofill recognise them.',
+        'Native input type, forwarded to the `<input>` through `Input`. Use `email` for e-mail fields so mobile keyboards and autofill recognise them.',
       table: {
         category: 'props',
         type: { summary: "'text' | 'email' | 'number'" },
@@ -88,8 +88,7 @@ const meta = {
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
-      description:
-        'Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px.',
+      description: 'Size forwarded to the `Input`. Heights: small=28px, medium=32px, large=40px.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium' | 'large'" },
@@ -132,17 +131,17 @@ const meta = {
     },
     iconLeft: {
       control: false,
-      description: 'Forwarded to the underlying `InputText#iconLeft` slot.',
+      description: 'Forwarded to the underlying `Input#iconLeft` slot.',
       table: { category: 'slots', type: { summary: 'slot' } }
     },
     iconRight: {
       control: false,
-      description: 'Forwarded to the underlying `InputText#iconRight` slot.',
+      description: 'Forwarded to the underlying `Input#iconRight` slot.',
       table: { category: 'slots', type: { summary: 'slot' } }
     },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
-      description: 'Re-emitted from the underlying `InputText` on every input event.',
+      description: 'Re-emitted from the underlying `Input` on every input event.',
       table: { category: 'events', type: { summary: '(value: string) => void' } }
     }
   },
@@ -359,7 +358,7 @@ export const Icons = {
       controls: { disable: true },
       description: {
         story:
-          '`#iconLeft` and `#iconRight` slots are forwarded to the underlying `InputText`, shown with a leading icon, a trailing icon, and both.'
+          '`#iconLeft` and `#iconRight` slots are forwarded to the underlying `Input`, shown with a leading icon, a trailing icon, and both.'
       },
       source: {
         code: toSfc(

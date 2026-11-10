@@ -6,7 +6,7 @@ export const declareOptions = (name, options) =>
   `const ${name} = [\n${options.map((option) => `  ${quoted(option)}`).join(',\n')}\n]`
 
 export const searchSlot = (key, label) => `<template #search>
-  <InputText
+  <Input
     v-model="${key}Query"
     size="small"
     placeholder="Search"
@@ -18,7 +18,7 @@ export const searchSlot = (key, label) => `<template #search>
         aria-hidden="true"
       />
     </template>
-  </InputText>
+  </Input>
 </template>`
 
 export const noMatches = (key) => `<p

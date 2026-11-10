@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -70,7 +70,7 @@
   >
     <div class="py-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox>
+        <Card>
           <template #content>
             <div class="flex flex-col gap-(--spacing-md)">
               <div class="flex flex-col gap-(--spacing-xxs)">
@@ -151,7 +151,7 @@
               </div>
             </div>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

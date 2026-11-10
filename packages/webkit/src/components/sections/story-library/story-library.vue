@@ -3,7 +3,7 @@
 
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
@@ -71,7 +71,7 @@
 
   /** The no-match state. */
   export type StoryLibraryEmpty = {
-    /** Message of the empty state. */
+    /** Alert of the empty state. */
     title: string
     /** Label of the button that clears every filter. */
     action: string
@@ -202,7 +202,7 @@
           role="search"
           class="grid items-center gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))]"
         >
-          <InputText
+          <Input
             v-if="search"
             v-model="query"
             size="large"
@@ -213,7 +213,7 @@
             <template #iconLeft>
               <i class="pi pi-search text-(--text-muted)" />
             </template>
-          </InputText>
+          </Input>
           <Select
             v-for="facet in facets"
             :key="facet.key"
@@ -226,7 +226,7 @@
             <SelectTrigger :aria-label="facet.label" />
             <SelectContent>
               <template #search>
-                <InputText
+                <Input
                   :model-value="optionQuery[facet.key] ?? ''"
                   size="small"
                   placeholder="Search"
@@ -239,7 +239,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </template>
               <SelectOption
                 v-for="option in optionsOf(facet)"

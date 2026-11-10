@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: f1d5312457c3fc6efe885b1eec38934f5f01fe9458b0adeb15219924c31b3232
+checksum: c63d7f56676f76970fcde204d923f2b87e07990891ed40d04d290fe7fe75a31a
 created: 2026-08-22
 last_updated: 2026-09-25
 ---
@@ -24,7 +24,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 - When each entry needs a sentence to be understood — use `DocItem` rows, one column, so every description is read at the page's own measure instead of squeezed into a cell.
 - For a single call to action at the end of a page — that is a button, not a card.
-- For an application surface — use `CardBox`, which is the console's carded surface.
+- For an application surface — use `Card`, which is the console's carded surface.
 
 ## Related
 

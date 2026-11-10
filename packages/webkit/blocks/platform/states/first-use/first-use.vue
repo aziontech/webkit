@@ -4,11 +4,11 @@
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
 
@@ -22,7 +22,7 @@
 
 <template>
   <div class="flex flex-col items-start gap-(--spacing-lg)">
-    <CardBox
+    <Card
       :padded="false"
       class="w-full"
     >
@@ -91,7 +91,7 @@
                 <Item.Actions class="w-full">
                   <InputGroupRoot class="w-full">
                     <div class="flex min-w-0 flex-1">
-                      <InputText
+                      <Input
                         model-value="platform deploy"
                         size="large"
                         class="w-full"
@@ -134,10 +134,10 @@
           </Item.List>
         </div>
       </template>
-    </CardBox>
+    </Card>
 
     <div class="grid w-full gap-(--spacing-lg) md:grid-cols-2">
-      <CardBox
+      <Card
         :padded="false"
         class="w-full"
       >
@@ -199,9 +199,9 @@
             />
           </button>
         </template>
-      </CardBox>
+      </Card>
 
-      <CardBox
+      <Card
         :padded="false"
         class="w-full"
       >
@@ -241,7 +241,7 @@
             </span>
           </button>
         </template>
-      </CardBox>
+      </Card>
     </div>
   </div>
 </template>

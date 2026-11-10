@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -90,7 +90,7 @@
           <div
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
           >
-            <CardBox>
+            <Card>
               <template #content>
                 <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
                   <a
@@ -227,11 +227,11 @@
                   </div>
                 </div>
               </template>
-            </CardBox>
+            </Card>
 
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Resources created</h2>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item
@@ -266,13 +266,13 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
               <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
-                <CardBox
+                <Card
                   v-for="step in nextSteps"
                   :key="step.title"
                   :padded="false"
@@ -318,7 +318,7 @@
                       </span>
                     </component>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </section>
 

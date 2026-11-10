@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import Item from '../../item/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -49,7 +49,7 @@
   >
     <div class="py-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox
+        <Card
           :padded="false"
           title="How do you want to start?"
         >
@@ -84,7 +84,7 @@
               </Item>
             </Item.List>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

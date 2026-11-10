@@ -1,11 +1,11 @@
 <script setup>
   import Item from '@aziontech/webkit/item'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     class="w-full"
   >
@@ -70,5 +70,5 @@
         </Item>
       </Item.List>
     </template>
-  </CardBox>
+  </Card>
 </template>

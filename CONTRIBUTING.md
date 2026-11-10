@@ -147,7 +147,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). Merges to `
 
 Types marked **none** never release on their own — they ride along in the next release cut by a `feat`/`fix`. Release-please cannot be configured to change this mapping; the full contract is [`.claude/rules/release-types.md`](./.claude/rules/release-types.md).
 
-### Message shape
+### Alert shape
 
 The commit parser accepts these forms:
 
@@ -164,7 +164,7 @@ fix: commit message
 
 Examples:
 
-- `feat(webkit): [ENG-1231] add Dropdown component`
+- `feat(webkit): [ENG-1231] add DropdownMenu component`
 - `fix(theme): correct --ring-color for dark mode`
 - `chore(icons): regenerate after source update`
 - `feat(webkit)!: drop deprecated tone prop on Button`

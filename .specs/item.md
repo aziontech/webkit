@@ -6,37 +6,38 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-11-09
-checksum: a355fcce96cf8bdd1a8d2563e4481a4f34581fae5f3bf19b3bff9fe0aa9c637a
+checksum: b43d9454a0397c763f3de3021881704448b217ef027c7b6dfe975ed3b70e28ed
 ---
+
 # Item — Component Spec
 
 ## Purpose
 
-Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `CardBox`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
+Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
 
 ## When to use
 
 - A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.
-- A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card-box`.
+- A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.
 - A whole row that is one link or button — set `as-child` and pass a single `a` / `button` as the item's child.
 
 ## When NOT to use
 
 - Records that share columns and need sorting, selection or paging → use `table`.
 - Hierarchical navigation rows in a sidebar → use `menu`.
-- A grid of selectable option cards → use `box-grid-selection`.
-- A single surface that frames arbitrary content → use `card-box`.
+- A grid of selectable option cards → use `radio-cards`.
+- A single surface that frames arbitrary content → use `card`.
 
 ## Related
 
-- `card-box` — the surface an `Item.List` sits in (with `:padded="false"`).
+- `card` — the surface an `Item.List` sits in (with `:padded="false"`).
 - `table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
 - `menu` — navigation rows with nesting and drill levels.
 - `avatar` — the usual leading media for people rows inside `Item.Media`.
 
 ## Best practices
 
-- Use `Item.Group` off-card and `Item.List` inside a `card-box` with `:padded="false"`; both force their child items' `kind` (`inline` in a group, `default` in a list), so do not set `kind` on rows inside them.
+- Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded="false"`; both force their child items' `kind` (`inline` in a group, `default` in a list), so do not set `kind` on rows inside them.
 - `Item.List` draws its own dividers — do not add `Item.Separator` inside it.
 - With `as-child`, pass exactly one child element; the row's hover, active and focus ring move onto it, so do not also put buttons inside that row.
 - Set `Item.Media` `kind="icon"` for a glyph and `kind="image"` for a picture; the frame sizes and clips the content.
@@ -46,9 +47,9 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
-import CardBox from '@aziontech/webkit/card-box'
-import Item from '@aziontech/webkit/item'
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import Item from '@aziontech/webkit/item'
 </script>
 
 <template>
@@ -56,14 +57,21 @@ import Item from '@aziontech/webkit/item'
     <Item>
       <Item.Header>Updated 2 hours ago</Item.Header>
       <Item.Media kind="icon">
-        <i class="ai ai-edge-firewall" aria-hidden="true" />
+        <i
+          class="ai ai-edge-firewall"
+          aria-hidden="true"
+        />
       </Item.Media>
       <Item.Content>
         <Item.Title>Firewall</Item.Title>
         <Item.Description>Blocks requests that match your rules.</Item.Description>
       </Item.Content>
       <Item.Actions>
-        <Button label="Edit" kind="outlined" size="small" />
+        <Button
+          label="Edit"
+          kind="outlined"
+          size="small"
+        />
       </Item.Actions>
       <Item.Footer>3 rules active</Item.Footer>
     </Item>
@@ -76,7 +84,7 @@ import Item from '@aziontech/webkit/item'
     </Item>
   </Item.Group>
 
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <Item.List>
         <Item>
@@ -87,7 +95,7 @@ import Item from '@aziontech/webkit/item'
         </Item>
       </Item.List>
     </template>
-  </CardBox>
+  </Card>
 </template>
 ```
 
@@ -95,7 +103,7 @@ import Item from '@aziontech/webkit/item'
 
 - `item.vue` — Root row container (`kind`, `size`).
 - `item-group.vue` — Vertical list wrapper (`role="list"`) with a gap between rows; for off-card lists. Forces its descendant Items to render inline (no per-item surface or padding) to avoid a box-in-box effect.
-- `item-list.vue` — Vertical list wrapper (`role="list"`) that draws full-width dividers between rows and no gap; for in-card lists (inside a `CardBox` with `padded=false`). Forces its descendant Items to the `default` kind (padded rows, transparent surface, no per-item border) to avoid a box-in-box effect.
+- `item-list.vue` — Vertical list wrapper (`role="list"`) that draws full-width dividers between rows and no gap; for in-card lists (inside a `Card` with `padded=false`). Forces its descendant Items to the `default` kind (padded rows, transparent surface, no per-item border) to avoid a box-in-box effect.
 - `item-separator.vue` — Horizontal divider between rows in a group.
 - `item-media.vue` — Leading media slot (`kind` for icon/image frames).
 - `item-content.vue` — Main text column (title + description).
@@ -107,11 +115,11 @@ import Item from '@aziontech/webkit/item'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'default' \| 'outline' \| 'muted' \| 'inline'` | `'default'` | false | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Item root density (padding and gap). |
-| `asChild` | `boolean` | `false` | false | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
+| Prop      | Type                                            | Default     | Required | JSDoc                                                                                                                                     |
+| --------- | ----------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`    | `'default' \| 'outline' \| 'muted' \| 'inline'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
+| `size`    | `'small' \| 'medium'`                           | `'medium'`  | false    | Item root density (padding and gap).                                                                                                      |
+| `asChild` | `boolean`                                       | `false`     | false    | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor).                                          |
 
 > `ItemMedia` carries its own `kind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
 
@@ -121,9 +129,9 @@ import Item from '@aziontech/webkit/item'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Every sub-component exposes `default` for its region. |
+| Slot      | Scope | Notes                                                 |
+| --------- | ----- | ----------------------------------------------------- |
+| `default` | —     | Every sub-component exposes `default` for its region. |
 
 ## States
 
@@ -140,29 +148,29 @@ import Item from '@aziontech/webkit/item'
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| title typography | `.text-body-sm` |
-| description typography | `.text-body-sm` |
-| surface (default) | `var(--bg-surface)` |
-| surface (muted kind) | `var(--bg-mask)` |
-| text | `var(--text-default)` |
-| text muted | `var(--text-muted)` |
-| border | `var(--border-default)` |
-| spacing gap (medium) | `var(--spacing-4)` |
-| spacing gap (small) | `var(--spacing-2)` |
-| padding (medium) | `var(--spacing-4)` |
-| padding (small) | `var(--spacing-3)` |
-| ItemGroup row gap | `var(--spacing-lg)` |
-| ItemList divider | `var(--border-muted)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                 | Token (DESIGN.md)       |
+| ---------------------- | ----------------------- |
+| title typography       | `.text-body-sm`         |
+| description typography | `.text-body-sm`         |
+| surface (default)      | `var(--bg-surface)`     |
+| surface (muted kind)   | `var(--bg-mask)`        |
+| text                   | `var(--text-default)`   |
+| text muted             | `var(--text-muted)`     |
+| border                 | `var(--border-default)` |
+| spacing gap (medium)   | `var(--spacing-4)`      |
+| spacing gap (small)    | `var(--spacing-2)`      |
+| padding (medium)       | `var(--spacing-4)`      |
+| padding (small)        | `var(--spacing-3)`      |
+| ItemGroup row gap      | `var(--spacing-lg)`     |
+| ItemList divider       | `var(--border-muted)`   |
+| shape                  | `var(--shape-elements)` |
+| ring                   | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -183,8 +191,8 @@ import Item from '@aziontech/webkit/item'
 - WithAvatar — `ItemMedia` wrapping `Avatar` for profile list rows.
 - WithImageMedia — `ItemMedia` with `kind="image"` and a thumbnail image.
 - WithGroup — `ItemGroup` with multiple items, avatars, and actions; gapped off-card list.
-- WithList — `ItemList` inside a `CardBox` (`padded=false`); rows separated by full-width dividers.
-- WithListAsChild — `ItemList` of `asChild` anchor rows inside a `CardBox`; whole-row links with dividers, row-level hover, and focus-visible ring.
+- WithList — `ItemList` inside a `Card` (`padded=false`); rows separated by full-width dividers.
+- WithListAsChild — `ItemList` of `asChild` anchor rows inside a `Card`; whole-row links with dividers, row-level hover, and focus-visible ring.
 - Inline — `kind="inline"` items in an `ItemGroup`, placed directly on the page (no card, no outer padding).
 - WithAsChild — `asChild` on `Item` wrapping an anchor; row layout merges onto the link; focus stays on the anchor.
 

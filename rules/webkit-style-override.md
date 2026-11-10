@@ -29,7 +29,7 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
 - Use a component that is **built to be personalized** (`styleSeam` in the catalog, e.g.
   `FrameBox`, `SectionContainer`) when a container must accept your classes.
 - Size or align the component in its parent with the layout utilities above
-  (`<Button class="w-full" />`, `<CardBox class="w-full max-w-(--container-sm)" />`).
+  (`<Button class="w-full" />`, `<Card class="w-full max-w-(--container-sm)" />`).
 - Change behavior/appearance through the component's **props** (`kind`, `size`, `severity`).
 - If no prop or slot covers a legitimate need, request the variant in the design system —
   do not patch it locally.
@@ -55,7 +55,7 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
 </Button>
 
 <!-- layout utilities only: fill the column, cap the width -->
-<CardBox class="w-full max-w-(--container-sm)">…</CardBox>
+<Card class="w-full max-w-(--container-sm)">…</Card>
 
 <!-- a styleSeam component accepts consumer classes by design -->
 <FrameBox class="bg-(--bg-canvas)">…</FrameBox>

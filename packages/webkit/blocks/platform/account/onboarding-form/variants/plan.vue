@@ -1,10 +1,10 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import Divider from '@aziontech/webkit/divider'
+  import Card from '@aziontech/webkit/card'
+  import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -17,12 +17,12 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Link from '@aziontech/webkit/link'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import Progress from '@aziontech/webkit/progress'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -272,12 +272,12 @@
         class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
       >
         <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
-          <CardBox
+          <Card
             :padded="false"
             class="w-full"
           >
             <template #content>
-              <ProgressBar
+              <Progress
                 :value="2"
                 :max="3"
                 size="small"
@@ -317,7 +317,7 @@
 
                     <div class="animate-fade-in motion-reduce:animate-none">
                       <div class="flex flex-col gap-(--spacing-xs)">
-                        <BoxGridSelection
+                        <RadioCards
                           :model-value="pendingPlanId || plan"
                           :items="plans"
                           aria-label="Plan"
@@ -348,7 +348,7 @@
                               </div>
                             </div>
                           </template>
-                        </BoxGridSelection>
+                        </RadioCards>
 
                         <HelperText
                           v-if="submitted && !plan"
@@ -416,7 +416,7 @@
                                       </div>
 
                                       <div class="flex flex-col gap-(--spacing-xs)">
-                                        <Divider />
+                                        <Separator />
                                         <div
                                           v-for="link in pricingLinks"
                                           :key="link.label"
@@ -434,10 +434,10 @@
                                     </aside>
 
                                     <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                                      <CardBox :padded="false">
+                                      <Card :padded="false">
                                         <template #header>
                                           <p class="text-label-lg text-(--text-default)">Charged</p>
-                                          <SegmentedButton
+                                          <ToggleGroup
                                             v-model="period"
                                             :options="periods"
                                             aria-label="Billing period"
@@ -476,7 +476,7 @@
                                               </div>
                                             </div>
 
-                                            <Divider />
+                                            <Separator />
 
                                             <div
                                               class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
@@ -496,9 +496,9 @@
                                             </div>
                                           </div>
                                         </template>
-                                      </CardBox>
+                                      </Card>
 
-                                      <CardBox
+                                      <Card
                                         title="Payment Method"
                                         :padded="false"
                                       >
@@ -613,7 +613,7 @@
                                                   />
                                                 </div>
 
-                                                <Message
+                                                <Alert
                                                   severity="info"
                                                   size="small"
                                                   label="Sensitive data is handled by a PCI-compliant payment partner."
@@ -645,9 +645,9 @@
                                             </template>
                                           </div>
                                         </template>
-                                      </CardBox>
+                                      </Card>
 
-                                      <CardBox
+                                      <Card
                                         title="Address information"
                                         :padded="false"
                                       >
@@ -714,7 +714,7 @@
                                             />
                                           </fieldset>
                                         </template>
-                                      </CardBox>
+                                      </Card>
                                     </div>
                                   </div>
                                 </PanelContent>
@@ -771,7 +771,7 @@
                 </form>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
 
         <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-mr-(--spacing-xl)">

@@ -3,12 +3,12 @@
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import Progress from '@aziontech/webkit/progress'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
@@ -256,28 +256,28 @@
               />
             </span>
             <ChartCard.Controls>
-              <SegmentedButton
+              <ToggleGroup
                 v-model="trendForm"
                 :options="forms"
                 size="small"
                 aria-label="Chart form for Spend by category"
               />
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Spend by category"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -314,22 +314,22 @@
               <Hint text="This month’s spend by category, with the total in the center." />
             </span>
             <ChartCard.Controls>
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Current split"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -354,22 +354,22 @@
               />
             </span>
             <ChartCard.Controls>
-              <Dropdown placement="bottom-end">
-                <Dropdown.Trigger>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top contributors"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
                   />
-                </Dropdown.Group>
-              </Dropdown>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </ChartCard.Controls>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -421,7 +421,7 @@
               <template #cell-share="{ row }">
                 <div class="flex w-full min-w-0 items-center gap-(--spacing-sm)">
                   <div class="w-16 shrink-0">
-                    <ProgressBar
+                    <Progress
                       :value="row.share"
                       size="small"
                       :aria-label="row.name + ' share of total'"

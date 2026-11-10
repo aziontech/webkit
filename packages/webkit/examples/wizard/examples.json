@@ -19,7 +19,7 @@
     },
     {
       "name": "Validation",
-      "summary": "The first step requires a name. The next handler calls event.preventDefault() while the field is empty, so the wizard stays on the step and an inline danger Message says what to fix.",
+      "summary": "The first step requires a name. The next handler calls event.preventDefault() while the field is empty, so the wizard stays on the step and an inline danger Alert says what to fix.",
       "file": "validation.vue"
     }
   ]

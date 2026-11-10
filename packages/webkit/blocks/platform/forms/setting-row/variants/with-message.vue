@@ -1,7 +1,7 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import { reactive } from 'vue'
 
@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <Item.List>
         <Item size="small">
@@ -22,7 +22,7 @@
           <div class="flex max-w-(--container-3xs) flex-1 justify-end">
             <Item.Actions class="w-full">
               <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <InputText
+                <Input
                   v-model="form.name"
                   size="large"
                   class="w-full"
@@ -43,5 +43,5 @@
         </Item>
       </Item.List>
     </template>
-  </CardBox>
+  </Card>
 </template>

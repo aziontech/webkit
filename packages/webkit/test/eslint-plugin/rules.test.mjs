@@ -348,9 +348,9 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><div class="p-4"><Button /></div></template>`,
         filename: 'b.vue'
       },
-      // styleSeam component (card-box) is exempt
+      // styleSeam component (card) is exempt
       {
-        code: `${imp('CardBox', 'card-box')}<template><CardBox class="bg-[var(--bg-canvas)]" /></template>`,
+        code: `${imp('Card', 'card')}<template><Card class="bg-[var(--bg-canvas)]" /></template>`,
         filename: 'c.vue'
       },
       // allow-listed via options (binding name)

@@ -4,9 +4,9 @@
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Chip from '../../../inputs/chip/chip.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Badge from '../../badge/badge.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -177,7 +177,7 @@
               </div>
 
               <div class="flex flex-col border-b border-(--border-default) p-(--spacing-xs)">
-                <InputText
+                <Input
                   model-value=""
                   size="medium"
                   placeholder="Filter period…"
@@ -189,7 +189,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </div>
 
               <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xxs)">
@@ -249,7 +249,7 @@
               :key="metric.label"
               class="grid"
             >
-              <CardBox>
+              <Card>
                 <template #content>
                   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                     <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
@@ -261,7 +261,7 @@
                     </p>
                   </div>
                 </template>
-              </CardBox>
+              </Card>
             </li>
           </ul>
         </ShellMockupPart>

@@ -29,7 +29,7 @@
     },
     {
       "name": "Icons",
-      "summary": "`#iconLeft` and `#iconRight` slots are forwarded to the underlying `InputText`, shown with a leading icon, a trailing icon, and both.",
+      "summary": "`#iconLeft` and `#iconRight` slots are forwarded to the underlying `Input`, shown with a leading icon, a trailing icon, and both.",
       "file": "icons.vue"
     },
     {

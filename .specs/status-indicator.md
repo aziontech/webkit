@@ -4,10 +4,11 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 1d9df179a7e91f5221c6c1c8565fdca1b03aecadc8c88fcba3a2b6a1eb7c2ad7
+checksum: 856a430b4bc595a2d80a190de75dd867eb93c99b72d65827a4412eda6c1eb5f6
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
+
 # Status Indicator — Component Spec
 
 ## Purpose
@@ -24,14 +25,14 @@ Communicates status, alerts, or progress to the user. Lives at `packages/webkit/
 - A count or a very short label attached to another element → use `badge`.
 - A category or status chip with an optional icon → use `tag`.
 - A page or section notice with copy and actions → use `message`.
-- Measurable progress → use `progress-bar`.
+- Measurable progress → use `progress`.
 
 ## Related
 
 - `badge` — filled count indicator, usually overlaid on an icon or avatar.
 - `tag` — labelled chip for categories and statuses.
 - `spinner` — replaces the dot while `loading` is true.
-- `progress-bar` — continuous progress instead of a discrete state.
+- `progress` — continuous progress instead of a discrete state.
 
 ## Best practices
 
@@ -44,21 +45,24 @@ Communicates status, alerts, or progress to the user. Lives at `packages/webkit/
 
 ```vue
 <script setup>
-import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <StatusIndicator severity="success" label="Status" />
+  <StatusIndicator
+    severity="success"
+    label="Status"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false | Severity token driving the status dot color. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `label` | `string` | `'Status'` | false | Visible label text. |
+| Prop       | Type                                                                 | Default     | Required | JSDoc                                        |
+| ---------- | -------------------------------------------------------------------- | ----------- | -------- | -------------------------------------------- |
+| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false    | Severity token driving the status dot color. |
+| `loading`  | `boolean`                                                            | `false`     | false    | Shows loading state and disables activation. |
+| `label`    | `string`                                                             | `'Status'`  | false    | Visible label text.                          |
 
 ## Events
 
@@ -78,19 +82,19 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

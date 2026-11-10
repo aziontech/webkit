@@ -4,7 +4,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 
 Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `SectionContainer` instead of sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it.
 
-The band is the `ArticleBody` component from `@aziontech/webkit/article-body`; it composes `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Divider`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
+The band is the `ArticleBody` component from `@aziontech/webkit/article-body`; it composes `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Separator`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
 
 ## Stories
 

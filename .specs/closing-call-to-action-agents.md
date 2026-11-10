@@ -6,13 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: a910824a35c212bb2a858d86af4681b514b000e0b83599f1c8cbe00bff839179
+checksum: 46ed7dd9a3cd80491d2bf15b27b39de2c7086b87469d50163dd7f6810ef2966a
 ---
+
 # ClosingCallToActionAgents — Component Spec
 
 ## Purpose
 
-The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks the way in. Each audience carries an optional copyable line and its actions; under them, a line types its words one after another behind a blinking cursor, then a closing sentence, both the same for every audience so the band keeps its height when the switch changes. The hatched closing frame follows. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `segmented-button`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. The switch and the typed word are local state.
+The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks the way in. Each audience carries an optional copyable line and its actions; under them, a line types its words one after another behind a blinking cursor, then a closing sentence, both the same for every audience so the band keeps its height when the switch changes. The hatched closing frame follows. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `toggle-group`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. The switch and the typed word are local state.
 
 ## When to use
 
@@ -37,7 +38,7 @@ The close for a reader who may be a person or an agent: one centred ask in the l
 
 ```vue
 <script setup>
-import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
+  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
 </script>
 
 <template>
@@ -71,16 +72,16 @@ import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty. |
-| `typedLead` | `string` | `''` | false | Fixed opening of the typed line, before the typed word. |
-| `typedWords` | `string[]` | `[]` | false | Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words. |
-| `description` | `string` | `''` | false | Closing sentence under the typed line, the same for every audience. |
-| `audiences` | `ClosingCallToActionAgentsAudience[]` | `[]` | false | The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more. |
-| `audiencesAriaLabel` | `string` | `''` | false | Accessible name of the audience switch. |
-| `lineAriaLabel` | `string` | `''` | false | Accessible name of the read-only field that shows an audience's copyable line. |
+| Prop                 | Type                                  | Default | Required | JSDoc                                                                                                                                        |
+| -------------------- | ------------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`             | `string`                              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                               |
+| `title`              | `string`                              | `''`    | false    | Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty.                                       |
+| `typedLead`          | `string`                              | `''`    | false    | Fixed opening of the typed line, before the typed word.                                                                                      |
+| `typedWords`         | `string[]`                            | `[]`    | false    | Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words.                      |
+| `description`        | `string`                              | `''`    | false    | Closing sentence under the typed line, the same for every audience.                                                                          |
+| `audiences`          | `ClosingCallToActionAgentsAudience[]` | `[]`    | false    | The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more. |
+| `audiencesAriaLabel` | `string`                              | `''`    | false    | Accessible name of the audience switch.                                                                                                      |
+| `lineAriaLabel`      | `string`                              | `''`    | false    | Accessible name of the read-only field that shows an audience's copyable line.                                                               |
 
 ## Events
 
@@ -100,30 +101,30 @@ import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| audience switch (swapped row) | `animate-fade-in` | semantic | `motion-reduce:animate-none` |
-| each typed character enters | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance` | semantic | `motion-reduce:transition-none` |
-| typed-line cursor | `animate-blink` | semantic | `motion-reduce:hidden` (and the word list is shown whole, not typed) |
+| Trigger                       | Animation / Transition                                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                              |
+| ----------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------- | -------------------------------------------------------------------- |
+| audience switch (swapped row) | `animate-fade-in`                                                              | semantic                                          | `motion-reduce:animate-none`                                         |
+| each typed character enters   | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance` | semantic                                          | `motion-reduce:transition-none`                                      |
+| typed-line cursor             | `animate-blink`                                                                | semantic                                          | `motion-reduce:hidden` (and the word list is shown whole, not typed) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| copyable line | `.text-label-code-sm`, `var(--bg-surface)`, `var(--text-default)` |
-| typed line | `.text-body-code-sm`, `var(--text-muted)`, `var(--text-default)`, `var(--accent)` |
-| rhythm | `var(--spacing-xxl)`, `var(--spacing-md)`, `var(--spacing-sm)` |
+| Region        | Token (DESIGN.md)                                                                 |
+| ------------- | --------------------------------------------------------------------------------- |
+| copyable line | `.text-label-code-sm`, `var(--bg-surface)`, `var(--text-default)`                 |
+| typed line    | `.text-body-code-sm`, `var(--text-muted)`, `var(--text-default)`, `var(--accent)` |
+| rhythm        | `var(--spacing-xxl)`, `var(--spacing-md)`, `var(--spacing-sm)`                    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by `segmented-button`, `copy-button` and `button`.
-- Keyboard map: `Tab` reaches the switch, the copy button and each action; the arrow keys move the switch (owned by `segmented-button`).
+- Visible focus: owned by `toggle-group`, `copy-button` and `button`.
+- Keyboard map: `Tab` reaches the switch, the copy button and each action; the arrow keys move the switch (owned by `toggle-group`).
 - ARIA: the root is a plain `div`; the call to action owns the band's named region. The switch is a `radiogroup` named by `audiencesAriaLabel`; the swapped row is `aria-live="polite"`; the read-only field is named by `lineAriaLabel` and the copy button by the audience's `copy.label`. The typed line reads its whole sentence from a visually hidden copy while the animated letters are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the typed line uses `var(--text-muted)` and `var(--text-default)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — see the Motion table; under reduced motion nothing types or blinks.

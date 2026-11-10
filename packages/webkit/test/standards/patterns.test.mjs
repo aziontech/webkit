@@ -42,7 +42,7 @@ test('readBlocks builds a pattern from block.json, the primary SFC and every var
     const sfc = (tag) =>
       `<script setup>\nimport ${tag} from '@aziontech/webkit/${tag.toLowerCase()}'\n</script>\n<template>\n  <${tag} />\n</template>\n`
     writeFileSync(join(dir, 'sign-in.vue'), sfc('Button'))
-    writeFileSync(join(dir, 'variants/password.vue'), sfc('Divider'))
+    writeFileSync(join(dir, 'variants/password.vue'), sfc('Separator'))
     writeFileSync(
       join(dir, 'block.json'),
       JSON.stringify({
@@ -62,7 +62,7 @@ test('readBlocks builds a pattern from block.json, the primary SFC and every var
     assert.equal(entry.surface, 'product')
     assert.deepEqual(entry.intents, ['login'])
     assert.deepEqual(entry.steps, ['email', 'password'])
-    assert.deepEqual(entry.components, ['Button', 'Divider'])
+    assert.deepEqual(entry.components, ['Button', 'Separator'])
     assert.equal(entry.primary, 'Email')
     assert.equal(entry.sfc.endsWith('</template>'), true)
     assert.equal(entry.variants.length, 1)

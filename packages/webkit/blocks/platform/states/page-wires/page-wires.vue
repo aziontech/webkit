@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
 
@@ -25,7 +25,7 @@
         class="flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:flex-row xl:items-stretch xl:gap-(--layout-section-gap)"
       >
         <div class="flex min-w-0 xl:flex-1">
-          <CardBox
+          <Card
             :padded="false"
             class="w-full"
           >
@@ -53,11 +53,11 @@
                 </div>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
 
         <div class="w-full shrink-0 xl:w-[30%] xl:max-w-(--container-xs)">
-          <CardBox :padded="false">
+          <Card :padded="false">
             <template #content>
               <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                 <div class="flex items-center [&>*+*]:-ml-2">
@@ -82,7 +82,7 @@
                 </div>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
       </div>
 

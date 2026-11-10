@@ -3,7 +3,7 @@
 
   import FieldRadioBlock from '../../../inputs/field-radio-block/field-radio-block.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -160,7 +160,7 @@
             label="Name"
             required
           />
-          <InputText
+          <Input
             id="network-list-name"
             model-value="qa-p-nl-ip"
             size="medium"

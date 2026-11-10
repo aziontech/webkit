@@ -271,7 +271,7 @@ Organize template logically:
       :label="props.label"
     />
     <!-- Main component content -->
-    <InputText v-model="inputValue" />
+    <Input v-model="inputValue" />
 
     <!-- Error message -->
     <small
@@ -560,7 +560,7 @@ When creating a new component, ensure you've completed all requirements:
 <script setup>
   import { computed, ref, toRef, useAttrs } from 'vue'
   import { useField } from 'vee-validate'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Label from '../label/label.vue'
 
   const emit = defineEmits(['blur', 'input'])
@@ -617,7 +617,7 @@ When creating a new component, ensure you've completed all requirements:
       :data-testid="customTestId.label"
       :label="props.label"
     />
-    <InputText
+    <Input
       v-model="inputValue"
       ref="inputRef"
       :data-testid="customTestId.input"
@@ -1102,7 +1102,7 @@ Stories follow the **market-standard CSF3 pattern for Vue 3** — concretely, th
 1. **Composite stories `Types` and `Sizes`** render every variant side-by-side in a single frame — replacing one-story-per-variant (`Primary`, `Secondary`, `Outlined`, …).
 2. **`parameters.docs.description.component` is the short Purpose prose lead** (see the rule callout above); the runnable usage is surfaced by the "Show code" panel via an explicit `source.code: toSfc(IMPORT, TEMPLATE)`, not by pasting the `## Usage` block into the description.
 
-```js
+````js
 // <Name>.stories.js — canonical shape (matches Button.stories.js)
 import Component from '@aziontech/webkit/<category>/<name>'
 
@@ -1233,7 +1233,7 @@ export const Disabled = {
   render: Template,
   parameters: { docs: { description: { story: 'Disabled state.' } } }
 }
-```
+````
 
 **Hard rules:**
 
@@ -1290,30 +1290,30 @@ The webkit layer applies styles **inline on the template root element's `class` 
 
 ```vue
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-defineOptions({ name: 'Button', inheritAttrs: false })
+  defineOptions({ name: 'Button', inheritAttrs: false })
 
-export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
-export type ButtonSize = 'small' | 'medium' | 'large'
+  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  export type ButtonSize = 'small' | 'medium' | 'large'
 
-interface Props {
-  /** Visual variant. */
-  kind?: ButtonKind
-  /** Size token. */
-  size?: ButtonSize
-  /** Disables interaction. */
-  disabled?: boolean
-}
+  interface Props {
+    /** Visual variant. */
+    kind?: ButtonKind
+    /** Size token. */
+    size?: ButtonSize
+    /** Disables interaction. */
+    disabled?: boolean
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  kind: 'primary',
-  size: 'large',
-  disabled: false
-})
+  const props = withDefaults(defineProps<Props>(), {
+    kind: 'primary',
+    size: 'large',
+    disabled: false
+  })
 
-const attrs = useAttrs()
-const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
+  const attrs = useAttrs()
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
 </script>
 
 <template>
@@ -1350,8 +1350,14 @@ Use `data-*` + Tailwind variant — never `:class="cond ? ... : ..."`:
 
 ```vue
 <!-- ✅ -->
-<button :data-loading="loading || null" class="data-[loading]:cursor-wait data-[loading]:opacity-80" />
-<div :data-state="open ? 'open' : 'closed'" class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out" />
+<button
+  :data-loading="loading || null"
+  class="data-[loading]:cursor-wait data-[loading]:opacity-80"
+/>
+<div
+  :data-state="open ? 'open' : 'closed'"
+  class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out"
+/>
 
 <!-- ❌ -->
 <button :class="loading ? 'cursor-wait opacity-80' : ''" />
@@ -1383,7 +1389,7 @@ The Figma ↔ code link is owned by `<name>.figma.ts` (Code Connect). Hardcoded 
 
 #### Components with open/close state must default to **closed**
 
-For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popover, Tooltip, Dropdown, NavigationMenu, ContextMenu, Accordion, Combobox, …):
+For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popover, Tooltip, DropdownMenu, NavigationMenu, ContextMenu, Accordion, Combobox, …):
 
 - The `Default` story renders the component in its **closed** state — the trigger is visible; the overlay is not.
 - The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) inside the Storybook canvas — exactly as a real consumer would.

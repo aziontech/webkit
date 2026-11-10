@@ -1,6 +1,6 @@
 ---
 name: webkit-errors
-description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as a Message in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Message, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field-*.
+description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as a Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field-*.
 status: active
 last_updated: 2026-08-13
 scope: general
@@ -58,20 +58,20 @@ this way. Use **@aziontech/theme tokens** for spacing and color, never raw px or
 Everything below follows from that. The failure's HTTP status does not decide the surface — its
 _recoverability_ and the user's _presence_ do.
 
-| The failure…                                                     | Goes to                                                                            | Carries                                            |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **1.** Empty or malformed input, caught before any request       | the **field itself** — amber `required` prompt / red `invalid`                     | nothing — the field is the recovery                |
-| **2.** Server rejection **scoped to one field**                  | a **`Message`** inside **that field's own section**, + the field's `invalid` state | the fix, in words; on a long form, a scroll anchor |
-| **3.** Request failed, tied to **no** field (5xx, network)       | **`toast.error`**                                                                  | **Retry**                                          |
-| **4.** Anything on a **signed-out** screen                       | **one `Message` in the card** — auth never toasts                                  | Retry only if the user can't fix it                |
-| **5.** A failure that arrives **after the user left the screen** | a **permanent, closable toast** — the only global surface                          | the ways out (retry + an escape)                   |
+| The failure…                                                     | Goes to                                                                          | Carries                                            |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **1.** Empty or malformed input, caught before any request       | the **field itself** — amber `required` prompt / red `invalid`                   | nothing — the field is the recovery                |
+| **2.** Server rejection **scoped to one field**                  | a **`Alert`** inside **that field's own section**, + the field's `invalid` state | the fix, in words; on a long form, a scroll anchor |
+| **3.** Request failed, tied to **no** field (5xx, network)       | **`toast.error`**                                                                | **Retry**                                          |
+| **4.** Anything on a **signed-out** screen                       | **one `Alert` in the card** — auth never toasts                                  | Retry only if the user can't fix it                |
+| **5.** A failure that arrives **after the user left the screen** | a **permanent, closable toast** — the only global surface                        | the ways out (retry + an escape)                   |
 
 Rows 1–3 are the create-form ladder. Row 4 is the same question asked where the answer collapses to
 one surface. Row 5 is the inversion: the page that owned the error may not be mounted any more.
 
 ## 1. Client-side validation → the field
 
-An empty or malformed value never reaches the server, so it never reaches a `Message` or a toast. It
+An empty or malformed value never reaches the server, so it never reaches a `Alert` or a toast. It
 belongs on the control that holds it. Validate **on submit**, not on every keystroke, and keep the two
 states distinct:
 
@@ -80,9 +80,9 @@ states distinct:
 
 Mechanics (the `field-*` triad, `aria-describedby`, submit-time validation, the locked scope) live in
 **`/webkit-form`**. The only rule this skill adds: **client-side validation is the one thing that does
-not go in a `Message`.** The `Message` is for what the **server** said.
+not go in a `Alert`.** The `Alert` is for what the **server** said.
 
-## 2. Server rejection scoped to one field → a `Message` in that section
+## 2. Server rejection scoped to one field → a `Alert` in that section
 
 The case most apps get wrong. Two people work the same module: User 1 fills in a form and links a
 resource; User 2 deletes that resource through the API before User 1 saves. User 1's browser is never
@@ -120,10 +120,10 @@ try {
 
 - **A toast is wrong here**: it dismisses itself and points nowhere, while the only place the user can
   recover is one `Select`, possibly six sections down.
-- **The `Message` renders inside that section's own heading region**, so the section that needs
+- **The `Alert` renders inside that section's own heading region**, so the section that needs
   attention carries the notice itself. Animate the region's height so nothing below it jumps.
 - **It stays until the user recovers** — no auto-dismiss on something that names a required action.
-- **The field takes its own state too.** The `Message` says what happened; the red `invalid` field
+- **The field takes its own state too.** The `Alert` says what happened; the red `invalid` field
   says _which control_ to touch. Neither alone is enough on a long form.
 - **Nothing is lost.** The form keeps every value: the request was rejected, not partially applied.
   Say so in the copy — that sentence is what stops the user from starting over.
@@ -175,7 +175,7 @@ On the signed-out screens the placement question collapses to **one answer**, an
 apps get backwards:
 
 > **Auth never toasts.** Every outcome the server returns — including success — lands in **one
-> `Message`, inside the card, in the same slot, at the same size.**
+> `Alert`, inside the card, in the same slot, at the same size.**
 
 A toast is wrong here for reasons that do not apply inside the console. There is exactly **one object
 on the page and the user cannot leave it**, so a notice that flies to a screen corner has travelled
@@ -197,9 +197,9 @@ With the placement settled, three decisions are left per outcome:
 1. **401 is not field-scoped.** Which half of the pair is wrong is not yours to disclose — saying
    "wrong password" confirms the address exists. So it goes above **both** fields, and the password is
    cleared and refocused under it.
-2. **Whether the `Message` carries an action, decided by whether the user can fix it.** After a 401 the
+2. **Whether the `Alert` carries an action, decided by whether the user can fix it.** After a 401 the
    credentials are right there to retype, so a button would only repeat the form. A 503, a 500 and a
-   timeout are fixable by nobody, so the `Message` carries the one move left — **Retry** — and stays
+   timeout are fixable by nobody, so the `Alert` carries the one move left — **Retry** — and stays
    until it works. A 409 _is_ fixable, but not only here, so it carries the two exits (sign in, reset
    your password) as links in the copy.
 3. **Severity follows certainty, not severity of tone.** A 500 is a failure → `danger`. A timeout is an
@@ -211,10 +211,10 @@ request and belongs on the field.
 
 Two rendering notes worth carrying over:
 
-- **`size="small"` on every auth `Message`.** It sits inside a card under a heading — it is a notice on
+- **`size="small"` on every auth `Alert`.** It sits inside a card under a heading — it is a notice on
   the form, not a second banner competing with it.
 - **Put the copy in the default slot, not the `label` prop**, if any variant needs to slot links; and
-  animate the notice's entrance on a **wrapper**, not on `<Message>` itself (the component sets an
+  animate the notice's entrance on a **wrapper**, not on `<Alert>` itself (the component sets an
   inline `transition` on its own root, and an inline style beats a utility class).
 
 ## 5. The failure that outlives its screen → a permanent, closable toast
@@ -225,7 +225,7 @@ that page may not be mounted when the failure arrives. This inverts everything a
 
 | The failure arrives…                   | Report it in…                         |
 | -------------------------------------- | ------------------------------------- |
-| while the user is on the form          | a `Message` in the owning section     |
+| while the user is on the form          | a `Alert` in the owning section       |
 | scoped to one field they must fix      | + that field's `invalid` state        |
 | after they left, from a background job | a **toast** — the only global surface |
 
@@ -258,11 +258,11 @@ application. Check your connection and try again."` — not `"Error 500"`.
 
 - **Never a toast for a field-level error.** If the user must fix a control, the error renders on or
   beside that control.
-- **Never a toast on a signed-out screen.** Every auth outcome lands in one `Message` in the card.
-- **A field-scoped server rejection takes both surfaces** — the `Message` in its section _and_ the
+- **Never a toast on a signed-out screen.** Every auth outcome lands in one `Alert` in the card.
+- **A field-scoped server rejection takes both surfaces** — the `Alert` in its section _and_ the
   field's red `invalid` state. Never the amber `required` prompt: the value is present, just no longer
   valid.
-- **Never auto-dismiss an error that names a required action.** `Message`s stay until recovery;
+- **Never auto-dismiss an error that names a required action.** `Alert`s stay until recovery;
   background-job error toasts are `duration: 0` **and** `closable`.
 - **Release the lock in `finally`**, on success and failure alike — otherwise Retry cannot re-run.
 - **Move the user to the problem only after the lock is released**; a disabled control cannot take
@@ -278,12 +278,12 @@ For `/webkit-errors <file>`, list gaps. Each:
 
 ```
 ✗ CreateApplication.vue:118  toast.error for a rejection that names `connectorId`
-  rule: A field-scoped rejection goes to a Message in that field's section, not a toast.
-  fix: render Message severity="danger" in the Origin section + set the field's invalid state.
+  rule: A field-scoped rejection goes to a Alert in that field's section, not a toast.
+  fix: render Alert severity="danger" in the Origin section + set the field's invalid state.
 
 ✗ SignIn.vue:64  toast.error('Incorrect credentials')
-  rule: Auth never toasts — one Message in the card, same slot, every outcome.
-  fix: render a size="small" danger Message above both fields; clear and refocus the password.
+  rule: Auth never toasts — one Alert in the card, same slot, every outcome.
+  fix: render a size="small" danger Alert above both fields; clear and refocus the password.
 
 ✗ Deploy.vue:52  error toast uses the default duration
   rule: A failure the user was not present for must not expire unseen.
@@ -299,7 +299,7 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 ## References
 
 - **Surfaces** (resolve each via the MCP / catalog — see "How to find the components"):
-  `@aziontech/webkit/message` (inline notice: `severity`, `size`, `#action` slot, default slot for
+  `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#action` slot, default slot for
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
   `closable`, `action`), the `@aziontech/webkit/field-*` family + `/helper-text` (the field's own
   required / invalid state).
@@ -313,14 +313,14 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 - [ ] Every `catch` on the screen routes to a surface picked from the table — not to whichever one was
       easiest.
 - [ ] Client-side validation renders on the field (amber `required` / red `invalid`), never in a
-      `Message` or a toast.
-- [ ] Field-scoped server rejections render a `Message` in the owning section **and** set that field's
+      `Alert` or a toast.
+- [ ] Field-scoped server rejections render a `Alert` in the owning section **and** set that field's
       red `invalid` state, and say what was not lost.
 - [ ] On a long form, the erroring section is scroll-anchored and the field takes focus — after the
       lock is released, re-asserted after the message region expands, `prefers-reduced-motion` honoured.
 - [ ] Unscoped request failures use `toast.error` and carry `Retry`, with the lock released in
       `finally`.
-- [ ] No signed-out screen toasts: every auth outcome is one `size="small"` `Message` in the card, and
+- [ ] No signed-out screen toasts: every auth outcome is one `size="small"` `Alert` in the card, and
       only the outcomes the user cannot fix carry an action.
 - [ ] A long-running action's state lives outside the component; its progress is a non-dismissing
       `loading` toast and its failure a `duration: 0` + `closable` toast carrying both ways out.

@@ -34,7 +34,7 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import Paginator from '../paginator/paginator.vue'
+  import Pagination from '../pagination/pagination.vue'
   import {
     type AppliedFilter,
     type FilterField,
@@ -116,7 +116,7 @@
       selectOnRowClick?: boolean
       /** Header density: `compact` shrinks the column-header row's height and padding. */
       headerKind?: 'default' | 'compact'
-      /** Render a Paginator in the footer. */
+      /** Render a Pagination in the footer. */
       paginated?: boolean
       /** Rows per page when paginated. */
       pageSize?: number
@@ -1072,7 +1072,7 @@
 
     <TableFooter v-if="dataDriven && paginated">
       <div class="flex items-center px-(--spacing-sm) py-(--spacing-xs)">
-        <Paginator
+        <Pagination
           class="w-full"
           :page="pageIndex + 1"
           :total="totalRows"

@@ -3,16 +3,16 @@
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Chip from '@aziontech/webkit/chip'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import PopoverContent from '@aziontech/webkit/popover-content'
   import PopoverRoot from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
@@ -441,7 +441,7 @@
 
                             <template v-else>
                               <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                                <InputText
+                                <Input
                                   v-model="query"
                                   size="medium"
                                   class="w-full"
@@ -462,7 +462,7 @@
                                       aria-hidden="true"
                                     />
                                   </template>
-                                </InputText>
+                                </Input>
                               </div>
 
                               <div
@@ -567,7 +567,7 @@
                 </PopoverRoot>
               </div>
               <div class="flex min-w-36 grow basis-(--container-2xs)">
-                <InputText
+                <Input
                   v-model="search"
                   size="medium"
                   placeholder="Search resources"
@@ -580,7 +580,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </div>
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -732,7 +732,7 @@
               </span>
             </TransitionGroup>
           </div>
-          <CardBox :padded="false">
+          <Card :padded="false">
             <template #content>
               <EmptyState
                 size="medium"
@@ -760,7 +760,7 @@
                 </template>
               </EmptyState>
             </template>
-          </CardBox>
+          </Card>
         </section>
       </section>
     </main>

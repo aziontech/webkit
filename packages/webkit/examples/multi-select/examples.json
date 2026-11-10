@@ -9,7 +9,7 @@
     },
     {
       "name": "Sizes",
-      "summary": "The three trigger sizes (small, medium, large) matching InputText.",
+      "summary": "The three trigger sizes (small, medium, large) matching Input.",
       "file": "sizes.vue"
     },
     {

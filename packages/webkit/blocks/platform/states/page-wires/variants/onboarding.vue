@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Skeleton from '@aziontech/webkit/skeleton'
 </script>
 
@@ -20,7 +20,7 @@
       </div>
 
       <div class="grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3">
-        <CardBox
+        <Card
           v-for="door in 3"
           :key="door"
           :padded="false"
@@ -58,7 +58,7 @@
               </div>
             </div>
           </template>
-        </CardBox>
+        </Card>
       </div>
     </div>
   </main>

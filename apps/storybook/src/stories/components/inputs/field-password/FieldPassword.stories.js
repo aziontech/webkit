@@ -30,7 +30,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          'Form field for password input that composes `Label`, `InputPassword`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `InputPassword` in form contexts, mirroring the `FieldText` pattern.',
+          'Form field for password input that composes `Label`, `PasswordInput`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a password input needs a visible label or helper/error message — login, sign-up, and password-change forms. Acts as the canonical wrapper for `PasswordInput` in form contexts, mirroring the `FieldText` pattern.',
           '',
           '### The password-requirements row',
           '',
@@ -59,7 +59,7 @@ const meta = {
   argTypes: {
     modelValue: {
       control: 'text',
-      description: 'Two-way bound value of the underlying `InputPassword`.',
+      description: 'Two-way bound value of the underlying `PasswordInput`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     label: {
@@ -69,7 +69,7 @@ const meta = {
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder forwarded to the `InputPassword`.',
+      description: 'Placeholder forwarded to the `PasswordInput`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     helperText: {
@@ -80,7 +80,7 @@ const meta = {
     },
     maxLength: {
       control: { type: 'number', min: 0 },
-      description: 'Native `maxlength` forwarded to the `InputPassword`.',
+      description: 'Native `maxlength` forwarded to the `PasswordInput`.',
       table: {
         category: 'props',
         type: { summary: 'number' },
@@ -113,14 +113,14 @@ const meta = {
     toggleable: {
       control: 'boolean',
       description:
-        'Forwards to `InputPassword`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.',
+        'Forwards to `PasswordInput`. When true, renders the visibility toggle on the trailing edge; when false, the field behaves as a plain password input.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
     },
     autocomplete: {
       control: 'select',
       options: ['current-password', 'new-password', 'off'],
       description:
-        'Forwarded to the `InputPassword` for password-manager hints. Use `new-password` for sign-up and password-change flows.',
+        'Forwarded to the `PasswordInput` for password-manager hints. Use `new-password` for sign-up and password-change flows.',
       table: {
         category: 'props',
         type: { summary: "'current-password' | 'new-password' | 'off'" },
@@ -176,18 +176,18 @@ const meta = {
     },
     iconLeft: {
       control: false,
-      description: 'Forwarded to the underlying `InputPassword` leading-icon slot.',
+      description: 'Forwarded to the underlying `PasswordInput` leading-icon slot.',
       table: { category: 'slots', type: { summary: 'slot' } }
     },
     iconRight: {
       control: false,
       description:
-        'Forwarded to the underlying `InputPassword` trailing-icon slot. Only honored when `toggleable=false`.',
+        'Forwarded to the underlying `PasswordInput` trailing-icon slot. Only honored when `toggleable=false`.',
       table: { category: 'slots', type: { summary: 'slot' } }
     },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
-      description: 'Re-emitted from the underlying `InputPassword` on every input event.',
+      description: 'Re-emitted from the underlying `PasswordInput` on every input event.',
       table: { category: 'events', type: { summary: 'string' } }
     }
   },
@@ -437,7 +437,7 @@ export const Toggle = {
       controls: { disable: true },
       description: {
         story:
-          '`toggleable=true` (default) renders the visibility toggle button; `toggleable=false` renders a plain password field — the prop is forwarded to the underlying `InputPassword`.'
+          '`toggleable=true` (default) renders the visibility toggle button; `toggleable=false` renders a plain password field — the prop is forwarded to the underlying `PasswordInput`.'
       },
       source: { code: toSfc(TOGGLE_SCRIPT, TOGGLE_TEMPLATE) }
     }
@@ -463,7 +463,7 @@ export const Icons = {
       controls: { disable: true },
       description: {
         story:
-          '`#iconLeft` slot is forwarded to the underlying `InputPassword`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.'
+          '`#iconLeft` slot is forwarded to the underlying `PasswordInput`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.'
       },
       source: { code: toSfc(IMPORT, ICONS_TEMPLATE) }
     }

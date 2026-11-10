@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import CodeBlock from '../../../code/code-block/code-block.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -64,7 +64,7 @@
           <div
             class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
           >
-            <SegmentedButton
+            <ToggleGroup
               model-value="code"
               :options="DOCUMENTS"
               aria-label="Editor document"

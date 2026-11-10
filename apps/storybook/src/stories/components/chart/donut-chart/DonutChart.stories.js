@@ -91,7 +91,7 @@ const meta = {
     },
     error: {
       control: 'text',
-      description: 'Error message; when set, a danger Message replaces the ring.',
+      description: 'Error message; when set, a danger Alert replaces the ring.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     emptyTitle: {

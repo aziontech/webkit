@@ -11,7 +11,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `CardBox` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full Name, Language) and Notifications (Product updates, Security alerts). Built from the platform shell, `CardBox`, `Item`, `InputText`, `Select`, `Switch` and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full Name, Language) and Notifications (Product updates, Security alerts). Built from the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`." } },
     webkit: {"block":"platform/forms/save-per-group","intents":["save per group","save per section","preferences page","grouped settings save","section save button","independent groups","salvar por grupo","preferências","salvar por seção"],"skills":["webkit-form","webkit-errors","webkit-ux-heuristics"],"primary":"Default"}
   }
 }

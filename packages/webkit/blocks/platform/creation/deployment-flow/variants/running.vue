@@ -1,9 +1,9 @@
 <script setup>
   import Accordion from '@aziontech/webkit/accordion'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
+  import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
@@ -132,7 +132,7 @@
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     class="w-full"
   >
@@ -237,7 +237,7 @@
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
-        <ProgressBar
+        <Progress
           :value="32"
           :max="100"
           size="small"
@@ -247,5 +247,5 @@
         />
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

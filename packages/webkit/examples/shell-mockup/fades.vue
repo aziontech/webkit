@@ -1,7 +1,7 @@
 <script setup>
   import ShellMockup from '@aziontech/webkit/shell-mockup'
   import Button from '@aziontech/webkit/button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
 </script>
@@ -26,7 +26,7 @@
           </ShellMockup.Part>
           <ShellMockup.Part :order="1">
             <div class="flex items-center gap-(--spacing-sm)">
-              <InputText
+              <Input
                 placeholder="Search workloads"
                 size="small"
               />
@@ -101,7 +101,7 @@
           </ShellMockup.Part>
           <ShellMockup.Part :order="1">
             <div class="flex items-center gap-(--spacing-sm)">
-              <InputText
+              <Input
                 placeholder="Search workloads"
                 size="small"
               />
@@ -176,7 +176,7 @@
           </ShellMockup.Part>
           <ShellMockup.Part :order="1">
             <div class="flex items-center gap-(--spacing-sm)">
-              <InputText
+              <Input
                 placeholder="Search workloads"
                 size="small"
               />

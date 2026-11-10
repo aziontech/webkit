@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c637a814bbe9c49a87249efffa70c5439ef8fb38536111cea77a919361fc25a4
+checksum: 918d42b14fc95c7d51bf8edc0874282ca482b288dd09c02d60156979f909d580
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
@@ -31,7 +31,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - For several quotations read side by side or swiped through → use `quote-carousel`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
 - For a moving strip of marks with no links → use `ticker`.
-- For switching a page's content between views → use `tab-view`.
+- For switching a page's content between views → use `tabs`.
 
 ## Related
 
@@ -54,8 +54,8 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
-import QuoteTabs from '@aziontech/webkit/quote-tabs'
+  import Button from '@aziontech/webkit/button'
+  import QuoteTabs from '@aziontech/webkit/quote-tabs'
 </script>
 
 <template>
@@ -101,19 +101,19 @@ import QuoteTabs from '@aziontech/webkit/quote-tabs'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `QuoteTabsItem[]` | `[]` | false | The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the wall of client cards. |
-| `autoPlay` | `boolean` | `true` | false | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
-| `autoPlayInterval` | `number` | `5000` | false | Milliseconds each client is held before the band advances. |
-| `showProgress` | `boolean` | `true` | false | Advances a hairline along the quotation panel's bottom edge while the timer runs. |
+| Prop               | Type              | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                            |
+| ------------------ | ----------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `QuoteTabsItem[]` | `[]`    | false    | The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. |
+| `ariaLabel`        | `string`          | `''`    | false    | Accessible name for the wall of client cards.                                                                                                                                                                                                                                                                    |
+| `autoPlay`         | `boolean`         | `true`  | false    | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion.                                                                                                                                                      |
+| `autoPlayInterval` | `number`          | `5000`  | false    | Milliseconds each client is held before the band advances.                                                                                                                                                                                                                                                       |
+| `showProgress`     | `boolean`         | `true`  | false    | Advances a hairline along the quotation panel's bottom edge while the timer runs.                                                                                                                                                                                                                                |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                 |
+| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
 
 ## Events
 
@@ -121,9 +121,9 @@ _No plain events — selection flows through `v-model`._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `actions` | — | A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client. |
+| Slot      | Scope | Notes                                                                                                                                                                                    |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actions` | —     | A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client. |
 
 ## States
 
@@ -147,36 +147,36 @@ _No plain events — selection flows through `v-model`._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-01` (150ms) + `productive-entrance` | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
-| selection change — quotation leaving | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity | `moderate-01` (150ms) + `productive-exit` | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
-| selection change (card) | `transition-colors duration-moderate-01 ease-out` | `moderate-01` (150ms) | `motion-reduce:transition-none` |
-| autoplay progress | `transition-[width] duration-fast-01 ease-linear` on the hairline, its width set from the elapsed share of `autoPlayInterval` | `fast-01` (70ms) + linear | `motion-reduce:transition-none` (and the timer never runs under reduced motion, so no hairline is drawn) |
-| hover (card) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer | `fast-02` (110ms) + `productive-entrance` | `motion-reduce:before:transition-none` |
+| Trigger                                                               | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                  |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-01` (150ms) + `productive-entrance`     | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly)   |
+| selection change — quotation leaving                                  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity       | `moderate-01` (150ms) + `productive-exit`         | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly)   |
+| selection change (card)                                               | `transition-colors duration-moderate-01 ease-out`                                                                                                                 | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                                                          |
+| autoplay progress                                                     | `transition-[width] duration-fast-01 ease-linear` on the hairline, its width set from the elapsed share of `autoPlayInterval`                                     | `fast-01` (70ms) + linear                         | `motion-reduce:transition-none` (and the timer never runs under reduced motion, so no hairline is drawn) |
+| hover (card)                                                          | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                            | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                                                   |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| panel surface | `var(--bg-canvas)` |
+| Region                                       | Token (DESIGN.md)       |
+| -------------------------------------------- | ----------------------- |
+| panel surface                                | `var(--bg-canvas)`      |
 | panel frame, corner marks and card hairlines | `var(--border-default)` |
-| resting card surface | `var(--bg-surface)` |
-| selected card surface | `var(--bg-selected)` |
-| hovered card surface (ghost layer) | `var(--bg-hover)` |
-| one-ink mark | `var(--text-default)` |
-| progress hairline | `var(--primary)` |
-| typography (mark fallback) | `.text-heading-xxs` |
-| spacing (card inset, x) | `var(--spacing-md)` |
-| spacing (panel inset, every side) | `var(--spacing-xl)` |
-| spacing (quotation travel) | `var(--spacing-xl)` |
-| ring | `var(--ring-color)` |
+| resting card surface                         | `var(--bg-surface)`     |
+| selected card surface                        | `var(--bg-selected)`    |
+| hovered card surface (ghost layer)           | `var(--bg-hover)`       |
+| one-ink mark                                 | `var(--text-default)`   |
+| progress hairline                            | `var(--primary)`        |
+| typography (mark fallback)                   | `.text-heading-xxs`     |
+| spacing (card inset, x)                      | `var(--spacing-md)`     |
+| spacing (panel inset, every side)            | `var(--spacing-xl)`     |
+| spacing (quotation travel)                   | `var(--spacing-xl)`     |
+| ring                                         | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

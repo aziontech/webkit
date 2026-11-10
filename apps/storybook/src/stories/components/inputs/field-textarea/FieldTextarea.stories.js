@@ -126,7 +126,7 @@ const meta = {
   },
   args: {
     modelValue: '',
-    label: 'Message',
+    label: 'Alert',
     placeholder: 'Write your message',
     helperText: 'Up to 500 characters.',
     disabled: false,
@@ -147,7 +147,7 @@ const Template = (args) => ({
 
 const DEFAULT_MARKUP = `<FieldTextarea
   v-model="value"
-  label="Message"
+  label="Alert"
   placeholder="Write your message"
   helper-text="Up to 500 characters."
 />`
@@ -165,7 +165,7 @@ export const Default = {
 
 const REQUIRED_MARKUP = `<FieldTextarea
   v-model="value"
-  label="Message"
+  label="Alert"
   placeholder="Write your message"
   helper-text="This field is required."
   required
@@ -201,7 +201,7 @@ export const Required = {
     template: `
       <div class="flex flex-col gap-4 w-[320px]">
         <FieldTextarea
-          label="Message"
+          label="Alert"
           placeholder="Write your message"
           :model-value="value"
           @update:model-value="onUpdate"
@@ -227,7 +227,7 @@ export const Required = {
 
 const INVALID_MARKUP = `<FieldTextarea
   v-model="value"
-  label="Message"
+  label="Alert"
   helper-text="This value is not valid."
   invalid
 />`
@@ -236,7 +236,7 @@ const INVALID_MARKUP = `<FieldTextarea
 export const Invalid = {
   args: {
     invalid: true,
-    label: 'Message',
+    label: 'Alert',
     modelValue: 'Text filled',
     helperText: 'This value is not valid.'
   },
@@ -254,7 +254,7 @@ export const Invalid = {
 
 const DISABLED_MARKUP = `<FieldTextarea
   v-model="value"
-  label="Message"
+  label="Alert"
   helper-text="This field is locked."
   disabled
 />`
@@ -263,7 +263,7 @@ const DISABLED_MARKUP = `<FieldTextarea
 export const Disabled = {
   args: {
     disabled: true,
-    label: 'Message',
+    label: 'Alert',
     modelValue: 'This message is locked.',
     helperText: 'This field is locked.'
   },

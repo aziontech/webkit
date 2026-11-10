@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: e94268e37cc6687d579032a83656fed9ca7ae22580725b25a4d041440c5d90bc
+checksum: 19f5e852821b365a407ece24c8af0b6f50a7cc06962fc0a74fd651abf24b26a3
 created: 2026-06-15
 last_updated: 2026-11-09
 ---
@@ -45,22 +45,25 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 
 ```vue
 <script setup>
-import HelperText from '@aziontech/webkit/helper-text'
-import InputText from '@aziontech/webkit/input-text'
+  import HelperText from '@aziontech/webkit/helper-text'
+  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
-  <InputText id="email" />
-  <HelperText kind="invalid" label="Enter a valid email address." />
+  <Input id="email" />
+  <HelperText
+    kind="invalid"
+    label="Enter a valid email address."
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
+| Prop    | Type                                                | Default    | Required | JSDoc                                                         |
+| ------- | --------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------- |
+| `label` | `string`                                            | `''`       | false    | Fallback text when the default slot is empty.                 |
+| `kind`  | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false    | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
 
 ## Events
 
@@ -68,9 +71,9 @@ import InputText from '@aziontech/webkit/input-text'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Helper text; falls back to `label` prop when empty. |
+| Slot      | Scope | Notes                                               |
+| --------- | ----- | --------------------------------------------------- |
+| `default` | —     | Helper text; falls back to `label` prop when empty. |
 
 ## States
 
@@ -83,18 +86,18 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-label-sm` |
-| color (helper, disabled) | `var(--text-muted)` |
-| color (invalid) | `var(--danger-contrast)` |
-| color (required) | `var(--warning-contrast)` |
-| gap (disabled icon) | `var(--spacing-xxs)` |
+| Region                   | Token (DESIGN.md)         |
+| ------------------------ | ------------------------- |
+| typography               | `.text-label-sm`          |
+| color (helper, disabled) | `var(--text-muted)`       |
+| color (invalid)          | `var(--danger-contrast)`  |
+| color (required)         | `var(--warning-contrast)` |
+| gap (disabled icon)      | `var(--spacing-xxs)`      |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                                  | Temporary primitive                           | Follow-up                                                                            |
+| --------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `Components/Form Field/Helper` (Rubik 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-helper semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)

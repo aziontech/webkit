@@ -24,7 +24,7 @@ const helper =
     ? helperText.textContent.trim()
     : ''
 
-const input = instance.findInstance('InputPassword')
+const input = instance.findInstance('PasswordInput')
 const placeholder = input.type === 'INSTANCE' ? input.getString('placeholder') : ''
 
 export default {

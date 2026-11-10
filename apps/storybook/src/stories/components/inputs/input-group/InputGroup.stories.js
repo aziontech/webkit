@@ -39,7 +39,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: outer border, `focus-within` ring, and inline Tailwind child-selectors that round only the outer edges and collapse borders between siblings. Everything else is a **child**: the middle input goes in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<InputText>`, `<InputGroupAddon>`) are dropped in directly."
+          "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: outer border, `focus-within` ring, and inline Tailwind child-selectors that round only the outer edges and collapse borders between siblings. Everything else is a **child**: the middle input goes in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, `<InputGroupAddon>`) are dropped in directly."
       },
       canvas: { sourceState: 'shown' }
     }

@@ -5,8 +5,8 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
-  import CardBox from '@aziontech/webkit/card-box'
-  import CommandMenu from '@aziontech/webkit/command-menu'
+  import Card from '@aziontech/webkit/card'
+  import Command from '@aziontech/webkit/command'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -14,15 +14,15 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Flow from '@aziontech/webkit/flow'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -30,7 +30,7 @@
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TabView from '@aziontech/webkit/tab-view'
+  import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -623,21 +623,21 @@
               </a>
             </div>
 
-            <CommandMenu
+            <Command
               v-model:open="paletteOpen"
               @select="onPaletteSelect"
             >
-              <CommandMenu.Input
+              <Command.Input
                 placeholder="Search resources, pages and commands"
                 @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
               />
-              <CommandMenu.List>
-                <CommandMenu.Group
+              <Command.List>
+                <Command.Group
                   v-if="!paletteQuery"
                   key="recents"
                   heading="Recents"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="row in recentRows"
                     :key="row.key"
                     :value="'res:' + row.key"
@@ -652,20 +652,20 @@
                     <template #suffix>
                       <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
                     </template>
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator
+                <Command.Separator
                   v-if="!paletteQuery"
                   key="recents-rule"
                 />
 
-                <CommandMenu.Group
+                <Command.Group
                   v-for="group in paletteGroups"
                   :key="group.key"
                   :heading="group.heading"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="item in group.items"
                     :key="item.id"
                     :value="'nav:' + item.id"
@@ -680,13 +680,13 @@
                       />
                     </template>
                     {{ item.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator key="commands-rule" />
+                <Command.Separator key="commands-rule" />
 
-                <CommandMenu.Group heading="Actions">
-                  <CommandMenu.Item
+                <Command.Group heading="Actions">
+                  <Command.Item
                     v-for="command in actionCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -698,11 +698,11 @@
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Group heading="Account">
-                  <CommandMenu.Item
+                <Command.Group heading="Account">
+                  <Command.Item
                     v-for="command in accountCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -714,14 +714,12 @@
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Empty
-                  >No resource, page or command matches your search.</CommandMenu.Empty
-                >
-              </CommandMenu.List>
-            </CommandMenu>
+                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
+              </Command.List>
+            </Command>
           </div>
         </template>
 
@@ -744,8 +742,8 @@
               kind="square"
             />
             <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <Dropdown placement="top-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="top-end">
+              <DropdownMenu.Trigger>
                 <Tooltip text="Account menu">
                   <IconButton
                     icon="pi pi-ellipsis-v"
@@ -754,15 +752,15 @@
                     size="small"
                   />
                 </Tooltip>
-              </Dropdown.Trigger>
-              <Dropdown.Group>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
                 <template #top>
                   <div class="flex min-w-0 flex-col">
                     <span class="truncate text-label-md text-(--text-default)">alex</span>
                     <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
                   </div>
                 </template>
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="settings"
                   label="Account Settings"
                 >
@@ -772,8 +770,8 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="personal-tokens"
                   label="Personal Tokens"
                 >
@@ -783,9 +781,9 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
@@ -797,9 +795,9 @@
                     aria-label="Theme"
                   />
                 </div>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="home"
                   label="Home Page"
                 >
@@ -809,8 +807,8 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="changelog"
                   label="Changelog"
                 >
@@ -820,8 +818,8 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="feedback"
                   label="Feedback"
                 >
@@ -831,8 +829,8 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="docs"
                   label="Docs"
                 >
@@ -842,10 +840,10 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="logout"
                   label="Log out"
                 >
@@ -855,9 +853,9 @@
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
                   <Button
                     label="Upgrade to Pro"
@@ -872,8 +870,8 @@
                     />
                   </div>
                 </div>
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </div>
         </template>
       </Sidebar>
@@ -938,7 +936,7 @@
                           <Select.Trigger aria-label="Switch environment" />
                           <Select.Content>
                             <template #search>
-                              <InputText
+                              <Input
                                 v-model="environmentQuery"
                                 size="small"
                                 placeholder="Search environments"
@@ -951,7 +949,7 @@
                                     aria-hidden="true"
                                   />
                                 </template>
-                              </InputText>
+                              </Input>
                             </template>
                             <Select.Group label="Environments">
                               <Select.Option
@@ -1092,19 +1090,19 @@
               class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <TabView
+                <Tabs
                   v-model:value="activeTab"
                   class="w-full"
                 >
-                  <TabView.List>
-                    <TabView.Item
+                  <Tabs.List>
+                    <Tabs.Item
                       v-for="tab in tabs"
                       :key="tab.value"
                       :value="tab.value"
                       :label="tab.label"
                     />
-                  </TabView.List>
-                </TabView>
+                  </Tabs.List>
+                </Tabs>
               </div>
               <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
                 <Button
@@ -1123,7 +1121,7 @@
                 <section
                   class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
                 >
-                  <CardBox :padded="false">
+                  <Card :padded="false">
                     <template #content>
                       <div
                         class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
@@ -1219,7 +1217,7 @@
                             <Tooltip
                               text="Select an environment to see its deployment and settings, or add another one"
                             >
-                              <Dropdown
+                              <DropdownMenu
                                 placement="bottom-end"
                                 @select="
                                   (event, value) => {
@@ -1227,7 +1225,7 @@
                                   }
                                 "
                               >
-                                <Dropdown.Trigger>
+                                <DropdownMenu.Trigger>
                                   <span
                                     class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
                                   >
@@ -1241,20 +1239,20 @@
                                       aria-hidden="true"
                                     />
                                   </span>
-                                </Dropdown.Trigger>
+                                </DropdownMenu.Trigger>
 
-                                <Dropdown.Group label="Environments">
-                                  <Dropdown.Option
+                                <DropdownMenu.Group label="Environments">
+                                  <DropdownMenu.Option
                                     v-for="option in environments"
                                     :key="option.name"
                                     :value="option.name"
                                     :label="option.name"
                                     :selected="option.name === environment"
                                   />
-                                </Dropdown.Group>
+                                </DropdownMenu.Group>
 
-                                <Dropdown.Group>
-                                  <Dropdown.Option
+                                <DropdownMenu.Group>
+                                  <DropdownMenu.Option
                                     value="__add-environment__"
                                     label="Add Environment"
                                   >
@@ -1264,14 +1262,14 @@
                                         aria-hidden="true"
                                       />
                                     </template>
-                                  </Dropdown.Option>
-                                </Dropdown.Group>
-                              </Dropdown>
+                                  </DropdownMenu.Option>
+                                </DropdownMenu.Group>
+                              </DropdownMenu>
                             </Tooltip>
                           </div>
 
-                          <Dropdown placement="bottom-end">
-                            <Dropdown.Trigger>
+                          <DropdownMenu placement="bottom-end">
+                            <DropdownMenu.Trigger>
                               <Tooltip text="Service actions">
                                 <IconButton
                                   icon="pi pi-ellipsis-h"
@@ -1280,10 +1278,10 @@
                                   aria-label="Service actions"
                                 />
                               </Tooltip>
-                            </Dropdown.Trigger>
+                            </DropdownMenu.Trigger>
 
-                            <Dropdown.Group>
-                              <Dropdown.Option
+                            <DropdownMenu.Group>
+                              <DropdownMenu.Option
                                 value="copy-url"
                                 label="Copy URL"
                               >
@@ -1293,11 +1291,11 @@
                                     aria-hidden="true"
                                   />
                                 </template>
-                              </Dropdown.Option>
-                            </Dropdown.Group>
+                              </DropdownMenu.Option>
+                            </DropdownMenu.Group>
 
-                            <Dropdown.Group>
-                              <Dropdown.Option
+                            <DropdownMenu.Group>
+                              <DropdownMenu.Option
                                 value="manage-domains"
                                 label="Manage Domains"
                               >
@@ -1307,8 +1305,8 @@
                                     aria-hidden="true"
                                   />
                                 </template>
-                              </Dropdown.Option>
-                              <Dropdown.Option
+                              </DropdownMenu.Option>
+                              <DropdownMenu.Option
                                 value="settings"
                                 label="Settings"
                               >
@@ -1318,9 +1316,9 @@
                                     aria-hidden="true"
                                   />
                                 </template>
-                              </Dropdown.Option>
-                            </Dropdown.Group>
-                          </Dropdown>
+                              </DropdownMenu.Option>
+                            </DropdownMenu.Group>
+                          </DropdownMenu>
                         </div>
                       </div>
 
@@ -1442,7 +1440,7 @@
 
                             <Accordion.Content>
                               <div class="px-(--spacing-md) pt-(--spacing-xs)">
-                                <Message
+                                <Alert
                                   severity="warning"
                                   size="small"
                                   label="Deploying with this setting also publishes to service-05, service-09."
@@ -1518,9 +1516,9 @@
                         </Accordion>
                       </div>
                     </template>
-                  </CardBox>
+                  </Card>
 
-                  <CardBox
+                  <Card
                     :padded="false"
                     :data-complete="complete || null"
                   >
@@ -1594,7 +1592,7 @@
                         </Item>
                       </div>
                     </template>
-                  </CardBox>
+                  </Card>
 
                   <Drawer
                     v-model:open="detailOpen"
@@ -1701,7 +1699,7 @@
                       </div>
                     </header>
 
-                    <CardBox :padded="false">
+                    <Card :padded="false">
                       <template #content>
                         <div class="overflow-x-auto">
                           <Flow align="start">
@@ -1800,8 +1798,8 @@
                                         v-if="node.bind"
                                         class="flex shrink-0 items-center gap-(--spacing-xxs)"
                                       >
-                                        <Dropdown placement="bottom-end">
-                                          <Dropdown.Trigger>
+                                        <DropdownMenu placement="bottom-end">
+                                          <DropdownMenu.Trigger>
                                             <Tooltip
                                               :text="
                                                 node.bind.boundId
@@ -1822,9 +1820,9 @@
                                                 "
                                               />
                                             </Tooltip>
-                                          </Dropdown.Trigger>
+                                          </DropdownMenu.Trigger>
 
-                                          <Dropdown.Group
+                                          <DropdownMenu.Group
                                             :label="
                                               node.bind.options.length ? node.bind.groupLabel : ''
                                             "
@@ -1837,7 +1835,7 @@
                                                 node.bind.emptyLabel
                                               }}</span>
                                             </template>
-                                            <Dropdown.Option
+                                            <DropdownMenu.Option
                                               v-for="option in node.bind.options"
                                               :key="option.value"
                                               :value="option.value"
@@ -1846,15 +1844,15 @@
                                                 String(option.value) === String(node.bind.boundId)
                                               "
                                             />
-                                          </Dropdown.Group>
+                                          </DropdownMenu.Group>
 
-                                          <Dropdown.Group>
-                                            <Dropdown.Option
+                                          <DropdownMenu.Group>
+                                            <DropdownMenu.Option
                                               value="__create__"
                                               :label="node.bind.createLabel"
                                             />
-                                          </Dropdown.Group>
-                                        </Dropdown>
+                                          </DropdownMenu.Group>
+                                        </DropdownMenu>
 
                                         <Tooltip
                                           v-if="node.bind.boundId && node.removable"
@@ -1941,7 +1939,7 @@
                           </Flow>
                         </div>
                       </template>
-                    </CardBox>
+                    </Card>
                   </div>
                 </section>
               </div>
@@ -2000,8 +1998,8 @@
                 <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
                   >alex</span
                 >
-                <Dropdown placement="top-end">
-                  <Dropdown.Trigger>
+                <DropdownMenu placement="top-end">
+                  <DropdownMenu.Trigger>
                     <Tooltip text="Account menu">
                       <IconButton
                         icon="pi pi-ellipsis-v"
@@ -2010,8 +2008,8 @@
                         size="small"
                       />
                     </Tooltip>
-                  </Dropdown.Trigger>
-                  <Dropdown.Group>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Group>
                     <template #top>
                       <div class="flex min-w-0 flex-col">
                         <span class="truncate text-label-md text-(--text-default)">alex</span>
@@ -2020,7 +2018,7 @@
                         >
                       </div>
                     </template>
-                    <Dropdown.Option
+                    <DropdownMenu.Option
                       value="settings"
                       label="Account Settings"
                     >
@@ -2030,8 +2028,8 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="personal-tokens"
                       label="Personal Tokens"
                     >
@@ -2041,9 +2039,9 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
@@ -2055,9 +2053,9 @@
                         aria-label="Theme"
                       />
                     </div>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="home"
                       label="Home Page"
                     >
@@ -2067,8 +2065,8 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="changelog"
                       label="Changelog"
                     >
@@ -2078,8 +2076,8 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="feedback"
                       label="Feedback"
                     >
@@ -2089,8 +2087,8 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="docs"
                       label="Docs"
                     >
@@ -2100,10 +2098,10 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="logout"
                       label="Log out"
                     >
@@ -2113,9 +2111,9 @@
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
                     >
@@ -2132,8 +2130,8 @@
                         />
                       </div>
                     </div>
-                  </Dropdown.Group>
-                </Dropdown>
+                  </DropdownMenu.Group>
+                </DropdownMenu>
               </div>
             </template>
           </Sidebar>

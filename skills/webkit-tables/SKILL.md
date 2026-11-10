@@ -1,6 +1,6 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions Dropdown cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's right edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions DropdownMenu cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's right edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
 last_updated: 2026-10-28
 scope: general
@@ -72,7 +72,7 @@ internals — compose inside its slots.
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`
   discipline below so cell controls don't trigger it).
 - `enable-sorting` + per-column `enableSorting: true` turns on the sort affordance for that column.
-- `paginated` + `:page-size` paginates client-side; `:border="false"` for a flush table inside a `CardBox`.
+- `paginated` + `:page-size` paginates client-side; `:border="false"` for a flush table inside a `Card`.
 
 ### Column model
 
@@ -133,15 +133,15 @@ chain, not a fixed pixel height:
 
 ```vue
 <section class="flex min-h-0 flex-1 flex-col">
-  <CardBox :padded="false" class="h-full">
+  <Card :padded="false" class="h-full">
     <template #content>
       <Table … max-height="100%" class="h-full">…</Table>
     </template>
-  </CardBox>
+  </Card>
 </section>
 ```
 
-`min-h-0` on the flex parent (so it can shrink), `h-full` down the chain (`CardBox` → `Table`), and
+`min-h-0` on the flex parent (so it can shrink), `h-full` down the chain (`Card` → `Table`), and
 `max-height="100%"` on the `Table` — the body scrolls inside, the toolbar and column headers don't move.
 
 ## Cell recipes
@@ -406,27 +406,27 @@ identical:
 - Do **not**: render the raw absolute date; keep a separate "Last Modified By"/"Author" column beside this
   cell (two avatars per row).
 
-### Actions cell — Dropdown + ellipsis IconButton
+### Actions cell — DropdownMenu + ellipsis IconButton
 
-The trailing `kind:'action'` column renders a `Dropdown` triggered by an ellipsis `IconButton`. Group
-destructive actions in their own `Dropdown.Group`.
+The trailing `kind:'action'` column renders a `DropdownMenu` triggered by an ellipsis `IconButton`. Group
+destructive actions in their own `DropdownMenu.Group`.
 
 ```vue
 <template #cell-actions="{ row }">
-  <Dropdown
+  <DropdownMenu
     placement="bottom-end"
     @select="(event, value) => onRowAction(event, value, row)"
   >
-    <Dropdown.Trigger>
+    <DropdownMenu.Trigger>
       <IconButton
         icon="pi pi-ellipsis-h"
         kind="outlined"
         size="small"
         aria-label="Row actions"
       />
-    </Dropdown.Trigger>
-    <Dropdown.Group>
-      <Dropdown.Option
+    </DropdownMenu.Trigger>
+    <DropdownMenu.Group>
+      <DropdownMenu.Option
         value="view"
         label="View details"
       >
@@ -435,11 +435,11 @@ destructive actions in their own `Dropdown.Group`.
             class="pi pi-eye"
             aria-hidden="true"
         /></template>
-      </Dropdown.Option>
+      </DropdownMenu.Option>
       <!-- edit, clone … -->
-    </Dropdown.Group>
-    <Dropdown.Group>
-      <Dropdown.Option
+    </DropdownMenu.Group>
+    <DropdownMenu.Group>
+      <DropdownMenu.Option
         value="delete"
         label="Delete"
       >
@@ -448,9 +448,9 @@ destructive actions in their own `Dropdown.Group`.
             class="pi pi-trash"
             aria-hidden="true"
         /></template>
-      </Dropdown.Option>
-    </Dropdown.Group>
-  </Dropdown>
+      </DropdownMenu.Option>
+    </DropdownMenu.Group>
+  </DropdownMenu>
 </template>
 ```
 
@@ -464,7 +464,7 @@ destructive actions in their own `Dropdown.Group`.
 - [ ] Exactly one `principal: true` column; the actions column is `{ kind: 'action', hideable: false }`.
 - [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · ColumnSelector; `#filters` → `Table.AppliedFilters`.
-- [ ] Body scrolls internally: `min-h-0 flex-1` parent → `CardBox h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
+- [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen uses the one shared cross-resource link: 12px `pi-external-link`, a tooltip naming the destination, underline on hover, and **no mark at all** when there is no destination.
 - [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.

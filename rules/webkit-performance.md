@@ -4,7 +4,7 @@ Every component is importable in a way that ships only what you render. Choose t
 
 ## Prefer the tree-shakeable path
 
-Composition components (Table, Dropdown, Dialog, and similar) expose two roots:
+Composition components (Table, DropdownMenu, Dialog, and similar) expose two roots:
 
 - The compound path — `@aziontech/webkit/table` — attaches every sub-component for dot-notation (`Table.Row`, `Table.Cell`). Convenient, but a bundler keeps all the sub-components even if you only render the root.
 - The `-root` path — `@aziontech/webkit/table-root` — is the standalone root with nothing attached.

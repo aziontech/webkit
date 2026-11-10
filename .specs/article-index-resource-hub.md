@@ -6,13 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: d8378e44784cb405cc9e7c81d91140fff1236434ec70cbc7bb90d48a2f1a3c91
+checksum: cfd89ae5da5428d5248d3ac01a43e9f70fc21dc61ae3a88d3e168b31f4ea12f0
 ---
+
 # ArticleIndexResourceHub — Component Spec
 
 ## Purpose
 
-Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input-text` and `button`; the facet selections and each dropdown's option search are local state.
+Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`; the facet selections and each dropdown's option search are local state.
 
 ## When to use
 
@@ -37,7 +38,7 @@ Every resource of a hub as one ruled list, with a headline and one searchable dr
 
 ```vue
 <script setup>
-import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
+  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
 </script>
 
 <template>
@@ -48,7 +49,12 @@ import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hu
     more-label="Load more"
     aria-label="Resources"
     :facets="[
-      { key: 'contentType', label: 'Content type', allLabel: 'All content types', options: ['E-books', 'Blog'] }
+      {
+        key: 'contentType',
+        label: 'Content type',
+        allLabel: 'All content types',
+        options: ['E-books', 'Blog']
+      }
     ]"
     :items="[
       {
@@ -67,15 +73,15 @@ import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hu
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title` | `string` | `''` | false | Headline beside the dropdowns, rendered as the band's `h2`. |
-| `items` | `ArticleIndexResourceHubItem[]` | `[]` | false | The resources, in order; each is `{ key, href, image, meta, title, description, facets? }`. |
-| `facets` | `ArticleIndexResourceHubFacet[]` | `[]` | false | The facet dropdowns, in order; each is `{ key, label, allLabel, options }`. |
-| `rowLabel` | `string` | `''` | false | Read cue revealed at the end of a row under hover or focus. |
-| `moreLabel` | `string` | `''` | false | Label of the load-more button under the list; the button is omitted when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the list of resources. |
+| Prop        | Type                             | Default | Required | JSDoc                                                                                       |
+| ----------- | -------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------- |
+| `anchor`    | `string`                         | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                              |
+| `title`     | `string`                         | `''`    | false    | Headline beside the dropdowns, rendered as the band's `h2`.                                 |
+| `items`     | `ArticleIndexResourceHubItem[]`  | `[]`    | false    | The resources, in order; each is `{ key, href, image, meta, title, description, facets? }`. |
+| `facets`    | `ArticleIndexResourceHubFacet[]` | `[]`    | false    | The facet dropdowns, in order; each is `{ key, label, allLabel, options }`.                 |
+| `rowLabel`  | `string`                         | `''`    | false    | Read cue revealed at the end of a row under hover or focus.                                 |
+| `moreLabel` | `string`                         | `''`    | false    | Label of the load-more button under the list; the button is omitted when empty.             |
+| `ariaLabel` | `string`                         | `''`    | false    | Accessible name of the list of resources.                                                   |
 
 ## Events
 
@@ -94,27 +100,27 @@ import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hu
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover fill of a row | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| read cue rising in on hover or focus | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                              | Animation / Transition                                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover fill of a row                  | `transition-colors duration-fast-02 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| read cue rising in on hover or focus | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| row fill | hover `var(--bg-hover)` |
-| cover cell | `var(--bg-surface)`, rule `var(--border-default)` |
-| headline | `text-heading-md` (band), `text-heading-sm` (rows), `var(--text-default)` |
-| overline, deck | `text-overline-sm` / `text-body-sm`, `var(--text-muted)` |
-| read cue | `text-overline-md`, `var(--text-default)` |
-| focus ring | `var(--ring-color)` |
+| Region         | Token (DESIGN.md)                                                         |
+| -------------- | ------------------------------------------------------------------------- |
+| row fill       | hover `var(--bg-hover)`                                                   |
+| cover cell     | `var(--bg-surface)`, rule `var(--border-default)`                         |
+| headline       | `text-heading-md` (band), `text-heading-sm` (rows), `var(--text-default)` |
+| overline, deck | `text-overline-sm` / `text-body-sm`, `var(--text-muted)`                  |
+| read cue       | `text-overline-md`, `var(--text-default)`                                 |
+| focus ring     | `var(--ring-color)`                                                       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -22,10 +22,10 @@
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/button"
     },
-    "card-box": {
-      "import": "@aziontech/webkit/card-box",
+    "card": {
+      "import": "@aziontech/webkit/card",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/card-box",
+      "treeShakeableImport": "@aziontech/webkit/card",
       "styleSeam": true
     },
     "chip": {

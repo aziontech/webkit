@@ -13,12 +13,12 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -433,7 +433,7 @@
                             aria-hidden="true"
                             @change="onFilePicked"
                           />
-                          <SegmentedButton
+                          <ToggleGroup
                             v-model="view"
                             :options="VIEW_OPTIONS"
                             aria-label="Variables view"
@@ -676,7 +676,7 @@
                                 />
                                 <MultiSelect.Content>
                                   <template #search>
-                                    <InputText
+                                    <Input
                                       v-model="scope.query"
                                       size="small"
                                       placeholder="Search"
@@ -689,7 +689,7 @@
                                           aria-hidden="true"
                                         />
                                       </template>
-                                    </InputText>
+                                    </Input>
                                   </template>
                                   <MultiSelect.Option
                                     v-for="option in visibleScopeOptions(scope)"

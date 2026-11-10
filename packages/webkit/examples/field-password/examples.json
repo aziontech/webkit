@@ -24,12 +24,12 @@
     },
     {
       "name": "Toggle",
-      "summary": "`toggleable=true` (default) renders the visibility toggle button; `toggleable=false` renders a plain password field — the prop is forwarded to the underlying `InputPassword`.",
+      "summary": "`toggleable=true` (default) renders the visibility toggle button; `toggleable=false` renders a plain password field — the prop is forwarded to the underlying `PasswordInput`.",
       "file": "toggle.vue"
     },
     {
       "name": "Icons",
-      "summary": "`#iconLeft` slot is forwarded to the underlying `InputPassword`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.",
+      "summary": "`#iconLeft` slot is forwarded to the underlying `PasswordInput`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.",
       "file": "icons.vue"
     },
     {

@@ -15,7 +15,7 @@
   import FieldTextarea from '@aziontech/webkit/field-textarea'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
-  import InputNumber from '@aziontech/webkit/input-number'
+  import NumberInput from '@aziontech/webkit/number-input'
   import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
   import Select from '@aziontech/webkit/select'
@@ -241,7 +241,7 @@
                           <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
                             <Label for="record-ttl">TTL (seconds)</Label>
                           </div>
-                          <InputNumber
+                          <NumberInput
                             id="record-ttl"
                             v-model="form.ttl"
                             size="large"
@@ -354,7 +354,7 @@
                           <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
                             <Label for="record-weight">Weight</Label>
                           </div>
-                          <InputNumber
+                          <NumberInput
                             id="record-weight"
                             v-model="form.weight"
                             size="large"

@@ -2,11 +2,11 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import Card from '@aziontech/webkit/card'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PopoverContent from '@aziontech/webkit/popover-content'
@@ -204,7 +204,7 @@
   <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
     <main class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
-        <CardBox :padded="false">
+        <Card :padded="false">
           <template #content>
             <TableRoot
               ref="tableRef"
@@ -404,11 +404,11 @@
               </template>
 
               <template #cell-actions="{ row }">
-                <DropdownRoot
+                <DropdownMenuRoot
                   v-if="row.kind !== 'parent'"
                   placement="bottom-end"
                 >
-                  <DropdownTrigger>
+                  <DropdownMenuTrigger>
                     <Tooltip text="File actions">
                       <IconButton
                         icon="pi pi-ellipsis-h"
@@ -417,9 +417,9 @@
                         aria-label="File actions"
                       />
                     </Tooltip>
-                  </DropdownTrigger>
-                  <DropdownGroup>
-                    <DropdownOption
+                  </DropdownMenuTrigger>
+                  <DropdownMenuGroup>
+                    <DropdownMenuOption
                       v-if="row.kind === 'folder'"
                       key="open"
                       value="open"
@@ -430,8 +430,8 @@
                           class="pi pi-folder-open"
                           aria-hidden="true"
                       /></template>
-                    </DropdownOption>
-                    <DropdownOption
+                    </DropdownMenuOption>
+                    <DropdownMenuOption
                       v-else
                       key="download"
                       value="download"
@@ -442,10 +442,10 @@
                           class="pi pi-download"
                           aria-hidden="true"
                       /></template>
-                    </DropdownOption>
-                  </DropdownGroup>
-                  <DropdownGroup>
-                    <DropdownOption
+                    </DropdownMenuOption>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuOption
                       value="delete"
                       label="Delete"
                     >
@@ -454,9 +454,9 @@
                           class="pi pi-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownOption>
-                  </DropdownGroup>
-                </DropdownRoot>
+                    </DropdownMenuOption>
+                  </DropdownMenuGroup>
+                </DropdownMenuRoot>
               </template>
 
               <template #empty>
@@ -478,7 +478,7 @@
               </template>
             </TableRoot>
           </template>
-        </CardBox>
+        </Card>
       </section>
     </main>
   </div>

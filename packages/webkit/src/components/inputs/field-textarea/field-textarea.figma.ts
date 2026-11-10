@@ -22,7 +22,7 @@ const helperLayer = instance.findInstance('HelperText')
 const helperText = helperLayer.type === 'INSTANCE' ? helperLayer.findText('label') : undefined
 const helper = helperText && helperText.type === 'TEXT' ? helperText.textContent.trim() : ''
 
-const input = instance.findInstance('InputTextArea')
+const input = instance.findInstance('InputArea')
 const placeholder = input.type === 'INSTANCE' ? input.getString('placeholder') : ''
 
 export default {

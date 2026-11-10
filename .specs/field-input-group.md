@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: c8a3ac4b0a9e0ea6c5328edbfb351d5508256d71281075589f566c918e1c7ee5
+checksum: fcd3a97ff57c5046eb58f600163fc14b471c12cdd925039da24c629347d102af
 created: 2026-07-01
 last_updated: 2026-11-09
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Form field wrapper around `InputGroup` that composes `Label`, `InputGroup` (with its own middle `<input>` rendered internally), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldText`'s API and template shape verbatim, except the underlying primitive is `InputGroup` (fixed height, no `size` prop, side slots for icons/text) instead of `InputText`. Use it whenever a text input surrounded by prefix/suffix content needs a visible label or helper/error message.
+Form field wrapper around `InputGroup` that composes `Label`, `InputGroup` (with its own middle `<input>` rendered internally), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldText`'s API and template shape verbatim, except the underlying primitive is `InputGroup` (fixed height, no `size` prop, side slots for icons/text) instead of `Input`. Use it whenever a text input surrounded by prefix/suffix content needs a visible label or helper/error message.
 
 ## When to use
 

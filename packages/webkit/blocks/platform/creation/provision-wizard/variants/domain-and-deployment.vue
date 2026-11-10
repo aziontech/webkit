@@ -4,17 +4,17 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Label from '@aziontech/webkit/label'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Stepper from '@aziontech/webkit/stepper'
@@ -772,7 +772,7 @@
                       v-if="stepIndex === 0"
                       class="flex min-w-0 flex-col gap-(--layout-section-gap)"
                     >
-                      <CardBox
+                      <Card
                         :padded="false"
                         title="Project"
                       >
@@ -782,7 +782,7 @@
                               What this service serves on each environment, so one service can serve
                               different projects on Production and Preview.
                             </p>
-                            <SegmentedButton
+                            <ToggleGroup
                               v-model="projectMode"
                               :options="projectModes"
                               size="large"
@@ -826,7 +826,7 @@
                               :data-field-invalid="projectPicker.message || null"
                               class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-md)"
                             >
-                              <InputText
+                              <Input
                                 v-if="projectPicker.paged"
                                 v-model="projectPicker.query"
                                 size="large"
@@ -840,7 +840,7 @@
                                     aria-hidden="true"
                                   />
                                 </template>
-                              </InputText>
+                              </Input>
 
                               <HelperText
                                 v-if="projectPicker.message"
@@ -949,13 +949,13 @@
                             </div>
                           </div>
                         </template>
-                      </CardBox>
+                      </Card>
 
                       <div
                         v-if="projectMode === 'new'"
                         class="flex min-w-0 flex-col gap-(--layout-section-gap)"
                       >
-                        <CardBox
+                        <Card
                           title="Cache Settings"
                           :padded="false"
                         >
@@ -1018,9 +1018,9 @@
                               </Item>
                             </Item.List>
                           </template>
-                        </CardBox>
+                        </Card>
 
-                        <CardBox :padded="false">
+                        <Card :padded="false">
                           <template #content>
                             <Item.List>
                               <Item size="small">
@@ -1058,7 +1058,7 @@
                                     >
                                       Type
                                     </p>
-                                    <BoxGridSelection
+                                    <RadioCards
                                       v-model="scratch.origin.type"
                                       :items="originTypes"
                                       aria-labelledby="origin-type-label"
@@ -1139,13 +1139,13 @@
                               </div>
                             </div>
                           </template>
-                        </CardBox>
+                        </Card>
                       </div>
                     </div>
 
                     <template v-else>
                       <div class="mb-(--layout-section-gap)">
-                        <CardBox :padded="false">
+                        <Card :padded="false">
                           <template #content>
                             <Item.List>
                               <Item size="small">
@@ -1175,17 +1175,17 @@
                               </Item>
                             </Item.List>
                           </template>
-                        </CardBox>
+                        </Card>
                       </div>
 
                       <div class="flex min-w-0 flex-col">
-                        <CardBox
+                        <Card
                           :padded="false"
                           title="Domain"
                         >
                           <template #content>
                             <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
-                              <SegmentedButton
+                              <ToggleGroup
                                 v-model="form.domainType"
                                 :options="domainTypes"
                                 size="large"
@@ -1283,10 +1283,10 @@
                               </p>
                             </div>
                           </template>
-                        </CardBox>
+                        </Card>
 
                         <div class="mt-(--layout-section-gap)">
-                          <CardBox title="Environment and certificate">
+                          <Card title="Environment and certificate">
                             <template #content>
                               <div class="flex flex-col gap-(--spacing-lg)">
                                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
@@ -1300,7 +1300,7 @@
                                       Environment
                                     </Label>
                                   </div>
-                                  <BoxGridSelection
+                                  <RadioCards
                                     v-model="form.environment"
                                     :items="environments"
                                     aria-labelledby="environment-label"
@@ -1350,11 +1350,11 @@
                                 </div>
                               </div>
                             </template>
-                          </CardBox>
+                          </Card>
                         </div>
 
                         <div class="mt-(--layout-section-gap)">
-                          <CardBox
+                          <Card
                             :padded="false"
                             title="Deployment"
                           >
@@ -1365,7 +1365,7 @@
                                   binds, and how versions are promoted into it.
                                 </p>
 
-                                <SegmentedButton
+                                <ToggleGroup
                                   v-model="form.deploymentMode"
                                   :options="deploymentModes"
                                   size="large"
@@ -1412,7 +1412,7 @@
                                   :data-field-invalid="deploymentPicker.message || null"
                                   class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-md)"
                                 >
-                                  <InputText
+                                  <Input
                                     v-if="deploymentPicker.paged"
                                     v-model="deploymentPicker.query"
                                     size="large"
@@ -1426,7 +1426,7 @@
                                         aria-hidden="true"
                                       />
                                     </template>
-                                  </InputText>
+                                  </Input>
 
                                   <HelperText
                                     v-if="deploymentPicker.message"
@@ -1541,7 +1541,7 @@
                                 </div>
                               </div>
                             </template>
-                          </CardBox>
+                          </Card>
                         </div>
 
                         <section
@@ -1591,7 +1591,7 @@
                                 :data-open="advancedOpen || null"
                                 class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                               >
-                                <CardBox :padded="false">
+                                <Card :padded="false">
                                   <template #content>
                                     <div class="p-(--spacing-md)">
                                       <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
@@ -1686,7 +1686,7 @@
                                       </Item>
                                     </Item.List>
                                   </template>
-                                </CardBox>
+                                </Card>
                               </div>
                             </div>
                           </div>

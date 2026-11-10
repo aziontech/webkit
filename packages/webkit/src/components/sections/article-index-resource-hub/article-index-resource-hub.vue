@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
@@ -160,7 +160,7 @@
               <SelectTrigger :aria-label="facet.label" />
               <SelectContent>
                 <template #search>
-                  <InputText
+                  <Input
                     :model-value="optionQuery[facet.key] ?? ''"
                     size="small"
                     placeholder="Search"
@@ -173,7 +173,7 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
                 </template>
                 <SelectOption :value="facet.allLabel">
                   {{ facet.allLabel }}

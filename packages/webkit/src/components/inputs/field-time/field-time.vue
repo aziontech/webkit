@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
-  import InputText from '../input-text/input-text.vue'
+  import Input from '../input/input.vue'
   import Label from '../label/label.vue'
   import {
     caretAfterDigits,
@@ -32,7 +32,7 @@
     /** Text rendered inside the Label. When empty, the label row is omitted. */
     label?: string
     /**
-     * Placeholder forwarded to the InputText. When empty, it falls back to the format in upper
+     * Placeholder forwarded to the Input. When empty, it falls back to the format in upper
      * case: HH:MM for hh:mm, HH:MM:SS for hh:mm:ss.
      */
     placeholder?: string
@@ -41,7 +41,7 @@
      * so the row is always present. A non-empty value replaces the hint.
      */
     helperText?: string
-    /** Size forwarded to the InputText. Heights: small=28px, medium=32px, large=40px. */
+    /** Size forwarded to the Input. Heights: small=28px, medium=32px, large=40px. */
     size?: FieldTimeSize
     /** Disables the input and switches the helper to kind=disabled (lock icon). */
     disabled?: boolean
@@ -155,7 +155,7 @@
       :for="resolvedInputId"
       :data-testid="`${testId}__label`"
     />
-    <InputText
+    <Input
       :model-value="displayValue"
       :placeholder="effectivePlaceholder"
       type="text"
@@ -179,7 +179,7 @@
           :data-testid="`${testId}__icon`"
         />
       </template>
-    </InputText>
+    </Input>
     <HelperText
       :id="helperId"
       :label="helperLabel"

@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: approved
-checksum: b926dd1d3233b1e8590425f88ea169ea1f4a4e46af204b64af6e8ba54374ae19
+checksum: 732cc6999aa548fc7cfe63f47766429f3a9c45f7031348991022540638767680
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-10
@@ -43,65 +43,69 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 
 ```vue
 <script setup>
-import DonutChart from '@aziontech/webkit/donut-chart'
+  import DonutChart from '@aziontech/webkit/donut-chart'
 
-const series = [
-  { id: 'br', name: 'Brazil', values: [48200] },
-  { id: 'us', name: 'United States', values: [31600] },
-  { id: 'de', name: 'Germany', values: [18900] }
-]
+  const series = [
+    { id: 'br', name: 'Brazil', values: [48200] },
+    { id: 'us', name: 'United States', values: [31600] },
+    { id: 'de', name: 'Germany', values: [18900] }
+  ]
 </script>
 
 <template>
-  <DonutChart :series="series" total-label="Blocked threats" aria-label="Top WAF threat requests by country" />
+  <DonutChart
+    :series="series"
+    total-label="Blocked threats"
+    aria-label="Top WAF threat requests by country"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `series` | `ChartSeries[]` | `[]` | false | One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. |
-| `kind` | `'donut' \| 'pie'` | `'donut'` | false | Ring or solid disc. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Diameter of the ring: 128, 176 or 240 pixels. |
-| `cap` | `number` | `6` | false | Slices kept before the rest fold into Other. |
-| `otherLabel` | `string` | `'Other'` | false | Name of the folded slice. |
-| `totalLabel` | `string` | `'Total'` | false | Caption under the total in the center. |
-| `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the center value and legend values. |
-| `loading` | `boolean` | `false` | false | Renders a circular Skeleton and suppresses interaction. |
-| `refetching` | `boolean` | `false` | false | Holds the previous render at reduced opacity while new data loads. |
-| `error` | `string` | `''` | false | Error message; when set, a danger Message replaces the ring. |
-| `emptyTitle` | `string` | `'No data available'` | false | Title of the empty state shown when every slice is zero. |
-| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
-| `tableView` | `boolean` | `false` | false | Shows the data table in place of the ring. The table is always present for assistive tech. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the chart. |
+| Prop               | Type                             | Default               | Required | JSDoc                                                                                                                       |
+| ------------------ | -------------------------------- | --------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `series`           | `ChartSeries[]`                  | `[]`                  | false    | One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. |
+| `kind`             | `'donut' \| 'pie'`               | `'donut'`             | false    | Ring or solid disc.                                                                                                         |
+| `size`             | `'small' \| 'medium' \| 'large'` | `'medium'`            | false    | Diameter of the ring: 128, 176 or 240 pixels.                                                                               |
+| `cap`              | `number`                         | `6`                   | false    | Slices kept before the rest fold into Other.                                                                                |
+| `otherLabel`       | `string`                         | `'Other'`             | false    | Name of the folded slice.                                                                                                   |
+| `totalLabel`       | `string`                         | `'Total'`             | false    | Caption under the total in the center.                                                                                      |
+| `formatValue`      | `(value: number) => string`      | `formatCompact`       | false    | Formats the center value and legend values.                                                                                 |
+| `loading`          | `boolean`                        | `false`               | false    | Renders a circular Skeleton and suppresses interaction.                                                                     |
+| `refetching`       | `boolean`                        | `false`               | false    | Holds the previous render at reduced opacity while new data loads.                                                          |
+| `error`            | `string`                         | `''`                  | false    | Error message; when set, a danger Alert replaces the ring.                                                                  |
+| `emptyTitle`       | `string`                         | `'No data available'` | false    | Title of the empty state shown when every slice is zero.                                                                    |
+| `emptyDescription` | `string`                         | `''`                  | false    | Supporting line under the empty title: why the range is empty, or what to do next.                                          |
+| `tableView`        | `boolean`                        | `false`               | false    | Shows the data table in place of the ring. The table is always present for assistive tech.                                  |
+| `ariaLabel`        | `string`                         | `''`                  | false    | Accessible name of the chart.                                                                                               |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:activeIndex` | `number \| null` | `null` | `update:activeIndex` | The slice under the pointer or keyboard focus. |
-| `v-model:hiddenSeries` | `string[]` | `[]` | `update:hiddenSeries` | Ids of slices the legend has hidden. |
+| Model                  | Type             | Default | Emits                 | Notes                                          |
+| ---------------------- | ---------------- | ------- | --------------------- | ---------------------------------------------- |
+| `v-model:activeIndex`  | `number \| null` | `null`  | `update:activeIndex`  | The slice under the pointer or keyboard focus. |
+| `v-model:hiddenSeries` | `string[]`       | `[]`    | `update:hiddenSeries` | Ids of slices the legend has hidden.           |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `slice-click` | `(event: MouseEvent \| KeyboardEvent, series: ChartSeries)` | Click on a slice, or Enter / Space on the focused chart; `series` is the consumer's own series object. |
-| `legend-toggle` | `(event: MouseEvent, series: ChartSeries)` | A legend entry toggled. |
+| Event           | Payload                                                     | Notes                                                                                                  |
+| --------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `slice-click`   | `(event: MouseEvent \| KeyboardEvent, series: ChartSeries)` | Click on a slice, or Enter / Space on the focused chart; `series` is the consumer's own series object. |
+| `legend-toggle` | `(event: MouseEvent, series: ChartSeries)`                  | A legend entry toggled.                                                                                |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `center` | `{ total: number; active: ChartSeries \| null }` | Replaces the center readout. |
-| `empty` | — | Replaces the default EmptyState. |
-| `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
-| `error` | — | Replaces the default danger Message. |
+| Slot            | Scope                                            | Notes                                                                                                                   |
+| --------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `center`        | `{ total: number; active: ChartSeries \| null }` | Replaces the center readout.                                                                                            |
+| `empty`         | —                                                | Replaces the default EmptyState.                                                                                        |
+| `empty-actions` | —                                                | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
+| `error`         | —                                                | Replaces the default danger Alert.                                                                                      |
 
 ## States
 
-- Visual states: `default`, `loading` (circular Skeleton), `error` (Message), `empty` (EmptyState with a chart icon, the title, the optional description and actions, holding the ring's footprint), `refetching`, `table-view`, `active` (a slice hovered or focused)
+- Visual states: `default`, `loading` (circular Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, holding the ring's footprint), `refetching`, `table-view`, `active` (a slice hovered or focused)
 - `data-kind`: `donut` | `pie`; `data-size`: `small` | `medium` | `large`
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view` mirror the state
 - `data-entered` on each slice flips after two animation frames to run the sweep
@@ -109,30 +113,30 @@ const series = [
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| slice sweep on entrance | `transition-[stroke-dasharray,opacity] duration-slow-02 ease-productive-entrance`, each arc grows from zero length on `data-entered`, staggered per slice by `transition-delay` | `slow-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| active slice lift, others dim | `transition-[stroke-width,opacity] duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| refetch hold | `transition-opacity duration-moderate-01` | `moderate-01` | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                                                                                                                                                          | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| slice sweep on entrance       | `transition-[stroke-dasharray,opacity] duration-slow-02 ease-productive-entrance`, each arc grows from zero length on `data-entered`, staggered per slice by `transition-delay` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| active slice lift, others dim | `transition-[stroke-width,opacity] duration-fast-02 ease-productive-entrance`                                                                                                   | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| refetch hold                  | `transition-opacity duration-moderate-01`                                                                                                                                       | `moderate-01`                                     | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| slices | `var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)` |
-| status slices | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
-| slice gap | `var(--bg-surface)` |
-| center value | `.text-big-number-sm`, `tabular-nums` |
-| center caption, legend names | `.text-body-sm`, `var(--text-muted)`, `var(--text-default)` |
-| legend values and shares | `.text-label-code-md`, `tabular-nums`, `var(--text-muted)` |
-| spacing | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)` |
-| focus | `var(--ring-color)` |
+| Region                       | Token (DESIGN.md)                                                                                                      |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| slices                       | `var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`                                         |
+| status slices                | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
+| slice gap                    | `var(--bg-surface)`                                                                                                    |
+| center value                 | `.text-big-number-sm`, `tabular-nums`                                                                                  |
+| center caption, legend names | `.text-body-sm`, `var(--text-muted)`, `var(--text-default)`                                                            |
+| legend values and shares     | `.text-label-code-md`, `tabular-nums`, `var(--text-muted)`                                                             |
+| spacing                      | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`                                                          |
+| focus                        | `var(--ring-color)`                                                                                                    |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | The `--chart-*` role ships with the chart category. |
+| Figma variable | Temporary primitive | Follow-up                                           |
+| -------------- | ------------------- | --------------------------------------------------- |
+| _none_         | —                   | The `--chart-*` role ships with the chart category. |
 
 ## Accessibility (WCAG 2.1 AA)
 

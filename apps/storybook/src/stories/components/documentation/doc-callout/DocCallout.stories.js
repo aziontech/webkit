@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The admonition a documentation page interrupts itself with, rendered on the webkit Message surface so the severity colour, border, icon and radius come from the design system. The anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — and there is no title row and no `title` prop, because the name repeated what the glyph and the tint already say and pushed the sentence the reader came for further down the box. One kind carries no severity: `tip` takes the page's own surface and rule and spends its whole emphasis on the glyph, in `--primary`."
+          "The admonition a documentation page interrupts itself with, rendered on the webkit Alert surface so the severity colour, border, icon and radius come from the design system. The anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — and there is no title row and no `title` prop, because the name repeated what the glyph and the tint already say and pushed the sentence the reader came for further down the box. One kind carries no severity: `tip` takes the page's own surface and rule and spends its whole emphasis on the glyph, in `--primary`."
       },
       canvas: { sourceState: 'shown' }
     }

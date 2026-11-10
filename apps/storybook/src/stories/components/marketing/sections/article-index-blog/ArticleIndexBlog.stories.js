@@ -26,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Every article of the blog as one ruled list, with a category picker and a search field on one row. Each article is a row — its cover, overline, headline, two-line deck and byline — that is one link named by its headline, with a read cue that rises in on hover or focus from `lg` up. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `input-text`, `avatar` and `button`."
+          "Every article of the blog as one ruled list, with a category picker and a search field on one row. Each article is a row — its cover, overline, headline, two-line deck and byline — that is one link named by its headline, with a read cue that rises in on hover or focus from `lg` up. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar` and `button`."
       },
       canvas: { sourceState: 'shown' }
     }

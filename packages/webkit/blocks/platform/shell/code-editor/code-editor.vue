@@ -4,33 +4,33 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
-  import CardBox from '@aziontech/webkit/card-box'
-  import CommandMenu from '@aziontech/webkit/command-menu'
+  import Card from '@aziontech/webkit/card'
+  import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import Menu from '@aziontech/webkit/menu'
-  import ResizablePanelHandle from '@aziontech/webkit/resizable-panel-handle'
-  import ResizablePanelPane from '@aziontech/webkit/resizable-panel-pane'
-  import ResizablePanelRoot from '@aziontech/webkit/resizable-panel-root'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ResizableHandle from '@aziontech/webkit/resizable-handle'
+  import ResizablePane from '@aziontech/webkit/resizable-pane'
+  import ResizableRoot from '@aziontech/webkit/resizable-root'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
-  import TabView from '@aziontech/webkit/tab-view'
+  import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
@@ -590,21 +590,21 @@ export async function handleRequest(request, args = {}) {
               </a>
             </div>
 
-            <CommandMenu
+            <Command
               v-model:open="paletteOpen"
               @select="onPaletteSelect"
             >
-              <CommandMenu.Input
+              <Command.Input
                 placeholder="Search resources, pages and commands"
                 @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
               />
-              <CommandMenu.List>
-                <CommandMenu.Group
+              <Command.List>
+                <Command.Group
                   v-if="!paletteQuery"
                   key="recents"
                   heading="Recents"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="row in recentRows"
                     :key="row.key"
                     :value="'res:' + row.key"
@@ -619,20 +619,20 @@ export async function handleRequest(request, args = {}) {
                     <template #suffix>
                       <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
                     </template>
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator
+                <Command.Separator
                   v-if="!paletteQuery"
                   key="recents-rule"
                 />
 
-                <CommandMenu.Group
+                <Command.Group
                   v-for="group in paletteGroups"
                   :key="group.key"
                   :heading="group.heading"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="item in group.items"
                     :key="item.id"
                     :value="'nav:' + item.id"
@@ -647,13 +647,13 @@ export async function handleRequest(request, args = {}) {
                       />
                     </template>
                     {{ item.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator key="commands-rule" />
+                <Command.Separator key="commands-rule" />
 
-                <CommandMenu.Group heading="Actions">
-                  <CommandMenu.Item
+                <Command.Group heading="Actions">
+                  <Command.Item
                     v-for="command in actionCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -665,11 +665,11 @@ export async function handleRequest(request, args = {}) {
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Group heading="Account">
-                  <CommandMenu.Item
+                <Command.Group heading="Account">
+                  <Command.Item
                     v-for="command in accountCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -681,14 +681,12 @@ export async function handleRequest(request, args = {}) {
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Empty
-                  >No resource, page or command matches your search.</CommandMenu.Empty
-                >
-              </CommandMenu.List>
-            </CommandMenu>
+                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
+              </Command.List>
+            </Command>
           </div>
         </template>
 
@@ -711,8 +709,8 @@ export async function handleRequest(request, args = {}) {
               kind="square"
             />
             <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <Dropdown placement="top-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="top-end">
+              <DropdownMenu.Trigger>
                 <Tooltip text="Account menu">
                   <IconButton
                     icon="pi pi-ellipsis-v"
@@ -721,15 +719,15 @@ export async function handleRequest(request, args = {}) {
                     size="small"
                   />
                 </Tooltip>
-              </Dropdown.Trigger>
-              <Dropdown.Group>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
                 <template #top>
                   <div class="flex min-w-0 flex-col">
                     <span class="truncate text-label-md text-(--text-default)">alex</span>
                     <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
                   </div>
                 </template>
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="settings"
                   label="Account Settings"
                 >
@@ -739,8 +737,8 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="personal-tokens"
                   label="Personal Tokens"
                 >
@@ -750,9 +748,9 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
@@ -764,9 +762,9 @@ export async function handleRequest(request, args = {}) {
                     aria-label="Theme"
                   />
                 </div>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="home"
                   label="Home Page"
                 >
@@ -776,8 +774,8 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="changelog"
                   label="Changelog"
                 >
@@ -787,8 +785,8 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="feedback"
                   label="Feedback"
                 >
@@ -798,8 +796,8 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="docs"
                   label="Docs"
                 >
@@ -809,10 +807,10 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="logout"
                   label="Log out"
                 >
@@ -822,9 +820,9 @@ export async function handleRequest(request, args = {}) {
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
                   <Button
                     label="Upgrade to Pro"
@@ -839,8 +837,8 @@ export async function handleRequest(request, args = {}) {
                     />
                   </div>
                 </div>
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </div>
         </template>
       </Sidebar>
@@ -980,19 +978,19 @@ export async function handleRequest(request, args = {}) {
               class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <TabView
+                <Tabs
                   v-model:value="activeTab"
                   class="w-full"
                 >
-                  <TabView.List>
-                    <TabView.Item
+                  <Tabs.List>
+                    <Tabs.Item
                       v-for="tab in tabs"
                       :key="tab.value"
                       :value="tab.value"
                       :label="tab.label"
                     />
-                  </TabView.List>
-                </TabView>
+                  </Tabs.List>
+                </Tabs>
               </div>
             </div>
           </div>
@@ -1011,7 +1009,7 @@ export async function handleRequest(request, args = {}) {
                     <div
                       class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
                     >
-                      <SegmentedButton
+                      <ToggleGroup
                         v-model="activeDocument"
                         :options="documents"
                         aria-label="Editor document"
@@ -1082,11 +1080,11 @@ export async function handleRequest(request, args = {}) {
                             </div>
                           </div>
                           <div class="flex min-h-0 flex-1">
-                            <ResizablePanelRoot
+                            <ResizableRoot
                               class="w-full"
                               aria-label="Argument form"
                             >
-                              <ResizablePanelPane
+                              <ResizablePane
                                 v-model:basis="schemaWidth"
                                 v-model:collapsed="schemaCollapsed"
                                 collapsible
@@ -1106,9 +1104,9 @@ export async function handleRequest(request, args = {}) {
                                     </div>
                                   </div>
                                 </div>
-                              </ResizablePanelPane>
-                              <ResizablePanelHandle aria-label="Resize the schema" />
-                              <ResizablePanelPane aria-label="Fields">
+                              </ResizablePane>
+                              <ResizableHandle aria-label="Resize the schema" />
+                              <ResizablePane aria-label="Fields">
                                 <div
                                   v-if="fields.length === 0"
                                   class="flex min-h-0 flex-1 p-(--spacing-sm)"
@@ -1146,7 +1144,7 @@ export async function handleRequest(request, args = {}) {
                                   <div
                                     class="layout-column-form mx-auto flex min-w-0 flex-col gap-(--spacing-sm)"
                                   >
-                                    <CardBox :padded="false">
+                                    <Card :padded="false">
                                       <template #content>
                                         <Item.List>
                                           <div
@@ -1281,7 +1279,7 @@ export async function handleRequest(request, args = {}) {
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
                                                                 <div class="contents font-code">
-                                                                  <InputText
+                                                                  <Input
                                                                     :id="
                                                                       formId + '-key-' + field.id
                                                                     "
@@ -1373,7 +1371,7 @@ export async function handleRequest(request, args = {}) {
                                                               <div
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
-                                                                <InputText
+                                                                <Input
                                                                   v-model="field.title"
                                                                   size="medium"
                                                                   :placeholder="
@@ -1402,7 +1400,7 @@ export async function handleRequest(request, args = {}) {
                                                               <div
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
-                                                                <InputText
+                                                                <Input
                                                                   v-model="field.description"
                                                                   size="medium"
                                                                   placeholder="What this argument does"
@@ -1512,7 +1510,7 @@ export async function handleRequest(request, args = {}) {
                                                                     v-else
                                                                     class="contents font-code"
                                                                   >
-                                                                    <InputText
+                                                                    <Input
                                                                       v-model="field.default"
                                                                       size="medium"
                                                                       :inputmode="
@@ -1546,7 +1544,7 @@ export async function handleRequest(request, args = {}) {
                                                               <div
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
-                                                                <InputText
+                                                                <Input
                                                                   v-model="field.minLength"
                                                                   size="medium"
                                                                   inputmode="numeric"
@@ -1572,7 +1570,7 @@ export async function handleRequest(request, args = {}) {
                                                               <div
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
-                                                                <InputText
+                                                                <Input
                                                                   v-model="field.maxLength"
                                                                   size="medium"
                                                                   inputmode="numeric"
@@ -1603,7 +1601,7 @@ export async function handleRequest(request, args = {}) {
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
                                                                 <div class="contents font-code">
-                                                                  <InputText
+                                                                  <Input
                                                                     v-model="field.pattern"
                                                                     size="medium"
                                                                     placeholder="^[a-z0-9_-]+$"
@@ -1634,7 +1632,7 @@ export async function handleRequest(request, args = {}) {
                                                               <div
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
-                                                                <InputText
+                                                                <Input
                                                                   v-model="field.minimum"
                                                                   size="medium"
                                                                   inputmode="numeric"
@@ -1663,7 +1661,7 @@ export async function handleRequest(request, args = {}) {
                                                               <div
                                                                 class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                                               >
-                                                                <InputText
+                                                                <Input
                                                                   v-model="field.maximum"
                                                                   size="medium"
                                                                   inputmode="numeric"
@@ -1762,11 +1760,11 @@ export async function handleRequest(request, args = {}) {
                                           </div>
                                         </Item.List>
                                       </template>
-                                    </CardBox>
+                                    </Card>
                                   </div>
                                 </div>
-                              </ResizablePanelPane>
-                            </ResizablePanelRoot>
+                              </ResizablePane>
+                            </ResizableRoot>
                           </div>
                         </div>
                       </div>
@@ -1795,7 +1793,7 @@ export async function handleRequest(request, args = {}) {
                       <div class="grid min-w-0 grid-rows-[1fr]">
                         <div class="min-w-0">
                           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <CardBox :padded="false">
+                            <Card :padded="false">
                               <template #content>
                                 <Item.List>
                                   <Item size="small">
@@ -1811,7 +1809,7 @@ export async function handleRequest(request, args = {}) {
                                         <div
                                           class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                         >
-                                          <InputText
+                                          <Input
                                             v-model="form.name"
                                             size="large"
                                             class="w-full"
@@ -1835,7 +1833,7 @@ export async function handleRequest(request, args = {}) {
                                   </Item>
                                 </Item.List>
                               </template>
-                            </CardBox>
+                            </Card>
                           </div>
                         </div>
                       </div>
@@ -1858,7 +1856,7 @@ export async function handleRequest(request, args = {}) {
                       <div class="grid min-w-0 grid-rows-[1fr]">
                         <div class="min-w-0">
                           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <CardBox :padded="false">
+                            <Card :padded="false">
                               <template #content>
                                 <Item.List>
                                   <Item size="small">
@@ -1874,7 +1872,7 @@ export async function handleRequest(request, args = {}) {
                                         <div
                                           class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
                                         >
-                                          <InputText
+                                          <Input
                                             :model-value="runtimeLabel"
                                             size="large"
                                             class="w-full"
@@ -1888,14 +1886,14 @@ export async function handleRequest(request, args = {}) {
                                                 aria-hidden="true"
                                               />
                                             </template>
-                                          </InputText>
+                                          </Input>
                                         </div>
                                       </Item.Actions>
                                     </div>
                                   </Item>
                                 </Item.List>
                               </template>
-                            </CardBox>
+                            </Card>
                           </div>
                         </div>
                       </div>
@@ -1924,7 +1922,7 @@ export async function handleRequest(request, args = {}) {
                       <div class="grid min-w-0 grid-rows-[1fr]">
                         <div class="min-w-0">
                           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <CardBox :padded="false">
+                            <Card :padded="false">
                               <template #content>
                                 <Item.List>
                                   <Item size="small">
@@ -1963,7 +1961,7 @@ export async function handleRequest(request, args = {}) {
                                   </Item>
                                 </Item.List>
                               </template>
-                            </CardBox>
+                            </Card>
                           </div>
                         </div>
                       </div>
@@ -1986,7 +1984,7 @@ export async function handleRequest(request, args = {}) {
                       <div class="grid min-w-0 grid-rows-[1fr]">
                         <div class="min-w-0">
                           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <CardBox :padded="false">
+                            <Card :padded="false">
                               <template #content>
                                 <Item.List>
                                   <Item size="small">
@@ -2006,7 +2004,7 @@ export async function handleRequest(request, args = {}) {
                                   </Item>
                                 </Item.List>
                               </template>
-                            </CardBox>
+                            </Card>
                           </div>
                         </div>
                       </div>
@@ -2115,8 +2113,8 @@ export async function handleRequest(request, args = {}) {
                 <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
                   >alex</span
                 >
-                <Dropdown placement="top-end">
-                  <Dropdown.Trigger>
+                <DropdownMenu placement="top-end">
+                  <DropdownMenu.Trigger>
                     <Tooltip text="Account menu">
                       <IconButton
                         icon="pi pi-ellipsis-v"
@@ -2125,8 +2123,8 @@ export async function handleRequest(request, args = {}) {
                         size="small"
                       />
                     </Tooltip>
-                  </Dropdown.Trigger>
-                  <Dropdown.Group>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Group>
                     <template #top>
                       <div class="flex min-w-0 flex-col">
                         <span class="truncate text-label-md text-(--text-default)">alex</span>
@@ -2135,7 +2133,7 @@ export async function handleRequest(request, args = {}) {
                         >
                       </div>
                     </template>
-                    <Dropdown.Option
+                    <DropdownMenu.Option
                       value="settings"
                       label="Account Settings"
                     >
@@ -2145,8 +2143,8 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="personal-tokens"
                       label="Personal Tokens"
                     >
@@ -2156,9 +2154,9 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
@@ -2170,9 +2168,9 @@ export async function handleRequest(request, args = {}) {
                         aria-label="Theme"
                       />
                     </div>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="home"
                       label="Home Page"
                     >
@@ -2182,8 +2180,8 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="changelog"
                       label="Changelog"
                     >
@@ -2193,8 +2191,8 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="feedback"
                       label="Feedback"
                     >
@@ -2204,8 +2202,8 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="docs"
                       label="Docs"
                     >
@@ -2215,10 +2213,10 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="logout"
                       label="Log out"
                     >
@@ -2228,9 +2226,9 @@ export async function handleRequest(request, args = {}) {
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
                     >
@@ -2247,8 +2245,8 @@ export async function handleRequest(request, args = {}) {
                         />
                       </div>
                     </div>
-                  </Dropdown.Group>
-                </Dropdown>
+                  </DropdownMenu.Group>
+                </DropdownMenu>
               </div>
             </template>
           </Sidebar>

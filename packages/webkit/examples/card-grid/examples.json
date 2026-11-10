@@ -18,7 +18,7 @@
       "file": "columns.vue"
     },
     {
-      "name": "DividerColor",
+      "name": "SeparatorColor",
       "summary": "The muted hairline weight, for rules one step back.",
       "file": "divider-color.vue"
     },

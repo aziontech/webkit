@@ -3,15 +3,15 @@
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputNumber from '@aziontech/webkit/input-number'
-  import InputText from '@aziontech/webkit/input-text'
+  import NumberInput from '@aziontech/webkit/number-input'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -258,7 +258,7 @@
                   </div>
                 </div>
               </header>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item size="small">
@@ -273,7 +273,7 @@
                         <Item.Actions class="w-full">
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <InputText
+                              <Input
                                 v-model="form.name"
                                 size="large"
                                 class="w-full"
@@ -297,7 +297,7 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
@@ -316,7 +316,7 @@
                   </div>
                 </div>
               </header>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item size="small">
@@ -395,7 +395,7 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
@@ -414,7 +414,7 @@
                   </div>
                 </div>
               </header>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item size="small">
@@ -483,7 +483,7 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
@@ -515,7 +515,7 @@
                         leave-to-class="-translate-y-2 opacity-0"
                       >
                         <div v-if="originError">
-                          <Message
+                          <Alert
                             severity="danger"
                             :label="originError"
                           >
@@ -528,14 +528,14 @@
                                 @click="reloadOrigins"
                               />
                             </template>
-                          </Message>
+                          </Alert>
                         </div>
                       </Transition>
                     </div>
                   </div>
                 </div>
               </header>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item size="small">
@@ -610,7 +610,7 @@
                         <Item.Actions class="w-full">
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <InputText
+                              <Input
                                 v-model="form.hostHeader"
                                 size="large"
                                 class="w-full"
@@ -635,7 +635,7 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
@@ -654,7 +654,7 @@
                   </div>
                 </div>
               </header>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item size="small">
@@ -667,7 +667,7 @@
                       <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                         <Item.Actions class="w-full">
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <InputNumber
+                            <NumberInput
                               v-model="form.browserMaxTtl"
                               size="large"
                               class="w-full"
@@ -690,7 +690,7 @@
                       <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                         <Item.Actions class="w-full">
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <InputNumber
+                            <NumberInput
                               v-model="form.cacheMaxTtl"
                               size="large"
                               class="w-full"
@@ -704,7 +704,7 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
@@ -723,7 +723,7 @@
                   </div>
                 </div>
               </header>
-              <CardBox :padded="false">
+              <Card :padded="false">
                 <template #content>
                   <Item.List>
                     <Item size="small">
@@ -744,7 +744,7 @@
                     </Item>
                   </Item.List>
                 </template>
-              </CardBox>
+              </Card>
             </section>
           </fieldset>
         </div>

@@ -4,22 +4,22 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import CommandMenu from '@aziontech/webkit/command-menu'
+  import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TabView from '@aziontech/webkit/tab-view'
+  import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -473,21 +473,21 @@ jobs:
               </a>
             </div>
 
-            <CommandMenu
+            <Command
               v-model:open="paletteOpen"
               @select="onPaletteSelect"
             >
-              <CommandMenu.Input
+              <Command.Input
                 placeholder="Search resources, pages and commands"
                 @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
               />
-              <CommandMenu.List>
-                <CommandMenu.Group
+              <Command.List>
+                <Command.Group
                   v-if="!paletteQuery"
                   key="recents"
                   heading="Recents"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="row in recentRows"
                     :key="row.key"
                     :value="'res:' + row.key"
@@ -502,20 +502,20 @@ jobs:
                     <template #suffix>
                       <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
                     </template>
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator
+                <Command.Separator
                   v-if="!paletteQuery"
                   key="recents-rule"
                 />
 
-                <CommandMenu.Group
+                <Command.Group
                   v-for="group in paletteGroups"
                   :key="group.key"
                   :heading="group.heading"
                 >
-                  <CommandMenu.Item
+                  <Command.Item
                     v-for="item in group.items"
                     :key="item.id"
                     :value="'nav:' + item.id"
@@ -530,13 +530,13 @@ jobs:
                       />
                     </template>
                     {{ item.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Separator key="commands-rule" />
+                <Command.Separator key="commands-rule" />
 
-                <CommandMenu.Group heading="Actions">
-                  <CommandMenu.Item
+                <Command.Group heading="Actions">
+                  <Command.Item
                     v-for="command in actionCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -548,11 +548,11 @@ jobs:
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Group heading="Account">
-                  <CommandMenu.Item
+                <Command.Group heading="Account">
+                  <Command.Item
                     v-for="command in accountCommands"
                     :key="command.id"
                     :value="'cmd:' + command.id"
@@ -564,14 +564,12 @@ jobs:
                       />
                     </template>
                     {{ command.label }}
-                  </CommandMenu.Item>
-                </CommandMenu.Group>
+                  </Command.Item>
+                </Command.Group>
 
-                <CommandMenu.Empty
-                  >No resource, page or command matches your search.</CommandMenu.Empty
-                >
-              </CommandMenu.List>
-            </CommandMenu>
+                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
+              </Command.List>
+            </Command>
           </div>
         </template>
 
@@ -594,8 +592,8 @@ jobs:
               kind="square"
             />
             <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <Dropdown placement="top-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="top-end">
+              <DropdownMenu.Trigger>
                 <Tooltip text="Account menu">
                   <IconButton
                     icon="pi pi-ellipsis-v"
@@ -604,15 +602,15 @@ jobs:
                     size="small"
                   />
                 </Tooltip>
-              </Dropdown.Trigger>
-              <Dropdown.Group>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
                 <template #top>
                   <div class="flex min-w-0 flex-col">
                     <span class="truncate text-label-md text-(--text-default)">alex</span>
                     <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
                   </div>
                 </template>
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="settings"
                   label="Account Settings"
                 >
@@ -622,8 +620,8 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="personal-tokens"
                   label="Personal Tokens"
                 >
@@ -633,9 +631,9 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div
                   class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                 >
@@ -647,9 +645,9 @@ jobs:
                     aria-label="Theme"
                   />
                 </div>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="home"
                   label="Home Page"
                 >
@@ -659,8 +657,8 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="changelog"
                   label="Changelog"
                 >
@@ -670,8 +668,8 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="feedback"
                   label="Feedback"
                 >
@@ -681,8 +679,8 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+                <DropdownMenu.Option
                   value="docs"
                   label="Docs"
                 >
@@ -692,10 +690,10 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="logout"
                   label="Log out"
                 >
@@ -705,9 +703,9 @@ jobs:
                       aria-hidden="true"
                     />
                   </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
+                </DropdownMenu.Option>
+              </DropdownMenu.Group>
+              <DropdownMenu.Group>
                 <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
                   <Button
                     label="Upgrade to Pro"
@@ -722,8 +720,8 @@ jobs:
                     />
                   </div>
                 </div>
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </div>
         </template>
       </Sidebar>
@@ -862,19 +860,19 @@ jobs:
               class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <TabView
+                <Tabs
                   v-model:value="activeTab"
                   class="w-full"
                 >
-                  <TabView.List>
-                    <TabView.Item
+                  <Tabs.List>
+                    <Tabs.Item
                       v-for="tab in tabs"
                       :key="tab.value"
                       :value="tab.value"
                       :label="tab.label"
                     />
-                  </TabView.List>
-                </TabView>
+                  </Tabs.List>
+                </Tabs>
               </div>
             </div>
           </div>
@@ -886,7 +884,7 @@ jobs:
                   <section
                     class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-section-gap)"
                   >
-                    <CardBox :padded="false">
+                    <Card :padded="false">
                       <template #content>
                         <div
                           class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
@@ -932,8 +930,8 @@ jobs:
                               icon="pi pi-external-link"
                             />
 
-                            <Dropdown placement="bottom-end">
-                              <Dropdown.Trigger>
+                            <DropdownMenu placement="bottom-end">
+                              <DropdownMenu.Trigger>
                                 <Tooltip text="Resource actions">
                                   <IconButton
                                     icon="pi pi-ellipsis-h"
@@ -942,10 +940,10 @@ jobs:
                                     aria-label="Resource actions"
                                   />
                                 </Tooltip>
-                              </Dropdown.Trigger>
+                              </DropdownMenu.Trigger>
 
-                              <Dropdown.Group>
-                                <Dropdown.Option
+                              <DropdownMenu.Group>
+                                <DropdownMenu.Option
                                   value="copy-url"
                                   label="Copy URL"
                                 >
@@ -955,11 +953,11 @@ jobs:
                                       aria-hidden="true"
                                     />
                                   </template>
-                                </Dropdown.Option>
-                              </Dropdown.Group>
+                                </DropdownMenu.Option>
+                              </DropdownMenu.Group>
 
-                              <Dropdown.Group>
-                                <Dropdown.Option
+                              <DropdownMenu.Group>
+                                <DropdownMenu.Option
                                   value="settings"
                                   label="Settings"
                                 >
@@ -969,9 +967,9 @@ jobs:
                                       aria-hidden="true"
                                     />
                                   </template>
-                                </Dropdown.Option>
-                              </Dropdown.Group>
-                            </Dropdown>
+                                </DropdownMenu.Option>
+                              </DropdownMenu.Group>
+                            </DropdownMenu>
                           </div>
                         </div>
 
@@ -1121,7 +1119,7 @@ jobs:
                           </div>
                         </div>
                       </template>
-                    </CardBox>
+                    </Card>
 
                     <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
                       <header class="group/heading flex flex-col">
@@ -1151,7 +1149,7 @@ jobs:
                           <div
                             class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
                           >
-                            <SegmentedButton
+                            <ToggleGroup
                               v-model="path"
                               :options="PATHS"
                               size="large"
@@ -1173,7 +1171,7 @@ jobs:
                             class="absolute right-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
                           />
                           <div class="flex min-w-0 flex-1">
-                            <CardBox
+                            <Card
                               :padded="false"
                               class="w-full"
                             >
@@ -1204,7 +1202,7 @@ jobs:
                                   </div>
                                 </div>
                               </template>
-                            </CardBox>
+                            </Card>
                           </div>
                         </div>
                       </div>
@@ -1267,8 +1265,8 @@ jobs:
                 <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
                   >alex</span
                 >
-                <Dropdown placement="top-end">
-                  <Dropdown.Trigger>
+                <DropdownMenu placement="top-end">
+                  <DropdownMenu.Trigger>
                     <Tooltip text="Account menu">
                       <IconButton
                         icon="pi pi-ellipsis-v"
@@ -1277,8 +1275,8 @@ jobs:
                         size="small"
                       />
                     </Tooltip>
-                  </Dropdown.Trigger>
-                  <Dropdown.Group>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Group>
                     <template #top>
                       <div class="flex min-w-0 flex-col">
                         <span class="truncate text-label-md text-(--text-default)">alex</span>
@@ -1287,7 +1285,7 @@ jobs:
                         >
                       </div>
                     </template>
-                    <Dropdown.Option
+                    <DropdownMenu.Option
                       value="settings"
                       label="Account Settings"
                     >
@@ -1297,8 +1295,8 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="personal-tokens"
                       label="Personal Tokens"
                     >
@@ -1308,9 +1306,9 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
@@ -1322,9 +1320,9 @@ jobs:
                         aria-label="Theme"
                       />
                     </div>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="home"
                       label="Home Page"
                     >
@@ -1334,8 +1332,8 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="changelog"
                       label="Changelog"
                     >
@@ -1345,8 +1343,8 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="feedback"
                       label="Feedback"
                     >
@@ -1356,8 +1354,8 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
                       value="docs"
                       label="Docs"
                     >
@@ -1367,10 +1365,10 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
-                    <Dropdown.Option
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
                       value="logout"
                       label="Log out"
                     >
@@ -1380,9 +1378,9 @@ jobs:
                           aria-hidden="true"
                         />
                       </template>
-                    </Dropdown.Option>
-                  </Dropdown.Group>
-                  <Dropdown.Group>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group>
                     <div
                       class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
                     >
@@ -1399,8 +1397,8 @@ jobs:
                         />
                       </div>
                     </div>
-                  </Dropdown.Group>
-                </Dropdown>
+                  </DropdownMenu.Group>
+                </DropdownMenu>
               </div>
             </template>
           </Sidebar>

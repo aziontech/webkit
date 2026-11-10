@@ -144,7 +144,7 @@ const meta = {
     },
     error: {
       control: 'text',
-      description: 'Error message; when set, the plot renders a danger Message instead of marks.',
+      description: 'Error message; when set, the plot renders a danger Alert instead of marks.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     emptyTitle: {
@@ -505,7 +505,7 @@ export const ErrorState = {
     'error',
     'Could not load this report.',
     ' error="Could not load this report."',
-    'The request failed. A danger Message takes the plot; the card around it keeps its title and controls.'
+    'The request failed. A danger Alert takes the plot; the card around it keeps its title and controls.'
   )
 }
 

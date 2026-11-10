@@ -1,7 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import Divider from '@aziontech/webkit/divider'
+  import Card from '@aziontech/webkit/card'
+  import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -14,7 +14,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -675,7 +675,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                             <div class="flex flex-col gap-(--spacing-xs)">
@@ -698,7 +698,7 @@
                             </div>
                           </div>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -733,7 +733,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <div>
                             <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
@@ -826,7 +826,7 @@
                                         >
                                           <div class="relative w-full">
                                             <div class="contents font-code">
-                                              <InputText
+                                              <Input
                                                 v-model="cond.variable"
                                                 size="large"
                                                 placeholder="${uri}"
@@ -852,7 +852,7 @@
                                                     aria-hidden="true"
                                                   />
                                                 </template>
-                                              </InputText>
+                                              </Input>
                                             </div>
                                             <Transition
                                               enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
@@ -958,7 +958,7 @@
                                               </Select.Option>
                                             </Select.Content>
                                           </Select>
-                                          <InputText
+                                          <Input
                                             v-else-if="takesArgument(cond.operator)"
                                             v-model="cond.argument"
                                             size="large"
@@ -1053,7 +1053,7 @@
                                 </div>
                               </div>
 
-                              <Divider />
+                              <Separator />
 
                               <div class="flex flex-wrap items-center gap-(--spacing-sm)">
                                 <Button
@@ -1075,7 +1075,7 @@
                             </div>
                           </div>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -1110,7 +1110,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <div
                             class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
@@ -1149,7 +1149,7 @@
                                       <Select.Trigger aria-label="Behavior" />
                                       <Select.Content>
                                         <template #search>
-                                          <InputText
+                                          <Input
                                             v-model="behaviorQuery[behavior.id]"
                                             size="medium"
                                             class="w-full"
@@ -1163,7 +1163,7 @@
                                                 aria-hidden="true"
                                               />
                                             </template>
-                                          </InputText>
+                                          </Input>
                                         </template>
                                         <Select.Option
                                           v-for="option in behaviorMatches(behavior.id)"
@@ -1186,7 +1186,7 @@
                                     <template
                                       v-if="behaviorArgument(behavior.type)?.kind === 'text'"
                                     >
-                                      <InputText
+                                      <Input
                                         v-model="behavior[behaviorArgument(behavior.type).field]"
                                         size="large"
                                         class="w-full"
@@ -1263,7 +1263,7 @@
                                       v-else-if="behaviorArgument(behavior.type)?.kind === 'group'"
                                     >
                                       <div class="flex flex-col gap-(--spacing-xs)">
-                                        <InputText
+                                        <Input
                                           v-for="part in behaviorArgument(behavior.type).fields"
                                           :key="part.field"
                                           v-model="behavior[part.field]"
@@ -1354,7 +1354,7 @@
                             </div>
                           </div>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -1389,7 +1389,7 @@
                       data-open
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #content>
                           <Item.List>
                             <Item size="small">
@@ -1409,7 +1409,7 @@
                             </Item>
                           </Item.List>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,36 @@
+{
+  "component": "message",
+  "title": "Components/Primitives/Feedback/Alert",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default info message: leading icon, one line of copy, and an action.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All severity variants stacked.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Both size tokens. `small` is a 32px banner with 8px inline padding and `.text-label-sm` copy; `medium` (the default) is 36px with 12px inline padding and `.text-label-md`. Block padding stays 6px in both, and the leading icon is 14px at either size. A trailing action or close control tightens the end edge to 8px, takes the matching Button/IconButton size, and lets the banner grow past the floor.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithLinks",
+      "summary": "Copy passed through the default slot may carry inline anchors. The message region styles every descendant `a` with the `.text-link` token — underlined, token-colored, and focusable — so a plain `<a href>` needs no wrapper component.",
+      "file": "with-links.vue"
+    },
+    {
+      "name": "Closable",
+      "summary": "Closable message with a dismiss control on the trailing edge.",
+      "file": "closable.vue"
+    },
+    {
+      "name": "AutoDismiss",
+      "summary": "Auto-dismisses after 5 seconds when `life` is greater than zero.",
+      "file": "auto-dismiss.vue"
+    }
+  ]
+}

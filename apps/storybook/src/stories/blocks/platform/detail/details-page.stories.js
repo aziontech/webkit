@@ -13,7 +13,7 @@ export default {
   parameters: {
     layout: "padded",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `CardBox`, `Button`, `IconButton`, `Dropdown`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Message` and `Tooltip`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `Card`, `Button`, `IconButton`, `DropdownMenu`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Alert` and `Tooltip`." } },
     webkit: {"block":"platform/detail/details-page","intents":["resource summary","summary card","overview card","resource facts","status card","resumo do recurso","cartão de resumo","visão geral","details page","resource details","página de detalhes"],"skills":["webkit-layout"],"primary":"Resource"}
   }
 }

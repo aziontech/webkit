@@ -10,7 +10,7 @@
     PopoverFooter
   } from '@aziontech/webkit/popover'
   import Select, { SelectTrigger, SelectContent, SelectOption } from '@aziontech/webkit/select'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
   import Button from '@aziontech/webkit/button'
 
@@ -99,7 +99,7 @@
             </Select>
           </div>
           <div class="min-w-0 flex-1">
-            <InputText
+            <Input
               size="small"
               v-model="value"
               placeholder="Value"

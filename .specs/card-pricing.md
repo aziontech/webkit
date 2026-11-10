@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4de4075a39ed5e6d866e868e185d4d3af327a4da2a61c960884abe3d289a7b1b
+checksum: ad6688846a25190ccd4a7bc72a6429e2999650da3313baf7a7dc83015477099e
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
@@ -38,14 +38,14 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 - You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.
 - You need a feature-by-feature comparison across plans → use `compare-plans`.
 - You only need to show an amount, in a table cell or a summary → use `currency`.
-- The card holds general content rather than a price → use `card-box`.
+- The card holds general content rather than a price → use `card`.
 
 ## Related
 
 - `currency` — typesets the amount inside the card; use it directly for prices outside a tier card.
 - `pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.
 - `compare-plans` — the matrix that sits under the plan cards.
-- `card-box` — generic bordered card with header, content and footer regions.
+- `card` — generic bordered card with header, content and footer regions.
 
 ## Best practices
 
@@ -59,10 +59,10 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
-import CardPricing from '@aziontech/webkit/card-pricing'
+  import Button from '@aziontech/webkit/button'
+  import CardPricing from '@aziontech/webkit/card-pricing'
 
-const upgrade = () => {}
+  const upgrade = () => {}
 </script>
 
 <template>
@@ -83,7 +83,12 @@ const upgrade = () => {}
       <li>Real-time metrics</li>
     </ul>
     <template #actions>
-      <Button label="Upgrade to Pro" kind="secondary" size="large" @click="upgrade" />
+      <Button
+        label="Upgrade to Pro"
+        kind="secondary"
+        size="large"
+        @click="upgrade"
+      />
     </template>
   </CardPricing>
 </template>
@@ -129,22 +134,22 @@ _none_
 
 ## Tokens
 
-| Region                     | Token (DESIGN.md)                                                                 |
-| -------------------------- | --------------------------------------------------------------------------------- |
-| plan title typography      | `.text-overline-md` (carries the display face, `uppercase` and `tracking-widest`) |
+| Region                     | Token (DESIGN.md)                                                                   |
+| -------------------------- | ----------------------------------------------------------------------------------- |
+| plan title typography      | `.text-overline-md` (carries the display face, `uppercase` and `tracking-widest`)   |
 | caveat band (`aligned`)    | `3lh` of the region's own line box — 66px, the whole-line form of the design's 64px |
-| amount                     | `Currency` at `medium` (`bottom`) / `large` (`middle`)                            |
-| pricing details typography | `.text-body-sm` (`bottom`) / `.text-body-md` (`middle`)                           |
-| surface (`contained`)      | `var(--bg-surface)`                                                               |
-| border (`contained`)       | `var(--border-default)` @ `var(--border-width-default)`                           |
-| shape                      | `var(--shape-card)`                                                               |
-| inset                      | `var(--spacing-lg)`                                                               |
-| stack gap                  | `var(--spacing-lg)`                                                               |
-| header gap                 | `var(--spacing-xs)` (`bottom`) / `var(--spacing-md)` (`middle`)                   |
-| title↔tag gap              | `var(--spacing-xs)`                                                               |
-| action row gap             | `var(--spacing-md)`                                                               |
-| text                       | `var(--text-default)`                                                             |
-| muted text                 | `var(--text-muted)`                                                               |
+| amount                     | `Currency` at `medium` (`bottom`) / `large` (`middle`)                              |
+| pricing details typography | `.text-body-sm` (`bottom`) / `.text-body-md` (`middle`)                             |
+| surface (`contained`)      | `var(--bg-surface)`                                                                 |
+| border (`contained`)       | `var(--border-default)` @ `var(--border-width-default)`                             |
+| shape                      | `var(--shape-card)`                                                                 |
+| inset                      | `var(--spacing-lg)`                                                                 |
+| stack gap                  | `var(--spacing-lg)`                                                                 |
+| header gap                 | `var(--spacing-xs)` (`bottom`) / `var(--spacing-md)` (`middle`)                     |
+| title↔tag gap              | `var(--spacing-xs)`                                                                 |
+| action row gap             | `var(--spacing-md)`                                                                 |
+| text                       | `var(--text-default)`                                                               |
+| muted text                 | `var(--text-muted)`                                                                 |
 
 ## Theme gaps
 

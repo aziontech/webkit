@@ -4,7 +4,7 @@ category: layout
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6ac18126148bbed9d94771242149d9e77c7670178decb2126126b07200a4b649
+checksum: 041018c4603f738c29ecf82e394a616cf2b14f5acfdaa4877ea559a2403a9cd7
 style_seam: true
 created: 2026-08-11
 last_updated: 2026-11-09
@@ -24,7 +24,7 @@ The registration frame: a hairline box with a small square set inside each corne
 
 ## When NOT to use
 
-- For a card-shaped surface with padding, a header and a footer → use `card-box` instead.
+- For a card-shaped surface with padding, a header and a footer → use `card` instead.
 - For a single separating line between two blocks → use `divider` instead.
 - For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job.
 
@@ -32,7 +32,7 @@ The registration frame: a hairline box with a small square set inside each corne
 
 - `section-gap` — an empty `frame-box` that holds the air between two sections.
 - `section-title` — a `frame-box` around a centered section header.
-- `card-box` — a padded surface with header/content/footer regions; a card, not a frame.
+- `card` — a padded surface with header/content/footer regions; a card, not a frame.
 - `divider` — one hairline with optional centered label; no corners, no content.
 
 ## Best practices
@@ -46,7 +46,7 @@ The registration frame: a hairline box with a small square set inside each corne
 
 ```vue
 <script setup>
-import FrameBox from '@aziontech/webkit/frame-box'
+  import FrameBox from '@aziontech/webkit/frame-box'
 </script>
 
 <template>
@@ -58,12 +58,12 @@ import FrameBox from '@aziontech/webkit/frame-box'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `borders` | `'all' \| 'none' \| 'x' \| 'y' \| Side \| Side[]` | `'all'` | false | Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides. |
-| `marks` | `'all' \| 'none' \| Edge \| Corner \| Corner[]` | `'all'` | false | Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. |
-| `hatch` | `boolean` | `false` | false | Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture-material`'s `lines` kind for a ruled ground; `section-gap` composes that instead. |
-| `flush` | `boolean \| Side \| Side[]` | `false` | false | Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell. |
+| Prop      | Type                                              | Default | Required | JSDoc                                                                                                                                                                                   |
+| --------- | ------------------------------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `borders` | `'all' \| 'none' \| 'x' \| 'y' \| Side \| Side[]` | `'all'` | false    | Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides.                                                                                                  |
+| `marks`   | `'all' \| 'none' \| Edge \| Corner \| Corner[]`   | `'all'` | false    | Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners.                                         |
+| `hatch`   | `boolean`                                         | `false` | false    | Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture-material`'s `lines` kind for a ruled ground; `section-gap` composes that instead. |
+| `flush`   | `boolean \| Side \| Side[]`                       | `false` | false    | Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell.        |
 
 ## Events
 
@@ -71,9 +71,9 @@ import FrameBox from '@aziontech/webkit/frame-box'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Frame content; rendered above the hatch texture and stretched to the frame height. |
+| Slot      | Scope | Notes                                                                              |
+| --------- | ----- | ---------------------------------------------------------------------------------- |
+| `default` | —     | Frame content; rendered above the hatch texture and stretched to the frame height. |
 
 ## States
 
@@ -89,12 +89,12 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| frame rule | `var(--border-default)` |
+| Region      | Token (DESIGN.md)       |
+| ----------- | ----------------------- |
+| frame rule  | `var(--border-default)` |
 | corner mark | `var(--border-default)` |
-| hatch line | `var(--border-default)` |
-| hatch pitch | `var(--spacing-lg)` |
+| hatch line  | `var(--border-default)` |
+| hatch pitch | `var(--spacing-lg)`     |
 
 ## Theme gaps
 
@@ -103,8 +103,8 @@ _none_
      backdrop and the hatch reads faint; `flush` already keeps a shared edge to one rule, so
      nothing doubles either way. Making them opaque is a theme concern, tracked separately. -->
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable      | Temporary primitive                                                   | Follow-up                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | opaque neutral rule | `var(--border-default)` / `var(--border-muted)` as they resolve today | The neutral border tokens are semi-transparent, so a frame rule has no fixed identity — it paints one colour on `--bg-canvas` and a brighter one on `--bg-surface-overlay` — and the hatch inherits that faintness. Making both opaque steps of the surface palette is [#889](https://github.com/aziontech/webkit/pull/889); the frame needs no change when it lands. |
 
 ## Accessibility (WCAG 2.1 AA)

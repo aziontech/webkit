@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7582
   node_id: 2027:7582
-checksum: d65e1380f64a882d9148a94e79fb18c3a6420e3862a85b65c56361c07b24fd85
+checksum: 62aaefa97ce285c4b91a611777f0dae70c1b3100159e40be8619fb9ccf6360fe
 created: 2026-05-23
 last_updated: 2026-11-09
 ---
@@ -27,13 +27,13 @@ Card-style radio option with selected border and background. Matches Figma Field
 
 - A plain radio row is enough → use `field-radio`.
 - More than one option can be on → use `field-checkbox-block`.
-- The card needs an icon or trailing content such as a tag → use `box-grid-selection`.
+- The card needs an icon or trailing content such as a tag → use `radio-cards`.
 - The list is long → use `field-select`.
 
 ## Related
 
 - `field-radio` — inline row with the same props.
-- `box-grid-selection` — selectable cards with an icon, a description, and a `tag` slot for trailing content.
+- `radio-cards` — selectable cards with an icon, a description, and a `tag` slot for trailing content.
 - `field-checkbox-block` — the same card for independent options.
 - `radio-button` — the bare control rendered inside the card.
 
@@ -47,10 +47,10 @@ Card-style radio option with selected border and background. Matches Figma Field
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import { ref } from 'vue'
+  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
 
-const plan = ref('pro')
+  const plan = ref('pro')
 </script>
 
 <template>
@@ -108,21 +108,21 @@ const plan = ref('pro')
 
 ## Tokens
 
-| Region                   | Token (DESIGN.md)         |
-| ------------------------ | ------------------------- |
-| typography (label)       | `.text-body-sm`           |
-| typography (description) | `.text-body-xs`           |
-| typography (helper)      | `.text-body-xs`           |
-| surface                  | `var(--bg-surface)`       |
-| surface (selected)       | `var(--bg-selected)`      |
-| text                     | `var(--text-default)`     |
-| text (muted)             | `var(--text-muted)`       |
-| border (muted)           | `var(--border-muted)`     |
-| border (selected)        | `var(--border-selected)`  |
-| border (helper)          | `var(--border-default)`   |
-| spacing                  | `var(--spacing-sm)`       |
-| spacing (tight)          | `var(--spacing-xxs)`      |
-| shape                    | `var(--shape-elements)`   |
+| Region                   | Token (DESIGN.md)        |
+| ------------------------ | ------------------------ |
+| typography (label)       | `.text-body-sm`          |
+| typography (description) | `.text-body-xs`          |
+| typography (helper)      | `.text-body-xs`          |
+| surface                  | `var(--bg-surface)`      |
+| surface (selected)       | `var(--bg-selected)`     |
+| text                     | `var(--text-default)`    |
+| text (muted)             | `var(--text-muted)`      |
+| border (muted)           | `var(--border-muted)`    |
+| border (selected)        | `var(--border-selected)` |
+| border (helper)          | `var(--border-default)`  |
+| spacing                  | `var(--spacing-sm)`      |
+| spacing (tight)          | `var(--spacing-xxs)`     |
+| shape                    | `var(--shape-elements)`  |
 
 ## Theme gaps
 

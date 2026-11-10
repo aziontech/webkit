@@ -175,7 +175,7 @@ describe('DocPageHeader', () => {
         props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
       })
       const separators = getByTestId('documentation-doc-page-header').querySelectorAll(
-        '[data-testid="layout-divider"]'
+        '[data-testid="layout-separator"]'
       )
       expect(separators.length).toBeGreaterThan(0)
       // Three announced separators on the way to three controls is noise, not structure.
@@ -240,7 +240,7 @@ describe('DocPageHeader', () => {
       await expectNoA11yViolations(container)
     })
 
-    // The masthead's own control used to be a SplitButton, whose Dropdown.Trigger nests a
+    // The masthead's own control used to be a SplitButton, whose DropdownMenu.Trigger nests a
     // real IconButton inside a span[role=button] — axe's nested-interactive, which forced
     // these three to be skipped. The meta line is plain buttons and anchors, so they run.
     it('has no violations on the default story', async () => {

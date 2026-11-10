@@ -38,14 +38,14 @@ hand-rolled, nothing hardcoded.
 - **MUST** compose from `@aziontech/webkit` whenever a primitive exists. To find a component and its
   flat import path, ask the webkit MCP `suggest_component`, or read
   `node_modules/@aziontech/webkit/catalog.json` (`imports`) — every key is a real subpath (e.g.
-  `@aziontech/webkit/button`, `@aziontech/webkit/input-text`, `@aziontech/webkit/dialog`,
-  `@aziontech/webkit/dropdown`).
+  `@aziontech/webkit/button`, `@aziontech/webkit/input`, `@aziontech/webkit/dialog`,
+  `@aziontech/webkit/dropdown-menu`).
 - **NEVER** hand-roll a `<button>`, input, modal, tooltip, dropdown, tabs, **or divider** that webkit
-  ships — this includes a separator. A horizontal/vertical rule is **`@aziontech/webkit/divider`**
-  (`<Divider />` / `<Divider orientation="vertical" />`), **never** a hand-rolled `<hr>` or a
+  ships — this includes a separator. A horizontal/vertical rule is **`@aziontech/webkit/separator`**
+  (`<Separator />` / `<Separator orientation="vertical" />`), **never** a hand-rolled `<hr>` or a
   `<div class="border-t …">` / `<div class="h-px bg-…">`. If you're reaching for a border utility to draw
-  a line between sections, that's the Divider component. (A real, observed failure: a `<div>` with border
-  classes standing in for the Divider — do not.)
+  a line between sections, that's the Separator component. (A real, observed failure: a `<div>` with border
+  classes standing in for the Separator — do not.)
 - **NEVER** mix another component library's primitives onto the same surface.
 - **MUST** use `@aziontech/webkit/icon-button` with an `aria-label` for icon-only actions.
 - **MUST** use `@aziontech/webkit/utils/cn` (clsx + tailwind-merge) for any class composition.
@@ -73,12 +73,12 @@ hand-rolled, nothing hardcoded.
 
 ### Section titles — a small heading, optically inset
 
-A **content section** (a titled block sitting above a `CardBox`, an `Item.List`, or a table) is
+A **content section** (a titled block sitting above a `Card`, an `Item.List`, or a table) is
 labelled with a **small heading**, not an overline:
 
 - **MUST** title the section with `text-heading-xxs text-(--text-default)` — the smallest heading
   token. `text-overline-*` is **reserved for compact menu / popover group labels** (e.g.
-  `Dropdown.Group`, a Popover section), **not** page section titles.
+  `DropdownMenu.Group`, a Popover section), **not** page section titles.
 - **MUST** give the title an optical inset of `px-(--spacing-xs)` so it lines up with the card's
   inner content directly below it (the card body pads at `--spacing-md`; the smaller `--spacing-xs`
   title inset reads as aligned, not indented).
@@ -144,7 +144,7 @@ Two rules from that system are worth repeating here because they are the ones a 
 ### Control size rhythm — same size on a horizontal line
 
 - **MUST** give buttons and fields sitting on the **same horizontal line** the **same `size`**. When a
-  `@aziontech/webkit/button` sits beside an `@aziontech/webkit/input-text` (search bar + submit, filter
+  `@aziontech/webkit/button` sits beside an `@aziontech/webkit/input` (search bar + submit, filter
   row, toolbar, inline form), both take the same size token so their heights match and the row shares one
   baseline. A `medium` input next to a `large` button breaks the rhythm.
 - **MUST** keep that one size consistent across every control in the group — inputs, selects, buttons,

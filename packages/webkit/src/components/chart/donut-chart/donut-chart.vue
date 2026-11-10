@@ -3,8 +3,8 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
+  import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import Message from '../../feedback/message/message.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { type ChartSeries, formatCompact, formatShare, normalizeSeries } from '../_lib'
 
@@ -32,7 +32,7 @@
     loading?: boolean
     /** Holds the previous render at reduced opacity while new data loads. */
     refetching?: boolean
-    /** Error message; when set, a danger Message replaces the ring. */
+    /** Error message; when set, a danger Alert replaces the ring. */
     error?: string
     /** Title of the empty state shown when every slice is zero. */
     emptyTitle?: string
@@ -76,7 +76,7 @@
     empty(): unknown
     /** Actions under the default EmptyState, such as a Clear filters button or a setup link. */
     'empty-actions'(): unknown
-    /** Replaces the default danger Message. */
+    /** Replaces the default danger Alert. */
     error(): unknown
   }>()
 
@@ -262,7 +262,7 @@
       class="flex flex-1 items-center justify-center p-(--spacing-md)"
     >
       <slot name="error">
-        <Message
+        <Alert
           severity="danger"
           :label="error"
           :data-testid="`${testId}__error`"

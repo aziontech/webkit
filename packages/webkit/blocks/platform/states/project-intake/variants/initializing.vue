@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Spinner from '@aziontech/webkit/spinner'
 
   const files = [
@@ -23,7 +23,7 @@
         <p class="text-body-sm text-(--text-muted)">Setting up your deployment. 2 of 5 files.</p>
       </header>
 
-      <CardBox
+      <Card
         :padded="false"
         class="w-full max-w-(--container-md)"
       >
@@ -64,7 +64,7 @@
             </li>
           </ol>
         </template>
-      </CardBox>
+      </Card>
 
       <p class="text-body-xs text-(--text-muted)">5 files, 8.17 KB</p>
     </div>

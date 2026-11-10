@@ -3,7 +3,7 @@
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -113,7 +113,7 @@
           data-phase="connect"
           class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
         >
-          <CardBox class="w-full">
+          <Card class="w-full">
             <template #content>
               <div
                 class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
@@ -165,7 +165,7 @@
                 </EmptyState>
               </div>
             </template>
-          </CardBox>
+          </Card>
 
           <Button
             label="Browse Templates"

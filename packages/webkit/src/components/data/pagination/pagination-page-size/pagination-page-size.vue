@@ -1,0 +1,72 @@
+<script setup lang="ts">
+  import { computed, inject, useAttrs } from 'vue'
+
+  import { PaginationInjectionKey } from '../injection-key'
+
+  defineOptions({
+    name: 'PaginationPageSize',
+    inheritAttrs: false
+  })
+
+  interface Props {
+    /** Selected rows-per-page value. */
+    modelValue?: number
+    /** Available page-size options. */
+    options?: number[]
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    modelValue: 10,
+    options: () => [10, 25, 50, 100]
+  })
+
+  const emit = defineEmits<{
+    'update:modelValue': [value: number]
+  }>()
+
+  const attrs = useAttrs()
+  const ctx = inject(PaginationInjectionKey, null)
+
+  const testId = computed<string>(
+    () =>
+      (attrs['data-testid'] as string | undefined) ??
+      (ctx ? `${ctx.testId}__page-size` : 'data-pagination__page-size')
+  )
+
+  const displayOptions = computed<number[]>(() =>
+    props.options.includes(props.modelValue)
+      ? props.options
+      : [...props.options, props.modelValue].sort((a, b) => a - b)
+  )
+
+  const handleChange = (event: Event) => {
+    emit('update:modelValue', Number((event.target as HTMLSelectElement).value))
+  }
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    class="relative inline-flex h-7 min-w-16 items-center rounded-(--shape-elements) bg-(--bg-canvas) text-body-sm text-(--text-muted)"
+  >
+    <select
+      :value="modelValue"
+      aria-label="Rows per page"
+      class="h-7 w-full cursor-pointer appearance-none rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) pl-(--spacing-sm) pr-7 text-label-sm text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+      @change="handleChange"
+    >
+      <option
+        v-for="opt in displayOptions"
+        :key="opt"
+        :value="opt"
+      >
+        {{ opt }}
+      </option>
+    </select>
+    <i
+      class="pi pi-chevron-down pointer-events-none absolute right-(--spacing-sm) text-[length:inherit] leading-none"
+      aria-hidden="true"
+    />
+  </div>
+</template>

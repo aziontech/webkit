@@ -2,10 +2,10 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
-  import InputPassword, {
-    type InputPasswordAutocomplete
-  } from '../input-password/input-password.vue'
   import Label from '../label/label.vue'
+  import PasswordInput, {
+    type PasswordInputAutocomplete
+  } from '../password-input/password-input.vue'
   import FieldPasswordRequirements from './field-password-requirements/field-password-requirements.vue'
   import {
     DEFAULT_PASSWORD_REQUIREMENTS,
@@ -25,15 +25,15 @@
   export type PasswordRequirement = Requirement
 
   interface Props {
-    /** Two-way bound value of the underlying InputPassword. */
+    /** Two-way bound value of the underlying PasswordInput. */
     modelValue?: string
     /** Text rendered inside the Label. When empty, the label row is omitted. */
     label?: string
-    /** Placeholder forwarded to the InputPassword. */
+    /** Placeholder forwarded to the PasswordInput. */
     placeholder?: string
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
-    /** Native maxlength forwarded to the InputPassword. */
+    /** Native maxlength forwarded to the PasswordInput. */
     maxLength?: number
     /** Disables the input; a supplied helperText switches to kind=disabled (lock icon). */
     disabled?: boolean
@@ -43,10 +43,10 @@
     required?: boolean
     /** Switches the helper to kind=invalid and applies invalid border/ring tokens on the input. */
     invalid?: boolean
-    /** Forwards to InputPassword. Renders the visibility toggle on the trailing edge when true. */
+    /** Forwards to PasswordInput. Renders the visibility toggle on the trailing edge when true. */
     toggleable?: boolean
-    /** Forwarded to InputPassword for password-manager hints. */
-    autocomplete?: InputPasswordAutocomplete
+    /** Forwarded to PasswordInput for password-manager hints. */
+    autocomplete?: PasswordInputAutocomplete
     /** id for the native input; consumed by Label via for and by aria-describedby wiring. */
     inputId?: string
     /** HTML name for the underlying input (form + vee-validate integration). */
@@ -130,7 +130,7 @@
       :for="resolvedInputId"
       :data-testid="`${testId}__label`"
     />
-    <InputPassword
+    <PasswordInput
       :model-value="modelValue"
       :placeholder="placeholder"
       :max-length="maxLength"
@@ -158,7 +158,7 @@
       >
         <slot name="iconRight" />
       </template>
-    </InputPassword>
+    </PasswordInput>
     <HelperText
       v-if="helperText"
       :id="helperId"

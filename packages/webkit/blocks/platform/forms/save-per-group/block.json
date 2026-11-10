@@ -3,7 +3,7 @@
   "name": "SavePerGroup",
   "title": "Templates/Platform/Forms/SavePerGroup",
   "surface": "product",
-  "summary": "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `CardBox` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full Name, Language) and Notifications (Product updates, Security alerts). Built from the platform shell, `CardBox`, `Item`, `InputText`, `Select`, `Switch` and `Button`.",
+  "summary": "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full Name, Language) and Notifications (Product updates, Security alerts). Built from the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

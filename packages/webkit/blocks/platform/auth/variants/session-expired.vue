@@ -1,16 +1,16 @@
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import Divider from '@aziontech/webkit/divider'
+  import Separator from '@aziontech/webkit/separator'
   import FieldPassword from '@aziontech/webkit/field-password'
   import HelperText from '@aziontech/webkit/helper-text'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
   import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -161,7 +161,7 @@
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
         <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
           <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
-            <CardBox
+            <Card
               class="w-full max-w-(--container-sm)"
               :padded="false"
             >
@@ -185,7 +185,7 @@
                       </p>
                     </header>
 
-                    <Message
+                    <Alert
                       v-if="expiredNotice"
                       severity="info"
                       size="small"
@@ -216,7 +216,7 @@
                           />
                         </div>
 
-                        <Divider label="or" />
+                        <Separator label="or" />
                       </div>
 
                       <div
@@ -229,7 +229,7 @@
                             label="Email"
                             required
                           />
-                          <InputText
+                          <Input
                             id="login-email"
                             v-model="email"
                             type="email"
@@ -327,7 +327,7 @@
                             label="Email"
                             required
                           />
-                          <InputText
+                          <Input
                             id="reset-email"
                             v-model="resetEmail"
                             type="email"
@@ -444,7 +444,7 @@
                   </form>
                 </div>
               </template>
-            </CardBox>
+            </Card>
 
             <div
               class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"

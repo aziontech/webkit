@@ -27,7 +27,7 @@ const showLeft = group.type === 'INSTANCE' ? group.getBoolean('showSlotLeft') : 
 const showRight = group.type === 'INSTANCE' ? group.getBoolean('showSlotRight') : false
 const left = group.type === 'INSTANCE' && showLeft ? group.getSlot('slotLeft') : undefined
 const right = group.type === 'INSTANCE' && showRight ? group.getSlot('slotRight') : undefined
-const input = group.type === 'INSTANCE' ? group.findInstance('InputText') : undefined
+const input = group.type === 'INSTANCE' ? group.findInstance('Input') : undefined
 const placeholder = input && input.type === 'INSTANCE' ? input.getString('placeholder') : ''
 
 const attrs = figma.code`v-model="value"${

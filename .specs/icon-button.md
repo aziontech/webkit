@@ -4,10 +4,11 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 71a7716bbdbaaf54a58c51f6feb1b8025f18030fc393d4f9f3d0ebf0846ab0d9
+checksum: 873089928253c09eac2e89cb5456b6c8ade7317f6b23adbbccbc73734b20b0cc
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
+
 # Icon Button — Component Spec
 
 ## Purpose
@@ -24,7 +25,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 - The action needs a visible label → use `button`.
 - Copying a value to the clipboard → use `copy-button`, which already wires the icon swap, the tooltip and the `copy` event.
-- Choosing one of a few mutually exclusive options → use `segmented-button`.
+- Choosing one of a few mutually exclusive options → use `toggle-group`.
 
 ## Related
 
@@ -45,36 +46,49 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ```vue
 <script setup>
-import IconButton from '@aziontech/webkit/icon-button'
+  import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
-  <IconButton icon="pi pi-plus" aria-label="Add domain" />
-  <IconButton icon="pi pi-refresh" aria-label="Refresh" kind="transparent" size="medium" />
-  <IconButton icon="pi pi-trash" aria-label="Delete domain" kind="danger" size="small" />
+  <IconButton
+    icon="pi pi-plus"
+    aria-label="Add domain"
+  />
+  <IconButton
+    icon="pi pi-refresh"
+    aria-label="Refresh"
+    kind="transparent"
+    size="medium"
+  />
+  <IconButton
+    icon="pi pi-trash"
+    aria-label="Delete domain"
+    kind="danger"
+    size="small"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `icon` | `string` | `—` | true | PrimeIcons class for the leading/trailing icon. |
-| `ariaLabel` | `string` | `—` | true | Accessible name for icon-only controls. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
-| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
-| `iconTransition` | `boolean` | `false` | false | Animates icon swaps with enter/leave transitions. |
-| `iconClass` | `string` | `''` | false | Extra classes applied to the icon glyph. |
+| Prop             | Type                                                                  | Default     | Required | JSDoc                                                |
+| ---------------- | --------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------- |
+| `icon`           | `string`                                                              | `—`         | true     | PrimeIcons class for the leading/trailing icon.      |
+| `ariaLabel`      | `string`                                                              | `—`         | true     | Accessible name for icon-only controls.              |
+| `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                      |
+| `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography. |
+| `disabled`       | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.    |
+| `loading`        | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.         |
+| `href`           | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                 |
+| `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                      |
+| `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.    |
+| `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.             |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `click` | `MouseEvent` | — |
+| Event   | Payload      | Notes |
+| ------- | ------------ | ----- |
+| `click` | `MouseEvent` | —     |
 
 ## Slots
 
@@ -87,27 +101,27 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
-| icon swap (enter / leave) | `transition-[transform,opacity] duration-moderate-01` / `transition-opacity duration-fast-02 ease-productive-exit` (`presets/icon-transition.js`) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none` |
+| Trigger                           | Animation / Transition                                                                                                                            | Token                                        | Reduced-motion fallback                |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------- |
+| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                                               | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
+| icon swap (enter / leave)         | `transition-[transform,opacity] duration-moderate-01` / `transition-opacity duration-fast-02 ease-productive-exit` (`presets/icon-transition.js`) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none`        |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-button-lg |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-button-lg         |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

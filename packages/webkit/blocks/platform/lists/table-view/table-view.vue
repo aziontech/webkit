@@ -3,16 +3,16 @@
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Chip from '@aziontech/webkit/chip'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import PopoverContent from '@aziontech/webkit/popover-content'
   import PopoverRoot from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
@@ -519,7 +519,7 @@
 
                             <template v-else>
                               <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                                <InputText
+                                <Input
                                   v-model="query"
                                   size="medium"
                                   class="w-full"
@@ -540,7 +540,7 @@
                                       aria-hidden="true"
                                     />
                                   </template>
-                                </InputText>
+                                </Input>
                               </div>
 
                               <div
@@ -645,7 +645,7 @@
                 </PopoverRoot>
               </div>
               <div class="flex min-w-36 grow basis-(--container-2xs)">
-                <InputText
+                <Input
                   v-model="search"
                   size="medium"
                   placeholder="Search resources"
@@ -658,7 +658,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </div>
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -811,7 +811,7 @@
             </TransitionGroup>
           </div>
           <section class="flex min-h-0 flex-col">
-            <CardBox :padded="false">
+            <Card :padded="false">
               <template #content>
                 <TableRoot
                   ref="tableRef"
@@ -899,7 +899,7 @@
                             <p class="text-label-sm text-(--text-muted)">
                               {{ domainSummary(row) }}
                             </p>
-                            <InputText
+                            <Input
                               v-if="row.domains.length > 10"
                               :model-value="domainQuery[row.id] ?? ''"
                               size="medium"
@@ -913,7 +913,7 @@
                                   aria-hidden="true"
                                 />
                               </template>
-                            </InputText>
+                            </Input>
                           </div>
                           <div
                             class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
@@ -1011,8 +1011,8 @@
                     </div>
                   </template>
                   <template #cell-actions>
-                    <DropdownRoot placement="bottom-end">
-                      <DropdownTrigger>
+                    <DropdownMenuRoot placement="bottom-end">
+                      <DropdownMenuTrigger>
                         <Tooltip text="Row actions">
                           <IconButton
                             icon="pi pi-ellipsis-h"
@@ -1021,9 +1021,9 @@
                             aria-label="Row actions"
                           />
                         </Tooltip>
-                      </DropdownTrigger>
-                      <DropdownGroup>
-                        <DropdownOption
+                      </DropdownMenuTrigger>
+                      <DropdownMenuGroup>
+                        <DropdownMenuOption
                           value="deploy"
                           label="Deploy"
                         >
@@ -1032,8 +1032,8 @@
                               class="pi pi-cloud-upload"
                               aria-hidden="true"
                           /></template>
-                        </DropdownOption>
-                        <DropdownOption
+                        </DropdownMenuOption>
+                        <DropdownMenuOption
                           value="view"
                           label="View details"
                         >
@@ -1042,8 +1042,8 @@
                               class="pi pi-eye"
                               aria-hidden="true"
                           /></template>
-                        </DropdownOption>
-                        <DropdownOption
+                        </DropdownMenuOption>
+                        <DropdownMenuOption
                           value="duplicate"
                           label="Clone"
                         >
@@ -1052,10 +1052,10 @@
                               class="pi pi-clone"
                               aria-hidden="true"
                           /></template>
-                        </DropdownOption>
-                      </DropdownGroup>
-                      <DropdownGroup>
-                        <DropdownOption
+                        </DropdownMenuOption>
+                      </DropdownMenuGroup>
+                      <DropdownMenuGroup>
+                        <DropdownMenuOption
                           value="delete"
                           label="Delete"
                         >
@@ -1064,9 +1064,9 @@
                               class="pi pi-trash"
                               aria-hidden="true"
                           /></template>
-                        </DropdownOption>
-                      </DropdownGroup>
-                    </DropdownRoot>
+                        </DropdownMenuOption>
+                      </DropdownMenuGroup>
+                    </DropdownMenuRoot>
                   </template>
                   <template #empty>
                     <EmptyState
@@ -1097,7 +1097,7 @@
                   </template>
                 </TableRoot>
               </template>
-            </CardBox>
+            </Card>
           </section>
         </section>
       </section>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
   import Tag from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
@@ -114,7 +114,7 @@
   >
     <div class="flex h-full flex-col justify-center p-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox
+        <Card
           :padded="false"
           class="w-full overflow-hidden"
         >
@@ -176,7 +176,7 @@
               </div>
             </ShellMockupPart>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

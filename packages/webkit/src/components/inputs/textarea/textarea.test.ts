@@ -188,7 +188,7 @@ describe('Textarea', () => {
   describe('accessibility', () => {
     it('has no a11y violations for a labelled default textarea', async () => {
       const { container } = render(Textarea, {
-        attrs: { 'aria-label': 'Message' }
+        attrs: { 'aria-label': 'Alert' }
       })
       await expectNoA11yViolations(container)
     })
@@ -196,7 +196,7 @@ describe('Textarea', () => {
     it('has no a11y violations for an invalid labelled textarea (aria-invalid semantics)', async () => {
       const { container } = render(Textarea, {
         props: { invalid: true },
-        attrs: { 'aria-label': 'Message' }
+        attrs: { 'aria-label': 'Alert' }
       })
       await expectNoA11yViolations(container)
     })
@@ -204,7 +204,7 @@ describe('Textarea', () => {
     it('has no a11y violations for a disabled labelled textarea', async () => {
       const { container } = render(Textarea, {
         props: { disabled: true },
-        attrs: { 'aria-label': 'Message' }
+        attrs: { 'aria-label': 'Alert' }
       })
       await expectNoA11yViolations(container)
     })

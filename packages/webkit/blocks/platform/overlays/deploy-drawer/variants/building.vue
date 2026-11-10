@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -8,16 +8,16 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import Hint from '@aziontech/webkit/hint'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -440,9 +440,9 @@
                       data-open="true"
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
-                      <CardBox :padded="false">
+                      <Card :padded="false">
                         <template #header>
-                          <SegmentedButton
+                          <ToggleGroup
                             v-model="projectMode"
                             :options="projectModes"
                             size="medium"
@@ -542,7 +542,7 @@
                                           <p class="text-label-sm text-(--text-muted)">
                                             {{ domainGroup.summary }}
                                           </p>
-                                          <InputText
+                                          <Input
                                             v-if="domainGroup.total > 10"
                                             size="medium"
                                             placeholder="Search domains"
@@ -554,7 +554,7 @@
                                                 aria-hidden="true"
                                               />
                                             </template>
-                                          </InputText>
+                                          </Input>
                                         </div>
 
                                         <div
@@ -600,11 +600,11 @@
                                 </ul>
                               </Item.Content>
                               <Item.Actions v-if="projectMode === 'existing'">
-                                <Dropdown
+                                <DropdownMenu
                                   placement="bottom-end"
                                   @select="(event, id) => (projectId = String(id))"
                                 >
-                                  <Dropdown.Trigger>
+                                  <DropdownMenu.Trigger>
                                     <Button
                                       label="Change"
                                       kind="outlined"
@@ -612,13 +612,13 @@
                                       icon="pi pi-chevron-down"
                                       icon-position="trailing"
                                     />
-                                  </Dropdown.Trigger>
-                                  <Dropdown.Group
+                                  </DropdownMenu.Trigger>
+                                  <DropdownMenu.Group
                                     v-for="group in projectGroups"
                                     :key="group.key"
                                     :label="group.label"
                                   >
-                                    <Dropdown.Option
+                                    <DropdownMenu.Option
                                       v-for="entry in group.projects"
                                       :key="entry.id"
                                       :value="entry.id"
@@ -630,14 +630,14 @@
                                           {{ entry.detail }}
                                         </span>
                                       </template>
-                                    </Dropdown.Option>
-                                  </Dropdown.Group>
-                                </Dropdown>
+                                    </DropdownMenu.Option>
+                                  </DropdownMenu.Group>
+                                </DropdownMenu>
                               </Item.Actions>
                             </Item>
                           </div>
                         </template>
-                      </CardBox>
+                      </Card>
                     </div>
                   </div>
                 </div>
@@ -843,7 +843,7 @@
                                             <p class="text-label-sm text-(--text-muted)">
                                               {{ domainGroup.summary }}
                                             </p>
-                                            <InputText
+                                            <Input
                                               v-if="domainGroup.total > 10"
                                               size="medium"
                                               placeholder="Search domains"
@@ -855,7 +855,7 @@
                                                   aria-hidden="true"
                                                 />
                                               </template>
-                                            </InputText>
+                                            </Input>
                                           </div>
 
                                           <div

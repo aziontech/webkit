@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, ref, useId, watch } from 'vue'
 
-  import InputText from '../../input-text/input-text.vue'
+  import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
   import { parseFixedDate } from '../parse-period'
@@ -115,7 +115,7 @@
       </label>
       <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
-          <InputText
+          <Input
             :id="startDateId"
             :model-value="startDateText"
             :size="size"
@@ -129,7 +129,7 @@
           v-if="showTime"
           class="w-24 shrink-0"
         >
-          <InputText
+          <Input
             :model-value="startTimeText"
             :size="size"
             :disabled="disabled"
@@ -154,7 +154,7 @@
       </label>
       <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
-          <InputText
+          <Input
             :id="endDateId"
             :model-value="endDateText"
             :size="size"
@@ -168,7 +168,7 @@
           v-if="showTime"
           class="w-24 shrink-0"
         >
-          <InputText
+          <Input
             :model-value="endTimeText"
             :size="size"
             :disabled="disabled"

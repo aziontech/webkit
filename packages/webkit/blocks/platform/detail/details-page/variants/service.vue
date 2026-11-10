@@ -2,11 +2,11 @@
   import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import Popover from '@aziontech/webkit/popover'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
@@ -28,7 +28,7 @@
 </script>
 
 <template>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <div
         class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
@@ -122,7 +122,7 @@
             <Tooltip
               text="Select an environment to see its deployment and settings, or add another one"
             >
-              <Dropdown
+              <DropdownMenu
                 placement="bottom-end"
                 @select="
                   (event, value) => {
@@ -130,7 +130,7 @@
                   }
                 "
               >
-                <Dropdown.Trigger>
+                <DropdownMenu.Trigger>
                   <span
                     class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
                   >
@@ -144,20 +144,20 @@
                       aria-hidden="true"
                     />
                   </span>
-                </Dropdown.Trigger>
+                </DropdownMenu.Trigger>
 
-                <Dropdown.Group label="Environments">
-                  <Dropdown.Option
+                <DropdownMenu.Group label="Environments">
+                  <DropdownMenu.Option
                     v-for="option in environments"
                     :key="option.name"
                     :value="option.name"
                     :label="option.name"
                     :selected="option.name === environment"
                   />
-                </Dropdown.Group>
+                </DropdownMenu.Group>
 
-                <Dropdown.Group>
-                  <Dropdown.Option
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     value="__add-environment__"
                     label="Add Environment"
                   >
@@ -167,14 +167,14 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </Dropdown.Option>
-                </Dropdown.Group>
-              </Dropdown>
+                  </DropdownMenu.Option>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </Tooltip>
           </div>
 
-          <Dropdown placement="bottom-end">
-            <Dropdown.Trigger>
+          <DropdownMenu placement="bottom-end">
+            <DropdownMenu.Trigger>
               <Tooltip text="Service actions">
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -183,10 +183,10 @@
                   aria-label="Service actions"
                 />
               </Tooltip>
-            </Dropdown.Trigger>
+            </DropdownMenu.Trigger>
 
-            <Dropdown.Group>
-              <Dropdown.Option
+            <DropdownMenu.Group>
+              <DropdownMenu.Option
                 value="copy-url"
                 label="Copy URL"
               >
@@ -196,11 +196,11 @@
                     aria-hidden="true"
                   />
                 </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
+              </DropdownMenu.Option>
+            </DropdownMenu.Group>
 
-            <Dropdown.Group>
-              <Dropdown.Option
+            <DropdownMenu.Group>
+              <DropdownMenu.Option
                 value="manage-domains"
                 label="Manage Domains"
               >
@@ -210,8 +210,8 @@
                     aria-hidden="true"
                   />
                 </template>
-              </Dropdown.Option>
-              <Dropdown.Option
+              </DropdownMenu.Option>
+              <DropdownMenu.Option
                 value="settings"
                 label="Settings"
               >
@@ -221,9 +221,9 @@
                     aria-hidden="true"
                   />
                 </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
-          </Dropdown>
+              </DropdownMenu.Option>
+            </DropdownMenu.Group>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -337,7 +337,7 @@
 
             <Accordion.Content>
               <div class="px-(--spacing-md) pt-(--spacing-xs)">
-                <Message
+                <Alert
                   severity="warning"
                   size="small"
                   label="Deploying with this setting also publishes to service-05, service-09."
@@ -399,5 +399,5 @@
         </Accordion>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

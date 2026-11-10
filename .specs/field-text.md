@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: ac3caa4af4196596efd79ac7b86303418ecc7b00a3f59dd306e18273599eab18
+checksum: ed4bfc32595d20f38a65cb45a37f8dedc7e8c84b3e17bea42e1cbe19740e53c7
 created: 2026-06-15
 last_updated: 2026-11-09
 ---
@@ -16,12 +16,12 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Form field for free-text input that composes `Label`, `InputText`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Aligned with Figma frame `536:22` (FieldText) and acts as the canonical wrapper for `InputText` in form contexts.
+Form field for free-text input that composes `Label`, `Input`, and `HelperText` into a single vertical stack with consistent spacing. Use it whenever a text input needs a visible label or helper/error message — i.e. virtually every form field outside of inline editing. Aligned with Figma frame `536:22` (FieldText) and acts as the canonical wrapper for `Input` in form contexts.
 
 ## When to use
 
 - Single-line free text that needs a visible label or a helper/error message: names, emails, URLs, IDs.
-- Any `InputText` in a form context, including ones with a leading or trailing icon (`iconLeft` / `iconRight` slots).
+- Any `Input` in a form context, including ones with a leading or trailing icon (`iconLeft` / `iconRight` slots).
 
 ## When NOT to use
 
@@ -32,7 +32,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 ## Related
 
-- `input-text` — the bare input this field wraps.
+- `input` — the bare input this field wraps.
 - `field-input-group` — the same field shape with `left` / `right` addon slots.
 - `field-textarea` — multi-line sibling.
 - `helper-text` — the guidance/error row under the input.
@@ -43,7 +43,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 - `required` paints the warning border and the required helper on first render — bind it to a submit state (`:required="submitted && !value"`), not as a bare attribute.
 - The helper row renders only when `helperText` is non-empty, also while `disabled`; on a failed validation swap the guidance for the message and set `invalid`.
 - `size` defaults to `medium`; match it to the sibling fields in the same form.
-- The field does not forward a `hint`; when the label needs one, compose `label` + `input-text` + `helper-text`.
+- The field does not forward a `hint`; when the label needs one, compose `label` + `input` + `helper-text`.
 
 ## Usage
 
@@ -70,14 +70,14 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 | Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                    |
 | -------------- | -------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`   | `string`                         | `''`        | false    | Two-way bound value of the underlying `InputText`.                                                                                                                                                                                                                                       |
+| `modelValue`   | `string`                         | `''`        | false    | Two-way bound value of the underlying `Input`.                                                                                                                                                                                                                                           |
 | `label`        | `string`                         | `''`        | false    | Text rendered inside the `Label`. When empty, the label row is omitted.                                                                                                                                                                                                                  |
-| `placeholder`  | `string`                         | `''`        | false    | Placeholder forwarded to the `InputText`.                                                                                                                                                                                                                                                |
-| `type`         | `'text' \| 'email' \| 'number'`  | `'text'`    | false    | Native input type, forwarded to the `<input>` through `InputText`. Use `email` for e-mail fields.                                                                                                                                                                                        |
+| `placeholder`  | `string`                         | `''`        | false    | Placeholder forwarded to the `Input`.                                                                                                                                                                                                                                                    |
+| `type`         | `'text' \| 'email' \| 'number'`  | `'text'`    | false    | Native input type, forwarded to the `<input>` through `Input`. Use `email` for e-mail fields.                                                                                                                                                                                            |
 | `autocomplete` | `string \| undefined`            | `undefined` | false    | Native `autocomplete` token, forwarded to the `<input>` (`username` on a sign-in e-mail, `email` on a sign-up e-mail). Omitted when unset. Before this prop existed, `autocomplete` passed as an attribute fell on the wrapper `<div>`.                                                  |
 | `spellcheck`   | `boolean \| undefined`           | `undefined` | false    | Native `spellcheck`, forwarded to the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset (explicit `undefined` default, so no `spellcheck="false"` appears by itself).                                                                                                |
 | `helperText`   | `string`                         | `''`        | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say. |
-| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                                         |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size forwarded to the `Input`. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                                             |
 | `disabled`     | `boolean`                        | `false`     | false    | Disables the input and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                             |
 | `readonly`     | `boolean`                        | `false`     | false    | Marks the input read-only: value visible, focusable and copyable, not editable. The input renders transparent with a dashed border so it never looks editable. Use it for values the system owns (IDs, generated keys).                                                                  |
 | `required`     | `boolean`                        | `false`     | false    | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                        |
@@ -87,21 +87,21 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 ## Events
 
-| Event               | Payload  | Notes                                                            |
-| ------------------- | -------- | ---------------------------------------------------------------- |
-| `update:modelValue` | `string` | Re-emitted from the underlying `InputText` on every input event. |
+| Event               | Payload  | Notes                                                        |
+| ------------------- | -------- | ------------------------------------------------------------ |
+| `update:modelValue` | `string` | Re-emitted from the underlying `Input` on every input event. |
 
 ## Slots
 
-| Slot        | Scope | Notes                                                   |
-| ----------- | ----- | ------------------------------------------------------- |
-| `iconLeft`  | —     | Forwarded to the underlying `InputText#iconLeft` slot.  |
-| `iconRight` | —     | Forwarded to the underlying `InputText#iconRight` slot. |
+| Slot        | Scope | Notes                                               |
+| ----------- | ----- | --------------------------------------------------- |
+| `iconLeft`  | —     | Forwarded to the underlying `Input#iconLeft` slot.  |
+| `iconRight` | —     | Forwarded to the underlying `Input#iconRight` slot. |
 
 ## States
 
-- Password managers: inherits the `InputText` rule — an ordinary field is hidden from 1Password, LastPass, Bitwarden and Dashlane; set `autocomplete` (`username`, `email`, `name`, …) or `type="email"` to let them fill it.
-- Visual states: `default`, `required`, `invalid`, `disabled`, `readonly` (from `InputText`: transparent fill, dashed border, no hover)
+- Password managers: inherits the `Input` rule — an ordinary field is hidden from 1Password, LastPass, Bitwarden and Dashlane; set `autocomplete` (`username`, `email`, `name`, …) or `type="email"` to let them fill it.
+- Visual states: `default`, `required`, `invalid`, `disabled`, `readonly` (from `Input`: transparent fill, dashed border, no hover)
 - `data-required` mirrors the `required` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop
@@ -109,9 +109,9 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 ## Motion & Animations
 
-| Trigger                                                | Animation / Transition | Token | Reduced-motion fallback |
-| ------------------------------------------------------ | ---------------------- | ----- | ----------------------- |
-| _none_ — motion is owned by the underlying `InputText` | —                      | —     | —                       |
+| Trigger                                            | Animation / Transition | Token | Reduced-motion fallback |
+| -------------------------------------------------- | ---------------------- | ----- | ----------------------- |
+| _none_ — motion is owned by the underlying `Input` | —                      | —     | —                       |
 
 ## Tokens
 
@@ -119,7 +119,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 | ----------------------------------------- | ------------------- |
 | gap (between label / input / helper rows) | `var(--spacing-xs)` |
 
-(Typography and color tokens are owned by the children — `Label`, `InputText`, `HelperText` — and not redeclared here.)
+(Typography and color tokens are owned by the children — `Label`, `Input`, `HelperText` — and not redeclared here.)
 
 ## Theme gaps
 
@@ -135,7 +135,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 - When `invalid`, the input receives `aria-invalid="true"` and the helper switches color tokens to `var(--danger-contrast)` — the helper text remains the human-readable error message.
 - When `disabled`, the input is disabled and the label dims via inherited `var(--text-muted)`. A supplied `helperText` switches to `kind="disabled"` (lock icon), so the lock never appears alone; an empty `helperText` renders no helper row at all — the field writes no copy of its own, and `aria-describedby` is dropped with the row.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including all derived states.
-- Touch target: the underlying `InputText` owns the ≥40×40 px hit area at `size="large"`.
+- Touch target: the underlying `Input` owns the ≥40×40 px hit area at `size="large"`.
 
 ## Stories (Storybook)
 
@@ -144,7 +144,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 - Required — `required: true`; documents the Label's Required tag plus the input's `aria-required` wiring.
 - Invalid — `invalid: true` with a sample `helperText`; documents the danger-tokened helper and invalid input border.
 - Disabled — `disabled: true`; documents the lock-icon helper and disabled input tokens.
-- Icons — composite story forwarding `#iconLeft` and `#iconRight` slots (with `pi pi-globe` + `pi pi-times`), to document the slot forwarding to the underlying `InputText`.
+- Icons — composite story forwarding `#iconLeft` and `#iconRight` slots (with `pi pi-globe` + `pi pi-times`), to document the slot forwarding to the underlying `Input`.
 
 ## Constraints — DO NOT
 

@@ -4,7 +4,7 @@ category: data
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 72c7769fab381d465cab8fb43236aa71bb0c2da6c8a94173964218286aa8ca94
+checksum: cc1917c5689a3f0cebf17bbf3469bb96615e4e1ba81fecfa3ea7e77ccce1cd49
 created: 2026-11-10
 last_updated: 2026-11-10
 ---
@@ -13,31 +13,31 @@ last_updated: 2026-11-10
 
 ## Purpose
 
-PaginationButton is one segment of the paginator's numbers strip: a 28px-tall native `button` that renders a page number, a Previous / Next chevron or an overflow ellipsis, selected by `kind`. It is the part `paginator` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Paginator.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `paginator` root and the consumer.
+PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number, a Previous / Next chevron or an overflow ellipsis, selected by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
 
 ## When to use
 
-- Compose a custom page strip inside `paginator`'s default slot (composition mode), one button per Previous, page number, overflow and Next.
-- Render the current page of a hand-wired paginator with `selected`, and the unavailable Previous / Next ends with `disabled`.
+- Compose a custom page strip inside `pagination`'s default slot (composition mode), one button per Previous, page number, overflow and Next.
+- Render the current page of a hand-wired pagination with `selected`, and the unavailable Previous / Next ends with `disabled`.
 
 ## When NOT to use
 
-- You know the item count → pass `total` to `paginator` and bind `v-model:page`; it renders and wires every PaginationButton itself.
+- You know the item count → pass `total` to `pagination` and bind `v-model:page`; it renders and wires every PaginationButton itself.
 - The rows live in a data-driven `table` → set `paginated` on the table instead.
 - The control is a previous / next link between documentation pages → use `doc-pagination`.
-- It is a standalone action outside a paginator strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.
+- It is a standalone action outside a pagination strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.
 - It is a "Load more" control at the end of a list → use `button`.
 
 ## Related
 
-- `paginator` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Paginator.Button`.
-- `paginator-info` — the page-info text that sits beside the strip.
-- `paginator-page-size` — the rows-per-page selector placed in the paginator's `controls` slot.
+- `pagination` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.
+- `pagination-info` — the page-info text that sits beside the strip.
+- `pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
 - `icon-button` — a standalone icon-only action with its own frame and radius.
 
 ## Best practices
 
-- Place it only inside `paginator`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.
+- Place it only inside `pagination`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.
 - Pass `aria-label` on every `previous`, `next` and `more` button: those kinds render an `aria-hidden` icon only and have no accessible name otherwise.
 - Put the page number in the default slot of `kind="number"` only; the other kinds ignore the slot.
 - Set `selected` on exactly one number button (it sets `aria-current="page"`), and `disabled` on Previous at the first page and Next at the last.
@@ -47,12 +47,12 @@ PaginationButton is one segment of the paginator's numbers strip: a 28px-tall na
 
 ```vue
 <script setup>
-  import Paginator from '@aziontech/webkit/paginator'
+  import Pagination from '@aziontech/webkit/pagination'
   import PaginationButton from '@aziontech/webkit/pagination-button'
 </script>
 
 <template>
-  <Paginator>
+  <Pagination>
     <PaginationButton
       kind="previous"
       aria-label="Previous page"
@@ -72,7 +72,7 @@ PaginationButton is one segment of the paginator's numbers strip: a 28px-tall na
       kind="next"
       aria-label="Next page"
     />
-  </Paginator>
+  </Pagination>
 </template>
 ```
 
@@ -80,7 +80,7 @@ PaginationButton is one segment of the paginator's numbers strip: a 28px-tall na
 
 | Prop       | Type                                         | Default    | Required | JSDoc                                                   |
 | ---------- | -------------------------------------------- | ---------- | -------- | ------------------------------------------------------- |
-| `kind`     | `'previous' \| 'next' \| 'number' \| 'more'` | `'number'` | false    | Button role within the paginator.                       |
+| `kind`     | `'previous' \| 'next' \| 'number' \| 'more'` | `'number'` | false    | Button role within the pagination.                      |
 | `selected` | `boolean`                                    | `false`    | false    | Marks the current page (filled surface + aria-current). |
 | `disabled` | `boolean`                                    | `false`    | false    | Disables interaction and applies disabled tokens.       |
 
@@ -104,7 +104,7 @@ PaginationButton is one segment of the paginator's numbers strip: a 28px-tall na
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.
-- Test ids: `<paginator testId>__button` when rendered inside a `paginator` (`data-paginator__button` by default), `data-paginator__button` outside one; a consumer `data-testid` wins.
+- Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.
 
 ## Motion & Animations
 
@@ -140,14 +140,14 @@ PaginationButton is one segment of the paginator's numbers strip: a 28px-tall na
 
 - Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: native button — `Tab` focuses; `Enter` / `Space` activates; a `disabled` button is skipped by `Tab`.
-- ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron and ellipsis icons are `aria-hidden="true"`, so `previous`, `next` and `more` take their accessible name from a consumer `aria-label` (data-driven `paginator` sets one on Previous and Next only).
+- ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron and ellipsis icons are `aria-hidden="true"`, so `previous`, `next` and `more` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on Previous and Next only).
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
 - `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
-- Touch target: 28×28, a justified deviation — the buttons are butted into the compact paginator strip that sits in a table footer, with no room to pad the hit area (see `paginator`).
+- Touch target: 28×28, a justified deviation — the buttons are butted into the compact pagination strip that sits in a table footer, with no room to pad the hit area (see `pagination`).
 
 ## Stories (Storybook)
 
-- Covered by the `paginator` stories (`apps/storybook/src/stories/components/data/paginator/Paginator.stories.js`): `Buttons` renders every `kind` and the `selected` / `disabled` states as `Paginator.Button`; `Default` and `DataDriven` show it inside the full strip. No standalone story — the button is only meaningful inside the paginator's strip, whose frame it does not draw itself.
+- Covered by the `pagination` stories (`apps/storybook/src/stories/components/data/pagination/Pagination.stories.js`): `Buttons` renders every `kind` and the `selected` / `disabled` states as `Pagination.Button`; `Default` and `DataDriven` show it inside the full strip. No standalone story — the button is only meaningful inside the pagination's strip, whose frame it does not draw itself.
 
 ## Constraints — DO NOT
 

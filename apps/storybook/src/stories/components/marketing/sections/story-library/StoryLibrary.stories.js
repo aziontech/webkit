@@ -21,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Every success story of a company as one filterable library: a left-aligned title over a search field and one searchable select per facet, then a grid of story cards and a load-more button. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input-text`, `select`, `button` and `empty-state`."
+          "Every success story of a company as one filterable library: a left-aligned title over a search field and one searchable select per facet, then a grid of story cards and a load-more button. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `button` and `empty-state`."
       },
       canvas: { sourceState: 'shown' }
     }

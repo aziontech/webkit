@@ -6,17 +6,17 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import FieldInputGroup from '@aziontech/webkit/field-input-group'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Label from '@aziontech/webkit/label'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -180,11 +180,11 @@
 </script>
 
 <template>
-  <DropdownRoot
+  <DropdownMenuRoot
     placement="bottom-end"
     @select="(event, value) => onRowAction(value)"
   >
-    <DropdownTrigger>
+    <DropdownMenuTrigger>
       <Tooltip text="Row actions">
         <IconButton
           icon="pi pi-ellipsis-h"
@@ -193,9 +193,9 @@
           aria-label="Actions for www.example.com"
         />
       </Tooltip>
-    </DropdownTrigger>
-    <DropdownGroup>
-      <DropdownOption
+    </DropdownMenuTrigger>
+    <DropdownMenuGroup>
+      <DropdownMenuOption
         value="edit"
         label="Edit"
       >
@@ -204,10 +204,10 @@
             class="pi pi-pencil"
             aria-hidden="true"
         /></template>
-      </DropdownOption>
-    </DropdownGroup>
-    <DropdownGroup>
-      <DropdownOption
+      </DropdownMenuOption>
+    </DropdownMenuGroup>
+    <DropdownMenuGroup>
+      <DropdownMenuOption
         value="delete"
         label="Delete"
       >
@@ -216,9 +216,9 @@
             class="pi pi-trash"
             aria-hidden="true"
         /></template>
-      </DropdownOption>
-    </DropdownGroup>
-  </DropdownRoot>
+      </DropdownMenuOption>
+    </DropdownMenuGroup>
+  </DropdownMenuRoot>
 
   <Drawer
     v-model:open="open"
@@ -443,7 +443,7 @@
                           </div>
                         </template>
 
-                        <Message
+                        <Alert
                           severity="info"
                           label="Your resource is always accessible at an example.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
                         />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import Divider from '../../../layout/divider/divider.vue'
+  import Separator from '../../../layout/separator/separator.vue'
 
   defineOptions({
     name: 'HelpPanelLinks',
@@ -37,7 +37,7 @@
     :data-testid="testId"
     class="flex w-full flex-col gap-(--spacing-lg)"
   >
-    <Divider />
+    <Separator />
     <div class="flex w-full flex-col gap-(--spacing-xs)">
       <h3
         v-if="title"

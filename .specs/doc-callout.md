@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6b1bfae5f1f00f6b4f9b463764799a4c24d11c1d825b5e65874c8c54f2e1964e
+checksum: c111089281cf00d2327223aa33c8fae690f99e40780936272bf4bf92c4237da2
 created: 2026-08-22
 last_updated: 2026-09-25
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-09-25
 
 ## Purpose
 
-The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 ## When to use
 
@@ -23,12 +23,12 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 ## When NOT to use
 
 - For a block that needs its own box — a fenced sample, a table, a card grid. Those belong outside the callout; its body is prose, at most a short list.
-- For an application-screen banner or a form error — use `Message` directly, which is what this composes.
+- For an application-screen banner or a form error — use `Alert` directly, which is what this composes.
 - As a section heading. A callout is an interruption, not structure.
 
 ## Related
 
-- `Message` — the webkit surface this renders on; reach for it directly outside documentation prose.
+- `Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.
 - `DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Best practices
@@ -89,7 +89,7 @@ _none_
 | surface (neutral kind)            | `var(--bg-surface)`                                                                               |
 | border (neutral kind)             | `var(--border-default)`                                                                           |
 | glyph (neutral kind)              | `var(--primary)`                                                                                  |
-| surface + border (severity kinds) | `Message`'s own `data-severity` tokens                                                            |
+| surface + border (severity kinds) | `Alert`'s own `data-severity` tokens                                                              |
 | surface (inline code, neutral)    | `var(--bg-hover)`                                                                                 |
 | border (inline code, severity)    | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
 | shape (inline code)               | `var(--shape-flat)`                                                                               |
@@ -105,7 +105,7 @@ _none_
 
 - Visible focus: the callout is not focusable; a link inside it inherits the prose focus ring.
 - Keyboard map: none of its own — `Tab` reaches only a link in the copy.
-- ARIA: the role comes from `Message`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
+- ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
 - Contrast ≥4.5:1: the copy is `--text-default` in every kind, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
 - Touch target: not applicable; the component is not interactive.

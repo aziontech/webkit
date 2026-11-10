@@ -2,7 +2,7 @@
   import Accordion from '@aziontech/webkit/accordion'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -265,7 +265,7 @@
           severity="success"
         />
         <span class="text-label-sm text-(--text-muted)">Deployed in 42s</span>
-        <SegmentedButton
+        <ToggleGroup
           v-model="logView"
           :options="logViews"
           size="medium"

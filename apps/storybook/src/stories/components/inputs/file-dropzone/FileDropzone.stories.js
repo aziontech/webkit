@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import CardBox from '@aziontech/webkit/card-box'
+import Card from '@aziontech/webkit/card'
 import FileDropzone from '@aziontech/webkit/file-dropzone'
 import { ref } from 'vue'
 
@@ -7,7 +7,7 @@ import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import FileDropzone from '@aziontech/webkit/file-dropzone'"
 const BUTTON_IMPORT = "import Button from '@aziontech/webkit/button'"
-const CARD_BOX_IMPORT = "import CardBox from '@aziontech/webkit/card-box'"
+const CARD_BOX_IMPORT = "import Card from '@aziontech/webkit/card'"
 
 const BROWSE_SCRIPT = [
   "import { ref } from 'vue'",
@@ -34,13 +34,13 @@ const DISABLED_MARKUP = `<div class="w-full max-w-(--container-md)">
 </div>`
 
 const OVERLAY_MARKUP = `<div class="relative w-full max-w-(--container-md)">
-  <CardBox title="Project files">
+  <Card title="Project files">
     <template #content>
       <div class="flex min-h-48 flex-col gap-(--spacing-xs)">
         <p class="text-body-sm text-(--text-muted)">Drag a file from your computer over this window. The drop target covers this card until you drop the file, leave the window or press Escape.</p>
       </div>
     </template>
-  </CardBox>
+  </Card>
   <FileDropzone kind="overlay" />
 </div>`
 
@@ -215,18 +215,18 @@ export const Default = {
 
 export const Overlay = {
   render: (args) => ({
-    components: { FileDropzone, CardBox },
+    components: { FileDropzone, Card },
     setup() {
       return { args }
     },
     template: `<div class="relative w-full max-w-(--container-md)">
-  <CardBox title="Project files">
+  <Card title="Project files">
     <template #content>
       <div class="flex min-h-48 flex-col gap-(--spacing-xs)">
         <p class="text-body-sm text-(--text-muted)">Drag a file from your computer over this window. The drop target covers this card until you drop the file, leave the window or press Escape.</p>
       </div>
     </template>
-  </CardBox>
+  </Card>
   <FileDropzone v-bind="args" />
 </div>`
   }),

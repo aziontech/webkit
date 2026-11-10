@@ -5,13 +5,13 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import HelperText from '@aziontech/webkit/helper-text'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import Stepper from '@aziontech/webkit/stepper'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -372,7 +372,7 @@
                   </header>
 
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                    <InputText
+                    <Input
                       v-model="query"
                       size="large"
                       class="w-full"
@@ -444,13 +444,13 @@
                   </div>
                 </section>
 
-                <CardBox
+                <Card
                   v-else-if="current === 'module'"
                   :padded="false"
                 >
                   <template #content>
                     <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                      <Message
+                      <Alert
                         severity="warning"
                         size="small"
                         :label="
@@ -476,14 +476,14 @@
                       </p>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
 
                 <section
                   v-else-if="current === 'general'"
                   class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
                 >
                   <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                    <CardBox :padded="false">
+                    <Card :padded="false">
                       <template #content>
                         <Item.List>
                           <Item size="small">
@@ -497,7 +497,7 @@
                             <div class="flex max-w-(--container-3xs) flex-1 justify-end">
                               <Item.Actions class="w-full">
                                 <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                  <InputText
+                                  <Input
                                     v-model="form.name"
                                     size="large"
                                     class="w-full"
@@ -522,7 +522,7 @@
                           </Item>
                         </Item.List>
                       </template>
-                    </CardBox>
+                    </Card>
                   </div>
                 </section>
 
@@ -531,7 +531,7 @@
                   class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
                 >
                   <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                    <CardBox :padded="false">
+                    <Card :padded="false">
                       <template #content>
                         <Item.List>
                           <Item size="small">
@@ -591,7 +591,7 @@
                           </Item>
                         </Item.List>
                       </template>
-                    </CardBox>
+                    </Card>
                   </div>
                 </section>
               </fieldset>

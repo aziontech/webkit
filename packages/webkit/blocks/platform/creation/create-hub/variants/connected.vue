@@ -5,9 +5,9 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import ScrollArea from '@aziontech/webkit/scroll-area'
@@ -484,7 +484,7 @@
                   v-if="!accounts.length"
                   class="flex lg:min-h-0 lg:flex-1"
                 >
-                  <CardBox class="w-full">
+                  <Card class="w-full">
                     <template #content>
                       <div
                         class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
@@ -534,7 +534,7 @@
                         </EmptyState>
                       </div>
                     </template>
-                  </CardBox>
+                  </Card>
                 </div>
 
                 <div
@@ -581,7 +581,7 @@
                     </div>
 
                     <div class="flex w-full flex-1">
-                      <InputText
+                      <Input
                         v-model="search"
                         size="large"
                         placeholder="Search project or enter a Git Repository URL"
@@ -591,12 +591,12 @@
                         <template #iconLeft>
                           <i class="pi pi-search" />
                         </template>
-                      </InputText>
+                      </Input>
                     </div>
                   </div>
 
                   <div class="flex lg:min-h-0">
-                    <CardBox
+                    <Card
                       :padded="false"
                       class="w-full"
                     >
@@ -688,7 +688,7 @@
                           </p>
                         </div>
                       </template>
-                    </CardBox>
+                    </Card>
                   </div>
                 </div>
               </div>
@@ -743,7 +743,7 @@
                               :key="item.slug"
                               class="group relative cursor-pointer transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
                             >
-                              <CardBox
+                              <Card
                                 role="button"
                                 tabindex="0"
                               >
@@ -777,7 +777,7 @@
                                     </div>
                                   </div>
                                 </template>
-                              </CardBox>
+                              </Card>
                             </div>
                           </div>
 
@@ -790,7 +790,7 @@
                               :key="item.slug"
                               class="flex group relative min-h-(--size-44) cursor-pointer"
                             >
-                              <CardBox
+                              <Card
                                 class="w-full"
                                 role="button"
                                 tabindex="0"
@@ -818,7 +818,7 @@
                                     </div>
                                   </div>
                                 </template>
-                              </CardBox>
+                              </Card>
                             </div>
                           </div>
                         </section>

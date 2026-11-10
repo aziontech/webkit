@@ -8,7 +8,7 @@
 <template>
   <FieldTextarea
     v-model="value"
-    label="Message"
+    label="Alert"
     placeholder="Write your message"
     helper-text="This field is required."
     required

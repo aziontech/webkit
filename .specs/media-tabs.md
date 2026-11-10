@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 3f52f749cabe1cb771937f5e4a99c1d8137a15643c529bbf9776143481f3ae4b
+checksum: c2e8afe96e5861513ea021cc446f888a8266731481772409660f845a69bf5773
 created: 2026-09-24
 last_updated: 2026-11-09
 ---
@@ -28,7 +28,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 - For one claim beside one picture → use `media-split`.
 - For questions and answers → use `faq`.
-- For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set.
+- For switching a page's content between peer views the reader navigates → use `tabs`, which is a real ARIA tab set.
 
 ## Related
 
@@ -88,7 +88,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 | ------------------ | ---------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
 | `position`         | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'`     | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row.                                                                 |
-| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                     |
+| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                    |
 | `selectOn`         | `'hover' \| 'click'`                     | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                    |
 | `autoPlay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                                                  |
 | `autoPlayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |

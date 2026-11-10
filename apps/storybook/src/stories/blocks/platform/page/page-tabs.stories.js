@@ -11,7 +11,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Every resource detail page opens with it, and an account page such as Billing uses it with its row held to the `layout-column` width. Built from `TabView`, with `Button` and `Tag` in the trailing actions." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Every resource detail page opens with it, and an account page such as Billing uses it with its row held to the `layout-column` width. Built from `Tabs`, with `Button` and `Tag` in the trailing actions." } },
     webkit: {"block":"platform/page/page-tabs","intents":["page tabs","resource tabs","detail tabs","tab bar","tabs with deploy button","second-level navigation","abas","abas do recurso","navegação por abas"],"skills":["webkit-navigation"],"primary":"Default"}
   }
 }

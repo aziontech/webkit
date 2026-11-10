@@ -2,7 +2,7 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import Button from '../../../actions/button/button.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Tag from '../../../tag/tag.vue'
   import Badge from '../../badge/badge.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -147,7 +147,7 @@
                 class="flex w-24"
                 :data-cursor="name === 'qa-qc-fw-waf' ? 'raise' : undefined"
               >
-                <InputNumber
+                <NumberInput
                   :model-value="index + 1"
                   :min="1"
                   :max="SAVED.length"

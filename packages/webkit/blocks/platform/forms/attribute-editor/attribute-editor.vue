@@ -1,7 +1,7 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
@@ -10,19 +10,19 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Switch from '@aziontech/webkit/switch'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
@@ -556,7 +556,7 @@
                           class="flex flex-col"
                         >
                           <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                            <InputText
+                            <Input
                               v-model="filterQuery"
                               size="medium"
                               class="w-full"
@@ -569,7 +569,7 @@
                                   aria-hidden="true"
                                 />
                               </template>
-                            </InputText>
+                            </Input>
                           </div>
                           <div
                             class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
@@ -602,7 +602,7 @@
                 </Popover>
               </div>
               <div class="flex min-w-36 grow basis-(--container-2xs)">
-                <InputText
+                <Input
                   v-model="search"
                   size="medium"
                   placeholder="Search variables"
@@ -615,7 +615,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </div>
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -715,7 +715,7 @@
           </header>
 
           <section class="flex min-h-0 flex-col">
-            <CardBox :padded="false">
+            <Card :padded="false">
               <template #content>
                 <TableRoot
                   ref="table"
@@ -807,8 +807,8 @@
                   </template>
 
                   <template #cell-actions>
-                    <Dropdown placement="bottom-end">
-                      <Dropdown.Trigger>
+                    <DropdownMenu placement="bottom-end">
+                      <DropdownMenu.Trigger>
                         <Tooltip text="Row actions">
                           <IconButton
                             icon="pi pi-ellipsis-h"
@@ -817,10 +817,10 @@
                             aria-label="Row actions"
                           />
                         </Tooltip>
-                      </Dropdown.Trigger>
+                      </DropdownMenu.Trigger>
 
-                      <Dropdown.Group>
-                        <Dropdown.Option
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
                           value="edit"
                           label="Edit"
                         >
@@ -830,8 +830,8 @@
                               aria-hidden="true"
                             />
                           </template>
-                        </Dropdown.Option>
-                        <Dropdown.Option
+                        </DropdownMenu.Option>
+                        <DropdownMenu.Option
                           value="duplicate"
                           label="Clone"
                         >
@@ -841,11 +841,11 @@
                               aria-hidden="true"
                             />
                           </template>
-                        </Dropdown.Option>
-                      </Dropdown.Group>
+                        </DropdownMenu.Option>
+                      </DropdownMenu.Group>
 
-                      <Dropdown.Group>
-                        <Dropdown.Option
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
                           value="delete"
                           label="Delete"
                         >
@@ -855,13 +855,13 @@
                               aria-hidden="true"
                             />
                           </template>
-                        </Dropdown.Option>
-                      </Dropdown.Group>
-                    </Dropdown>
+                        </DropdownMenu.Option>
+                      </DropdownMenu.Group>
+                    </DropdownMenu>
                   </template>
                 </TableRoot>
               </template>
-            </CardBox>
+            </Card>
           </section>
         </section>
       </section>
@@ -946,7 +946,7 @@
                               aria-hidden="true"
                               @change="onFilePicked"
                             />
-                            <SegmentedButton
+                            <ToggleGroup
                               v-model="view"
                               :options="VIEW_OPTIONS"
                               aria-label="Variables view"
@@ -1195,7 +1195,7 @@
                                   />
                                   <MultiSelect.Content>
                                     <template #search>
-                                      <InputText
+                                      <Input
                                         v-model="scope.query"
                                         size="small"
                                         placeholder="Search"
@@ -1208,7 +1208,7 @@
                                             aria-hidden="true"
                                           />
                                         </template>
-                                      </InputText>
+                                      </Input>
                                     </template>
                                     <MultiSelect.Option
                                       v-for="option in visibleScopeOptions(scope)"

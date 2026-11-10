@@ -316,12 +316,12 @@ export const Open = {
       // measured at mount. Rendered INLINE on the docs page those coordinates
       // freeze before the page finishes laying out, so the panel drifts thousands
       // of pixels away from its trigger and floats over the stories above it.
-      // An iframe (same treatment as Dropdown's forced-open stories) gives it a
+      // An iframe (same treatment as DropdownMenu's forced-open stories) gives it a
       // viewport of its own, where mount-time geometry is the real geometry.
       story: { inline: false, iframeHeight: '720px' },
       description: {
         story:
-          'The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input-text` — same heights, same `.text-label-sm` value, same hover and disabled treatment.'
+          'The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input` — same heights, same `.text-label-sm` value, same hover and disabled treatment.'
       },
       source: {
         code: toSfc(

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: adc582ea5d0b4048a5159b5d0d99a3401531337105487985b383300cb7587e92
+checksum: b1ec9a469465b4753fc5e755460f15b2885144fed9de119cfdd11c5482fba66b
 created: 2026-05-25
 last_updated: 2026-11-09
 ---
@@ -27,7 +27,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 ## When NOT to use
 
 - It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.
-- It moves between sibling views of the same page → use `tab-view`.
+- It moves between sibling views of the same page → use `tabs`.
 - It is the previous / next pair at the end of a docs page → use `doc-pagination`.
 
 ## Related
@@ -47,22 +47,33 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ```vue
 <script setup>
-import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
 </script>
 
 <template>
   <Breadcrumb>
     <Breadcrumb.List>
       <li>
-        <Breadcrumb.Item label="Home" href="/" show-icon icon="pi pi-home" />
+        <Breadcrumb.Item
+          label="Home"
+          href="/"
+          show-icon
+          icon="pi pi-home"
+        />
       </li>
       <Breadcrumb.Separator />
       <li>
-        <Breadcrumb.Item label="Applications" href="/applications" />
+        <Breadcrumb.Item
+          label="Applications"
+          href="/applications"
+        />
       </li>
       <Breadcrumb.Separator />
       <li>
-        <Breadcrumb.Item label="my-application" current />
+        <Breadcrumb.Item
+          label="my-application"
+          current
+        />
       </li>
     </Breadcrumb.List>
   </Breadcrumb>
@@ -78,23 +89,23 @@ import Breadcrumb from '@aziontech/webkit/breadcrumb'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `BreadcrumbItemData[]` | `() => []` | false | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
+| Prop    | Type                   | Default    | Required | JSDoc                                                                                                         |
+| ------- | ---------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `items` | `BreadcrumbItemData[]` | `() => []` | false    | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
 
 `BreadcrumbItemData`: `{ label: string; href?: string; showIcon?: boolean; icon?: string; current?: boolean }`
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event      | Payload                             | Notes                                                                                                              |
+| ---------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `navigate` | `(event: MouseEvent, href: string)` | Fires when an ancestor segment is activated. `event` is the activation event; `href` is the segment's destination. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Custom composition (`BreadcrumbList` + items + separators). Used when `items` is empty. |
+| Slot      | Scope | Notes                                                                                   |
+| --------- | ----- | --------------------------------------------------------------------------------------- |
+| `default` | —     | Custom composition (`BreadcrumbList` + items + separators). Used when `items` is empty. |
 
 ## States
 
@@ -113,20 +124,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-label-lg` |
-| text (ancestor) | `var(--text-muted)` |
-| text (current) | `var(--text-default)` |
-| separator icon | `var(--text-muted)` |
-| spacing gap | `var(--spacing-1)` |
-| shape | `var(--shape-elements)` |
+| Region          | Token (DESIGN.md)       |
+| --------------- | ----------------------- |
+| typography      | `.text-label-lg`        |
+| text (ancestor) | `var(--text-muted)`     |
+| text (current)  | `var(--text-default)`   |
+| separator icon  | `var(--text-muted)`     |
+| spacing gap     | `var(--spacing-1)`      |
+| shape           | `var(--shape-elements)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

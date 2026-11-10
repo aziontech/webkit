@@ -2,7 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -497,22 +497,22 @@
             />
           </span>
           <ChartCard.Controls>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Conversion funnel"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -586,22 +586,22 @@
             />
           </span>
           <ChartCard.Controls>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Retention by cohort"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -643,22 +643,22 @@
             />
           </span>
           <ChartCard.Controls>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Weekly cohorts"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>

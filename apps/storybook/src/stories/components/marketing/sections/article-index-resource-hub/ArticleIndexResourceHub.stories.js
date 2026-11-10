@@ -3,8 +3,7 @@ import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hu
 import { toSfc } from '../../../../_shared/story-source'
 import { SITE_SECTION } from '../../../../templates/marketing/_sections/article-index-resource-hub'
 
-const IMPORT =
-  "import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'"
+const IMPORT = "import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'"
 
 const text = (summary) => ({
   category: 'props',
@@ -27,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet on one row. Each resource is a row — its cover, overline, headline and two-line deck centred in the row — that is one link named by its headline, with a read cue that rises in on hover or focus from `lg` up. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input-text` and `button`."
+          "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet on one row. Each resource is a row — its cover, overline, headline and two-line deck centred in the row — that is one link named by its headline, with a read cue that rises in on hover or focus from `lg` up. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`."
       },
       canvas: { sourceState: 'shown' }
     }

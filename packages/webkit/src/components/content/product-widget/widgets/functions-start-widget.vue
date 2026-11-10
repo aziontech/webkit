@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
 
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import { AGENT_CLIENTS } from '../data/functions-start'
   import CliTerminal from '../parts/cli-terminal.vue'
@@ -54,7 +54,7 @@
     class="flex h-full min-w-0 flex-col gap-(--spacing-sm)"
   >
     <span class="flex shrink-0 justify-center">
-      <SegmentedButton
+      <ToggleGroup
         v-model="client"
         :options="AGENTS"
         size="large"

@@ -15,7 +15,7 @@ const TESTID = 'navigation-breadcrumb'
 // The Playwright test viewport is narrow (< md / 768px), so useOverlayMobile()
 // resolves TRUE and the root renders its COLLAPSED mobile layout:
 //   first item  -> `__segment-0-mobile` / `__item-0`
-//   middle items -> a Dropdown overflow menu (`__overflow-menu` / `__overflow-trigger`
+//   middle items -> a DropdownMenu overflow menu (`__overflow-menu` / `__overflow-trigger`
 //                    / `__overflow-item-<n>`) framed by `__separator-overflow-before`
 //   last item   -> `__segment-last-mobile` / `__item-last`
 // Every assertion below is grounded in that real render path (breadcrumb.vue
@@ -101,7 +101,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     })
   })
 
-  describe('overflow menu (middle items collapsed into a Dropdown)', () => {
+  describe('overflow menu (middle items collapsed into a DropdownMenu)', () => {
     it('renders the ellipsis trigger closed by default', () => {
       const { getByTestId } = render(Breadcrumb, { props: { items: TRAIL } })
 
@@ -117,7 +117,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
 
       await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
 
-      // The Dropdown's data-state flips to open.
+      // The DropdownMenu's data-state flips to open.
       expect(getByTestId(`${TESTID}__overflow-menu`).getAttribute('data-state')).toBe('open')
 
       // The panel + options are Teleported to document.body (escape the container).
@@ -134,7 +134,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     })
 
     it('renders a collapsed item icon inside its overflow option', async () => {
-      // Dropdown.Option declares `left` / `right` (not `leading`), so a mismatched
+      // DropdownMenu.Option declares `left` / `right` (not `leading`), so a mismatched
       // slot name silently renders nothing — the icon has to be reachable here.
       const { getByTestId } = render(Breadcrumb, {
         props: {
@@ -155,8 +155,8 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     })
 
     // This was skipped as a harness limitation ("@select does not fire under test
-    // interaction"). It was not: the listener was bound to `Dropdown.Option`, which
-    // never emits `select` — the Dropdown ROOT does, from `selectOption`. Picking a
+    // interaction"). It was not: the listener was bound to `DropdownMenu.Option`, which
+    // never emits `select` — the DropdownMenu ROOT does, from `selectOption`. Picking a
     // collapsed crumb below `md` therefore did nothing in a real browser either. The
     // listener moved to the root, and this is the test that holds it there.
     it('emits navigate with the middle item href when its overflow option is selected', async () => {
@@ -169,11 +169,11 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       ) as HTMLElement
       expect(option).toBeTruthy()
 
-      // The Dropdown option selects on the full pointer sequence, not a synthetic
+      // The DropdownMenu option selects on the full pointer sequence, not a synthetic
       // click — userEvent fires pointerdown/up so @select -> onOverflowSelect runs.
       await userEvent.click(option)
 
-      // Dropdown select -> onOverflowSelect -> handleItemClick -> navigate(event, '/projects').
+      // DropdownMenu select -> onOverflowSelect -> handleItemClick -> navigate(event, '/projects').
       const navigate = emitted().navigate as Array<[unknown, string]>
       expect(navigate).toBeTruthy()
       expect(navigate[0][1]).toBe('/projects')

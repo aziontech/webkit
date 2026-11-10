@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 733b40b89ddd46f604b11964e643a6e2e0b076ac645bc8932940b48d06d73239
+checksum: fb4c7e33ac4aa87909d44e4f1c21bd33d275207a666e4e6873434f69ae989add
 created: 2026-07-13
 last_updated: 2026-11-09
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with `v-model:value` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tab-view` (view navigation), it is a fixed three-way single-select over the theme modes.
+A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with `v-model:value` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
 ## When to use
 
@@ -25,12 +25,12 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 ## When NOT to use
 
 - A general on/off preference → use `switch`.
-- Picking one of other mutually exclusive options → use `segmented-button`.
-- Moving between views or panels → use `tab-view`.
+- Picking one of other mutually exclusive options → use `toggle-group`.
+- Moving between views or panels → use `tabs`.
 
 ## Related
 
-- `segmented-button` — the generic mutually exclusive option group, with labels and sizes.
+- `toggle-group` — the generic mutually exclusive option group, with labels and sizes.
 - `switch` — boolean toggle for a single setting.
 
 ## Best practices
@@ -43,10 +43,10 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { ref } from 'vue'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
 
-const theme = ref('system')
+  const theme = ref('system')
 </script>
 
 <template>
@@ -56,16 +56,16 @@ const theme = ref('system')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `value` | `'system' \| 'dark' \| 'light'` | `'system'` | false | Selected theme mode. Bind with `v-model:value`. |
-| `disabled` | `boolean` | `false` | false | Disables the whole control and applies disabled tokens. |
-| `ariaLabel` | `string` | `'Theme'` | false | Accessible name for the icon-only segmented group. |
+| Prop        | Type                            | Default    | Required | JSDoc                                                   |
+| ----------- | ------------------------------- | ---------- | -------- | ------------------------------------------------------- |
+| `value`     | `'system' \| 'dark' \| 'light'` | `'system'` | false    | Selected theme mode. Bind with `v-model:value`.         |
+| `disabled`  | `boolean`                       | `false`    | false    | Disables the whole control and applies disabled tokens. |
+| `ariaLabel` | `string`                        | `'Theme'`  | false    | Accessible name for the icon-only segmented group.      |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event          | Payload                         | Notes                                                              |
+| -------------- | ------------------------------- | ------------------------------------------------------------------ |
 | `update:value` | `'system' \| 'dark' \| 'light'` | Emitted when the user selects a mode. Paired with `v-model:value`. |
 
 ## Slots
@@ -81,29 +81,29 @@ const theme = ref('system')
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / icon color change | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (`animate.js`) | `motion-reduce:transition-none` |
-| selection change | indicator slides between segments via `transition-transform duration-moderate-02 ease-productive-entrance` (position measured from the active segment) | semantic (`animate.js`) | `motion-reduce:transition-none` |
+| Trigger                   | Animation / Transition                                                                                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover / icon color change | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                          | semantic (`animate.js`)                           | `motion-reduce:transition-none` |
+| selection change          | indicator slides between segments via `transition-transform duration-moderate-02 ease-productive-entrance` (position measured from the active segment) | semantic (`animate.js`)                           | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| pill surface | `var(--bg-surface)` |
-| pill border | `var(--border-default)` |
-| selected segment surface | `var(--bg-selected)` |
-| hover segment surface | `var(--bg-hover)` |
-| icon color | `var(--text-default)` |
-| disabled icon | `var(--text-disabled)` |
-| gap / padding | `var(--spacing-xxs)` |
-| ring | `var(--ring-color)` |
-| ring offset | `var(--bg-canvas)` |
+| Region                   | Token (DESIGN.md)       |
+| ------------------------ | ----------------------- |
+| pill surface             | `var(--bg-surface)`     |
+| pill border              | `var(--border-default)` |
+| selected segment surface | `var(--bg-selected)`    |
+| hover segment surface    | `var(--bg-hover)`       |
+| icon color               | `var(--text-default)`   |
+| disabled icon            | `var(--text-disabled)`  |
+| gap / padding            | `var(--spacing-xxs)`    |
+| ring                     | `var(--ring-color)`     |
+| ring offset              | `var(--bg-canvas)`      |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                   | Temporary primitive                                                  | Follow-up                                            |
+| -------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------- |
 | `--border-width-default` (0.8px) | `border-(length:--border-width-default)` (real compiled theme token) | `TODO: document --border-width-default in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -144,4 +144,5 @@ const theme = ref('system')
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
 - If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.
 </content>
+
 </invoke>

@@ -1,12 +1,12 @@
 <script setup>
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import Input from '@aziontech/webkit/input'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
@@ -212,7 +212,7 @@
                 :icon="comparison.delta > 0 ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-left'"
                 size="small"
               />
-              <SegmentedButton
+              <ToggleGroup
                 v-model="form"
                 :options="FORMS"
                 size="small"
@@ -227,26 +227,26 @@
                 aria-label="Expand Data transferred, this period vs previous"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Data transferred, this period vs previous"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -299,26 +299,26 @@
                 aria-label="Expand Data transferred by project"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Data transferred by project"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
@@ -366,33 +366,33 @@
                 aria-label="Expand Usage by project"
               />
             </Tooltip>
-            <Dropdown placement="bottom-end">
-              <Dropdown.Trigger>
+            <DropdownMenu placement="bottom-end">
+              <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
                   aria-label="More options for Usage by project"
                 />
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Group>
+                <DropdownMenu.Option
                   value="query"
                   label="Copy query"
                 />
-                <Dropdown.Option
+                <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
                 />
-              </Dropdown.Group>
-            </Dropdown>
+              </DropdownMenu.Group>
+            </DropdownMenu>
           </ChartCard.Controls>
         </ChartCard.Header>
         <ChartCard.Content>
           <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
             <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
               <div class="min-w-36 grow basis-(--container-3xs)">
-                <InputText
+                <Input
                   v-model="search"
                   size="medium"
                   placeholder="Search projects"
@@ -404,7 +404,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </div>
             </div>
 

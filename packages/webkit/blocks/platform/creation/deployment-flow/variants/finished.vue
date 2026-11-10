@@ -1,6 +1,6 @@
 <script setup>
   import Accordion from '@aziontech/webkit/accordion'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -255,7 +255,7 @@
 </script>
 
 <template>
-  <CardBox
+  <Card
     :padded="false"
     class="w-full"
   >
@@ -370,5 +370,5 @@
         </LogView>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

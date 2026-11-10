@@ -1,6 +1,6 @@
 <script setup>
   import Wizard from '@aziontech/webkit/wizard'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldSelect from '@aziontech/webkit/field-select'
   import { ref } from 'vue'
@@ -42,7 +42,7 @@
       description="Name the resource and choose where it runs."
     >
       <div class="flex flex-col gap-(--spacing-md)">
-        <Message
+        <Alert
           v-if="nameMissing"
           severity="danger"
           label="Enter a name to continue."

@@ -2,7 +2,7 @@
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
   import Tag from '../../../tag/tag.vue'
@@ -270,7 +270,7 @@
                     label="Name"
                     required
                   />
-                  <InputText
+                  <Input
                     model-value="qa-p-app"
                     size="medium"
                     aria-label="Name"
@@ -342,7 +342,7 @@
                 class="flex items-center gap-(--spacing-xs) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-sm)"
               >
                 <div class="w-77">
-                  <InputText
+                  <Input
                     model-value=""
                     size="medium"
                     placeholder="Search keywords..."
@@ -354,7 +354,7 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
                 </div>
                 <span class="ml-auto inline-flex gap-(--spacing-xs)">
                   <IconButton

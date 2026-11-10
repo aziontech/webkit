@@ -16,8 +16,8 @@
     "entryOnly": true
   },
   {
-    "name": "input-text",
-    "path": "src/components/inputs/input-text/input-text.vue",
+    "name": "input",
+    "path": "src/components/inputs/input/input.vue",
     "limit": "2 KB"
   },
   {
@@ -142,7 +142,7 @@
   },
   {
     "name": "resizable-panel-root",
-    "path": "src/components/layout/resizable-panel/resizable-panel.vue",
+    "path": "src/components/layout/resizable/resizable.vue",
     "limit": "3 KB"
   },
   {

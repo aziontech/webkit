@@ -1,6 +1,6 @@
 <script setup>
   import BarList from '@aziontech/webkit/bar-list'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -559,7 +559,7 @@
         </ChartCard>
 
         <div class="lg:col-span-4">
-          <CardBox title="Open by severity">
+          <Card title="Open by severity">
             <template #content>
               <ul
                 v-if="loading"
@@ -607,7 +607,7 @@
                 description="Every alert raised in the period has been closed."
               />
             </template>
-          </CardBox>
+          </Card>
         </div>
 
         <ChartCard :span="4">

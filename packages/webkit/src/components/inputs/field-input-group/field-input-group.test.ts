@@ -75,7 +75,7 @@ describe('FieldInputGroup', () => {
       [{}, 'helper']
     ] as const)('computes helper kind by precedence: %o -> %s', (state, kind) => {
       const { getByTestId } = render(FieldInputGroup, {
-        props: { label: 'Website', helperText: 'Message', ...state }
+        props: { label: 'Website', helperText: 'Alert', ...state }
       })
 
       expect(getByTestId('input-field-input-group__helper').getAttribute('data-kind')).toBe(kind)

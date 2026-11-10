@@ -4,7 +4,7 @@
   import { usePlacement } from '../../../../composables/use-placement'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import {
     type AppliedFilter,
     type FilterField,
@@ -297,7 +297,7 @@
                   {{ option.label }}
                 </option>
               </select>
-              <InputText
+              <Input
                 v-else-if="needsValue"
                 v-model="draftValue"
                 :data-testid="`${testId}__value`"

@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: approved
-checksum: 4b2fb0c9307c7d205843dfdad3aae0de051e4d5085b38eca330fcf7c143a5319
+checksum: 43d53e72a2dc614c3399b7c0a3a9a4ed1ab16e15bc7e7acac8f840d9614d50ce
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-10
@@ -48,7 +48,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 
 ```vue
 <script setup>
-import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/webkit/stat-tile'
 </script>
 
 <template>
@@ -65,17 +65,17 @@ import StatTile from '@aziontech/webkit/stat-tile'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Metric name, in sentence case. Fallback for the default slot. |
-| `value` | `number \| null` | `null` | false | The current value. It counts up from the previous value on change; null renders a dash. |
-| `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the figure. |
-| `unit` | `string` | `''` | false | Unit read after the figure, in a muted tone. Empty hides it. |
-| `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent. Null hides the delta. |
-| `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
-| `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
-| `trend` | `number[]` | `[]` | false | Sparkline values, oldest first. Empty hides the sparkline. |
-| `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
+| Prop          | Type                        | Default         | Required | JSDoc                                                                                   |
+| ------------- | --------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------- |
+| `label`       | `string`                    | `''`            | false    | Metric name, in sentence case. Fallback for the default slot.                           |
+| `value`       | `number \| null`            | `null`          | false    | The current value. It counts up from the previous value on change; null renders a dash. |
+| `formatValue` | `(value: number) => string` | `formatCompact` | false    | Formats the figure.                                                                     |
+| `unit`        | `string`                    | `''`            | false    | Unit read after the figure, in a muted tone. Empty hides it.                            |
+| `delta`       | `number \| null`            | `null`          | false    | Signed change against the named period, in percent. Null hides the delta.               |
+| `deltaLabel`  | `string`                    | `''`            | false    | The comparison period, read after the delta.                                            |
+| `inverse`     | `boolean`                   | `false`         | false    | A rise is bad for this metric; flips the delta between success and danger.              |
+| `trend`       | `number[]`                  | `[]`            | false    | Sparkline values, oldest first. Empty hides the sparkline.                              |
+| `loading`     | `boolean`                   | `false`         | false    | Renders Skeleton lines in place of the figure, delta and sparkline.                     |
 
 ## Events
 
@@ -83,43 +83,43 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Replaces the label text. |
-| `aside` | — | Trailing content beside the label, such as an info icon or a menu. |
+| Slot      | Scope | Notes                                                              |
+| --------- | ----- | ------------------------------------------------------------------ |
+| `default` | —     | Replaces the label text.                                           |
+| `aside`   | —     | Trailing content beside the label, such as an info icon or a menu. |
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Divider` carrying a "No data" `Tag`)
+- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `secondary` when flat
 - `data-loading` mirrors `loading`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| value change | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance` | skipped under `prefers-reduced-motion`; the final value renders at once |
-| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`) | `slow-02` · `productive-entrance` | `motion-reduce:transition-none` inside `spark-chart` |
+| Trigger            | Animation / Transition                                                                                                                                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| value change       | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance`                 | skipped under `prefers-reduced-motion`; the final value renders at once |
+| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`)                                                                                             | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` inside `spark-chart`                    |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| surface | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
-| label | `.text-label-sm`, `var(--text-muted)` |
-| figure | `.text-big-number-sm`, `var(--text-default)` — one size |
-| unit | the figure's big-number class, `var(--text-muted)` |
-| delta | `tag` at `size="small"` (`success` / `danger` / `secondary`); period in `.text-label-sm`, `var(--text-muted)` |
-| sparkline | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge |
-| no-data band | `spark-chart` `color="other"` at reduced opacity, `divider`, `tag` `severity="secondary"` at `size="small"` |
-| spacing | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)` |
+| Region       | Token (DESIGN.md)                                                                                             |
+| ------------ | ------------------------------------------------------------------------------------------------------------- |
+| surface      | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`                                             |
+| label        | `.text-label-sm`, `var(--text-muted)`                                                                         |
+| figure       | `.text-big-number-sm`, `var(--text-default)` — one size                                                       |
+| unit         | the figure's big-number class, `var(--text-muted)`                                                            |
+| delta        | `tag` at `size="small"` (`success` / `danger` / `secondary`); period in `.text-label-sm`, `var(--text-muted)` |
+| sparkline    | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge                            |
+| no-data band | `spark-chart` `color="other"` at reduced opacity, `divider`, `tag` `severity="secondary"` at `size="small"`   |
+| spacing      | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

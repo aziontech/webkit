@@ -1,11 +1,11 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldText from '@aziontech/webkit/field-text'
   import HelperText from '@aziontech/webkit/helper-text'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Skeleton from '@aziontech/webkit/skeleton'
   import { computed, reactive, ref } from 'vue'
 
@@ -126,7 +126,7 @@
 
 <template>
   <div class="layout-column-form">
-    <CardBox
+    <Card
       :padded="false"
       title="Project"
     >
@@ -136,7 +136,7 @@
             What this service serves on each environment, so one service can serve different
             projects on Production and Preview.
           </p>
-          <SegmentedButton
+          <ToggleGroup
             v-model="mode"
             :options="projectModes"
             size="large"
@@ -177,7 +177,7 @@
             :data-field-invalid="projectPicker.message || null"
             class="flex flex-col gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-md)"
           >
-            <InputText
+            <Input
               v-if="projectPicker.paged"
               v-model="projectPicker.query"
               size="large"
@@ -191,7 +191,7 @@
                   aria-hidden="true"
                 />
               </template>
-            </InputText>
+            </Input>
 
             <HelperText
               v-if="projectPicker.message"
@@ -300,6 +300,6 @@
           </div>
         </div>
       </template>
-    </CardBox>
+    </Card>
   </div>
 </template>

@@ -5,7 +5,7 @@
   import Button from '../../../actions/button/button.vue'
   import Chip from '../../../inputs/chip/chip.vue'
   import Badge from '../../badge/badge.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -221,7 +221,7 @@
             >
               <p class="px-(--spacing-xs) text-label-sm text-(--text-muted)">Recommended</p>
               <div class="grid grid-cols-3 gap-(--spacing-md)">
-                <CardBox
+                <Card
                   v-for="card in RECOMMENDED"
                   :key="card.title"
                   class="min-h-(--size-44)"
@@ -245,7 +245,7 @@
                       </div>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </section>
 
@@ -255,7 +255,7 @@
             >
               <p class="px-(--spacing-xs) text-label-sm text-(--text-muted)">Azion Templates</p>
               <div class="grid grid-cols-1 gap-(--spacing-md)">
-                <CardBox
+                <Card
                   v-for="template in AZION_TEMPLATES"
                   :key="template.key"
                   :data-cursor="template.key"
@@ -283,14 +283,14 @@
                       </div>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </section>
 
             <section class="flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-label-sm text-(--text-muted)">All Frameworks</p>
               <div class="grid grid-cols-1 gap-(--spacing-md)">
-                <CardBox
+                <Card
                   v-for="framework in ALL_FRAMEWORKS"
                   :key="framework.title"
                 >
@@ -313,7 +313,7 @@
                       </div>
                     </div>
                   </template>
-                </CardBox>
+                </Card>
               </div>
             </section>
           </div>

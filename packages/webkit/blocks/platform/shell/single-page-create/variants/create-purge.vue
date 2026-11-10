@@ -5,12 +5,12 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, watch } from 'vue'
 
@@ -196,7 +196,7 @@
                   </div>
                 </div>
                 <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                  <CardBox :padded="false">
+                  <Card :padded="false">
                     <template #content>
                       <Item.List>
                         <Item size="small">
@@ -265,7 +265,7 @@
                         </Item>
                       </Item.List>
                     </template>
-                  </CardBox>
+                  </Card>
                 </div>
               </section>
 
@@ -286,7 +286,7 @@
                   </div>
                 </div>
                 <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                  <CardBox :padded="false">
+                  <Card :padded="false">
                     <template #content>
                       <Item.List>
                         <Item size="small">
@@ -322,9 +322,9 @@
                         </Item>
                       </Item.List>
                     </template>
-                  </CardBox>
+                  </Card>
 
-                  <Message
+                  <Alert
                     severity="warning"
                     size="small"
                     label="A purge cannot be undone. A broad one briefly raises the traffic that reaches your origin, while the cache fills again."

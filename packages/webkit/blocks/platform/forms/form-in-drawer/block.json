@@ -3,7 +3,7 @@
   "name": "FormInDrawer",
   "title": "Templates/Platform/Forms/FormInDrawer",
   "surface": "product",
-  "summary": "An in-context create whose body is the settings layout: a list page whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `CardBox`, saved together by the one Create in the footer. Create service is the example, with General, Runtime and Options. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Runtime flag only after Create is pressed. Built from the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `CardBox`, `Item`, `InputText`, `Select`, `Switch` and `HelperText`.",
+  "summary": "An in-context create whose body is the settings layout: a list page whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Create in the footer. Create service is the example, with General, Runtime and Options. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Runtime flag only after Create is pressed. Built from the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `HelperText`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

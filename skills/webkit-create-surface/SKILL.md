@@ -181,7 +181,7 @@ reuses one or makes one, and the form says which in one place.
 
 **A whole resource the reader may reuse or create gets its own band with an Existing / New choice.**
 
-- A `SegmentedButton` at the top of the band, `Existing <noun>` / `New <noun>`, full width.
+- A `ToggleGroup` at the top of the band, `Existing <noun>` / `New <noun>`, full width.
 - **Existing is the default when at least one exists.** When none exist, there is no choice to
   offer: the segment is not rendered and the band opens on the New fields.
 - **Existing** shows an inline picker: one selectable `Item` row per resource (icon, name,

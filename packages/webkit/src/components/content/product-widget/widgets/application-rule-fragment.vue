@@ -3,7 +3,7 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Select from '../../../inputs/select/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -180,7 +180,7 @@
               <span class="h-0 flex-1 border-t border-dashed border-(--border-default)" />
             </span>
             <span class="grid min-w-0 grid-cols-[5fr_4fr_3fr] gap-(--spacing-xs)">
-              <InputText
+              <Input
                 model-value="${uri}"
                 size="medium"
                 aria-label="Variable"
@@ -192,7 +192,7 @@
               >
                 <Select.Trigger aria-label="Operator" />
               </Select>
-              <InputText
+              <Input
                 model-value="/assets/"
                 size="medium"
                 aria-label="Argument"
@@ -224,7 +224,7 @@
                 />
               </span>
               <span class="grid min-w-0 grid-cols-[5fr_4fr_3fr] gap-(--spacing-xs)">
-                <InputText
+                <Input
                   :model-value="variable"
                   data-cursor="variable"
                   size="medium"
@@ -239,7 +239,7 @@
                   data-cursor="operator"
                   aria-label="Operator"
                 />
-                <InputText
+                <Input
                   :model-value="argument"
                   data-cursor="argument"
                   size="medium"

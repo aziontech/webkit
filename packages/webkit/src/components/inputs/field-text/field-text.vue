@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
-  import InputText, { type InputTextType } from '../input-text/input-text.vue'
+  import Input, { type InputType } from '../input/input.vue'
   import Label from '../label/label.vue'
 
   defineOptions({
@@ -13,14 +13,14 @@
   type FieldTextSize = 'small' | 'medium' | 'large'
 
   interface Props {
-    /** Two-way bound value of the underlying InputText. */
+    /** Two-way bound value of the underlying Input. */
     modelValue?: string
     /** Text rendered inside the Label. When empty, the label row is omitted. */
     label?: string
-    /** Placeholder forwarded to the InputText. */
+    /** Placeholder forwarded to the Input. */
     placeholder?: string
-    /** Native input type forwarded to the InputText ('text' | 'email' | 'number'). */
-    type?: InputTextType
+    /** Native input type forwarded to the Input ('text' | 'email' | 'number'). */
+    type?: InputType
     /**
      * Native autocomplete token forwarded to the <input> (e.g. "email", "username"). Omitted when
      * unset.
@@ -30,7 +30,7 @@
     spellcheck?: boolean
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
-    /** Size forwarded to the InputText. Heights: small=28px, medium=32px, large=40px. */
+    /** Size forwarded to the Input. Heights: small=28px, medium=32px, large=40px. */
     size?: FieldTextSize
     /** Disables the input; a supplied helperText switches to kind=disabled (lock icon). */
     disabled?: boolean
@@ -107,7 +107,7 @@
       :for="resolvedInputId"
       :data-testid="`${testId}__label`"
     />
-    <InputText
+    <Input
       :model-value="modelValue"
       :placeholder="placeholder"
       :type="type"
@@ -136,7 +136,7 @@
       >
         <slot name="iconRight" />
       </template>
-    </InputText>
+    </Input>
     <HelperText
       v-if="helperText"
       :id="helperId"

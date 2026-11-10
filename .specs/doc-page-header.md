@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0f497e00e7d9821b5fd7faa38768717c38f90bd082daabeeb4de10471e18501a
+checksum: aa4d7c927fbd310f912903ef26f576c90c5fd17734d2110cd421714766b3c5fb
 created: 2026-08-22
 last_updated: 2026-08-28
 ---
@@ -28,7 +28,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 - `DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.
 - `DocOnThisPage` — the rail beside the body, which lists those `h2`s.
-- `Button` / `Tooltip` / `Divider` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
+- `Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
 
 ## Best practices
 
@@ -119,7 +119,7 @@ _none_
 | text                      | `var(--text-default)`                       |
 | text (last updated)       | `var(--text-muted)`                         |
 | border (the closing rule) | `var(--border-default)`                     |
-| border (entry separator)  | `Divider` `orientation="vertical"`          |
+| border (entry separator)  | `Separator` `orientation="vertical"`        |
 | spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`  |
 
 ## Theme gaps

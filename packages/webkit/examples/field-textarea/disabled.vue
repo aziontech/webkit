@@ -8,7 +8,7 @@
 <template>
   <FieldTextarea
     v-model="value"
-    label="Message"
+    label="Alert"
     helper-text="This field is locked."
     disabled
   />

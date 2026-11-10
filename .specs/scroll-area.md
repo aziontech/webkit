@@ -6,10 +6,11 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: 0a0158b971afdaa194eb95b4f0ed69c887db4eb062b0ee7935642bd1ecc655b4
+checksum: a0befb6f03ac9add5a99522dcf934ed7f3590dd8316e091e87a123c90c0224b3
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
+
 # Scroll Area — Component Spec
 
 ## Purpose
@@ -23,7 +24,7 @@ Structural layout primitive for scrolling regions: native overflow with themed t
 
 ## When NOT to use
 
-- The region is one of several the reader resizes by dragging → use `resizable-panel`, with a ScrollArea inside a pane if its content overflows.
+- The region is one of several the reader resizes by dragging → use `resizable`, with a ScrollArea inside a pane if its content overflows.
 - It is an application navigation rail → use `sidebar`, which already scrolls its items.
 - It is a code sample → use `code-block`, which already scrolls its lines.
 
@@ -31,7 +32,7 @@ Structural layout primitive for scrolling regions: native overflow with themed t
 
 - `sidebar` — scrolls its navigation inside a built-in ScrollArea.
 - `code-block` — runs its code lines in a ScrollArea with `orientation="both"`.
-- `resizable-panel` — draggable regions; each pane can hold a ScrollArea.
+- `resizable` — draggable regions; each pane can hold a ScrollArea.
 
 ## Best practices
 
@@ -44,11 +45,16 @@ Structural layout primitive for scrolling regions: native overflow with themed t
 
 ```vue
 <script setup>
-import ScrollArea from '@aziontech/webkit/scroll-area'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
 </script>
 
 <template>
-  <ScrollArea aria-label="Recent activity" orientation="vertical" fade class="max-h-80">
+  <ScrollArea
+    aria-label="Recent activity"
+    orientation="vertical"
+    fade
+    class="max-h-80"
+  >
     <ul>
       <li>Deploy finalized</li>
       <li>Domain attached</li>
@@ -60,11 +66,11 @@ import ScrollArea from '@aziontech/webkit/scroll-area'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `orientation` | `'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | false | Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow. |
-| `ariaLabel` | `string` | `''` | false | Accessible name when the region is not labelled by visible text; omit when content provides context. |
-| `fade` | `boolean` | `false` | false | Fades the edges that still have content to scroll to, sized by the distance left on each side. |
+| Prop          | Type                                   | Default      | Required | JSDoc                                                                                                     |
+| ------------- | -------------------------------------- | ------------ | -------- | --------------------------------------------------------------------------------------------------------- |
+| `orientation` | `'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | false    | Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow. |
+| `ariaLabel`   | `string`                               | `''`         | false    | Accessible name when the region is not labelled by visible text; omit when content provides context.      |
+| `fade`        | `boolean`                              | `false`      | false    | Fades the edges that still have content to scroll to, sized by the distance left on each side.            |
 
 ## Events
 
@@ -72,9 +78,9 @@ import ScrollArea from '@aziontech/webkit/scroll-area'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
@@ -87,20 +93,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -1,12 +1,12 @@
 <script setup>
   import BarList from '@aziontech/webkit/bar-list'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -546,7 +546,7 @@
         </ChartCard>
 
         <div class="lg:col-span-4">
-          <CardBox title="Held and flagged">
+          <Card title="Held and flagged">
             <template #content>
               <div
                 v-if="loading"
@@ -601,7 +601,7 @@
                 </div>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
 
         <ChartCard :span="12">
@@ -620,7 +620,7 @@
             >
               <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                 <div class="min-w-36 grow basis-(--container-3xs)">
-                  <InputText
+                  <Input
                     v-model="search"
                     size="medium"
                     placeholder="Search by name or submitter"
@@ -632,7 +632,7 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
                 </div>
                 <div class="w-full sm:w-44">
                   <Select

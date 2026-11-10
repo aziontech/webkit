@@ -3,7 +3,7 @@
   "name": "PageTabs",
   "title": "Templates/Platform/Page/PageTabs",
   "surface": "product",
-  "summary": "The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Every resource detail page opens with it, and an account page such as Billing uses it with its row held to the `layout-column` width. Built from `TabView`, with `Button` and `Tag` in the trailing actions.",
+  "summary": "The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Every resource detail page opens with it, and an account page such as Billing uses it with its row held to the `layout-column` width. Built from `Tabs`, with `Button` and `Tag` in the trailing actions.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

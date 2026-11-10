@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: fb0769adb28c2f01a7ab3511ddda75dcc76338195be06489c6918550b6b62d18
+checksum: 09c5690a29d1233801aac74d5650f929bd01dc30e81c27e7aeb82112177f8f2e
 created: 2026-06-23
 last_updated: 2026-07-03
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-07-03
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -24,12 +24,12 @@ Collects multi-line free-form text from the user. Sibling of `input-text` in the
 
 ## When NOT to use
 
-- The value is a single line → use `input-text`.
-- The value is strictly numeric → use `input-number`.
+- The value is a single line → use `input`.
+- The value is strictly numeric → use `number-input`.
 
 ## Related
 
-- `input-text` — single-line sibling with the same field API.
+- `input` — single-line sibling with the same field API.
 
 ## Best practices
 

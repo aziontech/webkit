@@ -3,7 +3,7 @@
 
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Hint from '../../../inputs/hint/hint.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -108,7 +108,7 @@
               for="device-group-name"
               label="Name"
             />
-            <InputText
+            <Input
               id="device-group-name"
               model-value="mobiledevices"
               size="large"

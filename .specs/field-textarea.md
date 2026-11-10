@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=602-890
   node_id: 602:890
-checksum: 434ecab4f8e39429e0da2b903191ba206ac3e8c3318e9e5b3ad96541c79bc9f7
+checksum: 95bd3992ab7ae980e42178b01f5fe86600ebcef884126534726fb05a27076b6a
 created: 2026-06-23
 last_updated: 2026-11-09
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, 80px min-height, configurable resize axis via `resizable`) instead of `InputText`.
+Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText` into a single form-ready control. Sibling of `field-text` in the `inputs` category; differs by hosting `Textarea` (fixed `large` size, 80px min-height, configurable resize axis via `resizable`) instead of `Input`.
 
 ## When to use
 
@@ -48,17 +48,17 @@ Labeled multi-line text field — composes `Label`, `Textarea`, and `HelperText`
 
 ```vue
 <script setup>
-import FieldTextarea from '@aziontech/webkit/field-textarea'
-import { ref } from 'vue'
+  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import { ref } from 'vue'
 
-const value = ref('')
+  const value = ref('')
 </script>
 
 <template>
   <FieldTextarea
     v-model="value"
     name="message"
-    label="Message"
+    label="Alert"
     placeholder="Write your message"
     helperText="Up to 500 characters."
   />
@@ -67,24 +67,24 @@ const value = ref('')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | false | Two-way bound value of the underlying Textarea. |
-| `name` | `string` | `''` | false | HTML name for the underlying textarea (form integration). |
-| `label` | `string` | `''` | false | Text rendered inside the Label. When empty, the label row is omitted. |
-| `placeholder` | `string` | `''` | false | Placeholder forwarded to the Textarea. |
-| `helperText` | `string` | `''` | false | Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. |
-| `disabled` | `boolean` | `false` | false | Disables the textarea and switches the helper to `kind=disabled` (lock icon). |
-| `readonly` | `boolean` | `false` | false | Marks the textarea read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | false | Adds the Required tag to the Label and sets native required + aria-required on the textarea. |
-| `invalid` | `boolean` | `false` | false | Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea. |
-| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field. |
-| `inputId` | `string` | `''` | false | id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring. |
+| Prop          | Type                                             | Default      | Required | JSDoc                                                                                              |
+| ------------- | ------------------------------------------------ | ------------ | -------- | -------------------------------------------------------------------------------------------------- |
+| `modelValue`  | `string`                                         | `''`         | false    | Two-way bound value of the underlying Textarea.                                                    |
+| `name`        | `string`                                         | `''`         | false    | HTML name for the underlying textarea (form integration).                                          |
+| `label`       | `string`                                         | `''`         | false    | Text rendered inside the Label. When empty, the label row is omitted.                              |
+| `placeholder` | `string`                                         | `''`         | false    | Placeholder forwarded to the Textarea.                                                             |
+| `helperText`  | `string`                                         | `''`         | false    | Auxiliary text rendered inside HelperText. When empty, the helper row is omitted.                  |
+| `disabled`    | `boolean`                                        | `false`      | false    | Disables the textarea and switches the helper to `kind=disabled` (lock icon).                      |
+| `readonly`    | `boolean`                                        | `false`      | false    | Marks the textarea read-only; value is visible but not editable. Native pass-through.              |
+| `required`    | `boolean`                                        | `false`      | false    | Adds the Required tag to the Label and sets native required + aria-required on the textarea.       |
+| `invalid`     | `boolean`                                        | `false`      | false    | Switches the helper to `kind=invalid` and applies invalid border tokens on the textarea.           |
+| `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Forwarded to the underlying `Textarea`; controls which axes the user can drag to resize the field. |
+| `inputId`     | `string`                                         | `''`         | false    | id for the native textarea; consumed by Label via `for` and by `aria-describedby` wiring.          |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes           |
+| ------------------- | -------- | --------------- |
 | `update:modelValue` | `string` | v-model update. |
 
 ## Slots
@@ -101,28 +101,28 @@ const value = ref('')
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| field state change (border / background) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| field focus padding | `transition-[padding] duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                                  | Animation / Transition                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ---------------------------------------- | -------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| field state change (border / background) | `transition-colors duration-150 ease-out`    | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| field focus padding                      | `transition-[padding] duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-label-md` |
-| text (label) | `var(--text-default)` |
-| spacing (row gap) | `var(--spacing-xs)` |
-| spacing (label gap) | `var(--spacing-xs)` |
-| shape | `var(--shape-elements)` |
+| Region              | Token (DESIGN.md)       |
+| ------------------- | ----------------------- |
+| typography (label)  | `.text-label-md`        |
+| text (label)        | `var(--text-default)`   |
+| spacing (row gap)   | `var(--spacing-xs)`     |
+| spacing (label gap) | `var(--spacing-xs)`     |
+| shape               | `var(--shape-elements)` |
 
 Helper typography and color are owned by `HelperText` and not redeclared here — the same contract as `field-text`. The field only resolves the helper's `kind`: `disabled` › `invalid` › `required` › `helper`.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

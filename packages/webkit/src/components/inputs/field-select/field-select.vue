@@ -3,7 +3,7 @@
 
   import { useSelectSearch } from '../../../composables/use-select-search'
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
-  import InputText from '../input-text/input-text.vue'
+  import Input from '../input/input.vue'
   import Label from '../label/label.vue'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
@@ -199,7 +199,7 @@
           v-if="searchEnabled"
           #search
         >
-          <InputText
+          <Input
             :id="searchId"
             v-model="query"
             :placeholder="searchPlaceholder"
@@ -212,7 +212,7 @@
             <template #iconLeft>
               <i class="pi pi-search" />
             </template>
-          </InputText>
+          </Input>
         </template>
         <slot>
           <SelectOption

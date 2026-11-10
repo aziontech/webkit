@@ -31,7 +31,7 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Keep hit targets at **24px or more** (44px on touch layouts), even when the visible glyph is
   smaller.
 - Announce async results politely: inline validation and status updates go to an
-  `aria-live="polite"` region (the webkit `Toast` and `Message` already do this).
+  `aria-live="polite"` region (the webkit `Toast` and `Alert` already do this).
 - Give in-page link targets a scroll offset (`scroll-mt-(--spacing-xxl)`) so a sticky header never
   covers the heading the link jumps to.
 - Wrap brand names, product names and code tokens in `translate="no"` so browser translation does

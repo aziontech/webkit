@@ -3,7 +3,7 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 80ca2148fe95569cb84b75c551a40c3fed281ac717cba5d5033c7b8502ee3a4e
+checksum: aa6b7f4f872e002f42c21540da8ac61ce1871a6c4118cac34ac3934182bb3a9c
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -31,7 +31,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 ## When NOT to use
 
 - Picking files by keyboard or click only, with no drag affordance → a `button` that opens a native file input is enough.
-- Showing the chosen files, their progress or their errors → render them yourself with `progress-bar`, `message` or `helper-text`. The dropzone renders none of these.
+- Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `helper-text`. The dropzone renders none of these.
 - Dragging items inside the page (reordering rows, moving cards) → this component only reacts to OS drags that carry `Files`. In-page drag and drop is out of scope.
 - A static "nothing here yet" panel with no drop behavior → use `empty-state`.
 
@@ -39,9 +39,9 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 
 - `button`: the "Browse files" action composed into the default slot. It is the keyboard path to the same outcome as a drop.
 - `empty-state`: a no-data panel. Compose a FileDropzone inside or beside it when the empty state's call to action is "upload".
-- `progress-bar`: the consumer renders per-file progress after `drop`. The dropzone does not track uploads.
+- `progress`: the consumer renders per-file progress after `drop`. The dropzone does not track uploads.
 - `toast`: confirms the result of a drop or reports rejected files to everyone, including users who never see the drag.
-- `card-box`: a positioned container (`class="relative"`) that hosts an `overlay` dropzone.
+- `card`: a positioned container (`class="relative"`) that hosts an `overlay` dropzone.
 
 ## Best practices
 
@@ -58,29 +58,29 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import FileDropzone from '@aziontech/webkit/file-dropzone'
-import Button from '@aziontech/webkit/button'
+  import { ref } from 'vue'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
+  import Button from '@aziontech/webkit/button'
 
-const picker = ref(null)
-const files = ref([])
-const skipped = ref([])
+  const picker = ref(null)
+  const files = ref([])
+  const skipped = ref([])
 
-function onDrop(event, accepted) {
-  files.value.push(...accepted)
-}
+  function onDrop(event, accepted) {
+    files.value.push(...accepted)
+  }
 
-function onReject(event, rejected) {
-  skipped.value = rejected.map((file) => file.name)
-}
+  function onReject(event, rejected) {
+    skipped.value = rejected.map((file) => file.name)
+  }
 
-function onPick(event) {
-  files.value.push(...event.target.files)
-}
+  function onPick(event) {
+    files.value.push(...event.target.files)
+  }
 
-function onDeploy(event, accepted) {
-  files.value = accepted
-}
+  function onDeploy(event, accepted) {
+    files.value = accepted
+  }
 </script>
 
 <template>
@@ -91,8 +91,20 @@ function onDeploy(event, accepted) {
     @drop="onDrop"
     @reject="onReject"
   >
-    <Button label="Browse files" kind="outlined" size="medium" @click="picker.click()" />
-    <input ref="picker" type="file" accept="image/png,image/jpeg" multiple hidden @change="onPick" />
+    <Button
+      label="Browse files"
+      kind="outlined"
+      size="medium"
+      @click="picker.click()"
+    />
+    <input
+      ref="picker"
+      type="file"
+      accept="image/png,image/jpeg"
+      multiple
+      hidden
+      @change="onPick"
+    />
   </FileDropzone>
 
   <section class="relative">
@@ -108,16 +120,16 @@ function onDeploy(event, accepted) {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
-| `title` | `string` | `'Drop files to upload'` | false | Instruction shown under the icon. |
-| `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
-| `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
-| `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. |
-| `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
-| `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
-| `icon` | `string` | `'pi pi-cloud-upload'` | false | PrimeIcons class for the glyph above the title. |
+| Prop          | Type                    | Default                  | Required | JSDoc                                                                                                                                                                      |
+| ------------- | ----------------------- | ------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`        | `'inline' \| 'overlay'` | `'inline'`               | false    | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor.           |
+| `title`       | `string`                | `'Drop files to upload'` | false    | Instruction shown under the icon.                                                                                                                                          |
+| `description` | `string`                | `''`                     | false    | Secondary line under the title, typically the accepted types and limits. Not rendered when empty.                                                                          |
+| `accept`      | `string`                | `''`                     | false    | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
+| `multiple`    | `boolean`               | `true`                   | false    | When false, only the first accepted file of a drop is accepted and the rest are rejected.                                                                                  |
+| `disabled`    | `boolean`               | `false`                  | false    | Ignores drags and drops: no active state, no events.                                                                                                                       |
+| `invalid`     | `boolean`               | `false`                  | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                         |
+| `icon`        | `string`                | `'pi pi-cloud-upload'`   | false    | PrimeIcons class for the glyph above the title.                                                                                                                            |
 
 `multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `<input multiple>` attribute the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 
@@ -125,16 +137,16 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `drop` | `(event: DragEvent, files: File[])` | Activation event. Fires when files are dropped on the target (the inline root, or the visible overlay) and at least one passes `accept` / `multiple`. `files` holds only the accepted files, in `dataTransfer.files` order, and is never empty. Not emitted when `disabled`. Declaring `drop` means a consumer `@drop` listener binds to this event, never to the native DOM `drop` on the root. |
-| `reject` | `(event: DragEvent, files: File[])` | Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple="false"`. `files` holds only the rejected files and is never empty. When a drop has both kinds of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`. |
+| Event    | Payload                             | Notes                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `drop`   | `(event: DragEvent, files: File[])` | Activation event. Fires when files are dropped on the target (the inline root, or the visible overlay) and at least one passes `accept` / `multiple`. `files` holds only the accepted files, in `dataTransfer.files` order, and is never empty. Not emitted when `disabled`. Declaring `drop` means a consumer `@drop` listener binds to this event, never to the native DOM `drop` on the root. |
+| `reject` | `(event: DragEvent, files: File[])` | Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple="false"`. `files` holds only the rejected files and is never empty. When a drop has both kinds of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`.                                                         |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Actions or extra content under the description, typically a "Browse files" `Button`. Rendered only in `kind="inline"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered. |
+| Slot      | Scope | Notes                                                                                                                                                                                                                                  |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | Actions or extra content under the description, typically a "Browse files" `Button`. Rendered only in `kind="inline"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered. |
 
 ## States
 
@@ -165,39 +177,39 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| overlay shows (files enter the window) | `animate-fade-in` on the Vue `Transition` enter phase of the overlay root | semantic (220ms · ease-in-out) | `motion-reduce:animate-none` (instant) |
-| overlay hides (drag leave / drop / Escape) | `animate-fade-out` on the Vue `Transition` leave phase of the overlay root | semantic (220ms · ease-in-out) | `motion-reduce:animate-none` (instant) |
-| inline idle ↔ active (border + fill colour) | `transition-[background-color,border-color] duration-fast-02 ease-productive-entrance` | DESIGN.md § Interactive states | `motion-reduce:transition-none` |
+| Trigger                                     | Animation / Transition                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| overlay shows (files enter the window)      | `animate-fade-in` on the Vue `Transition` enter phase of the overlay root              | semantic (220ms · ease-in-out)                    | `motion-reduce:animate-none` (instant) |
+| overlay hides (drag leave / drop / Escape)  | `animate-fade-out` on the Vue `Transition` leave phase of the overlay root             | semantic (220ms · ease-in-out)                    | `motion-reduce:animate-none` (instant) |
+| inline idle ↔ active (border + fill colour) | `transition-[background-color,border-color] duration-fast-02 ease-productive-entrance` | DESIGN.md § Interactive states                    | `motion-reduce:transition-none`        |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| shape (both kinds) | `var(--shape-card)` |
-| inline border (idle) | `var(--border-strong)` |
-| inline / overlay border (active) | `var(--border-selected)` |
-| inline border (disabled) | `var(--border-default)` |
-| inline border (invalid) | `var(--danger-border)` |
-| inline surface (idle) | `var(--bg-surface)` |
-| inline surface (active) | `var(--bg-selected)` |
-| inline surface (disabled) | `var(--bg-disabled)` |
-| overlay surface | `var(--bg-canvas)` |
-| padding | `var(--spacing-lg)` |
-| gap (icon → text → slot) | `var(--spacing-md)` |
-| gap (title → description) | `var(--spacing-xxs)` |
-| text column max width | `var(--container-md)` |
-| icon frame | `var(--bg-surface-raised)` fill, `var(--border-default)` border, `var(--shape-elements)` radius |
-| icon glyph | `.text-body-lg`, `var(--text-default)` |
-| typography (title) | `.text-heading-xs`, `var(--text-default)` |
-| typography (description) | `.text-body-sm`, `var(--text-muted)` |
-| text / icon (disabled) | `var(--text-disabled)` |
+| Region                           | Token (DESIGN.md)                                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------------- |
+| shape (both kinds)               | `var(--shape-card)`                                                                             |
+| inline border (idle)             | `var(--border-strong)`                                                                          |
+| inline / overlay border (active) | `var(--border-selected)`                                                                        |
+| inline border (disabled)         | `var(--border-default)`                                                                         |
+| inline border (invalid)          | `var(--danger-border)`                                                                          |
+| inline surface (idle)            | `var(--bg-surface)`                                                                             |
+| inline surface (active)          | `var(--bg-selected)`                                                                            |
+| inline surface (disabled)        | `var(--bg-disabled)`                                                                            |
+| overlay surface                  | `var(--bg-canvas)`                                                                              |
+| padding                          | `var(--spacing-lg)`                                                                             |
+| gap (icon → text → slot)         | `var(--spacing-md)`                                                                             |
+| gap (title → description)        | `var(--spacing-xxs)`                                                                            |
+| text column max width            | `var(--container-md)`                                                                           |
+| icon frame                       | `var(--bg-surface-raised)` fill, `var(--border-default)` border, `var(--shape-elements)` radius |
+| icon glyph                       | `.text-body-lg`, `var(--text-default)`                                                          |
+| typography (title)               | `.text-heading-xs`, `var(--text-default)`                                                       |
+| typography (description)         | `.text-body-sm`, `var(--text-muted)`                                                            |
+| text / icon (disabled)           | `var(--text-disabled)`                                                                          |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                               | Temporary primitive                                                                                                                                                          | Follow-up                                                                                                                                                                                           |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | (no Figma frame) overlay stacking layer inside its container | none: no z-index. The overlay relies on paint order (a positioned element placed as the container's last child). The sample's `z-40` is a raw value and is not carried over. | `TODO: tokenizar` a semantic in-container overlay layer in `z-indices.data.js` + DESIGN.md (the theme has only `z-input-field` / `z-input-popup` / `z-input-overlay`, none documented in DESIGN.md) |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -219,7 +231,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 Canonical layout, with two justified deviations: there is no `size` prop (no Sizes story), and there is no Types composite because an `overlay` is invisible at rest, so a side-by-side frame would show one empty box. Each kind gets its own story instead.
 
 - Default: `kind="inline"` with a "Browse files" `Button` in the default slot wired to a hidden native `<input type="file" multiple>`. `drop` and `reject` are logged through `argTypes` actions (`onDrop` / `onReject`).
-- Overlay: `kind="overlay"` inside a positioned `CardBox` (`class="relative"`) with a min height, and placeholder card content under it. The story copy tells the reader to drag a file over the window to see it. Justified because the overlay's placement and window-level behavior cannot be shown in Default.
+- Overlay: `kind="overlay"` inside a positioned `Card` (`class="relative"`) with a min height, and placeholder card content under it. The story copy tells the reader to drag a file over the window to see it. Justified because the overlay's placement and window-level behavior cannot be shown in Default.
 - Accept: `kind="inline"`, `accept="image/*"`, with the story rendering the names of rejected files from the `reject` payload under the dropzone. Justified because `reject` is half of the event contract and needs a visible demonstration.
 - Disabled: `disabled: true` on the Default composition, with the slotted Button also disabled.
 

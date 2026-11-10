@@ -1,8 +1,8 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
-  import Dropdown from '@aziontech/webkit/dropdown'
+  import Card from '@aziontech/webkit/card'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <CardBox :padded="false">
+  <Card :padded="false">
     <template #content>
       <div
         class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
@@ -53,8 +53,8 @@
             icon="pi pi-external-link"
           />
 
-          <Dropdown placement="bottom-end">
-            <Dropdown.Trigger>
+          <DropdownMenu placement="bottom-end">
+            <DropdownMenu.Trigger>
               <Tooltip text="Resource actions">
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -63,10 +63,10 @@
                   aria-label="Resource actions"
                 />
               </Tooltip>
-            </Dropdown.Trigger>
+            </DropdownMenu.Trigger>
 
-            <Dropdown.Group>
-              <Dropdown.Option
+            <DropdownMenu.Group>
+              <DropdownMenu.Option
                 value="copy-url"
                 label="Copy URL"
               >
@@ -76,11 +76,11 @@
                     aria-hidden="true"
                   />
                 </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
+              </DropdownMenu.Option>
+            </DropdownMenu.Group>
 
-            <Dropdown.Group>
-              <Dropdown.Option
+            <DropdownMenu.Group>
+              <DropdownMenu.Option
                 value="settings"
                 label="Settings"
               >
@@ -90,9 +90,9 @@
                     aria-hidden="true"
                   />
                 </template>
-              </Dropdown.Option>
-            </Dropdown.Group>
-          </Dropdown>
+              </DropdownMenu.Option>
+            </DropdownMenu.Group>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -271,5 +271,5 @@
         </div>
       </div>
     </template>
-  </CardBox>
+  </Card>
 </template>

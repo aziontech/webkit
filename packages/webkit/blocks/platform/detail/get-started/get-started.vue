@@ -1,7 +1,7 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, ref } from 'vue'
 
   const PATHS = [
@@ -143,7 +143,7 @@ jobs:
         <div
           class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
         >
-          <SegmentedButton
+          <ToggleGroup
             v-model="path"
             :options="PATHS"
             size="large"
@@ -165,7 +165,7 @@ jobs:
           class="absolute right-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
         />
         <div class="flex min-w-0 flex-1">
-          <CardBox
+          <Card
             :padded="false"
             class="w-full"
           >
@@ -190,7 +190,7 @@ jobs:
                 </div>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
       </div>
     </div>

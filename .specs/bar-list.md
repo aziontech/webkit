@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
-checksum: 816212a99ce6ea629fe07ce93a6804e68b301cf63cb99111b34740f4052a08aa
+checksum: ea9c565c5554acc93d821059fe41e790c52ca56a9b32ef13c290426406fec72a
 ---
 
 # BarList — Component Spec
@@ -25,7 +25,7 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 
 - Several series per category, or values over time → use `chart`.
 - A share of a whole where the parts sum to 100% → use `donut-chart`.
-- One value against a limit (quota, usage) → use `progress-bar`.
+- One value against a limit (quota, usage) → use `progress`.
 
 ## Related
 
@@ -44,7 +44,7 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 
 ```vue
 <script setup>
-import BarList from '@aziontech/webkit/bar-list'
+  import BarList from '@aziontech/webkit/bar-list'
 </script>
 
 <template>
@@ -63,21 +63,21 @@ import BarList from '@aziontech/webkit/bar-list'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `BarListItem[]` | `[]` | false | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link. |
-| `sort` | `'descending' \| 'ascending' \| 'none'` | `'descending'` | false | Row order; `none` keeps the order of `items`. |
-| `color` | `ChartColor` | `1` | false | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface. |
-| `clickable` | `boolean` | `false` | false | Renders rows without an `href` as buttons that emit `item-click`. |
-| `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the value column. |
-| `loading` | `boolean` | `false` | false | Renders Skeleton rows in place of the list. |
-| `emptyTitle` | `string` | `'No data available'` | false | Title of the empty state shown when `items` is empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the list. |
+| Prop          | Type                                    | Default               | Required | JSDoc                                                                                                                            |
+| ------------- | --------------------------------------- | --------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `BarListItem[]`                         | `[]`                  | false    | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link. |
+| `sort`        | `'descending' \| 'ascending' \| 'none'` | `'descending'`        | false    | Row order; `none` keeps the order of `items`.                                                                                    |
+| `color`       | `ChartColor`                            | `1`                   | false    | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface.                   |
+| `clickable`   | `boolean`                               | `false`               | false    | Renders rows without an `href` as buttons that emit `item-click`.                                                                |
+| `formatValue` | `(value: number) => string`             | `formatCompact`       | false    | Formats the value column.                                                                                                        |
+| `loading`     | `boolean`                               | `false`               | false    | Renders Skeleton rows in place of the list.                                                                                      |
+| `emptyTitle`  | `string`                                | `'No data available'` | false    | Title of the empty state shown when `items` is empty.                                                                            |
+| `ariaLabel`   | `string`                                | `''`                  | false    | Accessible name of the list.                                                                                                     |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event        | Payload                                  | Notes                                                                                                                  |
+| ------------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `item-click` | `(event: MouseEvent, item: BarListItem)` | A row activated — a clickable row, or a link row (the link still navigates). `item` is the consumer's own item object. |
 
 ## Slots
@@ -93,28 +93,28 @@ _No slots — the rows are data (`items`); the empty state is the package's `Emp
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| entrance and value change | bar `transition-[width] duration-slow-01 ease-productive-entrance` | `slow-01` · `productive-entrance` | `motion-reduce:transition-none` |
-| row hover | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                   | Animation / Transition                                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| entrance and value change | bar `transition-[width] duration-slow-01 ease-productive-entrance` | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| row hover                 | `transition-colors duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| bar fill | the `color` role (`var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`, `var(--chart-status-*)`) tinted over the surface |
-| name | `.text-label-md`, `var(--text-default)` |
-| value | `.text-label-md`, `tabular-nums`, `var(--text-default)` |
-| row hover | `var(--bg-hover)` |
-| shape | `var(--shape-elements)` |
-| spacing | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)` |
-| ring | `var(--ring-color)` |
+| Region    | Token (DESIGN.md)                                                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| bar fill  | the `color` role (`var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`, `var(--chart-status-*)`) tinted over the surface |
+| name      | `.text-label-md`, `var(--text-default)`                                                                                                            |
+| value     | `.text-label-md`, `tabular-nums`, `var(--text-default)`                                                                                            |
+| row hover | `var(--bg-hover)`                                                                                                                                  |
+| shape     | `var(--shape-elements)`                                                                                                                            |
+| spacing   | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                                     |
+| ring      | `var(--ring-color)`                                                                                                                                |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

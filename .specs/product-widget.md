@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 1033d8bec482f7e8f13fe1a5773a0bec7ea72b1a672c40a029a23a492927ad3a
+checksum: 064c1720ef639d53096d927f0c42078e6759fb46aca0f46ea064b8b8e73a26e8
 created: 2026-10-23
 last_updated: 2026-11-09
 ---
@@ -92,7 +92,7 @@ _No slots — a widget is a closed drawing selected by `name`._
 ## States
 
 - Visual states: `default` only. A widget is decorative: no `hover`, `focus-visible`, `disabled` or `loading` state of its own. `hover` and `active` are triggers the host drives, not states the root renders.
-- Every widget is drawn in an inert `shell-mockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `segmented-button` above its inert frame that switches the coding agent.
+- Every widget is drawn in an inert `shell-mockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `toggle-group` above its inert frame that switches the coding agent.
 - `cli-terminal-start` and `cli-terminal-deploy` play a recorded Azion CLI session (init to curl, or link and deploy); `workload-topology-flow` draws domains, a workload and its bindings joined by `flow` connectors, with the workload ringed in the primary glow.
 - `data-name` mirrors `name` on the root.
 - Loading: the widget's code is loaded on demand. The root keeps its size while it loads and draws nothing until the widget arrives. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.

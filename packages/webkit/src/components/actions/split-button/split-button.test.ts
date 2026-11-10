@@ -15,7 +15,7 @@ const model: SplitButtonItem[] = [
   { label: 'Rollback release', value: 'rollback', disabled: true }
 ]
 
-/** The Dropdown panel Teleports to <body>; the SplitButton hands its menu the
+/** The DropdownMenu panel Teleports to <body>; the SplitButton hands its menu the
  *  `actions-split-button__menu` testid, so the panel derives from it. */
 const panel = () =>
   document.body.querySelector<HTMLElement>('[data-testid="actions-split-button__menu__panel"]')
@@ -254,11 +254,11 @@ describe('SplitButton (joined command + menu overlay)', () => {
     await expectNoA11yViolations(panel() as HTMLElement)
   })
 
-  // Real component defect: Dropdown.Trigger renders a focusable role=button span
+  // Real component defect: DropdownMenu.Trigger renders a focusable role=button span
   // and SplitButton nests the real IconButton <button> inside it — axe
   // nested-interactive (focusable widget inside a widget). Suppressing the
   // assertion would fake a pass; fixing it requires a component change.
-  it.skip('has no axe violations on the closed shell — BLOCKED by nested-interactive: Dropdown.Trigger[role=button] wraps IconButton <button> (split-button.vue:141-151)', async () => {
+  it.skip('has no axe violations on the closed shell — BLOCKED by nested-interactive: DropdownMenu.Trigger[role=button] wraps IconButton <button> (split-button.vue:141-151)', async () => {
     const view = render(host())
     await expectNoA11yViolations(view.container)
   })

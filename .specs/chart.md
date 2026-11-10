@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: cdae440349656c9a3bead34de87475f355db854cc432d96ca4c8fb9c6c3b554b
+checksum: 10dd6239d443b44aa01b8f6ab5e5e43101bd9ed08e4737ff48b1360f706eed19
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-10
@@ -50,18 +50,27 @@ A cartesian chart — lines, areas and bars over one category axis — composed 
 
 ```vue
 <script setup>
-import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/webkit/chart'
 
-const labels = ['14:00', '14:05', '14:10', '14:15', '14:20', '14:25']
-const series = [
-  { id: 'allowed', name: 'WAF requests allowed', values: [1200, 1350, 1280, 1500, 1460, 1610] },
-  { id: 'blocked', name: 'WAF requests blocked', values: [320, 410, 380, 520, 470, 430], color: 'danger' },
-  { id: 'threat', name: 'WAF requests threat', values: [80, 95, 70, 120, 110, 90] }
-]
+  const labels = ['14:00', '14:05', '14:10', '14:15', '14:20', '14:25']
+  const series = [
+    { id: 'allowed', name: 'WAF requests allowed', values: [1200, 1350, 1280, 1500, 1460, 1610] },
+    {
+      id: 'blocked',
+      name: 'WAF requests blocked',
+      values: [320, 410, 380, 520, 470, 430],
+      color: 'danger'
+    },
+    { id: 'threat', name: 'WAF requests threat', values: [80, 95, 70, 120, 110, 90] }
+  ]
 </script>
 
 <template>
-  <Chart :series="series" :labels="labels" aria-label="Threats vs requests">
+  <Chart
+    :series="series"
+    :labels="labels"
+    aria-label="Threats vs requests"
+  >
     <Chart.Grid />
     <Chart.Axis kind="y" />
     <Chart.Axis kind="x" />
@@ -79,9 +88,9 @@ Tree-shaking alternative — the standalone root plus only the parts a chart use
 
 ```vue
 <script setup>
-import Chart from '@aziontech/webkit/chart-root'
-import ChartLine from '@aziontech/webkit/chart-line'
-import ChartAxis from '@aziontech/webkit/chart-axis'
+  import Chart from '@aziontech/webkit/chart-root'
+  import ChartLine from '@aziontech/webkit/chart-line'
+  import ChartAxis from '@aziontech/webkit/chart-axis'
 </script>
 ```
 
@@ -144,52 +153,52 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `series` | `ChartSeries[]` | `[]` | false | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. |
-| `labels` | `ChartLabel[]` | `[]` | false | One category label per index: a string, a number, or a Date. |
-| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Value axis direction. Horizontal lays categories down the side, for ordered bars. |
-| `min` | `number` | `0` | false | Floor of the value axis. Marks grow from one baseline. |
-| `max` | `number` | `undefined` | false | Ceiling of the value axis. When absent, the nice ceiling of the visible data. |
-| `cap` | `number` | `6` | false | Series kept before the rest fold into Other. |
-| `otherLabel` | `string` | `'Other'` | false | Name of the folded series. |
-| `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats ticks, tooltip values and legend totals. |
-| `formatLabel` | `(label: ChartLabel) => string` | `formatLabel` | false | Formats category labels on the axis and in the tooltip. |
-| `height` | `number` | `240` | false | Minimum plot height in pixels; the plot grows to fill a taller container. |
-| `loading` | `boolean` | `false` | false | Renders a Skeleton sized to the plot and suppresses interaction. |
-| `refetching` | `boolean` | `false` | false | Holds the previous render at reduced opacity while new data loads. |
-| `error` | `string` | `''` | false | Error message; when set, the plot renders a danger Message instead of marks. |
-| `emptyTitle` | `string` | `'No data available'` | false | Title of the empty state shown when no series has a value. |
-| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
-| `tableView` | `boolean` | `false` | false | Shows the data table in place of the marks. The table is always present for assistive tech. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the chart when it is not inside a ChartCard with a title. |
+| Prop               | Type                            | Default               | Required | JSDoc                                                                                              |
+| ------------------ | ------------------------------- | --------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `series`           | `ChartSeries[]`                 | `[]`                  | false    | Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. |
+| `labels`           | `ChartLabel[]`                  | `[]`                  | false    | One category label per index: a string, a number, or a Date.                                       |
+| `orientation`      | `'vertical' \| 'horizontal'`    | `'vertical'`          | false    | Value axis direction. Horizontal lays categories down the side, for ordered bars.                  |
+| `min`              | `number`                        | `0`                   | false    | Floor of the value axis. Marks grow from one baseline.                                             |
+| `max`              | `number`                        | `undefined`           | false    | Ceiling of the value axis. When absent, the nice ceiling of the visible data.                      |
+| `cap`              | `number`                        | `6`                   | false    | Series kept before the rest fold into Other.                                                       |
+| `otherLabel`       | `string`                        | `'Other'`             | false    | Name of the folded series.                                                                         |
+| `formatValue`      | `(value: number) => string`     | `formatCompact`       | false    | Formats ticks, tooltip values and legend totals.                                                   |
+| `formatLabel`      | `(label: ChartLabel) => string` | `formatLabel`         | false    | Formats category labels on the axis and in the tooltip.                                            |
+| `height`           | `number`                        | `240`                 | false    | Minimum plot height in pixels; the plot grows to fill a taller container.                          |
+| `loading`          | `boolean`                       | `false`               | false    | Renders a Skeleton sized to the plot and suppresses interaction.                                   |
+| `refetching`       | `boolean`                       | `false`               | false    | Holds the previous render at reduced opacity while new data loads.                                 |
+| `error`            | `string`                        | `''`                  | false    | Error message; when set, the plot renders a danger Alert instead of marks.                         |
+| `emptyTitle`       | `string`                        | `'No data available'` | false    | Title of the empty state shown when no series has a value.                                         |
+| `emptyDescription` | `string`                        | `''`                  | false    | Supporting line under the empty title: why the range is empty, or what to do next.                 |
+| `tableView`        | `boolean`                       | `false`               | false    | Shows the data table in place of the marks. The table is always present for assistive tech.        |
+| `ariaLabel`        | `string`                        | `''`                  | false    | Accessible name of the chart when it is not inside a ChartCard with a title.                       |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:activeIndex` | `number \| null` | `null` | `update:activeIndex` | The category index under the pointer or keyboard focus. Bind it to sync crosshairs across charts. |
-| `v-model:hiddenSeries` | `string[]` | `[]` | `update:hiddenSeries` | Ids of series the legend has hidden. A hidden series keeps its color slot. |
+| Model                  | Type             | Default | Emits                 | Notes                                                                                             |
+| ---------------------- | ---------------- | ------- | --------------------- | ------------------------------------------------------------------------------------------------- |
+| `v-model:activeIndex`  | `number \| null` | `null`  | `update:activeIndex`  | The category index under the pointer or keyboard focus. Bind it to sync crosshairs across charts. |
+| `v-model:hiddenSeries` | `string[]`       | `[]`    | `update:hiddenSeries` | Ids of series the legend has hidden. A hidden series keeps its color slot.                        |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `point-click` | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value. |
-| `legend-toggle` | `(event: MouseEvent, series: ChartSeries)` | A legend entry toggled; `series` is the consumer's own series object. |
+| Event           | Payload                                                   | Notes                                                                                                                                               |
+| --------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `point-click`   | `(event: MouseEvent \| KeyboardEvent, point: ChartPoint)` | Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value. |
+| `legend-toggle` | `(event: MouseEvent, series: ChartSeries)`                | A legend entry toggled; `series` is the consumer's own series object.                                                                               |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order. |
-| `empty` | — | Replaces the default EmptyState. |
-| `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
-| `error` | — | Replaces the default danger Message. |
+| Slot            | Scope | Notes                                                                                                                   |
+| --------------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
+| `default`       | —     | The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order.                                     |
+| `empty`         | —     | Replaces the default EmptyState.                                                                                        |
+| `empty-actions` | —     | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
+| `error`         | —     | Replaces the default danger Alert.                                                                                      |
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `error` (Message), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
+- Visual states: `default`, `loading` (Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, filling the plot height), `refetching` (marks at reduced opacity), `table-view`, `active` (an index is hovered or focused)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view`, `data-active` on the root mirror the state; priority loading, then error, then empty, then marks
 - `data-orientation`: `vertical` | `horizontal`
 - `data-entered` on each mark flips after two animation frames to run its entrance transition
@@ -197,41 +206,41 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| line and area edge entrance | `transition-[stroke-dashoffset,opacity] duration-slow-02 ease-productive-entrance`, `pathLength="1"`, dash offset 1 to 0 on `data-entered`, staggered per series by `transition-delay` | `slow-02` · `productive-entrance` | `motion-reduce:transition-none` (drawn at once) |
-| area wash entrance | `transition-opacity duration-slow-01 ease-productive-entrance`, opacity 0 to 1 on `data-entered` | `slow-01` · `productive-entrance` | `motion-reduce:transition-none` |
-| bar entrance | `transition-[scale,opacity] duration-slow-01 ease-productive-entrance`, grows from the baseline on `data-entered` | `slow-01` · `productive-entrance` | `motion-reduce:transition-none` |
-| crosshair and tooltip follow | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| legend emphasis dim, refetch hold | `transition-opacity duration-moderate-01` | `moderate-01` | `motion-reduce:transition-none` |
+| Trigger                           | Animation / Transition                                                                                                                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                         |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| line and area edge entrance       | `transition-[stroke-dashoffset,opacity] duration-slow-02 ease-productive-entrance`, `pathLength="1"`, dash offset 1 to 0 on `data-entered`, staggered per series by `transition-delay` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` (drawn at once) |
+| area wash entrance                | `transition-opacity duration-slow-01 ease-productive-entrance`, opacity 0 to 1 on `data-entered`                                                                                       | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
+| bar entrance                      | `transition-[scale,opacity] duration-slow-01 ease-productive-entrance`, grows from the baseline on `data-entered`                                                                      | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
+| crosshair and tooltip follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance`                                                                                                             | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
+| legend emphasis dim, refetch hold | `transition-opacity duration-moderate-01`                                                                                                                                              | `moderate-01`                                     | `motion-reduce:transition-none`                 |
 
 The entrance is a composition assembling on first paint with a per-series stagger, so it is the `data-entered` transition recipe from the add-animation skill, not a catalog keyframe. No component-local `@keyframes`.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| series 1 to 6 | `var(--chart-series-1)` … `var(--chart-series-6)` |
-| folded series | `var(--chart-series-other)` |
-| status series | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
-| severity series | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)` |
-| gridlines | `var(--chart-grid)` |
-| axis rule | `var(--chart-axis)` |
-| tick labels | `var(--chart-label)`, `.text-label-sm` |
-| crosshair | `var(--chart-crosshair)` |
-| tooltip surface | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)` |
-| tooltip label and series names | `.text-label-md` |
-| tooltip values | `.text-label-code-md` |
-| marker ring | `var(--bg-surface)` |
-| tooltip and legend shape | `var(--shape-elements)` |
-| spacing | `var(--spacing-xs)`, `var(--spacing-sm)` |
-| focus | `var(--ring-color)` |
+| Region                         | Token (DESIGN.md)                                                                                                           |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| series 1 to 6                  | `var(--chart-series-1)` … `var(--chart-series-6)`                                                                           |
+| folded series                  | `var(--chart-series-other)`                                                                                                 |
+| status series                  | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)`      |
+| severity series                | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)` |
+| gridlines                      | `var(--chart-grid)`                                                                                                         |
+| axis rule                      | `var(--chart-axis)`                                                                                                         |
+| tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                      |
+| crosshair                      | `var(--chart-crosshair)`                                                                                                    |
+| tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`         |
+| tooltip label and series names | `.text-label-md`                                                                                                            |
+| tooltip values                 | `.text-label-code-md`                                                                                                       |
+| marker ring                    | `var(--bg-surface)`                                                                                                         |
+| tooltip and legend shape       | `var(--shape-elements)`                                                                                                     |
+| spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                    |
+| focus                          | `var(--ring-color)`                                                                                                         |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | The `--chart-*` role ships with this component. |
+| Figma variable | Temporary primitive | Follow-up                                       |
+| -------------- | ------------------- | ----------------------------------------------- |
+| _none_         | —                   | The `--chart-*` role ships with this component. |
 
 ## Accessibility (WCAG 2.1 AA)
 

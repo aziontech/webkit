@@ -15,7 +15,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "Where a rejected save renders: a Create Service page whose linked origin is deleted by another user while the form is open. The API rejects the save with a field-scoped error, so it lands as a danger `Message` under the Origin section heading, the section that owns the broken reference, carrying Reload origins, while the Origin select takes the invalid state. Never a toast, never a validation summary. A dashed simulation panel above the form plays the other user. Same page anatomy as the in-page create form (CreateFormPage): the creation header, section headings over flush `CardBox` groups of `Item` rows, and a sticky footer, here raised with `z-10`. Built from `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `CardBox`, `Item`, `InputText`, `MultiSelect`, `Select`, `FieldRadioBlock`, `Switch`, `InputNumber`, `Skeleton`, `Message`, `HelperText` and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "Where a rejected save renders: a Create Service page whose linked origin is deleted by another user while the form is open. The API rejects the save with a field-scoped error, so it lands as a danger `Alert` under the Origin section heading, the section that owns the broken reference, carrying Reload origins, while the Origin select takes the invalid state. Never a toast, never a validation summary. A dashed simulation panel above the form plays the other user. Same page anatomy as the in-page create form (CreateFormPage): the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer, here raised with `z-10`. Built from `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `FieldRadioBlock`, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`." } },
     webkit: {"block":"platform/forms/server-validation","intents":["server validation","server-side error","rejected save","field scoped error","stale reference","api error on save","reload options","validação no servidor","erro da api","salvamento rejeitado"],"skills":["webkit-errors","webkit-form","webkit-ui-states"],"primary":"InSync"}
   }
 }
@@ -27,7 +27,7 @@ export const InSync = {
 
 export const Rejected = {
   render: () => ({ components: { Block: State1 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "User 2 deleted web-origin-prod and Save was pressed: the danger Message opens under the Origin heading with Reload origins, and the Origin select reads This origin no longer exists." }, source: { code: source1 } } }
+  parameters: { docs: { description: { story: "User 2 deleted web-origin-prod and Save was pressed: the danger Alert opens under the Origin heading with Reload origins, and the Origin select reads This origin no longer exists." }, source: { code: source1 } } }
 }
 
 export const Reloading = {
@@ -37,5 +37,5 @@ export const Reloading = {
 
 export const Reloaded = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The list is reloaded without the deleted origin: the Message closes, the select is cleared and flagged required with Select an origin to continue." }, source: { code: source3 } } }
+  parameters: { docs: { description: { story: "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue." }, source: { code: source3 } } }
 }

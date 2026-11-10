@@ -1,14 +1,14 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
+  import Progress from '@aziontech/webkit/progress'
   import { ref } from 'vue'
 
   const usageOptions = [
@@ -70,12 +70,12 @@
         class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
       >
         <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
-          <CardBox
+          <Card
             :padded="false"
             class="w-full"
           >
             <template #content>
-              <ProgressBar
+              <Progress
                 :value="3"
                 :max="3"
                 size="small"
@@ -119,7 +119,7 @@
                           <Label :required="submitted && !usage"
                             >How are you planning to use the platform?</Label
                           >
-                          <BoxGridSelection
+                          <RadioCards
                             v-model="usage"
                             :items="usageOptions"
                             aria-label="How are you planning to use the platform?"
@@ -135,7 +135,7 @@
                           <Label :required="submitted && !role"
                             >What best describes your role?</Label
                           >
-                          <BoxGridSelection
+                          <RadioCards
                             v-model="role"
                             :items="roleOptions"
                             aria-label="What best describes your role?"
@@ -175,7 +175,7 @@
                 </form>
               </div>
             </template>
-          </CardBox>
+          </Card>
         </div>
 
         <div class="lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-mr-(--spacing-xl)">

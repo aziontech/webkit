@@ -6,16 +6,16 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownGroup from '@aziontech/webkit/dropdown-group'
-  import DropdownOption from '@aziontech/webkit/dropdown-option'
-  import DropdownRoot from '@aziontech/webkit/dropdown-root'
-  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import FieldInputGroup from '@aziontech/webkit/field-input-group'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import Label from '@aziontech/webkit/label'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -180,11 +180,11 @@
 
 <template>
   <Tooltip text="Select an environment to see its deployment and settings, or add another one">
-    <DropdownRoot
+    <DropdownMenuRoot
       placement="bottom-end"
       @select="(event, value) => onSelect(value)"
     >
-      <DropdownTrigger>
+      <DropdownMenuTrigger>
         <span
           class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
         >
@@ -198,18 +198,18 @@
             aria-hidden="true"
           />
         </span>
-      </DropdownTrigger>
-      <DropdownGroup label="Environments">
-        <DropdownOption
+      </DropdownMenuTrigger>
+      <DropdownMenuGroup label="Environments">
+        <DropdownMenuOption
           v-for="name in resourceEnvironments"
           :key="name"
           :value="name"
           :label="name"
           :selected="name === selectedEnvironment"
         />
-      </DropdownGroup>
-      <DropdownGroup>
-        <DropdownOption
+      </DropdownMenuGroup>
+      <DropdownMenuGroup>
+        <DropdownMenuOption
           :value="ADD_ENVIRONMENT"
           label="Add Environment"
         >
@@ -218,9 +218,9 @@
               class="pi pi-plus"
               aria-hidden="true"
           /></template>
-        </DropdownOption>
-      </DropdownGroup>
-    </DropdownRoot>
+        </DropdownMenuOption>
+      </DropdownMenuGroup>
+    </DropdownMenuRoot>
   </Tooltip>
 
   <Drawer
@@ -447,7 +447,7 @@
                           </div>
                         </template>
 
-                        <Message
+                        <Alert
                           severity="info"
                           label="Your resource is always accessible at an example.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
                         />

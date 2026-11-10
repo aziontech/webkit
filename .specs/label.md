@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: c644cf0bea006fd9b20caed8ab3c37f04247729eee37af1e61c27b1af2458a55
+checksum: b028e29d2a0d0956daa19d6b41758b21e41d366736d154d5c76f83ebb890a6af
 created: 2026-06-15
 last_updated: 2026-11-09
 ---
@@ -48,7 +48,7 @@ Form-field label that pairs descriptive text with an optional required indicator
 ```vue
 <script setup>
   import Label from '@aziontech/webkit/label'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
@@ -58,7 +58,7 @@ Form-field label that pairs descriptive text with an optional required indicator
     required
     hint="We only use it for deploy notifications."
   />
-  <InputText id="email" />
+  <Input id="email" />
 </template>
 ```
 
@@ -102,8 +102,8 @@ _none_
 
 ## Theme gaps
 
-| Figma variable                                                | Temporary primitive                           | Follow-up                                                                           |
-| ------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Figma variable                                                 | Temporary primitive                           | Follow-up                                                                           |
+| -------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `Components/Form Field/Label` (Rubik 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)

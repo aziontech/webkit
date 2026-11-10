@@ -1,7 +1,7 @@
 <script setup>
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
 </script>
 
@@ -40,7 +40,7 @@
         <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
           <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
             <div class="flex w-full flex-col items-center">
-              <CardBox
+              <Card
                 class="w-full max-w-(--container-sm)"
                 :padded="false"
               >
@@ -72,7 +72,7 @@
                     />
                   </div>
                 </template>
-              </CardBox>
+              </Card>
             </div>
           </div>
         </div>

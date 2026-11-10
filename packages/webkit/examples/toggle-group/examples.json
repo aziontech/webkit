@@ -1,0 +1,26 @@
+{
+  "component": "toggle-group",
+  "title": "Components/Primitives/Actions/ToggleGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Five generic options with the first selected.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithDisabledOption",
+      "summary": "Four options with one disabled segment showing the lock affordance.",
+      "file": "with-disabled-option.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three steps: 28px, 32px and 40px tall. Pick the one the row it sits in already uses — a group 6px off its neighbour reads as a rendering mistake.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Fluid",
+      "summary": "By default the group hugs its labels (top). `fluid` gives it the container width and lets the options divide that row between them (bottom) — which is what a two-answer question at the head of a form card wants, instead of two pills bunched at the left with dead space beside them.",
+      "file": "fluid.vue"
+    }
+  ]
+}

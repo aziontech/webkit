@@ -1,5 +1,5 @@
 import Button from '@aziontech/webkit/button'
-import InputText from '@aziontech/webkit/input-text'
+import Input from '@aziontech/webkit/input'
 import MultiSelect from '@aziontech/webkit/multi-select'
 import MultiSelectContent from '@aziontech/webkit/multi-select-content'
 import MultiSelectGroup from '@aziontech/webkit/multi-select-group'
@@ -12,7 +12,7 @@ import { toSfc } from '../../../_shared/story-source'
 
 const components = {
   Button,
-  InputText,
+  Input,
   Tag,
   MultiSelect,
   MultiSelectTrigger,
@@ -81,7 +81,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Multi-select control for choosing several options from a list. The trigger mirrors InputText size and state visuals, while the dropdown is composed from MultiSelectTrigger, MultiSelectContent, MultiSelectGroup, and MultiSelectOption. Selection is always an array and every option row carries a checkbox indicator.'
+          'Multi-select control for choosing several options from a list. The trigger mirrors Input size and state visuals, while the dropdown is composed from MultiSelectTrigger, MultiSelectContent, MultiSelectGroup, and MultiSelectOption. Selection is always an array and every option row carries a checkbox indicator.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -288,7 +288,7 @@ export const Sizes = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'The three trigger sizes (small, medium, large) matching InputText.' },
+      description: { story: 'The three trigger sizes (small, medium, large) matching Input.' },
       source: {
         code: toSfc(
           [
@@ -394,11 +394,11 @@ const SEARCH_FOOTER_MARKUP = `<div style="width: 280px;">
     <MultiSelectTrigger />
     <MultiSelectContent>
       <template #search>
-        <InputText v-model="search" size="small" placeholder="Search">
+        <Input v-model="search" size="small" placeholder="Search">
           <template #iconLeft>
             <i class="pi pi-search" aria-hidden="true" />
           </template>
-        </InputText>
+        </Input>
       </template>
       <MultiSelectOption
         v-for="o in filtered"
@@ -456,7 +456,7 @@ export const WithSearchAndFooter = {
           [
             ...BASE_IMPORTS,
             "import Button from '@aziontech/webkit/button'",
-            "import InputText from '@aziontech/webkit/input-text'",
+            "import Input from '@aziontech/webkit/input'",
             "import { computed, ref } from 'vue'",
             '',
             'const value = ref([])',

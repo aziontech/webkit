@@ -1,6 +1,11 @@
 import Button from '@aziontech/webkit/button'
-import InputText from '@aziontech/webkit/input-text'
-import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
+import Input from '@aziontech/webkit/input'
+import Select, {
+  SelectContent,
+  SelectGroup,
+  SelectOption,
+  SelectTrigger
+} from '@aziontech/webkit/select'
 import Tag from '@aziontech/webkit/tag'
 import { computed, ref, watch } from 'vue'
 
@@ -21,7 +26,7 @@ const components = {
   'Select.Group': SelectGroup,
   'Select.Option': SelectOption,
   Button,
-  InputText,
+  Input,
   Tag
 }
 
@@ -47,7 +52,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `InputText`\'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a selection indicator, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<Select.Content>`.'
+          'Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `Input`\'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown is rendered via the native Popover API + CSS anchor positioning — no `@floating-ui` runtime. Each option carries a selection indicator, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<Select.Content>`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -97,7 +102,7 @@ const meta = {
       control: 'select',
       options: ['small', 'medium', 'large'],
       description:
-        'Size token; affects trigger height (small 28px, medium 32px, large 40px) matching `InputText`.',
+        'Size token; affects trigger height (small 28px, medium 32px, large 40px) matching `Input`.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium' | 'large'" },
@@ -407,11 +412,11 @@ const SEARCH_FOOTER_TEMPLATE = `<div class="w-[280px]">
     <Select.Trigger />
     <Select.Content>
       <template #search>
-        <InputText v-model="search" size="small" placeholder="Search">
+        <Input v-model="search" size="small" placeholder="Search">
           <template #iconLeft>
             <i class="pi pi-search" aria-hidden="true" />
           </template>
-        </InputText>
+        </Input>
       </template>
       <Select.Option
         v-for="o in filtered"
@@ -469,7 +474,7 @@ export const WithSearchAndFooter = {
           [
             IMPORT,
             "import Button from '@aziontech/webkit/button'",
-            "import InputText from '@aziontech/webkit/input-text'",
+            "import Input from '@aziontech/webkit/input'",
             "import { computed, ref } from 'vue'",
             '',
             "const value = ref('')",

@@ -1,6 +1,6 @@
 ---
 name: webkit-ui-states
-description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Message), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
+description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
 last_updated: 2026-07-21
 scope: general
@@ -65,7 +65,7 @@ missing any is not done.
 | **Empty** (no data at all)               | the collection is genuinely empty (first run)   | `EmptyState` — a one-line reason + one clear next action                                  |
 | **Empty** (no results for a filter)      | data exists, the current filter matches nothing | `EmptyState` with a "clear filters" action — distinct copy from first-run empty           |
 | **Partial**                              | some rows loaded, more paging in                | render what arrived + an inline `Spinner`/"load more"; never blank the list               |
-| **Error** (request failed)               | network / 5xx / 4xx not tied to one field       | a `Message` in the view (or a `toast` for a transient action) with what failed + a retry  |
+| **Error** (request failed)               | network / 5xx / 4xx not tied to one field       | a `Alert` in the view (or a `toast` for a transient action) with what failed + a retry    |
 | **Success** (transient)                  | a mutation completed                            | optional toast; don't leave the user guessing whether it worked                           |
 
 Field-level validation is **not** in this matrix — a bad email or a required value stays inline next
@@ -101,20 +101,20 @@ count the work:
 - **Indeterminate / streaming → `Spinner`, low emphasis, always with a label.** "Preparing
   repository…", "Provisioning… 12s", or the running step in a multi-step list — a `Spinner` beside
   text, never a bare spinner with no label. Remove it the instant the process settles.
-- **A measurable whole → `ProgressBar` (`:value` / `:max`).** When you can compute "N of M done"
+- **A measurable whole → `Progress` (`:value` / `:max`).** When you can compute "N of M done"
   (an upload, a deploy with countable phases), show forward motion, not a spinner. Remove it on
   completion.
 - **Both together only** when you have per-unit liveness _and_ a countable whole (a per-step `Spinner`
-  over an overall `ProgressBar`). Every ongoing affordance clears the moment the flow finishes.
+  over an overall `Progress`). Every ongoing affordance clears the moment the flow finishes.
 
-The state-matrix render — Skeleton (data in), then Message / EmptyState / data:
+The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
 
 ```vue
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import Skeleton from '@aziontech/webkit/skeleton'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Message from '@aziontech/webkit/message'
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
 
   type Row = { id: string; name: string }
@@ -160,7 +160,7 @@ The state-matrix render — Skeleton (data in), then Message / EmptyState / data
   </div>
 
   <!-- Error: located in the view, recoverable -->
-  <Message
+  <Alert
     v-else-if="error"
     severity="danger"
     :label="error"
@@ -171,7 +171,7 @@ The state-matrix render — Skeleton (data in), then Message / EmptyState / data
       size="small"
       @click="load"
     />
-  </Message>
+  </Alert>
 
   <!-- Empty: one reason + one action -->
   <EmptyState
@@ -223,7 +223,7 @@ Why both, off one flag:
 <script setup>
   import { ref } from 'vue'
   import Button from '@aziontech/webkit/button'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
   import Select from '@aziontech/webkit/select'
 
   const submitting = ref(false)
@@ -251,7 +251,7 @@ Why both, off one flag:
     <Select.Trigger />
     <Select.Content><!-- options --></Select.Content>
   </Select>
-  <InputText
+  <Input
     v-model="repoName"
     :disabled="submitting"
   />
@@ -349,8 +349,8 @@ prevention, and it never fires a global toast.
 | Long request succeeded / started                         | `toast.success` (optional)                      |
 
 Two more rows exist, and both are places a toast is **wrong**: a server rejection **scoped to one
-field** (→ a `Message` in that field's own section + the field's `invalid` state) and anything on a
-**signed-out** screen (→ one `Message` in the card; **auth never toasts**). The inverse case — a
+field** (→ a `Alert` in that field's own section + the field's `invalid` state) and anything on a
+**signed-out** screen (→ one `Alert` in the card; **auth never toasts**). The inverse case — a
 failure that arrives **after** the user left the screen — is the one that _must_ be a toast, and a
 permanent, closable one. The full table lives in **`/webkit-errors`**.
 
@@ -376,11 +376,11 @@ For `/webkit-ui-states <file>`, list gaps grouped by view / flow. Each:
 ```
 ✗ WorkloadsList.vue:31  v-if="items.length" with no empty/error branch
   state: Empty + Error missing — a failed or empty fetch renders a blank panel.
-  fix: add EmptyState (reason + Create action) and a Message severity="danger" with Retry.
+  fix: add EmptyState (reason + Create action) and a Alert severity="danger" with Retry.
 
 ✗ SomeForm.vue:44  Button :loading="submitting" but fields have no :disabled
   behavior: Lock the scope — a loading trigger over editable fields lets the payload change mid-request.
-  fix: bind :disabled="submitting" on the Select / InputText / Switch in the same card; guard the handler, release in finally.
+  fix: bind :disabled="submitting" on the Select / Input / Switch in the same card; guard the handler, release in finally.
 
 ✗ api.js:31  catch (e) { console.error(e) }
   behavior: Report request errors — the failure is silent; the user sees a spinner that never clears.

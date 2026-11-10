@@ -8,7 +8,7 @@ import SidebarHeader from './sidebar-header.vue'
 
 // The Sidebar story is the fixture that exercises the whole Sidebar composition.
 // No story render function mounts <SidebarHeader> directly (the #header slot uses
-// InputText), so composeStories is used only to prove the fixture loads and the
+// Input), so composeStories is used only to prove the fixture loads and the
 // Sidebar root renders — SidebarHeader itself is tested directly below.
 
 describe('SidebarHeader', () => {

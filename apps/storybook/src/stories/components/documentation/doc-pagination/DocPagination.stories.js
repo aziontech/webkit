@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The previous / next pair that closes a documentation page. Each side carries an eyebrow and the destination's real title — the title is what tells the reader whether they want to go. A side with no neighbour leaves its half of the row empty, so the remaining link stays anchored to its own edge instead of drifting to the centre. It is not the data `Paginator`: this links two named documents and knows nothing about a total."
+          "The previous / next pair that closes a documentation page. Each side carries an eyebrow and the destination's real title — the title is what tells the reader whether they want to go. A side with no neighbour leaves its half of the row empty, so the remaining link stays anchored to its own edge instead of drifting to the centre. It is not the data `Pagination`: this links two named documents and knows nothing about a total."
       },
       canvas: { sourceState: 'shown' }
     }

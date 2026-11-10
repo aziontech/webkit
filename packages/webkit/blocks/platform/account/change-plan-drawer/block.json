@@ -3,7 +3,7 @@
   "name": "ChangePlanDrawer",
   "title": "Templates/Platform/Account/ChangePlanDrawer",
   "surface": "product",
-  "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. Built from `Drawer`, `PanelHeader`, `PanelContent`, `SegmentedButton`, `CardPricing` and `Button`.",
+  "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing` and `Button`.",
   "preview": {
     "layout": "padded",
     "background": "dark"

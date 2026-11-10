@@ -3,7 +3,7 @@
   "name": "DeploySuccess",
   "title": "Templates/Platform/Creation/DeploySuccess",
   "surface": "product",
-  "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `CardBox`, `Tag`, `Button`, `Tooltip`, `Item`, `SegmentedButton` and `CodeBlock`.",
+  "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Card`, `Tag`, `Button`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

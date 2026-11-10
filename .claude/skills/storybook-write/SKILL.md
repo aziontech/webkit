@@ -15,7 +15,7 @@ Generate `apps/storybook/src/stories/components/<category>/<name>/<PascalName>.s
 
 **"Show code" copy-paste-ready (canonical).** `parameters.docs.description.component` carries a **short prose lead** (the `## Purpose` paragraph) — NOT the spec's `## Usage` code block. The runnable usage is surfaced by the Docs **"Show code"** panel via an **explicit** `source.code` on every story, built with `toSfc` from [`apps/storybook/src/stories/_shared/story-source.js`](../../../apps/storybook/src/stories/_shared/story-source.js):
 
-- Keep `parameters.docs` a plain **object literal** (a helper *call* there makes Storybook print the raw CSF story object). Set `description.component` (prose lead) and `canvas.sourceState: 'shown'` at the meta level.
+- Keep `parameters.docs` a plain **object literal** (a helper _call_ there makes Storybook print the raw CSF story object). Set `description.component` (prose lead) and `canvas.sourceState: 'shown'` at the meta level.
 - Give **every** story `parameters.docs.source.code: toSfc(IMPORT, TEMPLATE)`. For composite / state stories, define the markup as a `const`, render it, and pass the same const to `toSfc` (zero drift). For the arg-driven `Default`, keep `render: Template` and set `source.code` to the canonical default markup.
 
 Do NOT use Storybook's dynamic source (`source.transform` / `source.type: 'dynamic'`) — it lowercases tags (`<skeleton>`, `<chips>`), double-wraps `<template>`, and falls back to the raw story object. The snippet MUST be a single runnable SFC whose tags match the import (PascalCase). Enforced by [`validate-story-source.mjs`](../../hooks/validate-story-source.mjs). Full rule: [`.claude/rules/storybook-source.md`](../../rules/storybook-source.md). (Reference: `Skeleton.stories.js`.)
@@ -122,7 +122,7 @@ Do NOT use Storybook's dynamic source (`source.transform` / `source.type: 'dynam
    })
    ```
 
-   **Shape — stateful / v-model components (InputText, InputSelect, FieldText, Checkbox, RadioGroup, anything with `modelValue`):**
+   **Shape — stateful / v-model components (Input, InputSelect, FieldText, Checkbox, RadioGroup, anything with `modelValue`):**
 
    The story MUST hold local state and explicitly forward the update so the field actually reflects user typing/selection AND the `update:modelValue` action fires in the Actions panel. Binding `v-bind="args"` alone makes `modelValue` a one-way prop — the field appears frozen.
 
@@ -263,7 +263,6 @@ Do NOT use Storybook's dynamic source (`source.transform` / `source.type: 'dynam
    ```
 
    > Define the template once as a `const`, reuse it for both `render`'s `template` and `toSfc(IMPORT, TEMPLATE)`, so they can never drift. The body uses PascalCase tags and contains no `<template>` (toSfc adds the one wrapper). Any story built from a raw multi-element `render` template (a row of variants, a `Toaster` + several trigger buttons, …) needs this explicit `source.code`.
-
    - **Always-composite stories.** Whenever a prop or slot has more than one meaningful option, render **one composite story** that shows every option side by side — never one story per option. Canonical composites and their backing concept:
      - `Types` — the `kind` prop (visual variants).
      - `Sizes` — the `size` prop.

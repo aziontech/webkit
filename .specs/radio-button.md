@@ -7,10 +7,11 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: 88c061595b00e10475f10ee3f79554926a9cfe95903581c91cc8b0f77ae41116
+checksum: a58e7cd9e9e3e4f585580c2aee40dc35426199481a4df0163da0d0798904946d
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
+
 # Radio Button — Component Spec
 
 ## Purpose
@@ -25,7 +26,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 ## When NOT to use
 
 - A radio option in a form that needs its own label, description, or helper text → use `field-radio`.
-- Options that need visual weight, such as plans or tiers → use `field-radio-block`, or `box-grid-selection` for a horizontal grid of cards.
+- Options that need visual weight, such as plans or tiers → use `field-radio-block`, or `radio-cards` for a horizontal grid of cards.
 - More than one option may be selected → use `checkbox`.
 - The options are many or loaded from data → use `select`.
 
@@ -33,7 +34,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 - `field-radio` — radio with label, description, and disabled helper; the default inside forms.
 - `field-radio-block` — card-style radio option with a selected border and background.
-- `box-grid-selection` — horizontal grid of selectable cards with its own model.
+- `radio-cards` — horizontal grid of selectable cards with its own model.
 - `checkbox` — the multi-pick counterpart.
 - `select` — single choice from a dropdown when the options do not fit inline.
 
@@ -48,10 +49,10 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ```vue
 <script setup>
-import RadioButton from '@aziontech/webkit/radio-button'
-import { ref } from 'vue'
+  import RadioButton from '@aziontech/webkit/radio-button'
+  import { ref } from 'vue'
 
-const billing = ref('monthly')
+  const billing = ref('monthly')
 </script>
 
 <template>
@@ -77,18 +78,18 @@ const billing = ref('monthly')
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | false | Selected value for v-model. |
-| `value` | `string` | `undefined` | false | Option value for this radio instance. |
-| `name` | `string` | `undefined` | false | HTML name shared across a mutually exclusive group. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | false | id for the native input; links label to control. |
+| Prop         | Type      | Default     | Required | JSDoc                                               |
+| ------------ | --------- | ----------- | -------- | --------------------------------------------------- |
+| `modelValue` | `string`  | `undefined` | false    | Selected value for v-model.                         |
+| `value`      | `string`  | `undefined` | false    | Option value for this radio instance.               |
+| `name`       | `string`  | `undefined` | false    | HTML name shared across a mutually exclusive group. |
+| `disabled`   | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
+| `inputId`    | `string`  | `undefined` | false    | id for the native input; links label to control.    |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes    |
+| ------------------- | -------- | -------- |
 | `update:modelValue` | `string` | v-model. |
 
 ## Slots
@@ -103,28 +104,28 @@ const billing = ref('monthly')
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger      | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | ------ | ------------------------------- |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| surface | `var(--bg-surface)` |
-| primary | `var(--primary)` |
-| primary contrast | `var(--primary-contrast)` |
-| disabled surface | `var(--bg-disabled)` |
-| text (disabled indicator) | `var(--text-disabled)` |
-| border | `var(--border-default)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                    | Token (DESIGN.md)         |
+| ------------------------- | ------------------------- |
+| surface                   | `var(--bg-surface)`       |
+| primary                   | `var(--primary)`          |
+| primary contrast          | `var(--primary-contrast)` |
+| disabled surface          | `var(--bg-disabled)`      |
+| text (disabled indicator) | `var(--text-disabled)`    |
+| border                    | `var(--border-default)`   |
+| shape                     | `var(--shape-elements)`   |
+| ring                      | `var(--ring-color)`       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -4,10 +4,11 @@ category: utils
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 1edec34521c4e2d55edb0bf8410e250d90bab0f041ca62dad990b77d30653909
+checksum: b8eee23c06b905f737eac4edd617d10120d70d4d1f9ef724216cd7b40de23a09
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
+
 # Spinner — Component Spec
 
 ## Purpose
@@ -23,13 +24,13 @@ Shared visual utility used by other components. Lives at `packages/webkit/src/co
 
 - A button waiting on its action → set `loading` on `button`, `icon-button` or `button-highlight`.
 - Content that is still loading → use `skeleton`.
-- Progress you can measure → use `progress-bar`.
+- Progress you can measure → use `progress`.
 - A status with a color and a label → use `status-indicator`.
 
 ## Related
 
 - `skeleton` — reserves the shape of content while it loads.
-- `progress-bar` — determinate progress.
+- `progress` — determinate progress.
 - `button` — renders a Spinner itself when `loading` is set.
 
 ## Best practices
@@ -42,7 +43,7 @@ Shared visual utility used by other components. Lives at `packages/webkit/src/co
 
 ```vue
 <script setup>
-import Spinner from '@aziontech/webkit/spinner'
+  import Spinner from '@aziontech/webkit/spinner'
 </script>
 
 <template>
@@ -68,26 +69,26 @@ import Spinner from '@aziontech/webkit/spinner'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| always (while mounted) | `animate-spin` | Tailwind core | `motion-reduce:animate-none` |
+| Trigger                | Animation / Transition | Token         | Reduced-motion fallback      |
+| ---------------------- | ---------------------- | ------------- | ---------------------------- |
+| always (while mounted) | `animate-spin`         | Tailwind core | `motion-reduce:animate-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

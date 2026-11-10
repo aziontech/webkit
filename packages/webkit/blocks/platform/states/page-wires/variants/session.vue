@@ -1,5 +1,5 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
+  import Card from '@aziontech/webkit/card'
   import Skeleton from '@aziontech/webkit/skeleton'
 
   const navGroups = [
@@ -124,7 +124,7 @@
               />
             </div>
 
-            <CardBox :padded="false">
+            <Card :padded="false">
               <template #content>
                 <div
                   class="flex items-center gap-(--spacing-md) border-b-(length:--border-width-default) border-(--border-default) px-(--spacing-md) py-(--spacing-md)"
@@ -165,7 +165,7 @@
                   </div>
                 </div>
               </template>
-            </CardBox>
+            </Card>
           </div>
         </div>
       </div>

@@ -1,0 +1,31 @@
+{
+  "component": "command",
+  "title": "Components/Primitives/Overlay/Command",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The intended entry point: a large search field with a ⌘K hint that opens the palette via `v-model:open`, plus the global `meta+k` (⌘K / Ctrl+K) shortcut. Inside, a \"Suggestions\" group of plain-label items and a \"Commands\" group whose items carry ⌘ shortcut hints rendered via Kbd.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Grouped",
+      "summary": "Three labeled groups — the central grouping anatomy — showing both spacings: `--spacing-sm` above a `CommandSeparator` and `--spacing-xs` below it, and `--spacing-sm` between two groups with no separator between them. Half the items carry a `prefix` icon and half do not; the leading box is rendered only by the rows that supply a glyph, so an icon-less row puts no empty element in the DOM and carries no indent. Opens from a button; `shortcut=\"\"` opts out of the global binding so only Default owns ⌘K on this page.",
+      "file": "grouped.vue"
+    },
+    {
+      "name": "WithShortcuts",
+      "summary": "Items carrying keyboard-shortcut hints rendered on the right via Kbd. The item `shortcut` is display only — it does not register a binding. Opens from a button; `shortcut=\"\"` on the root opts out of the global binding.",
+      "file": "with-shortcuts.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "The empty state, shown when the filter yields no visible items. Opens from a button; `shortcut=\"\"` opts out of the global binding.",
+      "file": "empty.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "A disabled item alongside enabled ones — skipped by roving navigation and never activated. Opens from a button; `shortcut=\"\"` opts out of the global binding.",
+      "file": "disabled.vue"
+    }
+  ]
+}

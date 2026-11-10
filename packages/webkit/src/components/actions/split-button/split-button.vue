@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import Dropdown from '../../navigation/dropdown'
+  import DropdownMenu from '../../navigation/dropdown-menu'
   import Button from '../button/button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
@@ -116,7 +116,7 @@
     :data-loading="loading || null"
     class="relative inline-flex w-fit"
   >
-    <Dropdown
+    <DropdownMenu
       placement="bottom-end"
       :disabled="disabled || loading"
       :data-testid="`${testId}__menu`"
@@ -135,7 +135,7 @@
           @click="onPrimaryClick"
         />
 
-        <Dropdown.Trigger :data-testid="`${testId}__toggle`">
+        <DropdownMenu.Trigger :data-testid="`${testId}__toggle`">
           <IconButton
             icon="pi pi-chevron-down"
             :ariaLabel="toggleAriaLabel"
@@ -145,11 +145,11 @@
             :data-testid="`${testId}__toggle-button`"
             class="rounded-l-none! -ml-px border-l border-(--border-default) focus-visible:z-1"
           />
-        </Dropdown.Trigger>
+        </DropdownMenu.Trigger>
       </div>
 
-      <Dropdown.Group>
-        <Dropdown.Option
+      <DropdownMenu.Group>
+        <DropdownMenu.Option
           v-for="(item, index) in model"
           :key="`${optionValue(item)}-${index}`"
           :value="optionValue(item)"
@@ -168,8 +168,8 @@
               aria-hidden="true"
             />
           </template>
-        </Dropdown.Option>
-      </Dropdown.Group>
-    </Dropdown>
+        </DropdownMenu.Option>
+      </DropdownMenu.Group>
+    </DropdownMenu>
   </div>
 </template>

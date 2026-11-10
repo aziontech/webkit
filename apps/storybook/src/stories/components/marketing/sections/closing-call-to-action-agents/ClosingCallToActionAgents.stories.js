@@ -31,7 +31,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register under a pixelated, waving texture, with a segmented switch that picks the way in. Each audience carries an optional copyable line and its actions; under them a line types its words behind a blinking cursor, then a closing sentence, so the band keeps its height when the switch changes. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `segmented-button`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. Under reduced motion every word shows at once and nothing blinks."
+          "The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register under a pixelated, waving texture, with a segmented switch that picks the way in. Each audience carries an optional copyable line and its actions; under them a line types its words behind a blinking cursor, then a closing sentence, so the band keeps its height when the switch changes. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-agents', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `toggle-group`, `input-group`, `copy-button`, `button`, `frame-box` and `texture-material`. Under reduced motion every word shows at once and nothing blinks."
       },
       canvas: { sourceState: 'shown' }
     }

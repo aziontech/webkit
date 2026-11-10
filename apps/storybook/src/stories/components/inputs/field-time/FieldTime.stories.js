@@ -16,7 +16,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Form field for entering a time of day in 24-hour notation (`HH:mm` or `HH:mm:ss`). It stacks `Label`, `InputText`, and `HelperText` the same way `FieldText` does, and adds a masked text input: the user types digits, the field inserts the `:` separators, and it checks hours (00–23), minutes and seconds (00–59). It is a masked text input, not a native `type="time"`, so the control looks and behaves the same in every browser. Use it for schedules, maintenance windows, cron-style start times, and any clock time with no date.'
+          'Form field for entering a time of day in 24-hour notation (`HH:mm` or `HH:mm:ss`). It stacks `Label`, `Input`, and `HelperText` the same way `FieldText` does, and adds a masked text input: the user types digits, the field inserts the `:` separators, and it checks hours (00–23), minutes and seconds (00–59). It is a masked text input, not a native `type="time"`, so the control looks and behaves the same in every browser. Use it for schedules, maintenance windows, cron-style start times, and any clock time with no date.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -47,7 +47,7 @@ const meta = {
     placeholder: {
       control: 'text',
       description:
-        'Placeholder forwarded to the `InputText`. When empty, it falls back to the format in upper case (`HH:MM` or `HH:MM:SS`).',
+        'Placeholder forwarded to the `Input`. When empty, it falls back to the format in upper case (`HH:MM` or `HH:MM:SS`).',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     helperText: {
@@ -59,8 +59,7 @@ const meta = {
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
-      description:
-        'Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px.',
+      description: 'Size forwarded to the `Input`. Heights: small=28px, medium=32px, large=40px.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium' | 'large'" },

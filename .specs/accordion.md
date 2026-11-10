@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 1ec0d99d67a290672027116026f9bdca47961ab8b3c5efef693129735d8af181
+checksum: b4a1e4536ae457ab0f6aeb4d8605fb205c791e17cc3ea424865207adc12406fa
 created: 2026-06-26
 last_updated: 2026-11-10
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-10
 
 ## Purpose
 
-A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tab-view` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.
+A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tabs` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.
 
 ## When to use
 
@@ -26,13 +26,13 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 
 ## When NOT to use
 
-- The panels are mutually exclusive views shown in the same place → use `tab-view`.
+- The panels are mutually exclusive views shown in the same place → use `tabs`.
 - It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).
 - It is hierarchical navigation with expandable rows → use `menu`.
 
 ## Related
 
-- `tab-view` — switches between panels in place; one panel visible, headers in a row.
+- `tabs` — switches between panels in place; one panel visible, headers in a row.
 - `faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.
 - `menu` — expanding rows for navigation, not for revealing content.
 
@@ -188,11 +188,11 @@ Events below are emitted by the root `Accordion`.
 
 ## Theme gaps
 
-| Figma variable                                                                         | Temporary primitive                                                                              | Follow-up                                                                                                 |
-| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| Figma variable                                                                          | Temporary primitive                                                                              | Follow-up                                                                                                 |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | `Heading/xss` · `Heading/xs` (Rubik Regular, line-height 1.4) used for the header title | `.text-body-sm` · `.text-body-md` (line-height 1.5, same 14px / 16px sizes, same Regular weight) | `TODO: decide whether to surface text-heading-xs/xxs in DESIGN.md, or keep the body family for the title` |
-| `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)       | `hover:bg-(--bg-hover)` on the trigger                                                           | `TODO: confirm the header hover treatment with design`                                                    |
-| `--border-width-default` (0.8px header / item divider)                                 | `border-b` (1px)                                                                                 | `TODO: tokenize the sub-pixel border width if it must match exactly`                                      |
+| `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)        | `hover:bg-(--bg-hover)` on the trigger                                                           | `TODO: confirm the header hover treatment with design`                                                    |
+| `--border-width-default` (0.8px header / item divider)                                  | `border-b` (1px)                                                                                 | `TODO: tokenize the sub-pixel border width if it must match exactly`                                      |
 
 ## Accessibility (WCAG 2.1 AA)
 
