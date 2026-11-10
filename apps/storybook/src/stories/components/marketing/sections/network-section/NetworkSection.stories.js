@@ -240,3 +240,97 @@ export const Types = {
     }
   }
 }
+
+const OUTCOME_ENTRIES = [
+  `{
+        logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+        logoAlt: 'Dafiti',
+        logoTreatment: 'monochrome',
+        text: '86% faster load times, with a 45% cost reduction in data transfer.',
+        highlights: ['86% faster load times', '45% cost reduction']
+      }`,
+  `{
+        logo: '/marketing-components/clients/madeiramadeira.svg',
+        logoAlt: 'MadeiraMadeira',
+        logoTreatment: 'as-is',
+        text: '90% lower cloud costs and faster applications at scale.',
+        highlights: ['90% lower cloud costs']
+      }`,
+  `{
+        logo: '/marketing-components/clients/renner-color.svg',
+        logoAlt: 'Renner',
+        logoTreatment: 'as-is',
+        text: '67% saved on data transfer, even during massive traffic spikes.',
+        highlights: ['67% saved']
+      }`,
+  `{
+        logo: '/marketing-components/clients/fourbank.svg',
+        logoAlt: 'Fourbank',
+        logoTreatment: 'monochrome',
+        text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
+        highlights: ['DDoS mitigated']
+      }`
+]
+
+const BENEFIT_ENTRIES = [
+  `{
+        icon: 'pi pi-globe',
+        title: 'Global resilience beyond anycast',
+        description: 'Traffic is steered around failures and network degradation faster than BGP can reconverge.'
+      }`,
+  `{
+        icon: 'pi pi-stopwatch',
+        title: 'Low latency everywhere',
+        description: 'Compute, AI, databases, and security run in every data center, close to your users.'
+      }`,
+  `{
+        icon: 'pi pi-arrows-v',
+        title: 'Zero-ops autoscaling and failover',
+        description: 'Absorbs any traffic spike with no cold starts, no capacity planning and no provisioning.'
+      }`,
+  `{
+        icon: 'pi pi-shield',
+        title: 'Always-on protection',
+        description: 'DDoS mitigation and a programmable security layer run in front of every application.'
+      }`
+]
+
+const columnsBand = (kind, entries, count) => `  <NetworkSection
+    kind="${kind}"
+    eyebrow="Region: Earth."
+    title="${count} ${kind} set the floor in ${count} columns"
+    lead="Built around your users. Distributed around your data."
+    :claims="['100+ data centers', '100+ Tbps network capacity', '30 ms median latency', '100% availability']"
+    :${kind}="[
+      ${entries.slice(0, count).join(',\n      ')}
+    ]"
+  />`
+
+const COLUMNS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
+${[
+  columnsBand('outcomes', OUTCOME_ENTRIES, 2),
+  columnsBand('outcomes', OUTCOME_ENTRIES, 3),
+  columnsBand('outcomes', OUTCOME_ENTRIES, 4),
+  columnsBand('benefits', BENEFIT_ENTRIES, 2),
+  columnsBand('benefits', BENEFIT_ENTRIES, 3),
+  columnsBand('benefits', BENEFIT_ENTRIES, 4)
+].join('\n')}
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof NetworkSection>} */
+export const Columns = {
+  render: () => ({
+    components: { NetworkSection },
+    template: withTemplateAssets(COLUMNS_TEMPLATE)
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The floor takes one column per entry, two at least and four at most, on either kind: two, three and four `outcomes`, then two, three and four `benefits`. No entry count leaves an empty cell in the row.'
+      },
+      source: { code: toSfc(IMPORT, COLUMNS_TEMPLATE) }
+    }
+  }
+}
