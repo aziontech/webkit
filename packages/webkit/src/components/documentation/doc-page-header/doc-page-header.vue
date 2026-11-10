@@ -152,7 +152,7 @@
         </span>
         <Tooltip :text="action.tip ?? ''">
           <Button
-            kind="text"
+            kind="transparent"
             size="small"
             :label="action.label"
             :icon="action.icon ?? ''"

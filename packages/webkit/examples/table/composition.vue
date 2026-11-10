@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <Table border>
+  <Table bordered>
     <Table.Header>
       <Table.Row>
         <Table.HeadCell principal>Name</Table.HeadCell>

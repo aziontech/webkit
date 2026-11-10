@@ -162,7 +162,7 @@ This is automatic, and it is the reason a sticky bar works:
     class="layout-column-form layout-boundary-inline sticky bottom-0 flex justify-end gap-(--spacing-sm) py-(--spacing-md)"
   >
     <Button
-      kind="text"
+      kind="transparent"
       label="Cancel"
     />
     <Button label="Save" />

@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c63d7f56676f76970fcde204d923f2b87e07990891ed40d04d290fe7fe75a31a
+checksum: 9e26a4af2b4f376d2214bfe411458ffb7ecce60f7c9a741024131d48c936b2bb
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-10
 ---
 
 # DocCard — Component Spec
 
 ## Purpose
 
-One cell of the grid a documentation page scans across: a leading glyph, an optional overline, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.
+One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.
 
 ## When to use
 
@@ -34,8 +34,8 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 ## Best practices
 
 - Keep the title to a noun phrase and let the copy carry the verb.
-- Use `overline` only when the title alone does not say who or when; it is not a category label.
-- Set `link` when the card should close on an explicit call to action; otherwise the whole tile being the link is enough.
+- Use `eyebrow` only when the title alone does not say who or when; it is not a category label.
+- Set `link-label` when the card should close on an explicit call to action; otherwise the whole tile being the link is enough.
 
 ## Usage
 
@@ -49,7 +49,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
     title="Edge Application"
     icon="pi pi-server"
     href="/docs/edge-application"
-    link="Read the guide"
+    link-label="Read the guide"
   >
     Serve and cache your application at the edge, close to the people using it.
   </DocCard>
@@ -58,15 +58,15 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ## Props
 
-| Prop       | Type                  | Default   | Required | JSDoc                                                                                |
-| ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
-| `title`    | `string`              | `''`      | false    | Card heading.                                                                        |
-| `overline` | `string`              | `''`      | false    | Small muted line above the title — who makes the thing, when the title does not say. |
-| `icon`     | `string`              | `''`      | false    | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled.      |
-| `href`     | `string`              | `''`      | false    | Destination; when set the whole card becomes the link.                               |
-| `target`   | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                                                |
-| `label`    | `string`              | `''`      | false    | Fallback copy when the default slot is empty.                                        |
-| `link`     | `string`              | `''`      | false    | Call-to-action text; when set the card closes on a link row.                         |
+| Prop        | Type                  | Default   | Required | JSDoc                                                                                |
+| ----------- | --------------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
+| `title`     | `string`              | `''`      | false    | Card heading.                                                                        |
+| `eyebrow`   | `string`              | `''`      | false    | Small muted line above the title — who makes the thing, when the title does not say. |
+| `icon`      | `string`              | `''`      | false    | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled.      |
+| `href`      | `string`              | `''`      | false    | Destination; when set the whole card becomes the link.                               |
+| `target`    | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                                                |
+| `label`     | `string`              | `''`      | false    | Fallback copy when the default slot is empty.                                        |
+| `linkLabel` | `string`              | `''`      | false    | Call-to-action text; when set the card closes on a link row.                         |
 
 ## Events
 
@@ -94,19 +94,19 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ## Tokens
 
-| Region                | Token (DESIGN.md)                                                |
-| --------------------- | ---------------------------------------------------------------- |
-| typography (title)    | `.text-heading-xs`                                               |
-| typography (copy)     | `.text-body-sm`                                                  |
-| typography (overline) | `.text-overline-sm`                                              |
-| typography (cta)      | `.text-label-md`                                                 |
-| text                  | `var(--text-default)`                                            |
-| text (overline, copy) | `var(--text-muted)`                                              |
-| link (cta)            | `var(--text-link)`                                               |
-| surface               | `var(--bg-surface)`                                              |
-| surface.hover         | `var(--bg-hover)`                                                |
-| spacing               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
-| ring                  | `var(--ring-color)`                                              |
+| Region               | Token (DESIGN.md)                                                |
+| -------------------- | ---------------------------------------------------------------- |
+| typography (title)   | `.text-heading-xs`                                               |
+| typography (copy)    | `.text-body-sm`                                                  |
+| typography (eyebrow) | `.text-overline-sm`                                              |
+| typography (cta)     | `.text-label-md`                                                 |
+| text                 | `var(--text-default)`                                            |
+| text (eyebrow, copy) | `var(--text-muted)`                                              |
+| link (cta)           | `var(--text-link)`                                               |
+| surface              | `var(--bg-surface)`                                              |
+| surface.hover        | `var(--bg-hover)`                                                |
+| spacing              | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
+| ring                 | `var(--ring-color)`                                              |
 
 ## Theme gaps
 
@@ -126,7 +126,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 ## Stories (Storybook)
 
 - Default — a single linked card with a glyph, copy and a call-to-action row.
-- Variants — composite story covering the axes that change the anatomy: with and without an overline, with a slotted mark instead of a font glyph, an external destination, and a non-linked card. Justified in writing here because the root element itself changes with `href`, which no single-arg story can show.
+- Variants — composite story covering the axes that change the anatomy: with and without an eyebrow, with a slotted mark instead of a font glyph, an external destination, and a non-linked card. Justified in writing here because the root element itself changes with `href`, which no single-arg story can show.
 
 ## Constraints — DO NOT
 

@@ -17,7 +17,7 @@
     <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
       <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
         <Tabs
-          v-model:value="activeTab"
+          v-model="activeTab"
           class="w-full"
         >
           <Tabs.List>

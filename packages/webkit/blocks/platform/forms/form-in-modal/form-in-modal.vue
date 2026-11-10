@@ -546,7 +546,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -774,7 +774,7 @@
             </div>
           </header>
 
-          <Item kind="outline">
+          <Item kind="outlined">
             <Item.Content>
               <Item.Title>Delete this resource</Item.Title>
               <Item.Description>
@@ -957,7 +957,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

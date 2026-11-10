@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 2
 created: 2026-05-24
-last_updated: 2026-11-09
-checksum: b43d9454a0397c763f3de3021881704448b217ef027c7b6dfe975ed3b70e28ed
+last_updated: 2026-11-10
+checksum: d8ea49ef4babb55a1a1ccc150100d4d5c3a627505380bba050005182078870ab
 ---
 
 # Item — Component Spec
@@ -115,11 +115,11 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## Props
 
-| Prop      | Type                                            | Default     | Required | JSDoc                                                                                                                                     |
-| --------- | ----------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`    | `'default' \| 'outline' \| 'muted' \| 'inline'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
-| `size`    | `'small' \| 'medium'`                           | `'medium'`  | false    | Item root density (padding and gap).                                                                                                      |
-| `asChild` | `boolean`                                       | `false`     | false    | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor).                                          |
+| Prop      | Type                                             | Default     | Required | JSDoc                                                                                                                                     |
+| --------- | ------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`    | `'default' \| 'outlined' \| 'muted' \| 'inline'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
+| `size`    | `'small' \| 'medium'`                            | `'medium'`  | false    | Item root density (padding and gap).                                                                                                      |
+| `asChild` | `boolean`                                        | `false`     | false    | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor).                                          |
 
 > `ItemMedia` carries its own `kind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
 
@@ -137,7 +137,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - Visual states on Item shell: `default` only, **except with `asChild`**, where the merged child (the whole-row link/button) gains row-level `hover`, `active`, and `focus-visible`
 - Without `asChild`, slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
-- `data-kind` on Item root: `default` | `outline` | `muted` | `inline` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
+- `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
 - `data-size` on Item root: `small` | `medium`
 - `data-kind` on ItemMedia: `default` | `icon` | `image`
 

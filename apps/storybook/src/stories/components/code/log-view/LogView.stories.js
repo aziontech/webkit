@@ -59,7 +59,7 @@ const meta = {
         defaultValue: { summary: '[]' }
       }
     },
-    border: {
+    bordered: {
       control: 'boolean',
       description:
         'Draws the outer card border and corner radius. Set to false to render flush inside a surface that already frames the shell.',
@@ -74,7 +74,7 @@ const meta = {
         defaultValue: { summary: "'Find in Logs'" }
       }
     },
-    showCopy: {
+    copyable: {
       control: 'boolean',
       description: 'Shows the copy-to-clipboard control in LogViewContent.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
@@ -131,9 +131,9 @@ const meta = {
     }
   },
   args: {
-    border: true,
+    bordered: true,
     searchPlaceholder: 'Find in Logs',
-    showCopy: true,
+    copyable: true,
     disabled: false,
     loading: false,
     loadingLabel: 'Loading...',
@@ -215,7 +215,7 @@ export const Default = {
 
 const FLUSH_TEMPLATE = `<div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)">
   <span class="text-label-sm text-(--text-muted)">Deploy output</span>
-  <LogView :lines="lines" :border="false" v-model:search="search" v-model:warnings-only="warningsOnly" class="mt-(--spacing-sm) h-[420px]">
+  <LogView :lines="lines" :bordered="false" v-model:search="search" v-model:warnings-only="warningsOnly" class="mt-(--spacing-sm) h-[420px]">
     <LogViewHeader />
     <LogViewContent />
   </LogView>
@@ -237,7 +237,7 @@ export const Flush = {
       controls: { disable: true },
       description: {
         story:
-          'With `:border="false"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.'
+          'With `:bordered="false"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.'
       },
       source: { code: toSfc(IMPORT, FLUSH_TEMPLATE) }
     }

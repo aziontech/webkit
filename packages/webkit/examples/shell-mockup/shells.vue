@@ -39,7 +39,7 @@
             </div>
           </ShellMockup.Part>
           <ShellMockup.Part :order="2">
-            <Table border>
+            <Table bordered>
               <Table.Header>
                 <Table.Row>
                   <Table.HeadCell principal>Name</Table.HeadCell>
@@ -116,7 +116,7 @@
             </div>
           </ShellMockup.Part>
           <ShellMockup.Part :order="2">
-            <Table border>
+            <Table bordered>
               <Table.Header>
                 <Table.Row>
                   <Table.HeadCell principal>Name</Table.HeadCell>
@@ -191,7 +191,7 @@
             </div>
           </ShellMockup.Part>
           <ShellMockup.Part :order="2">
-            <Table border>
+            <Table bordered>
               <Table.Header>
                 <Table.Row>
                   <Table.HeadCell principal>Name</Table.HeadCell>

@@ -16,29 +16,22 @@
   })
 
   interface Props {
-    /** Controlled active tab (`v-model:value`). */
-    value?: TabsValue | null
     /** Initial active tab when uncontrolled. */
     defaultValue?: TabsValue | null
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: undefined,
     defaultValue: null
   })
 
-  const emit = defineEmits<{
-    'update:value': [value: TabsValue | null]
-  }>()
-
   defineSlots<{ default(): unknown }>()
 
-  const valueModel = defineModel<TabsValue | null | undefined>('value', { default: undefined })
+  const valueModel = defineModel<TabsValue | null | undefined>({ default: undefined })
 
   const attrs = useAttrs()
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-tabs')
 
-  const valueProp = computed(() => valueModel.value ?? props.value)
+  const valueProp = computed(() => valueModel.value)
 
   function getEnabledTabs(tabs: TabsTabRegistration[]) {
     return tabs.filter((tab) => !tab.disabled)
@@ -77,7 +70,6 @@
       }
 
       valueModel.value = next
-      emit('update:value', next)
     }
   })
 

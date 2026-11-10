@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <Item kind="outline">
+  <Item kind="outlined">
     <Item.Media>
       <Avatar
         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"

@@ -159,7 +159,7 @@ export function useNavigationMenuRootState(
         ? null
         : (triggers.value.find((entry) => entry.value === nextValue)?.el ?? null)
 
-    emit('update:value', nextValue, details)
+    emit('update:modelValue', nextValue, details)
 
     if (nextValue != null) {
       void notifyOpenChangeComplete(true)

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 28eba180679a8fd9fa157b44d7f36d4e6db898137e34c789d1ee5388cfeec667
+checksum: 67735fc08a4e623f8a56a716883d2c805ca27183a8023bfa1793d041977d9a64
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Card Box — Component Spec
@@ -60,7 +60,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
     <template #header-action>
       <Button
         label="Edit"
-        kind="text"
+        kind="transparent"
         size="small"
       />
     </template>

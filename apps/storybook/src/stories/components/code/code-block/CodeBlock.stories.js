@@ -319,9 +319,9 @@ const meta = {
         defaultValue: { summary: '[]' }
       }
     },
-    value: {
+    modelValue: {
       control: 'text',
-      description: 'Controlled active tab value (`v-model:value`).',
+      description: 'Controlled active tab value (`v-model`).',
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -375,7 +375,7 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
-    border: {
+    bordered: {
       control: 'boolean',
       description:
         'Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it.',
@@ -385,9 +385,9 @@ const meta = {
         defaultValue: { summary: 'true' }
       }
     },
-    'onUpdate:value': {
-      action: 'update:value',
-      description: 'v-model:value update emitted when the active tab changes.',
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
+      description: 'v-model update emitted when the active tab changes.',
       table: { category: 'events', type: { summary: 'string' } }
     },
     onCopy: {
@@ -403,7 +403,7 @@ const meta = {
     copyAriaLabel: 'Copy code',
     copyable: true,
     animateLines: false,
-    border: true
+    bordered: true
   }
 }
 
@@ -412,10 +412,10 @@ export default meta
 const Template = (args) => ({
   components: { CodeBlock },
   setup() {
-    const value = ref(args.value ?? args.defaultValue ?? args.tabs?.[0]?.value ?? '')
+    const value = ref(args.modelValue ?? args.defaultValue ?? args.tabs?.[0]?.value ?? '')
 
     watch(
-      () => args.value ?? args.defaultValue,
+      () => args.modelValue ?? args.defaultValue,
       (next) => {
         value.value = next ?? args.tabs?.[0]?.value ?? ''
       }
@@ -423,14 +423,14 @@ const Template = (args) => ({
 
     const onUpdate = (next) => {
       value.value = next
-      args['onUpdate:value']?.(next)
+      args['onUpdate:modelValue']?.(next)
     }
 
     return { args, value, onUpdate }
   },
   template: `
     <div class="max-w-[692px]">
-      <CodeBlock v-bind="args" :value="value" @update:value="onUpdate" />
+      <CodeBlock v-bind="args" :model-value="value" @update:model-value="onUpdate" />
     </div>
   `
 })
@@ -569,17 +569,20 @@ export const Shell = {
 /** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
 export const Borderless = {
   args: {
-    border: false
+    bordered: false
   },
   render: Template,
   parameters: {
     docs: {
       description: {
         story:
-          'The outer card border dropped via `:border="false"` — for embedding inside a surface that already frames the block. Internal dividers are unaffected.'
+          'The outer card border dropped via `:bordered="false"` — for embedding inside a surface that already frames the block. Internal dividers are unaffected.'
       },
       source: {
-        code: snippet(languageSwitcherTabs, 'default-value="js" show-line-numbers :border="false"')
+        code: snippet(
+          languageSwitcherTabs,
+          'default-value="js" show-line-numbers :bordered="false"'
+        )
       }
     }
   }

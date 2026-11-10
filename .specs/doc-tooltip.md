@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 8db4bc617c759c43801c81fc48b971d82998b02e507e61b303c5c6e7f7320d58
+checksum: 6f5d6e404bb08fe217b5a1d00f8b443683398170289c1fbcd9b248f6a21ff82a
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-10
 ---
 
 # DocTooltip — Component Spec
@@ -35,8 +35,8 @@ The inline gloss: a term in running prose that carries its own definition, shown
 ## Best practices
 
 - Gloss the term where the reader first meets it, not every time it appears.
-- Give `headline` the term itself and `tip` the definition; that pairing is also what names the panel for assistive tech.
-- Add `cta` only with an `href`. A call to action needs somewhere to go, and its presence is what turns the panel into a dialog the reader can enter.
+- Give `title` the term itself and `tip` the definition; that pairing is also what names the panel for assistive tech.
+- Add `link-label` only with an `href`. A call to action needs somewhere to go, and its presence is what turns the panel into a dialog the reader can enter.
 
 ## Usage
 
@@ -49,9 +49,9 @@ The inline gloss: a term in running prose that carries its own definition, shown
   <p>
     Deploys run on an
     <DocTooltip
-      headline="Edge Application"
+      title="Edge Application"
       tip="The build that runs at the edge, close to the people using it."
-      cta="Read the guide"
+      link-label="Read the guide"
       href="/docs/edge-application"
     >
       edge application
@@ -66,8 +66,8 @@ The inline gloss: a term in running prose that carries its own definition, shown
 | Prop        | Type                          | Default | Required | JSDoc                                                              |
 | ----------- | ----------------------------- | ------- | -------- | ------------------------------------------------------------------ |
 | `tip`       | `string`                      | `''`    | false    | The definition shown inside the panel.                             |
-| `headline`  | `string`                      | `''`    | false    | Bold lead-in above the definition — usually the term itself.       |
-| `cta`       | `string`                      | `''`    | false    | Label for the panel's call-to-action link. Needs `href`.           |
+| `title`     | `string`                      | `''`    | false    | Bold lead-in above the definition — usually the term itself.       |
+| `linkLabel` | `string`                      | `''`    | false    | Label for the panel's call-to-action link. Needs `href`.           |
 | `href`      | `string`                      | `''`    | false    | Destination for the call-to-action link.                           |
 | `placement` | `'top' \| 'bottom' \| 'auto'` | `'top'` | false    | Where the panel opens; `'auto'` picks the side with the most room. |
 | `delay`     | `number`                      | `150`   | false    | Hover-open delay in milliseconds.                                  |
@@ -101,21 +101,21 @@ The inline gloss: a term in running prose that carries its own definition, shown
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                                |
-| --------------------------------- | ---------------------------------------------------------------- |
-| typography (headline, definition) | `.text-body-sm`                                                  |
-| text (trigger, headline)          | `var(--text-default)`                                            |
-| text (definition)                 | `var(--text-muted)`                                              |
-| underline (rest)                  | `var(--border-strong)`                                           |
-| underline (hover, open)           | `var(--text-default)`                                            |
-| surface (panel)                   | `var(--bg-surface-raised)`                                       |
-| border (panel)                    | `var(--border-default)`                                          |
-| shadow (panel)                    | `var(--shadow-sm)`                                               |
-| shape (panel)                     | `var(--shape-elements)`                                          |
-| shape (trigger)                   | `var(--shape-flat)`                                              |
-| measure (panel)                   | `var(--container-2xs)`                                           |
-| spacing                           | `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
-| ring                              | `var(--ring-color)`                                              |
+| Region                         | Token (DESIGN.md)                                                |
+| ------------------------------ | ---------------------------------------------------------------- |
+| typography (title, definition) | `.text-body-sm`                                                  |
+| text (trigger, title)          | `var(--text-default)`                                            |
+| text (definition)              | `var(--text-muted)`                                              |
+| underline (rest)               | `var(--border-strong)`                                           |
+| underline (hover, open)        | `var(--text-default)`                                            |
+| surface (panel)                | `var(--bg-surface-raised)`                                       |
+| border (panel)                 | `var(--border-default)`                                          |
+| shadow (panel)                 | `var(--shadow-sm)`                                               |
+| shape (panel)                  | `var(--shape-elements)`                                          |
+| shape (trigger)                | `var(--shape-flat)`                                              |
+| measure (panel)                | `var(--container-2xs)`                                           |
+| spacing                        | `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
+| ring                           | `var(--ring-color)`                                              |
 
 ## Theme gaps
 

@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 8e28d62c2362b08427341ff4a4ab40134ed1b3bcc110d3d27c89823083c1bd81
+checksum: 6db5d6565052437eede94008cbd9aaffeb51f400b168642606c5c4acfa17e8f4
 created: 2026-11-10
 last_updated: 2026-11-10
 ---
@@ -46,7 +46,7 @@ import SeverityTag from '@aziontech/webkit/severity-tag'
 </script>
 
 <template>
-  <SeverityTag level="high" size="medium" />
+  <SeverityTag severity="high" size="medium" />
 </template>
 ```
 
@@ -54,7 +54,7 @@ import SeverityTag from '@aziontech/webkit/severity-tag'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `level` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'` | false | Severity level; sets how many glyph bars fill, their colour and the default label. |
+| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'` | false | Severity level; sets how many glyph bars fill, their colour and the default label. |
 | `label` | `string` | `''` | false | Text of the tag; empty falls back to the level name in sentence case. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 
@@ -71,7 +71,7 @@ import SeverityTag from '@aziontech/webkit/severity-tag'
 ## States
 
 - Visual states: `default` (static, non-interactive)
-- `data-level` mirrors the `level` prop: `critical` | `high` | `medium` | `low` | `info`
+- `data-severity` mirrors the `severity` prop: `critical` | `high` | `medium` | `low` | `info`
 - `data-size` mirrors the `size` prop: `small` | `medium`
 - Filled bars per level: critical 4, high 3, medium 2, low 1, info 0
 
@@ -115,7 +115,7 @@ _none_
 ## Stories (Storybook)
 
 - Default — one tag at the default level.
-- Levels — composite story rendering every `level` value side by side, in order from critical to info. It replaces Types because the variant axis is `level`, not `kind`.
+- Levels — composite story rendering every `severity` value side by side, in order from critical to info. It replaces Types because the variant axis is `severity`, not `kind`.
 - Sizes — composite story rendering both `size` values for one level.
 
 ## Constraints — DO NOT

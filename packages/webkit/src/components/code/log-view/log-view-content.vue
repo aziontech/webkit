@@ -38,7 +38,7 @@
     class="relative min-h-0 flex-1"
   >
     <div
-      v-if="ctx.showCopy.value && !ctx.loading.value"
+      v-if="ctx.copyable.value && !ctx.loading.value"
       class="absolute right-(--spacing-sm) top-(--spacing-sm) z-3"
       :data-testid="`${ctx.testId}__copy-anchor`"
     >

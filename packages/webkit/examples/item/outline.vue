@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <Item kind="outline">
+  <Item kind="outlined">
     <Item.Content>
       <Item.Title>Basic Item</Item.Title>
       <Item.Description>A simple item with title and description.</Item.Description>

@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'One cell of the grid a documentation page scans across: a leading glyph, an optional overline, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not — the root element switches on data, never on an `as` prop — so a card is either a destination or a statement, and never a dead link. A card that leaves the documentation swaps the chevron for a diagonal arrow.'
+          'One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not — the root element switches on data, never on an `as` prop — so a card is either a destination or a statement, and never a dead link. A card that leaves the documentation swaps the chevron for a diagonal arrow.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -25,7 +25,7 @@ const meta = {
       description: 'Card heading.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
-    overline: {
+    eyebrow: {
       control: 'text',
       description: 'Small muted line above the title.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
@@ -51,7 +51,7 @@ const meta = {
       description: 'Fallback copy when the default slot is empty.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
-    link: {
+    linkLabel: {
       control: 'text',
       description: 'Call-to-action text; when set the card closes on a link row.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
@@ -60,12 +60,12 @@ const meta = {
   },
   args: {
     title: 'Edge Application',
-    overline: '',
+    eyebrow: '',
     icon: 'pi pi-server',
     href: '/docs/edge-application',
     target: '_self',
     label: '',
-    link: 'Read the guide'
+    linkLabel: 'Read the guide'
   }
 }
 
@@ -75,7 +75,7 @@ const DEFAULT_MARKUP = `<DocCard
   title="Edge Application"
   icon="pi pi-server"
   href="/docs/edge-application"
-  link="Read the guide"
+  link-label="Read the guide"
 >
   Serve and cache your application at the edge, close to the people using it.
 </DocCard>`
@@ -97,13 +97,13 @@ export const Default = {
 }
 
 const VARIANTS_TEMPLATE = `<div class="grid gap-(--spacing-md) sm:grid-cols-2">
-  <DocCard title="Edge Application" icon="pi pi-server" href="/docs/edge-application" link="Read the guide">
+  <DocCard title="Edge Application" icon="pi pi-server" href="/docs/edge-application" link-label="Read the guide">
     The plain shape: a glyph, a title, copy and a call to action.
   </DocCard>
-  <DocCard overline="Azion CLI" title="Deploy from your terminal" icon="pi pi-desktop" href="/docs/cli">
-    An overline says who or when, for a title that does not carry it.
+  <DocCard eyebrow="Azion CLI" title="Deploy from your terminal" icon="pi pi-desktop" href="/docs/cli">
+    An eyebrow says who or when, for a title that does not carry it.
   </DocCard>
-  <DocCard title="Community templates" href="https://github.com/aziontech" target="_blank" link="Browse on GitHub">
+  <DocCard title="Community templates" href="https://github.com/aziontech" target="_blank" link-label="Browse on GitHub">
     A card that leaves the documentation trades the chevron for a diagonal arrow.
   </DocCard>
   <DocCard title="Not a destination">
@@ -118,7 +118,7 @@ export const Variants = {
     docs: {
       description: {
         story:
-          'The axes that change the anatomy: with and without an overline, an external destination, and a card with no `href` at all — whose root element is a block rather than an anchor.'
+          'The axes that change the anatomy: with and without an eyebrow, an external destination, and a card with no `href` at all — whose root element is a block rather than an anchor.'
       },
       source: { code: toSfc(IMPORT, VARIANTS_TEMPLATE) }
     }

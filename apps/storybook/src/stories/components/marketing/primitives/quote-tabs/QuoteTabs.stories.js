@@ -179,7 +179,7 @@ const meta = {
         defaultValue: { summary: "''" }
       }
     },
-    autoPlay: {
+    autoplay: {
       control: 'boolean',
       description:
         'Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion.',
@@ -189,7 +189,7 @@ const meta = {
         defaultValue: { summary: 'true' }
       }
     },
-    autoPlayInterval: {
+    autoplayInterval: {
       control: { type: 'number', min: 1000, step: 500 },
       description: 'Milliseconds each client is held before the band advances.',
       table: {
@@ -219,8 +219,8 @@ const meta = {
     modelValue: 0,
     items: CLIENTS,
     ariaLabel: ARIA,
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true
   }
 }

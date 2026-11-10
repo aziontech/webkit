@@ -157,7 +157,7 @@
               row-key="id"
               paginated
               :page-size="8"
-              :border="false"
+              :bordered="false"
             >
               <template #cell-name="cell">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">

@@ -21,7 +21,7 @@
         icon="pi pi-arrow-right"
       />
       <Button
-        kind="text"
+        kind="transparent"
         label="Button"
         icon="pi pi-arrow-right"
       />
@@ -51,7 +51,7 @@
         icon-position="trailing"
       />
       <Button
-        kind="text"
+        kind="transparent"
         label="Read the guide"
         icon="pi pi-chevron-right"
         icon-position="trailing"
@@ -80,7 +80,7 @@
         animated
       />
       <Button
-        kind="text"
+        kind="transparent"
         label="Read the guide"
         icon="pi pi-chevron-right"
         icon-position="trailing"

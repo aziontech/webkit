@@ -176,7 +176,7 @@ export const SITE_HEADER_MARKUP = `<div class="sticky top-0 z-40"><GlobalHeader 
 
   <GlobalHeader.Right>
     <div class="hidden xl:flex">
-      <Button label="Contact" kind="text" size="medium" href="#" />
+      <Button label="Contact" kind="transparent" size="medium" href="#" />
     </div>
     <Button label="Login" kind="secondary" size="medium" href="#" />
     <Button label="Start for free" kind="primary" size="medium" class="shrink-0" href="#" />

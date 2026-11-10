@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 2e73c47f340df953696fcab561e1fc6d75c9c73ae0ab6cf33e1fbd025e562588
+checksum: 4f3b09a06349ceaefad002103569f21adee0624c6c2ccf755108c3b8bcc1bd00
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-10
 ---
 
 # DocCardGroup — Component Spec
 
 ## Purpose
 
-The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileCols`.
+The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
 
 ## When to use
 
@@ -34,7 +34,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 ## Best practices
 
 - Pick `cols` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.
-- Leave `mobileCols` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.
+- Leave `mobileColumns` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.
 - Let an incomplete last row be empty; do not stretch the last card to fill it.
 
 ## Usage
@@ -67,10 +67,10 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 
 ## Props
 
-| Prop         | Type               | Default | Required | JSDoc                                                                         |
-| ------------ | ------------------ | ------- | -------- | ----------------------------------------------------------------------------- |
-| `cols`       | `1 \| 2 \| 3 \| 4` | `2`     | false    | Column count at the large breakpoint.                                         |
-| `mobileCols` | `1 \| 2`           | `1`     | false    | Column count on a phone. Two only pays when the cells are a mark plus a word. |
+| Prop            | Type               | Default | Required | JSDoc                                                                         |
+| --------------- | ------------------ | ------- | -------- | ----------------------------------------------------------------------------- |
+| `cols`          | `1 \| 2 \| 3 \| 4` | `2`     | false    | Column count at the large breakpoint.                                         |
+| `mobileColumns` | `1 \| 2`           | `1`     | false    | Column count on a phone. Two only pays when the cells are a mark plus a word. |
 
 ## Events
 
@@ -85,7 +85,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 ## States
 
 - Visual states: `default` (the component is not interactive and holds no state)
-- `data-cols` and `data-mobile-cols` mirror the props; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
+- `data-cols` and `data-mobile-cols` mirror `cols` and `mobileColumns`; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
 - `data-doc-block` is the `DocProse` contract (the group takes the block rung of the ladder)
 
 ## Motion & Animations

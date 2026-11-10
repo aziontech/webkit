@@ -38,7 +38,7 @@
   <div class="flex flex-col gap-(--spacing-xxl)">
     <MediaTabs
       position="left"
-      :auto-play="false"
+      :autoplay="false"
       :items="items"
     >
       <template #media="{ index }">
@@ -47,7 +47,7 @@
     </MediaTabs>
     <MediaTabs
       position="right"
-      :auto-play="false"
+      :autoplay="false"
       :items="items"
     >
       <template #media="{ index }">
@@ -56,7 +56,7 @@
     </MediaTabs>
     <MediaTabs
       position="top"
-      :auto-play="false"
+      :autoplay="false"
       :items="items"
     >
       <template #media="{ index }">
@@ -65,7 +65,7 @@
     </MediaTabs>
     <MediaTabs
       position="bottom"
-      :auto-play="false"
+      :autoplay="false"
       :items="items"
     >
       <template #media="{ index }">

@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 5491670ae7598f638d6f7c9da743de923e9322a9fcbbd0d42dcb78c41eaf9f47
+checksum: 5f90d8ca88663312adfe8390950498a73c0c649206f23f28947e3e2cf00a1675
 created: 2026-05-26
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Log View — Component Spec
@@ -40,7 +40,7 @@ Composition-based terminal log viewer for CI/deploy output. **LogView** is the r
 
 - Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`, `warning`); the type drives the line's rendering and the warnings filter.
 - Bind `v-model:search` and `v-model:warnings-only` when the app needs the filter state; otherwise leave them unbound and the header manages them.
-- Set `:border="false"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).
+- Set `:bordered="false"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).
 - The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.
 - Use the header's `left` / `right` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar.
 
@@ -75,7 +75,7 @@ const warningsOnly = ref(false)
 LogView ships flat, individually importable sub-components (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
 - `log-view-header.vue` — Default 48px toolbar: line count, warning filter, and a search field. Slots: `left`, `right`, `search`.
-- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `showCopy` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). Slot: `empty`.
+- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). Slot: `empty`.
 - `log-view-footer.vue` — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 
 ## Props
@@ -83,9 +83,9 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `lines` | `LogViewLine[]` | `[]` | false | Log entries; filtered in LogViewContent by search and warnings-only. |
-| `border` | `boolean` | `true` | false | Draw the outer card border and corner radius around the log shell. On by default; set `:border="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
+| `bordered` | `boolean` | `true` | false | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
 | `searchPlaceholder` | `string` | `'Find in Logs'` | false | Placeholder for the default header search field. |
-| `showCopy` | `boolean` | `true` | false | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
+| `copyable` | `boolean` | `true` | false | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent). |
 | `disabled` | `boolean` | `false` | false | Disables toolbar controls in LogViewHeader. |
 | `loading` | `boolean` | `false` | false | Replaces the LogViewContent log body with a centered spinner and label. |
 | `loadingLabel` | `string` | `'Loading...'` | false | Label shown beneath the spinner while `loading`. |
@@ -150,8 +150,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | text (timestamp) | `var(--text-muted)` |
 | text (warning line) | `var(--warning-contrast)` |
 | text (success line) | `var(--success-contrast)` |
-| border (outer card, `border` prop) | `var(--border-muted)` |
-| shape (outer card, `border` prop) | `var(--shape-elements)` |
+| border (outer card, `bordered` prop) | `var(--border-muted)` |
+| shape (outer card, `bordered` prop) | `var(--shape-elements)` |
 | spacing (loading block, vertical) | `var(--spacing-xl)` |
 | ring | `var(--ring-color)` |
 

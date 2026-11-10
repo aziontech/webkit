@@ -206,7 +206,7 @@ const makeOnLink = (args) => (event, row) => {
 
 const baseArgs = {
   maxHeight: '',
-  border: false,
+  bordered: false,
   paginated: true,
   pageSize: 5,
   enableSorting: true,
@@ -254,7 +254,7 @@ const dataDrivenSource = (args) => {
     open.push(`  header-kind="${args.headerKind}"`)
   }
   if (args.maxHeight) open.push(`  max-height="${args.maxHeight}"`)
-  if (args.border) open.push('  border')
+  if (args.bordered) open.push('  bordered')
   if (args.enableRowSelection) open.push('  v-model:row-selection="rowSelection"')
   open.push('  v-model:sorting="sorting"')
   open.push('  @row-click="onRowClick"')
@@ -347,7 +347,7 @@ const COMPOSITION_SOURCE = toSfc(
   { id: '1005', name: 'Workload Echo', status: 'Inactive', editor: 'user5@example.com' }
 ]`
   ],
-  `<Table border>
+  `<Table bordered>
   <Table.Header>
     <Table.Row>
       <Table.HeadCell principal>Name</Table.HeadCell>
@@ -458,7 +458,7 @@ const meta = {
         'Max height (CSS length). Vertical scroll engages only when set smaller than the content; horizontal scroll is always automatic.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" }, category: 'props' }
     },
-    border: {
+    bordered: {
       control: 'boolean',
       description: 'Draw the outer card border around the table (off by default).',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' }, category: 'props' }
@@ -792,15 +792,15 @@ export default meta
 export const Default = {
   render: makeStory({ rows, columns }),
   args: {
-    border: true
+    bordered: true
   },
   parameters: {
     docs: {
       description: {
         story:
-          'A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s, per-row action menus, and pagination. The outer card border is drawn via the `border` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `border` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.'
+          'A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s, per-row action menus, and pagination. The outer card border is drawn via the `bordered` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `bordered` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.'
       },
-      source: { code: dataDrivenSnippet({ ...baseArgs, border: true }, { cols: columns }) }
+      source: { code: dataDrivenSnippet({ ...baseArgs, bordered: true }, { cols: columns }) }
     }
   }
 }
@@ -811,7 +811,7 @@ export const Composition = {
     components,
     setup: () => ({ args, items: rows.slice(0, 5) }),
     template: `
-      <Table :border="args.border">
+      <Table :bordered="args.bordered">
         <Table.Header>
           <Table.Row>
             <Table.HeadCell principal>Name</Table.HeadCell>
@@ -830,7 +830,7 @@ export const Composition = {
     `
   }),
   args: {
-    border: true
+    bordered: true
   },
   parameters: {
     docs: {
@@ -1004,7 +1004,7 @@ export const CompactHeaderWithStickyColumn = {
 export const Empty = {
   render: makeStory({ rows: [], columns }),
   args: {
-    border: true,
+    bordered: true,
     paginated: false
   },
   parameters: {
@@ -1015,7 +1015,7 @@ export const Empty = {
       },
       source: {
         code: dataDrivenSnippet(
-          { ...baseArgs, border: true, paginated: false },
+          { ...baseArgs, bordered: true, paginated: false },
           { cols: columns, rowsLiteral: 'const rows = []' }
         )
       }

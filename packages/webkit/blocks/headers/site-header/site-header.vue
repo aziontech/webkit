@@ -76,7 +76,7 @@
           <div class="hidden xl:flex">
             <Button
               label="Contact"
-              kind="text"
+              kind="transparent"
               size="medium"
               href="#"
             />

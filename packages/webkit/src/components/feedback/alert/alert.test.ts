@@ -107,9 +107,9 @@ describe('Alert', () => {
     })
   })
 
-  it('normalizes severity="error" to danger and uses the alert role', () => {
+  it('renders severity="danger" with the alert role', () => {
     const { getByTestId } = render(Alert, {
-      props: { severity: 'error', label: 'Boom' }
+      props: { severity: 'danger', label: 'Boom' }
     })
 
     const root = getByTestId('feedback-alert')
@@ -325,15 +325,14 @@ describe('Alert', () => {
     })
   })
 
-  it.each(['info', 'success', 'warning', 'danger', 'error'] as const)(
+  it.each(['info', 'success', 'warning', 'danger'] as const)(
     'renders severity=%s with a data-severity attribute',
     (severity) => {
       const { getByTestId } = render(Alert, {
         props: { severity, label: `Severity ${severity}` }
       })
 
-      const expected = severity === 'error' ? 'danger' : severity
-      expect(getByTestId('feedback-alert').getAttribute('data-severity')).toBe(expected)
+      expect(getByTestId('feedback-alert').getAttribute('data-severity')).toBe(severity)
     }
   )
 

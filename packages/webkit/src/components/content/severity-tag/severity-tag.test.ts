@@ -19,7 +19,7 @@ describe('SeverityTag', () => {
     const { getByTestId } = render(SeverityTag)
 
     const root = getByTestId('content-severity-tag')
-    expect(root).toHaveAttribute('data-level', 'info')
+    expect(root).toHaveAttribute('data-severity', 'info')
     expect(root).toHaveAttribute('data-size', 'medium')
     expect(getByTestId('content-severity-tag__label')).toHaveTextContent('Info')
   })
@@ -35,10 +35,10 @@ describe('SeverityTag', () => {
     expect(queryByTestId('content-severity-tag')).toBeNull()
   })
 
-  it.each(LEVELS)('mirrors level %s on data-level and labels it %s', (level, name) => {
-    const { getByTestId } = render(SeverityTag, { props: { level } })
+  it.each(LEVELS)('mirrors level %s on data-severity and labels it %s', (level, name) => {
+    const { getByTestId } = render(SeverityTag, { props: { severity: level } })
 
-    expect(getByTestId('content-severity-tag')).toHaveAttribute('data-level', level)
+    expect(getByTestId('content-severity-tag')).toHaveAttribute('data-severity', level)
     expect(getByTestId('content-severity-tag__label')).toHaveTextContent(name)
   })
 
@@ -48,8 +48,8 @@ describe('SeverityTag', () => {
     expect(getByTestId('content-severity-tag')).toHaveAttribute('data-size', size)
   })
 
-  it('shows the label prop instead of the level name', () => {
-    const { getByTestId } = render(SeverityTag, { props: { level: 'high', label: 'Alta' } })
+  it('shows the label prop instead of the severity name', () => {
+    const { getByTestId } = render(SeverityTag, { props: { severity: 'high', label: 'Alta' } })
 
     const label = getByTestId('content-severity-tag__label')
     expect(label).toHaveTextContent('Alta')
@@ -58,7 +58,7 @@ describe('SeverityTag', () => {
 
   it('renders the default slot in place of the label', () => {
     const { getByTestId } = render(SeverityTag, {
-      props: { level: 'critical', label: 'ignored' },
+      props: { severity: 'critical', label: 'ignored' },
       slots: { default: 'Sev 1' }
     })
 
@@ -69,7 +69,7 @@ describe('SeverityTag', () => {
   })
 
   it('hides the four-bar glyph from assistive technology', () => {
-    const { getByTestId } = render(SeverityTag, { props: { level: 'medium' } })
+    const { getByTestId } = render(SeverityTag, { props: { severity: 'medium' } })
 
     const glyph = getByTestId('content-severity-tag__glyph')
     expect(glyph).toHaveAttribute('aria-hidden', 'true')
@@ -88,7 +88,7 @@ describe('SeverityTag', () => {
   })
 
   it.each(LEVELS)('has no axe violations at level %s', async (level) => {
-    const { container } = render(SeverityTag, { props: { level } })
+    const { container } = render(SeverityTag, { props: { severity: level } })
     await expectNoA11yViolations(container)
   })
 })

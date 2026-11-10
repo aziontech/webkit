@@ -7,7 +7,7 @@
     title="Edge Application"
     icon="pi pi-server"
     href="/docs/edge-application"
-    link="Read the guide"
+    link-label="Read the guide"
   >
     Serve and cache your application at the edge, close to the people using it.
   </DocCard>

@@ -58,10 +58,10 @@ const meta = {
         defaultValue: { summary: 'null' }
       }
     },
-    value: {
+    modelValue: {
       control: 'text',
       description:
-        'Controlled open item value; enables `v-model:value`. When omitted, the menu is uncontrolled.',
+        'Controlled open item value; enables `v-model`. When omitted, the menu is uncontrolled.',
       table: {
         category: 'props',
         type: { summary: 'string | number | null' },
@@ -114,9 +114,9 @@ const meta = {
         defaultValue: { summary: "'nav'" }
       }
     },
-    'onUpdate:value': {
-      action: 'update:value',
-      description: 'Fires when the open item changes; supports `v-model:value`.',
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
+      description: 'Fires when the open item changes; supports `v-model`.',
       table: {
         category: 'events',
         type: { summary: '(value: string | number | null, details: unknown) => void' }

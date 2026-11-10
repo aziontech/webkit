@@ -347,7 +347,7 @@
 
     <Accordion
       v-if="view === 'phased'"
-      v-model:value="openStep"
+      v-model="openStep"
       type="single"
       collapsible
     >
@@ -422,8 +422,8 @@
         <Accordion.Content>
           <LogView
             :lines="linesByStep[i]"
-            :border="false"
-            :show-copy="copyable && settled"
+            :bordered="false"
+            :copyable="copyable && settled"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
           >
@@ -444,8 +444,8 @@
     <LogView
       v-else
       :lines="allLines"
-      :border="false"
-      :show-copy="settled"
+      :bordered="false"
+      :copyable="settled"
       :loading="!settled && !allLines.length"
       loading-label="Waiting to start…"
     >

@@ -175,7 +175,7 @@
           class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
         >
           <Tabs
-            value="overview"
+            model-value="overview"
             class="-ml-(--spacing-xs) min-w-0 flex-1"
           >
             <Tabs.List>

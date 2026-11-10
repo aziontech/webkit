@@ -19,7 +19,7 @@
     :active="active"
     :width="896"
     :mobile-width="390"
-    still
+    :animated="false"
   >
     <CliTerminal
       script="deploy"

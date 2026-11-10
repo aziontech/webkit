@@ -366,7 +366,7 @@
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
                       <Item
-                        kind="outline"
+                        kind="outlined"
                         size="small"
                         aria-live="polite"
                       >
@@ -454,7 +454,7 @@
                         <template #content>
                           <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                             <Item
-                              kind="outline"
+                              kind="outlined"
                               size="small"
                             >
                               <Item.Media>
@@ -582,7 +582,7 @@
                                         >
                                           <Button
                                             :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                            kind="text"
+                                            kind="transparent"
                                             size="small"
                                             class="w-full"
                                           />
@@ -757,7 +757,7 @@
                               class="min-w-0"
                             >
                               <Item
-                                kind="outline"
+                                kind="outlined"
                                 size="small"
                               >
                                 <Item.Media>
@@ -883,7 +883,7 @@
                                           >
                                             <Button
                                               :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                              kind="text"
+                                              kind="transparent"
                                               size="small"
                                               class="w-full"
                                             />

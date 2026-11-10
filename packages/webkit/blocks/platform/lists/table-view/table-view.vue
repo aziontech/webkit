@@ -746,7 +746,7 @@
                     >
                       <Button
                         label="Show all columns"
-                        kind="text"
+                        kind="transparent"
                         size="small"
                         class="w-full"
                         @click="showAll"
@@ -824,7 +824,7 @@
                   enable-sorting
                   paginated
                   :page-size="10"
-                  :border="false"
+                  :bordered="false"
                   :loading="loading"
                 >
                   <template #cell-name="{ value }">
@@ -958,7 +958,7 @@
                           >
                             <Button
                               :label="'Load ' + nextDomains(row) + ' more'"
-                              kind="text"
+                              kind="transparent"
                               size="small"
                               :loading="domainLoading[row.id]"
                               class="w-full"

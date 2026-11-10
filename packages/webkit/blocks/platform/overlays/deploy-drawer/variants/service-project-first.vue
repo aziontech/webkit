@@ -468,7 +468,7 @@
                                     >
                                       <Button
                                         :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                        kind="text"
+                                        kind="transparent"
                                         size="small"
                                         class="w-full"
                                       />
@@ -657,7 +657,7 @@
                                                   >
                                                     <Button
                                                       :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                                      kind="text"
+                                                      kind="transparent"
                                                       size="small"
                                                       class="w-full"
                                                     />
@@ -735,7 +735,7 @@
                         <template #content>
                           <div class="p-(--spacing-lg)">
                             <Item
-                              kind="outline"
+                              kind="outlined"
                               size="small"
                             >
                               <Item.Media>

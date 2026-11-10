@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 07e16358a7ea8cd31a3db79548336d7395169fcc1e0565d881a165ff3ed09cd0
+checksum: 889764247d9b268f3664ce34c91e57062562090ca2910dd949c251b71f9e907e
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Button — Component Spec
@@ -18,7 +18,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 ## When to use
 
 - Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.
-- Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `text`.
+- Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
 - A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
 
@@ -31,7 +31,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ## Related
 
-- `icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind stands in for `text`.
+- `icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.
 - `split-button` — joins a Button to a chevron menu of related actions.
 - `button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
 - `mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.
@@ -72,19 +72,19 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ## Props
 
-| Prop           | Type                                                           | Default     | Required | JSDoc                                                                                                                                     |
-| -------------- | -------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`        | `string`                                                       | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
-| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'text' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                           |
-| `size`         | `'small' \| 'medium' \| 'large'`                               | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
-| `disabled`     | `boolean`                                                      | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
-| `loading`      | `boolean`                                                      | `false`     | false    | Shows loading state and disables activation.                                                                                              |
-| `icon`         | `string`                                                       | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
-| `iconPosition` | `'leading' \| 'trailing'`                                      | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
-| `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
-| `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
-| `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
-| `type`         | `'button' \| 'submit' \| 'reset'`                              | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
+| Prop           | Type                                                                  | Default     | Required | JSDoc                                                                                                                                     |
+| -------------- | --------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`        | `string`                                                              | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
+| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                           |
+| `size`         | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
+| `disabled`     | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
+| `loading`      | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                              |
+| `icon`         | `string`                                                              | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
+| `iconPosition` | `'leading' \| 'trailing'`                                             | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
+| `animated`     | `boolean`                                                             | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
+| `href`         | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
+| `target`       | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
+| `type`         | `'button' \| 'submit' \| 'reset'`                                     | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
 
 ## Events
 

@@ -83,7 +83,7 @@ Once the project is wired, import components by path:
     icon="pi pi-arrow-right"
   />
   <Button
-    kind="text"
+    kind="transparent"
     label="Button"
     icon="pi pi-arrow-right"
   />

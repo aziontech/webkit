@@ -58,8 +58,6 @@
   interface Props {
     /** Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. */
     tabs?: CodeBlockTab[]
-    /** Controlled active tab value (`v-model:value`). */
-    value?: string
     /** Initial active tab when uncontrolled. */
     defaultValue?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
@@ -71,26 +69,24 @@
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
-    border?: boolean
+    bordered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     tabs: () => [],
-    value: undefined,
     defaultValue: undefined,
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
     copyable: true,
     animateLines: false,
-    border: true
+    bordered: true
   })
 
   const emit = defineEmits<{
-    'update:value': [value: string]
     copy: [code: string]
   }>()
 
-  const valueModel = defineModel<string | undefined>('value', { default: undefined })
+  const valueModel = defineModel<string | undefined>({ default: undefined })
 
   defineSlots<{
     /** Leading mark of a tab in the tab strip; receives the tab. */
@@ -117,12 +113,12 @@
     props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
   )
 
-  const isControlled = computed(() => valueModel.value !== undefined || props.value !== undefined)
+  const isControlled = computed(() => valueModel.value !== undefined)
 
   const activeValue = computed({
     get: () => {
       if (isControlled.value) {
-        return valueModel.value ?? props.value ?? ''
+        return valueModel.value ?? ''
       }
 
       return internalValue.value
@@ -133,7 +129,6 @@
       }
 
       valueModel.value = next
-      emit('update:value', next)
     }
   })
 
@@ -557,7 +552,7 @@
         attrs.class as string | undefined
       )
     "
-    :data-border="border || null"
+    :data-border="bordered || null"
     :data-copyable="copyable || null"
     :data-testid="testId"
   >

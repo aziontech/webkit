@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <Item kind="outline">
+  <Item kind="outlined">
     <Item.Media kind="icon">
       <i
         class="ai ai-edge-firewall text-[length:inherit] leading-none"

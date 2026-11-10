@@ -44,7 +44,7 @@
     },
     {
       "name": "Borderless",
-      "summary": "The outer card border dropped via `:border=\"false\"` — for embedding inside a surface that already frames the block. Internal dividers are unaffected.",
+      "summary": "The outer card border dropped via `:bordered=\"false\"` — for embedding inside a surface that already frames the block. Internal dividers are unaffected.",
       "file": "borderless.vue"
     },
     {

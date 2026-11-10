@@ -101,7 +101,7 @@
       /** Max height (CSS length). Vertical scroll engages only when set smaller than the content; horizontal scroll is always automatic. */
       maxHeight?: string
       /** Draw the outer card border around the table (off by default; the table is typically framed by a surrounding surface). */
-      border?: boolean
+      bordered?: boolean
       /** Data-driven mode: row records. */
       data?: RowRecord[]
       /** Data-driven mode: column definitions. When set, the table renders itself via TanStack. */
@@ -155,7 +155,7 @@
     }>(),
     {
       maxHeight: '',
-      border: false,
+      bordered: false,
       data: () => [],
       columns: () => [],
       rowKey: 'id',
@@ -847,7 +847,7 @@
     v-bind="$attrs"
     role="table"
     :data-testid="testId"
-    :data-border="border || null"
+    :data-border="bordered || null"
     :aria-busy="loading || undefined"
     :style="viewportHeightVar"
     class="flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"

@@ -7,16 +7,16 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: fb4c7e33ac4aa87909d44e4f1c21bd33d275207a666e4e6873434f69ae989add
+checksum: 4f44f01909cbffe3828a1f2e2fced4dc5ccb1d8a32895549fa2bfe30dda3850c
 created: 2026-07-13
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Theme Switcher — Component Spec
 
 ## Purpose
 
-A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with `v-model:value` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
+A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
 ## When to use
 
@@ -35,7 +35,7 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ## Best practices
 
-- Bind with `v-model:value` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.
+- Bind with `v-model` and apply the mode in the app (for example a `data-theme` attribute, resolving `system` from `prefers-color-scheme`); the component has no side effects.
 - Persist the chosen mode on the app side so it survives a reload.
 - Localize `ariaLabel`; the segment names (System, Dark, Light) are fixed in the component.
 
@@ -50,23 +50,26 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 </script>
 
 <template>
-  <ThemeSwitcher v-model:value="theme" />
+  <ThemeSwitcher v-model="theme" />
 </template>
 ```
 
 ## Props
 
-| Prop        | Type                            | Default    | Required | JSDoc                                                   |
-| ----------- | ------------------------------- | ---------- | -------- | ------------------------------------------------------- |
-| `value`     | `'system' \| 'dark' \| 'light'` | `'system'` | false    | Selected theme mode. Bind with `v-model:value`.         |
-| `disabled`  | `boolean`                       | `false`    | false    | Disables the whole control and applies disabled tokens. |
-| `ariaLabel` | `string`                        | `'Theme'`  | false    | Accessible name for the icon-only segmented group.      |
+| Prop        | Type      | Default   | Required | JSDoc                                                   |
+| ----------- | --------- | --------- | -------- | ------------------------------------------------------- |
+| `disabled`  | `boolean` | `false`   | false    | Disables the whole control and applies disabled tokens. |
+| `ariaLabel` | `string`  | `'Theme'` | false    | Accessible name for the icon-only segmented group.      |
+
+## v-model
+
+| Model     | Type                            | Default    | Emits               | Notes                                                                                                                             |
+| --------- | ------------------------------- | ---------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `'system' \| 'dark' \| 'light'` | `'system'` | `update:modelValue` | Selected theme mode via `defineModel`. Emits when the user selects a different mode; the component applies no side effect itself. |
 
 ## Events
 
-| Event          | Payload                         | Notes                                                              |
-| -------------- | ------------------------------- | ------------------------------------------------------------------ |
-| `update:value` | `'system' \| 'dark' \| 'light'` | Emitted when the user selects a mode. Paired with `v-model:value`. |
+| _none_ | — | — |
 
 ## Slots
 

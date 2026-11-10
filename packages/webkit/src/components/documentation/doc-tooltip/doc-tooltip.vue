@@ -17,9 +17,9 @@
     /** The definition shown inside the panel. */
     tip?: string
     /** Bold lead-in above the definition — usually the term itself. */
-    headline?: string
+    title?: string
     /** Label for the panel's call-to-action link. Needs `href`. */
-    cta?: string
+    linkLabel?: string
     /** Destination for the call-to-action link. */
     href?: string
     /** Where the panel opens; `'auto'` picks the side with the most room. */
@@ -32,8 +32,8 @@
 
   const props = withDefaults(defineProps<Props>(), {
     tip: '',
-    headline: '',
-    cta: '',
+    title: '',
+    linkLabel: '',
     href: '',
     placement: 'top',
     delay: 150,
@@ -51,7 +51,7 @@
 
   const uid = useId()
   const panelId = `${uid}-tooltip`
-  const headlineId = `${uid}-headline`
+  const titleId = `${uid}-title`
   const tipId = `${uid}-tip`
 
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
@@ -61,12 +61,12 @@
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const open = ref(false)
 
-  const interactive = computed(() => props.cta.length > 0 && props.href.length > 0)
-  const hasContent = computed(() => props.tip.length > 0 || props.headline.length > 0)
+  const interactive = computed(() => props.linkLabel.length > 0 && props.href.length > 0)
+  const hasContent = computed(() => props.tip.length > 0 || props.title.length > 0)
 
   const isOpen = computed(() => open.value && hasContent.value)
 
-  const labelledBy = computed(() => (props.headline ? headlineId : tipId))
+  const labelledBy = computed(() => (props.title ? titleId : tipId))
   const placementRef = computed(() => props.placement)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
@@ -215,23 +215,23 @@
         @keydown="onPanelKeydown"
       >
         <span
-          v-if="headline"
-          :id="headlineId"
+          v-if="title"
+          :id="titleId"
           class="text-body-sm text-(--text-default)"
         >
-          {{ headline }}
+          {{ title }}
         </span>
         <span
           v-if="tip"
           :id="tipId"
-          :data-headline="Boolean(headline) || null"
-          class="text-pretty text-body-sm text-(--text-muted) data-[headline]:pt-(--spacing-xxs)"
+          :data-title="Boolean(title) || null"
+          class="text-pretty text-body-sm text-(--text-muted) data-[title]:pt-(--spacing-xxs)"
         >
           {{ tip }}
         </span>
         <Link
           v-if="interactive"
-          :label="cta"
+          :label="linkLabel"
           :href="href"
           size="small"
           icon="pi pi-chevron-right"

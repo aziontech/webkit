@@ -3,7 +3,7 @@
 
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text' | 'danger'
+  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
   export type ButtonIconPosition = 'leading' | 'trailing'
@@ -102,7 +102,8 @@
       'bg-(--secondary) text-(--secondary-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
     outlined:
       'border border-(--border-default) bg-(--bg-surface) text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
-    text: 'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
+    transparent:
+      'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
     danger:
       'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
   }

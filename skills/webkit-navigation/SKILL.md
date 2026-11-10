@@ -353,7 +353,7 @@ came to do — **narrow the list, or add to it**:
               :data="…"
               :columns="…"
               row-key="id"
-              :border="false"
+              :bordered="false"
             />
           </template>
         </Card>
@@ -370,7 +370,7 @@ came to do — **narrow the list, or add to it**:
   data only. The trade is that the search field must be a plain `Input` bound to
   `v-model:globalFilter`, because `Table.Search` only resolves inside `<Table>`.
 - **The controls row and the table are ONE band**, stacked at the group step — not two sections.
-- **The table is framed by the card, not itself:** `Card :padded="false"` + `Table :border="false"`
+- **The table is framed by the card, not itself:** `Card :padded="false"` + `Table :bordered="false"`
   — the card is the only border, so the table sits edge-to-edge.
 - **`Documentation` is a first-level affordance only.** It introduces the module. An internal level is
   already inside the module, so it carries only the action that level can perform; reference material
@@ -412,7 +412,7 @@ row above the table to put it on except the controls row, which is where narrowi
       <div class="border-b border-(--border-default) pr-(--spacing-lg) pl-(--spacing-sm)">
         <div class="flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
           <Tabs
-            v-model:value="activeTab"
+            v-model="activeTab"
             class="min-w-0 flex-1"
           >
             <Tabs.List>
@@ -548,7 +548,7 @@ Four rules hold across every row:
   once); a page that runs a full-bleed tab bar re-applies `p-(--spacing-md)` on its own content
   region. Never a bespoke `p-(--spacing-lg)` page inset.
 - **A list table lives in a flush, borderless `Card`.** `Card :padded="false"` +
-  `Table :border="false"`; the card is the only border. Never ship a bare bordered table, never wrap
+  `Table :bordered="false"`; the card is the only border. Never ship a bare bordered table, never wrap
   the table in a padded card. Where a page does carry a `PageHeading`, it sits **out** of the card,
   `--spacing-lg` above it — never buried in the card's `#header`.
 - **A first-level module list carries no `PageHeading`.** The breadcrumb crumb already names the

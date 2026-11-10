@@ -26,7 +26,7 @@
 <template>
   <MediaTabs
     select-on="click"
-    :auto-play="false"
+    :autoplay="false"
     :items="items"
   >
     <template #media="{ index }">

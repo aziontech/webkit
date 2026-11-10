@@ -422,7 +422,7 @@ describe('QuoteTabs', () => {
   it('advances to the next client once the interval elapses', async () => {
     vi.useFakeTimers()
     const { container, emitted } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
     vi.advanceTimersByTime(INTERVAL / 2)
@@ -442,7 +442,7 @@ describe('QuoteTabs', () => {
   it('wraps from the last client to the first, travelling forward', async () => {
     vi.useFakeTimers()
     const { container } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
     vi.advanceTimersByTime(INTERVAL * ITEMS.length)
@@ -452,10 +452,10 @@ describe('QuoteTabs', () => {
     expect(panelOf(container)).toHaveAttribute('data-direction', 'forward')
   })
 
-  it('never moves on its own and draws no hairline when autoPlay is off', async () => {
+  it('never moves on its own and draws no hairline when autoplay is off', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlay: false, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplay: false, autoplayInterval: INTERVAL }
     })
 
     expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
@@ -470,7 +470,7 @@ describe('QuoteTabs', () => {
   it('draws no hairline when showProgress is off, while the band still advances', async () => {
     vi.useFakeTimers()
     const { container } = render(QuoteTabs, {
-      props: { items: ITEMS, showProgress: false, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, showProgress: false, autoplayInterval: INTERVAL }
     })
 
     expect(progressOf(container)).toBeNull()
@@ -484,7 +484,7 @@ describe('QuoteTabs', () => {
   it('pauses while the pointer rests on the band, and resumes on leave', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
     const root = getByTestId(TESTID)
 
@@ -502,7 +502,7 @@ describe('QuoteTabs', () => {
   it('restarts the count on a click and keeps running with the pointer on the band', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
     const root = getByTestId(TESTID)
 

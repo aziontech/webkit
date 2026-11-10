@@ -59,10 +59,10 @@ const meta = {
         defaultValue: { summary: "'single'" }
       }
     },
-    value: {
+    modelValue: {
       control: 'text',
       description:
-        'Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`.',
+        'Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model`.',
       table: { category: 'props', type: { summary: 'string | string[] | null' } }
     },
     defaultValue: {
@@ -99,9 +99,9 @@ const meta = {
         defaultValue: { summary: "'right'" }
       }
     },
-    'onUpdate:value': {
-      action: 'update:value',
-      description: '`v-model:value`. Fires when the open item(s) change.',
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
+      description: '`v-model`. Fires when the open item(s) change.',
       table: { category: 'events' }
     },
     default: {

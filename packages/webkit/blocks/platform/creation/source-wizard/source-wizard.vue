@@ -335,7 +335,7 @@
                             <Button
                               type="button"
                               label="Back"
-                              kind="text"
+                              kind="transparent"
                               size="medium"
                               @click="cancelCreating"
                             />
@@ -414,7 +414,7 @@
                         <Button
                           type="button"
                           label="Continue without a service"
-                          kind="text"
+                          kind="transparent"
                           size="small"
                           @click="skip"
                         />

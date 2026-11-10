@@ -38,11 +38,11 @@ describe('DocCard', () => {
       expect(getByText('Fallback copy.')).toBeInTheDocument()
     })
 
-    it('renders the overline only when one is given', () => {
+    it('renders the eyebrow only when one is given', () => {
       const without = render(DocCard, { props: { title: 'T' } })
       expect(without.queryByText('Azion CLI')).not.toBeInTheDocument()
-      const withOverline = render(DocCard, { props: { title: 'T', overline: 'Azion CLI' } })
-      expect(withOverline.getByText('Azion CLI')).toBeInTheDocument()
+      const withEyebrow = render(DocCard, { props: { title: 'T', eyebrow: 'Azion CLI' } })
+      expect(withEyebrow.getByText('Azion CLI')).toBeInTheDocument()
     })
   })
 
@@ -81,11 +81,11 @@ describe('DocCard', () => {
   })
 
   describe('call to action', () => {
-    it('renders the link row only when link is set', () => {
+    it('renders the link row only when linkLabel is set', () => {
       const without = render(DocCard, { props: { title: 'T', href: '/x' } })
       expect(without.queryByText('Read the guide')).not.toBeInTheDocument()
       const withLink = render(DocCard, {
-        props: { title: 'T', href: '/x', link: 'Read the guide' }
+        props: { title: 'T', href: '/x', linkLabel: 'Read the guide' }
       })
       expect(withLink.getByText('Read the guide')).toBeInTheDocument()
     })

@@ -8,7 +8,7 @@
     <p>
       Every deploy produces an
       <DocTooltip
-        headline="Edge Application"
+        title="Edge Application"
         tip="The build that runs at the edge, close to the people using it."
       >
         edge application

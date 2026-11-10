@@ -4,7 +4,7 @@
 import figma from 'figma'
 
 export default {
-  example: figma.code`<ThemeSwitcher v-model:value="theme" />`,
+  example: figma.code`<ThemeSwitcher v-model="theme" />`,
   imports: ["import ThemeSwitcher from '@aziontech/webkit/theme-switcher'"],
   id: 'theme-switcher',
   metadata: { nestable: true }

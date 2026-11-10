@@ -193,13 +193,14 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
-    still: {
+    animated: {
       control: 'boolean',
-      description: 'Draws every part in place from the start, with no entrance and no replay.',
+      description:
+        'Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay.',
       table: {
         category: 'props',
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
+        defaultValue: { summary: 'true' }
       }
     },
     default: {
@@ -228,7 +229,7 @@ const meta = {
     beat: 'fast-01',
     active: true,
     interactive: false,
-    still: false
+    animated: true
   }
 }
 
@@ -254,7 +255,7 @@ const BODY = `<div class="flex flex-col gap-(--spacing-md) p-(--spacing-lg)">
     </div>
   </ShellMockup.Part>
   <ShellMockup.Part :order="2">
-    <Table border>
+    <Table bordered>
       <Table.Header>
         <Table.Row>
           <Table.HeadCell principal>Name</Table.HeadCell>

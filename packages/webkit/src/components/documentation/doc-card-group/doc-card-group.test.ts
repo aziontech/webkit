@@ -53,9 +53,9 @@ describe('DocCardGroup', () => {
       expect(grid?.getAttribute('data-mobile-cols')).toBe('1')
     })
 
-    it('mirrors cols and mobileCols onto the grid', () => {
+    it('mirrors cols and mobileColumns onto the grid', () => {
       const { getByTestId } = render(DocCardGroup, {
-        props: { cols: 4, mobileCols: 2 },
+        props: { cols: 4, mobileColumns: 2 },
         slots: { default: '<span>Cell</span>' }
       })
       const root = getByTestId('documentation-doc-card-group')

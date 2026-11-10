@@ -326,7 +326,7 @@
                   :key="level.id"
                   class="flex items-center justify-between gap-(--spacing-sm)"
                 >
-                  <SeverityTag :level="level.id" />
+                  <SeverityTag :severity="level.id" />
                   <span class="flex items-baseline gap-(--spacing-xs) tabular-nums">
                     <span class="text-body-md text-(--text-default)">{{ level.count }}</span>
                     <span class="w-10 text-right text-body-sm text-(--text-muted)"
@@ -381,7 +381,7 @@
               row-key="id"
               enable-sorting
               header-kind="compact"
-              border
+              bordered
               :loading="loading"
             >
               <template #cell-type="{ row }">
@@ -395,7 +395,7 @@
                 <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                   <span class="w-8 shrink-0 text-right tabular-nums">{{ row.score }}</span>
                   <SeverityTag
-                    :level="row.level"
+                    :severity="row.level"
                     size="small"
                   />
                 </div>
@@ -432,12 +432,12 @@
               :page-size="10"
               :rows-per-page-options="[10, 25, 50]"
               header-kind="compact"
-              border
+              bordered
               :loading="loading"
             >
               <template #cell-severity="{ row }">
                 <SeverityTag
-                  :level="row.level"
+                  :severity="row.level"
                   size="small"
                 />
               </template>

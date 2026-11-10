@@ -31,7 +31,7 @@ const meta = {
     }
   },
   argTypes: {
-    level: {
+    severity: {
       control: 'select',
       options: ['critical', 'high', 'medium', 'low', 'info'],
       description:
@@ -64,7 +64,7 @@ const meta = {
     }
   },
   args: {
-    level: 'info',
+    severity: 'info',
     label: '',
     size: 'medium'
   }
@@ -80,7 +80,7 @@ const Template = (args) => ({
   template: '<SeverityTag v-bind="args" />'
 })
 
-const DEFAULT_MARKUP = '<SeverityTag level="info" size="medium" />'
+const DEFAULT_MARKUP = '<SeverityTag severity="info" size="medium" />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof SeverityTag>} */
 export const Default = {
@@ -94,11 +94,11 @@ export const Default = {
 }
 
 const LEVELS_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <SeverityTag level="critical" />
-  <SeverityTag level="high" />
-  <SeverityTag level="medium" />
-  <SeverityTag level="low" />
-  <SeverityTag level="info" />
+  <SeverityTag severity="critical" />
+  <SeverityTag severity="high" />
+  <SeverityTag severity="medium" />
+  <SeverityTag severity="low" />
+  <SeverityTag severity="info" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof SeverityTag>} */
@@ -115,8 +115,8 @@ export const Levels = {
 }
 
 const SIZES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
-  <SeverityTag level="high" size="small" />
-  <SeverityTag level="high" size="medium" />
+  <SeverityTag severity="high" size="small" />
+  <SeverityTag severity="high" size="medium" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof SeverityTag>} */

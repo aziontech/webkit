@@ -83,11 +83,11 @@ const meta = {
   argTypes: {
     kind: {
       control: 'select',
-      options: ['default', 'outline', 'muted', 'inline'],
+      options: ['default', 'outlined', 'muted', 'inline'],
       description:
         'Item root surface variant. inline removes the outer padding for inline placement and divided in-card lists.',
       table: {
-        type: { summary: "'default' | 'outline' | 'muted' | 'inline'" },
+        type: { summary: "'default' | 'outlined' | 'muted' | 'inline'" },
         defaultValue: { summary: 'default' },
         category: 'props'
       }
@@ -190,14 +190,14 @@ export const Default = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Item>} */
 export const Outline = {
-  args: { kind: 'outline' },
+  args: { kind: 'outlined' },
   render: Template,
   parameters: {
     docs: {
       description: {
         story: 'Outlined variant with a visible border.'
       },
-      source: { code: toSfc(BASIC_IMPORTS, basicMarkup(' kind="outline"')) }
+      source: { code: toSfc(BASIC_IMPORTS, basicMarkup(' kind="outlined"')) }
     }
   }
 }
@@ -218,19 +218,19 @@ export const Muted = {
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Item>} */
 export const Small = {
-  args: { size: 'small', kind: 'outline' },
+  args: { size: 'small', kind: 'outlined' },
   render: Template,
   parameters: {
     docs: {
       description: {
         story: 'Compact density with reduced padding and gap.'
       },
-      source: { code: toSfc(BASIC_IMPORTS, basicMarkup(' kind="outline" size="small"')) }
+      source: { code: toSfc(BASIC_IMPORTS, basicMarkup(' kind="outlined" size="small"')) }
     }
   }
 }
 
-const ICON_MEDIA_MARKUP = `<Item kind="outline">
+const ICON_MEDIA_MARKUP = `<Item kind="outlined">
   <Item.Media kind="icon">
     <i class="ai ai-edge-firewall text-[length:inherit] leading-none" aria-hidden="true" />
   </Item.Media>
@@ -252,7 +252,7 @@ export const WithIconMedia = {
     },
     template: `
       <div class="flex w-full flex-col gap-(--spacing-4)">
-        <Item kind="outline" v-bind="args">
+        <Item kind="outlined" v-bind="args">
           <ItemMedia kind="icon">
             <i class="ai ai-edge-firewall text-[length:inherit] leading-none" aria-hidden="true" />
           </ItemMedia>
@@ -285,7 +285,7 @@ const AVATAR_IMPORTS = [
   "import Button from '@aziontech/webkit/button'"
 ]
 
-const AVATAR_MARKUP = `<Item kind="outline">
+const AVATAR_MARKUP = `<Item kind="outlined">
   <Item.Media>
     <Avatar src="${sampleAvatarSrc}" alt="Evil Rabbit" label="ER" size="medium" />
   </Item.Media>
@@ -307,7 +307,7 @@ export const WithAvatar = {
     },
     template: `
       <div class="flex w-full flex-col gap-(--spacing-4)">
-        <Item kind="outline" v-bind="args">
+        <Item kind="outlined" v-bind="args">
           <ItemMedia>
             <Avatar
               :src="sampleAvatarSrc"
@@ -339,7 +339,7 @@ export const WithAvatar = {
 
 const IMAGE_IMPORTS = ["import Item from '@aziontech/webkit/item'"]
 
-const IMAGE_MARKUP = `<Item kind="outline">
+const IMAGE_MARKUP = `<Item kind="outlined">
   <Item.Media kind="image">
     <img
       src="${sampleThumbnailSrc}"
@@ -365,7 +365,7 @@ export const WithImageMedia = {
     },
     template: `
       <div class="flex w-full flex-col gap-(--spacing-4)">
-        <Item kind="outline" v-bind="args">
+        <Item kind="outlined" v-bind="args">
           <ItemMedia kind="image">
             <img
               :src="sampleThumbnailSrc"
@@ -398,7 +398,7 @@ export const WithImageMedia = {
 const AS_CHILD_IMPORTS = ["import Item from '@aziontech/webkit/item'"]
 
 const AS_CHILD_MARKUP = `<div class="flex w-full flex-col gap-(--spacing-4)">
-  <Item kind="outline" as-child>
+  <Item kind="outlined" as-child>
     <a href="#" class="no-underline text-inherit">
       <Item.Content>
         <Item.Title>Visit our documentation</Item.Title>
@@ -409,7 +409,7 @@ const AS_CHILD_MARKUP = `<div class="flex w-full flex-col gap-(--spacing-4)">
       </Item.Actions>
     </a>
   </Item>
-  <Item kind="outline" size="small" as-child>
+  <Item kind="outlined" size="small" as-child>
     <a href="#" class="no-underline text-inherit">
       <Item.Media kind="icon">
         <i class="pi pi-verified text-[length:inherit] leading-none" aria-hidden="true" />
@@ -430,7 +430,7 @@ export const WithAsChild = {
     components: itemSubcomponents,
     template: `
       <div class="flex w-full flex-col gap-(--spacing-4)">
-        <Item kind="outline" as-child>
+        <Item kind="outlined" as-child>
           <a href="#" class="no-underline text-inherit">
             <ItemContent>
               <ItemTitle>Visit our documentation</ItemTitle>
@@ -443,7 +443,7 @@ export const WithAsChild = {
             </ItemActions>
           </a>
         </Item>
-        <Item kind="outline" size="small" as-child>
+        <Item kind="outlined" size="small" as-child>
           <a href="#" class="no-underline text-inherit">
             <ItemMedia kind="icon">
               <i class="pi pi-verified text-[length:inherit] leading-none" aria-hidden="true" />
@@ -487,7 +487,7 @@ const groupRow = (person) => `  <Item>
       <Item.Description>${person.email}</Item.Description>
     </Item.Content>
     <Item.Actions>
-      <Button label="Add" kind="text" size="small" icon="pi pi-plus" />
+      <Button label="Add" kind="transparent" size="small" icon="pi pi-plus" />
     </Item.Actions>
   </Item>`
 
@@ -523,7 +523,7 @@ export const WithGroup = {
               <ItemDescription>{{ person.email }}</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Button label="Add" kind="text" size="small" icon="pi pi-plus" />
+              <Button label="Add" kind="transparent" size="small" icon="pi pi-plus" />
             </ItemActions>
           </Item>
         </ItemGroup>

@@ -18,8 +18,8 @@ const settle = async () => {
 const panel = () =>
   document.body.querySelector<HTMLElement>('[data-testid="documentation-doc-tooltip__panel"]')
 
-const PASSIVE = { headline: 'workload', tip: 'A domain bound to an application.', delay: 0 }
-const INTERACTIVE = { ...PASSIVE, cta: 'Read the guide', href: '/docs/workload' }
+const PASSIVE = { title: 'workload', tip: 'A domain bound to an application.', delay: 0 }
+const INTERACTIVE = { ...PASSIVE, linkLabel: 'Read the guide', href: '/docs/workload' }
 
 // focusin schedules the open through the same delay timer hover uses, so opening
 // is polled rather than assumed to be synchronous.

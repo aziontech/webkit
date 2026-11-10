@@ -41,7 +41,7 @@
 
 <template>
   <Tabs.Root
-    v-model:value="active"
+    v-model="active"
     class="w-full max-w-[20rem]"
   >
     <Tabs.List>

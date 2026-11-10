@@ -551,7 +551,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -824,7 +824,7 @@
               />
               <Button
                 label="Reset scenario"
-                kind="text"
+                kind="transparent"
                 size="medium"
                 :disabled="running"
               />
@@ -952,7 +952,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

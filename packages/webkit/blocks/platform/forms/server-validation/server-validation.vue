@@ -224,7 +224,7 @@
               />
               <Button
                 label="Reset scenario"
-                kind="text"
+                kind="transparent"
                 size="medium"
                 :disabled="submitting"
                 @click="resetScenario"

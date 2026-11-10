@@ -54,9 +54,9 @@
     /** Accessible name for the wall of client cards. */
     ariaLabel?: string
     /** Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. */
-    autoPlay?: boolean
+    autoplay?: boolean
     /** Milliseconds each client is held before the band advances. */
-    autoPlayInterval?: number
+    autoplayInterval?: number
     /** Advances a hairline along the quotation panel's bottom edge while the timer runs. */
     showProgress?: boolean
   }
@@ -64,8 +64,8 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     ariaLabel: '',
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true
   })
 
@@ -122,16 +122,16 @@
     () => !current.value.logo && Boolean(current.value.art || current.value.label)
   )
 
-  const autoPlayEnabled = computed(
-    () => props.autoPlay && props.items.length > 1 && reducedMotion.value !== 'reduce'
+  const autoplayEnabled = computed(
+    () => props.autoplay && props.items.length > 1 && reducedMotion.value !== 'reduce'
   )
 
-  const autoPlayRunning = computed(
-    () => autoPlayEnabled.value && !pointerInside.value && !focusInside.value
+  const autoplayRunning = computed(
+    () => autoplayEnabled.value && !pointerInside.value && !focusInside.value
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoPlayInterval) * 100))
+    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
   )
 
   watch(selected, (next, previous) => {
@@ -140,10 +140,10 @@
     elapsed.value = 0
   })
 
-  watch(autoPlayRunning, (running) => (running ? start() : stop()))
+  watch(autoplayRunning, (running) => (running ? start() : stop()))
 
   onMounted(() => {
-    if (autoPlayRunning.value) start()
+    if (autoplayRunning.value) start()
   })
 
   onScopeDispose(stop)
@@ -179,7 +179,7 @@
 
   function tick(): void {
     elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoPlayInterval) return
+    if (elapsed.value < props.autoplayInterval) return
     pendingDirection = 'forward'
     select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
   }
@@ -238,7 +238,7 @@
     v-if="clients.length"
     v-bind="$attrs"
     :data-testid="testId"
-    :data-autoplay="autoPlayRunning || null"
+    :data-autoplay="autoplayRunning || null"
     class="flex flex-col"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
@@ -351,7 +351,7 @@
       </div>
 
       <span
-        v-if="showProgress && autoPlayEnabled"
+        v-if="showProgress && autoplayEnabled"
         aria-hidden="true"
         :data-testid="`${testId}__progress`"
         :style="{ width: `${progress}%` }"

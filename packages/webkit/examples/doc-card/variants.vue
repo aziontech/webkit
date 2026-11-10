@@ -8,12 +8,12 @@
       title="Edge Application"
       icon="pi pi-server"
       href="/docs/edge-application"
-      link="Read the guide"
+      link-label="Read the guide"
     >
       The plain shape: a glyph, a title, copy and a call to action.
     </DocCard>
     <DocCard
-      overline="Azion CLI"
+      eyebrow="Azion CLI"
       title="Deploy from your terminal"
       icon="pi pi-desktop"
       href="/docs/cli"
@@ -24,7 +24,7 @@
       title="Community templates"
       href="https://github.com/aziontech"
       target="_blank"
-      link="Browse on GitHub"
+      link-label="Browse on GitHub"
     >
       A card that leaves the documentation trades the chevron for a diagonal arrow.
     </DocCard>

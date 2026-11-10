@@ -43,9 +43,9 @@
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
     selectOn?: MediaTabsSelectOn
     /** Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
-    autoPlay?: boolean
+    autoplay?: boolean
     /** Milliseconds each tab is held before the band advances. */
-    autoPlayInterval?: number
+    autoplayInterval?: number
     /** Advances a hairline along the active row's bottom edge while the timer runs. */
     showProgress?: boolean
     /** Texture the media column is grounded with; `none` leaves it bare. */
@@ -61,8 +61,8 @@
     position: 'left',
     size: 'medium',
     selectOn: 'hover',
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true,
     texture: 'none',
     textureSize: 'medium',
@@ -103,19 +103,19 @@
 
   const hasItems = computed(() => tabs.value.length > 0)
 
-  const autoPlayEnabled = computed(
-    () => props.autoPlay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
+  const autoplayEnabled = computed(
+    () => props.autoplay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
   )
 
-  const autoPlayRunning = computed(
-    () => autoPlayEnabled.value && !pointerInside.value && !focusInside.value
+  const autoplayRunning = computed(
+    () => autoplayEnabled.value && !pointerInside.value && !focusInside.value
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoPlayInterval) * 100))
+    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
   )
 
-  watch(autoPlayRunning, (running) => (running ? start() : stop()))
+  watch(autoplayRunning, (running) => (running ? start() : stop()))
 
   watch(
     () => tabs.value.length,
@@ -127,7 +127,7 @@
   )
 
   onMounted(() => {
-    if (autoPlayRunning.value) start()
+    if (autoplayRunning.value) start()
   })
 
   onScopeDispose(stop)
@@ -149,7 +149,7 @@
 
   function tick(): void {
     elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoPlayInterval) return
+    if (elapsed.value < props.autoplayInterval) return
     elapsed.value = 0
     activeIndex.value = (activeIndex.value + 1) % tabs.value.length
   }
@@ -197,7 +197,7 @@
     :data-orientation="orientation"
     :data-size="size"
     :data-select-on="selectOn"
-    :data-autoplay="autoPlayRunning || null"
+    :data-autoplay="autoplayRunning || null"
     class="group/media-tabs [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
@@ -268,7 +268,7 @@
             </div>
 
             <span
-              v-if="isActive(index) && showProgress && autoPlayEnabled"
+              v-if="isActive(index) && showProgress && autoplayEnabled"
               aria-hidden="true"
               data-progress
               :style="{ width: `${progress}%` }"

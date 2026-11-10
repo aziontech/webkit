@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 27cc2728e4545b3d7bbecfb895040f1803c79a10314294f94a564de5d0bccfdd
+checksum: 730233d6811804433b37c373b876d1e205f505dd85e9a92f7792382a4e87c5ab
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 # Navigation Menu — Component Spec
 
@@ -39,7 +39,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 ## Best practices
 
-- Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model:value` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.
+- Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.
 - A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout="entry"`, an `href`, an optional `description` and `close-on-click`.
 - Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.
 - Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.
@@ -119,18 +119,22 @@ import NavigationMenu from '@aziontech/webkit/navigation-menu'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `defaultValue` | `NavigationMenuValue` | `null` | false | Uncontrolled initial open item value. |
-| `value` | `NavigationMenuValue` | `undefined` | false | Controlled open item (`v-model:value`). |
 | `delay` | `number` | `50` | false | Hover-open delay in milliseconds. |
 | `closeDelay` | `number` | `300` | false | Hover-close delay in milliseconds. |
 | `orientation` | `NavigationMenuOrientation` | `'horizontal'` | false | Menu orientation. |
 | `ariaLabel` | `string` | `'Main'` | false | Accessible name for the root navigation landmark. |
 | `as` | `string \| object` | `'nav'` | false | Polymorphic root element. |
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `NavigationMenuValue \| undefined` | `undefined` | `update:modelValue` | Open item via `defineModel`; `null` closes every panel. While unbound (`undefined`) the menu is uncontrolled and starts at `defaultValue`. The event carries a second argument, `eventDetails: unknown`, describing what caused the change. |
+
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:value` | `value: NavigationMenuValue, eventDetails: unknown` | v-model:value. |
 | `open-change-complete` | `open: boolean` | — |
 
 ## Slots

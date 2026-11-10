@@ -13,8 +13,6 @@
   interface Props {
     /** Uncontrolled initial open item value. */
     defaultValue?: NavigationMenuValue
-    /** Controlled open item (`v-model:value`). */
-    value?: NavigationMenuValue
     /** Hover-open delay in milliseconds. */
     delay?: number
     /** Hover-close delay in milliseconds. */
@@ -29,7 +27,6 @@
 
   const props = withDefaults(defineProps<Props>(), {
     defaultValue: null,
-    value: undefined,
     delay: 50,
     closeDelay: 300,
     orientation: 'horizontal',
@@ -38,9 +35,10 @@
   })
 
   const emit = defineEmits<{
-    'update:value': [value: NavigationMenuValue, eventDetails: unknown]
     'open-change-complete': [open: boolean]
   }>()
+
+  const model = defineModel<NavigationMenuValue | undefined>({ default: undefined })
 
   defineSlots<{ default(): unknown }>()
 
@@ -48,8 +46,8 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
 
   const internalValue = ref(props.defaultValue)
-  const isControlled = computed(() => props.value !== undefined)
-  const controlledValue = computed(() => (isControlled.value ? (props.value ?? null) : null))
+  const isControlled = computed(() => model.value !== undefined)
+  const controlledValue = computed(() => (isControlled.value ? (model.value ?? null) : null))
 
   const emitBridge = emit as (event: string, ...args: unknown[]) => void
 

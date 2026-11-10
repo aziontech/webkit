@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 7876c9d124d3ca4aced11d96f636cc26b7a82e83dfc35fb954ddef7814f9a035
+checksum: 30c27e510e04b1c28fad8a2e673345f0eba3f1da5eedac8710f0f601d7730651
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Tab View — Component Spec
@@ -39,7 +39,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 ## Best practices
 
 - Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.
-- Drive the active tab with `v-model:value` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
+- Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.
 - Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.
@@ -55,7 +55,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 </script>
 
 <template>
-  <Tabs.Root v-model:value="active">
+  <Tabs.Root v-model="active">
     <Tabs.List>
       <Tabs.Item
         value="overview"
@@ -88,16 +88,19 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 ## Props
 
-| Prop           | Type                | Default     | Required | JSDoc                                    |
-| -------------- | ------------------- | ----------- | -------- | ---------------------------------------- |
-| `value`        | `TabsValue \| null` | `undefined` | false    | Controlled active tab (`v-model:value`). |
-| `defaultValue` | `TabsValue \| null` | `null`      | false    | Initial active tab when uncontrolled.    |
+| Prop           | Type                | Default | Required | JSDoc                                 |
+| -------------- | ------------------- | ------- | -------- | ------------------------------------- |
+| `defaultValue` | `TabsValue \| null` | `null`  | false    | Initial active tab when uncontrolled. |
+
+## v-model
+
+| Model     | Type                             | Default     | Emits               | Notes                                                                                                                                        |
+| --------- | -------------------------------- | ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `TabsValue \| null \| undefined` | `undefined` | `update:modelValue` | Active tab via `defineModel`. While unbound (`undefined`) the root is uncontrolled: it starts at `defaultValue`, else the first enabled tab. |
 
 ## Events
 
-| Event          | Payload           | Notes |
-| -------------- | ----------------- | ----- |
-| `update:value` | `value: TabsValue | null` | v-model:value. |
+| _none_ | — | — |
 
 ## Slots
 

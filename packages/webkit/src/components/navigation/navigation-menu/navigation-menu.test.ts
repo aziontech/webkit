@@ -432,7 +432,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   })
 
   describe('events on real user actions (navigation-menu-root.vue emits)', () => {
-    it('emits update:value with the item value when a submenu opens', async () => {
+    it('emits update:modelValue with the item value when a submenu opens', async () => {
       const updateValues: Array<unknown> = []
 
       const Wrapped = defineComponent({
@@ -443,7 +443,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           }
         },
         template: `
-          <NavigationMenu @update:value="onUpdate">
+          <NavigationMenu @update:modelValue="onUpdate">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -467,7 +467,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       })
     })
 
-    it('emits update:value(null) when the Backdrop is clicked (root.close)', async () => {
+    it('emits update:modelValue(null) when the Backdrop is clicked (root.close)', async () => {
       const updateValues: Array<unknown> = []
 
       const Wrapped = defineComponent({
@@ -480,7 +480,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           }
         },
         template: `
-          <NavigationMenu v-model:value="value" @update:value="onUpdate">
+          <NavigationMenu v-model="value" @update:modelValue="onUpdate">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -518,7 +518,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     })
   })
 
-  describe('v-model:value round-trip (controlled)', () => {
+  describe('v-model round-trip (controlled)', () => {
     it('an external value opens the matching panel; an entry click writes back null', async () => {
       const controlled = ref<string | null>(null)
 
@@ -528,7 +528,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           return { controlled }
         },
         template: `
-          <NavigationMenu v-model:value="controlled">
+          <NavigationMenu v-model="controlled">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>

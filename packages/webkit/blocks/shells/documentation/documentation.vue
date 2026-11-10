@@ -200,7 +200,7 @@
           >
             <template #footer>
               <ThemeSwitcher
-                v-model:value="theme"
+                v-model="theme"
                 aria-label="Theme"
               />
             </template>

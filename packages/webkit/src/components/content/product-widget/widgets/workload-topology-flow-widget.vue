@@ -91,7 +91,7 @@
       :active="active"
       :width="876"
       :mobile-width="876"
-      still
+      :animated="false"
     >
       <FlowRoot
         align="center"

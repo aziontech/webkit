@@ -5,7 +5,7 @@
 <template>
   <div class="flex w-full flex-col gap-(--spacing-4)">
     <Item
-      kind="outline"
+      kind="outlined"
       as-child
     >
       <a
@@ -25,7 +25,7 @@
       </a>
     </Item>
     <Item
-      kind="outline"
+      kind="outlined"
       size="small"
       as-child
     >

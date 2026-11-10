@@ -35,7 +35,7 @@
 
       <template #bottom>
         <Button
-          kind="text"
+          kind="transparent"
           size="small"
           label="Manage account"
           class="w-full"
@@ -59,7 +59,7 @@
 
       <template #bottom>
         <Button
-          kind="text"
+          kind="transparent"
           size="small"
           label="Workspace settings"
           class="w-full"

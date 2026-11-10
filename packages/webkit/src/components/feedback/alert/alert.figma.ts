@@ -11,7 +11,7 @@ const severity = instance.getEnum('severity', {
   info: 'info',
   success: 'success',
   warning: 'warning',
-  error: 'error'
+  error: 'danger'
 })
 const showAction = instance.getBoolean('showAction')
 const closable = instance.getBoolean('closable')

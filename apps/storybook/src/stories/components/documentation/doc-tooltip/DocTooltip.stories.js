@@ -29,12 +29,12 @@ const meta = {
       description: 'The definition shown inside the panel.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
-    headline: {
+    title: {
       control: 'text',
       description: 'Bold lead-in above the definition — usually the term itself.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
-    cta: {
+    linkLabel: {
       control: 'text',
       description: "Label for the panel's call-to-action link. Needs href.",
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
@@ -67,8 +67,8 @@ const meta = {
   },
   args: {
     tip: 'The build that runs at the edge, close to the people using it.',
-    headline: 'Edge Application',
-    cta: '',
+    title: 'Edge Application',
+    linkLabel: '',
     href: '',
     placement: 'top',
     delay: 150,
@@ -82,7 +82,7 @@ const DEFAULT_MARKUP = `<DocProse>
   <p>
     Every deploy produces an
     <DocTooltip
-      headline="Edge Application"
+      title="Edge Application"
       tip="The build that runs at the edge, close to the people using it."
     >
       edge application
@@ -112,7 +112,7 @@ const KINDS_TEMPLATE = `<DocProse>
   <p>
     A passive gloss just defines the term: a
     <DocTooltip
-      headline="workload"
+      title="workload"
       tip="The binding between a domain and the application that answers on it."
     >
       workload
@@ -122,9 +122,9 @@ const KINDS_TEMPLATE = `<DocProse>
   <p>
     An interactive gloss closes on somewhere to go, so it is a small dialog instead: an
     <DocTooltip
-      headline="Edge Application"
+      title="Edge Application"
       tip="The build that runs at the edge, close to the people using it."
-      cta="Read the guide"
+      link-label="Read the guide"
       href="/docs/edge-application"
     >
       edge application
@@ -140,7 +140,7 @@ export const Kinds = {
     docs: {
       description: {
         story:
-          'The two a11y contracts side by side. The first panel is a `role="tooltip"` and its trigger takes `aria-describedby`; the second carries a link, so it is a `role="dialog"` announced through `aria-expanded`, named by its headline, and enterable with Tab. Tab again from inside it and focus returns to the term.'
+          'The two a11y contracts side by side. The first panel is a `role="tooltip"` and its trigger takes `aria-describedby`; the second carries a link, so it is a `role="dialog"` announced through `aria-expanded`, named by its title, and enterable with Tab. Tab again from inside it and focus returns to the term.'
       },
       source: { code: toSfc(IMPORT, KINDS_TEMPLATE) }
     }

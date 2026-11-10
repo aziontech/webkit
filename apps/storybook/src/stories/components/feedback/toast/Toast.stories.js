@@ -166,7 +166,7 @@ const TYPES_TEMPLATE = `<Toaster position="bottom-right" />
   <Button label="Info" kind="outlined" @click="() => toast.info('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
   <Button label="Warning" kind="outlined" @click="() => toast.warning('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
   <Button label="Error" kind="danger" @click="() => toast.error('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
-  <Button label="Loading" kind="text" @click="() => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
+  <Button label="Loading" kind="transparent" @click="() => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Toaster>} */
