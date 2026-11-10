@@ -345,16 +345,10 @@
 
                   <template #cell-status="{ value }">
                     <StatusIndicator
-                      v-if="value"
                       :severity="statusMeta(value).severity"
                       :loading="statusMeta(value).loading"
-                      :label="value"
+                      :label="value || 'Not deployed'"
                     />
-                    <span
-                      v-else
-                      class="text-body-sm text-(--text-disabled)"
-                      >Not deployed</span
-                    >
                   </template>
                   <template #cell-author="{ row }">
                     <AuthorCell
