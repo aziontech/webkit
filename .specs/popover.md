@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 3a1864aa7aab1536ab016d700899fba5e7d691e9455a171bc66f96331dd15c47
+checksum: 7309b9abcad5e5cc617636d278a960f1be81c117b015ded25b8e17893bf4b35d
 created: 2026-06-30
-last_updated: 2026-07-22
+last_updated: 2026-11-10
 ---
 
 # Popover — Component Spec
@@ -65,7 +65,7 @@ import PopoverFooter from '@aziontech/webkit/popover-footer'
 
 The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus containment and return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, `width`, `panelStyle`, and the `panelRef` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-placement`, and assigns itself to the root's `panelRef` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
-- `popover-trigger/popover-trigger.vue` — slot-only abstract wrapper. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a single inline element that toggles the panel on click and exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`. The popover anchors to this element's bounding box.
+- `popover-trigger/popover-trigger.vue` — slot-only abstract wrapper. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a single inline wrapper element that toggles the panel on click, carries the trigger `id`, `data-state` and `data-disabled`, and is the box the popover anchors to. The wrapper itself has no role: it writes `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls` onto the first focusable control in its slot (a link, button, field, or `[tabindex]` element), so the element that receives focus is the one that announces the popup. When the slot holds no focusable control (plain text), the wrapper becomes the control: `role="button"`, `tabindex="0"` (`-1` while disabled), the same three ARIA attributes, `aria-disabled` while disabled, and `Enter` / `Space` toggle the panel.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The wrapper attaches aria + click; the consumer must not bind those itself.
@@ -208,7 +208,7 @@ export default Object.assign(Popover, {
   - On the trigger: `Enter` / `Space` toggles the panel. When it opens, focus **stays on the trigger** — it is not moved into the panel.
   - `Esc` closes the panel and returns focus to the trigger, from anywhere (trigger or panel). `Tab` / `Shift+Tab` are **contained** within the trigger and the panel's focusable children: Tab from the trigger moves into the panel, Tab past the last panel child wraps back to the trigger, and Shift+Tab reverses. Tabbing **never** closes the panel — only `Esc` or an outside-click dismiss it.
   - Outside-click closes the panel; focus is not forced back to the trigger on outside-click.
-- ARIA: trigger exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`; the floating panel (rendered by the root) uses `role="dialog"` with `aria-modal="false"`, `aria-labelledby` pointing at the `Popover.Title` id and `aria-describedby` pointing at the `Popover.Description` id (when present); `Popover.Close` is an `IconButton` with `aria-label="Close"`.
+- ARIA: the trigger's focusable control (the consumer's button or link, or the wrapper itself when the slot has none) exposes `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`; no ARIA attribute sits on an element without a role. The floating panel (rendered by the root) uses `role="dialog"` with `aria-modal="false"`, `aria-labelledby` pointing at the `Popover.Title` id and `aria-describedby` pointing at the `Popover.Description` id (when present); `Popover.Close` is an `IconButton` with `aria-label="Close"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled trigger state (validated via `--text-muted` / `--text-disabled` tokens).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/focus states.
 - Touch target ≥40×40 px on the trigger (consumer's element — flagged in docs); the close `IconButton` follows `IconButton`'s own target sizing.
