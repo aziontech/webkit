@@ -24,35 +24,40 @@ body,
   transition: all 0.4s ease-in-out !important;
 }
 
-.docblock-code-toggle {
-  /* Avoid relying on `font-code` utility: Tailwind doesn't generate it (it generates `font-sans|serif|mono`). */
-  @apply font-mono! font-normal!;
-}
-.css-2p1np {
-  @apply font-mono! font-normal!;
+.docblock-code-toggle,
+.css-2p1np,
+.tabbutton > * {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  @apply font-normal!;
 }
 
 /* Text Name Column Props */
 .css-in3yi3 {
-  font-family: 'Roboto Mono', monospace !important;
-  @apply font-normal! text-neutral-50!;
-}
-
-.tabbutton > * {
-  @apply font-mono! font-normal!;
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  color: var(--color-gray-50) !important;
+  @apply font-normal!;
 }
 
 .docblock-argstable-head > tr {
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
   @apply lowercase!;
 }
 
 .css-7qiabv {
-  @apply font-sans! text-neutral-500!;
+  font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif !important;
+  color: var(--color-gray-400) !important;
 }
 
 :is(h1, h2, h3, h4, h5, h6):not([class*='text-overline-']) {
   @apply font-sans! font-normal!;
+}
+
+.sbdocs-content :is(h1, h2, h3, h4, h5, h6):not(.docs-story *) {
+  font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+.docs-story {
+  font-family: var(--font-sans);
 }
 
 /* Theme container styles */
