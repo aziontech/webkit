@@ -18,7 +18,10 @@
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -778,22 +781,12 @@
           @submit.prevent="submit"
         >
           <div class="layout-column-form layout-boundary flex flex-1 flex-col">
-            <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-              <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <h1
-                    id="profile-title"
-                    class="text-balance text-heading-xs text-(--text-default)"
-                  >
-                    Profile
-                  </h1>
-                </div>
-                <p class="text-pretty text-body-sm text-(--text-muted)">
-                  Define and manage personal account preferences and profile config. Topic sections
-                  of Item rows, each titled by a section heading, saved as a single unit.
-                </p>
-              </div>
-            </header>
+            <PageHeader
+              title="Profile"
+              description="Define and manage personal account preferences and profile config. Topic sections of Item rows, each titled by a section heading, saved as a single unit."
+              size="small"
+              title-id="profile-title"
+            />
 
             <fieldset
               class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
@@ -806,74 +799,64 @@
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Full Name</Item.Title>
-                          <Item.Description>The name shown across your account.</Item.Description>
-                        </Item.Content>
-                        <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                          <Item.Actions class="w-full">
-                            <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                              <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                <Input
-                                  v-model="form.fullName"
-                                  size="large"
-                                  :disabled="submitting"
-                                  class="w-full"
-                                  aria-label="Full Name"
-                                  :required="submitted && nameEmpty"
-                                  :aria-describedby="
-                                    submitted && nameEmpty ? 'full-name-error' : undefined
-                                  "
-                                />
-                                <HelperText
-                                  v-if="submitted && nameEmpty"
-                                  id="full-name-error"
-                                  kind="required"
-                                  label="This field is required."
-                                />
-                              </div>
-                            </div>
-                          </Item.Actions>
+                      <SettingRow
+                        title="Full Name"
+                        description="The name shown across your account."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              v-model="form.fullName"
+                              size="large"
+                              :disabled="submitting"
+                              class="w-full"
+                              aria-label="Full Name"
+                              :required="submitted && nameEmpty"
+                              :aria-describedby="
+                                submitted && nameEmpty ? 'full-name-error' : undefined
+                              "
+                            />
+                            <HelperText
+                              v-if="submitted && nameEmpty"
+                              id="full-name-error"
+                              kind="required"
+                              label="This field is required."
+                            />
+                          </div>
                         </div>
-                      </Item>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Email</Item.Title>
-                          <Item.Description>Used for sign-in and notifications.</Item.Description>
-                        </Item.Content>
-                        <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                          <Item.Actions class="w-full">
-                            <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                              <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                <Input
-                                  v-model="form.email"
-                                  type="email"
-                                  size="large"
-                                  :disabled="submitting"
-                                  class="w-full"
-                                  aria-label="Email"
-                                  :required="submitted && emailEmpty"
-                                  :invalid="submitted && !emailEmpty && emailInvalid"
-                                  :aria-describedby="
-                                    submitted && emailInvalid ? 'email-error' : undefined
-                                  "
-                                />
-                                <HelperText
-                                  v-if="submitted && emailInvalid"
-                                  id="email-error"
-                                  :kind="emailEmpty ? 'required' : 'invalid'"
-                                  :label="
-                                    emailEmpty
-                                      ? 'This field is required.'
-                                      : 'Enter a valid email address.'
-                                  "
-                                />
-                              </div>
-                            </div>
-                          </Item.Actions>
+                      </SettingRow>
+                      <SettingRow
+                        title="Email"
+                        description="Used for sign-in and notifications."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              v-model="form.email"
+                              type="email"
+                              size="large"
+                              :disabled="submitting"
+                              class="w-full"
+                              aria-label="Email"
+                              :required="submitted && emailEmpty"
+                              :invalid="submitted && !emailEmpty && emailInvalid"
+                              :aria-describedby="
+                                submitted && emailInvalid ? 'email-error' : undefined
+                              "
+                            />
+                            <HelperText
+                              v-if="submitted && emailInvalid"
+                              id="email-error"
+                              :kind="emailEmpty ? 'required' : 'invalid'"
+                              :label="
+                                emailEmpty
+                                  ? 'This field is required.'
+                                  : 'Enter a valid email address.'
+                              "
+                            />
+                          </div>
                         </div>
-                      </Item>
+                      </SettingRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -884,74 +867,62 @@
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Timezone</Item.Title>
-                          <Item.Description
-                            >Times across the app are shown in this zone.</Item.Description
+                      <SettingRow
+                        title="Timezone"
+                        description="Times across the app are shown in this zone."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <Select
+                            v-model="form.timezone"
+                            size="large"
+                            :disabled="submitting"
+                            class="w-full"
+                            :display-value="labelOf(timezones)"
                           >
-                        </Item.Content>
-                        <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                          <Item.Actions class="w-full">
-                            <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                              <Select
-                                v-model="form.timezone"
-                                size="large"
-                                :disabled="submitting"
-                                class="w-full"
-                                :display-value="labelOf(timezones)"
+                            <Select.Trigger
+                              id="profile-timezone"
+                              aria-label="Timezone"
+                            />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in timezones"
+                                :key="option.value"
+                                :value="option.value"
                               >
-                                <Select.Trigger
-                                  id="profile-timezone"
-                                  aria-label="Timezone"
-                                />
-                                <Select.Content>
-                                  <Select.Option
-                                    v-for="option in timezones"
-                                    :key="option.value"
-                                    :value="option.value"
-                                  >
-                                    {{ option.label }}
-                                  </Select.Option>
-                                </Select.Content>
-                              </Select>
-                            </div>
-                          </Item.Actions>
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
                         </div>
-                      </Item>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Language</Item.Title>
-                          <Item.Description>The interface language.</Item.Description>
-                        </Item.Content>
-                        <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                          <Item.Actions class="w-full">
-                            <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                              <Select
-                                v-model="form.language"
-                                size="large"
-                                :disabled="submitting"
-                                class="w-full"
-                                :display-value="labelOf(languages)"
+                      </SettingRow>
+                      <SettingRow
+                        title="Language"
+                        description="The interface language."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <Select
+                            v-model="form.language"
+                            size="large"
+                            :disabled="submitting"
+                            class="w-full"
+                            :display-value="labelOf(languages)"
+                          >
+                            <Select.Trigger
+                              id="profile-language"
+                              aria-label="Language"
+                            />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in languages"
+                                :key="option.value"
+                                :value="option.value"
                               >
-                                <Select.Trigger
-                                  id="profile-language"
-                                  aria-label="Language"
-                                />
-                                <Select.Content>
-                                  <Select.Option
-                                    v-for="option in languages"
-                                    :key="option.value"
-                                    :value="option.value"
-                                  >
-                                    {{ option.label }}
-                                  </Select.Option>
-                                </Select.Content>
-                              </Select>
-                            </div>
-                          </Item.Actions>
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
                         </div>
-                      </Item>
+                      </SettingRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -964,21 +935,17 @@
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
-                      <Item size="small">
-                        <Item.Content>
-                          <Item.Title>Product updates</Item.Title>
-                          <Item.Description
-                            >Occasional emails about new features and changes.</Item.Description
-                          >
-                        </Item.Content>
-                        <Item.Actions>
-                          <Switch
-                            v-model="form.productUpdates"
-                            aria-label="Product updates"
-                            :disabled="submitting"
-                          />
-                        </Item.Actions>
-                      </Item>
+                      <SettingRow
+                        title="Product updates"
+                        description="Occasional emails about new features and changes."
+                        kind="compact"
+                      >
+                        <Switch
+                          v-model="form.productUpdates"
+                          aria-label="Product updates"
+                          :disabled="submitting"
+                        />
+                      </SettingRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -986,12 +953,8 @@
             </fieldset>
           </div>
 
-          <footer
-            class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
-          >
-            <div
-              class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
-            >
+          <SaveBar kind="plain">
+            <template #actions>
               <Button
                 type="button"
                 label="Cancel"
@@ -1006,8 +969,8 @@
                 :loading="submitting"
                 @click="submit"
               />
-            </div>
-          </footer>
+            </template>
+          </SaveBar>
         </form>
       </div>
     </div>

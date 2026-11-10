@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 856a430b4bc595a2d80a190de75dd867eb93c99b72d65827a4412eda6c1eb5f6
+checksum: 74fce06c26427ad231eeec718bc3e8acdabf8999b34bd0f70bedca0271c26f76
 created: 2026-05-22
 last_updated: 2026-11-09
 ---

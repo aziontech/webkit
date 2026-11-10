@@ -16,6 +16,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -855,27 +857,14 @@ jobs:
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+          </PageTabs>
 
           <div class="relative flex min-h-0 flex-1 flex-col">
             <section class="min-h-0 flex-1 overflow-auto">
@@ -1122,42 +1111,27 @@ jobs:
                     </Card>
 
                     <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-                      <header class="group/heading flex flex-col">
-                        <div
-                          class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                        >
-                          <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                            <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                              <h2
-                                class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                              >
-                                Get started
-                              </h2>
-                            </div>
-                            <p class="text-pretty text-body-sm text-(--text-muted)">
-                              Two ways to build and deploy this resource. Pick one and follow the
-                              steps, or read the
-                              <a
-                                href="https://example.com/docs/cli"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                                >CLI docs</a
-                              >.
-                            </p>
-                          </div>
-                          <div
-                            class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
-                          >
-                            <ToggleGroup
-                              v-model="path"
-                              :options="PATHS"
-                              size="large"
-                              aria-label="Deploy with"
-                            />
-                          </div>
-                        </div>
-                      </header>
+                      <SectionHeader title="Get started">
+                        <template #description>
+                          Two ways to build and deploy this resource. Pick one and follow the steps,
+                          or read the
+                          <a
+                            href="https://example.com/docs/cli"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                            >CLI docs</a
+                          >.
+                        </template>
+                        <template #actions>
+                          <ToggleGroup
+                            v-model="path"
+                            :options="PATHS"
+                            size="large"
+                            aria-label="Deploy with"
+                          />
+                        </template>
+                      </SectionHeader>
 
                       <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
                         <div

@@ -1,0 +1,16 @@
+{
+  "component": "page-tabs",
+  "title": "Components/Primitives/Navigation/PageTabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The second-level navigation of a resource detail page: a full-bleed strip ruled at the bottom, its tabs at the page boundary inset.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithActions",
+      "summary": "A service's detail tabs with the actions the resource owns on the right: the staged-changes Tag and the outlined medium Deploy button.",
+      "file": "with-actions.vue"
+    }
+  ]
+}

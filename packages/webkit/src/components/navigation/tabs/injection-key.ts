@@ -24,6 +24,9 @@ export interface TabsContext {
   onListKeydown: (event: globalThis.KeyboardEvent) => void
   tabId: (value: TabsValue) => string
   panelId: (value: TabsValue) => string
+  panels: Ref<TabsValue[]>
+  registerPanel: (value: TabsValue) => void
+  unregisterPanel: (value: TabsValue) => void
 }
 
 export const TabsInjectionKey: InjectionKey<TabsContext> = Symbol('TabsContext')

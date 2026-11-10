@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 4cc61db0fb6a4ec39cffc2306e01a8b0c5eaf7de8a16aa7368a0c73e394293b2
+checksum: 22609da000ab83510ae147b8104bbaa88a12988dc5374de14b191b153bcb25b4
 ---
 
 # PricingPlans — Component Spec

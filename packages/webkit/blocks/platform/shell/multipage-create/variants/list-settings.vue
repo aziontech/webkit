@@ -11,7 +11,9 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
+  import PageHeader from '@aziontech/webkit/page-header'
   import RadioButton from '@aziontech/webkit/radio-button'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Stepper from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
@@ -324,24 +326,12 @@
                 Step {{ index + 1 }} of {{ steps.length }}
               </p>
 
-              <header
+              <PageHeader
                 v-if="step.heading !== false"
-                class="flex flex-wrap items-start justify-between gap-(--spacing-md)"
-              >
-                <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <h1
-                      data-size="small"
-                      class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                    >
-                      {{ step.title }}
-                    </h1>
-                  </div>
-                  <p class="text-pretty text-body-sm text-(--text-muted)">
-                    {{ step.description }}
-                  </p>
-                </div>
-              </header>
+                :title="step.title"
+                :description="step.description"
+                size="small"
+              />
 
               <fieldset
                 class="mx-0 flex min-w-0 flex-1 flex-col border-0 p-0 data-headed:mt-(--layout-section-gap)"
@@ -493,40 +483,30 @@
                     <Card :padded="false">
                       <template #content>
                         <Item.List>
-                          <Item size="small">
-                            <Item.Content>
-                              <Item.Title>Name</Item.Title>
-                              <Item.Description
-                                >Give a unique and descriptive name to identify the access
-                                list.</Item.Description
-                              >
-                            </Item.Content>
-                            <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                              <Item.Actions class="w-full">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                  <Input
-                                    v-model="form.name"
-                                    size="large"
-                                    class="w-full"
-                                    aria-label="Name"
-                                    placeholder="office-ranges"
-                                    autocomplete="off"
-                                    :required="errors.name?.kind === 'required'"
-                                    :aria-describedby="
-                                      errors.name ? 'create-access-list-name-message' : undefined
-                                    "
-                                    @update:model-value="delete errors.name"
-                                  />
-                                  <HelperText
-                                    v-if="errors.name"
-                                    id="create-access-list-name-message"
-                                    :kind="errors.name.kind"
-                                    :label="errors.name.message"
-                                  />
-                                </div>
-                              </Item.Actions>
-                            </div>
-                          </Item>
+                          <SettingRow
+                            title="Name"
+                            description="Give a unique and descriptive name to identify the access list."
+                          >
+                            <Input
+                              v-model="form.name"
+                              size="large"
+                              class="w-full"
+                              aria-label="Name"
+                              placeholder="office-ranges"
+                              autocomplete="off"
+                              :required="errors.name?.kind === 'required'"
+                              :aria-describedby="
+                                errors.name ? 'create-access-list-name-message' : undefined
+                              "
+                              @update:model-value="delete errors.name"
+                            />
+                            <HelperText
+                              v-if="errors.name"
+                              id="create-access-list-name-message"
+                              :kind="errors.name.kind"
+                              :label="errors.name.message"
+                            />
+                          </SettingRow>
                         </Item.List>
                       </template>
                     </Card>
@@ -541,72 +521,60 @@
                     <Card :padded="false">
                       <template #content>
                         <Item.List>
-                          <Item size="small">
-                            <div class="flex w-full flex-col items-stretch gap-(--spacing-sm)">
-                              <Item.Content>
-                                <Item.Title>Type</Item.Title>
-                              </Item.Content>
-                              <Item.Actions class="w-full">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                  <fieldset
-                                    class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
-                                  >
-                                    <legend class="sr-only">Type</legend>
-                                    <Field.Label
-                                      v-for="option in types"
-                                      :key="option.value"
-                                    >
-                                      <Field orientation="horizontal">
-                                        <RadioButton
-                                          v-model="form.type"
-                                          :value="option.value"
-                                          name="access-lists-type"
-                                        />
-                                        <Field.Content>
-                                          <Field.Title>
-                                            {{ option.label }}
-                                          </Field.Title>
-                                          <Field.Description v-if="option.description">
-                                            {{ option.description }}
-                                          </Field.Description>
-                                        </Field.Content>
-                                      </Field>
-                                    </Field.Label>
-                                  </fieldset>
-                                </div>
-                              </Item.Actions>
-                            </div>
-                          </Item>
-                          <Item size="small">
-                            <div class="flex w-full flex-col items-stretch gap-(--spacing-sm)">
-                              <Item.Content>
-                                <Item.Title>{{ listField.label }}</Item.Title>
-                                <Item.Description>{{ listField.helper }}</Item.Description>
-                              </Item.Content>
-                              <Item.Actions class="w-full">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                  <Textarea
-                                    v-model="form.items"
-                                    class="w-full"
-                                    :rows="5"
-                                    :aria-label="listField.label"
-                                    :placeholder="listField.placeholder"
-                                    :required="errors.items?.kind === 'required'"
-                                    :aria-describedby="
-                                      errors.items ? 'create-access-list-items-message' : undefined
-                                    "
-                                    @update:model-value="delete errors.items"
+                          <SettingRow
+                            title="Type"
+                            kind="stacked"
+                          >
+                            <fieldset
+                              class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
+                            >
+                              <legend class="sr-only">Type</legend>
+                              <Field.Label
+                                v-for="option in types"
+                                :key="option.value"
+                              >
+                                <Field orientation="horizontal">
+                                  <RadioButton
+                                    v-model="form.type"
+                                    :value="option.value"
+                                    name="access-lists-type"
                                   />
-                                  <HelperText
-                                    v-if="errors.items"
-                                    id="create-access-list-items-message"
-                                    :kind="errors.items.kind"
-                                    :label="errors.items.message"
-                                  />
-                                </div>
-                              </Item.Actions>
-                            </div>
-                          </Item>
+                                  <Field.Content>
+                                    <Field.Title>
+                                      {{ option.label }}
+                                    </Field.Title>
+                                    <Field.Description v-if="option.description">
+                                      {{ option.description }}
+                                    </Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
+                            </fieldset>
+                          </SettingRow>
+                          <SettingRow
+                            :title="listField.label"
+                            :description="listField.helper"
+                            kind="stacked"
+                          >
+                            <Textarea
+                              v-model="form.items"
+                              class="w-full"
+                              :rows="5"
+                              :aria-label="listField.label"
+                              :placeholder="listField.placeholder"
+                              :required="errors.items?.kind === 'required'"
+                              :aria-describedby="
+                                errors.items ? 'create-access-list-items-message' : undefined
+                              "
+                              @update:model-value="delete errors.items"
+                            />
+                            <HelperText
+                              v-if="errors.items"
+                              id="create-access-list-items-message"
+                              :kind="errors.items.kind"
+                              :label="errors.items.message"
+                            />
+                          </SettingRow>
                         </Item.List>
                       </template>
                     </Card>

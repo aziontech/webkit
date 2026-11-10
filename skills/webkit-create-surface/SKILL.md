@@ -61,7 +61,7 @@ a page.
 | A resource the sidebar routes to             | Page                   | `/<module>/new`                |
 | A resource inside another resource           | Drawer                 | none — it opens over the owner |
 | A tuple normally created in bulk (variables) | Drawer, at first level | none                           |
-| A confirmation, a destructive guard          | Dialog                 | none                           |
+| A confirmation, a destructive guard          | `ConfirmDialog`        | none                           |
 
 **Settings use the create surface again.** The page that edits a resource is the page that created
 it, with values in it. Same bands, same rows, same order — so the two are one object seen twice, and
@@ -101,6 +101,16 @@ Heading (what this is, one line)
   time it needs a textarea.
 - **The band step is the same everywhere**, and the page opens on that same step: header → heading →
   first band → every band after it. One rhythm, top to bottom.
+
+Each piece of the anatomy is a component — compose them, never re-type their markup:
+
+| Piece                        | Component                                                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                            |
+| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="pi pi-cog"`        |
+| Row (field, switch, stacked) | `SettingRow` (`@aziontech/webkit/setting-row`) with `kind` `field`, `compact` or `stacked`                  |
+| Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `kind="plain"` on a create page, the floating default on settings |
+| Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                        |
 
 ## 3. Advanced is the endpoint's not-required set
 

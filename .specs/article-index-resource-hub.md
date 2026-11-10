@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: cfd89ae5da5428d5248d3ac01a43e9f70fc21dc61ae3a88d3e168b31f4ea12f0
+checksum: 4af7b30b7f4667332caf28824187cea75c795883467522e6f8c60ac0039f9d0a
 ---
 
 # ArticleIndexResourceHub — Component Spec

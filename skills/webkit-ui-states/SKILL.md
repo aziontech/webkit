@@ -376,7 +376,7 @@ For `/webkit-ui-states <file>`, list gaps grouped by view / flow. Each:
 ```
 ✗ WorkloadsList.vue:31  v-if="items.length" with no empty/error branch
   state: Empty + Error missing — a failed or empty fetch renders a blank panel.
-  fix: add EmptyState (reason + Create action) and a Alert severity="danger" with Retry.
+  fix: add EmptyState (reason + Create action) and an Alert severity="danger" with Retry.
 
 ✗ SomeForm.vue:44  Button :loading="submitting" but fields have no :disabled
   behavior: Lock the scope — a loading trigger over editable fields lets the payload change mid-request.

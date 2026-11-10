@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Separator from '@aziontech/webkit/separator'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -87,11 +88,7 @@
                       novalidate
                       @submit.prevent="signUp"
                     >
-                      <header class="flex flex-col gap-(--spacing-xxs)">
-                        <h1 class="text-heading-sm text-(--text-default)">
-                          Sign Up for a Free Account
-                        </h1>
-                      </header>
+                      <PageHeader title="Sign Up for a Free Account" />
 
                       <div class="flex flex-col gap-(--spacing-sm)">
                         <Button

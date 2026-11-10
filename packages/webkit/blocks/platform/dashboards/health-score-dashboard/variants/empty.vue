@@ -6,6 +6,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
@@ -81,32 +82,30 @@
 <template>
   <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
     <main class="layout-column flex flex-col gap-(--layout-group-gap)">
-      <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-        <div class="flex min-w-0 grow basis-96 flex-col gap-(--spacing-xxs)">
-          <h1 class="text-balance text-heading-sm text-(--text-default)">Experience score</h1>
-          <p class="text-pretty text-body-sm text-(--text-muted)">
-            How people experience each application: the overall score, the score per application and
-            location, each hour of the period and the incidents still open.
-          </p>
-        </div>
-        <div class="w-44 shrink-0">
-          <Select
-            v-model="period"
-            size="medium"
-          >
-            <Select.Trigger aria-label="Period" />
-            <Select.Content>
-              <Select.Option
-                v-for="option in periods"
-                :key="option.label"
-                :value="option.label"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </div>
-      </header>
+      <PageHeader
+        title="Experience score"
+        description="How people experience each application: the overall score, the score per application and location, each hour of the period and the incidents still open."
+      >
+        <template #actions>
+          <div class="w-44 shrink-0">
+            <Select
+              v-model="period"
+              size="medium"
+            >
+              <Select.Trigger aria-label="Period" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in periods"
+                  :key="option.label"
+                  :value="option.label"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+          </div>
+        </template>
+      </PageHeader>
 
       <div
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"

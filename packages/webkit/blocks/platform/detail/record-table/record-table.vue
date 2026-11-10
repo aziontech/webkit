@@ -11,19 +11,18 @@
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Input from '@aziontech/webkit/input'
-  import ItemActions from '@aziontech/webkit/item-actions'
-  import ItemContent from '@aziontech/webkit/item-content'
-  import ItemDescription from '@aziontech/webkit/item-description'
   import ItemList from '@aziontech/webkit/item-list'
-  import ItemRoot from '@aziontech/webkit/item-root'
-  import ItemTitle from '@aziontech/webkit/item-title'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import PopoverContent from '@aziontech/webkit/popover-content'
   import PopoverRoot from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import TableRoot from '@aziontech/webkit/table-root'
@@ -96,9 +95,6 @@
     errors.name = ''
     errors.domain = ''
   }
-
-  const copyLink = (id) =>
-    globalThis.navigator?.clipboard?.writeText(`${location.origin}${location.pathname}#${id}`)
 
   const POLICY_TYPES = [
     { value: 'simple', label: 'Simple' },
@@ -342,25 +338,14 @@
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <main class="flex h-full min-h-0 flex-col">
-      <div class="border-b border-(--border-default)">
-        <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-          <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-            <Tabs
-              v-model="activeTab"
-              class="w-full"
-            >
-              <Tabs.List>
-                <Tabs.Item
-                  v-for="tab in tabs"
-                  :key="tab.value"
-                  :value="tab.value"
-                  :label="tab.label"
-                />
-              </Tabs.List>
-            </Tabs>
-          </div>
-        </div>
-      </div>
+      <PageTabs v-model="activeTab">
+        <Tabs.Item
+          v-for="tab in tabs"
+          :key="tab.value"
+          :value="tab.value"
+          :label="tab.label"
+        />
+      </PageTabs>
 
       <section
         v-if="activeTab === 'main-settings'"
@@ -379,399 +364,181 @@
                 :disabled="saving"
               >
                 <legend class="sr-only">Zone settings</legend>
-                <section
-                  data-stacked
-                  class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                <SettingsSection
+                  title="General"
+                  hint="How this zone is identified across the platform."
+                  anchor="general"
                 >
-                  <div
-                    data-stacked
-                    class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                  >
-                    <div
-                      class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                    >
-                      <button
-                        type="button"
-                        aria-label="Copy link to the General section"
-                        class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                        @click="copyLink('general')"
-                      >
-                        <i
-                          class="pi pi-link text-body-xs"
-                          aria-hidden="true"
-                        />
-                      </button>
-                      <h2
-                        id="general"
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                      >
-                        <span class="flex items-center gap-(--spacing-xs)">General</span>
-                      </h2>
-                      <Hint
-                        text="How this zone is identified across the platform."
-                        class="shrink-0"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    data-open
-                    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                  >
-                    <div class="min-w-0 data-collapsible:overflow-hidden">
-                      <div
-                        data-open
-                        class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <ItemList>
-                              <ItemRoot size="small">
-                                <ItemContent>
-                                  <ItemTitle>Name</ItemTitle>
-                                  <ItemDescription
-                                    >Give a unique and descriptive name to identify your
-                                    zone.</ItemDescription
-                                  >
-                                </ItemContent>
-                                <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                  <ItemActions class="w-full">
-                                    <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                      <Input
-                                        v-model="settings.name"
-                                        size="large"
-                                        class="w-full"
-                                        aria-label="Name"
-                                        autocomplete="off"
-                                        :required="!!errors.name"
-                                        :aria-describedby="errors.name ? nameMessageId : undefined"
-                                        :disabled="saving"
-                                        @update:model-value="errors.name = ''"
-                                      />
-                                      <HelperText
-                                        v-if="errors.name"
-                                        :id="nameMessageId"
-                                        kind="required"
-                                        :label="errors.name"
-                                      />
-                                    </div>
-                                  </ItemActions>
-                                </div>
-                              </ItemRoot>
-
-                              <ItemRoot size="small">
-                                <ItemContent>
-                                  <ItemTitle>Domain Name</ItemTitle>
-                                  <ItemDescription
-                                    >Provide the domain name you want to host. Example:
-                                    example.com.</ItemDescription
-                                  >
-                                </ItemContent>
-                                <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                  <ItemActions class="w-full">
-                                    <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                      <Input
-                                        v-model="settings.domain"
-                                        size="large"
-                                        class="w-full"
-                                        aria-label="Domain Name"
-                                        autocomplete="off"
-                                        :required="!!errors.domain"
-                                        :aria-describedby="
-                                          errors.domain ? domainMessageId : undefined
-                                        "
-                                        :disabled="saving"
-                                        @update:model-value="errors.domain = ''"
-                                      />
-                                      <HelperText
-                                        v-if="errors.domain"
-                                        :id="domainMessageId"
-                                        kind="required"
-                                        :label="errors.domain"
-                                      />
-                                    </div>
-                                  </ItemActions>
-                                </div>
-                              </ItemRoot>
-                            </ItemList>
-                          </template>
-                        </Card>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section
-                  data-stacked
-                  class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                >
-                  <div
-                    data-stacked
-                    class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                  >
-                    <div
-                      class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                    >
-                      <button
-                        type="button"
-                        aria-label="Copy link to the Configure your nameserver section"
-                        class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                        @click="copyLink('configure-your-nameserver')"
-                      >
-                        <i
-                          class="pi pi-link text-body-xs"
-                          aria-hidden="true"
-                        />
-                      </button>
-                      <h2
-                        id="configure-your-nameserver"
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                      >
-                        <span class="flex items-center gap-(--spacing-xs)"
-                          >Configure your nameserver</span
+                  <Card :padded="false">
+                    <template #content>
+                      <ItemList>
+                        <SettingRow
+                          title="Name"
+                          description="Give a unique and descriptive name to identify your zone."
                         >
-                      </h2>
-                      <Hint
-                        text="Make this zone the authoritative DNS for the domain."
-                        class="shrink-0"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    data-open
-                    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                  >
-                    <div class="min-w-0 data-collapsible:overflow-hidden">
-                      <div
-                        data-open
-                        class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <ItemList>
-                              <ItemRoot size="small">
-                                <ItemContent>
-                                  <ItemTitle>Nameservers</ItemTitle>
-                                  <ItemDescription
-                                    >Make this zone the authoritative DNS for the domain by copying
-                                    the nameserver values.</ItemDescription
-                                  >
-                                </ItemContent>
-                                <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                  <ItemActions class="w-full">
-                                    <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                      <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                        <InputGroupRoot
-                                          v-for="(ns, index) in nameservers"
-                                          :key="ns"
-                                        >
-                                          <div class="flex flex-1 font-code">
-                                            <Input
-                                              :model-value="ns"
-                                              size="large"
-                                              class="w-full"
-                                              :aria-label="'Nameserver ' + (index + 1)"
-                                              readonly
-                                            />
-                                          </div>
-                                          <CopyButton
-                                            kind="transparent"
-                                            :value="ns"
-                                            :aria-label="'Copy nameserver ' + (index + 1)"
-                                          />
-                                        </InputGroupRoot>
-                                      </div>
-                                      <HelperText
-                                        :id="nameserverMessageId"
-                                        kind="helper"
-                                        label="Add the nameservers in your domain provider."
-                                      />
-                                    </div>
-                                  </ItemActions>
-                                </div>
-                              </ItemRoot>
-                            </ItemList>
-                          </template>
-                        </Card>
-                      </div>
-                    </div>
-                  </div>
-                </section>
+                          <Input
+                            v-model="settings.name"
+                            size="large"
+                            class="w-full"
+                            aria-label="Name"
+                            autocomplete="off"
+                            :required="!!errors.name"
+                            :aria-describedby="errors.name ? nameMessageId : undefined"
+                            :disabled="saving"
+                            @update:model-value="errors.name = ''"
+                          />
+                          <HelperText
+                            v-if="errors.name"
+                            :id="nameMessageId"
+                            kind="required"
+                            :label="errors.name"
+                          />
+                        </SettingRow>
 
-                <section
-                  data-stacked
-                  class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                        <SettingRow
+                          title="Domain Name"
+                          description="Provide the domain name you want to host. Example: example.com."
+                        >
+                          <Input
+                            v-model="settings.domain"
+                            size="large"
+                            class="w-full"
+                            aria-label="Domain Name"
+                            autocomplete="off"
+                            :required="!!errors.domain"
+                            :aria-describedby="errors.domain ? domainMessageId : undefined"
+                            :disabled="saving"
+                            @update:model-value="errors.domain = ''"
+                          />
+                          <HelperText
+                            v-if="errors.domain"
+                            :id="domainMessageId"
+                            kind="required"
+                            :label="errors.domain"
+                          />
+                        </SettingRow>
+                      </ItemList>
+                    </template>
+                  </Card>
+                </SettingsSection>
+
+                <SettingsSection
+                  title="Configure your nameserver"
+                  hint="Make this zone the authoritative DNS for the domain."
+                  anchor="configure-your-nameserver"
                 >
-                  <div
-                    data-stacked
-                    class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                  >
-                    <div
-                      class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                    >
-                      <button
-                        type="button"
-                        aria-label="Copy link to the DNSSEC section"
-                        class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                        @click="copyLink('dnssec')"
-                      >
-                        <i
-                          class="pi pi-link text-body-xs"
-                          aria-hidden="true"
-                        />
-                      </button>
-                      <h2
-                        id="dnssec"
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                      >
-                        <span class="flex items-center gap-(--spacing-xs)">DNSSEC</span>
-                      </h2>
-                      <Hint
-                        text="Signs the zone so resolvers can detect spoofed answers."
-                        class="shrink-0"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    data-open
-                    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                  >
-                    <div class="min-w-0 data-collapsible:overflow-hidden">
-                      <div
-                        data-open
-                        class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <ItemList>
-                              <ItemRoot size="small">
-                                <ItemContent>
-                                  <ItemTitle>Enable DNSSEC</ItemTitle>
-                                  <ItemDescription
-                                    >Enable DNSSEC to secure your DNS zone against cache poisoning
-                                    and spoofing attacks. Configure the Key Tag and Digest values in
-                                    your domain provider to complete the setup.</ItemDescription
-                                  >
-                                </ItemContent>
-                                <ItemActions>
-                                  <Switch
-                                    v-model="settings.dnssec"
-                                    aria-label="Enable DNSSEC"
-                                    :disabled="saving"
-                                  />
-                                </ItemActions>
-                              </ItemRoot>
+                  <Card :padded="false">
+                    <template #content>
+                      <ItemList>
+                        <SettingRow
+                          title="Nameservers"
+                          description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
+                        >
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <InputGroupRoot
+                              v-for="(ns, index) in nameservers"
+                              :key="ns"
+                            >
+                              <div class="flex flex-1 font-code">
+                                <Input
+                                  :model-value="ns"
+                                  size="large"
+                                  class="w-full"
+                                  :aria-label="'Nameserver ' + (index + 1)"
+                                  readonly
+                                />
+                              </div>
+                              <CopyButton
+                                kind="transparent"
+                                :value="ns"
+                                :aria-label="'Copy nameserver ' + (index + 1)"
+                              />
+                            </InputGroupRoot>
+                          </div>
+                          <HelperText
+                            :id="nameserverMessageId"
+                            kind="helper"
+                            label="Add the nameservers in your domain provider."
+                          />
+                        </SettingRow>
+                      </ItemList>
+                    </template>
+                  </Card>
+                </SettingsSection>
 
-                              <template v-if="settings.dnssec">
-                                <ItemRoot
-                                  v-for="key in dnssecKeys"
-                                  :key="key.label"
-                                  size="small"
-                                >
-                                  <ItemContent>
-                                    <ItemTitle>{{ key.label }}</ItemTitle>
-                                    <ItemDescription>{{ key.description }}</ItemDescription>
-                                  </ItemContent>
-                                  <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                    <ItemActions class="w-full">
-                                      <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                        <InputGroupRoot class="w-full">
-                                          <div class="flex flex-1 font-code">
-                                            <Input
-                                              :model-value="key.value"
-                                              size="large"
-                                              class="w-full"
-                                              :aria-label="key.label"
-                                              readonly
-                                            />
-                                          </div>
-                                          <CopyButton
-                                            kind="transparent"
-                                            :value="key.value"
-                                            :aria-label="'Copy ' + key.label"
-                                          />
-                                        </InputGroupRoot>
-                                      </div>
-                                    </ItemActions>
-                                  </div>
-                                </ItemRoot>
-                              </template>
-                            </ItemList>
-                          </template>
-                        </Card>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section
-                  data-stacked
-                  class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                <SettingsSection
+                  title="DNSSEC"
+                  hint="Signs the zone so resolvers can detect spoofed answers."
+                  anchor="dnssec"
                 >
-                  <div
-                    data-stacked
-                    class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                  >
-                    <div
-                      class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                    >
-                      <button
-                        type="button"
-                        aria-label="Copy link to the Status section"
-                        class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                        @click="copyLink('status')"
-                      >
-                        <i
-                          class="pi pi-link text-body-xs"
-                          aria-hidden="true"
-                        />
-                      </button>
-                      <h2
-                        id="status"
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                      >
-                        <span class="flex items-center gap-(--spacing-xs)">Status</span>
-                      </h2>
-                      <Hint
-                        text="A zone can be held inactive while its records are being built."
-                        class="shrink-0"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    data-open
-                    class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                  >
-                    <div class="min-w-0 data-collapsible:overflow-hidden">
-                      <div
-                        data-open
-                        class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <ItemList>
-                              <ItemRoot size="small">
-                                <ItemContent>
-                                  <ItemTitle>Active</ItemTitle>
-                                  <ItemDescription
-                                    >When active, the zone answers authoritative DNS queries for the
-                                    domain.</ItemDescription
-                                  >
-                                </ItemContent>
-                                <ItemActions>
-                                  <Switch
-                                    v-model="settings.active"
-                                    aria-label="Active"
-                                    :disabled="saving"
-                                  />
-                                </ItemActions>
-                              </ItemRoot>
-                            </ItemList>
-                          </template>
-                        </Card>
-                      </div>
-                    </div>
-                  </div>
-                </section>
+                  <Card :padded="false">
+                    <template #content>
+                      <ItemList>
+                        <SettingRow
+                          title="Enable DNSSEC"
+                          description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the Key Tag and Digest values in your domain provider to complete the setup."
+                          kind="compact"
+                        >
+                          <Switch
+                            v-model="settings.dnssec"
+                            aria-label="Enable DNSSEC"
+                            :disabled="saving"
+                          />
+                        </SettingRow>
+
+                        <template v-if="settings.dnssec">
+                          <SettingRow
+                            v-for="key in dnssecKeys"
+                            :key="key.label"
+                            :title="key.label"
+                            :description="key.description"
+                          >
+                            <InputGroupRoot class="w-full">
+                              <div class="flex flex-1 font-code">
+                                <Input
+                                  :model-value="key.value"
+                                  size="large"
+                                  class="w-full"
+                                  :aria-label="key.label"
+                                  readonly
+                                />
+                              </div>
+                              <CopyButton
+                                kind="transparent"
+                                :value="key.value"
+                                :aria-label="'Copy ' + key.label"
+                              />
+                            </InputGroupRoot>
+                          </SettingRow>
+                        </template>
+                      </ItemList>
+                    </template>
+                  </Card>
+                </SettingsSection>
+
+                <SettingsSection
+                  title="Status"
+                  hint="A zone can be held inactive while its records are being built."
+                  anchor="status"
+                >
+                  <Card :padded="false">
+                    <template #content>
+                      <ItemList>
+                        <SettingRow
+                          title="Active"
+                          description="When active, the zone answers authoritative DNS queries for the domain."
+                          kind="compact"
+                        >
+                          <Switch
+                            v-model="settings.active"
+                            aria-label="Active"
+                            :disabled="saving"
+                          />
+                        </SettingRow>
+                      </ItemList>
+                    </template>
+                  </Card>
+                </SettingsSection>
               </fieldset>
             </section>
           </div>
@@ -781,45 +548,30 @@
             leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
             leave-to-class="translate-y-2 opacity-0"
           >
-            <footer
+            <SaveBar
               v-if="dirty || saving"
-              class="sticky bottom-0 z-10 shrink-0"
+              kind="docked"
             >
-              <div class="border-t border-(--border-default) bg-(--bg-canvas) lg:h-14">
-                <div
-                  class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
-                >
-                  <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-                    <i
-                      class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <p class="min-w-0 text-body-sm text-(--text-default)">
-                      You have unsaved changes.
-                    </p>
-                  </div>
-                  <div
-                    class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
-                  >
-                    <Button
-                      type="button"
-                      label="Discard"
-                      kind="outlined"
-                      size="medium"
-                      :disabled="saving"
-                      @click="discard"
-                    />
-                    <Button
-                      type="submit"
-                      label="Save"
-                      kind="primary"
-                      size="medium"
-                      :loading="saving"
-                    />
-                  </div>
-                </div>
-              </div>
-            </footer>
+              You have unsaved changes.
+
+              <template #actions>
+                <Button
+                  type="button"
+                  label="Discard"
+                  kind="outlined"
+                  size="medium"
+                  :disabled="saving"
+                  @click="discard"
+                />
+                <Button
+                  type="submit"
+                  label="Save"
+                  kind="primary"
+                  size="medium"
+                  :loading="saving"
+                />
+              </template>
+            </SaveBar>
           </Transition>
         </form>
       </section>
@@ -829,40 +581,28 @@
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
       >
         <div class="layout-column layout-boundary flex min-w-0 flex-col">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1 class="text-balance text-heading-xs text-(--text-default)">Records</h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                The authoritative records this zone answers with.
-              </p>
-            </div>
-            <div
-              class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-            >
-              <div class="w-full md:w-fit">
-                <Button
-                  label="Documentation"
-                  icon="pi pi-book"
-                  kind="outlined"
-                  size="medium"
-                  href="https://example.com/docs/records"
-                  target="_blank"
-                  class="w-full"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  label="Add Record"
-                  icon="pi pi-plus"
-                  kind="outlined"
-                  size="medium"
-                  class="w-full"
-                />
-              </div>
-            </div>
-          </header>
+          <PageHeader
+            title="Records"
+            description="The authoritative records this zone answers with."
+            size="small"
+          >
+            <template #actions>
+              <Button
+                label="Documentation"
+                icon="pi pi-book"
+                kind="outlined"
+                size="medium"
+                href="https://example.com/docs/records"
+                target="_blank"
+              />
+              <Button
+                label="Add Record"
+                icon="pi pi-plus"
+                kind="outlined"
+                size="medium"
+              />
+            </template>
+          </PageHeader>
           <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
             <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <header class="flex items-center gap-(--layout-group-gap)">

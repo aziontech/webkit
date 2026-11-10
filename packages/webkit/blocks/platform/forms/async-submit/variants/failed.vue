@@ -12,7 +12,6 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Kbd from '@aziontech/webkit/kbd'
@@ -20,6 +19,7 @@
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import Menu from '@aziontech/webkit/menu'
   import Alert from '@aziontech/webkit/alert'
+  import PageHeader from '@aziontech/webkit/page-header'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -1005,27 +1005,19 @@
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto layout-boundary"
       >
         <main class="layout-column-focused flex min-h-full flex-col">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1 class="text-balance text-heading-lg text-(--text-default)">Async deployment</h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                A deploy runs for half a minute and asks nothing of you while it does. Start one,
-                then open any module in the sidebar. The run keeps going and reports back through
-                the toast, wherever you are.
-              </p>
-            </div>
-            <div
-              class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-            >
+          <PageHeader
+            title="Async deployment"
+            description="A deploy runs for half a minute and asks nothing of you while it does. Start one, then open any module in the sidebar. The run keeps going and reports back through the toast, wherever you are."
+            size="large"
+          >
+            <template #actions>
               <Tag
                 :label="statusTag.label"
                 :severity="statusTag.severity"
                 size="medium"
               />
-            </div>
-          </header>
+            </template>
+          </PageHeader>
 
           <aside
             aria-label="Scenario simulation"

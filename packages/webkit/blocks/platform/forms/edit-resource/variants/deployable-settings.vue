@@ -14,7 +14,6 @@
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -22,8 +21,13 @@
   import Menu from '@aziontech/webkit/menu'
   import Alert from '@aziontech/webkit/alert'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import RadioButton from '@aziontech/webkit/radio-button'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -1031,56 +1035,33 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-              <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
-                <Button
-                  label="Deploy"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-cloud-upload"
-                />
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+            <template #actions>
+              <Button
+                label="Deploy"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-cloud-upload"
+              />
+            </template>
+          </PageTabs>
 
           <section class="min-h-0 flex-1 overflow-auto">
             <div>
               <div
                 class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
               >
-                <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <h1
-                        data-size="small"
-                        class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                      >
-                        Settings
-                      </h1>
-                    </div>
-                    <p class="text-pretty text-body-sm text-(--text-muted)">
-                      Manage this resource’s configuration.
-                    </p>
-                  </div>
-                </header>
+                <PageHeader
+                  title="Settings"
+                  description="Manage this resource’s configuration."
+                  size="small"
+                />
 
                 <form
                   class="mt-(--layout-section-gap) flex min-w-0 flex-col"
@@ -1094,1087 +1075,587 @@
                   >
                     <legend class="sr-only">Resource settings</legend>
 
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                    <SettingsSection
+                      title="General"
+                      hint="How this resource is identified across the platform, and whether it answers at all."
+                      anchor="general"
                     >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <button
-                            type="button"
-                            aria-label="Copy link to the General section"
-                            class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                          >
-                            <i
-                              class="pi pi-link text-body-xs"
-                              aria-hidden="true"
-                            />
-                          </button>
-                          <h2
-                            id="general"
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">General</span>
-                          </h2>
-                          <Hint
-                            text="How this resource is identified across the platform, and whether it answers at all."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Name</Item.Title>
-                                      <Item.Description
-                                        >A unique and descriptive name to identify the
-                                        resource.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                      <Item.Actions class="w-full">
-                                        <div
-                                          class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                        >
-                                          <Input
-                                            v-model="form.name"
-                                            size="large"
-                                            class="w-full"
-                                            aria-label="Name"
-                                            :disabled="saving"
-                                          />
-                                        </div>
-                                      </Item.Actions>
-                                    </div>
-                                  </Item>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Active</Item.Title>
-                                      <Item.Description
-                                        >When disabled, the resource stops answering and traffic to
-                                        its domains is refused. Its deployments are
-                                        kept.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <Switch
-                                        v-model="form.active"
-                                        aria-label="Active"
-                                        :disabled="saving"
-                                      />
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                    >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <button
-                            type="button"
-                            aria-label="Copy link to the Domains section"
-                            class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                          >
-                            <i
-                              class="pi pi-link text-body-xs"
-                              aria-hidden="true"
-                            />
-                          </button>
-                          <h2
-                            id="domains"
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Domains</span>
-                          </h2>
-                          <Hint
-                            text="The addresses this resource answers on, the environment each one answers in, and the certificate it is served with."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <Card :padded="false">
-                              <template #content>
-                                <div class="flex min-w-0 flex-col">
-                                  <Table :bordered="false">
-                                    <Table.Header>
-                                      <Table.Row>
-                                        <Table.HeadCell principal>Domain</Table.HeadCell>
-                                        <Table.HeadCell>Environment</Table.HeadCell>
-                                        <Table.HeadCell>Policy</Table.HeadCell>
-                                        <Table.HeadCell>Certificate</Table.HeadCell>
-                                        <Table.HeadCell kind="action" />
-                                      </Table.Row>
-                                    </Table.Header>
-
-                                    <Table.Body>
-                                      <Table.Row
-                                        v-for="entry in domains"
-                                        :key="entry.id"
-                                      >
-                                        <Table.Cell principal>{{ entry.domain }}</Table.Cell>
-                                        <Table.Cell>
-                                          <Tag
-                                            v-if="entry.environment"
-                                            severity="secondary"
-                                            size="medium"
-                                            rounded
-                                            icon="ai ai-layers"
-                                            :label="entry.environment"
-                                          />
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                          <Tag
-                                            v-if="entry.environment"
-                                            severity="secondary"
-                                            size="medium"
-                                            rounded
-                                            :label="entry.policy"
-                                          />
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                          <Tag
-                                            severity="secondary"
-                                            size="medium"
-                                            rounded
-                                            icon="pi pi-verified"
-                                            :label="entry.certificate"
-                                          />
-                                        </Table.Cell>
-                                        <Table.Cell kind="action">
-                                          <DropdownMenu
-                                            v-if="!entry.generated"
-                                            placement="bottom-end"
-                                          >
-                                            <DropdownMenu.Trigger>
-                                              <Tooltip text="Row actions">
-                                                <IconButton
-                                                  icon="pi pi-ellipsis-h"
-                                                  kind="outlined"
-                                                  size="small"
-                                                  :disabled="saving"
-                                                  :aria-label="`Actions for ${entry.domain}`"
-                                                />
-                                              </Tooltip>
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Group>
-                                              <DropdownMenu.Option
-                                                value="edit"
-                                                label="Edit"
-                                              >
-                                                <template #left
-                                                  ><i
-                                                    class="pi pi-pencil"
-                                                    aria-hidden="true"
-                                                /></template>
-                                              </DropdownMenu.Option>
-                                            </DropdownMenu.Group>
-                                            <DropdownMenu.Group>
-                                              <DropdownMenu.Option
-                                                value="delete"
-                                                label="Delete"
-                                              >
-                                                <template #left
-                                                  ><i
-                                                    class="pi pi-trash"
-                                                    aria-hidden="true"
-                                                /></template>
-                                              </DropdownMenu.Option>
-                                            </DropdownMenu.Group>
-                                          </DropdownMenu>
-                                        </Table.Cell>
-                                      </Table.Row>
-                                    </Table.Body>
-                                  </Table>
-
-                                  <div
-                                    class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"
-                                  >
-                                    <span class="text-body-xs text-(--text-muted)"
-                                      >{{ domains.length }}
-                                      {{ domains.length === 1 ? 'domain' : 'domains' }}</span
-                                    >
-                                    <Button
-                                      type="button"
-                                      label="Add Domain"
-                                      kind="outlined"
-                                      size="medium"
-                                      icon="pi pi-plus"
-                                      :disabled="saving"
-                                    />
-                                  </div>
-                                </div>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                    >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <button
-                            type="button"
-                            aria-label="Copy link to the Advanced Settings section"
-                            class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                          >
-                            <i
-                              class="pi pi-link text-body-xs"
-                              aria-hidden="true"
-                            />
-                          </button>
-                          <h2
-                            id="advanced-settings"
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <button
-                              type="button"
-                              :aria-expanded="advancedOpen"
-                              aria-controls="resource-advanced-settings"
-                              :data-state="advancedOpen ? 'open' : 'closed'"
-                              class="group/disclosure -mx-(--spacing-xxs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) text-left text-[length:inherit] font-[inherit] leading-[inherit] transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                              @click="advancedOpen = !advancedOpen"
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Name"
+                              description="A unique and descriptive name to identify the resource."
                             >
-                              Advanced Settings
-                              <i
-                                class="pi pi-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
-                                aria-hidden="true"
+                              <Input
+                                v-model="form.name"
+                                size="large"
+                                class="w-full"
+                                aria-label="Name"
+                                :disabled="saving"
                               />
-                            </button>
-                          </h2>
-                          <Hint
-                            text="Deployment Settings, protocols and mutual authentication, which most resources never change."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        id="resource-advanced-settings"
-                        :data-open="advancedOpen || null"
-                        :inert="!advancedOpen || undefined"
-                        :aria-hidden="!advancedOpen || undefined"
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div
-                          data-collapsible
-                          class="min-w-0 data-collapsible:overflow-hidden"
-                        >
-                          <div
-                            :data-open="advancedOpen || null"
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <div class="flex min-w-0 flex-col">
-                              <section
-                                data-stacked
-                                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                              >
-                                <div
-                                  data-stacked
-                                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
+                            </SettingRow>
+                            <SettingRow
+                              title="Active"
+                              description="When disabled, the resource stops answering and traffic to its domains is refused. Its deployments are kept."
+                              kind="compact"
+                            >
+                              <Switch
+                                v-model="form.active"
+                                aria-label="Active"
+                                :disabled="saving"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
+
+                    <SettingsSection
+                      title="Domains"
+                      hint="The addresses this resource answers on, the environment each one answers in, and the certificate it is served with."
+                      anchor="domains"
+                    >
+                      <Card :padded="false">
+                        <template #content>
+                          <div class="flex min-w-0 flex-col">
+                            <Table :bordered="false">
+                              <Table.Header>
+                                <Table.Row>
+                                  <Table.HeadCell principal>Domain</Table.HeadCell>
+                                  <Table.HeadCell>Environment</Table.HeadCell>
+                                  <Table.HeadCell>Policy</Table.HeadCell>
+                                  <Table.HeadCell>Certificate</Table.HeadCell>
+                                  <Table.HeadCell kind="action" />
+                                </Table.Row>
+                              </Table.Header>
+
+                              <Table.Body>
+                                <Table.Row
+                                  v-for="entry in domains"
+                                  :key="entry.id"
                                 >
-                                  <div
-                                    class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-label="Copy link to the Deployment Settings section"
-                                      class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        class="pi pi-link text-body-xs"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                    <h2
-                                      id="deployment-settings"
-                                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                                    >
-                                      <span class="flex items-center gap-(--spacing-xs)"
-                                        >Deployment Settings</span
-                                      >
-                                    </h2>
-                                    <Hint
-                                      text="Which shared configuration each of this resource’s environments publishes with, linked automatically by deployment policy."
-                                      class="shrink-0"
+                                  <Table.Cell principal>{{ entry.domain }}</Table.Cell>
+                                  <Table.Cell>
+                                    <Tag
+                                      v-if="entry.environment"
+                                      severity="secondary"
+                                      size="medium"
+                                      rounded
+                                      icon="ai ai-layers"
+                                      :label="entry.environment"
                                     />
-                                  </div>
-                                </div>
-                                <div
-                                  data-open
-                                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                                >
-                                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                                    <div
-                                      data-open
-                                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <Tag
+                                      v-if="entry.environment"
+                                      severity="secondary"
+                                      size="medium"
+                                      rounded
+                                      :label="entry.policy"
+                                    />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <Tag
+                                      severity="secondary"
+                                      size="medium"
+                                      rounded
+                                      icon="pi pi-verified"
+                                      :label="entry.certificate"
+                                    />
+                                  </Table.Cell>
+                                  <Table.Cell kind="action">
+                                    <DropdownMenu
+                                      v-if="!entry.generated"
+                                      placement="bottom-end"
                                     >
-                                      <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-                                        <Alert
-                                          severity="info"
-                                          size="small"
-                                          action-label="Manage Deployment Settings"
+                                      <DropdownMenu.Trigger>
+                                        <Tooltip text="Row actions">
+                                          <IconButton
+                                            icon="pi pi-ellipsis-h"
+                                            kind="outlined"
+                                            size="small"
+                                            :disabled="saving"
+                                            :aria-label="`Actions for ${entry.domain}`"
+                                          />
+                                        </Tooltip>
+                                      </DropdownMenu.Trigger>
+                                      <DropdownMenu.Group>
+                                        <DropdownMenu.Option
+                                          value="edit"
+                                          label="Edit"
                                         >
-                                          Deployment Settings centralize the services, policies and
-                                          error pages that environments share. Every environment a
-                                          domain answers in is linked to one automatically, matching
-                                          that environment’s deployment policy.
-                                        </Alert>
+                                          <template #left
+                                            ><i
+                                              class="pi pi-pencil"
+                                              aria-hidden="true"
+                                          /></template>
+                                        </DropdownMenu.Option>
+                                      </DropdownMenu.Group>
+                                      <DropdownMenu.Group>
+                                        <DropdownMenu.Option
+                                          value="delete"
+                                          label="Delete"
+                                        >
+                                          <template #left
+                                            ><i
+                                              class="pi pi-trash"
+                                              aria-hidden="true"
+                                          /></template>
+                                        </DropdownMenu.Option>
+                                      </DropdownMenu.Group>
+                                    </DropdownMenu>
+                                  </Table.Cell>
+                                </Table.Row>
+                              </Table.Body>
+                            </Table>
 
-                                        <Card :padded="false">
-                                          <template #content>
-                                            <Item.List>
-                                              <Item
-                                                v-for="environment in linkedEnvironments"
-                                                :key="environment.name"
-                                                size="small"
-                                              >
-                                                <Item.Content>
-                                                  <Item.Title>{{ environment.name }}</Item.Title>
-                                                  <Item.Description>
-                                                    <span
-                                                      class="flex flex-wrap items-center gap-(--spacing-xs)"
-                                                    >
-                                                      <Tag
-                                                        severity="info"
-                                                        size="small"
-                                                        :label="environment.policy"
-                                                      />
-                                                      <Tag
-                                                        v-if="
-                                                          environment.auto &&
-                                                          !form.deploymentSettings[environment.name]
-                                                        "
-                                                        severity="secondary"
-                                                        size="small"
-                                                        label="Linked automatically"
-                                                      />
-                                                      <span class="text-body-xs text-(--text-muted)"
-                                                        >Only {{ environment.policy }} Deployment
-                                                        Settings can be linked to this
-                                                        environment.</span
-                                                      >
-                                                    </span>
-                                                  </Item.Description>
-                                                </Item.Content>
-                                                <div
-                                                  class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                >
-                                                  <Item.Actions class="w-full">
-                                                    <div
-                                                      class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                    >
-                                                      <Select
-                                                        :model-value="
-                                                          form.deploymentSettings[
-                                                            environment.name
-                                                          ] ?? environment.settingsId
-                                                        "
-                                                        size="large"
-                                                        class="w-full"
-                                                        placeholder="Select a Deployment Setting"
-                                                        :disabled="saving"
-                                                        :display-value="settingName"
-                                                        @update:model-value="
-                                                          form.deploymentSettings[
-                                                            environment.name
-                                                          ] = $event
-                                                        "
-                                                      >
-                                                        <Select.Trigger
-                                                          class="w-full"
-                                                          :aria-label="`Deployment Settings for ${environment.name}`"
-                                                        />
-                                                        <Select.Content>
-                                                          <Select.Option
-                                                            v-for="option in environment.options"
-                                                            :key="option.value"
-                                                            :value="option.value"
-                                                          >
-                                                            {{ option.label }}
-                                                          </Select.Option>
-                                                        </Select.Content>
-                                                      </Select>
-                                                    </div>
-                                                  </Item.Actions>
-                                                </div>
-                                              </Item>
-                                            </Item.List>
-                                          </template>
-                                        </Card>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-
-                              <section
-                                data-stacked
-                                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                            <div
+                              class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"
+                            >
+                              <span class="text-body-xs text-(--text-muted)"
+                                >{{ domains.length }}
+                                {{ domains.length === 1 ? 'domain' : 'domains' }}</span
                               >
-                                <div
-                                  data-stacked
-                                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                                >
-                                  <div
-                                    class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-label="Copy link to the Protocol Settings section"
-                                      class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        class="pi pi-link text-body-xs"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                    <h2
-                                      id="protocol-settings"
-                                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                                    >
-                                      <span class="flex items-center gap-(--spacing-xs)"
-                                        >Protocol Settings</span
-                                      >
-                                    </h2>
-                                    <Hint
-                                      text="Which protocols and ports this resource answers on, and the TLS floor it accepts."
-                                      class="shrink-0"
-                                    />
-                                  </div>
-                                </div>
-                                <div
-                                  data-open
-                                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                                >
-                                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                                    <div
-                                      data-open
-                                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <Card :padded="false">
-                                        <template #content>
-                                          <Item.List>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>HTTP Ports</Item.Title>
-                                                <Item.Description
-                                                  >The ports this resource answers plain HTTP
-                                                  on.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <MultiSelect
-                                                      v-model="form.protocols.httpPorts"
-                                                      size="large"
-                                                      class="w-full"
-                                                      placeholder="Select an HTTP port"
-                                                      :disabled="saving"
-                                                      :display-value="portsLabel"
-                                                    >
-                                                      <MultiSelect.Trigger
-                                                        aria-label="HTTP Ports"
-                                                      />
-                                                      <MultiSelect.Content>
-                                                        <MultiSelect.Option
-                                                          v-for="option in httpPortOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </MultiSelect.Option>
-                                                      </MultiSelect.Content>
-                                                    </MultiSelect>
-                                                    <HelperText
-                                                      v-if="!form.protocols.httpPorts.length"
-                                                      id="http-ports-message"
-                                                      :kind="'required'"
-                                                      :label="'Select at least one HTTP port.'"
-                                                    />
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>HTTPS support</Item.Title>
-                                                <Item.Description
-                                                  >Answer on both HTTP and HTTPS. Required by HTTP/3
-                                                  and by mutual authentication.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <Item.Actions>
-                                                <Switch
-                                                  :model-value="form.protocols.useHttps"
-                                                  aria-label="HTTPS support"
-                                                  :disabled="saving"
-                                                  @update:model-value="setHttps"
-                                                />
-                                              </Item.Actions>
-                                            </Item>
-                                            <Item
-                                              v-if="form.protocols.useHttps"
-                                              key="https-ports"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>HTTPS Ports</Item.Title>
-                                                <Item.Description
-                                                  >The ports this resource answers TLS traffic
-                                                  on.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <MultiSelect
-                                                      v-model="form.protocols.httpsPorts"
-                                                      size="large"
-                                                      class="w-full"
-                                                      placeholder="Select an HTTPS port"
-                                                      :disabled="saving"
-                                                      :display-value="portsLabel"
-                                                    >
-                                                      <MultiSelect.Trigger
-                                                        aria-label="HTTPS Ports"
-                                                      />
-                                                      <MultiSelect.Content>
-                                                        <MultiSelect.Option
-                                                          v-for="option in httpsPortOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </MultiSelect.Option>
-                                                      </MultiSelect.Content>
-                                                    </MultiSelect>
-                                                    <HelperText
-                                                      v-if="!form.protocols.httpsPorts.length"
-                                                      id="https-ports-message"
-                                                      :kind="'required'"
-                                                      :label="'Select at least one HTTPS port.'"
-                                                    />
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>HTTP/3 support</Item.Title>
-                                                <Item.Description
-                                                  >Serve over HTTP/3 (QUIC) where the client
-                                                  supports it. Turns HTTPS support on with
-                                                  it.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <Item.Actions>
-                                                <Switch
-                                                  :model-value="form.protocols.useHttp3"
-                                                  aria-label="HTTP/3 support"
-                                                  :disabled="saving"
-                                                  @update:model-value="setHttp3"
-                                                />
-                                              </Item.Actions>
-                                            </Item>
-                                            <Item
-                                              v-if="form.protocols.useHttp3"
-                                              key="http3-ports"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>HTTP/3 Ports</Item.Title>
-                                                <Item.Description
-                                                  >The ports QUIC is answered on.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <MultiSelect
-                                                      v-model="form.protocols.http3Ports"
-                                                      size="large"
-                                                      class="w-full"
-                                                      placeholder="Select an HTTP/3 port"
-                                                      :disabled="saving"
-                                                      :display-value="portsLabel"
-                                                    >
-                                                      <MultiSelect.Trigger
-                                                        aria-label="HTTP/3 Ports"
-                                                      />
-                                                      <MultiSelect.Content>
-                                                        <MultiSelect.Option
-                                                          v-for="option in http3PortOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </MultiSelect.Option>
-                                                      </MultiSelect.Content>
-                                                    </MultiSelect>
-                                                    <HelperText
-                                                      v-if="!form.protocols.http3Ports.length"
-                                                      id="http3-ports-message"
-                                                      :kind="'required'"
-                                                      :label="'Select at least one HTTP/3 port.'"
-                                                    />
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item
-                                              v-if="secure"
-                                              key="tls-version"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>Minimum TLS version</Item.Title>
-                                                <Item.Description
-                                                  >The oldest TLS version a client may negotiate
-                                                  with.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <Select
-                                                      v-model="form.protocols.minimumTlsVersion"
-                                                      size="large"
-                                                      class="w-full"
-                                                      :disabled="saving"
-                                                      :display-value="tlsVersionLabel"
-                                                    >
-                                                      <Select.Trigger
-                                                        class="w-full"
-                                                        aria-label="Minimum TLS version"
-                                                      />
-                                                      <Select.Content>
-                                                        <Select.Option
-                                                          v-for="option in tlsVersionOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </Select.Option>
-                                                      </Select.Content>
-                                                    </Select>
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item
-                                              v-if="secure"
-                                              key="cipher-suite"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>Cipher suite</Item.Title>
-                                                <Item.Description
-                                                  >The set of ciphers offered during the
-                                                  handshake.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <Select
-                                                      v-model="form.protocols.cipherSuite"
-                                                      size="large"
-                                                      class="w-full"
-                                                      :disabled="saving"
-                                                      :display-value="cipherSuiteLabel"
-                                                    >
-                                                      <Select.Trigger
-                                                        class="w-full"
-                                                        aria-label="Cipher suite"
-                                                      />
-                                                      <Select.Content>
-                                                        <Select.Option
-                                                          v-for="option in cipherSuiteOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </Select.Option>
-                                                      </Select.Content>
-                                                    </Select>
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                          </Item.List>
-                                        </template>
-                                      </Card>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-
-                              <section
-                                data-stacked
-                                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                              >
-                                <div
-                                  data-stacked
-                                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                                >
-                                  <div
-                                    class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-label="Copy link to the Mutual Authentication section"
-                                      class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        class="pi pi-link text-body-xs"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                    <h2
-                                      id="mutual-authentication"
-                                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                                    >
-                                      <span class="flex items-center gap-(--spacing-xs)"
-                                        >Mutual Authentication</span
-                                      >
-                                    </h2>
-                                    <Hint
-                                      text="Require the client to present a certificate the resource can verify, as well as presenting its own."
-                                      class="shrink-0"
-                                    />
-                                  </div>
-                                </div>
-                                <div
-                                  data-open
-                                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                                >
-                                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                                    <div
-                                      data-open
-                                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <Card :padded="false">
-                                        <template #content>
-                                          <Item.List>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>Mutual Authentication</Item.Title>
-                                                <Item.Description
-                                                  >Require the client to present a certificate the
-                                                  resource can verify, as well as presenting its
-                                                  own.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <Item.Actions>
-                                                <Switch
-                                                  v-model="form.mtls.enabled"
-                                                  aria-label="Mutual Authentication"
-                                                  :disabled="saving || !form.protocols.useHttps"
-                                                />
-                                              </Item.Actions>
-                                            </Item>
-                                            <Item
-                                              v-if="armed"
-                                              key="mtls-mode"
-                                              size="small"
-                                            >
-                                              <div
-                                                class="flex w-full flex-col items-stretch gap-(--spacing-sm)"
-                                              >
-                                                <Item.Content>
-                                                  <Item.Title>Mode</Item.Title>
-                                                  <Item.Description
-                                                    >What happens when the client certificate cannot
-                                                    be validated against the Trusted
-                                                    CA.</Item.Description
-                                                  >
-                                                </Item.Content>
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <div
-                                                      role="radiogroup"
-                                                      aria-label="Mutual Authentication mode"
-                                                      class="flex w-full flex-col gap-(--spacing-sm)"
-                                                    >
-                                                      <Field.Label
-                                                        v-for="option in mtlsModeOptions"
-                                                        :key="option.value"
-                                                      >
-                                                        <Field
-                                                          orientation="horizontal"
-                                                          :disabled="saving"
-                                                        >
-                                                          <RadioButton
-                                                            v-model="form.mtls.mode"
-                                                            :value="option.value"
-                                                            name="mtls-mode"
-                                                            :input-id="`mtls-mode-${option.value}`"
-                                                          />
-                                                          <Field.Content>
-                                                            <Field.Title>{{
-                                                              option.label
-                                                            }}</Field.Title>
-                                                            <Field.Description
-                                                              v-if="option.description"
-                                                              >{{
-                                                                option.description
-                                                              }}</Field.Description
-                                                            >
-                                                          </Field.Content>
-                                                        </Field>
-                                                      </Field.Label>
-                                                    </div>
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item
-                                              v-if="armed"
-                                              key="mtls-certificate"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>Trusted CA Certificate</Item.Title>
-                                                <Item.Description
-                                                  >The authority a client certificate is verified
-                                                  against.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <Select
-                                                      v-model="form.mtls.certificate"
-                                                      size="large"
-                                                      class="w-full"
-                                                      placeholder="Select a Trusted CA certificate"
-                                                      :disabled="saving"
-                                                      :display-value="certificateName"
-                                                    >
-                                                      <Select.Trigger
-                                                        class="w-full"
-                                                        aria-label="Trusted CA Certificate"
-                                                      />
-                                                      <Select.Content>
-                                                        <Select.Option
-                                                          v-for="option in trustedCaOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </Select.Option>
-                                                      </Select.Content>
-                                                    </Select>
-                                                    <HelperText
-                                                      v-if="!form.mtls.certificate"
-                                                      id="mtls-certificate-message"
-                                                      :kind="'required'"
-                                                      :label="'Mutual Authentication requires a Trusted CA certificate.'"
-                                                    />
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item
-                                              v-if="armed"
-                                              key="mtls-crl"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>Certificate Revocation List</Item.Title>
-                                                <Item.Description
-                                                  >Revoked certificates are rejected during the
-                                                  handshake.</Item.Description
-                                                >
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <div
-                                                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                  >
-                                                    <MultiSelect
-                                                      v-model="form.mtls.crl"
-                                                      size="large"
-                                                      class="w-full"
-                                                      placeholder="Select a revocation list"
-                                                      :disabled="saving"
-                                                      :display-value="crlLabel"
-                                                    >
-                                                      <MultiSelect.Trigger
-                                                        aria-label="Certificate Revocation List"
-                                                      />
-                                                      <MultiSelect.Content>
-                                                        <MultiSelect.Option
-                                                          v-for="option in revocationListOptions"
-                                                          :key="option.value"
-                                                          :value="option.value"
-                                                        >
-                                                          {{ option.label }}
-                                                        </MultiSelect.Option>
-                                                      </MultiSelect.Content>
-                                                    </MultiSelect>
-                                                  </div>
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                          </Item.List>
-                                        </template>
-                                      </Card>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
+                              <Button
+                                type="button"
+                                label="Add Domain"
+                                kind="outlined"
+                                size="medium"
+                                icon="pi pi-plus"
+                                :disabled="saving"
+                              />
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </section>
+                        </template>
+                      </Card>
+                    </SettingsSection>
 
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                    <SettingsSection
+                      title="Advanced Settings"
+                      hint="Deployment Settings, protocols and mutual authentication, which most resources never change."
+                      anchor="advanced-settings"
+                      v-model:open="advancedOpen"
+                      collapsible
                     >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
+                      <div class="flex min-w-0 flex-col">
+                        <SettingsSection
+                          title="Deployment Settings"
+                          hint="Which shared configuration each of this resource’s environments publishes with, linked automatically by deployment policy."
+                          anchor="deployment-settings"
                         >
-                          <button
-                            type="button"
-                            aria-label="Copy link to the Danger Zone section"
-                            class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                          >
-                            <i
-                              class="pi pi-link text-body-xs"
-                              aria-hidden="true"
-                            />
-                          </button>
-                          <h2
-                            id="danger-zone"
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Danger Zone</span>
-                          </h2>
-                          <Hint
-                            text="Actions that cannot be undone."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
+                          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+                            <Alert
+                              severity="info"
+                              size="small"
+                              action-label="Manage Deployment Settings"
+                            >
+                              Deployment Settings centralize the services, policies and error pages
+                              that environments share. Every environment a domain answers in is
+                              linked to one automatically, matching that environment’s deployment
+                              policy.
+                            </Alert>
+
                             <Card :padded="false">
                               <template #content>
                                 <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Delete this resource</Item.Title>
-                                      <Item.Description
-                                        >Once deleted, the resource and its deployments cannot be
-                                        recovered.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <Button
-                                        type="button"
-                                        label="Delete Resource"
-                                        kind="danger"
-                                        size="medium"
-                                        icon="pi pi-trash"
+                                  <SettingRow
+                                    v-for="environment in linkedEnvironments"
+                                    :key="environment.name"
+                                    :title="environment.name"
+                                  >
+                                    <template #description>
+                                      <span class="flex flex-wrap items-center gap-(--spacing-xs)">
+                                        <Tag
+                                          severity="info"
+                                          size="small"
+                                          :label="environment.policy"
+                                        />
+                                        <Tag
+                                          v-if="
+                                            environment.auto &&
+                                            !form.deploymentSettings[environment.name]
+                                          "
+                                          severity="secondary"
+                                          size="small"
+                                          label="Linked automatically"
+                                        />
+                                        <span class="text-body-xs text-(--text-muted)"
+                                          >Only {{ environment.policy }} Deployment Settings can be
+                                          linked to this environment.</span
+                                        >
+                                      </span>
+                                    </template>
+                                    <Select
+                                      :model-value="
+                                        form.deploymentSettings[environment.name] ??
+                                        environment.settingsId
+                                      "
+                                      size="large"
+                                      class="w-full"
+                                      placeholder="Select a Deployment Setting"
+                                      :disabled="saving"
+                                      :display-value="settingName"
+                                      @update:model-value="
+                                        form.deploymentSettings[environment.name] = $event
+                                      "
+                                    >
+                                      <Select.Trigger
+                                        class="w-full"
+                                        :aria-label="`Deployment Settings for ${environment.name}`"
                                       />
-                                    </Item.Actions>
-                                  </Item>
+                                      <Select.Content>
+                                        <Select.Option
+                                          v-for="option in environment.options"
+                                          :key="option.value"
+                                          :value="option.value"
+                                        >
+                                          {{ option.label }}
+                                        </Select.Option>
+                                      </Select.Content>
+                                    </Select>
+                                  </SettingRow>
                                 </Item.List>
                               </template>
                             </Card>
                           </div>
-                        </div>
+                        </SettingsSection>
+
+                        <SettingsSection
+                          title="Protocol Settings"
+                          hint="Which protocols and ports this resource answers on, and the TLS floor it accepts."
+                          anchor="protocol-settings"
+                        >
+                          <Card :padded="false">
+                            <template #content>
+                              <Item.List>
+                                <SettingRow
+                                  title="HTTP Ports"
+                                  description="The ports this resource answers plain HTTP on."
+                                >
+                                  <MultiSelect
+                                    v-model="form.protocols.httpPorts"
+                                    size="large"
+                                    class="w-full"
+                                    placeholder="Select an HTTP port"
+                                    :disabled="saving"
+                                    :display-value="portsLabel"
+                                  >
+                                    <MultiSelect.Trigger aria-label="HTTP Ports" />
+                                    <MultiSelect.Content>
+                                      <MultiSelect.Option
+                                        v-for="option in httpPortOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </MultiSelect.Option>
+                                    </MultiSelect.Content>
+                                  </MultiSelect>
+                                  <HelperText
+                                    v-if="!form.protocols.httpPorts.length"
+                                    id="http-ports-message"
+                                    :kind="'required'"
+                                    :label="'Select at least one HTTP port.'"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  title="HTTPS support"
+                                  description="Answer on both HTTP and HTTPS. Required by HTTP/3 and by mutual authentication."
+                                  kind="compact"
+                                >
+                                  <Switch
+                                    :model-value="form.protocols.useHttps"
+                                    aria-label="HTTPS support"
+                                    :disabled="saving"
+                                    @update:model-value="setHttps"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="form.protocols.useHttps"
+                                  key="https-ports"
+                                  title="HTTPS Ports"
+                                  description="The ports this resource answers TLS traffic on."
+                                >
+                                  <MultiSelect
+                                    v-model="form.protocols.httpsPorts"
+                                    size="large"
+                                    class="w-full"
+                                    placeholder="Select an HTTPS port"
+                                    :disabled="saving"
+                                    :display-value="portsLabel"
+                                  >
+                                    <MultiSelect.Trigger aria-label="HTTPS Ports" />
+                                    <MultiSelect.Content>
+                                      <MultiSelect.Option
+                                        v-for="option in httpsPortOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </MultiSelect.Option>
+                                    </MultiSelect.Content>
+                                  </MultiSelect>
+                                  <HelperText
+                                    v-if="!form.protocols.httpsPorts.length"
+                                    id="https-ports-message"
+                                    :kind="'required'"
+                                    :label="'Select at least one HTTPS port.'"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  title="HTTP/3 support"
+                                  description="Serve over HTTP/3 (QUIC) where the client supports it. Turns HTTPS support on with it."
+                                  kind="compact"
+                                >
+                                  <Switch
+                                    :model-value="form.protocols.useHttp3"
+                                    aria-label="HTTP/3 support"
+                                    :disabled="saving"
+                                    @update:model-value="setHttp3"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="form.protocols.useHttp3"
+                                  key="http3-ports"
+                                  title="HTTP/3 Ports"
+                                  description="The ports QUIC is answered on."
+                                >
+                                  <MultiSelect
+                                    v-model="form.protocols.http3Ports"
+                                    size="large"
+                                    class="w-full"
+                                    placeholder="Select an HTTP/3 port"
+                                    :disabled="saving"
+                                    :display-value="portsLabel"
+                                  >
+                                    <MultiSelect.Trigger aria-label="HTTP/3 Ports" />
+                                    <MultiSelect.Content>
+                                      <MultiSelect.Option
+                                        v-for="option in http3PortOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </MultiSelect.Option>
+                                    </MultiSelect.Content>
+                                  </MultiSelect>
+                                  <HelperText
+                                    v-if="!form.protocols.http3Ports.length"
+                                    id="http3-ports-message"
+                                    :kind="'required'"
+                                    :label="'Select at least one HTTP/3 port.'"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="secure"
+                                  key="tls-version"
+                                  title="Minimum TLS version"
+                                  description="The oldest TLS version a client may negotiate with."
+                                >
+                                  <Select
+                                    v-model="form.protocols.minimumTlsVersion"
+                                    size="large"
+                                    class="w-full"
+                                    :disabled="saving"
+                                    :display-value="tlsVersionLabel"
+                                  >
+                                    <Select.Trigger
+                                      class="w-full"
+                                      aria-label="Minimum TLS version"
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in tlsVersionOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </Select.Option>
+                                    </Select.Content>
+                                  </Select>
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="secure"
+                                  key="cipher-suite"
+                                  title="Cipher suite"
+                                  description="The set of ciphers offered during the handshake."
+                                >
+                                  <Select
+                                    v-model="form.protocols.cipherSuite"
+                                    size="large"
+                                    class="w-full"
+                                    :disabled="saving"
+                                    :display-value="cipherSuiteLabel"
+                                  >
+                                    <Select.Trigger
+                                      class="w-full"
+                                      aria-label="Cipher suite"
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in cipherSuiteOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </Select.Option>
+                                    </Select.Content>
+                                  </Select>
+                                </SettingRow>
+                              </Item.List>
+                            </template>
+                          </Card>
+                        </SettingsSection>
+
+                        <SettingsSection
+                          title="Mutual Authentication"
+                          hint="Require the client to present a certificate the resource can verify, as well as presenting its own."
+                          anchor="mutual-authentication"
+                        >
+                          <Card :padded="false">
+                            <template #content>
+                              <Item.List>
+                                <SettingRow
+                                  title="Mutual Authentication"
+                                  description="Require the client to present a certificate the resource can verify, as well as presenting its own."
+                                  kind="compact"
+                                >
+                                  <Switch
+                                    v-model="form.mtls.enabled"
+                                    aria-label="Mutual Authentication"
+                                    :disabled="saving || !form.protocols.useHttps"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="armed"
+                                  key="mtls-mode"
+                                  title="Mode"
+                                  description="What happens when the client certificate cannot be validated against the Trusted CA."
+                                  kind="stacked"
+                                >
+                                  <div
+                                    role="radiogroup"
+                                    aria-label="Mutual Authentication mode"
+                                    class="flex w-full flex-col gap-(--spacing-sm)"
+                                  >
+                                    <Field.Label
+                                      v-for="option in mtlsModeOptions"
+                                      :key="option.value"
+                                    >
+                                      <Field
+                                        orientation="horizontal"
+                                        :disabled="saving"
+                                      >
+                                        <RadioButton
+                                          v-model="form.mtls.mode"
+                                          :value="option.value"
+                                          name="mtls-mode"
+                                          :input-id="`mtls-mode-${option.value}`"
+                                        />
+                                        <Field.Content>
+                                          <Field.Title>{{ option.label }}</Field.Title>
+                                          <Field.Description v-if="option.description">{{
+                                            option.description
+                                          }}</Field.Description>
+                                        </Field.Content>
+                                      </Field>
+                                    </Field.Label>
+                                  </div>
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="armed"
+                                  key="mtls-certificate"
+                                  title="Trusted CA Certificate"
+                                  description="The authority a client certificate is verified against."
+                                >
+                                  <Select
+                                    v-model="form.mtls.certificate"
+                                    size="large"
+                                    class="w-full"
+                                    placeholder="Select a Trusted CA certificate"
+                                    :disabled="saving"
+                                    :display-value="certificateName"
+                                  >
+                                    <Select.Trigger
+                                      class="w-full"
+                                      aria-label="Trusted CA Certificate"
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in trustedCaOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </Select.Option>
+                                    </Select.Content>
+                                  </Select>
+                                  <HelperText
+                                    v-if="!form.mtls.certificate"
+                                    id="mtls-certificate-message"
+                                    :kind="'required'"
+                                    :label="'Mutual Authentication requires a Trusted CA certificate.'"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  v-if="armed"
+                                  key="mtls-crl"
+                                  title="Certificate Revocation List"
+                                  description="Revoked certificates are rejected during the handshake."
+                                >
+                                  <MultiSelect
+                                    v-model="form.mtls.crl"
+                                    size="large"
+                                    class="w-full"
+                                    placeholder="Select a revocation list"
+                                    :disabled="saving"
+                                    :display-value="crlLabel"
+                                  >
+                                    <MultiSelect.Trigger aria-label="Certificate Revocation List" />
+                                    <MultiSelect.Content>
+                                      <MultiSelect.Option
+                                        v-for="option in revocationListOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </MultiSelect.Option>
+                                    </MultiSelect.Content>
+                                  </MultiSelect>
+                                </SettingRow>
+                              </Item.List>
+                            </template>
+                          </Card>
+                        </SettingsSection>
                       </div>
-                    </section>
+                    </SettingsSection>
+
+                    <SettingsSection
+                      title="Danger Zone"
+                      hint="Actions that cannot be undone."
+                      anchor="danger-zone"
+                    >
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Delete this resource"
+                              description="Once deleted, the resource and its deployments cannot be recovered."
+                              kind="compact"
+                            >
+                              <Button
+                                type="button"
+                                label="Delete Resource"
+                                kind="danger"
+                                size="medium"
+                                icon="pi pi-trash"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
                   </fieldset>
                 </form>
               </div>
@@ -2188,47 +1669,27 @@
           leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
           leave-to-class="translate-y-2 opacity-0"
         >
-          <footer
-            v-if="dirty || saving"
-            class="sticky bottom-0 z-10 h-0 shrink-0"
-          >
-            <div
-              class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14"
-            >
-              <div
-                class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
-              >
-                <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-                  <i
-                    class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <p class="min-w-0 text-body-sm text-(--text-default)">
-                    You have unsaved changes.
-                  </p>
-                </div>
-                <div
-                  class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
-                >
-                  <Button
-                    type="button"
-                    label="Discard"
-                    kind="outlined"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    label="Save"
-                    kind="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                  />
-                </div>
-              </div>
-            </div>
-          </footer>
+          <SaveBar v-if="dirty || saving">
+            You have unsaved changes.
+
+            <template #actions>
+              <Button
+                type="button"
+                label="Discard"
+                kind="outlined"
+                size="medium"
+                :disabled="saving"
+                @click="discard"
+              />
+              <Button
+                label="Save"
+                kind="primary"
+                size="medium"
+                :loading="saving"
+                @click="save"
+              />
+            </template>
+          </SaveBar>
         </Transition>
       </div>
     </div>

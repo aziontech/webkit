@@ -14,7 +14,6 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Input from '@aziontech/webkit/input'
@@ -22,6 +21,11 @@
   import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
@@ -764,27 +768,14 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+          </PageTabs>
 
           <div class="relative flex min-h-0 flex-1 flex-col">
             <section class="min-h-0 flex-1 overflow-auto">
@@ -793,382 +784,201 @@
                   <div
                     class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
                   >
-                    <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                          <h1
-                            data-size="small"
-                            class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                          >
-                            Build
-                          </h1>
-                        </div>
-                        <p class="text-pretty text-body-sm text-(--text-muted)">
-                          This resource has no repository. Connect one here, or keep deploying from
-                          your terminal.
-                        </p>
-                      </div>
-                      <div
-                        class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-                      >
-                        <div class="w-full md:w-fit">
-                          <Button
-                            label="Deploy"
-                            icon="pi pi-cloud-upload"
-                            kind="outlined"
-                            size="medium"
-                            class="w-full"
-                          />
-                        </div>
-                      </div>
-                    </header>
+                    <PageHeader
+                      title="Build"
+                      description="This resource has no repository. Connect one here, or keep deploying from your terminal."
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          label="Deploy"
+                          icon="pi pi-cloud-upload"
+                          kind="outlined"
+                          size="medium"
+                        />
+                      </template>
+                    </PageHeader>
 
                     <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
-                      <section
-                        data-stacked
-                        class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                      <SettingsSection
+                        title="Git repository"
+                        hint="Connect a provider to build this resource from a repository."
+                        anchor="git-repository"
                       >
-                        <div
-                          data-stacked
-                          class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                        >
-                          <div
-                            class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Copy link to the Git repository section"
-                              class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                            >
-                              <i
-                                class="pi pi-link text-body-xs"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <h2
-                              id="git-repository"
-                              class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                            >
-                              <span class="flex items-center gap-(--spacing-xs)"
-                                >Git repository</span
-                              >
-                            </h2>
-                            <Hint
-                              text="Connect a provider to build this resource from a repository."
-                              class="shrink-0"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-open
-                          class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                        >
-                          <div class="min-w-0 data-collapsible:overflow-hidden">
+                        <Card>
+                          <template #content>
                             <div
-                              data-open
-                              class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
+                              class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
                             >
-                              <Card>
-                                <template #content>
-                                  <div
-                                    class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
+                              <EmptyState
+                                size="medium"
+                                title="Connect your repository"
+                                description="Choose a Git provider, then pick the repository this resource builds from. Until then, new code reaches it from the CLI only."
+                                class="w-full"
+                              >
+                                <template #icon>
+                                  <span class="relative flex size-10 items-center justify-center">
+                                    <span
+                                      aria-hidden="true"
+                                      class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
+                                    />
+                                    <span
+                                      aria-hidden="true"
+                                      class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
+                                    />
+                                    <span
+                                      class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
+                                    >
+                                      <i
+                                        class="ai ai-github text-body-md leading-none text-(--text-default)"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </span>
+                                </template>
+                                <template #actions>
+                                  <Button
+                                    label="Continue with GitHub"
+                                    icon="ai ai-github"
+                                    kind="secondary"
+                                    size="large"
+                                  />
+                                  <Link
+                                    label="Manage connected providers"
+                                    href="#"
+                                    size="large"
+                                  />
+                                </template>
+                              </EmptyState>
+                            </div>
+                          </template>
+                        </Card>
+                      </SettingsSection>
+
+                      <SettingsSection
+                        title="Build configuration"
+                        hint="How the CLI builds this resource."
+                        anchor="build-configuration"
+                      >
+                        <form
+                          aria-label="Build configuration"
+                          novalidate
+                          @submit.prevent="save"
+                        >
+                          <Card :padded="false">
+                            <template #content>
+                              <fieldset
+                                class="m-0 flex min-w-0 flex-col border-0 p-0"
+                                :disabled="saving"
+                              >
+                                <legend class="sr-only">Build configuration</legend>
+                                <Item.List>
+                                  <SettingRow
+                                    title="Framework preset"
+                                    description="The preset the CLI builds with."
                                   >
-                                    <EmptyState
-                                      size="medium"
-                                      title="Connect your repository"
-                                      description="Choose a Git provider, then pick the repository this resource builds from. Until then, new code reaches it from the CLI only."
-                                      class="w-full"
+                                    <div
+                                      class="flex w-full items-center justify-end gap-(--spacing-xs)"
                                     >
-                                      <template #icon>
-                                        <span
-                                          class="relative flex size-10 items-center justify-center"
+                                      <div class="flex flex-1 cursor-not-allowed">
+                                        <Tooltip
+                                          text="Detected from platform.config and can't be changed here."
+                                          class="w-full"
                                         >
-                                          <span
-                                            aria-hidden="true"
-                                            class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                                          />
-                                          <span
-                                            aria-hidden="true"
-                                            class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                                          />
-                                          <span
-                                            class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
-                                          >
-                                            <i
-                                              class="ai ai-github text-body-md leading-none text-(--text-default)"
-                                              aria-hidden="true"
+                                          <div class="pointer-events-none">
+                                            <Input
+                                              model-value="Next.js"
+                                              size="large"
+                                              disabled
+                                              aria-label="Framework preset"
                                             />
-                                          </span>
-                                        </span>
-                                      </template>
-                                      <template #actions>
-                                        <Button
-                                          label="Continue with GitHub"
-                                          icon="ai ai-github"
-                                          kind="secondary"
-                                          size="large"
-                                        />
-                                        <Link
-                                          label="Manage connected providers"
-                                          href="#"
-                                          size="large"
-                                        />
-                                      </template>
-                                    </EmptyState>
-                                  </div>
-                                </template>
-                              </Card>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-
-                      <section
-                        data-stacked
-                        class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                      >
-                        <div
-                          data-stacked
-                          class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                        >
-                          <div
-                            class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Copy link to the Build configuration section"
-                              class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                            >
-                              <i
-                                class="pi pi-link text-body-xs"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <h2
-                              id="build-configuration"
-                              class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                            >
-                              <span class="flex items-center gap-(--spacing-xs)"
-                                >Build configuration</span
-                              >
-                            </h2>
-                            <Hint
-                              text="How the CLI builds this resource."
-                              class="shrink-0"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-open
-                          class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                        >
-                          <div class="min-w-0 data-collapsible:overflow-hidden">
-                            <div
-                              data-open
-                              class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                            >
-                              <form
-                                aria-label="Build configuration"
-                                novalidate
-                                @submit.prevent="save"
-                              >
-                                <Card :padded="false">
-                                  <template #content>
-                                    <fieldset
-                                      class="m-0 flex min-w-0 flex-col border-0 p-0"
-                                      :disabled="saving"
-                                    >
-                                      <legend class="sr-only">Build configuration</legend>
-                                      <Item.List>
-                                        <Item size="small">
-                                          <Item.Content>
-                                            <Item.Title>Framework preset</Item.Title>
-                                            <Item.Description
-                                              >The preset the CLI builds with.</Item.Description
-                                            >
-                                          </Item.Content>
-                                          <div
-                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                          >
-                                            <Item.Actions class="w-full">
-                                              <div
-                                                class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                              >
-                                                <div class="flex flex-1 cursor-not-allowed">
-                                                  <Tooltip
-                                                    text="Detected from platform.config and can't be changed here."
-                                                    class="w-full"
-                                                  >
-                                                    <div class="pointer-events-none">
-                                                      <Input
-                                                        model-value="Next.js"
-                                                        size="large"
-                                                        disabled
-                                                        aria-label="Framework preset"
-                                                      />
-                                                    </div>
-                                                  </Tooltip>
-                                                </div>
-                                              </div>
-                                            </Item.Actions>
                                           </div>
-                                        </Item>
-
-                                        <Item size="small">
-                                          <Item.Content>
-                                            <Item.Title>Build command</Item.Title>
-                                            <Item.Description
-                                              >The command that builds the
-                                              resource.</Item.Description
-                                            >
-                                          </Item.Content>
-                                          <div
-                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                          >
-                                            <Item.Actions class="w-full">
-                                              <div
-                                                class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                              >
-                                                <div
-                                                  class="contents font-(family-name:--font-code)"
-                                                >
-                                                  <Input
-                                                    v-model="buildConfig.buildCommand"
-                                                    size="large"
-                                                    :disabled="saving"
-                                                    class="w-full"
-                                                    aria-label="Build command"
-                                                  />
-                                                </div>
-                                              </div>
-                                            </Item.Actions>
-                                          </div>
-                                        </Item>
-
-                                        <Item size="small">
-                                          <Item.Content>
-                                            <Item.Title>Deploy command</Item.Title>
-                                            <Item.Description
-                                              >The command that deploys the build.</Item.Description
-                                            >
-                                          </Item.Content>
-                                          <div
-                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                          >
-                                            <Item.Actions class="w-full">
-                                              <div
-                                                class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                              >
-                                                <div
-                                                  class="contents font-(family-name:--font-code)"
-                                                >
-                                                  <Input
-                                                    v-model="buildConfig.deployCommand"
-                                                    size="large"
-                                                    :disabled="saving"
-                                                    class="w-full"
-                                                    aria-label="Deploy command"
-                                                  />
-                                                </div>
-                                              </div>
-                                            </Item.Actions>
-                                          </div>
-                                        </Item>
-                                      </Item.List>
-                                    </fieldset>
-                                  </template>
-                                </Card>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-
-                      <section
-                        data-stacked
-                        class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                      >
-                        <div
-                          data-stacked
-                          class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                        >
-                          <div
-                            class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Copy link to the Deployment section"
-                              class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                            >
-                              <i
-                                class="pi pi-link text-body-xs"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <h2
-                              id="deployment"
-                              class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                            >
-                              <span class="flex items-center gap-(--spacing-xs)">Deployment</span>
-                            </h2>
-                            <Hint
-                              text="The personal token the workflow authenticates with, kept as a repository secret."
-                              class="shrink-0"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-open
-                          class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                        >
-                          <div class="min-w-0 data-collapsible:overflow-hidden">
-                            <div
-                              data-open
-                              class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                            >
-                              <Card :padded="false">
-                                <template #content>
-                                  <Item.List>
-                                    <Item size="small">
-                                      <Item.Content>
-                                        <Item.Title>API token</Item.Title>
-                                        <Item.Description
-                                          >Stored as the PLATFORM_TOKEN GitHub
-                                          secret.</Item.Description
-                                        >
-                                      </Item.Content>
-                                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                        <Item.Actions class="w-full">
-                                          <div
-                                            class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                          >
-                                            <InputGroupRoot class="w-full">
-                                              <div class="flex flex-1">
-                                                <Input
-                                                  model-value="analytics-app build token"
-                                                  size="large"
-                                                  class="w-full"
-                                                  aria-label="API token"
-                                                  readonly
-                                                />
-                                              </div>
-                                              <CopyButton
-                                                kind="transparent"
-                                                value="analytics-app build token"
-                                                aria-label="Copy API token"
-                                              />
-                                            </InputGroupRoot>
-                                          </div>
-                                        </Item.Actions>
+                                        </Tooltip>
                                       </div>
-                                    </Item>
-                                  </Item.List>
-                                </template>
-                              </Card>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
+                                    </div>
+                                  </SettingRow>
+
+                                  <SettingRow
+                                    title="Build command"
+                                    description="The command that builds the resource."
+                                  >
+                                    <div
+                                      class="flex w-full items-center justify-end gap-(--spacing-xs)"
+                                    >
+                                      <div class="contents font-(family-name:--font-code)">
+                                        <Input
+                                          v-model="buildConfig.buildCommand"
+                                          size="large"
+                                          :disabled="saving"
+                                          class="w-full"
+                                          aria-label="Build command"
+                                        />
+                                      </div>
+                                    </div>
+                                  </SettingRow>
+
+                                  <SettingRow
+                                    title="Deploy command"
+                                    description="The command that deploys the build."
+                                  >
+                                    <div
+                                      class="flex w-full items-center justify-end gap-(--spacing-xs)"
+                                    >
+                                      <div class="contents font-(family-name:--font-code)">
+                                        <Input
+                                          v-model="buildConfig.deployCommand"
+                                          size="large"
+                                          :disabled="saving"
+                                          class="w-full"
+                                          aria-label="Deploy command"
+                                        />
+                                      </div>
+                                    </div>
+                                  </SettingRow>
+                                </Item.List>
+                              </fieldset>
+                            </template>
+                          </Card>
+                        </form>
+                      </SettingsSection>
+
+                      <SettingsSection
+                        title="Deployment"
+                        hint="The personal token the workflow authenticates with, kept as a repository secret."
+                        anchor="deployment"
+                      >
+                        <Card :padded="false">
+                          <template #content>
+                            <Item.List>
+                              <SettingRow
+                                title="API token"
+                                description="Stored as the PLATFORM_TOKEN GitHub secret."
+                              >
+                                <div
+                                  class="flex w-full items-center justify-end gap-(--spacing-xs)"
+                                >
+                                  <InputGroupRoot class="w-full">
+                                    <div class="flex flex-1">
+                                      <Input
+                                        model-value="analytics-app build token"
+                                        size="large"
+                                        class="w-full"
+                                        aria-label="API token"
+                                        readonly
+                                      />
+                                    </div>
+                                    <CopyButton
+                                      kind="transparent"
+                                      value="analytics-app build token"
+                                      aria-label="Copy API token"
+                                    />
+                                  </InputGroupRoot>
+                                </div>
+                              </SettingRow>
+                            </Item.List>
+                          </template>
+                        </Card>
+                      </SettingsSection>
                     </div>
                   </div>
 
@@ -1178,50 +988,29 @@
                     leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                     leave-to-class="translate-y-2 opacity-0"
                   >
-                    <footer
-                      v-if="dirty || saving"
-                      class="sticky bottom-0 z-10 h-0 shrink-0"
-                    >
-                      <div
-                        class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14"
+                    <SaveBar v-if="dirty || saving">
+                      Build configuration changed.
+                      <span class="text-(--text-muted)"
+                        >Saving applies it to the next build of this resource.</span
                       >
-                        <div
-                          class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
-                        >
-                          <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-                            <i
-                              class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-                              aria-hidden="true"
-                            />
-                            <p class="min-w-0 text-body-sm text-(--text-default)">
-                              Build configuration changed.
-                              <span class="text-(--text-muted)"
-                                >Saving applies it to the next build of this resource.</span
-                              >
-                            </p>
-                          </div>
-                          <div
-                            class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
-                          >
-                            <Button
-                              type="button"
-                              label="Discard"
-                              kind="outlined"
-                              size="medium"
-                              :disabled="saving"
-                              @click="discard"
-                            />
-                            <Button
-                              label="Save"
-                              kind="primary"
-                              size="medium"
-                              :loading="saving"
-                              @click="save"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </footer>
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Discard"
+                          kind="outlined"
+                          size="medium"
+                          :disabled="saving"
+                          @click="discard"
+                        />
+                        <Button
+                          label="Save"
+                          kind="primary"
+                          size="medium"
+                          :loading="saving"
+                          @click="save"
+                        />
+                      </template>
+                    </SaveBar>
                   </Transition>
                 </div>
               </div>

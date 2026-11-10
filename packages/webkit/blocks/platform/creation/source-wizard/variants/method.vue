@@ -9,6 +9,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Stepper from '@aziontech/webkit/stepper'
   import { computed, nextTick, ref } from 'vue'
 
@@ -247,24 +248,12 @@
                 v-if="stepIndex !== 0"
                 class="layout-column-form layout-boundary-inline pb-(--spacing-md) pt-(--spacing-lg)"
               >
-                <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <h1
-                        id="create-project-title"
-                        data-size="small"
-                        class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                      >
-                        Create Project
-                      </h1>
-                    </div>
-                    <p class="text-pretty text-body-sm text-(--text-muted)">
-                      A project is the code the platform runs, and the configuration it runs with.
-                      Select where the code comes from and name it. The last step creates it and
-                      deploys it to the service you selected.
-                    </p>
-                  </div>
-                </header>
+                <PageHeader
+                  title="Create Project"
+                  description="A project is the code the platform runs, and the configuration it runs with. Select where the code comes from and name it. The last step creates it and deploys it to the service you selected."
+                  size="small"
+                  title-id="create-project-title"
+                />
               </div>
 
               <p

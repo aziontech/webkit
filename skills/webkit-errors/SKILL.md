@@ -1,6 +1,6 @@
 ---
 name: webkit-errors
-description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as a Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
+description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
 status: active
 last_updated: 2026-11-10
 scope: general
@@ -79,7 +79,9 @@ states distinct:
 - **red `invalid`** — the value is present and wrong.
 
 Mechanics (the `Field` triad, `aria-describedby`, submit-time validation, the locked scope) live in
-**`/webkit-form`**. The only rule this skill adds: **client-side validation is the one thing that does
+**`/webkit-form`**. In a settings row (`SettingRow`, `@aziontech/webkit/setting-row`) the message is a
+`HelperText` placed in the row's default slot right after the control, so it sits under the control
+inside the row's control column. The only rule this skill adds: **client-side validation is the one thing that does
 not go in a `Alert`.** The `Alert` is for what the **server** said.
 
 ## 2. Server rejection scoped to one field → a `Alert` in that section
@@ -278,7 +280,7 @@ For `/webkit-errors <file>`, list gaps. Each:
 
 ```
 ✗ CreateApplication.vue:118  toast.error for a rejection that names `connectorId`
-  rule: A field-scoped rejection goes to a Alert in that field's section, not a toast.
+  rule: A field-scoped rejection goes to an Alert in that field's section, not a toast.
   fix: render Alert severity="danger" in the Origin section + set the field's invalid state.
 
 ✗ SignIn.vue:64  toast.error('Incorrect credentials')

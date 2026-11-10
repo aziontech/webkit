@@ -6,6 +6,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
@@ -410,13 +411,10 @@
 
 <template>
   <div class="flex min-w-0 flex-col gap-(--spacing-lg) p-(--spacing-lg)">
-    <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-      <h1 class="text-balance text-heading-sm text-(--text-default)">Funnel and retention</h1>
-      <p class="text-pretty text-body-sm text-(--text-muted)">
-        How visitors move from a first visit to a paid plan, and how many of each weekly sign-up
-        cohort keep coming back.
-      </p>
-    </header>
+    <PageHeader
+      title="Funnel and retention"
+      description="How visitors move from a first visit to a paid plan, and how many of each weekly sign-up cohort keep coming back."
+    />
 
     <div
       role="group"

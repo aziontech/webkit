@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 2
-checksum: 783d579e3f214322b7e6a4bfbee7b733b6e828c98acdb76109e701be8ac20670
+checksum: e92595e41b5dbba4987a7b6d7268d7c7dc7e8888b9ad2ab4b79a4d01b5cf64c4
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-09

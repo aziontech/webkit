@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Textarea from '@aziontech/webkit/textarea'
@@ -116,17 +117,12 @@
       :aria-busy="busy"
       @submit.prevent="submit"
     >
-      <header class="flex flex-col gap-(--spacing-xxs)">
-        <h1
-          id="create-variable-title"
-          class="text-balance text-heading-xs text-(--text-default)"
-        >
-          Create Variable
-        </h1>
-        <p class="text-pretty text-body-sm text-(--text-muted)">
-          Add a key-value pair your services read at runtime.
-        </p>
-      </header>
+      <PageHeader
+        title="Create Variable"
+        description="Add a key-value pair your services read at runtime."
+        size="small"
+        title-id="create-variable-title"
+      />
 
       <div class="layout-section-start flex flex-col gap-(--spacing-md)">
         <div

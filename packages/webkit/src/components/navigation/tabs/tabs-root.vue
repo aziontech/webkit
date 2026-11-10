@@ -122,6 +122,16 @@
   const tabId = (tabValue: TabsValue) => `${baseId}-tab-${String(tabValue)}`
   const panelId = (tabValue: TabsValue) => `${baseId}-panel-${String(tabValue)}`
 
+  const panels = ref<TabsValue[]>([])
+
+  const registerPanel = (tabValue: TabsValue) => {
+    if (!panels.value.includes(tabValue)) panels.value = [...panels.value, tabValue]
+  }
+
+  const unregisterPanel = (tabValue: TabsValue) => {
+    panels.value = panels.value.filter((entry) => entry !== tabValue)
+  }
+
   const onListKeydown = (event: globalThis.KeyboardEvent) => {
     const enabled = getEnabledTabs(tabs.value)
 
@@ -168,7 +178,10 @@
     focusTab,
     onListKeydown,
     tabId,
-    panelId
+    panelId,
+    panels,
+    registerPanel,
+    unregisterPanel
   }
 
   provide(TabsInjectionKey, context)

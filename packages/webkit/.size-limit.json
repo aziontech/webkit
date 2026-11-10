@@ -840,5 +840,40 @@
     "name": "input-group-input",
     "path": "src/components/inputs/input-group/input-group-input/input-group-input.vue",
     "limit": "1.25 KB"
+  },
+  {
+    "name": "page-header",
+    "path": "src/components/layout/page-header/page-header.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "section-header",
+    "path": "src/components/layout/section-header/section-header.vue",
+    "limit": "7.5 KB"
+  },
+  {
+    "name": "settings-section",
+    "path": "src/components/layout/settings-section/settings-section.vue",
+    "limit": "6 KB"
+  },
+  {
+    "name": "setting-row",
+    "path": "src/components/layout/setting-row/setting-row.vue",
+    "limit": "13.5 KB"
+  },
+  {
+    "name": "save-bar",
+    "path": "src/components/layout/save-bar/save-bar.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "page-tabs",
+    "path": "src/components/navigation/page-tabs/page-tabs.vue",
+    "limit": "14.5 KB"
+  },
+  {
+    "name": "confirm-dialog",
+    "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
+    "limit": "23 KB"
   }
 ]

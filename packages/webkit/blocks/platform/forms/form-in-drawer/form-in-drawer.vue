@@ -20,10 +20,12 @@
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -809,31 +811,21 @@
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto layout-boundary"
       >
         <main class="flex h-full flex-col">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1 class="text-balance text-heading-xs text-(--text-default)">Services</h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                Drawer create whose body is several section-titled ItemGroup sections: the settings
-                layout, in context, with one scoped save.
-              </p>
-            </div>
-            <div
-              class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-            >
-              <div class="w-full md:w-fit">
-                <Button
-                  label="Create Service"
-                  icon="pi pi-plus"
-                  kind="outlined"
-                  size="medium"
-                  class="w-full"
-                  @click="openCreate"
-                />
-              </div>
-            </div>
-          </header>
+          <PageHeader
+            title="Services"
+            description="Drawer create whose body is several section-titled ItemGroup sections: the settings layout, in context, with one scoped save."
+            size="small"
+          >
+            <template #actions>
+              <Button
+                label="Create Service"
+                icon="pi pi-plus"
+                kind="outlined"
+                size="medium"
+                @click="openCreate"
+              />
+            </template>
+          </PageHeader>
 
           <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
             <li
@@ -887,71 +879,52 @@
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Name</Item.Title>
-                                <Item.Description
-                                  >A unique identifier. Lower-case letters, numbers, and
-                                  hyphen.</Item.Description
-                                >
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                  >
-                                    <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                      <div class="contents font-code">
-                                        <Input
-                                          v-model="form.name"
-                                          size="large"
-                                          :disabled="submitting"
-                                          class="w-full"
-                                          aria-label="Name"
-                                          placeholder="my-service"
-                                          :required="!!errors.name && !form.name.trim()"
-                                          :invalid="!!errors.name && !!form.name.trim()"
-                                          :aria-describedby="
-                                            errors.name ? 'service-name-error' : undefined
-                                          "
-                                          @update:model-value="errors.name = ''"
-                                        />
-                                      </div>
-                                      <HelperText
-                                        v-if="errors.name"
-                                        id="service-name-error"
-                                        :kind="form.name.trim() ? 'invalid' : 'required'"
-                                        :label="errors.name"
-                                      />
-                                    </div>
-                                  </div>
-                                </Item.Actions>
-                              </div>
-                            </Item>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Description</Item.Title>
-                                <Item.Description
-                                  >A short note about what this service does.</Item.Description
-                                >
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                  >
+                            <SettingRow
+                              title="Name"
+                              description="A unique identifier. Lower-case letters, numbers, and hyphen."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                  <div class="contents font-code">
                                     <Input
-                                      v-model="form.description"
+                                      v-model="form.name"
                                       size="large"
                                       :disabled="submitting"
                                       class="w-full"
-                                      aria-label="Description"
-                                      placeholder="Optional"
+                                      aria-label="Name"
+                                      placeholder="my-service"
+                                      :required="!!errors.name && !form.name.trim()"
+                                      :invalid="!!errors.name && !!form.name.trim()"
+                                      :aria-describedby="
+                                        errors.name ? 'service-name-error' : undefined
+                                      "
+                                      @update:model-value="errors.name = ''"
                                     />
                                   </div>
-                                </Item.Actions>
+                                  <HelperText
+                                    v-if="errors.name"
+                                    id="service-name-error"
+                                    :kind="form.name.trim() ? 'invalid' : 'required'"
+                                    :label="errors.name"
+                                  />
+                                </div>
                               </div>
-                            </Item>
+                            </SettingRow>
+                            <SettingRow
+                              title="Description"
+                              description="A short note about what this service does."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <Input
+                                  v-model="form.description"
+                                  size="large"
+                                  :disabled="submitting"
+                                  class="w-full"
+                                  aria-label="Description"
+                                  placeholder="Optional"
+                                />
+                              </div>
+                            </SettingRow>
                           </Item.List>
                         </template>
                       </Card>
@@ -964,92 +937,76 @@
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Runtime</Item.Title>
-                                <Item.Description
-                                  >The language the service runs on.</Item.Description
-                                >
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
+                            <SettingRow
+                              title="Runtime"
+                              description="The language the service runs on."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                  <Select
+                                    v-model="form.runtime"
+                                    size="large"
+                                    :disabled="submitting"
+                                    class="w-full"
+                                    placeholder="Select a runtime"
+                                    :required="!!errors.runtime"
+                                    :display-value="runtimeLabel"
+                                    @update:model-value="errors.runtime = ''"
                                   >
-                                    <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                      <Select
-                                        v-model="form.runtime"
-                                        size="large"
-                                        :disabled="submitting"
-                                        class="w-full"
-                                        placeholder="Select a runtime"
-                                        :required="!!errors.runtime"
-                                        :display-value="runtimeLabel"
-                                        @update:model-value="errors.runtime = ''"
+                                    <Select.Trigger
+                                      id="service-runtime"
+                                      aria-label="Runtime"
+                                      :aria-describedby="
+                                        errors.runtime ? 'service-runtime-error' : undefined
+                                      "
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in runtimes"
+                                        :key="option.value"
+                                        :value="option.value"
                                       >
-                                        <Select.Trigger
-                                          id="service-runtime"
-                                          aria-label="Runtime"
-                                          :aria-describedby="
-                                            errors.runtime ? 'service-runtime-error' : undefined
-                                          "
-                                        />
-                                        <Select.Content>
-                                          <Select.Option
-                                            v-for="option in runtimes"
-                                            :key="option.value"
-                                            :value="option.value"
-                                          >
-                                            {{ option.label }}
-                                          </Select.Option>
-                                        </Select.Content>
-                                      </Select>
-                                      <HelperText
-                                        v-if="errors.runtime"
-                                        id="service-runtime-error"
-                                        kind="required"
-                                        :label="errors.runtime"
-                                      />
-                                    </div>
-                                  </div>
-                                </Item.Actions>
+                                        {{ option.label }}
+                                      </Select.Option>
+                                    </Select.Content>
+                                  </Select>
+                                  <HelperText
+                                    v-if="errors.runtime"
+                                    id="service-runtime-error"
+                                    kind="required"
+                                    :label="errors.runtime"
+                                  />
+                                </div>
                               </div>
-                            </Item>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Region</Item.Title>
-                                <Item.Description>Where the service is deployed.</Item.Description>
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                  >
-                                    <Select
-                                      v-model="form.region"
-                                      size="large"
-                                      :disabled="submitting"
-                                      class="w-full"
-                                      :display-value="regionLabel"
+                            </SettingRow>
+                            <SettingRow
+                              title="Region"
+                              description="Where the service is deployed."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <Select
+                                  v-model="form.region"
+                                  size="large"
+                                  :disabled="submitting"
+                                  class="w-full"
+                                  :display-value="regionLabel"
+                                >
+                                  <Select.Trigger
+                                    id="service-region"
+                                    aria-label="Region"
+                                  />
+                                  <Select.Content>
+                                    <Select.Option
+                                      v-for="option in regions"
+                                      :key="option.value"
+                                      :value="option.value"
                                     >
-                                      <Select.Trigger
-                                        id="service-region"
-                                        aria-label="Region"
-                                      />
-                                      <Select.Content>
-                                        <Select.Option
-                                          v-for="option in regions"
-                                          :key="option.value"
-                                          :value="option.value"
-                                        >
-                                          {{ option.label }}
-                                        </Select.Option>
-                                      </Select.Content>
-                                    </Select>
-                                  </div>
-                                </Item.Actions>
+                                      {{ option.label }}
+                                    </Select.Option>
+                                  </Select.Content>
+                                </Select>
                               </div>
-                            </Item>
+                            </SettingRow>
                           </Item.List>
                         </template>
                       </Card>
@@ -1062,36 +1019,28 @@
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Active</Item.Title>
-                                <Item.Description
-                                  >Start the service immediately after creation.</Item.Description
-                                >
-                              </Item.Content>
-                              <Item.Actions>
-                                <Switch
-                                  v-model="form.active"
-                                  aria-label="Active"
-                                  :disabled="submitting"
-                                />
-                              </Item.Actions>
-                            </Item>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Request logging</Item.Title>
-                                <Item.Description
-                                  >Record incoming requests for this service.</Item.Description
-                                >
-                              </Item.Content>
-                              <Item.Actions>
-                                <Switch
-                                  v-model="form.logging"
-                                  aria-label="Request logging"
-                                  :disabled="submitting"
-                                />
-                              </Item.Actions>
-                            </Item>
+                            <SettingRow
+                              title="Active"
+                              description="Start the service immediately after creation."
+                              kind="compact"
+                            >
+                              <Switch
+                                v-model="form.active"
+                                aria-label="Active"
+                                :disabled="submitting"
+                              />
+                            </SettingRow>
+                            <SettingRow
+                              title="Request logging"
+                              description="Record incoming requests for this service."
+                              kind="compact"
+                            >
+                              <Switch
+                                v-model="form.logging"
+                                aria-label="Request logging"
+                                :disabled="submitting"
+                              />
+                            </SettingRow>
                           </Item.List>
                         </template>
                       </Card>

@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
+  import PageHeader from '@aziontech/webkit/page-header'
 </script>
 
 <template>
@@ -46,13 +47,10 @@
               >
                 <template #content>
                   <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
-                    <header class="flex flex-col gap-(--spacing-xxs)">
-                      <h1 class="text-heading-sm text-(--text-default)">Check your inbox</h1>
-                      <p class="text-body-sm text-(--text-muted)">
-                        We sent a verification link to myemail@example.com. Check your inbox or spam
-                        folder and follow the instructions.
-                      </p>
-                    </header>
+                    <PageHeader
+                      title="Check your inbox"
+                      description="We sent a verification link to myemail@example.com. Check your inbox or spam folder and follow the instructions."
+                    />
 
                     <div class="flex items-center gap-(--spacing-xs)">
                       <p class="text-body-sm text-(--text-default)">Didn't receive the email?</p>

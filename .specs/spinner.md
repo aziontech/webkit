@@ -4,7 +4,7 @@ category: utils
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b8eee23c06b905f737eac4edd617d10120d70d4d1f9ef724216cd7b40de23a09
+checksum: 6889a76c960eec9ec7b41b3472c96df79c25527ce75a6dbcc041ca2fd27b2037
 created: 2026-05-22
 last_updated: 2026-11-09
 ---

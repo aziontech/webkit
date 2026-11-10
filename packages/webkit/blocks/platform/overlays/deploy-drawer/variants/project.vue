@@ -13,7 +13,6 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
@@ -21,6 +20,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Tag from '@aziontech/webkit/tag'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -235,476 +235,398 @@
           <PanelContent>
             <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">Deploy</legend>
-              <section
-                data-stacked="true"
-                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+              <SettingsSection
+                title="Resources"
+                hint="Everything this project serves, at the version this deployment publishes, with the version of every dependency they reference."
               >
-                <div
-                  data-stacked="true"
-                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                >
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
+                <Card :padded="false">
+                  <template #content>
+                    <template
+                      v-for="(row, index) in resources"
+                      :key="row.key"
                     >
-                      <span class="flex items-center gap-(--spacing-xs)">Resources</span>
-                    </h2>
-                    <Hint
-                      text="Everything this project serves, at the version this deployment publishes, with the version of every dependency they reference."
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-
-                <div
-                  data-open="true"
-                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                >
-                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                    <div
-                      data-open="true"
-                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                    >
-                      <Card :padded="false">
-                        <template #content>
-                          <template
-                            v-for="(row, index) in resources"
-                            :key="row.key"
+                      <Separator v-if="index" />
+                      <Item
+                        kind="inline"
+                        size="small"
+                      >
+                        <Item.Media>
+                          <span
+                            class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
-                            <Separator v-if="index" />
-                            <Item
-                              kind="inline"
+                            <i
+                              :class="row.icon"
+                              class="text-body-xs text-(--text-default)"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </Item.Media>
+                        <Item.Content>
+                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                            <span class="shrink-0 text-body-sm text-(--text-muted)">
+                              {{ row.label }}
+                            </span>
+                            <Item.Title>{{ row.name }}</Item.Title>
+                            <Tag
+                              v-if="!row.note"
+                              :label="row.versions.length ? 'Ready' : 'No ready version'"
+                              :severity="row.versions.length ? 'success' : 'warning'"
                               size="small"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                              class="shrink-0"
+                            />
+                          </span>
+                          <Item.Description>
+                            {{ row.note || versionOf(row).name }}
+                          </Item.Description>
+                        </Item.Content>
+                        <Item.Actions v-if="!row.note">
+                          <Popover
+                            v-model:open="versionOpen[row.key]"
+                            placement="bottom-end"
+                            width="small"
+                          >
+                            <Popover.Trigger>
+                              <Button
+                                label="Change Version"
+                                kind="outlined"
+                                size="small"
+                                icon="pi pi-chevron-down"
+                                icon-position="trailing"
+                                :disabled="!row.versions.length"
+                              />
+                            </Popover.Trigger>
+                            <Popover.Content>
+                              <div
+                                class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
+                              >
+                                <p class="text-label-sm text-(--text-muted)">
+                                  {{ versionSummary(row) }}
+                                </p>
+                                <Input
+                                  v-if="row.total > row.versions.length"
+                                  size="medium"
+                                  placeholder="Search versions"
+                                  aria-label="Search versions"
                                 >
+                                  <template #iconLeft>
+                                    <i
+                                      class="pi pi-search"
+                                      aria-hidden="true"
+                                    />
+                                  </template>
+                                </Input>
+                              </div>
+
+                              <div
+                                class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                              >
+                                <button
+                                  v-for="entry in row.versions"
+                                  :key="entry.id"
+                                  type="button"
+                                  :aria-current="entry.id === versionOf(row).id || undefined"
+                                  class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                  @click="pickVersion(row, entry.id)"
+                                >
+                                  <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                      <span class="truncate text-body-sm text-(--text-default)">
+                                        {{ entry.name }}
+                                      </span>
+                                      <Tag
+                                        v-if="entry.active"
+                                        label="Active"
+                                        severity="success"
+                                        size="small"
+                                        class="shrink-0"
+                                      />
+                                    </span>
+                                    <span
+                                      class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                                    >
+                                      <Avatar
+                                        :alt="entry.author"
+                                        :label="entry.author"
+                                        size="small"
+                                        kind="square"
+                                        class="shrink-0"
+                                      />
+                                      <span class="truncate"
+                                        >{{ entry.author }} · {{ entry.createdAgo }}</span
+                                      >
+                                    </span>
+                                  </span>
                                   <i
-                                    :class="row.icon"
-                                    class="text-body-xs text-(--text-default)"
+                                    v-if="entry.id === versionOf(row).id"
+                                    class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
                                     aria-hidden="true"
                                   />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                  <span class="shrink-0 text-body-sm text-(--text-muted)">
-                                    {{ row.label }}
-                                  </span>
-                                  <Item.Title>{{ row.name }}</Item.Title>
-                                  <Tag
-                                    v-if="!row.note"
-                                    :label="row.versions.length ? 'Ready' : 'No ready version'"
-                                    :severity="row.versions.length ? 'success' : 'warning'"
-                                    size="small"
-                                    class="shrink-0"
-                                  />
-                                </span>
-                                <Item.Description>
-                                  {{ row.note || versionOf(row).name }}
-                                </Item.Description>
-                              </Item.Content>
-                              <Item.Actions v-if="!row.note">
-                                <Popover
-                                  v-model:open="versionOpen[row.key]"
-                                  placement="bottom-end"
-                                  width="small"
+                                </button>
+                              </div>
+
+                              <div
+                                v-if="row.total > row.versions.length"
+                                class="border-t border-(--border-default) p-(--spacing-xxs)"
+                              >
+                                <Button
+                                  :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
+                                  kind="transparent"
+                                  size="small"
+                                  class="w-full"
+                                />
+                              </div>
+
+                              <span
+                                class="sr-only"
+                                role="status"
+                                >{{ versionSummary(row) }}</span
+                              >
+                            </Popover.Content>
+                          </Popover>
+                        </Item.Actions>
+                      </Item>
+                      <template v-if="row.owner">
+                        <Separator />
+                        <Accordion
+                          type="single"
+                          collapsible
+                          size="small"
+                        >
+                          <Accordion.Item value="dependencies">
+                            <Accordion.Trigger>
+                              <span class="text-label-sm text-(--text-default)">Dependencies</span>
+                            </Accordion.Trigger>
+                            <Accordion.Content>
+                              <div class="min-w-0 px-(--spacing-md) py-(--spacing-md)">
+                                <p
+                                  v-if="!row.dependencies.length"
+                                  class="text-body-sm text-(--text-muted)"
                                 >
-                                  <Popover.Trigger>
-                                    <Button
-                                      label="Change Version"
-                                      kind="outlined"
+                                  {{ row.name }} references no other resources.
+                                </p>
+                                <Item.Group v-else>
+                                  <div class="flex flex-col gap-(--spacing-sm)">
+                                    <Item
+                                      v-for="dependency in row.dependencies"
+                                      :key="dependency.key"
+                                      kind="inline"
                                       size="small"
-                                      icon="pi pi-chevron-down"
-                                      icon-position="trailing"
-                                      :disabled="!row.versions.length"
-                                    />
-                                  </Popover.Trigger>
-                                  <Popover.Content>
-                                    <div
-                                      class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
                                     >
-                                      <p class="text-label-sm text-(--text-muted)">
-                                        {{ versionSummary(row) }}
-                                      </p>
-                                      <Input
-                                        v-if="row.total > row.versions.length"
-                                        size="medium"
-                                        placeholder="Search versions"
-                                        aria-label="Search versions"
-                                      >
-                                        <template #iconLeft>
+                                      <Item.Media>
+                                        <span class="flex size-5 items-center justify-center">
                                           <i
-                                            class="pi pi-search"
+                                            :class="dependency.icon"
+                                            class="text-body-xs text-(--text-muted)"
                                             aria-hidden="true"
                                           />
-                                        </template>
-                                      </Input>
-                                    </div>
-
-                                    <div
-                                      class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
-                                    >
-                                      <button
-                                        v-for="entry in row.versions"
-                                        :key="entry.id"
-                                        type="button"
-                                        :aria-current="entry.id === versionOf(row).id || undefined"
-                                        class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                        @click="pickVersion(row, entry.id)"
-                                      >
-                                        <span
-                                          class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)"
-                                        >
-                                          <span
-                                            class="flex min-w-0 items-center gap-(--spacing-xs)"
-                                          >
-                                            <span
-                                              class="truncate text-body-sm text-(--text-default)"
-                                            >
-                                              {{ entry.name }}
-                                            </span>
-                                            <Tag
-                                              v-if="entry.active"
-                                              label="Active"
-                                              severity="success"
-                                              size="small"
-                                              class="shrink-0"
-                                            />
-                                          </span>
-                                          <span
-                                            class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
-                                          >
-                                            <Avatar
-                                              :alt="entry.author"
-                                              :label="entry.author"
-                                              size="small"
-                                              kind="square"
-                                              class="shrink-0"
-                                            />
-                                            <span class="truncate"
-                                              >{{ entry.author }} · {{ entry.createdAgo }}</span
-                                            >
-                                          </span>
                                         </span>
-                                        <i
-                                          v-if="entry.id === versionOf(row).id"
-                                          class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
-                                          aria-hidden="true"
-                                        />
-                                      </button>
-                                    </div>
-
-                                    <div
-                                      v-if="row.total > row.versions.length"
-                                      class="border-t border-(--border-default) p-(--spacing-xxs)"
-                                    >
-                                      <Button
-                                        :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                        kind="transparent"
-                                        size="small"
-                                        class="w-full"
-                                      />
-                                    </div>
-
-                                    <span
-                                      class="sr-only"
-                                      role="status"
-                                      >{{ versionSummary(row) }}</span
-                                    >
-                                  </Popover.Content>
-                                </Popover>
-                              </Item.Actions>
-                            </Item>
-                            <template v-if="row.owner">
-                              <Separator />
-                              <Accordion
-                                type="single"
-                                collapsible
-                                size="small"
-                              >
-                                <Accordion.Item value="dependencies">
-                                  <Accordion.Trigger>
-                                    <span class="text-label-sm text-(--text-default)"
-                                      >Dependencies</span
-                                    >
-                                  </Accordion.Trigger>
-                                  <Accordion.Content>
-                                    <div class="min-w-0 px-(--spacing-md) py-(--spacing-md)">
-                                      <p
-                                        v-if="!row.dependencies.length"
-                                        class="text-body-sm text-(--text-muted)"
-                                      >
-                                        {{ row.name }} references no other resources.
-                                      </p>
-                                      <Item.Group v-else>
-                                        <div class="flex flex-col gap-(--spacing-sm)">
-                                          <Item
-                                            v-for="dependency in row.dependencies"
-                                            :key="dependency.key"
-                                            kind="inline"
+                                      </Item.Media>
+                                      <Item.Content>
+                                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                          <span class="shrink-0 text-body-sm text-(--text-muted)">
+                                            {{ dependency.label }}
+                                          </span>
+                                          <Item.Title>{{ dependency.name }}</Item.Title>
+                                          <Tag
+                                            v-if="!dependency.note"
+                                            :label="
+                                              dependency.versions.length
+                                                ? 'Ready'
+                                                : 'No ready version'
+                                            "
+                                            :severity="
+                                              dependency.versions.length ? 'success' : 'warning'
+                                            "
                                             size="small"
-                                          >
-                                            <Item.Media>
-                                              <span class="flex size-5 items-center justify-center">
-                                                <i
-                                                  :class="dependency.icon"
-                                                  class="text-body-xs text-(--text-muted)"
-                                                  aria-hidden="true"
-                                                />
-                                              </span>
-                                            </Item.Media>
-                                            <Item.Content>
-                                              <span
-                                                class="flex min-w-0 items-center gap-(--spacing-xs)"
+                                            class="shrink-0"
+                                          />
+                                        </span>
+                                        <Item.Description>
+                                          {{ dependency.note || versionOf(dependency).name }}
+                                        </Item.Description>
+                                      </Item.Content>
+                                      <Item.Actions v-if="!dependency.note">
+                                        <Popover
+                                          v-model:open="versionOpen[dependency.key]"
+                                          placement="bottom-end"
+                                          width="small"
+                                        >
+                                          <Popover.Trigger>
+                                            <Button
+                                              label="Change Version"
+                                              kind="outlined"
+                                              size="small"
+                                              icon="pi pi-chevron-down"
+                                              icon-position="trailing"
+                                              :disabled="!dependency.versions.length"
+                                            />
+                                          </Popover.Trigger>
+                                          <Popover.Content>
+                                            <div
+                                              class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
+                                            >
+                                              <p class="text-label-sm text-(--text-muted)">
+                                                {{ versionSummary(dependency) }}
+                                              </p>
+                                              <Input
+                                                v-if="dependency.total > dependency.versions.length"
+                                                size="medium"
+                                                placeholder="Search versions"
+                                                aria-label="Search versions"
+                                              >
+                                                <template #iconLeft>
+                                                  <i
+                                                    class="pi pi-search"
+                                                    aria-hidden="true"
+                                                  />
+                                                </template>
+                                              </Input>
+                                            </div>
+
+                                            <div
+                                              class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                                            >
+                                              <button
+                                                v-for="entry in dependency.versions"
+                                                :key="entry.id"
+                                                type="button"
+                                                :aria-current="
+                                                  entry.id === versionOf(dependency).id || undefined
+                                                "
+                                                class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                                @click="pickVersion(dependency, entry.id)"
                                               >
                                                 <span
-                                                  class="shrink-0 text-body-sm text-(--text-muted)"
+                                                  class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)"
                                                 >
-                                                  {{ dependency.label }}
-                                                </span>
-                                                <Item.Title>{{ dependency.name }}</Item.Title>
-                                                <Tag
-                                                  v-if="!dependency.note"
-                                                  :label="
-                                                    dependency.versions.length
-                                                      ? 'Ready'
-                                                      : 'No ready version'
-                                                  "
-                                                  :severity="
-                                                    dependency.versions.length
-                                                      ? 'success'
-                                                      : 'warning'
-                                                  "
-                                                  size="small"
-                                                  class="shrink-0"
-                                                />
-                                              </span>
-                                              <Item.Description>
-                                                {{ dependency.note || versionOf(dependency).name }}
-                                              </Item.Description>
-                                            </Item.Content>
-                                            <Item.Actions v-if="!dependency.note">
-                                              <Popover
-                                                v-model:open="versionOpen[dependency.key]"
-                                                placement="bottom-end"
-                                                width="small"
-                                              >
-                                                <Popover.Trigger>
-                                                  <Button
-                                                    label="Change Version"
-                                                    kind="outlined"
-                                                    size="small"
-                                                    icon="pi pi-chevron-down"
-                                                    icon-position="trailing"
-                                                    :disabled="!dependency.versions.length"
-                                                  />
-                                                </Popover.Trigger>
-                                                <Popover.Content>
-                                                  <div
-                                                    class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
-                                                  >
-                                                    <p class="text-label-sm text-(--text-muted)">
-                                                      {{ versionSummary(dependency) }}
-                                                    </p>
-                                                    <Input
-                                                      v-if="
-                                                        dependency.total >
-                                                        dependency.versions.length
-                                                      "
-                                                      size="medium"
-                                                      placeholder="Search versions"
-                                                      aria-label="Search versions"
-                                                    >
-                                                      <template #iconLeft>
-                                                        <i
-                                                          class="pi pi-search"
-                                                          aria-hidden="true"
-                                                        />
-                                                      </template>
-                                                    </Input>
-                                                  </div>
-
-                                                  <div
-                                                    class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
-                                                  >
-                                                    <button
-                                                      v-for="entry in dependency.versions"
-                                                      :key="entry.id"
-                                                      type="button"
-                                                      :aria-current="
-                                                        entry.id === versionOf(dependency).id ||
-                                                        undefined
-                                                      "
-                                                      class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                                      @click="pickVersion(dependency, entry.id)"
-                                                    >
-                                                      <span
-                                                        class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)"
-                                                      >
-                                                        <span
-                                                          class="flex min-w-0 items-center gap-(--spacing-xs)"
-                                                        >
-                                                          <span
-                                                            class="truncate text-body-sm text-(--text-default)"
-                                                          >
-                                                            {{ entry.name }}
-                                                          </span>
-                                                          <Tag
-                                                            v-if="entry.active"
-                                                            label="Active"
-                                                            severity="success"
-                                                            size="small"
-                                                            class="shrink-0"
-                                                          />
-                                                        </span>
-                                                        <span
-                                                          class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
-                                                        >
-                                                          <Avatar
-                                                            :alt="entry.author"
-                                                            :label="entry.author"
-                                                            size="small"
-                                                            kind="square"
-                                                            class="shrink-0"
-                                                          />
-                                                          <span class="truncate"
-                                                            >{{ entry.author }} ·
-                                                            {{ entry.createdAgo }}</span
-                                                          >
-                                                        </span>
-                                                      </span>
-                                                      <i
-                                                        v-if="entry.id === versionOf(dependency).id"
-                                                        class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
-                                                        aria-hidden="true"
-                                                      />
-                                                    </button>
-                                                  </div>
-
-                                                  <div
-                                                    v-if="
-                                                      dependency.total > dependency.versions.length
-                                                    "
-                                                    class="border-t border-(--border-default) p-(--spacing-xxs)"
-                                                  >
-                                                    <Button
-                                                      :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                                      kind="transparent"
-                                                      size="small"
-                                                      class="w-full"
-                                                    />
-                                                  </div>
-
                                                   <span
-                                                    class="sr-only"
-                                                    role="status"
-                                                    >{{ versionSummary(dependency) }}</span
+                                                    class="flex min-w-0 items-center gap-(--spacing-xs)"
                                                   >
-                                                </Popover.Content>
-                                              </Popover>
-                                            </Item.Actions>
-                                          </Item>
-                                        </div>
-                                      </Item.Group>
-                                      <span
-                                        class="sr-only"
-                                        role="status"
-                                      />
-                                    </div>
-                                  </Accordion.Content>
-                                </Accordion.Item>
-                              </Accordion>
-                            </template>
-                          </template>
-                        </template>
-                      </Card>
-                    </div>
-                  </div>
-                </div>
-              </section>
+                                                    <span
+                                                      class="truncate text-body-sm text-(--text-default)"
+                                                    >
+                                                      {{ entry.name }}
+                                                    </span>
+                                                    <Tag
+                                                      v-if="entry.active"
+                                                      label="Active"
+                                                      severity="success"
+                                                      size="small"
+                                                      class="shrink-0"
+                                                    />
+                                                  </span>
+                                                  <span
+                                                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-xs text-(--text-muted)"
+                                                  >
+                                                    <Avatar
+                                                      :alt="entry.author"
+                                                      :label="entry.author"
+                                                      size="small"
+                                                      kind="square"
+                                                      class="shrink-0"
+                                                    />
+                                                    <span class="truncate"
+                                                      >{{ entry.author }} ·
+                                                      {{ entry.createdAgo }}</span
+                                                    >
+                                                  </span>
+                                                </span>
+                                                <i
+                                                  v-if="entry.id === versionOf(dependency).id"
+                                                  class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
+                                                  aria-hidden="true"
+                                                />
+                                              </button>
+                                            </div>
 
-              <section
-                data-stacked="true"
-                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                                            <div
+                                              v-if="dependency.total > dependency.versions.length"
+                                              class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                            >
+                                              <Button
+                                                :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
+                                                kind="transparent"
+                                                size="small"
+                                                class="w-full"
+                                              />
+                                            </div>
+
+                                            <span
+                                              class="sr-only"
+                                              role="status"
+                                              >{{ versionSummary(dependency) }}</span
+                                            >
+                                          </Popover.Content>
+                                        </Popover>
+                                      </Item.Actions>
+                                    </Item>
+                                  </div>
+                                </Item.Group>
+                                <span
+                                  class="sr-only"
+                                  role="status"
+                                />
+                              </div>
+                            </Accordion.Content>
+                          </Accordion.Item>
+                        </Accordion>
+                      </template>
+                    </template>
+                  </template>
+                </Card>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Environment"
+                hint="Where the deployment goes live. Each environment publishes with its own Deployment Settings."
               >
                 <div
-                  data-stacked="true"
-                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
+                  role="radiogroup"
+                  aria-label="Environment"
+                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
                 >
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)">Environment</span>
-                    </h2>
-                    <Hint
-                      text="Where the deployment goes live. Each environment publishes with its own Deployment Settings."
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-
-                <div
-                  data-open="true"
-                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                >
-                  <div class="min-w-0 data-collapsible:overflow-hidden">
+                  <div
+                    v-for="entry in environmentChoices"
+                    :key="entry.name"
+                    class="relative min-w-0"
+                  >
+                    <Field.Label>
+                      <Field orientation="horizontal">
+                        <RadioButton
+                          v-model="environment"
+                          name="project-deploy-environment"
+                          :value="entry.name"
+                        />
+                        <Field.Content>
+                          <Field.Title>
+                            {{ entry.name }}
+                          </Field.Title>
+                          <Field.Description v-if="entry.description">
+                            {{ entry.description }}
+                          </Field.Description>
+                        </Field.Content>
+                      </Field>
+                    </Field.Label>
                     <div
-                      data-open="true"
-                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
+                      v-if="entry.tag"
+                      class="pointer-events-none absolute right-(--spacing-sm) top-(--spacing-sm)"
                     >
-                      <div
-                        role="radiogroup"
-                        aria-label="Environment"
-                        class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                      >
-                        <div
-                          v-for="entry in environmentChoices"
-                          :key="entry.name"
-                          class="relative min-w-0"
-                        >
-                          <Field.Label>
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="environment"
-                                name="project-deploy-environment"
-                                :value="entry.name"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ entry.name }}
-                                </Field.Title>
-                                <Field.Description v-if="entry.description">
-                                  {{ entry.description }}
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                          <div
-                            v-if="entry.tag"
-                            class="pointer-events-none absolute right-(--spacing-sm) top-(--spacing-sm)"
-                          >
-                            <Tag
-                              :label="entry.tag"
-                              severity="info"
-                              size="small"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <Alert
-                        v-if="sharedWith.length"
-                        severity="warning"
+                      <Tag
+                        :label="entry.tag"
+                        severity="info"
                         size="small"
-                        :label="`Deploying with ${setting.name} also publishes to ${sharedWith.join(', ')}.`"
                       />
                     </div>
                   </div>
                 </div>
-              </section>
+
+                <Alert
+                  v-if="sharedWith.length"
+                  severity="warning"
+                  size="small"
+                  :label="`Deploying with ${setting.name} also publishes to ${sharedWith.join(', ')}.`"
+                />
+              </SettingsSection>
             </fieldset>
           </PanelContent>
 

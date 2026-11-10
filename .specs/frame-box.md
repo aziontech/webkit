@@ -4,7 +4,7 @@ category: layout
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 041018c4603f738c29ecf82e394a616cf2b14f5acfdaa4877ea559a2403a9cd7
+checksum: d472af7bb96787a779a4c2853fefaad0479bc447d499de5d558455c7c53248da
 style_seam: true
 created: 2026-08-11
 last_updated: 2026-11-09

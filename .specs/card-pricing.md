@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ad6688846a25190ccd4a7bc72a6429e2999650da3313baf7a7dc83015477099e
+checksum: 98d9390644613b867a1b1a08cbc3f11533f1ae8f4fbbbf4b6b526cf0c0852e25
 created: 2026-05-22
 last_updated: 2026-11-09
 ---

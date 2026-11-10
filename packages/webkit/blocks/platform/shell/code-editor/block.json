@@ -3,7 +3,7 @@
   "name": "CodeEditor",
   "title": "Templates/Platform/Shell/CodeEditor",
   "surface": "product",
-  "summary": "The code editor page placed in the platform shell: the Services breadcrumb, then the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a flush `Textarea` filling its pane, the place a product would embed a code editor. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar.",
+  "summary": "The code editor page placed in the platform shell: the Services breadcrumb, then the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a flush `Textarea` filling its pane, the place a product would embed a code editor. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

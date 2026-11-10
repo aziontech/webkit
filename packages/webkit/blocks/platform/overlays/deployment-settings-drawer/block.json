@@ -3,7 +3,7 @@
   "name": "DeploymentSettingsDrawer",
   "title": "Templates/Platform/Overlays/DeploymentSettingsDrawer",
   "surface": "product",
-  "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build & Deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Label`, `HelperText`, `Hint` and `Button`.",
+  "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build & Deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Label`, `HelperText`, `Hint` and `Button`.",
   "preview": {
     "layout": "padded",
     "background": "dark"

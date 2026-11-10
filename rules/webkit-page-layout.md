@@ -26,6 +26,10 @@ on the same column.
 - Space sections with `gap-(--layout-section-gap)` and the parts inside one section with
   `gap-(--layout-group-gap)`. Where the parent cannot carry a `gap`, use `.layout-section-start` /
   `.layout-group-start`.
+- Build the repeated bands from their components, which already carry the right container and
+  rhythm: `PageHeader` for the page heading, `SectionHeader` or `SettingsSection` for a band title,
+  `SettingRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
+  sticky action bar (`kind="plain"` is the form-column footer).
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
 - Start a screen from its pattern (`search_patterns` → `get_pattern` in the webkit MCP): the pattern

@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: approved
-checksum: 144ae7e523d1b50b7de3b62c999f65a93cbea93931bfe83fd1c4b2b4b888182c
+checksum: be4760b114b5ae96ac0ea2d4bf8b4878856f97ec1b51e998d75797bf04d88153
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-10-20

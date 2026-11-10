@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, nextTick, ref, useAttrs, watch } from 'vue'
+  import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import { type TabsContext, TabsInjectionKey, type TabsValue } from './injection-key'
@@ -38,6 +38,9 @@
 
   const tabId = computed(() => context.tabId(props.value))
   const panelId = computed(() => context.panelId(props.value))
+
+  onMounted(() => context.registerPanel(props.value))
+  onBeforeUnmount(() => context.unregisterPanel(props.value))
 
   const contentKey = computed(() => String(context.value.value))
 

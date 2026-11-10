@@ -3,7 +3,7 @@
   "name": "Profile",
   "title": "Templates/Platform/Account/Profile",
   "surface": "product",
-  "summary": "The profile page of a signed-in account, and the layout every account settings page follows, rendered inside the app shell: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account Name and Billing emails come filled from the account; the Appearance font picker defaults to Rubik. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Hint` and `Button`.",
+  "summary": "The profile page of a signed-in account, and the layout every account settings page follows, rendered inside the app shell: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account Name and Billing emails come filled from the account; the Appearance font picker defaults to Rubik. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Hint` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

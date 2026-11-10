@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
-checksum: ea9c565c5554acc93d821059fe41e790c52ca56a9b32ef13c290426406fec72a
+checksum: 184fe87064e423935f3af6a005541924c6d8ffa2b5eca5c6916aefa5b25b6421
 ---
 
 # BarList — Component Spec

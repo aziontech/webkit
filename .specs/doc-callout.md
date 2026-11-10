@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c111089281cf00d2327223aa33c8fae690f99e40780936272bf4bf92c4237da2
+checksum: d603f241e3be35ee13656602574243718463e98d5f90e10ef92d99abf331ee04
 created: 2026-08-22
 last_updated: 2026-09-25
 ---

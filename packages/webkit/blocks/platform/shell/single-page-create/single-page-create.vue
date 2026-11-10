@@ -7,9 +7,11 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { reactive, ref } from 'vue'
 
@@ -104,205 +106,109 @@
           <div
             class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
-            <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-              <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <h1
-                    id="create-domain-title"
-                    data-size="small"
-                    class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                  >
-                    Create Domain
-                  </h1>
-                </div>
-                <p class="text-pretty text-body-sm text-(--text-muted)">
-                  A domain holds the DNS records that answer authoritatively for a hostname.
-                </p>
-              </div>
-            </header>
+            <PageHeader
+              title="Create Domain"
+              description="A domain holds the DNS records that answer authoritatively for a hostname."
+              size="small"
+              title-id="create-domain-title"
+            />
 
             <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">Create Domain</legend>
 
-              <section
-                class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+              <SettingsSection
+                title="General"
+                hint="The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."
               >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)"> General </span>
-                    </h2>
-                    <Hint
-                      text="The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <Item size="small">
-                          <Item.Content>
-                            <Item.Title>Name</Item.Title>
-                            <Item.Description
-                              >Identifies the domain in this list. It is not the
-                              hostname.</Item.Description
-                            >
-                          </Item.Content>
-                          <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                            <Item.Actions class="w-full">
-                              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                <Input
-                                  v-model="form.name"
-                                  size="large"
-                                  class="w-full"
-                                  aria-label="Name"
-                                  placeholder="My domain"
-                                  autocomplete="off"
-                                  :required="!!errors.name && errors.nameKind === 'required'"
-                                  :invalid="!!errors.name && errors.nameKind === 'invalid'"
-                                  :aria-describedby="
-                                    errors.name ? 'create-domain-name-message' : undefined
-                                  "
-                                  @update:model-value="errors.name = ''"
-                                />
-                                <HelperText
-                                  v-if="errors.name"
-                                  id="create-domain-name-message"
-                                  :kind="errors.nameKind"
-                                  :label="errors.name"
-                                />
-                              </div>
-                            </Item.Actions>
-                          </div>
-                        </Item>
-                        <Item size="small">
-                          <Item.Content>
-                            <Item.Title>Domain Name</Item.Title>
-                            <Item.Description
-                              >The root hostname this domain answers for, without a subdomain.
-                              Pasting a zone file here imports its records
-                              instead.</Item.Description
-                            >
-                          </Item.Content>
-                          <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                            <Item.Actions class="w-full">
-                              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                <Input
-                                  v-model="form.domain"
-                                  size="large"
-                                  class="w-full"
-                                  aria-label="Domain Name"
-                                  placeholder="example.com"
-                                  autocomplete="off"
-                                  :required="!!errors.domain && errors.domainKind === 'required'"
-                                  :invalid="!!errors.domain && errors.domainKind === 'invalid'"
-                                  :aria-describedby="
-                                    errors.domain ? 'create-domain-domain-message' : undefined
-                                  "
-                                  @update:model-value="errors.domain = ''"
-                                />
-                                <HelperText
-                                  v-if="errors.domain"
-                                  id="create-domain-domain-message"
-                                  :kind="errors.domainKind"
-                                  :label="errors.domain"
-                                />
-                              </div>
-                            </Item.Actions>
-                          </div>
-                        </Item>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </div>
-              </section>
-
-              <section
-                class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <button
-                        type="button"
-                        :aria-expanded="advancedOpen"
-                        aria-controls="create-domain-advanced"
-                        :data-state="advancedOpen ? 'open' : 'closed'"
-                        class="group/disclosure -mx-(--spacing-xxs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) text-left text-[length:inherit] font-[inherit] leading-[inherit] transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                        @click="advancedOpen = !advancedOpen"
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Name"
+                        description="Identifies the domain in this list. It is not the hostname."
                       >
-                        <i
-                          class="pi pi-cog shrink-0 text-body-sm leading-none text-(--text-muted)"
-                          aria-hidden="true"
+                        <Input
+                          v-model="form.name"
+                          size="large"
+                          class="w-full"
+                          aria-label="Name"
+                          placeholder="My domain"
+                          autocomplete="off"
+                          :required="!!errors.name && errors.nameKind === 'required'"
+                          :invalid="!!errors.name && errors.nameKind === 'invalid'"
+                          :aria-describedby="errors.name ? 'create-domain-name-message' : undefined"
+                          @update:model-value="errors.name = ''"
                         />
-                        Advanced
-                        <i
-                          class="pi pi-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
-                          aria-hidden="true"
+                        <HelperText
+                          v-if="errors.name"
+                          id="create-domain-name-message"
+                          :kind="errors.nameKind"
+                          :label="errors.name"
                         />
-                      </button>
-                    </h2>
-                  </div>
-                </div>
-                <div
-                  id="create-domain-advanced"
-                  :data-open="advancedOpen || null"
-                  :inert="!advancedOpen || undefined"
-                  :aria-hidden="!advancedOpen || undefined"
-                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                >
-                  <div class="min-w-0 overflow-hidden">
-                    <div
-                      :data-open="advancedOpen || null"
-                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                    >
-                      <Card :padded="false">
-                        <template #content>
-                          <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>DNSSEC</Item.Title>
-                                <Item.Description
-                                  >Signs this domain's answers so a resolver can detect cache
-                                  poisoning and spoofing. Completing the setup also means adding the
-                                  Key Tag and Digest at your domain provider.</Item.Description
-                                >
-                              </Item.Content>
-                              <Item.Actions>
-                                <Switch
-                                  v-model="form.dnssec"
-                                  aria-label="Enable DNSSEC"
-                                />
-                              </Item.Actions>
-                            </Item>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Active</Item.Title>
-                                <Item.Description
-                                  >When active, the domain answers authoritative DNS queries for its
-                                  hostname.</Item.Description
-                                >
-                              </Item.Content>
-                              <Item.Actions>
-                                <Switch
-                                  v-model="form.active"
-                                  aria-label="Active"
-                                />
-                              </Item.Actions>
-                            </Item>
-                          </Item.List>
-                        </template>
-                      </Card>
-                    </div>
-                  </div>
-                </div>
-              </section>
+                      </SettingRow>
+                      <SettingRow
+                        title="Domain Name"
+                        description="The root hostname this domain answers for, without a subdomain. Pasting a zone file here imports its records instead."
+                      >
+                        <Input
+                          v-model="form.domain"
+                          size="large"
+                          class="w-full"
+                          aria-label="Domain Name"
+                          placeholder="example.com"
+                          autocomplete="off"
+                          :required="!!errors.domain && errors.domainKind === 'required'"
+                          :invalid="!!errors.domain && errors.domainKind === 'invalid'"
+                          :aria-describedby="
+                            errors.domain ? 'create-domain-domain-message' : undefined
+                          "
+                          @update:model-value="errors.domain = ''"
+                        />
+                        <HelperText
+                          v-if="errors.domain"
+                          id="create-domain-domain-message"
+                          :kind="errors.domainKind"
+                          :label="errors.domain"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Advanced"
+                v-model:open="advancedOpen"
+                icon="pi pi-cog"
+                collapsible
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="DNSSEC"
+                        description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
+                        kind="compact"
+                      >
+                        <Switch
+                          v-model="form.dnssec"
+                          aria-label="Enable DNSSEC"
+                        />
+                      </SettingRow>
+                      <SettingRow
+                        title="Active"
+                        description="When active, the domain answers authoritative DNS queries for its hostname."
+                        kind="compact"
+                      >
+                        <Switch
+                          v-model="form.active"
+                          aria-label="Active"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </SettingsSection>
             </fieldset>
           </div>
         </div>

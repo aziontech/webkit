@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 46ed7dd9a3cd80491d2bf15b27b39de2c7086b87469d50163dd7f6810ef2966a
+checksum: a0a14e6ee1ca10b271d5822c8cbc47f4247cc725f2307979c9d1329381be1f17
 ---
 
 # ClosingCallToActionAgents — Component Spec

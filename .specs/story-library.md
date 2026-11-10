@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 00a8ba401959d61439806815f8b5e83633f4f59070140b4a6063f862c02195ea
+checksum: 25e95d3e6ec516baa8594bcf01b3e80e80fe42b816ac33fe56f05e549293b3c2
 ---
 
 # StoryLibrary — Component Spec

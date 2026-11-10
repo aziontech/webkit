@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: a0befb6f03ac9add5a99522dcf934ed7f3590dd8316e091e87a123c90c0224b3
+checksum: 02e094929813127bfd117de44a84108a2e46dd478c00fcaf572a26b109fe4064
 created: 2026-05-22
 last_updated: 2026-11-09
 ---

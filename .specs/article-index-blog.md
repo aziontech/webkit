@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: e83ba1f91806f35924e84e06c0687c9094d5fe1ef74f77d931645d438f5c9ed8
+checksum: f2b8d6cdc0cd2be73b618c83c54ac6616036dcba2a789d8a9059039a6672a93b
 ---
 
 # ArticleIndexBlog — Component Spec

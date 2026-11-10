@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 2271ad85c4238f733799f1155bdfc9219006b4df31b6722abd9bac07500dfd25
+checksum: 9f82874dc4ca8687ebe18e9db6135968bd5ecf8766fec6edfad377c1892a6858
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: approved
-checksum: 43d53e72a2dc614c3399b7c0a3a9a4ed1ab16e15bc7e7acac8f840d9614d50ce
+checksum: 6d2d57a9d38553651dfde59556a2ab7874df1e2489c9c68f5c16a729f6f1da43
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-10

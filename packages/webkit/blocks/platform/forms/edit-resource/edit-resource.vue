@@ -12,12 +12,16 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -815,27 +819,14 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+          </PageTabs>
 
           <div class="relative flex min-h-0 flex-1 flex-col">
             <section class="min-h-0 flex-1 overflow-auto">
@@ -849,21 +840,11 @@
                   <div
                     class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
                   >
-                    <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                          <h1
-                            data-size="small"
-                            class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                          >
-                            Settings
-                          </h1>
-                        </div>
-                        <p class="text-pretty text-body-sm text-(--text-muted)">
-                          Core configuration for this project.
-                        </p>
-                      </div>
-                    </header>
+                    <PageHeader
+                      title="Settings"
+                      description="Core configuration for this project."
+                      size="small"
+                    />
 
                     <fieldset
                       class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
@@ -871,250 +852,109 @@
                     >
                       <legend class="sr-only">Main settings</legend>
 
-                      <section
-                        data-stacked
-                        class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                      <SettingsSection
+                        title="General"
+                        hint="How this project is identified across the platform, and whether it is serving traffic."
+                        anchor="general"
                       >
-                        <div
-                          data-stacked
-                          class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                        >
-                          <div
-                            class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Copy link to the General section"
-                              class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                            >
-                              <i
-                                class="pi pi-link text-body-xs"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <h2
-                              id="general"
-                              class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                            >
-                              <span class="flex items-center gap-(--spacing-xs)">General</span>
-                            </h2>
-                            <Hint
-                              text="How this project is identified across the platform, and whether it is serving traffic."
-                              class="shrink-0"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-open
-                          class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                        >
-                          <div class="min-w-0 data-collapsible:overflow-hidden">
-                            <div
-                              data-open
-                              class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                            >
-                              <Card :padded="false">
-                                <template #content>
-                                  <Item.List>
-                                    <Item size="small">
-                                      <Item.Content>
-                                        <Item.Title>Name</Item.Title>
-                                        <Item.Description>
-                                          A unique and descriptive name to identify the project.
-                                        </Item.Description>
-                                      </Item.Content>
-                                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                        <Item.Actions class="w-full">
-                                          <Input
-                                            v-model="form.name"
-                                            size="large"
-                                            :disabled="saving"
-                                            class="w-full"
-                                            aria-label="Name"
-                                          />
-                                        </Item.Actions>
-                                      </div>
-                                    </Item>
-                                    <Item size="small">
-                                      <Item.Content>
-                                        <Item.Title>Active</Item.Title>
-                                        <Item.Description>
-                                          When disabled, the project stops serving traffic.
-                                        </Item.Description>
-                                      </Item.Content>
-                                      <Item.Actions>
-                                        <Switch
-                                          v-model="form.active"
-                                          aria-label="Active"
-                                          :disabled="saving"
-                                        />
-                                      </Item.Actions>
-                                    </Item>
-                                  </Item.List>
-                                </template>
-                              </Card>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-
-                      <section
-                        data-stacked
-                        class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                      >
-                        <div
-                          data-stacked
-                          class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                        >
-                          <div
-                            class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Copy link to the Modules section"
-                              class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                            >
-                              <i
-                                class="pi pi-link text-body-xs"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <h2
-                              id="modules"
-                              class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                            >
-                              <span class="flex items-center gap-(--spacing-xs)">Modules</span>
-                            </h2>
-                            <Hint
-                              text="The capabilities this project runs with, each of which can be toggled here."
-                              class="shrink-0"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-open
-                          class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                        >
-                          <div class="min-w-0 data-collapsible:overflow-hidden">
-                            <div
-                              data-open
-                              class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                            >
-                              <Card :padded="false">
-                                <template #content>
-                                  <Item.List>
-                                    <Item
-                                      v-for="mod in defaultModules"
-                                      :key="mod.key"
-                                      size="small"
-                                    >
-                                      <Item.Content>
-                                        <Item.Title>{{ mod.title }}</Item.Title>
-                                        <Item.Description>{{ mod.description }}</Item.Description>
-                                      </Item.Content>
-                                      <Item.Actions>
-                                        <Switch
-                                          v-model="form.modules[mod.key]"
-                                          :aria-label="mod.title"
-                                          :disabled="saving"
-                                        />
-                                      </Item.Actions>
-                                    </Item>
-                                  </Item.List>
-                                </template>
-                              </Card>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-
-                      <section
-                        data-stacked
-                        class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                      >
-                        <div
-                          data-stacked
-                          class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                        >
-                          <div
-                            class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Copy link to the Subscription modules section"
-                              class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                            >
-                              <i
-                                class="pi pi-link text-body-xs"
-                                aria-hidden="true"
-                              />
-                            </button>
-                            <h2
-                              id="subscription-modules"
-                              class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                            >
-                              <span class="flex items-center gap-(--spacing-xs)"
-                                >Subscription modules</span
+                        <Card :padded="false">
+                          <template #content>
+                            <Item.List>
+                              <SettingRow
+                                title="Name"
+                                description="A unique and descriptive name to identify the project."
                               >
-                            </h2>
-                            <Hint
-                              text="Paid add-ons that are activated with sales, not from this page."
-                              class="shrink-0"
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-open
-                          class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                        >
-                          <div class="min-w-0 data-collapsible:overflow-hidden">
-                            <div
-                              data-open
-                              class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                            >
-                              <Card :padded="false">
-                                <template #content>
-                                  <Item.List>
-                                    <Item
-                                      v-for="mod in subscriptionModules"
-                                      :key="mod.key"
-                                      size="small"
-                                    >
-                                      <Item.Content>
-                                        <Item.Title>{{ mod.title }}</Item.Title>
-                                        <Item.Description>
-                                          {{ mod.description }}
-                                          <a
-                                            href="https://example.com/contact-sales"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                                          >
-                                            Contact sales
-                                            <i
-                                              class="pi pi-external-link shrink-0 text-body-sm leading-none"
-                                              aria-hidden="true"
-                                            />
-                                          </a>
-                                        </Item.Description>
-                                      </Item.Content>
-                                      <Item.Actions>
-                                        <Tooltip text="Contact sales to activate this module.">
-                                          <Switch
-                                            v-model="form.modules[mod.key]"
-                                            disabled
-                                            :aria-label="mod.title"
-                                          />
-                                        </Tooltip>
-                                      </Item.Actions>
-                                    </Item>
-                                  </Item.List>
+                                <Input
+                                  v-model="form.name"
+                                  size="large"
+                                  :disabled="saving"
+                                  class="w-full"
+                                  aria-label="Name"
+                                />
+                              </SettingRow>
+                              <SettingRow
+                                title="Active"
+                                description="When disabled, the project stops serving traffic."
+                                kind="compact"
+                              >
+                                <Switch
+                                  v-model="form.active"
+                                  aria-label="Active"
+                                  :disabled="saving"
+                                />
+                              </SettingRow>
+                            </Item.List>
+                          </template>
+                        </Card>
+                      </SettingsSection>
+
+                      <SettingsSection
+                        title="Modules"
+                        hint="The capabilities this project runs with, each of which can be toggled here."
+                        anchor="modules"
+                      >
+                        <Card :padded="false">
+                          <template #content>
+                            <Item.List>
+                              <SettingRow
+                                v-for="mod in defaultModules"
+                                :key="mod.key"
+                                :title="mod.title"
+                                :description="mod.description"
+                                kind="compact"
+                              >
+                                <Switch
+                                  v-model="form.modules[mod.key]"
+                                  :aria-label="mod.title"
+                                  :disabled="saving"
+                                />
+                              </SettingRow>
+                            </Item.List>
+                          </template>
+                        </Card>
+                      </SettingsSection>
+
+                      <SettingsSection
+                        title="Subscription modules"
+                        hint="Paid add-ons that are activated with sales, not from this page."
+                        anchor="subscription-modules"
+                      >
+                        <Card :padded="false">
+                          <template #content>
+                            <Item.List>
+                              <SettingRow
+                                v-for="mod in subscriptionModules"
+                                :key="mod.key"
+                                :title="mod.title"
+                                kind="compact"
+                              >
+                                <template #description>
+                                  {{ mod.description }}
+                                  <a
+                                    href="https://example.com/contact-sales"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                                  >
+                                    Contact sales
+                                    <i
+                                      class="pi pi-external-link shrink-0 text-body-sm leading-none"
+                                      aria-hidden="true"
+                                    />
+                                  </a>
                                 </template>
-                              </Card>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
+                                <Tooltip text="Contact sales to activate this module.">
+                                  <Switch
+                                    v-model="form.modules[mod.key]"
+                                    disabled
+                                    :aria-label="mod.title"
+                                  />
+                                </Tooltip>
+                              </SettingRow>
+                            </Item.List>
+                          </template>
+                        </Card>
+                      </SettingsSection>
                     </fieldset>
                   </div>
 
@@ -1124,50 +964,29 @@
                     leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                     leave-to-class="translate-y-2 opacity-0"
                   >
-                    <footer
-                      v-if="dirty || saving"
-                      class="sticky bottom-0 z-10 h-0 shrink-0"
-                    >
-                      <div
-                        class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14"
+                    <SaveBar v-if="dirty || saving">
+                      Project settings changed.
+                      <span class="text-(--text-muted)"
+                        >Saving publishes them on the next deployment.</span
                       >
-                        <div
-                          class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
-                        >
-                          <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-                            <i
-                              class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-                              aria-hidden="true"
-                            />
-                            <p class="min-w-0 text-body-sm text-(--text-default)">
-                              Project settings changed.
-                              <span class="text-(--text-muted)"
-                                >Saving publishes them on the next deployment.</span
-                              >
-                            </p>
-                          </div>
-                          <div
-                            class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
-                          >
-                            <Button
-                              type="button"
-                              label="Discard"
-                              kind="outlined"
-                              size="medium"
-                              :disabled="saving"
-                              @click="discard"
-                            />
-                            <Button
-                              label="Save"
-                              kind="primary"
-                              size="medium"
-                              :loading="saving"
-                              @click="save"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </footer>
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Discard"
+                          kind="outlined"
+                          size="medium"
+                          :disabled="saving"
+                          @click="discard"
+                        />
+                        <Button
+                          label="Save"
+                          kind="primary"
+                          size="medium"
+                          :loading="saving"
+                          @click="save"
+                        />
+                      </template>
+                    </SaveBar>
                   </Transition>
                 </form>
               </div>

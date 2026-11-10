@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 388055a1e8169b3bf129377d49eff97ceff12ce41f9101ebf2b06349ac0d64e3
+checksum: eb570065b04a3995c42709ae840b16c4ee58a383531b0bd7c37f9e36a52d7775
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870

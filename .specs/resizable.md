@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 570437893172b83f5c3dc61c3380e9ee287853c485b383ddfbcab3d0f77fa17e
+checksum: bf150815455d6fbfb15919d2ebb5cc2742c9c8e7729f727c7331e8dcf06c9cf5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16

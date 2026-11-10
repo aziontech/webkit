@@ -3,7 +3,7 @@ name: slider
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 66fb4fae28a1dc6520d71e4d2149c6e041be551be92d8af460cb4522d2e1ce03
+checksum: 5caa64ef06adc2c240430cdbbcd894676e44b38de4b3156582607b41d4e58eae
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

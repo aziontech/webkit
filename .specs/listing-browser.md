@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 719aed114e25127ba1faf64441b080ce8ef083a94e728799b9bd3d2578e1a60e
+checksum: 8f7ff3e4afd8ccba2f1fa9060e4ed0bd62c7e5e4817f85a991095110e46dbbe7
 ---
 
 # ListingBrowser — Component Spec

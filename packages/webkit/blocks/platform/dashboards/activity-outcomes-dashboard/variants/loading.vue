@@ -7,6 +7,7 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -432,21 +433,19 @@
 <template>
   <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
     <main class="layout-column flex flex-col gap-(--layout-group-gap)">
-      <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-        <div class="flex min-w-0 grow basis-(--container-md) flex-col gap-(--spacing-xxs)">
-          <h1 class="text-balance text-heading-sm text-(--text-default)">Request activity</h1>
-          <p class="text-pretty text-body-sm text-(--text-muted)">
-            What each actor requested through the rules: what was allowed, blocked or held for
-            approval, and what went over budget, per actor, category and destination.
-          </p>
-        </div>
-        <IconButton
-          icon="pi pi-refresh"
-          kind="outlined"
-          size="medium"
-          aria-label="Refresh"
-        />
-      </header>
+      <PageHeader
+        title="Request activity"
+        description="What each actor requested through the rules: what was allowed, blocked or held for approval, and what went over budget, per actor, category and destination."
+      >
+        <template #actions>
+          <IconButton
+            icon="pi pi-refresh"
+            kind="outlined"
+            size="medium"
+            aria-label="Refresh"
+          />
+        </template>
+      </PageHeader>
 
       <section
         aria-label="Filters"

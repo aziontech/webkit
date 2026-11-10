@@ -23,6 +23,8 @@
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import Alert from '@aziontech/webkit/alert'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -1085,35 +1087,22 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-              <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
-                <Button
-                  label="Deploy"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-cloud-upload"
-                />
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+            <template #actions>
+              <Button
+                label="Deploy"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-cloud-upload"
+              />
+            </template>
+          </PageTabs>
 
           <section class="min-h-0 flex-1 overflow-auto">
             <div>
@@ -1689,15 +1678,10 @@
                   </Drawer>
 
                   <div class="flex flex-col gap-(--layout-group-gap)">
-                    <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                          <h1 class="text-balance text-heading-xs text-(--text-default)">
-                            Deployment topology
-                          </h1>
-                        </div>
-                      </div>
-                    </header>
+                    <PageHeader
+                      title="Deployment topology"
+                      size="small"
+                    />
 
                     <Card :padded="false">
                       <template #content>
