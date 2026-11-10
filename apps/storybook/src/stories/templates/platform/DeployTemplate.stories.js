@@ -16,6 +16,7 @@ import Switch from '@aziontech/webkit/switch'
 import Tooltip from '@aziontech/webkit/tooltip'
 import { computed, reactive, ref } from 'vue'
 
+import { creationHeader } from '../../_shared/headers'
 import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 import { declare } from './_summary-markup'
@@ -23,60 +24,36 @@ import { declare } from './_summary-markup'
 const BREADCRUMB = [{ label: 'Start from a Template' }, { label: 'Nuxt E-commerce', current: true }]
 
 const SCOPES = [
-  { label: 'gab-az', value: 'gab-az' },
-  { label: 'aziontech', value: 'aziontech' },
-  { label: 'azion-templates', value: 'azion-templates' }
+  { label: 'gab-lisboa', value: 'gab-lisboa' },
+  { label: 'acme', value: 'acme' },
+  { label: 'acme-templates', value: 'acme-templates' }
 ]
 
 const SETTINGS = [
   {
-    name: 'shopifyAccessToken',
-    label: 'Shopify Access Token',
+    name: 'storeAccessToken',
+    label: 'Store Access Token',
     placeholder: 'Access Token',
-    description: 'You can find this token in Credentials on Shopify Project Configurations.',
+    description: 'You can find this token in the API credentials of your store.',
     required: true
   },
   {
-    name: 'shopifyRevalidationSecret',
-    label: 'Shopify revalidation secret',
+    name: 'storeRevalidationSecret',
+    label: 'Store revalidation secret',
     placeholder: 'Revalidation secret',
-    description: 'You can find this secret in Credentials on Shopify Project Configurations.',
+    description: 'You can find this secret in the API credentials of your store.',
     required: false
   },
   {
-    name: 'shopifyStoreDomain',
-    label: 'Shopify Store Domain',
-    placeholder: 'https://your-shopify-store-subdomain.myshopify.com',
-    description: 'Your Shopify Store Domain',
+    name: 'storeDomain',
+    label: 'Store Domain',
+    placeholder: 'https://shop.example.com',
+    description: 'The domain your store answers on',
     required: false
   }
 ]
 
-const HEADER = `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Left>
-    <IconButton icon="pi pi-chevron-left" aria-label="Back to Creation Center" kind="outlined" size="small" />
-    <GlobalHeader.Brand>
-      <a
-        href="/home"
-        aria-label="Azion home"
-        class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-      >
-        <Brand kind="default" size="small" />
-      </a>
-    </GlobalHeader.Brand>
-    <Breadcrumb :items="breadcrumb" />
-  </GlobalHeader.Left>
-  <GlobalHeader.Middle />
-  <GlobalHeader.Right>
-    <button
-      type="button"
-      aria-label="Account settings"
-      class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-    >
-      <Avatar label="myemail@azion.com" size="medium" kind="square" />
-    </button>
-  </GlobalHeader.Right>
-</GlobalHeader>`
+const HEADER = creationHeader({ backLabel: 'Back to Creation Center' })
 
 const PREVIEW = `<div
   class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
@@ -93,7 +70,7 @@ const PREVIEW = `<div
         <span class="truncate text-heading-xxs text-(--text-default)">Nuxt E-commerce</span>
       </span>
       <span class="text-body-xs text-(--text-muted)">
-        Launch a Nuxt e-commerce or content app on the edge.
+        Launch a Nuxt e-commerce or content app in a few steps.
       </span>
     </div>
 
@@ -102,7 +79,7 @@ const PREVIEW = `<div
       <div class="flex items-center gap-(--spacing-md)">
         <span class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)">
           <i class="ai ai-github text-[length:inherit] leading-none" aria-hidden="true" />
-          aziontech
+          acme
         </span>
         <span class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)">
           <i class="pi pi-folder text-[length:inherit] leading-none" aria-hidden="true" />
@@ -120,7 +97,7 @@ const CONNECT = `<CardBox class="w-full">
     <EmptyState
       size="medium"
       title="Connect a Git provider"
-      description="Azion clones Nuxt E-commerce into a repository in your account, then deploys from it on every push."
+      description="Nuxt E-commerce is cloned into a repository in your account, then deployed from it on every push."
       class="rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
     >
       <template #icon>
@@ -157,7 +134,7 @@ const FORM = `<CardBox class="w-full">
       <div class="flex flex-col gap-(--spacing-xxs)">
         <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
         <p class="text-body-sm text-pretty text-(--text-muted)">
-          Azion deploys from this repository and ships every push automatically.
+          This repository deploys on every push, automatically.
         </p>
       </div>
 
@@ -286,7 +263,7 @@ const FORM_SCRIPT = [
   '',
   declare('settings', SETTINGS),
   '',
-  "const scope = ref('gab-az')",
+  "const scope = ref('gab-lisboa')",
   "const repoName = ref('nuxt-ecommerce')",
   'const isPublic = ref(true)',
   "const values = reactive(Object.fromEntries(settings.map((field) => [field.name, ''])))",
@@ -300,13 +277,13 @@ const FORM_SCRIPT = [
 
 const components = {
   Avatar,
-  Brand,
   Breadcrumb,
   Button,
   CardBox,
   EmptyState,
   FieldSelect,
   FieldText,
+  Brand,
   GlobalHeader,
   'GlobalHeader.Left': GlobalHeader.Left,
   'GlobalHeader.Middle': GlobalHeader.Middle,
@@ -328,7 +305,7 @@ const formState = () => {
     breadcrumb: BREADCRUMB,
     scopes: SCOPES,
     settings: SETTINGS,
-    scope: ref('gab-az'),
+    scope: ref('gab-lisboa'),
     repoName,
     isPublic: ref(true),
     values,
@@ -352,7 +329,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Deploy Template page at /deploy, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a Template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse Templates under it. Without a Git provider the step is the Connect a Git provider card; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings, and the Deploy button that stays disabled until every required setting is filled. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git and Upload a Project reach the same page with the form trimmed to the repository or the uploaded files. Built from `GlobalHeader`, `Breadcrumb`, `CardBox`, `EmptyState`, `FieldSelect`, `Label`, `InputGroup`, `Switch`, `FieldText` and `Button`.'
+          'The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a Template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse Templates under it. Without a Git provider the step is the Connect a Git provider card; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings, and the Deploy button that stays disabled until every required setting is filled. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git and Upload a Project reach the same page with the form trimmed to the repository or the uploaded files. Built from `GlobalHeader`, `Breadcrumb`, `CardBox`, `EmptyState`, `FieldSelect`, `Label`, `InputGroup`, `Switch`, `FieldText` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -388,7 +365,7 @@ export const Form = {
     docs: {
       description: {
         story:
-          'GitHub connected: the gab-az scope and the nuxt-ecommerce repository name, public by default, over the three Shopify settings of the Nuxt E-commerce template; Deploy waits for the access token.'
+          'GitHub connected: the gab-lisboa scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token.'
       },
       source: { code: toSfc(FORM_SCRIPT, FORM_TEMPLATE) }
     }

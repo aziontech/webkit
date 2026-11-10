@@ -352,7 +352,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The skeleton wires the console paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home. Each one is the real page’s grid drawn with Skeleton bands inside the same CardBox frames, so nothing shifts when the content lands. In the console the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, CardBox and Item.'
+          'The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home. Each one is the real page’s grid drawn with Skeleton bands inside the same CardBox frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, CardBox and Item.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -367,7 +367,7 @@ export const Overview = {
     docs: {
       description: {
         story:
-          'The Home dashboard wire: a greeting band, the four-cell metrics strip beside the agent onboarding card, then the five-column panel grid, the Applications and Recents panels indented for their row glyph and Recents spanning two columns.'
+          'The Home dashboard wire: a greeting band, the four-cell metrics strip beside the agent onboarding card, then the five-column panel grid, the Projects and Recents panels indented for their row glyph and Recents spanning two columns.'
       },
       source: {
         code: toSfc([CARD_IMPORT, ITEM_IMPORT, SKELETON_IMPORT, '', panelsLine], OVERVIEW_TEMPLATE)
@@ -376,7 +376,7 @@ export const Overview = {
   }
 }
 
-export const FirstAccess = {
+export const Onboarding = {
   render: () => ({ components, template: FIRST_ACCESS_TEMPLATE }),
   parameters: {
     docs: {
@@ -391,7 +391,7 @@ export const FirstAccess = {
 
 export const Session = sessionStory(
   'list',
-  'The whole console as a wire while a session expires over a list page: header bar, navigation rail with its grouped items, the list controls row and a table card with header, eight rows and pagination.'
+  'The whole app shell as a wire while a session expires over a list page: header bar, navigation rail with its grouped items, the list controls row and a table card with header, eight rows and pagination.'
 )
 
 export const SessionDetail = sessionStory(

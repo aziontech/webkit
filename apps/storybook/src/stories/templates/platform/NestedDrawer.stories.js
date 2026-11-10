@@ -23,19 +23,19 @@ import { declare } from './_forms-markup'
 
 const BREADCRUMB = [{ label: 'Forms', href: '/forms' }, { label: 'Nested drawer' }]
 
-const FUNCTIONS = [
-  { value: 'fn-auth', label: 'auth-handler' },
-  { value: 'fn-img', label: 'image-optimizer' }
+const SERVICES = [
+  { value: 'svc-auth', label: 'auth-handler' },
+  { value: 'svc-img', label: 'image-optimizer' }
 ]
 
 const RUNTIMES = [
-  { value: 'azion-js', label: 'Azion Runtime (JavaScript)' },
-  { value: 'node20', label: 'Node.js 20' }
+  { value: 'node20', label: 'Node.js 20' },
+  { value: 'python312', label: 'Python 3.12' }
 ]
 
-const INSTANCES = [{ id: 'fi-1', name: 'auth-guard', functionId: 'fn-auth' }]
+const INSTANCES = [{ id: 'inst-1', name: 'auth-guard', serviceId: 'svc-auth' }]
 
-const CREATE_FUNCTION = '__create-function__'
+const CREATE_SERVICE = '__create-service__'
 
 const NAMES = [...DRAWER_NAMES, 'CardBox', 'HelperText', 'InputText', 'Item', 'Select']
 
@@ -61,47 +61,47 @@ const nameField = ({ model, error, id, placeholder, disabled }) =>
 />`
   )
 
-const FUNCTION_FIELD = withHelper(
+const SERVICE_FIELD = withHelper(
   `<Select
-  :model-value="form.functionId"
-  v-model:open="functionSelectOpen"
+  :model-value="form.serviceId"
+  v-model:open="serviceSelectOpen"
   size="large"
   :disabled="submitting"
   class="w-full"
-  placeholder="Select a function"
-  :required="!!errors.functionId"
-  :display-value="functionLabel"
-  @update:model-value="onFunctionModel"
+  placeholder="Select a service"
+  :required="!!errors.serviceId"
+  :display-value="serviceLabel"
+  @update:model-value="onServiceModel"
 >
   <Select.Trigger
-    id="instance-function"
-    aria-label="Edge Function"
-    :aria-describedby="errors.functionId ? 'instance-function-error' : undefined"
+    id="instance-service"
+    aria-label="Service"
+    :aria-describedby="errors.serviceId ? 'instance-service-error' : undefined"
   />
   <Select.Content class="z-[1002]!">
     <Select.Option
-      v-for="fn in functions"
-      :key="fn.value"
-      :value="fn.value"
+      v-for="service in services"
+      :key="service.value"
+      :value="service.value"
     >
-      {{ fn.label }}
+      {{ service.label }}
     </Select.Option>
     <template #footer>
       <Select.Option
-        :value="CREATE_FUNCTION"
+        :value="CREATE_SERVICE"
         icon="pi pi-plus-circle"
         class="w-full"
       >
-        Create Function
+        Create Service
       </Select.Option>
     </template>
   </Select.Content>
 </Select>`,
   `<HelperText
-  v-if="errors.functionId"
-  id="instance-function-error"
+  v-if="errors.serviceId"
+  id="instance-service-error"
   kind="required"
-  :label="errors.functionId"
+  :label="errors.serviceId"
 />`
 )
 
@@ -118,9 +118,9 @@ const RUNTIME_FIELD = withHelper(
       ':required="!!childErrors.runtime"'
     ],
     trigger: [
-      'id="fn-runtime"',
+      'id="svc-runtime"',
       'aria-label="Runtime"',
-      ':aria-describedby="childErrors.runtime ? \'fn-runtime-error\' : undefined"'
+      ':aria-describedby="childErrors.runtime ? \'svc-runtime-error\' : undefined"'
     ]
   }).replace(
     '  :display-value="runtimeLabel"\n>',
@@ -128,7 +128,7 @@ const RUNTIME_FIELD = withHelper(
   ),
   `<HelperText
   v-if="childErrors.runtime"
-  id="fn-runtime-error"
+  id="svc-runtime-error"
   kind="required"
   :label="childErrors.runtime"
 />`
@@ -137,12 +137,12 @@ const RUNTIME_FIELD = withHelper(
 const PARENT = formDrawer({
   open: 'parentOpen',
   size: 'large',
-  label: 'Add Functions Instance',
+  label: 'Add Instance',
   submit: 'submitParent',
-  title: 'Add Functions Instance',
+  title: 'Add Instance',
   description:
-    'Instantiate an edge function on this application — pick an existing function or create a new one inline.',
-  legend: 'Create functions instance',
+    'Instantiate a service in this project — pick an existing service or create a new one inline.',
+  legend: 'Create instance',
   disabled: 'submitting',
   sections: [
     itemSection({
@@ -164,14 +164,14 @@ const PARENT = formDrawer({
       ]
     }),
     itemSection({
-      heading: sectionLabel('Function'),
+      heading: sectionLabel('Service'),
       start: false,
       rows: [
         itemRow({
-          title: 'Edge Function',
-          description: 'Pick the function to instantiate, or create a new one.',
+          title: 'Service',
+          description: 'Pick the service to instantiate, or create a new one.',
           start: true,
-          control: FUNCTION_FIELD
+          control: SERVICE_FIELD
         })
       ]
     })
@@ -188,12 +188,12 @@ const CHILD = formDrawer({
   open: 'childOpen',
   size: 'medium',
   layer: { overlay: 'z-[1002]', content: 'z-[1003]' },
-  label: 'Create Function',
+  label: 'Create Service',
   submit: 'submitChild',
-  title: 'Create function',
+  title: 'Create service',
   description:
-    'Create a function to instantiate — it becomes available in the selector when saved.',
-  legend: 'Create function',
+    'Create a service to instantiate — it becomes available in the selector when saved.',
+  legend: 'Create service',
   disabled: 'childSubmitting',
   sections: [
     itemSection({
@@ -202,19 +202,19 @@ const CHILD = formDrawer({
       rows: [
         itemRow({
           title: 'Name',
-          description: 'A unique name for the function.',
+          description: 'A unique name for the service.',
           start: true,
           control: nameField({
             model: 'childForm.name',
             error: 'childErrors.name',
-            id: 'fn-name-error',
-            placeholder: 'my-function',
+            id: 'svc-name-error',
+            placeholder: 'my-service',
             disabled: 'childSubmitting'
           })
         }),
         itemRow({
           title: 'Runtime',
-          description: 'The language the function runs on.',
+          description: 'The language the service runs on.',
           start: true,
           control: RUNTIME_FIELD
         })
@@ -233,11 +233,11 @@ const TEMPLATE = consolePage({
   main: `<main class="flex h-full flex-col">
 ${indent(
   pageHeading({
-    title: 'Functions Instances',
+    title: 'Instances',
     description:
       'Create a resource whose Select needs a related resource that may not exist yet — the quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save.',
     actions: headingAction({
-      label: 'Add Functions Instance',
+      label: 'Add Instance',
       icon: 'pi pi-plus',
       click: 'openParent'
     })
@@ -249,7 +249,7 @@ ${indent(
     items: 'instances',
     item: 'instance',
     name: 'instance.name',
-    meta: 'functionLabel(instance.functionId)'
+    meta: 'serviceLabel(instance.serviceId)'
   })
 )}
 </main>
@@ -262,38 +262,38 @@ ${CHILD}`
 const setup = () => {
   let nextId = 0
   const uid = () => (nextId += 1)
-  const functions = ref(FUNCTIONS.map((fn) => ({ ...fn })))
-  const functionLabel = (value) => functions.value.find((fn) => fn.value === value)?.label ?? ''
+  const services = ref(SERVICES.map((service) => ({ ...service })))
+  const serviceLabel = (value) => services.value.find((service) => service.value === value)?.label ?? ''
   const runtimeLabel = (value) => RUNTIMES.find((r) => r.value === value)?.label ?? ''
   const instances = ref(INSTANCES.map((instance) => ({ ...instance })))
 
   const parentOpen = ref(false)
-  const form = reactive({ name: '', functionId: '' })
-  const errors = reactive({ name: '', functionId: '' })
+  const form = reactive({ name: '', serviceId: '' })
+  const errors = reactive({ name: '', serviceId: '' })
   const submitting = ref(false)
-  const functionSelectOpen = ref(false)
+  const serviceSelectOpen = ref(false)
 
   const childOpen = ref(false)
   const childForm = reactive({ name: '', runtime: '' })
   const childErrors = reactive({ name: '', runtime: '' })
   const childSubmitting = ref(false)
 
-  const onFunctionModel = (value) => {
-    if (value === CREATE_FUNCTION) {
-      functionSelectOpen.value = false
+  const onServiceModel = (value) => {
+    if (value === CREATE_SERVICE) {
+      serviceSelectOpen.value = false
       childOpen.value = true
       return
     }
-    form.functionId = value
-    errors.functionId = ''
+    form.serviceId = value
+    errors.serviceId = ''
   }
 
   watch(parentOpen, (open) => {
     if (!open) return
     form.name = ''
-    form.functionId = ''
+    form.serviceId = ''
     errors.name = ''
-    errors.functionId = ''
+    errors.serviceId = ''
   })
 
   watch(childOpen, (open) => {
@@ -306,10 +306,10 @@ const setup = () => {
 
   const submitParent = () => {
     errors.name = form.name.trim() ? '' : 'Name is required.'
-    errors.functionId = form.functionId ? '' : 'Select a function.'
-    if (errors.name || errors.functionId) return
+    errors.serviceId = form.serviceId ? '' : 'Select a service.'
+    if (errors.name || errors.serviceId) return
     instances.value = [
-      { id: `fi-${uid()}`, name: form.name.trim(), functionId: form.functionId },
+      { id: `inst-${uid()}`, name: form.name.trim(), serviceId: form.serviceId },
       ...instances.value
     ]
     parentOpen.value = false
@@ -319,18 +319,18 @@ const setup = () => {
     childErrors.name = childForm.name.trim() ? '' : 'Name is required.'
     childErrors.runtime = childForm.runtime ? '' : 'Runtime is required.'
     if (childErrors.name || childErrors.runtime) return
-    const value = `fn-${uid()}`
-    functions.value = [{ value, label: childForm.name.trim() }, ...functions.value]
-    form.functionId = value
-    errors.functionId = ''
+    const value = `svc-${uid()}`
+    services.value = [{ value, label: childForm.name.trim() }, ...services.value]
+    form.serviceId = value
+    errors.serviceId = ''
     childOpen.value = false
   }
 
   return consoleSetup({
     breadcrumb: BREADCRUMB,
     state: {
-      functions,
-      functionLabel,
+      services,
+      serviceLabel,
       runtimes: RUNTIMES,
       runtimeLabel,
       instances,
@@ -338,9 +338,9 @@ const setup = () => {
       form,
       errors,
       submitting,
-      CREATE_FUNCTION,
-      functionSelectOpen,
-      onFunctionModel,
+      CREATE_SERVICE,
+      serviceSelectOpen,
+      onServiceModel,
       openParent: () => {
         parentOpen.value = true
       },
@@ -368,8 +368,8 @@ const SCRIPT = consoleScript({
     'let nextId = 0',
     'const uid = () => (nextId += 1)',
     '',
-    declare('functions', FUNCTIONS, 'ref'),
-    "const functionLabel = (value) => functions.value.find((fn) => fn.value === value)?.label ?? ''",
+    declare('services', SERVICES, 'ref'),
+    "const serviceLabel = (value) => services.value.find((service) => service.value === value)?.label ?? ''",
     '',
     declare('runtimes', RUNTIMES),
     "const runtimeLabel = (value) => runtimes.find((r) => r.value === value)?.label ?? ''",
@@ -377,26 +377,26 @@ const SCRIPT = consoleScript({
     declare('instances', INSTANCES, 'ref'),
     '',
     ...`const parentOpen = ref(false)
-const form = reactive({ name: '', functionId: '' })
-const errors = reactive({ name: '', functionId: '' })
+const form = reactive({ name: '', serviceId: '' })
+const errors = reactive({ name: '', serviceId: '' })
 const submitting = ref(false)
 
-const CREATE_FUNCTION = '${CREATE_FUNCTION}'
-const functionSelectOpen = ref(false)
+const CREATE_SERVICE = '${CREATE_SERVICE}'
+const serviceSelectOpen = ref(false)
 
 const childOpen = ref(false)
 const childForm = reactive({ name: '', runtime: '' })
 const childErrors = reactive({ name: '', runtime: '' })
 const childSubmitting = ref(false)
 
-const onFunctionModel = (value) => {
-  if (value === CREATE_FUNCTION) {
-    functionSelectOpen.value = false
+const onServiceModel = (value) => {
+  if (value === CREATE_SERVICE) {
+    serviceSelectOpen.value = false
     childOpen.value = true
     return
   }
-  form.functionId = value
-  errors.functionId = ''
+  form.serviceId = value
+  errors.serviceId = ''
 }
 
 const openParent = () => {
@@ -409,17 +409,17 @@ const cancelParent = () => {
 watch(parentOpen, (open) => {
   if (!open) return
   form.name = ''
-  form.functionId = ''
+  form.serviceId = ''
   errors.name = ''
-  errors.functionId = ''
+  errors.serviceId = ''
 })
 
 const submitParent = () => {
   errors.name = form.name.trim() ? '' : 'Name is required.'
-  errors.functionId = form.functionId ? '' : 'Select a function.'
-  if (errors.name || errors.functionId) return
+  errors.serviceId = form.serviceId ? '' : 'Select a service.'
+  if (errors.name || errors.serviceId) return
   instances.value = [
-    { id: \`fi-\${uid()}\`, name: form.name.trim(), functionId: form.functionId },
+    { id: \`inst-\${uid()}\`, name: form.name.trim(), serviceId: form.serviceId },
     ...instances.value
   ]
   parentOpen.value = false
@@ -441,10 +441,10 @@ const submitChild = () => {
   childErrors.name = childForm.name.trim() ? '' : 'Name is required.'
   childErrors.runtime = childForm.runtime ? '' : 'Runtime is required.'
   if (childErrors.name || childErrors.runtime) return
-  const value = \`fn-\${uid()}\`
-  functions.value = [{ value, label: childForm.name.trim() }, ...functions.value]
-  form.functionId = value
-  errors.functionId = ''
+  const value = \`svc-\${uid()}\`
+  services.value = [{ value, label: childForm.name.trim() }, ...services.value]
+  form.serviceId = value
+  errors.serviceId = ''
   childOpen.value = false
 }`.split('\n')
   ]
@@ -460,7 +460,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A create drawer whose select needs a related resource that may not exist yet, from the forms lab (Nested drawer, `/forms/nested-drawer`): the list page opens a large Add Functions Instance drawer, and the Create Function option pinned to the foot of its Edge Function select opens a second, medium drawer stacked above it on raised layers. Saving the child adds the new function and selects it back into the parent. Each drawer is its own scoped save, and each clears its fields and errors when it opens, so its content stays in place while it closes. Built from the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `CardBox`, `Item`, `InputText`, `Select` and `HelperText`.'
+          'A create drawer whose select needs a related resource that may not exist yet: the list page opens a large Add Instance drawer, and the Create Service option pinned to the foot of its Service select opens a second, medium drawer stacked above it on raised layers. Saving the child adds the new service and selects it back into the parent. Each drawer is its own scoped save, and each clears its fields and errors when it opens, so its content stays in place while it closes. Built from the platform shell, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `CardBox`, `Item`, `InputText`, `Select` and `HelperText`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -475,7 +475,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'The Functions Instances list with both drawers closed: Add Functions Instance opens the parent, and Create Function in its select opens the child over it.'
+          'The Instances list with both drawers closed: Add Instance opens the parent, and Create Service in its select opens the child over it.'
       },
       source: { code: toSfc(SCRIPT, TEMPLATE) }
     }

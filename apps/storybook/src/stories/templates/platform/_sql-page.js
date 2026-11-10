@@ -72,8 +72,8 @@ const SCHEMA_COLUMNS = [
 
 export const TABLES = [
   {
-    id: 'tbl-users',
-    name: 'users',
+    id: 'tbl-customers',
+    name: 'customers',
     columns: [
       { id: 'col-1', name: 'id', type: 'int8', primaryKey: true, notNull: true },
       { id: 'col-2', name: 'name', type: 'text', primaryKey: false, notNull: true },
@@ -85,41 +85,41 @@ export const TABLES = [
         __k: 'row-1',
         id: 1,
         name: 'Ada Lovelace',
-        email: 'ada@azion.com',
+        email: 'ada@example.com',
         created_at: '2026-07-21 08:15:00'
       },
       {
         __k: 'row-2',
         id: 2,
         name: 'Alan Turing',
-        email: 'alan@azion.com',
+        email: 'alan@example.com',
         created_at: '2026-07-21 08:15:01'
       },
       {
         __k: 'row-3',
         id: 3,
         name: 'Grace Hopper',
-        email: 'grace@azion.com',
+        email: 'grace@example.com',
         created_at: null
       }
     ]
   },
   {
-    id: 'tbl-products',
-    name: 'products',
+    id: 'tbl-orders',
+    name: 'orders',
     columns: [
       { id: 'col-5', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-      { id: 'col-6', name: 'name', type: 'text', primaryKey: false, notNull: true },
-      { id: 'col-7', name: 'description', type: 'text', primaryKey: false, notNull: false }
+      { id: 'col-6', name: 'customer_id', type: 'int8', primaryKey: false, notNull: true },
+      { id: 'col-7', name: 'total', type: 'numeric', primaryKey: false, notNull: true }
     ],
     rows: [
-      { __k: 'row-4', id: 1, name: 'Edge Cache', description: 'Low-latency caching' },
-      { __k: 'row-5', id: 2, name: 'Edge SQL', description: 'Distributed database' }
+      { __k: 'row-4', id: 1001, customer_id: 1, total: '42.50' },
+      { __k: 'row-5', id: 1002, customer_id: 3, total: '18.00' }
     ]
   },
   {
-    id: 'tbl-sessions',
-    name: 'sessions',
+    id: 'tbl-invoices',
+    name: 'invoices',
     columns: [
       { id: 'col-8', name: 'id', type: 'int8', primaryKey: true, notNull: true },
       { id: 'col-9', name: 'created_at', type: 'timestamptz', primaryKey: false, notNull: false }
@@ -128,30 +128,30 @@ export const TABLES = [
   }
 ]
 
-export const CREATE_USERS_SQL = `CREATE TABLE IF NOT EXISTS users (
+export const CREATE_CUSTOMERS_SQL = `CREATE TABLE IF NOT EXISTS customers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );`
 
-const CREATE_PRODUCTS_SQL = `CREATE TABLE IF NOT EXISTS products (
+const CREATE_ORDERS_SQL = `CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  embedding F32_BLOB(4)
+  customer_id INTEGER NOT NULL REFERENCES customers (id),
+  total NUMERIC NOT NULL
 );`
 
-export const SELECT_USERS_SQL = `SELECT id, name, email, created_at
-FROM users
+export const SELECT_CUSTOMERS_SQL = `SELECT id, name, email, created_at
+FROM customers
 ORDER BY created_at DESC
 LIMIT 100;`
 
 export const FIRST_HISTORY = [
-  { id: 'q-0', sql: CREATE_USERS_SQL },
-  { id: 'q-1', sql: CREATE_PRODUCTS_SQL }
+  { id: 'q-0', sql: CREATE_CUSTOMERS_SQL },
+  { id: 'q-1', sql: CREATE_ORDERS_SQL }
 ]
 
-export const RAN_HISTORY = [{ id: 'q-2', sql: SELECT_USERS_SQL }, ...FIRST_HISTORY]
+export const RAN_HISTORY = [{ id: 'q-2', sql: SELECT_CUSTOMERS_SQL }, ...FIRST_HISTORY]
 
 export const SELECT_RESULT = {
   type: 'rows',
@@ -161,21 +161,21 @@ export const SELECT_RESULT = {
       __k: 1,
       id: 1,
       name: 'Ada Lovelace',
-      email: 'ada@azion.com',
+      email: 'ada@example.com',
       created_at: '2026-07-21 08:15:00'
     },
     {
       __k: 2,
       id: 2,
       name: 'Alan Turing',
-      email: 'alan@azion.com',
+      email: 'alan@example.com',
       created_at: '2026-07-21 08:15:01'
     },
     {
       __k: 3,
       id: 3,
       name: 'Grace Hopper',
-      email: 'grace@azion.com',
+      email: 'grace@example.com',
       created_at: '2026-07-21 08:15:02'
     }
   ]
@@ -185,82 +185,78 @@ const SQL_TEMPLATES = [
   {
     id: 'create-table',
     title: 'Create Table',
-    description: 'Create a basic users table with auto-increment ID and timestamp',
+    description: 'Create a basic customers table with auto-increment ID and timestamp',
     icon: 'pi pi-table',
-    sql: CREATE_USERS_SQL
+    sql: CREATE_CUSTOMERS_SQL
   },
   {
     id: 'insert-data',
     title: 'Insert Data',
-    description: 'Insert sample user records into the users table',
+    description: 'Insert sample customer records into the customers table',
     icon: 'pi pi-plus-circle',
-    sql: `INSERT INTO users (name, email) VALUES
-  ('Ada Lovelace', 'ada@azion.com'),
-  ('Alan Turing', 'alan@azion.com'),
-  ('Grace Hopper', 'grace@azion.com');`
+    sql: `INSERT INTO customers (name, email) VALUES
+  ('Ada Lovelace', 'ada@example.com'),
+  ('Alan Turing', 'alan@example.com'),
+  ('Grace Hopper', 'grace@example.com');`
   },
   {
     id: 'select-all',
     title: 'Select All',
-    description: 'Retrieve all records from users table with limit',
+    description: 'Retrieve all records from customers table with limit',
     icon: 'pi pi-list',
-    sql: SELECT_USERS_SQL
+    sql: SELECT_CUSTOMERS_SQL
   },
   {
     id: 'count-records',
     title: 'Count Records',
-    description: 'Count total number of records in users table',
+    description: 'Count total number of records in customers table',
     icon: 'pi pi-hashtag',
-    sql: 'SELECT COUNT(*) AS total_users FROM users;'
+    sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
   },
   {
-    id: 'vector-table',
-    title: 'Vector Table',
-    description: 'Create a products table with vector embeddings for AI search',
+    id: 'related-table',
+    title: 'Related Table',
+    description: 'Create an orders table that references the customers table',
     icon: 'pi pi-box',
-    sql: `CREATE TABLE IF NOT EXISTS products (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  description TEXT,
-  embedding F32_BLOB(4)
-);`
+    sql: CREATE_ORDERS_SQL
   },
   {
-    id: 'insert-vectors',
-    title: 'Insert Vectors',
-    description: 'Insert sample products with vector embeddings',
+    id: 'insert-related',
+    title: 'Insert Related Rows',
+    description: 'Insert sample orders for existing customers',
     icon: 'pi pi-arrow-right-arrow-left',
-    sql: `INSERT INTO products (name, description, embedding) VALUES
-  ('Edge Cache', 'Low-latency caching', vector('[0.10, 0.20, 0.30, 0.40]')),
-  ('Edge SQL', 'Distributed database', vector('[0.15, 0.25, 0.35, 0.45]'));`
+    sql: `INSERT INTO orders (customer_id, total) VALUES
+  (1, 42.50),
+  (3, 18.00);`
   },
   {
-    id: 'vector-search',
-    title: 'Vector Search',
-    description: 'Search products using cosine similarity with vector embeddings',
+    id: 'join-tables',
+    title: 'Join Tables',
+    description: 'List every order with the name of the customer who placed it',
     icon: 'pi pi-search',
-    sql: `SELECT name, description,
-  vector_distance_cos(embedding, vector('[0.12, 0.22, 0.32, 0.42]')) AS distance
-FROM products
-ORDER BY distance ASC;`
+    sql: `SELECT orders.id, customers.name, orders.total
+FROM orders
+JOIN customers ON customers.id = orders.customer_id
+ORDER BY orders.id DESC;`
   },
   {
-    id: 'create-vector-index',
-    title: 'Create Vector Index',
-    description: 'Create an index to optimize vector search performance',
+    id: 'create-index',
+    title: 'Create Index',
+    description: 'Create an index to speed up lookups of orders by customer',
     icon: 'pi pi-sitemap',
-    sql: `CREATE INDEX IF NOT EXISTS products_embedding_idx
-ON products (libsql_vector_idx(embedding));`
+    sql: `CREATE INDEX IF NOT EXISTS orders_customer_id_idx
+ON orders (customer_id);`
   },
   {
-    id: 'vector-top-k',
-    title: 'Vector Top K Query',
-    description: 'Find top 3 most similar products using vector distance',
+    id: 'top-customers',
+    title: 'Top Customers',
+    description: 'Find the 3 customers with the highest order totals',
     icon: 'pi pi-sort-amount-down',
-    sql: `SELECT name,
-  vector_distance_cos(embedding, vector('[0.12, 0.22, 0.32, 0.42]')) AS distance
-FROM products
-ORDER BY distance ASC
+    sql: `SELECT customers.name, SUM(orders.total) AS total_spent
+FROM customers
+JOIN orders ON orders.customer_id = customers.id
+GROUP BY customers.id
+ORDER BY total_spent DESC
 LIMIT 3;`
   }
 ]
@@ -1127,7 +1123,7 @@ ${indent(SEARCH_ICON, 5)}
   </DrawerPortal>
 </Drawer>`
 
-export const PAGE_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
+const PAGE_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
   <main class="flex h-full min-h-0 flex-col">
 ${indent(PAGE_TABS, 2)}
 
@@ -1143,7 +1139,7 @@ export const TABLES_STATE = {
   tab: 'tables',
   view: 'data',
   tables: TABLES,
-  sql: CREATE_USERS_SQL,
+  sql: CREATE_CUSTOMERS_SQL,
   history: FIRST_HISTORY,
   results: null
 }

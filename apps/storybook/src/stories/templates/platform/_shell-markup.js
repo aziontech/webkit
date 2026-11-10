@@ -28,179 +28,134 @@ import { computed, ref, watch } from 'vue'
 
 import { each, indent } from '../../_shared/markup'
 
-const USER_EMAIL = 'myemail@azion.com'
-const USER_NAME = 'myemail'
-export const DOCS_HREF =
-  'https://www.azion.com/en/documentation/products/build/edge-application/workloads/'
+const USER_EMAIL = 'gabriel@example.com'
+const USER_NAME = 'gabriel'
+export const DOCS_HREF = 'https://example.com/docs/resources'
 
 export const NAV_GROUPS = [
   {
     items: [
-      { id: 'overview', label: 'Overview', icon: 'pi pi-home', path: '/home' },
-      { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
-      { id: 'deployments', label: 'Deployments', icon: 'ai ai-deploy-pillar', path: '/deployments' }
+      { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
+      { id: 'projects', label: 'Projects', icon: 'pi pi-folder', path: '/projects' },
+      { id: 'deployments', label: 'Deployments', icon: 'pi pi-cloud-upload', path: '/deployments' }
     ]
   },
   {
     label: 'Build',
     items: [
-      {
-        id: 'applications',
-        label: 'Applications',
-        icon: 'ai ai-edge-application',
-        path: '/applications'
-      },
-      { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', path: '/functions' },
-      { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
-      { id: 'connectors', label: 'Connectors', icon: 'ai ai-edge-connectors', path: '/connectors' },
-      {
-        id: 'custom-pages',
-        label: 'Custom Pages',
-        icon: 'ai ai-custom-pages',
-        path: '/custom-pages'
-      }
+      { id: 'resources', label: 'Resources', icon: 'pi pi-box', path: '/resources' },
+      { id: 'services', label: 'Services', icon: 'pi pi-server', path: '/services' },
+      { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', path: '/variables' },
+      { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', path: '/integrations' },
+      { id: 'templates', label: 'Templates', icon: 'pi pi-clone', path: '/templates' }
     ]
   },
   {
-    label: 'Secure',
+    label: 'Security',
     items: [
-      { id: 'firewall', label: 'Firewall', icon: 'ai ai-edge-firewall', path: '/firewall' },
-      { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
-      { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', path: '/waf-rules' },
-      {
-        id: 'certificate-manager',
-        label: 'Certificate Manager',
-        icon: 'ai ai-certificate-manager',
-        path: '/certificates'
-      },
-      {
-        id: 'network-lists',
-        label: 'Network Lists',
-        icon: 'ai ai-network-lists',
-        path: '/network-lists'
-      }
+      { id: 'domains', label: 'Domains', icon: 'pi pi-globe', path: '/domains' },
+      { id: 'policies', label: 'Policies', icon: 'pi pi-shield', path: '/policies' },
+      { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', path: '/rule-sets' },
+      { id: 'keys', label: 'Keys', icon: 'pi pi-key', path: '/keys' }
     ]
   },
   {
-    label: 'Store',
+    label: 'Data',
     items: [
       {
-        id: 'object-storage',
-        label: 'Object Storage',
-        icon: 'ai ai-edge-storage',
-        path: '/object-storage'
-      },
-      {
-        id: 'sql-database',
-        label: 'SQL Database',
-        icon: 'ai ai-edge-sql',
-        path: '/sql-database',
+        id: 'databases',
+        label: 'Databases',
+        icon: 'pi pi-database',
+        path: '/databases',
         tagValue: 'Preview'
-      }
+      },
+      { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', path: '/storage' }
     ]
   },
   {
-    label: 'Observe',
+    label: 'Observability',
     items: [
-      { id: 'data-stream', label: 'Data Stream', icon: 'ai ai-data-stream', path: '/data-stream' },
-      { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', path: '/edge-pulse' },
+      { id: 'logs', label: 'Logs', icon: 'pi pi-file', path: '/logs' },
       {
-        id: 'real-time-metrics-module',
-        label: 'Real-Time Metrics',
-        icon: 'ai ai-real-time-metrics',
+        id: 'metrics-module',
+        label: 'Metrics',
+        icon: 'pi pi-chart-bar',
         kind: 'drill',
-        href: '/real-time-metrics',
+        href: '/metrics',
         groups: [
-          { items: [{ id: 'real-time-metrics', label: 'Overview', path: '/real-time-metrics' }] },
+          { items: [{ id: 'metrics', label: 'Overview', path: '/metrics' }] },
           {
             label: 'Build',
             items: [
               {
-                id: 'rtm-applications',
-                label: 'Applications',
-                path: '/real-time-metrics',
-                query: { dashboard: 'applications' }
+                id: 'metrics-resources',
+                label: 'Resources',
+                path: '/metrics',
+                query: { dashboard: 'resources' }
               },
               {
-                id: 'rtm-tiered-cache',
-                label: 'Tiered Cache',
-                path: '/real-time-metrics',
-                query: { dashboard: 'tiered-cache' }
+                id: 'metrics-services',
+                label: 'Services',
+                path: '/metrics',
+                query: { dashboard: 'services' }
               },
               {
-                id: 'rtm-functions',
-                label: 'Functions',
-                path: '/real-time-metrics',
-                query: { dashboard: 'functions' }
-              },
-              {
-                id: 'rtm-image-processor',
-                label: 'Image Processor',
-                path: '/real-time-metrics',
-                query: { dashboard: 'image-processor' }
+                id: 'metrics-cache',
+                label: 'Cache',
+                path: '/metrics',
+                query: { dashboard: 'cache' }
               }
             ]
           },
           {
-            label: 'Secure',
+            label: 'Security',
             items: [
               {
-                id: 'rtm-waf',
-                label: 'WAF',
-                path: '/real-time-metrics',
-                query: { dashboard: 'waf' }
+                id: 'metrics-domains',
+                label: 'Domains',
+                path: '/metrics',
+                query: { dashboard: 'domains' }
               },
               {
-                id: 'rtm-firewall',
-                label: 'Firewall',
-                path: '/real-time-metrics',
-                query: { dashboard: 'firewall' }
+                id: 'metrics-policies',
+                label: 'Policies',
+                path: '/metrics',
+                query: { dashboard: 'policies' }
               },
               {
-                id: 'rtm-dns',
-                label: 'DNS',
-                path: '/real-time-metrics',
-                query: { dashboard: 'dns' }
-              },
-              {
-                id: 'rtm-bot-manager',
-                label: 'Bot Manager',
-                path: '/real-time-metrics',
-                query: { dashboard: 'bot-manager' }
+                id: 'metrics-rule-sets',
+                label: 'Rule sets',
+                path: '/metrics',
+                query: { dashboard: 'rule-sets' }
               }
             ]
           },
           {
-            label: 'Observe',
+            label: 'Data',
             items: [
               {
-                id: 'rtm-data-stream',
-                label: 'Data Stream',
-                path: '/real-time-metrics',
-                query: { dashboard: 'data-stream' }
+                id: 'metrics-databases',
+                label: 'Databases',
+                path: '/metrics',
+                query: { dashboard: 'databases' }
+              },
+              {
+                id: 'metrics-storage',
+                label: 'Storage',
+                path: '/metrics',
+                query: { dashboard: 'storage' }
               }
             ]
           }
         ]
       },
-      {
-        id: 'real-time-events',
-        label: 'Real-Time Events',
-        icon: 'ai ai-real-time-events',
-        path: '/real-time-events'
-      },
-      {
-        id: 'real-time-purge',
-        label: 'Real-Time Purge',
-        icon: 'ai ai-real-time-purge',
-        path: '/real-time-purge'
-      }
+      { id: 'events', label: 'Events', icon: 'pi pi-bolt', path: '/events' }
     ]
   },
   {
     label: 'More',
     items: [
-      { id: 'marketplace', label: 'Marketplace', icon: 'ai ai-marketplace', path: '/marketplace' },
+      { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', path: '/catalog' },
       {
         id: 'settings',
         label: 'Settings',
@@ -244,8 +199,6 @@ export const NAV_GROUPS = [
   }
 ]
 
-export const BREADCRUMB = [{ label: 'Workloads', href: '/workloads' }, { label: 'workload_01' }]
-
 const leaves = (items) =>
   items.flatMap((item) =>
     item.groups
@@ -280,25 +233,25 @@ const PALETTE_GROUPS = NAV_GROUPS.flatMap((group, groupIndex) => {
 
 export const PALETTE_RECENTS = [
   {
-    key: 'workloads/1020655',
-    name: 'workload_01',
-    icon: 'ai ai-workloads',
-    typeLabel: 'Workload',
-    navId: 'workloads'
+    key: 'resources/1020655',
+    name: 'resource-01',
+    icon: 'pi pi-box',
+    typeLabel: 'Resource',
+    navId: 'resources'
   },
   {
     key: 'domains/domain-1020655',
-    name: 'my-workload-1.azion.run',
-    icon: 'ai ai-domains',
+    name: 'app.example.com',
+    icon: 'pi pi-globe',
     typeLabel: 'Domain',
-    navId: 'workloads'
+    navId: 'domains'
   },
   {
-    key: 'sql-database/feature-flags',
+    key: 'databases/feature-flags',
     name: 'feature-flags',
-    icon: 'ai ai-edge-sql',
+    icon: 'pi pi-database',
     typeLabel: 'Database',
-    navId: 'sql-database'
+    navId: 'databases'
   }
 ]
 
@@ -309,7 +262,7 @@ export const ACCOUNT_COMMANDS = [
   { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
 ]
 
-export const shellState = (active = 'workloads') => {
+export const shellState = (active = 'resources') => {
   const activeId = ref(active)
   const navOpen = ref(false)
   const paletteOpen = ref(false)
@@ -426,7 +379,7 @@ export const scriptLines = ({
   parts,
   declarations,
   state,
-  active = 'workloads',
+  active = 'resources',
   vue = ['ref']
 }) => [
   ...[...new Set([...SHELL_PARTS, ...parts])].sort().map(webkitImport),
@@ -764,7 +717,7 @@ const HEADER_ACTIONS = `<span class="contents @min-[47rem]:hidden">
 const header = (
   withBreadcrumb,
   crumb
-) => `<GlobalHeader aria-label="Azion Console" class="@container">
+) => `<GlobalHeader aria-label="Console" class="@container">
   <GlobalHeader.Left class="justify-start!">
 ${indent([MOBILE_NAV, ...(withBreadcrumb || crumb ? [crumbTrail(crumb)] : [])].join('\n\n'), 2)}
   </GlobalHeader.Left>
@@ -844,23 +797,23 @@ export const ENVIRONMENT_CRUMB = `<Select
   </Select.Content>
 </Select>`
 
-export const WORKLOAD_CRUMBS = [
-  { label: 'Workloads', href: '/workloads' },
-  { label: 'workload_01', href: '/workloads/1020655?name=workload_01' }
+export const DEPLOYABLE_CRUMBS = [
+  { label: 'Resources', href: '/resources' },
+  { label: 'resource-01', href: '/resources/1020655?name=resource-01' }
 ]
 
-export const WORKLOAD_ENVIRONMENTS = [
+export const DEPLOYABLE_ENVIRONMENTS = [
   { name: 'Production', policy: 'Single' },
   { name: 'Preview', policy: 'Versioned' }
 ]
 
 export const environmentCrumbState = () => {
-  const environment = ref(WORKLOAD_ENVIRONMENTS[0].name)
+  const environment = ref(DEPLOYABLE_ENVIRONMENTS[0].name)
   const environmentQuery = ref('')
   const environmentMatches = computed(() => {
     const needle = environmentQuery.value.trim().toLowerCase()
-    if (!needle) return WORKLOAD_ENVIRONMENTS
-    return WORKLOAD_ENVIRONMENTS.filter((entry) => entry.name.toLowerCase().includes(needle))
+    if (!needle) return DEPLOYABLE_ENVIRONMENTS
+    return DEPLOYABLE_ENVIRONMENTS.filter((entry) => entry.name.toLowerCase().includes(needle))
   })
   const pickEnvironment = (value) => {
     if (value !== '__create-environment__') environment.value = value
@@ -869,8 +822,8 @@ export const environmentCrumbState = () => {
     if (!open) environmentQuery.value = ''
   }
   return {
-    leadingCrumbs: WORKLOAD_CRUMBS,
-    environments: WORKLOAD_ENVIRONMENTS,
+    leadingCrumbs: DEPLOYABLE_CRUMBS,
+    environments: DEPLOYABLE_ENVIRONMENTS,
     environment,
     environmentQuery,
     environmentMatches,
@@ -881,9 +834,9 @@ export const environmentCrumbState = () => {
 
 export const ENVIRONMENT_CRUMB_DECLARATIONS = [
   '',
-  declare('leadingCrumbs', WORKLOAD_CRUMBS),
+  declare('leadingCrumbs', DEPLOYABLE_CRUMBS),
   '',
-  declare('environments', WORKLOAD_ENVIRONMENTS)
+  declare('environments', DEPLOYABLE_ENVIRONMENTS)
 ]
 
 export const ENVIRONMENT_CRUMB_STATE = [
@@ -955,26 +908,26 @@ export const SHELL_COMPONENTS = {
   Tooltip
 }
 
-export const APPLICATION_TABS = [
+export const PROJECT_DETAIL_TABS = [
   { value: 'overview', label: 'Overview' },
   { value: 'build', label: 'Build' },
   { value: 'deployments', label: 'Deployments' },
-  { value: 'device-groups', label: 'Device Groups' },
-  { value: 'cache-settings', label: 'Cache Settings' },
-  { value: 'functions-instances', label: 'Functions Instances' },
-  { value: 'rules-engine', label: 'Rules Engine' },
+  { value: 'variables', label: 'Variables' },
+  { value: 'caching', label: 'Caching' },
+  { value: 'integrations', label: 'Integrations' },
+  { value: 'rules', label: 'Rules' },
   { value: 'main-settings', label: 'Settings' }
 ]
 
-export const WORKLOAD_TABS = [
+export const DEPLOYABLE_TABS = [
   { value: 'overview', label: 'Overview' },
   { value: 'deployments', label: 'Deployments' },
   { value: 'settings', label: 'Settings' }
 ]
 
-export const FIREWALL_TABS = [
+export const POLICY_TABS = [
   { value: 'overview', label: 'Overview' },
-  { value: 'rules-engine', label: 'Rules Engine' },
+  { value: 'rules', label: 'Rules' },
   { value: 'main-settings', label: 'Settings' }
 ]
 
@@ -991,17 +944,6 @@ export const pageTabs = (actions = '') => `<div class="border-b border-(--border
     }
   </div>
 </div>`
-
-export const settingsTab = ({ ariaLabel, column, bar }) => `<main class="flex h-full flex-col">
-${indent(pageTabs())}
-  <form class="flex min-h-0 flex-1 flex-col overflow-auto" aria-label="${ariaLabel}" novalidate @submit.prevent>
-${indent(column, 2)}
-${indent(bar, 2)}
-  </form>
-</main>`
-
-export const region = (label, fill = false) =>
-  `<div class="flex ${fill ? 'min-h-0 flex-1' : 'min-h-(--container-3xs)'} items-center justify-center text-body-sm text-(--text-muted)">${label}</div>`
 
 export const pageScroll = (main, scroll = 'overflow-auto') =>
   `<div class="min-h-0 flex-1 ${scroll} animate-page-enter motion-reduce:animate-none">
@@ -1070,7 +1012,7 @@ export const AGENT_LOGOS = `<span v-for="agent in agentMarks" :key="agent.name" 
 </span>`
 
 export const AGENT_PROMO = {
-  title: 'Set up Azion with your agent',
+  title: 'Set up your coding agent',
   description: 'Give your editor a prompt that teaches it to build and deploy here.'
 }
 

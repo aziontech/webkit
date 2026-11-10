@@ -19,24 +19,23 @@ import { computed, reactive, ref } from 'vue'
 import { indent } from '../../_shared/markup'
 import { card, compactRow, declare, fieldRow, pageHeading, saveBar, section, wideRow } from './_forms-markup'
 import {
-  APPLICATION_TABS,
+  DEPLOYABLE_CRUMBS,
+  DEPLOYABLE_TABS,
   ENVIRONMENT_CRUMB,
   ENVIRONMENT_CRUMB_COMPONENTS,
   ENVIRONMENT_CRUMB_DECLARATIONS,
   ENVIRONMENT_CRUMB_PARTS,
   ENVIRONMENT_CRUMB_STATE,
   environmentCrumbState,
-  FIREWALL_TABS,
   mergeScripts,
   pageScroll,
   pageTabs,
+  POLICY_TABS,
+  PROJECT_DETAIL_TABS,
   scriptLines,
   shell,
   SHELL_COMPONENTS,
-  shellState,
-  WORKLOAD_CRUMBS,
-  WORKLOAD_TABS
-} from './_shell-markup'
+  shellState} from './_shell-markup'
 
 const webkitImport = (binding, subpath) => `import ${binding} from '@aziontech/webkit/${subpath}'`
 
@@ -90,47 +89,47 @@ const savedForm = (record, { edits = {}, saving = false } = {}) => {
   return { form, saving: busy, baseline, dirty }
 }
 
-const APPLICATION_RECORD = {
-  name: 'edgeflow-site',
+const PROJECT_RECORD = {
+  name: 'web-app',
   active: true,
   modules: {
-    application_accelerator: true,
-    cache: true,
+    compression: true,
+    caching: true,
     device_detection: false,
-    functions: true,
-    image_processor: false,
-    load_balancer: false,
+    custom_code: true,
+    image_optimization: false,
+    load_balancing: false,
     web_socket_proxy: false
   }
 }
 
 const DEFAULT_MODULES = [
   {
-    key: 'application_accelerator',
-    title: 'Application Accelerator',
-    description: 'Optimize protocols and manage dynamic content delivery.'
+    key: 'compression',
+    title: 'Compression',
+    description: 'Compress responses with gzip and Brotli before they are sent.'
   },
-  { key: 'cache', title: 'Cache', description: 'Customize advanced cache settings.' },
+  { key: 'caching', title: 'Caching', description: 'Customize advanced cache settings.' },
   {
     key: 'device_detection',
     title: 'Device Detection',
-    description: 'Activate DeviceAtlas variables to configure responsive rules.'
+    description: 'Expose device variables to build responsive rules.'
   },
   {
-    key: 'functions',
-    title: 'Functions',
-    description: 'Build ultra-low latency functions that run on Azion.'
+    key: 'custom_code',
+    title: 'Custom Code',
+    description: 'Run your own code on each request, close to the user.'
   },
   {
-    key: 'image_processor',
-    title: 'Image Processor',
-    description: 'Enable dynamic image editing options.'
+    key: 'image_optimization',
+    title: 'Image Optimization',
+    description: 'Resize and convert images on the fly.'
   },
   {
-    key: 'load_balancer',
-    title: 'Load Balancer',
+    key: 'load_balancing',
+    title: 'Load Balancing',
     description:
-      'Balance traffic to your origins ensuring reliability and network congestion control.'
+      'Balance traffic across your upstreams for reliability and network congestion control.'
   }
 ]
 
@@ -139,12 +138,12 @@ const SUBSCRIPTION_MODULES = [
     key: 'web_socket_proxy',
     title: 'WebSocket Proxy',
     description:
-      'Enhance real-time data exchange between your Application and backend services using the WebSocket protocol.'
+      'Enhance real-time data exchange between your project and its backends using the WebSocket protocol.'
   }
 ]
 
 const CONTACT_SALES_LINK = `<a
-  href="https://www.azion.com/en/contact-sales/"
+  href="https://example.com/contact-sales"
   target="_blank"
   rel="noopener noreferrer"
   class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
@@ -153,12 +152,12 @@ const CONTACT_SALES_LINK = `<a
   <i class="pi pi-external-link shrink-0 text-body-sm leading-none" aria-hidden="true" />
 </a>`
 
-const APPLICATION_GENERAL = card([
+const PROJECT_GENERAL = card([
   `<Item size="small">
   <Item.Content>
     <Item.Title>Name</Item.Title>
     <Item.Description>
-      A unique and descriptive name to identify the application.
+      A unique and descriptive name to identify the project.
     </Item.Description>
   </Item.Content>
   <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
@@ -169,7 +168,7 @@ const APPLICATION_GENERAL = card([
   <Item.Content>
     <Item.Title>Active</Item.Title>
     <Item.Description>
-      When disabled, the application stops serving traffic.
+      When disabled, the project stops serving traffic.
     </Item.Description>
   </Item.Content>
   <Item.Actions class="justify-end">
@@ -178,7 +177,7 @@ const APPLICATION_GENERAL = card([
 </Item>`
 ])
 
-const APPLICATION_MODULE_ROWS = card([
+const PROJECT_MODULE_ROWS = card([
   `<Item v-for="mod in defaultModules" :key="mod.key" size="small">
   <Item.Content>
     <Item.Title>{{ mod.title }}</Item.Title>
@@ -190,7 +189,7 @@ const APPLICATION_MODULE_ROWS = card([
 </Item>`
 ])
 
-const APPLICATION_SUBSCRIPTION_ROWS = card([
+const PROJECT_SUBSCRIPTION_ROWS = card([
   `<Item v-for="mod in subscriptionModules" :key="mod.key" size="small">
   <Item.Content>
     <Item.Title>{{ mod.title }}</Item.Title>
@@ -207,8 +206,8 @@ ${indent(CONTACT_SALES_LINK, 3)}
 </Item>`
 ])
 
-const APPLICATION_COLUMN = `<div class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
-${indent(pageHeading({ title: 'Settings', description: 'Core configuration for this application.' }))}
+const PROJECT_COLUMN = `<div class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
+${indent(pageHeading({ title: 'Settings', description: 'Core configuration for this project.' }))}
 
   <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0" :disabled="saving">
     <legend class="sr-only">Main settings</legend>
@@ -217,21 +216,21 @@ ${indent(
   [
     section({
       title: 'General',
-      hint: 'How this application is identified across the console, and whether it is serving traffic.',
+      hint: 'How this project is identified across the platform, and whether it is serving traffic.',
       anchor: true,
-      body: APPLICATION_GENERAL
+      body: PROJECT_GENERAL
     }),
     section({
       title: 'Modules',
-      hint: 'The capabilities this application runs with, each of which can be toggled here.',
+      hint: 'The capabilities this project runs with, each of which can be toggled here.',
       anchor: true,
-      body: APPLICATION_MODULE_ROWS
+      body: PROJECT_MODULE_ROWS
     }),
     section({
       title: 'Subscription modules',
       hint: 'Paid add-ons that are activated with sales, not from this page.',
       anchor: true,
-      body: APPLICATION_SUBSCRIPTION_ROWS
+      body: PROJECT_SUBSCRIPTION_ROWS
     })
   ].join('\n\n'),
   2
@@ -245,12 +244,12 @@ ${indent(pageTabs(actions))}
 ${indent(panel)}
 </main>`
 
-export const APPLICATION_SETTINGS = {
-  active: 'applications',
-  breadcrumb: [{ label: 'Applications', href: '/applications' }, { label: APPLICATION_RECORD.name }],
-  tabs: APPLICATION_TABS,
+export const PROJECT_SETTINGS = {
+  active: 'projects',
+  breadcrumb: [{ label: 'Projects', href: '/projects' }, { label: PROJECT_RECORD.name }],
+  tabs: PROJECT_DETAIL_TABS,
   tab: 'main-settings',
-  record: APPLICATION_RECORD,
+  record: PROJECT_RECORD,
   data: { defaultModules: DEFAULT_MODULES, subscriptionModules: SUBSCRIPTION_MODULES },
   parts: [
     ['CardBox', 'card-box'],
@@ -266,11 +265,11 @@ export const APPLICATION_SETTINGS = {
   <section class="min-h-0 flex-1 overflow-auto">
     <div class="flex min-h-full flex-col">
       <form class="flex min-h-full flex-col" aria-label="Main settings" novalidate @submit.prevent="save">
-${indent(APPLICATION_COLUMN, 4)}
+${indent(PROJECT_COLUMN, 4)}
 
 ${indent(
   saveBar({
-    label: 'Application settings changed.',
+    label: 'Project settings changed.',
     hint: 'Saving publishes them on the next deployment.',
     bound: true,
     ...bar
@@ -330,7 +329,7 @@ const MTLS_MODE_OPTIONS = [
     value: 'permissive',
     label: 'Permissive',
     description:
-      'Attempts to verify the client certificate, but allows the handshake even when the Trusted CA can’t be validated. Check which certificate attempted the request in Firewall.'
+      'Attempts to verify the client certificate, but allows the handshake even when the Trusted CA can’t be validated. Check which certificate attempted the request in the request logs.'
   }
 ]
 
@@ -348,9 +347,9 @@ const LINKED_ENVIRONMENTS = [
     settingsId: 's1',
     auto: true,
     options: [
-      { value: 'azion-default', label: 'Azion Default' },
-      { value: 's1', label: 'magalu-storefront' },
-      { value: 's2', label: 'azion-storefront' }
+      { value: 'default', label: 'Default' },
+      { value: 's1', label: 'storefront-production' },
+      { value: 's2', label: 'storefront-legacy' }
     ]
   },
   {
@@ -365,29 +364,29 @@ const LINKED_ENVIRONMENTS = [
   }
 ]
 
-const WORKLOAD_NAME = WORKLOAD_CRUMBS[WORKLOAD_CRUMBS.length - 1].label
+const DEPLOYABLE_NAME = DEPLOYABLE_CRUMBS[DEPLOYABLE_CRUMBS.length - 1].label
 
-const WORKLOAD_DOMAINS = [
+const DEPLOYABLE_DOMAINS = [
   {
     id: 'generated',
-    domain: 'w1020655.azion.run',
+    domain: 'resource-01.example.app',
     environment: 'Production',
     policy: 'Single',
-    certificate: 'Azion (free)',
+    certificate: 'Platform (free)',
     generated: true
   },
   {
     id: 'd-7731',
-    domain: 'www.edgeflow.com',
+    domain: 'www.example.com',
     environment: 'Production',
     policy: 'Single',
-    certificate: 'edgeflow.com wildcard',
+    certificate: 'example.com wildcard',
     generated: false
   }
 ]
 
-const WORKLOAD_RECORD = {
-  name: WORKLOAD_NAME,
+const DEPLOYABLE_RECORD = {
+  name: DEPLOYABLE_NAME,
   active: true,
   deploymentSettings: {},
   protocols: {
@@ -521,7 +520,7 @@ const portsRow = ({ when, key, title, text, model, placeholder, ariaLabel, optio
 
 const DEPLOYMENT_SETTINGS = `<div class="flex min-w-0 flex-col gap-(--spacing-md)">
   <Message severity="info" size="small" action-label="Manage Deployment Settings">
-    Deployment Settings centralize the applications, firewalls and custom pages that
+    Deployment Settings centralize the services, policies and error pages that
     environments share. Every environment a domain answers in is linked to one
     automatically, matching that environment’s deployment policy.
   </Message>
@@ -574,7 +573,7 @@ const DEPLOYMENT_SETTINGS = `<div class="flex min-w-0 flex-col gap-(--spacing-md
 const PROTOCOL_SETTINGS = card([
   portsRow({
     title: 'HTTP Ports',
-    text: 'The ports this workload answers plain HTTP on.',
+    text: 'The ports this resource answers plain HTTP on.',
     model: 'form.protocols.httpPorts',
     placeholder: 'Select an HTTP port',
     ariaLabel: 'HTTP Ports',
@@ -590,7 +589,7 @@ const PROTOCOL_SETTINGS = card([
     when: 'form.protocols.useHttps',
     key: 'https-ports',
     title: 'HTTPS Ports',
-    text: 'The ports this workload answers TLS traffic on.',
+    text: 'The ports this resource answers TLS traffic on.',
     model: 'form.protocols.httpsPorts',
     placeholder: 'Select an HTTPS port',
     ariaLabel: 'HTTPS Ports',
@@ -641,7 +640,7 @@ const MUTUAL_AUTH = card([
   `<Item size="small" class="items-start">
   <Item.Content>
     <Item.Title>Mutual Authentication</Item.Title>
-    <Item.Description>Require the client to present a certificate the workload can verify, as well as presenting its own.</Item.Description>
+    <Item.Description>Require the client to present a certificate the resource can verify, as well as presenting its own.</Item.Description>
   </Item.Content>
   <Item.Actions class="justify-end">
     <Switch
@@ -709,73 +708,73 @@ const MUTUAL_AUTH = card([
   )
 ])
 
-const WORKLOAD_GENERAL = card([
+const DEPLOYABLE_GENERAL = card([
   fieldRow(
     'Name',
-    'A unique and descriptive name to identify the workload.',
+    'A unique and descriptive name to identify the resource.',
     '<InputText v-model="form.name" size="large" class="w-full" aria-label="Name" :disabled="saving" />'
   ),
   compactRow(
     'Active',
-    'When disabled, the workload stops answering and traffic to its domains is refused. Its deployments are kept.',
+    'When disabled, the resource stops answering and traffic to its domains is refused. Its deployments are kept.',
     '<Switch v-model="form.active" aria-label="Active" :disabled="saving" />'
   )
 ])
 
-const WORKLOAD_DANGER = card([
+const DEPLOYABLE_DANGER = card([
   compactRow(
-    'Delete this workload',
-    'Once deleted, the workload and its deployments cannot be recovered.',
-    '<Button type="button" label="Delete Workload" kind="danger" size="medium" icon="pi pi-trash" />'
+    'Delete this resource',
+    'Once deleted, the resource and its deployments cannot be recovered.',
+    '<Button type="button" label="Delete Resource" kind="danger" size="medium" icon="pi pi-trash" />'
   )
 ])
 
-const WORKLOAD_COLUMN = `<div class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
-${indent(pageHeading({ title: 'Settings', description: 'Manage this workload’s configuration.' }))}
+const DEPLOYABLE_COLUMN = `<div class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
+${indent(pageHeading({ title: 'Settings', description: 'Manage this resource’s configuration.' }))}
 
-  <form class="mt-(--layout-section-gap) flex min-w-0 flex-col" aria-label="Workload settings" novalidate @submit.prevent="save">
+  <form class="mt-(--layout-section-gap) flex min-w-0 flex-col" aria-label="Resource settings" novalidate @submit.prevent="save">
     <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0" :disabled="saving">
-      <legend class="sr-only">Workload settings</legend>
+      <legend class="sr-only">Resource settings</legend>
 
 ${indent(
   [
     section({
       title: 'General',
-      hint: 'How this workload is identified across the console, and whether it answers at all.',
+      hint: 'How this resource is identified across the platform, and whether it answers at all.',
       anchor: true,
-      body: WORKLOAD_GENERAL
+      body: DEPLOYABLE_GENERAL
     }),
     section({
       title: 'Domains',
-      hint: 'The addresses this workload answers on, the environment each one answers in, and the certificate it is served with.',
+      hint: 'The addresses this resource answers on, the environment each one answers in, and the certificate it is served with.',
       anchor: true,
       body: DOMAINS_TABLE
     }),
     section({
       title: 'Advanced Settings',
-      hint: 'Deployment Settings, protocols and mutual authentication, which most workloads never change.',
+      hint: 'Deployment Settings, protocols and mutual authentication, which most resources never change.',
       anchor: true,
       collapsible: true,
       open: 'advancedOpen',
-      regionId: 'workload-advanced-settings',
+      regionId: 'resource-advanced-settings',
       body: `<div class="flex min-w-0 flex-col">
 ${indent(
   [
     section({
       title: 'Deployment Settings',
-      hint: 'Which shared configuration each of this workload’s environments publishes with, linked automatically by deployment policy.',
+      hint: 'Which shared configuration each of this resource’s environments publishes with, linked automatically by deployment policy.',
       anchor: true,
       body: DEPLOYMENT_SETTINGS
     }),
     section({
       title: 'Protocol Settings',
-      hint: 'Which protocols and ports this workload answers on, and the TLS floor it accepts.',
+      hint: 'Which protocols and ports this resource answers on, and the TLS floor it accepts.',
       anchor: true,
       body: PROTOCOL_SETTINGS
     }),
     section({
       title: 'Mutual Authentication',
-      hint: 'Require the client to present a certificate the workload can verify, as well as presenting its own.',
+      hint: 'Require the client to present a certificate the resource can verify, as well as presenting its own.',
       anchor: true,
       body: MUTUAL_AUTH
     })
@@ -787,7 +786,7 @@ ${indent(
       title: 'Danger Zone',
       hint: 'Actions that cannot be undone.',
       anchor: true,
-      body: WORKLOAD_DANGER
+      body: DEPLOYABLE_DANGER
     })
   ].join('\n\n'),
   3
@@ -799,7 +798,7 @@ ${indent(
 const DEPLOY_ACTION =
   '<Button label="Deploy" kind="outlined" size="medium" icon="pi pi-cloud-upload" />'
 
-const WORKLOAD_SCRIPT_LINES = [
+const DEPLOYABLE_SCRIPT_LINES = [
   '',
   'const secure = computed(() => form.protocols.useHttps || form.protocols.useHttp3)',
   'const armed = computed(() => form.protocols.useHttps && form.mtls.enabled)',
@@ -830,7 +829,7 @@ const WORKLOAD_SCRIPT_LINES = [
 const optionLabel = (options) => (value) =>
   options.find((option) => option.value === value)?.label ?? String(value ?? '')
 
-const workloadState = (form) => ({
+const deployableState = (form) => ({
   secure: computed(() => form.protocols.useHttps || form.protocols.useHttp3),
   armed: computed(() => form.protocols.useHttps && form.mtls.enabled),
   portsLabel: (values) =>
@@ -851,14 +850,14 @@ const workloadState = (form) => ({
   }
 })
 
-export const WORKLOAD_SETTINGS = {
-  active: 'workloads',
+export const DEPLOYABLE_SETTINGS = {
+  active: 'resources',
   crumb: true,
-  tabs: WORKLOAD_TABS,
+  tabs: DEPLOYABLE_TABS,
   tab: 'settings',
-  record: WORKLOAD_RECORD,
+  record: DEPLOYABLE_RECORD,
   data: {
-    domains: WORKLOAD_DOMAINS,
+    domains: DEPLOYABLE_DOMAINS,
     linkedEnvironments: LINKED_ENVIRONMENTS,
     httpPortOptions: HTTP_PORT_OPTIONS,
     httpsPortOptions: HTTPS_PORT_OPTIONS,
@@ -881,14 +880,14 @@ export const WORKLOAD_SETTINGS = {
     ['Switch', 'switch'],
     ['Table', 'table']
   ],
-  lines: WORKLOAD_SCRIPT_LINES,
-  extra: workloadState,
+  lines: DEPLOYABLE_SCRIPT_LINES,
+  extra: deployableState,
   main: (bar) => `<main class="flex h-full flex-col">
 ${indent(pageTabs(DEPLOY_ACTION))}
 
   <section class="min-h-0 flex-1 overflow-auto">
     <div>
-${indent(WORKLOAD_COLUMN, 3)}
+${indent(DEPLOYABLE_COLUMN, 3)}
     </div>
   </section>
 </main>
@@ -896,7 +895,7 @@ ${indent(WORKLOAD_COLUMN, 3)}
 ${saveBar({ bound: true, ...bar })}`
 }
 
-const FIREWALL_MODULE_FIELDS = [
+const POLICY_MODULE_FIELDS = [
   {
     key: 'ddos',
     title: 'DDoS Protection',
@@ -904,44 +903,44 @@ const FIREWALL_MODULE_FIELDS = [
     locked: true
   },
   {
-    key: 'waf',
-    title: 'WAF',
+    key: 'request-inspection',
+    title: 'Request Inspection',
     description: 'Inspects each request and blocks the OWASP Top 10 attack classes.'
   },
   {
-    key: 'network-shield',
-    title: 'Network Shield',
-    description: 'Blocks traffic by country, ASN or IP range using network lists.'
+    key: 'ip-blocking',
+    title: 'IP Blocking',
+    description: 'Blocks traffic by country, ASN or IP range using access lists.'
   },
   {
-    key: 'bot-manager',
-    title: 'Bot Manager',
+    key: 'bot-protection',
+    title: 'Bot Protection',
     description: 'Scores automated traffic and challenges the requests that fail.'
   },
   {
-    key: 'functions',
-    title: 'Functions',
-    description: 'Runs functions inside the firewall, before the request reaches the application.'
+    key: 'custom-code',
+    title: 'Custom Code',
+    description: 'Runs your own code inside the policy, before the request is served.'
   }
 ]
 
-const FIREWALL_RECORD = {
-  name: 'edgeflow-production',
+const POLICY_RECORD = {
+  name: 'production-policy',
   active: true,
   debugRules: false,
   modules: {
     ddos: true,
-    waf: true,
-    'network-shield': true,
-    'bot-manager': true,
-    functions: false
+    'request-inspection': true,
+    'ip-blocking': true,
+    'bot-protection': true,
+    'custom-code': false
   }
 }
 
-const FIREWALL_MODULE_ROWS = compactRow(
+const POLICY_MODULE_ROWS = compactRow(
   '{{ field.title }}',
   '{{ field.description }}',
-  `<Tooltip v-if="field.locked" text="DDoS Protection is always on, on every firewall.">
+  `<Tooltip v-if="field.locked" text="DDoS Protection is always on, on every policy.">
   <span class="flex">
     <Switch :model-value="true" :aria-label="field.title" disabled />
   </span>
@@ -950,15 +949,15 @@ const FIREWALL_MODULE_ROWS = compactRow(
   { attrs: ' v-for="field in moduleFields" :key="field.key"' }
 )
 
-const FIREWALL_HELP = 'https://www.azion.com/en/documentation/products/secure/edge-firewall/'
+const POLICY_HELP = 'https://example.com/docs/security-policies'
 
-const firewallPanel = (bar) => `<div class="flex min-w-0 flex-1 flex-col">
+const policyPanel = (bar) => `<div class="flex min-w-0 flex-1 flex-col">
   <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col pb-0">
 ${indent(
   pageHeading({
     title: 'Settings',
-    description: 'Core configuration for this firewall.',
-    documentation: FIREWALL_HELP
+    description: 'Core configuration for this policy.',
+    documentation: POLICY_HELP
   }),
   2
 )}
@@ -971,28 +970,28 @@ ${indent(
       body: card([
         fieldRow(
           'Name',
-          'Give a unique and descriptive name to identify this firewall.',
+          'Give a unique and descriptive name to identify this policy.',
           '<InputText v-model="form.name" size="large" class="w-full" aria-label="Name" autocomplete="off" />'
         ),
         compactRow(
-          'Application',
-          'The application this firewall runs in front of.',
-          '<span class="text-body-md text-(--text-default)">edgeflow-site</span>'
+          'Project',
+          'The project this policy runs in front of.',
+          '<span class="text-body-md text-(--text-default)">web-app</span>'
         )
       ])
     }),
     section({
       title: 'Modules',
-      hint: 'A module is what makes a rule act: WAF is what a Set WAF Rule Set behavior applies, Functions is what Run Function runs.',
-      body: card([FIREWALL_MODULE_ROWS])
+      hint: 'A module is what makes a rule act: a rule can only apply a capability that is switched on here.',
+      body: card([POLICY_MODULE_ROWS])
     }),
     section({
       title: 'Debug Rules',
-      hint: 'Query the logged executions with Data Stream, Real-Time Events, or the Real-Time Events GraphQL API.',
+      hint: 'Query the logged executions from the event log or the logs API.',
       body: card([
         compactRow(
           'Active',
-          'Logs which rules ran for a request, under the Straceback field in Data Stream and Real-Time Events.',
+          'Logs which rules ran for a request, under the trace field of each logged event.',
           '<Switch v-model="form.debugRules" aria-label="Debug Rules" />'
         )
       ])
@@ -1002,7 +1001,7 @@ ${indent(
       body: card([
         compactRow(
           'Active',
-          'An inactive firewall stops evaluating rules.',
+          'An inactive policy stops evaluating rules.',
           '<Switch v-model="form.active" aria-label="Active" />'
         )
       ])
@@ -1016,13 +1015,13 @@ ${indent(
 ${indent(saveBar({ bound: true, ...bar }))}
 </div>`
 
-export const FIREWALL_SETTINGS = {
-  active: 'firewall',
-  breadcrumb: [{ label: 'Firewall', href: '/firewall' }, { label: FIREWALL_RECORD.name }],
-  tabs: FIREWALL_TABS,
+export const POLICY_SETTINGS = {
+  active: 'policies',
+  breadcrumb: [{ label: 'Policies', href: '/policies' }, { label: POLICY_RECORD.name }],
+  tabs: POLICY_TABS,
   tab: 'main-settings',
-  record: FIREWALL_RECORD,
-  data: { moduleFields: FIREWALL_MODULE_FIELDS },
+  record: POLICY_RECORD,
+  data: { moduleFields: POLICY_MODULE_FIELDS },
   parts: [
     ['CardBox', 'card-box'],
     ['Hint', 'hint'],
@@ -1035,13 +1034,13 @@ export const FIREWALL_SETTINGS = {
       '',
       `<section class="min-h-0 flex-1 overflow-auto">
   <div class="flex min-h-full flex-col">
-${indent(firewallPanel(bar), 2)}
+${indent(policyPanel(bar), 2)}
   </div>
 </section>`
     )
 }
 
-const NETWORK_LIST_TYPES = [
+const ACCESS_LIST_TYPES = [
   {
     value: 'asn',
     label: 'ASN',
@@ -1060,7 +1059,7 @@ const NETWORK_LIST_TYPES = [
   }
 ]
 
-const NETWORK_LIST_RECORD = {
+const ACCESS_LIST_RECORD = {
   name: 'office-ranges',
   type: 'ip_cidr',
   items: '185.241.208.232\n194.26.192.64\n171.25.193.25 #comment'
@@ -1068,14 +1067,14 @@ const NETWORK_LIST_RECORD = {
 
 const specMessage = (id) => ({
   messageWhen: `errors.${id}`,
-  messageId: `network-lists-${id}-message`,
+  messageId: `access-lists-${id}-message`,
   messageKind: `errors.${id}.kind`,
   messageText: `errors.${id}.message`
 })
 
 const specState = (id) => `:required="errors.${id}?.kind === 'required'"
 :invalid="errors.${id}?.kind === 'invalid'"
-:aria-describedby="errors.${id} ? 'network-lists-${id}-message' : undefined"`
+:aria-describedby="errors.${id} ? 'access-lists-${id}-message' : undefined"`
 
 const listRow = ({ when, key, label, placeholder, helper }) =>
   wideRow(
@@ -1094,10 +1093,10 @@ ${indent(specState('items'))}
     { attrs: ` ${when} key="${key}"`, ...specMessage('items') }
   )
 
-const NETWORK_LIST_FIELDS = {
+const ACCESS_LIST_FIELDS = {
   general: fieldRow(
     'Name',
-    'Give a unique and descriptive name to identify the network list.',
+    'Give a unique and descriptive name to identify the access list.',
     `<InputText
   v-model="form.name"
   size="large"
@@ -1121,7 +1120,7 @@ ${indent(specState('name'))}
     :key="option.value"
     v-model="form.type"
     :value="option.value"
-    name="network-lists-type"
+    name="access-lists-type"
     :label="option.label"
     :description="option.description"
     :disabled="saving"
@@ -1166,31 +1165,31 @@ ${indent(rows.join('\n'), 4)}
   </template>
 </CardBox>`
 
-const NETWORK_LIST_COLUMN = `<div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
+const ACCESS_LIST_COLUMN = `<div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
 ${indent(
   pageHeading({
     title: 'Settings',
     description:
-      'Group networks once and reference them from firewall rules, instead of restating a range per rule.'
+      'Group networks once and reference them from policy rules, instead of restating a range per rule.'
   })
 )}
 
   <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0" :disabled="saving">
-    <legend class="sr-only">network list settings</legend>
+    <legend class="sr-only">access list settings</legend>
 
 ${indent(
   [
     section({
       title: 'General',
-      hint: 'Build allowlists, blocklists and greylists from IP addresses, countries or ASNs, and use them in Firewall rules.',
+      hint: 'Build allowlists, blocklists and greylists from IP addresses, countries or ASNs, and use them in policy rules.',
       anchor: true,
-      body: specCard([NETWORK_LIST_FIELDS.general])
+      body: specCard([ACCESS_LIST_FIELDS.general])
     }),
     section({
       title: 'List settings',
       hint: 'The kind of entry the list holds, and the entries themselves. The type cannot be changed after the list is created, because every entry is validated against it.',
       anchor: true,
-      body: specCard([NETWORK_LIST_FIELDS.type, ...NETWORK_LIST_FIELDS.items])
+      body: specCard([ACCESS_LIST_FIELDS.type, ...ACCESS_LIST_FIELDS.items])
     })
   ].join('\n\n'),
   2
@@ -1203,7 +1202,7 @@ const COUNTRY_PATTERN = /^[^\S\n]*[A-Za-z]{2}[^\S\n]*(\n[^\S\n]*[A-Za-z]{2}[^\S\
 const LIST_HINT = 'Remove the empty lines. Every line holds one entry.'
 const COUNTRY_HINT = 'Enter one two-letter country code per line. Example: BR.'
 
-const NETWORK_LIST_LINES = [
+const ACCESS_LIST_LINES = [
   '',
   'const errors = reactive({})',
   '',
@@ -1230,7 +1229,7 @@ const NETWORK_LIST_LINES = [
   '}'
 ]
 
-const networkListState = (form) => {
+const accessListState = (form) => {
   const errors = reactive({})
   const clear = (id) => {
     if (errors[id]) delete errors[id]
@@ -1252,14 +1251,14 @@ const networkListState = (form) => {
   return { errors, clear, validate }
 }
 
-export const NETWORK_LIST_SETTINGS = {
-  active: 'network-lists',
+export const ACCESS_LIST_SETTINGS = {
+  active: 'rule-sets',
   breadcrumb: [
-    { label: 'Network Lists', href: '/network-lists' },
-    { label: NETWORK_LIST_RECORD.name }
+    { label: 'Access Lists', href: '/access-lists' },
+    { label: ACCESS_LIST_RECORD.name }
   ],
-  record: NETWORK_LIST_RECORD,
-  data: { typeOptions: NETWORK_LIST_TYPES },
+  record: ACCESS_LIST_RECORD,
+  data: { typeOptions: ACCESS_LIST_TYPES },
   parts: [
     ['CardBox', 'card-box'],
     ['FieldRadioBlock', 'field-radio-block'],
@@ -1270,11 +1269,11 @@ export const NETWORK_LIST_SETTINGS = {
     ['Textarea', 'textarea']
   ],
   vue: ['reactive'],
-  lines: NETWORK_LIST_LINES,
+  lines: ACCESS_LIST_LINES,
   validate: 'validate',
-  extra: networkListState,
-  main: (bar) => `<form class="flex min-h-full min-w-0 flex-col" aria-label="network list settings" novalidate @submit.prevent="save">
-${indent(NETWORK_LIST_COLUMN)}
+  extra: accessListState,
+  main: (bar) => `<form class="flex min-h-full min-w-0 flex-col" aria-label="access list settings" novalidate @submit.prevent="save">
+${indent(ACCESS_LIST_COLUMN)}
 
 ${indent(saveBar({ bound: true, ...bar }))}
 </form>`

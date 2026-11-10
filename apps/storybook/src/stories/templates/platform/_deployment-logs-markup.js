@@ -13,19 +13,19 @@ import { declare, literal } from './_forms-markup'
 export const DEPLOYMENT_STEPS = [
   {
     key: 'token',
-    title: 'Azion Token',
+    title: 'Access Token',
     description: 'Deploy token created and added to the CLI',
     duration: 3,
     logs: [
       ['13:47:33', '[TASK] - #. Deploy started successfully!'],
-      ['13:47:33', '[TASK] - #. Creating Azion token!'],
-      ['13:47:35', '[TASK] - #. Add to Azion CLI!'],
+      ['13:47:33', '[TASK] - #. Creating access token!'],
+      ['13:47:35', '[TASK] - #. Adding token to the CLI!'],
       ['13:47:36', '[TASK] - #. Token added successfully!']
     ],
     failLogs: [
       ['13:47:33', '[TASK] - #. Deploy started successfully!'],
-      ['13:47:34', '[TASK] - #. Creating Azion token!'],
-      ['13:47:35', '[ERROR] - # Could not create an Azion token'],
+      ['13:47:34', '[TASK] - #. Creating access token!'],
+      ['13:47:35', '[ERROR] - # Could not create an access token'],
       ['13:47:35', '401 Unauthorized: the personal token has expired'],
       ['13:47:36', '[ERROR] - # Deployment aborted.']
     ]
@@ -83,58 +83,58 @@ export const DEPLOYMENT_STEPS = [
       ['13:47:50', '[TASK] - # Build template'],
       ['13:47:52', 'vite v6.0.7 building for production...'],
       ['13:47:56', '[ERROR] - # Build failed with exit code 1'],
-      ['13:47:56', "src/main.js: Cannot find module '@azion/config'"],
+      ['13:47:56', "src/main.js: Cannot find module '@acme/config'"],
       ['13:47:57', '[ERROR] - # Deployment aborted.']
     ]
   },
   {
     key: 'upload',
     title: 'Upload',
-    description: 'Static assets uploaded to Object Storage',
+    description: 'Static assets uploaded to storage',
     duration: 5,
     logs: [
-      ['13:47:58', '[TASK] - # Uploading static assets to Object Storage'],
+      ['13:47:58', '[TASK] - # Uploading static assets to storage'],
       ['13:47:59', 'create mode 100644 src/main.js'],
       ['13:47:59', 'create mode 100644 src/router/index.js'],
       ['13:48:01', '[TASK] - # 24 files uploaded (1.2 MB)'],
       ['13:48:02', '[TASK] - # Upload completed successfully!']
     ],
     failLogs: [
-      ['13:47:58', '[TASK] - # Uploading static assets to Object Storage'],
-      ['13:48:00', '[ERROR] - # Object Storage returned 503 Service Unavailable'],
+      ['13:47:58', '[TASK] - # Uploading static assets to storage'],
+      ['13:48:00', '[ERROR] - # Storage returned 503 Service Unavailable'],
       ['13:48:02', '[ERROR] - # Upload interrupted at 14/24 files.']
     ]
   },
   {
-    key: 'application',
-    title: 'Application',
-    description: 'Application and cache settings created',
+    key: 'service',
+    title: 'Service',
+    description: 'Service and cache settings created',
     duration: 5,
     logs: [
-      ['13:48:03', '[TASK] - # Creating Application'],
+      ['13:48:03', '[TASK] - # Creating service'],
       ['13:48:05', '[TASK] - # Cache Setting __DEFAULT__ created'],
-      ['13:48:07', '[TASK] - # Application created successfully!']
+      ['13:48:07', '[TASK] - # Service created successfully!']
     ],
     failLogs: [
-      ['13:48:03', '[TASK] - # Creating Application'],
-      ['13:48:05', '[ERROR] - # Application could not be created'],
-      ['13:48:06', '403 Forbidden: the account has reached its application limit'],
+      ['13:48:03', '[TASK] - # Creating service'],
+      ['13:48:05', '[ERROR] - # Service could not be created'],
+      ['13:48:06', '403 Forbidden: the account has reached its service limit'],
       ['13:48:07', '[ERROR] - # Deployment aborted.']
     ]
   },
   {
     key: 'rules',
-    title: 'Rules Engine',
+    title: 'Routing Rules',
     description: 'Request rules and cache policies applied',
     duration: 4,
     logs: [
-      ['13:48:08', '[TASK] - # Configuring Rules Engine and cache policies'],
+      ['13:48:08', '[TASK] - # Configuring routing rules and cache policies'],
       ['13:48:09', "[TASK] - # Rule 'Deliver Static Assets' created"],
-      ['13:48:11', '[TASK] - # Rules Engine configured successfully!']
+      ['13:48:11', '[TASK] - # Routing rules configured successfully!']
     ],
     failLogs: [
-      ['13:48:08', '[TASK] - # Configuring Rules Engine and cache policies'],
-      ['13:48:09', '[ERROR] - # Rules Engine rejected the configuration'],
+      ['13:48:08', '[TASK] - # Configuring routing rules and cache policies'],
+      ['13:48:09', '[ERROR] - # Routing rules rejected the configuration'],
       ['13:48:10', "409 Conflict: rule 'default-cache' already bound to this domain"],
       ['13:48:11', '[ERROR] - # Deploy finalized with errors. Nothing was published.']
     ]
@@ -146,12 +146,12 @@ export const DEPLOYMENT_STEPS = [
     duration: 4,
     logs: [
       ['13:48:12', "branch 'main' set up to track 'origin/main'."],
-      ['13:48:13', '[TASK] - #. Set Azion Personal Token in the repository.'],
+      ['13:48:13', '[TASK] - #. Set the access token as a repository secret.'],
       ['13:48:15', '[TASK] - #. Deploy finalized successfully!']
     ],
     failLogs: [
       ['13:48:12', "branch 'main' set up to track 'origin/main'."],
-      ['13:48:13', '[ERROR] - # Could not set the Azion Personal Token in the repository'],
+      ['13:48:13', '[ERROR] - # Could not set the access token as a repository secret'],
       ['13:48:14', '403 Forbidden: the GitHub App cannot write repository secrets'],
       ['13:48:15', '[ERROR] - # Deploy finalized with errors. Nothing was published.']
     ]

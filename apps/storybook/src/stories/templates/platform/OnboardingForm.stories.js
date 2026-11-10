@@ -1,3 +1,4 @@
+import { primitives } from '@aziontech/theme/colors'
 import Avatar from '@aziontech/webkit/avatar'
 import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
 import Brand from '@aziontech/webkit/brand'
@@ -24,7 +25,6 @@ import PanelFooter from '@aziontech/webkit/panel-footer'
 import PanelHeader from '@aziontech/webkit/panel-header'
 import ProgressBar from '@aziontech/webkit/progress-bar'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
-import Min from '@aziontech/webkit/svg/azion/min'
 import Tag from '@aziontech/webkit/tag'
 import { computed, reactive, ref, watch } from 'vue'
 
@@ -58,7 +58,6 @@ const WEBKIT_SUBPATHS = {
   PanelHeader: 'panel-header',
   ProgressBar: 'progress-bar',
   SegmentedButton: 'segmented-button',
-  Min: 'svg/azion/min',
   Tag: 'tag'
 }
 
@@ -100,7 +99,7 @@ const literal = (value, depth = 0) => {
 
 const declare = (name, value) => `const ${name} = ${literal(value)}`
 
-const EMAIL = 'myemail@azion.com'
+const EMAIL = 'myemail@example.com'
 const WORKSPACE_NAME = 'My Workspace'
 
 const ACCENTS = [
@@ -150,18 +149,18 @@ const ACCENTS = [
 
 const PLANS = [
   {
-    value: 'hobby',
+    value: 'free',
     label: "I'm working on personal projects",
     description: 'Start free for personal projects and experimentation',
-    ariaLabel: "I'm working on personal projects. Hobby plan, Free.",
-    name: 'Hobby',
+    ariaLabel: "I'm working on personal projects. Free plan, Free.",
+    name: 'Free',
     severity: 'contrast',
     price: 'Free'
   },
   {
     value: 'pro',
     label: "I'm working on commercial projects",
-    description: 'For growing applications with higher usage demand',
+    description: 'For growing projects with higher usage demand',
     ariaLabel: "I'm working on commercial projects. Pro plan, From $20/mo.",
     name: 'Pro',
     severity: 'info',
@@ -182,20 +181,20 @@ const COMPLIANCE_FEATURES = [
   { title: 'DDoS Protection included' },
   { title: 'PCI DSS 4.0.1 Level 1' },
   { title: 'SOC 2 Type 2 / SOC 3' },
-  { title: 'Universal Data Migration Service' }
+  { title: 'Data migration assistance' }
 ]
 
 const UPGRADES = {
   pro: {
     name: 'Pro',
     features: [
-      { title: '100 Workloads', detail: 'then $0.10 per workload per month' },
-      { title: '10M Application requests', detail: 'then as low as $0.90 per 1M' },
-      { title: '50 hours Function compute time', detail: 'then $0.18 per hour' },
-      { title: '10 GB Real-Time Events Storage', detail: 'then $0.10 per GB-month' },
-      { title: '100 GB Object Storage', detail: 'then as low as $0.021 per GB-month' },
-      { title: '1 GB SQL Database Storage', detail: 'then $0.75 per GB-month' },
-      { title: '100M Firewall requests', detail: 'then as low as $0.30 per 1M' },
+      { title: '100 Resources', detail: 'then $0.10 per resource per month' },
+      { title: '10M Requests', detail: 'then as low as $0.90 per 1M' },
+      { title: '50 hours Compute time', detail: 'then $0.18 per hour' },
+      { title: '10 GB Event log storage', detail: 'then $0.10 per GB-month' },
+      { title: '100 GB File storage', detail: 'then as low as $0.021 per GB-month' },
+      { title: '1 GB Database storage', detail: 'then $0.75 per GB-month' },
+      { title: '100M Security rule evaluations', detail: 'then as low as $0.30 per 1M' },
       ...COMPLIANCE_FEATURES
     ],
     charge: {
@@ -219,13 +218,13 @@ const UPGRADES = {
   enterprise: {
     name: 'Enterprise',
     features: [
-      { title: 'Unlimited Workloads' },
-      { title: '1B Application requests', detail: 'then as low as $0.60 per 1M' },
-      { title: '500 hours Function compute time', detail: 'then $0.12 per hour' },
-      { title: '1 TB Real-Time Events Storage', detail: 'then $0.08 per GB-month' },
-      { title: '10 TB Object Storage', detail: 'then as low as $0.015 per GB-month' },
-      { title: '100 GB SQL Database Storage', detail: 'then $0.50 per GB-month' },
-      { title: '1B Firewall requests', detail: 'then as low as $0.20 per 1M' },
+      { title: 'Unlimited Resources' },
+      { title: '1B Requests', detail: 'then as low as $0.60 per 1M' },
+      { title: '500 hours Compute time', detail: 'then $0.12 per hour' },
+      { title: '1 TB Event log storage', detail: 'then $0.08 per GB-month' },
+      { title: '10 TB File storage', detail: 'then as low as $0.015 per GB-month' },
+      { title: '100 GB Database storage', detail: 'then $0.50 per GB-month' },
+      { title: '1B Security rule evaluations', detail: 'then as low as $0.20 per 1M' },
       ...COMPLIANCE_FEATURES,
       { title: '99.99% uptime SLA' },
       { title: 'Named account team' }
@@ -251,8 +250,8 @@ const UPGRADES = {
 }
 
 const PRICING_LINKS = [
-  { label: 'Learn more about Pricing', href: '/site/pricing' },
-  { label: 'Compare Plans', href: '/site/pricing#comparison' }
+  { label: 'Learn more about Pricing', href: 'https://example.com/pricing' },
+  { label: 'Compare Plans', href: 'https://example.com/pricing#comparison' }
 ]
 
 const PERIODS = [
@@ -339,80 +338,40 @@ const marbleOf = (name, colors) => {
     if (position && Math.floor((value / 10 ** position) % 10) % 2 === 0) return -magnitude
     return magnitude
   }
-  return [0, 1, 2].map((index) => {
+  const paint = (color) => {
+    const [, family, step] = color.match(/^var\(--color-([a-z]+)-(\d+)\)$/) ?? []
+    return family ? primitives[family][step] : color
+  }
+  const layers = [0, 1, 2].map((index) => {
     const value = seed * (index + 1)
     const scale = 1.2 + unit(value, 4) / 10
     return {
-      fill: colors[(seed + index) % colors.length],
+      fill: paint(colors[(seed + index) % colors.length]),
       transform: `translate(${unit(value, 8, 1)} ${unit(value, 8, 2)}) rotate(${unit(value, 360, 1)} 40 40) scale(${scale})`
     }
   })
+  const svg = [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">',
+    '<defs><filter id="blur" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="7" /></filter></defs>',
+    `<rect width="80" height="80" fill="${layers[0].fill}" />`,
+    `<path filter="url(#blur)" transform="${layers[1].transform}" fill="${layers[1].fill}" d="M32.414 59.35L50.376 70.5H72.5v-71H33.728L26.5 13.381l19.057 27.08L32.414 59.35z" />`,
+    `<path filter="url(#blur)" transform="${layers[2].transform}" fill="${layers[2].fill}" style="mix-blend-mode: overlay" d="M22.216 24L0 46.75l14.108 38.129L78 86l-3.081-59.276-22.378 4.005 12.972 20.186-23.35 27.395L22.215 24z" />`,
+    '</svg>'
+  ].join('')
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`
 }
-
-const swatchOf = (item) => ({
-  backgroundImage: `linear-gradient(135deg, ${item.colors.join(', ')})`
-})
 
 const DEFAULT_ORG_NAME = 'Your organization'
 const DEFAULT_OWNER = EMAIL.split('@')[0]
 const DEFAULT_MARBLE = marbleOf(DEFAULT_ORG_NAME, ACCENTS[0].colors)
 
-const MARBLE_PATH_BACK =
-  'M32.414 59.35L50.376 70.5H72.5v-71H33.728L26.5 13.381l19.057 27.08L32.414 59.35z'
-const MARBLE_PATH_FRONT =
-  'M22.216 24L0 46.75l14.108 38.129L78 86l-3.081-59.276-22.378 4.005 12.972 20.186-23.35 27.395L22.215 24z'
-
-const marbleMarkup = (live) => {
-  const fill = (index) =>
-    live
-      ? `:style="{ fill: marble[${index}].fill }"`
-      : `style="fill: ${DEFAULT_MARBLE[index].fill}"`
-  const transform = (index) =>
-    live
-      ? `:transform="marble[${index}].transform"`
-      : `transform="${DEFAULT_MARBLE[index].transform}"`
-  return `<span
-  role="img"
-  ${live ? ':aria-label="previewName"' : `aria-label="${DEFAULT_ORG_NAME}"`}
-  class="inline-flex size-(--size-5) shrink-0 overflow-hidden rounded-(--shape-button)"
->
-  <svg
-    viewBox="0 0 80 80"
-    width="100%"
-    height="100%"
-    fill="none"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g>
-      <rect width="80" height="80" ${fill(0)} />
-      <path
-        filter="url(#onboarding-marble-blur)"
-        ${transform(1)}
-        ${fill(1)}
-        d="${MARBLE_PATH_BACK}"
-      />
-      <path
-        filter="url(#onboarding-marble-blur)"
-        ${transform(2)}
-        ${
-          live
-            ? `:style="{ fill: marble[2].fill, mixBlendMode: 'overlay' }"`
-            : `style="fill: ${DEFAULT_MARBLE[2].fill}; mix-blend-mode: overlay"`
-        }
-        d="${MARBLE_PATH_FRONT}"
-      />
-    </g>
-    <defs>
-      <filter id="onboarding-marble-blur" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-        <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-        <feGaussianBlur stdDeviation="7" result="effect1_foregroundBlur" />
-      </filter>
-    </defs>
-  </svg>
-</span>`
-}
+const marbleMarkup = (live) => `<Avatar
+  ${live ? ':src="marble"' : `src="${DEFAULT_MARBLE}"`}
+  ${live ? ':alt="previewName"' : `alt="${DEFAULT_ORG_NAME}"`}
+  size="small"
+  kind="square"
+  class="size-(--size-5) shrink-0"
+/>`
 
 const PLACEHOLDER = 'rounded-(--shape-elements) bg-(--bg-placeholder)'
 
@@ -437,7 +396,7 @@ const wireMarkup = (live) => `<div
     <div
       class="flex h-(--size-14) shrink-0 items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-(--border-muted) px-(--spacing-md)"
     >
-      <Min class="size-(--size-5) shrink-0" />
+      <span class="size-(--size-5) shrink-0 ${PLACEHOLDER}" />
 
       <span class="shrink-0 text-body-sm text-(--text-muted)">/</span>
 
@@ -496,7 +455,7 @@ ${indent(navGroup(['62%', '78%', '50%'], true), 4)}
               Hello, ${live ? '{{ ownerName }}' : DEFAULT_OWNER}
             </p>
             <p class="truncate text-body-sm text-(--text-muted)">
-              ${WORKSPACE_NAME} · no workloads yet
+              ${WORKSPACE_NAME} · no projects yet
             </p>
           </div>
 
@@ -539,10 +498,10 @@ ${indent(navGroup(['62%', '78%', '50%'], true), 4)}
 const onboardingPage = ({ step, title, description, body, live }) => {
   const last = step === 3
   return `<div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-  <GlobalHeader aria-label="Azion Console" class="shrink-0">
+  <GlobalHeader aria-label="Console" class="shrink-0">
     <GlobalHeader.Brand>
       <a
-        href="/site/home"
+        href="/"
         aria-label="Azion home"
         class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
       >
@@ -551,7 +510,7 @@ const onboardingPage = ({ step, title, description, body, live }) => {
     </GlobalHeader.Brand>
     <GlobalHeader.Middle />
     <GlobalHeader.Right>
-      <Button label="Documentation" kind="outlined" size="medium" icon="pi pi-book" href="/site/docs" />
+      <Button label="Documentation" kind="outlined" size="medium" icon="pi pi-book" href="https://example.com/docs" />
     </GlobalHeader.Right>
   </GlobalHeader>
 
@@ -635,7 +594,7 @@ const ORGANIZATION_BODY = `<div class="flex flex-col gap-(--spacing-lg)">
     placeholder="Jane Doe"
     autocomplete="name"
     :required="submitted && !fullName.trim()"
-    :helper-text="submitted && !fullName.trim() ? 'This field is required.' : 'How Azion Console will greet you.'"
+    :helper-text="submitted && !fullName.trim() ? 'This field is required.' : 'How the app will greet you.'"
   />
 
   <FieldText
@@ -659,7 +618,7 @@ const ORGANIZATION_BODY = `<div class="flex flex-col gap-(--spacing-lg)">
     >
       <template #default="{ item }">
         <span class="flex flex-col items-center gap-(--spacing-xs)">
-          <span class="size-(--size-8) rounded-full" :style="swatchOf(item)" />
+          <Avatar :src="marbleOf(previewName, item.colors)" :alt="item.label" size="medium" kind="square" />
           <span class="text-body-xs text-(--text-muted)">{{ item.label }}</span>
         </span>
       </template>
@@ -1002,11 +961,11 @@ ${indent(UPGRADE_DRAWER)}
 
 const PROFILE_BODY = `<div class="flex flex-col gap-(--spacing-lg)">
   <div class="flex flex-col gap-(--spacing-xs)">
-    <Label :required="submitted && !usage">How are you planning to use Azion?</Label>
+    <Label :required="submitted && !usage">How are you planning to use the platform?</Label>
     <BoxGridSelection
       v-model="usage"
       :items="usageOptions"
-      aria-label="How are you planning to use Azion?"
+      aria-label="How are you planning to use the platform?"
     />
     <HelperText v-if="submitted && !usage" kind="required" label="Select one to continue." />
   </div>
@@ -1023,8 +982,8 @@ const PROFILE_BODY = `<div class="flex flex-col gap-(--spacing-lg)">
 
   <FieldSwitchBlock
     v-model="session"
-    label="Schedule an onboarding session with an Azion expert"
-    description="A 30-minute call to create your first workload. We'll email you to schedule it."
+    label="Schedule an onboarding session with an expert"
+    description="A 30-minute call to create your first project. We'll email you to schedule it."
   />
 </div>`
 
@@ -1032,7 +991,7 @@ const ORGANIZATION_TEMPLATE = onboardingPage({
   step: 1,
   title: 'Create your organization',
   description:
-    'Everything you deploy on Azion lives inside an organization. Yours is created once, here, and you can invite people into it afterwards.',
+    'Everything you deploy lives inside an organization. Yours is created once, here, and you can invite people into it afterwards.',
   body: ORGANIZATION_BODY,
   live: true
 })
@@ -1056,6 +1015,8 @@ const PROFILE_TEMPLATE = onboardingPage({
 })
 
 const ORGANIZATION_SCRIPT = [
+  "import { primitives } from '@aziontech/theme/colors'",
+  '',
   declare('accents', ACCENTS),
   `const email = '${EMAIL}'`,
   '',
@@ -1067,8 +1028,6 @@ const ORGANIZATION_SCRIPT = [
   `const accountInitials = ${accountInitials}`,
   '',
   `const marbleOf = ${marbleOf}`,
-  '',
-  `const swatchOf = ${swatchOf}`,
   '',
   `const previewName = computed(() => organizationName.value.trim() || '${DEFAULT_ORG_NAME}')`,
   "const ownerName = computed(() => fullName.value.trim() || email.split('@')[0])",
@@ -1111,7 +1070,7 @@ const PLAN_SCRIPT = [
   '',
   'const selectPlan = (value) => {',
   '  submitted.value = false',
-  "  if (value === 'hobby') {",
+  "  if (value === 'free') {",
   '    plan.value = value',
   '    return',
   '  }',
@@ -1173,7 +1132,7 @@ const organizationState = () => {
     accent,
     submitted: ref(false),
     accountInitials,
-    swatchOf,
+    marbleOf,
     previewName,
     ownerName,
     marble
@@ -1200,7 +1159,7 @@ const planState = () => {
 
   const selectPlan = (value) => {
     submitted.value = false
-    if (value === 'hobby') {
+    if (value === 'free') {
       plan.value = value
       return
     }
@@ -1269,7 +1228,6 @@ const profileState = () => ({
 const components = {
   Avatar,
   BoxGridSelection,
-  Brand,
   Button,
   CardBox,
   Divider,
@@ -1283,6 +1241,7 @@ const components = {
   FieldSelect,
   FieldSwitchBlock,
   FieldText,
+  Brand,
   GlobalHeader,
   'GlobalHeader.Brand': GlobalHeader.Brand,
   'GlobalHeader.Middle': GlobalHeader.Middle,
@@ -1291,7 +1250,6 @@ const components = {
   Label,
   Link,
   Message,
-  Min,
   PanelContent,
   PanelFooter,
   PanelHeader,
@@ -1310,7 +1268,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `CardBox` with a flat `ProgressBar`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the console the new organization will open into. The console shows one step at a time; each story here is one of the three. Built from `FieldText`, `BoxGridSelection` under a `Label` with a `HelperText`, `FieldSwitchBlock`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `SegmentedButton`, `FieldSelect`, `FieldCheckbox`, `Link` and `Message`.'
+          'The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `CardBox` with a flat `ProgressBar`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `FieldText`, `BoxGridSelection` under a `Label` with a `HelperText`, `FieldSwitchBlock`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `SegmentedButton`, `FieldSelect`, `FieldCheckbox`, `Link` and `Message`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -1343,7 +1301,7 @@ export const Plan = {
     docs: {
       description: {
         story:
-          'Step 2 of 3: the three plans as full-width rows; Hobby selects directly, while Pro or Enterprise opens the upgrade drawer and only selects once Upgrade is pressed.'
+          'Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer and only selects once Upgrade is pressed.'
       },
       source: {
         code: toSfc(

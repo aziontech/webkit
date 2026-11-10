@@ -1,5 +1,7 @@
+import Brand from '@aziontech/webkit/brand'
 import { computed, reactive, ref, toValue } from 'vue'
 
+import { creationHeader } from '../../_shared/headers'
 import { indent } from '../../_shared/markup'
 
 const quote = (text) =>
@@ -34,7 +36,7 @@ export const HEADER_IMPORTS = [
   "import IconButton from '@aziontech/webkit/icon-button'"
 ]
 
-export const headerComponents = ({ Avatar, Brand, Breadcrumb, GlobalHeader, IconButton }) => ({
+export const headerComponents = ({ Avatar, Breadcrumb, GlobalHeader, IconButton }) => ({
   Avatar,
   Brand,
   Breadcrumb,
@@ -46,44 +48,12 @@ export const headerComponents = ({ Avatar, Brand, Breadcrumb, GlobalHeader, Icon
   IconButton
 })
 
+export { creationHeader }
+
 export const itemComponents = (
   Item,
   parts = ['List', 'Media', 'Content', 'Title', 'Description', 'Actions']
 ) => Object.fromEntries([['Item', Item], ...parts.map((part) => [`Item.${part}`, Item[part]])])
-
-export const creationHeader = ({ backLabel = '', crumbs = true } = {}) => {
-  const left = [
-    backLabel
-      ? `<IconButton icon="pi pi-chevron-left" aria-label="${backLabel}" kind="outlined" size="small" />`
-      : '',
-    `<GlobalHeader.Brand>
-  <a
-    href="/home"
-    aria-label="Azion home"
-    class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-  >
-    <Brand kind="default" size="small" />
-  </a>
-</GlobalHeader.Brand>`,
-    crumbs ? '<Breadcrumb :items="breadcrumb" />' : ''
-  ].filter(Boolean)
-
-  return `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Left>
-${indent(left.join('\n'), 2)}
-  </GlobalHeader.Left>
-  <GlobalHeader.Middle />
-  <GlobalHeader.Right>
-    <button
-      type="button"
-      aria-label="Account settings"
-      class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-    >
-      <Avatar label="myemail@azion.com" size="medium" kind="square" />
-    </button>
-  </GlobalHeader.Right>
-</GlobalHeader>`
-}
 
 export const pageHeading = ({ title, description = '', titleId = '', size = 'small' }) => {
   const id = titleId ? ` id="${titleId}"` : ''
@@ -220,26 +190,28 @@ export const createPage = ({
   backLabel
 }) => {
   const startSlot = start
-    ? `\n${indent(`<div class="flex min-w-0 items-center gap-(--spacing-sm)">\n${indent(start, 1)}\n</div>`, 3)}`
+    ? `\n${indent(`<div class="flex min-w-0 items-center gap-(--spacing-sm)">\n${indent(start, 1)}\n</div>`, 4)}`
     : ''
   return `<div class="flex h-dvh flex-col bg-(--bg-canvas)">
 ${indent(creationHeader({ backLabel }), 1)}
 
-  <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
-    <form class="flex min-h-full flex-col" aria-labelledby="${titleId}" novalidate @submit.prevent="submit">
-      <div class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
-${indent(pageHeading({ title, description, titleId }), 4)}
+  <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
+    <form class="flex min-h-0 flex-1 flex-col" aria-labelledby="${titleId}" novalidate @submit.prevent="submit">
+      <div class="min-h-0 flex-1 overflow-auto">
+        <div class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)">
+${indent(pageHeading({ title, description, titleId }), 5)}
 
-        <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
-          <legend class="sr-only">${title}</legend>
+          <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
+            <legend class="sr-only">${title}</legend>
 
-${indent(body, 5)}
-        </fieldset>
+${indent(body, 6)}
+          </fieldset>
+        </div>
       </div>
 
-      <footer class="pointer-events-none sticky bottom-0 z-10 flex justify-center px-(--spacing-md) pt-(--spacing-xl) pb-(--spacing-lg)">
-        <div class="pointer-events-auto flex max-w-full items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-xs) pr-(--spacing-xs) pl-(--spacing-xs) shadow-lg">${startSlot}
-          <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+      <footer class="flex min-h-14 shrink-0 flex-col border-t border-(--border-default) bg-(--bg-surface)">
+        <div class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)">${startSlot}
+          <div class="ml-auto flex shrink-0 items-center gap-(--spacing-sm)">
             <Button type="button" label="Cancel" kind="outlined" size="medium" />
             <Button label="${saveLabel}" kind="primary" size="medium" type="submit" />
           </div>
@@ -528,34 +500,26 @@ ${indent(control, 1)}${indent(helper, 1)}
 </div>`
 }
 
-export const APPLICATION_OPTIONS = [
-  { value: 'azion-site', label: 'azion-site', description: 'Astro · aziontech/azion-site' },
+export const PROJECT_OPTIONS = [
+  { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },
   {
     value: 'black-friday-2025',
     label: 'black-friday-2025',
-    description: 'Next.js · aziontech/black-friday-2025'
+    description: 'Next.js · acme/black-friday-2025'
   },
   {
     value: 'black-friday-2026',
     label: 'black-friday-2026',
-    description: 'Next.js · aziontech/black-friday-2026'
+    description: 'Next.js · acme/black-friday-2026'
   },
-  { value: 'azion-docs', label: 'azion-docs', description: 'Astro · aziontech/azion-docs' },
-  {
-    value: 'azion-docs-next',
-    label: 'azion-docs-next',
-    description: 'Next.js · aziontech/azion-docs-next'
-  },
-  {
-    value: 'webkit-sample-vue',
-    label: 'webkit-sample-vue',
-    description: 'Vue · gab-az/webkit-sample-vue'
-  },
-  { value: 'hello-edge', label: 'hello-edge', description: 'JavaScript · ' },
-  { value: 'edgeflow-site', label: 'edgeflow-site', description: 'HTML · edgeflow/edgeflow-site' },
-  { value: 'edgeflow-docs', label: 'edgeflow-docs', description: 'HTML · ' },
+  { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
+  { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
+  { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
+  { value: 'hello-world', label: 'hello-world', description: 'JavaScript · ' },
+  { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
+  { value: 'company-docs', label: 'company-docs', description: 'HTML · ' },
   { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
-  { value: 'analytics-edge', label: 'analytics-edge', description: 'Next.js · ' },
+  { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · ' },
   {
     value: 'react-dashboard',
     label: 'react-dashboard',
@@ -570,37 +534,37 @@ export const APPLICATION_OPTIONS = [
   { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · ' }
 ]
 
-export const APPLICATION_MODES = [
-  { label: 'Existing application', value: 'existing' },
-  { label: 'New application', value: 'new' }
+export const PROJECT_MODES = [
+  { label: 'Existing project', value: 'existing' },
+  { label: 'New project', value: 'new' }
 ]
 
-export const applicationBindingCard = ({
+export const projectBindingCard = ({
   mode = 'mode',
   name = 'name',
-  picker = 'applicationPicker'
-} = {}) => `<CardBox :padded="false" title="Application">
+  picker = 'projectPicker'
+} = {}) => `<CardBox :padded="false" title="Project">
   <template #content>
     <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md) pb-0">
       <p class="text-body-sm text-(--text-muted)">
-        What this workload serves on each environment, so one workload can serve different applications on Production and Preview.
+        What this service serves on each environment, so one service can serve different projects on Production and Preview.
       </p>
-      <SegmentedButton v-model="${mode}" :options="applicationModes" size="large" fluid aria-label="Where the application comes from" />
+      <SegmentedButton v-model="${mode}" :options="projectModes" size="large" fluid aria-label="Where the project comes from" />
 
       <p v-if="${mode} === 'existing'" class="text-body-sm text-(--text-muted)">
-        The release serves the latest ready version of the selected application, and an older one can be pinned from the deployment.
+        The release serves the latest ready version of the selected project, and an older one can be pinned from the deployment.
       </p>
 
 ${indent(
   fieldStack({
-    id: 'application-name',
+    id: 'project-name',
     label: 'Name',
     required: true,
     description: 'Lowercase letters, numbers, and hyphens.',
     message: `${picker}.message`,
     className: 'pb-(--spacing-md)',
     model: name,
-    placeholder: 'my-application',
+    placeholder: 'my-project',
     when: `${mode} === 'new'`
   }),
   3
@@ -608,7 +572,7 @@ ${indent(
     </div>
 
     <div v-if="${mode} === 'existing'" class="min-w-0 pt-(--spacing-md)">
-${indent(pickerList({ picker, noun: 'application', icon: 'ai ai-edge-application' }), 3)}
+${indent(pickerList({ picker, noun: 'project', icon: 'pi pi-box' }), 3)}
     </div>
   </template>
 </CardBox>`

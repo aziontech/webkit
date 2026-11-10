@@ -1,6 +1,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 
 import { indent } from '../../_shared/markup'
+import { avatars, AVATARS_SCRIPT } from '../../_shared/people'
 
 const quote = (text) => `'${String(text).replaceAll("'", "\\'")}'`
 
@@ -28,15 +29,16 @@ export const constLine = (name, value) => `const ${name} = ${literal(value)}`
 
 export const daysAgo = (days) => new Date(Date.now() - days * 86_400_000)
 
-const workload = (n, owner, days, lastModified, status = 'Live') => {
-  const domain = `my-workload-${n}.azion.run`
+const resource = (n, owner, days, lastModified, status = 'Live') => {
+  const name = `resource-${String(n).padStart(2, '0')}`
+  const domain = `${name}.example.com`
   return {
     id: `10${20482 + n * 173}`,
-    name: `workload_${String(n).padStart(2, '0')}`,
+    name,
     domain,
     domains: [
       domain,
-      ...Array.from({ length: n * 7 }, (_, j) => `my-workload-${n}-alias-${j + 1}.azion.run`)
+      ...Array.from({ length: n * 7 }, (_, j) => `${name}-alias-${j + 1}.example.com`)
     ],
     domainCount: n * 7,
     status,
@@ -46,31 +48,32 @@ const workload = (n, owner, days, lastModified, status = 'Live') => {
   }
 }
 
-export const WORKLOAD_ROWS = [
-  workload(1, 'Robson Junior', 0, 'just now'),
-  workload(2, 'Isaque Böck', 18, '3 weeks ago'),
-  workload(3, 'Rafael Garbinatto', 36, '1 month ago'),
-  workload(4, 'Herbert Júlio', 54, '2 months ago'),
-  workload(5, 'Rafael Umman', 72, '2 months ago'),
-  workload(6, 'Marcus Grando', 90, '3 months ago'),
-  workload(7, 'Bruno Germano', 108, '4 months ago'),
-  workload(8, 'Gab Lisboa', 126, '4 months ago'),
-  workload(9, 'Robson Junior', 144, '5 months ago', 'Inactive'),
-  workload(10, 'Isaque Böck', 162, '5 months ago')
+export const RESOURCE_ROWS = [
+  resource(1, 'Robson Junior', 0, 'just now'),
+  resource(2, 'Isaque Böck', 18, '3 weeks ago'),
+  resource(3, 'Rafael Garbinatto', 36, '1 month ago'),
+  resource(4, 'Herbert Júlio', 54, '2 months ago'),
+  resource(5, 'Rafael Umman', 72, '2 months ago'),
+  resource(6, 'Marcus Grando', 90, '3 months ago'),
+  resource(7, 'Bruno Germano', 108, '4 months ago'),
+  resource(8, 'Gab Lisboa', 126, '4 months ago'),
+  resource(9, 'Robson Junior', 144, '5 months ago', 'Inactive'),
+  resource(10, 'Isaque Böck', 162, '5 months ago')
 ]
 
 export const ROWS_SCRIPT = [
   'const daysAgo = (days) => new Date(Date.now() - days * 86_400_000)',
   '',
-  "const workload = (n, owner, days, lastModified, status = 'Live') => {",
-  '  const domain = `my-workload-${n}.azion.run`',
+  "const resource = (n, owner, days, lastModified, status = 'Live') => {",
+  "  const name = `resource-${String(n).padStart(2, '0')}`",
+  '  const domain = `${name}.example.com`',
   '  return {',
   '    id: `10${20482 + n * 173}`,',
-  "    name: `workload_${String(n).padStart(2, '0')}`,",
+  '    name,',
   '    domain,',
   '    domains: [',
   '      domain,',
-  '      ...Array.from({ length: n * 7 }, (_, j) => `my-workload-${n}-alias-${j + 1}.azion.run`)',
+  '      ...Array.from({ length: n * 7 }, (_, j) => `${name}-alias-${j + 1}.example.com`)',
   '    ],',
   '    domainCount: n * 7,',
   '    status,',
@@ -81,20 +84,20 @@ export const ROWS_SCRIPT = [
   '}',
   '',
   'const rows = [',
-  "  workload(1, 'Robson Junior', 0, 'just now'),",
-  "  workload(2, 'Isaque Böck', 18, '3 weeks ago'),",
-  "  workload(3, 'Rafael Garbinatto', 36, '1 month ago'),",
-  "  workload(4, 'Herbert Júlio', 54, '2 months ago'),",
-  "  workload(5, 'Rafael Umman', 72, '2 months ago'),",
-  "  workload(6, 'Marcus Grando', 90, '3 months ago'),",
-  "  workload(7, 'Bruno Germano', 108, '4 months ago'),",
-  "  workload(8, 'Gab Lisboa', 126, '4 months ago'),",
-  "  workload(9, 'Robson Junior', 144, '5 months ago', 'Inactive'),",
-  "  workload(10, 'Isaque Böck', 162, '5 months ago')",
+  "  resource(1, 'Robson Junior', 0, 'just now'),",
+  "  resource(2, 'Isaque Böck', 18, '3 weeks ago'),",
+  "  resource(3, 'Rafael Garbinatto', 36, '1 month ago'),",
+  "  resource(4, 'Herbert Júlio', 54, '2 months ago'),",
+  "  resource(5, 'Rafael Umman', 72, '2 months ago'),",
+  "  resource(6, 'Marcus Grando', 90, '3 months ago'),",
+  "  resource(7, 'Bruno Germano', 108, '4 months ago'),",
+  "  resource(8, 'Gab Lisboa', 126, '4 months ago'),",
+  "  resource(9, 'Robson Junior', 144, '5 months ago', 'Inactive'),",
+  "  resource(10, 'Isaque Böck', 162, '5 months ago')",
   ']'
 ]
 
-export const WORKLOAD_COLUMNS = [
+export const RESOURCE_COLUMNS = [
   { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
   { accessorKey: 'id', header: 'ID', minWidth: 80 },
   { accessorKey: 'domain', header: 'Domains', grow: 2 },
@@ -111,8 +114,6 @@ export const listedColumnsOf = (columns) =>
       label: column.label ?? column.header,
       locked: column.hideable === false
     }))
-
-export const COLUMN_OPTIONS = listedColumnsOf(WORKLOAD_COLUMNS)
 
 export const useColumnVisibility = (columns, initial = { id: false }) => {
   const columnVisibility = ref({ ...initial })
@@ -233,7 +234,7 @@ export const withinRange = (date, range) => {
   return date <= new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 59, 999)
 }
 
-export const WORKLOAD_FILTER_FIELDS = [
+export const RESOURCE_FILTER_FIELDS = [
   {
     id: 'owner',
     label: 'Author',
@@ -247,7 +248,7 @@ export const WORKLOAD_FILTER_FIELDS = [
       'Rafael Garbinatto',
       'Rafael Umman',
       'Robson Junior'
-    ].map((owner) => ({ value: owner, label: owner, avatar: '' })),
+    ].map((owner) => ({ value: owner, label: owner, avatar: avatars[owner] })),
     match: (row, values) => values.includes(row.owner)
   },
   {
@@ -302,7 +303,9 @@ export const DATE_FILTER_SCRIPT = [
   '}'
 ]
 
-export const WORKLOAD_FIELDS_SCRIPT = [
+export const RESOURCE_FIELDS_SCRIPT = [
+  ...AVATARS_SCRIPT,
+  '',
   'const filterFields = [',
   '  {',
   "    id: 'owner',",
@@ -317,7 +320,7 @@ export const WORKLOAD_FIELDS_SCRIPT = [
   "      'Rafael Garbinatto',",
   "      'Rafael Umman',",
   "      'Robson Junior'",
-  "    ].map((owner) => ({ value: owner, label: owner, avatar: '' })),",
+  "    ].map((owner) => ({ value: owner, label: owner, avatar: avatars[owner] })),",
   '    match: (row, values) => values.includes(row.owner)',
   '  },',
   '  {',
@@ -341,7 +344,7 @@ export const WORKLOAD_FIELDS_SCRIPT = [
   ']'
 ]
 
-export const FILTER_FIELDS_SCRIPT = [...DATE_FILTER_SCRIPT, '', ...WORKLOAD_FIELDS_SCRIPT]
+export const FILTER_FIELDS_SCRIPT = [...DATE_FILTER_SCRIPT, '', ...RESOURCE_FIELDS_SCRIPT]
 
 export const useFilterPanel = (fields, initial = {}) => {
   const filters = ref({ ...initial })
@@ -480,6 +483,7 @@ export const useFilterPanel = (fields, initial = {}) => {
   })
 
   return {
+    avatars,
     filters,
     filterFields: fields,
     filterOpen,
@@ -855,6 +859,7 @@ export const FILTER_POPOVER = `<div class="flex shrink-0 items-center">
                     >
                       <Avatar
                         v-if="'avatar' in option"
+                        :src="option.avatar || undefined"
                         :alt="option.label"
                         :label="option.label"
                         size="small"
@@ -892,8 +897,6 @@ export const FILTER_POPOVER = `<div class="flex shrink-0 items-center">
   </PopoverRoot>
 </div>`
 
-export const filterButton = () => FILTER_POPOVER
-
 export const searchField = (placeholder, ariaLabel = placeholder) => `<InputText
   v-model="search"
   size="medium"
@@ -906,7 +909,7 @@ export const searchField = (placeholder, ariaLabel = placeholder) => `<InputText
   </template>
 </InputText>`
 
-export const SEARCH_FIELD = searchField('Search workloads')
+export const SEARCH_FIELD = searchField('Search resources')
 
 export const REFRESH_BUTTON = `<Tooltip text="Refresh" class="shrink-0">
   <IconButton icon="pi pi-refresh" kind="outlined" size="medium" :loading="loading" aria-label="Refresh" @click="refresh" />
@@ -927,11 +930,7 @@ export const exportButton = (filename) => `<Tooltip text="Download CSV" class="s
   />
 </Tooltip>`
 
-export const WIRED_EXPORT_BUTTON = exportButton('workloads.csv')
-
-export const COLUMNS_BUTTON = `<Tooltip text="Columns" class="shrink-0">
-  <IconButton icon="ai ai-column" kind="outlined" size="medium" aria-label="Columns" />
-</Tooltip>`
+export const WIRED_EXPORT_BUTTON = exportButton('resources.csv')
 
 export const COLUMNS_POPOVER = `<PopoverRoot v-model:open="columnsOpen" placement="bottom-end" class="shrink-0">
   <PopoverTrigger>
@@ -1014,6 +1013,7 @@ export const APPLIED_CHIPS = `<div v-if="appliedFilters.length" class="relative 
             <Avatar
               v-for="(option, i) in avatarsOf(field)"
               :key="String(option.value)"
+              :src="option.avatar || undefined"
               :alt="option.label"
               :label="option.label"
               size="small"
@@ -1122,24 +1122,51 @@ const tableOpen = ({ wired }) =>
       :border="false"
     >`
 
+export const RESOURCE_EMPTY = `<EmptyState
+  size="medium"
+  icon="pi pi-box"
+  title="No resources yet"
+  description="Create a resource to start serving traffic on your domains."
+>
+  <template #actions>
+    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+      <Button label="Create Resource" icon="pi pi-plus" kind="secondary" size="small" />
+      <Button
+        label="Docs"
+        icon="pi pi-book"
+        kind="outlined"
+        size="small"
+        href="https://example.com/docs/resources"
+        target="_blank"
+      />
+    </div>
+  </template>
+</EmptyState>`
+
+export const emptyCard = (emptyState) => `<CardBox :padded="false">
+  <template #content>
+${indent(emptyState, 2)}
+  </template>
+</CardBox>`
+
 export const tableCard = ({ wired = false } = {}) => `<CardBox :padded="false">
   <template #content>
     ${tableOpen({ wired })}
       <template #cell-name="{ value }">
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-          <i class="ai ai-workloads shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
+          <i class="pi pi-box shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
           <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
         </div>
       </template>
       <template #cell-id="{ value }">
         <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
           <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
-          <CopyButton v-if="value" kind="outlined" :value="value" aria-label="Copy workload ID" />
+          <CopyButton v-if="value" kind="outlined" :value="value" aria-label="Copy resource ID" />
         </div>
       </template>
       <template #cell-domain="{ row, value }">
         <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-          <i class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
+          <i class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
           <Tooltip :text="'Open ' + value + ' in a new tab'" class="min-w-0 shrink!">
             <a
               :href="'https://' + value"
@@ -1164,7 +1191,7 @@ ${indent(DOMAIN_POPOVER, 5)}
       <template #cell-lastModified="{ row, value }">
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
           <Tooltip v-if="row.owner" :text="row.owner">
-            <Avatar :alt="row.owner" :label="row.owner" size="small" kind="square" />
+            <Avatar :src="avatars[row.owner]" :alt="row.owner" :label="row.owner" size="small" kind="square" />
           </Tooltip>
           <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
         </div>
@@ -1195,31 +1222,11 @@ ${indent(DOMAIN_POPOVER, 5)}
         </DropdownRoot>
       </template>
       <template #empty>
-        <EmptyState
-          size="medium"
-          title="No workloads yet"
-          description="Create a workload to serve your applications on your domains."
-        >
-          <template #actions>
-            <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-              <Button label="Create Workload" icon="pi pi-plus" kind="secondary" size="small" />
-              <Button
-                label="Docs"
-                icon="pi pi-book"
-                kind="outlined"
-                size="small"
-                href="https://www.azion.com/en/documentation/products/build/edge-application/workloads/"
-                target="_blank"
-              />
-            </div>
-          </template>
-        </EmptyState>
+${indent(RESOURCE_EMPTY, 4)}
       </template>
     </TableRoot>
   </template>
 </CardBox>`
-
-export const TABLE_CARD = tableCard()
 
 export const CONTROLS_IMPORTS = [
   "import Avatar from '@aziontech/webkit/avatar'",
@@ -1262,15 +1269,6 @@ export const idCell = (resource) => `<template #cell-id="{ value }">
   <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
     <span class="min-w-0 flex-1 truncate tabular-nums">{{ value }}</span>
     <CopyButton v-if="value" kind="outlined" :value="value" aria-label="Copy ${resource} ID" />
-  </div>
-</template>`
-
-export const lastModifiedCell = (key, author) => `<template #cell-${key}="{ row, value }">
-  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-    <Tooltip v-if="row.${author}" :text="row.${author}">
-      <Avatar :alt="row.${author}" :label="row.${author}" size="small" kind="square" />
-    </Tooltip>
-    <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
   </div>
 </template>`
 
@@ -1323,17 +1321,6 @@ export const pageHeading = ({ title, description, size = 'medium', docs = '', ac
   }
 </header>`
 }
-
-export const listPage = ({ heading, body }) => `<div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-  <main class="layout-column flex min-h-full flex-col">
-${indent(heading, 2)}
-    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-${indent(body, 4)}
-      </section>
-    </section>
-  </main>
-</div>`
 
 export const useListPage = ({ fields, rows, columns, initial = {}, pageSize = 10 }) => {
   const panel = useFilterPanel(fields, initial)

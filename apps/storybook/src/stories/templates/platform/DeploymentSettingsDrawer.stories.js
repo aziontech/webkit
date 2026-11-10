@@ -172,8 +172,8 @@ ${indent(
 
   <FieldSwitchBlock
     v-model="form.shared"
-    label="Share across workloads"
-    description="Let more than one workload publish with this configuration, so a single deploy reaches every environment bound to it. Turn it off to keep the setting to one workload."
+    label="Share across services"
+    description="Let more than one service publish with this configuration, so a single deploy reaches every environment bound to it. Turn it off to keep the setting to one service."
     :disabled="submitting"
   />
 </div>`
@@ -368,7 +368,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of the Build & Deployment panel in Account Settings (`/account/build-deployment`, plotted by the AccountSettings BuildDeployment template). A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across workloads switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `Drawer`, the `Panel` parts, `FieldText`, `FieldTextarea`, `Label`, `HelperText`, `FieldRadio`, `FieldSwitchBlock`, `Hint` and `Button`.'
+          'The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build & Deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `Drawer`, the `Panel` parts, `FieldText`, `FieldTextarea`, `Label`, `HelperText`, `FieldRadio`, `FieldSwitchBlock`, `Hint` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }

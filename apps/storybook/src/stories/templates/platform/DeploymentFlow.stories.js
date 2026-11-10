@@ -6,10 +6,7 @@ import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 import { deploymentLogs } from './_deployment-logs-markup'
 
-const RUN = { owner: 'gab-az', path: 'checkout-web', scope: 'gab-az' }
-
-const AZION_MARK =
-  'M18.2868 0L0.490892 14.9821L0 17.561H2.5639L16.349 5.96141L14.1271 17.561H17.4898L20.8537 0H18.2868Z'
+const RUN = { owner: 'acme', path: 'web-app', scope: 'acme' }
 
 const STATUS = `<StatusIndicator
   loading
@@ -59,13 +56,10 @@ const SPLASH = `<div
         <span
           class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-selected) bg-(--bg-canvas) text-(--primary)"
         >
-          <svg
-            viewBox="0 0 21 18"
-            fill="currentColor"
-            class="size-6"
-          >
-            <path d="${AZION_MARK}" />
-          </svg>
+          <i
+            class="pi pi-server text-body-lg"
+            aria-hidden="true"
+          />
         </span>
       </div>
       <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
@@ -149,7 +143,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The deploy flow card a create flow streams while it deploys: a CardBox titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete SegmentedButton once it has failed, opening on a cloning splash and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush ProgressBar. It is rendered by Create Application, Create Workload (titled Provisioning, with a Creating status and a Provisioning splash), Deploy Template at /deploy and the Async Deployment form; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from CardBox, StatusIndicator, SegmentedButton, Accordion, LogView, Spinner, Tag and ProgressBar.'
+          'The deploy flow card a create flow streams while it deploys: a CardBox titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete SegmentedButton once it has failed, opening on a cloning splash and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush ProgressBar. A create flow that provisions rather than deploys titles it Provisioning, with a Creating status and a Provisioning splash; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from CardBox, StatusIndicator, SegmentedButton, Accordion, LogView, Spinner, Tag and ProgressBar.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -191,10 +185,5 @@ export const Finished = flowStory(
 
 export const Failed = flowStory(
   { state: 'failed', at: 'rules' },
-  'The Rules Engine rejected the configuration: that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the header swaps the status for the Phased or Complete switch.'
-)
-
-export const CompleteView = flowStory(
-  { state: 'failed', at: 'rules', view: 'complete' },
-  'The same failed run in the Complete view: every line the pipeline printed as one continuous LogView with its copy button.'
+  'The routing rules were rejected: that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the header swaps the status for the Phased or Complete switch.'
 )

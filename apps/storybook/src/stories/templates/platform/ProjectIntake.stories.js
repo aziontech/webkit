@@ -8,7 +8,7 @@ const components = { CardBox, Spinner }
 
 const FILES = [
   { path: 'package.json', size: '1.2 KB', state: 'done' },
-  { path: 'azion.config.js', size: '640 B', state: 'done' },
+  { path: 'app.config.js', size: '640 B', state: 'done' },
   { path: 'src/index.ts', size: '3.4 KB', state: 'running' },
   { path: 'src/routes/api.ts', size: '2.1 KB', state: 'pending' },
   { path: 'public/index.html', size: '860 B', state: 'pending' }
@@ -39,7 +39,7 @@ const DROP_ZONE_TEMPLATE = `<div class="relative flex min-h-dvh flex-col">
         <div class="flex max-w-(--container-md) flex-col gap-(--spacing-xxs)">
           <p class="text-heading-xs text-(--text-default)">Drop your project to deploy it</p>
           <p class="text-pretty text-body-sm text-(--text-muted)">
-            A project folder, or the files inside one. Azion reads what it is built with.
+            A project folder, or the files inside one. We detect what it is built with.
           </p>
         </div>
       </div>
@@ -110,7 +110,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The surfaces a project passes through when it is dropped on the console: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. Home, the empty Home, the Creation Center and the Application detail page render the drop target (the Application page swaps the copy for “Azion builds a new version of webkit-sample-vue, then you choose where it goes live.”); Home, the empty Home and the Creation Center render Initializing over themselves. Built from `CardBox`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template.'
+          'The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `CardBox`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template.'
       },
       canvas: { sourceState: 'shown' }
     }

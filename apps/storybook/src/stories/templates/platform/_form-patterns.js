@@ -48,6 +48,7 @@ import Skeleton from '@aziontech/webkit/skeleton'
 import Switch from '@aziontech/webkit/switch'
 import Tag from '@aziontech/webkit/tag'
 
+import { creationHeader } from '../../_shared/headers'
 import { indent } from '../../_shared/markup'
 import {
   declare as declareConst,
@@ -169,31 +170,7 @@ export const creationPage = ({
   backLabel,
   main
 }) => `<div class="flex h-dvh flex-col bg-(--bg-canvas)">
-  <GlobalHeader aria-label="Azion Console">
-    <GlobalHeader.Left>
-      <IconButton icon="pi pi-chevron-left" aria-label="${backLabel}" kind="outlined" size="small" />
-      <GlobalHeader.Brand>
-        <a
-          href="/home"
-          aria-label="Azion home"
-          class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Brand kind="default" size="small" />
-        </a>
-      </GlobalHeader.Brand>
-      <Breadcrumb :items="breadcrumb" />
-    </GlobalHeader.Left>
-    <GlobalHeader.Middle />
-    <GlobalHeader.Right>
-      <button
-        type="button"
-        aria-label="Account settings"
-        class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-      >
-        <Avatar label="myemail@azion.com" size="medium" kind="square" />
-      </button>
-    </GlobalHeader.Right>
-  </GlobalHeader>
+${indent(creationHeader({ backLabel }))}
 ${indent(main)}
 </div>`
 

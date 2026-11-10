@@ -37,7 +37,7 @@ const declare = (name, value) => `const ${name} = ${literal(value)}`
 const TITLE = 'Ship to production'
 
 const DESCRIPTION =
-  'The create put this workload live on a generated hostname. These are the gates between that and production.'
+  'The create put this service live on a generated hostname. These are the gates between that and production.'
 
 const STEPS = [
   {
@@ -45,18 +45,18 @@ const STEPS = [
     icon: 'pi pi-globe',
     title: 'Add a custom domain',
     description:
-      'Serve this workload on a domain of your own, with a free HTTPS certificate, instead of the generated Azion hostname.',
+      'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
     actionLabel: 'Add Domain',
     done: true,
     doneNote: 'Serving shop.example.com.'
   },
   {
-    id: 'firewall',
+    id: 'policy',
     icon: 'pi pi-shield',
-    title: 'Enable firewall protection',
+    title: 'Enable a security policy',
     description:
-      'Bind a firewall so requests are inspected before they reach the application. Rate limiting, WAF rules, and network lists.',
-    actionLabel: 'Bind Firewall',
+      'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
+    actionLabel: 'Attach Policy',
     done: false,
     doneNote: ''
   },
@@ -64,8 +64,8 @@ const STEPS = [
     id: 'customPage',
     icon: 'pi pi-file',
     title: 'Set custom error pages',
-    description: "Answer 4xx and 5xx with your own page instead of Azion's default response.",
-    actionLabel: 'Bind Custom Page',
+    description: 'Answer 4xx and 5xx with your own page instead of the default response.',
+    actionLabel: 'Add Error Page',
     done: false,
     doneNote: ''
   }
@@ -76,7 +76,7 @@ const COMPLETE_STEPS = STEPS.map((step) => ({
   done: true,
   doneNote: {
     domain: 'Serving shop.example.com.',
-    firewall: 'Protected by edgeflow-production.',
+    policy: 'Protected by policy-production.',
     customPage: 'Serving Branded 404.'
   }[step.id]
 }))
@@ -309,7 +309,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The production checklist on a workload overview (ProductionChecklist and ProductionChecklistDrawer): a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on the Workload Overview tab (WorkloadDetail, `/workloads/:id`). Built from `CardBox`, `Item`, `Tag`, `IconButton`, `Drawer`, the `Panel` parts and `Button`.'
+          'A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `CardBox`, `Item`, `Tag`, `IconButton`, `Drawer`, the `Panel` parts and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }

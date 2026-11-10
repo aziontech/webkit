@@ -10,7 +10,7 @@ import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 import { blockScript, blockState, declare, getStarted } from './_summary-markup'
 
-const DOCUMENTATION = 'https://www.azion.com/en/documentation/'
+const DOCUMENTATION = 'https://example.com/docs'
 
 const LINK =
   'group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
@@ -45,7 +45,7 @@ const lead = ({ text, scope }) =>
   ${text}
 </p>`
 
-const domainCard = ({ title, domain, created, workloadId, repository, branch }) => `<CardBox>
+const domainCard = ({ title, domain, created, serviceId, repository, branch }) => `<CardBox>
   <template #content>
     <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
       <a
@@ -86,11 +86,11 @@ const domainCard = ({ title, domain, created, workloadId, repository, branch }) 
         <ul class="flex flex-col gap-(--spacing-xs)">
           <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <i class="ai ai-domains shrink-0 text-(--text-muted)" aria-hidden="true" />
+              <i class="pi pi-globe shrink-0 text-(--text-muted)" aria-hidden="true" />
 ${indent(externalLink(domain, `https://${domain}`), 7)}
             </span>
             <a
-              href="/workloads/${workloadId}?name=${title}&tab=settings"
+              href="/services/${serviceId}?name=${title}&tab=settings"
               class="group/link inline-flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
             >
               <i class="pi pi-plus-circle shrink-0 text-(--text-muted)" aria-hidden="true" />
@@ -209,7 +209,7 @@ const DEFAULT_NEXT_STEPS = [
   {
     icon: 'pi pi-globe',
     title: 'Customize domain',
-    description: 'Associate a custom domain and subdomains to Azion to handle user access.',
+    description: 'Associate a custom domain and subdomains with this service to handle user access.',
     href: DOCUMENTATION,
     external: true
   },
@@ -217,7 +217,7 @@ const DEFAULT_NEXT_STEPS = [
     icon: 'pi pi-sitemap',
     title: 'Point traffic',
     description:
-      'Redirect the traffic of a domain to Azion and take advantage of the distributed network.',
+      'Redirect the traffic of a domain to the platform and take advantage of the distributed network.',
     href: DOCUMENTATION,
     external: true
   },
@@ -231,52 +231,52 @@ const DEFAULT_NEXT_STEPS = [
 ]
 
 const GIT_DEPLOYMENT = {
-  domain: 'k3x9q2m7wp.azion.run',
-  workloadId: '1482736015',
-  name: 'my-storefront',
-  repository: 'gab-az/my-storefront',
+  domain: 'web-app-k3x9q2.example.com',
+  serviceId: '1482736015',
+  name: 'web-app',
+  repository: 'acme/web-app',
   branch: 'main'
 }
 
 const GIT_RESOURCES = [
   {
-    key: 'workload',
-    kind: 'Workload',
-    icon: 'ai ai-workloads',
-    name: 'my-storefront',
+    key: 'service',
+    kind: 'Service',
+    icon: 'pi pi-server',
+    name: 'web-app',
     reference: '1482736015'
   },
   {
-    key: 'application',
-    kind: 'Application',
-    icon: 'ai ai-edge-application',
-    name: 'my-storefront',
+    key: 'resource',
+    kind: 'Resource',
+    icon: 'pi pi-box',
+    name: 'web-app',
     state: 'created',
     reference: '1739204418'
   },
   {
-    key: 'connector',
-    kind: 'Connector',
-    icon: 'ai ai-edge-connectors',
-    name: 'my-storefront-storage',
+    key: 'integration',
+    kind: 'Integration',
+    icon: 'pi pi-link',
+    name: 'web-app-storage',
     reference: '1215583907'
   },
   {
     key: 'storage',
     kind: 'Storage',
-    icon: 'ai ai-edge-storage',
-    name: 'my-storefront-assets',
-    reference: '24 objects · 1.2 MB'
+    icon: 'pi pi-inbox',
+    name: 'web-app-assets',
+    reference: '24 files · 1.2 MB'
   }
 ]
 
-const CLI_NAME = 'analytics-edge'
+const CLI_NAME = 'analytics-app'
 
 const CLI_RESOURCES = [
   {
-    key: 'application',
-    kind: 'Application',
-    icon: 'ai ai-edge-application',
+    key: 'resource',
+    kind: 'Resource',
+    icon: 'pi pi-box',
     name: CLI_NAME,
     state: 'created',
     reference: '1650382274'
@@ -286,30 +286,30 @@ const CLI_RESOURCES = [
 const DEPLOY_METHODS = [
   {
     icon: 'pi pi-cloud-upload',
-    title: 'Deploy this application',
+    title: 'Deploy this resource',
     description:
-      'Provision a workload for it and deploy, without leaving this flow. Azion names the domain, and you can change it after.',
+      'Provision a service for it and deploy, without leaving this flow. The platform names the domain, and you can change it after.',
     action: true,
     recommended: true
   },
   {
-    icon: 'ai ai-workloads',
-    title: 'Deploy using a new workload',
+    icon: 'pi pi-server',
+    title: 'Deploy using a new service',
     description:
-      'Name the workload, put a firewall in front of it, and compose the release yourself.',
-    href: `/workloads/new?application=${CLI_NAME}`
+      'Name the service, put a policy in front of it, and compose the release yourself.',
+    href: `/services/new?resource=${CLI_NAME}`
   }
 ]
 
 const GIT_TEMPLATE = page({
-  title: 'Application deployed',
-  leadText: 'You deployed a new application.',
-  scope: 'gab-az',
+  title: 'Resource deployed',
+  leadText: 'You deployed a new resource.',
+  scope: 'acme',
   card: domainCard({
     title: GIT_DEPLOYMENT.name,
     domain: GIT_DEPLOYMENT.domain,
     created: 'just now',
-    workloadId: GIT_DEPLOYMENT.workloadId,
+    serviceId: GIT_DEPLOYMENT.serviceId,
     repository: GIT_DEPLOYMENT.repository,
     branch: GIT_DEPLOYMENT.branch
   }),
@@ -325,8 +325,8 @@ const GIT_BLOCK = {
 const CLI_GET_STARTED = getStarted(CLI_NAME)
 
 const CLI_TEMPLATE = page({
-  title: 'Application created',
-  leadText: 'The application layer is ready. Nothing serves it yet. Deploy it from Next steps.',
+  title: 'Resource created',
+  leadText: 'The resource is ready. Nothing serves it yet. Deploy it from Next steps.',
   resourcesTitle: 'Resources created',
   getStartedTemplate: CLI_GET_STARTED.template
 })
@@ -377,7 +377,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the workload name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the Azion CLI or GitHub Actions for an application made from the CLI; and the Manage button. Create Application, Create Workload (titled Workload deployed, with no scope) and Deploy Template at `/deploy` (titled Congratulations!) all render it. Built from `CardBox`, `Tag`, `Button`, `Tooltip`, `Item`, `SegmentedButton` and `CodeBlock`.'
+          'The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `CardBox`, `Tag`, `Button`, `Tooltip`, `Item`, `SegmentedButton` and `CodeBlock`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -389,11 +389,11 @@ export default meta
 export const Default = story(
   [GIT_BLOCK],
   GIT_TEMPLATE,
-  'An application deployed from a Git repository: the scope Tag, the live deployment card on its generated Azion domain with the repository and branch, the four resources the flow created, and the default next steps that open the documentation.'
+  'A resource deployed from a Git repository: the scope Tag, the live deployment card on its generated domain with the repository and branch, the four resources the flow created, and the default next steps that open the documentation.'
 )
 
 export const CliCreated = story(
   [CLI_BLOCK, CLI_GET_STARTED],
   CLI_TEMPLATE,
-  'An application made from the CLI that nothing serves yet: no deployment card, the application as its only resource, next steps that deploy it here (Recommended) or on a new workload, and Get started with the Azion CLI and GitHub Actions paths.'
+  'A resource made from the CLI that nothing serves yet: no deployment card, the resource as the only row, next steps that deploy it here (Recommended) or on a new service, and Get started with the CLI and GitHub Actions paths.'
 )

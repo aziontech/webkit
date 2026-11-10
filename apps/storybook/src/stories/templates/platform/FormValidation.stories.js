@@ -38,7 +38,7 @@ const FILLED = {
   key: 'API_BASE_URL',
   value: 'https://api.example.com/v2',
   environment: 'Production',
-  description: 'Base URL the checkout function calls.'
+  description: 'Base URL the checkout service calls.'
 }
 
 const SEEDS = {
@@ -187,7 +187,7 @@ const TEMPLATE = `<div class="min-h-dvh bg-(--bg-canvas)">
   >
     <header class="flex flex-col gap-(--spacing-xxs)">
       <h1 id="create-variable-title" class="text-balance text-heading-xs text-(--text-default)">Create Variable</h1>
-      <p class="text-pretty text-body-sm text-(--text-muted)">Add a key-value pair your functions read at runtime.</p>
+      <p class="text-pretty text-body-sm text-(--text-muted)">Add a key-value pair your services read at runtime.</p>
     </header>
 
     <div class="layout-section-start flex flex-col gap-(--spacing-md)">
@@ -230,7 +230,7 @@ const TEMPLATE = `<div class="min-h-dvh bg-(--bg-canvas)">
           :required="missing('value')"
           :invalid="invalid('value')"
           :disabled="busy"
-          :helper-text="helper('value', 'The value your functions read at runtime.')"
+          :helper-text="helper('value', 'The value your services read at runtime.')"
         />
         <FieldSelect
           v-model="form.environment"

@@ -7,6 +7,7 @@ import GlobalHeader from '@aziontech/webkit/global-header'
 import IconButton from '@aziontech/webkit/icon-button'
 import NavigationMenu from '@aziontech/webkit/navigation-menu'
 
+import { indent } from './markup'
 import { BRAND_LINK_CLASS } from './site-footer'
 
 const SEARCH_BUTTON = (label) =>
@@ -171,13 +172,48 @@ export const SITE_HEADER_MARKUP = `<GlobalHeader kind="site" aria-label="Azion" 
   </GlobalHeader.Right>
 </GlobalHeader>`
 
-const AVATAR_BUTTON = `<button
-      type="button"
-      aria-label="Account settings"
-      class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-    >
-      <Avatar label="gabriel@azion.com" size="medium" kind="square" />
-    </button>`
+const CONSOLE_BRAND_LINK_CLASS =
+  'inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none'
+
+export const accountButton = (email = 'name@example.com') => `<button
+  type="button"
+  aria-label="Account settings"
+  class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+>
+  <Avatar label="${email}" size="medium" kind="square" />
+</button>`
+
+const AVATAR_BUTTON = indent(accountButton(), 2).trimStart()
+
+export const consoleBrand = `<GlobalHeader.Brand>
+  <a
+    href="/home"
+    aria-label="Azion home"
+    class="${CONSOLE_BRAND_LINK_CLASS}"
+  >
+    <Brand kind="default" size="small" />
+  </a>
+</GlobalHeader.Brand>`
+
+export const creationHeader = ({ backLabel = '', crumbs = 'breadcrumb', email } = {}) => {
+  const left = [
+    backLabel
+      ? `<IconButton icon="pi pi-chevron-left" aria-label="${backLabel}" kind="outlined" size="small" />`
+      : '',
+    consoleBrand,
+    crumbs ? `<Breadcrumb :items="${crumbs}" />` : ''
+  ].filter(Boolean)
+
+  return `<GlobalHeader aria-label="Console">
+  <GlobalHeader.Left>
+${indent(left.join('\n'), 2)}
+  </GlobalHeader.Left>
+  <GlobalHeader.Middle />
+  <GlobalHeader.Right>
+${indent(accountButton(email), 2)}
+  </GlobalHeader.Right>
+</GlobalHeader>`
+}
 
 export const AUTH_HEADER_IMPORTS = [
   "import Brand from '@aziontech/webkit/brand'",
@@ -187,12 +223,8 @@ export const AUTH_HEADER_IMPORTS = [
 
 export const AUTH_HEADER_COMPONENTS = { Brand, Button, ...GLOBAL_HEADER_COMPONENTS }
 
-export const AUTH_HEADER_MARKUP = `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Brand>
-    <a href="/home" aria-label="Azion home" class="${BRAND_LINK_CLASS} self-center">
-      <Brand kind="default" size="small" />
-    </a>
-  </GlobalHeader.Brand>
+export const AUTH_HEADER_MARKUP = `<GlobalHeader aria-label="Console" class="shrink-0">
+${indent(consoleBrand)}
   <GlobalHeader.Middle />
   <GlobalHeader.Right>
     <Button label="Documentation" kind="outlined" size="medium" icon="pi pi-book" href="/docs" />
@@ -207,15 +239,6 @@ export const CREATION_HEADER_IMPORTS = [
   "import IconButton from '@aziontech/webkit/icon-button'"
 ]
 
-export const CREATION_CRUMBS = [
-  { label: 'Applications', href: '/applications' },
-  { label: 'Create application' }
-]
-
-export const CREATION_HEADER_SETUP = [
-  "const crumbs = [{ label: 'Applications', href: '/applications' }, { label: 'Create application' }]"
-]
-
 export const CREATION_HEADER_COMPONENTS = {
   Avatar,
   Brand,
@@ -224,21 +247,6 @@ export const CREATION_HEADER_COMPONENTS = {
   ...GLOBAL_HEADER_COMPONENTS
 }
 
-export const CREATION_HEADER_MARKUP = `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Left>
-    <IconButton icon="pi pi-chevron-left" kind="outlined" size="small" aria-label="Back to applications" />
-    <GlobalHeader.Brand>
-      <a href="/home" aria-label="Azion home" class="${BRAND_LINK_CLASS} self-center">
-        <Brand kind="default" size="small" />
-      </a>
-    </GlobalHeader.Brand>
-    <Breadcrumb :items="crumbs" />
-  </GlobalHeader.Left>
-  <GlobalHeader.Middle />
-  <GlobalHeader.Right>
-    ${AVATAR_BUTTON}
-  </GlobalHeader.Right>
-</GlobalHeader>`
 
 export const RESOURCE_HEADER_IMPORTS = [
   "import Avatar from '@aziontech/webkit/avatar'",

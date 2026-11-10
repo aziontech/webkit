@@ -5,18 +5,18 @@ import { ref } from 'vue'
 
 import { toSfc } from '../../_shared/story-source'
 
-const APPLICATION_TABS = [
+const PROJECT_TABS = [
   { value: 'overview', label: 'Overview' },
   { value: 'build', label: 'Build' },
   { value: 'deployments', label: 'Deployments' },
-  { value: 'device-groups', label: 'Device Groups' },
-  { value: 'cache-settings', label: 'Cache Settings' },
-  { value: 'functions-instances', label: 'Functions Instances' },
-  { value: 'rules-engine', label: 'Rules Engine' },
-  { value: 'main-settings', label: 'Settings' }
+  { value: 'variables', label: 'Variables' },
+  { value: 'rules', label: 'Rules' },
+  { value: 'logs', label: 'Logs' },
+  { value: 'metrics', label: 'Metrics' },
+  { value: 'settings', label: 'Settings' }
 ]
 
-const WORKLOAD_TABS = [
+const SERVICE_TABS = [
   { value: 'overview', label: 'Overview' },
   { value: 'deployments', label: 'Deployments' },
   { value: 'settings', label: 'Settings' }
@@ -75,7 +75,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The second-level navigation bar of a resource detail page, as the console’s PageTabs renders it: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. The Application, Application Version, Workload, Firewall, WAF Rule Set, Function, SQL Database and Edge DNS zone detail pages open with it, and Billing uses it with its row held to the `layout-column` width. Built from `TabView`, with `Button` and `Tag` in the trailing actions.'
+          'The second-level navigation bar of a resource detail page: a full-bleed strip under the global header, ruled at the bottom, whose tabs sit at the page boundary inset with room for the actions the whole resource owns on the right. Every resource detail page opens with it, and an account page such as Billing uses it with its row held to the `layout-column` width. Built from `TabView`, with `Button` and `Tag` in the trailing actions.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -87,15 +87,15 @@ export default meta
 export const Default = {
   render: () => ({
     components,
-    setup: () => ({ activeTab: ref('overview'), tabs: APPLICATION_TABS }),
+    setup: () => ({ activeTab: ref('overview'), tabs: PROJECT_TABS }),
     template: DEFAULT_TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
-        story: 'The application detail tabs, from Overview to Settings, with no trailing actions.'
+        story: 'A project’s detail tabs, from Overview to Settings, with no trailing actions.'
       },
-      source: { code: toSfc(scriptLines([TAB_VIEW_IMPORT], APPLICATION_TABS), DEFAULT_TEMPLATE) }
+      source: { code: toSfc(scriptLines([TAB_VIEW_IMPORT], PROJECT_TABS), DEFAULT_TEMPLATE) }
     }
   }
 }
@@ -103,14 +103,14 @@ export const Default = {
 export const WithActions = {
   render: () => ({
     components,
-    setup: () => ({ activeTab: ref('overview'), tabs: WORKLOAD_TABS }),
+    setup: () => ({ activeTab: ref('overview'), tabs: SERVICE_TABS }),
     template: WITH_ACTIONS_TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'The workload detail tabs with the actions the resource owns on the right: the staged-changes `Tag` that appears once a setting is staged, and the outlined medium Deploy button.'
+          'A service’s detail tabs with the actions the resource owns on the right: the staged-changes `Tag` that appears once a setting is staged, and the outlined medium Deploy button.'
       },
       source: {
         code: toSfc(
@@ -120,7 +120,7 @@ export const WithActions = {
               TAB_VIEW_IMPORT,
               "import Tag from '@aziontech/webkit/tag'"
             ],
-            WORKLOAD_TABS
+            SERVICE_TABS
           ),
           WITH_ACTIONS_TEMPLATE
         )

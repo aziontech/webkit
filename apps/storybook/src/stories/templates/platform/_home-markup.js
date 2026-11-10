@@ -10,7 +10,7 @@ import { reactive, ref, watch } from 'vue'
 import { each, indent } from '../../_shared/markup'
 
 const DOMAIN_SHAPE = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)*\.[a-z]{2,}$/i
-const REGISTERED = ['azion.com', 'google.com', 'example.com', 'cloudflare.com']
+const REGISTERED = ['example.com', 'example.org', 'example.net', 'acme.com']
 const CHECK_MS = 900
 
 export const FIRST_ACCESS_SCRIPT = [
@@ -24,7 +24,7 @@ export const FIRST_ACCESS_SCRIPT = [
   "import { reactive, ref, watch } from 'vue'",
   '',
   'const DOMAIN_SHAPE = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\\.[a-z0-9-]+)*\\.[a-z]{2,}$/i',
-  "const REGISTERED = ['azion.com', 'google.com', 'example.com', 'cloudflare.com']",
+  "const REGISTERED = ['example.com', 'example.org', 'example.net', 'acme.com']",
   `const CHECK_MS = ${CHECK_MS}`,
   '',
   "const domain = ref('')",
@@ -146,7 +146,7 @@ const DOMAIN_ACTION = `<Popover
               {{ check.name }} is already registered. Try another name.
             </template>
             <template v-else>
-              {{ check.name }} is available. Azion registers it and issues the certificate.
+              {{ check.name }} is available. We register it and issue the certificate.
             </template>
           </p>
           <Button v-if="!check.registered" label="Register" kind="secondary" size="medium" class="w-full" />
@@ -162,7 +162,7 @@ const DOORS = [
     title: 'Ship something new',
     description:
       'Deploy a static site or a full-stack app, with compute, AI, storage and media on the same build.',
-    action: '<Button label="Create Application" kind="outlined" size="medium" />'
+    action: '<Button label="Create Project" kind="outlined" size="medium" />'
   },
   {
     illustration: 'dns-protection',
@@ -175,7 +175,7 @@ const DOORS = [
     illustration: 'ai-applications',
     title: 'Onboard your agent',
     description:
-      'Give Claude, Cursor, Windsurf, Codex or OpenCode a prompt that sets your project up to deploy on Azion.',
+      'Give Claude, Cursor, Windsurf, Codex or OpenCode a prompt that sets your project up to deploy here.',
     action: '<Button label="Copy prompt" kind="outlined" size="medium" icon="pi pi-copy" />'
   }
 ]
@@ -211,7 +211,7 @@ export const firstAccessMain = ({ palette = false } = {}) => `<main class="layou
     <div class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-(--spacing-lg)">
       <div class="flex flex-col items-center gap-(--spacing-xs)">
         <p class="text-center text-body-md text-(--text-muted)">Good morning, Gabriel</p>
-        <h1 class="text-balance text-center text-heading-lg text-(--text-default)">Let's build on Azion.</h1>
+        <h1 class="text-balance text-center text-heading-lg text-(--text-default)">Let's build something new.</h1>
       </div>
 
       <div class="flex w-full max-w-(--container-2xl) flex-col items-stretch">
@@ -220,10 +220,10 @@ export const firstAccessMain = ({ palette = false } = {}) => `<main class="layou
         >
           <InputText
             model-value=""
-            placeholder="Search products, resources and commands"
+            placeholder="Search resources, pages and commands"
             size="large"
             readonly
-            aria-label="Search products, resources and commands"
+            aria-label="Search resources, pages and commands"
             aria-keyshortcuts="Meta+K"
           >
             <template #iconLeft>

@@ -78,7 +78,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Hobby, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Hobby. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. Built from `Drawer`, `PanelHeader`, `PanelContent`, `SegmentedButton`, `CardPricing` and `Button`.'
+          'The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. Built from `Drawer`, `PanelHeader`, `PanelContent`, `SegmentedButton`, `CardPricing` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -97,7 +97,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Closed behind the Billing page’s Change Plan button; Yearly is selected, Hobby carries the Current plan tag and its action is disabled.'
+          'Closed behind the Billing page’s Change Plan button; Yearly is selected, Free carries the Current plan tag and its action is disabled.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }

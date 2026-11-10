@@ -34,7 +34,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The deploy logs block on its own: a Logs row that reports the step count and the step in flight while the run goes, or the outcome Tag, the time and the Phased or Complete switch once it has settled; then the pipeline as an Accordion of steps, each with its status glyph, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view; and a flush ProgressBar on the bottom edge while it runs. DeploymentFlow renders it inside its card with the controls moved up to the card header, and the Deployment page at /deployments/:id renders it inside the Deployment Logs card without its Logs row and progress bar. Built from Accordion, LogView, Spinner, Tag, SegmentedButton and ProgressBar.'
+          'The deploy logs block on its own: a Logs row that reports the step count and the step in flight while the run goes, or the outcome Tag, the time and the Phased or Complete switch once it has settled; then the pipeline as an Accordion of steps, each with its status glyph, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view; and a flush ProgressBar on the bottom edge while it runs. Inside a deploy flow card it moves its controls up to the card header; on a deployment detail page it sits inside a Deployment Logs card without its Logs row and progress bar. Built from Accordion, LogView, Spinner, Tag, SegmentedButton and ProgressBar.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -55,7 +55,7 @@ export const Succeeded = logsStory(
 
 export const Failed = logsStory(
   { state: 'failed', at: 'rules' },
-  'A run the Rules Engine rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch.'
+  'A run whose routing rules were rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch.'
 )
 
 export const CompleteView = logsStory(

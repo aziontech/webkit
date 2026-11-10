@@ -74,17 +74,17 @@ ${indent(actions, 4)}
 const CONFIRM_TEMPLATE = dialog({
   trigger: '<Button label="Remove domain" kind="outlined" size="medium" />',
   title: 'Remove domain',
-  body: 'shop.example.com stops answering for this workload once you save. Traffic already pointed at it gets no response.',
+  body: 'shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response.',
   actions: `<Button class="w-full md:w-auto" label="Cancel" kind="text" size="medium" @click="open = false" />
 <Button class="w-full md:w-auto" label="Remove Domain" kind="danger" size="medium" @click="open = false" />`
 })
 
-const REPURGE_TEMPLATE = dialog({
-  trigger: '<Button label="Repurge" kind="outlined" size="medium" />',
-  title: 'Repurge cached content?',
-  body: 'This purges the same 2 URLs from the Cache layer again. Each object is fetched from your origin on its next request.',
+const RUN_AGAIN_TEMPLATE = dialog({
+  trigger: '<Button label="Run again" kind="outlined" size="medium" />',
+  title: 'Clear cached content again?',
+  body: 'This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request.',
   actions: `<Button class="w-full md:w-auto" label="Cancel" kind="text" size="medium" @click="open = false" />
-<Button class="w-full md:w-auto" label="Repurge" kind="primary" size="medium" @click="open = false" />`
+<Button class="w-full md:w-auto" label="Clear again" kind="primary" size="medium" @click="open = false" />`
 })
 
 const DISCARD_TEMPLATE = dialog({
@@ -114,7 +114,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The console small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose kind says how destructive the outcome is (danger for a removal, primary for a commit). The Remove domain confirmation on a workload’s Settings tab and the Repurge confirmation on Real-Time Purge render it, and the unsaved-changes guard shows the same shell when a dirty form is left (with a Save changes button when the form can be saved from there, as on the Firewall tabs). Built from `Dialog` with `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription` and `DialogClose`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`; closed by default behind a visible trigger.'
+          'A small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose kind says how destructive the outcome is (danger for a removal, primary for a commit). A removal such as Remove domain and a re-run such as Clear again render it, and the unsaved-changes guard shows the same shell when a dirty form is left (with a Save changes button when the form can be saved from there, as on a tabbed settings page). Built from `Dialog` with `DialogTrigger`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription` and `DialogClose`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`; closed by default behind a visible trigger.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -133,7 +133,7 @@ export const Confirm = {
     docs: {
       description: {
         story:
-          'Remove domain on a workload: a danger confirm button beside a text Cancel, with the description naming the domain and its consequence.'
+          'Remove domain on a resource: a danger confirm button beside a text Cancel, with the description naming the domain and its consequence.'
       },
       source: { code: toSfc(IMPORTS, CONFIRM_TEMPLATE) }
     }
@@ -157,19 +157,19 @@ export const DiscardChanges = {
   }
 }
 
-export const Repurge = {
+export const RunAgain = {
   render: () => ({
     components,
     setup: () => ({ open: ref(false) }),
-    template: REPURGE_TEMPLATE
+    template: RUN_AGAIN_TEMPLATE
   }),
   parameters: {
     docs: {
       description: {
         story:
-          'Repurge on Real-Time Purge: a commit rather than a removal, so the confirm button is primary; the description counts what is purged again and from which layer.'
+          'Run a cache-clear request again: a commit rather than a removal, so the confirm button is primary; the description counts what is cleared again and from which layer.'
       },
-      source: { code: toSfc(IMPORTS, REPURGE_TEMPLATE) }
+      source: { code: toSfc(IMPORTS, RUN_AGAIN_TEMPLATE) }
     }
   }
 }
@@ -184,7 +184,7 @@ export const SaveOrDiscard = {
     docs: {
       description: {
         story:
-          'The guard on a form that can be saved from the dialog, as when leaving a dirty Firewall tab: Discard changes drops to outlined and a primary Save changes saves before leaving.'
+          'The guard on a form that can be saved from the dialog, as when leaving a dirty settings tab: Discard changes drops to outlined and a primary Save changes saves before leaving.'
       },
       source: { code: toSfc(IMPORTS, SAVE_TEMPLATE) }
     }

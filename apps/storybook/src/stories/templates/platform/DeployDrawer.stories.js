@@ -30,12 +30,12 @@ import { indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
 import { declare } from './_summary-markup'
 
-const APPLICATION_RESOURCES = [
+const SERVICE_RESOURCES = [
   {
-    key: 'application',
-    label: 'Application',
-    name: 'webkit-sample-vue',
-    icon: 'ai ai-edge-application',
+    key: 'service',
+    label: 'Service',
+    name: 'web-app',
+    icon: 'pi pi-server',
     note: '',
     total: 6,
     versions: [
@@ -69,10 +69,10 @@ const APPLICATION_RESOURCES = [
     owner: true,
     dependencies: [
       {
-        key: 'application@AG1VVDJP:function-auth-gateway',
-        label: 'Function',
+        key: 'service@AG1VVDJP:module-auth-gateway',
+        label: 'Module',
         name: 'auth-gateway',
-        icon: 'ai ai-edge-functions',
+        icon: 'pi pi-code',
         note: '',
         total: 8,
         versions: [
@@ -109,10 +109,10 @@ const APPLICATION_RESOURCES = [
         ]
       },
       {
-        key: 'application@AG1VVDJP:function-geo-redirect',
-        label: 'Function',
+        key: 'service@AG1VVDJP:module-geo-redirect',
+        label: 'Module',
         name: 'geo-redirect',
-        icon: 'ai ai-edge-functions',
+        icon: 'pi pi-code',
         note: '',
         total: 11,
         versions: [
@@ -149,10 +149,10 @@ const APPLICATION_RESOURCES = [
         ]
       },
       {
-        key: 'application@AG1VVDJP:connector-payments-api',
-        label: 'Connector',
+        key: 'service@AG1VVDJP:integration-payments-api',
+        label: 'Integration',
         name: 'payments-api',
-        icon: 'ai ai-edge-connectors',
+        icon: 'pi pi-link',
         note: '',
         total: 11,
         versions: [
@@ -192,14 +192,14 @@ const APPLICATION_RESOURCES = [
   }
 ]
 
-const WORKLOAD_GROUPS = [
+const PROJECT_GROUPS = [
   {
     key: 'serving',
-    label: 'Serving webkit-sample-vue',
-    workloads: [
+    label: 'Serving web-app',
+    projects: [
       {
         id: '1020655',
-        name: 'workload_01',
+        name: 'project-01',
         detail: '2 environments',
         domains: [
           {
@@ -207,14 +207,14 @@ const WORKLOAD_GROUPS = [
             total: 8,
             summary: '8 domains',
             domains: [
-              'my-workload-1.azion.run',
-              'my-workload-1-alias-1.azion.run',
-              'my-workload-1-alias-2.azion.run',
-              'my-workload-1-alias-3.azion.run',
-              'my-workload-1-alias-4.azion.run',
-              'my-workload-1-alias-5.azion.run',
-              'my-workload-1-alias-6.azion.run',
-              'my-workload-1-alias-7.azion.run'
+              'project-1.example.com',
+              'project-1-alias-1.example.com',
+              'project-1-alias-2.example.com',
+              'project-1-alias-3.example.com',
+              'project-1-alias-4.example.com',
+              'project-1-alias-5.example.com',
+              'project-1-alias-6.example.com',
+              'project-1-alias-7.example.com'
             ]
           }
         ]
@@ -224,7 +224,7 @@ const WORKLOAD_GROUPS = [
   {
     key: 'flexible',
     label: 'Flexible',
-    workloads: [
+    projects: [
       {
         id: '1031410004',
         name: 'campaign-landing',
@@ -234,26 +234,26 @@ const WORKLOAD_GROUPS = [
             environment: 'Production',
             total: 1,
             summary: '1 domains',
-            domains: ['campaign.azion.com']
+            domains: ['campaign.example.com']
           }
         ]
       },
       {
         id: '1031410005',
-        name: 'docs-azion',
-        detail: 'Serves azion-docs · Preview only',
+        name: 'docs-site',
+        detail: 'Serves docs-web · Preview only',
         domains: [
           {
             environment: 'Preview',
             total: 1,
             summary: '1 domains',
-            domains: ['*-preview.docs.azion.com']
+            domains: ['*-preview.docs.example.com']
           }
         ]
       },
       {
         id: '1021001',
-        name: 'workload_03',
+        name: 'project-03',
         detail: 'Serves analytics-pro',
         domains: [
           {
@@ -261,23 +261,23 @@ const WORKLOAD_GROUPS = [
             total: 22,
             summary: '10 of 22 domains',
             domains: [
-              'my-workload-3.azion.run',
-              'my-workload-3-alias-1.azion.run',
-              'my-workload-3-alias-2.azion.run',
-              'my-workload-3-alias-3.azion.run',
-              'my-workload-3-alias-4.azion.run',
-              'my-workload-3-alias-5.azion.run',
-              'my-workload-3-alias-6.azion.run',
-              'my-workload-3-alias-7.azion.run',
-              'my-workload-3-alias-8.azion.run',
-              'my-workload-3-alias-9.azion.run'
+              'project-3.example.com',
+              'project-3-alias-1.example.com',
+              'project-3-alias-2.example.com',
+              'project-3-alias-3.example.com',
+              'project-3-alias-4.example.com',
+              'project-3-alias-5.example.com',
+              'project-3-alias-6.example.com',
+              'project-3-alias-7.example.com',
+              'project-3-alias-8.example.com',
+              'project-3-alias-9.example.com'
             ]
           }
         ]
       },
       {
         id: '1021866',
-        name: 'workload_08',
+        name: 'project-08',
         detail: 'Serves ecommerce-v2',
         domains: [
           {
@@ -285,23 +285,23 @@ const WORKLOAD_GROUPS = [
             total: 57,
             summary: '10 of 57 domains',
             domains: [
-              'my-workload-8.azion.run',
-              'my-workload-8-alias-1.azion.run',
-              'my-workload-8-alias-2.azion.run',
-              'my-workload-8-alias-3.azion.run',
-              'my-workload-8-alias-4.azion.run',
-              'my-workload-8-alias-5.azion.run',
-              'my-workload-8-alias-6.azion.run',
-              'my-workload-8-alias-7.azion.run',
-              'my-workload-8-alias-8.azion.run',
-              'my-workload-8-alias-9.azion.run'
+              'project-8.example.com',
+              'project-8-alias-1.example.com',
+              'project-8-alias-2.example.com',
+              'project-8-alias-3.example.com',
+              'project-8-alias-4.example.com',
+              'project-8-alias-5.example.com',
+              'project-8-alias-6.example.com',
+              'project-8-alias-7.example.com',
+              'project-8-alias-8.example.com',
+              'project-8-alias-9.example.com'
             ]
           }
         ]
       },
       {
         id: '1022731',
-        name: 'workload_13',
+        name: 'project-13',
         detail: 'Serves mobile-app',
         domains: [
           {
@@ -309,23 +309,23 @@ const WORKLOAD_GROUPS = [
             total: 92,
             summary: '10 of 92 domains',
             domains: [
-              'my-workload-13.azion.run',
-              'my-workload-13-alias-1.azion.run',
-              'my-workload-13-alias-2.azion.run',
-              'my-workload-13-alias-3.azion.run',
-              'my-workload-13-alias-4.azion.run',
-              'my-workload-13-alias-5.azion.run',
-              'my-workload-13-alias-6.azion.run',
-              'my-workload-13-alias-7.azion.run',
-              'my-workload-13-alias-8.azion.run',
-              'my-workload-13-alias-9.azion.run'
+              'project-13.example.com',
+              'project-13-alias-1.example.com',
+              'project-13-alias-2.example.com',
+              'project-13-alias-3.example.com',
+              'project-13-alias-4.example.com',
+              'project-13-alias-5.example.com',
+              'project-13-alias-6.example.com',
+              'project-13-alias-7.example.com',
+              'project-13-alias-8.example.com',
+              'project-13-alias-9.example.com'
             ]
           }
         ]
       },
       {
         id: '1023596',
-        name: 'workload_18',
+        name: 'project-18',
         detail: 'Serves react-dashboard',
         domains: [
           {
@@ -333,16 +333,16 @@ const WORKLOAD_GROUPS = [
             total: 28,
             summary: '10 of 28 domains',
             domains: [
-              'my-workload-18.azion.run',
-              'my-workload-18-alias-1.azion.run',
-              'my-workload-18-alias-2.azion.run',
-              'my-workload-18-alias-3.azion.run',
-              'my-workload-18-alias-4.azion.run',
-              'my-workload-18-alias-5.azion.run',
-              'my-workload-18-alias-6.azion.run',
-              'my-workload-18-alias-7.azion.run',
-              'my-workload-18-alias-8.azion.run',
-              'my-workload-18-alias-9.azion.run'
+              'project-18.example.com',
+              'project-18-alias-1.example.com',
+              'project-18-alias-2.example.com',
+              'project-18-alias-3.example.com',
+              'project-18-alias-4.example.com',
+              'project-18-alias-5.example.com',
+              'project-18-alias-6.example.com',
+              'project-18-alias-7.example.com',
+              'project-18-alias-8.example.com',
+              'project-18-alias-9.example.com'
             ]
           }
         ]
@@ -351,7 +351,7 @@ const WORKLOAD_GROUPS = [
   }
 ]
 
-const APPLICATION_ENVIRONMENTS = [
+const SERVICE_ENVIRONMENTS = [
   {
     name: 'Production',
     description: 'Live traffic. One version serves the domain, and deploying replaces it.',
@@ -365,13 +365,13 @@ const APPLICATION_ENVIRONMENTS = [
   }
 ]
 
-const IMPACTED_WORKLOADS = [
+const IMPACTED_PROJECTS = [
   {
     environment: 'Production',
-    workloads: [
+    projects: [
       {
         id: '1020655',
-        name: 'workload_01',
+        name: 'project-01',
         selected: true,
         domains: [
           {
@@ -379,60 +379,60 @@ const IMPACTED_WORKLOADS = [
             total: 8,
             summary: '8 domains',
             domains: [
-              'my-workload-1.azion.run',
-              'my-workload-1-alias-1.azion.run',
-              'my-workload-1-alias-2.azion.run',
-              'my-workload-1-alias-3.azion.run',
-              'my-workload-1-alias-4.azion.run',
-              'my-workload-1-alias-5.azion.run',
-              'my-workload-1-alias-6.azion.run',
-              'my-workload-1-alias-7.azion.run'
+              'project-1.example.com',
+              'project-1-alias-1.example.com',
+              'project-1-alias-2.example.com',
+              'project-1-alias-3.example.com',
+              'project-1-alias-4.example.com',
+              'project-1-alias-5.example.com',
+              'project-1-alias-6.example.com',
+              'project-1-alias-7.example.com'
             ]
           }
         ]
       },
       {
         id: '1021347',
-        name: 'workload_05',
+        name: 'project-05',
         domains: [
           {
             environment: 'Production',
             total: 36,
             summary: '10 of 36 domains',
             domains: [
-              'my-workload-5.azion.run',
-              'my-workload-5-alias-1.azion.run',
-              'my-workload-5-alias-2.azion.run',
-              'my-workload-5-alias-3.azion.run',
-              'my-workload-5-alias-4.azion.run',
-              'my-workload-5-alias-5.azion.run',
-              'my-workload-5-alias-6.azion.run',
-              'my-workload-5-alias-7.azion.run',
-              'my-workload-5-alias-8.azion.run',
-              'my-workload-5-alias-9.azion.run'
+              'project-5.example.com',
+              'project-5-alias-1.example.com',
+              'project-5-alias-2.example.com',
+              'project-5-alias-3.example.com',
+              'project-5-alias-4.example.com',
+              'project-5-alias-5.example.com',
+              'project-5-alias-6.example.com',
+              'project-5-alias-7.example.com',
+              'project-5-alias-8.example.com',
+              'project-5-alias-9.example.com'
             ]
           }
         ]
       },
       {
         id: '1022039',
-        name: 'workload_09',
+        name: 'project-09',
         domains: [
           {
             environment: 'Production',
             total: 64,
             summary: '10 of 64 domains',
             domains: [
-              'my-workload-9.azion.run',
-              'my-workload-9-alias-1.azion.run',
-              'my-workload-9-alias-2.azion.run',
-              'my-workload-9-alias-3.azion.run',
-              'my-workload-9-alias-4.azion.run',
-              'my-workload-9-alias-5.azion.run',
-              'my-workload-9-alias-6.azion.run',
-              'my-workload-9-alias-7.azion.run',
-              'my-workload-9-alias-8.azion.run',
-              'my-workload-9-alias-9.azion.run'
+              'project-9.example.com',
+              'project-9-alias-1.example.com',
+              'project-9-alias-2.example.com',
+              'project-9-alias-3.example.com',
+              'project-9-alias-4.example.com',
+              'project-9-alias-5.example.com',
+              'project-9-alias-6.example.com',
+              'project-9-alias-7.example.com',
+              'project-9-alias-8.example.com',
+              'project-9-alias-9.example.com'
             ]
           }
         ]
@@ -441,16 +441,16 @@ const IMPACTED_WORKLOADS = [
   }
 ]
 
-const SERVING_WORKLOADS = [
+const SERVING_PROJECTS = [
   {
     id: '1020655',
-    name: 'workload_01',
-    domain: 'my-workload-1.azion.run',
+    name: 'project-01',
+    domain: 'project-1.example.com',
     environment: 'Production'
   }
 ]
 
-const WORKLOAD_FIRST_ENVIRONMENTS = [
+const PROJECT_FIRST_ENVIRONMENTS = [
   {
     name: 'Production',
     description: 'Live traffic. One version serves the domain, and deploying replaces it.',
@@ -469,12 +469,12 @@ const WORKLOAD_FIRST_ENVIRONMENTS = [
   }
 ]
 
-const WORKLOAD_RESOURCES = [
+const PROJECT_RESOURCES = [
   {
-    key: 'application',
-    label: 'Application',
-    name: 'workload-01',
-    icon: 'ai ai-edge-application',
+    key: 'service',
+    label: 'Service',
+    name: 'project-01-web',
+    icon: 'pi pi-server',
     note: '',
     total: 12,
     versions: [
@@ -513,10 +513,10 @@ const WORKLOAD_RESOURCES = [
     owner: true,
     dependencies: [
       {
-        key: 'application@AWPT11GA:function-image-optimizer',
-        label: 'Function',
+        key: 'service@AWPT11GA:module-image-optimizer',
+        label: 'Module',
         name: 'image-optimizer',
-        icon: 'ai ai-edge-functions',
+        icon: 'pi pi-code',
         note: '',
         total: 6,
         versions: [
@@ -553,10 +553,10 @@ const WORKLOAD_RESOURCES = [
         ]
       },
       {
-        key: 'application@AWPT11GA:connector-search-index',
-        label: 'Connector',
+        key: 'service@AWPT11GA:integration-search-index',
+        label: 'Integration',
         name: 'search-index',
-        icon: 'ai ai-edge-connectors',
+        icon: 'pi pi-link',
         note: '',
         total: 3,
         versions: [
@@ -583,10 +583,10 @@ const WORKLOAD_RESOURCES = [
     ]
   },
   {
-    key: 'connector',
-    label: 'Object Storage',
-    name: 'workload-01-storage',
-    icon: 'ai ai-edge-storage',
+    key: 'storage',
+    label: 'Storage',
+    name: 'project-01-storage',
+    icon: 'pi pi-database',
     note: 'Not versioned',
     total: 0,
     versions: [],
@@ -595,55 +595,55 @@ const WORKLOAD_RESOURCES = [
   }
 ]
 
-const WORKLOAD_ENVIRONMENTS = [
+const PROJECT_ENVIRONMENTS = [
   {
     name: 'Production',
     description: 'Live traffic. One version serves the domain, and deploying replaces it.',
     tag: 'Last used',
-    setting: { name: 'magalu-storefront', shared: true, workloads: ['workload_05', 'workload_09'] }
+    setting: { name: 'shared-storefront', shared: true, projects: ['project-05', 'project-09'] }
   },
   {
     name: 'Preview',
     description:
       'Every other branch. Each version keeps its own URL, so a build can be read before it is live.',
     tag: '',
-    setting: { name: 'workload_01-preview', shared: false, workloads: [] }
+    setting: { name: 'project-01-preview', shared: false, projects: [] }
   }
 ]
 
-const APPLICATION_NAME = 'webkit-sample-vue'
+const SERVICE_NAME = 'web-app'
 
 const PINNED_VERSION = 'AG1VVDJP'
 
 const PENDING_VERSION = 'A77SA473'
 
-const WORKLOAD_ID = '1020655'
+const PROJECT_ID = '1020655'
 
-const WORKLOAD_NAME = 'workload_01'
+const PROJECT_NAME = 'project-01'
 
-const NEW_WORKLOAD = { name: APPLICATION_NAME, domain: `${APPLICATION_NAME}.azion.run` }
+const NEW_PROJECT = { name: SERVICE_NAME, domain: `${SERVICE_NAME}.example.com` }
 
-const WORKLOAD_MODES = [
+const PROJECT_MODES = [
   { value: 'existing', label: 'Use existing' },
   { value: 'new', label: 'Create new' }
 ]
 
-const APPLICATION_HINTS = {
+const SERVICE_HINTS = {
   resources:
-    'The application version this deployment publishes, and the version of every function and connector it references.',
-  workload:
-    'The workload whose domains serve the application. Create one to publish it on a new domain.',
+    'The service version this deployment publishes, and the version of every module and integration it references.',
+  project:
+    'The project whose domains serve the service. Create one to publish it on a new domain.',
   environment:
-    'Where the deployment goes live, from the environments this workload serves. Each one publishes with the Deployment Settings set on the workload.',
-  workloads:
-    'This environment publishes with shared Deployment Settings, so the deployment reaches every workload below, in every environment they are linked to, and the domains they serve.',
+    'Where the deployment goes live, from the environments this project serves. Each one publishes with the Deployment Settings set on the project.',
+  projects:
+    'This environment publishes with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve.',
   flatEnvironment:
     'Where the deployment goes live. Each environment publishes with its own Deployment Settings.'
 }
 
-const WORKLOAD_HINTS = {
+const PROJECT_HINTS = {
   resources:
-    'Everything this workload serves, at the version this deployment publishes, with the version of every dependency they reference.',
+    'Everything this project serves, at the version this deployment publishes, with the version of every dependency they reference.',
   environment:
     'Where the deployment goes live. Each environment publishes with its own Deployment Settings.'
 }
@@ -961,43 +961,43 @@ const domainList = (
   </li>
 </ul>`
 
-const WORKLOAD_MEDIA = `<Item.Media>
+const PROJECT_MEDIA = `<Item.Media>
   <span
     class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
   >
-    <i class="ai ai-workloads text-body-xs text-(--text-default)" aria-hidden="true" />
+    <i class="pi pi-box text-body-xs text-(--text-default)" aria-hidden="true" />
   </span>
 </Item.Media>`
 
 const MODE_SWITCH = `<template #header>
   <SegmentedButton
-    v-model="workloadMode"
-    :options="workloadModes"
+    v-model="projectMode"
+    :options="projectModes"
     size="medium"
     fluid
-    aria-label="Workload"
+    aria-label="Project"
     class="w-full"
   />
 </template>`
 
-const WORKLOAD_FIELD = `<CardBox :padded="false">
+const PROJECT_FIELD = `<CardBox :padded="false">
 ${indent(MODE_SWITCH)}
   <template #content>
     <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
       <Item kind="outline" size="small">
-${indent(WORKLOAD_MEDIA, 4)}
+${indent(PROJECT_MEDIA, 4)}
         <Item.Content>
           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <Item.Title class="truncate">{{ workload.name }}</Item.Title>
-            <Tag v-if="workloadMode === 'new'" label="New" severity="success" size="small" class="shrink-0" />
+            <Item.Title class="truncate">{{ project.name }}</Item.Title>
+            <Tag v-if="projectMode === 'new'" label="New" severity="success" size="small" class="shrink-0" />
           </span>
-          <Item.Description v-if="workloadMode === 'new'">
-            Gets its Azion domains on the first deploy.
+          <Item.Description v-if="projectMode === 'new'">
+            Gets its domains on the first deploy.
           </Item.Description>
-${indent(domainList('workload.domains', ' v-else'), 5)}
+${indent(domainList('project.domains', ' v-else'), 5)}
         </Item.Content>
-        <Item.Actions v-if="workloadMode === 'existing'">
-          <Dropdown placement="bottom-end" @select="(event, id) => (workloadId = String(id))">
+        <Item.Actions v-if="projectMode === 'existing'">
+          <Dropdown placement="bottom-end" @select="(event, id) => (projectId = String(id))">
             <Dropdown.Trigger>
               <Button
                 label="Change"
@@ -1007,13 +1007,13 @@ ${indent(domainList('workload.domains', ' v-else'), 5)}
                 icon-position="trailing"
               />
             </Dropdown.Trigger>
-            <Dropdown.Group v-for="group in workloadGroups" :key="group.key" :label="group.label">
+            <Dropdown.Group v-for="group in projectGroups" :key="group.key" :label="group.label">
               <Dropdown.Option
-                v-for="entry in group.workloads"
+                v-for="entry in group.projects"
                 :key="entry.id"
                 :value="entry.id"
                 :label="entry.name"
-                :selected="entry.id === workload.id"
+                :selected="entry.id === project.id"
               >
                 <template #right>
                   <span class="truncate text-body-xs text-(--text-muted)">
@@ -1058,11 +1058,11 @@ const IMPACTED = `<div class="flex min-w-0 flex-col gap-(--spacing-md)">
   >
     <ul
       class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
-      :aria-label="\`Workloads impacted in \${group.environment} (\${group.workloads.length})\`"
+      :aria-label="\`Projects impacted in \${group.environment} (\${group.projects.length})\`"
     >
-      <li v-for="target in group.workloads" :key="target.id" class="min-w-0">
+      <li v-for="target in group.projects" :key="target.id" class="min-w-0">
         <Item kind="outline" size="small">
-${indent(WORKLOAD_MEDIA, 5)}
+${indent(PROJECT_MEDIA, 5)}
           <Item.Content>
             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <Item.Title class="truncate">{{ target.name }}</Item.Title>
@@ -1087,12 +1087,12 @@ const BUILD_ROW = `<Item kind="outline" size="small" aria-live="polite">
     <span
       class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
     >
-      <i class="ai ai-edge-application text-body-xs text-(--text-default)" aria-hidden="true" />
+      <i class="pi pi-server text-body-xs text-(--text-default)" aria-hidden="true" />
     </span>
   </Item.Media>
   <Item.Content>
     <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-      <Item.Title class="truncate">${APPLICATION_NAME}</Item.Title>
+      <Item.Title class="truncate">${SERVICE_NAME}</Item.Title>
       <Tag label="${PENDING_VERSION}" severity="secondary" size="small" class="shrink-0" />
     </span>
     <Item.Description>Building…</Item.Description>
@@ -1112,26 +1112,26 @@ const environmentFirstTemplate = (building) =>
     body: [
       section({
         title: 'Resources',
-        hint: APPLICATION_HINTS.resources,
+        hint: SERVICE_HINTS.resources,
         body: building ? BUILD_ROW : RESOURCES
       }),
       section({
-        title: 'Workload',
-        hint: APPLICATION_HINTS.workload,
-        body: WORKLOAD_FIELD,
+        title: 'Project',
+        hint: SERVICE_HINTS.project,
+        body: PROJECT_FIELD,
         pending: building,
         fades: true
       }),
       section({
         title: 'Environment',
-        hint: APPLICATION_HINTS.environment,
-        body: environmentField('application-deploy-environment'),
+        hint: SERVICE_HINTS.environment,
+        body: environmentField('service-deploy-environment'),
         pending: building,
         fades: true
       }),
       section({
-        title: 'Workloads Impacted',
-        hint: APPLICATION_HINTS.workloads,
+        title: 'Projects Impacted',
+        hint: SERVICE_HINTS.projects,
         body: IMPACTED,
         pending: building,
         fades: true
@@ -1140,21 +1140,21 @@ const environmentFirstTemplate = (building) =>
     ].join('\n\n')
   })
 
-const WORKLOAD_FIRST_CARD = `<CardBox :padded="false">
+const PROJECT_FIRST_CARD = `<CardBox :padded="false">
 ${indent(MODE_SWITCH)}
   <template #content>
     <div class="p-(--spacing-lg)">
       <Item kind="outline" size="small">
-${indent(WORKLOAD_MEDIA, 4)}
+${indent(PROJECT_MEDIA, 4)}
         <Item.Content>
           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <Item.Title class="truncate">{{ workload.name }}</Item.Title>
+            <Item.Title class="truncate">{{ project.name }}</Item.Title>
             <Tag v-if="isLastUsed" label="Last used" severity="info" size="small" class="shrink-0" />
           </span>
-          <Item.Description>{{ workload.domain }}</Item.Description>
+          <Item.Description>{{ project.domain }}</Item.Description>
         </Item.Content>
-        <Item.Actions v-if="workloadMode === 'existing'">
-          <Popover v-model:open="workloadOpen" placement="bottom-end" width="small">
+        <Item.Actions v-if="projectMode === 'existing'">
+          <Popover v-model:open="projectOpen" placement="bottom-end" width="small">
             <Popover.Trigger>
               <Button
                 label="Change"
@@ -1167,16 +1167,16 @@ ${indent(WORKLOAD_MEDIA, 4)}
             <Popover.Content>
               <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
                 <p class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)">
-                  Workloads serving ${APPLICATION_NAME}
+                  Projects serving ${SERVICE_NAME}
                 </p>
                 <div class="max-h-72 overflow-y-auto overscroll-contain">
                   <button
-                    v-for="(entry, index) in boundWorkloads"
+                    v-for="(entry, index) in boundProjects"
                     :key="entry.id"
                     type="button"
-                    :aria-current="entry.id === workload.id || undefined"
+                    :aria-current="entry.id === project.id || undefined"
                     class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                    @click="pickWorkload(entry.id)"
+                    @click="pickProject(entry.id)"
                   >
                     <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -1196,7 +1196,7 @@ ${indent(WORKLOAD_MEDIA, 4)}
                       </span>
                     </span>
                     <i
-                      v-if="entry.id === workload.id"
+                      v-if="entry.id === project.id"
                       class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
                       aria-hidden="true"
                     />
@@ -1211,26 +1211,26 @@ ${indent(WORKLOAD_MEDIA, 4)}
   </template>
 </CardBox>`
 
-const WORKLOAD_FIRST_TEMPLATE = drawer({
+const PROJECT_FIRST_TEMPLATE = drawer({
   title: 'Deploy',
   body: [
-    section({ title: 'Resources', hint: APPLICATION_HINTS.resources, body: RESOURCES }),
+    section({ title: 'Resources', hint: SERVICE_HINTS.resources, body: RESOURCES }),
     section({
-      title: 'Workload',
-      hint: APPLICATION_HINTS.workload,
-      body: WORKLOAD_FIRST_CARD,
+      title: 'Project',
+      hint: SERVICE_HINTS.project,
+      body: PROJECT_FIRST_CARD,
       fades: true
     }),
     section({
       title: 'Environment',
-      hint: APPLICATION_HINTS.flatEnvironment,
-      body: environmentField('application-deploy-environment'),
+      hint: SERVICE_HINTS.flatEnvironment,
+      body: environmentField('service-deploy-environment'),
       fades: true
     })
   ].join('\n\n')
 })
 
-const WORKLOAD_ENVIRONMENT_FIELD = `${environmentField('workload-deploy-environment')}
+const PROJECT_ENVIRONMENT_FIELD = `${environmentField('project-deploy-environment')}
 
 <Message
   v-if="sharedWith.length"
@@ -1239,15 +1239,15 @@ const WORKLOAD_ENVIRONMENT_FIELD = `${environmentField('workload-deploy-environm
   :label="\`Deploying with \${setting.name} also publishes to \${sharedWith.join(', ')}.\`"
 />`
 
-const WORKLOAD_TEMPLATE = drawer({
+const PROJECT_TEMPLATE = drawer({
   title: 'Deploy',
-  description: `Publish ${WORKLOAD_NAME}. Review what this release carries and where it lands.`,
+  description: `Publish ${PROJECT_NAME}. Review what this release carries and where it lands.`,
   body: [
-    section({ title: 'Resources', hint: WORKLOAD_HINTS.resources, body: RESOURCES }),
+    section({ title: 'Resources', hint: PROJECT_HINTS.resources, body: RESOURCES }),
     section({
       title: 'Environment',
-      hint: WORKLOAD_HINTS.environment,
-      body: WORKLOAD_ENVIRONMENT_FIELD
+      hint: PROJECT_HINTS.environment,
+      body: PROJECT_ENVIRONMENT_FIELD
     })
   ].join('\n\n')
 })
@@ -1322,12 +1322,12 @@ const RESOURCE_SCRIPT = [
 
 const resetPicks = (pinned) => [
   '  Object.keys(picks).forEach((key) => delete picks[key])',
-  ...(pinned ? [`  picks.application = '${pinned}'`] : []),
+  ...(pinned ? [`  picks.service = '${pinned}'`] : []),
   '  Object.keys(versionOpen).forEach((key) => delete versionOpen[key])'
 ]
 
 const resourceState = (resources, pinned) => {
-  const picks = reactive(pinned ? { application: pinned } : {})
+  const picks = reactive(pinned ? { service: pinned } : {})
   const versionOpen = reactive({})
   return {
     resources,
@@ -1345,7 +1345,7 @@ const resourceState = (resources, pinned) => {
     },
     clearPicks: () => {
       Object.keys(picks).forEach((key) => delete picks[key])
-      if (pinned) picks.application = pinned
+      if (pinned) picks.service = pinned
       Object.keys(versionOpen).forEach((key) => delete versionOpen[key])
     }
   }
@@ -1353,35 +1353,35 @@ const resourceState = (resources, pinned) => {
 
 const environmentFirstSetup = (building) => () => {
   const open = ref(false)
-  const workloadMode = ref('existing')
-  const workloadId = ref(WORKLOAD_ID)
+  const projectMode = ref('existing')
+  const projectId = ref(PROJECT_ID)
   const environment = ref('Production')
-  const { clearPicks, ...resources } = resourceState(APPLICATION_RESOURCES, PINNED_VERSION)
-  const workload = computed(() =>
-    workloadMode.value === 'new'
-      ? NEW_WORKLOAD
-      : WORKLOAD_GROUPS.flatMap((group) => group.workloads).find(
-          (entry) => entry.id === workloadId.value
+  const { clearPicks, ...resources } = resourceState(SERVICE_RESOURCES, PINNED_VERSION)
+  const project = computed(() =>
+    projectMode.value === 'new'
+      ? NEW_PROJECT
+      : PROJECT_GROUPS.flatMap((group) => group.projects).find(
+          (entry) => entry.id === projectId.value
         )
   )
   watch(open, (isOpen) => {
     if (!isOpen) return
     clearPicks()
-    workloadMode.value = 'existing'
-    workloadId.value = WORKLOAD_ID
+    projectMode.value = 'existing'
+    projectId.value = PROJECT_ID
     environment.value = 'Production'
   })
   return {
     open,
     ...(building ? { elapsed: ref(2) } : resources),
-    workloadModes: WORKLOAD_MODES,
-    workloadGroups: WORKLOAD_GROUPS,
-    environmentChoices: APPLICATION_ENVIRONMENTS,
-    impacted: IMPACTED_WORKLOADS,
-    workloadMode,
-    workloadId,
+    projectModes: PROJECT_MODES,
+    projectGroups: PROJECT_GROUPS,
+    environmentChoices: SERVICE_ENVIRONMENTS,
+    impacted: IMPACTED_PROJECTS,
+    projectMode,
+    projectId,
     environment,
-    workload
+    project
   }
 }
 
@@ -1400,83 +1400,83 @@ const environmentFirstScript = (building) => [
     building ? ['computed', 'ref', 'watch'] : ['computed', 'reactive', 'ref', 'watch']
   ),
   '',
-  ...(building ? [] : [declare('resources', APPLICATION_RESOURCES), '']),
-  declare('workloadModes', WORKLOAD_MODES),
+  ...(building ? [] : [declare('resources', SERVICE_RESOURCES), '']),
+  declare('projectModes', PROJECT_MODES),
   '',
-  declare('newWorkload', NEW_WORKLOAD),
+  declare('newProject', NEW_PROJECT),
   '',
-  declare('workloadGroups', WORKLOAD_GROUPS),
+  declare('projectGroups', PROJECT_GROUPS),
   '',
-  declare('environmentChoices', APPLICATION_ENVIRONMENTS),
+  declare('environmentChoices', SERVICE_ENVIRONMENTS),
   '',
-  declare('impacted', IMPACTED_WORKLOADS),
+  declare('impacted', IMPACTED_PROJECTS),
   '',
   'const open = ref(false)',
   ...(building
     ? ['const elapsed = ref(2)']
     : [
-        `const picks = reactive({ application: '${PINNED_VERSION}' })`,
+        `const picks = reactive({ service: '${PINNED_VERSION}' })`,
         'const versionOpen = reactive({})'
       ]),
-  "const workloadMode = ref('existing')",
-  `const workloadId = ref('${WORKLOAD_ID}')`,
+  "const projectMode = ref('existing')",
+  `const projectId = ref('${PROJECT_ID}')`,
   "const environment = ref('Production')",
   '',
-  'const workload = computed(() =>',
-  "  workloadMode.value === 'new'",
-  '    ? newWorkload',
-  '    : workloadGroups',
-  '        .flatMap((group) => group.workloads)',
-  '        .find((entry) => entry.id === workloadId.value)',
+  'const project = computed(() =>',
+  "  projectMode.value === 'new'",
+  '    ? newProject',
+  '    : projectGroups',
+  '        .flatMap((group) => group.projects)',
+  '        .find((entry) => entry.id === projectId.value)',
   ')',
   ...(building ? [] : ['', ...RESOURCE_SCRIPT]),
   '',
   'watch(open, (isOpen) => {',
   '  if (!isOpen) return',
   ...(building ? [] : resetPicks(PINNED_VERSION)),
-  "  workloadMode.value = 'existing'",
-  `  workloadId.value = '${WORKLOAD_ID}'`,
+  "  projectMode.value = 'existing'",
+  `  projectId.value = '${PROJECT_ID}'`,
   "  environment.value = 'Production'",
   '})'
 ]
 
-const WORKLOAD_FIRST_SCRIPT = [
+const PROJECT_FIRST_SCRIPT = [
   ...importLines(
     ['CardBox', 'FieldRadioBlock', 'SegmentedButton', ...RESOURCE_PARTS],
     ['computed', 'reactive', 'ref', 'watch']
   ),
   '',
-  declare('resources', APPLICATION_RESOURCES),
+  declare('resources', SERVICE_RESOURCES),
   '',
-  declare('workloadModes', WORKLOAD_MODES),
+  declare('projectModes', PROJECT_MODES),
   '',
-  declare('newWorkload', NEW_WORKLOAD),
+  declare('newProject', NEW_PROJECT),
   '',
-  declare('boundWorkloads', SERVING_WORKLOADS),
+  declare('boundProjects', SERVING_PROJECTS),
   '',
-  declare('environmentChoices', WORKLOAD_FIRST_ENVIRONMENTS),
+  declare('environmentChoices', PROJECT_FIRST_ENVIRONMENTS),
   '',
   'const open = ref(false)',
   'const picks = reactive({})',
   'const versionOpen = reactive({})',
-  "const workloadMode = ref('existing')",
-  'const workloadId = ref(boundWorkloads[0].id)',
-  'const workloadOpen = ref(false)',
+  "const projectMode = ref('existing')",
+  'const projectId = ref(boundProjects[0].id)',
+  'const projectOpen = ref(false)',
   "const environment = ref('Production')",
   '',
-  'const workload = computed(() =>',
-  "  workloadMode.value === 'new'",
-  '    ? newWorkload',
-  '    : boundWorkloads.find((entry) => entry.id === workloadId.value)',
+  'const project = computed(() =>',
+  "  projectMode.value === 'new'",
+  '    ? newProject',
+  '    : boundProjects.find((entry) => entry.id === projectId.value)',
   ')',
   '',
   'const isLastUsed = computed(',
-  "  () => workloadMode.value === 'existing' && workload.value.id === boundWorkloads[0].id",
+  "  () => projectMode.value === 'existing' && project.value.id === boundProjects[0].id",
   ')',
   '',
-  'const pickWorkload = (id) => {',
-  '  workloadId.value = id',
-  '  workloadOpen.value = false',
+  'const pickProject = (id) => {',
+  '  projectId.value = id',
+  '  projectOpen.value = false',
   '}',
   '',
   ...RESOURCE_SCRIPT,
@@ -1484,64 +1484,64 @@ const WORKLOAD_FIRST_SCRIPT = [
   'watch(open, (isOpen) => {',
   '  if (!isOpen) return',
   ...resetPicks(''),
-  "  workloadMode.value = 'existing'",
-  '  workloadId.value = boundWorkloads[0].id',
-  '  workloadOpen.value = false',
+  "  projectMode.value = 'existing'",
+  '  projectId.value = boundProjects[0].id',
+  '  projectOpen.value = false',
   "  environment.value = 'Production'",
   '})'
 ]
 
-const workloadFirstSetup = () => {
+const projectFirstSetup = () => {
   const open = ref(false)
-  const workloadMode = ref('existing')
-  const workloadId = ref(SERVING_WORKLOADS[0].id)
-  const workloadOpen = ref(false)
+  const projectMode = ref('existing')
+  const projectId = ref(SERVING_PROJECTS[0].id)
+  const projectOpen = ref(false)
   const environment = ref('Production')
-  const { clearPicks, ...resources } = resourceState(APPLICATION_RESOURCES, '')
-  const workload = computed(() =>
-    workloadMode.value === 'new'
-      ? NEW_WORKLOAD
-      : SERVING_WORKLOADS.find((entry) => entry.id === workloadId.value)
+  const { clearPicks, ...resources } = resourceState(SERVICE_RESOURCES, '')
+  const project = computed(() =>
+    projectMode.value === 'new'
+      ? NEW_PROJECT
+      : SERVING_PROJECTS.find((entry) => entry.id === projectId.value)
   )
   const isLastUsed = computed(
-    () => workloadMode.value === 'existing' && workload.value.id === SERVING_WORKLOADS[0].id
+    () => projectMode.value === 'existing' && project.value.id === SERVING_PROJECTS[0].id
   )
-  const pickWorkload = (id) => {
-    workloadId.value = id
-    workloadOpen.value = false
+  const pickProject = (id) => {
+    projectId.value = id
+    projectOpen.value = false
   }
   watch(open, (isOpen) => {
     if (!isOpen) return
     clearPicks()
-    workloadMode.value = 'existing'
-    workloadId.value = SERVING_WORKLOADS[0].id
-    workloadOpen.value = false
+    projectMode.value = 'existing'
+    projectId.value = SERVING_PROJECTS[0].id
+    projectOpen.value = false
     environment.value = 'Production'
   })
   return {
     open,
     ...resources,
-    workloadModes: WORKLOAD_MODES,
-    boundWorkloads: SERVING_WORKLOADS,
-    environmentChoices: WORKLOAD_FIRST_ENVIRONMENTS,
-    workloadMode,
-    workloadOpen,
+    projectModes: PROJECT_MODES,
+    boundProjects: SERVING_PROJECTS,
+    environmentChoices: PROJECT_FIRST_ENVIRONMENTS,
+    projectMode,
+    projectOpen,
     environment,
-    workload,
+    project,
     isLastUsed,
-    pickWorkload
+    pickProject
   }
 }
 
-const WORKLOAD_SCRIPT = [
+const PROJECT_SCRIPT = [
   ...importLines(
     ['CardBox', 'FieldRadioBlock', 'Message', ...RESOURCE_PARTS],
     ['computed', 'reactive', 'ref', 'watch']
   ),
   '',
-  declare('resources', WORKLOAD_RESOURCES),
+  declare('resources', PROJECT_RESOURCES),
   '',
-  declare('environmentChoices', WORKLOAD_ENVIRONMENTS),
+  declare('environmentChoices', PROJECT_ENVIRONMENTS),
   '',
   'const open = ref(false)',
   'const picks = reactive({})',
@@ -1552,7 +1552,7 @@ const WORKLOAD_SCRIPT = [
   '  () => environmentChoices.find((entry) => entry.name === environment.value).setting',
   ')',
   '',
-  'const sharedWith = computed(() => (setting.value.shared ? setting.value.workloads : []))',
+  'const sharedWith = computed(() => (setting.value.shared ? setting.value.projects : []))',
   '',
   ...RESOURCE_SCRIPT,
   '',
@@ -1563,14 +1563,14 @@ const WORKLOAD_SCRIPT = [
   '})'
 ]
 
-const workloadSetup = () => {
+const projectSetup = () => {
   const open = ref(false)
   const environment = ref('Production')
-  const { clearPicks, ...resources } = resourceState(WORKLOAD_RESOURCES, '')
+  const { clearPicks, ...resources } = resourceState(PROJECT_RESOURCES, '')
   const setting = computed(
-    () => WORKLOAD_ENVIRONMENTS.find((entry) => entry.name === environment.value).setting
+    () => PROJECT_ENVIRONMENTS.find((entry) => entry.name === environment.value).setting
   )
-  const sharedWith = computed(() => (setting.value.shared ? setting.value.workloads : []))
+  const sharedWith = computed(() => (setting.value.shared ? setting.value.projects : []))
   watch(open, (isOpen) => {
     if (!isOpen) return
     clearPicks()
@@ -1579,7 +1579,7 @@ const workloadSetup = () => {
   return {
     open,
     ...resources,
-    environmentChoices: WORKLOAD_ENVIRONMENTS,
+    environmentChoices: PROJECT_ENVIRONMENTS,
     environment,
     setting,
     sharedWith
@@ -1649,7 +1649,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The drawer the console deploys from, opened by the outlined Deploy button on an application or a workload. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change Version popover, and a Dependencies disclosure with the functions and connectors the application references. On an application the default flow is environment first: the Workload card uses an existing workload or creates one, the environments come as radio blocks, and Workloads Impacted lists every workload the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and Deployment with a Building row and the other sections faded. The sample preset can switch applications to the workload-first flow. On a workload, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Rendered by ApplicationDetail and ApplicationVersion (ApplicationEnvironmentDeployDrawer or ApplicationDeployDrawer) and WorkloadDetail (DeployDrawer). Built from `Drawer`, the `Panel` parts, `CardBox`, `Item`, `Accordion`, `Divider`, `Popover`, `Dropdown`, `SegmentedButton`, `FieldRadioBlock`, `InputText`, `Avatar`, `Tag`, `Hint`, `Spinner`, `Message`, `Tooltip` and `Button`.'
+          'The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change Version popover, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects Impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and Deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `Drawer`, the `Panel` parts, `CardBox`, `Item`, `Accordion`, `Divider`, `Popover`, `Dropdown`, `SegmentedButton`, `FieldRadioBlock`, `InputText`, `Avatar`, `Tag`, `Hint`, `Spinner`, `Message`, `Tooltip` and `Button`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -1658,12 +1658,12 @@ const meta = {
 
 export default meta
 
-export const Application = story({
+export const Service = story({
   template: environmentFirstTemplate(false),
   script: environmentFirstScript(false),
   setup: environmentFirstSetup(false),
   description:
-    'Deploy on a Ready version from the Versions tab of webkit-sample-vue: the pinned version in the Resources card with its three dependencies, workload_01 with its Production domains and a Change menu that groups the workloads serving the application apart from the Flexible ones, Production last used, and the three workloads magalu-storefront publishes to.'
+    'Deploy on a Ready version of web-app: the pinned version in the Resources card with its three dependencies, project-01 with its Production domains and a Change menu that groups the projects serving the service apart from the Flexible ones, Production last used, and the three projects shared-storefront publishes to.'
 })
 
 export const Building = story({
@@ -1671,21 +1671,21 @@ export const Building = story({
   script: environmentFirstScript(true),
   setup: environmentFirstSetup(true),
   description:
-    'Deploy from the Deployments or Build tab, or a project dropped on the application: the drawer opens as Build and Deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Workload, Environment and Workloads Impacted sections stay faded and inert, with Deploy disabled, until the build lands.'
+    'Deploy without a pinned version: the drawer opens as Build and Deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects Impacted sections stay faded and inert, with Deploy disabled, until the build lands.'
 })
 
-export const ApplicationWorkloadFirst = story({
-  template: WORKLOAD_FIRST_TEMPLATE,
-  script: WORKLOAD_FIRST_SCRIPT,
-  setup: workloadFirstSetup,
+export const ServiceProjectFirst = story({
+  template: PROJECT_FIRST_TEMPLATE,
+  script: PROJECT_FIRST_SCRIPT,
+  setup: projectFirstSetup,
   description:
-    'The workload-first flow the sample preset can switch applications to: the same Resources card, a Workload card with the last used workload, its domain and a Change popover of the workloads serving the application, then every environment as a radio block.'
+    'The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block.'
 })
 
-export const Workload = story({
-  template: WORKLOAD_TEMPLATE,
-  script: WORKLOAD_SCRIPT,
-  setup: workloadSetup,
+export const Project = story({
+  template: PROJECT_TEMPLATE,
+  script: PROJECT_SCRIPT,
+  setup: projectSetup,
   description:
-    'Deploy on a workload: the Resources card with the application it serves and its dependencies, then its Object Storage connector, which is not versioned; Production and Preview below, with a warning that magalu-storefront also publishes to workload_05 and workload_09.'
+    'Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.'
 })
