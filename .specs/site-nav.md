@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: e412e5b285aba72c8b79c08920527688c222cf69adc7565b94b0befa3f44e79d
+checksum: baa1f69b7cd9787261bb17cf2d097040ac4997ecfb352fc6aa85939cd8b737b4
 ---
 # SiteNav — Component Spec
 
@@ -39,7 +39,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 
 ```vue
 <script setup>
-import SiteNav from '@aziontech/webkit/sections/site-nav'
+import SiteNav from '@aziontech/webkit/site-nav'
 </script>
 
 <template>

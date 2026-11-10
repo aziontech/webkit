@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 10e2e559cff73ea875a8619dc78a2d75016c2100f5d9bd1f26d55df459683882
+checksum: 4cb797aa066809e8e6a07782014c5a2e7b290415fed7be34f0af20faf1003702
 ---
 # StoryLibrary — Component Spec
 
@@ -37,7 +37,7 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ```vue
 <script setup>
-import StoryLibrary from '@aziontech/webkit/sections/story-library'
+import StoryLibrary from '@aziontech/webkit/story-library'
 </script>
 
 <template>

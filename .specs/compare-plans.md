@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 73a0a62ac5c28dc005e47fe8ca3f4c4e0073fd081910b9ef38305ead4b383bcd
+checksum: 9f14cb752aa74bbc6b16defd3d6662d66d7bd3e02293bc93ca51754eb62676a0
 ---
 
 # ComparePlans — Component Spec
@@ -39,7 +39,7 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 
 ```vue
 <script setup>
-import ComparePlans from '@aziontech/webkit/sections/compare-plans'
+import ComparePlans from '@aziontech/webkit/compare-plans'
 </script>
 
 <template>

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 0789d68301a55f5b1604c6cd949e284392242cc9714949bb1b57c33d620f752f
+checksum: c8de83a9213855ad4399a1278a1a60344be9a64ad915c875c799032fd6092711
 ---
 # ClosingCallToAction — Component Spec
 
@@ -38,7 +38,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ```vue
 <script setup>
-import ClosingCallToAction from '@aziontech/webkit/sections/closing-call-to-action'
+import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
 </script>
 
 <template>
