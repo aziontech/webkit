@@ -272,3 +272,36 @@ describe('InputText — autocomplete and spellcheck', () => {
     expect(input.hasAttribute('spellcheck')).toBe(false)
   })
 })
+
+describe('InputText — read-only look', () => {
+  it('marks a read-only field with data-readonly and the dashed, transparent look', () => {
+    const { getByTestId, container } = render(InputText, {
+      props: { readonly: true, modelValue: '9757a' }
+    })
+    const root = container.firstElementChild as HTMLElement
+    const input = getByTestId('input-text') as HTMLInputElement
+
+    expect(input.readOnly).toBe(true)
+    expect(root.hasAttribute('data-readonly')).toBe(true)
+    expect(root.className).toContain('data-[readonly]:border-dashed')
+    expect(root.className).toContain('data-[readonly]:bg-transparent')
+    expect(root.className).toContain(':not([data-readonly])]:hover:border-(--border-strong)')
+  })
+
+  it('keeps the read-only look apart from the editable and disabled looks', () => {
+    const readonly = render(InputText, { props: { readonly: true } }).container
+      .firstElementChild as HTMLElement
+    const disabled = render(InputText, { props: { disabled: true } }).container
+      .firstElementChild as HTMLElement
+
+    expect(readonly.hasAttribute('data-readonly')).toBe(true)
+    expect(readonly.hasAttribute('data-disabled')).toBe(false)
+    expect(disabled.hasAttribute('data-readonly')).toBe(false)
+    expect(readonly.className).not.toContain('data-[readonly]:bg-(--bg-disabled)')
+  })
+
+  it('omits data-readonly on an editable field', () => {
+    const { container } = render(InputText)
+    expect((container.firstElementChild as HTMLElement).hasAttribute('data-readonly')).toBe(false)
+  })
+})

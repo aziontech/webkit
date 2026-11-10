@@ -97,6 +97,7 @@
   <span
     :data-size="size"
     :data-disabled="disabled || null"
+    :data-readonly="readonly || null"
     :data-invalid="invalid || null"
     :data-required="required || null"
     :data-has-icon-left="hasIconLeft || null"
@@ -107,7 +108,7 @@
       'rounded-(--shape-elements)',
       'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
+      '[&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong)',
       // The ring offset must match the surface BEHIND the field: a host that puts the
       // field on something other than the canvas retunes it by redeclaring the input
       // ring-offset custom property on any ancestor — custom properties inherit, so one
@@ -116,6 +117,7 @@
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-(--danger-border)',
       'data-[required]:border-(--warning-border)',
+      'data-[readonly]:bg-transparent data-[readonly]:border-dashed data-[readonly]:cursor-default',
       'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"

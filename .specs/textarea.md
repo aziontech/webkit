@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 626f2f6487602359a433351e7f221cf119c3305354c27c19332068f49e42adea
+checksum: fb0769adb28c2f01a7ab3511ddda75dcc76338195be06489c6918550b6b62d18
 created: 2026-06-23
 last_updated: 2026-07-03
 ---
@@ -40,37 +40,48 @@ Collects multi-line free-form text from the user. Sibling of `input-text` in the
 
 ```vue
 <script setup>
-import Textarea from '@aziontech/webkit/textarea'
-import { ref } from 'vue'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { ref } from 'vue'
 
-const value = ref('')
+  const value = ref('')
 </script>
 
 <template>
-  <Textarea v-model="value" placeholder="Write your message" />
+  <Textarea
+    v-model="value"
+    placeholder="Write your message"
+  />
 
   <!-- Lock the field height, or allow horizontal/both-axes drag -->
-  <Textarea v-model="value" placeholder="Fixed size" resizable="none" />
-  <Textarea v-model="value" placeholder="Any direction" resizable="both" />
+  <Textarea
+    v-model="value"
+    placeholder="Fixed size"
+    resizable="none"
+  />
+  <Textarea
+    v-model="value"
+    placeholder="Any direction"
+    resizable="both"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | false | Bound value (v-model). |
-| `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field as read-only; keeps focus styling, blocks edits. |
-| `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
-| `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
-| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
+| Prop          | Type                                             | Default      | Required | JSDoc                                                                                                                                                  |
+| ------------- | ------------------------------------------------ | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `modelValue`  | `string`                                         | `''`         | false    | Bound value (v-model).                                                                                                                                 |
+| `placeholder` | `string`                                         | `''`         | false    | Placeholder shown when the field is empty.                                                                                                             |
+| `disabled`    | `boolean`                                        | `false`      | false    | Disables interaction and applies disabled tokens.                                                                                                      |
+| `readonly`    | `boolean`                                        | `false`      | false    | Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable. |
+| `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone.                                            |
+| `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                  |
+| `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior.                                        |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes           |
+| ------------------- | -------- | --------------- |
 | `update:modelValue` | `string` | v-model update. |
 
 ## Slots
@@ -89,35 +100,35 @@ _No slots._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                          | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| -------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
 | state change (border/background) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-body-xs` |
-| surface | `var(--bg-surface)` |
-| surface (hover, empty) | `var(--bg-surface-raised)` |
-| surface (disabled) | `var(--bg-disabled)` |
-| text | `var(--text-default)` |
-| text (placeholder) | `var(--text-muted)` |
-| text (disabled) | `var(--text-disabled)` |
-| border | `var(--border-default)` |
-| border (hover) | `var(--border-strong)` |
-| border (focus) | `var(--ring-color)` |
-| border (required) | `var(--warning-border)` |
-| border (invalid) | `var(--danger-border)` |
-| border width | `var(--border-width-default)` |
-| spacing (padding) | `var(--spacing-sm)` |
-| shape | `var(--shape-elements)` |
+| Region                 | Token (DESIGN.md)             |
+| ---------------------- | ----------------------------- |
+| typography             | `.text-body-xs`               |
+| surface                | `var(--bg-surface)`           |
+| surface (hover, empty) | `var(--bg-surface-raised)`    |
+| surface (disabled)     | `var(--bg-disabled)`          |
+| text                   | `var(--text-default)`         |
+| text (placeholder)     | `var(--text-muted)`           |
+| text (disabled)        | `var(--text-disabled)`        |
+| border                 | `var(--border-default)`       |
+| border (hover)         | `var(--border-strong)`        |
+| border (focus)         | `var(--ring-color)`           |
+| border (required)      | `var(--warning-border)`       |
+| border (invalid)       | `var(--danger-border)`        |
+| border width           | `var(--border-width-default)` |
+| spacing (padding)      | `var(--spacing-sm)`           |
+| shape                  | `var(--shape-elements)`       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

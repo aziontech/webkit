@@ -63,13 +63,21 @@ const meta = {
       control: 'text',
       description:
         'Native `autocomplete` token, applied on the `<input>` (e.g. `username` on a sign-in e-mail, `email` on a sign-up or newsletter e-mail). Omitted when unset.',
-      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'undefined' } }
+      table: {
+        category: 'props',
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' }
+      }
     },
     spellcheck: {
       control: 'boolean',
       description:
         'Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset, so the browser keeps its default.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'undefined' } }
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'undefined' }
+      }
     },
     helperText: {
       control: 'text',
@@ -398,6 +406,55 @@ export const Login = {
           'The e-mail field of a sign-in form. `type="email"`, `autocomplete="username"` and `spellcheck="false"` land on the `<input>`, so the browser and password managers recognise the login field.'
       },
       source: { code: toSfc([VUE_IMPORT, IMPORT, '', "const email = ref('')"], LOGIN_MARKUP) }
+    }
+  }
+}
+
+const READ_ONLY_MARKUP = `<div class="flex w-[360px] flex-col gap-(--spacing-lg)">
+  <FieldText
+    v-model="accountName"
+    label="Account name"
+    helper-text="What this account is called across the console."
+  />
+  <FieldText
+    v-model="clientId"
+    label="Client ID"
+    readonly
+    :spellcheck="false"
+    helper-text="Can't be changed. Quote it when opening a support ticket."
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldText>} */
+export const ReadOnly = {
+  render: () => ({
+    components: { FieldText },
+    setup() {
+      const accountName = ref('Acme')
+      const clientId = ref('9757a')
+      return { accountName, clientId }
+    },
+    template: READ_ONLY_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A value the user can read and copy but never change (an ID, a generated key) is `readonly`: transparent, dashed border, no hover — next to an editable field it never looks editable. Use `disabled` only for a control that is temporarily unavailable.'
+      },
+      source: {
+        code: toSfc(
+          [
+            VUE_IMPORT,
+            IMPORT,
+            '',
+            "const accountName = ref('Acme')",
+            "const clientId = ref('9757a')"
+          ],
+          READ_ONLY_MARKUP
+        )
+      }
     }
   }
 }

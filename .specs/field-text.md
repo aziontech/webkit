@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: 642def455fefbbeccdcf301219aa844a89c44eb6192c38bea5740832bb503665
+checksum: 07db9f67bfd1bbd98a3e3d6fe6a14ee9c89180b76744713e756195cee32c5f83
 created: 2026-06-15
 last_updated: 2026-11-09
 ---
@@ -79,7 +79,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 | `helperText`   | `string`                         | `''`        | false    | Auxiliary text rendered inside `HelperText`. When empty, the helper row is omitted — including while `disabled`: the field never substitutes copy of its own, so a field disabled for the length of a request grows no line (and no lock glyph) in the one moment it has nothing to say. |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size forwarded to the `InputText`. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                                         |
 | `disabled`     | `boolean`                        | `false`     | false    | Disables the input and switches the helper to `kind="disabled"` (lock icon).                                                                                                                                                                                                             |
-| `readonly`     | `boolean`                        | `false`     | false    | Marks the input read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                                                       |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the input read-only: value visible, focusable and copyable, not editable. The input renders transparent with a dashed border so it never looks editable. Use it for values the system owns (IDs, generated keys).                                                                  |
 | `required`     | `boolean`                        | `false`     | false    | Adds the `Required` tag to the `Label` and sets native `required` + `aria-required` on the input.                                                                                                                                                                                        |
 | `invalid`      | `boolean`                        | `false`     | false    | Switches the helper to `kind="invalid"` and applies invalid border/ring tokens on the input.                                                                                                                                                                                             |
 | `inputId`      | `string`                         | `''`        | false    | id for the native input; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`.                                                                                                                                   |
@@ -100,7 +100,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 ## States
 
-- Visual states: `default`, `required`, `invalid`, `disabled`
+- Visual states: `default`, `required`, `invalid`, `disabled`, `readonly` (from `InputText`: transparent fill, dashed border, no hover)
 - `data-required` mirrors the `required` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-disabled` mirrors the `disabled` prop

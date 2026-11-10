@@ -8843,7 +8843,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the field read-only; value is visible but not editable. Native pass-through."
+          "doc": "Marks the field read-only: value is visible, focusable and copyable but not editable. Renders transparent with a dashed border and no hover (`data-readonly`), distinct from both the editable and the disabled field."
         },
         {
           "name": "required",
@@ -9454,7 +9454,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the input read-only; value is visible but not editable. Native pass-through."
+          "doc": "Marks the input read-only: value visible, focusable and copyable, not editable. The input renders transparent with a dashed border so it never looks editable. Use it for values the system owns (IDs, generated keys)."
         },
         {
           "name": "required",
@@ -11728,7 +11728,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Marks the field as read-only; keeps focus styling, blocks edits."
+          "doc": "Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable."
         },
         {
           "name": "invalid",

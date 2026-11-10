@@ -125,6 +125,14 @@ describe('Textarea', () => {
   })
 
   describe('readonly', () => {
+    it('carries the dashed, transparent read-only look and no hover border', () => {
+      const { getByTestId } = render(Textarea, { props: { readonly: true } })
+      const el = getByTestId('input-textarea')
+      expect(el.className).toContain('data-[readonly]:border-dashed')
+      expect(el.className).toContain('data-[readonly]:bg-transparent')
+      expect(el.className).toContain(':not([data-readonly])]:hover:border-(--border-strong)')
+    })
+
     it('sets data-readonly + native readonly on the textarea', () => {
       const { getByTestId } = render(Textarea, { props: { readonly: true } })
 

@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldText from './field-text.vue'
 
-const { Default, Sizes, Invalid, Disabled, Icons, Login } = composeStories(stories)
+const { Default, Sizes, Invalid, Disabled, Icons, Login, ReadOnly } = composeStories(stories)
 
 describe('FieldText', () => {
   it('renders the root with the default data-testid and stacks its parts', () => {
@@ -274,5 +274,17 @@ describe('FieldText — native input attributes', () => {
 
     expect(input.getAttribute('type')).toBe('email')
     expect(input.getAttribute('autocomplete')).toBe('username')
+  })
+})
+
+describe('FieldText — read-only', () => {
+  it('renders the ReadOnly story with one editable and one read-only field that look different', () => {
+    const { getAllByTestId } = render(ReadOnly)
+    const inputs = getAllByTestId('input-field-text__input') as HTMLInputElement[]
+    expect(inputs.map((i) => i.readOnly)).toEqual([false, true])
+    const [editable, locked] = inputs.map((i) => i.parentElement as HTMLElement)
+    expect(locked.hasAttribute('data-readonly')).toBe(true)
+    expect(editable.hasAttribute('data-readonly')).toBe(false)
+    expect(locked.className).toContain('data-[readonly]:border-dashed')
   })
 })

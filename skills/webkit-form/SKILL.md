@@ -926,6 +926,31 @@ Rules:
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
 
+## Read-only vs disabled — a value the user cannot change
+
+A value the user can see but must never edit — a client ID, an account ID, a generated key, a
+creation date, an e-mail that only support can change — is **read-only**, not disabled:
+
+```vue
+<FieldText
+  v-model="clientId"
+  label="Client ID"
+  readonly
+  :spellcheck="false"
+  helper-text="Can't be changed. Quote it when opening a support ticket."
+/>
+```
+
+- `readonly` keeps the value in `var(--text-default)`, focusable and copyable, and the field renders
+  **transparent with a dashed border and no hover**, so it never looks editable next to the fields
+  that are. `FieldText`, `InputText` and `Textarea` share that look.
+- Say **why** in the helper text (who owns the value, and how to change it if that is possible).
+- **`disabled` is something else:** a control that is temporarily unavailable (a submit lock, a
+  dependency not met). It greys the value out and drops it from the tab order. Never use it for a
+  value that is permanently fixed.
+- Never fake read-only with a plain `<input>` or text styled to look like a field, and never leave a
+  fixed value in an editable field "because the save ignores it".
+
 ## Disabled state — the disabled helper is optional context, not submit feedback
 
 A `HelperText` with `kind="disabled"` (it prepends a lock glyph, muted text) is an **optional** element
@@ -1038,6 +1063,8 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
       e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
       error; submit is never pre-disabled.
+- [ ] A value the user cannot change is `readonly` (dashed, transparent, with a helper saying why), never
+      `disabled` and never an editable field the save ignores.
 - [ ] Leaving the page with unsaved edits asks first (or the edits survive the navigation).
 - [ ] `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
       (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per `/webkit-ui-states`

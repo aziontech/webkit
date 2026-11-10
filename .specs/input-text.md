@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 4c0d0ba96a717eab3a35f2f3a0032b21986a5bffda8aa9fe33c1ad6b8486d4d4
+checksum: 4645f654c79788abb6085ae7f290d39ac51b558352b0f04d69e0913349ddb306
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
@@ -42,10 +42,10 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 ```vue
 <script setup>
-import InputText from '@aziontech/webkit/input-text'
-import { ref } from 'vue'
+  import InputText from '@aziontech/webkit/input-text'
+  import { ref } from 'vue'
 
-const domain = ref('')
+  const domain = ref('')
 </script>
 
 <template>
@@ -74,7 +74,7 @@ const domain = ref('')
 | `spellcheck`   | `boolean \| undefined`           | `undefined` | false    | Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck="false"` on every field. |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px.                                                                                                                                    |
 | `disabled`     | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                                                                                                       |
-| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; value is visible but not editable. Native pass-through.                                                                                                                                                                      |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only: value is visible, focusable and copyable but not editable. Renders transparent with a dashed border and no hover (`data-readonly`), distinct from both the editable and the disabled field.                                  |
 | `required`     | `boolean`                        | `false`     | false    | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                                                                        |
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                                                                       |
 
@@ -93,7 +93,8 @@ const domain = ref('')
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`
+- Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
+- `data-readonly` mirrors the `readonly` prop: a read-only field drops its fill (`bg-transparent`), draws a dashed border and gets no hover border, so it never looks editable. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable.
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
