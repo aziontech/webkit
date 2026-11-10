@@ -22,3 +22,5 @@ export interface ItemContainerContext {
 
 export const ItemContainerInjectionKey: InjectionKey<ItemContainerContext> =
   Symbol('ItemContainerContext')
+
+export const ItemListMemberInjectionKey: InjectionKey<boolean> = Symbol('ItemListMember')

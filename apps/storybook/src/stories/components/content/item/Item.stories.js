@@ -623,7 +623,7 @@ const AS_CHILD_LIST_ROW = `      <Item as-child>
             <Item.Title>Basic Item</Item.Title>
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
-          <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
+          <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
         </a>
       </Item>`
 
@@ -654,7 +654,7 @@ export const WithListAsChild = {
                   <ItemTitle>Basic Item</ItemTitle>
                   <ItemDescription>A simple item with title and description.</ItemDescription>
                 </ItemContent>
-                <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
+                <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
               </a>
             </Item>
           </ItemList>
@@ -683,7 +683,7 @@ const inlineRow = (icon, title, description) => `  <Item kind="inline" size="sma
       <Item.Title>${title}</Item.Title>
       <Item.Description>${description}</Item.Description>
     </Item.Content>
-    <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
+    <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
   </Item>`
 
 const INLINE_MARKUP = `<Item.Group>
@@ -710,7 +710,7 @@ export const Inline = {
               <ItemTitle>Customize Domain</ItemTitle>
               <ItemDescription>Link custom domains and subdomains to Azion.</ItemDescription>
             </ItemContent>
-            <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
+            <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
           </Item>
           <Item kind="inline" size="small" v-bind="args">
             <ItemMedia kind="icon">
@@ -720,7 +720,7 @@ export const Inline = {
               <ItemTitle>Point Traffic</ItemTitle>
               <ItemDescription>Redirect domain traffic to Azion.</ItemDescription>
             </ItemContent>
-            <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
+            <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
           </Item>
           <Item kind="inline" size="small" v-bind="args">
             <ItemMedia kind="icon">
@@ -730,7 +730,7 @@ export const Inline = {
               <ItemTitle>View Analytics</ItemTitle>
               <ItemDescription>Monitor performance, availability, and security.</ItemDescription>
             </ItemContent>
-            <i class="pi pi-arrow-right text-(--text-muted)" aria-hidden="true" />
+            <i class="pi pi-chevron-right text-(--text-muted)" aria-hidden="true" />
           </Item>
         </ItemGroup>
       </div>
