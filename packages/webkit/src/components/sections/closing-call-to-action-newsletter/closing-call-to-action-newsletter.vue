@@ -2,12 +2,12 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Overline from '../../content/overline/overline.vue'
   import Alert from '../../feedback/alert/alert.vue'
   import FieldText from '../../inputs/field-text/field-text.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
-  import Overline from '../../overline/overline.vue'
 
   defineOptions({
     name: 'ClosingCallToActionNewsletter',

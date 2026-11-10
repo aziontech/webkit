@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Avatar from '../../avatar/avatar.vue'
+  import Avatar from '../../content/avatar/avatar.vue'
 
   defineOptions({
     name: 'Quote',

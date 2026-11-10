@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 699a6bc4eba490cdd7d0b4abf50018f66f09b17cdb285735b36ba7a49aab4759
+checksum: ce6f4c57799f1f986dba631cd2b56304e1bf8173357997c90422a7b289fe45c6
 created: 2026-11-10
 last_updated: 2026-11-10
 ---
@@ -43,7 +43,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 - Keep the label to one or two words: it is set uppercase and, with the default `single-line`, never wraps.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
-- Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is real text and is read out by screen readers.
+- Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
 - Use `show-cursor` for one eyebrow per view at most; the blink stops under reduced motion.
 - Keep the semantic heading in the element after the Overline; the Overline itself carries no heading role.
 
@@ -84,8 +84,8 @@ Overline is the short uppercase label set above a headline to name the section, 
 ## States
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
-- Prefix: a `span` before the label is rendered only when `prefix` is not empty.
-- Cursor: a `span` after the label is rendered only when `showCursor` is set; the root drops its end padding (`pr-0`) while the cursor is shown and keeps `pr-1` otherwise.
+- Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
+- Cursor: a `span` after the label is rendered only when `showCursor` is set; the root drops its end padding (`pr-0`) while the cursor is shown and keeps `pr-(--spacing-xxs)` otherwise.
 - Wrapping: with `singleLine` (default) the prefix and the label carry `whitespace-nowrap`; with it off the label wraps with `text-pretty`.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `content-overline` (consumer `data-testid` wins).
@@ -98,27 +98,27 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)                        |
-| --------------------------- | ---------------------------------------- |
-| typography (prefix, label)  | `.text-overline-md` with `font-medium`   |
-| text (prefix)               | `var(--text-default)` (`text-default`)   |
-| text (label)                | `var(--primary)` (`text-primary`)        |
-| cursor surface              | `var(--accent)`                          |
-| cursor size                 | `w-1` · `h-5`                            |
-| gap (prefix, label, cursor) | `gap-1`                                  |
-| padding.x                   | `pl-1` · `pr-1` (`pr-0` with the cursor) |
+| Region                      | Token (DESIGN.md)                                           |
+| --------------------------- | ----------------------------------------------------------- |
+| typography (prefix, label)  | `.text-overline-md` with `font-medium`                      |
+| text (prefix)               | `var(--text-default)` (`text-default`)                      |
+| text (label)                | `var(--primary)` (`text-primary`)                           |
+| cursor surface              | `var(--accent)`                                             |
+| cursor size                 | `w-1` · `h-5`                                               |
+| gap (prefix, label, cursor) | `var(--spacing-xxs)`                                        |
+| padding.x                   | `var(--spacing-xxs)` start and end (`pr-0` with the cursor) |
 
 ## Theme gaps
 
-| Figma variable                 | Temporary primitive                                                  | Follow-up         |
-| ------------------------------ | -------------------------------------------------------------------- | ----------------- |
-| spacing (gap / inline padding) | `gap-1` / `pl-1` / `pr-1` (4px core spacing, no `--spacing-*` token) | `TODO: tokenizar` |
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
-- ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is real text and is announced; the cursor `span` is empty and contributes no text.
+- ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
 - Contrast ≥4.5:1 (text): the label uses `var(--primary)` and the prefix `var(--text-default)` on the surface the consumer places it on.
 - `motion-reduce:animate-none` on the cursor's `animate-blink`.
 - Touch target: not applicable (non-interactive).

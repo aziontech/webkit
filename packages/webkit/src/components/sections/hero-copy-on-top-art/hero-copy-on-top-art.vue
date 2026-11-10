@@ -2,13 +2,13 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Flow from '../../data/flow/flow.vue'
   import FlowAnchor from '../../data/flow/flow-anchor/flow-anchor.vue'
   import FlowNode from '../../data/flow/flow-node/flow-node.vue'
   import FlowParallel from '../../data/flow/flow-parallel/flow-parallel.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
-  import Tag, { type TagSeverity } from '../../tag/tag.vue'
 
   defineOptions({
     name: 'HeroCopyOnTopArt',

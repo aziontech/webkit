@@ -4,15 +4,15 @@
   import Button from '../../../actions/button/button.vue'
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Avatar from '../../../avatar/avatar.vue'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
   import Tabs from '../../../navigation/tabs/index.js'
-  import Tag, { type TagSeverity } from '../../../tag/tag.vue'
+  import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag, { type TagSeverity } from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadOverviewWidget' })
 

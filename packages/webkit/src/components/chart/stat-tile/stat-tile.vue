@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Separator from '../../layout/separator/separator.vue'
-  import Tag, { type TagSeverity } from '../../tag/tag.vue'
   import { formatCompact, formatSignedPercent, isFiniteNumber } from '../_lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
   import { useCountUp } from './composables/use-count-up'

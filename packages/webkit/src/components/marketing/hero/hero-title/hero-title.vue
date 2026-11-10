@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Overline from '../../../overline/overline.vue'
+  import Overline from '../../../content/overline/overline.vue'
 
   defineOptions({
     name: 'HeroTitle',

@@ -5,13 +5,13 @@
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import Separator from '../../../layout/separator/separator.vue'
-  import Tag from '../../../tag/tag.vue'
   import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { DEFAULT_DEPLOYMENT_STEPS } from '../data/deployment-steps'
   import DeploymentLogs from '../parts/deployment-logs.vue'
 

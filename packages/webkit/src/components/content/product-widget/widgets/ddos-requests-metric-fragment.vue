@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
-  import Tag from '../../../tag/tag.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
 

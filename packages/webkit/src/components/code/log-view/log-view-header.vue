@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Tag from '../../content/tag/tag.vue'
   import Input from '../../inputs/input/input.vue'
-  import Tag from '../../tag/tag.vue'
   import { useLogViewContext } from './composables/use-log-view-context'
 
   defineOptions({

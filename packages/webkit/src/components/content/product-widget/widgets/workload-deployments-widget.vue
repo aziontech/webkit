@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
-  import Tag, { type TagSeverity } from '../../../tag/tag.vue'
   import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag, { type TagSeverity } from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadDeploymentsWidget' })
 

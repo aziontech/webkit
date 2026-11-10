@@ -414,6 +414,7 @@
                                       v-model="form.postalCode"
                                       size="large"
                                       class="w-full"
+                                      autocomplete="postal-code"
                                       aria-label="Postal Code"
                                       :disabled="saving"
                                     />
@@ -470,6 +471,7 @@
                                       v-model="form.address"
                                       size="large"
                                       class="w-full"
+                                      autocomplete="address-line1"
                                       aria-label="Address"
                                       :disabled="saving"
                                     />
@@ -488,6 +490,7 @@
                                       v-model="form.apartment"
                                       size="large"
                                       class="w-full"
+                                      autocomplete="address-line2"
                                       aria-label="Apartment, floor, etc."
                                       placeholder="1st floor"
                                       :disabled="saving"

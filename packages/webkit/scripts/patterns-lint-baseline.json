@@ -1,11 +1,1 @@
-{
-  "platform/account/change-plan-drawer": {
-    "webkit/no-hardcoded-color": 1
-  },
-  "platform/account/onboarding-form": {
-    "webkit/no-hardcoded-color": 1
-  },
-  "platform/account/payment-method-card": {
-    "webkit/no-hardcoded-color": 3
-  }
-}
+{}

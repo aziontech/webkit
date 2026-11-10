@@ -1,10 +1,10 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import Cursor from '../../../examples/overline/cursor.vue'
-import Default from '../../../examples/overline/default.vue'
-import Prefixes from '../../../examples/overline/prefixes.vue'
-import { expectNoA11yViolations } from '../../test/axe'
+import Cursor from '../../../../examples/overline/cursor.vue'
+import Default from '../../../../examples/overline/default.vue'
+import Prefixes from '../../../../examples/overline/prefixes.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Overline from './overline.vue'
 
 describe('Overline', () => {
@@ -29,6 +29,23 @@ describe('Overline', () => {
     })
     expect(getByText('//')).toBeInTheDocument()
     expect(getByText('COMMENT STYLE')).toBeInTheDocument()
+  })
+
+  it('hides the decorative prefix from assistive tech and keeps the label exposed', () => {
+    const { getByText } = render(Overline, {
+      props: { prefix: '//' },
+      slots: { default: 'COMMENT STYLE' }
+    })
+    expect(getByText('//').getAttribute('aria-hidden')).toBe('true')
+    expect(getByText('COMMENT STYLE').closest('[aria-hidden]')).toBeNull()
+  })
+
+  it('spaces the prefix, label and cursor with the --spacing-xxs token', () => {
+    const { getByTestId } = render(Overline, { slots: { default: 'TOKENS' } })
+    const root = getByTestId('content-overline')
+    expect(root.className).toContain('gap-(--spacing-xxs)')
+    expect(root.className).toContain('pl-(--spacing-xxs)')
+    expect(root.className).toContain('pr-(--spacing-xxs)')
   })
 
   it('renders angle-bracket and closing-tag prefixes verbatim', () => {

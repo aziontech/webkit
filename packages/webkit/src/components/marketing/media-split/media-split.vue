@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import Overline from '../../content/overline/overline.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import Overline from '../../overline/overline.vue'
   import { BandStackInjectionKey } from '../band-stack/injection-key'
   import TextureMaterial, {
     type TextureMaterialFade,

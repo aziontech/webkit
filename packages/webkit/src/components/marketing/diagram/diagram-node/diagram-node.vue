@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import Tag from '../../../content/tag/tag.vue'
   import FrameBox from '../../../layout/frame-box/frame-box.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import Tag from '../../../tag/tag.vue'
   import type { DiagramNode } from '../types'
 
   defineOptions({ name: 'DiagramNode', inheritAttrs: false })

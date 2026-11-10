@@ -2,13 +2,13 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Overline from '../../content/overline/overline.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import Link from '../../navigation/link/link.vue'
-  import Overline from '../../overline/overline.vue'
 
   defineOptions({
     name: 'CompareSupportTiers',

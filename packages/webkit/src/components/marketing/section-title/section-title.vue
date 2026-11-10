@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Overline from '../../content/overline/overline.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import Overline from '../../overline/overline.vue'
 
   defineOptions({
     name: 'SectionTitle',

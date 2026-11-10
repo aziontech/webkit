@@ -3,7 +3,7 @@
 
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import Avatar from '../../avatar/avatar.vue'
+  import Avatar from '../../content/avatar/avatar.vue'
   import Input from '../../inputs/input/input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'

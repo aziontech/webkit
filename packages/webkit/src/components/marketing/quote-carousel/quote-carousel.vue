@@ -2,7 +2,7 @@
   import { type Component, computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
-  import Avatar from '../../avatar/avatar.vue'
+  import Avatar from '../../content/avatar/avatar.vue'
   import Carousel from '../carousel/carousel.vue'
   import CarouselItem from '../carousel/carousel-item/carousel-item.vue'
   import Quote from '../quote/quote.vue'
