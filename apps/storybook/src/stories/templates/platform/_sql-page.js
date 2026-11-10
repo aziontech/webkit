@@ -72,8 +72,8 @@ const SCHEMA_COLUMNS = [
 
 export const TABLES = [
   {
-    id: 'tbl-users',
-    name: 'users',
+    id: 'tbl-customers',
+    name: 'customers',
     columns: [
       { id: 'col-1', name: 'id', type: 'int8', primaryKey: true, notNull: true },
       { id: 'col-2', name: 'name', type: 'text', primaryKey: false, notNull: true },
@@ -105,21 +105,21 @@ export const TABLES = [
     ]
   },
   {
-    id: 'tbl-products',
-    name: 'products',
+    id: 'tbl-orders',
+    name: 'orders',
     columns: [
       { id: 'col-5', name: 'id', type: 'int8', primaryKey: true, notNull: true },
-      { id: 'col-6', name: 'name', type: 'text', primaryKey: false, notNull: true },
-      { id: 'col-7', name: 'description', type: 'text', primaryKey: false, notNull: false }
+      { id: 'col-6', name: 'customer_id', type: 'int8', primaryKey: false, notNull: true },
+      { id: 'col-7', name: 'total', type: 'numeric', primaryKey: false, notNull: true }
     ],
     rows: [
-      { __k: 'row-4', id: 1, name: 'Edge Cache', description: 'Low-latency caching' },
-      { __k: 'row-5', id: 2, name: 'Edge SQL', description: 'Distributed database' }
+      { __k: 'row-4', id: 1001, customer_id: 1, total: '42.50' },
+      { __k: 'row-5', id: 1002, customer_id: 3, total: '18.00' }
     ]
   },
   {
-    id: 'tbl-sessions',
-    name: 'sessions',
+    id: 'tbl-invoices',
+    name: 'invoices',
     columns: [
       { id: 'col-8', name: 'id', type: 'int8', primaryKey: true, notNull: true },
       { id: 'col-9', name: 'created_at', type: 'timestamptz', primaryKey: false, notNull: false }
@@ -128,30 +128,30 @@ export const TABLES = [
   }
 ]
 
-export const CREATE_USERS_SQL = `CREATE TABLE IF NOT EXISTS users (
+export const CREATE_CUSTOMERS_SQL = `CREATE TABLE IF NOT EXISTS customers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );`
 
-const CREATE_PRODUCTS_SQL = `CREATE TABLE IF NOT EXISTS products (
+const CREATE_ORDERS_SQL = `CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  embedding F32_BLOB(4)
+  customer_id INTEGER NOT NULL REFERENCES customers (id),
+  total NUMERIC NOT NULL
 );`
 
-export const SELECT_USERS_SQL = `SELECT id, name, email, created_at
-FROM users
+export const SELECT_CUSTOMERS_SQL = `SELECT id, name, email, created_at
+FROM customers
 ORDER BY created_at DESC
 LIMIT 100;`
 
 export const FIRST_HISTORY = [
-  { id: 'q-0', sql: CREATE_USERS_SQL },
-  { id: 'q-1', sql: CREATE_PRODUCTS_SQL }
+  { id: 'q-0', sql: CREATE_CUSTOMERS_SQL },
+  { id: 'q-1', sql: CREATE_ORDERS_SQL }
 ]
 
-export const RAN_HISTORY = [{ id: 'q-2', sql: SELECT_USERS_SQL }, ...FIRST_HISTORY]
+export const RAN_HISTORY = [{ id: 'q-2', sql: SELECT_CUSTOMERS_SQL }, ...FIRST_HISTORY]
 
 export const SELECT_RESULT = {
   type: 'rows',
@@ -185,16 +185,16 @@ const SQL_TEMPLATES = [
   {
     id: 'create-table',
     title: 'Create Table',
-    description: 'Create a basic users table with auto-increment ID and timestamp',
+    description: 'Create a basic customers table with auto-increment ID and timestamp',
     icon: 'pi pi-table',
-    sql: CREATE_USERS_SQL
+    sql: CREATE_CUSTOMERS_SQL
   },
   {
     id: 'insert-data',
     title: 'Insert Data',
-    description: 'Insert sample user records into the users table',
+    description: 'Insert sample customer records into the customers table',
     icon: 'pi pi-plus-circle',
-    sql: `INSERT INTO users (name, email) VALUES
+    sql: `INSERT INTO customers (name, email) VALUES
   ('Ada Lovelace', 'ada@example.com'),
   ('Alan Turing', 'alan@example.com'),
   ('Grace Hopper', 'grace@example.com');`
@@ -202,65 +202,61 @@ const SQL_TEMPLATES = [
   {
     id: 'select-all',
     title: 'Select All',
-    description: 'Retrieve all records from users table with limit',
+    description: 'Retrieve all records from customers table with limit',
     icon: 'pi pi-list',
-    sql: SELECT_USERS_SQL
+    sql: SELECT_CUSTOMERS_SQL
   },
   {
     id: 'count-records',
     title: 'Count Records',
-    description: 'Count total number of records in users table',
+    description: 'Count total number of records in customers table',
     icon: 'pi pi-hashtag',
-    sql: 'SELECT COUNT(*) AS total_users FROM users;'
+    sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
   },
   {
-    id: 'vector-table',
-    title: 'Vector Table',
-    description: 'Create a products table with vector embeddings for AI search',
+    id: 'related-table',
+    title: 'Related Table',
+    description: 'Create an orders table that references the customers table',
     icon: 'pi pi-box',
-    sql: `CREATE TABLE IF NOT EXISTS products (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  description TEXT,
-  embedding F32_BLOB(4)
-);`
+    sql: CREATE_ORDERS_SQL
   },
   {
-    id: 'insert-vectors',
-    title: 'Insert Vectors',
-    description: 'Insert sample products with vector embeddings',
+    id: 'insert-related',
+    title: 'Insert Related Rows',
+    description: 'Insert sample orders for existing customers',
     icon: 'pi pi-arrow-right-arrow-left',
-    sql: `INSERT INTO products (name, description, embedding) VALUES
-  ('Edge Cache', 'Low-latency caching', vector('[0.10, 0.20, 0.30, 0.40]')),
-  ('Edge SQL', 'Distributed database', vector('[0.15, 0.25, 0.35, 0.45]'));`
+    sql: `INSERT INTO orders (customer_id, total) VALUES
+  (1, 42.50),
+  (3, 18.00);`
   },
   {
-    id: 'vector-search',
-    title: 'Vector Search',
-    description: 'Search products using cosine similarity with vector embeddings',
+    id: 'join-tables',
+    title: 'Join Tables',
+    description: 'List every order with the name of the customer who placed it',
     icon: 'pi pi-search',
-    sql: `SELECT name, description,
-  vector_distance_cos(embedding, vector('[0.12, 0.22, 0.32, 0.42]')) AS distance
-FROM products
-ORDER BY distance ASC;`
+    sql: `SELECT orders.id, customers.name, orders.total
+FROM orders
+JOIN customers ON customers.id = orders.customer_id
+ORDER BY orders.id DESC;`
   },
   {
-    id: 'create-vector-index',
-    title: 'Create Vector Index',
-    description: 'Create an index to optimize vector search performance',
+    id: 'create-index',
+    title: 'Create Index',
+    description: 'Create an index to speed up lookups of orders by customer',
     icon: 'pi pi-sitemap',
-    sql: `CREATE INDEX IF NOT EXISTS products_embedding_idx
-ON products (libsql_vector_idx(embedding));`
+    sql: `CREATE INDEX IF NOT EXISTS orders_customer_id_idx
+ON orders (customer_id);`
   },
   {
-    id: 'vector-top-k',
-    title: 'Vector Top K Query',
-    description: 'Find top 3 most similar products using vector distance',
+    id: 'top-customers',
+    title: 'Top Customers',
+    description: 'Find the 3 customers with the highest order totals',
     icon: 'pi pi-sort-amount-down',
-    sql: `SELECT name,
-  vector_distance_cos(embedding, vector('[0.12, 0.22, 0.32, 0.42]')) AS distance
-FROM products
-ORDER BY distance ASC
+    sql: `SELECT customers.name, SUM(orders.total) AS total_spent
+FROM customers
+JOIN orders ON orders.customer_id = customers.id
+GROUP BY customers.id
+ORDER BY total_spent DESC
 LIMIT 3;`
   }
 ]
@@ -690,8 +686,8 @@ const SEARCH_ICON = `<template #iconLeft>
 
 const PAGE_TABS = `<div class="border-b border-(--border-default)">
   <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-    <div class="-ml-(--spacing-xs) min-w-0 flex-1">
-      <TabView v-model:value="activeTab">
+    <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
+      <TabView v-model:value="activeTab" class="w-full">
         <TabView.List>
           <TabView.Item v-for="tab in tabs" :key="tab.value" :value="tab.value" :label="tab.label" />
         </TabView.List>
@@ -700,7 +696,7 @@ const PAGE_TABS = `<div class="border-b border-(--border-default)">
   </div>
 </div>`
 
-const TABLES_SIDEBAR = `<Sidebar
+const TABLES_SIDEBAR = `<div class="contents [--sidebar-width:var(--container-2xs)]"><Sidebar
   v-model:width="leftWidth"
   v-model:collapsed="leftCollapsed"
   resizable
@@ -709,7 +705,6 @@ const TABLES_SIDEBAR = `<Sidebar
   collapse-aria-label="Hide the tables panel"
   expand-aria-label="Show the tables panel"
   resize-aria-label="Resize the tables panel"
-  class="[--sidebar-width:var(--container-2xs)]"
 >
   <template #header>
     <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
@@ -762,51 +757,57 @@ ${indent(SEARCH_ICON, 4)}
       </div>
     </div>
   </div>
-</Sidebar>`
+</Sidebar></div>`
 
 const NO_TABLES = `<div v-if="!selectedTable" class="flex flex-1 items-center justify-center p-(--spacing-md)">
   <CardBox class="w-full max-w-(--container-2xl)">
     <template #content>
-      <EmptyState
-        size="medium"
-        title="No tables yet"
-        description="Create your first table to store your data."
-        class="flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
-      >
-        <template #icon>
-          <span class="relative flex size-10 items-center justify-center">
-            <span
-              aria-hidden="true"
-              class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-            />
-            <span
-              aria-hidden="true"
-              class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-            />
-            <span class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)">
-              <i class="pi pi-table text-body-md leading-none text-(--text-default)" aria-hidden="true" />
+      <div class="flex flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)">
+        <EmptyState
+          size="medium"
+          title="No tables yet"
+          description="Create your first table to store your data."
+          class="w-full"
+        >
+          <template #icon>
+            <span class="relative flex size-10 items-center justify-center">
+              <span
+                aria-hidden="true"
+                class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
+              />
+              <span
+                aria-hidden="true"
+                class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
+              />
+              <span class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)">
+                <i class="pi pi-table text-body-md leading-none text-(--text-default)" aria-hidden="true" />
+              </span>
             </span>
-          </span>
-        </template>
-        <template #actions>
-          <Button label="Create Table" icon="pi pi-plus" kind="secondary" size="large" class="w-full md:w-auto" />
-        </template>
-      </EmptyState>
+          </template>
+          <template #actions>
+            <div class="w-full md:w-fit">
+              <Button label="Create Table" icon="pi pi-plus" kind="secondary" size="medium" class="w-full" />
+            </div>
+          </template>
+        </EmptyState>
+      </div>
     </template>
   </CardBox>
 </div>`
 
 const DATA_VIEW = `<div v-if="tableView === 'data'" class="flex min-h-0 flex-1 flex-col">
   <div class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)">
-    <InputText
-      v-model="rowFilter"
-      size="medium"
-      class="min-w-0 flex-1 md:max-w-(--container-lg)"
-      :placeholder="filterPlaceholder"
-      aria-label="Filter rows"
-    >
-${indent(SEARCH_ICON, 3)}
-    </InputText>
+    <div class="flex min-w-0 flex-1 md:max-w-(--container-lg)">
+      <InputText
+        v-model="rowFilter"
+        size="medium"
+        class="w-full"
+        :placeholder="filterPlaceholder"
+        aria-label="Filter rows"
+      >
+  ${indent(SEARCH_ICON, 3)}
+      </InputText>
+    </div>
     <div class="ml-auto flex items-center gap-(--spacing-xs)">
       <Button label="Sort" kind="outlined" size="medium" icon="pi pi-sort-alt" />
       <Tooltip text="Refresh">
@@ -855,14 +856,15 @@ ${indent(SEARCH_ICON, 3)}
       </div>
       <div class="flex shrink-0 items-center px-(--spacing-xs)">
         <Tooltip text="Delete row">
-          <IconButton
-            icon="pi pi-trash"
-            kind="transparent"
-            size="small"
-            aria-label="Delete row"
-            class="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 motion-reduce:transition-none"
-            @click="deleteRow(row)"
-          />
+          <div class="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 motion-reduce:transition-none">
+            <IconButton
+              icon="pi pi-trash"
+              kind="transparent"
+              size="small"
+              aria-label="Delete row"
+              @click="deleteRow(row)"
+            />
+          </div>
         </Tooltip>
       </div>
     </div>
@@ -942,7 +944,7 @@ ${indent(TABLE_DETAIL, 2)}
   </div>
 </section>`
 
-const HISTORY_SIDEBAR = `<Sidebar
+const HISTORY_SIDEBAR = `<div class="contents [--sidebar-width:var(--container-2xs)]"><Sidebar
   v-model:width="leftWidth"
   v-model:collapsed="leftCollapsed"
   resizable
@@ -951,7 +953,6 @@ const HISTORY_SIDEBAR = `<Sidebar
   collapse-aria-label="Hide the query history"
   expand-aria-label="Show the query history"
   resize-aria-label="Resize the query history panel"
-  class="[--sidebar-width:var(--container-2xs)]"
 >
   <template #header>
     <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
@@ -996,7 +997,7 @@ ${indent(SEARCH_ICON, 4)}
       </div>
     </div>
   </div>
-</Sidebar>`
+</Sidebar></div>`
 
 const EDITOR_PANE = `<div class="flex min-w-0 flex-1 flex-col overflow-auto">
   <div class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)">
@@ -1014,28 +1015,32 @@ const EDITOR_PANE = `<div class="flex min-w-0 flex-1 flex-col overflow-auto">
     </div>
   </div>
 
-  <Textarea
-    v-model="editorSql"
-    :disabled="running"
-    resizable="vertical"
-    class="min-h-(--container-3xs) w-full rounded-none! border-0! font-code"
-    aria-label="SQL editor"
-    placeholder="Write your SQL query here"
-  />
+  <div class="flex w-full min-h-(--container-3xs) font-code">
+    <Textarea
+      v-model="editorSql"
+      :disabled="running"
+      resizable="vertical"
+      class="w-full"
+      aria-label="SQL editor"
+      placeholder="Write your SQL query here"
+    />
+  </div>
 
   <div class="flex flex-col border-t-(length:--border-width-default) border-(--border-default)">
     <div class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)">
       <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
-      <InputText
-        v-model="resultSearch"
-        size="medium"
-        class="ml-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)"
-        placeholder="Search"
-        aria-label="Search results"
-        :disabled="!resultRows.length"
-      >
-${indent(SEARCH_ICON, 4)}
-      </InputText>
+      <div class="flex ml-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
+        <InputText
+          v-model="resultSearch"
+          size="medium"
+          class="w-full"
+          placeholder="Search"
+          aria-label="Search results"
+          :disabled="!resultRows.length"
+        >
+  ${indent(SEARCH_ICON, 4)}
+        </InputText>
+      </div>
       <div class="ml-auto flex items-center gap-(--spacing-xs)">
         <SegmentedButton v-model="resultView" :options="resultViewOptions" aria-label="Result view" />
         <Tooltip text="Refresh">
@@ -1100,36 +1105,38 @@ const TEMPLATES_DRAWER = `<Drawer v-model:open="templatesOpen" size="large" side
         <DrawerClose />
       </PanelHeader>
 
-      <PanelContent class="flex flex-col gap-(--spacing-md)">
-        <InputText v-model="templateQuery" size="large" class="w-full" placeholder="Search templates" aria-label="Search templates">
-${indent(SEARCH_ICON, 5)}
-        </InputText>
+      <PanelContent>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <InputText v-model="templateQuery" size="large" class="w-full" placeholder="Search templates" aria-label="Search templates">
+  ${indent(SEARCH_ICON, 5)}
+          </InputText>
 
-        <div v-if="filteredTemplates.length" class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2">
-          <button
-            v-for="template in filteredTemplates"
-            :key="template.id"
-            type="button"
-            class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-left transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-            @click="chooseTemplate(template)"
-          >
-            <span class="flex items-center gap-(--spacing-xs)">
-              <i :class="template.icon" class="text-(--text-muted)" aria-hidden="true" />
-              <span class="text-label-md text-(--text-default)">{{ template.title }}</span>
-            </span>
-            <span class="text-body-xs text-(--text-muted)">{{ template.description }}</span>
-          </button>
+          <div v-if="filteredTemplates.length" class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2">
+            <button
+              v-for="template in filteredTemplates"
+              :key="template.id"
+              type="button"
+              class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-left transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+              @click="chooseTemplate(template)"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i :class="template.icon" class="text-(--text-muted)" aria-hidden="true" />
+                <span class="text-label-md text-(--text-default)">{{ template.title }}</span>
+              </span>
+              <span class="text-body-xs text-(--text-muted)">{{ template.description }}</span>
+            </button>
+          </div>
+
+          <p v-else class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)">
+            No templates match "{{ templateQuery }}".
+          </p>
         </div>
-
-        <p v-else class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)">
-          No templates match "{{ templateQuery }}".
-        </p>
       </PanelContent>
     </DrawerContent>
   </DrawerPortal>
 </Drawer>`
 
-export const PAGE_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
+const PAGE_TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
   <main class="flex h-full min-h-0 flex-col">
 ${indent(PAGE_TABS, 2)}
 
@@ -1145,7 +1152,7 @@ export const TABLES_STATE = {
   tab: 'tables',
   view: 'data',
   tables: TABLES,
-  sql: CREATE_USERS_SQL,
+  sql: CREATE_CUSTOMERS_SQL,
   history: FIRST_HISTORY,
   results: null
 }

@@ -1,0 +1,149 @@
+import Button from '@aziontech/webkit/button'
+import CopyButton from '@aziontech/webkit/copy-button'
+
+import { toSfc } from '../../_shared/story-source'
+
+const COPY_BUTTON_IMPORT = "import CopyButton from '@aziontech/webkit/copy-button'"
+
+const anchorUrlFor = (id) => `${globalThis.location.href.split('#')[0]}#${id}`
+
+const anchorLine = (id) => `const anchorUrl = globalThis.location.href.split('#')[0] + '#${id}'`
+
+const components = { Button, CopyButton }
+
+const heading = ({
+  id,
+  title,
+  description,
+  actions
+}) => `<header class="group/heading flex flex-col">
+  <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
+    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
+      <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
+        <h2
+          id="${id}"
+          data-size="medium"
+          class="scroll-mt-(--spacing-xl) text-balance data-[size=medium]:text-heading-xs data-[size=medium]:text-(--text-default) data-[size=small]:text-label-md data-[size=small]:text-(--text-muted)"
+        >
+          ${title}
+        </h2>
+        <span class="shrink-0 opacity-0 transition-opacity duration-150 ease-out group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none">
+          <CopyButton
+            :value="anchorUrl"
+            kind="transparent"
+            size="small"
+            aria-label="Copy link to the ${title} section"
+            copied-label="Link copied"
+          />
+        </span>
+      </div>
+      <p class="text-pretty text-body-sm text-(--text-muted)">${description}</p>
+    </div>
+    <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full">
+      ${actions}
+    </div>
+  </div>
+</header>`
+
+const DEFAULT_ID = 'payment-information'
+const DEFAULT_TEMPLATE = heading({
+  id: DEFAULT_ID,
+  title: 'Payment information',
+  description: 'Where invoices are sent, and whether the plan renews on its own.',
+  actions: '<Button label="Update" kind="outlined" size="medium" />'
+})
+
+const WITH_ACTIONS_ID = 'payment-methods'
+const WITH_ACTIONS_TEMPLATE = heading({
+  id: WITH_ACTIONS_ID,
+  title: 'Payment methods',
+  description: 'Every card on the account. Invoices are charged to the default one.',
+  actions: '<Button label="Add payment method" kind="outlined" size="medium" icon="pi pi-plus" />'
+})
+
+const meta = {
+  title: 'Templates/Platform/Page/SectionHeader',
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'padded',
+    backgrounds: { default: 'dark' },
+    controls: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The heading of one band inside a page: an h2 at the medium size with a one-line description, a copy-link affordance that appears when the heading is hovered or focused, and the band’s own actions on the right. A billing page renders one above each of its cards and tables, and a resource’s Get started block opens with one (that one is its own GetStarted template). Built from `CopyButton` and `Button`; below `md` the actions drop under the copy and the row wraps.'
+      },
+      canvas: { sourceState: 'shown' }
+    },
+    webkit: {
+      intents: [
+        'section heading',
+        'section title',
+        'h2 with copy link',
+        'anchor heading',
+        'subheading with actions',
+        'título da seção',
+        'cabeçalho de seção',
+        'section header',
+        'band heading'
+      ],
+      skills: ['webkit-layout']
+    }
+  }
+}
+
+export default meta
+
+export const Default = {
+  render: () => ({
+    components,
+    setup: () => ({ anchorUrl: anchorUrlFor(DEFAULT_ID) }),
+    template: DEFAULT_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The Billing payment-information heading: title, description, the hover-revealed copy-link button and the outlined Update action on the right.'
+      },
+      source: {
+        code: toSfc(
+          [
+            "import Button from '@aziontech/webkit/button'",
+            COPY_BUTTON_IMPORT,
+            '',
+            anchorLine(DEFAULT_ID)
+          ],
+          DEFAULT_TEMPLATE
+        )
+      }
+    }
+  }
+}
+
+export const WithActions = {
+  render: () => ({
+    components,
+    setup: () => ({ anchorUrl: anchorUrlFor(WITH_ACTIONS_ID) }),
+    template: WITH_ACTIONS_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The Billing payment-methods heading, with the outlined Add payment method action and its plus glyph on the right.'
+      },
+      source: {
+        code: toSfc(
+          [
+            "import Button from '@aziontech/webkit/button'",
+            COPY_BUTTON_IMPORT,
+            '',
+            anchorLine(WITH_ACTIONS_ID)
+          ],
+          WITH_ACTIONS_TEMPLATE
+        )
+      }
+    }
+  }
+}

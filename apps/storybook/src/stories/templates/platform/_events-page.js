@@ -59,9 +59,9 @@ export const pageState = (initial) => {
 
   const eventSources = {
     http: 'HTTP Requests',
-    waf: 'WAF',
-    functions: 'Functions',
-    firewall: 'Firewall'
+    security: 'Security',
+    services: 'Services',
+    access: 'Access Control'
   }
 
   const eventSourceOptions = Object.entries(eventSources).map(([value, label]) => ({
@@ -145,7 +145,7 @@ export const pageState = (initial) => {
     { id: 'geolocation', label: 'Geolocation' },
     { id: 'client', label: 'Client' },
     { id: 'security', label: 'Security' },
-    { id: 'functions', label: 'Functions' },
+    { id: 'services', label: 'Services' },
     { id: 'identifiers', label: 'Identifiers' }
   ]
 
@@ -178,17 +178,17 @@ export const pageState = (initial) => {
     { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
     { id: 'remoteAddress', label: 'Remote Address', category: 'client', minWidth: 80, mono: true },
     { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
-    { id: 'functionName', label: 'Function', category: 'functions', minWidth: 80, mono: true },
+    { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
     {
-      id: 'functionDurationMs',
-      label: 'Function Duration',
-      category: 'functions',
+      id: 'serviceDurationMs',
+      label: 'Service Duration',
+      category: 'services',
       align: 'end',
       minWidth: 80,
       format: (value) => `${value} ms`
     },
     { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
-    { id: 'workloadId', label: 'Workload ID', category: 'identifiers', minWidth: 80, mono: true },
+    { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
     { id: 'userAgent', label: 'User Agent', category: 'client', grow: 3, mono: true }
   ]
 
@@ -204,11 +204,11 @@ export const pageState = (initial) => {
   }
 
   const hosts = [
-    'edgeflow.com',
-    'api.edgeflow.com',
-    'staging.edgeflow.com',
-    'legacy.edgeflow.com',
-    'azion.design'
+    'example.com',
+    'api.example.com',
+    'staging.example.com',
+    'legacy.example.com',
+    'cdn.example.com'
   ]
   const addresses = [
     '45.132.11.9',
@@ -224,14 +224,14 @@ export const pageState = (initial) => {
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     'curl/8.12.1',
-    'Azion-Health-Check/1.0'
+    'Health-Check/1.0'
   ]
   const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
-  const workloads = ['wl-3f9a21', 'wl-77c40b', 'wl-91de55']
+  const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
 
   const eventTemplates = [
     {
-      source: 'waf',
+      source: 'security',
       level: 'Error',
       message: 'Blocked SQL injection attempt on /api/session',
       requestMethod: 'POST',
@@ -248,14 +248,14 @@ export const pageState = (initial) => {
       status: 502
     },
     {
-      source: 'functions',
+      source: 'services',
       level: 'Info',
       message: 'auth-handler completed in 12ms',
-      functionName: 'auth-handler',
-      functionDurationMs: 12
+      serviceName: 'auth-handler',
+      serviceDurationMs: 12
     },
     {
-      source: 'firewall',
+      source: 'access',
       level: 'Warning',
       message: 'Rate limit reached for a single address',
       requestMethod: 'GET',
@@ -264,11 +264,11 @@ export const pageState = (initial) => {
       ruleName: 'Rate Limit · 100 rpm'
     },
     {
-      source: 'functions',
+      source: 'services',
       level: 'Debug',
-      message: 'geo-router resolved region sa-east-1',
-      functionName: 'geo-router',
-      functionDurationMs: 4
+      message: 'geo-router resolved region south-america',
+      serviceName: 'geo-router',
+      serviceDurationMs: 4
     },
     {
       source: 'http',
@@ -279,13 +279,13 @@ export const pageState = (initial) => {
       status: 200
     },
     {
-      source: 'firewall',
+      source: 'access',
       level: 'Error',
-      message: 'Network list “Known scrapers” denied the request',
+      message: 'IP list “Known scrapers” denied the request',
       requestMethod: 'GET',
       requestUri: '/products',
       status: 403,
-      ruleName: 'Network list · Known scrapers'
+      ruleName: 'IP list · Known scrapers'
     },
     {
       source: 'http',
@@ -320,7 +320,7 @@ export const pageState = (initial) => {
       const template = rotation[index % rotation.length]
       const progress = (index + pick(100) / 100) / eventCount
       const at = minutesAgo(0.2 + seedWindowMinutes * ageFraction(progress))
-      const requestScoped = template.source !== 'functions'
+      const requestScoped = template.source !== 'services'
       return {
         id: `ev-${String(index + 1).padStart(3, '0')}`,
         at,
@@ -339,10 +339,10 @@ export const pageState = (initial) => {
         country: countries[pick(countries.length)],
         remoteAddress: addresses[pick(addresses.length)],
         ruleName: template.ruleName,
-        functionName: template.functionName,
-        functionDurationMs: template.functionDurationMs,
+        serviceName: template.serviceName,
+        serviceDurationMs: template.serviceDurationMs,
         requestId: `${(pick(0xffffff) + 0x100000).toString(16)}-${(pick(0xffff) + 0x1000).toString(16)}`,
-        workloadId: workloads[pick(workloads.length)],
+        resourceId: resources[pick(resources.length)],
         userAgent: requestScoped ? agents[pick(agents.length)] : undefined
       }
     })
@@ -687,6 +687,10 @@ export const pageState = (initial) => {
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
+  const documentEvent = ref(null)
+  watch(selectedEvent, (event) => {
+    if (event) documentEvent.value = event
+  })
 
   const logMinWidth = 480
   const documentMinWidth = 348
@@ -764,14 +768,14 @@ export const pageState = (initial) => {
     'requestMethod',
     'requestUri',
     'status',
-    'functionName',
-    'functionDurationMs',
+    'serviceName',
+    'serviceDurationMs',
     'ruleName',
     'requestTimeMs',
     'remoteAddress',
     'country',
     'cacheStatus',
-    'workloadId'
+    'resourceId'
   ]
 
   const summaryLimit = 6
@@ -1147,7 +1151,7 @@ export const pageState = (initial) => {
     countries,
     agents,
     cacheStatuses,
-    workloads,
+    resources,
     eventTemplates,
     sequence,
     eventCount,
@@ -1216,6 +1220,7 @@ export const pageState = (initial) => {
     statusTone,
     selectedId,
     selectedEvent,
+    documentEvent,
     logMinWidth,
     documentMinWidth,
     fieldsPanelWidth,
@@ -1322,9 +1327,9 @@ const formatEventStamp = (date) =>
 
 const eventSources = {
   http: 'HTTP Requests',
-  waf: 'WAF',
-  functions: 'Functions',
-  firewall: 'Firewall'
+  security: 'Security',
+  services: 'Services',
+  access: 'Access Control'
 }
 
 const eventSourceOptions = Object.entries(eventSources).map(([value, label]) => ({ value, label }))
@@ -1405,7 +1410,7 @@ const eventFieldCategories = [
   { id: 'geolocation', label: 'Geolocation' },
   { id: 'client', label: 'Client' },
   { id: 'security', label: 'Security' },
-  { id: 'functions', label: 'Functions' },
+  { id: 'services', label: 'Services' },
   { id: 'identifiers', label: 'Identifiers' }
 ]
 
@@ -1438,17 +1443,17 @@ const eventFields = [
   { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
   { id: 'remoteAddress', label: 'Remote Address', category: 'client', minWidth: 80, mono: true },
   { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
-  { id: 'functionName', label: 'Function', category: 'functions', minWidth: 80, mono: true },
+  { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
   {
-    id: 'functionDurationMs',
-    label: 'Function Duration',
-    category: 'functions',
+    id: 'serviceDurationMs',
+    label: 'Service Duration',
+    category: 'services',
     align: 'end',
     minWidth: 80,
     format: (value) => \`\${value} ms\`
   },
   { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
-  { id: 'workloadId', label: 'Workload ID', category: 'identifiers', minWidth: 80, mono: true },
+  { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
   { id: 'userAgent', label: 'User Agent', category: 'client', grow: 3, mono: true }
 ]
 
@@ -1465,11 +1470,11 @@ const formatEventValue = (field, value) => {
 
 __SEED_START__
 const hosts = [
-  'edgeflow.com',
-  'api.edgeflow.com',
-  'staging.edgeflow.com',
-  'legacy.edgeflow.com',
-  'azion.design'
+  'example.com',
+  'api.example.com',
+  'staging.example.com',
+  'legacy.example.com',
+  'cdn.example.com'
 ]
 const addresses = [
   '45.132.11.9',
@@ -1485,14 +1490,14 @@ const agents = [
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
   'curl/8.12.1',
-  'Azion-Health-Check/1.0'
+  'Health-Check/1.0'
 ]
 const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
-const workloads = ['wl-3f9a21', 'wl-77c40b', 'wl-91de55']
+const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
 
 const eventTemplates = [
   {
-    source: 'waf',
+    source: 'security',
     level: 'Error',
     message: 'Blocked SQL injection attempt on /api/session',
     requestMethod: 'POST',
@@ -1509,14 +1514,14 @@ const eventTemplates = [
     status: 502
   },
   {
-    source: 'functions',
+    source: 'services',
     level: 'Info',
     message: 'auth-handler completed in 12ms',
-    functionName: 'auth-handler',
-    functionDurationMs: 12
+    serviceName: 'auth-handler',
+    serviceDurationMs: 12
   },
   {
-    source: 'firewall',
+    source: 'access',
     level: 'Warning',
     message: 'Rate limit reached for a single address',
     requestMethod: 'GET',
@@ -1525,11 +1530,11 @@ const eventTemplates = [
     ruleName: 'Rate Limit · 100 rpm'
   },
   {
-    source: 'functions',
+    source: 'services',
     level: 'Debug',
-    message: 'geo-router resolved region sa-east-1',
-    functionName: 'geo-router',
-    functionDurationMs: 4
+    message: 'geo-router resolved region south-america',
+    serviceName: 'geo-router',
+    serviceDurationMs: 4
   },
   {
     source: 'http',
@@ -1540,13 +1545,13 @@ const eventTemplates = [
     status: 200
   },
   {
-    source: 'firewall',
+    source: 'access',
     level: 'Error',
-    message: 'Network list “Known scrapers” denied the request',
+    message: 'IP list “Known scrapers” denied the request',
     requestMethod: 'GET',
     requestUri: '/products',
     status: 403,
-    ruleName: 'Network list · Known scrapers'
+    ruleName: 'IP list · Known scrapers'
   },
   {
     source: 'http',
@@ -1581,7 +1586,7 @@ const seedEvents = () => {
     const template = rotation[index % rotation.length]
     const progress = (index + pick(100) / 100) / eventCount
     const at = minutesAgo(0.2 + seedWindowMinutes * ageFraction(progress))
-    const requestScoped = template.source !== 'functions'
+    const requestScoped = template.source !== 'services'
     return {
       id: \`ev-\${String(index + 1).padStart(3, '0')}\`,
       at,
@@ -1600,10 +1605,10 @@ const seedEvents = () => {
       country: countries[pick(countries.length)],
       remoteAddress: addresses[pick(addresses.length)],
       ruleName: template.ruleName,
-      functionName: template.functionName,
-      functionDurationMs: template.functionDurationMs,
+      serviceName: template.serviceName,
+      serviceDurationMs: template.serviceDurationMs,
       requestId: \`\${(pick(0xffffff) + 0x100000).toString(16)}-\${(pick(0xffff) + 0x1000).toString(16)}\`,
-      workloadId: workloads[pick(workloads.length)],
+      resourceId: resources[pick(resources.length)],
       userAgent: requestScoped ? agents[pick(agents.length)] : undefined
     }
   })
@@ -1949,6 +1954,10 @@ const selectedId = ref('')
 const selectedEvent = computed(
   () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
 )
+const documentEvent = ref(null)
+watch(selectedEvent, (event) => {
+  if (event) documentEvent.value = event
+})
 
 const logMinWidth = 480
 const documentMinWidth = 348
@@ -2026,14 +2035,14 @@ const summaryPriority = [
   'requestMethod',
   'requestUri',
   'status',
-  'functionName',
-  'functionDurationMs',
+  'serviceName',
+  'serviceDurationMs',
   'ruleName',
   'requestTimeMs',
   'remoteAddress',
   'country',
   'cacheStatus',
-  'workloadId'
+  'resourceId'
 ]
 
 const summaryLimit = 6
@@ -2454,25 +2463,28 @@ const FILTER_ROW =
 
 const FILTER_BUTTON = `<div ref="filterRoot" class="flex shrink-0 items-center" data-testid="filter-button">
   <Popover v-model:open="filterOpen" placement="bottom-start" :dismissible="!calendarOpen" class="shrink-0">
-    <Popover.Trigger class="relative">
-      <Button label="Filter" kind="outlined" size="medium" icon="pi pi-filter" data-testid="filter-button__trigger" />
-      <Transition
-        enter-from-class="scale-75 opacity-0"
-        enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-        leave-to-class="scale-75 opacity-0"
-        leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-      >
-        <Badge
-          v-if="filterCount"
-          :label="String(filterCount)"
-          severity="primary"
-          size="small"
-          aria-hidden="true"
-          data-testid="filter-button__count"
-          class="pointer-events-none absolute -top-2 -right-2 min-w-5"
-        />
-      </Transition>
-    </Popover.Trigger>
+    <div class="relative">
+      <Popover.Trigger>
+        <Button label="Filter" kind="outlined" size="medium" icon="pi pi-filter" data-testid="filter-button__trigger" />
+        <Transition
+          enter-from-class="scale-75 opacity-0"
+          enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+          leave-to-class="scale-75 opacity-0"
+          leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        >
+          <div v-if="filterCount" class="pointer-events-none absolute -top-2 -right-2 min-w-5">
+            <Badge
+              :label="String(filterCount)"
+              severity="primary"
+              size="small"
+              aria-hidden="true"
+              data-testid="filter-button__count"
+              class="w-full"
+            />
+          </div>
+        </Transition>
+      </Popover.Trigger>
+    </div>
 
     <Popover.Content>
       <div ref="filterPanel" class="flex flex-col" @keydown.down="moveFilterFocus($event, 1)" @keydown.up="moveFilterFocus($event, -1)">
@@ -2509,7 +2521,7 @@ const FILTER_BUTTON = `<div ref="filterRoot" class="flex shrink-0 items-center" 
                   size="medium"
                   :show-fields="false"
                   placeholder="Pick a range"
-                  class="w-full [&>span]:w-full [&>span>span]:w-full"
+                  class="w-full"
                   @update:model-value="commitCustomRange"
                 />
               </div>
@@ -2627,15 +2639,17 @@ const CONTROLS = `<header class="flex shrink-0 flex-col gap-(--spacing-xs) borde
   <header class="flex items-center gap-(--layout-group-gap)">
     <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
 ${indent(FILTER_BUTTON, 3)}
-      <InputText
-        v-model="search"
-        size="medium"
-        placeholder="Search events, hosts, paths or addresses"
-        aria-label="Search events"
-        class="min-w-36 grow basis-(--container-2xs)"
-      >
-${indent(SEARCH_ICON, 4)}
-      </InputText>
+      <div class="flex min-w-36 grow basis-(--container-2xs)">
+        <InputText
+          v-model="search"
+          size="medium"
+          placeholder="Search events, hosts, paths or addresses"
+          aria-label="Search events"
+          class="w-full"
+        >
+  ${indent(SEARCH_ICON, 4)}
+        </InputText>
+      </div>
     </div>
     <div class="flex shrink-0 items-center gap-(--spacing-xs)">
       <Tooltip text="Refresh" class="shrink-0">
@@ -2685,14 +2699,15 @@ const fieldRow = (list, shown) => `<div
   </label>
 
   <Popover v-if="canFilterField(field) && fieldCounts[field.id]" placement="right-start">
-    <Popover.Trigger
-      role="button"
-      tabindex="0"
-      :aria-label="\`Filter by \${field.label} — \${fieldCounts[field.id]} values\`"
-      class="shrink-0 cursor-pointer rounded-(--shape-button) px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-active) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover:text-(--text-default) motion-reduce:transition-none"
-    >
-      {{ fieldCounts[field.id] }}
-    </Popover.Trigger>
+    <div class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none">
+      <Popover.Trigger
+        role="button"
+        tabindex="0"
+        :aria-label="\`Filter by \${field.label} — \${fieldCounts[field.id]} values\`"
+      >
+        {{ fieldCounts[field.id] }}
+      </Popover.Trigger>
+    </div>
 
     <Popover.Content>
       <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
@@ -2736,9 +2751,7 @@ const fieldRow = (list, shown) => `<div
   </span>
 </div>`
 
-const FIELDS_PANEL = `<Sidebar
-  v-if="showFieldsPanel"
-  key="fields-panel"
+const FIELDS_PANEL = `<div v-if="showFieldsPanel" key="fields-panel" class="contents [--sidebar-width:var(--container-2xs)]"><Sidebar
   v-model:collapsed="fieldsCollapsed"
   v-model:width="fieldsWidth"
   resizable
@@ -2747,7 +2760,6 @@ const FIELDS_PANEL = `<Sidebar
   collapse-aria-label="Hide the fields panel"
   expand-aria-label="Show the fields panel"
   resize-aria-label="Resize the fields panel"
-  class="[--sidebar-width:var(--container-2xs)]"
 >
   <template #header>
     <div class="px-(--spacing-xs)">
@@ -2765,40 +2777,40 @@ ${indent(SEARCH_ICON, 4)}
 
 ${indent(fieldRow('shownFields', true), 2)}
 
-    <Accordion
-      v-if="fieldCategories.length"
-      v-model:value="openCategories"
-      type="multiple"
-      size="medium"
-      arrow-position="left"
-      class="mt-(--spacing-xs)"
-    >
-      <Accordion.Item v-for="category in fieldCategories" :key="category.id" :value="category.id">
-        <Accordion.Trigger class="gap-(--spacing-xs)! px-(--spacing-xs)! [&_i]:w-(--size-4) [&_i]:text-center">
-          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-            <span class="truncate text-label-sm text-(--text-default)">
-              {{ category.label }}
+    <div v-if="fieldCategories.length" class="mt-(--spacing-xs)">
+      <Accordion
+        v-model:value="openCategories"
+        type="multiple"
+        size="medium"
+        arrow-position="left"
+      >
+        <Accordion.Item v-for="category in fieldCategories" :key="category.id" :value="category.id">
+          <Accordion.Trigger>
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <span class="truncate text-label-sm text-(--text-default)">
+                {{ category.label }}
+              </span>
+              <Tag
+                v-if="categoryFilterCount(category)"
+                :label="String(categoryFilterCount(category))"
+                severity="info"
+                size="small"
+              />
             </span>
-            <Tag
-              v-if="categoryFilterCount(category)"
-              :label="String(categoryFilterCount(category))"
-              severity="info"
-              size="small"
-            />
-          </span>
-        </Accordion.Trigger>
+          </Accordion.Trigger>
 
-        <Accordion.Content class="px-0!">
-${indent(fieldRow('category.fields', false), 5)}
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion>
+          <Accordion.Content>
+  ${indent(fieldRow('category.fields', false), 5)}
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion>
+    </div>
 
     <p v-if="!hasFieldMatches" class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)">
       No fields match "{{ fieldSearch }}".
     </p>
   </div>
-</Sidebar>`
+</Sidebar></div>`
 
 const VOLUME_CHART = `<div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
   <div class="relative z-30">
@@ -2933,105 +2945,107 @@ ${indent(VOLUME_CHART)}
 </section>`
 
 const EVENT_TABLE = `<section class="flex min-h-0 min-w-0 flex-1 flex-col">
-  <TableRoot
-    ref="tableRef"
-    v-model:pagination="pagination"
-    :data="matchedEvents"
-    :columns="columns"
-    row-key="id"
-    enable-sorting
-    paginated
-    :page-size="25"
-    :border="false"
-    header-kind="compact"
-    max-height="100%"
-    class="log-table h-full"
-    :loading="loading"
-    @row-click="openDocument"
-  >
-    <template #header-detail>
-      <span class="sr-only">Open the event document</span>
-    </template>
+  <div class="flex min-h-0 flex-1">
+    <TableRoot
+      ref="tableRef"
+      v-model:pagination="pagination"
+      :data="matchedEvents"
+      :columns="columns"
+      row-key="id"
+      enable-sorting
+      paginated
+      :page-size="25"
+      :border="false"
+      header-kind="compact"
+      max-height="100%"
+      class="w-full"
+      :loading="loading"
+      @row-click="openDocument"
+    >
+      <template #header-detail>
+        <span class="sr-only">Open the event document</span>
+      </template>
 
-    <template #cell-detail="{ row }">
-      <i
-        class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
-        :data-open="row.id === selectedId || null"
-        aria-hidden="true"
-      />
-    </template>
+      <template #cell-detail="{ row }">
+        <i
+          class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
+          :data-open="row.id === selectedId || null"
+          aria-hidden="true"
+        />
+      </template>
 
-    <template #cell-time="{ value }">
-      <span class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)">
-        {{ value }}
-      </span>
-    </template>
+      <template #cell-time="{ value }">
+        <span class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)">
+          {{ value }}
+        </span>
+      </template>
 
-    <template #cell-level="{ value }">
-      <Tag :label="value" :severity="eventLevelSeverity(value)" size="medium" />
-    </template>
+      <template #cell-level="{ value }">
+        <Tag :label="value" :severity="eventLevelSeverity(value)" size="medium" />
+      </template>
 
-    <template #cell-message="{ value }">
-      <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
-    </template>
+      <template #cell-message="{ value }">
+        <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
+      </template>
 
-    <template #cell-status="{ value }">
-      <span
-        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
-        :data-tone="statusTone(value)"
-      >
-        {{ formatEventValue(statusField, value) }}
-      </span>
-    </template>
+      <template #cell-status="{ value }">
+        <span
+          class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
+          :data-tone="statusTone(value)"
+        >
+          {{ formatEventValue(statusField, value) }}
+        </span>
+      </template>
 
-    <template v-for="field in genericColumns" :key="field.id" #[\`cell-\${field.id}\`]="{ value }">
-      <span
-        class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
-        :data-mono="field.mono || null"
-        :data-numeric="field.align === 'end' || null"
-      >
-        {{ formatEventValue(field, value) }}
-      </span>
-    </template>
+      <template v-for="field in genericColumns" :key="field.id" #[\`cell-\${field.id}\`]="{ value }">
+        <span
+          class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
+          :data-mono="field.mono || null"
+          :data-numeric="field.align === 'end' || null"
+        >
+          {{ formatEventValue(field, value) }}
+        </span>
+      </template>
 
-    <template #empty>
-      <EmptyState
-        v-if="!events.length"
-        key="no-traffic"
-        size="small"
-        icon="pi pi-inbox"
-        title="No events yet"
-        description="Events appear here as soon as traffic reaches this workspace's workloads."
-      />
-      <EmptyState
-        v-else-if="search.trim()"
-        key="no-match"
-        size="small"
-        icon="pi pi-search"
-        title="No events match this search"
-        description="Clear the search, or widen the period to cover more of the log."
-      />
-      <EmptyState
-        v-else
-        key="no-events"
-        size="small"
-        icon="pi pi-filter-slash"
-        title="No events in this window"
-        description="Widen the period or clear a filter to see more of the log."
-      />
-    </template>
-  </TableRoot>
+      <template #empty>
+        <EmptyState
+          v-if="!events.length"
+          key="no-traffic"
+          size="small"
+          icon="pi pi-inbox"
+          title="No events yet"
+          description="Events appear here as soon as traffic reaches this workspace's resources."
+        />
+        <EmptyState
+          v-else-if="search.trim()"
+          key="no-match"
+          size="small"
+          icon="pi pi-search"
+          title="No events match this search"
+          description="Clear the search, or widen the period to cover more of the log."
+        />
+        <EmptyState
+          v-else
+          key="no-events"
+          size="small"
+          icon="pi pi-filter-slash"
+          title="No events in this window"
+          description="Widen the period or clear a filter to see more of the log."
+        />
+      </template>
+    </TableRoot>
+  </div>
 </section>`
 
 const eventDocument = (condition = '') => `<div${condition} class="flex min-w-0 flex-col">
   <div class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)">
     <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
       <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-        <Tag :label="selectedEvent.level" :severity="eventLevelSeverity(selectedEvent.level)" size="medium" />
-        <Tag :label="selectedEvent.sourceLabel" severity="secondary" size="medium" />
+        <Tag :label="documentEvent.level" :severity="eventLevelSeverity(documentEvent.level)" size="medium" />
+        <Tag :label="documentEvent.sourceLabel" severity="secondary" size="medium" />
       </div>
-      <p class="text-body-md text-(--text-default)">{{ selectedEvent.message }}</p>
-      <p class="text-label-code-sm tabular-nums text-(--text-muted)">{{ selectedEvent.time }}</p>
+      <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
+      <p class="text-label-code-sm tabular-nums text-(--text-muted)">{{ documentEvent.time }}</p>
     </div>
 
     <dl class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)">
@@ -3046,13 +3060,15 @@ const eventDocument = (condition = '') => `<div${condition} class="flex min-w-0 
 
   <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
     <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
-    <CodeBlock
-      :tabs="documentTabs"
-      :border="false"
-      show-line-numbers
-      copy-aria-label="Copy the event document as JSON"
-      class="min-w-0 rounded-none border-y border-(--border-default)"
-    />
+    <div class="min-w-0">
+      <CodeBlock
+        :tabs="documentTabs"
+        :border="false"
+        show-line-numbers
+        copy-aria-label="Copy the event document as JSON"
+        class="w-full"
+      />
+    </div>
   </div>
 </div>`
 
@@ -3083,7 +3099,7 @@ const DOCUMENT_PANEL = `<Sidebar
     </div>
   </template>
 
-  <div v-if="selectedEvent" class="-m-(--spacing-md)">
+  <div v-if="documentEvent" class="-m-(--spacing-md)">
 ${indent(eventDocument(), 2)}
   </div>
 </Sidebar>`
@@ -3097,7 +3113,7 @@ const DOCUMENT_DRAWER = `<Drawer v-model:open="documentDrawerOpen" size="medium"
         <DrawerClose />
       </PanelHeader>
       <div class="min-h-0 flex-1 overflow-auto">
-${indent(eventDocument(' v-if="selectedEvent"'), 4)}
+${indent(eventDocument(' v-if="documentEvent"'), 4)}
       </div>
     </DrawerContent>
   </DrawerPortal>

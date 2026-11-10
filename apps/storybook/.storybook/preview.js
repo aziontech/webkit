@@ -140,12 +140,13 @@ export const parameters = {
             'Overview',
             'Shell',
             [
-              'PlatformShell',
-              'CreatePage',
-              'SummaryPage',
+              'HomeDashboard',
+              'SinglePageCreate',
+              'MultipageCreate',
+              'DetailsPageWithTabs',
+              'SplitView',
               'CodeEditor',
-              'QueryEditor',
-              'EventsVisualizer'
+              'QueryEditor'
             ],
             'Page',
             'Lists',
@@ -154,11 +155,28 @@ export const parameters = {
             'Creation',
             'States',
             'Detail',
-            'Observe',
+            'Dashboards',
+            [
+              'AnalyticsDashboard',
+              'DataDashboard',
+              'ServiceMonitoringDashboard',
+              'SecurityDashboard',
+              'ExecutiveSummaryDashboard',
+              'FunnelCohortDashboard',
+              'CompositionDashboard',
+              'ProjectStatusDashboard',
+              'AlertsDashboard',
+              'HealthScoreDashboard',
+              'ScanResultsDashboard',
+              'ActivityOutcomesDashboard',
+              'ConfigurableDashboard'
+            ],
+            'Auth',
             'Account'
           ],
           'Headers',
-          'Shells'
+          'Shells',
+          ['Overview', 'Console', 'Documentation', 'Website']
         ],
         'Site'
       ]

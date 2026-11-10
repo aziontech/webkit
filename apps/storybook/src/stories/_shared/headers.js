@@ -7,6 +7,7 @@ import GlobalHeader from '@aziontech/webkit/global-header'
 import IconButton from '@aziontech/webkit/icon-button'
 import NavigationMenu from '@aziontech/webkit/navigation-menu'
 
+import { indent } from './markup'
 import { BRAND_LINK_CLASS } from './site-footer'
 
 const SEARCH_BUTTON = (label) =>
@@ -59,37 +60,42 @@ export const DOCS_HEADER_COMPONENTS = {
 }
 
 export const DOCS_HEADER_MARKUP = `<GlobalHeader aria-label="Azion documentation">
-  <GlobalHeader.Left class="justify-start!">
-    <IconButton
-      icon="pi pi-bars"
-      kind="outlined"
-      size="medium"
-      aria-label="Open documentation navigation"
-      class="shrink-0 lg:hidden"
-    />
-    <GlobalHeader.Brand>
-      <a href="#" aria-label="Azion Docs home" class="${BRAND_LINK_CLASS} gap-(--spacing-xs)">
-        <Brand kind="default" size="small" />
-        <span class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted)">
-          Docs
-        </span>
-      </a>
-    </GlobalHeader.Brand>
-    <NavigationMenu aria-label="Documentation sections" class="ml-(--spacing-xs) hidden shrink-0 lg:flex">
-      <NavigationMenu.List class="items-center gap-(--spacing-xxs)">
-        <NavigationMenu.Item v-for="section in sections" :key="section">
-          <NavigationMenu.Trigger href="#">{{ section }}</NavigationMenu.Trigger>
-        </NavigationMenu.Item>
-      </NavigationMenu.List>
-      <NavigationMenu.Portal>
-        <NavigationMenu.Positioner side="bottom" align="start" :side-offset="12">
-          <NavigationMenu.Popup>
-            <NavigationMenu.Arrow />
-            <NavigationMenu.Viewport />
-          </NavigationMenu.Popup>
-        </NavigationMenu.Positioner>
-      </NavigationMenu.Portal>
-    </NavigationMenu>
+  <GlobalHeader.Left>
+    <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
+      <div class="shrink-0 lg:hidden">
+        <IconButton
+          icon="pi pi-bars"
+          kind="outlined"
+          size="medium"
+          aria-label="Open documentation navigation"
+        />
+      </div>
+      <GlobalHeader.Brand>
+        <a href="#" aria-label="Azion Docs home" class="${BRAND_LINK_CLASS} gap-(--spacing-xs)">
+          <Brand kind="default" size="small" />
+          <span class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted)">
+            Docs
+          </span>
+        </a>
+      </GlobalHeader.Brand>
+      <div class="shrink-0 ml-(--spacing-xs) hidden lg:flex">
+        <NavigationMenu aria-label="Documentation sections">
+          <NavigationMenu.List>
+            <NavigationMenu.Item v-for="section in sections" :key="section">
+              <NavigationMenu.Trigger href="#">{{ section }}</NavigationMenu.Trigger>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner side="bottom" align="start" :side-offset="12">
+              <NavigationMenu.Popup>
+                <NavigationMenu.Arrow />
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+        </NavigationMenu>
+      </div>
+    </div>
   </GlobalHeader.Left>
   <GlobalHeader.Nav />
   <GlobalHeader.Right>
@@ -127,38 +133,45 @@ export const SITE_HEADER_COMPONENTS = {
   ...NAVIGATION_MENU_COMPONENTS
 }
 
-export const SITE_HEADER_MARKUP = `<GlobalHeader kind="site" aria-label="Azion" class="sticky top-0 z-40">
-  <GlobalHeader.Left class="justify-start!">
-    <IconButton
-      icon="pi pi-bars"
-      kind="outlined"
-      size="medium"
-      aria-label="Open navigation"
-      class="shrink-0 xl:hidden"
-    />
-    <GlobalHeader.Brand>
-      <a href="#" aria-label="Azion home" class="${BRAND_LINK_CLASS}">
-        <Brand kind="default" size="small" />
-      </a>
-    </GlobalHeader.Brand>
+export const SITE_HEADER_MARKUP = `<div class="sticky top-0 z-40"><GlobalHeader kind="site" aria-label="Azion">
+  <GlobalHeader.Left>
+    <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
+      <div class="shrink-0 xl:hidden">
+        <IconButton
+          icon="pi pi-bars"
+          kind="outlined"
+          size="medium"
+          aria-label="Open navigation"
+        />
+      </div>
+      <GlobalHeader.Brand>
+        <a href="#" aria-label="Azion home" class="${BRAND_LINK_CLASS}">
+          <Brand kind="default" size="small" />
+        </a>
+      </GlobalHeader.Brand>
+    </div>
   </GlobalHeader.Left>
 
-  <GlobalHeader.Middle class="justify-start!">
-    <NavigationMenu aria-label="Azion" class="min-w-0">
-      <NavigationMenu.List class="hidden items-center gap-(--spacing-xxs) xl:flex">
-        <NavigationMenu.Item v-for="link in links" :key="link">
-          <NavigationMenu.Trigger href="#">{{ link }}</NavigationMenu.Trigger>
-        </NavigationMenu.Item>
-      </NavigationMenu.List>
-      <NavigationMenu.Portal>
-        <NavigationMenu.Positioner side="bottom" align="start" :side-offset="12">
-          <NavigationMenu.Popup kind="contrast">
-            <NavigationMenu.Arrow />
-            <NavigationMenu.Viewport />
-          </NavigationMenu.Popup>
-        </NavigationMenu.Positioner>
-      </NavigationMenu.Portal>
-    </NavigationMenu>
+  <GlobalHeader.Middle>
+    <div class="flex w-full min-w-0 items-center justify-start">
+      <div class="min-w-0">
+        <NavigationMenu aria-label="Azion" class="w-full">
+          <NavigationMenu.List>
+            <NavigationMenu.Item v-for="link in links" :key="link">
+              <NavigationMenu.Trigger href="#">{{ link }}</NavigationMenu.Trigger>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner side="bottom" align="start" :side-offset="12">
+              <NavigationMenu.Popup kind="contrast">
+                <NavigationMenu.Arrow />
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+        </NavigationMenu>
+      </div>
+    </div>
   </GlobalHeader.Middle>
 
   <GlobalHeader.Right>
@@ -169,15 +182,50 @@ export const SITE_HEADER_MARKUP = `<GlobalHeader kind="site" aria-label="Azion" 
     <Button label="Start for free" kind="primary" size="medium" class="shrink-0" href="#" />
     ${SEARCH_BUTTON('Search')}
   </GlobalHeader.Right>
-</GlobalHeader>`
+</GlobalHeader></div>`
 
-const AVATAR_BUTTON = `<button
-      type="button"
-      aria-label="Account settings"
-      class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-    >
-      <Avatar label="jordan.silva@example.com" size="medium" kind="square" />
-    </button>`
+const CONSOLE_BRAND_LINK_CLASS =
+  'inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none'
+
+export const accountButton = (email = 'name@example.com') => `<button
+  type="button"
+  aria-label="Account settings"
+  class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+>
+  <Avatar label="${email}" size="medium" kind="square" />
+</button>`
+
+const AVATAR_BUTTON = indent(accountButton(), 2).trimStart()
+
+export const consoleBrand = `<GlobalHeader.Brand>
+  <a
+    href="/home"
+    aria-label="Azion home"
+    class="${CONSOLE_BRAND_LINK_CLASS}"
+  >
+    <Brand kind="default" size="small" />
+  </a>
+</GlobalHeader.Brand>`
+
+export const creationHeader = ({ backLabel = '', crumbs = 'breadcrumb', email } = {}) => {
+  const left = [
+    backLabel
+      ? `<IconButton icon="pi pi-chevron-left" aria-label="${backLabel}" kind="outlined" size="small" />`
+      : '',
+    consoleBrand,
+    crumbs ? `<Breadcrumb :items="${crumbs}" />` : ''
+  ].filter(Boolean)
+
+  return `<GlobalHeader aria-label="Console">
+  <GlobalHeader.Left>
+${indent(left.join('\n'), 2)}
+  </GlobalHeader.Left>
+  <GlobalHeader.Middle />
+  <GlobalHeader.Right>
+${indent(accountButton(email), 2)}
+  </GlobalHeader.Right>
+</GlobalHeader>`
+}
 
 export const AUTH_HEADER_IMPORTS = [
   "import Brand from '@aziontech/webkit/brand'",
@@ -187,15 +235,11 @@ export const AUTH_HEADER_IMPORTS = [
 
 export const AUTH_HEADER_COMPONENTS = { Brand, Button, ...GLOBAL_HEADER_COMPONENTS }
 
-export const AUTH_HEADER_MARKUP = `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Brand>
-    <a href="/home" aria-label="Azion home" class="${BRAND_LINK_CLASS} self-center">
-      <Brand kind="default" size="small" />
-    </a>
-  </GlobalHeader.Brand>
+export const AUTH_HEADER_MARKUP = `<GlobalHeader aria-label="Console" class="shrink-0">
+${indent(consoleBrand)}
   <GlobalHeader.Middle />
   <GlobalHeader.Right>
-    <Button label="Docs" kind="outlined" size="medium" icon="pi pi-book" href="/docs" />
+    <Button label="Documentation" kind="outlined" size="medium" icon="pi pi-book" href="/docs" />
   </GlobalHeader.Right>
 </GlobalHeader>`
 
@@ -207,15 +251,6 @@ export const CREATION_HEADER_IMPORTS = [
   "import IconButton from '@aziontech/webkit/icon-button'"
 ]
 
-export const CREATION_CRUMBS = [
-  { label: 'Applications', href: '/applications' },
-  { label: 'Create application' }
-]
-
-export const CREATION_HEADER_SETUP = [
-  "const crumbs = [{ label: 'Applications', href: '/applications' }, { label: 'Create application' }]"
-]
-
 export const CREATION_HEADER_COMPONENTS = {
   Avatar,
   Brand,
@@ -223,22 +258,6 @@ export const CREATION_HEADER_COMPONENTS = {
   IconButton,
   ...GLOBAL_HEADER_COMPONENTS
 }
-
-export const CREATION_HEADER_MARKUP = `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Left>
-    <IconButton icon="pi pi-chevron-left" kind="outlined" size="small" aria-label="Back to applications" />
-    <GlobalHeader.Brand>
-      <a href="/home" aria-label="Azion home" class="${BRAND_LINK_CLASS} self-center">
-        <Brand kind="default" size="small" />
-      </a>
-    </GlobalHeader.Brand>
-    <Breadcrumb :items="crumbs" />
-  </GlobalHeader.Left>
-  <GlobalHeader.Middle />
-  <GlobalHeader.Right>
-    ${AVATAR_BUTTON}
-  </GlobalHeader.Right>
-</GlobalHeader>`
 
 export const RESOURCE_HEADER_IMPORTS = [
   "import Avatar from '@aziontech/webkit/avatar'",
@@ -267,17 +286,20 @@ export const RESOURCE_HEADER_COMPONENTS = {
 }
 
 const resourceHeader = (crumb) => `<GlobalHeader aria-label="Azion Console">
-  <GlobalHeader.Left class="justify-start!">
-    <IconButton
-      icon="pi pi-bars"
-      kind="outlined"
-      size="medium"
-      aria-label="Open navigation"
-      class="shrink-0 md:hidden"
-    />
-    <a href="/home" aria-label="Azion home" class="${BRAND_LINK_CLASS} h-6 shrink-0 px-(--spacing-xxs)">
-      <Brand kind="default" size="small" />
-    </a>${crumb}
+  <GlobalHeader.Left>
+    <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
+      <div class="shrink-0 md:hidden">
+        <IconButton
+          icon="pi pi-bars"
+          kind="outlined"
+          size="medium"
+          aria-label="Open navigation"
+        />
+      </div>
+      <a href="/home" aria-label="Azion home" class="${BRAND_LINK_CLASS} h-6 shrink-0 px-(--spacing-xxs)">
+        <Brand kind="default" size="small" />
+      </a>${crumb}
+    </div>
   </GlobalHeader.Left>
   <GlobalHeader.Middle />
   <GlobalHeader.Right>
@@ -291,5 +313,5 @@ const resourceHeader = (crumb) => `<GlobalHeader aria-label="Azion Console">
 export const RESOURCE_FIRST_LEVEL_MARKUP = resourceHeader('')
 
 export const RESOURCE_SECOND_LEVEL_MARKUP = resourceHeader(
-  '\n    <Breadcrumb :items="crumbs" class="-ml-(--spacing-xs) hidden w-auto min-w-0 shrink md:flex" />'
+  '\n    <div class="-ml-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex"><Breadcrumb :items="crumbs" class="w-full" /></div>'
 )

@@ -30,7 +30,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Payment Method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `CardBox`, `FieldText`, `FieldSelect`, `Message` and `Button`; the Visa plate is the console’s inline brand mark, since webkit ships no card-brand asset.'
+          'The Payment Method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `CardBox`, `FieldText`, `FieldSelect`, `Message` and `Button`; the Visa plate is an inline card-brand mark, since webkit ships no card-brand asset.'
       },
       canvas: { sourceState: 'shown' }
     },
@@ -44,7 +44,21 @@ const meta = {
         'card details',
         'método de pagamento',
         'cartão de crédito',
-        'dados do cartão'
+        'dados do cartão',
+        'billing',
+        'billing page',
+        'invoices',
+        'bills',
+        'subscription plan',
+        'payment methods',
+        'credit cards',
+        'current plan',
+        'plan and billing',
+        'cobrança',
+        'faturas',
+        'faturamento',
+        'métodos de pagamento',
+        'plano de assinatura'
       ],
       skills: ['webkit-form', 'webkit-errors']
     }
