@@ -92,4 +92,4 @@ The Storybook `argTypes` entry mirrors it (`type: { summary: '(event: MouseEvent
 
 ## Why this rule exists
 
-Event payloads had drifted apart: `split-button/click` emitted `(event, item)`, `split-button/item-click` emitted `(item)`, `table/row-click` emitted `(row)`, `deploy-success/step-click` emitted `(index, event)`, and `dropdown/select` buried the event inside `{ value, event }`. A consumer could not write one handler shape across the system, and half the events forced a reach back into `event.target` to learn what was clicked. Fixing the order once, everywhere, makes every activation handler `(event, item) => …` and every "Show code" snippet honest.
+Event payloads had drifted apart: `split-button/click` emitted `(event, item)`, `split-button/item-click` emitted `(item)`, `table/row-click` emitted `(row)`, and `dropdown/select` buried the event inside `{ value, event }`. A consumer could not write one handler shape across the system, and half the events forced a reach back into `event.target` to learn what was clicked. Fixing the order once, everywhere, makes every activation handler `(event, item) => …` and every "Show code" snippet honest.

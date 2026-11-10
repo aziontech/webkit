@@ -180,13 +180,6 @@
   "packages/webkit/src/components/overline/overline.vue::runtime-define-props",
   "packages/webkit/src/components/overline/overline.vue::slot-without-defineslots",
   "packages/webkit/src/components/overline/overline.vue::spec:Spec file missing: .specs/overline.md",
-  "packages/webkit/src/components/templates/platform-shell/platform-shell.vue::spec:data-testid fallback \"'templates-platform-shell'\" not found in <script setup>. Expected: ?? 'templates-platform-shell'",
-  "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::runtime-define-emits",
-  "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::runtime-define-props",
-  "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::spec:Events missing in .vue: github-click, google-click, email-click, sign-in-click, terms-click, privacy-click",
-  "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::spec:Props missing in .vue: title, subtitle, githubLabel, googleLabel, emailLabel, signInPrompt, signInLabel, termsHref, privacyHref, signInHref, showGithub, showGoogle",
-  "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::spec:data-testid fallback \"'templates-sign-up-card'\" not found in <script setup>. Expected: ?? 'templates-sign-up-card'",
-  "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::token:js-class-preset",
   "packages/webkit/src/components/utils/spinner/spinner.vue::spec:Animation classes in .vue but not in spec: animate-spin",
   "packages/webkit/src/components/utils/spinner/spinner.vue::spec:data-testid fallback \"'utils-spinner'\" not found in <script setup>. Expected: ?? 'utils-spinner'"
 ]
