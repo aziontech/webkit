@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldText from './field-text.vue'
 
-const { Default, Sizes, Invalid, Disabled, Icons } = composeStories(stories)
+const { Default, Sizes, Invalid, Disabled, Icons, Login } = composeStories(stories)
 
 describe('FieldText', () => {
   it('renders the root with the default data-testid and stacks its parts', () => {
@@ -220,5 +220,59 @@ describe('FieldText', () => {
   it('renders the Icons story fixture', () => {
     const { getAllByTestId } = render(Icons)
     expect(getAllByTestId('input-field-text').length).toBe(3)
+  })
+})
+
+describe('FieldText — rendered HTML stays stable', () => {
+  it('renders the same HTML as before when type, autocomplete and spellcheck are absent', () => {
+    const { container } = render(FieldText, {
+      props: { label: 'Email', inputId: 'email', helperText: 'Work address', name: 'email' }
+    })
+    expect(container.innerHTML).toMatchSnapshot()
+  })
+})
+
+describe('FieldText — native input attributes', () => {
+  it('puts type and autocomplete on the <input>, not on the wrapper div', () => {
+    const { getByTestId } = render(FieldText, {
+      props: { label: 'Email', type: 'email', autocomplete: 'email' }
+    })
+    const root = getByTestId('input-field-text')
+    const input = getByTestId('input-field-text__input') as HTMLInputElement
+
+    expect(input.getAttribute('type')).toBe('email')
+    expect(input.getAttribute('autocomplete')).toBe('email')
+    expect(root.hasAttribute('type')).toBe(false)
+    expect(root.hasAttribute('autocomplete')).toBe(false)
+  })
+
+  it('renders spellcheck="false" on the <input> when spellcheck is false', () => {
+    const { getByTestId } = render(FieldText, { props: { label: 'Slug', spellcheck: false } })
+    const input = getByTestId('input-field-text__input')
+
+    expect(input.getAttribute('spellcheck')).toBe('false')
+    expect(getByTestId('input-field-text').hasAttribute('spellcheck')).toBe(false)
+  })
+
+  it('renders spellcheck="true" on the <input> when spellcheck is true', () => {
+    const { getByTestId } = render(FieldText, { props: { label: 'Notes', spellcheck: true } })
+    expect(getByTestId('input-field-text__input').getAttribute('spellcheck')).toBe('true')
+  })
+
+  it('leaves autocomplete and spellcheck off the <input> and keeps type="text" by default', () => {
+    const { getByTestId } = render(FieldText, { props: { label: 'Name' } })
+    const input = getByTestId('input-field-text__input')
+
+    expect(input.getAttribute('type')).toBe('text')
+    expect(input.hasAttribute('autocomplete')).toBe(false)
+    expect(input.hasAttribute('spellcheck')).toBe(false)
+  })
+
+  it('renders the Login story fixture with an email field the browser can autofill', () => {
+    const { getByTestId } = render(Login)
+    const input = getByTestId('input-field-text__input')
+
+    expect(input.getAttribute('type')).toBe('email')
+    expect(input.getAttribute('autocomplete')).toBe('username')
   })
 })

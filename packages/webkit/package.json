@@ -96,6 +96,7 @@
     "src",
     "!src/**/*.test.{ts,js}",
     "!src/test/**",
+    "!src/**/__snapshots__/**",
     "cli-templates",
     "docs",
     "catalog.json",

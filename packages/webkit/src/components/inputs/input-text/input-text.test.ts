@@ -239,3 +239,36 @@ describe('InputText', () => {
     })
   })
 })
+
+describe('InputText — rendered HTML stays stable', () => {
+  it('renders the same HTML as before when autocomplete and spellcheck are absent', () => {
+    const { container } = render(InputText, {
+      props: { placeholder: 'Type here' },
+      attrs: { id: 'plain' }
+    })
+    expect(container.innerHTML).toMatchSnapshot()
+  })
+})
+
+describe('InputText — autocomplete and spellcheck', () => {
+  it('applies autocomplete and type to the <input>', () => {
+    const { getByTestId } = render(InputText, { props: { type: 'email', autocomplete: 'email' } })
+    const input = getByTestId('input-text')
+
+    expect(input.getAttribute('type')).toBe('email')
+    expect(input.getAttribute('autocomplete')).toBe('email')
+  })
+
+  it('renders spellcheck="false" on the <input> when spellcheck is false', () => {
+    const { getByTestId } = render(InputText, { props: { spellcheck: false } })
+    expect(getByTestId('input-text').getAttribute('spellcheck')).toBe('false')
+  })
+
+  it('omits autocomplete and spellcheck when they are not set', () => {
+    const { getByTestId } = render(InputText)
+    const input = getByTestId('input-text')
+
+    expect(input.hasAttribute('autocomplete')).toBe(false)
+    expect(input.hasAttribute('spellcheck')).toBe(false)
+  })
+})

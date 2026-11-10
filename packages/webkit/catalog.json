@@ -7130,6 +7130,20 @@
           "doc": "Native `maxlength` — maximum number of characters allowed."
         },
         {
+          "name": "autocomplete",
+          "type": "string | undefined",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset."
+        },
+        {
+          "name": "spellcheck",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
+        },
+        {
           "name": "size",
           "type": "'small' | 'medium' | 'large'",
           "default": "'medium'",
@@ -7582,6 +7596,27 @@
           "default": "''",
           "required": "false",
           "doc": "Placeholder forwarded to the `InputText`."
+        },
+        {
+          "name": "type",
+          "type": "'text' | 'email' | 'number'",
+          "default": "'text'",
+          "required": "false",
+          "doc": "Native input type, forwarded to the `<input>` through `InputText`. Use `email` for e-mail fields."
+        },
+        {
+          "name": "autocomplete",
+          "type": "string | undefined",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Native `autocomplete` token, forwarded to the `<input>` (`username` on a sign-in e-mail, `email` on a sign-up e-mail). Omitted when unset. Before this prop existed, `autocomplete` passed as an attribute fell on the wrapper `<div>`."
+        },
+        {
+          "name": "spellcheck",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Native `spellcheck`, forwarded to the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset (explicit `undefined` default, so no `spellcheck=\"false\"` appears by itself)."
         },
         {
           "name": "helperText",

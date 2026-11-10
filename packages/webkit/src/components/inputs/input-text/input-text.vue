@@ -18,6 +18,16 @@
     type?: InputTextType
     /** Native maxlength — maximum number of characters allowed. */
     maxLength?: number
+    /**
+     * Native autocomplete token for the <input> (e.g. "email", "username", "off"). Omitted when
+     * unset, so the browser keeps its own default.
+     */
+    autocomplete?: string
+    /**
+     * Native spellcheck on the <input>. Set false for slugs, IDs, domains and code. Omitted when
+     * unset, so the browser keeps its own default.
+     */
+    spellcheck?: boolean
     /** Size token; affects height only. Heights: small=28px, medium=32px, large=40px. */
     size?: InputTextSize
     /** Disables interaction and applies disabled tokens. */
@@ -39,7 +49,9 @@
     required: false,
     invalid: false,
     type: 'text',
-    maxLength: undefined
+    maxLength: undefined,
+    autocomplete: undefined,
+    spellcheck: undefined
   })
 
   const emit = defineEmits<{
@@ -123,6 +135,8 @@
       :value="modelValue"
       :placeholder="placeholder"
       :maxlength="maxLength"
+      :autocomplete="autocomplete"
+      :spellcheck="spellcheck"
       :disabled="disabled"
       :readonly="readonly"
       :required="required"

@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
-  import InputText from '../input-text/input-text.vue'
+  import InputText, { type InputTextType } from '../input-text/input-text.vue'
   import Label from '../label/label.vue'
 
   defineOptions({
@@ -19,6 +19,15 @@
     label?: string
     /** Placeholder forwarded to the InputText. */
     placeholder?: string
+    /** Native input type forwarded to the InputText ('text' | 'email' | 'number'). */
+    type?: InputTextType
+    /**
+     * Native autocomplete token forwarded to the <input> (e.g. "email", "username"). Omitted when
+     * unset.
+     */
+    autocomplete?: string
+    /** Native spellcheck forwarded to the <input>. Set false for slugs, IDs and domains. */
+    spellcheck?: boolean
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
     /** Size forwarded to the InputText. Heights: small=28px, medium=32px, large=40px. */
@@ -41,6 +50,9 @@
     modelValue: '',
     label: '',
     placeholder: '',
+    type: 'text',
+    autocomplete: undefined,
+    spellcheck: undefined,
     helperText: '',
     size: 'medium',
     disabled: false,
@@ -98,6 +110,9 @@
     <InputText
       :model-value="modelValue"
       :placeholder="placeholder"
+      :type="type"
+      :autocomplete="autocomplete"
+      :spellcheck="spellcheck"
       :size="size"
       :disabled="disabled"
       :readonly="readonly"

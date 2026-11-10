@@ -48,6 +48,29 @@ const meta = {
       description: 'Placeholder forwarded to the `InputText`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'number'],
+      description:
+        'Native input type, forwarded to the `<input>` through `InputText`. Use `email` for e-mail fields so mobile keyboards and autofill recognise them.',
+      table: {
+        category: 'props',
+        type: { summary: "'text' | 'email' | 'number'" },
+        defaultValue: { summary: "'text'" }
+      }
+    },
+    autocomplete: {
+      control: 'text',
+      description:
+        'Native `autocomplete` token, applied on the `<input>` (e.g. `username` on a sign-in e-mail, `email` on a sign-up or newsletter e-mail). Omitted when unset.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: 'undefined' } }
+    },
+    spellcheck: {
+      control: 'boolean',
+      description:
+        'Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset, so the browser keeps its default.',
+      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'undefined' } }
+    },
     helperText: {
       control: 'text',
       description:
@@ -343,6 +366,38 @@ export const Icons = {
           ICONS_TEMPLATE
         )
       }
+    }
+  }
+}
+
+const LOGIN_MARKUP = `<FieldText
+  v-model="email"
+  label="Email"
+  type="email"
+  autocomplete="username"
+  :spellcheck="false"
+  name="email"
+  placeholder="you@example.com"
+/>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof FieldText>} */
+export const Login = {
+  render: () => ({
+    components: { FieldText },
+    setup() {
+      const email = ref('')
+      return { email }
+    },
+    template: LOGIN_MARKUP
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The e-mail field of a sign-in form. `type="email"`, `autocomplete="username"` and `spellcheck="false"` land on the `<input>`, so the browser and password managers recognise the login field.'
+      },
+      source: { code: toSfc([VUE_IMPORT, IMPORT, '', "const email = ref('')"], LOGIN_MARKUP) }
     }
   }
 }
