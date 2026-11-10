@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: bcd7db28e5ba8ceb7c073bb3b46f2a7949a9ba6d361bd01c962a72639d3d1172
+checksum: 6de5e85919da806f678d40f8a4b40ddf5a9b07f6dd0955f8a6433c424ba2201f
 ---
 # FeatureScroll — Component Spec
 
@@ -38,7 +38,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 
 ```vue
 <script setup>
-import FeatureScroll from '@aziontech/webkit/sections/feature-scroll'
+import FeatureScroll from '@aziontech/webkit/feature-scroll'
 </script>
 
 <template>

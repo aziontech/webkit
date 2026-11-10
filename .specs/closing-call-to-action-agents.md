@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 5da0a41c6dc758fb6a306498a372205ab748bac2e0c18cc536c6db2acb0fc8ec
+checksum: a910824a35c212bb2a858d86af4681b514b000e0b83599f1c8cbe00bff839179
 ---
 # ClosingCallToActionAgents — Component Spec
 
@@ -37,7 +37,7 @@ The close for a reader who may be a person or an agent: one centred ask in the l
 
 ```vue
 <script setup>
-import ClosingCallToActionAgents from '@aziontech/webkit/sections/closing-call-to-action-agents'
+import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
 </script>
 
 <template>

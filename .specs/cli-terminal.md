@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 66de448b728dd31299dc75e537d25f98b3c049bc8ecf59044eb9d2c901f0ff37
+checksum: b1bc18deb2f1e2410d11b44e5529fa733301dc513cc2e5256bdb9f1359b90aae
 ---
 # CliTerminal — Component Spec
 
@@ -37,7 +37,7 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 ```vue
 <script setup>
-import CliTerminal from '@aziontech/webkit/sections/cli-terminal'
+import CliTerminal from '@aziontech/webkit/cli-terminal'
 </script>
 
 <template>

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 5b47c3af41c508b98ee6dbed16437dfb8d6a4a1e70b9fff64dbc5687a73e6dd3
+checksum: 364474d3316daf76692cf2596769c59a3fcdce82ff696b317b984d1c54e82033
 ---
 # ArticleIndexBlog — Component Spec
 
@@ -37,7 +37,7 @@ Every article of the blog as one ruled list, with the controls to narrow it on o
 
 ```vue
 <script setup>
-import ArticleIndexBlog from '@aziontech/webkit/sections/article-index-blog'
+import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
 </script>
 
 <template>

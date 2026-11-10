@@ -4,7 +4,7 @@ import vercelExtendedMono from '@aziontech/webkit/assets/vercel-extended-mono.sv
 import vercelExtendedReversed from '@aziontech/webkit/assets/vercel-extended-reversed.svg'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ComparisonTable from '@aziontech/webkit/sections/comparison-table'
+import ComparisonTable from '@aziontech/webkit/comparison-table'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -12,7 +12,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { CLOUDFLARE_SECTION, VERCEL_SECTION } from './_sections/comparison-table'
 
-const IMPORT = "import ComparisonTable from '@aziontech/webkit/sections/comparison-table'"
+const IMPORT = "import ComparisonTable from '@aziontech/webkit/comparison-table'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('ComparisonTable', section.props)
