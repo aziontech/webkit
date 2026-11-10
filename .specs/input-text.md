@@ -4,10 +4,11 @@ category: inputs
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 1ddfc6708b0b4e2967eefe43e471ec999e50679be29f2ef3e314e8dafbd6c4e2
+checksum: 3c941a27812c744065de36893a5629fd39223087266a4b8df57a7a2519e6329c
 created: 2026-05-22
-last_updated: 2026-07-29
+last_updated: 2026-11-10
 ---
+
 # Input Text — Component Spec
 
 ## Purpose
@@ -36,32 +37,35 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 - Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
 - Set an appropriate `type`/`inputmode` for the content (email, url, …).
+- Set `autocomplete` so the browser can offer saved values, and `:spellcheck="false"` for slugs, IDs, and domains.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | false | Two-way bound value of the field. |
-| `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
-| `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
-| `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but not editable. Native pass-through. |
-| `required` | `boolean` | `false` | false | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
-| `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid`. |
+| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                            |
+| -------------- | -------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`   | `string`                         | `''`        | false    | Two-way bound value of the field.                                                                                                                                |
+| `placeholder`  | `string`                         | `''`        | false    | Placeholder shown when the field is empty.                                                                                                                       |
+| `type`         | `'text' \| 'email' \| 'number'`  | `'text'`    | false    | Native input type. Restricted to single-line variants the field treats identically.                                                                              |
+| `maxLength`    | `number \| undefined`            | `undefined` | false    | Native `maxlength` — maximum number of characters allowed.                                                                                                       |
+| `autocomplete` | `string`                         | `''`        | false    | Native `autocomplete` hint (`email`, `username`, `off`, …). When empty, the attribute is omitted.                                                                |
+| `spellcheck`   | `boolean \| undefined`           | `undefined` | false    | Native `spellcheck`. When unset, the attribute is omitted and the browser default applies; pass `false` for slugs, IDs and domains.                              |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px.                                             |
+| `disabled`     | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; value is visible but not editable. Native pass-through.                                                                               |
+| `required`     | `boolean`                        | `false`     | false    | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
+| `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes                                               |
+| ------------------- | -------- | --------------------------------------------------- |
 | `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
 
 ## Slots
 
-| Slot | Purpose | Notes |
-|---|---|---|
-| `iconLeft` | Leading icon rendered inside the field, before the input. | Hidden from assistive tech (`aria-hidden="true"`). |
+| Slot        | Purpose                                                   | Notes                                              |
+| ----------- | --------------------------------------------------------- | -------------------------------------------------- |
+| `iconLeft`  | Leading icon rendered inside the field, before the input. | Hidden from assistive tech (`aria-hidden="true"`). |
 | `iconRight` | Trailing icon rendered inside the field, after the input. | Hidden from assistive tech (`aria-hidden="true"`). |
 
 ## States
@@ -76,35 +80,35 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                       | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ----------------------------- | ----------------------------------------- | ------ | ------------------------------- |
 | state change (border/ring/bg) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-label-sm` |
-| surface | `var(--bg-surface)` |
-| surface (disabled) | `var(--bg-disabled)` |
-| text | `var(--text-default)` |
-| text (placeholder/muted) | `var(--text-muted)` |
-| text (disabled) | `var(--text-disabled)` |
-| border (default) | `var(--border-default)` |
-| border (hover) | `var(--border-strong)` |
-| border (invalid) | `var(--danger-border)` |
-| border (required) | `var(--warning-border)` |
-| ring (focus) | `var(--ring-color)` |
-| ring offset (focus) | `var(--input-ring-offset, var(--bg-canvas))` — host-tunable via the inherited `--input-ring-offset` custom property |
-| spacing (horizontal padding) | `var(--spacing-sm)` |
-| spacing (gap between icon and input) | `var(--spacing-xs)` |
-| shape | `var(--shape-elements)` |
+| Region                               | Token (DESIGN.md)                                                                                                   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| typography                           | `.text-label-sm`                                                                                                    |
+| surface                              | `var(--bg-surface)`                                                                                                 |
+| surface (disabled)                   | `var(--bg-disabled)`                                                                                                |
+| text                                 | `var(--text-default)`                                                                                               |
+| text (placeholder/muted)             | `var(--text-muted)`                                                                                                 |
+| text (disabled)                      | `var(--text-disabled)`                                                                                              |
+| border (default)                     | `var(--border-default)`                                                                                             |
+| border (hover)                       | `var(--border-strong)`                                                                                              |
+| border (invalid)                     | `var(--danger-border)`                                                                                              |
+| border (required)                    | `var(--warning-border)`                                                                                             |
+| ring (focus)                         | `var(--ring-color)`                                                                                                 |
+| ring offset (focus)                  | `var(--input-ring-offset, var(--bg-canvas))` — host-tunable via the inherited `--input-ring-offset` custom property |
+| spacing (horizontal padding)         | `var(--spacing-sm)`                                                                                                 |
+| spacing (gap between icon and input) | `var(--spacing-xs)`                                                                                                 |
+| shape                                | `var(--shape-elements)`                                                                                             |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

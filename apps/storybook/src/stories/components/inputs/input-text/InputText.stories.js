@@ -59,6 +59,22 @@ const meta = {
       description: 'Native `maxlength` — maximum number of characters allowed.',
       table: { category: 'props', type: { summary: 'number' } }
     },
+    autocomplete: {
+      control: 'text',
+      description:
+        'Native `autocomplete` hint (`email`, `username`, `off`, …). When empty, the attribute is omitted.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    spellcheck: {
+      control: 'boolean',
+      description:
+        'Native `spellcheck`. When unset, the attribute is omitted and the browser default applies; pass `false` for slugs, IDs and domains.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean | undefined' },
+        defaultValue: { summary: 'undefined' }
+      }
+    },
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
@@ -291,6 +307,7 @@ export const Invalid = {
 const EMAIL_TEMPLATE = `<div class="flex items-start gap-2 w-[320px]">
   <InputText
     type="email"
+    autocomplete="email"
     placeholder="you@example.com"
     :model-value="value"
     :invalid="invalid"

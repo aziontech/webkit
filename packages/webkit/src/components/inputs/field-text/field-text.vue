@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
-  import InputText from '../input-text/input-text.vue'
+  import InputText, { type InputTextType } from '../input-text/input-text.vue'
   import Label from '../label/label.vue'
 
   defineOptions({
@@ -11,6 +11,7 @@
   })
 
   type FieldTextSize = 'small' | 'medium' | 'large'
+  export type FieldTextType = InputTextType
 
   interface Props {
     /** Two-way bound value of the underlying InputText. */
@@ -19,6 +20,12 @@
     label?: string
     /** Placeholder forwarded to the InputText. */
     placeholder?: string
+    /** Native input type forwarded to the InputText. */
+    type?: FieldTextType
+    /** Native autocomplete hint forwarded to the InputText. When empty, the attribute is omitted. */
+    autocomplete?: string
+    /** Native spellcheck forwarded to the InputText. When unset, the browser default applies. */
+    spellcheck?: boolean
     /** Auxiliary text rendered inside HelperText. When empty, the helper row is omitted. */
     helperText?: string
     /** Size forwarded to the InputText. Heights: small=28px, medium=32px, large=40px. */
@@ -41,6 +48,9 @@
     modelValue: '',
     label: '',
     placeholder: '',
+    type: 'text',
+    autocomplete: '',
+    spellcheck: undefined,
     helperText: '',
     size: 'medium',
     disabled: false,
@@ -98,6 +108,9 @@
     <InputText
       :model-value="modelValue"
       :placeholder="placeholder"
+      :type="type"
+      :autocomplete="autocomplete"
+      :spellcheck="spellcheck"
       :size="size"
       :disabled="disabled"
       :readonly="readonly"
