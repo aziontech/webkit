@@ -64,20 +64,30 @@
     >
       <div
         :data-side="readout.side"
-        class="flex w-max max-w-(--container-3xs) flex-col gap-(--spacing-xxs) rounded-(--shape-elements) bg-(--chart-tooltip-bg) p-(--spacing-xs) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
+        class="flex w-max max-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
       >
-        <span class="text-label-sm text-(--chart-tooltip-muted)">{{ readout.title }}</span>
         <span
-          v-for="row in readout.rows"
-          :key="row.id"
-          class="flex items-center gap-(--spacing-xs)"
+          class="border-b border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-label-md"
         >
+          {{ readout.title }}
+        </span>
+        <span class="flex flex-col gap-(--spacing-xxs) px-(--spacing-sm) py-(--spacing-xs)">
           <span
-            class="h-0.5 w-3 shrink-0 rounded-full bg-(--chart-tooltip-key)"
-            :style="{ '--chart-tooltip-key': row.color }"
-          />
-          <span class="text-label-code-sm tabular-nums">{{ row.value }}</span>
-          <span class="truncate text-body-xs text-(--chart-tooltip-muted)">{{ row.name }}</span>
+            v-for="row in readout.rows"
+            :key="row.id"
+            class="flex items-center gap-(--spacing-xs)"
+          >
+            <span
+              class="h-0.5 w-3 shrink-0 rounded-full bg-(--chart-tooltip-key)"
+              :style="{ '--chart-tooltip-key': row.color }"
+            />
+            <span class="min-w-0 flex-1 truncate text-label-md text-(--chart-tooltip-muted)">
+              {{ row.name }}
+            </span>
+            <span class="shrink-0 ps-(--spacing-sm) text-label-code-md tabular-nums">
+              {{ row.value }}
+            </span>
+          </span>
         </span>
       </div>
     </div>

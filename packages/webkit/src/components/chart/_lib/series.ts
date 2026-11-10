@@ -7,6 +7,7 @@ const MAX_SLOTS = 6
 export function colorToken(color: ChartColor): string {
   if (color === 'other') return 'var(--chart-series-other)'
   if (typeof color === 'number') return `var(--chart-series-${color})`
+  if (color.startsWith('severity-')) return `var(--${color})`
   return `var(--chart-status-${color})`
 }
 

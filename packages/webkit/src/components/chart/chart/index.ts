@@ -46,6 +46,7 @@ export type {
   ChartLabel,
   ChartPoint,
   ChartSeries,
+  ChartSeverity,
   ChartStatus
 } from '../_lib'
 export type { ChartAxisKind, ChartOrientation } from './injection-key'

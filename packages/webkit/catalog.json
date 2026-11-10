@@ -131,6 +131,7 @@
       "--chart-status-success",
       "--chart-status-warning",
       "--chart-tooltip-bg",
+      "--chart-tooltip-border",
       "--chart-tooltip-muted",
       "--chart-tooltip-text",
       "--code-sintax-comment",
@@ -543,6 +544,11 @@
       "--secondary-contrast",
       "--secondary-mask",
       "--secondary-selected",
+      "--severity-critical",
+      "--severity-high",
+      "--severity-info",
+      "--severity-low",
+      "--severity-medium",
       "--shadow-2xl",
       "--shadow-2xs",
       "--shadow-lg",
@@ -1009,6 +1015,7 @@
         "--chart-status-success",
         "--chart-status-warning",
         "--chart-tooltip-bg",
+        "--chart-tooltip-border",
         "--chart-tooltip-muted",
         "--chart-tooltip-text"
       ],
@@ -1461,6 +1468,13 @@
         "--secondary-contrast",
         "--secondary-mask",
         "--secondary-selected"
+      ],
+      "severity": [
+        "--severity-critical",
+        "--severity-high",
+        "--severity-info",
+        "--severity-low",
+        "--severity-medium"
       ],
       "shadow": [
         "--shadow-2xl",
@@ -2750,6 +2764,7 @@
         "Keep one value axis. Index two measures to a common base or split them into two charts.",
         "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
         "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
+        "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
         "Keep filters and the time range in one row above the dashboard, never inside a chart.",
         "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
       ]
@@ -2942,6 +2957,7 @@
         "Keep one value axis. Index two measures to a common base or split them into two charts.",
         "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
         "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
+        "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
         "Keep filters and the time range in one row above the dashboard, never inside a chart.",
         "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
       ]
@@ -3497,6 +3513,13 @@
           "doc": "Formats the figure."
         },
         {
+          "name": "unit",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Unit read after the figure, in a muted tone. Empty hides it."
+        },
+        {
           "name": "delta",
           "type": "number | null",
           "default": "null",
@@ -3525,13 +3548,6 @@
           "doc": "Sparkline values, oldest first. Empty hides the sparkline."
         },
         {
-          "name": "size",
-          "type": "'small' | 'medium' | 'large'",
-          "default": "'medium'",
-          "required": "false",
-          "doc": "Scale of the figure."
-        },
-        {
           "name": "loading",
           "type": "boolean",
           "default": "false",
@@ -3551,7 +3567,7 @@
           "notes": "Trailing content beside the label, such as an info icon or a menu."
         }
       ],
-      "purpose": "A KPI tile: a label, one big figure that counts up into place, an optional delta against a named period, and an optional sparkline. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts.",
+      "purpose": "A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses.",
       "useWhen": [
         "The headline numbers of a dashboard: total requests, blocked threats, cache hit ratio, error rate.",
         "A single value whose change matters more than its history; the sparkline adds the shape of that history."
@@ -3564,13 +3580,243 @@
       "related": [
         "chart` — the full history behind a tile.",
         "chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.",
-        "big-numbers` — the marketing figure band, with no delta and no live data."
+        "big-numbers` — the marketing figure band, with no delta and no live data.",
+        "spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
+        "tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
+        "divider` — carries the \"No data\" `Tag` across the empty band."
       ],
       "bestPractices": [
         "Name the comparison period in `deltaLabel` (\"vs previous 24 hours\"); a bare percentage is ambiguous.",
         "Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.",
         "Keep the label in sentence case with no trailing colon.",
+        "Put the unit in `unit` (\"GB\", \"ms\", \"%\"), not inside `formatValue`, so it reads muted beside the figure.",
+        "Leave `trend` out for a strip of figures with no history; the tile then has no chart band.",
         "Give the sparkline the same buckets as the chart below it, about twelve points."
+      ]
+    },
+    "bar-list": {
+      "import": "@aziontech/webkit/bar-list",
+      "target": "./src/components/chart/bar-list/bar-list.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/bar-list",
+      "category": "chart",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "BarListItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link."
+        },
+        {
+          "name": "sort",
+          "type": "'descending' | 'ascending' | 'none'",
+          "default": "'descending'",
+          "required": "false",
+          "doc": "Row order; `none` keeps the order of `items`."
+        },
+        {
+          "name": "color",
+          "type": "ChartColor",
+          "default": "1",
+          "required": "false",
+          "doc": "Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface."
+        },
+        {
+          "name": "clickable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders rows without an `href` as buttons that emit `item-click`."
+        },
+        {
+          "name": "formatValue",
+          "type": "(value: number) => string",
+          "default": "formatCompact",
+          "required": "false",
+          "doc": "Formats the value column."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders Skeleton rows in place of the list."
+        },
+        {
+          "name": "emptyTitle",
+          "type": "string",
+          "default": "'No data available'",
+          "required": "false",
+          "doc": "Title of the empty state shown when `items` is empty."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the list."
+        }
+      ],
+      "events": [
+        {
+          "name": "item-click",
+          "payload": "(event: MouseEvent, item: BarListItem)",
+          "notes": "A row activated — a clickable row, or a link row (the link still navigates). `item` is the consumer's own item object."
+        }
+      ],
+      "purpose": "A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column. It reads as a list, not a chart — no axes, no grid — so it suits top-N breakdowns inside a card, where a horizontal `chart` would spend its width on an axis gutter.",
+      "useWhen": [
+        "Top-N breakdowns inside a card: top paths, top countries, top user agents, top rules triggered.",
+        "A ranking where the name matters as much as the size, and names are long enough to need the bar's full width.",
+        "Rows that lead somewhere — a filtered view of that path or country — via `href` or `item-click`."
+      ],
+      "avoidWhen": [
+        "Several series per category, or values over time → use `chart`.",
+        "A share of a whole where the parts sum to 100% → use `donut-chart`.",
+        "One value against a limit (quota, usage) → use `progress-bar`."
+      ],
+      "related": [
+        "chart` — horizontal bars with an axis, for comparing several series per category.",
+        "donut-chart` — the share view of the same breakdown when the parts sum to a whole.",
+        "chart-card` — the box a BarList sits in on a dashboard."
+      ],
+      "bestPractices": [
+        "Keep it to about ten rows; fold the tail into an \"Other\" row in the data rather than scrolling.",
+        "Leave `sort` on `descending` for rankings; use `none` only when the order itself carries meaning (pipeline steps, weekdays).",
+        "Pass the same `formatValue` as the chart beside it so a number reads the same in both.",
+        "Give interactive rows a destination the user expects — a filtered view of that item — not a detail drawer of the whole list."
+      ]
+    },
+    "spark-chart": {
+      "import": "@aziontech/webkit/spark-chart",
+      "target": "./src/components/chart/spark-chart/spark-chart.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/spark-chart",
+      "category": "chart",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "values",
+          "type": "(number | null)[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The series, oldest first; null leaves a gap."
+        },
+        {
+          "name": "kind",
+          "type": "'area' | 'line' | 'bar'",
+          "default": "'area'",
+          "required": "false",
+          "doc": "Mark drawn for the series."
+        },
+        {
+          "name": "color",
+          "type": "ChartColor",
+          "default": "1",
+          "required": "false",
+          "doc": "Hue of the mark: a categorical slot (1–6), `other`, or a status."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height: 32, 48 or 64 pixels. Width follows the container."
+        },
+        {
+          "name": "fromZero",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Starts the value range at zero instead of the lowest value; bars always start at zero."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name; when set the chart is an image, when empty it is decorative."
+        }
+      ],
+      "purpose": "A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a ticker card — where a full `chart` would be too much.",
+      "useWhen": [
+        "The shape of a metric's recent history beside its current value: requests in the last hour, latency over the day.",
+        "Rows of comparable items, each with its own trend: one SparkChart per row of a list or table.",
+        "The trend inside a `stat-tile`, which draws its `trend` through this component."
+      ],
+      "avoidWhen": [
+        "The reader needs exact values, a time axis or several series → use `chart`.",
+        "A ranking across categories → use `bar-list`.",
+        "Up/down status over discrete periods → use `tracker`."
+      ],
+      "related": [
+        "stat-tile` — the KPI tile that renders its sparkline with SparkChart.",
+        "chart` — the full history with axes, tooltip and legend.",
+        "tracker` — a strip of status blocks rather than a measured shape."
+      ],
+      "bestPractices": [
+        "Pair it with the number it describes; a spark alone has no scale and says nothing exact.",
+        "Use the same buckets as the chart behind it, about twelve to thirty points.",
+        "Leave `fromZero` off for prices and latencies, where the shape matters more than the magnitude; turn it on for counts that are meaningful from zero.",
+        "Give it an `ariaLabel` only when it stands without a nearby number; otherwise keep it decorative."
+      ]
+    },
+    "tracker": {
+      "import": "@aziontech/webkit/tracker",
+      "target": "./src/components/chart/tracker/tracker.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/tracker",
+      "category": "chart",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "TrackerItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders a Skeleton strip in place of the blocks."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the strip."
+        }
+      ],
+      "purpose": "A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.",
+      "useWhen": [
+        "Uptime and availability history: ninety days of a service, a region or an origin.",
+        "Pass/fail history: health checks, scheduled jobs, deployments.",
+        "Any discrete sequence where each period has one state and the pattern of failures matters."
+      ],
+      "avoidWhen": [
+        "A measured value over time → use `chart` or `spark-chart`.",
+        "The current state of one thing → use `status-indicator`.",
+        "A ranking across categories → use `bar-list`."
+      ],
+      "related": [
+        "status-indicator` — the current state; a Tracker is that state's history.",
+        "spark-chart` — a measured trend rather than a sequence of states.",
+        "chart-card` — the box a Tracker sits in, with the uptime figure in its header."
+      ],
+      "bestPractices": [
+        "Write each `label` as period plus state (\"Nov 3 · Partial outage\"), so the readout stands alone.",
+        "Leave periods with no data without a severity; they render neutral rather than pretending to be healthy.",
+        "Keep the period count fixed for a given view (90 days, 24 hours) so strips stacked in a list line up.",
+        "Put the summary figure (99.98% uptime) beside the strip; the strip shows where, the figure shows how much."
       ]
     },
     "tag": {
@@ -4794,6 +5040,65 @@
         "Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`.",
         "Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.",
         "Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology."
+      ]
+    },
+    "severity-tag": {
+      "import": "@aziontech/webkit/severity-tag",
+      "target": "./src/components/content/severity-tag/severity-tag.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/severity-tag",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "level",
+          "type": "'critical' | 'high' | 'medium' | 'low' | 'info'",
+          "default": "'info'",
+          "required": "false",
+          "doc": "Severity level; sets how many glyph bars fill, their colour and the default label."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Text of the tag; empty falls back to the level name in sentence case."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Replaces the label text."
+        }
+      ],
+      "purpose": "SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info. The level reads from a four-bar glyph, where the filled bars count the level, and from the label, so two levels never depend on colour alone to differ. It differs from `tag`, whose `severity` prop is a colour tone (success, warning, danger) with no order between values.",
+      "useWhen": [
+        "Show how severe an alert, finding, detection, incident or vulnerability is, in a table cell, a list row or a detail header.",
+        "Rank items on a fixed five-step scale where critical and high must stay visibly distinct."
+      ],
+      "avoidWhen": [
+        "The value is an outcome or a status with no order (allowed, blocked, healthy) → use `tag`.",
+        "The value is a count or a one-word indicator on an icon or avatar → use `badge`.",
+        "The user can select or remove the value (a severity filter) → use `chip`."
+      ],
+      "related": [
+        "tag` — a toned status or category label; use it for outcomes and states, not for an ordered level.",
+        "badge` — a dense count or short-label indicator.",
+        "chip` — an interactive or removable token, for severity filters."
+      ],
+      "bestPractices": [
+        "Keep the default label (the level name) so the text always names the level; override `label` only to translate it.",
+        "Use one SeverityTag per row, in its own column, so the glyphs line up and the scale reads down the column.",
+        "Do not pair the tag with a toned `tag` for the same level; the glyph and the ramp already carry it."
       ]
     },
     "shell-mockup": {

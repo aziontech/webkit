@@ -18,7 +18,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     ids: () => [],
-    curve: 'monotone',
+    curve: 'linear',
     markers: false
   })
 

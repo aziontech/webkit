@@ -45,7 +45,6 @@ export interface ChartContext {
   formatValue: (value: number) => string
   formatLabel: (label: ChartLabel) => string
   resolveSeries: (ids: readonly string[]) => NormalizedSeries[]
-  markKindOf: (id: string) => ChartMarkKind
   setActiveIndex: (index: number | null) => void
   setEmphasized: (id: string | null) => void
   toggleSeries: (event: MouseEvent, id: string) => void

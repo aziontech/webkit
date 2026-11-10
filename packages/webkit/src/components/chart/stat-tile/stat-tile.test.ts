@@ -24,12 +24,6 @@ describe('StatTile', () => {
     expect(label?.textContent).toContain('Blocked threats')
   })
 
-  it('maps size to a data attribute', () => {
-    expect(mount({ size: 'large' }).getByTestId('chart-stat-tile').getAttribute('data-size')).toBe(
-      'large'
-    )
-  })
-
   it('reaches the formatted value and exposes it to assistive tech', async () => {
     const view = mount()
     await vi.waitFor(() =>
@@ -38,9 +32,19 @@ describe('StatTile', () => {
     expect(view.getByText('48.2K', { selector: '.sr-only' })).toBeTruthy()
   })
 
-  it('renders a dash for a missing value', () => {
-    const view = mount({ value: null })
+  it('reads the unit after the figure, muted and announced with the value', async () => {
+    const view = mount({ value: 842, unit: 'GB' })
+    expect(view.getByTestId('chart-stat-tile__unit').textContent?.trim()).toBe('GB')
+    await vi.waitFor(() => expect(view.getByText('842 GB', { selector: '.sr-only' })).toBeTruthy())
+  })
+
+  it('renders a dash over the no-data band for a missing value', () => {
+    const view = mount({ value: null, unit: 'GB', trend: [1, 2, 3] })
     expect(view.getByTestId('chart-stat-tile__value').textContent?.trim()).toBe('–')
+    expect(view.queryByTestId('chart-stat-tile__unit')).toBeNull()
+    expect(view.getByText('No value', { selector: '.sr-only' })).toBeTruthy()
+    expect(view.getByTestId('chart-stat-tile__empty').textContent).toContain('No data')
+    expect(view.queryByTestId('chart-stat-tile__sparkline')).toBeNull()
   })
 
   it('reads a rise as good, and as bad when inverse', () => {
@@ -50,12 +54,18 @@ describe('StatTile', () => {
     expect(rise.textContent).toContain('+12.40%')
     expect(rise.textContent).toContain('better')
     expect(rise.textContent).toContain('vs previous 24 hours')
+    expect(good.getByTestId('chart-stat-tile__delta-tag').getAttribute('data-severity')).toBe(
+      'success'
+    )
     good.unmount()
 
     const bad = mount({ delta: 12.4, inverse: true })
     const worse = bad.getByTestId('chart-stat-tile__delta')
     expect(worse.querySelector('[data-trend]')?.getAttribute('data-trend')).toBe('bad')
     expect(worse.textContent).toContain('worse')
+    expect(bad.getByTestId('chart-stat-tile__delta-tag').getAttribute('data-severity')).toBe(
+      'danger'
+    )
     bad.unmount()
 
     const flat = mount({ delta: 0.001 })
@@ -71,11 +81,14 @@ describe('StatTile', () => {
     const view = mount()
     expect(view.queryByTestId('chart-stat-tile__delta')).toBeNull()
     expect(view.queryByTestId('chart-stat-tile__sparkline')).toBeNull()
+    expect(view.queryByTestId('chart-stat-tile__empty')).toBeNull()
   })
 
   it('draws a sparkline from the trend', () => {
     const view = mount({ trend: [1, 3, 2, 5, 4] })
-    expect(view.getByTestId('chart-stat-tile__sparkline').querySelectorAll('path')).toHaveLength(2)
+    const spark = view.getByTestId('chart-stat-tile__sparkline')
+    expect(spark.getAttribute('data-kind')).toBe('area')
+    expect(spark.querySelectorAll('path').length).toBeGreaterThan(0)
   })
 
   it('renders Skeleton lines while loading', () => {
@@ -86,7 +99,12 @@ describe('StatTile', () => {
   })
 
   it('has no a11y violations with and without a delta', async () => {
-    for (const props of [{}, { delta: -3.2, trend: [3, 2, 1] }, { loading: true }]) {
+    for (const props of [
+      {},
+      { delta: -3.2, unit: 'ms', trend: [3, 2, 1] },
+      { value: null },
+      { loading: true }
+    ]) {
       const view = mount(props)
       await expectNoA11yViolations(view.container)
       view.unmount()

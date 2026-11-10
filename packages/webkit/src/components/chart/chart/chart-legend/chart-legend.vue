@@ -27,8 +27,8 @@
       name: entry.name,
       color: entry.color,
       total: ctx.formatValue(entry.total),
-      kind: ctx.markKindOf(entry.id),
-      hidden: ctx.hidden.value.has(entry.id)
+      hidden: ctx.hidden.value.has(entry.id),
+      dimmed: ctx.emphasized.value !== null && ctx.emphasized.value !== entry.id
     }))
   )
 </script>
@@ -57,10 +57,10 @@
         @blur="ctx.setEmphasized(null)"
       >
         <span
-          :data-kind="entry.kind"
           :data-hidden="entry.hidden || null"
+          :data-dimmed="entry.dimmed || null"
           :style="{ '--chart-legend-key': entry.color }"
-          class="shrink-0 bg-(--chart-legend-key) data-[kind=area]:size-2.5 data-[kind=area]:rounded-(--shape-flat) data-[kind=bar]:size-2.5 data-[kind=bar]:rounded-(--shape-flat) data-[kind=line]:h-0.5 data-[kind=line]:w-3 data-[kind=line]:rounded-full data-[hidden]:opacity-30"
+          class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--chart-legend-key) transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
         />
         <span>{{ entry.name }}</span>
         <span

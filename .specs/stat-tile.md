@@ -3,17 +3,17 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: approved
-checksum: 19a974d8f76aa5bf611354f312ab95d51d523f27b003dadda9ceb1014437f2dd
+checksum: 4b2fb0c9307c7d205843dfdad3aae0de051e4d5085b38eca330fcf7c143a5319
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # StatTile — Component Spec
 
 ## Purpose
 
-A KPI tile: a label, one big figure that counts up into place, an optional delta against a named period, and an optional sparkline. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts.
+A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses.
 
 ## When to use
 
@@ -31,12 +31,17 @@ A KPI tile: a label, one big figure that counts up into place, an optional delta
 - `chart` — the full history behind a tile.
 - `chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.
 - `big-numbers` — the marketing figure band, with no delta and no live data.
+- `spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
+- `tag` — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
+- `divider` — carries the "No data" `Tag` across the empty band.
 
 ## Best practices
 
 - Name the comparison period in `deltaLabel` ("vs previous 24 hours"); a bare percentage is ambiguous.
 - Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.
 - Keep the label in sentence case with no trailing colon.
+- Put the unit in `unit` ("GB", "ms", "%"), not inside `formatValue`, so it reads muted beside the figure.
+- Leave `trend` out for a strip of figures with no history; the tile then has no chart band.
 - Give the sparkline the same buckets as the chart below it, about twelve points.
 
 ## Usage
@@ -65,11 +70,11 @@ import StatTile from '@aziontech/webkit/stat-tile'
 | `label` | `string` | `''` | false | Metric name, in sentence case. Fallback for the default slot. |
 | `value` | `number \| null` | `null` | false | The current value. It counts up from the previous value on change; null renders a dash. |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the figure. |
+| `unit` | `string` | `''` | false | Unit read after the figure, in a muted tone. Empty hides it. |
 | `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent. Null hides the delta. |
 | `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
 | `trend` | `number[]` | `[]` | false | Sparkline values, oldest first. Empty hides the sparkline. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Scale of the figure. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
 
 ## Events
@@ -85,8 +90,8 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## States
 
-- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null)
-- `data-size`: `small` | `medium` | `large`
+- Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Divider` carrying a "No data" `Tag`)
+- The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `secondary` when flat
 - `data-loading` mirrors `loading`
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 
@@ -95,18 +100,20 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
 | value change | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance` | skipped under `prefers-reduced-motion`; the final value renders at once |
-| sparkline entrance | `transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance`, `pathLength="1"` on `data-entered` | `slow-02` · `productive-entrance` | `motion-reduce:transition-none` |
+| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`) | `slow-02` · `productive-entrance` | `motion-reduce:transition-none` inside `spark-chart` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
 | surface | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
-| label | `.text-body-sm`, `var(--text-muted)` |
-| figure | `.text-big-number-sm`, `.text-big-number-md`, `.text-big-number-lg`, `var(--text-default)` |
-| delta | `.text-label-sm`, `var(--success-contrast)`, `var(--danger-contrast)`, `var(--text-muted)` |
-| sparkline | `var(--chart-series-other)`, `var(--chart-series-1)` |
-| spacing | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)` |
+| label | `.text-label-sm`, `var(--text-muted)` |
+| figure | `.text-big-number-sm`, `var(--text-default)` — one size |
+| unit | the figure's big-number class, `var(--text-muted)` |
+| delta | `tag` at `size="small"` (`success` / `danger` / `secondary`); period in `.text-label-sm`, `var(--text-muted)` |
+| sparkline | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge |
+| no-data band | `spark-chart` `color="other"` at reduced opacity, `divider`, `tag` `severity="secondary"` at `size="small"` |
+| spacing | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)` |
 
 ## Theme gaps
 
@@ -117,9 +124,9 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 ## Accessibility (WCAG 2.1 AA)
 
 - The tile is a `<section>` named by its label (`aria-labelledby`).
-- The animated figure is `aria-hidden`; a visually hidden copy holds the final formatted value, so assistive tech never reads a ticking number.
+- The animated figure and its unit are `aria-hidden`; a visually hidden copy holds the final formatted value with its unit, so assistive tech never reads a ticking number.
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
-- The sparkline SVG is `aria-hidden`; the figure and delta carry the information.
+- The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.
 - Proportional figures on the big number; `tabular-nums` on the delta.
 - Text contrast at least 4.5:1 in both themes.
 
@@ -127,10 +134,9 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 - Default — a tile with a delta and a sparkline.
 - Deltas — composite: a good rise, a bad rise with `inverse`, a flat change, no delta.
-- Sizes — composite: `small`, `medium`, `large`.
 - CountUp — a value that changes on a button press; excluded from visual regression because the count-up is timer driven, Default is its static sibling.
 - Loading — `loading`.
-- Empty — `value` null with no delta and no trend: the tile keeps its size and shows a dash, announced as No value.
+- Empty — `value` null with no delta and no trend: a dash, announced as No value, over the no-data band.
 
 ## Constraints — DO NOT
 

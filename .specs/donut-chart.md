@@ -3,10 +3,10 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: approved
-checksum: 7c9333654dcef295b13574be4dd9f45e84926cda2ed400572e1ce5e6426e5a4b
+checksum: b926dd1d3233b1e8590425f88ea169ea1f4a4e46af204b64af6e8ba54374ae19
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # DonutChart — Component Spec
@@ -122,8 +122,9 @@ const series = [
 | slices | `var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)` |
 | status slices | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
 | slice gap | `var(--bg-surface)` |
-| center value | `.text-heading-md` |
-| center caption, legend | `.text-body-sm`, `var(--text-muted)`, `var(--text-default)` |
+| center value | `.text-big-number-sm`, `tabular-nums` |
+| center caption, legend names | `.text-body-sm`, `var(--text-muted)`, `var(--text-default)` |
+| legend values and shares | `.text-label-code-md`, `tabular-nums`, `var(--text-muted)` |
 | spacing | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)` |
 | focus | `var(--ring-color)` |
 

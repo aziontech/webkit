@@ -19,7 +19,7 @@
   const props = withDefaults(defineProps<Props>(), {
     ids: () => [],
     stacked: false,
-    curve: 'monotone'
+    curve: 'linear'
   })
 
   const attrs = useAttrs()

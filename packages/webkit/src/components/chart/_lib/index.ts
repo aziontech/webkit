@@ -22,6 +22,7 @@ export type {
   ChartPoint,
   ChartPosition,
   ChartSeries,
+  ChartSeverity,
   ChartSlot,
   ChartStatus,
   NormalizedSeries

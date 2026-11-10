@@ -21,6 +21,7 @@ import Dropdown, {
   DropdownOption,
   DropdownTrigger
 } from '@aziontech/webkit/dropdown'
+import Hint from '@aziontech/webkit/hint'
 import IconButton from '@aziontech/webkit/icon-button'
 import Tag from '@aziontech/webkit/tag'
 import { ref } from 'vue'
@@ -52,6 +53,7 @@ const components = {
   DropdownTrigger,
   DropdownGroup,
   DropdownOption,
+  Hint,
   IconButton,
   Tag
 }
@@ -59,6 +61,7 @@ const components = {
 const THREATS_SCRIPT = [
   IMPORT,
   CHART_IMPORT,
+  "import Hint from '@aziontech/webkit/hint'",
   '',
   declare('labels', LABELS),
   declare('series', THREATS_VS_REQUESTS)
@@ -181,9 +184,11 @@ export default meta
 
 const CARD_BODY = `
   <ChartCard.Header>
-    <ChartCard.Title>Threats vs requests</ChartCard.Title>
+    <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+      <ChartCard.Title>Threats vs requests</ChartCard.Title>
+      <Hint text="Requests WAF analyzed, split into blocked, logged and allowed." />
+    </span>
   </ChartCard.Header>
-  <ChartCard.Description>Requests WAF analyzed, split into blocked, logged and allowed.</ChartCard.Description>
   <ChartCard.Content>
     ${CHART}
   </ChartCard.Content>
@@ -205,7 +210,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'A padded card with a title, a description, the chart, and a footer naming the range. The chart inside takes its accessible name from the card title.'
+          'A padded card with a title and its info hint, the chart, and a footer naming the range. The chart inside takes its accessible name from the card title.'
       },
       source: { code: toSfc(THREATS_SCRIPT, DEFAULT_MARKUP) }
     }
@@ -251,7 +256,10 @@ export const Content = {
 
 const CONTROLS_TEMPLATE = `<ChartCard class="max-w-(--container-3xl)">
   <ChartCard.Header>
-    <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
+    <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+      <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
+      <Hint text="Requests carrying cross-site scripting attacks against your domains." />
+    </span>
     <ChartCard.Controls>
       <Tag label="Sum" severity="secondary" icon="pi pi-calculator" />
       <Tag label="+12.40%" severity="danger" />
@@ -267,7 +275,6 @@ const CONTROLS_TEMPLATE = `<ChartCard class="max-w-(--container-3xl)">
       </Dropdown>
     </ChartCard.Controls>
   </ChartCard.Header>
-  <ChartCard.Description>Requests carrying cross-site scripting attacks against your domains.</ChartCard.Description>
   <ChartCard.Content>
     <Chart :series="series" :labels="labels">
       <Chart.Grid />
@@ -299,6 +306,7 @@ export const WithControls = {
             IMPORT,
             CHART_IMPORT,
             "import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from '@aziontech/webkit/dropdown'",
+            "import Hint from '@aziontech/webkit/hint'",
             "import IconButton from '@aziontech/webkit/icon-button'",
             "import Tag from '@aziontech/webkit/tag'",
             '',

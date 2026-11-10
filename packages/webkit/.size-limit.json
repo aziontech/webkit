@@ -675,5 +675,25 @@
     "name": "chart-card-resize-handle",
     "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
     "limit": "1.75 KB"
+  },
+  {
+    "name": "bar-list",
+    "path": "src/components/chart/bar-list/bar-list.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "spark-chart",
+    "path": "src/components/chart/spark-chart/spark-chart.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "tracker",
+    "path": "src/components/chart/tracker/tracker.vue",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "severity-tag",
+    "path": "src/components/content/severity-tag/severity-tag.vue",
+    "limit": "1.25 KB"
   }
 ]

@@ -3,10 +3,10 @@ name: chart
 category: chart
 structure: composition
 status: approved
-checksum: bfb61a48c3767ac36055e7652b533dae2c0c87660f7909a12765242ff2999b83
+checksum: cdae440349656c9a3bead34de87475f355db854cc432d96ca4c8fb9c6c3b554b
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Chart — Component Spec
@@ -42,6 +42,7 @@ A cartesian chart — lines, areas and bars over one category axis — composed 
 - Keep one value axis. Index two measures to a common base or split them into two charts.
 - Let the legend carry identity for two or more series; a single series needs no legend, its title names it.
 - Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.
+- Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.
 - Keep filters and the time range in one row above the dashboard, never inside a chart.
 - While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton.
 
@@ -98,11 +99,11 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: _none_.
 - `chart-line/chart-line.vue` — one 2px line per selected series, round joins, a marker (r 4, 2px `var(--bg-surface)` ring) on every series at the active index.
-  - Props: `ids?: string[]` (default `[]` — every visible series), `curve?: 'linear' | 'monotone'` (default `'monotone'`), `markers?: boolean` (default `false` — a marker on every point, not only the active one).
+  - Props: `ids?: string[]` (default `[]` — every visible series), `curve?: 'linear' | 'monotone'` (default `'linear'`), `markers?: boolean` (default `false` — a marker on every point, not only the active one).
   - Events: _none_.
   - Slots: _none_.
 - `chart-area/chart-area.vue` — a 10% wash plus a 2px edge per selected series; stacked when asked.
-  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `curve?: 'linear' | 'monotone'` (default `'monotone'`).
+  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `curve?: 'linear' | 'monotone'` (default `'linear'`).
   - Events: _none_.
   - Slots: _none_.
 - `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal.
@@ -113,11 +114,11 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): the label, then every visible series with a 2px line key, value first in tabular figures. Inverse surface `var(--chart-tooltip-bg)`; flips to the other side past the middle of the plot.
+- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot.
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), the swatch mirroring its mark, the name, and the series total. Hover and focus emphasize the series. Renders nothing for a single series.
+- `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
   - Props: `totals?: boolean` (default `false` — show each series total beside its name).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
@@ -213,12 +214,14 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | series 1 to 6 | `var(--chart-series-1)` … `var(--chart-series-6)` |
 | folded series | `var(--chart-series-other)` |
 | status series | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)` |
+| severity series | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)` |
 | gridlines | `var(--chart-grid)` |
 | axis rule | `var(--chart-axis)` |
 | tick labels | `var(--chart-label)`, `.text-label-sm` |
 | crosshair | `var(--chart-crosshair)` |
-| tooltip surface | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)` |
-| tooltip values | `.text-label-code-sm` |
+| tooltip surface | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)` |
+| tooltip label and series names | `.text-label-md` |
+| tooltip values | `.text-label-code-md` |
 | marker ring | `var(--bg-surface)` |
 | tooltip and legend shape | `var(--shape-elements)` |
 | spacing | `var(--spacing-xs)`, `var(--spacing-sm)` |

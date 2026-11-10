@@ -272,7 +272,7 @@
     <div
       v-else-if="isEmpty"
       :data-size="size"
-      class="flex flex-1 items-center justify-center data-[size=small]:min-h-32 data-[size=medium]:min-h-44 data-[size=large]:min-h-60"
+      class="flex flex-1 items-stretch data-[size=small]:min-h-32 data-[size=medium]:min-h-44 data-[size=large]:min-h-60"
     >
       <slot name="empty">
         <EmptyState
@@ -280,6 +280,7 @@
           :description="emptyDescription"
           icon="pi pi-chart-pie"
           size="small"
+          bordered
           :data-testid="`${testId}__empty`"
         >
           <template
@@ -391,7 +392,7 @@
             :total="total"
             :active="active ? active.source : null"
           >
-            <span class="text-heading-md tabular-nums text-(--text-default)">{{
+            <span class="text-big-number-sm tabular-nums text-(--text-default)">{{
               centerValue
             }}</span>
             <span class="line-clamp-2 text-body-sm text-(--text-muted)">{{ centerCaption }}</span>
@@ -418,11 +419,15 @@
             <span
               :data-hidden="entry.hidden || null"
               :style="{ '--donut-key': entry.color }"
-              class="size-2.5 shrink-0 rounded-(--shape-flat) bg-(--donut-key) data-[hidden]:opacity-30"
+              class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--donut-key) data-[hidden]:opacity-30"
             />
             <span class="min-w-0 flex-1 truncate">{{ entry.name }}</span>
-            <span class="tabular-nums text-(--text-muted)">{{ entry.value }}</span>
-            <span class="w-10 text-end tabular-nums text-(--text-muted)">{{ entry.share }}</span>
+            <span class="text-label-code-md tabular-nums text-(--text-muted)">{{
+              entry.value
+            }}</span>
+            <span class="w-10 text-end text-label-code-md tabular-nums text-(--text-muted)">{{
+              entry.share
+            }}</span>
           </button>
         </li>
       </ul>

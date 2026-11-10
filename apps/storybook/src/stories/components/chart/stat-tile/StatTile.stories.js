@@ -16,7 +16,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A KPI tile: a label, one figure that counts up into place, a delta against a named period, and a sparkline. The delta reads good or bad for the metric, not merely up or down; inverse flips it for metrics where a rise is bad.'
+          'A KPI tile: a label, one figure that counts up into place beside a muted unit, a delta Tag against a named period, and a sparkline along the bottom edge. The delta reads good or bad for the metric, not merely up or down; inverse flips it for metrics where a rise is bad. Without a trend the tile is the figure alone.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -42,6 +42,11 @@ const meta = {
       description: 'Formats the figure.',
       table: { category: 'props', type: { summary: '(value: number) => string' } }
     },
+    unit: {
+      control: 'text',
+      description: 'Unit read after the figure, in a muted tone. Empty hides it.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
     delta: {
       control: 'number',
       description: 'Signed change against the named period, in percent. Null hides the delta.',
@@ -66,16 +71,6 @@ const meta = {
       description: 'Sparkline values, oldest first. Empty hides the sparkline.',
       table: { category: 'props', type: { summary: 'number[]' }, defaultValue: { summary: '[]' } }
     },
-    size: {
-      control: 'select',
-      options: ['small', 'medium', 'large'],
-      description: 'Scale of the figure.',
-      table: {
-        category: 'props',
-        type: { summary: "'small' | 'medium' | 'large'" },
-        defaultValue: { summary: "'medium'" }
-      }
-    },
     loading: {
       control: 'boolean',
       description: 'Renders Skeleton lines in place of the figure, delta and sparkline.',
@@ -90,11 +85,11 @@ const meta = {
   args: {
     label: 'Blocked threats',
     value: 48210,
+    unit: '',
     delta: 12.4,
     deltaLabel: 'vs previous 24 hours',
     inverse: true,
     trend: BLOCKED_TREND,
-    size: 'medium',
     loading: false
   }
 }
@@ -132,9 +127,9 @@ export const Default = {
 }
 
 const DELTAS_TEMPLATE = `<div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2 lg:grid-cols-4">
-  <StatTile label="Requests" :value="3400000" :delta="8.2" delta-label="vs previous 24 hours" />
+  <StatTile label="Data transferred" :value="842" unit="GB" :delta="8.2" delta-label="vs previous 24 hours" />
   <StatTile label="Blocked threats" :value="48210" :delta="12.4" delta-label="vs previous 24 hours" inverse />
-  <StatTile label="Cache hit ratio" :value="96.2" :delta="0" delta-label="vs previous 24 hours" />
+  <StatTile label="Cache hit ratio" :value="96.2" unit="%" :delta="0" delta-label="vs previous 24 hours" />
   <StatTile label="Edge locations" :value="120" />
 </div>`
 
@@ -147,23 +142,6 @@ export const Deltas = {
         story: 'A good rise, a bad rise with inverse, a flat change, and no delta at all.'
       },
       source: { code: toSfc(IMPORT, DELTAS_TEMPLATE) }
-    }
-  }
-}
-
-const SIZES_TEMPLATE = `<div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-3">
-  <StatTile label="Blocked threats" :value="48210" size="small" />
-  <StatTile label="Blocked threats" :value="48210" size="medium" />
-  <StatTile label="Blocked threats" :value="48210" size="large" />
-</div>`
-
-export const Sizes = {
-  render: () => ({ components: { StatTile }, template: SIZES_TEMPLATE }),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: { story: 'The figure on the small, medium and large big-number scale.' },
-      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }
   }
 }
@@ -208,7 +186,7 @@ export const Loading = {
   args: { loading: true },
   parameters: {
     docs: {
-      description: { story: 'Skeleton lines hold the place of the figure and the delta.' },
+      description: { story: 'A Skeleton line holds the place of the figure and the delta.' },
       source: { code: toSfc(IMPORT, '<StatTile label="Blocked threats" loading />') }
     }
   }
@@ -221,7 +199,7 @@ export const Empty = {
     docs: {
       description: {
         story:
-          'No value for the range: the tile keeps its size and shows a dash, announced as No value. Leave out the delta and the trend rather than showing a zero.'
+          'No value for the range: a dash, announced as No value, over a muted placeholder line marked No data. Leave out the delta and the trend rather than showing a zero.'
       },
       source: { code: toSfc(IMPORT, '<StatTile label="Blocked threats" :value="null" />') }
     }

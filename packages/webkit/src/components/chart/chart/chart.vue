@@ -18,7 +18,6 @@
   import {
     categoryLayout,
     type ChartLabel,
-    type ChartMarkKind,
     type ChartPoint,
     type ChartSeries,
     formatCompact,
@@ -278,9 +277,6 @@
   const formatCell = (value: number | null | undefined) =>
     isFiniteNumber(value) ? props.formatValue(value) : ''
 
-  const markKindOf = (id: string): ChartMarkKind =>
-    markList.value.find((mark) => !mark.ids.length || mark.ids.includes(id))?.kind ?? 'line'
-
   function cancelEnter() {
     if (frame) globalThis.cancelAnimationFrame(frame)
     frame = 0
@@ -402,7 +398,6 @@
     formatValue: (value: number) => props.formatValue(value),
     formatLabel: (label: ChartLabel) => props.formatLabel(label),
     resolveSeries,
-    markKindOf,
     setActiveIndex,
     setEmphasized,
     toggleSeries,
@@ -450,7 +445,7 @@
     </div>
     <div
       v-else-if="isEmpty"
-      class="col-start-1 row-start-1 flex items-center justify-center"
+      class="col-start-1 row-start-1 flex items-stretch"
     >
       <slot name="empty">
         <EmptyState
@@ -458,6 +453,7 @@
           :description="emptyDescription"
           :icon="vertical ? 'pi pi-chart-line' : 'pi pi-chart-bar'"
           size="small"
+          bordered
           :data-testid="`${testId}__empty`"
         >
           <template

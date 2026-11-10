@@ -4,7 +4,10 @@ export type ChartSlot = 1 | 2 | 3 | 4 | 5 | 6
 
 export type ChartStatus = 'success' | 'warning' | 'danger' | 'info'
 
-export type ChartColor = ChartSlot | 'other' | ChartStatus
+export type ChartSeverity =
+  'severity-critical' | 'severity-high' | 'severity-medium' | 'severity-low' | 'severity-info'
+
+export type ChartColor = ChartSlot | 'other' | ChartStatus | ChartSeverity
 
 export type ChartMarkKind = 'line' | 'area' | 'bar'
 

@@ -127,6 +127,21 @@ describe('Chart', () => {
     ).toBe('var(--chart-status-danger)')
   })
 
+  it('honours a severity color for a series that counts one severity level', async () => {
+    const view = mount(
+      {
+        series: [
+          { id: 'critical', name: 'Critical', values: [1, 2, 3, 4], color: 'severity-critical' }
+        ]
+      },
+      () => [h(ChartLine)]
+    )
+    await nextTick()
+    expect(
+      view.getByTestId('chart-chart__line').querySelector('path')?.getAttribute('stroke')
+    ).toBe('var(--severity-critical)')
+  })
+
   it('renders no legend for a single series', () => {
     const view = mount({ series: [threats[0]] }, () => [h(ChartLine), h(ChartLegend)])
     expect(view.queryByTestId('chart-chart__legend')).toBeNull()
@@ -147,6 +162,19 @@ describe('Chart', () => {
     ).toBe('var(--chart-series-2)')
     const toggles = view.emitted('legend-toggle') as unknown[][] | undefined
     expect(toggles).toBeUndefined()
+  })
+
+  it('dims the other legend keys with their marks while one entry is emphasized', async () => {
+    const view = mount()
+    await nextTick()
+    const items = view.getAllByTestId('chart-chart__legend-item')
+    const keys = () => items.map((item) => item.querySelector('[data-dimmed]') !== null)
+    expect(keys()).toEqual([false, false, false])
+    await fireEvent.pointerEnter(items[0] as Element)
+    expect(keys()).toEqual([false, true, true])
+    expect(view.getByTestId('chart-chart__line').querySelector('[data-dimmed]')).not.toBeNull()
+    await fireEvent.pointerLeave(items[0] as Element)
+    expect(keys()).toEqual([false, false, false])
   })
 
   it('emits legend-toggle with the event first and the consumer series second', async () => {
@@ -217,7 +245,7 @@ describe('Chart', () => {
     expect(indexes.at(-1)).toBeNull()
   })
 
-  it('shows the tooltip inside the figure with every visible series, value first', async () => {
+  it('shows the tooltip inside the figure with every visible series, name before value', async () => {
     const view = mount({ activeIndex: 1 })
     await nextTick()
     const tooltip = view.getByTestId('chart-chart__tooltip')
@@ -226,7 +254,7 @@ describe('Chart', () => {
     expect(text).toContain('14:05')
     expect(text).toContain('1.4K')
     expect(text).toContain('WAF requests blocked')
-    expect(text.indexOf('1.4K')).toBeLessThan(text.indexOf('WAF requests allowed'))
+    expect(text.indexOf('WAF requests allowed')).toBeLessThan(text.indexOf('1.4K'))
   })
 
   it('renders exactly one state at a time', () => {
