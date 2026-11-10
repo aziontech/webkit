@@ -115,11 +115,43 @@ export function listTokens(catalog, { category } = {}) {
   }
 }
 
+function resolveAlias(catalog, name) {
+  const key = normalize(name).replace(/ /g, '-')
+  const to = catalog.aliases?.[key]
+  return to && catalog.getEntry(to) ? { alias: key, to } : null
+}
+
+function aliasNote(alias, to) {
+  return `"${alias}" is not a webkit export: it is another name for "${to}". Import @aziontech/webkit/${to}.`
+}
+
+function aliasHits(catalog, query) {
+  const nq = normalize(query)
+  const hits = new Map()
+  if (!nq) return hits
+  for (const [alias, to] of Object.entries(catalog.aliases || {})) {
+    if (!catalog.getEntry(to)) continue
+    const phrase = normalize(alias)
+    if (nq === phrase) hits.set(to, { alias, boost: 100 })
+    else if (!hits.has(to) && hasPhrase(nq, phrase)) hits.set(to, { alias, boost: 30 })
+  }
+  return hits
+}
+
 export function getComponent(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
   const key = String(name || '').trim()
   const e = catalog.getEntry(key)
   if (!e) {
+    const resolved = resolveAlias(catalog, key)
+    if (resolved) {
+      return {
+        ...getComponent(catalog, resolved.to),
+        requested: key,
+        aliasOf: resolved.to,
+        note: aliasNote(resolved.alias, resolved.to)
+      }
+    }
     return {
       ok: false,
       available: true,
@@ -284,16 +316,21 @@ function scoreMatch(name, entry, query) {
 export function searchComponents(catalog, query) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(query || '')
+  const aliases = aliasHits(catalog, q)
   const ranked = catalog.subpaths
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
     .map((sub) => {
       const e = catalog.getEntry(sub)
-      return { sub, score: scoreMatch(sub, e, q) }
+      return { sub, score: scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) }
     })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
     .slice(0, 10)
-    .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score }))
+    .map((r) => {
+      const card = { ...componentCard(catalog, r.sub), score: r.score }
+      const hit = aliases.get(r.sub)
+      return hit ? { ...card, aliasOf: hit.alias, note: aliasNote(hit.alias, r.sub) } : card
+    })
 
   return { ok: true, available: true, query: q, count: ranked.length, matches: ranked }
 }
@@ -310,7 +347,8 @@ function componentSuggestion(catalog, need) {
       need: q,
       found: true,
       best,
-      alternatives: rest.slice(0, 3)
+      alternatives: rest.slice(0, 3),
+      ...(best.note ? { note: best.note } : {})
     }
   }
   const fuzzy = catalog
@@ -806,7 +844,9 @@ export function suggestComponent(catalog, need) {
   const patterns = searchPatterns(catalog, q)
   const topPattern = patterns.matches?.[0]
   const screenIntent = SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
-  const exactComponent = component.best && normalize(component.best.name) === nq
+  const exactComponent =
+    component.best &&
+    (normalize(component.best.name) === nq || normalize(component.best.aliasOf ?? '') === nq)
   if (
     topPattern &&
     (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60 && !exactComponent)

@@ -366,3 +366,49 @@ test('getUsageExample prefers the real story example when there is one', () => {
   assert.match(res.source, /^story /)
   assert.match(res.sfc, /<template>/)
 })
+
+test('getComponent resolves a market or retired name to the current export with a note', () => {
+  assert.ok(catalog.aliases.modal === 'dialog')
+  const modal = getComponent(catalog, 'modal')
+  assert.equal(modal.found, true)
+  assert.equal(modal.name, 'dialog')
+  assert.equal(modal.binding, 'Dialog')
+  assert.equal(modal.requested, 'modal')
+  assert.equal(modal.aliasOf, 'dialog')
+  assert.match(modal.note, /"modal" is not a webkit export.*@aziontech\/webkit\/dialog/)
+  assert.equal(getComponent(catalog, 'paginator').name, 'pagination')
+  assert.equal(getComponent(catalog, 'Segmented Control').name, 'toggle-group')
+  const missing = getComponent(catalog, 'no-such-thing')
+  assert.equal(missing.found, false)
+  assert.equal(getComponent(catalog, 'dialog').note, undefined)
+})
+
+test('searchComponents ranks the aliased component first and marks it', () => {
+  for (const [query, name] of [
+    ['modal', 'dialog'],
+    ['sheet', 'drawer'],
+    ['message', 'alert'],
+    ['tiles', 'radio-cards']
+  ]) {
+    const res = searchComponents(catalog, query)
+    assert.equal(res.matches[0].name, name, `${query} should resolve to ${name}`)
+    assert.ok(res.matches[0].note)
+  }
+  const plain = searchComponents(catalog, 'table')
+  assert.ok(plain.matches.every((m) => m.note === undefined))
+})
+
+test('suggestComponent answers an alias with the current component, not a pattern', () => {
+  for (const [need, name] of [
+    ['modal', 'dialog'],
+    ['segmented control', 'toggle-group'],
+    ['paginator', 'pagination'],
+    ['tiles', 'radio-cards'],
+    ['message', 'alert']
+  ]) {
+    const res = suggestComponent(catalog, need)
+    assert.equal(res.recommendation, 'component', need)
+    assert.equal(res.best.name, name, need)
+    assert.match(res.note, new RegExp(`another name for "${name}"`))
+  }
+})

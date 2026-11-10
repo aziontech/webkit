@@ -18,14 +18,60 @@ authoring shape _is_ enforced: the `webkit/authoring-standards` ESLint rule bloc
 | Light-dismiss (outside-click / Esc)  | `dismissible`                                 | `boolean`                                                       | overlay-specific                         | `dismissable`, `closeable`                                                                                                                                 |
 | Explicit close affordance (X button) | `closable`                                    | `boolean`                                                       | `false`                                  | — (distinct concept, not an alias of `dismissible`)                                                                                                        |
 | Primary heading text                 | `title`                                       | `string`                                                        | `''`                                     | `heading`, `header` (as a prop)                                                                                                                            |
-| Primary two-way value                | `modelValue` (default `v-model`)              | component-specific                                              | per component                            | ad-hoc names like `isToggled`                                                                                                                              |
+| Primary two-way value                | `modelValue` (default `v-model`)              | component-specific                                              | per component                            | ad-hoc names like `isToggled`; `v-model:value` for the primary value                                                                                       |
 | Overlay open state                   | `open` (+ `v-model:open`), seed `defaultOpen` | `boolean`                                                       | `undefined` (controlled)                 | `visible`, `show`, `opened`                                                                                                                                |
 | Disabled                             | `disabled`                                    | `boolean`                                                       | `false`                                  | `isDisabled`, `enabled`                                                                                                                                    |
 | Loading                              | `loading`                                     | `boolean`                                                       | `false`                                  | `isLoading`                                                                                                                                                |
 | Leading/trailing glyph               | `icon`                                        | `string` (icon name)                                            | `''`                                     | `iconName`, `leadingIcon`, `trailingIcon`                                                                                                                  |
+| Validation state                     | `invalid`                                     | `boolean`                                                       | `false`                                  | `error` / `hasError` as a validation flag (an `error` _message_ string, or a send-failed state on a form band, is a different concept)                     |
+| Read-only                            | `readonly`                                    | `boolean`                                                       | `false`                                  | `readOnly`, `isReadonly`                                                                                                                                   |
+| Outline around the box               | `bordered`                                    | `boolean`                                                       | per component                            | `border` (boolean), `hasBorder`                                                                                                                            |
+| Copy affordance                      | `copyable`                                    | `boolean`                                                       | per component                            | `showCopy`                                                                                                                                                 |
+| Self-advancing media                 | `autoplay` (+ `autoplayInterval`, ms)         | `boolean`                                                       | per component                            | `autoPlay`, `autoPlayInterval`                                                                                                                             |
+| Motion on / off                      | `animated`                                    | `boolean`                                                       | per component                            | `still` (negative polarity)                                                                                                                                |
+| Short label above a heading          | `eyebrow`                                     | `string`                                                        | `''`                                     | `overline` (as a prop)                                                                                                                                     |
+| Text of a link or call-to-action     | `linkLabel` (`actionLabel` for a button)      | `string`                                                        | `''`                                     | `link` / `cta` as the text                                                                                                                                 |
+| Column count below `md`              | `mobileColumns`                               | number union                                                    | `1`                                      | `mobileCols`                                                                                                                                               |
 | Accessible name                      | `ariaLabel` (+ prefixed `xAriaLabel`)         | `string`                                                        | per component                            | `aria-label` as a prop                                                                                                                                     |
 | Boolean (any)                        | no `is`/`has` prefix; **positive polarity**   | `boolean`                                                       | `false`                                  | `isX`, `hasX`; negatives: `hidden`→`visible`, `closed`→`open`, `inactive`→`active`, `collapsed`→`expanded` (`disabled`/`readonly` are accepted exceptions) |
 | Value change signal                  | `v-model` / `update:<x>` only                 | —                                                               | —                                        | a `<x>-change` event that echoes `update:<x>`; a genuinely distinct commit (e.g. commit-on-blur) is a bare `change`                                        |
+
+## Shared values
+
+Value names are shared too. The same look gets the same token on every component:
+
+| Idea                      | Value                      | Prop               | Banned values                |
+| ------------------------- | -------------------------- | ------------------ | ---------------------------- |
+| Bordered surface, no fill | `outlined`                 | `kind`             | `outline`                    |
+| No surface until hover    | `transparent`              | `kind`             | `text`, `ghost`              |
+| Error / destructive color | `danger`                   | `severity`, `kind` | `error`, `destructive`       |
+| Size tokens               | `small`, `medium`, `large` | `size`             | `xs`, `sm`, `md`, `lg`, `xl` |
+
+`kind` and `small | medium | large` stay as they are in v6. shadcn and Radix call these `variant` and
+`sm | md | lg`; webkit already ships `kind` and the long tokens on every component, so a rename
+would break every consumer for no gain. Code ported from shadcn maps `variant` → `kind`,
+`ghost` → `transparent`, `destructive` → `danger`, `outline` → `outlined`.
+
+## v6 renames
+
+Every prop that drifted from this table is renamed in v6. The full map, with value renames,
+is `packages/webkit/src/cli/migrations/v6-props.json` (`{ "<subpath>": { "<old>": "<new>" } }`).
+The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
+
+| Component                                                              | Before                         | After                          |
+| ---------------------------------------------------------------------- | ------------------------------ | ------------------------------ |
+| `accordion`, `tabs`, `navigation-menu`, `code-block`, `theme-switcher` | `v-model:value`                | `v-model` (`modelValue`)       |
+| `alert`                                                                | `severity="error"`             | `severity="danger"`            |
+| `button`                                                               | `kind="text"`                  | `kind="transparent"`           |
+| `item`                                                                 | `kind="outline"`               | `kind="outlined"`              |
+| `severity-tag`                                                         | `level`                        | `severity`                     |
+| `code-block`, `log-view`, `table`                                      | `border`                       | `bordered`                     |
+| `log-view`                                                             | `showCopy`                     | `copyable`                     |
+| `media-tabs`, `quote-tabs`                                             | `autoPlay`, `autoPlayInterval` | `autoplay`, `autoplayInterval` |
+| `shell-mockup`                                                         | `still`                        | `animated` (inverted)          |
+| `doc-card`                                                             | `overline`, `link`             | `eyebrow`, `linkLabel`         |
+| `doc-card-group`                                                       | `mobileCols`                   | `mobileColumns`                |
+| `doc-tooltip`                                                          | `headline`, `cta`              | `title`, `linkLabel`           |
 
 **Not banned — legitimate competing uses:** `type` for native pass-throughs (`<input type>`)
 is fine — only a _variant_ named `type` is wrong (rename to `kind`). `value` is fine for
@@ -34,7 +80,7 @@ identity, the `v-model` payload, or display text.
 ## Do
 
 - Reuse the canonical name whenever a concept already has one — `kind`, `size`, `severity`,
-  `disabled`, `loading`, `icon`, `title`, `open`.
+  `disabled`, `readonly`, `invalid`, `loading`, `icon`, `title`, `open`, `bordered`, `eyebrow`.
 - Declare `size` with the shared tokens in canonical order; a subset (`'small' | 'medium'`)
   is fine, a reorder is not. Default `size` to `large` on actions/links, `medium` elsewhere.
 - Name booleans positively and unprefixed: `visible`, `active`, `expanded` — not `hidden`,

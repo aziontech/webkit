@@ -267,6 +267,9 @@ jobs:
       - name: Cited names (G2) — skills, rules and patterns only cite exports that exist
         run: pnpm --filter @aziontech/webkit run cited-names
 
+      - name: Naming (2.7) — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
+        run: pnpm --filter @aziontech/webkit run naming:check
+
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
 

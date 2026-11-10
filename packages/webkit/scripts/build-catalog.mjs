@@ -8,6 +8,7 @@ import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { readBlocks, readExamples } from './lib/blocks.mjs'
+import { buildAliases, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import {
   animate as themeAnimate,
@@ -20,6 +21,7 @@ const PKG_ROOT = resolve(SCRIPT_DIR, '..')
 const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
+const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
 
 const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
@@ -355,6 +357,7 @@ async function build() {
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
     surfaces: SURFACES,
+    aliases: buildAliases(subpaths, retiredNames(JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')))),
     imports,
     patterns
   }
