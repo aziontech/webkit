@@ -2736,7 +2736,7 @@
       ],
       "category": "content",
       "structure": "composition",
-      "status": "draft",
+      "status": "implemented",
       "props": [
         {
           "name": "type",
@@ -2805,7 +2805,7 @@
       "treeShakeableImport": "@aziontech/webkit/accordion-root",
       "category": "content",
       "structure": "composition",
-      "status": "draft",
+      "status": "implemented",
       "props": [
         {
           "name": "type",
@@ -9757,7 +9757,7 @@
       ],
       "category": "inputs",
       "structure": "composition",
-      "status": "draft",
+      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9866,7 +9866,7 @@
       "treeShakeableImport": "@aziontech/webkit/select-root",
       "category": "inputs",
       "structure": "composition",
-      "status": "draft",
+      "status": "implemented",
       "props": [
         {
           "name": "modelValue",

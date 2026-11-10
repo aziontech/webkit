@@ -2,14 +2,14 @@
 name: accordion
 category: content
 structure: composition
-status: draft
+status: implemented
 spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: ee1884fc16c8e518d06a2f1643a18741358a0c887c5136fc2bacb5dbba31e0ce
+checksum: 8f751bb6e9720c38970f9db81231d846eb2ff1bc137a5149a387cc0a44dbc3a2
 created: 2026-06-26
-last_updated: 2026-07-15
+last_updated: 2026-11-10
 ---
 
 # Accordion — Component Spec

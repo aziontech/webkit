@@ -255,6 +255,9 @@ jobs:
       - name: Catalog is in sync (no drift from exports/specs)
         run: pnpm --filter @aziontech/webkit catalog:check
 
+      - name: No spec in status draft (.specs/_template.md excepted)
+        run: pnpm --filter @aziontech/webkit run spec-status
+
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
 

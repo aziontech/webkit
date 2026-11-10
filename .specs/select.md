@@ -2,14 +2,14 @@
 name: select
 category: inputs
 structure: composition
-status: draft
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: cf42bdc6fefb728173a25c37d3d2b75911c62474dcba8ff496c5629e85ed3d5d
+checksum: bba6b46a528d8d28dd9d30fc088405ba6bb237e7e34225770a1ef332288e88e7
 created: 2026-06-15
-last_updated: 2026-08-12
+last_updated: 2026-11-10
 ---
 
 # Select — Component Spec
