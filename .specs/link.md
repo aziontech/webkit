@@ -4,9 +4,9 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 2c97ad82da3d4efcf717335ed42dc9d81a9f17c45da9c5880501b69a200bcbcd
+checksum: a63dbada089776c00dca709d934c743df54024abecf7c1d1af0263005c346323
 created: 2026-05-22
-last_updated: 2026-07-22
+last_updated: 2026-11-10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -15,7 +15,7 @@ figma:
 
 ## Purpose
 
-Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).
+Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).
 
 ## Props
 
@@ -41,7 +41,8 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`
+- `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
 
 ## Motion & Animations
@@ -55,7 +56,6 @@ Helps users move between views or sections. Migrated from the existing implement
 | Region | Token (DESIGN.md) |
 |---|---|
 | typography | .text-button-lg / .text-button-md |
-| surface | `var(--bg-surface-raised)` |
 | text | `var(--text-link)` |
 | spacing | `var(--spacing-xs)` |
 | shape | `var(--shape-button)` |

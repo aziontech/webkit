@@ -26,7 +26,12 @@ describe('Link', () => {
     expect(getByTestId('custom-link').tagName).toBe('A')
     expect(getByTestId('custom-link__content')).toBeTruthy()
     expect(getByTestId('custom-link__label').textContent?.trim()).toBe('Docs')
-    expect(getByTestId('custom-link__ghost')).toBeTruthy()
+  })
+
+  it('renders no hover surface behind the label', () => {
+    const { queryByTestId } = render(Link, { props: { label: 'Docs' } })
+
+    expect(queryByTestId('navigation-link__ghost')).toBeNull()
   })
 
   it('applies href and defaults target to _self with no rel', () => {
