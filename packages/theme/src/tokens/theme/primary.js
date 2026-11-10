@@ -11,7 +11,7 @@ export const primary = {
     primary: tokenRef('brand.primary.primary-500'),
     'primary-mask': tokenRef('primitives.alpha.orange.200'),
     'primary-selected': tokenRef('primitives.alpha.orange.200'),
-    'primary-contrast': tokenRef('primitives.base.white')
+    'primary-contrast': tokenRef('primitives.base.black')
   }
 }
 
