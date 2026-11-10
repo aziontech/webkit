@@ -1,3 +1,5 @@
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/layout-classes.js'
+
 const NOT_AVAILABLE = {
   ok: false,
   available: false,
@@ -148,7 +150,19 @@ export function getComponent(catalog, name) {
     bestPractices: e.bestPractices ?? [],
     props: e.props ?? [],
     events: e.events ?? [],
-    slots: e.slots ?? []
+    slots: e.slots ?? [],
+    allowedClasses: allowedClassesFor(e)
+  }
+}
+
+function allowedClassesFor(entry) {
+  if (entry.styleSeam) {
+    return { any: true, note: 'Built to be personalized (style seam): any class is accepted.' }
+  }
+  return {
+    any: false,
+    families: [...LAYOUT_CLASS_FAMILIES],
+    note: 'Only these layout utilities may go on the component tag. Anything else goes on a wrapper element or inside its slots.'
   }
 }
 
@@ -388,7 +402,7 @@ export function getUsageExample(catalog, name) {
   }
 }
 
-export function validateUsage(catalog, { import: importPath, classes } = {}) {
+export function validateUsage(catalog, { import: importPath, classes, component } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const problems = []
 
@@ -424,6 +438,24 @@ export function validateUsage(catalog, { import: importPath, classes } = {}) {
           message: `Unknown webkit export "${raw}".`,
           nearestPublishedPrefix: nearest ? `${prefix}${nearest}` : null,
           suggestions: catalog.suggestSubpaths(sub)
+        })
+      }
+    }
+  }
+
+  if (component != null && String(component).length && classes != null && String(classes).length) {
+    const key = String(component).trim()
+    const entry = catalog.getEntry(key)
+    if (entry && !entry.styleSeam) {
+      const rejected = nonLayoutClasses(classes)
+      if (rejected.length) {
+        problems.push({
+          kind: 'style-override',
+          severity: 'error',
+          component: key,
+          classes: rejected,
+          allowed: [...LAYOUT_CLASS_FAMILIES],
+          message: `Classes ${rejected.join(' ')} override the webkit component "${key}". Only layout utilities (${LAYOUT_CLASS_FAMILIES.join(', ')}) may go on its tag; move the rest to a wrapper element.`
         })
       }
     }

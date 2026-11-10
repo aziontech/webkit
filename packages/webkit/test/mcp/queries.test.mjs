@@ -257,3 +257,23 @@ test('validateUsage passes clean semantic-token classes', () => {
   const res = validateUsage(catalog, { classes: 'bg-[var(--bg-surface)] text-body-md p-4' })
   assert.equal(res.ok, true)
 })
+
+test('getComponent tells which classes may go on the tag (shared layout list)', async () => {
+  const { LAYOUT_CLASS_FAMILIES } = await import('../../src/eslint-plugin/layout-classes.js')
+  const button = getComponent(catalog, 'button')
+  assert.equal(button.allowedClasses.any, false)
+  assert.deepEqual(button.allowedClasses.families, [...LAYOUT_CLASS_FAMILIES])
+  assert.equal(getComponent(catalog, 'frame-box').allowedClasses.any, true)
+})
+
+test('validateUsage with a component flags classes outside the layout utilities', () => {
+  const ok = validateUsage(catalog, {
+    component: 'button',
+    classes: 'w-full max-w-(--container-sm)'
+  })
+  assert.equal(ok.ok, true)
+  const bad = validateUsage(catalog, { component: 'button', classes: 'w-full mt-4' })
+  assert.equal(bad.ok, false)
+  const problem = bad.problems.find((p) => p.kind === 'style-override')
+  assert.deepEqual(problem.classes, ['mt-4'])
+})

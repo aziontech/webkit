@@ -86,3 +86,4 @@ plugin.configs = {
 
 export default plugin
 export { rules }
+export { isLayoutClass, LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from './layout-classes.js'

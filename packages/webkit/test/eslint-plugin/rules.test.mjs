@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { RuleTester } from 'eslint'
@@ -363,13 +364,30 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`,
         filename: 'e.vue',
         options: [{ checkStyle: false }]
+      },
+      // layout utilities only: the four families, arbitrary values included
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full" /></template>`,
+        filename: 'l1.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full max-w-(--container-sm) self-start shrink-0" /></template>`,
+        filename: 'l2.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="max-w-[320px] self-center" /></template>`,
+        filename: 'l3.vue'
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table><Table.Row class="shrink-0" /></Table></template>`,
+        filename: 'l4.vue'
       }
     ],
     invalid: [
       {
         code: `${imp('Button', 'button')}<template><Button class="p-8">x</Button></template>`,
         filename: 'f.vue',
-        errors: [{ messageId: 'override' }]
+        errors: [{ messageId: 'overrideClasses' }]
       },
       {
         code: `${imp('Button', 'button')}<template><Button :class="cls" /></template>`,
@@ -385,6 +403,35 @@ test('no-style-override', () => {
       {
         code: `${imp('Table', 'table')}<template><Table><Table.Row class="x" /></Table></template>`,
         filename: 'i.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // one non-layout class next to allowed ones still fails
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full mt-4" /></template>`,
+        filename: 'l5.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'mt-4', tag: 'Button', allowed: 'w-full, max-w-*, self-*, shrink-0' }
+          }
+        ]
+      },
+      // look-alikes of the families are not layout utilities
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-1/2 shrink" /></template>`,
+        filename: 'l6.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // a variant prefix is not in the list
+      {
+        code: `${imp('Button', 'button')}<template><Button class="lg:w-full" /></template>`,
+        filename: 'l7.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // a bound :class stays barred even when it holds layout utilities
+      {
+        code: `${imp('Button', 'button')}<template><Button :class="'w-full'" /></template>`,
+        filename: 'l8.vue',
         errors: [{ messageId: 'override' }]
       }
     ]
@@ -561,4 +608,24 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       }
     ]
   })
+})
+
+test('layout class families: shared constant used by the rule and the MCP', async () => {
+  const { LAYOUT_CLASS_FAMILIES, isLayoutClass, nonLayoutClasses } =
+    await import('../../src/eslint-plugin/index.js')
+  assert.deepEqual([...LAYOUT_CLASS_FAMILIES], ['w-full', 'max-w-*', 'self-*', 'shrink-0'])
+  for (const ok of [
+    'w-full',
+    'max-w-sm',
+    'max-w-(--container-sm)',
+    'max-w-[320px]',
+    'self-end',
+    'shrink-0'
+  ]) {
+    assert.equal(isLayoutClass(ok), true, ok)
+  }
+  for (const bad of ['w-1/2', 'max-w-', 'self-', 'shrink', 'shrink-1', 'p-4', 'lg:w-full', '']) {
+    assert.equal(isLayoutClass(bad), false, bad)
+  }
+  assert.deepEqual(nonLayoutClasses('w-full  mt-2 self-start text-red'), ['mt-2', 'text-red'])
 })

@@ -207,7 +207,8 @@ async function main() {
       description:
         'Validate an import path (real / denied / unknown + suggestions) and/or a class string ' +
         '(scanned against the catalog token rules: hex, rgb/hsl, tailwind palette, raw text size, ' +
-        'PrimeVue color). Returns { ok, problems }.',
+        'PrimeVue color). With `component`, also checks the classes against the layout utilities ' +
+        'allowed on a webkit tag. Returns { ok, problems }.',
       inputSchema: {
         import: z
           .string()
@@ -216,11 +217,17 @@ async function main() {
         classes: z
           .string()
           .optional()
-          .describe('A class string to scan for forbidden hardcoded colors / raw utilities.')
+          .describe('A class string to scan for forbidden hardcoded colors / raw utilities.'),
+        component: z
+          .string()
+          .optional()
+          .describe(
+            'The webkit component the classes sit on (kebab-case). When set, any class outside the layout utilities (w-full, max-w-*, self-*, shrink-0) is reported as a style override.'
+          )
       }
     },
-    async ({ import: importPath, classes }) =>
-      json(validateUsage(catalog, { import: importPath, classes }))
+    async ({ import: importPath, classes, component }) =>
+      json(validateUsage(catalog, { import: importPath, classes, component }))
   )
 
   const transport = new StdioServerTransport()
