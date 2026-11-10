@@ -75,12 +75,12 @@
           <Tag
             :label="event.level"
             :severity="eventLevelSeverity(event.level)"
-            size="medium"
+            size="small"
           />
           <Tag
             :label="event.sourceLabel"
             severity="secondary"
-            size="medium"
+            size="small"
           />
         </div>
         <p class="text-body-md text-(--text-default)">{{ event.message }}</p>

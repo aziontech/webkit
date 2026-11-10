@@ -156,7 +156,7 @@
             v-for="level in STACK_ORDER"
             :key="level"
             :data-level="level"
-            class="w-full transition-[height] duration-fast-02 ease-productive-entrance data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast) motion-reduce:transition-none"
+            class="w-full transition-[height] duration-fast-02 ease-productive-entrance data-[level=Debug]:bg-(--severity-info) data-[level=Info]:bg-(--severity-low) data-[level=Warning]:bg-(--severity-medium) data-[level=Error]:bg-(--severity-critical) motion-reduce:transition-none"
             :style="{ height: share(bucket.levels[level]) }"
           />
         </div>
@@ -204,7 +204,7 @@
                 <span
                   :data-level="level"
                   aria-hidden="true"
-                  class="size-2 shrink-0 rounded-(--shape-elements) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast)"
+                  class="size-2 shrink-0 rounded-(--shape-elements) data-[level=Debug]:bg-(--severity-info) data-[level=Info]:bg-(--severity-low) data-[level=Warning]:bg-(--severity-medium) data-[level=Error]:bg-(--severity-critical)"
                 />
                 <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">{{ level }}</dt>
                 <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">

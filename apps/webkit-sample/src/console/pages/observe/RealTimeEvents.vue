@@ -587,7 +587,7 @@
                 <Tag
                   :label="value"
                   :severity="eventLevelSeverity(value)"
-                  size="medium"
+                  size="small"
                 />
               </template>
 
