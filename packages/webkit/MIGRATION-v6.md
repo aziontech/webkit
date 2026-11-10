@@ -77,9 +77,71 @@ component.
 
 ## 4. Manual changes
 
-<!-- FIELD-SECTION -->
+### Form fields: one `Field` replaces the `field-*` family
 
-<!-- FRAGMENTS-SECTION -->
+The codemod lists every `field-*` import as `MANUAL`. Replace each one with `Field` around the plain
+control (shadcn/ui anatomy). `Field` carries `orientation` (`vertical`, `horizontal`, `responsive`),
+`invalid`, `disabled` and `required`, and the control inside picks up its id, `aria-describedby` and
+state on its own.
+
+```vue
+<!-- v5 -->
+<FieldText v-model="name" label="Name" helper-text="Shown on invoices." required />
+
+<!-- v6 -->
+<Field required>
+  <Field.Label>Name</Field.Label>
+  <Input v-model="name" />
+  <Field.Description>Shown on invoices.</Field.Description>
+</Field>
+```
+
+| Removed                                  | Use instead                                                                                                   |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `@aziontech/webkit/field-text`           | Field + FieldLabel + Input + FieldDescription                                                                 |
+| `@aziontech/webkit/field-textarea`       | Field + FieldLabel + Textarea + FieldDescription                                                              |
+| `@aziontech/webkit/field-select`         | Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription                                       |
+| `@aziontech/webkit/field-password`       | Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)              |
+| `@aziontech/webkit/field-phone-number`   | Field + FieldLabel + PhoneInput + FieldDescription                                                            |
+| `@aziontech/webkit/field-time`           | Field + FieldLabel + Input + FieldDescription                                                                 |
+| `@aziontech/webkit/field-file-upload`    | Field + FieldLabel + FileDropzone + FieldDescription                                                          |
+| `@aziontech/webkit/field-input-group`    | Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription                                  |
+| `@aziontech/webkit/field-text-switch`    | Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription                      |
+| `@aziontech/webkit/field-checkbox`       | Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)                        |
+| `@aziontech/webkit/field-radio`          | Field orientation=horizontal + RadioButton + FieldContent (FieldLabel + FieldDescription)                     |
+| `@aziontech/webkit/field-switch`         | Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)                          |
+| `@aziontech/webkit/field-checkbox-block` | FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)    |
+| `@aziontech/webkit/field-radio-block`    | FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription) |
+| `@aziontech/webkit/field-switch-block`   | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)      |
+
+New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/phone-input`),
+`PasswordRequirements` (`@aziontech/webkit/password-requirements`) and `InputGroup.Input`
+(`@aziontech/webkit/input-group-input`). `HelperText`, `Label` and `Hint` remain.
+
+### Page fragments are components now
+
+Markup that every screen used to copy is now a component. Screens copied from v5 keep working; replace
+the copied markup when you touch them.
+
+| Component         | Import                               | Replaces                                                     |
+| ----------------- | ------------------------------------ | ------------------------------------------------------------ |
+| `PageHeader`      | `@aziontech/webkit/page-header`      | the h1 + description + actions row of every page             |
+| `SectionHeader`   | `@aziontech/webkit/section-header`   | the h2 + description (+ copy-link anchor) of a section       |
+| `PageTabs`        | `@aziontech/webkit/page-tabs`        | the full-bleed tab strip under a resource header (`v-model`) |
+| `SettingsSection` | `@aziontech/webkit/settings-section` | a titled settings band (collapsible)                         |
+| `SettingRow`      | `@aziontech/webkit/setting-row`      | one settings row: title, description, control                |
+| `SaveBar`         | `@aziontech/webkit/save-bar`         | the floating or docked save / discard bar                    |
+| `ConfirmDialog`   | `@aziontech/webkit/confirm-dialog`   | a confirm / discard / delete dialog                          |
+
+The screens (blocks) that were only these fragments are gone from the catalog:
+`platform/page/page-header`, `platform/page/section-header`, `platform/page/page-tabs`,
+`platform/page/settings-section`, `platform/forms/setting-row` and `platform/overlays/confirm-dialog`.
+
+### `v-model` everywhere
+
+`Accordion`, `Tabs`, `NavigationMenu`, `CodeBlock`, `ThemeSwitcher` and `PageTabs` bind `v-model`
+(`modelValue`), no longer `v-model:value`. The codemod rewrites the usual forms; check custom
+`:value` / `@update:value` wiring by hand.
 
 ### Test ids
 
