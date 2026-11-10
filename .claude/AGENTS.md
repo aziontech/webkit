@@ -53,6 +53,8 @@ pnpm icons:build
 
 When changing UI components in `packages/webkit`, update or add stories in Storybook in the same branch.
 
+Changed a story in `apps/storybook/src/stories/templates/` (headers, shells, platform)? It is the source of a pattern the AI copies: keep `parameters.webkit.intents` and `skills` up to date and run `pnpm --filter @aziontech/webkit catalog:build`, then commit `catalog.json`. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `adapters/claude/agents/`); `.claude/` is for people who maintain WebKit. The full table is in CONTRIBUTING, "What to update when WebKit changes".
+
 ## 5) Component and styling standards
 
 For `@aziontech/webkit` and Storybook content:
@@ -140,17 +142,17 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 
 **What lives where:**
 
-| Concern | Location |
-|---|---|
-| Per-component contract | [`.specs/<name>.md`](.specs/) (one file per component, reviewed BEFORE code) |
-| Frontmatter schema | [`.specs/_schema.json`](.specs/_schema.json) |
-| Spec template | [`.specs/_template.md`](.specs/_template.md) |
-| Slash commands | [`.claude/commands/`](.claude/commands/) (`spec-create`, `component-create`, `component-verify`) |
-| Focused skills (one per phase) | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `storybook-write`, `code-connect-write`, `validate-component`, `echo-report` |
-| Isolated sub-agent prompts | [`.claude/agents/`](.claude/agents/) — one per skill, no chat history, no cross-talk |
-| Immutable rules (injected verbatim) | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies` |
-| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline) |
-| Run logs (audit trail) | [`.claude/logs/<run-id>.jsonl`](.claude/logs/) |
+| Concern                                    | Location                                                                                                                                                                                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Per-component contract                     | [`.specs/<name>.md`](.specs/) (one file per component, reviewed BEFORE code)                                                                                                                                                                |
+| Frontmatter schema                         | [`.specs/_schema.json`](.specs/_schema.json)                                                                                                                                                                                                |
+| Spec template                              | [`.specs/_template.md`](.specs/_template.md)                                                                                                                                                                                                |
+| Slash commands                             | [`.claude/commands/`](.claude/commands/) (`spec-create`, `component-create`, `component-verify`)                                                                                                                                            |
+| Focused skills (one per phase)             | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `storybook-write`, `code-connect-write`, `validate-component`, `echo-report` |
+| Isolated sub-agent prompts                 | [`.claude/agents/`](.claude/agents/) — one per skill, no chat history, no cross-talk                                                                                                                                                        |
+| Immutable rules (injected verbatim)        | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies`                                                                                                                                                            |
+| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline)                                                                               |
+| Run logs (audit trail)                     | [`.claude/logs/<run-id>.jsonl`](.claude/logs/)                                                                                                                                                                                              |
 
 **How `/component-create` runs:**
 

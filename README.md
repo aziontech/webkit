@@ -10,57 +10,37 @@
 
 The shared front-end foundation for Azion products. Webkit ships the Vue components, design tokens, and icon fonts that keep Console, Marketplace, and partner surfaces visually and behaviorally consistent.
 
-## What is in this repository
+## For AI agents: start here
 
-- `@aziontech/webkit`: Vue component library and UI building blocks.
-- `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
-- `@aziontech/icons`: Azion + Prime icon fonts as CSS/woff2 assets.
-- Storybook app for documentation and visual validation.
-- Icons Gallery app for icon exploration and QA.
+Pick the path by what you are about to do.
 
-## Workspace structure
+### I am building a screen or an app with WebKit (consume)
 
-```text
-webkit/
-├── apps/
-│   ├── storybook/      # Component docs and development playground
-│   └── icons-gallery/  # Interactive icon browser
-├── packages/
-│   ├── webkit/         # Reusable Vue components
-│   ├── theme/          # Tokens and theme styles
-│   └── icons/          # Icon generation and distribution
-├── .specs/             # Component specs (source of truth for the API)
-├── package.json        # Root workspace scripts
-└── pnpm-workspace.yaml
-```
+1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
+   rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
+2. A whole screen (login, signup, settings, a list, a create flow): start from a pattern.
+   `search_patterns`, then `get_pattern`. Copy the SFC and change only the content. Do not build the
+   screen from scratch.
+3. A single piece: `suggest_component`, then `get_component`.
+4. Follow the `webkit-ui-craft` skill, which points to the skill for each case.
+5. Before you hand it over: `npx @aziontech/webkit doctor` and the `webkit-ui-verify` skill.
 
-**Internal dependencies:** `icons` is standalone. `theme` has no internal deps. `webkit` depends on `theme`. Apps depend on all three.
+Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `.claude/`,
+`.specs/` or `apps/storybook/` to build screens; they belong to the people who maintain WebKit.
 
-## How to read this repo
+### I am creating or changing WebKit (contribute)
 
-If you are new (human or AI), open these in order — together they describe the entire shape of a component:
+1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
+2. Every component starts from a spec in `.specs/`, through `/component-create`.
+3. Every story in `apps/storybook/src/stories/templates/` (except `marketing/`) is the source of a
+   pattern. Changed a story? Run `pnpm --filter @aziontech/webkit catalog:build`.
+4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-1. [`.specs/_template.md`](./.specs/_template.md) — the spec format every component conforms to.
-2. [`.specs/button.md`](./.specs/button.md) — canonical filled-in spec.
-3. [`packages/webkit/src/components/actions/button/button.vue`](./packages/webkit/src/components/actions/button/button.vue) — canonical implementation matching that spec.
-4. [`.claude/rules/`](./.claude/rules/) — the constraints every component must respect.
+## Building with WebKit (consume)
 
-## Packages
+The path for apps and screens that use the packages. AI agents start with the patterns in the `webkit` MCP (above).
 
-| Package                                                              | Description                                                    | CI                                                                                                                                                                                                                | Version                                                                                                               |
-| -------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)   | Azion and Prime icon fonts used across products.               | [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml?query=branch%3Amain)    | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)   |
-| [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)   | Theme configuration, semantic tokens, and styling foundations. | [![Package Theme](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml?query=branch%3Amain)    | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)   |
-| [@aziontech/webkit](https://www.npmjs.com/package/@aziontech/webkit) | Reusable UI components and design system utilities.            | [![Package Webkit](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit.svg)](https://www.npmjs.com/package/@aziontech/webkit) |
-
-## Apps
-
-| App                                   | Description                                      | CI                                                                                                                                                                                                                         |
-| ------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. Live: <https://webkit.azion.app/> | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
-| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
-
-## Use in your app
+### Use in your app
 
 The `webkit` CLI ships inside the `@aziontech/webkit` package — there is no separate CLI to install. One command adopts the design system in an existing project:
 
@@ -87,15 +67,43 @@ Once the project is wired, import components by path:
 </script>
 
 <template>
-  <Button kind="primary" label="Button" icon="pi pi-arrow-right" />
-  <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
-  <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
-  <Button kind="text" label="Button" icon="pi pi-arrow-right" />
-  <Button kind="danger" label="Button" icon="pi pi-trash" />
+  <Button
+    kind="primary"
+    label="Button"
+    icon="pi pi-arrow-right"
+  />
+  <Button
+    kind="secondary"
+    label="Button"
+    icon="pi pi-arrow-right"
+  />
+  <Button
+    kind="outlined"
+    label="Button"
+    icon="pi pi-arrow-right"
+  />
+  <Button
+    kind="text"
+    label="Button"
+    icon="pi pi-arrow-right"
+  />
+  <Button
+    kind="danger"
+    label="Button"
+    icon="pi pi-trash"
+  />
 
   <!-- statment buttons -->
-  <Button kind="outlined" label="Button" disabled />
-  <Button kind="outlined" label="Button" loading />
+  <Button
+    kind="outlined"
+    label="Button"
+    disabled
+  />
+  <Button
+    kind="outlined"
+    label="Button"
+    loading
+  />
 </template>
 ```
 
@@ -104,9 +112,70 @@ Once the project is wired, import components by path:
 - Vue `^3.5.x`
 - A Tailwind-aware build (the design tokens compile to CSS variables and Tailwind utilities)
 
-## Getting started (contributors)
+### Live previews
 
-### Prerequisites
+- **Component playground** — <https://webkit.azion.app/> — Storybook deployment. Source of truth for every component's API, props, and visual states. Start here to explore the design system.
+- **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the Azion + Prime icon sets used by `@aziontech/icons`.
+
+Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
+
+## Changing WebKit (contribute)
+
+The path for people and agents who maintain the design system itself.
+
+### What is in this repository
+
+- `@aziontech/webkit`: Vue component library and UI building blocks.
+- `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
+- `@aziontech/icons`: Azion + Prime icon fonts as CSS/woff2 assets.
+- Storybook app for documentation and visual validation.
+- Icons Gallery app for icon exploration and QA.
+
+### Workspace structure
+
+```text
+webkit/
+├── apps/
+│   ├── storybook/      # Component docs and development playground
+│   └── icons-gallery/  # Interactive icon browser
+├── packages/
+│   ├── webkit/         # Reusable Vue components
+│   ├── theme/          # Tokens and theme styles
+│   └── icons/          # Icon generation and distribution
+├── .specs/             # Component specs (source of truth for the API)
+├── package.json        # Root workspace scripts
+└── pnpm-workspace.yaml
+```
+
+**Internal dependencies:** `icons` is standalone. `theme` has no internal deps. `webkit` depends on `theme`. Apps depend on all three.
+
+### How to read this repo
+
+If you are new (human or AI), open these in order — together they describe the entire shape of a component:
+
+1. [`.specs/_template.md`](./.specs/_template.md) — the spec format every component conforms to.
+2. [`.specs/button.md`](./.specs/button.md) — canonical filled-in spec.
+3. [`packages/webkit/src/components/actions/button/button.vue`](./packages/webkit/src/components/actions/button/button.vue) — canonical implementation matching that spec.
+4. [`.claude/rules/`](./.claude/rules/) — the constraints every component must respect.
+
+### Packages
+
+| Package                                                              | Description                                                    | CI                                                                                                                                                                                                                | Version                                                                                                               |
+| -------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)   | Azion and Prime icon fonts used across products.               | [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml?query=branch%3Amain)    | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)   |
+| [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)   | Theme configuration, semantic tokens, and styling foundations. | [![Package Theme](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml?query=branch%3Amain)    | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)   |
+| [@aziontech/webkit](https://www.npmjs.com/package/@aziontech/webkit) | Reusable UI components and design system utilities.            | [![Package Webkit](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit.svg)](https://www.npmjs.com/package/@aziontech/webkit) |
+
+### Apps
+
+| App                                   | Description                                                                             | CI                                                                                                                                                                                                                         |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. Live: <https://webkit.azion.app/>      | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
+| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
+
+### Getting started (contributors)
+
+#### Prerequisites
 
 - **Node.js `>= 24`** — the version lives in [`.nvmrc`](./.nvmrc) and is enforced by `engines` in the root `package.json`. With a version manager, `nvm use` (or `fnm use`) picks it up.
 - **pnpm `11.x`** — the root `packageManager` field pins the exact version. Enable Corepack once and it installs that version for you:
@@ -115,7 +184,7 @@ Once the project is wired, import components by path:
 corepack enable
 ```
 
-### Clone and install
+#### Clone and install
 
 ```bash
 git clone https://github.com/aziontech/webkit.git
@@ -125,7 +194,7 @@ pnpm install
 
 Always install from the repository root: it links the workspace packages to each other and installs the Husky hooks (`commit-msg` and `pre-commit`) that guard every commit.
 
-### Run the Storybook
+#### Run the Storybook
 
 The Storybook in [`apps/storybook`](./apps/storybook) is the development playground: every component ships its stories there, with controls for every prop and a copy-paste-ready "Show code" snippet.
 
@@ -147,7 +216,7 @@ pnpm storybook:validate-docs
 
 A static build (`pnpm storybook:build`) lands in `apps/storybook/dist`; preview it with `pnpm storybook:preview` at <http://localhost:6007>. The full guide — stack, project structure, writing stories, visual tests — is in the [Storybook app README](./apps/storybook/README.md).
 
-### Run the tests
+#### Run the tests
 
 Components ship a co-located `*.test.ts` run by **Vitest in browser mode** (real Chromium, never jsdom). The first run needs the browser installed:
 
@@ -164,7 +233,7 @@ pnpm storybook:test:visual
 
 Baselines are per-platform and only the Linux ones are committed, so never commit snapshots generated on macOS. The full testing contract — coverage, opting a story out, regenerating baselines — is in [CONTRIBUTING.md](./CONTRIBUTING.md#testing).
 
-### Most used commands
+#### Most used commands
 
 ```bash
 # Storybook
@@ -195,12 +264,12 @@ pnpm webkit:format:check    # Prettier check
 pnpm governance             # Lint + type-check + format + audit
 ```
 
-### Troubleshooting
+#### Troubleshooting
 
 - **Stale or half-installed dependencies** — `pnpm install:reset` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
 - **pnpm aborts a script with a deps-verify error** (common when `node_modules` is symlinked, e.g. in a git worktree) — prefix the command with `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false`.
 
-## Development flow
+### Development flow
 
 New components follow a **spec-driven pipeline**: spec → scaffold → verify. The spec at `.specs/<name>.md` is the contract; the `.vue`, story, and exports are generated from it.
 
@@ -212,18 +281,11 @@ New components follow a **spec-driven pipeline**: spec → scaffold → verify. 
 
 Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`.claude/rules/`](./.claude/rules/).
 
-## For AI agents
+### Claude Code commands for contributors
 
 The slash commands above (`/spec-create`, `/component-create`, `/component-verify`) are [Claude Code](https://claude.com/claude-code) commands defined in [`.claude/commands/`](./.claude/commands/), which orchestrate lower-level skills in [`.claude/skills/`](./.claude/skills/) (spec-validate, component-scaffold, storybook-write, echo-report, etc.).
 
 If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with repo access), read the corresponding `.md` file under `.claude/commands/<name>.md` and follow the steps manually — each command is a documented procedure, not a black box. The constraints in [`.claude/rules/`](./.claude/rules/) apply regardless of which tool runs them; treat that directory as load-bearing context for any contribution.
-
-## Live previews
-
-- **Component playground** — <https://webkit.azion.app/> — Storybook deployment. Source of truth for every component's API, props, and visual states. Start here to explore the design system.
-- **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the Azion + Prime icon sets used by `@aziontech/icons`.
-
-Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
 
 ## Related docs
 

@@ -38,6 +38,27 @@ The spec template lives at [`.specs/_template.md`](./.specs/_template.md). The C
 
 Components in [`.claude/hooks/_lib/legacy-components.json`](./.claude/hooks/_lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./.claude/rules/migration.md)) — do not paste from the legacy file.
 
+## What to update when WebKit changes
+
+You only write the source. `catalog:build` and the package's `prepack` generate what AI agents read
+(`catalog.json`, its `patterns`, the packaged `skills/` and `rules/`), and CI fails the PR when the
+source and the generated files disagree. Nobody rewrites the AI files by hand.
+
+| When you…                                                   | You write                                                                                    | Generated                                      | CI gate                                                 |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| Create or change a component or a section                   | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and the story    | `catalog.json` imports, with docs and examples | `catalog:check` (fails on a missing doc section), hooks |
+| Create or change a story in `templates/` (not `marketing/`) | The story, with `parameters.webkit.intents` and `skills` (and `steps` for a multi-step flow) | `catalog.json` `patterns`                      | `patterns:check` (G1)                                   |
+| Rename, deprecate or remove a component                     | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                      |
+| Create or change a skill or a rule                          | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests    |
+| Change a token                                              | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                       |
+| Open a new spec                                             | The spec in `status: draft`, only on your branch                                             | —                                              | `spec-status` (G3): no draft lands on `main`            |
+| Release a version                                           | Nothing                                                                                      | The release, by release-please                 | —                                                       |
+
+After any of these, run `pnpm --filter @aziontech/webkit catalog:build` and commit `catalog.json`.
+A pattern's SFC must pass the consumer lint; legacy findings are frozen in
+`packages/webkit/scripts/patterns-lint-baseline.json` and can only go down
+(`pnpm --filter @aziontech/webkit run patterns:check --update` after fixing some).
+
 ## Quality gates
 
 Before opening a PR, all of these must pass:
@@ -97,19 +118,19 @@ Opt a story out of the snapshot (it is still visited for render errors) with `pa
 
 We use [Conventional Commits](https://www.conventionalcommits.org/). Merges to `main` are **squash merges**, and [release-please](https://github.com/googleapis/release-please) parses the squashed commit — the **PR title** — to compute version bumps and changelogs through its Release PR, so the scope and type matter.
 
-| Type | When | Release |
-|---|---|---|
-| `feat` | New component, new prop/event/slot, new public export | minor |
-| `fix` | Bug fix, accessibility correction, visual regression — anything that must ship (incl. urgent production fixes) | patch |
-| `chore` | Tooling, dependency bumps, internal cleanup | none |
-| `docs` | README, spec body, JSDoc | none |
-| `style` | Formatting / whitespace only | none |
-| `refactor` | Internal restructure with no API change | none |
-| `perf` | Performance improvement (use `fix` if it must ship on its own) | none |
-| `test` | Test additions or changes | none |
-| `ci` | CI/CD pipeline changes | none |
-| `revert` | Reverting a prior commit | none |
-| `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export | major |
+| Type                                        | When                                                                                                           | Release |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------- |
+| `feat`                                      | New component, new prop/event/slot, new public export                                                          | minor   |
+| `fix`                                       | Bug fix, accessibility correction, visual regression — anything that must ship (incl. urgent production fixes) | patch   |
+| `chore`                                     | Tooling, dependency bumps, internal cleanup                                                                    | none    |
+| `docs`                                      | README, spec body, JSDoc                                                                                       | none    |
+| `style`                                     | Formatting / whitespace only                                                                                   | none    |
+| `refactor`                                  | Internal restructure with no API change                                                                        | none    |
+| `perf`                                      | Performance improvement (use `fix` if it must ship on its own)                                                 | none    |
+| `test`                                      | Test additions or changes                                                                                      | none    |
+| `ci`                                        | CI/CD pipeline changes                                                                                         | none    |
+| `revert`                                    | Reverting a prior commit                                                                                       | none    |
+| `!` after type or `BREAKING CHANGE:` footer | Removed/renamed prop, event, slot, or export                                                                   | major   |
 
 Types marked **none** never release on their own — they ride along in the next release cut by a `feat`/`fix`. Release-please cannot be configured to change this mapping; the full contract is [`.claude/rules/release-types.md`](./.claude/rules/release-types.md).
 
@@ -167,9 +188,9 @@ git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true
 ```
 
-Then register that **same public key a second time** on GitHub, under [SSH and GPG keys](https://github.com/settings/keys) → **New SSH key** → **Key type: `Signing Key`**. An authentication key does not verify signatures: without the signing-key entry your commits are signed but arrive as *Unverified*, which the ruleset rejects exactly like an unsigned one. Registering the key re-verifies existing commits retroactively, so a branch you pushed before adding it does not need to be re-signed. The commit e-mail (`git config user.email`) must be a verified e-mail on your GitHub account.
+Then register that **same public key a second time** on GitHub, under [SSH and GPG keys](https://github.com/settings/keys) → **New SSH key** → **Key type: `Signing Key`**. An authentication key does not verify signatures: without the signing-key entry your commits are signed but arrive as _Unverified_, which the ruleset rejects exactly like an unsigned one. Registering the key re-verifies existing commits retroactively, so a branch you pushed before adding it does not need to be re-signed. The commit e-mail (`git config user.email`) must be a verified e-mail on your GitHub account.
 
-> **macOS:** on git < 2.34, `gpg.format ssh` fails hard — `error: unsupported value for gpg.format: ssh` on *every* git command, including `git status`. The usual cause is a stale `/usr/local/bin/git` (from the git-scm installer) shadowing the newer `/usr/bin/git` in `PATH`. Diagnose with `git --version` and `which -a git`; fix by installing a current git (`brew install git`) or removing the stale symlink.
+> **macOS:** on git < 2.34, `gpg.format ssh` fails hard — `error: unsupported value for gpg.format: ssh` on _every_ git command, including `git status`. The usual cause is a stale `/usr/local/bin/git` (from the git-scm installer) shadowing the newer `/usr/bin/git` in `PATH`. Diagnose with `git --version` and `which -a git`; fix by installing a current git (`brew install git`) or removing the stale symlink.
 
 #### Checking your own signatures locally
 

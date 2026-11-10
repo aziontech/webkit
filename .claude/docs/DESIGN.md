@@ -357,15 +357,13 @@ Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-co
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
 2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacings.data.js`.
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
-4. **Container** — Use `max-w-(--container-<size>)` for page sections and fixed content (cards, modals, columns), with sizes `3xs` … `7xl` from `primitives/shape/container.js`.
+4. **Container** — A page band carries one of the layout container classes (§ Layout containers), never its own `max-w-*`. `max-w-(--container-<size>)` (`3xs` … `7xl` from `primitives/shape/container.js`) is only for fixed content: cards, modals, columns.
 5. **Radius** — `rounded-(--shape-*)`.
 6. **Shadow** — `shadow-(--shadow-*)` from `primitives/effects/shadow.js` when the surface elevates.
 7. **Color** — `bg-(--…)`, `text-(--…)`, `border-(--…)`.
 8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
 9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
 10. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
-
----
 
 ---
 
@@ -394,13 +392,6 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
 
-The pop rides the same 9s cycle with a **negative `animation-delay` per message**
-(`-6.75s` / `-4.5s` / `-2.25s` / `0s`), which lands its 4% pop on a step boundary — the moment that
-message stops moving at the bottom. CSS cannot re-trigger an entrance once per pass; phase-locking
-one long loop to another is how you get one anyway. Fade the ends **unevenly**: deep at the top
-where messages leave (`mask-t-from-72%`), shallow at the bottom where they arrive
-(`mask-b-from-92%`) — a deep bottom fade is one message tall and lands every arrival half-faded.
-
 `animate-flow-dash` animates an **SVG stroke** and expects a `stroke-dasharray` whose cycle **divides 24** (`4 4` = 8, `2 4` = 6, `8 4` = 12), because 24 is the keyframe's travel: the pattern lands exactly where it started and the loop has no visible seam. A cycle that does not divide 24 (`5 5` = 10) jumps on every repeat. Like `animate-shimmer` and `animate-spin` it is `linear` — an endlessly looping animation must not accelerate, or the seam between repeats becomes visible.
 
 ### Easing primitives — `primitives/animations/ease.js`
@@ -421,14 +412,16 @@ Productive and expressive curves live in `animate.js` — see § Motion primitiv
 
 **Durations**
 
-| Token         | Value   | Typical use                              |
-| ------------- | ------- | ---------------------------------------- |
-| `fast-01`     | `70ms`  | Micro-feedback                           |
-| `fast-02`     | `110ms` | Hover / active ghost layers, popup close |
-| `moderate-01` | `150ms` | Popup open, overlay open (drawer)        |
-| `moderate-02` | `240ms` | General color/layout transitions         |
-| `slow-01`     | `400ms` | Panel close (drawer), overlay open       |
-| `slow-02`     | `700ms` | Large surface enter (drawer panel open)  |
+| Token         | Value    | Typical use                              |
+| ------------- | -------- | ---------------------------------------- |
+| `fast-01`     | `70ms`   | Micro-feedback                           |
+| `fast-02`     | `110ms`  | Hover / active ghost layers, popup close |
+| `moderate-01` | `150ms`  | Popup open, overlay open (drawer)        |
+| `moderate-02` | `240ms`  | General color/layout transitions         |
+| `slow-01`     | `400ms`  | Panel close (drawer), overlay open       |
+| `slow-02`     | `700ms`  | Large surface enter (drawer panel open)  |
+| `slow-03`     | `1100ms` | Highlight fade, indeterminate offset     |
+| `slow-04`     | `2100ms` | Indeterminate progress sweep             |
 
 **Curves**
 
@@ -544,7 +537,7 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 
 ### Forbidden in animations
 
-- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `semantic/animations.js`.
+- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `primitives/animations/keyframes.js`.
 - Hardcoded durations (`duration-[180ms]`, `transition: opacity 200ms`) — use `duration` from `animate.js`, Tailwind `duration-*` utilities, or a `presets/transitions.ts` helper (Drawer pattern).
 - Inline easing (`ease-[cubic-bezier(...)]`) — use `curve` from `animate.js` or `ease-productive-*` / `ease-expressive-*` / `ease.in` · `ease.out` · `ease.in-out`.
 - `data-state` / overlay motion without importing `duration` / `curve` from `animate.js` (no ad-hoc ms or bezier literals in `.vue` files).

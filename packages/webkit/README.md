@@ -9,7 +9,33 @@ wires it all in one command.
 - **Styleguide:** [`docs/STYLEGUIDE.md`](./docs/STYLEGUIDE.md) — every code standard in full, with the gate that blocks each one.
 - **Guidelines:** [`docs/GUIDELINES.md`](./docs/GUIDELINES.md) — the one-page digest (build & use on-pattern).
 
-## Getting started
+## For AI agents: start here
+
+Pick the path by what you are about to do.
+
+### I am building a screen or an app with WebKit (consume)
+
+1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
+   rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
+2. A whole screen (login, signup, settings, a list, a create flow): start from a pattern.
+   `search_patterns`, then `get_pattern`. Copy the SFC and change only the content. Do not build the
+   screen from scratch.
+3. A single piece: `suggest_component`, then `get_component`.
+4. Follow the `webkit-ui-craft` skill, which points to the skill for each case.
+5. Before you hand it over: `npx @aziontech/webkit doctor` and the `webkit-ui-verify` skill.
+
+Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,
+`.specs/` or `apps/storybook/` to build screens; they belong to the people who maintain WebKit.
+
+### I am creating or changing WebKit (contribute)
+
+1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
+2. Every component starts from a spec in `.specs/`, through `/component-create`.
+3. Every story in `apps/storybook/src/stories/templates/` (except `marketing/`) is the source of a
+   pattern. Changed a story? Run `pnpm --filter @aziontech/webkit catalog:build`.
+4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md).
+
+## Building with WebKit (consume)
 
 ### Quick start with AI
 
@@ -18,9 +44,10 @@ Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent
 > Install `@aziontech/webkit`, `@aziontech/theme`, and `@aziontech/icons` in this project,
 > then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
 
-The MCP server it wires gives your AI the full component catalog (`list_components`,
-`get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
-`validate_usage`) — so it writes the right import, prop, and token on the first try.
+The MCP server it wires gives your AI the screen patterns (`search_patterns`, `get_pattern`) and
+the full component catalog (`list_components`, `get_component`, `list_tokens`,
+`suggest_component`, `get_best_practices`, `validate_usage`) — so it starts each screen from the
+reviewed layout and writes the right import, prop, and token on the first try.
 
 ### 1 · Install
 
@@ -103,6 +130,12 @@ The full pattern catalog — how to build a component by hand and how to use our
 npx @aziontech/webkit doctor   # verify the wiring is healthy (lint, MCP, theme)
 npx webkit-mcp                 # the MCP server your AI tools connect to
 ```
+
+## Changing WebKit (contribute)
+
+This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webkit) monorepo. Read
+[`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md) and [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md) (its
+"What to update when WebKit changes" section) before changing a component, a story or a skill.
 
 ## Packages
 
