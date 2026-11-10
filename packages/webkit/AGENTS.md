@@ -23,7 +23,6 @@ Component creation under `components/**` is **always** driven by the pipeline at
 
 ## 2) Files agents must NOT edit without explicit human approval
 
-- [`../../.claude/docs/DESIGN.md`](../../.claude/docs/DESIGN.md)
 - [`../../.claude/docs/COMPONENT_REQUIREMENTS.md`](../../.claude/docs/COMPONENT_REQUIREMENTS.md)
 - `package.json` outside of the `exports` block (structural changes only with approval)
 - `.github/workflows/governance.yml` (CI config)
@@ -53,7 +52,7 @@ Type coverage threshold: **95%**.
 
 ## 6) Common pitfalls
 
-- **Tokenizing manually:** if Figma exposes a variable that has no equivalent in DESIGN.md, register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
+- **Tokenizing manually:** if Figma exposes a variable that has no equivalent token (check with the webkit MCP `list_tokens`), register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
 - **Slots in the wrong layer:** monolithic components (button, icon-button, tag) do not expose slots. Card-pricing exposes `default` + named `actions` because the layout positions are fixed configuration points — not Composition Pattern.
 - **Typography raw classes leaking in:** `text-[length:var(--text-button-lg-font-size)]` and similar are legacy. New components always use the generated class (`text-button-lg`). `validate-tokens.mjs` only blocks **new** violations; the remaining legacy debt is frozen in [`scripts/authoring-baseline.json`](./scripts/authoring-baseline.json) and blocked from growing by the CI ratchet.
 - **Hook blocking a legitimate edit:** read the stderr message — it states the rule that fired and how to fix it. The hooks fail open on unexpected errors and never silently break workflows.

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 8423e16d0f9e7f78e779848368bf14f0fcf9d181bbe6887df8aaaadd0b390dd1
+checksum: 758cf3c0d08aaf6e0da71dc4b0f7071ca37a0ac55b7e7ac842fe9b30bd3889b6
 created: 2026-08-03
 last_updated: 2026-10-01
 ---
@@ -26,9 +26,9 @@ megamenu — this menu is vertical, recursive, and owns a view stack.
 Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>):
 full-width rows, padding inside the row rather than on the list, and indentation carried by the
 nested list's `padding-left`. Per [`migration.md`](../.claude/rules/migration.md) only that
-*structure* is adopted — every *value* is expressed in our own tokens per
-[`DESIGN.md`](../.claude/docs/DESIGN.md). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`,
-`gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things DESIGN.md forbids outright; the
+*structure* is adopted — every *value* is expressed in our own design tokens (the webkit MCP
+`list_tokens` tool lists them). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`,
+`gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token set forbids outright; the
 mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
 
 ## When to use
@@ -53,7 +53,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - `menu-item` — **is** `Menu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
 - `sidebar-group` — functionally **superseded by `Menu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.
 - `navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
-- `accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates DESIGN.md § Forbidden in animations).
+- `accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the animation token rules).
 - `tag` — renders the optional trailing badge on a row via `menu-item`'s `tagValue`.
 
 ## Best practices
@@ -68,7 +68,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - **One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-xxs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.
 - **The rail descends from that column**, so `--menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--menu-indent - --menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.
 - **A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.
-- Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
+- Hover and active are `::before` / `::after` **ghost layers** (the interactive-states pattern) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
 - **The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.
 - Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.

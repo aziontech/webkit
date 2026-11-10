@@ -1539,7 +1539,7 @@ Blocks hex/rgb/hsl colors, raw Tailwind palette, raw typography, `any`, `@ts-ign
 <!-- ❌ blocked -->
 <button class="bg-[#f3652b] text-orange-500 text-sm font-['Inter']" />
 
-<!-- ✅ tokens + generated typography classes from DESIGN.md -->
+<!-- ✅ tokens + generated typography classes -->
 <button class="bg-(--primary) text-(--primary-contrast) text-button-lg" />
 ```
 

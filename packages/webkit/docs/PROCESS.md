@@ -69,7 +69,7 @@ validated against [`.specs/_schema.json`](../../../.specs/_schema.json). It decl
   come from the [prop-vocabulary](../../../.claude/rules/prop-vocabulary.md) dictionary
   (`kind`, not `variant`; `dismissible` for light-dismiss; `(event, item?)` payloads per
   [event-payloads](../../../.claude/rules/event-payloads.md)).
-- **Tokens & Motion tables** — every visual decision mapped to a DESIGN.md token or a
+- **Tokens & Motion tables** — every visual decision mapped to a design token or a
   catalogued `animate-*` utility (each motion class paired with `motion-reduce:`).
 - **Constraints block** — verbatim from the template; altering it fails validation.
 

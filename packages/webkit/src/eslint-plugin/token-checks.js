@@ -21,31 +21,31 @@ export const TOKEN_CHECKS = [
     id: 'typography-raw-size',
     regex: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b(?!-)/g,
     message:
-      'Raw Tailwind text size. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, text-label-md, ...).'
+      'Raw Tailwind text size. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, text-label-md, ...); ask the webkit MCP: list_tokens category "text".'
   },
   {
     id: 'typography-raw-length',
     regex: /text-(?:\[length:var\(|\(length:)--text-/g,
     message:
-      'Raw typography token. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, ...).'
+      'Raw typography token. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...); ask the webkit MCP: list_tokens category "text".'
   },
   {
     id: 'leading-raw',
     regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|[[(])/g,
     message:
-      'Raw leading-* class. Line-height is part of the generated typography class (DESIGN.md); do not override.'
+      'Raw leading-* class. Line-height is part of the generated typography class; do not override (ask the webkit MCP: list_tokens category "text").'
   },
   {
     id: 'tracking-raw',
     regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|[[(])/g,
     message:
-      'Raw tracking-* class. Letter-spacing is part of the generated typography class (DESIGN.md); do not override.'
+      'Raw tracking-* class. Letter-spacing is part of the generated typography class; do not override (ask the webkit MCP: list_tokens category "text").'
   },
   {
     id: 'font-family-raw',
     regex: /\b(?:font-(?:sans|serif|mono|sora|proto-mono)\b|font-[[(]family-name:)/g,
     message:
-      'Raw font-family. Font family is part of the generated typography class (DESIGN.md); do not override.'
+      'Raw font-family. Font family is part of the generated typography class; do not override (ask the webkit MCP: list_tokens category "text").'
   },
   {
     id: 'legacy-color-util',
@@ -118,7 +118,7 @@ export const TOKEN_CHECKS = [
     id: 'motion-hardcoded',
     regex: /\b(?:duration|delay|ease)-[[(]/g,
     message:
-      'Hardcoded duration/ease/delay. Use the duration/curve/ease tokens from primitives/animations (DESIGN.md § Animations).'
+      'Hardcoded duration/ease/delay. Use the duration/curve/ease tokens from primitives/animations (ask the webkit MCP: list_tokens category "animations").'
   }
 ]
 
