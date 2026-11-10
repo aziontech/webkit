@@ -314,7 +314,7 @@
         >
           <Button
             :label="contact.label"
-            kind="text"
+            kind="transparent"
             size="medium"
             :href="contact.href"
           />

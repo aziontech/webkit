@@ -179,7 +179,7 @@
       </div>
     </div>
     <Accordion
-      v-model:value="openStep"
+      v-model="openStep"
       type="single"
       collapsible
     >
@@ -247,8 +247,8 @@
         <Accordion.Content>
           <LogView
             :lines="step.lines"
-            :border="false"
-            :show-copy="false"
+            :bordered="false"
+            :copyable="false"
             :loading="step.status === 'pending'"
             loading-label="Waiting to start…"
           >

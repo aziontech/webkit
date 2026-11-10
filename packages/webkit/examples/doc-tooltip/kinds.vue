@@ -8,7 +8,7 @@
     <p>
       A passive gloss just defines the term: a
       <DocTooltip
-        headline="workload"
+        title="workload"
         tip="The binding between a domain and the application that answers on it."
       >
         workload
@@ -18,9 +18,9 @@
     <p>
       An interactive gloss closes on somewhere to go, so it is a small dialog instead: an
       <DocTooltip
-        headline="Edge Application"
+        title="Edge Application"
         tip="The build that runs at the edge, close to the people using it."
-        cta="Read the guide"
+        link-label="Read the guide"
         href="/docs/edge-application"
       >
         edge application

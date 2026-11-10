@@ -17,7 +17,7 @@
       label="Button"
     />
     <Button
-      kind="text"
+      kind="transparent"
       label="Button"
     />
     <Button

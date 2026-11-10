@@ -153,7 +153,7 @@
                     />
                     <Button
                       label="Continue without Git"
-                      kind="text"
+                      kind="transparent"
                       size="large"
                     />
                     <Link

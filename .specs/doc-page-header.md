@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: aa4d7c927fbd310f912903ef26f576c90c5fd17734d2110cd421714766b3c5fb
+checksum: bd1ef67d1877be67062b2068ca26f7d7ee4af513435685a639a99bd8fcff4dc7
 created: 2026-08-22
-last_updated: 2026-08-28
+last_updated: 2026-11-10
 ---
 
 # DocPageHeader — Component Spec
@@ -110,17 +110,17 @@ _none_
 
 ## Tokens
 
-| Region                    | Token (DESIGN.md)                           |
-| ------------------------- | ------------------------------------------- |
-| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl` |
-| typography (deck)         | `.text-body-md`                             |
-| typography (last updated) | `.text-label-sm`                            |
-| typography (meta entry)   | `Button` `kind="text"` `size="small"`       |
-| text                      | `var(--text-default)`                       |
-| text (last updated)       | `var(--text-muted)`                         |
-| border (the closing rule) | `var(--border-default)`                     |
-| border (entry separator)  | `Separator` `orientation="vertical"`        |
-| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`  |
+| Region                    | Token (DESIGN.md)                            |
+| ------------------------- | -------------------------------------------- |
+| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl`  |
+| typography (deck)         | `.text-body-md`                              |
+| typography (last updated) | `.text-label-sm`                             |
+| typography (meta entry)   | `Button` `kind="transparent"` `size="small"` |
+| text                      | `var(--text-default)`                        |
+| text (last updated)       | `var(--text-muted)`                          |
+| border (the closing rule) | `var(--border-default)`                      |
+| border (entry separator)  | `Separator` `orientation="vertical"`         |
+| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`   |
 
 ## Theme gaps
 

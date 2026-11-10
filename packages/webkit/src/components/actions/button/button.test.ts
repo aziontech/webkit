@@ -34,6 +34,11 @@ describe('Button', () => {
       })
       expect(getByTestId('save-button').tagName).toBe('BUTTON')
     })
+
+    it('renders kind="transparent" with no surface fill', () => {
+      const { getByRole } = render(Button, { props: { label: 'Skip', kind: 'transparent' } })
+      expect(getByRole('button', { name: 'Skip' }).className).toContain('bg-transparent')
+    })
   })
 
   describe('attribute forwarding', () => {

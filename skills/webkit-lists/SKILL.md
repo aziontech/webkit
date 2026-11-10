@@ -117,7 +117,7 @@ A heading, then three nested bands, and nothing else:
                   enable-sorting
                   paginated
                   :page-size="8"
-                  :border="false"
+                  :bordered="false"
                   @row-click="open"
                 />
               </template>
@@ -166,7 +166,7 @@ _does_ name the resource, so the heading only labels the list inside it.)
 thing — a set of rows and the two controls that narrow it. Pushing the search a full section step away
 from the table it filters is the single most common version of this page done wrong.
 
-**The card is unpadded and the table is unbordered** (`:padded="false"` + `:border="false"`), so the card
+**The card is unpadded and the table is unbordered** (`:padded="false"` + `:bordered="false"`), so the card
 frames the table edge to edge. A padded card inside a bordered table gives you two nested rectangles with
 a stripe of dead space between them.
 
@@ -371,7 +371,7 @@ its columns and nothing else.
 - A first-level module index **opens with a `PageHeading`** (`size="medium"`) carrying the module's
   create action — the breadcrumb starts at the second level, so nothing else names the page.
 - **The heading's action is the page's only `large` control; the whole controls row is `medium`.**
-- `Card :padded="false"` + `Table :border="false"` — never a padded card around a bordered table.
+- `Card :padded="false"` + `Table :bordered="false"` — never a padded card around a bordered table.
 - **Search runs inside the table** (`v-model:globalFilter`); **filters narrow `:data` outside it**. Never
   route a membership filter through an operator builder — `is one of` on every row is a control with one
   option.

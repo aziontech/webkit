@@ -555,7 +555,7 @@
               :page-size="10"
               :rows-per-page-options="[10, 25, 50]"
               header-kind="compact"
-              border
+              bordered
               :loading="loading"
             >
               <template #cell-outcome="{ row }">
@@ -567,7 +567,7 @@
               </template>
               <template #cell-severity="{ row }">
                 <SeverityTag
-                  :level="row.severity"
+                  :severity="row.severity"
                   size="small"
                 />
               </template>

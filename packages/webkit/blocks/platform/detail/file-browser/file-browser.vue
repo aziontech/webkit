@@ -213,7 +213,7 @@
               :columns="columns"
               row-key="id"
               enable-sorting
-              :border="false"
+              :bordered="false"
               :loading="loading"
               export-filename="files.csv"
               @row-click="onRowClick"
@@ -322,7 +322,7 @@
                           >
                             <Button
                               label="Show all columns"
-                              kind="text"
+                              kind="transparent"
                               size="small"
                               class="w-full"
                               @click="showAll"

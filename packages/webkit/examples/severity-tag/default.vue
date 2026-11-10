@@ -4,7 +4,7 @@
 
 <template>
   <SeverityTag
-    level="info"
+    severity="info"
     size="medium"
   />
 </template>

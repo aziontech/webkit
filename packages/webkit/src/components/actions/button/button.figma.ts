@@ -11,7 +11,7 @@ const kind = instance.getEnum('kind', {
   primary: 'primary',
   secondary: 'secondary',
   outlined: 'outlined',
-  text: 'text',
+  text: 'transparent',
   danger: 'danger'
 })
 const size = instance.getEnum('size', {

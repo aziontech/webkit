@@ -686,7 +686,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -906,7 +906,7 @@
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
                 <Tabs
-                  v-model:value="activeTab"
+                  v-model="activeTab"
                   class="w-full"
                 >
                   <Tabs.List>
@@ -1040,7 +1040,7 @@
                           enable-sorting
                           paginated
                           :page-size="10"
-                          :border="false"
+                          :bordered="false"
                           :loading="loading"
                         >
                           <template #cell-name="{ value, row }">
@@ -1240,7 +1240,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

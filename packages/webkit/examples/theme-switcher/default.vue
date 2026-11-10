@@ -6,5 +6,5 @@
 </script>
 
 <template>
-  <ThemeSwitcher v-model:value="theme" />
+  <ThemeSwitcher v-model="theme" />
 </template>

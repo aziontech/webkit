@@ -430,7 +430,7 @@ const WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<DropdownMenu :open="true">
 
   <template #bottom>
     <div class="flex justify-end p-(--spacing-xxs)">
-      <Button kind="text" size="small" label="View all" />
+      <Button kind="transparent" size="small" label="View all" />
     </div>
   </template>
 </DropdownMenu>`
@@ -470,7 +470,7 @@ const GROUPS_WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<DropdownMenu :open="true">
     <DropdownMenuOption value="settings" label="Settings" />
 
     <template #bottom>
-      <Button kind="text" size="small" label="Manage account" class="w-full" />
+      <Button kind="transparent" size="small" label="Manage account" class="w-full" />
     </template>
   </DropdownMenuGroup>
 
@@ -483,7 +483,7 @@ const GROUPS_WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<DropdownMenu :open="true">
     <DropdownMenuOption value="logs" label="Audit log" />
 
     <template #bottom>
-      <Button kind="text" size="small" label="Workspace settings" class="w-full" />
+      <Button kind="transparent" size="small" label="Workspace settings" class="w-full" />
     </template>
   </DropdownMenuGroup>
 </DropdownMenu>`

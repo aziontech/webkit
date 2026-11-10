@@ -42,11 +42,11 @@ describe('Item (composition)', () => {
 
     it('reflects kind and size props on the root data-* attributes', () => {
       const { getByTestId } = render(Item, {
-        props: { kind: 'outline', size: 'small' },
+        props: { kind: 'outlined', size: 'small' },
         slots: { default: '<span>y</span>' }
       })
       const root = getByTestId('content-item')
-      expect(root.getAttribute('data-kind')).toBe('outline')
+      expect(root.getAttribute('data-kind')).toBe('outlined')
       expect(root.getAttribute('data-size')).toBe('small')
     })
 
@@ -182,13 +182,13 @@ describe('Item (composition)', () => {
   describe('asChild — merges root bindings onto the single slotted child (merge-as-child.js)', () => {
     it('renders no wrapper div and merges data-slot/data-kind/data-size onto the child', () => {
       const { getByTestId } = render(Item, {
-        props: { asChild: true, kind: 'outline', size: 'small' },
+        props: { asChild: true, kind: 'outlined', size: 'small' },
         slots: { default: '<a href="#" data-testid="link">Docs</a>' }
       })
       const link = getByTestId('link')
       expect(link.tagName).toBe('A')
       expect(link.getAttribute('data-slot')).toBe('item')
-      expect(link.getAttribute('data-kind')).toBe('outline')
+      expect(link.getAttribute('data-kind')).toBe('outlined')
       expect(link.getAttribute('data-size')).toBe('small')
       expect(link.getAttribute('href')).toBe('#')
     })
@@ -216,9 +216,9 @@ describe('Item (composition)', () => {
     })
 
     it.each([
-      ['Outline', Outline, 'outline', 'medium'],
+      ['Outline', Outline, 'outlined', 'medium'],
       ['Muted', Muted, 'muted', 'medium'],
-      ['Small', Small, 'outline', 'small']
+      ['Small', Small, 'outlined', 'small']
     ])('%s story sets the root kind/size from its args', (_name, Story, kind, size) => {
       const { getByTestId } = render(Story)
       const root = getByTestId('content-item')
@@ -244,7 +244,7 @@ describe('Item (composition)', () => {
           IActions: Item.Actions
         },
         template: `
-          <Item kind="outline">
+          <Item kind="outlined">
             <IContent>
               <ITitle>Accessible Item</ITitle>
               <IDescription>A row with a title, description and an action.</IDescription>

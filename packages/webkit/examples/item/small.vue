@@ -5,7 +5,7 @@
 
 <template>
   <Item
-    kind="outline"
+    kind="outlined"
     size="small"
   >
     <Item.Content>

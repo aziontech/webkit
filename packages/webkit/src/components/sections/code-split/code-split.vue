@@ -114,7 +114,7 @@
             <CodeBlock
               :tabs="tabs"
               show-line-numbers
-              :border="false"
+              :bordered="false"
               v-bind="{ animateLines: true }"
               :copy-aria-label="copyAriaLabel || undefined"
             >

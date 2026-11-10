@@ -8,9 +8,9 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: d083e79dc49466dc4fc2c47eb1e3924e38a927f342db1a8750b7a01c0de56ca7
+checksum: 586c4116e5caa82269761846ec58aedd0245bb71116c5553987b408a7ff87be6
 created: 2026-06-23
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Toast — Component Spec
@@ -151,7 +151,7 @@ Each part is also a standalone import (`import ToastItem from '@aziontech/webkit
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-xxs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-label-md` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — a PrimeIcons glyph by `type` sized with the `text-label-md` token to match the title (`pi pi-check` / `pi pi-info-circle` / `pi pi-exclamation-triangle` / `pi pi-exclamation-circle`); the neutral `default` type has **no** icon, and `loading` renders a `Spinner`. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `error`/`warning`). Props `type?: ToastType` (default `'default'`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-type`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
-- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="text"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
+- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="transparent"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
 - `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`pi pi-times`, `kind="transparent"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):

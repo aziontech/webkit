@@ -668,7 +668,7 @@
                     >
                       <Button
                         label="Show all columns"
-                        kind="text"
+                        kind="transparent"
                         size="small"
                         class="w-full"
                         @click="showAll"

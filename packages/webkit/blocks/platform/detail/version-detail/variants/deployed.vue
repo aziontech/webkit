@@ -719,7 +719,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -1036,7 +1036,7 @@
                   >
                     <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
                       <Tabs
-                        v-model:value="activeTab"
+                        v-model="activeTab"
                         class="w-full"
                       >
                         <Tabs.List>
@@ -1601,7 +1601,7 @@
                   >
                     <Button
                       label="Show older"
-                      kind="text"
+                      kind="transparent"
                       size="small"
                       @click="shown += 5"
                     />
@@ -1714,7 +1714,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

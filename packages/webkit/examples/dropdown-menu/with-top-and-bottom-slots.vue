@@ -46,7 +46,7 @@
     <template #bottom>
       <div class="flex justify-end p-(--spacing-xxs)">
         <Button
-          kind="text"
+          kind="transparent"
           size="small"
           label="View all"
         />

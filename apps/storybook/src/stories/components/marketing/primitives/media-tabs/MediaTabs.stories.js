@@ -108,7 +108,7 @@ const meta = {
         defaultValue: { summary: "'hover'" }
       }
     },
-    autoPlay: {
+    autoplay: {
       control: 'boolean',
       description:
         'Advances to the next tab on a timer. It pauses under pointer or focus, stops for good on a click, and never starts under reduced motion.',
@@ -118,7 +118,7 @@ const meta = {
         defaultValue: { summary: 'true' }
       }
     },
-    autoPlayInterval: {
+    autoplayInterval: {
       control: { type: 'number', min: 1000, step: 500 },
       description: 'Milliseconds each tab is held before the band advances.',
       table: {
@@ -155,8 +155,8 @@ const meta = {
     position: 'left',
     size: 'medium',
     selectOn: 'hover',
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true
   }
 }
@@ -231,16 +231,16 @@ const POSITIONS_SCRIPT = [
 ]
 
 const POSITIONS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
-  <MediaTabs position="left" :auto-play="false" :items="items">
+  <MediaTabs position="left" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
-  <MediaTabs position="right" :auto-play="false" :items="items">
+  <MediaTabs position="right" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
-  <MediaTabs position="top" :auto-play="false" :items="items">
+  <MediaTabs position="top" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
-  <MediaTabs position="bottom" :auto-play="false" :items="items">
+  <MediaTabs position="bottom" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
 </div>`
@@ -267,13 +267,13 @@ export const Positions = {
 }
 
 const SIZES_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
-  <MediaTabs size="small" :auto-play="false" :items="items">
+  <MediaTabs size="small" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
-  <MediaTabs size="medium" :auto-play="false" :items="items">
+  <MediaTabs size="medium" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
-  <MediaTabs size="large" :auto-play="false" :items="items">
+  <MediaTabs size="large" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
 </div>`
@@ -312,10 +312,10 @@ const TAB_COUNTS_SCRIPT = [
 ]
 
 const TAB_COUNTS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
-  <MediaTabs position="left" :auto-play="false" :items="items">
+  <MediaTabs position="left" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
-  <MediaTabs position="top" size="small" :auto-play="false" :items="items">
+  <MediaTabs position="top" size="small" :autoplay="false" :items="items">
   ${MEDIA_SLOT}
   </MediaTabs>
 </div>`
@@ -341,7 +341,7 @@ export const TabCounts = {
   }
 }
 
-const STATIC_TEMPLATE = `<MediaTabs select-on="click" :auto-play="false" :items="items">\n${MEDIA_SLOT}\n</MediaTabs>`
+const STATIC_TEMPLATE = `<MediaTabs select-on="click" :autoplay="false" :items="items">\n${MEDIA_SLOT}\n</MediaTabs>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof MediaTabs>} */
 export const Static = {

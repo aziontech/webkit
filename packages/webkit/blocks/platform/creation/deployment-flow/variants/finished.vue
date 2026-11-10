@@ -283,7 +283,7 @@
         </div>
         <Accordion
           v-if="logView === 'phased'"
-          v-model:value="openStep"
+          v-model="openStep"
           type="single"
           collapsible
         >
@@ -345,8 +345,8 @@
             <Accordion.Content>
               <LogView
                 :lines="step.lines"
-                :border="false"
-                show-copy
+                :bordered="false"
+                copyable
                 :loading="step.status === 'pending'"
                 loading-label="Waiting to start…"
               >
@@ -360,8 +360,8 @@
         <LogView
           v-else
           :lines="lines"
-          :border="false"
-          show-copy
+          :bordered="false"
+          copyable
           loading-label="Waiting to start…"
         >
           <LogViewContent>

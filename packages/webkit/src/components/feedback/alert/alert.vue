@@ -9,7 +9,7 @@
     messageDismissTransitionClasses
   } from './presets/transitions'
 
-  export type AlertSeverity = 'info' | 'success' | 'warning' | 'danger' | 'error'
+  export type AlertSeverity = 'info' | 'success' | 'warning' | 'danger'
   export type AlertSize = 'small' | 'medium'
 
   defineOptions({
@@ -18,7 +18,7 @@
   })
 
   interface Props {
-    /** Visual severity variant (maps Error to danger). */
+    /** Visual severity variant. */
     severity?: AlertSeverity
     /** Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. */
     size?: AlertSize
@@ -71,10 +71,6 @@
 
   const normalizedSeverity = computed<NormalizedSeverity>(() => {
     const severity = String(props.severity || 'info').toLowerCase()
-
-    if (severity === 'error') {
-      return 'danger'
-    }
 
     if (
       severity === 'info' ||

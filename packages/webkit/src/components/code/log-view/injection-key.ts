@@ -20,7 +20,7 @@ export interface LogViewContext {
   search: ComputedRef<string>
   warningsOnly: ComputedRef<boolean>
   disabled: ComputedRef<boolean>
-  showCopy: ComputedRef<boolean>
+  copyable: ComputedRef<boolean>
   loading: ComputedRef<boolean>
   loadingLabel: ComputedRef<string>
   searchPlaceholder: ComputedRef<string>

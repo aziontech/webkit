@@ -70,7 +70,7 @@ The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
 | `doc-card-group` | `mobileCols` | `mobileColumns` |
 | `doc-tooltip` | `headline`, `cta` | `title`, `linkLabel` |
 
-† Added in v6. These rows are not yet in [`_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs), so the hook does not block them: adding them before the renames land would block every edit to the components that still carry the old names. Add them to `CONCEPTS` (and the value bans to a `VALUES` map) in the same PR that applies `v6-props.json` to the components.
+† Added in v6. [`_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs) enforces them: the aliases are in `CONCEPTS` and the banned values of the shared-values table are in `VALUES` (checked against a `kind` / `severity` union). `error` stays allowed as a prop name (a message string or a send-failed state is a different concept), and `v-model:value` cannot be blocked by name because `value` is a legitimate prop, so those two are review-only.
 
 **Not banned — legitimate competing uses:**
 

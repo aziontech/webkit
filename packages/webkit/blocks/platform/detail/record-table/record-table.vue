@@ -346,7 +346,7 @@
         <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
           <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
             <Tabs
-              v-model:value="activeTab"
+              v-model="activeTab"
               class="w-full"
             >
               <Tabs.List>
@@ -1193,7 +1193,7 @@
                         >
                           <Button
                             label="Show all columns"
-                            kind="text"
+                            kind="transparent"
                             size="small"
                             class="w-full"
                             @click="showAll"
@@ -1270,7 +1270,7 @@
                     enable-sorting
                     paginated
                     :page-size="8"
-                    :border="false"
+                    :bordered="false"
                     :loading="loading"
                   >
                     <template #cell-name="{ value }">

@@ -552,7 +552,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -1026,7 +1026,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

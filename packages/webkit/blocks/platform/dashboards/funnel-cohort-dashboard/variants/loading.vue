@@ -551,7 +551,7 @@
               :columns="stepColumns"
               row-key="id"
               header-kind="compact"
-              border
+              bordered
               :loading="loading"
             >
               <template #cell-users="{ row }">
@@ -667,7 +667,7 @@
             :columns="cohortColumns"
             row-key="id"
             header-kind="compact"
-            border
+            bordered
             :loading="loading"
           >
             <template #empty>

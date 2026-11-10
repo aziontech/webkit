@@ -181,7 +181,7 @@
         class="flex items-center justify-between gap-(--spacing-xs) border-t border-(--border-default) pt-(--spacing-md)"
       >
         <Button
-          kind="text"
+          kind="transparent"
           label="Cancel"
           :disabled="loading"
           @click="onCancel"

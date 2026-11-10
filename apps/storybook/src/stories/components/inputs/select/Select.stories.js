@@ -427,7 +427,7 @@ const SEARCH_FOOTER_TEMPLATE = `<div class="w-[280px]">
         <Button
           label="Create new item"
           icon="pi pi-plus-circle"
-          kind="text"
+          kind="transparent"
           size="small"
           class="w-full"
           @click="onCreate"

@@ -44,7 +44,7 @@ const LINES: LogViewLine[] = [
  */
 function makeHost(options: {
   lines?: LogViewLine[]
-  showCopy?: boolean
+  copyable?: boolean
   disabled?: boolean
   searchPlaceholder?: string
   withFooter?: boolean
@@ -60,7 +60,7 @@ function makeHost(options: {
           LogView,
           {
             lines: options.lines ?? LINES,
-            showCopy: options.showCopy ?? true,
+            copyable: options.copyable ?? true,
             disabled: options.disabled ?? false,
             searchPlaceholder: options.searchPlaceholder,
             search: search.value,
@@ -113,13 +113,13 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
 
     // The outline AND the corner radius hang off data-border (Tailwind
     // `data-[border]:` variants), so dropping the attribute drops both.
-    it('sets data-border by default and drops it when border is false', () => {
+    it('sets data-border by default and drops it when bordered is false', () => {
       const bordered = render(LogView, { props: { lines: LINES } })
       expect(
         within(bordered.container).getByTestId('code-log-view').getAttribute('data-border')
       ).toBe('true')
 
-      const flush = render(LogView, { props: { lines: LINES, border: false } })
+      const flush = render(LogView, { props: { lines: LINES, bordered: false } })
       expect(within(flush.container).getByTestId('code-log-view').hasAttribute('data-border')).toBe(
         false
       )
@@ -276,10 +276,10 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(payload.split('\n')).toHaveLength(LINES.length)
     })
 
-    it('does not render the copy control when showCopy is false', () => {
-      const { Host } = makeHost({ showCopy: false })
+    it('does not render the copy control when copyable is false', () => {
+      const { Host } = makeHost({ copyable: false })
       const { queryByTestId } = render(Host)
-      // Header template: v-if="ctx.showCopy.value" on the default copy IconButton.
+      // Header template: v-if="ctx.copyable.value" on the default copy IconButton.
       expect(queryByTestId('code-log-view__copy')).toBeNull()
     })
   })

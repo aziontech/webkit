@@ -43,7 +43,7 @@
     :columns="columns"
     row-key="id"
     enable-sorting
-    border
+    bordered
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >

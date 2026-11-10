@@ -145,7 +145,7 @@ describe('CodeBlock', () => {
       expect(first.getAttribute('tabindex')).toBe('-1')
     })
 
-    it('emits update:value with the clicked tab value', async () => {
+    it('emits update:modelValue with the clicked tab value', async () => {
       const { getAllByRole, emitted } = render(CodeBlock, {
         props: { tabs: twoTabs, defaultValue: 'first' }
       })
@@ -153,9 +153,9 @@ describe('CodeBlock', () => {
       const [, second] = getAllByRole('tab')
       await fireEvent.click(second)
 
-      // update:value carries the user selection (it may also carry a mount-time
+      // update:modelValue carries the user selection (it may also carry a mount-time
       // model sync), so assert its latest emission is the clicked value.
-      const updateValue = emitted()['update:value'] as string[][]
+      const updateValue = emitted()['update:modelValue'] as string[][]
       expect(updateValue).toBeTruthy()
       expect(updateValue[updateValue.length - 1]).toEqual(['second'])
     })
@@ -165,23 +165,23 @@ describe('CodeBlock', () => {
         props: { tabs: twoTabs, defaultValue: 'first' }
       })
 
-      const before = (emitted()['update:value'] ?? []).length
+      const before = (emitted()['update:modelValue'] ?? []).length
       const [first] = getAllByRole('tab')
       await fireEvent.click(first)
 
       // Clicking the active tab is a no-op in setActiveTab, so no new
-      // update:value is emitted beyond any mount-time sync.
-      expect((emitted()['update:value'] ?? []).length).toBe(before)
+      // update:modelValue is emitted beyond any mount-time sync.
+      expect((emitted()['update:modelValue'] ?? []).length).toBe(before)
     })
 
-    it('honors the controlled value prop and updates the active tab when it changes', async () => {
+    it('honors the controlled modelValue prop and updates the active tab when it changes', async () => {
       const { getAllByRole, rerender } = render(CodeBlock, {
-        props: { tabs: twoTabs, value: 'first' }
+        props: { tabs: twoTabs, modelValue: 'first' }
       })
 
       expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('true')
 
-      await rerender({ tabs: twoTabs, value: 'second' })
+      await rerender({ tabs: twoTabs, modelValue: 'second' })
 
       const tabs = getAllByRole('tab')
       expect(tabs[1].getAttribute('aria-selected')).toBe('true')
@@ -227,8 +227,8 @@ describe('CodeBlock', () => {
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: 'Enter' })
 
-      expect(emitted()['update:value']).toBeTruthy()
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
     })
 
     it('activates a tab with Space', async () => {
@@ -239,8 +239,8 @@ describe('CodeBlock', () => {
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: ' ' })
 
-      expect(emitted()['update:value']).toBeTruthy()
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
     })
 
     it('moves to the next tab with ArrowRight and wraps to the first from the last', async () => {
@@ -250,12 +250,12 @@ describe('CodeBlock', () => {
 
       const [first] = getAllByRole('tab')
       await fireEvent.keyDown(first, { key: 'ArrowRight' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
 
       // From the last tab, ArrowRight wraps back to the first.
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: 'ArrowRight' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['first'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['first'])
     })
 
     it('moves to the previous tab with ArrowLeft and wraps to the last from the first', async () => {
@@ -267,7 +267,7 @@ describe('CodeBlock', () => {
       await fireEvent.keyDown(first, { key: 'ArrowLeft' })
 
       // From the first tab, ArrowLeft wraps to the last tab.
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
     })
 
     it('jumps to the first tab with Home and the last with End', async () => {
@@ -277,11 +277,11 @@ describe('CodeBlock', () => {
 
       const [first] = getAllByRole('tab')
       await fireEvent.keyDown(first, { key: 'End' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
 
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: 'Home' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['first'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['first'])
     })
   })
 
@@ -409,16 +409,16 @@ describe('CodeBlock', () => {
     })
   })
 
-  describe('border', () => {
+  describe('bordered', () => {
     it('draws the outer border by default (data-border set)', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
       expect(getByTestId('code-code-block').getAttribute('data-border')).toBe('true')
     })
 
-    it('drops the outer border when border is false (data-border absent)', () => {
+    it('drops the outer border when bordered is false (data-border absent)', () => {
       const { getByTestId } = render(CodeBlock, {
-        props: { tabs: singleTab, border: false }
+        props: { tabs: singleTab, bordered: false }
       })
 
       expect(getByTestId('code-code-block').getAttribute('data-border')).toBeNull()

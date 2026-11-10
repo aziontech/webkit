@@ -701,7 +701,7 @@ export async function handleRequest(request) {
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -922,7 +922,7 @@ export async function handleRequest(request) {
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
                 <Tabs
-                  v-model:value="activeTab"
+                  v-model="activeTab"
                   class="w-full"
                 >
                   <Tabs.List>
@@ -2125,7 +2125,7 @@ export async function handleRequest(request) {
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

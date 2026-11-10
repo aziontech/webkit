@@ -127,7 +127,7 @@ The anatomy, top to bottom, the same in all three:
    threshold (more than 7 items).
 3. **List** — scrolls inside the popover (`max-h-(--container-xs) overflow-auto
 overscroll-contain`). Each entry truncates; an entry that is an external resource follows rule 1.
-4. **Load more** — a full-width `Button kind="text" size="small"` in a bordered footer, labelled
+4. **Load more** — a full-width `Button kind="transparent" size="small"` in a bordered footer, labelled
    with the count it adds (`Load 10 more`), present only while items remain. While it loads, the
    button shows `loading` and `Skeleton` rows hold the place of the incoming batch.
 5. **No match** — a one-line muted message quoting the query: `No domain matches "api"`. In a
@@ -160,7 +160,7 @@ Behavior:
       <!-- visible entries, Skeleton rows while loading, no-match line -->
     </div>
     <div v-if="remaining" class="border-t border-(--border-default) p-(--spacing-xxs)">
-      <Button :label="`Load ${nextBatch} more`" kind="text" size="small" :loading="loading" class="w-full" @click.stop="loadMore" />
+      <Button :label="`Load ${nextBatch} more`" kind="transparent" size="small" :loading="loading" class="w-full" @click.stop="loadMore" />
     </div>
     <span class="sr-only" role="status">{{ loading ? `Loading ${nextBatch} more domains` : summary }}</span>
   </Popover.Content>

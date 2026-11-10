@@ -133,7 +133,7 @@
           :position="position"
           size="small"
           :items="items"
-          :auto-play-interval="6000"
+          :autoplay-interval="6000"
           class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
         >
           <template #media="{ index }">

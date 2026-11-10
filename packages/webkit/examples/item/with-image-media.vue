@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <Item kind="outline">
+  <Item kind="outlined">
     <Item.Media kind="image">
       <img
         src="https://images.unsplash.com/photo-1650804068570-7fb2e3dbf888?w=64&h=64&fit=crop"

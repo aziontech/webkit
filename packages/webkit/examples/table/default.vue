@@ -79,7 +79,7 @@
     enable-sorting
     paginated
     :page-size="5"
-    border
+    bordered
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >

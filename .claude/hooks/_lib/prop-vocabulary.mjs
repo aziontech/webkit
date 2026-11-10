@@ -38,8 +38,67 @@ export const CONCEPTS = [
     concept: 'in-page anchor id',
     canonical: 'anchor',
     aliases: ['anchorId', 'sectionId', 'hash']
+  },
+  {
+    // `error` stays allowed: an error message string or a send-failed state is a different
+    // concept (rule doc), so only the unambiguous flag spellings are banned.
+    concept: 'validation state',
+    canonical: 'invalid',
+    aliases: ['hasError', 'isInvalid']
+  },
+  {
+    concept: 'read-only',
+    canonical: 'readonly',
+    aliases: ['readOnly', 'isReadonly']
+  },
+  {
+    concept: 'outline around the box',
+    canonical: 'bordered',
+    aliases: ['border', 'hasBorder']
+  },
+  {
+    concept: 'copy affordance',
+    canonical: 'copyable',
+    aliases: ['showCopy']
+  },
+  {
+    concept: 'self-advancing media',
+    canonical: 'autoplay',
+    aliases: ['autoPlay']
+  },
+  {
+    concept: 'self-advancing media interval (ms)',
+    canonical: 'autoplayInterval',
+    aliases: ['autoPlayInterval']
+  },
+  {
+    concept: 'motion on / off (positive polarity)',
+    canonical: 'animated',
+    aliases: ['still']
+  },
+  {
+    concept: 'short label above a heading',
+    canonical: 'eyebrow',
+    aliases: ['overline']
+  },
+  {
+    concept: 'text of a link or call-to-action',
+    canonical: 'linkLabel',
+    aliases: ['link', 'cta']
+  },
+  {
+    concept: 'column count below md',
+    canonical: 'mobileColumns',
+    aliases: ['mobileCols']
   }
 ]
+
+// Shared value tokens: prop -> { banned value: canonical value }. The same look gets the
+// same token on every component; checked against the prop's string-literal union.
+export const VALUES = {
+  kind: { outline: 'outlined', text: 'transparent', ghost: 'transparent', destructive: 'danger' },
+  severity: { error: 'danger', destructive: 'danger' }
+}
 
 // The `size` scale is canonical everywhere it appears. A component may support a SUBSET
 // (e.g. only small|medium) but must (a) use these exact tokens — never xs/sm/md/lg/xl —
@@ -105,6 +164,17 @@ export function checkPropVocabulary(props, opts = {}) {
       })
       continue
     }
+    if (VALUES[p.name]) {
+      let union = p.type || ''
+      if (!/'/.test(union) && typeof opts.resolveTypeUnion === 'function') {
+        union = opts.resolveTypeUnion(union.trim()) || union
+      }
+      const msg = checkValueUnion(p.name, union)
+      if (msg) {
+        violations.push({ prop: p.name, message: msg })
+        continue
+      }
+    }
     if (p.name === SIZE.prop) {
       let union = p.type || ''
       if (!/'/.test(union) && typeof opts.resolveTypeUnion === 'function') {
@@ -115,6 +185,20 @@ export function checkPropVocabulary(props, opts = {}) {
     }
   }
   return violations
+}
+
+/**
+ * Validate a `kind` / `severity` union STRING against VALUES. Returns an error message or
+ * null (also null when the text is not a string-literal union).
+ */
+export function checkValueUnion(prop, unionText) {
+  const banned = VALUES[prop]
+  if (!banned) return null
+  const members = [...String(unionText).matchAll(/'([a-zA-Z-]+)'/g)].map((m) => m[1])
+  const bad = members.filter((m) => Object.hasOwn(banned, m))
+  if (!bad.length) return null
+  const fixes = bad.map((b) => `'${b}' → '${banned[b]}'`).join(', ')
+  return `${prop} values ${bad.map((b) => `'${b}'`).join(', ')} are not allowed — use the shared token (${fixes}) (${RULE_DOC}).`
 }
 
 /**
@@ -190,6 +274,7 @@ export function vocabularySnapshot() {
     size: { canonical: SIZE.canonical, bannedTokens: SIZE.bannedTokens },
     booleanPrefixes: { banned: ['is', 'has'] },
     negativeBooleans: NEGATIVE_BOOLEANS,
+    values: VALUES,
     events: {
       convention: 'kebab-case, or update:<prop> for v-model',
       noEchoRule:

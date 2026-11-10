@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Three tabs with sliding indicator and horizontally animated panels. The active tab is held in `v-model:value`; clicking a tab or using Arrow / Home / End keys updates it.",
+      "summary": "Three tabs with sliding indicator and horizontally animated panels. The active tab is held in `v-model`; clicking a tab or using Arrow / Home / End keys updates it.",
       "file": "default.vue"
     },
     {

@@ -46,15 +46,15 @@ const meta = {
     docs: {
       description: {
         component:
-          'Composable tab navigation that helps users move between views or sections. Compose `Tabs.Root`, `Tabs.List`, `Tabs.Item`, `Tabs.Content`, and `Tabs.Panel` off the PascalCase `Tabs` import. The active indicator slides between tabs and panel content animates in horizontally; the active tab is exposed via `v-model:value`.'
+          'Composable tab navigation that helps users move between views or sections. Compose `Tabs.Root`, `Tabs.List`, `Tabs.Item`, `Tabs.Content`, and `Tabs.Panel` off the PascalCase `Tabs` import. The active indicator slides between tabs and panel content animates in horizontally; the active tab is exposed via `v-model`.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
-    value: {
+    modelValue: {
       control: 'text',
-      description: 'Controlled active tab (`v-model:value`).',
+      description: 'Controlled active tab (`v-model`).',
       table: {
         category: 'props',
         type: { summary: 'string | number | null' },
@@ -70,9 +70,9 @@ const meta = {
         defaultValue: { summary: 'null' }
       }
     },
-    'onUpdate:value': {
-      action: 'update:value',
-      description: 'Emitted when the active tab changes (drives `v-model:value`).',
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
+      description: 'Emitted when the active tab changes (drives `v-model`).',
       table: { category: 'events', type: { summary: 'string | number | null' } }
     },
     default: {
@@ -90,9 +90,9 @@ export default meta
 
 const DEFAULT_TEMPLATE = `
   <Tabs.Root
-    :value="value"
+    :model-value="value"
     class="w-full max-w-[40rem]"
-    @update:value="onUpdate"
+    @update:model-value="onUpdate"
   >
     <Tabs.List>
       <Tabs.Item value="tab-1" label="Tab Item" />
@@ -125,9 +125,9 @@ const DEFAULT_TEMPLATE = `
 const Template = (args) => ({
   components,
   setup() {
-    const value = ref(args.value ?? args.defaultValue ?? null)
+    const value = ref(args.modelValue ?? args.defaultValue ?? null)
     watch(
-      () => args.value,
+      () => args.modelValue,
       (next) => {
         if (next !== undefined && next !== null) {
           value.value = next
@@ -136,14 +136,14 @@ const Template = (args) => ({
     )
     const onUpdate = (next) => {
       value.value = next
-      args['onUpdate:value']?.(next)
+      args['onUpdate:modelValue']?.(next)
     }
     return { args, value, onUpdate }
   },
   template: DEFAULT_TEMPLATE
 })
 
-const DEFAULT_SOURCE = `<Tabs.Root v-model:value="active" class="w-full max-w-[40rem]">
+const DEFAULT_SOURCE = `<Tabs.Root v-model="active" class="w-full max-w-[40rem]">
   <Tabs.List>
     <Tabs.Item value="tab-1" label="Tab Item" />
     <Tabs.Item value="tab-2" label="Tab Item" />
@@ -178,7 +178,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Three tabs with sliding indicator and horizontally animated panels. The active tab is held in `v-model:value`; clicking a tab or using Arrow / Home / End keys updates it.'
+          'Three tabs with sliding indicator and horizontally animated panels. The active tab is held in `v-model`; clicking a tab or using Arrow / Home / End keys updates it.'
       },
       source: {
         code: toSfc(
@@ -233,7 +233,7 @@ const SCROLLABLE_TABS = [
 ]
 
 const SCROLLABLE_TEMPLATE = `
-  <Tabs.Root v-model:value="active" class="w-full max-w-[20rem]">
+  <Tabs.Root v-model="active" class="w-full max-w-[20rem]">
     <Tabs.List>
       <Tabs.Item
         v-for="tab in tabs"
@@ -255,7 +255,7 @@ const SCROLLABLE_TEMPLATE = `
   </Tabs.Root>
 `
 
-const SCROLLABLE_SOURCE = `<Tabs.Root v-model:value="active" class="w-full max-w-[20rem]">
+const SCROLLABLE_SOURCE = `<Tabs.Root v-model="active" class="w-full max-w-[20rem]">
   <Tabs.List>
     <Tabs.Item
       v-for="tab in tabs"

@@ -7,7 +7,7 @@
 
 <template>
   <ThemeSwitcher
-    v-model:value="theme"
+    v-model="theme"
     disabled
   />
 </template>

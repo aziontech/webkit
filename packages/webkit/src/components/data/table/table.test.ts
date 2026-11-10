@@ -254,6 +254,15 @@ describe('Table (composition + data-driven)', () => {
       expect(cellText).toContain('Inactive')
     })
 
+    it('sets data-border only when bordered is true', () => {
+      const flush = render(Table, { props: { data: rows, columns } })
+      expect(flush.getByTestId('data-table').hasAttribute('data-border')).toBe(false)
+      flush.unmount()
+
+      const framed = render(Table, { props: { data: rows, columns, bordered: true } })
+      expect(framed.getByTestId('data-table').hasAttribute('data-border')).toBe(true)
+    })
+
     it('renders the default empty state when data is empty', () => {
       const { getByTestId, queryByRole } = render(Table, {
         props: { data: [], columns }

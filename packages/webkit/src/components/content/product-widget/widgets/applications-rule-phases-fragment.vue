@@ -126,7 +126,7 @@
     >
       <ShellMockupPart :order="0">
         <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
-          <Table :border="false">
+          <Table :bordered="false">
             <Table.Header>
               <Table.Row>
                 <Table.HeadCell class="w-24 flex-none!">
@@ -139,7 +139,7 @@
 
             <Table.Body>
               <Accordion
-                :value="frame.open"
+                :model-value="frame.open"
                 type="multiple"
                 size="large"
                 arrow-position="left"

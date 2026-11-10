@@ -217,7 +217,7 @@
                     :data="ROWS"
                     :columns="COLUMNS"
                     row-key="id"
-                    :border="false"
+                    :bordered="false"
                   />
                 </div>
                 <div

@@ -49,7 +49,7 @@
               <Button
                 class="w-full"
                 label="Cancel"
-                kind="text"
+                kind="transparent"
                 size="medium"
                 @click="open = false"
               />

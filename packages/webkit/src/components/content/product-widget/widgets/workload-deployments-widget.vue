@@ -119,7 +119,7 @@
               <Button
                 v-if="row.action"
                 :label="row.action"
-                kind="text"
+                kind="transparent"
                 size="small"
               />
             </span>

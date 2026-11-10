@@ -40,11 +40,11 @@ const meta = {
     },
     kind: {
       control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'text', 'danger'],
+      options: ['primary', 'secondary', 'outlined', 'transparent', 'danger'],
       description: 'Visual variant.',
       table: {
         category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text' | 'danger'" },
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'" },
         defaultValue: { summary: "'primary'" }
       }
     },
@@ -164,7 +164,7 @@ const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
   <Button kind="primary" label="Button" />
   <Button kind="secondary" label="Button" />
   <Button kind="outlined" label="Button" />
-  <Button kind="text" label="Button" />
+  <Button kind="transparent" label="Button" />
   <Button kind="danger" label="Button" />
 </div>`
 
@@ -203,20 +203,20 @@ const ICON_TEMPLATE = `<div class="flex flex-col gap-4">
     <Button kind="primary" label="Button" icon="pi pi-arrow-right" />
     <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
     <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
-    <Button kind="text" label="Button" icon="pi pi-arrow-right" />
+    <Button kind="transparent" label="Button" icon="pi pi-arrow-right" />
     <Button kind="danger" label="Button" icon="pi pi-trash" />
   </div>
   <div class="flex flex-wrap items-center gap-4">
     <Button kind="primary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
     <Button kind="secondary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
     <Button kind="outlined" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
-    <Button kind="text" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
+    <Button kind="transparent" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
   </div>
   <div class="flex flex-wrap items-center gap-4">
     <Button kind="primary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
     <Button kind="secondary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
     <Button kind="outlined" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
-    <Button kind="text" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
+    <Button kind="transparent" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
   </div>
   <div class="flex flex-wrap items-center gap-4">
     <Button kind="outlined" size="medium" label="Deploy now" icon="pi pi-chevron-right" icon-position="trailing" animated #prefix>

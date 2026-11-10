@@ -83,11 +83,11 @@ export const Overview = {
 
         <!-- Import -->
         <SectionHeader title="Import" />
-        <CodeBlock :tabs="importTabs" :border="true" :show-line-numbers="false" class="h-fit mb-12" />
+        <CodeBlock :tabs="importTabs" :bordered="true" :show-line-numbers="false" class="h-fit mb-12" />
 
         <!-- Usage -->
         <SectionHeader title="Usage" />
-        <CodeBlock :tabs="usageTabs" :border="true" :show-line-numbers="false" class="h-fit mb-6" />
+        <CodeBlock :tabs="usageTabs" :bordered="true" :show-line-numbers="false" class="h-fit mb-6" />
         <p class="text-body-sm text-muted m-0 max-w-[620px] leading-relaxed mb-12">
           Icons are a font, which means they inherit text properties.
           <strong class="text-default">Colored</strong> brand icons (the <code>-cor</code> set) are

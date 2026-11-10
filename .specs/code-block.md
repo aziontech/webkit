@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 29b9e67a478e1ae10de6556a02710325f93b7ed98d9cdac8b0c15a9bc0f2fbda
+checksum: 5b0cbab2e92caafb865a215a870730fab1f734c48cc406cd6167b3412a7fac6c
 created: 2026-05-28
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 
@@ -61,8 +61,8 @@ Regions render conditionally from tab data — the consumer does not pick a sepa
 
 - Put the source on each tab's `code`. There is no top-level `code` prop, and a tab without a `value` or a `code` is dropped.
 - Set `language` on every tab. Only JavaScript/TypeScript, shell, HCL, GraphQL and Markdown are tokenised; anything else renders as flat text.
-- Use `default-value` for the initial tab, and `v-model:value` only when something outside the block must follow the selected tab.
-- Set `:copyable="false"` on decorative blocks, and `:border="false"` when the block sits inside a surface that already frames it.
+- Use `default-value` for the initial tab, and `v-model` only when something outside the block must follow the selected tab.
+- Set `:copyable="false"` on decorative blocks, and `:bordered="false"` when the block sits inside a surface that already frames it.
 - Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.
 
 ## Usage
@@ -95,20 +95,19 @@ const tabs = [
 </template>
 ```
 
-For multiple languages, add one tab per snippet (each with its own `code`). Use `v-model:value` to control the active tab. Replace `tabs[n].code` or rebuild `tabs` when the source should update reactively.
+For multiple languages, add one tab per snippet (each with its own `code`). Use `v-model` to control the active tab. Replace `tabs[n].code` or rebuild `tabs` when the source should update reactively.
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `tabs` | `CodeBlockTab[]` | `[]` | false | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
-| `value` | `string` | `undefined` | false | Controlled active tab value (`v-model:value`). |
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `'Copy code'` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
 | `copyable` | `boolean` | `true` | false | Shows the copy control; turn it off for a decorative block nobody copies from. |
 | `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
-| `border` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
+| `bordered` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
 ## Type shapes
 
@@ -117,7 +116,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `label` | `string` | true | Tab label (uppercase in UI via `.text-overline-sm`). |
-| `value` | `string` | true | Stable tab id for `v-model:value`. |
+| `value` | `string` | true | Stable tab id for `v-model`. |
 | `code` | `string` | true | Raw source; split on `\n` for rendering. |
 | `language` | `string` | false | Drives syntax highlighting and default file icon when `fileIcon` is omitted. |
 | `fileName` | `string` | false | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
@@ -132,11 +131,16 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `line` | `number` | true | 1-based line index. |
 | `change` | `'added' \| 'removed'` | true | `added` → success row + `+` marker; `removed` → danger row + `-` marker. |
 
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+| --- | --- | --- | --- | --- |
+| `v-model` | `string \| undefined` | `undefined` | `update:modelValue` | Active tab `value` via `defineModel`. While unbound (`undefined`) the block is uncontrolled: it starts at `defaultValue`, else the first tab. |
+
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:value` | `string` | v-model:value. |
 | `copy` | `string` | Fires after the active tab code is copied to the clipboard. |
 
 ## Slots
@@ -239,7 +243,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Shell — single tab with `language: 'bash'`; justified because the command tokeniser is a distinct rendered surface from the expression one (program, flags, operator hand-off, expansion, trailing comment) that no JavaScript sample exercises.
 - UnevenTabs — two tabs whose snippets have different line counts; the only geometry where the shell's height changes on a swap, so it is what exercises the height transition and the per-line entrance together.
 - SingleLine — one `bash` line, `showLineNumbers={false}`, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
-- Borderless — Default sample with `border={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
+- Borderless — Default sample with `bordered={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
 
 ## Constraints — DO NOT
 

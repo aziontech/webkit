@@ -418,7 +418,7 @@
               :page-size="5"
               :rows-per-page-options="[5, 10, 25]"
               header-kind="compact"
-              border
+              bordered
               :loading="loading"
             >
               <template #empty>

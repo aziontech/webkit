@@ -4,10 +4,10 @@
 
 <template>
   <div class="flex flex-wrap items-center gap-4">
-    <SeverityTag level="critical" />
-    <SeverityTag level="high" />
-    <SeverityTag level="medium" />
-    <SeverityTag level="low" />
-    <SeverityTag level="info" />
+    <SeverityTag severity="critical" />
+    <SeverityTag severity="high" />
+    <SeverityTag severity="medium" />
+    <SeverityTag severity="low" />
+    <SeverityTag severity="info" />
   </div>
 </template>

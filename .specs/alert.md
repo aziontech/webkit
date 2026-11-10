@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: d3b00c45acdb5ae9ece0021db4a89fa410897285a088f02a1396c70b3f573814
+checksum: 081e3622f505106604ca9885df26a51c14cf87a2d18668fcc80419f8f3be5e9f
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Alert — Component Spec
@@ -39,7 +39,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 
 ## Best practices
 
-- Pick `severity` by meaning. `error` is an alias of `danger`, and `danger` and `warning` render with `role="alert"`.
+- Pick `severity` by meaning. `danger` and `warning` render with `role="alert"`.
 - Use `label` for plain copy and the default slot when the copy needs inline links.
 - Use either the built-in action (`actionLabel` with `@action`) or the `action` slot, not both. The slot replaces the button.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
@@ -70,15 +70,15 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 
 ## Props
 
-| Prop          | Type                                                      | Default    | Required | JSDoc                                                                                             |
-| ------------- | --------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `severity`    | `'info' \| 'success' \| 'warning' \| 'danger' \| 'error'` | `'info'`   | false    | Visual severity variant (maps Error to danger).                                                   |
-| `size`        | `'small' \| 'medium'`                                     | `'medium'` | false    | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
-| `label`       | `string`                                                  | `''`       | false    | Fallback message copy when the default slot is empty.                                             |
-| `icon`        | `string`                                                  | `''`       | false    | PrimeIcons class override for the leading icon.                                                   |
-| `actionLabel` | `string`                                                  | `''`       | false    | Label for the built-in secondary action button; hidden when empty.                                |
-| `closable`    | `boolean`                                                 | `false`    | false    | When true, shows a close control that dismisses the message.                                      |
-| `life`        | `number`                                                  | `0`        | false    | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss.                          |
+| Prop          | Type                                           | Default    | Required | JSDoc                                                                                             |
+| ------------- | ---------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `severity`    | `'info' \| 'success' \| 'warning' \| 'danger'` | `'info'`   | false    | Visual severity variant.                                                                          |
+| `size`        | `'small' \| 'medium'`                          | `'medium'` | false    | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
+| `label`       | `string`                                       | `''`       | false    | Fallback message copy when the default slot is empty.                                             |
+| `icon`        | `string`                                       | `''`       | false    | PrimeIcons class override for the leading icon.                                                   |
+| `actionLabel` | `string`                                       | `''`       | false    | Label for the built-in secondary action button; hidden when empty.                                |
+| `closable`    | `boolean`                                      | `false`    | false    | When true, shows a close control that dismisses the message.                                      |
+| `life`        | `number`                                       | `0`        | false    | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss.                          |
 
 ## Events
 

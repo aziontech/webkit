@@ -56,7 +56,7 @@
     />
     <Button
       label="Loading"
-      kind="text"
+      kind="transparent"
       @click="
         () => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
       "

@@ -5,11 +5,11 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <SeverityTag
-      level="high"
+      severity="high"
       size="small"
     />
     <SeverityTag
-      level="high"
+      severity="high"
       size="medium"
     />
   </div>

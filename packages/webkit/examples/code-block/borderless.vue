@@ -25,7 +25,7 @@
       :tabs="tabs"
       default-value="js"
       show-line-numbers
-      :border="false"
+      :bordered="false"
     />
   </div>
 </template>

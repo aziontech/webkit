@@ -278,7 +278,7 @@
               <Button
                 type="button"
                 :label="'Load ' + projectPicker.nextBatch + ' more'"
-                kind="text"
+                kind="transparent"
                 size="small"
                 class="w-full"
                 :loading="projectPicker.loading"

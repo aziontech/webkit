@@ -1615,7 +1615,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -2290,7 +2290,7 @@
                     class="mt-(--spacing-xs)"
                   >
                     <Accordion
-                      v-model:value="openCategories"
+                      v-model="openCategories"
                       type="multiple"
                       size="medium"
                       arrow-position="left"
@@ -2581,7 +2581,7 @@
                     enable-sorting
                     paginated
                     :page-size="25"
-                    :border="false"
+                    :bordered="false"
                     header-kind="compact"
                     max-height="100%"
                     class="w-full"
@@ -2754,7 +2754,7 @@
                     <div class="min-w-0">
                       <CodeBlock
                         :tabs="documentTabs"
-                        :border="false"
+                        :bordered="false"
                         show-line-numbers
                         copy-aria-label="Copy the event document as JSON"
                         class="w-full"
@@ -2831,7 +2831,7 @@
                       <div class="min-w-0">
                         <CodeBlock
                           :tabs="documentTabs"
-                          :border="false"
+                          :bordered="false"
                           show-line-numbers
                           copy-aria-label="Copy the event document as JSON"
                           class="w-full"
@@ -2947,7 +2947,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

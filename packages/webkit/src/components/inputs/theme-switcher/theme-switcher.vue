@@ -12,8 +12,6 @@
   export type ThemeSwitcherValue = 'system' | 'dark' | 'light'
 
   interface Props {
-    /** Selected theme mode. Bind with `v-model:value`. */
-    value?: ThemeSwitcherValue
     /** Disables the whole control and applies disabled tokens. */
     disabled?: boolean
     /** Accessible name for the icon-only segmented group. */
@@ -21,14 +19,11 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: 'system',
     disabled: false,
     ariaLabel: 'Theme'
   })
 
-  const emit = defineEmits<{
-    'update:value': [value: ThemeSwitcherValue]
-  }>()
+  const model = defineModel<ThemeSwitcherValue>({ default: 'system' })
 
   const attrs = useAttrs()
 
@@ -48,7 +43,7 @@
   const indicatorOffsetX = ref(0)
   const indicatorOffsetY = ref(0)
 
-  const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === props.value))
+  const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === model.value))
 
   function setSegmentRef(el: globalThis.HTMLButtonElement | null, index: number) {
     if (el) {
@@ -58,7 +53,7 @@
 
   function select(next: ThemeSwitcherValue) {
     if (!props.disabled) {
-      emit('update:value', next)
+      model.value = next
     }
   }
 
@@ -140,7 +135,7 @@
     resizeObserver = null
   })
 
-  watch(() => props.value, scheduleIndicatorSync)
+  watch(() => model.value, scheduleIndicatorSync)
 
   const ROOT_CLASS =
     'relative inline-flex h-7 w-fit items-center gap-(--spacing-xxs) p-(--spacing-xxs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
@@ -177,10 +172,10 @@
         :ref="(el) => setSegmentRef(el as globalThis.HTMLButtonElement | null, index)"
         type="button"
         role="radio"
-        :aria-checked="mode.value === value"
+        :aria-checked="mode.value === model"
         :aria-label="mode.label"
-        :data-state="mode.value === value ? 'active' : 'inactive'"
-        :tabindex="mode.value === value ? 0 : -1"
+        :data-state="mode.value === model ? 'active' : 'inactive'"
+        :tabindex="mode.value === model ? 0 : -1"
         :disabled="disabled"
         :class="SEGMENT_CLASS"
         @click="select(mode.value)"

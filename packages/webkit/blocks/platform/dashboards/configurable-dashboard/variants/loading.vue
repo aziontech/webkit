@@ -269,7 +269,7 @@
         <Button
           v-if="customized"
           label="Reset layout"
-          kind="text"
+          kind="transparent"
           size="medium"
           icon="pi pi-replay"
           @click="reset"

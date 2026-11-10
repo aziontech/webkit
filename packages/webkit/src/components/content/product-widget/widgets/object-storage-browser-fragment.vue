@@ -195,7 +195,7 @@
               :data="rows"
               :columns="COLUMNS"
               row-key="id"
-              :border="false"
+              :bordered="false"
             >
               <template #toolbar>
                 <div class="flex w-full flex-col gap-(--spacing-sm)">

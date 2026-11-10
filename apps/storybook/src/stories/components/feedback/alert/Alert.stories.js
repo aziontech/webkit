@@ -34,11 +34,11 @@ const meta = {
   argTypes: {
     severity: {
       control: 'select',
-      options: ['info', 'success', 'warning', 'danger', 'error'],
+      options: ['info', 'success', 'warning', 'danger'],
       description: 'Visual severity variant (maps Error to danger).',
       table: {
         category: 'props',
-        type: { summary: "'info' | 'success' | 'warning' | 'danger' | 'error'" },
+        type: { summary: "'info' | 'success' | 'warning' | 'danger'" },
         defaultValue: { summary: "'info'" }
       }
     },

@@ -5,7 +5,7 @@ import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import ThemeSwitcher from '@aziontech/webkit/theme-switcher'"
 
-// Canonical runnable usage for the "Show code" panel: v-model:value with a ref.
+// Canonical runnable usage for the "Show code" panel: v-model with a ref.
 // toSfc joins these lines verbatim inside <script setup>, so extra script lines
 // (the ref) are included alongside the imports.
 const V_MODEL_SCRIPT = ["import { ref } from 'vue'", IMPORT, '', "const theme = ref('system')"]
@@ -19,16 +19,16 @@ const meta = {
     docs: {
       description: {
         component:
-          'A compact pill-shaped segmented control that lets the user pick the app color-theme mode — system, dark, or light — via three icon-only segments. It is a pure controlled input: it reflects and emits the selected mode with v-model:value and applies no global side effect itself.'
+          'A compact pill-shaped segmented control that lets the user pick the app color-theme mode — system, dark, or light — via three icon-only segments. It reflects and emits the selected mode with v-model and applies no global side effect itself.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
-    value: {
+    modelValue: {
       control: 'select',
       options: ['system', 'dark', 'light'],
-      description: 'Selected theme mode. Bind with v-model:value.',
+      description: 'Selected theme mode. Bind with v-model.',
       table: {
         type: { summary: "'system' | 'dark' | 'light'" },
         defaultValue: { summary: "'system'" }
@@ -44,13 +44,13 @@ const meta = {
       description: 'Accessible name for the icon-only segmented group.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "'Theme'" } }
     },
-    'onUpdate:value': {
-      action: 'update:value',
-      description: 'Emitted when the user selects a mode. Paired with v-model:value.',
+    'onUpdate:modelValue': {
+      action: 'update:modelValue',
+      description: 'Emitted when the user selects a mode. Paired with v-model.',
       table: { type: { summary: "'system' | 'dark' | 'light'" } }
     }
   },
-  args: { value: 'system', disabled: false, ariaLabel: 'Theme' }
+  args: { modelValue: 'system', disabled: false, ariaLabel: 'Theme' }
 }
 
 export default meta
@@ -60,21 +60,21 @@ export default meta
 const Template = (args) => ({
   components: { ThemeSwitcher },
   setup() {
-    const model = ref(args.value)
+    const model = ref(args.modelValue)
     watch(
-      () => args.value,
+      () => args.modelValue,
       (next) => {
         model.value = next
       }
     )
     const onSelect = (next) => {
       model.value = next
-      args['onUpdate:value']?.(next)
+      args['onUpdate:modelValue']?.(next)
     }
     return { args, model, onSelect }
   },
   template:
-    '<ThemeSwitcher :value="model" :disabled="args.disabled" :aria-label="args.ariaLabel" @update:value="onSelect" />'
+    '<ThemeSwitcher :model-value="model" :disabled="args.disabled" :aria-label="args.ariaLabel" @update:model-value="onSelect" />'
 })
 
 export const Default = {
@@ -85,7 +85,7 @@ export const Default = {
         story:
           'Controlled theme switcher; defaults to the system mode. Click a segment and the highlight slides to it.'
       },
-      source: { code: toSfc(V_MODEL_SCRIPT, '<ThemeSwitcher v-model:value="theme" />') }
+      source: { code: toSfc(V_MODEL_SCRIPT, '<ThemeSwitcher v-model="theme" />') }
     }
   }
 }
@@ -99,7 +99,7 @@ export const Disabled = {
         story:
           'The whole control is disabled and applies disabled tokens; no segment can be selected.'
       },
-      source: { code: toSfc(V_MODEL_SCRIPT, '<ThemeSwitcher v-model:value="theme" disabled />') }
+      source: { code: toSfc(V_MODEL_SCRIPT, '<ThemeSwitcher v-model="theme" disabled />') }
     }
   }
 }

@@ -409,7 +409,7 @@ const SEARCH_FOOTER_MARKUP = `<div style="width: 280px;">
         <Button
           label="Create new item"
           icon="pi pi-plus-circle"
-          kind="text"
+          kind="transparent"
           size="small"
           class="w-full"
           @click="onCreate"

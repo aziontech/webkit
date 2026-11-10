@@ -432,13 +432,13 @@
                     <Button
                       type="button"
                       label="Create a policy"
-                      kind="text"
+                      kind="transparent"
                       size="small"
                     />
                     <Button
                       type="button"
                       label="Continue without a policy"
-                      kind="text"
+                      kind="transparent"
                       size="small"
                       @click="skip"
                     />
@@ -624,7 +624,7 @@
             <Button
               type="button"
               label="Cancel"
-              kind="text"
+              kind="transparent"
               size="medium"
             />
             <div class="flex shrink-0 items-center gap-(--spacing-sm)">

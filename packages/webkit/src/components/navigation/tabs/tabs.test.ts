@@ -201,8 +201,8 @@ describe('Tabs (composition)', () => {
     })
   })
 
-  describe('v-model:value round-trip and update:value', () => {
-    it('emits update:value with the new value on activation', async () => {
+  describe('v-model round-trip and update:modelValue', () => {
+    it('emits update:modelValue with the new value on activation', async () => {
       const updates: Array<string | number | null> = []
 
       const Host = defineComponent({
@@ -213,7 +213,7 @@ describe('Tabs (composition)', () => {
           }
         },
         template: `
-          <Tabs default-value="tab-1" @update:value="onUpdate">
+          <Tabs default-value="tab-1" @update:modelValue="onUpdate">
             <TabsList>
               <TabsItem value="tab-1" label="First" />
               <TabsItem value="tab-2" label="Second" />
@@ -228,14 +228,14 @@ describe('Tabs (composition)', () => {
       expect(updates.at(-1)).toBe('tab-2')
     })
 
-    it('round-trips v-model:value — external change selects the matching tab and content', async () => {
+    it('round-trips v-model — external change selects the matching tab and content', async () => {
       const Host = defineComponent({
         components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
         setup: () => ({ active: ref<string>('tab-1') }),
         template: `
           <div>
             <button data-testid="ext" type="button" @click="active = 'tab-3'">go</button>
-            <Tabs v-model:value="active">
+            <Tabs v-model="active">
               <TabsList>
                 <TabsItem value="tab-1" label="First" />
                 <TabsItem value="tab-2" label="Second" />

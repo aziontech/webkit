@@ -78,7 +78,7 @@
         <ShellMockupPart :order="1">
           <CodeBlock
             :tabs="FILES"
-            :border="false"
+            :bordered="false"
             show-line-numbers
             copy-aria-label="Copy the function code"
           />

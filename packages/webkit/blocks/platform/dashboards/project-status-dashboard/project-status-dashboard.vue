@@ -741,7 +741,7 @@
               row-key="id"
               enable-sorting
               header-kind="compact"
-              border
+              bordered
               :loading="loading"
             >
               <template #empty>

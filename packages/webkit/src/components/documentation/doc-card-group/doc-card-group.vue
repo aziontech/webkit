@@ -19,10 +19,10 @@
     /** Column count at the large breakpoint. */
     cols?: DocCardGroupCols
     /** Column count on a phone. Two only pays when the cells are a mark plus a word. */
-    mobileCols?: DocCardGroupMobileCols
+    mobileColumns?: DocCardGroupMobileCols
   }
 
-  withDefaults(defineProps<Props>(), { cols: 2, mobileCols: 1 })
+  withDefaults(defineProps<Props>(), { cols: 2, mobileColumns: 1 })
 
   defineSlots<{
     /** The `DocCard` children. */
@@ -45,7 +45,7 @@
     <div
       class="grid w-full gap-px [&>*]:ring-1 [&>*]:ring-(--border-default) data-[mobile-cols=1]:grid-cols-1 data-[mobile-cols=2]:grid-cols-2 data-[cols=2]:sm:grid-cols-2 data-[cols=3]:sm:grid-cols-2 data-[cols=3]:lg:grid-cols-3 data-[cols=4]:sm:grid-cols-2 data-[cols=4]:lg:grid-cols-4"
       :data-cols="cols"
-      :data-mobile-cols="mobileCols"
+      :data-mobile-cols="mobileColumns"
     >
       <slot />
     </div>

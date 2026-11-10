@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: b4a1e4536ae457ab0f6aeb4d8605fb205c791e17cc3ea424865207adc12406fa
+checksum: 9d7e034744d9ffb9ae42310312f18d5e28c2def9e5940ab5d500a25070144a03
 created: 2026-06-26
 last_updated: 2026-11-10
 ---
@@ -38,8 +38,8 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 
 ## Best practices
 
-- Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model:value` refer to it.
-- Bind `v-model:value` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
+- Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
+- Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
 - Set the trigger's `level` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
 - `Accordion.Content` applies no padding; pad the content you put inside it.
 - Set `size` and `arrow-position` on the root, not per item — they are provided to every item through context.
@@ -106,7 +106,7 @@ Resulting layout (no per-component `package.json` — dropped repo-wide; the roo
 
 ```
 packages/webkit/src/components/content/accordion/
-├── accordion.vue                 (root; owns type/value/size/arrowPosition, provides context)
+├── accordion.vue                 (root; owns type/modelValue/size/arrowPosition, provides context)
 ├── index.ts                      (compound: attaches Item / Trigger / Content to the root)
 ├── injection-key.ts              (shared AccordionContext)
 ├── accordion-item/
@@ -130,22 +130,23 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 Props below belong to the root `Accordion`. Sub-component props are documented in the **Sub-components** section above.
 
-| Prop            | Type                         | Default     | Required | JSDoc                                                                                                                           |
-| --------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `type`          | `'single' \| 'multiple'`     | `'single'`  | false    | Whether one or multiple items can be open at the same time.                                                                     |
-| `value`         | `string \| string[] \| null` | `undefined` | false    | Controlled open item(s): a single `value` string in single mode, an array of values in multiple mode. Use with `v-model:value`. |
-| `defaultValue`  | `string \| string[] \| null` | `null`      | false    | Initial open item(s) when uncontrolled.                                                                                         |
-| `collapsible`   | `boolean`                    | `true`      | false    | In single mode, lets the open item collapse so that no item is open.                                                            |
-| `size`          | `'medium' \| 'large'`        | `'medium'`  | false    | Size token; affects header height, padding, and typography. Provided to every item via context.                                 |
-| `arrowPosition` | `'left' \| 'right'`          | `'right'`   | false    | Side of the header the chevron sits on. Provided to every item via context.                                                     |
+| Prop            | Type                         | Default    | Required | JSDoc                                                                                           |
+| --------------- | ---------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------- |
+| `type`          | `'single' \| 'multiple'`     | `'single'` | false    | Whether one or multiple items can be open at the same time.                                     |
+| `defaultValue`  | `string \| string[] \| null` | `null`     | false    | Initial open item(s) when uncontrolled.                                                         |
+| `collapsible`   | `boolean`                    | `true`     | false    | In single mode, lets the open item collapse so that no item is open.                            |
+| `size`          | `'medium' \| 'large'`        | `'medium'` | false    | Size token; affects header height, padding, and typography. Provided to every item via context. |
+| `arrowPosition` | `'left' \| 'right'`          | `'right'`  | false    | Side of the header the chevron sits on. Provided to every item via context.                     |
+
+## v-model
+
+| Model     | Type                                      | Default     | Emits               | Notes                                                                                                                                                                                                                          |
+| --------- | ----------------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model` | `string \| string[] \| null \| undefined` | `undefined` | `update:modelValue` | Open item(s) via `defineModel`: a single `value` string in single mode, an array of values in multiple mode, `null` when none is open. While unbound (`undefined`) the accordion is uncontrolled and starts at `defaultValue`. |
 
 ## Events
 
-Events below are emitted by the root `Accordion`.
-
-| Event          | Payload                      | Notes                                                |
-| -------------- | ---------------------------- | ---------------------------------------------------- |
-| `update:value` | `string \| string[] \| null` | `v-model:value`. Fires when the open item(s) change. |
+| _none_ | — | — |
 
 ## Slots
 

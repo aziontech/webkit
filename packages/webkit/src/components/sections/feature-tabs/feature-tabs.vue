@@ -104,7 +104,7 @@
         <MediaTabs
           :items="items"
           size="small"
-          :auto-play-interval="5200"
+          :autoplay-interval="5200"
           class="[--media-tabs-media-min:24rem]"
         >
           <template #media="{ index }">

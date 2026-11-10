@@ -55,8 +55,8 @@
     active?: boolean
     /** Lets the viewer operate the controls inside instead of drawing them as an inert picture. */
     interactive?: boolean
-    /** Draws every part in place from the start, with no entrance and no replay. */
-    still?: boolean
+    /** Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay. */
+    animated?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -74,7 +74,7 @@
     beat: 'fast-01',
     active: true,
     interactive: false,
-    still: false
+    animated: true
   })
 
   defineSlots<{
@@ -143,7 +143,7 @@
 
   const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
 
-  const entered = ref(reduced || props.still)
+  const entered = ref(reduced || !props.animated)
   const onScreen = ref(false)
 
   let observer: globalThis.ResizeObserver | null = null
@@ -180,7 +180,7 @@
   watch(
     () => props.active,
     (active) => {
-      if (reduced || props.still) return
+      if (reduced || !props.animated) return
       if (active) arm()
       else entered.value = false
     }
@@ -218,7 +218,7 @@
   }
 
   function arm() {
-    if (reduced || props.still || entered.value || !onScreen.value || !props.active) return
+    if (reduced || !props.animated || entered.value || !onScreen.value || !props.active) return
     globalThis.requestAnimationFrame(() =>
       globalThis.requestAnimationFrame(() => {
         if (onScreen.value && props.active) entered.value = true
@@ -227,7 +227,7 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced || props.still) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    if (reduced || !props.animated) return { '--part-duration': '0ms', '--part-delay': '0ms' }
     return {
       '--part-duration': duration[props.travel],
       '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`

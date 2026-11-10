@@ -910,7 +910,7 @@ LIMIT 3;`
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -1130,7 +1130,7 @@ LIMIT 3;`
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
                 <Tabs
-                  v-model:value="activeTab"
+                  v-model="activeTab"
                   class="w-full"
                 >
                   <Tabs.List>
@@ -1557,7 +1557,7 @@ LIMIT 3;`
                         :data="schemaRows"
                         :columns="schemaColumns"
                         row-key="id"
-                        :border="false"
+                        :bordered="false"
                       >
                         <template #cell-name="{ value }">
                           <span class="min-w-0 truncate">{{ value }}</span>
@@ -1802,7 +1802,7 @@ LIMIT 3;`
                     :data="filteredResultRows"
                     :columns="resultColumns"
                     row-key="__k"
-                    :border="false"
+                    :bordered="false"
                   />
                   <pre
                     v-else-if="resultRows.length && resultView === 'json'"
@@ -2017,7 +2017,7 @@ LIMIT 3;`
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>

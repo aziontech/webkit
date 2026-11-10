@@ -684,7 +684,7 @@
                                     >
                                       <Button
                                         :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                        kind="text"
+                                        kind="transparent"
                                         size="small"
                                         class="w-full"
                                       />
@@ -873,7 +873,7 @@
                                                   >
                                                     <Button
                                                       :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                                      kind="text"
+                                                      kind="transparent"
                                                       size="small"
                                                       class="w-full"
                                                     />
@@ -951,7 +951,7 @@
                         <template #content>
                           <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                             <Item
-                              kind="outline"
+                              kind="outlined"
                               size="small"
                             >
                               <Item.Media>
@@ -1079,7 +1079,7 @@
                                         >
                                           <Button
                                             :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                            kind="text"
+                                            kind="transparent"
                                             size="small"
                                             class="w-full"
                                           />
@@ -1260,7 +1260,7 @@
                               class="min-w-0"
                             >
                               <Item
-                                kind="outline"
+                                kind="outlined"
                                 size="small"
                               >
                                 <Item.Media>
@@ -1386,7 +1386,7 @@
                                           >
                                             <Button
                                               :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                              kind="text"
+                                              kind="transparent"
                                               size="small"
                                               class="w-full"
                                             />

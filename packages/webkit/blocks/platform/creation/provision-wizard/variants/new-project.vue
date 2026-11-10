@@ -924,7 +924,7 @@
                                 <Button
                                   type="button"
                                   :label="'Load ' + projectPicker.nextBatch + ' more'"
-                                  kind="text"
+                                  kind="transparent"
                                   size="small"
                                   class="w-full"
                                   :loading="projectPicker.loading"
@@ -1183,7 +1183,7 @@
                                   <Button
                                     type="button"
                                     label="Change"
-                                    kind="text"
+                                    kind="transparent"
                                     size="small"
                                     @click="stepIndex = 0"
                                   />
@@ -1535,7 +1535,7 @@
                                     <Button
                                       type="button"
                                       :label="'Load ' + deploymentPicker.nextBatch + ' more'"
-                                      kind="text"
+                                      kind="transparent"
                                       size="small"
                                       class="w-full"
                                       :loading="deploymentPicker.loading"

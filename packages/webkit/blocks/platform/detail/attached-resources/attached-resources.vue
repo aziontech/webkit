@@ -52,7 +52,7 @@
   <Card :padded="false">
     <template #content>
       <div class="flex min-w-0 flex-col">
-        <TableRoot :border="false">
+        <TableRoot :bordered="false">
           <TableHeader>
             <TableRow>
               <TableHeadCell principal>Domain</TableHeadCell>

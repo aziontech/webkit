@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 4676fc53a9ad5b072467a74ae33161a7c1c042115f163f757581ee0bf5c1263e
+checksum: e7f9785795c2ace4ba6d4719ab86b6928ae5132121ab25f35f7a8b8558121de2
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -166,7 +166,7 @@ The root composes, and does not re-implement:
 
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
-  - Cancel is `kind="text"`, at the start of the footer.
+  - Cancel is `kind="transparent"`, at the start of the footer.
   - Previous is `kind="secondary"`, at the end. It is not rendered (`v-if`, not hidden) on step 1.
   - Next is `kind="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
     `submit` instead of `next`, and it carries `loading`.

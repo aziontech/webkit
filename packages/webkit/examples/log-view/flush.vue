@@ -29,7 +29,7 @@
     <span class="text-label-sm text-(--text-muted)">Deploy output</span>
     <LogView
       :lines="lines"
-      :border="false"
+      :bordered="false"
       v-model:search="search"
       v-model:warnings-only="warningsOnly"
       class="mt-(--spacing-sm) h-[420px]"

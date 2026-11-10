@@ -59,7 +59,7 @@ internals — compose inside its slots.
     enable-sorting
     paginated
     :page-size="8"
-    :border="false"
+    :bordered="false"
     max-height="100%"
     class="h-full"
     @row-click="openApp"
@@ -72,7 +72,7 @@ internals — compose inside its slots.
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`
   discipline below so cell controls don't trigger it).
 - `enable-sorting` + per-column `enableSorting: true` turns on the sort affordance for that column.
-- `paginated` + `:page-size` paginates client-side; `:border="false"` for a flush table inside a `Card`.
+- `paginated` + `:page-size` paginates client-side; `:bordered="false"` for a flush table inside a `Card`.
 
 ### Column model
 

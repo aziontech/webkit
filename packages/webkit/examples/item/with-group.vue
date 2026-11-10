@@ -22,7 +22,7 @@
       <Item.Actions>
         <Button
           label="Add"
-          kind="text"
+          kind="transparent"
           size="small"
           icon="pi pi-plus"
         />
@@ -44,7 +44,7 @@
       <Item.Actions>
         <Button
           label="Add"
-          kind="text"
+          kind="transparent"
           size="small"
           icon="pi pi-plus"
         />
@@ -66,7 +66,7 @@
       <Item.Actions>
         <Button
           label="Add"
-          kind="text"
+          kind="transparent"
           size="small"
           icon="pi pi-plus"
         />

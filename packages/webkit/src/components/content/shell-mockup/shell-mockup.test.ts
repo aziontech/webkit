@@ -177,8 +177,8 @@ describe('ShellMockup (composition)', () => {
       .toBe(true)
   })
 
-  it('draws every part in place from the start when still', () => {
-    const { container } = render(host({ still: true }))
+  it('draws every part in place from the start when not animated', () => {
+    const { container } = render(host({ animated: false }))
 
     expect(parts(container).every((part) => part.hasAttribute('data-entered'))).toBe(true)
   })

@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a ring into them — so neighbours share one hairline and an incomplete last row stays simply empty. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of mark-plus-a-word cells opts into two with `mobileCols`.'
+          'The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a ring into them — so neighbours share one hairline and an incomplete last row stays simply empty. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of mark-plus-a-word cells opts into two with `mobileColumns`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -30,7 +30,7 @@ const meta = {
       description: 'Column count at the large breakpoint.',
       table: { type: { summary: '1 | 2 | 3 | 4' }, defaultValue: { summary: '2' } }
     },
-    mobileCols: {
+    mobileColumns: {
       control: 'inline-radio',
       options: [1, 2],
       description: 'Column count on a phone. Two only pays when the cells are a mark plus a word.',
@@ -38,7 +38,7 @@ const meta = {
     },
     default: { description: 'The DocCard children.', table: { type: { summary: 'slot' } } }
   },
-  args: { cols: 2, mobileCols: 1 }
+  args: { cols: 2, mobileColumns: 1 }
 }
 
 export default meta

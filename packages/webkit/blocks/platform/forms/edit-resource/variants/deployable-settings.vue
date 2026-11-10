@@ -737,7 +737,7 @@
                     >Theme</span
                   >
                   <ThemeSwitcher
-                    v-model:value="theme"
+                    v-model="theme"
                     aria-label="Theme"
                   />
                 </div>
@@ -1037,7 +1037,7 @@
             >
               <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
                 <Tabs
-                  v-model:value="activeTab"
+                  v-model="activeTab"
                   class="w-full"
                 >
                   <Tabs.List>
@@ -1233,7 +1233,7 @@
                             <Card :padded="false">
                               <template #content>
                                 <div class="flex min-w-0 flex-col">
-                                  <Table :border="false">
+                                  <Table :bordered="false">
                                     <Table.Header>
                                       <Table.Row>
                                         <Table.HeadCell principal>Domain</Table.HeadCell>
@@ -2333,7 +2333,7 @@
                         >Theme</span
                       >
                       <ThemeSwitcher
-                        v-model:value="theme"
+                        v-model="theme"
                         aria-label="Theme"
                       />
                     </div>
