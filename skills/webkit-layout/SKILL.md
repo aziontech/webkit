@@ -52,7 +52,7 @@ another's.
 ```vue
 <template>
   <main class="layout-column layout-boundary flex min-w-0 flex-col">
-    <PageHeading title="Applications" />
+    <PageHeader title="Applications" />
 
     <section class="layout-section-start flex flex-col gap-(--layout-section-gap)">
       <section class="flex flex-col gap-(--layout-group-gap)">…</section>
@@ -62,6 +62,10 @@ another's.
 </template>
 ```
 
+- **The heading** is `PageHeader` (`@aziontech/webkit/page-header`): the page's only h1, its
+  description, and the page's own actions. A band inside the page is titled by a `SectionHeader`
+  (`@aziontech/webkit/section-header`), or by a `SettingsSection` (`@aziontech/webkit/settings-section`)
+  on a settings page — never by a second hand-written header block.
 - **The boundary** (`layout-boundary`) sets the page's inset from the app chrome — sides, top and
   bottom — and its top inset is the space above the heading.
 - **The parent section** spaces the sections inside it with `--layout-section-gap`. Every page carries
@@ -171,7 +175,8 @@ This is automatic, and it is the reason a sticky bar works:
 ```
 
 Same column class, same inline boundary, on both — so the bar's buttons land inside the form's own
-right edge by construction. Naming the inline half is what lets the measure rule see a self-inset
+right edge by construction. `SaveBar kind="plain"` (`@aziontech/webkit/save-bar`) is this footer,
+already carrying `layout-column-form layout-boundary-inline`; reach for it instead of writing the bar. Naming the inline half is what lets the measure rule see a self-inset
 band and treat it exactly like the scrolling body it sits under.
 
 **The boundary is padding, never margin.** A top margin on an `h-full` child of a padded scroll box

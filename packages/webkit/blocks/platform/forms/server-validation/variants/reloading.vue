@@ -13,7 +13,10 @@
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
@@ -246,244 +249,160 @@
             <legend class="sr-only">Create service</legend>
 
             <section class="flex flex-col gap-(--layout-group-gap)">
-              <header class="group/heading flex flex-col">
-                <div
-                  class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <h2
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                      >
-                        General
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-              </header>
+              <SectionHeader title="General" />
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Name</Item.Title>
-                        <Item.Description
-                          >Give a unique and descriptive name to identify the
-                          service.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="form.name"
-                                size="large"
-                                class="w-full"
-                                aria-label="Name"
-                                placeholder="My Service"
-                                :required="!!errors.name"
-                                :aria-describedby="errors.name ? 'ev-name-error' : undefined"
-                                :disabled="submitting"
-                                @update:model-value="errors.name = ''"
-                              />
-                              <HelperText
-                                v-if="errors.name"
-                                id="ev-name-error"
-                                kind="required"
-                                :label="errors.name"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                    <SettingRow
+                      title="Name"
+                      description="Give a unique and descriptive name to identify the service."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            v-model="form.name"
+                            size="large"
+                            class="w-full"
+                            aria-label="Name"
+                            placeholder="My Service"
+                            :required="!!errors.name"
+                            :aria-describedby="errors.name ? 'ev-name-error' : undefined"
+                            :disabled="submitting"
+                            @update:model-value="errors.name = ''"
+                          />
+                          <HelperText
+                            v-if="errors.name"
+                            id="ev-name-error"
+                            kind="required"
+                            :label="errors.name"
+                          />
+                        </div>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <header class="group/heading flex flex-col">
-                <div
-                  class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <h2
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                      >
-                        Delivery Settings
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-              </header>
+              <SectionHeader title="Delivery Settings" />
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Protocol Usage</Item.Title>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                              <legend class="sr-only">Protocol Usage</legend>
-                              <FieldRadioBlock
-                                v-for="option in protocolUsageOptions"
+                    <SettingRow title="Protocol Usage">
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
+                          <legend class="sr-only">Protocol Usage</legend>
+                          <FieldRadioBlock
+                            v-for="option in protocolUsageOptions"
+                            :key="option.value"
+                            v-model="form.protocolUsage"
+                            :value="option.value"
+                            name="protocolUsage"
+                            :input-id="`ev-protocolUsage-${option.value}`"
+                            :label="option.label"
+                            :description="option.description"
+                            :disabled="submitting"
+                          />
+                        </fieldset>
+                      </div>
+                    </SettingRow>
+                    <SettingRow
+                      title="HTTP ports"
+                      description="The ports the service listens on for HTTP traffic."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <MultiSelect
+                            v-model="form.httpPorts"
+                            size="large"
+                            class="w-full"
+                            placeholder="Select ports"
+                            :required="!!errors.httpPorts"
+                            :display-value="portsLabel"
+                            :disabled="submitting"
+                            @update:model-value="errors.httpPorts = ''"
+                          >
+                            <MultiSelect.Trigger
+                              id="ev-httpPorts"
+                              aria-label="HTTP ports"
+                              :aria-describedby="
+                                errors.httpPorts ? 'ev-httpPorts-error' : undefined
+                              "
+                            />
+                            <MultiSelect.Content>
+                              <MultiSelect.Option
+                                v-for="option in httpPortOptions"
                                 :key="option.value"
-                                v-model="form.protocolUsage"
                                 :value="option.value"
-                                name="protocolUsage"
-                                :input-id="`ev-protocolUsage-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                                :disabled="submitting"
-                              />
-                            </fieldset>
-                          </div>
-                        </Item.Actions>
-                      </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>HTTP ports</Item.Title>
-                        <Item.Description
-                          >The ports the service listens on for HTTP traffic.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <MultiSelect
-                                v-model="form.httpPorts"
-                                size="large"
-                                class="w-full"
-                                placeholder="Select ports"
-                                :required="!!errors.httpPorts"
-                                :display-value="portsLabel"
-                                :disabled="submitting"
-                                @update:model-value="errors.httpPorts = ''"
                               >
-                                <MultiSelect.Trigger
-                                  id="ev-httpPorts"
-                                  aria-label="HTTP ports"
-                                  :aria-describedby="
-                                    errors.httpPorts ? 'ev-httpPorts-error' : undefined
-                                  "
-                                />
-                                <MultiSelect.Content>
-                                  <MultiSelect.Option
-                                    v-for="option in httpPortOptions"
-                                    :key="option.value"
-                                    :value="option.value"
-                                  >
-                                    {{ option.label }}
-                                  </MultiSelect.Option>
-                                </MultiSelect.Content>
-                              </MultiSelect>
-                              <HelperText
-                                v-if="errors.httpPorts"
-                                id="ev-httpPorts-error"
-                                kind="required"
-                                :label="errors.httpPorts"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                                {{ option.label }}
+                              </MultiSelect.Option>
+                            </MultiSelect.Content>
+                          </MultiSelect>
+                          <HelperText
+                            v-if="errors.httpPorts"
+                            id="ev-httpPorts-error"
+                            kind="required"
+                            :label="errors.httpPorts"
+                          />
+                        </div>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <header class="group/heading flex flex-col">
-                <div
-                  class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <h2
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                      >
-                        Features
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-              </header>
+              <SectionHeader title="Features" />
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Compression</Item.Title>
-                        <Item.Description
-                          >Compress responses with gzip or Brotli before they are
-                          sent.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="form.compression"
-                          aria-label="Compression"
-                          :disabled="submitting"
-                        />
-                      </Item.Actions>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Rate limiting</Item.Title>
-                        <Item.Description
-                          >Limit how many requests a single client can send per
-                          minute.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="form.rateLimiting"
-                          aria-label="Rate limiting"
-                          :disabled="submitting"
-                        />
-                      </Item.Actions>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Image optimization</Item.Title>
-                        <Item.Description
-                          >Resize, crop, and convert images on the fly through URL
-                          parameters.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="form.imageOptimization"
-                          aria-label="Image optimization"
-                          :disabled="submitting"
-                        />
-                      </Item.Actions>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Secondary cache</Item.Title>
-                        <Item.Description
-                          >Add a second caching layer to reduce requests to the
-                          origin.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="form.secondaryCache"
-                          aria-label="Secondary cache"
-                          :disabled="submitting"
-                        />
-                      </Item.Actions>
-                    </Item>
+                    <SettingRow
+                      title="Compression"
+                      description="Compress responses with gzip or Brotli before they are sent."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.compression"
+                        aria-label="Compression"
+                        :disabled="submitting"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      title="Rate limiting"
+                      description="Limit how many requests a single client can send per minute."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.rateLimiting"
+                        aria-label="Rate limiting"
+                        :disabled="submitting"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      title="Image optimization"
+                      description="Resize, crop, and convert images on the fly through URL parameters."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.imageOptimization"
+                        aria-label="Image optimization"
+                        :disabled="submitting"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      title="Secondary cache"
+                      description="Add a second caching layer to reduce requests to the origin."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.secondaryCache"
+                        aria-label="Secondary cache"
+                        :disabled="submitting"
+                      />
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -541,210 +460,144 @@
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Origin</Item.Title>
-                        <Item.Description
-                          >The origin that serves this service’s content. Origins are shared across
-                          the account, so anyone on it can change one.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Skeleton
-                                v-if="reloadingOrigins"
-                                kind="shape"
-                                width="100%"
-                                height="40px"
-                                aria-label="Loading origins"
+                    <SettingRow
+                      title="Origin"
+                      description="The origin that serves this service’s content. Origins are shared across the account, so anyone on it can change one."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Skeleton
+                            v-if="reloadingOrigins"
+                            kind="shape"
+                            width="100%"
+                            height="40px"
+                            aria-label="Loading origins"
+                          />
+                          <template v-else>
+                            <Select
+                              v-model="form.originId"
+                              size="large"
+                              class="w-full"
+                              placeholder="Select an origin"
+                              :display-value="originLabel"
+                              :required="!!errors.originId && !form.originId"
+                              :invalid="!!errors.originId && !!form.originId"
+                              :disabled="submitting"
+                              @update:model-value="onOriginChange"
+                            >
+                              <Select.Trigger
+                                id="ev-origin"
+                                aria-label="Origin"
+                                :aria-describedby="errors.originId ? 'ev-origin-error' : undefined"
                               />
-                              <template v-else>
-                                <Select
-                                  v-model="form.originId"
-                                  size="large"
-                                  class="w-full"
-                                  placeholder="Select an origin"
-                                  :display-value="originLabel"
-                                  :required="!!errors.originId && !form.originId"
-                                  :invalid="!!errors.originId && !!form.originId"
-                                  :disabled="submitting"
-                                  @update:model-value="onOriginChange"
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="origin in origins"
+                                  :key="origin.value"
+                                  :value="origin.value"
                                 >
-                                  <Select.Trigger
-                                    id="ev-origin"
-                                    aria-label="Origin"
-                                    :aria-describedby="
-                                      errors.originId ? 'ev-origin-error' : undefined
-                                    "
-                                  />
-                                  <Select.Content>
-                                    <Select.Option
-                                      v-for="origin in origins"
-                                      :key="origin.value"
-                                      :value="origin.value"
-                                    >
-                                      {{ origin.label }}
-                                    </Select.Option>
-                                  </Select.Content>
-                                </Select>
-                                <HelperText
-                                  v-if="errors.originId"
-                                  id="ev-origin-error"
-                                  :kind="form.originId ? 'invalid' : 'required'"
-                                  :label="errors.originId"
-                                />
-                              </template>
-                            </div>
-                          </div>
-                        </Item.Actions>
+                                  {{ origin.label }}
+                                </Select.Option>
+                              </Select.Content>
+                            </Select>
+                            <HelperText
+                              v-if="errors.originId"
+                              id="ev-origin-error"
+                              :kind="form.originId ? 'invalid' : 'required'"
+                              :label="errors.originId"
+                            />
+                          </template>
+                        </div>
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Host header</Item.Title>
-                        <Item.Description
-                          >Identify a virtualhost sent in the Host header to the
-                          origin.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="form.hostHeader"
-                                size="large"
-                                class="w-full"
-                                aria-label="Host header"
-                                :required="!!errors.hostHeader"
-                                :aria-describedby="
-                                  errors.hostHeader ? 'ev-hostHeader-error' : undefined
-                                "
-                                :disabled="submitting"
-                                @update:model-value="errors.hostHeader = ''"
-                              />
-                              <HelperText
-                                v-if="errors.hostHeader"
-                                id="ev-hostHeader-error"
-                                kind="required"
-                                :label="errors.hostHeader"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow
+                      title="Host header"
+                      description="Identify a virtualhost sent in the Host header to the origin."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            v-model="form.hostHeader"
+                            size="large"
+                            class="w-full"
+                            aria-label="Host header"
+                            :required="!!errors.hostHeader"
+                            :aria-describedby="
+                              errors.hostHeader ? 'ev-hostHeader-error' : undefined
+                            "
+                            :disabled="submitting"
+                            @update:model-value="errors.hostHeader = ''"
+                          />
+                          <HelperText
+                            v-if="errors.hostHeader"
+                            id="ev-hostHeader-error"
+                            kind="required"
+                            :label="errors.hostHeader"
+                          />
+                        </div>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <header class="group/heading flex flex-col">
-                <div
-                  class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <h2
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                      >
-                        Cache expiration policies
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-              </header>
+              <SectionHeader title="Cache expiration policies" />
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Browser Maximum TTL (seconds)</Item.Title>
-                        <Item.Description
-                          >How long browsers may keep a cached response.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <NumberInput
-                              v-model="form.browserMaxTtl"
-                              size="large"
-                              class="w-full"
-                              :min="0"
-                              :disabled="submitting"
-                              aria-label="Browser maximum TTL in seconds"
-                            />
-                          </div>
-                        </Item.Actions>
-                      </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Cache Maximum TTL (seconds)</Item.Title>
-                        <Item.Description
-                          >How long the cache may keep a response. A secondary cache requires a TTL
-                          of at least 3 seconds.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <NumberInput
-                              v-model="form.cacheMaxTtl"
-                              size="large"
-                              class="w-full"
-                              :min="0"
-                              :disabled="submitting"
-                              aria-label="Cache maximum TTL in seconds"
-                            />
-                          </div>
-                        </Item.Actions>
-                      </div>
-                    </Item>
-                  </Item.List>
-                </template>
-              </Card>
-            </section>
-
-            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <header class="group/heading flex flex-col">
-                <div
-                  class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <h2
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                      >
-                        Debug Rules
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-              </header>
-              <Card :padded="false">
-                <template #content>
-                  <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Active</Item.Title>
-                        <Item.Description
-                          >Rules that were successfully executed will be listed in the request logs
-                          and in the trace of each event.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="form.debugRules"
-                          aria-label="Active"
+                    <SettingRow
+                      title="Browser Maximum TTL (seconds)"
+                      description="How long browsers may keep a cached response."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <NumberInput
+                          v-model="form.browserMaxTtl"
+                          size="large"
+                          class="w-full"
+                          :min="0"
                           :disabled="submitting"
+                          aria-label="Browser maximum TTL in seconds"
                         />
-                      </Item.Actions>
-                    </Item>
+                      </div>
+                    </SettingRow>
+                    <SettingRow
+                      title="Cache Maximum TTL (seconds)"
+                      description="How long the cache may keep a response. A secondary cache requires a TTL of at least 3 seconds."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <NumberInput
+                          v-model="form.cacheMaxTtl"
+                          size="large"
+                          class="w-full"
+                          :min="0"
+                          :disabled="submitting"
+                          aria-label="Cache maximum TTL in seconds"
+                        />
+                      </div>
+                    </SettingRow>
+                  </Item.List>
+                </template>
+              </Card>
+            </section>
+
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+              <SectionHeader title="Debug Rules" />
+              <Card :padded="false">
+                <template #content>
+                  <Item.List>
+                    <SettingRow
+                      title="Active"
+                      description="Rules that were successfully executed will be listed in the request logs and in the trace of each event."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.debugRules"
+                        aria-label="Active"
+                        :disabled="submitting"
+                      />
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -752,12 +605,8 @@
           </fieldset>
         </div>
 
-        <footer
-          class="sticky bottom-0 z-10 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
-        >
-          <div
-            class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
-          >
+        <SaveBar kind="plain">
+          <template #actions>
             <Button
               type="button"
               label="Cancel"
@@ -773,8 +622,8 @@
               :disabled="reloadingOrigins"
               type="submit"
             />
-          </div>
-        </footer>
+          </template>
+        </SaveBar>
       </form>
     </main>
   </div>

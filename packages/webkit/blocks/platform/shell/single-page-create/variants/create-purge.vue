@@ -8,9 +8,11 @@
   import Card from '@aziontech/webkit/card'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, watch } from 'vue'
 
@@ -158,179 +160,115 @@
           <div
             class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
-            <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-              <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <h1
-                    id="create-purge-title"
-                    data-size="small"
-                    class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                  >
-                    Create Purge
-                  </h1>
-                </div>
-                <p class="text-pretty text-body-sm text-(--text-muted)">
-                  Evict cached objects from every location. Each one is fetched from your origin
-                  again on its next request.
-                </p>
-              </div>
-            </header>
+            <PageHeader
+              title="Create Purge"
+              description="Evict cached objects from every location. Each one is fetched from your origin again on its next request."
+              size="small"
+              title-id="create-purge-title"
+            />
 
             <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">Create Purge</legend>
 
-              <section
-                class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+              <SettingsSection
+                title="Target"
+                hint="Where the objects are evicted from, and how this purge identifies them."
               >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)"> Target </span>
-                    </h2>
-                    <Hint
-                      text="Where the objects are evicted from, and how this purge identifies them."
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <Item size="small">
-                          <div class="flex w-full flex-col items-stretch gap-(--spacing-sm)">
-                            <Item.Content>
-                              <Item.Title>Layer</Item.Title>
-                              <Item.Description
-                                >The cache layer the objects are evicted from.</Item.Description
-                              >
-                            </Item.Content>
-                            <Item.Actions class="w-full">
-                              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                <fieldset
-                                  class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
-                                >
-                                  <legend class="sr-only">Layer</legend>
-                                  <FieldRadioBlock
-                                    v-for="option in layers"
-                                    :key="option.value"
-                                    v-model="form.layer"
-                                    :value="option.value"
-                                    name="purge-layer"
-                                    :input-id="'purge-layer-' + option.value"
-                                    :label="option.label"
-                                    :description="option.description"
-                                  />
-                                </fieldset>
-                              </div>
-                            </Item.Actions>
-                          </div>
-                        </Item>
-                        <Item size="small">
-                          <div class="flex w-full flex-col items-stretch gap-(--spacing-sm)">
-                            <Item.Content>
-                              <Item.Title>Purge Type</Item.Title>
-                              <Item.Description
-                                >How the arguments below identify the objects.</Item.Description
-                              >
-                            </Item.Content>
-                            <Item.Actions class="w-full">
-                              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                <fieldset
-                                  class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
-                                >
-                                  <legend class="sr-only">Purge Type</legend>
-                                  <FieldRadioBlock
-                                    v-for="option in types"
-                                    :key="option.value"
-                                    v-model="form.type"
-                                    :value="option.value"
-                                    name="purge-type"
-                                    :input-id="'purge-type-' + option.value"
-                                    :label="option.label"
-                                    :description="option.description"
-                                    :helper-text="
-                                      typeAllowed(option.value)
-                                        ? ''
-                                        : 'Tiered Cache purges by cache key only.'
-                                    "
-                                    :disabled="!typeAllowed(option.value)"
-                                  />
-                                </fieldset>
-                              </div>
-                            </Item.Actions>
-                          </div>
-                        </Item>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </div>
-              </section>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Layer"
+                        description="The cache layer the objects are evicted from."
+                        kind="stacked"
+                      >
+                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
+                          <legend class="sr-only">Layer</legend>
+                          <FieldRadioBlock
+                            v-for="option in layers"
+                            :key="option.value"
+                            v-model="form.layer"
+                            :value="option.value"
+                            name="purge-layer"
+                            :input-id="'purge-layer-' + option.value"
+                            :label="option.label"
+                            :description="option.description"
+                          />
+                        </fieldset>
+                      </SettingRow>
+                      <SettingRow
+                        title="Purge Type"
+                        description="How the arguments below identify the objects."
+                        kind="stacked"
+                      >
+                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
+                          <legend class="sr-only">Purge Type</legend>
+                          <FieldRadioBlock
+                            v-for="option in types"
+                            :key="option.value"
+                            v-model="form.type"
+                            :value="option.value"
+                            name="purge-type"
+                            :input-id="'purge-type-' + option.value"
+                            :label="option.label"
+                            :description="option.description"
+                            :helper-text="
+                              typeAllowed(option.value)
+                                ? ''
+                                : 'Tiered Cache purges by cache key only.'
+                            "
+                            :disabled="!typeAllowed(option.value)"
+                          />
+                        </fieldset>
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </SettingsSection>
 
-              <section
-                class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+              <SettingsSection
+                title="Arguments"
+                :hint="'The ' + selectedType.noun + 's to purge, one per line.'"
               >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)"> Arguments </span>
-                    </h2>
-                    <Hint
-                      :text="'The ' + selectedType.noun + 's to purge, one per line.'"
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <Item size="small">
-                          <div class="flex w-full flex-col items-stretch gap-(--spacing-sm)">
-                            <Item.Content>
-                              <Item.Title>{{ selectedType.label }} List</Item.Title>
-                              <Item.Description>{{ selectedType.description }}</Item.Description>
-                            </Item.Content>
-                            <Item.Actions class="w-full">
-                              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                <div class="contents font-(family-name:--font-code) text-body-sm">
-                                  <Textarea
-                                    v-model="form.arguments"
-                                    class="w-full"
-                                    :rows="6"
-                                    :aria-label="selectedType.label + ' list'"
-                                    :placeholder="selectedType.placeholder"
-                                    :required="!!error.message && error.kind === 'required'"
-                                    :invalid="!!error.message && error.kind === 'invalid'"
-                                    aria-describedby="create-purge-arguments-message"
-                                    spellcheck="false"
-                                    autocomplete="off"
-                                  />
-                                </div>
-                                <HelperText
-                                  id="create-purge-arguments-message"
-                                  :kind="error.message ? error.kind : 'helper'"
-                                  :label="guidance"
-                                />
-                              </div>
-                            </Item.Actions>
-                          </div>
-                        </Item>
-                      </Item.List>
-                    </template>
-                  </Card>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="List"
+                        :description="selectedType.description"
+                        kind="stacked"
+                      >
+                        <template #title> {{ selectedType.label }} List </template>
+                        <div class="contents font-(family-name:--font-code) text-body-sm">
+                          <Textarea
+                            v-model="form.arguments"
+                            class="w-full"
+                            :rows="6"
+                            :aria-label="selectedType.label + ' list'"
+                            :placeholder="selectedType.placeholder"
+                            :required="!!error.message && error.kind === 'required'"
+                            :invalid="!!error.message && error.kind === 'invalid'"
+                            aria-describedby="create-purge-arguments-message"
+                            spellcheck="false"
+                            autocomplete="off"
+                          />
+                        </div>
+                        <HelperText
+                          id="create-purge-arguments-message"
+                          :kind="error.message ? error.kind : 'helper'"
+                          :label="guidance"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
 
-                  <Alert
-                    severity="warning"
-                    size="small"
-                    label="A purge cannot be undone. A broad one briefly raises the traffic that reaches your origin, while the cache fills again."
-                  />
-                </div>
-              </section>
+                <Alert
+                  severity="warning"
+                  size="small"
+                  label="A purge cannot be undone. A broad one briefly raises the traffic that reaches your origin, while the cache fills again."
+                />
+              </SettingsSection>
             </fieldset>
           </div>
         </div>

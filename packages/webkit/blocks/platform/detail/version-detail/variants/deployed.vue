@@ -11,17 +11,19 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import Resizable from '@aziontech/webkit/resizable'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -1031,65 +1033,52 @@
           >
             <Resizable.Pane aria-label="Version settings">
               <main class="flex min-h-0 min-w-0 flex-1 flex-col">
-                <div class="border-b border-(--border-default)">
-                  <div
-                    class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-                  >
-                    <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                      <Tabs
-                        v-model:value="activeTab"
-                        class="w-full"
-                      >
-                        <Tabs.List>
-                          <Tabs.Item
-                            v-for="tab in tabs"
-                            :key="tab.value"
-                            :value="tab.value"
-                            :label="tab.label"
-                          />
-                        </Tabs.List>
-                      </Tabs>
-                    </div>
-                    <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
-                      <span class="hidden text-body-sm text-(--text-muted) md:inline">
-                        Created Nov 5, 2026
-                      </span>
-                      <Tag
-                        label="Deployed"
-                        severity="primary"
-                        size="medium"
-                      />
-                      <DropdownMenu
-                        placement="bottom-end"
-                        @select="openHistory"
-                      >
-                        <DropdownMenu.Trigger>
-                          <IconButton
-                            icon="pi pi-ellipsis-h"
-                            kind="transparent"
-                            size="small"
-                            aria-label="Version actions"
-                          />
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="history"
-                            :label="
-                              historyCollapsed ? 'Show version history' : 'Hide version history'
-                            "
-                          >
-                            <template #left>
-                              <i
-                                class="pi pi-history"
-                                aria-hidden="true"
-                              />
-                            </template>
-                          </DropdownMenu.Option>
-                        </DropdownMenu.Group>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </div>
+                <PageTabs v-model:value="activeTab">
+                  <Tabs.Item
+                    v-for="tab in tabs"
+                    :key="tab.value"
+                    :value="tab.value"
+                    :label="tab.label"
+                  />
+                  <template #actions>
+                    <span class="hidden text-body-sm text-(--text-muted) md:inline">
+                      Created Nov 5, 2026
+                    </span>
+                    <Tag
+                      label="Deployed"
+                      severity="primary"
+                      size="medium"
+                    />
+                    <DropdownMenu
+                      placement="bottom-end"
+                      @select="openHistory"
+                    >
+                      <DropdownMenu.Trigger>
+                        <IconButton
+                          icon="pi pi-ellipsis-h"
+                          kind="transparent"
+                          size="small"
+                          aria-label="Version actions"
+                        />
+                      </DropdownMenu.Trigger>
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
+                          value="history"
+                          :label="
+                            historyCollapsed ? 'Show version history' : 'Hide version history'
+                          "
+                        >
+                          <template #left>
+                            <i
+                              class="pi pi-history"
+                              aria-hidden="true"
+                            />
+                          </template>
+                        </DropdownMenu.Option>
+                      </DropdownMenu.Group>
+                    </DropdownMenu>
+                  </template>
+                </PageTabs>
 
                 <section
                   class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
@@ -1113,279 +1102,116 @@
                           <div
                             class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
                           >
-                            <header
-                              class="flex flex-wrap items-start justify-between gap-(--spacing-md)"
-                            >
-                              <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                  <h1 class="text-balance text-heading-xs text-(--text-default)">
-                                    Settings
-                                  </h1>
-                                </div>
-                                <p class="text-pretty text-body-sm text-(--text-muted)">
-                                  Core configuration for this resource.
-                                </p>
-                              </div>
-                            </header>
+                            <PageHeader
+                              title="Settings"
+                              description="Core configuration for this resource."
+                              size="small"
+                            />
 
                             <fieldset
                               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
                             >
                               <legend class="sr-only">Main settings</legend>
 
-                              <section
-                                data-stacked
-                                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                              <SettingsSection
+                                title="General"
+                                hint="How this resource is identified across the console, and whether it is serving traffic."
+                                anchor="general"
                               >
-                                <div
-                                  data-stacked
-                                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                                >
-                                  <div
-                                    class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-label="Copy link to the General section"
-                                      class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        class="pi pi-link text-body-xs"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                    <h2
-                                      id="general"
-                                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                                    >
-                                      <span class="flex items-center gap-(--spacing-xs)"
-                                        >General</span
+                                <Card :padded="false">
+                                  <template #content>
+                                    <Item.List>
+                                      <SettingRow
+                                        title="Name"
+                                        description="A unique and descriptive name to identify the resource."
                                       >
-                                    </h2>
-                                    <Hint
-                                      text="How this resource is identified across the console, and whether it is serving traffic."
-                                      class="shrink-0"
-                                    />
-                                  </div>
-                                </div>
+                                        <Input
+                                          v-model="settings.name"
+                                          size="large"
+                                          class="w-full"
+                                          aria-label="Name"
+                                        />
+                                      </SettingRow>
+                                      <SettingRow
+                                        title="Active"
+                                        description="When disabled, the resource stops serving traffic."
+                                        kind="compact"
+                                      >
+                                        <Switch
+                                          v-model="settings.active"
+                                          aria-label="Active"
+                                        />
+                                      </SettingRow>
+                                    </Item.List>
+                                  </template>
+                                </Card>
+                              </SettingsSection>
 
-                                <div
-                                  data-open
-                                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                                >
-                                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                                    <div
-                                      data-open
-                                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <Card :padded="false">
-                                        <template #content>
-                                          <Item.List>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>Name</Item.Title>
-                                                <Item.Description>
-                                                  A unique and descriptive name to identify the
-                                                  resource.
-                                                </Item.Description>
-                                              </Item.Content>
-                                              <div
-                                                class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                              >
-                                                <Item.Actions class="w-full">
-                                                  <Input
-                                                    v-model="settings.name"
-                                                    size="large"
-                                                    class="w-full"
-                                                    aria-label="Name"
-                                                  />
-                                                </Item.Actions>
-                                              </div>
-                                            </Item>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>Active</Item.Title>
-                                                <Item.Description>
-                                                  When disabled, the resource stops serving traffic.
-                                                </Item.Description>
-                                              </Item.Content>
-                                              <Item.Actions>
-                                                <Switch
-                                                  v-model="settings.active"
-                                                  aria-label="Active"
-                                                />
-                                              </Item.Actions>
-                                            </Item>
-                                          </Item.List>
-                                        </template>
-                                      </Card>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-
-                              <section
-                                data-stacked
-                                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                              <SettingsSection
+                                title="Modules"
+                                hint="The capabilities this resource runs with, each of which can be toggled here."
+                                anchor="modules"
                               >
-                                <div
-                                  data-stacked
-                                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                                >
-                                  <div
-                                    class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-label="Copy link to the Modules section"
-                                      class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        class="pi pi-link text-body-xs"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                    <h2
-                                      id="modules"
-                                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                                    >
-                                      <span class="flex items-center gap-(--spacing-xs)"
-                                        >Modules</span
+                                <Card :padded="false">
+                                  <template #content>
+                                    <Item.List>
+                                      <SettingRow
+                                        v-for="mod in defaultModules"
+                                        :key="mod.key"
+                                        :title="mod.title"
+                                        :description="mod.description"
+                                        kind="compact"
                                       >
-                                    </h2>
-                                    <Hint
-                                      text="The capabilities this resource runs with, each of which can be toggled here."
-                                      class="shrink-0"
-                                    />
-                                  </div>
-                                </div>
+                                        <Switch
+                                          v-model="settings.modules[mod.key]"
+                                          :aria-label="mod.title"
+                                        />
+                                      </SettingRow>
+                                    </Item.List>
+                                  </template>
+                                </Card>
+                              </SettingsSection>
 
-                                <div
-                                  data-open
-                                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                                >
-                                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                                    <div
-                                      data-open
-                                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <Card :padded="false">
-                                        <template #content>
-                                          <Item.List>
-                                            <Item
-                                              v-for="mod in defaultModules"
-                                              :key="mod.key"
-                                              size="small"
-                                            >
-                                              <Item.Content>
-                                                <Item.Title>{{ mod.title }}</Item.Title>
-                                                <Item.Description>{{
-                                                  mod.description
-                                                }}</Item.Description>
-                                              </Item.Content>
-                                              <Item.Actions>
-                                                <Switch
-                                                  v-model="settings.modules[mod.key]"
-                                                  :aria-label="mod.title"
-                                                />
-                                              </Item.Actions>
-                                            </Item>
-                                          </Item.List>
-                                        </template>
-                                      </Card>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
-
-                              <section
-                                data-stacked
-                                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                              <SettingsSection
+                                title="Subscription modules"
+                                hint="Paid add-ons that are activated with sales, not from this page."
+                                anchor="subscription-modules"
                               >
-                                <div
-                                  data-stacked
-                                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                                >
-                                  <div
-                                    class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-label="Copy link to the Subscription modules section"
-                                      class="absolute -left-(--size-6) flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <i
-                                        class="pi pi-link text-body-xs"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                    <h2
-                                      id="subscription-modules"
-                                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                                    >
-                                      <span class="flex items-center gap-(--spacing-xs)"
-                                        >Subscription modules</span
+                                <Card :padded="false">
+                                  <template #content>
+                                    <Item.List>
+                                      <SettingRow
+                                        title="WebSocket Proxy"
+                                        kind="compact"
                                       >
-                                    </h2>
-                                    <Hint
-                                      text="Paid add-ons that are activated with sales, not from this page."
-                                      class="shrink-0"
-                                    />
-                                  </div>
-                                </div>
-
-                                <div
-                                  data-open
-                                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                                >
-                                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                                    <div
-                                      data-open
-                                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                                    >
-                                      <Card :padded="false">
-                                        <template #content>
-                                          <Item.List>
-                                            <Item size="small">
-                                              <Item.Content>
-                                                <Item.Title>WebSocket Proxy</Item.Title>
-                                                <Item.Description>
-                                                  Enhance real-time data exchange between your
-                                                  resource and backend services using the WebSocket
-                                                  protocol.
-                                                  <a
-                                                    href="https://example.com/contact-sales"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                                                  >
-                                                    Contact sales
-                                                    <i
-                                                      class="pi pi-external-link shrink-0 text-body-sm leading-none"
-                                                      aria-hidden="true"
-                                                    />
-                                                  </a>
-                                                </Item.Description>
-                                              </Item.Content>
-                                              <Item.Actions>
-                                                <Tooltip
-                                                  text="Contact sales to activate this module."
-                                                >
-                                                  <Switch
-                                                    v-model="settings.modules.web_socket_proxy"
-                                                    disabled
-                                                    aria-label="WebSocket Proxy"
-                                                  />
-                                                </Tooltip>
-                                              </Item.Actions>
-                                            </Item>
-                                          </Item.List>
+                                        <template #description>
+                                          Enhance real-time data exchange between your resource and
+                                          backend services using the WebSocket protocol.
+                                          <a
+                                            href="https://example.com/contact-sales"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                                          >
+                                            Contact sales
+                                            <i
+                                              class="pi pi-external-link shrink-0 text-body-sm leading-none"
+                                              aria-hidden="true"
+                                            />
+                                          </a>
                                         </template>
-                                      </Card>
-                                    </div>
-                                  </div>
-                                </div>
-                              </section>
+                                        <Tooltip text="Contact sales to activate this module.">
+                                          <Switch
+                                            v-model="settings.modules.web_socket_proxy"
+                                            disabled
+                                            aria-label="WebSocket Proxy"
+                                          />
+                                        </Tooltip>
+                                      </SettingRow>
+                                    </Item.List>
+                                  </template>
+                                </Card>
+                              </SettingsSection>
                             </fieldset>
                           </div>
                         </form>

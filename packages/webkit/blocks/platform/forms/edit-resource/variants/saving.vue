@@ -12,12 +12,16 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -799,321 +803,144 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model:value="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model:value="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+          </PageTabs>
 
           <section class="min-h-0 flex-1 overflow-auto">
             <div class="flex min-h-full flex-col">
               <div class="flex min-w-0 flex-1 flex-col">
                 <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col pb-0">
-                  <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <h1
-                          data-size="small"
-                          class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                        >
-                          Settings
-                        </h1>
-                      </div>
-                      <p class="text-pretty text-body-sm text-(--text-muted)">
-                        Core configuration for this policy.
-                      </p>
-                    </div>
-                    <div
-                      class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-                    >
-                      <div class="w-full md:w-fit">
-                        <Button
-                          label="Documentation"
-                          icon="pi pi-book"
-                          kind="outlined"
-                          href="https://example.com/docs/security-policies"
-                          target="_blank"
-                          size="medium"
-                          class="w-full"
-                        />
-                      </div>
-                    </div>
-                  </header>
+                  <PageHeader
+                    title="Settings"
+                    description="Core configuration for this policy."
+                    size="small"
+                  >
+                    <template #actions>
+                      <Button
+                        label="Documentation"
+                        icon="pi pi-book"
+                        kind="outlined"
+                        href="https://example.com/docs/security-policies"
+                        target="_blank"
+                        size="medium"
+                      />
+                    </template>
+                  </PageHeader>
 
                   <section
                     class="layout-section-start flex min-w-0 flex-1 flex-col pb-(--layout-boundary-end)"
                   >
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                    >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">General</span>
-                          </h2>
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Name</Item.Title>
-                                      <Item.Description
-                                        >Give a unique and descriptive name to identify this
-                                        policy.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                      <Item.Actions class="w-full">
-                                        <div
-                                          class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                        >
-                                          <Input
-                                            v-model="form.name"
-                                            size="large"
-                                            class="w-full"
-                                            aria-label="Name"
-                                            autocomplete="off"
-                                          />
-                                        </div>
-                                      </Item.Actions>
-                                    </div>
-                                  </Item>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Project</Item.Title>
-                                      <Item.Description
-                                        >The project this policy runs in front of.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <span class="text-body-md text-(--text-default)"
-                                        >web-app</span
-                                      >
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                    <SettingsSection title="General">
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Name"
+                              description="Give a unique and descriptive name to identify this policy."
+                            >
+                              <Input
+                                v-model="form.name"
+                                size="large"
+                                class="w-full"
+                                aria-label="Name"
+                                autocomplete="off"
+                              />
+                            </SettingRow>
+                            <SettingRow
+                              title="Project"
+                              description="The project this policy runs in front of."
+                              kind="compact"
+                            >
+                              <span class="text-body-md text-(--text-default)">web-app</span>
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
 
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                    <SettingsSection
+                      title="Modules"
+                      hint="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
                     >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Modules</span>
-                          </h2>
-                          <Hint
-                            text="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item
-                                    v-for="field in moduleFields"
-                                    :key="field.key"
-                                    size="small"
-                                  >
-                                    <Item.Content>
-                                      <Item.Title>{{ field.title }}</Item.Title>
-                                      <Item.Description>{{ field.description }}</Item.Description>
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <Tooltip
-                                        v-if="field.locked"
-                                        text="DDoS Protection is always on, on every policy."
-                                      >
-                                        <span class="flex">
-                                          <Switch
-                                            :model-value="true"
-                                            :aria-label="field.title"
-                                            disabled
-                                          />
-                                        </span>
-                                      </Tooltip>
-                                      <Switch
-                                        v-else
-                                        v-model="form.modules[field.key]"
-                                        :aria-label="field.title"
-                                      />
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              v-for="field in moduleFields"
+                              :key="field.key"
+                              :title="field.title"
+                              :description="field.description"
+                              kind="compact"
+                            >
+                              <Tooltip
+                                v-if="field.locked"
+                                text="DDoS Protection is always on, on every policy."
+                              >
+                                <span class="flex">
+                                  <Switch
+                                    :model-value="true"
+                                    :aria-label="field.title"
+                                    disabled
+                                  />
+                                </span>
+                              </Tooltip>
+                              <Switch
+                                v-else
+                                v-model="form.modules[field.key]"
+                                :aria-label="field.title"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
 
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                    <SettingsSection
+                      title="Debug Rules"
+                      hint="Query the logged executions from the event log or the logs API."
                     >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Debug Rules</span>
-                          </h2>
-                          <Hint
-                            text="Query the logged executions from the event log or the logs API."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Active</Item.Title>
-                                      <Item.Description
-                                        >Logs which rules ran for a request, under the trace field
-                                        of each logged event.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <Switch
-                                        v-model="form.debugRules"
-                                        aria-label="Debug Rules"
-                                      />
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Active"
+                              description="Logs which rules ran for a request, under the trace field of each logged event."
+                              kind="compact"
+                            >
+                              <Switch
+                                v-model="form.debugRules"
+                                aria-label="Debug Rules"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
 
-                    <section
-                      data-stacked
-                      class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
-                    >
-                      <div
-                        data-stacked
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                      >
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Status</span>
-                          </h2>
-                        </div>
-                      </div>
-                      <div
-                        data-open
-                        class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                      >
-                        <div class="min-w-0 data-collapsible:overflow-hidden">
-                          <div
-                            data-open
-                            class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                          >
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Active</Item.Title>
-                                      <Item.Description
-                                        >An inactive policy stops evaluating
-                                        rules.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <Switch
-                                        v-model="form.active"
-                                        aria-label="Active"
-                                      />
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                    <SettingsSection title="Status">
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Active"
+                              description="An inactive policy stops evaluating rules."
+                              kind="compact"
+                            >
+                              <Switch
+                                v-model="form.active"
+                                aria-label="Active"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
                   </section>
                 </div>
 
@@ -1123,47 +950,27 @@
                   leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                   leave-to-class="translate-y-2 opacity-0"
                 >
-                  <footer
-                    v-if="dirty || saving"
-                    class="sticky bottom-0 z-10 h-0 shrink-0"
-                  >
-                    <div
-                      class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14"
-                    >
-                      <div
-                        class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
-                      >
-                        <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-                          <i
-                            class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                          <p class="min-w-0 text-body-sm text-(--text-default)">
-                            You have unsaved changes.
-                          </p>
-                        </div>
-                        <div
-                          class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
-                        >
-                          <Button
-                            type="button"
-                            label="Discard"
-                            kind="outlined"
-                            size="medium"
-                            :disabled="saving"
-                            @click="discard"
-                          />
-                          <Button
-                            label="Save"
-                            kind="primary"
-                            size="medium"
-                            :loading="saving"
-                            @click="save"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </footer>
+                  <SaveBar v-if="dirty || saving">
+                    You have unsaved changes.
+
+                    <template #actions>
+                      <Button
+                        type="button"
+                        label="Discard"
+                        kind="outlined"
+                        size="medium"
+                        :disabled="saving"
+                        @click="discard"
+                      />
+                      <Button
+                        label="Save"
+                        kind="primary"
+                        size="medium"
+                        :loading="saving"
+                        @click="save"
+                      />
+                    </template>
+                  </SaveBar>
                 </Transition>
               </div>
             </div>

@@ -11,9 +11,21 @@
     "dropdown": { "to": "dropdown-menu", "from": "Dropdown", "binding": "DropdownMenu" },
     "input-text": { "to": "input", "from": "InputText", "binding": "Input" },
     "input-number": { "to": "number-input", "from": "InputNumber", "binding": "NumberInput" },
-    "input-password": { "to": "password-input", "from": "InputPassword", "binding": "PasswordInput" },
-    "box-grid-selection": { "to": "radio-cards", "from": "BoxGridSelection", "binding": "RadioCards" },
+    "input-password": {
+      "to": "password-input",
+      "from": "InputPassword",
+      "binding": "PasswordInput"
+    },
+    "box-grid-selection": {
+      "to": "radio-cards",
+      "from": "BoxGridSelection",
+      "binding": "RadioCards"
+    },
     "resizable-panel": { "to": "resizable", "from": "ResizablePanel", "binding": "Resizable" },
-    "segmented-button": { "to": "toggle-group", "from": "SegmentedButton", "binding": "ToggleGroup" }
+    "segmented-button": {
+      "to": "toggle-group",
+      "from": "SegmentedButton",
+      "binding": "ToggleGroup"
+    }
   }
 }

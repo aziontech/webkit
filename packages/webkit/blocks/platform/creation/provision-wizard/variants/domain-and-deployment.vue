@@ -4,16 +4,18 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
+  import PageHeader from '@aziontech/webkit/page-header'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Label from '@aziontech/webkit/label'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -733,23 +735,12 @@
               <div
                 class="layout-column-form layout-boundary-inline pb-(--spacing-md) pt-(--spacing-lg)"
               >
-                <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <h1
-                        id="create-service-title"
-                        data-size="small"
-                        class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                      >
-                        Create Service
-                      </h1>
-                    </div>
-                    <p class="text-pretty text-body-sm text-(--text-muted)">
-                      A service is the public entry point: what it serves, and the domain traffic
-                      arrives on. The last step provisions both.
-                    </p>
-                  </div>
-                </header>
+                <PageHeader
+                  title="Create Service"
+                  description="A service is the public entry point: what it serves, and the domain traffic arrives on. The last step provisions both."
+                  size="small"
+                  title-id="create-service-title"
+                />
               </div>
 
               <p
@@ -1023,21 +1014,16 @@
                         <Card :padded="false">
                           <template #content>
                             <Item.List>
-                              <Item size="small">
-                                <Item.Content>
-                                  <Item.Title>Add an origin</Item.Title>
-                                  <Item.Description>
-                                    Where the project fetches from when the cache does not already
-                                    hold the answer. Add one now, or bind one later.
-                                  </Item.Description>
-                                </Item.Content>
-                                <Item.Actions>
-                                  <Switch
-                                    v-model="scratch.origin.enabled"
-                                    aria-label="Add an origin"
-                                  />
-                                </Item.Actions>
-                              </Item>
+                              <SettingRow
+                                title="Add an origin"
+                                description="Where the project fetches from when the cache does not already hold the answer. Add one now, or bind one later."
+                                kind="compact"
+                              >
+                                <Switch
+                                  v-model="scratch.origin.enabled"
+                                  aria-label="Add an origin"
+                                />
+                              </SettingRow>
                             </Item.List>
 
                             <div
@@ -1544,153 +1530,101 @@
                           </Card>
                         </div>
 
-                        <section
-                          class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+                        <SettingsSection
+                          title="Advanced"
+                          hint="Every field here already carries the endpoint's own default, and all of them can be changed once the service exists."
+                          v-model:open="advancedOpen"
+                          icon="pi pi-cog"
+                          collapsible
                         >
-                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                            <div
-                              class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                            >
-                              <h2
-                                class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                              >
-                                <button
-                                  type="button"
-                                  :aria-expanded="advancedOpen"
-                                  aria-controls="create-service-advanced"
-                                  :data-state="advancedOpen ? 'open' : 'closed'"
-                                  class="group/disclosure -mx-(--spacing-xxs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) text-left text-[length:inherit] font-[inherit] leading-[inherit] transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                                  @click="advancedOpen = !advancedOpen"
-                                >
-                                  <i
-                                    class="pi pi-cog shrink-0 text-body-sm leading-none text-(--text-muted)"
-                                    aria-hidden="true"
-                                  />
-                                  Advanced
-                                  <i
-                                    class="pi pi-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
-                                    aria-hidden="true"
-                                  />
-                                </button>
-                              </h2>
-                              <Hint
-                                text="Every field here already carries the endpoint's own default, and all of them can be changed once the service exists."
-                                class="shrink-0"
-                              />
-                            </div>
-                          </div>
-                          <div
-                            id="create-service-advanced"
-                            :data-open="advancedOpen || null"
-                            :inert="!advancedOpen || undefined"
-                            :aria-hidden="!advancedOpen || undefined"
-                            class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                          >
-                            <div class="min-w-0 overflow-hidden">
-                              <div
-                                :data-open="advancedOpen || null"
-                                class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                              >
-                                <Card :padded="false">
-                                  <template #content>
-                                    <div class="p-(--spacing-md)">
-                                      <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                        <div
-                                          class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
-                                        >
-                                          <Label
-                                            for="minimum-tls-version"
-                                            hint="Connections negotiating below this version are refused."
-                                          >
-                                            Minimum TLS version
-                                          </Label>
-                                        </div>
-                                        <Select
-                                          v-model="form.minimumTlsVersion"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelFor(tlsVersions)"
-                                        >
-                                          <Select.Trigger
-                                            id="minimum-tls-version"
-                                            aria-label="Minimum TLS version"
-                                          />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in tlsVersions"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </div>
-                                    </div>
-
-                                    <div
-                                      class="border-t border-(--border-default) p-(--spacing-md)"
+                          <Card :padded="false">
+                            <template #content>
+                              <div class="p-(--spacing-md)">
+                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                                  <div
+                                    class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
+                                  >
+                                    <Label
+                                      for="minimum-tls-version"
+                                      hint="Connections negotiating below this version are refused."
                                     >
-                                      <FieldSelect
-                                        input-id="error-page"
-                                        v-model="form.errorPage"
-                                        label="Error page"
-                                        size="large"
-                                        :options="errorPages"
-                                        placeholder="Not bound"
-                                        helper-text="Optional. Without one, the service falls back to the default pages."
-                                      />
-                                    </div>
-
-                                    <h3
-                                      class="border-t border-(--border-default) px-(--spacing-md) pb-(--spacing-xs) pt-(--spacing-md) text-label-sm text-(--text-muted)"
-                                    >
-                                      Behavior
-                                    </h3>
-                                    <Item.List>
-                                      <Item size="small">
-                                        <Item.Content>
-                                          <Item.Title>Allow the platform domain</Item.Title>
-                                          <Item.Description>
-                                            Serve traffic on the provisioned
-                                            {{
-                                              names.service
-                                                ? names.service + platformDomainSuffix
-                                                : 'platform domain'
-                                            }}
-                                            alongside your own. Turn it off once your own domain
-                                            answers instead.
-                                          </Item.Description>
-                                        </Item.Content>
-                                        <Item.Actions>
-                                          <Switch
-                                            v-model="form.allowPlatformDomain"
-                                            aria-label="Allow the platform domain"
-                                          />
-                                        </Item.Actions>
-                                      </Item>
-                                      <Item size="small">
-                                        <Item.Content>
-                                          <Item.Title>Active</Item.Title>
-                                          <Item.Description>
-                                            When disabled, the service is created but does not serve
-                                            traffic.
-                                          </Item.Description>
-                                        </Item.Content>
-                                        <Item.Actions>
-                                          <Switch
-                                            v-model="form.active"
-                                            aria-label="Active"
-                                          />
-                                        </Item.Actions>
-                                      </Item>
-                                    </Item.List>
-                                  </template>
-                                </Card>
+                                      Minimum TLS version
+                                    </Label>
+                                  </div>
+                                  <Select
+                                    v-model="form.minimumTlsVersion"
+                                    size="large"
+                                    class="w-full"
+                                    :display-value="labelFor(tlsVersions)"
+                                  >
+                                    <Select.Trigger
+                                      id="minimum-tls-version"
+                                      aria-label="Minimum TLS version"
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in tlsVersions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </Select.Option>
+                                    </Select.Content>
+                                  </Select>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        </section>
+
+                              <div class="border-t border-(--border-default) p-(--spacing-md)">
+                                <FieldSelect
+                                  input-id="error-page"
+                                  v-model="form.errorPage"
+                                  label="Error page"
+                                  size="large"
+                                  :options="errorPages"
+                                  placeholder="Not bound"
+                                  helper-text="Optional. Without one, the service falls back to the default pages."
+                                />
+                              </div>
+
+                              <h3
+                                class="border-t border-(--border-default) px-(--spacing-md) pb-(--spacing-xs) pt-(--spacing-md) text-label-sm text-(--text-muted)"
+                              >
+                                Behavior
+                              </h3>
+                              <Item.List>
+                                <SettingRow
+                                  title="Allow the platform domain"
+                                  kind="compact"
+                                >
+                                  <template #description>
+                                    Serve traffic on the provisioned
+                                    {{
+                                      names.service
+                                        ? names.service + platformDomainSuffix
+                                        : 'platform domain'
+                                    }}
+                                    alongside your own. Turn it off once your own domain answers
+                                    instead.
+                                  </template>
+                                  <Switch
+                                    v-model="form.allowPlatformDomain"
+                                    aria-label="Allow the platform domain"
+                                  />
+                                </SettingRow>
+                                <SettingRow
+                                  title="Active"
+                                  description="When disabled, the service is created but does not serve traffic."
+                                  kind="compact"
+                                >
+                                  <Switch
+                                    v-model="form.active"
+                                    aria-label="Active"
+                                  />
+                                </SettingRow>
+                              </Item.List>
+                            </template>
+                          </Card>
+                        </SettingsSection>
                       </div>
                     </template>
                   </div>

@@ -1,0 +1,74 @@
+import { render, within } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import Default from '../../../../examples/save-bar/default.vue'
+import Docked from '../../../../examples/save-bar/docked.vue'
+import Plain from '../../../../examples/save-bar/plain.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import SaveBar from './save-bar.vue'
+
+describe('SaveBar', () => {
+  it('renders a footer with the default testid and the floating kind', () => {
+    const { getByTestId } = within(render(SaveBar).container)
+
+    const root = getByTestId('layout-save-bar')
+    expect(root.tagName).toBe('FOOTER')
+    expect(root.getAttribute('data-kind')).toBe('floating')
+  })
+
+  it('honours a consumer data-testid', () => {
+    const { getByTestId } = within(
+      render(SaveBar, {
+        attrs: { 'data-testid': 'profile-save' },
+        slots: { default: 'You have unsaved changes.' }
+      }).container
+    )
+
+    expect(getByTestId('profile-save__message').textContent?.trim()).toBe(
+      'You have unsaved changes.'
+    )
+  })
+
+  it.each(['floating', 'docked', 'plain'] as const)(
+    'mirrors kind=%s and renders the actions',
+    (kind) => {
+      const { getByTestId, getByRole } = within(
+        render(SaveBar, {
+          props: { kind },
+          slots: { actions: '<button type="button">Save</button>' }
+        }).container
+      )
+
+      expect(getByTestId('layout-save-bar').getAttribute('data-kind')).toBe(kind)
+      expect(getByTestId('layout-save-bar__actions').contains(getByRole('button'))).toBe(true)
+    }
+  )
+
+  it('renders the status message only when the default slot is given', () => {
+    const bare = within(render(SaveBar).container)
+    expect(bare.queryByTestId('layout-save-bar__message')).toBeNull()
+
+    const withMessage = within(
+      render(SaveBar, { slots: { default: 'You have unsaved changes.' } }).container
+    )
+    expect(withMessage.getByTestId('layout-save-bar__message').textContent?.trim()).toBe(
+      'You have unsaved changes.'
+    )
+  })
+
+  it('renders the examples', () => {
+    expect(within(render(Default).container).getByRole('button', { name: 'Save' })).toBeTruthy()
+    expect(
+      within(render(Docked).container).getByTestId('layout-save-bar').getAttribute('data-kind')
+    ).toBe('docked')
+    expect(within(render(Plain).container).getByRole('button', { name: 'Cancel' })).toBeTruthy()
+  })
+
+  it('has no accessibility violations as a floating bar', async () => {
+    await expectNoA11yViolations(render(Default).container)
+  })
+
+  it('has no accessibility violations as a plain form footer', async () => {
+    await expectNoA11yViolations(render(Plain).container)
+  })
+})

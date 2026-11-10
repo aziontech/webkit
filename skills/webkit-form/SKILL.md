@@ -21,8 +21,8 @@ toasts request errors) — this skill owns **layout, labels, grouping, validatio
 
 There are **two ways to lay out a form**, and both are first-class:
 
-- **Approach A — Cards + ItemGroups.** Sections are a flush `Card` wrapping an `Item.List`; every
-  field is one `Item` row (name/guidance on the left, control on the right). This is the default for
+- **Approach A — Cards + ItemGroups.** Sections are a `SettingsSection` over a flush `Card` wrapping
+  an `Item.List`; every field is one `SettingRow` (name/guidance on the left, control on the right). This is the default for
   **grouped, settings-style, or list-like** forms — an account settings page, a resource's config or
   create page, a create drawer.
 - **Approach B — Fields separated.** Standalone `field-*` triads stacked in a column. This is for
@@ -125,19 +125,19 @@ changes.
 The same spacing applies in **every** container and **both** approaches. Never hand-pick a one-off gap;
 if a form seems to need a different rhythm, it's in the wrong container.
 
-| Between                                          | Token          | px                                     |
-| ------------------------------------------------ | -------------- | -------------------------------------- |
-| Label → control → HelperText (inside one field)  | `--spacing-xs` | 8 — already baked into every `field-*` |
-| Field → field (and row → row)                    | `--spacing-lg` | 24                                     |
-| Section → section                                | `--spacing-lg` | 24                                     |
-| Section overline → its card (Cards + ItemGroups) | `--spacing-sm` | 12                                     |
-| Compact modal body (Dialog / Drawer)             | `--spacing-md` | 16 — the **only** allowed tightening   |
+| Between                                         | Token          | px                                     |
+| ----------------------------------------------- | -------------- | -------------------------------------- |
+| Label → control → HelperText (inside one field) | `--spacing-xs` | 8 — already baked into every `field-*` |
+| Field → field (and row → row)                   | `--spacing-lg` | 24                                     |
+| Section → section                               | `--spacing-lg` | 24                                     |
+| Section title → its card (`SettingsSection`)    | `--spacing-md` | 16 — owned by the component            |
+| Compact modal body (Dialog / Drawer)            | `--spacing-md` | 16 — the **only** allowed tightening   |
 
 ### Hierarchy (top → down, never inverted)
 
-form title (`text-heading-*` — `PageHeading size="medium"` on a page, a `Card` title / `text-heading-sm`
+form title (`text-heading-*` — `PageHeader` on a page, a `Card` title / `text-heading-sm`
 in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
-→ section overline (`text-overline-sm`) or sub-heading (`text-heading-xs`) → **field label** (`Label`,
+→ section title (`SettingsSection`, `text-heading-xxs`) or sub-heading (`text-heading-xs`) → **field label** (`Label`,
 which carries the required tag) → control → **helper** (`HelperText` — guidance, or the required/invalid
 feedback). A label is never smaller than its helper; a section title is never smaller than a field label.
 
@@ -149,7 +149,7 @@ contexts** in Azion products:
 
 - **Drawer form.** In-context creation — the user is deep inside a navigated module and needs to create
   a resource _without leaving the page they're on_. One scoped save (the drawer's primary action).
-  Approach A for grouped/config-heavy creates (one flush ItemGroup, or several overline-titled sections),
+  Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsSection` bands),
   Approach B for short ones.
 
 - **Nested drawer.** A drawer form whose Select points at a _related_ resource that may not exist yet — a
@@ -161,12 +161,14 @@ contexts** in Azion products:
   documented below.
 
 - **Dialog form.** Small, focused, usually confirmational or destructive — e.g. removing a resource.
-  Few (or zero) fields, a single confirm action. Approach B (stacked fields). A destructive confirm
+  Few (or zero) fields, a single confirm action. A yes-or-no decision is `ConfirmDialog`
+  (`@aziontech/webkit/confirm-dialog`); a typed confirmation puts its field in the default slot and
+  keeps the confirm `disabled` until it matches. Approach B (stacked fields). A destructive confirm
   typically gates its action on a typed phrase (error prevention) rather than surfacing a required-error.
 
 - **ItemGroup settings.** Account-level configuration surfaces built from `Item` rows (Approach A). The
   rows organize **either as multiple Cards** (grouped by topic — e.g. Billing split into Plan, Payment,
-  Invoices; each card titled by an `OVERLINE` above it, see Approach A § _Section title_) **or as a
+  Invoices; each card titled by a `SettingsSection`, see Approach A § _Section title_) **or as a
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
 
@@ -175,8 +177,8 @@ contexts** in Azion products:
   submit. Approach A inside each card.
 
 **Save model follows partitioning, not the container type.** A form that is one logical unit has **one
-save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several overline-titled
-sections, like Account Settings; the sections group the topic, not the save). A form deliberately split
+save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several
+`SettingsSection` bands, like Account Settings; the sections group the topic, not the save). A form deliberately split
 into independently-committed cards — the **Card with independent saves** type — has **one save per
 card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
 
@@ -539,92 +541,99 @@ Rules:
 
 ## Approach A — Cards + ItemGroups (grouped / settings forms)
 
-Each section is a flush `Card` (`:padded="false"`) whose body is an `Item.List`. `Item.List` draws
-the dividers between rows automatically, so every field reads as a divided row inside one box: the
-field's name + guidance on the left (`Item.Content`), the control on the right (`Item.Actions`).
-Multiple sections stack, each with a small `OVERLINE` title above its card.
+Each section is a `SettingsSection` (`@aziontech/webkit/settings-section`) over a flush `Card`
+(`:padded="false"`) whose body is an `Item.List`. `Item.List` draws the dividers between rows, so every
+field reads as a divided row inside one box. Each row is a `SettingRow`
+(`@aziontech/webkit/setting-row`): the field's name and guidance on the left, the control on the right.
+Sections stack at the section gap; the first one takes no top margin.
 
-**In an ItemGroup, `Item.Title` IS the label.** Do **not** use `<Label>` inside an `Item` — the field
-name is `Item.Title`, its guidance is `Item.Description`, and the control carries an `aria-label` for its
-accessible name. `<Label>` is reserved for **Fields separated** (Approach B) and composed `Select`
-fields, where there is a real `<label for>` wired to a control `id`. (`Label` renders at
-`text-label-sm`, smaller than `Item.Description` — using it as a row title inverts the hierarchy.)
+**In a SettingRow, `title` IS the label.** Do **not** use `<Label>` inside a row — the field name is
+`title`, its guidance is `description`, and the control carries an `aria-label` with the same text for
+its accessible name. `<Label>` is reserved for **Fields separated** (Approach B) and composed `Select`
+fields, where there is a real `<label for>` wired to a control `id`.
 
-**Items are `size="small"`.** Small is the density that gives grouped forms the best rhythm and
-hierarchy — tight enough that a section reads as one unit, roomy enough that each row is a clear field.
-Use `size="small"` on **every** `Item` in a form; reserve `medium` for content/marketing rows.
+**`kind` places the control by what it needs.** `field` (the default) for `Input` and `Select`: a right
+cell capped at `--container-3xs`, so every field on the card ends at the same edge. `compact` for a
+`Switch` or a `Button`, hard right at its natural width. `stacked` for a `Textarea`, a radio group or an
+editor, under the copy at the full measure. A setting that only applies while the row above it is on
+renders with `v-if` on that state and `:level="1"` (or `2`), indented under a rule.
+
 Canonical pattern:
 
 ```vue
 <script setup>
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Item from '@aziontech/webkit/item'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
+  import Switch from '@aziontech/webkit/switch'
 </script>
 
 <template>
-  <section class="flex flex-col gap-(--spacing-sm)">
-    <p class="px-(--spacing-xs) text-overline-sm text-(--text-muted)">General</p>
+  <SettingsSection
+    title="General"
+    hint="How this application is identified, and whether it is serving traffic."
+    anchor="general"
+  >
     <Card :padded="false">
       <template #content>
         <Item.List>
-          <Item
-            size="small"
-            class="items-start"
+          <SettingRow
+            title="Name"
+            description="A unique, descriptive name for the application."
           >
-            <Item.Content>
-              <!-- Item.Title is the label; control takes an aria-label -->
-              <Item.Title>Name</Item.Title>
-              <Item.Description>A unique, descriptive name for the application.</Item.Description>
-            </Item.Content>
-            <Item.Actions class="flex-1 justify-end">
-              <!-- Control + feedback stack in one field-width column: the
-                   HelperText renders UNDER the control, --spacing-xs apart, only
-                   after a failed submit. An empty required field is amber
-                   `required` (a prompt, NOT an error); a filled-but-malformed value
-                   is red `invalid`. Emptiness picks the state — never both at once. -->
-              <div class="flex w-full max-w-(--container-xl) flex-col gap-(--spacing-xs)">
-                <Input
-                  v-model="form.name"
-                  size="large"
-                  class="w-full"
-                  aria-label="Name"
-                  :required="!!errors.name && !form.name.trim()"
-                  :invalid="!!errors.name && !!form.name.trim()"
-                  :aria-describedby="errors.name ? 'name-error' : undefined"
-                  @update:model-value="errors.name = ''"
-                />
-                <HelperText
-                  v-if="errors.name"
-                  id="name-error"
-                  :kind="form.name.trim() ? 'invalid' : 'required'"
-                  :value="errors.name"
-                />
-              </div>
-            </Item.Actions>
-          </Item>
+            <!-- Control + feedback stack in the row's control column: the HelperText
+                 renders UNDER the control, only after a failed submit. An empty required
+                 field is amber `required` (a prompt, NOT an error); a filled-but-malformed
+                 value is red `invalid`. Emptiness picks the state — never both at once. -->
+            <Input
+              v-model="form.name"
+              size="large"
+              class="w-full"
+              aria-label="Name"
+              :required="!!errors.name && !form.name.trim()"
+              :invalid="!!errors.name && !!form.name.trim()"
+              :aria-describedby="errors.name ? 'name-error' : undefined"
+              @update:model-value="errors.name = ''"
+            />
+            <HelperText
+              v-if="errors.name"
+              id="name-error"
+              :kind="form.name.trim() ? 'invalid' : 'required'"
+              :label="errors.name"
+            />
+          </SettingRow>
+          <SettingRow
+            title="Active"
+            description="When off, the application stops serving traffic."
+            kind="compact"
+          >
+            <Switch
+              v-model="form.active"
+              aria-label="Active"
+            />
+          </SettingRow>
         </Item.List>
       </template>
     </Card>
-  </section>
+  </SettingsSection>
 </template>
 ```
 
 Rules:
 
-- **`Card :padded="false"` + `Item.List`** — one box, dividers from the list, no box-in-box.
-- **Every `Item` is `size="small"`.** Consistent across the whole form.
-- **`Item.Title` is the label; the control takes an `aria-label`.** Name in `Item.Title`, guidance in
-  `Item.Description`, control on the right in `Item.Actions class="flex-1 justify-end"`. No `<Label>`
-  inside an `Item` — validation feedback is the control's own `:required`/`:invalid` on submit.
-- **The validation message renders as a `HelperText` under the control.** Since there is no `Label` (so
-  no `HelperText` triad) and no guidance region on the right, wrap the control in a field-width
-  `flex flex-col gap-(--spacing-xs)` column — capped at `max-w-(--container-xl)` (576px) so the
-  control column stays a legible field width on wide pages — and render a `<HelperText>` **below** it, shown only
-  after a failed submit and linked to the control via `aria-describedby`. This is still the field saying
-  what it needs, on the field — **not** a summary block or a `Alert` callout. `Item.Description` stays
-  as the always-on guidance on the left.
+- **`SettingsSection` + `Card :padded="false"` + `Item.List`** — one box per band, dividers from the
+  list, no box-in-box. The card is header-less (only `#content`); the band's title is the section's.
+- **Every row is a `SettingRow`.** Do not hand-write the `Item` / `Item.Content` / `Item.Actions`
+  markup of a settings row; the row owns its density (`Item size="small"`) and the control placement.
+- **`title` is the label; the control takes an `aria-label`** with the same text. No `<Label>` inside a
+  row — validation feedback is the control's own `:required`/`:invalid` on submit.
+- **The validation message renders as a `HelperText` under the control**, in the row's default slot
+  after the control, shown only after a failed submit and linked to the control via
+  `aria-describedby`. This is still the field saying what it needs, on the field — **not** a summary
+  block or a `Alert` callout. `description` stays as the always-on guidance on the left.
 - **Required is NOT an error — pick the state by what failed.** An empty required field is a _prompt_:
   `<HelperText kind="required">` (amber) + the control's `:required` (amber). A field whose value is
   present but malformed is an _error_: `<HelperText kind="invalid">` (red) + the control's `:invalid`
@@ -633,43 +642,26 @@ Rules:
   (`:kind="value.trim() ? 'invalid' : 'required'"`). Note `Select`/`MultiSelect` have no amber border,
   so for an empty-required Select the amber `HelperText` (and `:required` for `aria-required`) carries
   the cue — never colour it red.
-- **A row whose left column wraps to two lines uses `class="items-start"`** so the title aligns to the
-  control's top, not its centre.
-- **Richer controls that don't fit a one-line row** (a radio group, a block of `field-radio-block`s)
-  stay a full-width block inside `Item.Actions` (or their own `Item`), not forced onto the row.
+- **Richer controls that don't fit a one-line row** (a radio group, a block of `field-radio-block`s,
+  a list editor) use `kind="stacked"`, not a squeezed right column.
 
-### Section title — an OVERLINE above the card
+### Section title — the SettingsSection heading
 
-When a settings surface is split into topic sections (a multi-Card ItemGroup — the Account Settings
-pattern), **each section is titled by an `OVERLINE` above its flush `Card`**, not by the card's own
-header. The `<section>` stacks the overline over the card with `--spacing-sm` (12px); the `Card` stays
-`:padded="false"` and header-less (content only). This keeps the topic label lightweight and lets the
-card read as a single divided block of rows.
-
-```vue
-<section class="flex flex-col gap-(--spacing-sm)">
-  <p class="px-(--spacing-xs) text-overline-sm text-(--text-muted)">General</p>
-  <Card :padded="false">
-    <template #content>
-      <Item.List>
-        <!-- Item rows … -->
-      </Item.List>
-    </template>
-  </Card>
-</section>
-```
+When a settings surface is split into topic bands (the Account Settings pattern), **each band is a
+`SettingsSection`**: an h2 titled in one or two words, its one-sentence guidance in `hint` (rendered as
+a `Hint` glyph beside the title), and `anchor` when people link to it (the h2 takes the id and a
+copy-link appears in the gutter on hover or focus). An Advanced band whose defaults suit most people is
+`collapsible` with `icon="pi pi-cog"`; it starts closed, and its body is `inert` while folded.
 
 Rules:
 
-- **The section title is `text-overline-sm text-(--text-muted)`** with `px-(--spacing-xs)`
-  inset so it aligns with the card's content; `--spacing-sm` gap to the card (per the spacing macro rule).
-- **The card is header-less** (`:padded="false"`, only `#content`). Don't also set a `Card` `title` —
-  the overline is the section title; a card header would double it.
-- **A dangerous section** (Danger Zone) reuses the pattern with the danger tokens: overline in
-  `text-(--danger-contrast)` above a `Card class="border-(--danger-border) bg-(--danger)"`.
-- **Overline vs `Card` title — pick by role.** An **OVERLINE above** the card titles a _section of a
-  larger page_ (multi-Card ItemGroup). A **`Card` `title`** (in the card header) names a _self-contained
-  card that is the form_ — the "Card with its own save" / Contained form. Never use both on one card.
+- **Do not also set a `Card` `title`** on the card inside a band — the band's title would double it.
+- **A band with a description line and its own actions** (Billing's Payment methods with Add payment
+  method) is a `SectionHeader` (`@aziontech/webkit/section-header`) over its card, not a
+  `SettingsSection`.
+- **`SettingsSection` vs `Card` title — pick by role.** A `SettingsSection` titles a _band of a larger
+  page_. A **`Card` `title`** (in the card header) names a _self-contained card that is the form_ — the
+  "Card with its own save" / Contained form. Never use both on one card.
 
 ## Approach B — Fields separated (short focused forms)
 
@@ -767,7 +759,7 @@ Rules:
 ## Grouping — a real `<fieldset>` + `<legend>`
 
 Each section is a **group of related controls**. Give it programmatic grouping with a native
-`<fieldset>` and an `sr-only` `<legend>` (the visible section title — the `OVERLINE` or `Card title`
+`<fieldset>` and an `sr-only` `<legend>` (the visible section title — the `SettingsSection` title or `Card title`
 — already names it, so it isn't drawn twice). A `<fieldset>` also disables its whole subtree in one
 attribute, which is how you lock the scope on submit.
 
@@ -896,7 +888,11 @@ Rules:
 The primary action drives the native submit so **Enter submits**. While the request runs, **one flag
 locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skill **references it, does not
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
-flag**. On a long form, the actions live in a **sticky bar** so Save/Cancel are always reachable.
+flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
+(`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page or a form saved
+as one unit uses `kind="plain"` (always shown, on the form column); a settings page mounts the
+default `floating` bar only while the form is dirty or saving, with the status sentence in its
+default slot.
 
 **Bind `:disabled` on the controls, not only the `<fieldset>`.** A native `<fieldset :disabled>` blocks
 _interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `field-*`, `Input`)
@@ -906,14 +902,12 @@ active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native sa
 (Card with independent saves) bind each card's controls to _that card's_ flag.
 
 ```vue
-<footer
-  class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
->
-  <div class="mx-auto flex max-w-(--container-5xl) items-center justify-end gap-(--spacing-sm) px-(--spacing-xl) py-(--spacing-sm)">
+<SaveBar kind="plain">
+  <template #actions>
     <Button type="button" label="Cancel" kind="outlined" size="medium" :disabled="submitting" @click="cancel" />
     <Button type="submit" label="Save" kind="primary" size="medium" :loading="submitting" />
-  </div>
-</footer>
+  </template>
+</SaveBar>
 ```
 
 Rules:
@@ -1037,7 +1031,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       the fallback, and then the label + `aria-describedby` are wired by hand.
 - [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
-      Dialog, or an ItemGroup — single block _or_ multiple overline-titled sections); one save per card only
+      Dialog, or an ItemGroup — single block _or_ multiple `SettingsSection` bands); one save per card only
       for the Card-with-independent-saves type.
 - [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
       `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
@@ -1046,10 +1040,10 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - [ ] Field spacing follows the macro rule: `--spacing-xs` inside a field, `--spacing-lg` between fields
       and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
 - [ ] Hierarchy is not inverted: title → description → section title → field label → control → helper.
-- [ ] Section titling matches role: a multi-Card ItemGroup titles each section with an `OVERLINE`
-      (`text-overline-sm`) above a header-less flush `Card`; a self-contained card that _is_ the form
+- [ ] Section titling matches role: a multi-Card ItemGroup titles each band with a `SettingsSection`
+      over a header-less flush `Card`; a self-contained card that _is_ the form
       uses the `Card` `title` in its header. Never both on one card.
-- [ ] The form uses **one** layout: Cards + ItemGroups (`Item.List`, every `Item` `size="small"`) or
+- [ ] The form uses **one** layout: Cards + ItemGroups (`Item.List` of `SettingRow` rows) or
       Fields separated (`field-*` stacked) — not a mix within a section.
 - [ ] Field naming matches the type: in an **ItemGroup**, `Item.Title` is the label and the control
       takes an `aria-label` (no `<Label>` inside an `Item`); in **Fields separated**, a real `Label`

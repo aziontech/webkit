@@ -51,10 +51,15 @@ Every page type as its frame: the chrome around it and the regions the page fill
 
 ## Page
 
-- [PageHeader](?path=/docs/templates-platform-page-pageheader--documentation) — the title and description with the Documentation link and the primary action, at list and settings sizes.
-- [PageTabs](?path=/docs/templates-platform-page-pagetabs--documentation) — the full-bleed second-level navigation bar under a detail page's header.
-- [SectionHeader](?path=/docs/templates-platform-page-sectionheader--documentation) — a section's title and description with its docs link and actions, aligned to the card below it.
-- [SettingsSection](?path=/docs/templates-platform-page-settingssection--documentation) — the settings band: an anchored title with its hint over a card of rows, collapsible when it holds advanced settings.
+The fragments every screen repeats are components, not templates. Compose them:
+
+- [PageHeader](?path=/docs/components-primitives-layout-pageheader--documentation) — the page h1, its description and the page's own actions, at list, settings and hub sizes.
+- [PageTabs](?path=/docs/components-primitives-navigation-pagetabs--documentation) — the full-bleed second-level navigation bar under a detail page's header, with the resource's actions on the right.
+- [SectionHeader](?path=/docs/components-primitives-layout-sectionheader--documentation) — a band's title and description with its copy-link and actions, aligned to the card below it.
+- [SettingsSection](?path=/docs/components-primitives-layout-settingssection--documentation) — the settings band: an anchored title with its hint over a card of rows, collapsible when it holds advanced settings.
+- [SettingRow](?path=/docs/components-primitives-layout-settingrow--documentation) — the settings row inside a card: title and description left, control right or stacked when wide.
+- [SaveBar](?path=/docs/components-primitives-layout-savebar--documentation) — the bar that commits a settings page or a create form: floating while dirty, docked, or the plain form footer.
+- [ConfirmDialog](?path=/docs/components-primitives-overlay-confirmdialog--documentation) — the plain confirmation, the run-again confirmation, and the unsaved-changes guards (discard, or save or discard).
 
 ## Lists
 
@@ -66,7 +71,6 @@ Every page type as its frame: the chrome around it and the regions the page fill
 
 ## Forms
 
-- [SettingRow](?path=/docs/templates-platform-forms-settingrow--documentation) — the settings row inside a card: title and description left, control right or stacked when wide.
 - [EditResource](?path=/docs/templates-platform-forms-editresource--documentation) — the settings tab of a resource: small header, sections of rows, and the unsaved-changes bar once something is edited, through its saving state.
 - [CreateInDrawer](?path=/docs/templates-platform-forms-createindrawer--documentation) — the create form in a drawer, the one every add or edit drawer inside a resource follows: a domain, an environment, a record.
 - [AttributeEditor](?path=/docs/templates-platform-forms-attributeeditor--documentation) — key and value rows: the list page and its create drawer, with secrets, the JSON view and the scope band.
@@ -85,7 +89,6 @@ Every page type as its frame: the chrome around it and the regions the page fill
 ## Overlays
 
 - [DeleteWithConfirmation](?path=/docs/templates-platform-overlays-deletewithconfirmation--documentation) — the destructive confirmation that asks for the resource name.
-- [ConfirmDialog](?path=/docs/templates-platform-overlays-confirmdialog--documentation) — the plain confirmation, the run-again confirmation, and the unsaved-changes guards (discard, or save or discard).
 - [DeployDrawer](?path=/docs/templates-platform-overlays-deploydrawer--documentation) — deploy from a drawer: what to ship, its version and the resources it brings, then the build.
 - [DeploymentSettingsDrawer](?path=/docs/templates-platform-overlays-deploymentsettingsdrawer--documentation) — create a deployment setting: its strategy and the services that share it.
 

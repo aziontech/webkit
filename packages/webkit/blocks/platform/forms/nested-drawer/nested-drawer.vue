@@ -20,10 +20,12 @@
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
@@ -831,32 +833,21 @@
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto layout-boundary"
       >
         <main class="flex h-full flex-col">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1 class="text-balance text-heading-xs text-(--text-default)">Instances</h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                Create a resource whose Select needs a related resource that may not exist yet — the
-                quick-add opens a second drawer, then selects the new resource back into the parent.
-                Each drawer is its own scoped save.
-              </p>
-            </div>
-            <div
-              class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-            >
-              <div class="w-full md:w-fit">
-                <Button
-                  label="Add Instance"
-                  icon="pi pi-plus"
-                  kind="outlined"
-                  size="medium"
-                  class="w-full"
-                  @click="openParent"
-                />
-              </div>
-            </div>
-          </header>
+          <PageHeader
+            title="Instances"
+            description="Create a resource whose Select needs a related resource that may not exist yet — the quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
+            size="small"
+          >
+            <template #actions>
+              <Button
+                label="Add Instance"
+                icon="pi pi-plus"
+                kind="outlined"
+                size="medium"
+                @click="openParent"
+              />
+            </template>
+          </PageHeader>
 
           <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
             <li
@@ -911,45 +902,35 @@
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Name</Item.Title>
-                                <Item.Description
-                                  >Give a unique and descriptive name to identify the
-                                  instance.</Item.Description
-                                >
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                  >
-                                    <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                      <Input
-                                        v-model="form.name"
-                                        size="large"
-                                        :disabled="submitting"
-                                        class="w-full"
-                                        aria-label="Name"
-                                        placeholder="my-instance"
-                                        :required="!!errors.name && !form.name.trim()"
-                                        :invalid="!!errors.name && !!form.name.trim()"
-                                        :aria-describedby="
-                                          errors.name ? 'instance-name-error' : undefined
-                                        "
-                                        @update:model-value="errors.name = ''"
-                                      />
-                                      <HelperText
-                                        v-if="errors.name"
-                                        id="instance-name-error"
-                                        :kind="form.name.trim() ? 'invalid' : 'required'"
-                                        :label="errors.name"
-                                      />
-                                    </div>
-                                  </div>
-                                </Item.Actions>
+                            <SettingRow
+                              title="Name"
+                              description="Give a unique and descriptive name to identify the instance."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                  <Input
+                                    v-model="form.name"
+                                    size="large"
+                                    :disabled="submitting"
+                                    class="w-full"
+                                    aria-label="Name"
+                                    placeholder="my-instance"
+                                    :required="!!errors.name && !form.name.trim()"
+                                    :invalid="!!errors.name && !!form.name.trim()"
+                                    :aria-describedby="
+                                      errors.name ? 'instance-name-error' : undefined
+                                    "
+                                    @update:model-value="errors.name = ''"
+                                  />
+                                  <HelperText
+                                    v-if="errors.name"
+                                    id="instance-name-error"
+                                    :kind="form.name.trim() ? 'invalid' : 'required'"
+                                    :label="errors.name"
+                                  />
+                                </div>
                               </div>
-                            </Item>
+                            </SettingRow>
                           </Item.List>
                         </template>
                       </Card>
@@ -962,68 +943,58 @@
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Service</Item.Title>
-                                <Item.Description
-                                  >Pick the service to instantiate, or create a new
-                                  one.</Item.Description
-                                >
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
+                            <SettingRow
+                              title="Service"
+                              description="Pick the service to instantiate, or create a new one."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                  <Select
+                                    :model-value="form.serviceId"
+                                    v-model:open="serviceSelectOpen"
+                                    size="large"
+                                    :disabled="submitting"
+                                    class="w-full"
+                                    placeholder="Select a service"
+                                    :required="!!errors.serviceId"
+                                    :display-value="serviceLabel"
+                                    @update:model-value="onServiceModel"
                                   >
-                                    <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                      <Select
-                                        :model-value="form.serviceId"
-                                        v-model:open="serviceSelectOpen"
-                                        size="large"
-                                        :disabled="submitting"
-                                        class="w-full"
-                                        placeholder="Select a service"
-                                        :required="!!errors.serviceId"
-                                        :display-value="serviceLabel"
-                                        @update:model-value="onServiceModel"
+                                    <Select.Trigger
+                                      id="instance-service"
+                                      aria-label="Service"
+                                      :aria-describedby="
+                                        errors.serviceId ? 'instance-service-error' : undefined
+                                      "
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="service in services"
+                                        :key="service.value"
+                                        :value="service.value"
                                       >
-                                        <Select.Trigger
-                                          id="instance-service"
-                                          aria-label="Service"
-                                          :aria-describedby="
-                                            errors.serviceId ? 'instance-service-error' : undefined
-                                          "
-                                        />
-                                        <Select.Content>
-                                          <Select.Option
-                                            v-for="service in services"
-                                            :key="service.value"
-                                            :value="service.value"
-                                          >
-                                            {{ service.label }}
-                                          </Select.Option>
-                                          <template #footer>
-                                            <Select.Option
-                                              :value="CREATE_SERVICE"
-                                              icon="pi pi-plus-circle"
-                                              class="w-full"
-                                            >
-                                              Create Service
-                                            </Select.Option>
-                                          </template>
-                                        </Select.Content>
-                                      </Select>
-                                      <HelperText
-                                        v-if="errors.serviceId"
-                                        id="instance-service-error"
-                                        kind="required"
-                                        :label="errors.serviceId"
-                                      />
-                                    </div>
-                                  </div>
-                                </Item.Actions>
+                                        {{ service.label }}
+                                      </Select.Option>
+                                      <template #footer>
+                                        <Select.Option
+                                          :value="CREATE_SERVICE"
+                                          icon="pi pi-plus-circle"
+                                          class="w-full"
+                                        >
+                                          Create Service
+                                        </Select.Option>
+                                      </template>
+                                    </Select.Content>
+                                  </Select>
+                                  <HelperText
+                                    v-if="errors.serviceId"
+                                    id="instance-service-error"
+                                    kind="required"
+                                    :label="errors.serviceId"
+                                  />
+                                </div>
                               </div>
-                            </Item>
+                            </SettingRow>
                           </Item.List>
                         </template>
                       </Card>
@@ -1102,93 +1073,77 @@
                       <Card :padded="false">
                         <template #content>
                           <Item.List>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Name</Item.Title>
-                                <Item.Description>A unique name for the service.</Item.Description>
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
-                                  >
-                                    <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                      <Input
-                                        v-model="childForm.name"
-                                        size="large"
-                                        :disabled="childSubmitting"
-                                        class="w-full"
-                                        aria-label="Name"
-                                        placeholder="my-service"
-                                        :required="!!childErrors.name && !childForm.name.trim()"
-                                        :invalid="!!childErrors.name && !!childForm.name.trim()"
-                                        :aria-describedby="
-                                          childErrors.name ? 'svc-name-error' : undefined
-                                        "
-                                        @update:model-value="childErrors.name = ''"
-                                      />
-                                      <HelperText
-                                        v-if="childErrors.name"
-                                        id="svc-name-error"
-                                        :kind="childForm.name.trim() ? 'invalid' : 'required'"
-                                        :label="childErrors.name"
-                                      />
-                                    </div>
-                                  </div>
-                                </Item.Actions>
+                            <SettingRow
+                              title="Name"
+                              description="A unique name for the service."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                  <Input
+                                    v-model="childForm.name"
+                                    size="large"
+                                    :disabled="childSubmitting"
+                                    class="w-full"
+                                    aria-label="Name"
+                                    placeholder="my-service"
+                                    :required="!!childErrors.name && !childForm.name.trim()"
+                                    :invalid="!!childErrors.name && !!childForm.name.trim()"
+                                    :aria-describedby="
+                                      childErrors.name ? 'svc-name-error' : undefined
+                                    "
+                                    @update:model-value="childErrors.name = ''"
+                                  />
+                                  <HelperText
+                                    v-if="childErrors.name"
+                                    id="svc-name-error"
+                                    :kind="childForm.name.trim() ? 'invalid' : 'required'"
+                                    :label="childErrors.name"
+                                  />
+                                </div>
                               </div>
-                            </Item>
-                            <Item size="small">
-                              <Item.Content>
-                                <Item.Title>Runtime</Item.Title>
-                                <Item.Description
-                                  >The language the service runs on.</Item.Description
-                                >
-                              </Item.Content>
-                              <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                <Item.Actions class="w-full">
-                                  <div
-                                    class="flex w-full items-center justify-end gap-(--spacing-xs)"
+                            </SettingRow>
+                            <SettingRow
+                              title="Runtime"
+                              description="The language the service runs on."
+                            >
+                              <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                                <div class="flex w-full flex-col gap-(--spacing-xs)">
+                                  <Select
+                                    v-model="childForm.runtime"
+                                    size="large"
+                                    :disabled="childSubmitting"
+                                    class="w-full"
+                                    placeholder="Select a runtime"
+                                    :required="!!childErrors.runtime"
+                                    :display-value="runtimeLabel"
+                                    @update:model-value="childErrors.runtime = ''"
                                   >
-                                    <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                      <Select
-                                        v-model="childForm.runtime"
-                                        size="large"
-                                        :disabled="childSubmitting"
-                                        class="w-full"
-                                        placeholder="Select a runtime"
-                                        :required="!!childErrors.runtime"
-                                        :display-value="runtimeLabel"
-                                        @update:model-value="childErrors.runtime = ''"
+                                    <Select.Trigger
+                                      id="svc-runtime"
+                                      aria-label="Runtime"
+                                      :aria-describedby="
+                                        childErrors.runtime ? 'svc-runtime-error' : undefined
+                                      "
+                                    />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in runtimes"
+                                        :key="option.value"
+                                        :value="option.value"
                                       >
-                                        <Select.Trigger
-                                          id="svc-runtime"
-                                          aria-label="Runtime"
-                                          :aria-describedby="
-                                            childErrors.runtime ? 'svc-runtime-error' : undefined
-                                          "
-                                        />
-                                        <Select.Content>
-                                          <Select.Option
-                                            v-for="option in runtimes"
-                                            :key="option.value"
-                                            :value="option.value"
-                                          >
-                                            {{ option.label }}
-                                          </Select.Option>
-                                        </Select.Content>
-                                      </Select>
-                                      <HelperText
-                                        v-if="childErrors.runtime"
-                                        id="svc-runtime-error"
-                                        kind="required"
-                                        :label="childErrors.runtime"
-                                      />
-                                    </div>
-                                  </div>
-                                </Item.Actions>
+                                        {{ option.label }}
+                                      </Select.Option>
+                                    </Select.Content>
+                                  </Select>
+                                  <HelperText
+                                    v-if="childErrors.runtime"
+                                    id="svc-runtime-error"
+                                    kind="required"
+                                    :label="childErrors.runtime"
+                                  />
+                                </div>
                               </div>
-                            </Item>
+                            </SettingRow>
                           </Item.List>
                         </template>
                       </Card>

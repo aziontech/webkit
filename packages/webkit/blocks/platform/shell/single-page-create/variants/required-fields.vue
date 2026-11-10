@@ -12,6 +12,8 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
   import { computed, reactive, ref } from 'vue'
 
@@ -166,39 +168,31 @@
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Name</Item.Title>
-                        <Item.Description
-                          >Give a unique and descriptive name to identify the
-                          service.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="form.name"
-                                size="large"
-                                class="w-full"
-                                aria-label="Name"
-                                placeholder="My Service"
-                                :required="!!errors.name"
-                                :aria-describedby="errors.name ? 'app-name-error' : undefined"
-                                @update:model-value="errors.name = ''"
-                              />
-                              <HelperText
-                                v-if="errors.name"
-                                id="app-name-error"
-                                kind="required"
-                                :label="errors.name"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                    <SettingRow
+                      title="Name"
+                      description="Give a unique and descriptive name to identify the service."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            v-model="form.name"
+                            size="large"
+                            class="w-full"
+                            aria-label="Name"
+                            placeholder="My Service"
+                            :required="!!errors.name"
+                            :aria-describedby="errors.name ? 'app-name-error' : undefined"
+                            @update:model-value="errors.name = ''"
+                          />
+                          <HelperText
+                            v-if="errors.name"
+                            id="app-name-error"
+                            kind="required"
+                            :label="errors.name"
+                          />
+                        </div>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -211,108 +205,87 @@
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Protocol Usage</Item.Title>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                              <legend class="sr-only">Protocol Usage</legend>
-                              <FieldRadioBlock
-                                v-for="option in protocolUsageOptions"
+                    <SettingRow title="Protocol Usage">
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
+                          <legend class="sr-only">Protocol Usage</legend>
+                          <FieldRadioBlock
+                            v-for="option in protocolUsageOptions"
+                            :key="option.value"
+                            v-model="form.protocolUsage"
+                            :value="option.value"
+                            name="protocolUsage"
+                            :input-id="`app-protocolUsage-${option.value}`"
+                            :label="option.label"
+                            :description="option.description"
+                          />
+                        </fieldset>
+                      </div>
+                    </SettingRow>
+                    <SettingRow title="HTTP ports">
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <MultiSelect
+                            v-model="form.httpPorts"
+                            size="large"
+                            class="w-full"
+                            placeholder="Select ports"
+                            :required="!!errors.httpPorts"
+                            :display-value="portsLabel(httpPortOptions)"
+                            @update:model-value="errors.httpPorts = ''"
+                          >
+                            <MultiSelect.Trigger
+                              id="app-httpPorts"
+                              aria-label="HTTP ports"
+                              :aria-describedby="
+                                errors.httpPorts ? 'app-httpPorts-error' : undefined
+                              "
+                            />
+                            <MultiSelect.Content>
+                              <MultiSelect.Option
+                                v-for="option in httpPortOptions"
                                 :key="option.value"
-                                v-model="form.protocolUsage"
                                 :value="option.value"
-                                name="protocolUsage"
-                                :input-id="`app-protocolUsage-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                              />
-                            </fieldset>
-                          </div>
-                        </Item.Actions>
-                      </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>HTTP ports</Item.Title>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <MultiSelect
-                                v-model="form.httpPorts"
-                                size="large"
-                                class="w-full"
-                                placeholder="Select ports"
-                                :required="!!errors.httpPorts"
-                                :display-value="portsLabel(httpPortOptions)"
-                                @update:model-value="errors.httpPorts = ''"
                               >
-                                <MultiSelect.Trigger
-                                  id="app-httpPorts"
-                                  aria-label="HTTP ports"
-                                  :aria-describedby="
-                                    errors.httpPorts ? 'app-httpPorts-error' : undefined
-                                  "
-                                />
-                                <MultiSelect.Content>
-                                  <MultiSelect.Option
-                                    v-for="option in httpPortOptions"
-                                    :key="option.value"
-                                    :value="option.value"
-                                  >
-                                    {{ option.label }}
-                                  </MultiSelect.Option>
-                                </MultiSelect.Content>
-                              </MultiSelect>
-                              <HelperText
-                                v-if="errors.httpPorts"
-                                id="app-httpPorts-error"
-                                kind="required"
-                                :label="errors.httpPorts"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                                {{ option.label }}
+                              </MultiSelect.Option>
+                            </MultiSelect.Content>
+                          </MultiSelect>
+                          <HelperText
+                            v-if="errors.httpPorts"
+                            id="app-httpPorts-error"
+                            kind="required"
+                            :label="errors.httpPorts"
+                          />
+                        </div>
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>HTTPS ports</Item.Title>
-                        <Item.Description
-                          >Applies when the service serves HTTPS traffic.</Item.Description
+                    </SettingRow>
+                    <SettingRow
+                      title="HTTPS ports"
+                      description="Applies when the service serves HTTPS traffic."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <MultiSelect
+                          v-model="form.httpsPorts"
+                          size="large"
+                          class="w-full"
+                          placeholder="443 (Default)"
+                          :disabled="!httpsEnabled"
+                          :display-value="portsLabel(httpsPortOptions)"
                         >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <MultiSelect
-                              v-model="form.httpsPorts"
-                              size="large"
-                              class="w-full"
-                              placeholder="443 (Default)"
-                              :disabled="!httpsEnabled"
-                              :display-value="portsLabel(httpsPortOptions)"
+                          <MultiSelect.Trigger aria-label="HTTPS ports" />
+                          <MultiSelect.Content>
+                            <MultiSelect.Option
+                              v-for="option in httpsPortOptions"
+                              :key="option.value"
+                              :value="option.value"
                             >
-                              <MultiSelect.Trigger aria-label="HTTPS ports" />
-                              <MultiSelect.Content>
-                                <MultiSelect.Option
-                                  v-for="option in httpsPortOptions"
-                                  :key="option.value"
-                                  :value="option.value"
-                                >
-                                  {{ option.label }}
-                                </MultiSelect.Option>
-                              </MultiSelect.Content>
-                            </MultiSelect>
-                          </div>
-                        </Item.Actions>
+                              {{ option.label }}
+                            </MultiSelect.Option>
+                          </MultiSelect.Content>
+                        </MultiSelect>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -323,121 +296,90 @@
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Origin Type</Item.Title>
-                        <Item.Description
-                          >The origin type is pre-defined and can't be customized.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <Input
-                              model-value="Single Origin"
-                              size="large"
-                              class="w-full"
-                              aria-label="Origin Type"
-                              readonly
-                            />
-                          </div>
-                        </Item.Actions>
+                    <SettingRow
+                      title="Origin Type"
+                      description="The origin type is pre-defined and can't be customized."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <Input
+                          model-value="Single Origin"
+                          size="large"
+                          class="w-full"
+                          aria-label="Origin Type"
+                          readonly
+                        />
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Protocol Policy</Item.Title>
-                        <Item.Description
-                          >Select the protocol used between the cache servers and the
-                          origin.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                              <legend class="sr-only">Protocol Policy</legend>
-                              <FieldRadioBlock
-                                v-for="option in protocolPolicyOptions"
-                                :key="option.value"
-                                v-model="form.protocolPolicy"
-                                :value="option.value"
-                                name="protocolPolicy"
-                                :input-id="`app-protocolPolicy-${option.value}`"
-                                :label="option.label"
-                              />
-                            </fieldset>
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow
+                      title="Protocol Policy"
+                      description="Select the protocol used between the cache servers and the origin."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
+                          <legend class="sr-only">Protocol Policy</legend>
+                          <FieldRadioBlock
+                            v-for="option in protocolPolicyOptions"
+                            :key="option.value"
+                            v-model="form.protocolPolicy"
+                            :value="option.value"
+                            name="protocolPolicy"
+                            :input-id="`app-protocolPolicy-${option.value}`"
+                            :label="option.label"
+                          />
+                        </fieldset>
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Address</Item.Title>
-                        <Item.Description
-                          >Define an origin for the content in FQDN format or an IPv4/IPv6
-                          address.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="form.address"
-                                size="large"
-                                class="w-full"
-                                aria-label="Address"
-                                placeholder="example.com"
-                                :required="!!errors.address"
-                                :aria-describedby="errors.address ? 'app-address-error' : undefined"
-                                @update:model-value="errors.address = ''"
-                              />
-                              <HelperText
-                                v-if="errors.address"
-                                id="app-address-error"
-                                kind="required"
-                                :label="errors.address"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow
+                      title="Address"
+                      description="Define an origin for the content in FQDN format or an IPv4/IPv6 address."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            v-model="form.address"
+                            size="large"
+                            class="w-full"
+                            aria-label="Address"
+                            placeholder="example.com"
+                            :required="!!errors.address"
+                            :aria-describedby="errors.address ? 'app-address-error' : undefined"
+                            @update:model-value="errors.address = ''"
+                          />
+                          <HelperText
+                            v-if="errors.address"
+                            id="app-address-error"
+                            kind="required"
+                            :label="errors.address"
+                          />
+                        </div>
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Host header</Item.Title>
-                        <Item.Description
-                          >Identify a virtualhost sent in the Host header to the
-                          origin.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="form.hostHeader"
-                                size="large"
-                                class="w-full"
-                                aria-label="Host header"
-                                :required="!!errors.hostHeader"
-                                :aria-describedby="
-                                  errors.hostHeader ? 'app-hostHeader-error' : undefined
-                                "
-                                @update:model-value="errors.hostHeader = ''"
-                              />
-                              <HelperText
-                                v-if="errors.hostHeader"
-                                id="app-hostHeader-error"
-                                kind="required"
-                                :label="errors.hostHeader"
-                              />
-                            </div>
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow
+                      title="Host header"
+                      description="Identify a virtualhost sent in the Host header to the origin."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <Input
+                            v-model="form.hostHeader"
+                            size="large"
+                            class="w-full"
+                            aria-label="Host header"
+                            :required="!!errors.hostHeader"
+                            :aria-describedby="
+                              errors.hostHeader ? 'app-hostHeader-error' : undefined
+                            "
+                            @update:model-value="errors.hostHeader = ''"
+                          />
+                          <HelperText
+                            v-if="errors.hostHeader"
+                            id="app-hostHeader-error"
+                            kind="required"
+                            :label="errors.hostHeader"
+                          />
+                        </div>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -450,95 +392,65 @@
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Browser Cache Settings</Item.Title>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                              <legend class="sr-only">Browser Cache Settings</legend>
-                              <FieldRadioBlock
-                                v-for="option in browserCacheOptions"
-                                :key="option.value"
-                                v-model="form.browserCache"
-                                :value="option.value"
-                                name="browserCache"
-                                :input-id="`app-browserCache-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                              />
-                            </fieldset>
-                          </div>
-                        </Item.Actions>
+                    <SettingRow title="Browser Cache Settings">
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
+                          <legend class="sr-only">Browser Cache Settings</legend>
+                          <FieldRadioBlock
+                            v-for="option in browserCacheOptions"
+                            :key="option.value"
+                            v-model="form.browserCache"
+                            :value="option.value"
+                            name="browserCache"
+                            :input-id="`app-browserCache-${option.value}`"
+                            :label="option.label"
+                            :description="option.description"
+                          />
+                        </fieldset>
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Maximum TTL (seconds)</Item.Title>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <NumberInput
-                              v-model="form.browserMaxTtl"
-                              size="large"
-                              class="w-full"
-                              :min="0"
-                              aria-label="Browser maximum TTL in seconds"
-                            />
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow title="Maximum TTL (seconds)">
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <NumberInput
+                          v-model="form.browserMaxTtl"
+                          size="large"
+                          class="w-full"
+                          :min="0"
+                          aria-label="Browser maximum TTL in seconds"
+                        />
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Cache Settings</Item.Title>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                              <legend class="sr-only">Cache Settings</legend>
-                              <FieldRadioBlock
-                                v-for="option in cacheOptions"
-                                :key="option.value"
-                                v-model="form.cache"
-                                :value="option.value"
-                                name="cache"
-                                :input-id="`app-cache-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                              />
-                            </fieldset>
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow title="Cache Settings">
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
+                          <legend class="sr-only">Cache Settings</legend>
+                          <FieldRadioBlock
+                            v-for="option in cacheOptions"
+                            :key="option.value"
+                            v-model="form.cache"
+                            :value="option.value"
+                            name="cache"
+                            :input-id="`app-cache-${option.value}`"
+                            :label="option.label"
+                            :description="option.description"
+                          />
+                        </fieldset>
                       </div>
-                    </Item>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Maximum TTL (seconds)</Item.Title>
-                        <Item.Description
-                          >Enable dynamic acceleration in the Main Settings tab to use values lower
-                          than 60 seconds. A secondary cache requires a cache TTL equal to or
-                          greater than 3 seconds.</Item.Description
-                        >
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <NumberInput
-                              v-model="form.cacheMaxTtl"
-                              size="large"
-                              class="w-full"
-                              :min="0"
-                              aria-label="Cache maximum TTL in seconds"
-                            />
-                          </div>
-                        </Item.Actions>
+                    </SettingRow>
+                    <SettingRow
+                      title="Maximum TTL (seconds)"
+                      description="Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <NumberInput
+                          v-model="form.cacheMaxTtl"
+                          size="large"
+                          class="w-full"
+                          :min="0"
+                          aria-label="Cache maximum TTL in seconds"
+                        />
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -549,21 +461,16 @@
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Active</Item.Title>
-                        <Item.Description
-                          >Rules that were successfully executed will be listed in the request logs
-                          and in the trace of each event.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="form.debugRules"
-                          aria-label="Active"
-                        />
-                      </Item.Actions>
-                    </Item>
+                    <SettingRow
+                      title="Active"
+                      description="Rules that were successfully executed will be listed in the request logs and in the trace of each event."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.debugRules"
+                        aria-label="Active"
+                      />
+                    </SettingRow>
                   </Item.List>
                 </template>
               </Card>
@@ -571,12 +478,8 @@
           </fieldset>
         </div>
 
-        <footer
-          class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
-        >
-          <div
-            class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
-          >
+        <SaveBar kind="plain">
+          <template #actions>
             <Button
               type="button"
               label="Cancel"
@@ -591,8 +494,8 @@
               :loading="submitting"
               @click="submit"
             />
-          </div>
-        </footer>
+          </template>
+        </SaveBar>
       </form>
     </main>
   </div>

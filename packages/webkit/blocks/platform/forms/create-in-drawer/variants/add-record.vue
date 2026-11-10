@@ -14,11 +14,11 @@
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import NumberInput from '@aziontech/webkit/number-input'
   import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
   import Select from '@aziontech/webkit/select'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import { computed, reactive, ref, watch } from 'vue'
 
   const recordTypes = [
@@ -154,228 +154,168 @@
               :disabled="submitting"
             >
               <legend class="sr-only">Add Record</legend>
-              <section
-                data-stacked
-                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+              <SettingsSection
+                title="Settings"
+                hint="Which addresses are associated with the domain and how the zone should handle requests."
               >
-                <div
-                  data-stacked
-                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                >
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)">Settings</span>
-                    </h2>
-                    <Hint
-                      text="Which addresses are associated with the domain and how the zone should handle requests."
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-                <div
-                  data-open
-                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                >
-                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                    <div
-                      data-open
-                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                    >
-                      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                        <FieldInputGroup
-                          v-model="form.name"
-                          label="Name"
-                          input-id="record-name"
-                          placeholder="subdomain"
-                          :disabled="submitting"
-                          :required="!!errors.name"
-                          :helper-text="
-                            errors.name || 'Use @ to create a record for the root domain.'
-                          "
-                          @update:model-value="errors.name = ''"
-                        >
-                          <template #right>.example.com</template>
-                        </FieldInputGroup>
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <FieldInputGroup
+                    v-model="form.name"
+                    label="Name"
+                    input-id="record-name"
+                    placeholder="subdomain"
+                    :disabled="submitting"
+                    :required="!!errors.name"
+                    :helper-text="errors.name || 'Use @ to create a record for the root domain.'"
+                    @update:model-value="errors.name = ''"
+                  >
+                    <template #right>.example.com</template>
+                  </FieldInputGroup>
 
-                        <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                          <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                            <Label for="record-type">Record type</Label>
-                          </div>
-                          <Select
-                            v-model="form.type"
-                            size="large"
-                            class="w-full"
-                            :disabled="submitting"
-                            :display-value="typeLabel"
-                          >
-                            <Select.Trigger
-                              id="record-type"
-                              aria-label="Record type"
-                            />
-                            <Select.Content>
-                              <Select.Option
-                                v-for="type in recordTypes"
-                                :key="type.value"
-                                :value="type.value"
-                              >
-                                {{ type.label }}
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
-                          <HelperText
-                            id="record-type-helper"
-                            kind="helper"
-                          >
-                            <Link
-                              label="Read more about record types"
-                              size="medium"
-                              href="https://example.com/docs/dns-records"
-                              target="_blank"
-                            />
-                          </HelperText>
-                        </div>
-
-                        <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                          <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                            <Label for="record-ttl">TTL (seconds)</Label>
-                          </div>
-                          <NumberInput
-                            id="record-ttl"
-                            v-model="form.ttl"
-                            size="large"
-                            class="w-full"
-                            :min="0"
-                            :disabled="submitting"
-                            aria-label="TTL in seconds"
-                          />
-                          <HelperText
-                            id="record-ttl-helper"
-                            kind="helper"
-                            >Time-to-live a response can be cached for on a resolver
-                            server.</HelperText
-                          >
-                        </div>
-
-                        <FieldTextarea
-                          v-model="form.value"
-                          label="Value"
-                          input-id="record-value"
-                          :placeholder="selectedType.placeholder"
-                          :disabled="submitting"
-                          :required="!!errors.value"
-                          :helper-text="errors.value || selectedType.valueHelper"
-                          @update:model-value="errors.value = ''"
-                        />
-
-                        <FieldText
-                          v-model="form.description"
-                          label="Description"
-                          input-id="record-description"
-                          size="large"
-                          placeholder="Optional description"
-                          :disabled="submitting"
-                          helper-text="An optional note to help identify this record."
-                        />
-                      </div>
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                      <Label for="record-type">Record type</Label>
                     </div>
+                    <Select
+                      v-model="form.type"
+                      size="large"
+                      class="w-full"
+                      :disabled="submitting"
+                      :display-value="typeLabel"
+                    >
+                      <Select.Trigger
+                        id="record-type"
+                        aria-label="Record type"
+                      />
+                      <Select.Content>
+                        <Select.Option
+                          v-for="type in recordTypes"
+                          :key="type.value"
+                          :value="type.value"
+                        >
+                          {{ type.label }}
+                        </Select.Option>
+                      </Select.Content>
+                    </Select>
+                    <HelperText
+                      id="record-type-helper"
+                      kind="helper"
+                    >
+                      <Link
+                        label="Read more about record types"
+                        size="medium"
+                        href="https://example.com/docs/dns-records"
+                        target="_blank"
+                      />
+                    </HelperText>
                   </div>
-                </div>
-              </section>
 
-              <section
-                data-stacked
-                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                      <Label for="record-ttl">TTL (seconds)</Label>
+                    </div>
+                    <NumberInput
+                      id="record-ttl"
+                      v-model="form.ttl"
+                      size="large"
+                      class="w-full"
+                      :min="0"
+                      :disabled="submitting"
+                      aria-label="TTL in seconds"
+                    />
+                    <HelperText
+                      id="record-ttl-helper"
+                      kind="helper"
+                      >Time-to-live a response can be cached for on a resolver server.</HelperText
+                    >
+                  </div>
+
+                  <FieldTextarea
+                    v-model="form.value"
+                    label="Value"
+                    input-id="record-value"
+                    :placeholder="selectedType.placeholder"
+                    :disabled="submitting"
+                    :required="!!errors.value"
+                    :helper-text="errors.value || selectedType.valueHelper"
+                    @update:model-value="errors.value = ''"
+                  />
+
+                  <FieldText
+                    v-model="form.description"
+                    label="Description"
+                    input-id="record-description"
+                    size="large"
+                    placeholder="Optional description"
+                    :disabled="submitting"
+                    helper-text="An optional note to help identify this record."
+                  />
+                </div>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Policy"
+                hint="How the zone should deal with requests answered by this record."
               >
-                <div
-                  data-stacked
-                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
-                >
-                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
-                    <h2
-                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)">Policy</span>
-                    </h2>
-                    <Hint
-                      text="How the zone should deal with requests answered by this record."
-                      class="shrink-0"
-                    />
-                  </div>
-                </div>
-                <div
-                  data-open
-                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-                >
-                  <div class="min-w-0 data-collapsible:overflow-hidden">
-                    <div
-                      data-open
-                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
-                    >
-                      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                        <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                          <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                            <Label for="record-policy">Policy type</Label>
-                          </div>
-                          <Select
-                            v-model="form.policy"
-                            size="large"
-                            class="w-full"
-                            :disabled="submitting"
-                            :display-value="policyLabelOf"
-                          >
-                            <Select.Trigger
-                              id="record-policy"
-                              aria-label="Policy type"
-                            />
-                            <Select.Content>
-                              <Select.Option
-                                v-for="policy in policyTypes"
-                                :key="policy.value"
-                                :value="policy.value"
-                              >
-                                {{ policy.label }}
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
-                          <HelperText
-                            id="record-policy-helper"
-                            kind="helper"
-                            >Simple is standard resolution. Weighted distributes answers across
-                            records by weight.</HelperText
-                          >
-                        </div>
-
-                        <div
-                          v-if="isWeighted"
-                          class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                        >
-                          <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                            <Label for="record-weight">Weight</Label>
-                          </div>
-                          <NumberInput
-                            id="record-weight"
-                            v-model="form.weight"
-                            size="large"
-                            class="w-full"
-                            :min="0"
-                            :max="255"
-                            :disabled="submitting"
-                            aria-label="Weight"
-                          />
-                          <HelperText
-                            id="record-weight-helper"
-                            kind="helper"
-                            >Relative weight (0–255) for this record within the weighted
-                            set.</HelperText
-                          >
-                        </div>
-                      </div>
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                      <Label for="record-policy">Policy type</Label>
                     </div>
+                    <Select
+                      v-model="form.policy"
+                      size="large"
+                      class="w-full"
+                      :disabled="submitting"
+                      :display-value="policyLabelOf"
+                    >
+                      <Select.Trigger
+                        id="record-policy"
+                        aria-label="Policy type"
+                      />
+                      <Select.Content>
+                        <Select.Option
+                          v-for="policy in policyTypes"
+                          :key="policy.value"
+                          :value="policy.value"
+                        >
+                          {{ policy.label }}
+                        </Select.Option>
+                      </Select.Content>
+                    </Select>
+                    <HelperText
+                      id="record-policy-helper"
+                      kind="helper"
+                      >Simple is standard resolution. Weighted distributes answers across records by
+                      weight.</HelperText
+                    >
+                  </div>
+
+                  <div
+                    v-if="isWeighted"
+                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+                  >
+                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                      <Label for="record-weight">Weight</Label>
+                    </div>
+                    <NumberInput
+                      id="record-weight"
+                      v-model="form.weight"
+                      size="large"
+                      class="w-full"
+                      :min="0"
+                      :max="255"
+                      :disabled="submitting"
+                      aria-label="Weight"
+                    />
+                    <HelperText
+                      id="record-weight-helper"
+                      kind="helper"
+                      >Relative weight (0–255) for this record within the weighted set.</HelperText
+                    >
                   </div>
                 </div>
-              </section>
+              </SettingsSection>
             </fieldset>
           </PanelContent>
 

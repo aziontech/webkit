@@ -16,6 +16,8 @@
   import Input from '@aziontech/webkit/input'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
@@ -900,61 +902,33 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model:value="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model:value="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+          </PageTabs>
 
           <div class="relative flex min-h-0 flex-1 flex-col">
             <section class="min-h-0 flex-1 overflow-auto">
               <div class="flex min-h-full flex-col">
                 <div class="layout-column layout-boundary flex min-w-0 flex-col">
-                  <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-                    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <h1
-                          data-size="small"
-                          class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                        >
-                          Versions
-                        </h1>
-                      </div>
-                      <p class="text-pretty text-body-sm text-(--text-muted)">
-                        Each version is an isolated snapshot of this resource's configuration. Open
-                        one to view it, or deploy a Ready version.
-                      </p>
-                    </div>
-                    <div
-                      class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
-                    >
-                      <div class="w-full md:w-fit">
-                        <Button
-                          label="New Version"
-                          icon="pi pi-plus"
-                          kind="outlined"
-                          size="medium"
-                          class="w-full"
-                        />
-                      </div>
-                    </div>
-                  </header>
+                  <PageHeader
+                    title="Versions"
+                    description="Each version is an isolated snapshot of this resource's configuration. Open one to view it, or deploy a Ready version."
+                    size="small"
+                  >
+                    <template #actions>
+                      <Button
+                        label="New Version"
+                        icon="pi pi-plus"
+                        kind="outlined"
+                        size="medium"
+                      />
+                    </template>
+                  </PageHeader>
 
                   <section
                     class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)"

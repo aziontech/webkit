@@ -1,0 +1,21 @@
+{
+  "component": "section-header",
+  "title": "Components/Primitives/Layout/SectionHeader",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A band heading with an anchor: the h2 takes the id, a copy-link button appears when the heading is hovered or focused, and the band's action sits on the right.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithActions",
+      "summary": "The Billing payment-methods heading, with the outlined Add payment method action and its plus glyph on the right.",
+      "file": "with-actions.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Medium, the band heading, and small, a muted label-sized heading.",
+      "file": "sizes.vue"
+    }
+  ]
+}

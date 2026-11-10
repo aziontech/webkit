@@ -11,7 +11,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "Account-level settings as `Item` rows saved as one unit: the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Cancel and Save. Profile is the example, with General (Full Name, Email), Preferences (Timezone, Language) and Notifications (Product updates). Full Name and Email flag only after Save is pressed. Built from the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch`, `HelperText` and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "Account-level settings as `Item` rows saved as one unit: the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Cancel and Save. Profile is the example, with General (Full Name, Email), Preferences (Timezone, Language) and Notifications (Product updates). Full Name and Email flag only after Save is pressed. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch`, `HelperText` and `Button`." } },
     webkit: {"block":"platform/forms/save-all-groups","intents":["save all","single save for the page","sticky footer save","account settings form","save as one unit","cancel and save footer","salvar tudo","rodapé fixo com salvar","formulário de conta"],"skills":["webkit-form","webkit-errors","webkit-ux-heuristics"],"primary":"Default"}
   }
 }

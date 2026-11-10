@@ -1,0 +1,26 @@
+{
+  "component": "page-header",
+  "title": "Components/Primitives/Layout/PageHeader",
+  "examples": [
+    {
+      "name": "ListPage",
+      "summary": "A first-level list page: medium h1, one-line description, and the outlined Documentation and create actions on the right; on a phone they stack, each at full width.",
+      "file": "default.vue"
+    },
+    {
+      "name": "SettingsPage",
+      "summary": "A settings sub-page or a detail tab: small title and description, no actions.",
+      "file": "settings-page.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three heading scales: large for a creation hub headline, medium for a first-level page, small for detail tabs and settings sub-pages.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "RichDescription",
+      "summary": "The `description` slot carries inline buttons or links when one plain sentence is not enough.",
+      "file": "rich-description.vue"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+import { fireEvent, render, within } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
+
+import Default from '../../../../examples/confirm-dialog/default.vue'
+import SaveOrDiscard from '../../../../examples/confirm-dialog/save-or-discard.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import ConfirmDialog from './confirm-dialog.vue'
+
+const settle = async () => {
+  await nextTick()
+  await nextTick()
+}
+
+const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
+
+describe('ConfirmDialog', () => {
+  it('stays closed until the trigger is activated, then teleports the dialog to body', async () => {
+    const { getByTestId } = within(render(Default).container)
+
+    expect(byTestId('overlay-confirm-dialog__panel')).toBeNull()
+
+    await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
+    await settle()
+
+    const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]')
+    expect(dialog).toBeTruthy()
+    expect(within(dialog as HTMLElement).getByText('Remove domain')).toBeTruthy()
+    expect(
+      within(dialog as HTMLElement).getByRole('button', { name: 'Remove Domain' })
+    ).toBeTruthy()
+  })
+
+  it('renders title, description and the default buttons when open', async () => {
+    render(ConfirmDialog, {
+      props: { open: true, title: 'Remove domain', description: 'It stops answering.' }
+    })
+    await settle()
+
+    expect(byTestId('overlay-confirm-dialog')).toBeTruthy()
+    expect(byTestId('overlay-confirm-dialog__cancel')?.textContent?.trim()).toBe('Cancel')
+    expect(byTestId('overlay-confirm-dialog__confirm')?.textContent?.trim()).toBe('Confirm')
+    expect(document.body.textContent).toContain('It stops answering.')
+  })
+
+  it('honours a consumer data-testid', async () => {
+    render(ConfirmDialog, {
+      props: { open: true, title: 'Remove domain' },
+      attrs: { 'data-testid': 'remove-domain' }
+    })
+    await settle()
+
+    expect(byTestId('remove-domain__confirm')).toBeTruthy()
+  })
+
+  it('emits confirm on the confirm button and cancel plus update:open on cancel', async () => {
+    const { emitted } = render(ConfirmDialog, {
+      props: { open: true, title: 'Remove domain', confirmLabel: 'Remove' }
+    })
+    await settle()
+
+    await fireEvent.click(byTestId('overlay-confirm-dialog__confirm') as HTMLElement)
+    expect(emitted()['confirm']).toHaveLength(1)
+
+    await fireEvent.click(byTestId('overlay-confirm-dialog__cancel') as HTMLElement)
+    expect(emitted()['cancel']).toHaveLength(1)
+    expect(emitted()['update:open']).toContainEqual([false])
+  })
+
+  it.each([{ disabled: true }, { loading: true }])(
+    'does not emit confirm when %o',
+    async (state) => {
+      const { emitted } = render(ConfirmDialog, {
+        props: { open: true, title: 'Delete resource', ...state }
+      })
+      await settle()
+
+      await fireEvent.click(byTestId('overlay-confirm-dialog__confirm') as HTMLElement)
+      expect(emitted()['confirm']).toBeUndefined()
+    }
+  )
+
+  it('replaces the buttons with the actions slot', async () => {
+    const { getByTestId } = within(render(SaveOrDiscard).container)
+
+    await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
+    await settle()
+
+    const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]') as HTMLElement
+    expect(within(dialog).getByRole('button', { name: 'Save changes' })).toBeTruthy()
+    expect(byTestId('overlay-confirm-dialog__confirm')).toBeNull()
+  })
+
+  it('has no accessibility violations when open', async () => {
+    render(ConfirmDialog, {
+      props: { open: true, title: 'Remove domain', description: 'It stops answering.' }
+    })
+    await settle()
+
+    await expectNoA11yViolations(document.body.querySelector('[role="dialog"]') as HTMLElement)
+  })
+})

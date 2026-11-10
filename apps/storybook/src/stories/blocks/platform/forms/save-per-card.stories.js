@@ -11,7 +11,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project Settings is the example, with Preview Toolbar and Deployment Protection. Built from the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project Settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`." } },
     webkit: {"block":"platform/forms/save-per-card","intents":["save per card","card with its own save","project settings","configuration cards","independent saves","long settings page","salvar por card","configurações do projeto","salvar cada seção"],"skills":["webkit-form","webkit-errors","webkit-ux-heuristics"],"primary":"Default"}
   }
 }

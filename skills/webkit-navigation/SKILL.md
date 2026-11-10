@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeading (the crumb names it) opening on a controls row over a flush borderless Card table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tabs.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeader (the crumb names it) opening on a controls row over a flush borderless Card table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tabs.
 status: active
 last_updated: 2026-08-13
 scope: general
@@ -46,7 +46,7 @@ every webkit primitive the same way:
   published subpath. If a subpath is not a key there, it does not exist.
 
 The primitives you compose the shells from — `sidebar` (+ `sidebar-header`, `sidebar-group`,
-`sidebar-footer`), `global-header`, `breadcrumb`, `tabs` — all resolve this way. **There is no
+`sidebar-footer`), `global-header`, `breadcrumb`, `tabs`, `page-tabs`, `page-header` — all resolve this way. **There is no
 `@aziontech/webkit/app-layout` and no `@aziontech/webkit/creation-header`:** the two shells are
 components _you_ compose in your own app (shown below), not webkit imports — never copy a dead import
 for them.
@@ -176,9 +176,9 @@ A browse page then imports **your** shell — not a webkit path — and renders 
 </template>
 ```
 
-- The breadcrumb naming the location and an in-page `PageHeading` are **different roles**: the crumb is
-  top chrome that says _where you are_; the `PageHeading` is the page's own title + description +
-  actions. A second-level page carries both (the crumb _and_ its `PageHeading`); Home carries only the
+- The breadcrumb naming the location and an in-page `PageHeader` are **different roles**: the crumb is
+  top chrome that says _where you are_; the `PageHeader` is the page's own title + description +
+  actions. A second-level page carries both (the crumb _and_ its `PageHeader`); Home carries only the
   crumb and lets its content lead.
 
 ### Shell 2 — focused creation
@@ -291,7 +291,7 @@ inset (`p-(--spacing-lg)`). A resource-detail page that opts out of the shell in
 full-bleed tab bar) re-applies the same `p-(--spacing-md)` on its own scrolling content region —
 never `lg`.
 
-### First-level module list — the controls row leads, and there is no `PageHeading`
+### First-level module list — the controls row leads, and there is no `PageHeader`
 
 A **first-level** page is one the sidebar routes to directly (Applications, Workloads, Object Storage,
 Deployments). It is **already named by the header breadcrumb**, so an `<h1>` repeating that name buys
@@ -315,7 +315,7 @@ came to do — **narrow the list, or add to it**:
     :breadcrumb="[{ label: 'Applications' }]"
   >
     <main class="flex h-full flex-col">
-      <!-- The controls row REPLACES the PageHeading on a first-level list.
+      <!-- The controls row REPLACES the PageHeader on a first-level list.
            Narrowing reads left (where the eye starts); the module's own actions
            sit right (where a control belongs); the table follows. -->
       <header class="flex items-center gap-(--layout-group-gap)">
@@ -363,7 +363,7 @@ came to do — **narrow the list, or add to it**:
 </template>
 ```
 
-- **No `PageHeading` on a first-level module list.** The breadcrumb crumb is the module's name; a
+- **No `PageHeader` on a first-level module list.** The breadcrumb crumb is the module's name; a
   second one is a duplicate that only pushes the data down.
 - **The controls live OUT of the table, not in its `#toolbar`.** They belong to the **page** — the
   create button acts on the module, not on the table — and hoisting them keeps the card a frame around
@@ -375,7 +375,7 @@ came to do — **narrow the list, or add to it**:
 - **`Documentation` is a first-level affordance only.** It introduces the module. An internal level is
   already inside the module, so it carries only the action that level can perform; reference material
   a band needs is a `documentation` link on that band's own section heading instead.
-- **A `PageHeading` still belongs** on a page that is _not_ a module list — a second-level page that
+- **A `PageHeader` still belongs** on a page that is _not_ a module list — a second-level page that
   names its own subject (an async deploy view, a gallery, a utility page). There it sits **out** of the
   card, `--spacing-lg` above it.
 
@@ -407,40 +407,29 @@ row above the table to put it on except the controls row, which is where narrowi
     :breadcrumb="[{ label: 'Applications', href: '/applications' }, { label: application.name }]"
   >
     <main class="flex h-full flex-col">
-      <!-- The tab bar IS the bottom of the header: full-bleed, its own bottom
-           border, and it does not scroll. NO PageHeading on this page. -->
-      <div class="border-b border-(--border-default) pr-(--spacing-lg) pl-(--spacing-sm)">
-        <div class="flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
-          <Tabs
-            v-model:value="activeTab"
-            class="min-w-0 flex-1"
-          >
-            <Tabs.List>
-              <Tabs.Item
-                v-for="tab in tabs"
-                :key="tab.value"
-                :value="tab.value"
-                :label="tab.label"
-              />
-            </Tabs.List>
-          </Tabs>
-
-          <!-- The page's action, trailing the tabs. `min-h-8` RESERVES a medium
-               button's height for the tab that renders nothing here, so switching
-               tabs never nudges the page by 2px. -->
-          <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
-            <Button
-              v-if="activeView.action"
-              :label="activeView.action.label"
-              :icon="activeView.action.icon"
-              :loading="actionPending"
-              kind="primary"
-              size="medium"
-              @click="runTabAction"
-            />
-          </div>
-        </div>
-      </div>
+      <!-- The tab bar IS the bottom of the header: PageTabs is full-bleed, ruled
+           at the bottom, and it does not scroll. NO PageHeader on this page.
+           Its #actions region reserves a medium button's height (`min-h-8`), so a
+           tab that renders no action never nudges the page by 2px. -->
+      <PageTabs v-model:value="activeTab">
+        <Tabs.Item
+          v-for="tab in tabs"
+          :key="tab.value"
+          :value="tab.value"
+          :label="tab.label"
+        />
+        <template #actions>
+          <Button
+            v-if="activeView.action"
+            :label="activeView.action.label"
+            :icon="activeView.action.icon"
+            :loading="actionPending"
+            kind="primary"
+            size="medium"
+            @click="runTabAction"
+          />
+        </template>
+      </PageTabs>
 
       <!-- Only this region scrolls; each tab's view brings its own inset. -->
       <section class="min-h-0 flex-1 overflow-auto">
@@ -457,15 +446,11 @@ row above the table to put it on except the controls row, which is where narrowi
 </template>
 ```
 
-- **The row is `items-center`, not `items-end`.** A 32px `size="medium"` button centres against the
-  30px tab items; aligning their bottoms makes the button overhang by 2px and forces a hand-written
-  `mb-*` to undo.
-- **`min-w-0 flex-1` on the `Tabs`** lets the tab list shrink (and scroll horizontally on a narrow
-  viewport) instead of pushing the action off the row.
-- **Reserve the action's height (`min-h-8`)** on the wrapper, not on the row: a row's own padding
-  counts against a min-height, so a floor there never binds. Without the reservation the row is
-  content-sized — 30px with tabs alone, 32px with a button — so every switch between a tab that has an
-  action and one that doesn't shifts the whole page below it.
+- **Use `PageTabs` (`@aziontech/webkit/page-tabs`), not a hand-built bar.** It is `Tabs` plus the
+  strip: full-bleed with the page inset, ruled at the bottom, the row `items-center` so a 32px
+  `size="medium"` button centres against the 30px tab items, the tab list free to shrink and scroll
+  instead of pushing the action off the row, and the `#actions` region holding a medium button's
+  height so switching between a tab with an action and one without never shifts the page.
 - **The tab owns the flow; the row only positions the button.** Declare the action's _label and icon_
   on the tab entry and its _behaviour_ in the view, reached through the mounted view's `defineExpose`
   — so the drawer, the form, and the pending flag never leave the file that renders them. A tab with
@@ -479,10 +464,10 @@ row above the table to put it on except the controls row, which is where narrowi
 The first-level list above. Nothing else changes: search and filters left, the module's actions right,
 `size="large"` (the row has no 30px tab items to centre against), table below.
 
-### A tabbed page renders no `PageHeading`
+### A tabbed page renders no `PageHeader`
 
 The tab bar is **navigation**, not a heading — each tab is its own page, so the bar carries no `<h1>`,
-and each tab's own heading (if it needs one) lives inside that tab's view. A `PageHeading` folded into
+and each tab's own heading (if it needs one) lives inside that tab's view. A `PageHeader` folded into
 the bar would be a heading block that renders no heading.
 
 The one page shape that shows **both** is a first-level list whose tabs sit _in content, below_ the
@@ -493,14 +478,14 @@ Each tab renders one of two bodies:
 
 - **A list tab** → the list pattern above (controls row + flush borderless `Table`), with its create
   action **on the tab row**.
-- **A settings tab** → the `ItemGroup` form: `--spacing-sm`-titled sections (`text-heading-xxs`) each
-  over a flush `Card` + `Item.List`, committed as **one block** by a single Save bar pinned below
-  the scroll region (see `webkit-form` and `webkit-ui-states`).
+- **A settings tab** → the `ItemGroup` form: `SettingsSection` bands each over a flush `Card` +
+  `Item.List` of `SettingRow` rows, committed as **one block** by a single `SaveBar` pinned below the
+  scroll region (see `webkit-form` and `webkit-ui-states`).
 
 ## Breadcrumb — first level and second-level resource nav
 
 The breadcrumb is the **only** thing naming the page's location, which is why it renders on every
-level and why first-level pages dropped their `PageHeading`. It is top chrome that says _where you
+level and why first-level pages dropped their `PageHeader`. It is top chrome that says _where you
 are_; it is not the page's title block.
 
 | Level                                              | Items                                                                                                    |
@@ -514,7 +499,7 @@ are_; it is not the page's title block.
 Four rules hold across every row:
 
 1. **First-level pages are not special-cased to hide the crumb.** One crumb is still a breadcrumb —
-   it is what names the module now that there is no `PageHeading`.
+   it is what names the module now that there is no `PageHeader`.
 2. **The second-level crumb is the resource's own name**, not the page type: `webkit-sample-vue`, not
    `Application detail`. That name is the page's identity, which is exactly why the page needs no
    heading repeating it.
@@ -549,16 +534,16 @@ Four rules hold across every row:
   region. Never a bespoke `p-(--spacing-lg)` page inset.
 - **A list table lives in a flush, borderless `Card`.** `Card :padded="false"` +
   `Table :border="false"`; the card is the only border. Never ship a bare bordered table, never wrap
-  the table in a padded card. Where a page does carry a `PageHeading`, it sits **out** of the card,
+  the table in a padded card. Where a page does carry a `PageHeader`, it sits **out** of the card,
   `--spacing-lg` above it — never buried in the card's `#header`.
-- **A first-level module list carries no `PageHeading`.** The breadcrumb crumb already names the
+- **A first-level module list carries no `PageHeader`.** The breadcrumb crumb already names the
   module; the page opens on its controls row (narrowing left, the module's actions right) over the
   table. Never ship an `<h1>` that repeats the crumb.
 - **One place for the page's primary button, decided by whether the page has tabs.** Tabs → the tab
   row (`size="medium"`, `items-center`, height reserved with `min-h-8`). No tabs → the controls row
   (`size="large"`). Never both: a tab's own list must not re-render the create button its tab row
   already carries.
-- **A tabbed page renders no `PageHeading`.** The tab bar is navigation; each tab's heading lives
+- **A tabbed page renders no `PageHeader`.** The tab bar is navigation; each tab's heading lives
   inside that tab's view. The active tab travels in `?tab=`.
 - **The breadcrumb names the level, and a tab is never a crumb.** One unlinked crumb at first level;
   `module › resource name` at second level; every non-last crumb links. Switching tabs must not change
@@ -577,8 +562,8 @@ For `/webkit-navigation <file>`, list gaps. Each:
   rule: The user is always visible — a header with no identity reads as signed out.
   fix: render the account avatar in GlobalHeader.Right (your focused shell should anchor it for you).
 
-✗ Applications.vue:28  PageHeading title="Applications" above the table
-  rule: A first-level module list carries no PageHeading — the breadcrumb crumb already names it.
+✗ Applications.vue:28  PageHeader title="Applications" above the table
+  rule: A first-level module list carries no PageHeader — the breadcrumb crumb already names it.
   fix: drop the heading; open on the controls row (search/filters left, + New Application right).
 
 ✗ WorkloadDetail.vue:64  create button inside the Deployments tab's own controls row
@@ -619,12 +604,12 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - [ ] Shells are composed from the webkit primitives (`global-header` / `sidebar` / `breadcrumb` via the
       MCP / catalog), not hand-rolled, and there is no dead `@aziontech/webkit/app-layout` import.
 - [ ] Content inset is `--spacing-md` (from the shell); a table sits in a flush borderless `Card`,
-      and any `PageHeading` is out of the card, `--spacing-lg` above it. No bespoke `lg` page inset.
-- [ ] A first-level module list has no `PageHeading` — it opens on the controls row (narrowing left,
+      and any `PageHeader` is out of the card, `--spacing-lg` above it. No bespoke `lg` page inset.
+- [ ] A first-level module list has no `PageHeader` — it opens on the controls row (narrowing left,
       module actions right) over the table.
 - [ ] The page's primary button is in exactly one place: the tab row (`medium`) if the page has tabs,
       the controls row (`large`) if it doesn't — never duplicated inside a tab's own list.
-- [ ] A tabbed page renders no `PageHeading`, keeps the tab row `items-center` with the action's height
+- [ ] A tabbed page renders no `PageHeader`, keeps the tab row `items-center` with the action's height
       reserved, and carries the active tab in `?tab=`.
 - [ ] The breadcrumb matches the level (one unlinked crumb at first level; `module › resource name` at
       second level), every non-last crumb links, and no tab appears in the trail.

@@ -67,7 +67,11 @@
     context ? context.tabId(resolvedValue.value) : `${testId.value}__tab`
   )
 
-  const panelId = computed(() => (context ? context.panelId(resolvedValue.value) : undefined))
+  const panelId = computed(() =>
+    context?.panels.value.includes(resolvedValue.value)
+      ? context.panelId(resolvedValue.value)
+      : undefined
+  )
 
   const itemSharedClasses = [
     'relative z-1 inline-flex h-(--size-8) shrink-0 cursor-pointer items-center',

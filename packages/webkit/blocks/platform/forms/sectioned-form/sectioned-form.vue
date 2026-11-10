@@ -29,6 +29,7 @@
   import Label from '@aziontech/webkit/label'
   import Menu from '@aziontech/webkit/menu'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -872,22 +873,12 @@
           @submit.prevent="submit"
         >
           <div class="layout-column-form layout-boundary flex flex-1 flex-col">
-            <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-              <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <h1
-                    id="template-settings-title"
-                    class="text-balance text-heading-xs text-(--text-default)"
-                  >
-                    Import from Git
-                  </h1>
-                </div>
-                <p class="text-pretty text-body-sm text-(--text-muted)">
-                  Configure your Git repository to integrate your codebase and automate deployments
-                  directly from your version control system.
-                </p>
-              </div>
-            </header>
+            <PageHeader
+              title="Import from Git"
+              description="Configure your Git repository to integrate your codebase and automate deployments directly from your version control system."
+              size="small"
+              title-id="template-settings-title"
+            />
 
             <fieldset
               class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"

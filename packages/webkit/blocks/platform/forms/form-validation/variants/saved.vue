@@ -3,6 +3,7 @@
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Skeleton from '@aziontech/webkit/skeleton'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, onMounted, reactive, ref } from 'vue'
@@ -110,17 +111,12 @@
       :aria-busy="busy"
       @submit.prevent="submit"
     >
-      <header class="flex flex-col gap-(--spacing-xxs)">
-        <h1
-          id="create-variable-title"
-          class="text-balance text-heading-xs text-(--text-default)"
-        >
-          Create Variable
-        </h1>
-        <p class="text-pretty text-body-sm text-(--text-muted)">
-          Add a key-value pair your services read at runtime.
-        </p>
-      </header>
+      <PageHeader
+        title="Create Variable"
+        description="Add a key-value pair your services read at runtime."
+        size="small"
+        title-id="create-variable-title"
+      />
 
       <div class="layout-section-start flex flex-col gap-(--spacing-md)">
         <div

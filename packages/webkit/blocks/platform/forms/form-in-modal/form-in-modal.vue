@@ -24,6 +24,7 @@
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import Alert from '@aziontech/webkit/alert'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -762,17 +763,11 @@
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto layout-boundary"
       >
         <main class="flex h-full flex-col">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1 class="text-balance text-heading-xs text-(--text-default)">Dialog form</h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                A short, blocking decision in a modal. This destructive delete stays disabled until
-                the exact resource name is typed.
-              </p>
-            </div>
-          </header>
+          <PageHeader
+            title="Dialog form"
+            description="A short, blocking decision in a modal. This destructive delete stays disabled until the exact resource name is typed."
+            size="small"
+          />
 
           <Item kind="outline">
             <Item.Content>

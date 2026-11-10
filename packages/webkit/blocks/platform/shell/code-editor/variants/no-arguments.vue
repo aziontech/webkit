@@ -15,16 +15,19 @@
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import Menu from '@aziontech/webkit/menu'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import ResizableHandle from '@aziontech/webkit/resizable-handle'
   import ResizablePane from '@aziontech/webkit/resizable-pane'
   import ResizableRoot from '@aziontech/webkit/resizable-root'
+  import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsSection from '@aziontech/webkit/settings-section'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -915,27 +918,14 @@ export async function handleRequest(request) {
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full min-h-0 flex-col">
           <h1 class="sr-only">{{ form.name }}</h1>
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model:value="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model:value="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+          </PageTabs>
           <section
             class="flex min-h-0 flex-1 flex-col"
             :class="activeTab === 'code' ? 'overflow-hidden' : 'overflow-auto'"
@@ -1204,171 +1194,99 @@ export async function handleRequest(request) {
                                                       class="mt-(--spacing-xs) border-t border-(--border-muted)"
                                                     >
                                                       <Item.List>
-                                                        <Item size="small">
-                                                          <Item.Content>
-                                                            <Item.Title>Name</Item.Title>
-                                                            <Item.Description
-                                                              >The key in the arguments object, and
-                                                              what the service
-                                                              reads.</Item.Description
-                                                            >
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <div class="contents font-code">
-                                                                  <Input
-                                                                    :id="
-                                                                      formId + '-key-' + field.id
-                                                                    "
-                                                                    v-model="field.key"
-                                                                    size="medium"
-                                                                    placeholder="cookie_name"
-                                                                    autocomplete="off"
-                                                                    spellcheck="false"
-                                                                    class="w-full"
-                                                                    aria-label="Name"
-                                                                    :invalid="!!keyError(field)"
-                                                                    :aria-describedby="
-                                                                      keyError(field)
-                                                                        ? formId +
-                                                                          '-message-' +
-                                                                          field.id
-                                                                        : undefined
-                                                                    "
-                                                                    @blur="touch(field.id)"
-                                                                  />
-                                                                </div>
-                                                                <HelperText
-                                                                  v-if="keyError(field)"
-                                                                  :id="
-                                                                    formId + '-message-' + field.id
-                                                                  "
-                                                                  kind="required"
-                                                                  :label="keyError(field)"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item size="small">
-                                                          <Item.Content>
-                                                            <Item.Title>Type</Item.Title>
-                                                            <Item.Description
-                                                              >What the field accepts, and the
-                                                              control the form
-                                                              renders.</Item.Description
-                                                            >
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Select
-                                                                  v-model="field.type"
-                                                                  size="medium"
-                                                                  class="w-full"
-                                                                  :display-value="fieldTypeLabel"
-                                                                  @update:model-value="
-                                                                    onTypeChange(field)
-                                                                  "
-                                                                >
-                                                                  <Select.Trigger
-                                                                    aria-label="Type"
-                                                                  />
-                                                                  <Select.Content>
-                                                                    <Select.Option
-                                                                      v-for="option in fieldTypes"
-                                                                      :key="option.value"
-                                                                      :value="option.value"
-                                                                    >
-                                                                      {{ option.label }}
-                                                                    </Select.Option>
-                                                                  </Select.Content>
-                                                                </Select>
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item size="small">
-                                                          <Item.Content>
-                                                            <Item.Title>Label</Item.Title>
-                                                            <Item.Description
-                                                              >How the field is named in the form.
-                                                              Falls back to the
-                                                              key.</Item.Description
-                                                            >
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Input
-                                                                  v-model="field.title"
-                                                                  size="medium"
-                                                                  :placeholder="
-                                                                    field.key || 'Max Age (seconds)'
-                                                                  "
-                                                                  autocomplete="off"
-                                                                  class="w-full"
-                                                                  aria-label="Label"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item size="small">
-                                                          <Item.Content>
-                                                            <Item.Title>Description</Item.Title>
-                                                            <Item.Description
-                                                              >The guidance under the
-                                                              field.</Item.Description
-                                                            >
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Input
-                                                                  v-model="field.description"
-                                                                  size="medium"
-                                                                  placeholder="What this argument does"
-                                                                  autocomplete="off"
-                                                                  class="w-full"
-                                                                  aria-label="Description"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item size="small">
-                                                          <Item.Content>
-                                                            <Item.Title>Required</Item.Title>
-                                                            <Item.Description
-                                                              >The form refuses to save without
-                                                              it.</Item.Description
-                                                            >
-                                                          </Item.Content>
-                                                          <Item.Actions>
-                                                            <Switch
-                                                              v-model="field.required"
-                                                              aria-label="Required"
+                                                        <SettingRow
+                                                          title="Name"
+                                                          description="The key in the arguments object, and what the service reads."
+                                                        >
+                                                          <div class="contents font-code">
+                                                            <Input
+                                                              :id="formId + '-key-' + field.id"
+                                                              v-model="field.key"
+                                                              size="medium"
+                                                              placeholder="cookie_name"
+                                                              autocomplete="off"
+                                                              spellcheck="false"
+                                                              class="w-full"
+                                                              aria-label="Name"
+                                                              :invalid="!!keyError(field)"
+                                                              :aria-describedby="
+                                                                keyError(field)
+                                                                  ? formId + '-message-' + field.id
+                                                                  : undefined
+                                                              "
+                                                              @blur="touch(field.id)"
                                                             />
-                                                          </Item.Actions>
-                                                        </Item>
+                                                          </div>
+                                                          <HelperText
+                                                            v-if="keyError(field)"
+                                                            :id="formId + '-message-' + field.id"
+                                                            kind="required"
+                                                            :label="keyError(field)"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
+                                                          title="Type"
+                                                          description="What the field accepts, and the control the form renders."
+                                                        >
+                                                          <Select
+                                                            v-model="field.type"
+                                                            size="medium"
+                                                            class="w-full"
+                                                            :display-value="fieldTypeLabel"
+                                                            @update:model-value="
+                                                              onTypeChange(field)
+                                                            "
+                                                          >
+                                                            <Select.Trigger aria-label="Type" />
+                                                            <Select.Content>
+                                                              <Select.Option
+                                                                v-for="option in fieldTypes"
+                                                                :key="option.value"
+                                                                :value="option.value"
+                                                              >
+                                                                {{ option.label }}
+                                                              </Select.Option>
+                                                            </Select.Content>
+                                                          </Select>
+                                                        </SettingRow>
+                                                        <SettingRow
+                                                          title="Label"
+                                                          description="How the field is named in the form. Falls back to the key."
+                                                        >
+                                                          <Input
+                                                            v-model="field.title"
+                                                            size="medium"
+                                                            :placeholder="
+                                                              field.key || 'Max Age (seconds)'
+                                                            "
+                                                            autocomplete="off"
+                                                            class="w-full"
+                                                            aria-label="Label"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
+                                                          title="Description"
+                                                          description="The guidance under the field."
+                                                        >
+                                                          <Input
+                                                            v-model="field.description"
+                                                            size="medium"
+                                                            placeholder="What this argument does"
+                                                            autocomplete="off"
+                                                            class="w-full"
+                                                            aria-label="Description"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
+                                                          title="Required"
+                                                          description="The form refuses to save without it."
+                                                          kind="compact"
+                                                        >
+                                                          <Switch
+                                                            v-model="field.required"
+                                                            aria-label="Required"
+                                                          />
+                                                        </SettingRow>
                                                         <Item size="small">
                                                           <div
                                                             class="flex w-full gap-(--spacing-sm)"
@@ -1472,227 +1390,126 @@ export async function handleRequest(request) {
                                                             </div>
                                                           </div>
                                                         </Item>
-                                                        <Item
+                                                        <SettingRow
                                                           v-if="field.type === 'string'"
-                                                          size="small"
+                                                          title="Minimum length"
                                                         >
-                                                          <Item.Content>
-                                                            <Item.Title>Minimum length</Item.Title>
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Input
-                                                                  v-model="field.minLength"
-                                                                  size="medium"
-                                                                  inputmode="numeric"
-                                                                  placeholder="No minimum"
-                                                                  class="w-full"
-                                                                  aria-label="Minimum length"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item
+                                                          <Input
+                                                            v-model="field.minLength"
+                                                            size="medium"
+                                                            inputmode="numeric"
+                                                            placeholder="No minimum"
+                                                            class="w-full"
+                                                            aria-label="Minimum length"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
                                                           v-if="field.type === 'string'"
-                                                          size="small"
+                                                          title="Maximum length"
                                                         >
-                                                          <Item.Content>
-                                                            <Item.Title>Maximum length</Item.Title>
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Input
-                                                                  v-model="field.maxLength"
-                                                                  size="medium"
-                                                                  inputmode="numeric"
-                                                                  placeholder="No maximum"
-                                                                  class="w-full"
-                                                                  aria-label="Maximum length"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item
+                                                          <Input
+                                                            v-model="field.maxLength"
+                                                            size="medium"
+                                                            inputmode="numeric"
+                                                            placeholder="No maximum"
+                                                            class="w-full"
+                                                            aria-label="Maximum length"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
                                                           v-if="field.type === 'string'"
-                                                          size="small"
+                                                          title="Pattern"
+                                                          description="A regular expression the value has to match."
+                                                          kind="stacked"
                                                         >
-                                                          <div
-                                                            class="flex w-full flex-col items-stretch gap-(--spacing-sm)"
-                                                          >
-                                                            <Item.Content>
-                                                              <Item.Title>Pattern</Item.Title>
-                                                              <Item.Description
-                                                                >A regular expression the value has
-                                                                to match.</Item.Description
-                                                              >
-                                                            </Item.Content>
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <div class="contents font-code">
-                                                                  <Input
-                                                                    v-model="field.pattern"
-                                                                    size="medium"
-                                                                    placeholder="^[a-z0-9_-]+$"
-                                                                    autocomplete="off"
-                                                                    spellcheck="false"
-                                                                    class="w-full"
-                                                                    aria-label="Pattern"
-                                                                  />
-                                                                </div>
-                                                              </div>
-                                                            </Item.Actions>
+                                                          <div class="contents font-code">
+                                                            <Input
+                                                              v-model="field.pattern"
+                                                              size="medium"
+                                                              placeholder="^[a-z0-9_-]+$"
+                                                              autocomplete="off"
+                                                              spellcheck="false"
+                                                              class="w-full"
+                                                              aria-label="Pattern"
+                                                            />
                                                           </div>
-                                                        </Item>
-                                                        <Item
+                                                        </SettingRow>
+                                                        <SettingRow
                                                           v-if="
                                                             field.type === 'integer' ||
                                                             field.type === 'number'
                                                           "
-                                                          size="small"
+                                                          title="Minimum"
                                                         >
-                                                          <Item.Content>
-                                                            <Item.Title>Minimum</Item.Title>
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Input
-                                                                  v-model="field.minimum"
-                                                                  size="medium"
-                                                                  inputmode="numeric"
-                                                                  placeholder="No minimum"
-                                                                  class="w-full"
-                                                                  aria-label="Minimum"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item
+                                                          <Input
+                                                            v-model="field.minimum"
+                                                            size="medium"
+                                                            inputmode="numeric"
+                                                            placeholder="No minimum"
+                                                            class="w-full"
+                                                            aria-label="Minimum"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
                                                           v-if="
                                                             field.type === 'integer' ||
                                                             field.type === 'number'
                                                           "
-                                                          size="small"
+                                                          title="Maximum"
                                                         >
-                                                          <Item.Content>
-                                                            <Item.Title>Maximum</Item.Title>
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
-                                                          >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <Input
-                                                                  v-model="field.maximum"
-                                                                  size="medium"
-                                                                  inputmode="numeric"
-                                                                  placeholder="No maximum"
-                                                                  class="w-full"
-                                                                  aria-label="Maximum"
-                                                                />
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
-                                                        <Item
+                                                          <Input
+                                                            v-model="field.maximum"
+                                                            size="medium"
+                                                            inputmode="numeric"
+                                                            placeholder="No maximum"
+                                                            class="w-full"
+                                                            aria-label="Maximum"
+                                                          />
+                                                        </SettingRow>
+                                                        <SettingRow
                                                           v-if="field.type === 'select'"
-                                                          size="small"
+                                                          title="Choices"
+                                                          description="One per line. These are the values the form offers."
+                                                          kind="stacked"
                                                         >
-                                                          <div
-                                                            class="flex w-full flex-col items-stretch gap-(--spacing-sm)"
-                                                          >
-                                                            <Item.Content>
-                                                              <Item.Title>Choices</Item.Title>
-                                                              <Item.Description
-                                                                >One per line. These are the values
-                                                                the form offers.</Item.Description
-                                                              >
-                                                            </Item.Content>
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                                              >
-                                                                <div class="contents font-code">
-                                                                  <Textarea
-                                                                    :model-value="
-                                                                      listToLines(field.options)
-                                                                    "
-                                                                    :rows="3"
-                                                                    placeholder="webp&#10;avif&#10;jpeg"
-                                                                    class="w-full"
-                                                                    aria-label="Choices"
-                                                                    @update:model-value="
-                                                                      field.options =
-                                                                        linesToList($event)
-                                                                    "
-                                                                  />
-                                                                </div>
-                                                              </div>
-                                                            </Item.Actions>
+                                                          <div class="contents font-code">
+                                                            <Textarea
+                                                              :model-value="
+                                                                listToLines(field.options)
+                                                              "
+                                                              :rows="3"
+                                                              placeholder="webp&#10;avif&#10;jpeg"
+                                                              class="w-full"
+                                                              aria-label="Choices"
+                                                              @update:model-value="
+                                                                field.options = linesToList($event)
+                                                              "
+                                                            />
                                                           </div>
-                                                        </Item>
-                                                        <Item
+                                                        </SettingRow>
+                                                        <SettingRow
                                                           v-if="field.type === 'array'"
-                                                          size="small"
+                                                          title="List of"
+                                                          description="The type of every value in the list."
                                                         >
-                                                          <Item.Content>
-                                                            <Item.Title>List of</Item.Title>
-                                                            <Item.Description
-                                                              >The type of every value in the
-                                                              list.</Item.Description
-                                                            >
-                                                          </Item.Content>
-                                                          <div
-                                                            class="flex max-w-(--container-3xs) flex-1 justify-end"
+                                                          <Select
+                                                            v-model="field.itemType"
+                                                            size="medium"
+                                                            class="w-full"
+                                                            :display-value="itemTypeLabel"
                                                           >
-                                                            <Item.Actions class="w-full">
-                                                              <div
-                                                                class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+                                                            <Select.Trigger aria-label="List of" />
+                                                            <Select.Content>
+                                                              <Select.Option
+                                                                v-for="option in itemTypes"
+                                                                :key="option.value"
+                                                                :value="option.value"
                                                               >
-                                                                <Select
-                                                                  v-model="field.itemType"
-                                                                  size="medium"
-                                                                  class="w-full"
-                                                                  :display-value="itemTypeLabel"
-                                                                >
-                                                                  <Select.Trigger
-                                                                    aria-label="List of"
-                                                                  />
-                                                                  <Select.Content>
-                                                                    <Select.Option
-                                                                      v-for="option in itemTypes"
-                                                                      :key="option.value"
-                                                                      :value="option.value"
-                                                                    >
-                                                                      {{ option.label }}
-                                                                    </Select.Option>
-                                                                  </Select.Content>
-                                                                </Select>
-                                                              </div>
-                                                            </Item.Actions>
-                                                          </div>
-                                                        </Item>
+                                                                {{ option.label }}
+                                                              </Select.Option>
+                                                            </Select.Content>
+                                                          </Select>
+                                                        </SettingRow>
                                                       </Item.List>
                                                     </div>
                                                   </div>
@@ -1718,239 +1535,119 @@ export async function handleRequest(request) {
                   class="layout-column-form layout-boundary flex min-w-0 flex-col"
                 >
                   <section class="layout-section-start flex min-w-0 flex-col">
-                    <section
-                      class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                    >
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">General</span>
-                          </h2>
-                        </div>
-                      </div>
-                      <div class="grid min-w-0 grid-rows-[1fr]">
-                        <div class="min-w-0">
-                          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Name</Item.Title>
-                                      <Item.Description
-                                        >Give a unique and descriptive name to identify your
-                                        service.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                      <Item.Actions class="w-full">
-                                        <div
-                                          class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                        >
-                                          <Input
-                                            v-model="form.name"
-                                            size="large"
-                                            class="w-full"
-                                            aria-label="Name"
-                                            autocomplete="off"
-                                            :required="!!nameError"
-                                            :aria-describedby="
-                                              nameError ? nameMessageId : undefined
-                                            "
-                                            @update:model-value="nameError = ''"
-                                          />
-                                          <HelperText
-                                            v-if="nameError"
-                                            :id="nameMessageId"
-                                            kind="required"
-                                            :label="nameError"
-                                          />
-                                        </div>
-                                      </Item.Actions>
-                                    </div>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section
-                      class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                    >
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Runtime</span>
-                          </h2>
-                        </div>
-                      </div>
-                      <div class="grid min-w-0 grid-rows-[1fr]">
-                        <div class="min-w-0">
-                          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Runtime</Item.Title>
-                                      <Item.Description
-                                        >The runtime isn't editable after the service is
-                                        created.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                                      <Item.Actions class="w-full">
-                                        <div
-                                          class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                        >
-                                          <Input
-                                            :model-value="runtimeLabel"
-                                            size="large"
-                                            class="w-full"
-                                            aria-label="Runtime"
-                                            readonly
-                                            disabled
-                                          >
-                                            <template #iconRight>
-                                              <i
-                                                class="pi pi-lock"
-                                                aria-hidden="true"
-                                              />
-                                            </template>
-                                          </Input>
-                                        </div>
-                                      </Item.Actions>
-                                    </div>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section
-                      class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                    >
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)"
-                              >Execution environment</span
+                    <SettingsSection title="General">
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Name"
+                              description="Give a unique and descriptive name to identify your service."
                             >
-                          </h2>
-                          <Hint
-                            text="Where in the request path the service runs, each stage handing the code a different request."
-                            class="shrink-0"
-                          />
-                        </div>
-                      </div>
-                      <div class="grid min-w-0 grid-rows-[1fr]">
-                        <div class="min-w-0">
-                          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <div
-                                      class="flex w-full flex-col items-stretch gap-(--spacing-sm)"
-                                    >
-                                      <Item.Content>
-                                        <Item.Title>Runs on</Item.Title>
-                                      </Item.Content>
-                                      <Item.Actions class="w-full">
-                                        <div
-                                          class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                                        >
-                                          <fieldset
-                                            class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
-                                          >
-                                            <legend class="sr-only">Execution environment</legend>
-                                            <FieldRadioBlock
-                                              v-model="form.executionEnvironment"
-                                              value="request"
-                                              :name="groupName"
-                                              label="On request"
-                                              description="Runs on each request the service handles, after routing."
-                                            />
-                                            <FieldRadioBlock
-                                              v-model="form.executionEnvironment"
-                                              value="gateway"
-                                              :name="groupName"
-                                              label="At the gateway"
-                                              description="Runs at the gateway, before routing, where a request can still be refused."
-                                            />
-                                          </fieldset>
-                                        </div>
-                                      </Item.Actions>
-                                    </div>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                              <Input
+                                v-model="form.name"
+                                size="large"
+                                class="w-full"
+                                aria-label="Name"
+                                autocomplete="off"
+                                :required="!!nameError"
+                                :aria-describedby="nameError ? nameMessageId : undefined"
+                                @update:model-value="nameError = ''"
+                              />
+                              <HelperText
+                                v-if="nameError"
+                                :id="nameMessageId"
+                                kind="required"
+                                :label="nameError"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
 
-                    <section
-                      class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+                    <SettingsSection title="Runtime">
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Runtime"
+                              description="The runtime isn't editable after the service is created."
+                            >
+                              <Input
+                                :model-value="runtimeLabel"
+                                size="large"
+                                class="w-full"
+                                aria-label="Runtime"
+                                readonly
+                                disabled
+                              >
+                                <template #iconRight>
+                                  <i
+                                    class="pi pi-lock"
+                                    aria-hidden="true"
+                                  />
+                                </template>
+                              </Input>
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
+
+                    <SettingsSection
+                      title="Execution environment"
+                      hint="Where in the request path the service runs, each stage handing the code a different request."
                     >
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                        <div
-                          class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <h2
-                            class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
-                          >
-                            <span class="flex items-center gap-(--spacing-xs)">Status</span>
-                          </h2>
-                        </div>
-                      </div>
-                      <div class="grid min-w-0 grid-rows-[1fr]">
-                        <div class="min-w-0">
-                          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                            <Card :padded="false">
-                              <template #content>
-                                <Item.List>
-                                  <Item size="small">
-                                    <Item.Content>
-                                      <Item.Title>Active</Item.Title>
-                                      <Item.Description
-                                        >An inactive service keeps its code and stops
-                                        running.</Item.Description
-                                      >
-                                    </Item.Content>
-                                    <Item.Actions>
-                                      <Switch
-                                        v-model="form.active"
-                                        aria-label="Active"
-                                      />
-                                    </Item.Actions>
-                                  </Item>
-                                </Item.List>
-                              </template>
-                            </Card>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Runs on"
+                              kind="stacked"
+                            >
+                              <fieldset
+                                class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
+                              >
+                                <legend class="sr-only">Execution environment</legend>
+                                <FieldRadioBlock
+                                  v-model="form.executionEnvironment"
+                                  value="request"
+                                  :name="groupName"
+                                  label="On request"
+                                  description="Runs on each request the service handles, after routing."
+                                />
+                                <FieldRadioBlock
+                                  v-model="form.executionEnvironment"
+                                  value="gateway"
+                                  :name="groupName"
+                                  label="At the gateway"
+                                  description="Runs at the gateway, before routing, where a request can still be refused."
+                                />
+                              </fieldset>
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
+
+                    <SettingsSection title="Status">
+                      <Card :padded="false">
+                        <template #content>
+                          <Item.List>
+                            <SettingRow
+                              title="Active"
+                              description="An inactive service keeps its code and stops running."
+                              kind="compact"
+                            >
+                              <Switch
+                                v-model="form.active"
+                                aria-label="Active"
+                              />
+                            </SettingRow>
+                          </Item.List>
+                        </template>
+                      </Card>
+                    </SettingsSection>
                   </section>
                 </div>
               </fieldset>
@@ -1962,45 +1659,25 @@ export async function handleRequest(request) {
             leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
             leave-to-class="translate-y-2 opacity-0"
           >
-            <footer
-              v-if="dirty"
-              class="sticky bottom-0 z-10 h-0 shrink-0"
-            >
-              <div
-                class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14"
-              >
-                <div
-                  class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
-                >
-                  <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-                    <i
-                      class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <p class="min-w-0 text-body-sm text-(--text-default)">
-                      You have unsaved changes.
-                    </p>
-                  </div>
-                  <div
-                    class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
-                  >
-                    <Button
-                      type="button"
-                      label="Discard"
-                      kind="outlined"
-                      size="medium"
-                      @click="discard"
-                    />
-                    <Button
-                      label="Save"
-                      kind="primary"
-                      size="medium"
-                      @click="save"
-                    />
-                  </div>
-                </div>
-              </div>
-            </footer>
+            <SaveBar v-if="dirty">
+              You have unsaved changes.
+
+              <template #actions>
+                <Button
+                  type="button"
+                  label="Discard"
+                  kind="outlined"
+                  size="medium"
+                  @click="discard"
+                />
+                <Button
+                  label="Save"
+                  kind="primary"
+                  size="medium"
+                  @click="save"
+                />
+              </template>
+            </SaveBar>
           </Transition>
         </main>
       </div>

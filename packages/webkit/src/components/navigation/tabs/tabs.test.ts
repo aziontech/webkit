@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/tabs/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -96,8 +96,9 @@ describe('Tabs (composition)', () => {
       expect(panels).toHaveLength(3)
     })
 
-    it('wires aria-controls / aria-labelledby between the active tab and its panel', () => {
+    it('wires aria-controls / aria-labelledby between the active tab and its panel', async () => {
       const { getAllByRole } = render(Tree)
+      await nextTick()
 
       const activeTab = getAllByRole('tab').find(
         (t) => t.getAttribute('aria-selected') === 'true'
@@ -110,6 +111,24 @@ describe('Tabs (composition)', () => {
       const panel = document.getElementById(panelId as string) as HTMLElement
       expect(panel.getAttribute('role')).toBe('tabpanel')
       expect(panel.getAttribute('aria-labelledby')).toBe(tabId)
+    })
+
+    it('leaves aria-controls off a tab whose panel is rendered elsewhere', () => {
+      const { getAllByRole } = render(
+        defineComponent({
+          components: { TabsRoot, TabsList, TabsItem },
+          template: `
+            <TabsRoot default-value="a">
+              <TabsList>
+                <TabsItem value="a" label="A" />
+                <TabsItem value="b" label="B" />
+              </TabsList>
+            </TabsRoot>
+          `
+        })
+      )
+
+      expect(getAllByRole('tab').every((tab) => !tab.hasAttribute('aria-controls'))).toBe(true)
     })
   })
 

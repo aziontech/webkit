@@ -79,7 +79,9 @@ states distinct:
 - **red `invalid`** — the value is present and wrong.
 
 Mechanics (the `field-*` triad, `aria-describedby`, submit-time validation, the locked scope) live in
-**`/webkit-form`**. The only rule this skill adds: **client-side validation is the one thing that does
+**`/webkit-form`**. In a settings row (`SettingRow`, `@aziontech/webkit/setting-row`) the message is a
+`HelperText` placed in the row's default slot right after the control, so it sits under the control
+inside the row's control column. The only rule this skill adds: **client-side validation is the one thing that does
 not go in a `Alert`.** The `Alert` is for what the **server** said.
 
 ## 2. Server rejection scoped to one field → a `Alert` in that section

@@ -3,7 +3,7 @@
   "name": "SavePerCard",
   "title": "Templates/Platform/Forms/SavePerCard",
   "surface": "product",
-  "summary": "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project Settings is the example, with Preview Toolbar and Deployment Protection. Built from the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`.",
+  "summary": "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project Settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

@@ -17,7 +17,9 @@
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
@@ -763,17 +765,11 @@
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto layout-boundary"
       >
         <main class="flex w-full flex-col">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1 class="text-balance text-heading-xs text-(--text-default)">Preferences</h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                The same partitioned-save idea as Card, on the ItemGroup surface: Item rows in a
-                flush card, each topic group owning its own save, so changes commit in parts.
-              </p>
-            </div>
-          </header>
+          <PageHeader
+            title="Preferences"
+            description="The same partitioned-save idea as Card, on the ItemGroup surface: Item rows in a flush card, each topic group owning its own save, so changes commit in parts."
+            size="small"
+          />
 
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
@@ -785,59 +781,49 @@
                 >
                   <legend class="sr-only">General</legend>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Full Name</Item.Title>
-                        <Item.Description>The name shown across your account.</Item.Description>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <Input
-                              v-model="general.fullName"
-                              size="large"
-                              :disabled="savingGeneral"
-                              class="w-full"
-                              aria-label="Full Name"
-                            />
-                          </div>
-                        </Item.Actions>
+                    <SettingRow
+                      title="Full Name"
+                      description="The name shown across your account."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <Input
+                          v-model="general.fullName"
+                          size="large"
+                          :disabled="savingGeneral"
+                          class="w-full"
+                          aria-label="Full Name"
+                        />
                       </div>
-                    </Item>
+                    </SettingRow>
 
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Language</Item.Title>
-                        <Item.Description>The interface language.</Item.Description>
-                      </Item.Content>
-                      <div class="flex max-w-(--container-3xs) flex-1 justify-end">
-                        <Item.Actions class="w-full">
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <Select
-                              v-model="general.language"
-                              size="large"
-                              :disabled="savingGeneral"
-                              class="w-full"
-                              :display-value="languageLabel"
+                    <SettingRow
+                      title="Language"
+                      description="The interface language."
+                    >
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <Select
+                          v-model="general.language"
+                          size="large"
+                          :disabled="savingGeneral"
+                          class="w-full"
+                          :display-value="languageLabel"
+                        >
+                          <Select.Trigger
+                            id="preferences-language"
+                            aria-label="Language"
+                          />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in languages"
+                              :key="option.value"
+                              :value="option.value"
                             >
-                              <Select.Trigger
-                                id="preferences-language"
-                                aria-label="Language"
-                              />
-                              <Select.Content>
-                                <Select.Option
-                                  v-for="option in languages"
-                                  :key="option.value"
-                                  :value="option.value"
-                                >
-                                  {{ option.label }}
-                                </Select.Option>
-                              </Select.Content>
-                            </Select>
-                          </div>
-                        </Item.Actions>
+                              {{ option.label }}
+                            </Select.Option>
+                          </Select.Content>
+                        </Select>
                       </div>
-                    </Item>
+                    </SettingRow>
                   </Item.List>
                 </fieldset>
               </template>
@@ -865,37 +851,29 @@
                 >
                   <legend class="sr-only">Notifications</legend>
                   <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Product updates</Item.Title>
-                        <Item.Description
-                          >Occasional emails about new features and changes.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="notifications.productUpdates"
-                          aria-label="Product updates"
-                          :disabled="savingNotifications"
-                        />
-                      </Item.Actions>
-                    </Item>
+                    <SettingRow
+                      title="Product updates"
+                      description="Occasional emails about new features and changes."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="notifications.productUpdates"
+                        aria-label="Product updates"
+                        :disabled="savingNotifications"
+                      />
+                    </SettingRow>
 
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Security alerts</Item.Title>
-                        <Item.Description
-                          >Emails when a sign-in or key change is detected.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions>
-                        <Switch
-                          v-model="notifications.securityAlerts"
-                          aria-label="Security alerts"
-                          :disabled="savingNotifications"
-                        />
-                      </Item.Actions>
-                    </Item>
+                    <SettingRow
+                      title="Security alerts"
+                      description="Emails when a sign-in or key change is detected."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="notifications.securityAlerts"
+                        aria-label="Security alerts"
+                        :disabled="savingNotifications"
+                      />
+                    </SettingRow>
                   </Item.List>
                 </fieldset>
               </template>

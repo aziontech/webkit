@@ -10,6 +10,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
+  import PageHeader from '@aziontech/webkit/page-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -439,35 +440,28 @@
     >
       <div class="flex min-h-0 flex-1 flex-col overflow-auto lg:overflow-hidden">
         <div class="layout-boundary flex flex-col lg:min-h-0 lg:flex-1">
-          <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-            <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <h1
-                  data-size="large"
-                  class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
-                >
-                  Start a new project
-                </h1>
-              </div>
-              <p class="text-pretty text-body-sm text-(--text-muted)">
-                Start from a repository or use a framework template. You can also drag and drop your
-                project, or choose a
-                <button
-                  type="button"
-                  class="text-link cursor-pointer"
-                >
-                  file
-                </button>
-                or a
-                <button
-                  type="button"
-                  class="text-link cursor-pointer"
-                >
-                  folder</button
-                >.
-              </p>
-            </div>
-          </header>
+          <PageHeader
+            title="Start a new project"
+            size="large"
+          >
+            <template #description>
+              Start from a repository or use a framework template. You can also drag and drop your
+              project, or choose a
+              <button
+                type="button"
+                class="text-link cursor-pointer"
+              >
+                file
+              </button>
+              or a
+              <button
+                type="button"
+                class="text-link cursor-pointer"
+              >
+                folder</button
+              >.
+            </template>
+          </PageHeader>
 
           <div
             class="layout-section-start flex flex-col gap-(--layout-boundary-start) lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-(--layout-section-gap)"

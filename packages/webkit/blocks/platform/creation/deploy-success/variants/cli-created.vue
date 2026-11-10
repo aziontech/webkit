@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Item from '@aziontech/webkit/item'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
@@ -266,42 +267,27 @@ jobs:
             </section>
 
             <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-              <header class="group/heading flex flex-col">
-                <div
-                  class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <h2
-                        class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
-                      >
-                        Get started
-                      </h2>
-                    </div>
-                    <p class="text-pretty text-body-sm text-(--text-muted)">
-                      Two ways to build and deploy this resource. Pick one and follow the steps, or
-                      read the
-                      <a
-                        href="https://example.com/docs/cli"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                        >CLI docs</a
-                      >.
-                    </p>
-                  </div>
-                  <div
-                    class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full"
-                  >
-                    <ToggleGroup
-                      v-model="path"
-                      :options="PATHS"
-                      size="large"
-                      aria-label="Deploy with"
-                    />
-                  </div>
-                </div>
-              </header>
+              <SectionHeader title="Get started">
+                <template #description>
+                  Two ways to build and deploy this resource. Pick one and follow the steps, or read
+                  the
+                  <a
+                    href="https://example.com/docs/cli"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                    >CLI docs</a
+                  >.
+                </template>
+                <template #actions>
+                  <ToggleGroup
+                    v-model="path"
+                    :options="PATHS"
+                    size="large"
+                    aria-label="Deploy with"
+                  />
+                </template>
+              </SectionHeader>
 
               <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
                 <div

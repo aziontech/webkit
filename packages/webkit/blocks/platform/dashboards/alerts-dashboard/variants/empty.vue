@@ -5,6 +5,7 @@
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import SeverityTag from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -206,34 +207,33 @@
 <template>
   <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
     <main class="layout-column flex flex-col gap-(--layout-group-gap)">
-      <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
-        <div class="flex min-w-0 grow basis-(--container-md) flex-col gap-(--spacing-xxs)">
-          <h1 class="text-balance text-heading-sm text-(--text-default)">Alerts</h1>
-          <p class="text-pretty text-body-sm text-(--text-muted)">
-            What is open, how severe it is, what kind it is and who is involved.
-          </p>
-        </div>
-        <div class="w-44 shrink-0">
-          <Select
-            v-model="period"
-            size="medium"
-            :display-value="
-              (value) => periods.find((option) => option.value === value)?.label ?? value
-            "
-          >
-            <Select.Trigger aria-label="Period" />
-            <Select.Content>
-              <Select.Option
-                v-for="option in periods"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </div>
-      </header>
+      <PageHeader
+        title="Alerts"
+        description="What is open, how severe it is, what kind it is and who is involved."
+      >
+        <template #actions>
+          <div class="w-44 shrink-0">
+            <Select
+              v-model="period"
+              size="medium"
+              :display-value="
+                (value) => periods.find((option) => option.value === value)?.label ?? value
+              "
+            >
+              <Select.Trigger aria-label="Period" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in periods"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+          </div>
+        </template>
+      </PageHeader>
 
       <section aria-label="Summary">
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">

@@ -16,6 +16,7 @@
   import Input from '@aziontech/webkit/input'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -845,35 +846,22 @@
 
       <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
         <main class="flex h-full flex-col">
-          <div class="border-b border-(--border-default)">
-            <div
-              class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)"
-            >
-              <div class="flex -ml-(--spacing-xs) min-w-0 flex-1">
-                <Tabs
-                  v-model:value="activeTab"
-                  class="w-full"
-                >
-                  <Tabs.List>
-                    <Tabs.Item
-                      v-for="tab in tabs"
-                      :key="tab.value"
-                      :value="tab.value"
-                      :label="tab.label"
-                    />
-                  </Tabs.List>
-                </Tabs>
-              </div>
-              <div class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)">
-                <Button
-                  label="Deploy"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-cloud-upload"
-                />
-              </div>
-            </div>
-          </div>
+          <PageTabs v-model:value="activeTab">
+            <Tabs.Item
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              :label="tab.label"
+            />
+            <template #actions>
+              <Button
+                label="Deploy"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-cloud-upload"
+              />
+            </template>
+          </PageTabs>
 
           <section class="min-h-0 flex-1 overflow-auto">
             <div class="layout-column layout-boundary flex min-w-0 flex-col">

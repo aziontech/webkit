@@ -8,6 +8,7 @@
   import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
   import Alert from '@aziontech/webkit/alert'
+  import PageHeader from '@aziontech/webkit/page-header'
   import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
   import { reactive, ref } from 'vue'
 
@@ -168,10 +169,10 @@
                       novalidate
                       @submit.prevent="signIn"
                     >
-                      <header class="flex flex-col gap-(--spacing-xxs)">
-                        <h1 class="text-heading-sm text-(--text-default)">Welcome back</h1>
-                        <p class="text-body-sm text-(--text-muted)">Sign in to your account.</p>
-                      </header>
+                      <PageHeader
+                        title="Welcome back"
+                        description="Sign in to your account."
+                      />
 
                       <Transition
                         enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
@@ -296,11 +297,7 @@
                       novalidate
                       @submit.prevent="signUp"
                     >
-                      <header class="flex flex-col gap-(--spacing-xxs)">
-                        <h1 class="text-heading-sm text-(--text-default)">
-                          Sign up for a free account
-                        </h1>
-                      </header>
+                      <PageHeader title="Sign up for a free account" />
 
                       <Transition
                         enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"

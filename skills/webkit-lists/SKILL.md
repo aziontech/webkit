@@ -60,7 +60,7 @@ A heading, then three nested bands, and nothing else:
            appears: the shell renders the breadcrumb from the SECOND crumb up, so the
            single crumb above is passed and not drawn. The create action lives HERE,
            and it is the page's one `large` control. -->
-      <PageHeading
+      <PageHeader
         size="medium"
         title="Applications"
         description="Build, deploy, and manage your applications."
@@ -73,7 +73,7 @@ A heading, then three nested bands, and nothing else:
             icon="pi pi-plus"
           />
         </template>
-      </PageHeading>
+      </PageHeader>
 
       <!-- the band below the heading; `layout-section-start` opens it at the boundary
            step, and zeroes itself when the heading is absent (empty account) -->
@@ -130,7 +130,8 @@ A heading, then three nested bands, and nothing else:
 </template>
 ```
 
-**A first-level module index opens with a `PageHeading`, and the module's create action lives in it.**
+**A first-level module index opens with a `PageHeader` (`@aziontech/webkit/page-header`), and the module's
+create action lives in it.**
 The crumb does not name the page any more: the shell draws the breadcrumb only from the **second** crumb
 up (`/webkit-navigation`), because at first level a lone crumb repeated the word the highlighted nav row
 was already showing. So the heading is the only place the module's name appears in the content — a page
@@ -368,7 +369,7 @@ its columns and nothing else.
 
 - The controls row, the filter bar and the table are **one band** at the group step — never a section step
   between the search and the rows it filters.
-- A first-level module index **opens with a `PageHeading`** (`size="medium"`) carrying the module's
+- A first-level module index **opens with a `PageHeader`** (`size="medium"`) carrying the module's
   create action — the breadcrumb starts at the second level, so nothing else names the page.
 - **The heading's action is the page's only `large` control; the whole controls row is `medium`.**
 - `Card :padded="false"` + `Table :border="false"` — never a padded card around a bordered table.
@@ -404,7 +405,7 @@ Per gap:
   quoted: <ControlsHeader> … <template #actions><Button label="New Connector" size="large" /></template>
   rule:   the create action is the PAGE's, so it belongs to the heading — the controls row
           narrows the list and runs entirely at `medium`
-  fix:    add the size="medium" PageHeading (the crumb no longer names the page) and move the
+  fix:    add the size="medium" PageHeader (the crumb no longer names the page) and move the
           button into its #actions as `Create connector`, large
 ```
 
@@ -422,7 +423,7 @@ Close with `List sound` or `N gaps — fix before polish`.
 ## Definition of Done
 
 - [ ] Page is shell → column → heading → section → one band holding controls, filters and the card.
-- [ ] First-level index carries a `size="medium"` `PageHeading` with the create action in `#actions`.
+- [ ] First-level index carries a `size="medium"` `PageHeader` with the create action in `#actions`.
 - [ ] Heading action `large`; every control on the controls row `medium`.
 - [ ] Search is in the controls row and bound to the table's global filter; filters narrow `:data`.
 - [ ] A field catalog exists, with a `match` per field and `kind` chosen deliberately.
