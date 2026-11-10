@@ -91,7 +91,7 @@ export const parameters = {
         'Foundations',
         [
           'Design Tokens',
-          ['Color', 'Theme', 'Typography', 'Layout', 'Motion'],
+          ['Color', 'Theme', 'Typography', 'Layout', 'Motion', 'Data Viz'],
           'Assets',
           ['Illustrations', 'Globe', 'Logos', 'Icons']
         ],
@@ -100,6 +100,7 @@ export const parameters = {
           'Primitives',
           [
             'Actions',
+            'Chart',
             'Code',
             'Content',
             'Data',
