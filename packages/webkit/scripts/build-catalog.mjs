@@ -240,7 +240,8 @@ function build() {
     if (subpath.endsWith('-root')) return null
     const target = exportsMap[`./${subpath}`] || ''
     for (const c of compoundByLength) {
-      if (subpath !== c && subpath.startsWith(`${c}-`) && target.startsWith(compoundDir(c))) return c
+      if (subpath !== c && subpath.startsWith(`${c}-`) && target.startsWith(compoundDir(c)))
+        return c
     }
     return null
   }
