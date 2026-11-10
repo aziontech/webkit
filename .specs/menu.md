@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 8423e16d0f9e7f78e779848368bf14f0fcf9d181bbe6887df8aaaadd0b390dd1
+checksum: 9a4eee0f91e9f7b6203d028a7b5f965e6194c73264ab9e2c8c298d907e810e09
 created: 2026-08-03
 last_updated: 2026-10-01
 ---
@@ -26,9 +26,9 @@ megamenu — this menu is vertical, recursive, and owns a view stack.
 Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>):
 full-width rows, padding inside the row rather than on the list, and indentation carried by the
 nested list's `padding-left`. Per [`migration.md`](../.claude/rules/migration.md) only that
-*structure* is adopted — every *value* is expressed in our own tokens per
-[`DESIGN.md`](../.claude/docs/DESIGN.md). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`,
-`gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things DESIGN.md forbids outright; the
+*structure* is adopted — every *value* is expressed in our own tokens (see
+[`styling.md`](../.claude/rules/styling.md)). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`,
+`gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token rules forbid outright; the
 mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
 
 ## When to use
@@ -53,7 +53,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - `menu-item` — **is** `Menu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
 - `sidebar-group` — functionally **superseded by `Menu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.
 - `navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
-- `accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates DESIGN.md § Forbidden in animations).
+- `accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the token rules § Forbidden in animations).
 - `tag` — renders the optional trailing badge on a row via `menu-item`'s `tagValue`.
 
 ## Best practices
@@ -68,7 +68,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - **One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-xxs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.
 - **The rail descends from that column**, so `--menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--menu-indent - --menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.
 - **A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.
-- Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
+- Hover and active are `::before` / `::after` **ghost layers** per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
 - **The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.
 - Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.
@@ -360,7 +360,7 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 ## Motion & Animations
 
 Every piece of this component's motion is **per-phase, open-vs-close, driven by `data-state`** —
-which DESIGN.md § Motion ("When to use which pattern") routes through a **`presets/transitions.ts`**
+which the motion standard ("When to use which pattern") routes through a **`presets/transitions.ts`**
 module, *not* through the catalogued `animate-*` utilities. So `menu/presets/transitions.ts` imports
 `duration` / `curve` from the theme and returns the inline `transition`; the transform / height /
 opacity themselves stay in Tailwind classes on `data-[…]` variants.
@@ -431,7 +431,7 @@ both are load-bearing:
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
+| Region | Token |
 |---|---|
 | typography (first-level group title) | `.text-label-sm` |
 | typography (every row: Item, SubTrigger, Back) | `.text-label-md` |
@@ -450,11 +450,11 @@ both are load-bearing:
 | surface while sliding | `var(--menu-slide-surface, var(--bg-surface))` |
 
 Geometry — the Kumo box model re-expressed in our tokens. Every Kumo value in the middle column is
-something DESIGN.md forbids in a webkit component (arbitrary `p-*`/`gap-*` where a
+something the token rules forbid in a webkit component (arbitrary `p-*`/`gap-*` where a
 `spacings.data.js` token applies, `rounded-lg`, Tailwind default durations, `cubic-bezier`
 literals), so the right column is the contract:
 
-| Region | Kumo | Ours (DESIGN.md) |
+| Region | Kumo | Ours (tokens) |
 |---|---|---|
 | list reset | `m-0 list-none p-0 flex flex-col` | adopted as-is — structure, no values |
 | row padding-x | `px-3` (12 px) | `px-(--spacing-sm)` — exact match |
@@ -462,12 +462,12 @@ literals), so the right column is the contract:
 | group-label margin-y | `my-3` (12 px) | `my-(--spacing-sm)`, `0` on the first group — exact match |
 | row min-height | `min-h-8.5` (34 px) | `min-h-8` — the theme size scale (checklist § Sizing), and the Figma frame's row height |
 | icon size | — | `size-3` — theme size scale, matches the Figma 12 px glyph |
-| row radius | `rounded-lg` (8 px) | `rounded-(--shape-elements)` — DESIGN.md forbids `rounded-lg` and every numeric radius |
+| row radius | `rounded-lg` (8 px) | `rounded-(--shape-elements)` — the token rules forbid `rounded-lg` and every numeric radius |
 | rail connector column | — (Kumo draws no rail) | `var(--spacing-sm)` (12 px) — the elbow's width and its negative offset |
 | rail elbow height | — | `h-4` — half the row, so the horizontal leg meets the row's centre line |
 | nested indent | `pl-7` (28 px) | `pl-[calc(var(--spacing-sm)+var(--spacing-md))]` (**28 px — matched to the reference**); narrower than our own 40 px icon column, so children sit slightly left of the parent's label rather than on it. Both tokens are breakpoint-fixed, unlike `--spacing-lg` / `--spacing-xl` |
-| hover / active | `hover:bg-*` on the root | `::before` / `::after` ghost layers on `var(--bg-hover)` / `var(--bg-active)` — DESIGN.md § Interactive states |
-| focus | `focus-visible:bg-*`, no ring | `focus-visible:ring-2` + `ring-offset-1` on `var(--ring-color)` — DESIGN.md § Interactive states; a visible ring is required by [`accessibility.md`](../.claude/rules/accessibility.md), so our standard wins over the reference |
+| hover / active | `hover:bg-*` on the root | `::before` / `::after` ghost layers on `var(--bg-hover)` / `var(--bg-active)` — the interactive-states standard |
+| focus | `focus-visible:bg-*`, no ring | `focus-visible:ring-2` + `ring-offset-1` on `var(--ring-color)` — the interactive-states standard; a visible ring is required by [`accessibility.md`](../.claude/rules/accessibility.md), so our standard wins over the reference |
 | motion | `250ms cubic-bezier(0.77, 0, 0.175, 1)` | `duration` / `curve` from `animate.js` only — see Motion |
 
 **A sliding surface carries a fill, and only while it slides.** Backgroundless layers cannot
@@ -492,16 +492,16 @@ it.
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| Kumo row-to-row gap `1px` (`gap-y-px`) — a hairline that makes adjacent hover surfaces read as separate rows | **None.** Rows are flush (`flex flex-col`, no `gap-y`). DESIGN.md forbids arbitrary spacing utilities and directs new values to `spacings.data.js`; the smallest token is `--spacing-xxs` (4 px), which is 4× too large. Kumo's paired `before:-inset-y-px` hit-area bleed is dropped with it — with no gap there is no dead strip to cover. | `TODO: tokenizar` — add a `spacing-hairline` (`1px`) entry to `spacings.data.js`, then set `gap-y-(--spacing-hairline)` on every list and restore the bleed. Purely cosmetic; the menu is correct without it. |
+| Kumo row-to-row gap `1px` (`gap-y-px`) — a hairline that makes adjacent hover surfaces read as separate rows | **None.** Rows are flush (`flex flex-col`, no `gap-y`). The token rules forbid arbitrary spacing utilities and directs new values to `spacings.data.js`; the smallest token is `--spacing-xxs` (4 px), which is 4× too large. Kumo's paired `before:-inset-y-px` hit-area bleed is dropped with it — with no gap there is no dead strip to cover. | `TODO: tokenizar` — add a `spacing-hairline` (`1px`) entry to `spacings.data.js`, then set `gap-y-(--spacing-hairline)` on every list and restore the bleed. Purely cosmetic; the menu is correct without it. |
 
-Two further reference values are **conscious mappings, not gaps** — DESIGN.md already dictates the
+Two further reference values are **conscious mappings, not gaps** — the token rules already dictate the
 answer, so no token is missing: Kumo's `min-h-8.5` (34 px) becomes `min-h-8` (the theme size scale,
 and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elements)`, since
 `rounded-lg` and every numeric radius are forbidden outright.
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]` — `ring-offset-1` per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states, with the offset colour handed down by the host (`Sidebar` sets `--menu-ring-offset` to its own surface, mirroring the existing `--menu-item-ring-offset` pattern).
+- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]` — `ring-offset-1` per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)), with the offset colour handed down by the host (`Sidebar` sets `--menu-ring-offset` to its own surface, mirroring the existing `--menu-item-ring-offset` pattern).
 - Keyboard map: `Tab` / `Shift+Tab` move between rows; `Enter`/`Space` activates a row, toggles an inline `Sub`, or pushes a drill level; `ArrowRight` expands a collapsed inline `Sub` or pushes a drill level; `ArrowLeft` collapses an expanded inline `Sub`, or pops one drill level when the current level is not the root; `Escape` pops one drill level.
 - ARIA:
   - The root renders a plain container with `role="navigation"` and `aria-label` from `ariaLabel`. It does **not** render `<nav>`: the menu is injected into a host that may already be a `<nav>` landmark (`Sidebar` is), and nesting landmarks duplicates them in the landmark list. When the host provides the landmark, the consumer suppresses the role by passing `role="presentation"` — and **the name goes with the role**: the root renders no `aria-label` under `role="presentation"` / `"none"`, because ARIA prohibits naming a presentational element and the a11y tree drops the name anyway. The consumer therefore suppresses the landmark with one attribute rather than remembering to unset `ariaLabel` as well.
