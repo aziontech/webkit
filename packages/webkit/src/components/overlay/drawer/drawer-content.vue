@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener, useScrollLock } from '@vueuse/core'
+  import { defaultDocument, useEventListener, useScrollLock } from '@vueuse/core'
   import { computed, inject, nextTick, provide, ref, unref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
@@ -40,7 +40,7 @@
   const isMobileOverlay = useOverlayMobile()
   const isDesktopDrawer = computed(() => !isMobileOverlay.value)
 
-  const isScrollLocked = useScrollLock(document.body)
+  const isScrollLocked = useScrollLock(defaultDocument?.body)
 
   watch(
     isOpen,
@@ -51,7 +51,7 @@
   )
   useFocusTrap(contentRef, isOpen)
 
-  useEventListener(document, 'keydown', (event) => {
+  useEventListener(defaultDocument, 'keydown', (event: KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
     if (!ctx?.dismissible) return
     event.preventDefault()

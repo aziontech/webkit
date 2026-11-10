@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener, useScrollLock } from '@vueuse/core'
+  import { defaultDocument, useEventListener, useScrollLock } from '@vueuse/core'
   import type { VNode } from 'vue'
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
@@ -71,7 +71,7 @@
 
   const armed = ref(false)
 
-  const isScrollLocked = useScrollLock(document.body)
+  const isScrollLocked = useScrollLock(defaultDocument?.body)
 
   const flipTransform = (from: DOMRect, to: DOMRect) => {
     if (!to.width || !to.height) return ''
@@ -127,7 +127,7 @@
 
   useFocusTrap(overlayRef, zoomed)
 
-  useEventListener(document, 'keydown', (event: KeyboardEvent) => {
+  useEventListener(defaultDocument, 'keydown', (event: KeyboardEvent) => {
     if (!zoomed.value || event.key !== 'Escape') return
     event.preventDefault()
     close()
