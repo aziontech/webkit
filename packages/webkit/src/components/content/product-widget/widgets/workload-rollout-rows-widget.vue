@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
-  import Tag from '../../../tag/tag.vue'
   import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadRolloutRowsWidget' })
 

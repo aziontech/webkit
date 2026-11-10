@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 6049d8ca38fa77b0c011e9e21624464f6bc9e1d3e970bca375e4d59922a38825
+checksum: c26d983b2c69770925f85e753429516de1c07d3cfe513d0bee99bcf20ebedfad
 created: 2026-06-16
 last_updated: 2026-11-09
 ---
@@ -116,7 +116,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
      (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
      map points each public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
-- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-elements)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `selected?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `pi pi-chevron-left`; `next` renders `pi pi-chevron-right`; `more` renders `pi pi-ellipsis-h`; only `number` renders the default slot — the three glyph kinds are icon-only and take their accessible name from `aria-label`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `selected` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
+- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-elements)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `selected?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `pi pi-chevron-left`; `next` renders `pi pi-chevron-right`; `more` renders `pi pi-ellipsis-h`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `selected` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
 - `pagination-info/pagination-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
 - `pagination-page-size/pagination-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-elements)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `pi pi-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Pagination `controls` slot.
 
@@ -170,7 +170,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 - `hover` and `active` are mutually exclusive: pressing a button drops the hover layer and shows the `var(--bg-active)` layer alone, so the pressed surface reads one step below hover.
 - `data-selected` on PaginationButton mirrors the current-page `selected` prop; `aria-current="page"` set when selected.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
-- Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive.
+- Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
 
 ## Motion & Animations
 
@@ -209,8 +209,8 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every pagination button.
-- Keyboard map: `Tab` moves across buttons and the rows-per-page selector; `Enter`/`Space` activates a button; disabled buttons are skipped.
-- ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs are `aria-hidden`.
+- Keyboard map: `Tab` moves across buttons and the rows-per-page selector; `Enter`/`Space` activates a button; disabled buttons and the overflow ellipsis are skipped.
+- ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs and the overflow ellipsis are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: each button is 28×28, a justified deviation from 44×44 — the design is a compact segmented strip sized to sit inside a table footer, and the buttons are butted with no gap, so there is no room to pad the hit area without breaking the strip.

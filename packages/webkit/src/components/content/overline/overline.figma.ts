@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/overline/overline.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/overline/overline.vue
 // component=Overline
 import figma from 'figma'
 

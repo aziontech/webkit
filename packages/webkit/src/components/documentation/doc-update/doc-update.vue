@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useHeadingNav } from '../../../composables/use-heading-nav/index'
-  import Tag from '../../tag/tag.vue'
+  import Tag from '../../content/tag/tag.vue'
   import { slugify } from './slugify'
 
   /**

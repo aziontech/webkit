@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
-  import Avatar from '../../../avatar/avatar.vue'
   import StatusIndicator, {
     type StatusIndicatorSeverity
   } from '../../../feedback/status-indicator/status-indicator.vue'
   import Input from '../../../inputs/input/input.vue'
+  import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,

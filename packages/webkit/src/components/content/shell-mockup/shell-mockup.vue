@@ -5,11 +5,11 @@
   import Button from '../../actions/button/button.vue'
   import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import Avatar from '../../avatar/avatar.vue'
   import TextureMaterial, {
     type TextureMaterialFade,
     type TextureMaterialKind
   } from '../../marketing/texture-material/texture-material.vue'
+  import Avatar from '../avatar/avatar.vue'
   import Brand from '../brand/brand.vue'
   import Kbd from '../kbd/kbd.vue'
   import { SHELL_MOCKUP_KEY } from './injection-key'

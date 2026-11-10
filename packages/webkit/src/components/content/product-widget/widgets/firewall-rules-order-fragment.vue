@@ -3,10 +3,10 @@
 
   import Button from '../../../actions/button/button.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
-  import Tag from '../../../tag/tag.vue'
   import Badge from '../../badge/badge.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
 

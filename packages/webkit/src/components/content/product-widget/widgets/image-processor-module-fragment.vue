@@ -2,9 +2,9 @@
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import Button from '../../../actions/button/button.vue'
-  import Tag from '../../../tag/tag.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import LegacySwitch from '../parts/legacy-switch.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'

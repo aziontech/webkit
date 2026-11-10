@@ -6,9 +6,9 @@
   import LogView from '../../../code/log-view/log-view.vue'
   import LogViewContent from '../../../code/log-view/log-view-content.vue'
   import Progress from '../../../feedback/progress/progress.vue'
-  import Tag from '../../../tag/tag.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import Accordion from '../../accordion/index'
+  import Tag from '../../tag/tag.vue'
   import {
     DEFAULT_DEPLOYMENT_STEPS,
     type DeploymentLogTuple,

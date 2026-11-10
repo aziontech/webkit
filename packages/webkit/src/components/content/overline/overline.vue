@@ -33,11 +33,12 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex items-center gap-1 relative w-fit pl-1"
-    :class="!showCursor ? 'pr-1' : 'pr-0'"
+    class="flex items-center gap-(--spacing-xxs) relative w-fit pl-(--spacing-xxs)"
+    :class="!showCursor ? 'pr-(--spacing-xxs)' : 'pr-0'"
   >
     <span
       v-if="prefix"
+      aria-hidden="true"
       class="text-default font-medium text-overline-md"
       :class="{ 'whitespace-nowrap': singleLine }"
     >

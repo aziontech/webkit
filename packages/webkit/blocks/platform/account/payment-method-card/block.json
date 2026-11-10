@@ -3,7 +3,7 @@
   "name": "PaymentMethodCard",
   "title": "Templates/Platform/Account/PaymentMethodCard",
   "surface": "product",
-  "summary": "The Payment Method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `FieldText`, `FieldSelect`, `Alert` and `Button`; the Visa plate is an inline card-brand mark, since webkit ships no card-brand asset.",
+  "summary": "The Payment Method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `FieldText`, `FieldSelect`, `Alert` and `Button`; the Visa plate is an inline monochrome card-brand mark drawn in theme tokens (`--bg-surface`, `--border-default`, `--text-default`), since webkit ships no card-brand asset.",
   "preview": {
     "layout": "padded",
     "background": "dark"

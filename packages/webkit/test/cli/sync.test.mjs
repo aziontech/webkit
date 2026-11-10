@@ -27,7 +27,7 @@ function makeTemplatesDir(overrides = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'webkit-templates-'))
   mkdirSync(join(dir, 'rules'), { recursive: true })
   mkdirSync(join(dir, 'skills/webkit-sample'), { recursive: true })
-  mkdirSync(join(dir, 'agents'), { recursive: true })
+  mkdirSync(join(dir, 'adapters/claude/agents'), { recursive: true })
   writeFileSync(
     join(dir, 'rules/webkit-imports.md'),
     overrides.rule ?? '# Rule: imports\n\nUse the flat path.\n'
@@ -38,7 +38,7 @@ function makeTemplatesDir(overrides = {}) {
       '---\nname: webkit-sample\ndescription: A sample skill.\n---\n\n# Skill: webkit-sample\nBody.\n'
   )
   writeFileSync(
-    join(dir, 'CLAUDE.fragment.md'),
+    join(dir, 'adapters/AGENTS.fragment.md'),
     overrides.fragment ?? '## @aziontech/webkit design system\n\nFollow the rules.\n'
   )
   return dir
@@ -260,7 +260,7 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
 
     // stale — the fragment template changed upstream.
     writeFileSync(
-      join(templatesDir, 'CLAUDE.fragment.md'),
+      join(templatesDir, 'adapters/AGENTS.fragment.md'),
       '## @aziontech/webkit design system\n\nFollow the rules, updated.\n'
     )
     plan = planSync(project, { templatesDir, version: VERSION })

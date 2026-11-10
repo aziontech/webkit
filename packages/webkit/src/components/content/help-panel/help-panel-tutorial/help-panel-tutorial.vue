@@ -2,7 +2,7 @@
   import { computed, provide, ref, useAttrs, useId, useSlots } from 'vue'
 
   import { hasRenderedContent } from '../../../../utils/rendered-content'
-  import Tag from '../../../tag/tag.vue'
+  import Tag from '../../tag/tag.vue'
   import type { HelpPanelTaskHandle, HelpPanelTaskStatus } from '../injection-key'
   import { HelpPanelTutorialInjectionKey } from '../injection-key'
 

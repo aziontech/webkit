@@ -1,8 +1,8 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import Default from '../../../examples/tag/default.vue'
-import { expectNoA11yViolations } from '../../test/axe'
+import Default from '../../../../examples/tag/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Tag from './tag.vue'
 
 const SEVERITIES = [

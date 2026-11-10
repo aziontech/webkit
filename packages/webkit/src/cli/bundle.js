@@ -6,30 +6,20 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const PACKAGE_ROOT = join(__dirname, '../..')
 const REPO_ROOT = join(PACKAGE_ROOT, '../..')
-const LEGACY_TEMPLATES = join(PACKAGE_ROOT, 'cli-templates/claude')
-
 function resolveTemplatesRoot() {
-  for (const candidate of [PACKAGE_ROOT, REPO_ROOT]) {
-    if (existsSync(join(candidate, 'skills')) && existsSync(join(candidate, 'rules'))) {
-      return candidate
-    }
-  }
-  return LEGACY_TEMPLATES
+  return existsSync(join(PACKAGE_ROOT, 'skills')) && existsSync(join(PACKAGE_ROOT, 'rules'))
+    ? PACKAGE_ROOT
+    : REPO_ROOT
 }
 
 export const AI_TEMPLATES = resolveTemplatesRoot()
 export const CLAUDE_TEMPLATES = AI_TEMPLATES
 
 export function agentsDir(templatesDir = AI_TEMPLATES) {
-  const adapter = join(templatesDir, 'adapters/claude/agents')
-  return existsSync(adapter) ? adapter : join(templatesDir, 'agents')
+  return join(templatesDir, 'adapters/claude/agents')
 }
 
 export function fragmentFile(templatesDir = AI_TEMPLATES) {
-  for (const rel of ['adapters/AGENTS.fragment.md', 'AGENTS.fragment.md', 'CLAUDE.fragment.md']) {
-    const abs = join(templatesDir, rel)
-    if (existsSync(abs)) return abs
-  }
   return join(templatesDir, 'adapters/AGENTS.fragment.md')
 }
 

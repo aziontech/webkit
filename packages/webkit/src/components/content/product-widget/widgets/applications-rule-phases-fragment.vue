@@ -4,10 +4,10 @@
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Table from '../../../data/table/index'
   import Input from '../../../inputs/input/input.vue'
-  import Tag from '../../../tag/tag.vue'
   import Accordion from '../../accordion/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
 

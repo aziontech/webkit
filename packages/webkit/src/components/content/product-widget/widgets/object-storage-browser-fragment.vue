@@ -2,10 +2,10 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import SplitButton from '../../../actions/split-button/split-button.vue'
-  import Avatar from '../../../avatar/avatar.vue'
   import TableRoot from '../../../data/table/table.vue'
   import Input from '../../../inputs/input/input.vue'
   import Breadcrumb from '../../../navigation/breadcrumb/breadcrumb.vue'
+  import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'

@@ -1,8 +1,8 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import Default from '../../../examples/avatar/default.vue'
-import { expectNoA11yViolations } from '../../test/axe'
+import Default from '../../../../examples/avatar/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Avatar from './avatar.vue'
 
 const KINDS = ['circle', 'square'] as const

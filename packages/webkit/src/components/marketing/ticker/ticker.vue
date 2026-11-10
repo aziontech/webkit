@@ -11,7 +11,7 @@
   } from 'vue'
 
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
-  import Overline from '../../overline/overline.vue'
+  import Overline from '../../content/overline/overline.vue'
 
   defineOptions({ name: 'Ticker', inheritAttrs: false })
 

@@ -2,12 +2,12 @@
   import { onMounted, onScopeDispose, ref } from 'vue'
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import Tag from '../../../tag/tag.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadTopologyChainWidget' })
 

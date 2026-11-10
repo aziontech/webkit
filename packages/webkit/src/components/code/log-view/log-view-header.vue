@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import InputText from '../../inputs/input-text/input-text.vue'
-  import Tag from '../../tag/tag.vue'
+  import Tag from '../../content/tag/tag.vue'
+  import Input from '../../inputs/input/input.vue'
   import { useLogViewContext } from './composables/use-log-view-context'
 
   defineOptions({
@@ -76,7 +76,7 @@
     >
       <slot name="right">
         <slot name="search">
-          <InputText
+          <Input
             size="small"
             :model-value="ctx.search.value"
             :placeholder="ctx.searchPlaceholder.value"
@@ -91,7 +91,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
         </slot>
       </slot>
     </div>

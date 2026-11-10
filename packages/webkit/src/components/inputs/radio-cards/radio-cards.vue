@@ -42,9 +42,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-radio-cards'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-radio-cards')
 
   const focusedIndex = ref(0)
 

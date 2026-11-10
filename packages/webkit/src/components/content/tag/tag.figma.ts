@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/tag/tag.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/tag/tag.vue
 // component=Tag
 import figma from 'figma'
 

@@ -114,15 +114,17 @@ describe('Pagination (composition)', () => {
       expect(getByRole('button', { name: '1' }).getAttribute('aria-current')).toBeNull()
     })
 
-    it('renders an overflow "more" button when the page count exceeds the window', () => {
-      // total 200 / pageSize 10 -> 20 pages, siblingCount 1 -> windowed with ellipsis.
-      const { getAllByRole, getByRole } = render(Pagination, {
+    it('renders an inert overflow ellipsis when the page count exceeds the window', () => {
+      const { container, getAllByRole, getByRole } = render(Pagination, {
         props: { total: 200, pageSize: 10, page: 1, siblingCount: 1 }
       })
-      const moreButtons = getAllByRole('button').filter(
-        (b) => b.getAttribute('data-kind') === 'more'
-      )
-      expect(moreButtons.length).toBeGreaterThanOrEqual(1)
+      const ellipses = container.querySelectorAll('[data-kind="more"]')
+      expect(ellipses.length).toBeGreaterThanOrEqual(1)
+      ellipses.forEach((el) => {
+        expect(el.tagName).toBe('SPAN')
+        expect(el.getAttribute('aria-hidden')).toBe('true')
+      })
+      expect(getAllByRole('button').some((b) => b.getAttribute('data-kind') === 'more')).toBe(false)
       expect(getByRole('button', { name: '20' })).toBeTruthy()
     })
   })
@@ -246,14 +248,28 @@ describe('Pagination (composition)', () => {
     })
 
     it('kind="more" hides the default slot content', () => {
-      const { getByRole } = render(PaginationButton, {
+      const { getByTestId } = render(PaginationButton, {
         props: { kind: 'more' },
         slots: { default: 'SHOULD-NOT-SHOW' }
       })
-      expect(getByRole('button').textContent).not.toContain('SHOULD-NOT-SHOW')
+      expect(getByTestId('data-pagination__button').textContent).not.toContain('SHOULD-NOT-SHOW')
     })
 
-    it.each(['previous', 'next', 'number', 'more'] as const)(
+    it('kind="more" is an inert decorative span: hidden, unfocusable, never emits click', async () => {
+      const { getByTestId, queryByRole, emitted } = render(PaginationButton, {
+        props: { kind: 'more' }
+      })
+      const ellipsis = getByTestId('data-pagination__button')
+      expect(ellipsis.tagName).toBe('SPAN')
+      expect(ellipsis.getAttribute('aria-hidden')).toBe('true')
+      expect(ellipsis.hasAttribute('tabindex')).toBe(false)
+      expect(ellipsis.hasAttribute('type')).toBe(false)
+      expect(queryByRole('button')).toBeNull()
+      await fireEvent.click(ellipsis)
+      expect(emitted().click).toBeUndefined()
+    })
+
+    it.each(['previous', 'next', 'number'] as const)(
       'renders each kind and reflects it on data-kind (%s)',
       (kind) => {
         const { getByRole } = render(PaginationButton, { props: { kind }, slots: { default: 'x' } })
@@ -345,11 +361,17 @@ describe('Pagination (composition)', () => {
 
   describe('a11y (axe against styled DOM)', () => {
     it('data-driven pagination (no overflow ellipsis) has no violations', async () => {
-      // 3 pages -> no "more" button; a windowed config trips axe button-name on the
-      // unnamed ellipsis button (known component gap).
       const { container } = render(Pagination, {
         props: { total: 30, pageSize: 10, page: 2, ariaLabel: 'Results pages' }
       })
+      await expectNoA11yViolations(container)
+    })
+
+    it('windowed data-driven pagination with overflow ellipses has no violations', async () => {
+      const { container } = render(Pagination, {
+        props: { total: 200, pageSize: 10, page: 10, ariaLabel: 'Results pages' }
+      })
+      expect(container.querySelectorAll('[data-kind="more"]')).toHaveLength(2)
       await expectNoA11yViolations(container)
     })
 

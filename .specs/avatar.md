@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 636c595544b23c2314b17167817745d9cf60a2e93271d55701b74edf0391a0fd
+checksum: 5ba30b86965191c4ec3a167c2fb10f73535ab6ee7d95b077a41b12e9285762fc
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-11-09
 
 ## Purpose
 
-Displays content or metadata in the UI. Lives at `packages/webkit/src/components/avatar/`.
+Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/avatar/`.
 
 ## When to use
 

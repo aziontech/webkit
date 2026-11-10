@@ -10,7 +10,7 @@
   } from 'vue'
 
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Tag from '../../../tag/tag.vue'
+  import Tag from '../../tag/tag.vue'
   import { typeInto, useSceneScript } from '../composables/use-scene-script'
   import {
     AGENT_CLIENTS,
