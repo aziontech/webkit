@@ -3,7 +3,7 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: 8eb52eb3b0f7857a165aceb2392457d06331dc5f6cdd0615eef5b62172c3613c
+checksum: 93cc75f6019159edf752dc172b413edf10f3bcdbdd0497da355528841fdd6ad0
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

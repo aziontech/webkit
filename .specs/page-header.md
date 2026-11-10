@@ -3,7 +3,7 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: c9ab680ed8704ff0f3058e0ed2f3c1398606dee62e3e76f10244cd37b87df0dc
+checksum: b2b2ea4fa07cf3633ffb849fd200f52b8a0ab2399a1ed58f5517ae9df8ba8e04
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

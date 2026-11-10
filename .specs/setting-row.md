@@ -3,7 +3,7 @@ name: setting-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: 5cf9acf8b661d3f9ecf32eb2dea1a4d767f59b6c21276be71fa4330c4fd78046
+checksum: b285a2f11c07433956f09360aee7203cbc5464ba7ec55d43d6b70c33dcfe9770
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

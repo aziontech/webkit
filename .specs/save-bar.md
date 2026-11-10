@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 92c278aa5567edd5e1f9fe68e40657500b8f714ddf11c52139f5acb8580f639e
+checksum: 2f638cada7bac24de17e4c073ec876b26a5810575cadb0cb5d2f95300b09dd5b
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

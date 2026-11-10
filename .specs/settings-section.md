@@ -3,7 +3,7 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: c75e21a4dbc675b1f07a61789ac71588220f6983dc681e3c8b1a1073688d2b83
+checksum: cdfd58e26280fcff96ab1ba7b62e88a7df808733854ba4436a0cc23f61a6dce1
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

@@ -3,7 +3,7 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 378389afe3b71bd22912efaacb39b33eda01d57dbbd6abecceed57e4d350e98e
+checksum: d095c1d8067612be7ae3db29fe0eec728553a774aa43d1bbaaeeff485520251f
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10

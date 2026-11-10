@@ -3,7 +3,7 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 9fe27a9bf5adf7db1239b12de3f9b430b608477af5fcf52aef0f9248c366d5f7
+checksum: 38a9292780a4443b21b744d1c1cb4ec8875106a2a29d9ccaea11caff9753ff77
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
