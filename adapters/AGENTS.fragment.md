@@ -28,7 +28,7 @@ not cover. A marketing band is a page section: `suggest_component` returns it (r
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`) or `node_modules/@aziontech/webkit/catalog.json`.
 - **Flat imports.** `import Button from '@aziontech/webkit/button'` (PascalCase binding = the subpath);
-  page sections are `@aziontech/webkit/sections/<name>`. Never category-prefixed, `/src/`,
+  page sections too (`@aziontech/webkit/pricing-plans`). Never category-prefixed, `/src/`,
   deep-internal, or a bare-package barrel.
 - **Tokens only.** Color, typography, shape, spacing come from `@aziontech/theme`
   (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`) — never hex, `rgb`, `hsl`, or Tailwind palette.

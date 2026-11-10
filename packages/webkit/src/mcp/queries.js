@@ -741,10 +741,13 @@ function sectionSuggestion(catalog, need) {
   const q = normalize(need)
   const words = q.split(' ').filter((w) => w.length >= 3 && !SCREEN_WORDS.includes(w))
   const ranked = catalog.subpaths
-    .filter((sub) => sub.startsWith('sections/') && catalog.getEntry(sub)?.kind === 'component')
+    .filter((sub) => {
+      const e = catalog.getEntry(sub)
+      return e?.kind === 'component' && e.category === 'sections'
+    })
     .map((sub) => {
       const e = catalog.getEntry(sub)
-      const name = normalize(sub.replace(/^sections\//, ''))
+      const name = normalize(sub)
       const prose = normalize([e.purpose || '', ...(e.useWhen || [])].join(' '))
       let score = 0
       for (const w of words) {
@@ -778,7 +781,7 @@ export function suggestComponent(catalog, need) {
           .slice(0, 3)
           .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score })),
         found: true,
-        hint: 'A marketing band is a page section: import it from its sections/ subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+        hint: 'A marketing band is a page section: import it from its flat subpath (@aziontech/webkit/<name>, the site JSON _id), bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
       }
     }
   }

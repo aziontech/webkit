@@ -1,7 +1,8 @@
 # Rule: marketing page sections
 
 A marketing band (hero, features, pricing, FAQ, newsletter, footer) is a **page section**: a
-complete webkit component published at `@aziontech/webkit/sections/<name>`. The site places it from
+complete webkit component published at `@aziontech/webkit/<name>`, where `<name>` is the section's `_id` in
+the site JSON. The site places it from
 JSON. Never rebuild a band from primitives when a section exists.
 
 ## Do
@@ -9,8 +10,8 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Find the section with the webkit MCP: `suggest_component` with the band's purpose ("pricing page",
   "newsletter sign-up") returns it with `recommendation: "section"`; `list_components` with category
   `sections` lists all of them.
-- Import it from its section path and name the binding after the last segment:
-  `import PricingPlans from '@aziontech/webkit/sections/pricing-plans'`.
+- Import it from its flat path and name the binding after it:
+  `import PricingPlans from '@aziontech/webkit/pricing-plans'`.
 - Pass the site JSON entry's props as the whole API: `<PricingPlans v-bind="section.props" />`. The
   `_id` in the JSON is the section's name.
 - Place sections inside the page column: `SectionContainer` (`max-width="site"`) with a
@@ -21,8 +22,8 @@ JSON. Never rebuild a band from primitives when a section exists.
 
 ## Do not
 
-- Do not import a section from a single-segment path (`@aziontech/webkit/pricing-plans`) or from
-  `/src/`. Sections are the one family with a two-segment path: `sections/<name>`.
+- Do not import a section from `/src/` or with a category prefix (`@aziontech/webkit/sections/pricing-plans`
+  no longer exists).
 - Do not pass slots or extra props a section does not declare. If the JSON needs a new field, the
   section changes in webkit first.
 - Do not wrap a section in your own `max-w-*`, padding or border to change its look. Spacing between
@@ -35,8 +36,8 @@ JSON. Never rebuild a band from primitives when a section exists.
 <script setup>
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import PricingPlans from '@aziontech/webkit/sections/pricing-plans'
-  import ClosingCallToActionNewsletter from '@aziontech/webkit/sections/closing-call-to-action-newsletter'
+  import PricingPlans from '@aziontech/webkit/pricing-plans'
+  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
 
   defineProps({ page: { type: Object, required: true } })
   const subscribe = async (event, values) => {

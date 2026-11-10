@@ -314,7 +314,7 @@ test('suggestComponent returns the pattern first for a screen and the section fo
   assert.equal(screen.pattern.id, 'platform/auth/sign-in')
   const band = suggestComponent(catalog, 'pricing page')
   assert.equal(band.recommendation, 'section')
-  assert.equal(band.best.name, 'sections/pricing-plans')
+  assert.equal(band.best.name, 'pricing-plans')
   assert.equal(suggestComponent(catalog, 'button').recommendation, 'component')
 })
 

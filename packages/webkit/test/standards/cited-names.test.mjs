@@ -6,13 +6,13 @@ import { citedSubpaths, unknownCitations } from '../../scripts/check-cited-names
 test('citedSubpaths reads real citations and skips negative examples, globs and file paths', () => {
   const text = [
     "import Button from '@aziontech/webkit/button'",
-    'Use `@aziontech/webkit/sections/pricing-plans` for the band.',
+    'Use `@aziontech/webkit/pricing-plans` for the band.',
     'There is no `@aziontech/webkit/app-layout`.',
     'Never `@aziontech/webkit/feedback/skeleton`.',
     'The `@aziontech/webkit/field-*` family.',
     'Read node_modules/@aziontech/webkit/skills/webkit-form/SKILL.md.'
   ].join('\n')
-  assert.deepEqual(citedSubpaths(text), ['button', 'sections/pricing-plans'])
+  assert.deepEqual(citedSubpaths(text), ['button', 'pricing-plans'])
 })
 
 test('unknownCitations reports a cited export missing from the catalog', () => {

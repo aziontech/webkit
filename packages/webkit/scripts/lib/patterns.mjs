@@ -178,7 +178,6 @@ export function componentSubpathForTitle(title, knownSubpaths) {
       .pop() || ''
   )
   if (knownSubpaths.has(last)) return last
-  if (knownSubpaths.has(`sections/${last}`)) return `sections/${last}`
   return null
 }
 
