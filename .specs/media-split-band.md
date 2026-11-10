@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 1ee450a85c53c09abcd51d00468917336252a382e677899d3e3df0f19d3c4c6f
+checksum: cc6dcef50d272a610e449d8a0a1f6e91b2a878539211884fe3171f358764a606
 ---
 # MediaSplitBand — Component Spec
 
@@ -38,7 +38,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ```vue
 <script setup>
-import MediaSplitBand from '@aziontech/webkit/sections/media-split-band'
+import MediaSplitBand from '@aziontech/webkit/media-split-band'
 </script>
 
 <template>

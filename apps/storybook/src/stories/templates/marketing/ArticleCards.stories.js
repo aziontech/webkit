@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ArticleCards from '@aziontech/webkit/sections/article-cards'
+import ArticleCards from '@aziontech/webkit/article-cards'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -13,7 +13,7 @@ import {
   SUCCESS_CASES_SECTION
 } from './_sections/article-cards'
 
-const IMPORT = "import ArticleCards from '@aziontech/webkit/sections/article-cards'"
+const IMPORT = "import ArticleCards from '@aziontech/webkit/article-cards'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('ArticleCards', section.props)
