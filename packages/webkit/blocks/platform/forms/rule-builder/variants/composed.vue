@@ -1,7 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -9,8 +8,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -19,8 +17,10 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
+  import Separator from '@aziontech/webkit/separator'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
@@ -631,26 +631,33 @@
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
                       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                        <FieldText
-                          v-model="form.name"
-                          label="Name"
-                          input-id="rule-name"
-                          size="large"
-                          placeholder="My rule"
+                        <Field
                           :disabled="submitting"
-                          :helper-text="nameError ? 'Name is required.' : ''"
                           :required="nameError"
-                        />
+                        >
+                          <Field.Label for="rule-name">Name</Field.Label>
+                          <Input
+                            id="rule-name"
+                            v-model="form.name"
+                            size="large"
+                            placeholder="My rule"
+                          />
+                          <Field.Description v-if="nameError">Name is required.</Field.Description>
+                        </Field>
 
-                        <FieldText
-                          v-model="form.description"
-                          label="Description"
-                          input-id="rule-description"
-                          size="large"
-                          placeholder="Optional"
-                          :disabled="submitting"
-                          helper-text="For whoever reads this rule next. It never affects what the rule does."
-                        />
+                        <Field :disabled="submitting">
+                          <Field.Label for="rule-description">Description</Field.Label>
+                          <Input
+                            id="rule-description"
+                            v-model="form.description"
+                            size="large"
+                            placeholder="Optional"
+                          />
+                          <Field.Description
+                            >For whoever reads this rule next. It never affects what the rule
+                            does.</Field.Description
+                          >
+                        </Field>
                       </div>
                     </div>
                   </div>
@@ -690,17 +697,26 @@
                         <template #content>
                           <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                             <div class="flex flex-col gap-(--spacing-xs)">
-                              <FieldRadioBlock
+                              <Field.Label
                                 v-for="phase in PHASES"
                                 :key="phase.value"
-                                v-model="form.phase"
-                                :value="phase.value"
-                                name="rule-phase"
-                                :input-id="`rule-phase-${phase.value}`"
-                                :label="phase.label"
-                                :description="phase.description"
-                                :disabled="submitting || editing"
-                              />
+                              >
+                                <Field
+                                  orientation="horizontal"
+                                  :disabled="submitting || editing"
+                                >
+                                  <RadioButton
+                                    v-model="form.phase"
+                                    :value="phase.value"
+                                    name="rule-phase"
+                                    :input-id="`rule-phase-${phase.value}`"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>{{ phase.label }}</Field.Title>
+                                    <Field.Description>{{ phase.description }}</Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
                               <HelperText
                                 v-if="editing"
                                 kind="disabled"

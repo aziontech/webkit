@@ -11,7 +11,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -28,6 +28,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
+  import Textarea from '@aziontech/webkit/textarea'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
@@ -1556,12 +1557,16 @@
                           v-if="editing"
                           class="flex flex-col gap-(--spacing-sm) pt-(--spacing-xs)"
                         >
-                          <FieldTextarea
-                            v-model="draftText"
-                            label="Description"
-                            placeholder="What changed in this version?"
-                            helper-text="Shows in the version list and on the deployment."
-                          />
+                          <Field>
+                            <Field.Label>Description</Field.Label>
+                            <Textarea
+                              v-model="draftText"
+                              placeholder="What changed in this version?"
+                            />
+                            <Field.Description
+                              >Shows in the version list and on the deployment.</Field.Description
+                            >
+                          </Field>
                           <div class="flex justify-end gap-(--spacing-xs)">
                             <Button
                               label="Cancel"

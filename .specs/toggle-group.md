@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 334a9ef1fd6200d6c7dc4643c1fd71a93459c4b8768c5b45b63cf5946a697cf1
+checksum: 940250d53bfaf2fc6bc2f335ad797c9bc8d7263e66a52eb8dc41560c7e9a5d52
 created: 2026-11-09
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # ToggleGroup — Component Spec
@@ -27,16 +27,15 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 ## When NOT to use
 
 - The choice switches between content panels that belong to the control → use `tabs`.
-- The choice is a form field with a label, helper text or validation → use `field-radio`, or `field-radio-block` when each option needs a description.
-- The value is a binary on/off setting → use `switch` (or `field-switch` inside a form).
-- The user can pick more than one option → use `checkbox` (or `field-checkbox`).
+- The choice is a form field with a label, helper text or validation → use horizontal `field`s with a `radio-button`, or `Field.Label` choice cards when each option needs a description.
+- The value is a binary on/off setting → use `switch` (in a horizontal `field` inside a form).
+- The user can pick more than one option → use `checkbox` (in a horizontal `field`).
 - The control triggers an action instead of holding a value → use `button` or `split-button`.
 
 ## Related
 
 - `tabs` — tabs that own their panels; reach for it when each option reveals its own content region.
-- `field-radio` — the form-field single choice with label and helper text; use it inside forms.
-- `field-radio-block` — single choice where each option carries a title and description.
+- `field` — a horizontal `Field` with a `radio-button` is the form-field single choice with label and description; a `Field.Label` choice card when each option carries a title and description.
 - `switch` — a single boolean toggle.
 - `button` — a lone action; the segments here hold a value instead of firing one.
 

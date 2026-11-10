@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 0c87822141f8ed304e3fa73a1ddc3a9c1275c2cf9deaa0b72aa2cb4e314fccb9
+checksum: 29923df879c0b5ce82ff682616ea0cf482aaec28ef039fd65df340b86a3eb3b7
 created: 2026-06-16
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Input Password — Component Spec
@@ -18,7 +18,7 @@ last_updated: 2026-11-09
 
 Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `Input` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer.
 
-Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mapping was originally inferred from the `input` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside `FieldPassword` (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `Input`'s borders and `Input` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
+Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mapping was originally inferred from the `input` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside the password field frame (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `Input`'s borders and `Input` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
 
 ## When to use
 
@@ -27,14 +27,15 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 
 ## When NOT to use
 
-- A password field with a label, helper or error text, or a requirements row → use `field-password`.
+- A password field with a label, helper or error text, or a requirements row → wrap it in a `field` (with `password-requirements` for the rules row).
 - The value is not secret → use `input`.
 
 ## Related
 
-- `field-password` — wraps this input with label, helper text, and the password-requirements chips.
+- `field` — wraps this input with its label and description; it hands the input its id, `aria-describedby` and state.
+- `password-requirements` — the live checklist of password rules rendered under this input.
 - `input` — plain-text field with the same borders, focus ring, and disabled treatment.
-- `field-text` — labelled plain-text field.
+- `input` — plain single-line text input.
 
 ## Best practices
 

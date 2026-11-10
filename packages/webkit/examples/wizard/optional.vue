@@ -1,8 +1,9 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import Switch from '@aziontech/webkit/switch'
   import Wizard from '@aziontech/webkit/wizard'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldSwitch from '@aziontech/webkit/field-switch'
   import { ref } from 'vue'
 
   const step = ref(0)
@@ -30,16 +31,26 @@
       description="Name the resource and choose where it runs."
     >
       <div class="flex flex-col gap-(--spacing-md)">
-        <FieldText
-          v-model="name"
-          label="Name"
-          required
-        />
-        <FieldSelect
-          v-model="region"
-          label="Region"
-          :options="regions"
-        />
+        <Field required>
+          <Field.Label> Name </Field.Label>
+          <Input v-model="name" />
+        </Field>
+        <Field>
+          <Field.Label> Region </Field.Label>
+          <Select v-model="region">
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in regions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
       </div>
     </Wizard.Step>
     <Wizard.Step
@@ -47,11 +58,15 @@
       description="Fine-tune the defaults, or skip to keep them."
       optional
     >
-      <FieldSwitch
-        v-model="logging"
-        label="Enable logging"
-        description="Keep a record of every request this resource handles."
-      />
+      <Field orientation="horizontal">
+        <Switch v-model="logging" />
+        <Field.Content>
+          <Field.Label> Enable logging </Field.Label>
+          <Field.Description>
+            Keep a record of every request this resource handles.
+          </Field.Description>
+        </Field.Content>
+      </Field>
     </Wizard.Step>
     <Wizard.Step
       title="Review"

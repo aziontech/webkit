@@ -2,17 +2,18 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
-  import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Stepper from '@aziontech/webkit/stepper'
+  import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref } from 'vue'
@@ -460,15 +461,21 @@
                         "
                       />
 
-                      <FieldSwitchBlock
-                        v-model="enableModule"
-                        label="Turn on IP filtering"
-                        :description="
-                          'Sets modules.ip_filtering on the policy ' +
-                          choice +
-                          ' when this access list is created.'
-                        "
-                      />
+                      <Field.Label>
+                        <Field orientation="horizontal">
+                          <Switch v-model="enableModule" />
+                          <Field.Content>
+                            <Field.Title> Turn on IP filtering </Field.Title>
+                            <Field.Description>
+                              {{
+                                'Sets modules.ip_filtering on the policy ' +
+                                choice +
+                                ' when this access list is created.'
+                              }}
+                            </Field.Description>
+                          </Field.Content>
+                        </Field>
+                      </Field.Label>
 
                       <p class="text-body-sm text-(--text-muted)">
                         Leaving it off still creates the access list — it simply is not read until
@@ -545,15 +552,26 @@
                                     class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
                                   >
                                     <legend class="sr-only">Type</legend>
-                                    <FieldRadioBlock
+                                    <Field.Label
                                       v-for="option in types"
                                       :key="option.value"
-                                      v-model="form.type"
-                                      :value="option.value"
-                                      name="access-lists-type"
-                                      :label="option.label"
-                                      :description="option.description"
-                                    />
+                                    >
+                                      <Field orientation="horizontal">
+                                        <RadioButton
+                                          v-model="form.type"
+                                          :value="option.value"
+                                          name="access-lists-type"
+                                        />
+                                        <Field.Content>
+                                          <Field.Title>
+                                            {{ option.label }}
+                                          </Field.Title>
+                                          <Field.Description v-if="option.description">
+                                            {{ option.description }}
+                                          </Field.Description>
+                                        </Field.Content>
+                                      </Field>
+                                    </Field.Label>
                                   </fieldset>
                                 </div>
                               </Item.Actions>

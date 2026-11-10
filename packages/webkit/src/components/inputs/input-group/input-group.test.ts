@@ -81,7 +81,7 @@ describe('InputGroup', () => {
   })
 
   describe('required', () => {
-    it('sets data-required and aria-required="true" on the root', () => {
+    it('sets data-required but no aria-required on the group root', () => {
       const { getByTestId } = render(InputGroup, {
         props: { required: true },
         slots: { default: LABELLED_INPUT }
@@ -89,7 +89,7 @@ describe('InputGroup', () => {
 
       const root = getByTestId('input-group')
       expect(root.getAttribute('data-required')).toBe('true')
-      expect(root.getAttribute('aria-required')).toBe('true')
+      expect(root.getAttribute('aria-required')).toBeNull()
     })
 
     it('omits both attributes when required is false', () => {
@@ -220,9 +220,7 @@ describe('InputGroup', () => {
       await expectNoA11yViolations(container)
     })
 
-    // Component defect: aria-required is not an allowed ARIA attribute on
-    // role="group" (axe aria-allowed-attr) — input-group.vue:39 sets it on the root.
-    it.skip('has no violations in the required state', async () => {
+    it('has no violations in the required state', async () => {
       const { container } = render(InputGroup, {
         props: { required: true },
         slots: { default: LABELLED_INPUT }

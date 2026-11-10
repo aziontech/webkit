@@ -4,11 +4,14 @@
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Separator from '@aziontech/webkit/separator'
-  import FieldPassword from '@aziontech/webkit/field-password'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import Label from '@aziontech/webkit/label'
-  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+  import PasswordRequirements, {
+    DEFAULT_PASSWORD_REQUIREMENTS
+  } from '@aziontech/webkit/password-requirements'
   import IconButton from '@aziontech/webkit/icon-button'
   import Alert from '@aziontech/webkit/alert'
   import Tag from '@aziontech/webkit/tag'
@@ -279,17 +282,22 @@
                             label="Password"
                             required
                           />
-                          <FieldPassword
-                            v-model="password"
-                            input-id="login-password"
-                            name="password"
-                            autocomplete="current-password"
-                            placeholder="Type your password"
+                          <Field
                             :required="!!errors.password && !password"
                             :invalid="!!errors.password && !!password"
-                            :helper-text="errors.password"
-                            @update:model-value="errors.password = ''"
-                          />
+                          >
+                            <PasswordInput
+                              id="login-password"
+                              v-model="password"
+                              name="password"
+                              autocomplete="current-password"
+                              placeholder="Type your password"
+                              @update:model-value="errors.password = ''"
+                            />
+                            <Field.Description v-if="errors.password">{{
+                              errors.password
+                            }}</Field.Description>
+                          </Field>
 
                           <a
                             class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
@@ -360,18 +368,23 @@
                             label="New password"
                             required
                           />
-                          <FieldPassword
-                            v-model="newPassword"
-                            input-id="new-password"
-                            name="new-password"
-                            autocomplete="new-password"
-                            placeholder="Enter a new password"
-                            requirements
+                          <Field
                             :required="!!errors.newPassword && !newPassword"
                             :invalid="!!errors.newPassword && !!newPassword"
-                            :helper-text="errors.newPassword"
-                            @update:model-value="errors.newPassword = ''"
-                          />
+                          >
+                            <PasswordInput
+                              id="new-password"
+                              v-model="newPassword"
+                              name="new-password"
+                              autocomplete="new-password"
+                              placeholder="Enter a new password"
+                              @update:model-value="errors.newPassword = ''"
+                            />
+                            <Field.Description v-if="errors.newPassword">{{
+                              errors.newPassword
+                            }}</Field.Description>
+                            <PasswordRequirements :value="newPassword" />
+                          </Field>
                         </div>
 
                         <div class="flex flex-col gap-(--spacing-xs)">
@@ -380,17 +393,22 @@
                             label="Confirm password"
                             required
                           />
-                          <FieldPassword
-                            v-model="confirmPassword"
-                            input-id="confirm-password"
-                            name="confirm-password"
-                            autocomplete="new-password"
-                            placeholder="Repeat the new password"
+                          <Field
                             :required="!!errors.confirmPassword && !confirmPassword"
                             :invalid="!!errors.confirmPassword && !!confirmPassword"
-                            :helper-text="errors.confirmPassword"
-                            @update:model-value="errors.confirmPassword = ''"
-                          />
+                          >
+                            <PasswordInput
+                              id="confirm-password"
+                              v-model="confirmPassword"
+                              name="confirm-password"
+                              autocomplete="new-password"
+                              placeholder="Repeat the new password"
+                              @update:model-value="errors.confirmPassword = ''"
+                            />
+                            <Field.Description v-if="errors.confirmPassword">{{
+                              errors.confirmPassword
+                            }}</Field.Description>
+                          </Field>
                         </div>
                       </div>
 

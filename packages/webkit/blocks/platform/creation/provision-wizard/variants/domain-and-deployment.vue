@@ -2,23 +2,22 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import RadioCards from '@aziontech/webkit/radio-cards'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Label from '@aziontech/webkit/label'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Stepper from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, reactive, ref } from 'vue'
 
   const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
@@ -802,18 +801,18 @@
                               v-if="projectMode === 'new'"
                               class="pb-(--spacing-md)"
                             >
-                              <FieldText
-                                input-id="project-name"
-                                v-model="projectName"
-                                label="Name"
-                                size="large"
-                                placeholder="my-project"
-                                :required="!!projectPicker.message"
-                                :helper-text="
+                              <Field :required="!!projectPicker.message">
+                                <Field.Label>Name</Field.Label>
+                                <Input
+                                  v-model="projectName"
+                                  size="large"
+                                  placeholder="my-project"
+                                />
+                                <Field.Description>{{
                                   projectPicker.message ||
                                   'Lowercase letters, numbers, and hyphens.'
-                                "
-                              />
+                                }}</Field.Description>
+                              </Field>
                             </div>
                           </div>
 
@@ -996,20 +995,32 @@
                                           v-for="field in policy.fields"
                                           :key="field.name"
                                         >
-                                          <FieldText
-                                            :input-id="'cache-' + policy.value + '-' + field.name"
-                                            v-model="scratch.cache[policy.value].values[field.name]"
-                                            :label="field.label"
-                                            size="large"
-                                            :placeholder="field.placeholder"
+                                          <Field
                                             :required="
                                               !!errors['cache.' + policy.value + '.' + field.name]
                                             "
-                                            :helper-text="
-                                              errors['cache.' + policy.value + '.' + field.name] ||
-                                              field.description
-                                            "
-                                          />
+                                          >
+                                            <Field.Label>{{ field.label }}</Field.Label>
+                                            <Input
+                                              v-model="
+                                                scratch.cache[policy.value].values[field.name]
+                                              "
+                                              size="large"
+                                              :placeholder="field.placeholder"
+                                            />
+                                            <Field.Description
+                                              v-if="
+                                                errors[
+                                                  'cache.' + policy.value + '.' + field.name
+                                                ] || field.description
+                                              "
+                                              >{{
+                                                errors[
+                                                  'cache.' + policy.value + '.' + field.name
+                                                ] || field.description
+                                              }}</Field.Description
+                                            >
+                                          </Field>
                                         </template>
                                       </div>
                                     </div>
@@ -1122,18 +1133,23 @@
                                         {{ errors['origin.' + field.name] || field.description }}
                                       </HelperText>
                                     </div>
-                                    <FieldText
+                                    <Field
                                       v-else
-                                      :input-id="'origin-' + field.name"
-                                      v-model="scratch.origin.values[field.name]"
-                                      :label="field.label"
-                                      size="large"
-                                      :placeholder="field.placeholder"
                                       :required="!!errors['origin.' + field.name]"
-                                      :helper-text="
-                                        errors['origin.' + field.name] || field.description
-                                      "
-                                    />
+                                    >
+                                      <Field.Label>{{ field.label }}</Field.Label>
+                                      <Input
+                                        v-model="scratch.origin.values[field.name]"
+                                        size="large"
+                                        :placeholder="field.placeholder"
+                                      />
+                                      <Field.Description
+                                        v-if="errors['origin.' + field.name] || field.description"
+                                        >{{
+                                          errors['origin.' + field.name] || field.description
+                                        }}</Field.Description
+                                      >
+                                    </Field>
                                   </template>
                                 </div>
                               </div>
@@ -1193,55 +1209,57 @@
                                 aria-label="Where the domain comes from"
                               />
 
-                              <FieldText
+                              <Field
                                 v-if="form.domainType !== 'own'"
-                                input-id="domain-prefix"
-                                v-model="form.domainPrefix"
-                                label="Domain prefix"
-                                size="large"
-                                placeholder="my-first-app"
                                 :required="!!errors.domainPrefix"
-                                :helper-text="
-                                  errors.domainPrefix ||
-                                  'Lowercase letters, numbers and hyphens. Anything else is folded into a hyphen. It also names the service and its deployment.'
-                                "
                               >
-                                <template #iconRight>
-                                  <span
-                                    class="whitespace-nowrap text-label-sm text-(--text-muted)"
-                                    aria-hidden="true"
-                                  >
-                                    {{ platformDomainSuffix }}
-                                  </span>
-                                </template>
-                              </FieldText>
-
-                              <template v-else>
-                                <FieldText
-                                  input-id="domain-host"
-                                  v-model="form.domainHost"
-                                  label="Domain"
-                                  size="large"
-                                  placeholder="www.example.com"
-                                  :required="!!errors.domainHost"
-                                  :helper-text="
-                                    errors.domainHost ||
-                                    'A full hostname, like www.example.com. Add its DNS record once the service exists. The run does not wait on it.'
-                                  "
-                                />
-
-                                <FieldText
-                                  input-id="service-name"
-                                  v-model="form.name"
-                                  label="Name"
+                                <Field.Label>Domain prefix</Field.Label>
+                                <Input
+                                  v-model="form.domainPrefix"
                                   size="large"
                                   placeholder="my-first-app"
-                                  :required="!!errors.name"
-                                  :helper-text="
+                                >
+                                  <template #iconRight>
+                                    <span
+                                      class="whitespace-nowrap text-label-sm text-(--text-muted)"
+                                      aria-hidden="true"
+                                    >
+                                      {{ platformDomainSuffix }}
+                                    </span>
+                                  </template>
+                                </Input>
+                                <Field.Description>{{
+                                  errors.domainPrefix ||
+                                  'Lowercase letters, numbers and hyphens. Anything else is folded into a hyphen. It also names the service and its deployment.'
+                                }}</Field.Description>
+                              </Field>
+
+                              <template v-else>
+                                <Field :required="!!errors.domainHost">
+                                  <Field.Label>Domain</Field.Label>
+                                  <Input
+                                    v-model="form.domainHost"
+                                    size="large"
+                                    placeholder="www.example.com"
+                                  />
+                                  <Field.Description>{{
+                                    errors.domainHost ||
+                                    'A full hostname, like www.example.com. Add its DNS record once the service exists. The run does not wait on it.'
+                                  }}</Field.Description>
+                                </Field>
+
+                                <Field :required="!!errors.name">
+                                  <Field.Label>Name</Field.Label>
+                                  <Input
+                                    v-model="form.name"
+                                    size="large"
+                                    placeholder="my-first-app"
+                                  />
+                                  <Field.Description>{{
                                     errors.name ||
                                     'Lowercase letters, numbers and hyphens. It also names the deployment created for it.'
-                                  "
-                                />
+                                  }}</Field.Description>
+                                </Field>
                               </template>
                             </div>
 
@@ -1631,15 +1649,30 @@
                                     <div
                                       class="border-t border-(--border-default) p-(--spacing-md)"
                                     >
-                                      <FieldSelect
-                                        input-id="error-page"
-                                        v-model="form.errorPage"
-                                        label="Error page"
-                                        size="large"
-                                        :options="errorPages"
-                                        placeholder="Not bound"
-                                        helper-text="Optional. Without one, the service falls back to the default pages."
-                                      />
+                                      <Field>
+                                        <Field.Label>Error page</Field.Label>
+                                        <Select
+                                          v-model="form.errorPage"
+                                          size="large"
+                                          placeholder="Not bound"
+                                        >
+                                          <Select.Trigger />
+                                          <Select.Content>
+                                            <Select.Option
+                                              v-for="option in errorPages"
+                                              :key="String(option.value)"
+                                              :value="option.value"
+                                              :disabled="option.disabled"
+                                            >
+                                              {{ option.label }}
+                                            </Select.Option>
+                                          </Select.Content>
+                                        </Select>
+                                        <Field.Description
+                                          >Optional. Without one, the service falls back to the
+                                          default pages.</Field.Description
+                                        >
+                                      </Field>
                                     </div>
 
                                     <h3

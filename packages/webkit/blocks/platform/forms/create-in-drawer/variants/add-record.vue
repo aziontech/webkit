@@ -7,18 +7,19 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import InputGroup from '@aziontech/webkit/input-group'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import FieldInputGroup from '@aziontech/webkit/field-input-group'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import NumberInput from '@aziontech/webkit/number-input'
   import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
   import Select from '@aziontech/webkit/select'
+  import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref, watch } from 'vue'
 
   const recordTypes = [
@@ -184,20 +185,23 @@
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
                       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                        <FieldInputGroup
-                          v-model="form.name"
-                          label="Name"
-                          input-id="record-name"
-                          placeholder="subdomain"
+                        <Field
                           :disabled="submitting"
                           :required="!!errors.name"
-                          :helper-text="
-                            errors.name || 'Use @ to create a record for the root domain.'
-                          "
-                          @update:model-value="errors.name = ''"
                         >
-                          <template #right>.example.com</template>
-                        </FieldInputGroup>
+                          <Field.Label>Name</Field.Label>
+                          <InputGroup>
+                            <InputGroup.Input
+                              v-model="form.name"
+                              placeholder="subdomain"
+                              @update:model-value="errors.name = ''"
+                            />
+                            <InputGroup.Addon>.example.com</InputGroup.Addon>
+                          </InputGroup>
+                          <Field.Description>
+                            {{ errors.name || 'Use @ to create a record for the root domain.' }}
+                          </Field.Description>
+                        </Field>
 
                         <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
                           <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
@@ -258,26 +262,32 @@
                           >
                         </div>
 
-                        <FieldTextarea
-                          v-model="form.value"
-                          label="Value"
-                          input-id="record-value"
-                          :placeholder="selectedType.placeholder"
+                        <Field
                           :disabled="submitting"
                           :required="!!errors.value"
-                          :helper-text="errors.value || selectedType.valueHelper"
-                          @update:model-value="errors.value = ''"
-                        />
+                        >
+                          <Field.Label>Value</Field.Label>
+                          <Textarea
+                            v-model="form.value"
+                            :placeholder="selectedType.placeholder"
+                            @update:model-value="errors.value = ''"
+                          />
+                          <Field.Description v-if="errors.value || selectedType.valueHelper">
+                            {{ errors.value || selectedType.valueHelper }}
+                          </Field.Description>
+                        </Field>
 
-                        <FieldText
-                          v-model="form.description"
-                          label="Description"
-                          input-id="record-description"
-                          size="large"
-                          placeholder="Optional description"
-                          :disabled="submitting"
-                          helper-text="An optional note to help identify this record."
-                        />
+                        <Field :disabled="submitting">
+                          <Field.Label>Description</Field.Label>
+                          <Input
+                            v-model="form.description"
+                            size="large"
+                            placeholder="Optional description"
+                          />
+                          <Field.Description
+                            >An optional note to help identify this record.</Field.Description
+                          >
+                        </Field>
                       </div>
                     </div>
                   </div>

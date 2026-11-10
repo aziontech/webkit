@@ -4,10 +4,11 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 797ed122f1f6451d050b6018a4d9eeb08072edf7cceb9ec1f9af5aa0087786fa
+checksum: 4ae3f01403758223a462dea82f32e9ed1d63fa8d59c20c600b43f6c12ab76b03
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
+
 # Checkbox — Component Spec
 
 ## Purpose
@@ -22,15 +23,14 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 ## When NOT to use
 
-- A form field that needs its own label, description, or helper text → use `field-checkbox`.
-- Each option needs a bordered card with a label and description → use `field-checkbox-block`.
+- A form field that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation="horizontal"` + `Field.Content`).
+- Each option needs a bordered card with a label and description → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`).
 - An on/off setting that applies as soon as it flips → use `switch`.
 - Only one option of the set may be chosen → use `radio-button`.
 
 ## Related
 
-- `field-checkbox` — the checkbox with label, description, and disabled helper; the default inside forms.
-- `field-checkbox-block` — the same control inside a card-style bordered option.
+- `field` — `orientation="horizontal"` puts the checkbox beside its label and description (the default inside forms); a `Field.Label` wrapping that Field turns it into a bordered choice card.
 - `switch` — on/off toggle for settings that take effect immediately.
 - `multi-select` — renders this checkbox in every option row; use it when the option list is long.
 - `table` — uses this checkbox for row selection and the select-all header.
@@ -46,42 +46,46 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 ```vue
 <script setup>
-import Checkbox from '@aziontech/webkit/checkbox'
+  import Checkbox from '@aziontech/webkit/checkbox'
 
-const checked = defineModel({ default: false })
+  const checked = defineModel({ default: false })
 </script>
 
 <template>
-  <Checkbox v-model="checked" binary aria-label="Subscribe to newsletter" />
+  <Checkbox
+    v-model="checked"
+    binary
+    aria-label="Subscribe to newsletter"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `unknown` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
-| `value` | `unknown` | `undefined` | false | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
-| `binary` | `boolean` | `false` | false | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
-| `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
-| `inputId` | `string` | `''` | false | Forwarded to the inner `<input id>` for label association. |
-| `name` | `string` | `''` | false | HTML name for form submission. |
-| `tabindex` | `number` | `0` | false | Forwarded to the inner `<input tabindex>`. |
+| Prop            | Type      | Default     | Required | JSDoc                                                                                                                 |
+| --------------- | --------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`    | `unknown` | `undefined` | false    | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting.           |
+| `value`         | `unknown` | `undefined` | false    | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array).            |
+| `binary`        | `boolean` | `false`     | false    | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing).                                       |
+| `indeterminate` | `boolean` | `false`     | false    | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
+| `disabled`      | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.                                                                     |
+| `readonly`      | `boolean` | `false`     | false    | Marks the field read-only; value is visible but cannot change via interaction.                                        |
+| `inputId`       | `string`  | `''`        | false    | Forwarded to the inner `<input id>` for label association.                                                            |
+| `name`          | `string`  | `''`        | false    | HTML name for form submission.                                                                                        |
+| `tabindex`      | `number`  | `0`         | false    | Forwarded to the inner `<input tabindex>`.                                                                            |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload   | Notes                                                                                                |
+| ------------------- | --------- | ---------------------------------------------------------------------------------------------------- |
 | `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
 
 ## Slots
 
-The checkbox is a leaf primitive — no slots. Label/description live in `FieldCheckbox` wrappers.
+The checkbox is a leaf primitive — no slots. Label/description live in the enclosing `Field`, which also hands the checkbox its id, `aria-describedby`, `disabled` and `required`.
 
 | Slot | Scope | Notes |
-|---|---|---|
+| ---- | ----- | ----- |
 
 ## States
 
@@ -94,30 +98,30 @@ The checkbox is a leaf primitive — no slots. Label/description live in `FieldC
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                            | Animation / Transition                    | Token                    | Reduced-motion fallback         |
+| ---------------------------------- | ----------------------------------------- | ------------------------ | ------------------------------- |
 | state change (border / bg / color) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| surface (unchecked) | `var(--bg-surface)` |
-| surface (checked) | `var(--primary)` |
-| surface (indeterminate) | `var(--primary)` |
-| surface (disabled) | `var(--bg-disabled)` |
+| Region                         | Token (DESIGN.md)         |
+| ------------------------------ | ------------------------- |
+| surface (unchecked)            | `var(--bg-surface)`       |
+| surface (checked)              | `var(--primary)`          |
+| surface (indeterminate)        | `var(--primary)`          |
+| surface (disabled)             | `var(--bg-disabled)`      |
 | icon (checked / indeterminate) | `var(--primary-contrast)` |
-| icon (disabled) | `var(--text-disabled)` |
-| border (default) | `var(--border-default)` |
-| border (checked) | `var(--primary)` |
-| ring (focus) | `var(--ring-color)` |
-| ring offset (focus) | `var(--bg-canvas)` |
-| shape | `var(--shape-elements)` |
+| icon (disabled)                | `var(--text-disabled)`    |
+| border (default)               | `var(--border-default)`   |
+| border (checked)               | `var(--primary)`          |
+| ring (focus)                   | `var(--ring-color)`       |
+| ring offset (focus)            | `var(--bg-canvas)`        |
+| shape                          | `var(--shape-elements)`   |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                    | Temporary primitive                   | Follow-up                                                                                                                |
+| --------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `--border-width-default` (0.8 px) | `border-[0.8px]` (Tailwind arbitrary) | TODO: catalog `--border-width-default` in DESIGN.md as a semantic primitive shared with Select / MultiSelect / Checkbox. |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -127,7 +131,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in `FieldC
 - ARIA: native `<input type="checkbox">` is the source of truth. `aria-checked` is set to `'mixed'` when `indeterminate` is true (with `indeterminate` DOM property also set on the input). The wrapping `<span>` is decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.
-- Touch target — the `1.125rem` size is below 40×40 px; consumers should wrap with `FieldCheckbox` or expand the parent click area when the control sits on its own.
+- Touch target — the `1.125rem` size is below 40×40 px; consumers should wrap it in a horizontal `Field` (the label extends the target) or expand the parent click area when the control sits on its own.
 
 ## Stories (Storybook)
 

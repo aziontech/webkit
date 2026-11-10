@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: ea35d42795b4004eeaf2792898d9bba3ecf4693722200c3daf4c8341c90602d1
+checksum: a3aeea71afcb714569a1d3b4def4d34d510dc7e00cfe7d724eae2974cbeccb32
 created: 2026-06-15
 last_updated: 2026-11-10
 ---
@@ -28,14 +28,14 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ## When NOT to use
 
-- A select with a visible label and helper/error text in a form → use `field-select`.
+- A select with a visible label and helper/error text in a form → put it inside a `field`; the trigger picks up the field's id, description and state.
 - The field is always multi-pick → use `multi-select`.
-- Two to five options that fit on screen → use `field-radio`, or `radio-cards` for cards.
+- Two to five options that fit on screen → use horizontal `field`s with a `radio-button`, or `radio-cards` for cards.
 - The list triggers actions or navigation instead of holding a value → use `dropdown`.
 
 ## Related
 
-- `field-select` — label, select, and helper text, with options passed as data through `options`.
+- `field` — label, this select, and description/error, with the wiring done.
 - `multi-select` — multi-only variant with checkbox rows and an array model.
 - `dropdown` — action menu that reports the chosen option as an event and holds no form value.
 - `input-group` — joins a select to an input, such as currency plus amount.

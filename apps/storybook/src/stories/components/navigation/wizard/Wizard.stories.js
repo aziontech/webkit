@@ -1,26 +1,35 @@
-import FieldSelect from '@aziontech/webkit/field-select'
-import FieldSwitch from '@aziontech/webkit/field-switch'
-import FieldText from '@aziontech/webkit/field-text'
 import Alert from '@aziontech/webkit/alert'
+import Field, { FieldContent, FieldDescription, FieldLabel } from '@aziontech/webkit/field'
+import Input from '@aziontech/webkit/input'
+import Select, { SelectContent, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
+import Switch from '@aziontech/webkit/switch'
 import Wizard, { WizardStep } from '@aziontech/webkit/wizard'
 import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Wizard from '@aziontech/webkit/wizard'"
-const FIELD_TEXT_IMPORT = "import FieldText from '@aziontech/webkit/field-text'"
-const FIELD_SELECT_IMPORT = "import FieldSelect from '@aziontech/webkit/field-select'"
+const FIELD_IMPORT = "import Field from '@aziontech/webkit/field'"
+const INPUT_IMPORT = "import Input from '@aziontech/webkit/input'"
+const SELECT_IMPORT = "import Select from '@aziontech/webkit/select'"
 const MESSAGE_IMPORT = "import Alert from '@aziontech/webkit/alert'"
-const FIELD_SWITCH_IMPORT = "import FieldSwitch from '@aziontech/webkit/field-switch'"
+const SWITCH_IMPORT = "import Switch from '@aziontech/webkit/switch'"
 const VUE_IMPORT = "import { ref } from 'vue'"
 
 const components = {
   Wizard,
   Alert,
   'Wizard.Step': WizardStep,
-  FieldText,
-  FieldSelect,
-  FieldSwitch
+  Field,
+  'Field.Label': FieldLabel,
+  'Field.Description': FieldDescription,
+  'Field.Content': FieldContent,
+  Input,
+  Select,
+  'Select.Trigger': SelectTrigger,
+  'Select.Content': SelectContent,
+  'Select.Option': SelectOption,
+  Switch
 }
 
 const REGIONS = [
@@ -81,9 +90,10 @@ const createFlowState = (initialStep) => ({
 
 const flowScript = (initialStep) => [
   IMPORT,
-  FIELD_TEXT_IMPORT,
-  FIELD_SELECT_IMPORT,
-  FIELD_SWITCH_IMPORT,
+  FIELD_IMPORT,
+  INPUT_IMPORT,
+  SELECT_IMPORT,
+  SWITCH_IMPORT,
   VUE_IMPORT,
   '',
   `const step = ref(${initialStep})`,
@@ -103,28 +113,110 @@ const flowScript = (initialStep) => [
 const FLOW_STEPS = `
   <Wizard.Step title="Configure" description="Name the resource and choose where it runs.">
     <div class="flex flex-col gap-(--spacing-md)">
-      <FieldText v-model="name" label="Name" required />
-      <FieldSelect v-model="region" label="Region" :options="regions" />
+      <Field
+        required
+      >
+        <Field.Label>
+          Name
+        </Field.Label>
+        <Input
+          v-model="name"
+        />
+      </Field>
+      <Field>
+        <Field.Label>
+          Region
+        </Field.Label>
+        <Select
+          v-model="region"
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in regions"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+      </Field>
     </div>
   </Wizard.Step>
   <Wizard.Step title="Settings" description="Fine-tune the defaults.">
     <div class="flex flex-col gap-(--spacing-md)">
-      <FieldSelect v-model="environment" label="Environment" :options="environments" />
-      <FieldSwitch
-        v-model="logging"
-        label="Enable logging"
-        description="Keep a record of every request this resource handles."
-      />
+      <Field>
+        <Field.Label>
+          Environment
+        </Field.Label>
+        <Select
+          v-model="environment"
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in environments"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+      </Field>
+      <Field
+        orientation="horizontal"
+      >
+        <Switch
+          v-model="logging"
+        />
+        <Field.Content>
+          <Field.Label>
+            Enable logging
+          </Field.Label>
+          <Field.Description>
+            Keep a record of every request this resource handles.
+          </Field.Description>
+        </Field.Content>
+      </Field>
     </div>
   </Wizard.Step>
   <Wizard.Step title="Rules" description="Decide what happens to matching requests.">
     <div class="flex flex-col gap-(--spacing-md)">
-      <FieldText
-        v-model="path"
-        label="Path pattern"
-        helper-text="Requests whose path matches this pattern follow the behavior below."
-      />
-      <FieldSelect v-model="behavior" label="Behavior" :options="behaviors" />
+      <Field>
+        <Field.Label>
+          Path pattern
+        </Field.Label>
+        <Input
+          v-model="path"
+        />
+        <Field.Description>
+          Requests whose path matches this pattern follow the behavior below.
+        </Field.Description>
+      </Field>
+      <Field>
+        <Field.Label>
+          Behavior
+        </Field.Label>
+        <Select
+          v-model="behavior"
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in behaviors"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+      </Field>
     </div>
   </Wizard.Step>
   <Wizard.Step title="Review" description="Check every answer before creating.">
@@ -261,16 +353,54 @@ export const Default = {
 const OPTIONAL_TEMPLATE = `<Wizard v-model:active-step="step" aria-label="Create resource" submit-label="Create">
   <Wizard.Step title="Configure" description="Name the resource and choose where it runs.">
     <div class="flex flex-col gap-(--spacing-md)">
-      <FieldText v-model="name" label="Name" required />
-      <FieldSelect v-model="region" label="Region" :options="regions" />
+      <Field
+        required
+      >
+        <Field.Label>
+          Name
+        </Field.Label>
+        <Input
+          v-model="name"
+        />
+      </Field>
+      <Field>
+        <Field.Label>
+          Region
+        </Field.Label>
+        <Select
+          v-model="region"
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in regions"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+      </Field>
     </div>
   </Wizard.Step>
   <Wizard.Step title="Settings" description="Fine-tune the defaults, or skip to keep them." optional>
-    <FieldSwitch
-      v-model="logging"
-      label="Enable logging"
-      description="Keep a record of every request this resource handles."
-    />
+    <Field
+      orientation="horizontal"
+    >
+      <Switch
+        v-model="logging"
+      />
+      <Field.Content>
+        <Field.Label>
+          Enable logging
+        </Field.Label>
+        <Field.Description>
+          Keep a record of every request this resource handles.
+        </Field.Description>
+      </Field.Content>
+    </Field>
   </Wizard.Step>
   <Wizard.Step title="Review" description="Check every answer before creating.">
     <dl class="grid grid-cols-2 gap-(--spacing-xs) text-body-sm">
@@ -301,9 +431,10 @@ export const Optional = {
         code: toSfc(
           [
             IMPORT,
-            FIELD_TEXT_IMPORT,
-            FIELD_SELECT_IMPORT,
-            FIELD_SWITCH_IMPORT,
+            FIELD_IMPORT,
+            INPUT_IMPORT,
+            SELECT_IMPORT,
+            SWITCH_IMPORT,
             VUE_IMPORT,
             '',
             'const step = ref(0)',
@@ -342,12 +473,60 @@ const VALIDATION_TEMPLATE = `<Wizard v-model:active-step="step" aria-label="Crea
   <Wizard.Step title="Name and region" description="Name the resource and choose where it runs.">
     <div class="flex flex-col gap-(--spacing-md)">
       <Alert v-if="nameMissing" severity="danger" label="Enter a name to continue." />
-      <FieldText v-model="name" label="Name" required :invalid="nameMissing" />
-      <FieldSelect v-model="region" label="Region" :options="regions" />
+      <Field
+        required
+        :invalid="nameMissing"
+      >
+        <Field.Label>
+          Name
+        </Field.Label>
+        <Input
+          v-model="name"
+        />
+      </Field>
+      <Field>
+        <Field.Label>
+          Region
+        </Field.Label>
+        <Select
+          v-model="region"
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in regions"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+      </Field>
     </div>
   </Wizard.Step>
   <Wizard.Step title="Configuration" description="Choose the environment it serves.">
-    <FieldSelect v-model="environment" label="Environment" :options="environments" />
+    <Field>
+      <Field.Label>
+        Environment
+      </Field.Label>
+      <Select
+        v-model="environment"
+      >
+        <Select.Trigger />
+        <Select.Content>
+          <Select.Option
+            v-for="option in environments"
+            :key="String(option.value)"
+            :value="option.value"
+            :disabled="option.disabled"
+          >
+            {{ option.label }}
+          </Select.Option>
+        </Select.Content>
+      </Select>
+    </Field>
   </Wizard.Step>
   <Wizard.Step title="Review" description="Check every answer before creating.">
     <dl class="grid grid-cols-2 gap-(--spacing-xs) text-body-sm">
@@ -406,8 +585,9 @@ export const Validation = {
           [
             IMPORT,
             MESSAGE_IMPORT,
-            FIELD_TEXT_IMPORT,
-            FIELD_SELECT_IMPORT,
+            FIELD_IMPORT,
+            INPUT_IMPORT,
+            SELECT_IMPORT,
             VUE_IMPORT,
             '',
             'const step = ref(0)',

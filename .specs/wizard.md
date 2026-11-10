@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: ecd19d7776f6b4ba0de63cc4c6d303bb9271342cef7c496f3f8e6361df9a10b4
+checksum: 4676fc53a9ad5b072467a74ae33161a7c1c042115f163f757581ee0bf5c1263e
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -75,7 +75,8 @@ completion.
 <script setup>
   import { ref } from 'vue'
   import Wizard from '@aziontech/webkit/wizard'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
 
   const step = ref(0)
   const name = ref('')
@@ -104,10 +105,10 @@ completion.
       title="Configure"
       description="Name the resource and choose where it runs."
     >
-      <FieldText
-        v-model="name"
-        label="Name"
-      />
+      <Field required>
+        <Field.Label>Name</Field.Label>
+        <Input v-model="name" />
+      </Field>
     </Wizard.Step>
     <Wizard.Step
       title="Settings"

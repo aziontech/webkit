@@ -2,15 +2,16 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, watch } from 'vue'
 
@@ -213,16 +214,27 @@
                                   class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
                                 >
                                   <legend class="sr-only">Layer</legend>
-                                  <FieldRadioBlock
+                                  <Field.Label
                                     v-for="option in layers"
                                     :key="option.value"
-                                    v-model="form.layer"
-                                    :value="option.value"
-                                    name="purge-layer"
-                                    :input-id="'purge-layer-' + option.value"
-                                    :label="option.label"
-                                    :description="option.description"
-                                  />
+                                  >
+                                    <Field orientation="horizontal">
+                                      <RadioButton
+                                        v-model="form.layer"
+                                        :value="option.value"
+                                        name="purge-layer"
+                                        :input-id="'purge-layer-' + option.value"
+                                      />
+                                      <Field.Content>
+                                        <Field.Title>
+                                          {{ option.label }}
+                                        </Field.Title>
+                                        <Field.Description v-if="option.description">
+                                          {{ option.description }}
+                                        </Field.Description>
+                                      </Field.Content>
+                                    </Field>
+                                  </Field.Label>
                                 </fieldset>
                               </div>
                             </Item.Actions>
@@ -242,22 +254,43 @@
                                   class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
                                 >
                                   <legend class="sr-only">Purge Type</legend>
-                                  <FieldRadioBlock
+                                  <Field.Label
                                     v-for="option in types"
                                     :key="option.value"
-                                    v-model="form.type"
-                                    :value="option.value"
-                                    name="purge-type"
-                                    :input-id="'purge-type-' + option.value"
-                                    :label="option.label"
-                                    :description="option.description"
-                                    :helper-text="
-                                      typeAllowed(option.value)
-                                        ? ''
-                                        : 'Tiered Cache purges by cache key only.'
-                                    "
-                                    :disabled="!typeAllowed(option.value)"
-                                  />
+                                  >
+                                    <Field
+                                      orientation="horizontal"
+                                      :disabled="!typeAllowed(option.value)"
+                                    >
+                                      <RadioButton
+                                        v-model="form.type"
+                                        :value="option.value"
+                                        name="purge-type"
+                                        :input-id="'purge-type-' + option.value"
+                                      />
+                                      <Field.Content>
+                                        <Field.Title>
+                                          {{ option.label }}
+                                        </Field.Title>
+                                        <Field.Description v-if="option.description">
+                                          {{ option.description }}
+                                        </Field.Description>
+                                        <Field.Description
+                                          v-if="
+                                            !typeAllowed(option.value) && typeAllowed(option.value)
+                                              ? ''
+                                              : 'Tiered Cache purges by cache key only.'
+                                          "
+                                        >
+                                          {{
+                                            typeAllowed(option.value)
+                                              ? ''
+                                              : 'Tiered Cache purges by cache key only.'
+                                          }}
+                                        </Field.Description>
+                                      </Field.Content>
+                                    </Field>
+                                  </Field.Label>
                                 </fieldset>
                               </div>
                             </Item.Actions>

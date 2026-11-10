@@ -25,12 +25,12 @@ test('importsOf keeps only @aziontech/webkit imports with their bindings', () =>
     '<script setup>',
     "import Button from '@aziontech/webkit/button'",
     "import { ref } from 'vue'",
-    "import FieldText from '@aziontech/webkit/field-text'",
+    "import Field from '@aziontech/webkit/field'",
     '</script>'
   ].join('\n')
   assert.deepEqual(importsOf(sfc), [
     { binding: 'Button', subpath: 'button' },
-    { binding: 'FieldText', subpath: 'field-text' }
+    { binding: 'Field', subpath: 'field' }
   ])
 })
 

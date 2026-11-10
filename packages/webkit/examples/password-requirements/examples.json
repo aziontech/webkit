@@ -1,0 +1,11 @@
+{
+  "component": "password-requirements",
+  "title": "Components/Primitives/Inputs/PasswordRequirements",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Under a `PasswordInput` in a `Field`: each chip turns to the success tone as the typed password meets its rule.",
+      "file": "default.vue"
+    }
+  ]
+}

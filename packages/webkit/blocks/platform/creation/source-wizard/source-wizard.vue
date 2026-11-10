@@ -2,11 +2,11 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Stepper from '@aziontech/webkit/stepper'
@@ -322,15 +322,16 @@
                           v-if="creating"
                           class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
                         >
-                          <FieldText
-                            ref="nameField"
-                            input-id="create-project-new-service"
-                            v-model="newName"
-                            label="New service"
-                            size="large"
-                            placeholder="my-service"
-                            @keydown.enter.prevent="confirmCreating"
-                          />
+                          <Field>
+                            <Field.Label>New service</Field.Label>
+                            <Input
+                              ref="nameField"
+                              v-model="newName"
+                              size="large"
+                              placeholder="my-service"
+                              @keydown.enter.prevent="confirmCreating"
+                            />
+                          </Field>
                           <div class="flex items-center justify-end gap-(--spacing-sm)">
                             <Button
                               type="button"

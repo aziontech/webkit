@@ -4,11 +4,14 @@
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Separator from '@aziontech/webkit/separator'
-  import FieldPassword from '@aziontech/webkit/field-password'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import Label from '@aziontech/webkit/label'
-  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+  import PasswordRequirements, {
+    DEFAULT_PASSWORD_REQUIREMENTS
+  } from '@aziontech/webkit/password-requirements'
   import { reactive, ref } from 'vue'
 
   const email = ref('')
@@ -148,18 +151,23 @@
                             label="Password"
                             required
                           />
-                          <FieldPassword
-                            v-model="password"
-                            input-id="signup-password"
-                            name="password"
-                            autocomplete="new-password"
-                            placeholder="Create a password"
-                            requirements
+                          <Field
                             :required="!!errors.password && !password"
                             :invalid="!!errors.password && !!password"
-                            :helper-text="errors.password"
-                            @update:model-value="errors.password = ''"
-                          />
+                          >
+                            <PasswordInput
+                              id="signup-password"
+                              v-model="password"
+                              name="password"
+                              autocomplete="new-password"
+                              placeholder="Create a password"
+                              @update:model-value="errors.password = ''"
+                            />
+                            <Field.Description v-if="errors.password">{{
+                              errors.password
+                            }}</Field.Description>
+                            <PasswordRequirements :value="password" />
+                          </Field>
                         </div>
                       </fieldset>
 

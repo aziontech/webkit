@@ -2,13 +2,16 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldPassword from '@aziontech/webkit/field-password'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
+  import PasswordInput from '@aziontech/webkit/password-input'
   import Label from '@aziontech/webkit/label'
   import Alert from '@aziontech/webkit/alert'
-  import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+  import PasswordRequirements, {
+    DEFAULT_PASSWORD_REQUIREMENTS
+  } from '@aziontech/webkit/password-requirements'
   import { reactive, ref } from 'vue'
 
   const failure = ref('timeout')
@@ -256,19 +259,23 @@
                           />
                         </div>
 
-                        <FieldPassword
-                          v-model="signin.password"
-                          input-id="auth-signin-password"
-                          name="password"
-                          label="Password"
-                          autocomplete="current-password"
-                          placeholder="Type your password"
+                        <Field
                           :disabled="verifying"
                           :required="!!errors.signinPassword && !signin.password"
                           :invalid="!!errors.signinPassword && !!signin.password"
-                          :helper-text="verifying ? '' : errors.signinPassword"
-                          @update:model-value="errors.signinPassword = ''"
-                        />
+                        >
+                          <Field.Label>Password</Field.Label>
+                          <PasswordInput
+                            v-model="signin.password"
+                            name="password"
+                            autocomplete="current-password"
+                            placeholder="Type your password"
+                            @update:model-value="errors.signinPassword = ''"
+                          />
+                          <Field.Description v-if="!verifying && errors.signinPassword">{{
+                            errors.signinPassword
+                          }}</Field.Description>
+                        </Field>
                       </fieldset>
 
                       <Button
@@ -385,20 +392,24 @@
                           />
                         </div>
 
-                        <FieldPassword
-                          v-model="signup.password"
-                          input-id="auth-signup-password"
-                          name="new-password"
-                          label="Password"
-                          autocomplete="new-password"
-                          placeholder="Create a password"
-                          requirements
+                        <Field
                           :disabled="verifying"
                           :required="!!errors.signupPassword && !signup.password"
                           :invalid="!!errors.signupPassword && !!signup.password"
-                          :helper-text="verifying ? '' : errors.signupPassword"
-                          @update:model-value="errors.signupPassword = ''"
-                        />
+                        >
+                          <Field.Label>Password</Field.Label>
+                          <PasswordInput
+                            v-model="signup.password"
+                            name="new-password"
+                            autocomplete="new-password"
+                            placeholder="Create a password"
+                            @update:model-value="errors.signupPassword = ''"
+                          />
+                          <Field.Description v-if="!verifying && errors.signupPassword">{{
+                            errors.signupPassword
+                          }}</Field.Description>
+                          <PasswordRequirements :value="signup.password" />
+                        </Field>
                       </fieldset>
 
                       <Button

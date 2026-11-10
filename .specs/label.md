@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: b028e29d2a0d0956daa19d6b41758b21e41d366736d154d5c76f83ebb890a6af
+checksum: 30cd01001b3e7f1489130e59a6563e0fa97f8e2a2a5e53de87eafd2814b14bcc
 created: 2026-06-15
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Label — Component Spec
@@ -26,7 +26,7 @@ Form-field label that pairs descriptive text with an optional required indicator
 
 ## When NOT to use
 
-- A standard text, password, select, or textarea field → use `field-text`, `field-password`, `field-select`, or `field-textarea`, which render the label for you.
+- A standard text, password, select, or textarea field → use `field`, whose `Field.Label` targets the control and shows the Required marker for you.
 - Guidance, error, or required messages under the input → use `helper-text`.
 - An info glyph with no field name next to it → use `hint`.
 
@@ -34,7 +34,7 @@ Form-field label that pairs descriptive text with an optional required indicator
 
 - `helper-text` — the line under the input; pairs with the label above it.
 - `hint` — the glyph the `hint` prop renders; use it alone when there is no label.
-- `field-text` — composes label, input, and helper text with the wiring done.
+- `field` — composes label, any control, and description/error with the wiring done.
 
 ## Best practices
 

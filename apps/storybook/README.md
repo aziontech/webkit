@@ -132,7 +132,7 @@ The Storybook sidebar is organized into **Foundations**, **Components** (by cate
 
 **Feedback** — EmptyState, Message, Skeleton, Status Indicator
 
-**Inputs** — Box Grid Selection, Checkbox, Dropdown, Field Checkbox, Field Checkbox Block, Field Radio, Field Radio Block, Field Switch, FieldSwitchBlock, FieldTextarea, Input Switch, Input Text, Label, Radio Button, Select, Textarea
+**Inputs** — Box Grid Selection, Checkbox, Dropdown, Field, Input Switch, Input Text, Label, Phone Input, Radio Button, Select, Textarea
 
 **Layout** — GlobalHeader, ScrollArea, Sidebar
 

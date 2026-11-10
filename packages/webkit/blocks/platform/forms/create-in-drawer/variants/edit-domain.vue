@@ -10,16 +10,17 @@
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import FieldInputGroup from '@aziontech/webkit/field-input-group'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
+  import InputGroup from '@aziontech/webkit/input-group'
   import Label from '@aziontech/webkit/label'
   import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
@@ -375,36 +376,50 @@
                             aria-labelledby="domain-source-label"
                             class="flex min-w-0 flex-col gap-(--spacing-sm)"
                           >
-                            <FieldRadioBlock
+                            <Field.Label
                               v-for="option in kindOptions"
                               :key="option.value"
-                              v-model="form.kind"
-                              :value="option.value"
-                              name="domain-kind"
-                              :input-id="'domain-kind-' + option.value"
-                              :label="option.label"
-                              :description="option.description"
-                              :disabled="submitting"
-                            />
+                            >
+                              <Field
+                                orientation="horizontal"
+                                :disabled="submitting"
+                              >
+                                <RadioButton
+                                  v-model="form.kind"
+                                  :value="option.value"
+                                  name="domain-kind"
+                                  :input-id="'domain-kind-' + option.value"
+                                />
+                                <Field.Content>
+                                  <Field.Title>{{ option.label }}</Field.Title>
+                                  <Field.Description v-if="option.description">{{
+                                    option.description
+                                  }}</Field.Description>
+                                </Field.Content>
+                              </Field>
+                            </Field.Label>
                           </div>
                         </div>
 
-                        <FieldInputGroup
-                          v-model="form.domain"
-                          label="Domain"
-                          input-id="domain-name"
-                          placeholder="my-resource"
+                        <Field
                           :disabled="submitting"
                           :required="!!errors.domain"
-                          :helper-text="errors.domain"
-                          @update:model-value="errors.domain = ''"
                         >
-                          <template
-                            v-if="form.kind === 'free'"
-                            #right
-                            >.example.app</template
-                          >
-                        </FieldInputGroup>
+                          <Field.Label>Domain</Field.Label>
+                          <InputGroup>
+                            <InputGroup.Input
+                              v-model="form.domain"
+                              placeholder="my-resource"
+                              @update:model-value="errors.domain = ''"
+                            />
+                            <InputGroup.Addon v-if="form.kind === 'free'"
+                              >.example.app</InputGroup.Addon
+                            >
+                          </InputGroup>
+                          <Field.Description v-if="errors.domain">{{
+                            errors.domain
+                          }}</Field.Description>
+                        </Field>
 
                         <template v-if="form.kind === 'own'">
                           <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">

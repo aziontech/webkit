@@ -1,8 +1,8 @@
 ---
 name: webkit-errors
-description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as a Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field-*.
+description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as a Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts and every outcome lands in one card Alert, and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
 status: active
-last_updated: 2026-08-13
+last_updated: 2026-11-10
 scope: general
 enforced_by: [webkit-component-states, webkit-accessibility, ui-verify]
 ---
@@ -48,7 +48,7 @@ Never guess an import path — files move. Resolve every primitive the same way:
 - Or read **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real
   published subpath. If a subpath is not a key there, it does not exist.
 
-The surfaces this skill uses — `message`, `toast`, the `field-*` family, `helper-text` — all resolve
+The surfaces this skill uses — `message`, `toast`, `field` (with its `Field.Description` / `Field.Error`), `helper-text` — all resolve
 this way. Use **@aziontech/theme tokens** for spacing and color, never raw px or hex.
 
 ## The one question
@@ -78,7 +78,7 @@ states distinct:
 - **amber `required`** — the value is missing. A prompt, not an accusation.
 - **red `invalid`** — the value is present and wrong.
 
-Mechanics (the `field-*` triad, `aria-describedby`, submit-time validation, the locked scope) live in
+Mechanics (the `Field` triad, `aria-describedby`, submit-time validation, the locked scope) live in
 **`/webkit-form`**. The only rule this skill adds: **client-side validation is the one thing that does
 not go in a `Alert`.** The `Alert` is for what the **server** said.
 
@@ -301,7 +301,7 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 - **Surfaces** (resolve each via the MCP / catalog — see "How to find the components"):
   `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#action` slot, default slot for
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
-  `closable`, `action`), the `@aziontech/webkit/field-*` family + `/helper-text` (the field's own
+  `closable`, `action`), the `@aziontech/webkit/field` compound + `/helper-text` (the field's own
   required / invalid state).
 - **Companion skills:** `/webkit-form` (the field triad, submit-time validation, the locked scope),
   `/webkit-ui-states` (the full loading / empty / partial / error surface and async behaviour),

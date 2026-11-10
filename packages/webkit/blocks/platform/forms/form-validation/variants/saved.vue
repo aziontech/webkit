@@ -1,9 +1,10 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 
@@ -146,48 +147,77 @@
           v-else
           class="flex flex-col gap-(--spacing-md)"
         >
-          <FieldText
-            v-model="form.key"
-            :input-id="fieldIds.key"
-            name="key"
-            label="Key"
-            placeholder="API_TOKEN"
+          <Field
             :required="missing('key')"
             :invalid="invalid('key')"
             :disabled="busy"
-            :helper-text="
-              helper('key', 'Uppercase letters, digits and underscores, for example API_TOKEN.')
-            "
-          />
-          <FieldText
-            v-model="form.value"
-            :input-id="fieldIds.value"
-            name="value"
-            label="Value"
+          >
+            <Field.Label :for="fieldIds.key">Key</Field.Label>
+            <Input
+              :id="fieldIds.key"
+              v-model="form.key"
+              name="key"
+              placeholder="API_TOKEN"
+            />
+            <Field.Description>
+              {{
+                helper('key', 'Uppercase letters, digits and underscores, for example API_TOKEN.')
+              }}
+            </Field.Description>
+          </Field>
+          <Field
             :required="missing('value')"
             :invalid="invalid('value')"
             :disabled="busy"
-            :helper-text="helper('value', 'The value your services read at runtime.')"
-          />
-          <FieldSelect
-            v-model="form.environment"
-            :input-id="fieldIds.environment"
-            label="Environment"
-            placeholder="Select an environment"
-            :options="environments"
+          >
+            <Field.Label :for="fieldIds.value">Value</Field.Label>
+            <Input
+              :id="fieldIds.value"
+              v-model="form.value"
+              name="value"
+            />
+            <Field.Description>
+              {{ helper('value', 'The value your services read at runtime.') }}
+            </Field.Description>
+          </Field>
+          <Field
             :required="missing('environment')"
             :disabled="busy"
-            :helper-text="helper('environment', 'Where this variable is available.')"
-          />
-          <FieldTextarea
-            v-model="form.description"
-            :input-id="fieldIds.description"
-            name="description"
-            label="Description"
+          >
+            <Field.Label :for="fieldIds.environment">Environment</Field.Label>
+            <Select
+              v-model="form.environment"
+              placeholder="Select an environment"
+            >
+              <Select.Trigger :id="fieldIds.environment" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in environments"
+                  :key="String(option.value)"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+            <Field.Description>
+              {{ helper('environment', 'Where this variable is available.') }}
+            </Field.Description>
+          </Field>
+          <Field
             :invalid="invalid('description')"
             :disabled="busy"
-            :helper-text="helper('description', 'Optional. Up to 200 characters.')"
-          />
+          >
+            <Field.Label :for="fieldIds.description">Description</Field.Label>
+            <Textarea
+              :id="fieldIds.description"
+              v-model="form.description"
+              name="description"
+            />
+            <Field.Description>
+              {{ helper('description', 'Optional. Up to 200 characters.') }}
+            </Field.Description>
+          </Field>
         </div>
       </div>
 

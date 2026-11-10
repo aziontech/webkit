@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-10-19
+last_updated: 2026-11-10
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -25,7 +25,7 @@ There are **two ways to lay out a form**, and both are first-class:
   field is one `Item` row (name/guidance on the left, control on the right). This is the default for
   **grouped, settings-style, or list-like** forms — an account settings page, a resource's config or
   create page, a create drawer.
-- **Approach B — Fields separated.** Standalone `field-*` triads stacked in a column. This is for
+- **Approach B — Fields separated.** Standalone `Field` triads (label, control, description) stacked in a column. This is for
   **short, focused, single-purpose** forms — a sign-in flow, a rename or delete-confirmation dialog, a
   short create drawer, a single step in a wizard.
 
@@ -48,38 +48,37 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
   "where do errors go", "which layout for this form".
 - After `/webkit-ux-heuristics` establishes the states and before `/webkit-ui-states` locks the async submit.
 
-## Reach for the complete `Field*` first — loose inputs are the fallback
+## Wrap every control in a `Field` — loose inputs are the fallback
 
-webkit ships two tiers of form control. **Default to the complete `Field*` component**; reach for a loose
-input only when no `Field*` fits.
+webkit ships **one** form-field component, `Field` (`@aziontech/webkit/field`), and wraps **any** control
+in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`,
+`InputGroup` (with `InputGroup.Input`), `Checkbox`, `RadioButton`, `Switch`, `Slider`. **Default to a
+`Field`**; leave a control bare only when no label belongs next to it.
 
-- **`Field*` (complete, preferred):** `FieldText`, `FieldTextarea`, `FieldPassword`, `FieldPhoneNumber`,
-  `FieldRadio` / `FieldRadioBlock`, `FieldCheckbox` / `FieldCheckboxBlock`, `FieldSwitch` /
-  `FieldSwitchBlock`, `FieldTextSwitch`, `FieldInputGroup`. Each bundles the **label ↔ control
-  association**, the on-field `HelperText`, and the `required` / `invalid` a11y wiring (`aria-required` /
-  `aria-invalid` / `aria-describedby`) that this skill otherwise asks you to wire by hand. Using it means
-  the accessible-name / error-association rules below are satisfied **by construction**.
-- **Loose (`Input`, `NumberInput`, `Textarea`, `Select`, `Checkbox`, `RadioButton`, `Switch`,
-  `InputGroup`, …):** the bare control, no label/helper/validation shell. Use one only when the matching
-  `Field*` genuinely doesn't fit — a composed `Select` inside a custom row, a control in an `Item.Actions`
-  cell, a bespoke layout the `Field*` wrapper can't express. When you do, **you** own the label
-  association + `aria-describedby` per the rules below.
-
-This is a **preference, not a prohibition**: check whether a `Field*` covers the need first; if it does,
-use it; if it truly doesn't, drop to the loose control and wire the a11y yourself.
+- **`Field` (preferred):** `<Field>` + `<Field.Label>` + the control + `<Field.Description>` /
+  `<Field.Error>`. State lives on the Field — `<Field :required :invalid :disabled>` — and the control
+  reads its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from it; `Field.Label`
+  points `for` at the control and shows the Required tag; `Field.Description` takes the helper tone
+  (disabled → invalid → required → helper) from the Field. The accessible-name / error-association rules
+  below are satisfied **by construction**.
+- **Checkbox, radio, switch:** `<Field orientation="horizontal">` with the control first and a
+  `<Field.Content>` holding `Field.Label` + `Field.Description`.
+- **Choice cards** (a bordered option with a title and description): `<Field.Label>` wrapping a
+  horizontal `<Field>` with the control and `<Field.Content>` (`Field.Title` + `Field.Description`).
+  Group cards with `<Field.Set>` + `<Field.Legend>`, never inside another `Field`.
+- **Loose (the bare control):** only when the label lives elsewhere — a control in an `Item.Actions`
+  cell whose `Item.Title` names it, a table cell, a toolbar. Then **you** own the `aria-label` /
+  `aria-describedby` per the rules below.
 
 ```vue
-<!-- ✅ Preferred — the field owns label + helper + validation -->
-<FieldText
-  id="app-name"
-  label="Application name"
-  v-model="form.name"
-  :invalid="!!errors.name"
-  :helper-text="errors.name || 'Shown in the dashboard.'"
-  required
-/>
+<!-- ✅ Preferred — the Field owns label + description + validation wiring -->
+<Field required :invalid="!!errors.name">
+  <Field.Label>Application name</Field.Label>
+  <Input v-model="form.name" name="name" />
+  <Field.Description>{{ errors.name || 'Shown in the dashboard.' }}</Field.Description>
+</Field>
 
-<!-- ⚠️ Loose — only when no Field* fits; now YOU wire the label + aria-describedby -->
+<!-- ⚠️ Loose — only when no Field fits; now YOU wire the label + aria-describedby -->
 <Label for="app-name">Application name</Label>
 <Input
   id="app-name"
@@ -97,15 +96,16 @@ error is **tied to it**, and related controls are **grouped** — so a screen re
 its state, and the group it belongs to. The mechanics differ per approach, the contract does not:
 
 - **A real label, never a placeholder.** Approach B (and a composed `Select`) wires a real `<label for>`
-  to the control `id` — via a `field-*` wrapper or a hand-rendered `Label`; a composed `Select` points
-  `for` at `Select.Trigger`'s `id` (labelling the wrapper labels nothing). Approach A (ItemGroup) uses
+  to the control `id` — a `Field.Label` inside a `Field` does it for you (a `Select` inside a `Field`
+  gets the id on its trigger); a hand-rendered `Label` outside a `Field` points `for` at
+  `Select.Trigger`'s `id` (labelling the wrapper labels nothing). Approach A (ItemGroup) uses
   `Item.Title` as the field name and gives the control an `aria-label`. A placeholder is **never** the
   label — it disappears on input and is not a reliable accessible name.
-- **Errors associated via `aria-describedby`.** The on-field `HelperText` carries an `id` and the control
-  points `aria-describedby` at it, so the message is announced when focus lands; the control's
-  `:required` / `:invalid` props set `aria-required` / `aria-invalid` — don't hand-roll them. A `field-*`
-  wrapper wires this for you; in an ItemGroup you set `aria-describedby` on the control and the `id` on
-  the `<HelperText>` yourself.
+- **Errors associated via `aria-describedby`.** The message carries an `id` and the control points
+  `aria-describedby` at it, so it is announced when focus lands; `:required` / `:invalid` set
+  `aria-required` / `aria-invalid` — don't hand-roll them. Inside a `Field`, `Field.Description` /
+  `Field.Error` register themselves and the control is described by them automatically; in an ItemGroup
+  you set `aria-describedby` on the control and the `id` on the `<HelperText>` yourself.
 - **Groups in `<fieldset>` + `<legend>`.** Each section is a native `<fieldset>` with a `<legend>`
   (`sr-only` when a visible title already names it); a radio/checkbox set is its own `<fieldset>` whose
   `<legend>` is the question.
@@ -125,13 +125,13 @@ changes.
 The same spacing applies in **every** container and **both** approaches. Never hand-pick a one-off gap;
 if a form seems to need a different rhythm, it's in the wrong container.
 
-| Between                                          | Token          | px                                     |
-| ------------------------------------------------ | -------------- | -------------------------------------- |
-| Label → control → HelperText (inside one field)  | `--spacing-xs` | 8 — already baked into every `field-*` |
-| Field → field (and row → row)                    | `--spacing-lg` | 24                                     |
-| Section → section                                | `--spacing-lg` | 24                                     |
-| Section overline → its card (Cards + ItemGroups) | `--spacing-sm` | 12                                     |
-| Compact modal body (Dialog / Drawer)             | `--spacing-md` | 16 — the **only** allowed tightening   |
+| Between                                          | Token          | px                                   |
+| ------------------------------------------------ | -------------- | ------------------------------------ |
+| Label → control → HelperText (inside one field)  | `--spacing-xs` | 8 — already baked into every `Field` |
+| Field → field (and row → row)                    | `--spacing-lg` | 24                                   |
+| Section → section                                | `--spacing-lg` | 24                                   |
+| Section overline → its card (Cards + ItemGroups) | `--spacing-sm` | 12                                   |
+| Compact modal body (Dialog / Drawer)             | `--spacing-md` | 16 — the **only** allowed tightening |
 
 ### Hierarchy (top → down, never inverted)
 
@@ -635,7 +635,7 @@ Rules:
   the cue — never colour it red.
 - **A row whose left column wraps to two lines uses `class="items-start"`** so the title aligns to the
   control's top, not its centre.
-- **Richer controls that don't fit a one-line row** (a radio group, a block of `field-radio-block`s)
+- **Richer controls that don't fit a one-line row** (a radio group, a block of choice cards)
   stay a full-width block inside `Item.Actions` (or their own `Item`), not forced onto the row.
 
 ### Section title — an OVERLINE above the card
@@ -673,69 +673,81 @@ Rules:
 
 ## Approach B — Fields separated (short focused forms)
 
-A field is a **triad**: a visible `Label`, the control, and a `HelperText`. Ship it as one of the
-`@aziontech/webkit/field-*` components — they render the triad and wire the a11y for you: the `Label`'s
-`for` matches the control `id`, the helper is linked via `aria-describedby`, `required` sets
-`aria-required`, and `invalid` sets `aria-invalid`. Stack the fields in a single column.
+A field is a **triad**: a visible label, the control, and a description. Ship it as a
+`Field` (`@aziontech/webkit/field`) — it renders the triad and wires the a11y for you: the label's `for`
+matches the control `id`, the description is linked via `aria-describedby`, `required` sets
+`aria-required`, and `invalid` sets `aria-invalid`. Stack the fields in a single column (`Field.Group`
+gives the `--spacing-lg` rhythm).
 
-The `required` tag on the `Label` is **persistent** — it advertises the field is mandatory from first
-render, independent of validation. Because `field-*`'s own `label` prop couples the Label tag to the
-same `required` that drives the field's amber state, render the `Label` **yourself** (always `required`)
-and give the wrapper **no** `label`; then bind the wrapper's `:required` to the post-submit empty state
-so only the field's amber (border + helper) is revealed on submit. Canonical pattern:
+The `required` tag on the label is **persistent** — it advertises the field is mandatory from first
+render, independent of validation. `Field.Label` shows the tag from the Field's own `required`, which
+also drives the field's amber state, so for the persistent tag render a `Label` **yourself** (always
+`required`, `for` = the control's `id`) instead of `Field.Label`, and bind the Field's `:required` to the
+post-submit empty state so only the amber (border + description) is revealed on submit. Canonical pattern:
 
 ```vue
 <script setup>
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-md)">
-    <!-- Label required ALWAYS (rendered here; the wrapper gets no `label`). Empty →
-         :required (amber), the wrapper's helper flips to kind=required. A malformed
-         value → :invalid (red). Never both at once. `errors.name` holds the message
-         ("" = valid), so the helper falls back to guidance when clear. -->
-    <div class="flex w-full flex-col gap-(--spacing-xs)">
+  <Field.Group>
+    <!-- Label required ALWAYS (rendered here, not Field.Label). Empty → :required
+         (amber), the description flips to the required tone. A malformed value →
+         :invalid (red). Never both at once. `errors.name` holds the message
+         ("" = valid), so the description falls back to guidance when clear. -->
+    <Field
+      :required="!!errors.name && !form.name.trim()"
+      :invalid="!!errors.name && !!form.name.trim()"
+    >
       <Label
         for="app-name"
         required
         >Name</Label
       >
-      <FieldText
+      <Input
+        id="app-name"
         v-model="form.name"
-        input-id="app-name"
         name="name"
         placeholder="my-application"
-        :required="!!errors.name && !form.name.trim()"
-        :invalid="!!errors.name && !!form.name.trim()"
-        :helper-text="errors.name || 'A unique name for this application.'"
         @update:model-value="errors.name = ''"
       />
-    </div>
-  </div>
+      <Field.Description>{{
+        errors.name || 'A unique name for this application.'
+      }}</Field.Description>
+    </Field>
+  </Field.Group>
 </template>
 ```
 
-Available wrappers (ask the webkit MCP `suggest_component`, or read
-`node_modules/@aziontech/webkit/catalog.json` (`imports`) — every key is a real subpath): `field-text`,
-`field-textarea`, `field-password`, `field-phone-number`, `field-input-group`, `field-checkbox` /
-`field-checkbox-block`, `field-radio` / `field-radio-block`, `field-switch` / `field-switch-block`,
-`field-text-switch`.
+When the tag does not need to outlive validation (an optional field, or a field that is always
+required), `<Field required><Field.Label>Name</Field.Label>…</Field>` is all it takes.
+
+Parts of the `Field` compound (ask the webkit MCP `suggest_component`, or read
+`node_modules/@aziontech/webkit/catalog.json` (`imports`)): `Field.Label`, `Field.Description`,
+`Field.Error`, `Field.Group`, `Field.Set`, `Field.Legend`, `Field.Content`, `Field.Title`,
+`Field.Separator`. Controls: `input`, `textarea`, `select`, `multi-select`, `number-input`,
+`password-input` (+ `password-requirements` for the rules row), `phone-input`, `input-group` (+
+`InputGroup.Input`), `checkbox`, `radio-button`, `switch`, `slider`.
 
 Rules:
 
-- **Never a bare `Input` / `Textarea` next to a floating `<p>` "label".** Use the `field-*`
-  wrapper. A placeholder is **not** a label — it vanishes on input and is not a reliable accessible name.
-- **The helper region is the guidance region.** Feed it the field's guidance; on a failed submit swap it
-  for the message and flip the state — `:required` (amber, `kind=required`) for an empty field,
-  `:invalid` (red, `kind=invalid`) for a malformed one. Never pass both `:required` and `:invalid` true
-  together (amber border + red helper). It's still the wrapper's own helper row, not a second error node.
-- **A composed `Select` labels its TRIGGER, not the wrapper** — see the next pattern.
+- **Never a bare `Input` / `Textarea` next to a floating `<p>` "label".** Wrap it in a `Field`.
+  A placeholder is **not** a label — it vanishes on input and is not a reliable accessible name.
+- **The description is the guidance region.** Feed it the field's guidance; on a failed submit swap it
+  for the message and flip the Field's state — `:required` (amber) for an empty field, `:invalid` (red)
+  for a malformed one. Never pass both `:required` and `:invalid` true together (amber border + red
+  helper). It's still the field's own description, not a second error node. Use `Field.Error` when the
+  message must sit beside a guidance description that stays visible.
+- **A `Select` in a `Field` is labelled on its trigger automatically**; outside a `Field`, see the next
+  pattern.
 
 ## Composed Select — label the TRIGGER, not the wrapper
 
-There is no `field-select`. When you compose one from `Label` + `Select` + options, the focusable
+Inside a `Field`, `Field.Label` already targets the trigger. When you render a `Label` yourself next to a
+`Select` (the persistent-tag pattern, or no `Field`), the focusable
 element is the **trigger** (a `role="combobox"` `<button>`), and `Select`'s `$attrs` land on its outer
 wrapper `<div>`, _not_ the button. So the `Label`'s `for` and the `id` must go on **`<Select.Trigger>`**.
 Pointing `<label for>` at the `<Select>` wrapper labels nothing. This holds in **both** approaches.
@@ -774,7 +786,7 @@ attribute, which is how you lock the scope on submit.
 ```vue
 <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0" :disabled="submitting">
   <legend class="sr-only">Account settings</legend>
-  <!-- sections: Card + Item.List (Approach A) OR stacked field-* (Approach B) -->
+  <!-- sections: Card + Item.List (Approach A) OR stacked Fields (Approach B) -->
 </fieldset>
 ```
 
@@ -782,13 +794,14 @@ Rules:
 
 - **`<legend>` is the fieldset's first child**, and `sr-only` when a visible title already shows it.
 - **Related radios/checkboxes are their own group** — a set of radios is a `<fieldset>` whose
-  `<legend>` is the question; the `field-radio-block` labels are the options.
+  `<legend>` is the question; the choice cards are the options. `Field.Set` + `Field.Legend` render that
+  native `<fieldset>` + `<legend>` without browser chrome.
 
 ## Native input hints — autofill, keyboards, paste
 
 The browser, password managers and mobile keyboards read the `<input>`, so the hints must land
-there. `FieldText` forwards `type`, `autocomplete` and `spellcheck` to its `<input>`;
-`FieldPassword` takes `autocomplete`.
+there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `PasswordInput` takes
+`autocomplete`.
 
 | Field                               | `type`  | `autocomplete`     | `spellcheck` |
 | ----------------------------------- | ------- | ------------------ | ------------ |
@@ -832,9 +845,9 @@ something to show.
 
 **Where a field has a `Label`, its required tag is persistent** — it shows from first render, not just
 on a failed submit, so the user knows the field is mandatory before touching it. Only the field's amber
-state (border + helper) is revealed on submit. Because `field-*`'s `label` prop couples the tag to the
-same `required` that colours the field, render the `Label` yourself (always `required`) and leave the
-wrapper's `label` unset (see Approach B). An **ItemGroup** has no `Label`, so it has no persistent tag —
+state (border + helper) is revealed on submit. Because `Field.Label` couples the tag to the same
+`required` that colours the field, render the `Label` yourself (always `required`) instead of
+`Field.Label` (see Approach B). An **ItemGroup** has no `Label`, so it has no persistent tag —
 its required feedback is the on-submit amber `HelperText` only.
 
 ```js
@@ -874,9 +887,9 @@ Rules:
   never both), appearing only after a failed submit and clearing as the user edits
   (`@update:model-value="errors.x = ''"`). Colour is never the only signal — the required tag / helper
   text is the non-colour cue.
-- **The message lives on the field, as a `HelperText`.** In **Fields separated** it is the `field-*`
-  wrapper's own helper row (its `kind` flips to `required` when you pass `:required`, `invalid` when you
-  pass `:invalid`); in an **ItemGroup** it is a `<HelperText>` rendered under the control, its `kind`
+- **The message lives on the field, as a `HelperText`.** In **Fields separated** it is the Field's
+  `Field.Description` (its tone flips to `required` when the Field is `:required`, `invalid` when it is
+  `:invalid`) or a `Field.Error`; in an **ItemGroup** it is a `<HelperText>` rendered under the control, its `kind`
   matching the failure (`required` amber / `invalid` red — see Approach A). Either way it is
   `aria-describedby`-linked to the control and appears only after a failed submit.
 - **No custom error-summary block** (`role="alert"` list of links) and **no `Alert` callout** for
@@ -899,10 +912,10 @@ re-derive it**. Save shows `:loading`, and **every field the action reads takes 
 flag**. On a long form, the actions live in a **sticky bar** so Save/Cancel are always reachable.
 
 **Bind `:disabled` on the controls, not only the `<fieldset>`.** A native `<fieldset :disabled>` blocks
-_interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `field-*`, `Input`)
+_interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `Input`, …)
 render their **disabled visual** from their own `disabled` prop — a fieldset alone leaves them looking
 active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native safety net **and** pass
-`:disabled="submitting"` to each control (`field-*` forward it to their inner input). Multi-save forms
+`:disabled="submitting"` to each `Field` (it disables the control inside) or to each bare control. Multi-save forms
 (Card with independent saves) bind each card's controls to _that card's_ flag.
 
 ```vue
@@ -926,7 +939,7 @@ Rules:
 - **Lock off one flag.** `<fieldset :disabled="submitting">` + `:disabled="submitting"` on **every**
   control + Save `:loading="submitting"`; guard the handler and release in `finally` (this IS
   `/webkit-ui-states` Pattern 1 — the fieldset is the native lock, the per-control
-  `:disabled` is what makes webkit `Select`/`Switch`/`field-*` show the disabled visual).
+  `:disabled` is what makes webkit `Select`/`Switch`/`Input` show the disabled visual).
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
 
@@ -936,18 +949,16 @@ A value the user can see but must never edit — a client ID, an account ID, a g
 creation date, an e-mail that only support can change — is **read-only**, not disabled:
 
 ```vue
-<FieldText
-  v-model="clientId"
-  label="Client ID"
-  readonly
-  :spellcheck="false"
-  helper-text="Can't be changed. Quote it when opening a support ticket."
-/>
+<Field>
+  <Field.Label>Client ID</Field.Label>
+  <Input v-model="clientId" readonly :spellcheck="false" />
+  <Field.Description>Can't be changed. Quote it when opening a support ticket.</Field.Description>
+</Field>
 ```
 
 - `readonly` keeps the value in `var(--text-default)`, focusable and copyable, and the field renders
   **transparent with a dashed border and no hover**, so it never looks editable next to the fields
-  that are. `FieldText`, `Input` and `Textarea` share that look.
+  that are. `Input` and `Textarea` share that look.
 - Say **why** in the helper text (who owns the value, and how to change it if that is possible).
 - **`disabled` is something else:** a control that is temporarily unavailable (a submit lock, a
   dependency not met). It greys the value out and drops it from the tab order. Never use it for a
@@ -964,9 +975,9 @@ validation feedback and it is **not** required by the submit lock. Two cases:
 - **Submit lock — you don't need a helper, and you get none.** The `:disabled="submitting"` applied to
   every control during a save is transient (it clears in `finally`) and the Save button's `:loading`
   already says the form is busy. **Don't add a disabled-reason helper just because fields are locked
-  mid-submit.** A `field-*` that already has a guidance `helper-text` keeps showing it (its `kind` flips
-  to `disabled`, so the lock glyph joins it for the ~1s of the request); one with **no** `helper-text`
-  renders **no helper row at all** — the field writes no copy of its own, so nothing appears and
+  mid-submit.** A `Field` that already has a guidance `Field.Description` keeps showing it (its tone
+  flips to `disabled`, so the lock glyph joins it for the ~1s of the request); one with **no**
+  description renders **no helper row at all** — the field writes no copy of its own, so nothing appears and
   disappears under the field mid-save. Do **not** invent a lock explanation for a lock that lasts a
   second.
 
@@ -993,7 +1004,7 @@ Rules:
 | Situation                                                            | Approach                                                                             |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Settings page, resource config, many grouped fields, a Create drawer | **A — Cards + ItemGroups** (`Item.List`, `size="small"`)                             |
-| Login, rename, a short 1–3 field dialog, one wizard step             | **B — Fields separated** (`field-*` stacked)                                         |
+| Login, rename, a short 1–3 field dialog, one wizard step             | **B — Fields separated** (`Field` stacked)                                           |
 | A section mixes a couple of simple rows with a radio block           | **A**, with the radio block as a full-width child inside its `Item`                  |
 | A drawer's Select needs a related resource that doesn't exist yet    | **Nested drawer** — quick-add opens a second drawer; each drawer its own scoped save |
 
@@ -1018,7 +1029,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## References
 
-- Field wrappers, `Label`, `HelperText`, `Item`, `Card`, `Select`, `Button` import paths: ask the
+- `Field` and its parts, `Label`, `HelperText`, `Item`, `Card`, `Select`, `Button` import paths: ask the
   webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
   every key is a real subpath.
 - Companion skills: `/webkit-ux-heuristics` (states + inline error placement), `/webkit-ui-states`
@@ -1032,9 +1043,10 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## Definition of Done
 
-- [ ] Every control is a complete `Field*` (`FieldText`, `FieldTextarea`, `FieldPassword`, `FieldRadioBlock`,
-      `FieldSwitch`, …) unless no `Field*` fits; a loose input (`Input`, `Select`, …) is used only as
-      the fallback, and then the label + `aria-describedby` are wired by hand.
+- [ ] Every labelled control sits in a `Field` (`Field.Label` + control + `Field.Description` /
+      `Field.Error`, state on the `Field`); checkboxes/radios/switches use `orientation="horizontal"`,
+      choice cards are `Field.Label` wrapping a horizontal `Field`; a bare control is used only when its
+      label lives elsewhere, and then the `aria-label` + `aria-describedby` are wired by hand.
 - [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
       Dialog, or an ItemGroup — single block _or_ multiple overline-titled sections); one save per card only
@@ -1050,17 +1062,17 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       (`text-overline-sm`) above a header-less flush `Card`; a self-contained card that _is_ the form
       uses the `Card` `title` in its header. Never both on one card.
 - [ ] The form uses **one** layout: Cards + ItemGroups (`Item.List`, every `Item` `size="small"`) or
-      Fields separated (`field-*` stacked) — not a mix within a section.
+      Fields separated (`Field` stacked) — not a mix within a section.
 - [ ] Field naming matches the type: in an **ItemGroup**, `Item.Title` is the label and the control
       takes an `aria-label` (no `<Label>` inside an `Item`); in **Fields separated**, a real `Label`
-      (or `field-*` wrapper) with `for`→`id`, and a composed `Select` labels its trigger. No bare
+      (or `Field.Label` inside a `Field`) with `for`→`id`, and a `Select` labels its trigger. No bare
       control with a floating `<p>` label, no placeholder-as-label.
 - [ ] Where a required field has a `Label`, its required tag is **persistent** (always `required`, not
-      revealed on submit) — render the `Label` yourself and leave the `field-*` `label` unset so the tag
+      revealed on submit) — render the `Label` yourself instead of `Field.Label` so the tag
       stays on while only the field's amber state is revealed on submit.
 - [ ] Each section is a native `<fieldset>` with an `sr-only` `<legend>`.
 - [ ] Validation runs on submit only; feedback is the field's state **and** an on-field `HelperText`
-      message (the `field-*` helper row in Fields separated; a `<HelperText>` under the control in an
+      message (`Field.Description` / `Field.Error` in Fields separated; a `<HelperText>` under the control in an
       ItemGroup), bound to the error and cleared on edit. Required-but-empty uses the amber `required`
       state/`kind` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`kind`;
       never both on one field. No error-summary block, no `Alert` callout for field validation.

@@ -57,8 +57,8 @@
   },
   {
     "name": "password-requirements",
-    "path": "src/components/inputs/field-password/password-requirements.ts",
-    "limit": "0.3 KB"
+    "path": "src/components/inputs/password-requirements/index.ts",
+    "limit": "3 KB"
   },
   {
     "name": "chip",
@@ -757,19 +757,9 @@
     "limit": "5.5 KB"
   },
   {
-    "name": "field-time",
-    "path": "src/components/inputs/field-time/field-time.vue",
-    "limit": "8 KB"
-  },
-  {
     "name": "file-dropzone",
     "path": "src/components/inputs/file-dropzone/file-dropzone.vue",
     "limit": "3.5 KB"
-  },
-  {
-    "name": "field-file-upload",
-    "path": "src/components/inputs/field-file-upload/field-file-upload.vue",
-    "limit": "12.5 KB"
   },
   {
     "name": "slider",
@@ -790,5 +780,65 @@
     "name": "wizard-step",
     "path": "src/components/navigation/wizard/wizard-step/wizard-step.vue",
     "limit": "1.5 KB"
+  },
+  {
+    "name": "field",
+    "path": "src/components/inputs/field/index.ts",
+    "limit": "7 KB"
+  },
+  {
+    "name": "field-root",
+    "path": "src/components/inputs/field/field.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "field-label",
+    "path": "src/components/inputs/field/field-label/field-label.vue",
+    "limit": "5.25 KB"
+  },
+  {
+    "name": "field-description",
+    "path": "src/components/inputs/field/field-description/field-description.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "field-error",
+    "path": "src/components/inputs/field/field-error/field-error.vue",
+    "limit": "1.25 KB"
+  },
+  {
+    "name": "field-group",
+    "path": "src/components/inputs/field/field-group/field-group.vue",
+    "limit": "0.5 KB"
+  },
+  {
+    "name": "field-set",
+    "path": "src/components/inputs/field/field-set/field-set.vue",
+    "limit": "0.5 KB"
+  },
+  {
+    "name": "field-legend",
+    "path": "src/components/inputs/field/field-legend/field-legend.vue",
+    "limit": "0.5 KB"
+  },
+  {
+    "name": "field-content",
+    "path": "src/components/inputs/field/field-content/field-content.vue",
+    "limit": "0.5 KB"
+  },
+  {
+    "name": "field-title",
+    "path": "src/components/inputs/field/field-title/field-title.vue",
+    "limit": "0.5 KB"
+  },
+  {
+    "name": "field-separator",
+    "path": "src/components/inputs/field/field-separator/field-separator.vue",
+    "limit": "0.75 KB"
+  },
+  {
+    "name": "input-group-input",
+    "path": "src/components/inputs/input-group/input-group-input/input-group-input.vue",
+    "limit": "1.25 KB"
   }
 ]

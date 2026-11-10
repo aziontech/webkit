@@ -3,7 +3,7 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 31a060a930f0e3951252219cccd35402182560614ae519444f023c15d45e3671
+checksum: 8254b11202120aad4ae4b6eabd146f3f133afc52fc237e021c0742556e9b2d9c
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -25,7 +25,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 ## When NOT to use
 
 - Rows of many subjects compared attribute by attribute → use `table`.
-- Editable fields → use the form field components (`field-text`, `field-select`, …); this component is read-only.
+- Editable fields → use the form field components (`field` with `input`, `select`, …); this component is read-only.
 - A single headline figure with a trend → use `stat-tile`.
 - A list of items with no key/value relation → use a plain list or `item`.
 

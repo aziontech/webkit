@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, watch } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { cn } from '../../../utils/cn'
 
   defineOptions({
@@ -34,6 +35,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    labelledBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    disabled: () => props.disabled
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-switch')
 
   const passthroughAttrs = computed(() => {
@@ -57,12 +72,12 @@
   )
 
   function handleToggle() {
-    if (props.disabled) return
+    if (isDisabled.value) return
     emit('update:modelValue', !isChecked.value)
   }
 
   function handleKeydown(event: globalThis.KeyboardEvent) {
-    if (props.disabled) return
+    if (isDisabled.value) return
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
       handleToggle()
@@ -87,14 +102,19 @@
     ref="buttonRef"
     type="button"
     role="switch"
+    :id="controlId"
+    :aria-describedby="describedBy"
+    :aria-labelledby="attrs['aria-label'] ? undefined : labelledBy"
+    :aria-invalid="isInvalid || undefined"
+    :aria-required="isRequired || undefined"
     :aria-checked="isChecked"
-    :aria-disabled="disabled || undefined"
-    :disabled="disabled"
+    :aria-disabled="isDisabled || undefined"
+    :disabled="isDisabled"
     :data-testid="testId"
     :data-kind="kind"
     :data-checked="isChecked || null"
     :data-focused="focused || null"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     :class="rootClass"
     v-bind="passthroughAttrs"
     @click="handleToggle"

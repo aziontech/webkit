@@ -18,6 +18,10 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-trigger'
   )
+  const triggerId = computed(() => (attrs['id'] as string | undefined) ?? ctx.controlId.value)
+  const describedBy = computed(
+    () => (attrs['aria-describedby'] as string | undefined) ?? ctx.describedBy.value
+  )
 
   const onClick = () => {
     if (ctx.disabled.value || ctx.readonly.value) return
@@ -45,6 +49,8 @@
     "
     v-bind="$attrs"
     type="button"
+    :id="triggerId"
+    :aria-describedby="describedBy"
     role="combobox"
     aria-haspopup="listbox"
     :aria-expanded="ctx.open.value"

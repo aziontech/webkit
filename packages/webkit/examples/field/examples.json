@@ -1,0 +1,36 @@
+{
+  "component": "field",
+  "title": "Components/Primitives/Inputs/Field",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "`Field` + `Field.Label` + `Input` + `Field.Description`. The label targets the input and the input is described by the description — no ids to wire.",
+      "file": "default.vue"
+    },
+    {
+      "name": "DescriptionAndError",
+      "summary": "State lives on the `Field`: `required` shows the label's Required marker and sets `required` on the input; `invalid` sets `aria-invalid`. `Field.Error` is announced through `aria-describedby` next to the description.",
+      "file": "description-and-error.vue"
+    },
+    {
+      "name": "Horizontal",
+      "summary": "`orientation=\"horizontal\"` puts a `Checkbox` or `Switch` beside a `Field.Content` that stacks its label and description.",
+      "file": "horizontal.vue"
+    },
+    {
+      "name": "ChoiceCard",
+      "summary": "A `Field.Label` wrapping a horizontal `Field` becomes a selectable card: the whole card toggles the control and takes the selected tokens while it is checked. Replaces the v5 `field-checkbox-block`, `field-radio-block` and `field-switch-block`.",
+      "file": "choice-card.vue"
+    },
+    {
+      "name": "Fieldset",
+      "summary": "`Field.Set` + `Field.Legend` group related fields; a nested set with `kind=\"label\"` groups a radio choice. `Field.Group` stacks the fields and `Field.Separator` divides them.",
+      "file": "fieldset.vue"
+    },
+    {
+      "name": "InputGroup",
+      "summary": "An `InputGroup` inside a `Field`: `InputGroup.Input` picks up the field's id, description and state like any other control.",
+      "file": "input-group.vue"
+    }
+  ]
+}

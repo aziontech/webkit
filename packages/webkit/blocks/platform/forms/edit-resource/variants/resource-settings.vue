@@ -11,7 +11,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
@@ -20,6 +20,7 @@
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Textarea from '@aziontech/webkit/textarea'
@@ -990,16 +991,27 @@
                                         class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
                                       >
                                         <legend class="sr-only">Type</legend>
-                                        <FieldRadioBlock
+                                        <Field.Label
                                           v-for="option in typeOptions"
                                           :key="option.value"
-                                          v-model="form.type"
-                                          :value="option.value"
-                                          name="access-lists-type"
-                                          :label="option.label"
-                                          :description="option.description"
-                                          :disabled="saving"
-                                        />
+                                        >
+                                          <Field
+                                            orientation="horizontal"
+                                            :disabled="saving"
+                                          >
+                                            <RadioButton
+                                              v-model="form.type"
+                                              :value="option.value"
+                                              name="access-lists-type"
+                                            />
+                                            <Field.Content>
+                                              <Field.Title>{{ option.label }}</Field.Title>
+                                              <Field.Description v-if="option.description">{{
+                                                option.description
+                                              }}</Field.Description>
+                                            </Field.Content>
+                                          </Field>
+                                        </Field.Label>
                                       </fieldset>
                                     </div>
                                   </Item.Actions>

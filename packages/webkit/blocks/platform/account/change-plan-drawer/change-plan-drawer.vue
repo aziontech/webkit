@@ -1,4 +1,8 @@
 <script setup>
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CardPricing from '@aziontech/webkit/card-pricing'
@@ -10,9 +14,6 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import FieldCheckbox from '@aziontech/webkit/field-checkbox'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldText from '@aziontech/webkit/field-text'
   import Link from '@aziontech/webkit/link'
   import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -515,53 +516,69 @@
                           :disabled="submitting"
                         >
                           <legend class="sr-only">Payment Method</legend>
-                          <FieldText
-                            v-model="cardForm.holder"
-                            label="Cardholder's full name"
-                            input-id="payment-holder"
-                            name="cardholderName"
-                            size="large"
-                            placeholder="Jane A. Doe"
-                            autocomplete="cc-name"
-                          />
-                          <FieldSelect
-                            v-model="cardForm.country"
-                            label="Country/Region"
-                            :options="countryOptions"
-                            input-id="payment-country"
-                            size="large"
-                          />
-                          <FieldText
-                            v-model="cardForm.number"
-                            label="Credit card number"
-                            input-id="payment-number"
-                            name="cardNumber"
-                            size="large"
-                            placeholder="1234 5678 9012 3456"
-                            autocomplete="cc-number"
-                            inputmode="numeric"
-                          />
+                          <Field>
+                            <Field.Label>Cardholder's full name</Field.Label>
+                            <Input
+                              v-model="cardForm.holder"
+                              name="cardholderName"
+                              size="large"
+                              placeholder="Jane A. Doe"
+                              autocomplete="cc-name"
+                            />
+                          </Field>
+                          <Field>
+                            <Field.Label>Country/Region</Field.Label>
+                            <Select
+                              v-model="cardForm.country"
+                              size="large"
+                            >
+                              <Select.Trigger />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="option in countryOptions"
+                                  :key="String(option.value)"
+                                  :value="option.value"
+                                  :disabled="option.disabled"
+                                >
+                                  {{ option.label }}
+                                </Select.Option>
+                              </Select.Content>
+                            </Select>
+                          </Field>
+                          <Field>
+                            <Field.Label>Credit card number</Field.Label>
+                            <Input
+                              v-model="cardForm.number"
+                              name="cardNumber"
+                              size="large"
+                              placeholder="1234 5678 9012 3456"
+                              autocomplete="cc-number"
+                              inputmode="numeric"
+                            />
+                          </Field>
                           <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                            <FieldText
-                              v-model="cardForm.expiry"
-                              label="Expiration Date (MM/YY)"
-                              input-id="payment-expiry"
-                              name="cardExpiry"
-                              size="large"
-                              placeholder="08 / 26"
-                              autocomplete="cc-exp"
-                              inputmode="numeric"
-                            />
-                            <FieldText
-                              v-model="cardForm.code"
-                              label="Security Code (CVC/CVV)"
-                              input-id="payment-code"
-                              name="cardSecurityCode"
-                              size="large"
-                              placeholder="999"
-                              autocomplete="cc-csc"
-                              inputmode="numeric"
-                            />
+                            <Field>
+                              <Field.Label>Expiration Date (MM/YY)</Field.Label>
+                              <Input
+                                v-model="cardForm.expiry"
+                                name="cardExpiry"
+                                size="large"
+                                placeholder="08 / 26"
+                                autocomplete="cc-exp"
+                                inputmode="numeric"
+                              />
+                            </Field>
+                            <Field>
+                              <Field.Label>Security Code (CVC/CVV)</Field.Label>
+                              <Input
+                                v-model="cardForm.code"
+                                name="cardSecurityCode"
+                                size="large"
+                                placeholder="999"
+                                autocomplete="cc-csc"
+                                inputmode="numeric"
+                              />
+                            </Field>
                           </div>
                           <Alert
                             severity="info"
@@ -605,57 +622,102 @@
                       :disabled="submitting"
                     >
                       <legend class="sr-only">Address information</legend>
-                      <FieldCheckbox
-                        v-model="address.useAccountInformation"
-                        label="Use the same information as my account"
-                        description="Uncheck to bill this organization at a different address."
-                        input-id="upgrade-same-address"
-                        name="useAccountInformation"
-                      />
+                      <Field orientation="horizontal">
+                        <Checkbox
+                          v-model="address.useAccountInformation"
+                          binary
+                          name="useAccountInformation"
+                        />
+                        <Field.Content>
+                          <Field.Label>Use the same information as my account</Field.Label>
+                          <Field.Description
+                            >Uncheck to bill this organization at a different
+                            address.</Field.Description
+                          >
+                        </Field.Content>
+                      </Field>
                       <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                        <FieldSelect
-                          v-model="address.country"
-                          label="Country"
-                          :options="countryOptions"
-                          input-id="upgrade-country"
-                          placeholder="Select an option"
-                          size="large"
-                        />
-                        <FieldText
-                          v-model="address.postalCode"
-                          label="Postal Code"
-                          input-id="upgrade-postal-code"
-                          name="postalCode"
-                          size="large"
-                          placeholder="00000-000"
-                          autocomplete="postal-code"
-                        />
-                        <FieldSelect
-                          v-model="address.state"
-                          label="State/Region"
-                          :options="stateOptions"
-                          input-id="upgrade-state"
-                          placeholder="Select an option"
-                          size="large"
-                        />
-                        <FieldSelect
-                          v-model="address.city"
-                          label="City"
-                          :options="cityOptions"
-                          input-id="upgrade-city"
-                          placeholder="Select an option"
-                          size="large"
-                        />
+                        <Field>
+                          <Field.Label>Country</Field.Label>
+                          <Select
+                            v-model="address.country"
+                            placeholder="Select an option"
+                            size="large"
+                          >
+                            <Select.Trigger />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in countryOptions"
+                                :key="String(option.value)"
+                                :value="option.value"
+                                :disabled="option.disabled"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
+                        </Field>
+                        <Field>
+                          <Field.Label>Postal Code</Field.Label>
+                          <Input
+                            v-model="address.postalCode"
+                            name="postalCode"
+                            size="large"
+                            placeholder="00000-000"
+                            autocomplete="postal-code"
+                          />
+                        </Field>
+                        <Field>
+                          <Field.Label>State/Region</Field.Label>
+                          <Select
+                            v-model="address.state"
+                            placeholder="Select an option"
+                            size="large"
+                          >
+                            <Select.Trigger />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in stateOptions"
+                                :key="String(option.value)"
+                                :value="option.value"
+                                :disabled="option.disabled"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
+                        </Field>
+                        <Field>
+                          <Field.Label>City</Field.Label>
+                          <Select
+                            v-model="address.city"
+                            placeholder="Select an option"
+                            size="large"
+                          >
+                            <Select.Trigger />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in cityOptions"
+                                :key="String(option.value)"
+                                :value="option.value"
+                                :disabled="option.disabled"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
+                        </Field>
                       </div>
-                      <FieldText
-                        v-model="address.line2"
-                        label="Apartment, floor, etc."
-                        input-id="upgrade-address-line-2"
-                        name="addressLine2"
-                        size="large"
-                        placeholder="Optional"
-                        autocomplete="address-line2"
-                      />
+                      <Field>
+                        <Field.Label>Apartment, floor, etc.</Field.Label>
+                        <Input
+                          v-model="address.line2"
+                          name="addressLine2"
+                          size="large"
+                          placeholder="Optional"
+                          autocomplete="address-line2"
+                        />
+                      </Field>
                     </fieldset>
                   </template>
                 </Card>

@@ -1,8 +1,9 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import Switch from '@aziontech/webkit/switch'
   import Wizard from '@aziontech/webkit/wizard'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldSwitch from '@aziontech/webkit/field-switch'
   import { ref } from 'vue'
 
   const step = ref(0)
@@ -43,16 +44,26 @@
       description="Name the resource and choose where it runs."
     >
       <div class="flex flex-col gap-(--spacing-md)">
-        <FieldText
-          v-model="name"
-          label="Name"
-          required
-        />
-        <FieldSelect
-          v-model="region"
-          label="Region"
-          :options="regions"
-        />
+        <Field required>
+          <Field.Label> Name </Field.Label>
+          <Input v-model="name" />
+        </Field>
+        <Field>
+          <Field.Label> Region </Field.Label>
+          <Select v-model="region">
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in regions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
       </div>
     </Wizard.Step>
     <Wizard.Step
@@ -60,16 +71,31 @@
       description="Fine-tune the defaults."
     >
       <div class="flex flex-col gap-(--spacing-md)">
-        <FieldSelect
-          v-model="environment"
-          label="Environment"
-          :options="environments"
-        />
-        <FieldSwitch
-          v-model="logging"
-          label="Enable logging"
-          description="Keep a record of every request this resource handles."
-        />
+        <Field>
+          <Field.Label> Environment </Field.Label>
+          <Select v-model="environment">
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in environments"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
+        <Field orientation="horizontal">
+          <Switch v-model="logging" />
+          <Field.Content>
+            <Field.Label> Enable logging </Field.Label>
+            <Field.Description>
+              Keep a record of every request this resource handles.
+            </Field.Description>
+          </Field.Content>
+        </Field>
       </div>
     </Wizard.Step>
     <Wizard.Step
@@ -77,16 +103,29 @@
       description="Decide what happens to matching requests."
     >
       <div class="flex flex-col gap-(--spacing-md)">
-        <FieldText
-          v-model="path"
-          label="Path pattern"
-          helper-text="Requests whose path matches this pattern follow the behavior below."
-        />
-        <FieldSelect
-          v-model="behavior"
-          label="Behavior"
-          :options="behaviors"
-        />
+        <Field>
+          <Field.Label> Path pattern </Field.Label>
+          <Input v-model="path" />
+          <Field.Description>
+            Requests whose path matches this pattern follow the behavior below.
+          </Field.Description>
+        </Field>
+        <Field>
+          <Field.Label> Behavior </Field.Label>
+          <Select v-model="behavior">
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in behaviors"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
       </div>
     </Wizard.Step>
     <Wizard.Step

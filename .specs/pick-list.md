@@ -4,9 +4,9 @@ category: data
 structure: composition
 status: implemented
 spec_version: 2
-checksum: 3812825685f3c54c96eed183d29d86238a12691ed896d92c8579ebc1af7a98d4
+checksum: 39650aa9ef208c267cdf004388c5159beee500775120b874f79c8d011e249763
 created: 2026-06-25
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Pick List — Component Spec
@@ -27,7 +27,7 @@ Compound, composition API: the root (`<PickList>`) owns the bound data (`v-model
 
 - Picking a few values in a compact field → use `multi-select`.
 - Selecting rows of tabular data with columns, sorting, or pagination → use `table` with row selection.
-- A handful of fixed options → use `field-checkbox` for each.
+- A handful of fixed options → use a horizontal `field` with a `checkbox` for each.
 
 ## Related
 
@@ -48,20 +48,23 @@ Composition — one import of the root; every part is reached via dot-notation (
 
 ```vue
 <script setup>
-import PickList from '@aziontech/webkit/pick-list'
-import { ref } from 'vue'
+  import PickList from '@aziontech/webkit/pick-list'
+  import { ref } from 'vue'
 
-const model = ref([
-  [
-    { id: 1, label: 'Edge Functions' },
-    { id: 2, label: 'WAF' }
-  ],
-  [{ id: 3, label: 'Cache' }]
-])
+  const model = ref([
+    [
+      { id: 1, label: 'Edge Functions' },
+      { id: 2, label: 'WAF' }
+    ],
+    [{ id: 3, label: 'Cache' }]
+  ])
 </script>
 
 <template>
-  <PickList v-model="model" data-key="id">
+  <PickList
+    v-model="model"
+    data-key="id"
+  >
     <PickList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>
     </PickList.Source>
@@ -108,25 +111,25 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `[unknown[], unknown[]]` | `() => [[], []]` | false | Bound pair of lists as `[sourceItems, targetItems]` (v-model). |
-| `dataKey` | `string` | `''` | false | Item field used as each row's render key (falls back to the index). Selection is always tracked by index. |
-| `disabled` | `boolean` | `false` | false | Disables all selection and move controls and applies disabled tokens. |
-| `moveOnDoubleClick` | `boolean` | `true` | false | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
+| Prop                | Type                     | Default          | Required | JSDoc                                                                                                                            |
+| ------------------- | ------------------------ | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `modelValue`        | `[unknown[], unknown[]]` | `() => [[], []]` | false    | Bound pair of lists as `[sourceItems, targetItems]` (v-model).                                                                   |
+| `dataKey`           | `string`                 | `''`             | false    | Item field used as each row's render key (falls back to the index). Selection is always tracked by index.                        |
+| `disabled`          | `boolean`                | `false`          | false    | Disables all selection and move controls and applies disabled tokens.                                                            |
+| `moveOnDoubleClick` | `boolean`                | `true`           | false    | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:modelValue` | `[unknown[], unknown[]]` | v-model update with the new `[sourceItems, targetItems]` pair. |
-| `move` | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }` | Fired after items move between lists, with the moved items. |
+| Event               | Payload                                                                                      | Notes                                                                                                                                                                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `update:modelValue` | `[unknown[], unknown[]]`                                                                     | v-model update with the new `[sourceItems, targetItems]` pair.                                                                                                                                                                           |
+| `move`              | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }`                                | Fired after items move between lists, with the moved items.                                                                                                                                                                              |
 | `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
+| Slot      | Scope                                                       | Notes                                                                                                                                                                                                                                                                      |
+| --------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `default` | `{ move, moveAll, hasSelection, count, disabled, loading }` | Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`. |
 
 The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its instance (via `defineExpose`), so controls rendered **outside** the root can drive it through a template ref. The signatures match the slot scope above.
@@ -141,38 +144,38 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| control hover/focus | `transition-colors duration-150 ease-out` on move buttons | inline (matches catalog) | `motion-reduce:transition-none` |
-| item moved between lists | each list (`pick-list-source` / `pick-list-target`) is a `TransitionGroup`; an arriving item fades in (`opacity-0` → `opacity-100`) and a departing item fades out, via an inline `transition: opacity` built from the `duration` / `curve` primitives in `@aziontech/theme/animations` (centralized in `presets/transitions.ts`, mirroring `message` / `toast`). The same swap covers the loading spinner toggling in/out. | semantic (`duration` / `curve` from animate.js) | `motion-reduce:transition-none` on the enter/leave active class |
-| loading | the composed `Spinner` component rotates continuously inside a loading list | semantic (owned by `Spinner`) | the `Spinner` carries its own reduced-motion fallback |
+| Trigger                  | Animation / Transition                                                                                                                                                                                                                                                                                                                                                                                                      | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                         |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------- |
+| control hover/focus      | `transition-colors duration-150 ease-out` on move buttons                                                                                                                                                                                                                                                                                                                                                                   | inline (matches catalog)                          | `motion-reduce:transition-none`                                 |
+| item moved between lists | each list (`pick-list-source` / `pick-list-target`) is a `TransitionGroup`; an arriving item fades in (`opacity-0` → `opacity-100`) and a departing item fades out, via an inline `transition: opacity` built from the `duration` / `curve` primitives in `@aziontech/theme/animations` (centralized in `presets/transitions.ts`, mirroring `message` / `toast`). The same swap covers the loading spinner toggling in/out. | semantic (`duration` / `curve` from animate.js)   | `motion-reduce:transition-none` on the enter/leave active class |
+| loading                  | the composed `Spinner` component rotates continuously inside a loading list                                                                                                                                                                                                                                                                                                                                                 | semantic (owned by `Spinner`)                     | the `Spinner` carries its own reduced-motion fallback           |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (title) | `.text-label-lg` |
-| typography (option) | `.text-body-md` |
-| surface (list) | `var(--bg-surface)` |
-| surface (option hover) | `var(--bg-hover)` |
-| surface (option selected) | `var(--bg-selected)` |
-| text | `var(--text-default)` |
-| text (title) | `var(--text-muted)` |
-| text (disabled) | `var(--text-disabled)` |
-| surface (disabled) | `var(--bg-disabled)` |
-| border | `var(--border-default)` |
-| ring | `var(--ring-color)` |
-| spacing (list padding) | `var(--spacing-xs)` |
-| spacing (option padding) | `var(--spacing-sm)` |
-| gap (lists + controls) | `var(--spacing-sm)` |
-| shape (list) | `var(--shape-card)` |
-| shape (option) | `var(--shape-elements)` |
+| Region                    | Token (DESIGN.md)       |
+| ------------------------- | ----------------------- |
+| typography (title)        | `.text-label-lg`        |
+| typography (option)       | `.text-body-md`         |
+| surface (list)            | `var(--bg-surface)`     |
+| surface (option hover)    | `var(--bg-hover)`       |
+| surface (option selected) | `var(--bg-selected)`    |
+| text                      | `var(--text-default)`   |
+| text (title)              | `var(--text-muted)`     |
+| text (disabled)           | `var(--text-disabled)`  |
+| surface (disabled)        | `var(--bg-disabled)`    |
+| border                    | `var(--border-default)` |
+| ring                      | `var(--ring-color)`     |
+| spacing (list padding)    | `var(--spacing-xs)`     |
+| spacing (option padding)  | `var(--spacing-sm)`     |
+| gap (lists + controls)    | `var(--spacing-sm)`     |
+| shape (list)              | `var(--shape-card)`     |
+| shape (option)            | `var(--shape-elements)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

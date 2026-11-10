@@ -24,7 +24,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Control-only pill toggle `Switch` (36×20 px). Two visual kinds: `default` (plain handle) and `privacy` (handle carries a lock icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts.'
+          'Control-only pill toggle `Switch` (36×20 px). Two visual kinds: `default` (plain handle) and `privacy` (handle carries a lock icon mirroring the toggled state). No label or description — wrap it in a `Field` (`orientation="horizontal"`, or a `Field.Label` choice card) for labeled layouts.'
       },
       canvas: { sourceState: 'shown' }
     }

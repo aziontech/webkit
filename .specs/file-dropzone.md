@@ -3,7 +3,7 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: aa6b7f4f872e002f42c21540da8ac61ce1871a6c4118cac34ac3934182bb3a9c
+checksum: f5b279d0966d41c658212adcf195868c8117504f05d37e521720209ac250e3ad
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -13,7 +13,7 @@ last_updated: 2026-11-10
 
 ## Purpose
 
-A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (and later to a `field-file-upload` that will compose this component).
+A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages).
 
 `kind` covers the two places a drop target lives:
 
@@ -133,7 +133,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 
 `multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `<input multiple>` attribute the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 
-No `v-model`: the dropzone holds no value. The accumulated file list belongs to the consumer (and to the planned `field-file-upload`).
+No `v-model`: the dropzone holds no value. The accumulated file list belongs to the consumer (composed with a `Field`).
 
 ## Events
 
@@ -161,7 +161,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 - **Inline / disabled**: `--border-default` dashed border, `--bg-disabled` fill, icon, title and description in `--text-disabled`, `cursor-not-allowed`. The slot still renders, and the consumer disables its own Browse button.
 - **Overlay / idle**: not displayed (`v-show`). The root stays in the DOM so `data-testid` and `$attrs` are always present.
 - **Overlay / active**: `absolute inset-0` over the nearest positioned ancestor. 2px dashed `--border-selected` border on a `--bg-canvas` fill, `--shape-card` radius. The content column sits in a `sticky top-0` wrapper capped at the viewport height (`h-dvh max-h-full`), so the prompt stays centered in the viewport even when the ancestor is taller than the screen (the page-level case). It receives pointer events while active so the drop lands on it, and `data-[state=idle]:pointer-events-none` keeps the fade-out from swallowing clicks.
-- No `loading`, `empty` or `error` state: the dropzone does not upload, validate or list anything. `invalid` only paints the border; the message and the file list belong to the consumer (see `field-file-upload`).
+- No `loading`, `empty` or `error` state: the dropzone does not upload, validate or list anything. `invalid` only paints the border; the message and the file list belong to the consumer (compose it inside a `Field`).
 
 ## Behavior
 
@@ -239,13 +239,13 @@ Canonical layout, with two justified deviations: there is no `size` prop (no Siz
 
 - **`multiple="false"` with several accepted files:** the draft accepts the first and rejects the rest. Cloudscape-style "reject the whole drop" is the alternative. Decide before approval, because changing it later changes what `drop` delivers.
 - **Reject reason:** `reject` carries `File[]` only, so the consumer cannot tell "wrong type" from "too many" without re-running the filter. A reason-bearing payload (`{ file, reason }[]`) would be a breaking reshape once shipped. Decide before approval.
-- **Folder drops (Vercel's "drop a folder"):** the draft passes `dataTransfer.files` as the browser exposes them. A dropped directory arrives as an unreadable entry with an empty `type`, and nothing is traversed recursively (`webkitGetAsEntry`). Folder traversal would be a new prop and a `spec_version` bump, or a `field-file-upload` concern.
+- **Folder drops (Vercel's "drop a folder"):** the draft passes `dataTransfer.files` as the browser exposes them. A dropped directory arrives as an unreadable entry with an empty `type`, and nothing is traversed recursively (`webkitGetAsEntry`). Folder traversal would be a new prop and a `spec_version` bump, or a consumer concern.
 - **Overlay inset:** the sample insets its overlay by the page boundary (`--drop-zone-inset`). The draft covers the positioned ancestor exactly (`inset-0`). The consumer controls the inset by choosing which container is positioned. Revisit if page-level usage needs a gutter.
 - **Stacking token:** see Theme gaps. Paint order is fragile when the container has its own z-indexed children.
 - **Active-state visual baseline:** neither story shows the active look at rest. A `play` function that dispatches a synthetic `dragenter` carrying a `DataTransfer` with a `File` would let the visual gate capture it. Not added to the story list without approval.
 - **Default `title` copy:** `'Drop files to upload'` is English-only. Confirm the microcopy (sentence case, no trailing period) against the console microcopy standard.
-- **`invalid` prop (resolved):** added for `field-file-upload`, which forwards `accept` and re-emits this component's `reject` for dropped files instead of filtering them a second time.
-- **File size / count limits:** out of scope here (the planned `field-file-upload`). Confirm that no `maxSize` / `maxFiles` is wanted on the dropzone itself.
+- **`invalid` prop (resolved):** added so a consumer form can paint the dropzone from its own validation (an enclosing `Field`'s error) while reusing this component's `reject` for dropped files instead of filtering them a second time.
+- **File size / count limits:** out of scope here (a consumer concern). Confirm that no `maxSize` / `maxFiles` is wanted on the dropzone itself.
 
 ## Constraints — DO NOT
 

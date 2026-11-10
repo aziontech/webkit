@@ -17,9 +17,10 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
@@ -811,12 +812,10 @@
                           severity="warning"
                           label="Once confirmed, this action can't be reversed. The selected resource will be deleted, along with all associated settings or instances. Check the Help Center for more details."
                         />
-                        <FieldText
-                          v-model="confirmation"
-                          input-id="confirm-delete"
-                          :label="confirmLabel"
-                          :disabled="submitting"
-                        />
+                        <Field :disabled="submitting">
+                          <Field.Label>{{ confirmLabel }}</Field.Label>
+                          <Input v-model="confirmation" />
+                        </Field>
                       </div>
                     </PanelContent>
 

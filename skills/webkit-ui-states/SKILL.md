@@ -2,7 +2,7 @@
 name: webkit-ui-states
 description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
-last_updated: 2026-07-21
+last_updated: 2026-11-10
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
 ---
@@ -342,11 +342,11 @@ required value, an out-of-range number stays **next to the field** with the fiel
 (`/webkit-form`, and `/webkit-ux-heuristics` for error placement) — validating before submit is error
 prevention, and it never fires a global toast.
 
-| Failure                                                  | Where it goes                                   |
-| -------------------------------------------------------- | ----------------------------------------------- |
-| Field is invalid / required / malformed                  | inline `field-*` + `message`, next to the field |
-| Request failed (network, 5xx, 4xx not tied to one field) | `toast.error` / `toast.promise`                 |
-| Long request succeeded / started                         | `toast.success` (optional)                      |
+| Failure                                                  | Where it goes                                 |
+| -------------------------------------------------------- | --------------------------------------------- |
+| Field is invalid / required / malformed                  | inline `Field` + `message`, next to the field |
+| Request failed (network, 5xx, 4xx not tied to one field) | `toast.error` / `toast.promise`               |
+| Long request succeeded / started                         | `toast.success` (optional)                    |
 
 Two more rows exist, and both are places a toast is **wrong**: a server rejection **scoped to one
 field** (→ a `Alert` in that field's own section + the field's `invalid` state) and anything on a
@@ -367,7 +367,7 @@ permanent, closable one. The full table lives in **`/webkit-errors`**.
   `<Toaster>` is mounted once. Never a silent `console.error`.
 - Hand-rolled "Nothing here" strings or bespoke spinners are forbidden when `EmptyState` / `Skeleton`
   / `Spinner` exist — resolve them via the MCP/catalog.
-- Field validation is inline (`field-*` + `message`), never in this matrix and never a toast.
+- Field validation is inline (`Field` + `message`), never in this matrix and never a toast.
 
 ## Review output
 
@@ -397,5 +397,5 @@ End with: `states + async sound` or `N gaps — fix before polish`.
 - [ ] Every async action locks its scope off **one** flag: trigger `:loading`, every field `:disabled`.
 - [ ] The handler guards on the flag and releases it in `finally` (success **and** failure).
 - [ ] `<Toaster>` is mounted once; request/API errors raise `toast.error` / `toast.promise` with what failed + how to recover (Retry where it applies).
-- [ ] Field validation stays inline (`field-*` + `message`) — never a toast.
+- [ ] Field validation stays inline (`Field` + `message`) — never a toast.
 - [ ] Every state component came from the MCP/catalog, not a guessed or borrowed path.

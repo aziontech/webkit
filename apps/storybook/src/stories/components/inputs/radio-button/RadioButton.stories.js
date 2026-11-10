@@ -26,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Control only — the circular radio input with no label or description. Pair with an external label or use FieldRadio / FieldRadioBlock for built-in text.'
+          'Control only — the circular radio input with no label or description. Pair with an external label or wrap it in a horizontal Field (or a Field.Label choice card) for built-in text.'
       },
       canvas: { sourceState: 'shown' }
     }

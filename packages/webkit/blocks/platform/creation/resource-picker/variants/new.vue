@@ -1,12 +1,12 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, reactive, ref } from 'vue'
 
   const projectModes = [
@@ -152,15 +152,17 @@
             v-if="mode === 'new'"
             class="pb-(--spacing-md)"
           >
-            <FieldText
-              input-id="project-name"
-              v-model="name"
-              label="Name"
-              size="large"
-              placeholder="my-project"
-              :required="!!projectPicker.message"
-              :helper-text="projectPicker.message || 'Lowercase letters, numbers, and hyphens.'"
-            />
+            <Field :required="!!projectPicker.message">
+              <Field.Label>Name</Field.Label>
+              <Input
+                v-model="name"
+                size="large"
+                placeholder="my-project"
+              />
+              <Field.Description>{{
+                projectPicker.message || 'Lowercase letters, numbers, and hyphens.'
+              }}</Field.Description>
+            </Field>
           </div>
         </div>
 

@@ -5,15 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: b3fd6636bf664ef930e254e45fc09c4c0bed8c2de3262c666e4def0744f72dab
+last_updated: 2026-11-10
+checksum: 770df0753c31a3d11077bade79d94e2c7e11e57db3733c8ac724d83369c1e2da
 ---
 
 # ClosingCallToActionNewsletter — Component Spec
 
 ## Purpose
 
-The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field-text`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.
+The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field`, `input`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.
 
 ## When to use
 
@@ -135,7 +135,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by `field-text` and `button`.
+- Visible focus: owned by `input` and `button`.
 - Keyboard map: `Tab` reaches the field then the button; `Enter` in the field or on the button submits.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`; the validation message is the field's helper text and `invalid` sets `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline and ask `var(--text-default)`.

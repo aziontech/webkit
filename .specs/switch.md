@@ -7,16 +7,16 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 7e522a80938a84fe8db43692fddda202a32516388afe7f871340ba020194a420
+checksum: c496d57532fc195a2981559819b20518a66da366a908d271ec1c3d48e1a1456f
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Switch — Component Spec
 
 ## Purpose
 
-Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — use `FieldSwitch` / `FieldSwitchBlock` for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
+Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
 
 ## When to use
 
@@ -26,16 +26,15 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 
 ## When NOT to use
 
-- The toggle needs its own label, description, or helper text in a form → use `field-switch`.
-- The toggle should sit in a bordered card with a description → use `field-switch-block`.
-- A text value that only applies while a feature is on → use `field-text-switch`.
+- The toggle needs its own label, description, or helper text in a form → wrap it in a horizontal `field` (`Field orientation="horizontal"` + `Field.Content`).
+- The toggle should sit in a bordered card with a description → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`).
+- A text value that only applies while a feature is on → compose a `Field` with an `InputGroup` (`InputGroup.Input` + an `InputGroup.Addon` holding the switch).
 - The choice is submitted with a form instead of applied immediately → use `checkbox`.
 
 ## Related
 
-- `field-switch` — switch with label, description, and disabled helper.
-- `field-switch-block` — card-style switch with label and description.
-- `field-text-switch` — text input with a trailing switch that enables it.
+- `field` — a horizontal `Field` gives the switch its label and description; a `Field.Label` wrapping it is a card-style option.
+- `input-group` — a text input with a trailing switch addon that enables it, inside a `Field`.
 - `checkbox` — boolean selection submitted with a form.
 - `item` — list row whose title names a bare switch.
 
@@ -50,30 +49,33 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 
 ```vue
 <script setup>
-import Switch from '@aziontech/webkit/switch'
-import { ref } from 'vue'
+  import Switch from '@aziontech/webkit/switch'
+  import { ref } from 'vue'
 
-const enabled = ref(false)
+  const enabled = ref(false)
 </script>
 
 <template>
-  <Switch v-model="enabled" kind="default" />
+  <Switch
+    v-model="enabled"
+    kind="default"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `boolean` | `false` | false | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant. |
-| `kind` | `'default' \| 'privacy'` | `'default'` | false | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
-| `focused` | `boolean` | `false` | false | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
+| Prop         | Type                     | Default     | Required | JSDoc                                                                                              |
+| ------------ | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `modelValue` | `boolean`                | `false`     | false    | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant.               |
+| `kind`       | `'default' \| 'privacy'` | `'default'` | false    | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on).   |
+| `focused`    | `boolean`                | `false`     | false    | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
+| `disabled`   | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                              |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload   | Notes                                                            |
+| ------------------- | --------- | ---------------------------------------------------------------- |
 | `update:modelValue` | `boolean` | Emitted when the user toggles the switch. Paired with `v-model`. |
 
 ## Slots
@@ -91,36 +93,36 @@ const enabled = ref(false)
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| track color change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| handle slide | `transition-transform duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none motion-reduce:transform-none` |
+| Trigger            | Animation / Transition                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                      |
+| ------------------ | -------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
+| track color change | `transition-colors duration-150 ease-out`    | inline (matches catalog)                          | `motion-reduce:transition-none`                              |
+| handle slide       | `transition-transform duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none motion-reduce:transform-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| track (off) — background | `var(--bg-surface)` |
-| track (off) — border | `var(--border-default)` |
-| track (on) — background | `var(--accent)` |
-| handle (off) — fill | `var(--text-muted)` |
-| handle (on) — fill | `var(--color-base-white)` (theme-independent white knob on the `--accent` track) |
-| lock icon (off) | `var(--bg-surface)` |
-| lock icon (on) | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
-| track (hover) — overlay | `var(--bg-hover)` (applies to both off and on tracks) |
-| track (disabled) — background | `var(--bg-disabled)` (over the checked `--accent`, so on/off read the same when locked) |
-| track (disabled) — border | `var(--border-default)` |
-| handle (disabled) — fill | `var(--text-disabled)` |
-| disabled — cursor | `cursor-not-allowed` |
-| focus-visible / `data-focused` ring | `var(--ring-color)` |
-| shape — track | `rounded-(--shape-elements)` (6px) |
-| shape — handle | `rounded-(--radius)` (4px — concentric with the track: track 6px − `px-0.5` inset 2px) |
+| Region                              | Token (DESIGN.md)                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| track (off) — background            | `var(--bg-surface)`                                                                                  |
+| track (off) — border                | `var(--border-default)`                                                                              |
+| track (on) — background             | `var(--accent)`                                                                                      |
+| handle (off) — fill                 | `var(--text-muted)`                                                                                  |
+| handle (on) — fill                  | `var(--color-base-white)` (theme-independent white knob on the `--accent` track)                     |
+| lock icon (off)                     | `var(--bg-surface)`                                                                                  |
+| lock icon (on)                      | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
+| track (hover) — overlay             | `var(--bg-hover)` (applies to both off and on tracks)                                                |
+| track (disabled) — background       | `var(--bg-disabled)` (over the checked `--accent`, so on/off read the same when locked)              |
+| track (disabled) — border           | `var(--border-default)`                                                                              |
+| handle (disabled) — fill            | `var(--text-disabled)`                                                                               |
+| disabled — cursor                   | `cursor-not-allowed`                                                                                 |
+| focus-visible / `data-focused` ring | `var(--ring-color)`                                                                                  |
+| shape — track                       | `rounded-(--shape-elements)` (6px)                                                                   |
+| shape — handle                      | `rounded-(--radius)` (4px — concentric with the track: track 6px − `px-0.5` inset 2px)               |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| handle fill (off) — Figma `--surface-300` (#b2b2b2) | inline `bg-(--text-muted)` (closest semantic) | `TODO: introduce semantic --fg-handle (or equivalent) in DESIGN.md` |
+| Figma variable                                                                 | Temporary primitive                                                                                                         | Follow-up                                                                        |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| handle fill (off) — Figma `--surface-300` (#b2b2b2)                            | inline `bg-(--text-muted)` (closest semantic)                                                                               | `TODO: introduce semantic --fg-handle (or equivalent) in DESIGN.md`              |
 | handle fill (on) — fixed white knob over `--accent` (must not flip with theme) | inline `bg-(--color-base-white)` + lock icon `text-(--color-base-black)` (base primitives, intentionally theme-independent) | `TODO: introduce semantic --fg-handle-on / --fg-handle-on-contrast in DESIGN.md` |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -130,7 +132,7 @@ const enabled = ref(false)
 - ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `kind="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically via `FieldSwitch`). The component still exposes a clickable root.
+- Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically a horizontal `Field`, whose label extends the target). The component still exposes a clickable root.
 
 ## Stories (Storybook)
 
@@ -139,7 +141,7 @@ const enabled = ref(false)
 - Disabled — the mutually-exclusive `disabled` state, rendered in both the off and on positions (the locked visual must not depend on `modelValue`).
 
 <!-- Sizes is omitted: the component has no `size` prop (Figma documents a single 36×20 size). -->
-<!-- `disabled` was added in spec_version 9. It was previously omitted on the grounds that "consumers like FieldSwitch own the disabled visual at the wrapper level", but a switch is also used bare wherever the label lives outside it (an ItemGroup row, where `Item.Title` is the label) — there the consumer had no wrapper to own the visual, so `:disabled` blocked interaction natively while the control still looked live. Owning `disabled` here is what makes the lock visible at every call site instead of only inside `FieldSwitch`. -->
+<!-- `disabled` was added in spec_version 9. It was previously omitted on the grounds that "the v5 field wrapper owns the disabled visual", but a switch is also used bare wherever the label lives outside it (an ItemGroup row, where `Item.Title` is the label) — there the consumer had no wrapper to own the visual, so `:disabled` blocked interaction natively while the control still looked live. Owning `disabled` here is what makes the lock visible at every call site instead of only inside a wrapper. -->
 
 ## Constraints — DO NOT
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { cn } from '../../../utils/cn'
   import { toggleControlClasses } from '../presets/interactive-states'
 
@@ -36,6 +37,18 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    labelledBy,
+    disabled: isDisabled
+  } = useFieldControl({
+    id: () => props.inputId || (attrs['id'] as string | undefined),
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    disabled: () => props.disabled
+  })
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-radio-button'
   )
@@ -52,7 +65,7 @@
   const isChecked = computed(() => props.modelValue === props.value)
 
   const handleChange = () => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
 
@@ -84,16 +97,18 @@
     :class="rootClasses"
     :data-testid="testId"
     :data-checked="isChecked || null"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
   >
     <input
-      :id="inputId"
+      :id="controlId"
+      :aria-describedby="describedBy"
+      :aria-labelledby="attrs['aria-label'] ? undefined : labelledBy"
       type="radio"
       class="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
       :name="name"
       :value="value"
       :checked="isChecked"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :aria-checked="isChecked"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
