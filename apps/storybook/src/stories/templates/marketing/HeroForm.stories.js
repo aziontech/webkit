@@ -1,4 +1,4 @@
-import HeroForm from '@aziontech/webkit/sections/hero-form'
+import HeroForm from '@aziontech/webkit/hero-form'
 
 import { sectionMarkup, SUBMIT_STATE_BINDINGS, submitWiring } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
@@ -6,7 +6,7 @@ import { toSfc } from '../../_shared/story-source'
 import { CONTACT_SECTION, UNDER_ATTACK_SECTION } from './_sections/hero-form'
 
 const IMPORTS = [
-  "import HeroForm from '@aziontech/webkit/sections/hero-form'",
+  "import HeroForm from '@aziontech/webkit/hero-form'",
   "import { ref } from 'vue'"
 ]
 

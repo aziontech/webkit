@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 8735d4708c70bb45b0b332d19c24a8148d789e75c04fd47351686f42c8c8321b
+checksum: e45bf60d83583d3f1d172ca5a8c544a7b69fa645d8315d187c97a1933b970372
 ---
 # ArchitectureTabs — Component Spec
 
@@ -37,7 +37,7 @@ The architecture band of a product page: a horizontal section title with one lar
 
 ```vue
 <script setup>
-import ArchitectureTabs from '@aziontech/webkit/sections/architecture-tabs'
+import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'
 </script>
 
 <template>

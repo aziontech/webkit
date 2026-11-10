@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: e1ef481f75424f1f6f3983d77bec06a1df654316b1036f5980c8424acb71d69b
+checksum: cbf8b61a2bb7102cac0be6d0307652f57f4da353a5af3263e63f773c228dd1ba
 ---
 # ClientQuotes — Component Spec
 
@@ -36,7 +36,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 ```vue
 <script setup>
-import ClientQuotes from '@aziontech/webkit/sections/client-quotes'
+import ClientQuotes from '@aziontech/webkit/client-quotes'
 </script>
 
 <template>
