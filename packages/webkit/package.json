@@ -33,6 +33,7 @@
     "doc-standards:update": "node scripts/check-authoring-docs.mjs --update",
     "test:gate": "node scripts/check-tests.mjs",
     "spec-status": "node scripts/check-spec-status.mjs",
+    "patterns:check": "node scripts/check-patterns.mjs",
     "smoke:consume": "node scripts/smoke-consume.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

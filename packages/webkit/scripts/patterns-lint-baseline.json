@@ -1,0 +1,128 @@
+{
+  "headers/docs-header": {
+    "webkit/no-style-override": 4
+  },
+  "headers/resource-header": {
+    "webkit/no-style-override": 5
+  },
+  "headers/site-header": {
+    "webkit/no-style-override": 6
+  },
+  "platform/account/account-settings/activity-history": {
+    "webkit/no-style-override": 2
+  },
+  "platform/account/account-settings/billing": {
+    "webkit/no-style-override": 14,
+    "webkit/no-hardcoded-color": 1
+  },
+  "platform/account/account-settings/build-deployment": {
+    "webkit/no-style-override": 16
+  },
+  "platform/account/account-settings/credentials": {
+    "webkit/no-style-override": 3
+  },
+  "platform/account/account-settings/environments": {
+    "webkit/no-style-override": 7
+  },
+  "platform/account/account-settings/settings": {
+    "webkit/no-style-override": 31
+  },
+  "platform/account/account-settings/teams-permissions": {
+    "webkit/no-style-override": 7
+  },
+  "platform/account/account-settings/users-management": {
+    "webkit/no-style-override": 3
+  },
+  "platform/account/change-plan-drawer": {
+    "webkit/no-style-override": 8,
+    "webkit/no-hardcoded-color": 1
+  },
+  "platform/account/onboarding-form": {
+    "webkit/no-style-override": 14,
+    "webkit/no-hardcoded-color": 1
+  },
+  "platform/account/payment-method-card": {
+    "webkit/no-hardcoded-color": 3,
+    "webkit/no-style-override": 6
+  },
+  "platform/account/plan-upgrade-drawer": {
+    "webkit/no-style-override": 6,
+    "webkit/no-hardcoded-color": 1
+  },
+  "platform/account/sign-up-card": {
+    "webkit/no-style-override": 1
+  },
+  "platform/creation/creation-progress": {
+    "webkit/no-style-override": 1
+  },
+  "platform/detail/domains-section": {
+    "webkit/no-style-override": 8
+  },
+  "platform/detail/function-editor": {
+    "webkit/no-style-override": 204
+  },
+  "platform/detail/get-started": {
+    "webkit/no-style-override": 4
+  },
+  "platform/detail/production-checklist": {
+    "webkit/no-style-override": 1
+  },
+  "platform/detail/resource-summary": {
+    "webkit/no-style-override": 13
+  },
+  "platform/detail/sql-database": {
+    "webkit/no-style-override": 45
+  },
+  "platform/forms/field-row": {
+    "webkit/no-style-override": 4
+  },
+  "platform/forms/settings-page": {
+    "webkit/no-style-override": 6
+  },
+  "platform/forms/settings-save-bar": {
+    "webkit/no-style-override": 4
+  },
+  "platform/forms/variable": {
+    "webkit/no-style-override": 2
+  },
+  "platform/lists/module-list": {
+    "webkit/no-style-override": 1
+  },
+  "platform/lists/resource-table": {
+    "webkit/no-style-override": 2
+  },
+  "platform/overlays/confirm-dialog": {
+    "webkit/no-style-override": 2
+  },
+  "platform/page/section": {
+    "webkit/no-style-override": 5
+  },
+  "platform/shell/code-editor": {
+    "webkit/no-style-override": 156
+  },
+  "platform/shell/create-page": {
+    "webkit/no-style-override": 8
+  },
+  "platform/shell/events-visualizer": {
+    "webkit/no-style-override": 42
+  },
+  "platform/shell/platform-shell": {
+    "webkit/no-style-override": 2
+  },
+  "platform/shell/query-editor": {
+    "webkit/no-style-override": 20
+  },
+  "platform/shell/summary-page": {
+    "webkit/no-style-override": 40
+  },
+  "platform/states/product-first-use": {
+    "webkit/no-style-override": 1
+  },
+  "shells/docs-shell": {
+    "webkit/prefer-tree-shakeable-root": 1,
+    "webkit/no-style-override": 6
+  },
+  "shells/site-shell": {
+    "webkit/no-style-override": 6
+  }
+}

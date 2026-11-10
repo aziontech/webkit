@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+import { buildPatterns } from './lib/patterns.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -215,7 +216,7 @@ function _readSpec(subpath) {
   }
 }
 
-function build() {
+async function build() {
   const pkg = JSON.parse(readFileSync(PKG_PATH, 'utf-8'))
   const exportsMap = pkg.exports || {}
   const subpaths = Object.keys(exportsMap)
@@ -336,7 +337,8 @@ function build() {
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
-    imports
+    imports,
+    patterns: await buildPatterns(REPO_ROOT)
   }
 }
 
@@ -387,9 +389,9 @@ function buildTokens() {
   return { cssVars, typography, groups, animations, animationGuide }
 }
 
-const catalog = build()
+const catalog = await build()
 writeFileSync(OUT_PATH, JSON.stringify(catalog, null, 2) + '\n', 'utf-8')
 const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
 process.stdout.write(
-  `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components) @ ${catalog.webkitVersion}\n`
+  `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}\n`
 )

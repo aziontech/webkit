@@ -258,6 +258,9 @@ jobs:
       - name: No spec in status draft (.specs/_template.md excepted)
         run: pnpm --filter @aziontech/webkit run spec-status
 
+      - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
+        run: pnpm --filter @aziontech/webkit run patterns:check --warn-intents
+
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
 
