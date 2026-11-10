@@ -305,3 +305,36 @@ describe('InputText — read-only look', () => {
     expect((container.firstElementChild as HTMLElement).hasAttribute('data-readonly')).toBe(false)
   })
 })
+
+describe('InputText — password managers', () => {
+  it('hides a plain field from password managers so no sign-in prompt appears', () => {
+    const input = render(InputText).getByTestId('input-text')
+    expect(input).toHaveAttribute('data-1p-ignore', 'true')
+    expect(input).toHaveAttribute('data-lpignore', 'true')
+    expect(input).toHaveAttribute('data-bwignore', 'true')
+    expect(input).toHaveAttribute('data-form-type', 'other')
+  })
+
+  it('keeps a login field fillable (autocomplete="username", type="email")', () => {
+    const username = render(InputText, { props: { autocomplete: 'username' } }).getByTestId(
+      'input-text'
+    )
+    expect(username).not.toHaveAttribute('data-1p-ignore')
+    const email = render(InputText, { props: { type: 'email' } }).getAllByTestId('input-text')[1]
+    expect(email).not.toHaveAttribute('data-1p-ignore')
+  })
+
+  it('hides read-only fields even when they carry an autocomplete token', () => {
+    const input = render(InputText, {
+      props: { readonly: true, autocomplete: 'username' }
+    }).getByTestId('input-text')
+    expect(input).toHaveAttribute('data-1p-ignore', 'true')
+  })
+
+  it('lets a consumer override the hint through attrs', () => {
+    const input = render(InputText, { attrs: { 'data-1p-ignore': 'false' } }).getByTestId(
+      'input-text'
+    )
+    expect(input).toHaveAttribute('data-1p-ignore', 'false')
+  })
+})

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=536-22
   node_id: 536:22
-checksum: 07db9f67bfd1bbd98a3e3d6fe6a14ee9c89180b76744713e756195cee32c5f83
+checksum: ac3caa4af4196596efd79ac7b86303418ecc7b00a3f59dd306e18273599eab18
 created: 2026-06-15
 last_updated: 2026-11-09
 ---
@@ -100,6 +100,7 @@ Form field for free-text input that composes `Label`, `InputText`, and `HelperTe
 
 ## States
 
+- Password managers: inherits the `InputText` rule — an ordinary field is hidden from 1Password, LastPass, Bitwarden and Dashlane; set `autocomplete` (`username`, `email`, `name`, …) or `type="email"` to let them fill it.
 - Visual states: `default`, `required`, `invalid`, `disabled`, `readonly` (from `InputText`: transparent fill, dashed border, no hover)
 - `data-required` mirrors the `required` prop
 - `data-invalid` mirrors the `invalid` prop

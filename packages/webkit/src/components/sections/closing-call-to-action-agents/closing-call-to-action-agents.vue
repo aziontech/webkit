@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import SegmentedButton from '../../actions/segmented-button/segmented-button.vue'
@@ -195,6 +196,7 @@
                     <InputGroup size="large">
                       <input
                         readonly
+                        v-bind="PASSWORD_MANAGER_IGNORE"
                         :value="current.copy.text"
                         :aria-label="lineAriaLabel || undefined"
                         class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none"

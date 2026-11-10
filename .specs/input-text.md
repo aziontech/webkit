@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 4645f654c79788abb6085ae7f290d39ac51b558352b0f04d69e0913349ddb306
+checksum: 3e92aac65c3d5c98366d34fea97ced006dfcded8efac634bd12621b8526d3d49
 created: 2026-05-22
 last_updated: 2026-11-09
 ---
@@ -94,6 +94,7 @@ Aligned with Figma frame `562:6774` (Webkit / InputText).
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `readonly`, `invalid`
+- Password managers: the `<input>` carries `data-1p-ignore`, `data-lpignore`, `data-bwignore` and `data-form-type="other"` unless it is a credential or identity field — `autocomplete` set to any token but `off`, or `type="email"`. A read-only field always carries them. This keeps 1Password, LastPass, Bitwarden and Dashlane from offering a sign-in on ordinary fields (names, IDs, searches) while login fields stay fillable. A consumer attr (e.g. `data-1p-ignore="false"`) wins.
 - `data-readonly` mirrors the `readonly` prop: a read-only field drops its fill (`bg-transparent`), draws a dashed border and gets no hover border, so it never looks editable. The value keeps `var(--text-default)` (readable and copyable, unlike `disabled`) and the field stays focusable.
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop

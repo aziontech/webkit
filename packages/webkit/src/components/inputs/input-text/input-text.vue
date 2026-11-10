@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
+  import { passwordManagerHints } from '../../../utils/autofill'
+
   export type InputTextSize = 'small' | 'medium' | 'large'
   export type InputTextType = 'text' | 'email' | 'number'
 
@@ -77,6 +79,14 @@
     return rest
   })
 
+  const autofillHints = computed(() =>
+    passwordManagerHints({
+      autocomplete: props.autocomplete,
+      type: props.type,
+      readonly: props.readonly
+    })
+  )
+
   const hasIconLeft = computed(() => Boolean(slots['iconLeft']))
   const hasIconRight = computed(() => Boolean(slots['iconRight']))
 
@@ -146,7 +156,7 @@
       :aria-required="required || undefined"
       :data-testid="testId"
       class="relative z-(--z-input-field) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
-      v-bind="passthroughAttrs"
+      v-bind="{ ...autofillHints, ...passthroughAttrs }"
       @input="handleInput"
     />
 

@@ -801,6 +801,10 @@ there. `FieldText` forwards `type`, `autocomplete` and `spellcheck` to its `<inp
 | Search, filter (not a credential)   | `text`  | `off`              | —            |
 
 - Give every control a meaningful `name` next to `autocomplete`; autofill needs both.
+- WebKit hides every field **without** `autocomplete` from password managers (`data-1p-ignore` and the
+  LastPass, Bitwarden and Dashlane equivalents), so 1Password never offers a sign-in on an account name
+  or a search box. A login or contact field **must** set `autocomplete` (or `type="email"`) to stay
+  fillable; a read-only field is always hidden.
 - **Never block paste** — not in passwords, not in one-time codes, not in confirmation fields.
 - Do not block keystrokes in a numeric field: accept the input and validate on submit.
 - Trim the value before validating: input methods and autofill add trailing spaces.

@@ -288,3 +288,13 @@ describe('FieldText — read-only', () => {
     expect(locked.className).toContain('data-[readonly]:border-dashed')
   })
 })
+
+describe('FieldText — password managers', () => {
+  it('keeps the sign-in e-mail fillable and hides the other fields', () => {
+    const login = render(Login).container.querySelector('input') as HTMLInputElement
+    expect(login).not.toHaveAttribute('data-1p-ignore')
+    const [editable, locked] = [...render(ReadOnly).container.querySelectorAll('input')]
+    expect(editable).toHaveAttribute('data-1p-ignore', 'true')
+    expect(locked).toHaveAttribute('data-1p-ignore', 'true')
+  })
+})

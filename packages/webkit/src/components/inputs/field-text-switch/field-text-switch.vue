@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { passwordManagerHints } from '../../../utils/autofill'
   import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
   import InputGroup from '../input-group/input-group.vue'
   import InputGroupAddon from '../input-group/input-group-addon/input-group-addon.vue'
@@ -128,6 +129,7 @@
         :disabled="inputInert"
         :readonly="readonly"
         :required="required"
+        v-bind="passwordManagerHints({ readonly })"
         :aria-invalid="invalid || undefined"
         :aria-required="required || undefined"
         :aria-describedby="describedBy"

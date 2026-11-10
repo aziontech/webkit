@@ -284,4 +284,11 @@ describe('InputPassword', () => {
     expect(getByTestId('input-password')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
+
+  it('stays visible to password managers (no ignore hints on a password field)', () => {
+    const { container } = render(InputPassword)
+    const input = container.querySelector('input') as HTMLInputElement
+    expect(input.hasAttribute('data-1p-ignore')).toBe(false)
+    expect(input.hasAttribute('data-lpignore')).toBe(false)
+  })
 })
