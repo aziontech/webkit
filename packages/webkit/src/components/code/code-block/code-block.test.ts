@@ -1,13 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/code/code-block/CodeBlock.stories'
+import Default from '../../../../examples/code-block/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CodeBlock from './code-block.vue'
 import { highlightCodeLine } from './utils/highlight-code'
-
-const { Default } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium ("Document is not
 // focused"), so writeText is stubbed to resolve. This is NOT a layout/focus
@@ -487,7 +484,7 @@ describe('CodeBlock', () => {
 
   describe('story fixture', () => {
     it('renders the Default story cleanly', async () => {
-      const { getByTestId, container } = render(Default())
+      const { getByTestId, container } = render(Default)
 
       expect(getByTestId('code-code-block')).toBeTruthy()
       await expectNoA11yViolations(container)

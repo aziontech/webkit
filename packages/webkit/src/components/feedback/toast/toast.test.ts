@@ -1,9 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createApp, defineComponent, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/toast/Toast.stories'
+import Default from '../../../../examples/toast/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
 import ToastAction from './toast-action/toast-action.vue'
@@ -11,8 +10,6 @@ import ToastClose from './toast-close/toast-close.vue'
 import ToastDescription from './toast-description/toast-description.vue'
 import ToastItem from './toast-item/toast-item.vue'
 import ToastTitle from './toast-title/toast-title.vue'
-
-const { Default } = composeStories(stories)
 
 // The store (`toastStore`) is a module-level singleton driven by the imperative
 // `toast()` — and only ONE mounted <Toaster> renders the stack (registerToaster).
@@ -348,9 +345,9 @@ describe('Toast (composition + imperative store)', () => {
     })
   })
 
-  describe('story smoke (composeStories)', () => {
+  describe('documented examples smoke', () => {
     it('Default story mounts a Toaster and its trigger button', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await nextTick()
 
       // The Default story renders a "Show toast" Button trigger in the canvas.

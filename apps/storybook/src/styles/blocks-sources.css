@@ -1,0 +1,10 @@
+/*
+ * Storybook renders WebKit's blocks and examples straight from packages/webkit. Tailwind only
+ * scans this app and webkit/src (registered by @aziontech/theme), so the utilities that exist only
+ * in a block or an example are generated here. Storybook-only on purpose: a consuming app copies
+ * a block into its own sources, where its own Tailwind finds it.
+ */
+@import 'tailwindcss/utilities' source(none);
+@reference "@aziontech/theme";
+@source '../../../../packages/webkit/blocks';
+@source '../../../../packages/webkit/examples';

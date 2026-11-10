@@ -1,0 +1,21 @@
+{
+  "component": "log-view",
+  "title": "Components/Primitives/Code/LogView",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "LogViewHeader + LogViewContent over a realistic deploy log. Search filters lines and highlights matches in the body.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Flush",
+      "summary": "With `:border=\"false\"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.",
+      "file": "flush.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While `loading` is set, LogViewContent replaces the log body with a centered spinner and the `loadingLabel` text.",
+      "file": "loading.vue"
+    }
+  ]
+}

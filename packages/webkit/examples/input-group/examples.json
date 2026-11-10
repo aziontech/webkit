@@ -1,0 +1,61 @@
+{
+  "component": "input-group",
+  "title": "Components/Primitives/Inputs/InputGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Root with only a raw `<input>` as its single child.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three sizes stacked (`small`=28px, `medium`=32px, `large`=40px). Match the same `size` on child input controls to keep the inner content vertically centered.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithAddonLeft",
+      "summary": "`<InputGroupAddon>` before the middle input — static-text island on the left.",
+      "file": "with-addon-left.vue"
+    },
+    {
+      "name": "WithAddonRight",
+      "summary": "`<InputGroupAddon>` after the middle input — static-text island on the right.",
+      "file": "with-addon-right.vue"
+    },
+    {
+      "name": "BothAddons",
+      "summary": "Addons on both sides flanking the input — `https://…​.com` composition.",
+      "file": "both-addons.vue"
+    },
+    {
+      "name": "WithButton",
+      "summary": "`<Button>` as a direct child on the right. The Button keeps its own API (`label`, `kind`, `size`, `@click`) — the group only joins the border/seam.",
+      "file": "with-button.vue"
+    },
+    {
+      "name": "WithSelect",
+      "summary": "`<Select>` as a direct child on the left. The Select composition (`Trigger` + `Content` + `Option`) is unchanged — the group only joins the border/seam.",
+      "file": "with-select.vue"
+    },
+    {
+      "name": "WithAll",
+      "summary": "Addon + input + Button in a single row. Seams are drawn between adjacent children; only the outer edges are rounded.",
+      "file": "with-all.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state — root shows the danger border.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "Required state — root shows the warning border.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — muted fill, not-allowed cursor, focus-within ring suppressed. Note: the consumer must also set `disabled` on their middle `<input>` and on each child control; InputGroup does not propagate it.",
+      "file": "disabled.vue"
+    }
+  ]
+}

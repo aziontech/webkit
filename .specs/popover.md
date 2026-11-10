@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: f662f46d2334c46521000ab46f488067f989a5c48620b0640f20f05b31f5adef
+checksum: d6a1e77a2d63044e968d9c1c19a2bb8823ee177525d2fa3a4b5eaf47e54a15a5
 created: 2026-06-30
 last_updated: 2026-11-09
 ---
@@ -227,7 +227,7 @@ export default Object.assign(Popover, {
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `Typography/Heading/xss` (14px Sora Regular) | `.text-body-sm` | `TODO: tokenizar` — DESIGN.md documents headings only down to `text-heading-sm` (responsive ≤18px); add a flat-14px heading role if popover titles need a true heading class. |
+| `Typography/Heading/xss` (14px Rubik Regular) | `.text-body-sm` | `TODO: tokenizar` — DESIGN.md documents headings only down to `text-heading-sm` (responsive ≤18px); add a flat-14px heading role if popover titles need a true heading class. |
 
 ## Accessibility (WCAG 2.1 AA)
 

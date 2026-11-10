@@ -1,0 +1,21 @@
+{
+  "component": "help-panel",
+  "title": "Components/Primitives/Content/HelpPanel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A help topic: a header, two sections that each answer one question, and the Learn more links at the end.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Tutorial",
+      "summary": "Tutorial mode: three tasks, one complete, one current and one not started, with the progress line derived from them and a Continue action.",
+      "file": "tutorial.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the topic loads, skeleton lines reserve the space and the landmark is marked busy.",
+      "file": "loading.vue"
+    }
+  ]
+}

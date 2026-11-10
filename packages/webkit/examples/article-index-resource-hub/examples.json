@@ -1,0 +1,11 @@
+{
+  "component": "article-index-resource-hub",
+  "title": "Components/Marketing/Sections/ArticleIndexResourceHub",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Resource Hub list at rest. Pick a value in a dropdown to narrow it; the dropdowns combine, and when nothing matches the list and its button are left out.",
+      "file": "default.vue"
+    }
+  ]
+}

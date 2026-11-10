@@ -1,0 +1,34 @@
+{
+  "id": "platform/page/page-header",
+  "name": "PageHeader",
+  "title": "Templates/Platform/Page/PageHeader",
+  "surface": "product",
+  "summary": "The heading that opens a page: an h1 whose `data-size` picks the heading token by page level, a one-line description, and the actions the page owns on the right, the Documentation link first and the create action on the outer edge, both outlined `Button`s at the medium size. First-level lists render it at the medium size; detail tabs and settings sub-pages such as a resource’s Settings tab render it small; a creation hub’s headline is the only large one. Built from `Button`. When the row runs out of room, the actions move below the copy together instead of squeezing the description; on a phone they stack, each at full width.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "page heading",
+    "page title",
+    "page header with actions",
+    "heading with documentation link",
+    "list page heading",
+    "título da página",
+    "cabeçalho da página",
+    "page header",
+    "h1 with actions"
+  ],
+  "skills": ["webkit-layout"],
+  "primary": {
+    "name": "ListPage",
+    "file": "page-header.vue"
+  },
+  "variants": [
+    {
+      "name": "SettingsPage",
+      "summary": "A settings sub-page heading: small title and description, no actions.",
+      "file": "variants/settings-page.vue"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "component": "closing-call-to-action",
+  "title": "Components/Marketing/Sections/ClosingCallToAction",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The `split` close the solution pages end with: the headline and the white button in the lead cell, the sentence and the outlined button in the aside cell, over the tall closing frame. Edit the props in the Controls panel — a band with no title renders nothing.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "The three layouts stacked: the `split` close with two actions over the tall closing frame, the `panel` close with one action over the short closing frame, then the loud `primary` close under its pixelated texture.",
+      "file": "types.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Split",
+      "summary": "The solution pages close: the headline and `Start for free` in the raised lead cell, the sentence and `Talk to a specialist` in the aside cell, then a tall closing frame.",
+      "file": "site-split.vue",
+      "json": "site-split.json"
+    },
+    {
+      "name": "Panel",
+      "summary": "The Careers close: a panel with one action to the job listing, then a short closing frame.",
+      "file": "site-panel.vue",
+      "json": "site-panel.json"
+    },
+    {
+      "name": "Newsletter",
+      "summary": "The ask beside a subscribe form, over a strip lit by the pixelated primary wave. The headline sits large on the lead side and the ask labels the email field. The Blog and Resource Hub pages close with it. An empty field and a malformed address each show their message under the field; a valid address fires the `submit` action and sends nothing. Toggle `loading`, `submitted` and `error` to see what the site sets back.",
+      "file": "site-newsletter.vue",
+      "json": "site-newsletter.json"
+    },
+    {
+      "name": "Primary",
+      "summary": "The loud close: one centred ask on the canvas, under a pixelated texture whose two waves keep travelling across it, then the tall closing frame.",
+      "file": "site-primary.vue",
+      "json": "site-primary.json"
+    },
+    {
+      "name": "Agents",
+      "summary": "The close for a reader who may be a person or an agent: the `primary` register with a switch under the title. For humans opens on two actions; For agents swaps in a copyable prompt and the agent docs. The typed word loops under both.",
+      "file": "site-agents.vue",
+      "json": "site-agents.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Closing CTAs/ClosingCallToAction",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": [
+    "Split",
+    "SplitJson",
+    "Panel",
+    "PanelJson",
+    "Newsletter",
+    "NewsletterJson",
+    "Primary",
+    "PrimaryJson",
+    "Agents",
+    "AgentsJson"
+  ]
+}

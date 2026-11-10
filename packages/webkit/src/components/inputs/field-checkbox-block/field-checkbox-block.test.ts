@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-checkbox-block/FieldCheckboxBlock.stories'
+import Default from '../../../../examples/field-checkbox-block/default.vue'
+import Disabled from '../../../../examples/field-checkbox-block/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldCheckboxBlock from './field-checkbox-block.vue'
-
-const { Default, Disabled } = composeStories(stories)
 
 // The inner Checkbox receives data-testid `${testId}__control`; its native input
 // is `${controlTestId}__input`. So the clickable input is `<root>__control__input`.
@@ -281,9 +279,9 @@ describe('FieldCheckboxBlock', () => {
     )
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story seeded unchecked and toggles it through the story v-model', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
 
       const input = getByTestId(INPUT) as HTMLInputElement
       expect(input.checked).toBe(false)
@@ -296,7 +294,7 @@ describe('FieldCheckboxBlock', () => {
     })
 
     it('renders the Disabled story with a disabled input and a helper badge', () => {
-      const { getByTestId } = render(Disabled())
+      const { getByTestId } = render(Disabled)
       expect((getByTestId(INPUT) as HTMLInputElement).disabled).toBe(true)
       expect(getByTestId(`${ROOT}__helper`)).toBeTruthy()
     })

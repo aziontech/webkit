@@ -1,0 +1,26 @@
+{
+  "component": "key-value-pairs",
+  "title": "Components/Primitives/Content/KeyValuePairs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The facts band of a resource detail page: an ID with its copy button, a status, the creation date, a region and a linked domain, in one column.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "The same facts at 2, 3 and 4 columns. Below md every grid collapses to one column, and 3 or 4 columns fall back to two at md.",
+      "file": "columns.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Facts split into titled columns, one group per column. The Region key carries an info hint, and the custom certificate has no value, so it shows the empty-value marker.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the data loads, every value becomes a skeleton and the labels stay in place, so the layout does not jump when the values arrive.",
+      "file": "loading.vue"
+    }
+  ]
+}

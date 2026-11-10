@@ -1,0 +1,21 @@
+{
+  "component": "global-header",
+  "title": "Components/Primitives/Layout/GlobalHeader",
+  "examples": [
+    {
+      "name": "DefaultHeader",
+      "summary": "The shell composed with the Azion logo in the brand slot at the start region, leaving the center and end regions ready for consumer content.",
+      "file": "default-header.vue"
+    },
+    {
+      "name": "ContentZone",
+      "summary": "The default placement, against a page: full bleed across the zone that holds it, with its regions inset by the page boundary — so the breadcrumb starts on the same vertical as the heading under it, and retuning the boundary moves both. The mock page is here to make that vertical visible.",
+      "file": "content-zone.vue"
+    },
+    {
+      "name": "SitePlacement",
+      "summary": "The marketing placement: the bar's surface still spans the window, but its regions are capped at the site header measure (`--layout-measure-site-header`) and centred, so the brand answers to the page instead of drifting to the window edge as the viewport grows. That cap is one rung wider than the page frame the hero, sections and footer share (`--layout-measure-site`): a bar carries the brand at one end and the account actions at the other, so it is the one band deliberately outside the frame.",
+      "file": "site-placement.vue"
+    }
+  ]
+}

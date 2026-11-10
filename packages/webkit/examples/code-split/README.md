@@ -1,0 +1,82 @@
+# CodeSplit
+
+A claim beside the code that makes it true: copy on one side, a code sample on the other, on one frame. Product pages use it when the argument is a config or a handler a developer can read, like Functions and Application Accelerator.
+
+The code sits in a wrapper with its own radius, so the wrapper casts the shadow. The tabs are declared in the script, so the code stays verbatim.
+
+The band is the `CodeSplit` component from `@aziontech/webkit/code-split`; it composes `SectionModule`, a `framed` `MediaSplit`, `CodeBlock` and `Button`. The three bands below are the same component with different props, so all three use `_id: 'code-split'`.
+
+## Stories
+
+### Default
+
+From the Functions page: a two-tab code sample on the pixelate texture, cut off by the frame's bottom rule, with two large actions. With two destinations the band is not a link itself, so the reader picks a button.
+
+Example: [`site-default.vue`](./site-default.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
+
+- `title` and `description` are the copy beside the code.
+- `codeTabs` are the files, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`. A tab without `code` is skipped.
+- `copyAriaLabel` names the copy button for screen readers.
+- `primaryAction` and `secondaryAction` are the two buttons, each a `label` and an `href`; `trailing` closes the label on a chevron, `icon` draws a leading glyph and `target` opens the link elsewhere. Leave either out to drop it.
+
+Example:
+
+Site JSON: [`site-default.json`](./site-default.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Accelerator
+
+From the Application Accelerator page: the same band as Functions with one large button: a heading, a sentence and the button on one side, a one-file code sample on the pixelate texture on the other. With one tab, the sample shows a filename bar and no tabs.
+
+Example: [`site-accelerator.vue`](./site-accelerator.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
+
+- `title` and `description` are the copy on the start side.
+- `codeTabs` are the files; one tab draws a filename bar instead of tabs.
+- `copyAriaLabel` names the copy button for screen readers.
+- `primaryAction` is the button, a `label`, an `href` and `trailing`.
+
+Example:
+
+Site JSON: [`site-accelerator.json`](./site-accelerator.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Agents
+
+From the AI Gateway page: the Accelerator band with one tab per coding agent. Each tab opens that agent's own file and carries the agent's mark beside its name, set by the tab's `icon`.
+
+Example: [`site-agents.vue`](./site-agents.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
+
+- `title` and `description` are the copy beside the code.
+- `codeTabs` are the tabs, each a code file with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`, plus an `icon` naming the agent's mark.
+- `copyAriaLabel` names the copy button for screen readers.
+- `primaryAction` is the button under the copy.
+
+Example:
+
+Site JSON: [`site-agents.json`](./site-agents.json)

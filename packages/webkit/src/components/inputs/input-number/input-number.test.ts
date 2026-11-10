@@ -1,12 +1,12 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/input-number/InputNumber.stories'
+import Default from '../../../../examples/input-number/default.vue'
+import Disabled from '../../../../examples/input-number/disabled.vue'
+import Invalid from '../../../../examples/input-number/invalid.vue'
+import Sizes from '../../../../examples/input-number/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import InputNumber from './input-number.vue'
-
-const { Default, Sizes, Disabled, Invalid } = composeStories(stories)
 
 describe('InputNumber', () => {
   it('renders the input with the default data-testid and type=number', () => {

@@ -1,0 +1,26 @@
+{
+  "component": "dialog",
+  "title": "Components/Primitives/Overlay/Dialog",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Medium modal with a trigger, overlay backdrop, and header/body/footer panel regions.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three `size` presets. Each caps the panel max-width from the `md` breakpoint up; below `md` the dialog is a full-width bottom sheet regardless of `size`.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "ScrollContent",
+      "summary": "A body taller than the dialog, centered above the page (from `md` up). Open it from the trigger: the panel bounds the surface and `PanelContent` is the only region that scrolls, so the title and the footer actions stay put while the body moves.",
+      "file": "scroll-content.vue"
+    },
+    {
+      "name": "ScrollContentMobile",
+      "summary": "The same overflowing body below `md`, where the dialog is a full-width bottom sheet capped at 80% of the visible viewport (`dvh`, so the cap follows the browser toolbars instead of the largest viewport). Open it from the trigger and check three things: the body scrolls to its last row, the title stays at the top, and the footer actions stay on screen rather than sitting under the URL bar.",
+      "file": "scroll-content-mobile.vue"
+    }
+  ]
+}

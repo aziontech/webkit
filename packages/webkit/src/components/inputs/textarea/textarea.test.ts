@@ -1,12 +1,12 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/textarea/Textarea.stories'
+import Default from '../../../../examples/textarea/default.vue'
+import Disabled from '../../../../examples/textarea/disabled.vue'
+import Invalid from '../../../../examples/textarea/invalid.vue'
+import Required from '../../../../examples/textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Textarea from './textarea.vue'
-
-const { Default, Disabled, Invalid, Required } = composeStories(stories)
 
 describe('Textarea', () => {
   it('renders a <textarea> root carrying the default data-testid', () => {
@@ -212,13 +212,13 @@ describe('Textarea', () => {
 
   describe('story fixtures', () => {
     it('composes the Default story with the placeholder from its args', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
 
       expect(getByTestId('input-textarea')).toHaveAttribute('placeholder', 'Write your message')
     })
 
     it('composes the Disabled story with a disabled control', () => {
-      const { getByTestId } = render(Disabled())
+      const { getByTestId } = render(Disabled)
 
       const control = getByTestId('input-textarea')
       expect(control).toHaveAttribute('data-disabled')
@@ -226,7 +226,7 @@ describe('Textarea', () => {
     })
 
     it('composes the Invalid story with invalid semantics and a filled value', () => {
-      const { getByTestId } = render(Invalid())
+      const { getByTestId } = render(Invalid)
 
       const control = getByTestId('input-textarea')
       expect(control).toHaveAttribute('data-invalid')
@@ -235,7 +235,7 @@ describe('Textarea', () => {
     })
 
     it('composes the Required story with required semantics', () => {
-      const { getByTestId } = render(Required())
+      const { getByTestId } = render(Required)
 
       const control = getByTestId('input-textarea')
       expect(control).toHaveAttribute('data-required')

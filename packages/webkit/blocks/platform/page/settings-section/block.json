@@ -1,0 +1,41 @@
+{
+  "id": "platform/page/settings-section",
+  "name": "SettingsSection",
+  "title": "Templates/Platform/Page/SettingsSection",
+  "surface": "product",
+  "summary": "A settings band: an h2 with a `Hint` glyph that carries the one-sentence guidance, over a flush card of settings rows, each a title and description with its control on the right. Every settings page stacks it (`stacked`, no rule between bands), from a resource’s Settings tabs to Account Settings and every create page and drawer. An anchored band carries a copy-link button that appears in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the card along the grid track. Built from `Hint`, `CardBox` and `Item` rows holding `InputText`, `Switch` and `Select`; the split aside layout is still in the markup for a non-stacked band, but no page renders one.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "settings section",
+    "settings band",
+    "collapsible section",
+    "section with card",
+    "grouped settings",
+    "advanced settings",
+    "seção de configurações",
+    "seção recolhível",
+    "grupo de configurações",
+    "settings section with hint",
+    "seção de ajustes"
+  ],
+  "skills": ["webkit-form", "webkit-layout"],
+  "primary": {
+    "name": "Default",
+    "file": "settings-section.vue"
+  },
+  "variants": [
+    {
+      "name": "Stacked",
+      "summary": "A resource’s Settings tab: the General and Features bands stacked one under the other at the section gap, with no rule between them.",
+      "file": "variants/stacked.vue"
+    },
+    {
+      "name": "Collapsible",
+      "summary": "The collapsible Advanced band of Create Team, closed: the cog glyph and the title are the disclosure trigger, and the card unfolds along the grid track when it opens.",
+      "file": "variants/collapsible.vue"
+    }
+  ]
+}

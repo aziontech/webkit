@@ -1,0 +1,26 @@
+{
+  "component": "breadcrumb-item",
+  "title": "Components/Primitives/Navigation/BreadcrumbItem",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Ancestor segment rendered as a link with muted label text.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Current",
+      "summary": "Current page segment: rendered as a span with `aria-current=\"page\"` and default (non-muted) text.",
+      "file": "current.vue"
+    },
+    {
+      "name": "WithIcon",
+      "summary": "Segment with a leading PrimeIcons icon before the label.",
+      "file": "with-icon.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled segment: interaction is blocked and disabled tokens are applied.",
+      "file": "disabled.vue"
+    }
+  ]
+}

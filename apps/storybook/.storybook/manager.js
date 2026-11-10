@@ -5,7 +5,7 @@ const azionTheme = create({
   base: 'dark',
 
   // Typography
-  fontBase: '"Sora", sans-serif',
+  fontBase: '"Rubik", sans-serif',
   fontCode: '"Roboto Mono", monospace',
 
   // Colors

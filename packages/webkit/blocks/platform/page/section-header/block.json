@@ -1,0 +1,34 @@
+{
+  "id": "platform/page/section-header",
+  "name": "SectionHeader",
+  "title": "Templates/Platform/Page/SectionHeader",
+  "surface": "product",
+  "summary": "The heading of one band inside a page: an h2 at the medium size with a one-line description, a copy-link affordance that appears when the heading is hovered or focused, and the band’s own actions on the right. A billing page renders one above each of its cards and tables, and a resource’s Get started block opens with one (that one is its own GetStarted template). Built from `CopyButton` and `Button`; below `md` the actions drop under the copy and the row wraps.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "section heading",
+    "section title",
+    "h2 with copy link",
+    "anchor heading",
+    "subheading with actions",
+    "título da seção",
+    "cabeçalho de seção",
+    "section header",
+    "band heading"
+  ],
+  "skills": ["webkit-layout"],
+  "primary": {
+    "name": "Default",
+    "file": "section-header.vue"
+  },
+  "variants": [
+    {
+      "name": "WithActions",
+      "summary": "The Billing payment-methods heading, with the outlined Add payment method action and its plus glyph on the right.",
+      "file": "variants/with-actions.vue"
+    }
+  ]
+}

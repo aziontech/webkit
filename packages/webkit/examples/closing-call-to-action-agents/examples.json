@@ -1,0 +1,11 @@
+{
+  "component": "closing-call-to-action-agents",
+  "title": "Components/Marketing/Sections/ClosingCallToActionAgents",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "For humans opens on two actions; For agents swaps in the copyable prompt and the agent docs. The typed word loops under both.",
+      "file": "default.vue"
+    }
+  ]
+}

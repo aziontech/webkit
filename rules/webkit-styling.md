@@ -45,7 +45,7 @@ enforced in code review.
 Write a token value with Tailwind v4's **paren shorthand**, not the bracket form. This is the single canonical spelling the toolkit standardizes on — it matches what upstream v4 canonicalizes to, so your editor stops flagging every styled line.
 
 - **Whole-value var:** `bg-(--primary)`, `text-(--text-default)`, `rounded-(--shape-card)` — **not** `bg-[var(--primary)]`. Variants compose: `data-[disabled]:bg-(--bg-disabled)`.
-- **Typed value:** `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sora)`.
+- **Typed value:** `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sans)`.
 - **Numeric arbitrary:** `z-1`, not `z-[1]`.
 
 Two cases **stay in brackets** — the paren form silently emits no CSS for them:

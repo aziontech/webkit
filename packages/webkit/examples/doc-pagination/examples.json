@@ -1,0 +1,16 @@
+{
+  "component": "doc-pagination",
+  "title": "Components/Documentation/DocPagination",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Both neighbours present. Hover either side and the chevron travels outward.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Ends",
+      "summary": "The first and last pages of a series. The one remaining link stays anchored to its own edge — an absent side leaves a placeholder rather than collapsing, so a lone \"Next\" never drifts into the middle of the row. Each is given its own `aria-label` here because two nav landmarks may not share an accessible name; a real page carries one pagination and takes the default.",
+      "file": "ends.vue"
+    }
+  ]
+}

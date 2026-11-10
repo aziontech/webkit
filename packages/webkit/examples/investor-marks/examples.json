@@ -1,0 +1,25 @@
+{
+  "component": "investor-marks",
+  "title": "Components/Marketing/Sections/InvestorMarks",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The investors band as the company page places it: a centered eyebrow and headline over the investor marks in a two-column bento grid. Hover or focus a mark to reveal its link line. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The two investors About runs: monashees+ and Qualcomm Ventures.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Social Proof/InvestorMarks",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

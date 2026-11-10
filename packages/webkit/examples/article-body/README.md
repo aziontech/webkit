@@ -1,0 +1,32 @@
+# ArticleBody
+
+The reading page of an article. A brand banner sits over a three-column grid: the share, community and Copy page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right.
+
+Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `SectionContainer` instead of sitting in the page column. Every blog post (/blog/:slug) and every success story (/success-cases/:slug) opens with it.
+
+The band is the `ArticleBody` component from `@aziontech/webkit/article-body`; it composes `SectionContainer`, `SectionModule`, `FrameBox`, `Breadcrumb`, `HeroTitle`, `Divider`, `DocProse`, `Tooltip`, `IconButton`, `SplitButton` and `DocOnThisPage`. The body is markdown rendered block by block — `##` / `###` headings, `-` lists and paragraphs — and the copy buttons write to the clipboard.
+
+## Stories
+
+### Success Story
+
+The Magalu success story under Success cases › Retail. A story has no author, so the byline is the date and read time alone. The outline lists the three sections the prose opens with, the first one active.
+
+Example: [`site-success-story.vue`](./site-success-story.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` is the overline above the headline.
+- `article` is the piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`.
+- `trail` is the breadcrumb, each a `label` and an `href`, the last entry marked `current`.
+- `body` is the article as markdown: headings, `-` lists and paragraphs separated by blank lines. Its `##` and `###` headings feed the "On this page" outline.
+- `banner` is the image over the masthead.
+- `share` labels the share group: `title`, `copyLink`, `shareX` and `shareLinkedIn`. The X and LinkedIn links are built from `article.href`, which the copy-link button copies.
+- `community` is the community group: a `title` and `links`, each a `label`, an `href` and an `icon`.
+- `copyPage` is the split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`. The main action copies the body; the `link` entry copies the article URL.
+
+Example:
+
+Site JSON: [`site-success-story.json`](./site-success-story.json)

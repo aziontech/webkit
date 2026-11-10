@@ -1,9 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/dialog/Dialog.stories'
+import Default from '../../../../examples/dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Dialog from './dialog.vue'
 import DialogClose from './dialog-close.vue'
@@ -13,8 +12,6 @@ import DialogOverlay from './dialog-overlay.vue'
 import DialogPortal from './dialog-portal.vue'
 import DialogTitle from './dialog-title.vue'
 import DialogTrigger from './dialog-trigger.vue'
-
-const { Default } = composeStories(stories)
 
 // The panel + backdrop are Teleported to <body> by DialogPortal, so they escape
 // the render container. Query them from document.body, not the utils container.
@@ -355,7 +352,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
 
   describe('Storybook Default story composes and opens', () => {
     it('renders the composed Default and opens via its trigger', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       await settle()
 
       await fireEvent.click(getByTestId('overlay-dialog__trigger'))

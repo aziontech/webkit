@@ -1,0 +1,26 @@
+{
+  "component": "section-module",
+  "title": "Components/Marketing/Primitives/SectionModule",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A header row divided from the body by one hairline. The header is a `SectionTitle`, so the module never re-implements that anatomy.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "The three header layouts, stacked — they differ only in where the copy sits.",
+      "file": "kinds.vue"
+    },
+    {
+      "name": "Divided",
+      "summary": "Two modules, the first undivided. A shared edge is invisible on a single module — the stack is what proves the rule is drawn once.",
+      "file": "divided.vue"
+    },
+    {
+      "name": "Padded",
+      "summary": "With `padded` off the body runs edge to edge, for a grid that owns its cell padding.",
+      "file": "padded.vue"
+    }
+  ]
+}

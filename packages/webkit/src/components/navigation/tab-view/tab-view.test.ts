@@ -1,9 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/tab-view/TabView.stories'
+import Default from '../../../../examples/tab-view/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TabView from './index'
 import { getTabViewPanelTransitionStyle } from './presets/transitions'
@@ -12,8 +11,6 @@ import TabViewItem from './tab-view-item.vue'
 import TabViewList from './tab-view-list.vue'
 import TabViewPanel from './tab-view-panel.vue'
 import TabViewRoot from './tab-view-root.vue'
-
-const { Default } = composeStories(stories)
 
 // A realistic composed tab tree wired through the dot-notation sub-components.
 // Uncontrolled (default-value) unless a test overrides via v-model.
@@ -365,7 +362,7 @@ describe('TabView (composition)', () => {
     })
 
     it('renders the Default story fixture cleanly with no a11y violations', async () => {
-      const { getByTestId, container } = render(Default())
+      const { getByTestId, container } = render(Default)
 
       expect(getByTestId('navigation-tab-view')).toBeTruthy()
       await expectNoA11yViolations(container)

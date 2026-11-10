@@ -1,0 +1,16 @@
+{
+  "component": "mini-button",
+  "title": "Components/Primitives/Actions/MiniButton",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default large mini button with trailing icon.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    }
+  ]
+}

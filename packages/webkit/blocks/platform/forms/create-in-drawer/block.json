@@ -1,0 +1,50 @@
+{
+  "id": "platform/forms/create-in-drawer",
+  "name": "CreateInDrawer",
+  "title": "Templates/Platform/Forms/CreateInDrawer",
+  "surface": "product",
+  "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `Section` bands, each a heading with a `Hint` glyph over its stacked `Field` components; and one submit button in the footer that flags empty required fields only after it is pressed and shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own Domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldInputGroup`, `Label` and `HelperText` around `Select`, `InputNumber`, `FieldRadioBlock`, `FieldText`, `FieldTextarea`, `Hint`, `Link`, `Message` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "create domain",
+    "add domain",
+    "create domain form",
+    "add domain drawer",
+    "edit domain",
+    "new domain",
+    "create drawer",
+    "custom domain",
+    "criar domínio",
+    "adicionar domínio",
+    "novo domínio",
+    "create in drawer",
+    "add record",
+    "add environment",
+    "criar em gaveta"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "Default",
+    "file": "create-in-drawer.vue"
+  },
+  "variants": [
+    {
+      "name": "AddEnvironment",
+      "summary": "The same form opened from Add Environment in the resource environment menu, titled and saved as Add Environment.",
+      "file": "variants/add-environment.vue"
+    },
+    {
+      "name": "EditDomain",
+      "summary": "Edit from a domain row menu: the drawer opens on www.example.com as a domain of its own, so the Certificate select shows with example.com wildcard and the footer saves the domain.",
+      "file": "variants/edit-domain.vue"
+    },
+    {
+      "name": "AddRecord",
+      "summary": "Closed until Add Record opens it, here as a DNS zone renders it: Name with the zone as an addon, Record type, TTL, Value with the placeholder and helper of the selected type, and Description under Settings; Policy type under Policy, with Weight appearing only for the weighted policy. Save on an empty form flags Name and Value as required.",
+      "file": "variants/add-record.vue"
+    }
+  ]
+}

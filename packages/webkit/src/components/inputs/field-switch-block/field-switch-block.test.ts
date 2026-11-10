@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-switch-block/FieldSwitchBlock.stories'
+import Default from '../../../../examples/field-switch-block/default.vue'
+import Disabled from '../../../../examples/field-switch-block/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldSwitchBlock from './field-switch-block.vue'
-
-const { Default, Disabled } = composeStories(stories)
 
 // The inner Switch receives data-testid `${testId}__control`; the Switch renders a
 // <button role="switch"> as its root, so the toggleable control is `<root>__control`.
@@ -296,9 +294,9 @@ describe('FieldSwitchBlock', () => {
     )
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story seeded off and toggles it through the story v-model', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
 
       const control = getByTestId(CONTROL)
       expect(control.getAttribute('aria-checked')).toBe('false')
@@ -311,7 +309,7 @@ describe('FieldSwitchBlock', () => {
     })
 
     it('renders the Disabled story with a disabled block and a helper badge', () => {
-      const { getByTestId } = render(Disabled())
+      const { getByTestId } = render(Disabled)
       expect(getByTestId(ROOT).getAttribute('data-disabled')).toBe('true')
       expect(getByTestId(`${ROOT}__helper`)).toBeTruthy()
     })

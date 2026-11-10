@@ -1,0 +1,31 @@
+{
+  "component": "frame-box",
+  "title": "Components/Primitives/Layout/FrameBox",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "All four rules plus the corner registration squares. Toggle `hatch`, `marks` and `borders` to see the frame change.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Borders",
+      "summary": "Every `borders` value side by side. `y` is the full-bleed band that keeps only the two dividing rules; `none` hands every edge over to a surrounding grid and contributes just the corner marks.",
+      "file": "borders.vue"
+    },
+    {
+      "name": "Marks",
+      "summary": "Each pair of corner ticks is drawn independently. `top` and `bottom` are what a stack needs: the frame above keeps its `bottom` pair and the frame below asks for `bottom` only, so a shared junction carries one mark per corner instead of two a few pixels apart.",
+      "file": "marks.vue"
+    },
+    {
+      "name": "Hatch",
+      "summary": "The vertical hatch-line texture, faded toward the edges and rendered behind the content.",
+      "file": "hatch.vue"
+    },
+    {
+      "name": "Flush",
+      "summary": "`flush` names the sides a neighbour already draws, so it works on both axes. Vertically, the lower frame is `flush` (shorthand for `top`) with `marks=\"bottom\"`; horizontally, the right-hand frame is `flush=\"left\"` with `marks=\"right\"`. Either way the shared edge reads as one hairline with one mark per corner, instead of two rules and four ticks. It is a subtraction from the frame's own side set, not an offset, so nothing overlaps.",
+      "file": "flush.vue"
+    }
+  ]
+}

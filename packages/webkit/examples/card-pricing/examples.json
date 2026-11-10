@@ -1,0 +1,31 @@
+{
+  "component": "card-pricing",
+  "title": "Components/Primitives/Content/CardPricing",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default pricing card with bottom slot placement and a contained surface.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Aligned",
+      "summary": "Three tiers whose copy is deliberately uneven: Hobby has no billing caveat, Pro has one line and Enterprise two. With `aligned` every region sits on the same line in all three cards, so the row reads as one comparison. Drop the prop and each card sizes to its own copy, staggering the feature lists and the buttons.",
+      "file": "aligned.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "Every slot position (bottom, middle) and card style (contained, transparent) combination.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "WithTag",
+      "summary": "Highlight tag rendered next to the plan title when `showTag` is enabled.",
+      "file": "with-tag.vue"
+    },
+    {
+      "name": "Slots",
+      "summary": "Default slot filled with a feature list and the actions slot replacing the default button.",
+      "file": "slots.vue"
+    }
+  ]
+}

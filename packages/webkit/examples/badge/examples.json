@@ -1,0 +1,21 @@
+{
+  "component": "badge",
+  "title": "Components/Primitives/Content/Badge",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A single badge driven by the controls.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All severities side by side.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All sizes side by side.",
+      "file": "sizes.vue"
+    }
+  ]
+}

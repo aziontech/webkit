@@ -1,0 +1,21 @@
+{
+  "component": "severity-tag",
+  "title": "Components/Primitives/Content/SeverityTag",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One tag at the default level, driven by the controls.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Levels",
+      "summary": "Every level side by side, from critical to info.",
+      "file": "levels.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Both sizes side by side at one level.",
+      "file": "sizes.vue"
+    }
+  ]
+}

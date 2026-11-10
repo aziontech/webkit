@@ -1,0 +1,44 @@
+{
+  "id": "platform/overlays/deploy-drawer",
+  "name": "DeployDrawer",
+  "title": "Templates/Platform/Overlays/DeployDrawer",
+  "surface": "product",
+  "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change Version popover, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects Impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and Deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `Drawer`, the `Panel` parts, `CardBox`, `Item`, `Accordion`, `Divider`, `Popover`, `Dropdown`, `SegmentedButton`, `FieldRadioBlock`, `InputText`, `Avatar`, `Tag`, `Hint`, `Spinner`, `Message`, `Tooltip` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "deploy drawer",
+    "deploy panel",
+    "deploy service",
+    "choose versions to deploy",
+    "dependencies before deploy",
+    "release drawer",
+    "gaveta de deploy",
+    "implantar serviço",
+    "escolher versão"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-ui-states"],
+  "primary": {
+    "name": "Service",
+    "file": "deploy-drawer.vue"
+  },
+  "variants": [
+    {
+      "name": "Building",
+      "summary": "Deploy without a pinned version: the drawer opens as Build and Deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects Impacted sections stay faded and inert, with Deploy disabled, until the build lands.",
+      "file": "variants/building.vue"
+    },
+    {
+      "name": "ServiceProjectFirst",
+      "summary": "The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block.",
+      "file": "variants/service-project-first.vue"
+    },
+    {
+      "name": "Project",
+      "summary": "Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.",
+      "file": "variants/project.vue"
+    }
+  ]
+}

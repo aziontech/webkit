@@ -1,13 +1,14 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-input-group/FieldInputGroup.stories'
+import Default from '../../../../examples/field-input-group/default.vue'
+import Disabled from '../../../../examples/field-input-group/disabled.vue'
+import Icons from '../../../../examples/field-input-group/icons.vue'
+import Invalid from '../../../../examples/field-input-group/invalid.vue'
+import WithSlots from '../../../../examples/field-input-group/with-slots.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldInputGroup from './field-input-group.vue'
-
-const { Default, WithSlots, Invalid, Disabled, Icons } = composeStories(stories)
 
 describe('FieldInputGroup', () => {
   describe('data-testid', () => {
@@ -309,7 +310,7 @@ describe('FieldInputGroup', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story with label, group and helper', () => {
       const { getByTestId } = render(Default)
 

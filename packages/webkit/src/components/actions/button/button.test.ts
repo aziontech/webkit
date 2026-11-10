@@ -1,13 +1,12 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/button/Button.stories'
+import Default from '../../../../examples/button/default.vue'
+import Disabled from '../../../../examples/button/disabled.vue'
+import Loading from '../../../../examples/button/loading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Button from './button.vue'
-
-const { Default, Disabled, Loading } = composeStories(stories)
 
 describe('Button', () => {
   describe('rendering & polymorphism', () => {
@@ -286,7 +285,7 @@ describe('Button', () => {
     })
   })
 
-  describe('composeStories (the story fixture runs in-test)', () => {
+  describe('documented examples (the example file runs in-test)', () => {
     it('Default story mounts an enabled button', () => {
       const { getByRole } = render(Default)
       expect(getByRole('button', { name: 'Button' }).tagName).toBe('BUTTON')

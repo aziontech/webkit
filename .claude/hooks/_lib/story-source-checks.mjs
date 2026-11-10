@@ -196,15 +196,15 @@ export function checks(result, relPath = '') {
     })
   }
 
-  // ---- presence (every story file that emits docs) ----
+  const showsRealFile = /from\s+['"][^'"]+\.(vue|json)\?raw['"]/.test(result)
   if (hasDocsConfig) {
-    if (!isFoundations && !usesHelper) {
+    if (!isFoundations && !usesHelper && !showsRealFile) {
       violations.push({
         id: 'missing-helper',
         message: 'Story emits docs but does not import the shared helper (_shared/story-source).'
       })
     }
-    if (!isFoundations && !usesToSfc) {
+    if (!isFoundations && !usesToSfc && !showsRealFile) {
       violations.push({
         id: 'missing-source-code',
         message: 'Story does not build its Show code with source.code: toSfc(IMPORT, TEMPLATE).'

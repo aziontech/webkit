@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/currency/Currency.stories'
+import Default from '../../../../examples/currency/default.vue'
+import Sizes from '../../../../examples/currency/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Currency from './currency.vue'
-
-const { Default, Sizes } = composeStories(stories)
 
 describe('Currency', () => {
   it('renders the default testid on the root', () => {
@@ -96,7 +94,7 @@ describe('Currency', () => {
   })
 
   it('composes the Default story', () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
     // Default args: value '20', prefix '$', suffix 'per month'.
     expect(getByTestId('content-currency__value').textContent?.trim()).toBe('20')
     expect(getByTestId('content-currency__prefix').textContent?.trim()).toBe('$')
@@ -104,7 +102,7 @@ describe('Currency', () => {
   })
 
   it('composes the Sizes story rendering every step of the ladder', () => {
-    const { getAllByTestId } = render(Sizes())
+    const { getAllByTestId } = render(Sizes)
     // Three <Currency> instances (small + medium + large) -> three value spans.
     const values = getAllByTestId('content-currency__value')
     expect(values).toHaveLength(3)

@@ -1,0 +1,25 @@
+{
+  "component": "article-highlight",
+  "title": "Components/Marketing/Sections/ArticleHighlight",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Blog band with its four newest posts: the first is featured over a four-across wall of titles. Click a title, or move along the wall with the arrow, Home and End keys, to swap the featured article.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Featured",
+      "summary": "The Blog page's band: its four newest posts, the first featured over the wall of titles.",
+      "file": "site-featured.vue",
+      "json": "site-featured.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Articles/ArticleHighlight",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Featured", "FeaturedJson"]
+}

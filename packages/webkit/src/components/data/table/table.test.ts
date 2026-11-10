@@ -1,9 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/table/Table.stories'
+import Composition from '../../../../examples/table/composition.vue'
+import Default from '../../../../examples/table/default.vue'
+import Empty from '../../../../examples/table/empty.vue'
+import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
@@ -15,8 +17,6 @@ import TableRow from './table-row/table-row.vue'
 import TableSearch from './table-search/table-search.vue'
 import TableSortButton from './table-sort-button/table-sort-button.vue'
 import TableToolbar from './table-toolbar/table-toolbar.vue'
-
-const { Default, Composition, WithCheckboxes, Empty } = composeStories(stories)
 
 // A small, stable dataset used across data-driven tests.
 const rows = [
@@ -543,9 +543,9 @@ describe('Table (composition + data-driven)', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Composition story cleanly', () => {
-      const { getByTestId, getAllByRole } = render(Composition())
+      const { getByTestId, getAllByRole } = render(Composition)
 
       expect(getByTestId('data-table')).toBeTruthy()
       // 1 header row + 5 body rows (the story slices the first five records).
@@ -553,7 +553,7 @@ describe('Table (composition + data-driven)', () => {
     })
 
     it('renders the Default (data-driven) story with rows', () => {
-      const { getByTestId, getAllByRole } = render(Default())
+      const { getByTestId, getAllByRole } = render(Default)
 
       expect(getByTestId('data-table')).toBeTruthy()
       // Header row + at least one body row.
@@ -561,13 +561,13 @@ describe('Table (composition + data-driven)', () => {
     })
 
     it('renders the WithCheckboxes story with a selection column', () => {
-      const { getByLabelText } = render(WithCheckboxes())
+      const { getByLabelText } = render(WithCheckboxes)
 
       expect(getByLabelText('Select all rows')).toBeTruthy()
     })
 
     it('renders the Empty story with the empty state', () => {
-      const { getByTestId } = render(Empty())
+      const { getByTestId } = render(Empty)
 
       expect(getByTestId('data-table__empty')).toBeTruthy()
     })

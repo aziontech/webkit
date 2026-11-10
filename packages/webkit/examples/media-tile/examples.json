@@ -1,0 +1,31 @@
+{
+  "component": "media-tile",
+  "title": "Components/Marketing/Primitives/MediaTile",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A framed panel with its caption under it: the lead in the page's ink, the sentence in the muted one, both on the same line. The scene is an official `Illustration`, inset from the frame by the `padded` default. Type a URL into `src` in the Controls panel and the tile swaps the scene for a plain image; clear `description` and the caption is the lead alone, with the frame holding its height either way.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "The two registers, each in the grid it belongs to. `frame` sits in `card-grid`'s `gap` register, where gutters keep every frame its own. `plain` sits in the `divider` register, where the grid draws every rule and the tile only has to fill its own background — a framed tile there would put a frame rule and a grid hairline a padding apart.",
+      "file": "kinds.vue"
+    },
+    {
+      "name": "Unpadded",
+      "summary": "The same tile with the inset off: the media runs to the frame's rules instead of sitting inside them. Reach for it only when the asset already carries its own air — a composed scene wants the inset, and a band mixing the two reads as a mistake.",
+      "file": "unpadded.vue"
+    },
+    {
+      "name": "Band",
+      "summary": "The row the tile exists for, laid out by `card-grid` in its `gap` register: the gutters keep every frame its own, the grid row equalises the panels so the captions start on one line, and the claims read down the band as one paragraph. The `divider` register would rule the captions as well as the panels — which is the seam this component keeps out of the copy.",
+      "file": "band.vue"
+    },
+    {
+      "name": "Placeholder",
+      "summary": "The tile with the library placeholder in its frame. An `Illustration` with no `name` draws the placeholder from the asset library, so a tile whose artwork has not been made yet keeps its frame and its caption in place. Swap the empty `Illustration` for a named scene or an image when the artwork lands.",
+      "file": "placeholder.vue"
+    }
+  ]
+}

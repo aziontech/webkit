@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
-import { buildComponentExamples, buildPatterns, withStoryServer } from './lib/patterns.mjs'
+import { readBlocks, readExamples } from './lib/blocks.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import {
   animate as themeAnimate,
@@ -16,6 +16,7 @@ import {
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
+const PKG_ROOT = resolve(SCRIPT_DIR, '..')
 const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
@@ -340,10 +341,8 @@ async function build() {
     imports[subpath] = entry
   }
 
-  const { patterns, examples } = await withStoryServer(REPO_ROOT, async (load) => ({
-    patterns: await buildPatterns(REPO_ROOT, load),
-    examples: await buildComponentExamples(REPO_ROOT, load, subpathSet)
-  }))
+  const patterns = readBlocks(PKG_ROOT)
+  const examples = readExamples(PKG_ROOT, subpathSet)
   for (const [subpath, list] of Object.entries(examples)) {
     if (imports[subpath]) imports[subpath].examples = list
   }

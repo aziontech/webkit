@@ -1,16 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-item/DocItem.stories'
+import Default from '../../../../examples/doc-item/default.vue'
+import Variants from '../../../../examples/doc-item/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocItem from './doc-item.vue'
 
 // Browser mode loads no Tailwind — hover fill/ring/hit-area belong to the visual gate;
 // asserted here: roles, anchor scope, link attributes, glyph swap, testids. The axe
 // checks run on the composed stories: listitem is only valid under a list-role parent.
-
-const { Default, Variants } = composeStories(stories)
 
 describe('DocItem', () => {
   describe('rendering & testid', () => {
@@ -120,12 +118,12 @@ describe('DocItem', () => {
 
   describe('accessibility', () => {
     it('has no violations on the composed default list', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across the anatomy variants', async () => {
-      const { container } = render(Variants())
+      const { container } = render(Variants)
       await expectNoA11yViolations(container)
     })
   })

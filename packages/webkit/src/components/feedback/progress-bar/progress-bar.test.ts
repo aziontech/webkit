@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/progress-bar/ProgressBar.stories'
+import Default from '../../../../examples/progress-bar/default.vue'
+import Indeterminate from '../../../../examples/progress-bar/indeterminate.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ProgressBar from './progress-bar.vue'
-
-const { Default, Indeterminate } = composeStories(stories)
 
 describe('ProgressBar', () => {
   it('renders the progressbar role with the default testid', () => {

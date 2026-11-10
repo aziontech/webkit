@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-radio/FieldRadio.stories'
+import Default from '../../../../examples/field-radio/default.vue'
+import Disabled from '../../../../examples/field-radio/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldRadio from './field-radio.vue'
-
-const { Default, Disabled } = composeStories(stories)
 
 describe('FieldRadio', () => {
   it('renders the div root with the default testid and wires the label for/input id', () => {
@@ -201,13 +199,13 @@ describe('FieldRadio', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { container } = render(Default())
+    const { container } = render(Default)
 
     await expectNoA11yViolations(container)
   })
 
   it('renders the Disabled story fixture cleanly', async () => {
-    const { container } = render(Disabled())
+    const { container } = render(Disabled)
 
     await expectNoA11yViolations(container)
   })

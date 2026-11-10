@@ -1,0 +1,25 @@
+{
+  "component": "template-gallery",
+  "title": "Components/Marketing/Sections/TemplateGallery",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Retail page's band: the storefront pitch beside a scrolling wall of eight deploy templates, closed by a ticker of compatible frameworks and clouds. Marks flagged `invertInDark` invert under the dark theme. Edit the props in the Controls panel — a band with no templates renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/TemplateGallery",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

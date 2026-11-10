@@ -1,0 +1,474 @@
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import DropdownGroup from '@aziontech/webkit/dropdown-group'
+  import DropdownOption from '@aziontech/webkit/dropdown-option'
+  import DropdownRoot from '@aziontech/webkit/dropdown-root'
+  import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'
+  import FieldInputGroup from '@aziontech/webkit/field-input-group'
+  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import HelperText from '@aziontech/webkit/helper-text'
+  import Hint from '@aziontech/webkit/hint'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Label from '@aziontech/webkit/label'
+  import Message from '@aziontech/webkit/message'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, reactive, ref, watch } from 'vue'
+
+  const open = ref(false)
+  const submitting = ref(false)
+  const environmentSelectOpen = ref(false)
+  const certificateTouched = ref(true)
+
+  const CREATE_ENVIRONMENT = '__create-environment__'
+  const environmentOptions = [
+    { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' },
+    { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' },
+    { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' }
+  ]
+  const policyLabels = { single_version: 'Single', versioned_urls: 'Versioned' }
+  const resourceEnvironments = ['Production', 'Preview']
+  const certificateOptions = [
+    { value: '', label: 'Platform (free)', subject: '' },
+    { value: 'cert-8801', label: 'example.com wildcard', subject: '*.example.com' },
+    { value: 'cert-8803', label: 'api.example.com', subject: 'api.example.com' },
+    { value: 'cert-8805', label: 'staging wildcard', subject: '*.staging.example.com' },
+    { value: 'cert-8802', label: 'example.org', subject: 'example.org' }
+  ]
+  const kindOptions = [
+    {
+      value: 'free',
+      label: 'Use a free platform domain',
+      description: 'You can use a free example.app subdomain.'
+    },
+    {
+      value: 'own',
+      label: 'Bring my own Domain',
+      description: 'Use your own DNS and point it to this resource.'
+    }
+  ]
+  const editingDomain = {
+    kind: 'own',
+    domain: 'www.example.com',
+    environment: 'Production',
+    certificate: 'cert-8801'
+  }
+
+  const blankForm = () => ({ kind: 'free', domain: '', environment: '', certificate: '' })
+  const form = reactive({ ...editingDomain })
+  const errors = reactive({ domain: '', environment: '' })
+
+  const environmentLabel = (value) =>
+    environmentOptions.find((option) => option.value === value)?.label ?? ''
+  const certificateLabel = (value) =>
+    certificateOptions.find((option) => option.value === value)?.label ?? ''
+
+  const subjectCovers = (subject, host) => {
+    const pattern = subject.toLowerCase()
+    if (!pattern) return false
+    if (pattern === host) return true
+    if (!pattern.startsWith('*.')) return false
+    const parent = pattern.slice(2)
+    return (
+      host.endsWith(`.${parent}`) && host.slice(0, -(parent.length + 1)).split('.').length === 1
+    )
+  }
+
+  const certificateForDomain = (host) => {
+    const name = host.trim().toLowerCase()
+    if (!name) return ''
+    const candidates = certificateOptions.filter((option) => subjectCovers(option.subject, name))
+    const exact = candidates.find((option) => option.subject.toLowerCase() === name)
+    return (exact ?? candidates[0])?.value ?? ''
+  }
+
+  watch(open, (isOpen) => {
+    if (!isOpen) return
+    Object.assign(errors, { domain: '', environment: '' })
+    submitting.value = false
+    Object.assign(form, { ...editingDomain })
+    certificateTouched.value = true
+  })
+
+  const fullDomain = computed(() => {
+    const name = form.domain.trim()
+    if (!name) return ''
+    return form.kind === 'free' ? `${name}.example.app` : name
+  })
+
+  watch(
+    () => [fullDomain.value, form.kind],
+    ([host, kind]) => {
+      if (kind === 'free') {
+        form.certificate = ''
+        return
+      }
+      if (certificateTouched.value) return
+      form.certificate = certificateForDomain(host)
+    },
+    { immediate: true }
+  )
+
+  const onCertificate = (value) => {
+    certificateTouched.value = true
+    form.certificate = value
+  }
+
+  const certificateHint = computed(() => {
+    if (!form.certificate) {
+      return 'Served by the free platform certificate, issued and renewed automatically.'
+    }
+    const name = certificateLabel(form.certificate)
+    return certificateTouched.value
+      ? `Served with ${name}.`
+      : `${name} already covers this address, so it is selected. Change it if another one should serve it.`
+  })
+
+  const chosen = computed(() =>
+    environmentOptions.find((option) => option.value === form.environment)
+  )
+
+  const joinsResource = computed(
+    () => Boolean(form.environment) && !resourceEnvironments.includes(form.environment)
+  )
+
+  const environmentHint = computed(() => {
+    if (!chosen.value) return 'Where this domain answers. Pick one, or create it from here.'
+    const policy = policyLabels[chosen.value.deploymentPolicy]
+    return joinsResource.value
+      ? `This resource doesn't publish into ${chosen.value.label} yet. Adding this domain connects it, served by the Deployment Settings set to ${policy}.`
+      : `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
+  })
+
+  const onEnvironmentModel = (value) => {
+    if (value === CREATE_ENVIRONMENT) {
+      environmentSelectOpen.value = false
+      return
+    }
+    form.environment = value
+    errors.environment = ''
+  }
+
+  const validate = () => {
+    errors.domain = form.domain.trim() ? '' : 'This field is required.'
+    errors.environment = form.environment ? '' : 'This field is required.'
+    return !errors.domain && !errors.environment
+  }
+
+  const submit = () => {
+    if (submitting.value) return
+    if (!validate()) return
+    submitting.value = true
+    setTimeout(() => {
+      submitting.value = false
+      open.value = false
+    }, 600)
+  }
+
+  const onRowAction = (value) => {
+    if (value === 'edit') open.value = true
+  }
+</script>
+
+<template>
+  <DropdownRoot
+    placement="bottom-end"
+    @select="(event, value) => onRowAction(value)"
+  >
+    <DropdownTrigger>
+      <Tooltip text="Row actions">
+        <IconButton
+          icon="pi pi-ellipsis-h"
+          kind="outlined"
+          size="small"
+          aria-label="Actions for www.example.com"
+        />
+      </Tooltip>
+    </DropdownTrigger>
+    <DropdownGroup>
+      <DropdownOption
+        value="edit"
+        label="Edit"
+      >
+        <template #left
+          ><i
+            class="pi pi-pencil"
+            aria-hidden="true"
+        /></template>
+      </DropdownOption>
+    </DropdownGroup>
+    <DropdownGroup>
+      <DropdownOption
+        value="delete"
+        label="Delete"
+      >
+        <template #left
+          ><i
+            class="pi pi-trash"
+            aria-hidden="true"
+        /></template>
+      </DropdownOption>
+    </DropdownGroup>
+  </DropdownRoot>
+
+  <Drawer
+    v-model:open="open"
+    size="medium"
+    side="right"
+  >
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Edit Domain"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Edit Domain</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                Change where it answers, the address, or the certificate it is served with.
+              </p>
+            </div>
+            <DrawerClose />
+          </PanelHeader>
+
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">Edit Domain</legend>
+              <section
+                data-stacked
+                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+              >
+                <div
+                  data-stacked
+                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
+                >
+                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
+                    <h2
+                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
+                    >
+                      <span class="flex items-center gap-(--spacing-xs)">Environment</span>
+                    </h2>
+                    <Hint
+                      text="Where the domain answers."
+                      class="shrink-0"
+                    />
+                  </div>
+                </div>
+                <div
+                  data-open
+                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+                >
+                  <div class="min-w-0 data-collapsible:overflow-hidden">
+                    <div
+                      data-open
+                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
+                    >
+                      <div
+                        :data-field-invalid="errors.environment ? true : null"
+                        class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+                      >
+                        <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                          <Label
+                            for="domain-environment"
+                            :required="!!errors.environment"
+                            >Environment</Label
+                          >
+                        </div>
+                        <Select
+                          v-model:open="environmentSelectOpen"
+                          :model-value="form.environment"
+                          size="large"
+                          class="w-full"
+                          placeholder="Select an environment"
+                          :disabled="submitting"
+                          :invalid="!!errors.environment"
+                          :display-value="environmentLabel"
+                          @update:model-value="onEnvironmentModel"
+                        >
+                          <Select.Trigger
+                            id="domain-environment"
+                            aria-describedby="domain-environment-helper"
+                          />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in environmentOptions"
+                              :key="option.value"
+                              :value="option.value"
+                            >
+                              {{ option.label }}
+                            </Select.Option>
+                            <template #footer>
+                              <Select.Option
+                                :value="CREATE_ENVIRONMENT"
+                                class="w-full"
+                              >
+                                Create Environment
+                              </Select.Option>
+                            </template>
+                          </Select.Content>
+                        </Select>
+                        <HelperText
+                          id="domain-environment-helper"
+                          :kind="errors.environment ? 'required' : 'helper'"
+                        >
+                          <template v-if="errors.environment">{{ errors.environment }}</template>
+                          <template v-else>{{ environmentHint }}</template>
+                        </HelperText>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section
+                data-stacked
+                class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+              >
+                <div
+                  data-stacked
+                  class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
+                >
+                  <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
+                    <h2
+                      class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
+                    >
+                      <span class="flex items-center gap-(--spacing-xs)">Domain</span>
+                    </h2>
+                    <Hint
+                      text="The address this resource answers on, where it comes from, and the certificate it is served with."
+                      class="shrink-0"
+                    />
+                  </div>
+                </div>
+                <div
+                  data-open
+                  class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+                >
+                  <div class="min-w-0 data-collapsible:overflow-hidden">
+                    <div
+                      data-open
+                      class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
+                    >
+                      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                        <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                          <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                            <Label id="domain-source-label">Domain source</Label>
+                          </div>
+                          <div
+                            role="radiogroup"
+                            aria-labelledby="domain-source-label"
+                            class="flex min-w-0 flex-col gap-(--spacing-sm)"
+                          >
+                            <FieldRadioBlock
+                              v-for="option in kindOptions"
+                              :key="option.value"
+                              v-model="form.kind"
+                              :value="option.value"
+                              name="domain-kind"
+                              :input-id="'domain-kind-' + option.value"
+                              :label="option.label"
+                              :description="option.description"
+                              :disabled="submitting"
+                            />
+                          </div>
+                        </div>
+
+                        <FieldInputGroup
+                          v-model="form.domain"
+                          label="Domain"
+                          input-id="domain-name"
+                          placeholder="my-resource"
+                          :disabled="submitting"
+                          :required="!!errors.domain"
+                          :helper-text="errors.domain"
+                          @update:model-value="errors.domain = ''"
+                        >
+                          <template
+                            v-if="form.kind === 'free'"
+                            #right
+                            >.example.app</template
+                          >
+                        </FieldInputGroup>
+
+                        <template v-if="form.kind === 'own'">
+                          <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                            <div
+                              class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
+                            >
+                              <Label for="domain-certificate">Certificate</Label>
+                            </div>
+                            <Select
+                              :model-value="form.certificate"
+                              size="large"
+                              class="w-full"
+                              :disabled="submitting"
+                              :display-value="certificateLabel"
+                              @update:model-value="onCertificate"
+                            >
+                              <Select.Trigger
+                                id="domain-certificate"
+                                aria-describedby="domain-certificate-helper"
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="option in certificateOptions"
+                                  :key="option.value"
+                                  :value="option.value"
+                                >
+                                  {{ option.label }}
+                                </Select.Option>
+                              </Select.Content>
+                            </Select>
+                            <HelperText
+                              id="domain-certificate-helper"
+                              kind="helper"
+                              >{{ certificateHint }}</HelperText
+                            >
+                          </div>
+                        </template>
+
+                        <Message
+                          severity="info"
+                          label="Your resource is always accessible at an example.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </fieldset>
+          </PanelContent>
+
+          <PanelFooter>
+            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
+              <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
+              <Button
+                label="Save Domain"
+                kind="primary"
+                size="medium"
+                :loading="submitting"
+                type="submit"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
+    </DrawerPortal>
+  </Drawer>
+</template>

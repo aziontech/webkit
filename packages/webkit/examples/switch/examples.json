@@ -1,0 +1,21 @@
+{
+  "component": "switch",
+  "title": "Components/Primitives/Inputs/Switch",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default switch. Use the Controls panel to flip modelValue, kind, and focused.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Both kind variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled in both positions. The lock reads the same either way — the disabled track and handle tokens win over the checked ones — and neither click nor Space/Enter emits.",
+      "file": "disabled.vue"
+    }
+  ]
+}

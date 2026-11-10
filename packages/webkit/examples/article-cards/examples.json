@@ -1,0 +1,49 @@
+{
+  "component": "article-cards",
+  "title": "Components/Marketing/Sections/ArticleCards",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The blog post closing band: the `left` heading over three related posts, each with its cover. Edit the props in the Controls panel — a band with no items renders nothing, and one with no title drops its header.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Both placements stacked: the `left` heading over three covers, then the `centered` heading under an overline over three cards that draw their client marks.",
+      "file": "types.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "RelatedArticles",
+      "summary": "The blog post's closing band: three related posts, each with its cover image.",
+      "file": "site-related-articles.vue",
+      "json": "site-related-articles.json"
+    },
+    {
+      "name": "RelatedSuccessCases",
+      "summary": "The Magalu story's closing band: three Retail stories, each card drawing its client's mark.",
+      "file": "site-related-success-cases.vue",
+      "json": "site-related-success-cases.json"
+    },
+    {
+      "name": "Centered",
+      "summary": "The heading centred under an overline over the cards, as a landing-page band.",
+      "file": "site-centered.vue",
+      "json": "site-centered.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Articles/ArticleCards",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": [
+    "RelatedArticles",
+    "RelatedArticlesJson",
+    "RelatedSuccessCases",
+    "RelatedSuccessCasesJson",
+    "Centered",
+    "CenteredJson"
+  ]
+}

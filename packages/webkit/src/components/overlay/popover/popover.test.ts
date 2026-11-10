@@ -1,9 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/popover/Popover.stories'
+import Default from '../../../../examples/popover/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Popover, {
   PopoverClose,
@@ -14,8 +13,6 @@ import Popover, {
   PopoverTitle,
   PopoverTrigger
 } from './index'
-
-const { Default } = composeStories(stories)
 
 /** The panel Teleports to <body>, escaping the render container. */
 const panel = () =>
@@ -603,7 +600,7 @@ describe('Popover (compound / overlay)', () => {
     // mount glue re-renders the story right after mount, and a click landing on
     // the pre-settle instance is discarded with it (flaky). Controlled args are
     // race-free; the click path is covered by the direct compound tests above.
-    const { getByRole, getByTestId } = render(Default({ open: true }))
+    const { getByRole, getByTestId } = render(Default, { props: { open: true } })
 
     await waitFor(() => expect(panel()).not.toBeNull())
     expect(getByRole('button', { name: 'Open popover' })).toBeTruthy()

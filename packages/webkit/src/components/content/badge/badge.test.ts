@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/badge/Badge.stories'
+import Default from '../../../../examples/badge/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Badge from './badge.vue'
-
-const { Default } = composeStories(stories)
 
 const SEVERITIES = ['primary', 'secondary', 'success', 'warning', 'danger', 'default'] as const
 const SIZES = ['small', 'medium', 'large'] as const

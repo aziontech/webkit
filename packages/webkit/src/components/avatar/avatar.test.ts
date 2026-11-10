@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../apps/storybook/src/stories/components/content/avatar/Avatar.stories'
+import Default from '../../../examples/avatar/default.vue'
 import { expectNoA11yViolations } from '../../test/axe'
 import Avatar from './avatar.vue'
-
-const { Default } = composeStories(stories)
 
 const KINDS = ['circle', 'square'] as const
 const SIZES = ['small', 'medium', 'large'] as const

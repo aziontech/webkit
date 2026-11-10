@@ -1,0 +1,49 @@
+{
+  "id": "platform/shell/single-page-create",
+  "name": "SinglePageCreate",
+  "title": "Templates/Platform/Shell/SinglePageCreate",
+  "surface": "product",
+  "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush CardBox of field rows, and a fixed bar under the scrolling form, the same bar Version Detail uses, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings and ends in a full-bleed sticky footer. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. Built from `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Hint`, `CardBox`, `Item`, `InputText`, `HelperText`, `Switch`, `FieldRadioBlock`, `Textarea`, `Message`, `MultiSelect`, `InputNumber` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "create page",
+    "create resource page",
+    "create zone",
+    "full page create form",
+    "top-level create page",
+    "new resource form",
+    "creation page",
+    "página de criação",
+    "criar recurso",
+    "formulário de criação",
+    "single page create",
+    "create purge",
+    "create service page",
+    "criação em uma página"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "Default",
+    "file": "single-page-create.vue"
+  },
+  "variants": [
+    {
+      "name": "CreatePurge",
+      "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge Type with FieldRadioBlock, an Arguments section whose code-font Textarea follows the chosen type, a warning Message, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type.",
+      "file": "variants/create-purge.vue"
+    },
+    {
+      "name": "CreateService",
+      "summary": "A long create, Create Service, in five groups of Item rows (General, Delivery Settings, Origins, Cache Expiration Policies and Debug Rules) over a full-bleed sticky footer with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.",
+      "file": "variants/create-service.vue"
+    },
+    {
+      "name": "RequiredFields",
+      "summary": "Create Service after Save on the empty form: Name and Address carry the required state with This field is required. under them, and typing into either clears its own error.",
+      "file": "variants/required-fields.vue"
+    }
+  ]
+}

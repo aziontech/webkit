@@ -1,0 +1,41 @@
+{
+  "id": "platform/detail/details-page",
+  "name": "DetailsPage",
+  "title": "Templates/Platform/Detail/DetailsPage",
+  "surface": "product",
+  "summary": "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `CardBox`, `Button`, `IconButton`, `Dropdown`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Message` and `Tooltip`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "resource summary",
+    "summary card",
+    "overview card",
+    "resource facts",
+    "status card",
+    "resumo do recurso",
+    "cartão de resumo",
+    "visão geral",
+    "details page",
+    "resource details",
+    "página de detalhes"
+  ],
+  "skills": ["webkit-layout"],
+  "primary": {
+    "name": "Resource",
+    "file": "details-page.vue"
+  },
+  "variants": [
+    {
+      "name": "Service",
+      "summary": "The service summary: the domain with its aliases in the overflow popover, the environment menu (shown below md only; from md up the breadcrumb carries the environment) and actions, the custom domains, status, service ID and creation, and the shared Deployment Settings band that expands into its policies.",
+      "file": "variants/service.vue"
+    },
+    {
+      "name": "Policy",
+      "summary": "The policy summary: the resource it protects, a Rules shortcut and actions, then status, environment, rule count, last edit and the enabled modules, and what the policy inspects.",
+      "file": "variants/policy.vue"
+    }
+  ]
+}

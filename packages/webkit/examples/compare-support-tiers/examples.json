@@ -1,0 +1,25 @@
+{
+  "component": "compare-support-tiers",
+  "title": "Components/Marketing/Sections/CompareSupportTiers",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Developer, Business, Enterprise and Mission-Critical across the Support and the Professional Services bands, each closing on its pricing link. Narrow the canvas below 1024px to see the tier picker, which opens on Enterprise.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "TierMatrix",
+      "summary": "Developer, Business, Enterprise and Mission-Critical across the Support and the Professional Services bands. Developer is the free tier, so its button starts a free account; the other three hand off to the contact page, with Enterprise as the recommended tier. Narrow the canvas below 1024px to see the tier picker; it opens on Enterprise.",
+      "file": "site-tier-matrix.vue",
+      "json": "site-tier-matrix.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Comparison/CompareSupportTiers",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["TierMatrix", "TierMatrixJson"]
+}

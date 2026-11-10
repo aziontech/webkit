@@ -1,0 +1,33 @@
+{
+  "_id": "hero-band",
+  "props": {
+    "kind": "title-band",
+    "size": "large",
+    "eyebrow": "Resources",
+    "title": "Learning Center",
+    "description": "Practical knowledge to speed up, secure, and scale applications.",
+    "primaryAction": {
+      "label": "See articles",
+      "href": "#subjects"
+    },
+    "secondaryAction": {
+      "label": "Talk to a specialist",
+      "href": "https://www.azion.com/en/contact/",
+      "trailing": true
+    },
+    "carouselLabel": "Trusted by teams running critical workloads",
+    "carouselMarks": [
+      "global-fashion-group",
+      "herospark",
+      "itau",
+      "nzn",
+      "netshoes",
+      "caixa",
+      "agibank",
+      "prime-video",
+      "america-movil",
+      "gpa",
+      "fourbank"
+    ]
+  }
+}

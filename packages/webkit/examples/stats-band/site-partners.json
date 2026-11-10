@@ -1,0 +1,22 @@
+{
+  "_id": "stats-band",
+  "props": {
+    "items": [
+      {
+        "prefix": "+",
+        "value": "100",
+        "label": "Data centers worldwide"
+      },
+      {
+        "prefix": "+",
+        "value": "3k",
+        "label": "ASNs directly connected to Azion"
+      },
+      {
+        "value": "100",
+        "suffix": "%",
+        "label": "Availability, guaranteed by SLA"
+      }
+    ]
+  }
+}

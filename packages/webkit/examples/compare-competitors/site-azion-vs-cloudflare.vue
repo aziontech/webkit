@@ -1,0 +1,202 @@
+<script setup>
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import ComparisonTable from '@aziontech/webkit/comparison-table'
+
+  const competitor = {
+    name: 'Cloudflare',
+    logo: '/marketing-components/competitors/cloudflare-extended-reversed.svg',
+    logoLight: '/marketing-components/competitors/cloudflare-extended-color.svg'
+  }
+
+  const groups = [
+    {
+      title: 'Architecture and resilience',
+      rows: [
+        {
+          capability: 'Unified platform',
+          definition:
+            'Delivery, compute, storage, and security run on one platform with one configuration model.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Global network',
+          definition: 'How many locations serve traffic close to end users.',
+          azion: 'partial',
+          competitor: 'full'
+        },
+        {
+          capability: 'Same routing on every plan',
+          definition:
+            'Whether lower-tier traffic is moved to other locations first when a data center runs short of capacity.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Load balancing and failover',
+          definition:
+            'Steering traffic away from unhealthy origins or locations, included on every plan.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Instant cache purge',
+          definition: 'Removing cached content from every location within seconds.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Support and services',
+      rows: [
+        {
+          capability: 'Enterprise response time',
+          definition: 'How fast a support engineer answers a critical, production-down ticket.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: '24×7 critical support',
+          definition: 'Round-the-clock coverage for business-critical outages.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Professional services',
+          definition: 'Specialists who plan and run migrations and architecture changes.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Security',
+      rows: [
+        {
+          capability: 'Web application firewall',
+          definition: 'Managed rules that block attacks on applications and APIs.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'DDoS protection',
+          definition:
+            'Absorbing volumetric and application-layer attacks before they reach the origin.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Bot management',
+          definition:
+            'Detecting and blocking automated traffic, available without an Enterprise contract.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Zero Trust (SASE)',
+          definition: 'Verifying every user and device before granting access to internal apps.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Compute',
+      rows: [
+        {
+          capability: 'Serverless functions',
+          definition: 'Running application code at the edge on web standards.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'AI inference',
+          definition: 'Running AI models on the provider’s network, close to users.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Observability',
+      rows: [
+        {
+          capability: 'Real-time metrics',
+          definition: 'Live traffic, performance, and security dashboards.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Log streaming',
+          definition: 'Sending logs in real time to your SIEM or data lake, on every plan.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Ingest, catalog & query',
+          definition:
+            'Streaming events into storage, organizing them as tables, and querying them with SQL.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Object storage',
+          definition: 'S3-compatible storage for files and objects.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'SQL database',
+          definition: 'A relational database replicated close to users.',
+          azion: 'full',
+          competitor: 'full'
+        }
+      ]
+    },
+    {
+      title: 'Commercial',
+      rows: [
+        {
+          capability: 'Predictable pricing',
+          definition: 'Knowing in advance what a month of traffic and compute will cost.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Committed-use discounts',
+          definition: 'Lower rates in exchange for a reserved volume or term.',
+          azion: 'full',
+          competitor: 'partial'
+        },
+        {
+          capability: 'Every feature on every plan',
+          definition: 'No product or feature locked behind an Enterprise contract.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
+    }
+  ]
+</script>
+
+<template>
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <ComparisonTable
+      eyebrow="Comparison"
+      title="How Azion compares with Cloudflare"
+      caption="How Azion compares with Cloudflare"
+      column-label="Capability"
+      full-label="Full support"
+      partial-label="Partial support"
+      none-label="Not available"
+      :competitor="competitor"
+      :groups="groups"
+    />
+
+    <SectionGap hatch />
+  </SectionContainer>
+</template>

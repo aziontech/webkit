@@ -1,0 +1,21 @@
+{
+  "component": "checkbox",
+  "title": "Components/Primitives/Inputs/Checkbox",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Binary control only — associate copy via an external label or FieldCheckbox.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Indeterminate",
+      "summary": "Tri-state visual. The parent owns the indeterminate logic (typical pattern: a \"select all\" header when some rows are selected). Sets `aria-checked=\"mixed\"` and the native input.indeterminate DOM property.",
+      "file": "indeterminate.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled checked and unchecked controls without label chrome.",
+      "file": "disabled.vue"
+    }
+  ]
+}

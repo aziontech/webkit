@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/input-password/InputPassword.stories'
+import Default from '../../../../examples/input-password/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import InputPassword from './input-password.vue'
-
-const { Default } = composeStories(stories)
 
 describe('InputPassword', () => {
   it('renders the input with the default testid and masks the value by default', () => {
@@ -279,7 +276,7 @@ describe('InputPassword', () => {
   it('renders the Default story fixture cleanly', async () => {
     // The story documents the bare field (its label is the form-field layer's job), so
     // the accessible name is supplied here rather than baked into the canonical story.
-    const { getByTestId, container } = render(Default({ 'aria-label': 'Password' }))
+    const { getByTestId, container } = render(Default, { props: { 'aria-label': 'Password' } })
 
     expect(getByTestId('input-password')).toBeTruthy()
     await expectNoA11yViolations(container)

@@ -1,0 +1,31 @@
+{
+  "component": "section-container",
+  "title": "Components/Marketing/Primitives/SectionContainer",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two bands stacked inside the column. The column draws the vertical rules; each band draws only its own horizontal ones, so no line is doubled.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Widths",
+      "summary": "Three caps in one view — a width only reads against another.",
+      "file": "widths.vue"
+    },
+    {
+      "name": "Bordered",
+      "summary": "With `bordered` off the column hands its sides to whatever frame encloses it.",
+      "file": "bordered.vue"
+    },
+    {
+      "name": "Padded",
+      "summary": "For a prose column with no modules, `padded` gives the column its own inset.",
+      "file": "padded.vue"
+    },
+    {
+      "name": "WithModules",
+      "summary": "What the column is actually for: a stack of `SectionModule` bands, with `SectionGap` for the deliberate pauses between them. The column stays `:padded=\"false\"` — the default — because each module already owns its inset; turning both on doubles the padding. Note the division rule: the first module draws no top edge, every later one draws the seam above it, so a page never shows two hairlines on the same pixel.",
+      "file": "with-modules.vue"
+    }
+  ]
+}

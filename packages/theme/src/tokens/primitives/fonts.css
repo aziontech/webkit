@@ -107,11 +107,25 @@
   font-display: swap;
 }
 
+/* Rubik (OFL), variable 300–900. fonts.azion.com serves apps/fonts/rubik/; the jsDelivr copy of
+   google/fonts is the fallback while a new upload propagates. */
 @font-face {
-  font-family: 'Sora';
-  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-Italic-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: italic;
   font-display: swap;
 }
 

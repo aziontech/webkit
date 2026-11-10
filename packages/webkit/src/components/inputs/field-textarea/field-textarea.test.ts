@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-textarea/FieldTextarea.stories'
+import Invalid from '../../../../examples/field-textarea/invalid.vue'
+import Required from '../../../../examples/field-textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldTextarea from './field-textarea.vue'
-
-const { Required, Invalid } = composeStories(stories)
 
 // The root fallback testid is `input-field-textarea`. FieldTextarea passes
 // `${root}__control` to the composed <Textarea>, whose root element IS the native
@@ -263,13 +261,13 @@ describe('FieldTextarea', () => {
 
   describe('story fixtures', () => {
     it('composes the Required story with required semantics', () => {
-      const { getByTestId } = render(Required())
+      const { getByTestId } = render(Required)
       expect(getByTestId(ROOT).getAttribute('data-required')).toBe('true')
       expect(getByTestId(NATIVE).getAttribute('aria-required')).toBe('true')
     })
 
     it('composes the Invalid story with invalid semantics and a seeded value', () => {
-      const { getByTestId } = render(Invalid())
+      const { getByTestId } = render(Invalid)
       expect(getByTestId(ROOT).getAttribute('data-invalid')).toBe('true')
       expect(getByTestId(NATIVE)).toHaveValue('Text filled')
       expect(getByTestId(NATIVE).getAttribute('aria-invalid')).toBe('true')

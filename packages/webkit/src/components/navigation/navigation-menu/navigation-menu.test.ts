@@ -1,10 +1,9 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/navigation-menu/NavigationMenu.stories'
+import Default from '../../../../examples/navigation-menu/default.vue'
 import NavigationMenu from './index'
 import NavigationMenuArrow from './navigation-menu-arrow.vue'
 import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'
@@ -22,8 +21,6 @@ import NavigationMenuViewport from './navigation-menu-viewport.vue'
 // which itself lives in body). Open/close transitions run ~400ms (slow-01), so
 // state assertions poll via waitFor with a generous timeout.
 const OPEN_TIMEOUT = 3000
-
-const { Default } = composeStories(stories)
 
 // The runtime string-template compiler lowercases member-expression tags
 // (`<NavigationMenu.Trigger>` -> `<navigation-menu.trigger>`), so — exactly like
@@ -621,10 +618,10 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     )
   })
 
-  describe('story integration (composeStories)', () => {
+  describe('documented example integration', () => {
     it('renders the Default story composition without error', () => {
-      const { getByTestId } = render(Default())
-      expect(getByTestId('navigation-menu-demo')).toBeTruthy()
+      const { getByRole } = render(Default)
+      expect(getByRole('navigation', { name: 'Azion' })).toBeTruthy()
     })
   })
 })

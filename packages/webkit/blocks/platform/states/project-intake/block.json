@@ -1,0 +1,34 @@
+{
+  "id": "platform/states/project-intake",
+  "name": "ProjectIntake",
+  "title": "Templates/Platform/States/ProjectIntake",
+  "surface": "product",
+  "summary": "The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `CardBox`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "drop zone",
+    "drag and drop upload",
+    "upload project",
+    "folder upload",
+    "initializing project",
+    "file drop",
+    "arrastar e soltar",
+    "enviar projeto",
+    "upload de arquivos"
+  ],
+  "skills": ["webkit-ui-states", "webkit-motion-polish"],
+  "primary": {
+    "name": "DropZone",
+    "file": "project-intake.vue"
+  },
+  "variants": [
+    {
+      "name": "Initializing",
+      "summary": "The Initializing overlay mid-upload, held inside a layout-contained frame here so it does not cover the docs page: two files uploaded, the third running, two queued, each row a step with its status glyph, path and size.",
+      "file": "variants/initializing.vue"
+    }
+  ]
+}

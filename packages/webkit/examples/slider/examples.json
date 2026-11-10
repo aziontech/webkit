@@ -1,0 +1,31 @@
+{
+  "component": "slider",
+  "title": "Components/Primitives/Inputs/Slider",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Single thumb over 0–100 in steps of 1, bound with `v-model` and named with `aria-label`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Ticks",
+      "summary": "A tick mark under every step. Ticks render only when the range has at most 21 positions.",
+      "file": "ticks.vue"
+    },
+    {
+      "name": "ReferenceValues",
+      "summary": "Labelled landmarks under the track. `unit` is appended to each label and to the announced value.",
+      "file": "reference-values.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled: skipped by Tab, ignores pointer and keys, and uses the disabled tokens.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid: the fill and thumb border switch to the danger tokens and aria-invalid is set.",
+      "file": "invalid.vue"
+    }
+  ]
+}

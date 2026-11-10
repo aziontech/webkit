@@ -1,0 +1,25 @@
+{
+  "component": "listing-browser",
+  "title": "Components/Marketing/Sections/ListingBrowser",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Careers jobs list at rest: every department and location, newest first, with Engineering and Security as the groups shown. Type in the search field, pick a department or a location, or switch the order — pick Marketing to reach the empty state and clear it from its button.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "OpenPositions",
+      "summary": "",
+      "file": "site-open-positions.vue",
+      "json": "site-open-positions.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Listings/ListingBrowser",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["OpenPositions", "OpenPositionsJson"]
+}

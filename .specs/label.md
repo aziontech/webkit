@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: 28312067033289d207114f7f642887bfc03fbdaec109323aa0fcd88a3ecb675d
+checksum: c644cf0bea006fd9b20caed8ab3c37f04247729eee37af1e61c27b1af2458a55
 created: 2026-06-15
 last_updated: 2026-11-09
 ---
@@ -104,7 +104,7 @@ _none_
 
 | Figma variable                                                | Temporary primitive                           | Follow-up                                                                           |
 | ------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `Components/Form Field/Label` (Sora 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
+| `Components/Form Field/Label` (Rubik 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)
 

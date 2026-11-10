@@ -95,7 +95,7 @@ test('the arbitrary-value guardrails catch the paren spelling as well as the bra
     ['typography-raw-length', 'text-[length:var(--text-body-md)]', 'text-(length:--text-body-md)'],
     ['leading-raw', 'leading-[1.5]', 'leading-(--leading-body)'],
     ['tracking-raw', 'tracking-[0.5px]', 'tracking-(--tracking-tight)'],
-    ['font-family-raw', 'font-[family-name:var(--font-sora)]', 'font-(family-name:--font-sora)'],
+    ['font-family-raw', 'font-[family-name:var(--font-sans)]', 'font-(family-name:--font-sans)'],
     ['animate-arbitrary', 'animate-[spin_1s]', 'animate-(--animation-spin)'],
     ['motion-hardcoded', 'duration-[200ms]', 'duration-(--duration-fast)']
   ]
@@ -112,7 +112,7 @@ test('the paren spellings named in ENG-47001 acceptance are all caught', () => {
     ['leading-(--y)', 'leading-raw'],
     ['tracking-(--z)', 'tracking-raw'],
     ['text-(length:--text-body-md)', 'typography-raw-length'],
-    ['font-(family-name:--font-sora)', 'font-family-raw']
+    ['font-(family-name:--font-sans)', 'font-family-raw']
   ]) {
     assert.ok(ids(content).includes(id), `expected ${id} for: ${content}`)
   }
@@ -159,7 +159,7 @@ test('dead-token-shorthand fires on a paren shorthand that emits no CSS', () => 
 test('dead-token-shorthand stays silent on every VALID token spelling', () => {
   for (const content of [
     'class="bg-(--bg-surface) text-(--text-default) rounded-(--shape-card)"',
-    'class="text-(length:--text-body-md) font-(family-name:--font-sora)"',
+    'class="text-(length:--text-body-md) font-(family-name:--font-sans)"',
     'class="data-[disabled]:bg-(--bg-disabled)"',
     // Declaring a custom property keeps its brackets — the sanctioned form.
     'class="[--table-row-bg:var(--bg-surface)]"',

@@ -1,0 +1,13 @@
+<script setup>
+  import StatsBand from '@aziontech/webkit/stats-band'
+</script>
+
+<template>
+  <StatsBand
+    :items="[
+      { value: '100', suffix: 'ms', label: 'Median response, worldwide' },
+      { value: '24', suffix: '/7', label: 'Support on every plan' },
+      { value: '99.99', suffix: '%', label: 'Availability, contractual' }
+    ]"
+  />
+</template>

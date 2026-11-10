@@ -108,6 +108,8 @@
     "rules",
     "adapters",
     "docs",
+    "blocks",
+    "examples",
     "catalog.json",
     "package.json"
   ],

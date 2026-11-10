@@ -1,13 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/select/Select.stories'
+import Default from '../../../../examples/select/default.vue'
+import Disabled from '../../../../examples/select/disabled.vue'
+import Multiple from '../../../../examples/select/multiple.vue'
+import WithGroups from '../../../../examples/select/with-groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
-
-const { Default, Multiple, WithGroups, Disabled } = composeStories(stories)
 
 const OPTIONS = [
   { value: 'opt-1', label: 'Option 1' },
@@ -391,7 +391,7 @@ describe('Select (compound / overlay)', () => {
     ['WithGroups', WithGroups],
     ['Disabled', Disabled]
   ] as const)('mounts the %s story fixture and renders a role=combobox trigger', (_name, Story) => {
-    const { getByTestId } = render(Story())
+    const { getByTestId } = render(Story)
     const trigger = getByTestId('select-trigger')
     expect(trigger.tagName).toBe('BUTTON')
     expect(trigger.getAttribute('role')).toBe('combobox')

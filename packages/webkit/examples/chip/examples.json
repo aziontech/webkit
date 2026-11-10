@@ -1,0 +1,36 @@
+{
+  "component": "chip",
+  "title": "Components/Primitives/Inputs/Chip",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The baseline Chip rendering its `label`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "The three kinds in the order they read in a filter surface: an applied value, an available one, and the control that adds one.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Both sizes side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Removable",
+      "summary": "Removable chip; the × button emits `remove` immediately. The chip does not hide itself — the consumer decides whether it disappears, stays, or becomes an `outlined` offer.",
+      "file": "removable.vue"
+    },
+    {
+      "name": "Clickable",
+      "summary": "Clickable chip; the interactive body emits `click` on pointer or keyboard (Enter / Space).",
+      "file": "clickable.vue"
+    },
+    {
+      "name": "Selectable",
+      "summary": "Selectable chips toggle their `selected` model on pointer or keyboard (Enter / Space) and keep it after the click, exposed as `aria-pressed`. Selection is a mode, not a kind: these are `outlined` chips, and `filled` would still mean an applied filter.",
+      "file": "selectable.vue"
+    }
+  ]
+}

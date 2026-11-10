@@ -1,8 +1,3 @@
-/**
- * Which product surface an export belongs to. WebKit serves three: the console and other
- * product apps, the marketing site, and the documentation site. A consumer agent building a
- * console screen should never reach for a marketing band, and the site must never lose one.
- */
 export const SURFACES = {
   product: 'Product UI (the console and other apps). The default for components.',
   marketing: 'The marketing site (azion.com): page sections, bands, brand and client assets.',
@@ -15,7 +10,6 @@ const BY_COMPONENT_FOLDER = {
   documentation: 'docs'
 }
 
-/** @param {string} target the `./src/...` file an export points to */
 export function surfaceFromTarget(target) {
   const component = String(target).match(/^\.\/src\/components\/([^/]+)\//)
   if (component) return BY_COMPONENT_FOLDER[component[1]] ?? 'product'

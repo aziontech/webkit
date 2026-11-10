@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/footer/Footer.stories'
+import DefaultFooter from '../../../../examples/footer/default-footer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Footer from './index'
-
-const { DefaultFooter } = composeStories(stories)
 
 /**
  * footer is a COMPOSITION component: `index.ts` attaches Column and Link onto
@@ -324,7 +321,7 @@ describe('Footer', () => {
     })
   })
 
-  describe('composeStories (the Default story fixture runs in-test)', () => {
+  describe('documented example (the Default story fixture runs in-test)', () => {
     it('Default story renders the landmark with its columns and every band', () => {
       const { getByRole, getByTestId, getAllByTestId } = render(DefaultFooter)
       expect(getByRole('contentinfo', { name: 'Footer' })).toBeTruthy()

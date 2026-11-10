@@ -1,0 +1,36 @@
+{
+  "component": "field-phone-number",
+  "title": "Components/Primitives/Inputs/FieldPhoneNumber",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Label + `InputGroup` with dial-code Select and masked input + helper text. Country defaults to `BR` (`+55`), mask is `(##) #####-####`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All three sizes, each beside a `FieldText` of the same size: the group and the dial-code trigger take the same height as the sibling field.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Countries",
+      "summary": "Brazil allows two lengths, so its mask follows the digits: 11 read as a mobile `(##) #####-####`, 10 as a landline `(##) ####-####`. US and UK each allow one: `(###) ###-####`, `#### ######`.",
+      "file": "countries.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid — helper switches to `kind=\"invalid\"` (danger tokens) and the `InputGroup` border turns danger; the input gets `aria-invalid`.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled — `InputGroup` goes muted and the dial-code Select and internal input are both disabled. The helper copy is the **caller's**: a supplied `helper-text` renders with the lock icon, and with none the row is absent.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Readonly",
+      "summary": "Read-only — value is visible but neither the number nor the dial code can change. The dial-code Select is disabled alongside the input.",
+      "file": "readonly.vue"
+    }
+  ]
+}

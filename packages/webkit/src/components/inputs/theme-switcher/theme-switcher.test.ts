@@ -1,13 +1,11 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/theme-switcher/ThemeSwitcher.stories'
+import Default from '../../../../examples/theme-switcher/default.vue'
+import Disabled from '../../../../examples/theme-switcher/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ThemeSwitcher from './theme-switcher.vue'
-
-const { Default, Disabled } = composeStories(stories)
 
 describe('ThemeSwitcher', () => {
   it('renders a radiogroup root with the default testid and three icon-only radio segments', () => {
@@ -224,13 +222,13 @@ describe('ThemeSwitcher', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { container } = render(Default())
+    const { container } = render(Default)
 
     await expectNoA11yViolations(container)
   })
 
   it('renders the Disabled story fixture cleanly', async () => {
-    const { container } = render(Disabled())
+    const { container } = render(Disabled)
 
     await expectNoA11yViolations(container)
   })

@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/primitives/section-gap/SectionGap.stories'
+import Default from '../../../../examples/section-gap/default.vue'
+import Hatch from '../../../../examples/section-gap/hatch.vue'
+import Sizes from '../../../../examples/section-gap/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionGap from './section-gap.vue'
-
-const { Default, Hatch, Sizes } = composeStories(stories)
 
 const TESTID = 'marketing-section-gap'
 const FRAME_TESTID = 'layout-frame-box'
@@ -81,7 +80,7 @@ describe('SectionGap', () => {
 
   describe('stories', () => {
     it('renders the Default story with the gap between two stub sections', () => {
-      const { getByTestId, getByText } = render(Default())
+      const { getByTestId, getByText } = render(Default)
 
       expect(getByText('Section above')).toBeInTheDocument()
       expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'top')
@@ -89,13 +88,13 @@ describe('SectionGap', () => {
     })
 
     it('renders the Hatch story with the texture drawn in the gap', () => {
-      const { getByTestId } = render(Hatch())
+      const { getByTestId } = render(Hatch)
 
       expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
     })
 
     it('renders the Sizes story with one gap per size step', () => {
-      const { getAllByTestId } = render(Sizes())
+      const { getAllByTestId } = render(Sizes)
 
       expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-size'))).toEqual([
         'small',

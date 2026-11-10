@@ -1,0 +1,26 @@
+{
+  "component": "spark-chart",
+  "title": "Components/Primitives/Chart/SparkChart",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An area spark of twelve points. It fills the width of its container, so the frame sets the width.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "The same series drawn as an area, a line and bars.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Small, medium and large: 32, 48 and 64 pixels tall.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Cards",
+      "summary": "A list of ticker rows: the name, a small area spark, the current value and the signed change. The spark stays decorative because the value beside it carries the number; its color says whether the change is good for that metric, so falling threats and latency read as success.",
+      "file": "cards.vue"
+    }
+  ]
+}

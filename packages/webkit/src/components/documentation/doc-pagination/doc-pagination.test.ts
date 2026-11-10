@@ -1,8 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-pagination/DocPagination.stories'
+import Default from '../../../../examples/doc-pagination/default.vue'
+import Ends from '../../../../examples/doc-pagination/ends.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPagination from './doc-pagination.vue'
 
@@ -11,8 +11,6 @@ import DocPagination from './doc-pagination.vue'
 // position assertion would read the same value whether the layout is right or absent.
 // Those belong to the visual gate. What is real without CSS: which sides render, the
 // anchor semantics, the landmark, and the event payload order.
-
-const { Default, Ends } = composeStories(stories)
 
 const PREV = { title: 'Deploy an application', href: '/docs/deploy' }
 const NEXT = { title: 'Bind a domain', href: '/docs/domains' }
@@ -137,12 +135,12 @@ describe('DocPagination', () => {
 
   describe('accessibility', () => {
     it('has no violations with both neighbours', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations at the ends of a series', async () => {
-      const { container } = render(Ends())
+      const { container } = render(Ends)
       await expectNoA11yViolations(container)
     })
   })

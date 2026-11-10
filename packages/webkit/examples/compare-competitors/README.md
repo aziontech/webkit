@@ -1,0 +1,39 @@
+# CompareCompetitors
+
+A table that compares Azion with one competitor, capability by capability, grouped by category. It is used on the migration guide landing pages.
+
+Each category opens with a heading row. Each cell is a circle icon with a `Tooltip` naming the level: `pi-check-circle` for full support, `ai-circle-half` for partial and `ai-circle-minus` for none. A capability with a definition carries an info button that opens it in a `Popover`. Screen readers hear each value with its row and its column. The header row stays on screen while you scroll.
+
+The capability column takes 56% of the width on phones, 36% from `sm` and 40% from `lg`, and the two platform columns share the rest. Logos are 12px tall on phones and 24px from `sm`. The band is the `ComparisonTable` component from `@aziontech/webkit/comparison-table`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Brand` for the Azion column, `Popover` with `IconButton` for the definitions, and `Tooltip` on the support icons. Both comparisons below are the same component with different props, so both use `_id: 'comparison-table'`.
+
+## Stories
+
+### Azion vs Cloudflare
+
+Six categories with a definition on every capability. The Cloudflare logo has two files: the reversed one for the dark theme and the color one for light.
+
+Example: [`site-azion-vs-cloudflare.vue`](./site-azion-vs-cloudflare.vue)
+
+### Azion vs Vercel
+
+All twenty-three rows of the Vercel comparison in seven categories, each with a definition. The Vercel logo has two files: the reversed one for the dark theme and the mono one for light.
+
+Example: [`site-azion-vs-vercel.vue`](./site-azion-vs-vercel.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` and `title` head the section; `title` also names the band, and without it no header renders. `caption` names the table for screen readers, and `columnLabel` heads the capability column.
+- `competitor` sets the other column and is required: `name`, `logo`, and `logoLight` for the light theme. With only `logo` it shows in both themes; without a logo the name shows as text.
+- `groups[]` holds one category each: a `title` and its `rows[]`.
+- Each row holds a `capability`, an optional `definition` shown in the popover, and an `azion` and a `competitor` level: `full`, `partial` or `none`. A missing level counts as `none`.
+- `fullLabel`, `partialLabel` and `noneLabel` are the texts for each level.
+
+Example:
+
+Site JSON: [`site-azion-vs-cloudflare.json`](./site-azion-vs-cloudflare.json)
+
+The Vercel comparison is the same entry with its own `competitor`, `title`, `caption` and `groups`:
+
+Site JSON: [`site-azion-vs-vercel.json`](./site-azion-vs-vercel.json)

@@ -1,8 +1,7 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/paginator/Paginator.stories'
+import DataDriven from '../../../../examples/paginator/data-driven.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Paginator from './index'
 import PaginationButton from './pagination-button/pagination-button.vue'
@@ -11,7 +10,6 @@ import PaginatorPageSize from './paginator-page-size/paginator-page-size.vue'
 
 // Default/Buttons are string-template stories whose Paginator.Button dot-notation
 // the runtime template compiler cannot resolve, so only DataDriven is exercised.
-const { DataDriven } = composeStories(stories)
 
 describe('Paginator (composition)', () => {
   describe('compound API — dot-notation resolves to the sub-components', () => {
@@ -334,7 +332,7 @@ describe('Paginator (composition)', () => {
     })
   })
 
-  describe('composeStories (data-driven fixture runs in-test)', () => {
+  describe('documented example (data-driven fixture runs in-test)', () => {
     it('DataDriven story wires v-model and renders the windowed controls (total 200)', () => {
       const { getByTestId, getByRole } = render(DataDriven)
       expect(getByTestId('data-paginator__info').textContent).toContain(

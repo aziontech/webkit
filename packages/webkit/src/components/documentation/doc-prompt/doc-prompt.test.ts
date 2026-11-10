@@ -1,17 +1,16 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-prompt/DocPrompt.stories'
+import Bare from '../../../../examples/doc-prompt/bare.vue'
+import Default from '../../../../examples/doc-prompt/default.vue'
+import Kinds from '../../../../examples/doc-prompt/kinds.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPrompt from './doc-prompt.vue'
 
 // Browser mode loads no Tailwind, so the height cap and its overflow do not exist
 // here (scrollHeight === clientHeight, `capped` always false) — the cap, fade and
 // disclosure are asserted through the visual gate, not this suite.
-
-const { Default, Kinds, Bare } = composeStories(stories)
 
 const PROMPT = 'Deploy this repository to Azion and show me the edge URL when it is live.'
 
@@ -202,17 +201,17 @@ describe('DocPrompt', () => {
 
   describe('a11y', () => {
     it('has no violations on the default story', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across both kinds', async () => {
-      const { container } = render(Kinds())
+      const { container } = render(Kinds)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations in the bare shape', async () => {
-      const { container } = render(Bare())
+      const { container } = render(Bare)
       await expectNoA11yViolations(container)
     })
   })

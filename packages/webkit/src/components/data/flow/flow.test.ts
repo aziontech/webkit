@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/flow/Flow.stories'
+import AnchoredNode from '../../../../examples/flow/anchored-node.vue'
+import Branches from '../../../../examples/flow/branches.vue'
+import Default from '../../../../examples/flow/default.vue'
+import Disabled from '../../../../examples/flow/disabled.vue'
+import Parallel from '../../../../examples/flow/parallel.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Flow, { FlowAnchor, FlowNode, FlowParallel } from './index'
-
-const { Default, Parallel, Branches, AnchoredNode, Disabled } = composeStories(stories)
 
 // Vue's runtime string-template compiler cannot resolve member-expression tags
 // like Flow.Node, so trees register the same component objects under flat
@@ -346,33 +347,33 @@ describe('Flow (composition compound)', () => {
 
   describe('stories compose and render (grounded end-to-end usage)', () => {
     it('renders the Default sequential flow', () => {
-      const { getByText, getAllByTestId } = render(Default())
+      const { getByText, getAllByTestId } = render(Default)
       expect(getByText('Source')).toBeTruthy()
       expect(getByText('Deliver')).toBeTruthy()
       expect(getAllByTestId('data-flow__node').length).toBe(3)
     })
 
     it('renders the Parallel story with a parallel group between nodes', () => {
-      const { getByTestId, getByText } = render(Parallel())
+      const { getByTestId, getByText } = render(Parallel)
       expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('group')
       expect(getByText('Branch A')).toBeTruthy()
       expect(getByText('Branch C')).toBeTruthy()
     })
 
     it('renders the Branches story with leading and trailing parallel groups', () => {
-      const { getAllByTestId } = render(Branches())
+      const { getAllByTestId } = render(Branches)
       expect(getAllByTestId('data-flow__parallel').length).toBe(2)
     })
 
     it('renders the AnchoredNode story exposing start/end anchors inside an unstyled node', () => {
-      const { getAllByTestId } = render(AnchoredNode())
+      const { getAllByTestId } = render(AnchoredNode)
       const anchors = getAllByTestId('data-flow__anchor')
       const types = anchors.map((a) => a.getAttribute('data-flow-anchor')).sort()
       expect(types).toEqual(['end', 'start'])
     })
 
     it('renders the Disabled story with the middle node marked disabled', () => {
-      const { getAllByTestId } = render(Disabled())
+      const { getAllByTestId } = render(Disabled)
       const disabled = getAllByTestId('data-flow__node').filter(
         (n) => n.getAttribute('data-flow-disabled') === 'true'
       )

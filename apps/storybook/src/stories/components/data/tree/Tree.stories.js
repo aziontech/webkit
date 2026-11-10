@@ -17,7 +17,7 @@ const bucketItems = [
       file('assets/images/hero.webp', 'hero.webp', '248 KB'),
       file('assets/images/logo.svg', 'logo.svg', '12 KB')
     ]),
-    folder('assets/fonts', 'fonts', [file('assets/fonts/sora.woff2', 'sora.woff2', '64 KB')]),
+    folder('assets/fonts', 'fonts', [file('assets/fonts/rubik.woff2', 'rubik.woff2', '64 KB')]),
     file('assets/styles.css', 'styles.css', '18 KB')
   ]),
   folder('reports', 'reports', [

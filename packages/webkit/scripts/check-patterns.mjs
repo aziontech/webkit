@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join, relative, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import { listPatternStories } from './lib/patterns.mjs'
+import { readBlocks } from './lib/blocks.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -16,18 +16,16 @@ export function skillExists(name, dirs = SKILL_DIRS) {
   return dirs.some((dir) => existsSync(join(dir, name, 'SKILL.md')))
 }
 
-export function checkPatternMetadata(patterns, storyFiles, { repoRoot = REPO_ROOT } = {}) {
+export function checkPatternMetadata(patterns, blockIds) {
   const errors = []
   const warnings = []
-  const byStory = new Map(Object.entries(patterns).map(([id, p]) => [p.story, id]))
-  for (const file of storyFiles) {
-    const rel = relative(repoRoot, file).split('\\').join('/')
-    if (!byStory.has(rel))
-      errors.push(`${rel}: no entry in catalog.json#patterns (run catalog:build)`)
+  for (const id of blockIds) {
+    if (!patterns[id])
+      errors.push(`blocks/${id}: no entry in catalog.json#patterns (run catalog:build)`)
   }
   for (const [id, p] of Object.entries(patterns)) {
     if (!Array.isArray(p.intents) || p.intents.length === 0) {
-      warnings.push(`${id}: parameters.webkit.intents is missing or empty in ${p.story}`)
+      warnings.push(`${id}: "intents" is missing or empty in blocks/${id}/block.json`)
     }
     for (const skill of p.skills || []) {
       if (!skillExists(skill)) errors.push(`${id}: skill "${skill}" does not exist in skills/`)
@@ -94,7 +92,10 @@ async function main() {
   const warnIntents = process.argv.includes('--warn-intents')
   const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
   const patterns = catalog.patterns || {}
-  const metadata = checkPatternMetadata(patterns, listPatternStories(REPO_ROOT))
+  const metadata = checkPatternMetadata(
+    patterns,
+    Object.keys(readBlocks(resolve(SCRIPT_DIR, '..')))
+  )
   const errors = warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]
   if (warnIntents) {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
@@ -129,7 +130,7 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery story in templates/headers, shells and platform is a pattern the AI copies: it needs parameters.webkit.intents, real skills, and an SFC that passes the consumer lint.\n'
+      '\nEvery block in packages/webkit/blocks is a pattern the AI copies: it needs intents in block.json, real skills, and SFCs that pass the consumer lint.\n'
     )
     process.exit(1)
   }

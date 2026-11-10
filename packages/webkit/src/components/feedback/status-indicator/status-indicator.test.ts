@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/status-indicator/StatusIndicator.stories'
+import Default from '../../../../examples/status-indicator/default.vue'
+import Loading from '../../../../examples/status-indicator/loading.vue'
+import Status from '../../../../examples/status-indicator/status.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import StatusIndicator from './status-indicator.vue'
-
-const { Default, Status, Loading } = composeStories(stories)
 
 const STATUSES = ['success', 'info', 'neutral', 'warning', 'alt', 'danger'] as const
 
@@ -108,21 +107,21 @@ describe('StatusIndicator', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { getByTestId, container } = render(Default())
+    const { getByTestId, container } = render(Default)
 
     expect(getByTestId('feedback-status-indicator')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
 
   it('renders the Status story fixture with all variants', () => {
-    const { getAllByTestId } = render(Status())
+    const { getAllByTestId } = render(Status)
 
     // The composite story renders one indicator per status option.
     expect(getAllByTestId('feedback-status-indicator').length).toBe(STATUSES.length)
   })
 
   it('renders the Loading story fixture with a spinner and busy state', async () => {
-    const { getByTestId, container } = render(Loading())
+    const { getByTestId, container } = render(Loading)
 
     expect(getByTestId('feedback-status-indicator').getAttribute('aria-busy')).toBe('true')
     expect(getByTestId('feedback-status-indicator__spinner')).toBeTruthy()

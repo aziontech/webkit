@@ -1,12 +1,12 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/breadcrumb-item/BreadcrumbItem.stories'
+import Current from '../../../../examples/breadcrumb-item/current.vue'
+import Default from '../../../../examples/breadcrumb-item/default.vue'
+import Disabled from '../../../../examples/breadcrumb-item/disabled.vue'
+import WithIcon from '../../../../examples/breadcrumb-item/with-icon.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import BreadcrumbItem from './breadcrumb-item.vue'
-
-const { Default, Current, WithIcon, Disabled } = composeStories(stories)
 
 const TESTID = 'navigation-breadcrumb-item'
 
@@ -216,14 +216,14 @@ describe('BreadcrumbItem', () => {
 
   describe('story fixtures', () => {
     it('composes the Default story', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
 
       expect(getByTestId(TESTID)).toBeTruthy()
       expect(getByTestId(`${TESTID}__label`).textContent?.trim()).toBe('Page Name')
     })
 
     it('composes the Current story as a current-page span', () => {
-      const { getByTestId } = render(Current())
+      const { getByTestId } = render(Current)
 
       const root = getByTestId(TESTID)
       expect(root.tagName).toBe('SPAN')
@@ -231,13 +231,13 @@ describe('BreadcrumbItem', () => {
     })
 
     it('composes the WithIcon story rendering the leading icon', () => {
-      const { getByTestId } = render(WithIcon())
+      const { getByTestId } = render(WithIcon)
 
       expect(getByTestId(`${TESTID}__icon`)).toBeTruthy()
     })
 
     it('composes the Disabled story with disabled semantics', () => {
-      const { getByTestId } = render(Disabled())
+      const { getByTestId } = render(Disabled)
 
       const root = getByTestId(TESTID)
       expect(root.getAttribute('aria-disabled')).toBe('true')

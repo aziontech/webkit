@@ -1,0 +1,46 @@
+{
+  "component": "input-text",
+  "title": "Components/Primitives/Inputs/InputText",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default empty input at medium size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Icons",
+      "summary": "The `iconLeft` slot, the `iconRight` slot, and both combined.",
+      "file": "icons.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-populated value to show the filled visual state (driven by `:not(:placeholder-shown)`).",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state — applies danger border/ring tokens and `aria-invalid`.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Email",
+      "summary": "Native `type=\"email\"`. Click **Submit** to validate the value — it flips to the `invalid` state when the value is not a valid email, and clears on the next keystroke.",
+      "file": "email.vue"
+    },
+    {
+      "name": "MaxLength",
+      "summary": "Hard character cap of 10 enforced by the native `maxlength` attribute.",
+      "file": "max-length.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state.",
+      "file": "disabled.vue"
+    }
+  ]
+}

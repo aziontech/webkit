@@ -1,0 +1,46 @@
+{
+  "id": "platform/forms/setting-row",
+  "name": "SettingRow",
+  "title": "Templates/Platform/Forms/SettingRow",
+  "surface": "product",
+  "summary": "The settings row, one field inside a flush `CardBox`: an `Item` whose content carries the title and description, where the title is the label and the control takes it as `aria-label`. Its kind follows what the control needs: a typed or picked field sits right in a cell capped at the 3xs container so every field on the card ends at the same edge; a switch or a button sits hard right at its natural width; a textarea, list, radio group or editor drops under the copy at the full measure. A message under a field or wide control, amber for required and red for invalid, appears only after Save. A child field indents one or two levels under a rule. Account settings, build settings, every create page and the generic resource settings page are built from it. Built from `CardBox`, `Item`, `InputText`, `Select`, `Switch`, `Textarea`, `Button` and `HelperText`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "field row",
+    "settings row",
+    "setting with control",
+    "label and input row",
+    "switch row",
+    "settings card rows",
+    "field validation message",
+    "linha de configuração",
+    "linha de campo",
+    "setting row",
+    "nested settings"
+  ],
+  "skills": ["webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "SettingsCard",
+    "file": "setting-row.vue"
+  },
+  "variants": [
+    {
+      "name": "CompactRows",
+      "summary": "The Login Settings card of Account Settings: two switches and a Manage button, each at its natural width against the right edge.",
+      "file": "variants/compact-rows.vue"
+    },
+    {
+      "name": "WithMessage",
+      "summary": "A Name row after Save was pressed with it empty, as the resource settings and create pages render it: the input carries its required state and the amber message sits under it inside the control column.",
+      "file": "variants/with-message.vue"
+    },
+    {
+      "name": "Nested",
+      "summary": "The protocol rows of a domain’s Advanced section: the HTTPS rows indent one level under HTTPS support and HTTP/3 ports a second level under HTTP/3 support, each behind a rule, and they leave when the switch above them turns off.",
+      "file": "variants/nested.vue"
+    }
+  ]
+}

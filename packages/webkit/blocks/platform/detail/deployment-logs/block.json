@@ -1,0 +1,49 @@
+{
+  "id": "platform/detail/deployment-logs",
+  "name": "DeploymentLogs",
+  "title": "Templates/Platform/Detail/DeploymentLogs",
+  "surface": "product",
+  "summary": "The deploy logs block on its own: a Logs row that reports the step count and the step in flight while the run goes, or the outcome Tag, the time and the Phased or Complete switch once it has settled; then the pipeline as an Accordion of steps, each with its status glyph, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view; and a flush ProgressBar on the bottom edge while it runs. Inside a deploy flow card it moves its controls up to the card header; on a deployment detail page it sits inside a Deployment Logs card without its Logs row and progress bar. Built from Accordion, LogView, Spinner, Tag, SegmentedButton and ProgressBar.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "deployment logs",
+    "deploy logs",
+    "build logs",
+    "pipeline steps",
+    "log viewer",
+    "phased logs",
+    "logs do deploy",
+    "logs de build",
+    "etapas do pipeline"
+  ],
+  "skills": ["webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Running",
+    "file": "deployment-logs.vue"
+  },
+  "variants": [
+    {
+      "name": "Succeeded",
+      "summary": "A run that went live: every step checked, the last one open, a Completed Tag with Deployed in 42s and the view switch in the Logs row, and copy on every step log.",
+      "file": "variants/succeeded.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "A run whose routing rules were rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch.",
+      "file": "variants/failed.vue"
+    },
+    {
+      "name": "CompleteView",
+      "summary": "The Complete view of a finished run: every line the pipeline printed as one continuous LogView with its copy button.",
+      "file": "variants/complete-view.vue"
+    },
+    {
+      "name": "FailedCompleteView",
+      "summary": "The Complete view of the failed run: the lines up to the error, as one LogView, nothing from the steps that never ran.",
+      "file": "variants/failed-complete-view.vue"
+    }
+  ]
+}

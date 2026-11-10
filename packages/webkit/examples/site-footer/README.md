@@ -1,0 +1,29 @@
+# SiteFooter
+
+The footer under every marketing page: four link columns, then the social row beside the status indicator and the language select.
+
+`Footer kind="site"` caps its bands at the page frame’s measure and draws that frame: the side rules, the hatched gutters, the corner marks and the full-bleed bottom rule that closes the page. The hairline above it mirrors the hero’s top rule, so the frame turns the corner instead of stopping at it. The page above must not draw a bottom rule of its own.
+
+The band is the `SiteFooter` component from `@aziontech/webkit/site-footer`; it composes `Footer` (`Footer.Column`, `Footer.Link`), `Brand`, `IconButton`, `StatusIndicator` and `Select`.
+
+## Stories
+
+### Default
+
+The site’s own footer. From `lg` the Azion mark leads the social row at the social glyphs’ size; below it the mark moves to the footer’s signature band and the icons get the row to themselves. The `#brand` slot is withheld rather than hidden on wide screens, because the footer opens that band whenever the slot is given. The language select’s values are the labels the reader sees, since its trigger shows the value.
+
+Example: [`site-default.vue`](./site-default.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `kind` is `site` under a framed marketing page; `home` is where the Azion mark links. Without `home` the mark is left out.
+- `ariaLabel` names the footer landmark, `homeAriaLabel` the Azion mark and `languageAriaLabel` the language select, for assistive tech.
+- `columns[]` are the link columns, each a `title` and its `links[]` (`label`, `href`).
+- `socials[]` are the profile icon buttons, each an `icon`, a `label` for assistive tech and an `href`.
+- `statusLabel` is the line beside the language select, and `languages[]` are the select's options as the reader sees them; the first one is selected.
+
+Example:
+
+Site JSON: [`site-default.json`](./site-default.json)

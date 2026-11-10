@@ -1,0 +1,16 @@
+{
+  "component": "doc-prose",
+  "title": "Components/Documentation/DocProse",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Headings, paragraphs, links, inline code, both list kinds, a blockquote and a section rule — all of it plain semantic HTML, none of it carrying a class. The markup is hand-written here, which is also the proof that the contract is not tied to any renderer.",
+      "file": "default.vue"
+    },
+    {
+      "name": "ChromeBoundary",
+      "summary": "`DocProse` styles descendants, so without a guard it would restyle the internals of every documentation component sitting in the prose — a callout body, a code block’s lines, an accordion trigger’s heading. Every prose rule carries `:not([data-doc-chrome],[data-doc-chrome]_*)`, so a subtree marked `data-doc-chrome` is left alone while the prose around it is not.",
+      "file": "chrome-boundary.vue"
+    }
+  ]
+}

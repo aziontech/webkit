@@ -1,0 +1,21 @@
+{
+  "component": "overline",
+  "title": "Components/Primitives/Content/Overline",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default overline label without prefix or cursor.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Prefixes",
+      "summary": "All preset prefixes side by side: `//`, `<>`, and `</>`.",
+      "file": "prefixes.vue"
+    },
+    {
+      "name": "Cursor",
+      "summary": "Blinking terminal-style cursor at the end of the text, shown with and without a prefix.",
+      "file": "cursor.vue"
+    }
+  ]
+}

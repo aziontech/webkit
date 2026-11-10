@@ -1,15 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/primitives/diagram/Diagram.stories'
+import Default from '../../../../examples/diagram/default.vue'
+import Groups from '../../../../examples/diagram/groups.vue'
+import NodeKinds from '../../../../examples/diagram/node-kinds.vue'
+import Spec from '../../../../examples/diagram/spec.vue'
 import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Diagram, { type DiagramName } from './diagram.vue'
 import type { DiagramSpec } from './types'
-
-const { Default, Spec, NodeKinds, Groups } = composeStories(stories)
 
 const NAMES = Object.keys(diagrams) as DiagramName[]
 

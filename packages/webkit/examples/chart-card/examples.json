@@ -1,0 +1,31 @@
+{
+  "component": "chart-card",
+  "title": "Components/Primitives/Chart/ChartCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A padded card with a title and its info hint, the chart, and a footer naming the range. The chart inside takes its accessible name from the card title.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Content",
+      "summary": "Padded content for a chart with axes and a legend; flush content for an edge-to-edge plot.",
+      "file": "content.vue"
+    },
+    {
+      "name": "WithControls",
+      "summary": "The aggregation and variation tags sit before the options menu. The menu carries Copy query and Export CSV, the two paths a person takes to move this data into another tool.",
+      "file": "with-controls.vue"
+    },
+    {
+      "name": "Resizable",
+      "summary": "Drag the corner to change the span and the height, or focus it: Left and Right change the span by one column, Up and Down the height by 24 pixels.",
+      "file": "resizable.vue"
+    },
+    {
+      "name": "Draggable",
+      "summary": "Three cards on a 12-column grid. Drag a card by its handle to drop it on another, or focus the handle and use the arrow keys. The page owns the order; the card only reports the gesture.",
+      "file": "draggable.vue"
+    }
+  ]
+}

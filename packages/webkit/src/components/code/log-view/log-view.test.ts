@@ -1,17 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/code/log-view/LogView.stories'
+import Default from '../../../../examples/log-view/default.vue'
+import Flush from '../../../../examples/log-view/flush.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { LogViewLine } from './injection-key'
 import LogView from './log-view.vue'
 import LogViewContent from './log-view-content.vue'
 import LogViewFooter from './log-view-footer.vue'
 import LogViewHeader from './log-view-header.vue'
-
-const { Default, Flush } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium; stub writeText to resolve
 // so CopyButton's own logic (await write -> emit 'copy') runs. Not a layout mock.
@@ -363,7 +361,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
     })
   })
 
-  describe('composeStories (the story fixture runs in-test)', () => {
+  describe('documented examples (the example file runs in-test)', () => {
     it('Default story renders the composed viewer over the deploy log with rows', () => {
       const { getByTestId, getAllByTestId } = render(Default)
       expect(getByTestId('code-log-view').tagName).toBe('DIV')

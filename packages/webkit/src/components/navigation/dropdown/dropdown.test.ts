@@ -1,13 +1,12 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/dropdown/Dropdown.stories'
+import Default from '../../../../examples/dropdown/default.vue'
+import Groups from '../../../../examples/dropdown/groups.vue'
+import OptionAffordances from '../../../../examples/dropdown/option-affordances.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Dropdown, { DropdownGroup, DropdownOption, DropdownTrigger } from './index'
-
-const { Default, Groups, OptionAffordances } = composeStories(stories)
 
 /**
  * A realistic composed tree mirroring how a consumer wires the compound:

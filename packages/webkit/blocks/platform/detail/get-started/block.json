@@ -1,0 +1,34 @@
+{
+  "id": "platform/detail/get-started",
+  "name": "GetStarted",
+  "title": "Templates/Platform/Detail/GetStarted",
+  "surface": "product",
+  "summary": "The onboarding block for a resource made from the CLI: a section heading with a toggle between the CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. It sits under the summary on a resource Overview tab and at the end of a create wizard, on the deploy success screen. Built from `SegmentedButton`, `CardBox` and `CodeBlock`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "get started",
+    "cli setup steps",
+    "github actions setup",
+    "onboarding steps",
+    "deploy with cli",
+    "numbered steps with code",
+    "primeiros passos",
+    "como começar",
+    "passos de configuração"
+  ],
+  "skills": ["webkit-microcopy"],
+  "primary": {
+    "name": "Cli",
+    "file": "get-started.vue"
+  },
+  "variants": [
+    {
+      "name": "Ci",
+      "summary": "The GitHub Actions path: store a personal token as a repository secret, add the deploy workflow, then push to the production branch.",
+      "file": "variants/ci.vue"
+    }
+  ]
+}

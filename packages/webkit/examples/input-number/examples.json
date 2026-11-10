@@ -1,0 +1,26 @@
+{
+  "component": "input-number",
+  "title": "Components/Primitives/Inputs/InputNumber",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default numeric input at medium size with a placeholder.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants stacked vertically. Each input has its own `ref`, its own bounds (`min`/`max`), and its own step.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — interaction (typing, spinner, arrow keys) is fully blocked.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state with the danger border applied. Interaction still works.",
+      "file": "invalid.vue"
+    }
+  ]
+}

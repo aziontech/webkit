@@ -1,12 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-text/FieldText.stories'
+import Default from '../../../../examples/field-text/default.vue'
+import Disabled from '../../../../examples/field-text/disabled.vue'
+import Icons from '../../../../examples/field-text/icons.vue'
+import Invalid from '../../../../examples/field-text/invalid.vue'
+import Login from '../../../../examples/field-text/login.vue'
+import ReadOnly from '../../../../examples/field-text/read-only.vue'
+import Sizes from '../../../../examples/field-text/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldText from './field-text.vue'
-
-const { Default, Sizes, Invalid, Disabled, Icons, Login, ReadOnly } = composeStories(stories)
 
 describe('FieldText', () => {
   it('renders the root with the default data-testid and stacks its parts', () => {

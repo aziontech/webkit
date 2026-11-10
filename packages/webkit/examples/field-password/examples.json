@@ -1,0 +1,46 @@
+{
+  "component": "field-password",
+  "title": "Components/Primitives/Inputs/FieldPassword",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default field with label, password input, helper text, and the requirements row turned on by the bare `requirements` attribute.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "Click **Submit** with the field empty: the button shows the loading spinner for ~1.2s (simulating an async call) and the input is locked. When loading finishes, the required check fires — the `Label` gets the Required tag, the input border turns warning, and the helper switches to the warning-tone \"This field is required.\" copy. Typing any value clears the error.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state — the helper switches to `kind=\"invalid\"` (danger tokens) and the input gets the invalid border/ring plus `aria-invalid`. The chips are untouched by it: they keep reporting what the current value does and does not satisfy, so the field's error and the rules never contradict each other.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — the input is disabled, the helper switches to `kind=\"disabled\"` (lock icon), and the label dims via inherited muted text token. The copy is the **caller's**: pass a `helperText` and it renders with the lock; pass none and a disabled field renders no helper row at all. The field never substitutes a padlock line of its own, so a field that goes disabled for the length of a request stays silent instead of growing one.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Toggle",
+      "summary": "`toggleable=true` (default) renders the visibility toggle button; `toggleable=false` renders a plain password field — the prop is forwarded to the underlying `InputPassword`.",
+      "file": "toggle.vue"
+    },
+    {
+      "name": "Icons",
+      "summary": "`#iconLeft` slot is forwarded to the underlying `InputPassword`. `#iconRight` is only honored when `toggleable=false` — the visibility toggle occupies that position by default.",
+      "file": "icons.vue"
+    },
+    {
+      "name": "Requirements",
+      "summary": "The built-in rule set, turned on by the bare `requirements` attribute — no array, nothing to configure. **Type in the first field** to watch each chip flip to the satisfied treatment (`pi pi-check` glyph + `var(--success)` surface) as its rule is met; the shape change, not just the color, is what keeps the state readable without relying on color alone. The second field starts on `Abcdefgh1`, so it shows both treatments at rest: four rules satisfied and `Special character` still muted. The row wraps at the field width, and its caption names the group for assistive tech.",
+      "file": "requirements.vue"
+    },
+    {
+      "name": "CustomRequirements",
+      "summary": "Bringing your own rules — the row's second lever. The first field imports `DEFAULT_PASSWORD_REQUIREMENTS`, filters `Special character` out **by its `key`** (`special`, not its localizable label), and appends a `No spaces` predicate rule. The second replaces the set entirely with a localized one and matches it with `requirements-title`. Both still render the same two chip treatments: an array changes *which rules* appear, never how a chip looks.",
+      "file": "custom-requirements.vue"
+    }
+  ]
+}

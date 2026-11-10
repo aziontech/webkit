@@ -1,13 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/chip/Chip.stories'
+import Clickable from '../../../../examples/chip/clickable.vue'
+import Default from '../../../../examples/chip/default.vue'
+import Removable from '../../../../examples/chip/removable.vue'
+import Selectable from '../../../../examples/chip/selectable.vue'
+import Sizes from '../../../../examples/chip/sizes.vue'
+import Types from '../../../../examples/chip/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Chip from './chip.vue'
-
-const { Clickable, Default, Removable, Selectable, Sizes, Types } = composeStories(stories)
 
 describe('Chip', () => {
   it('renders a <span> root carrying the default data-testid and default size', () => {
@@ -324,7 +326,7 @@ describe('Chip', () => {
     })
 
     it('composes the Selectable story fixture as independent toggles', async () => {
-      const { getAllByTestId } = render(Selectable())
+      const { getAllByTestId } = render(Selectable)
 
       const chips = getAllByTestId('input-chip')
       expect(chips.map((chip) => chip.getAttribute('aria-pressed'))).toEqual([
@@ -393,7 +395,7 @@ describe('Chip', () => {
   })
 
   it('composes the Default story fixture', () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
 
     expect(getByTestId('input-chip')).toHaveTextContent('Label')
     expect(getByTestId('input-chip')).toHaveAttribute('data-size', 'medium')
@@ -401,14 +403,14 @@ describe('Chip', () => {
   })
 
   it('composes the Types story fixture with all three kinds', () => {
-    const { getAllByTestId } = render(Types())
+    const { getAllByTestId } = render(Types)
 
     const kinds = getAllByTestId('input-chip').map((chip) => chip.getAttribute('data-kind'))
     expect(kinds).toEqual(expect.arrayContaining(['filled', 'outlined', 'dashed']))
   })
 
   it('composes the Sizes story fixture with both size tokens', () => {
-    const { getAllByTestId } = render(Sizes())
+    const { getAllByTestId } = render(Sizes)
 
     const chips = getAllByTestId('input-chip')
     const sizes = chips.map((chip) => chip.getAttribute('data-size'))
@@ -417,14 +419,14 @@ describe('Chip', () => {
   })
 
   it('composes the Removable story fixture with the remove button', () => {
-    const { getByTestId } = render(Removable())
+    const { getByTestId } = render(Removable)
 
     expect(getByTestId('input-chip')).toHaveAttribute('data-removable')
     expect(getByTestId('input-chip__remove')).toHaveAttribute('aria-label', 'Remove Label')
   })
 
   it('composes the Clickable story fixture as an interactive root', () => {
-    const { getByTestId } = render(Clickable())
+    const { getByTestId } = render(Clickable)
 
     expect(getByTestId('input-chip')).toHaveAttribute('data-clickable')
     expect(getByTestId('input-chip')).toHaveAttribute('role', 'button')

@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../apps/storybook/src/stories/components/content/overline/Overline.stories'
+import Cursor from '../../../examples/overline/cursor.vue'
+import Default from '../../../examples/overline/default.vue'
+import Prefixes from '../../../examples/overline/prefixes.vue'
 import { expectNoA11yViolations } from '../../test/axe'
 import Overline from './overline.vue'
-
-const { Default, Prefixes, Cursor } = composeStories(stories)
 
 describe('Overline', () => {
   it('renders the default slot content', () => {
@@ -91,12 +90,12 @@ describe('Overline', () => {
   })
 
   it('composes and renders the Default story', () => {
-    const { getByText } = render(Default())
+    const { getByText } = render(Default)
     expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
   })
 
   it('composes the Cursor story: blinking cursor with and without a prefix', () => {
-    const { getByText, container } = render(Cursor())
+    const { getByText, container } = render(Cursor)
 
     // First instance: prefix + text; second: text only, still with its cursor.
     expect(getByText('OVERLINE TEXT')).toBeInTheDocument()
@@ -106,7 +105,7 @@ describe('Overline', () => {
   })
 
   it('composes the Prefixes story with all three preset prefixes rendered', () => {
-    const { getByText } = render(Prefixes())
+    const { getByText } = render(Prefixes)
 
     expect(getByText('//')).toBeInTheDocument()
     expect(getByText('COMMENT STYLE')).toBeInTheDocument()

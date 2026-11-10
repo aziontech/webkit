@@ -1,0 +1,16 @@
+{
+  "component": "field-checkbox-block",
+  "title": "Components/Primitives/Inputs/FieldCheckboxBlock",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Interactive checkbox block seeded unchecked. Toggle the control to see the highlighted checked state.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state with a lock helper badge that surfaces why the option cannot be changed.",
+      "file": "disabled.vue"
+    }
+  ]
+}

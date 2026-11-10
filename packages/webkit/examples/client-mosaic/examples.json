@@ -1,0 +1,31 @@
+{
+  "component": "client-mosaic",
+  "title": "Components/Marketing/Sections/ClientMosaic",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the home page places it: two customer stories in the framed grid, the first one spanning two columns and two rows, followed by six client marks on mixed fills. Edit the props in the Controls panel — a band with no stories and no logos renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The Home mosaic in four columns, two on a phone. Netshoes leads as a large story tile, GPA runs two rows tall, and six logo tiles fill the rest.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    },
+    {
+      "name": "Columns",
+      "summary": "Three featured stories side by side, each mark on a face painted in the client brand colour over a one-line story that links to the case.",
+      "file": "site-columns.vue",
+      "json": "site-columns.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Social Proof/ClientMosaic",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson", "Columns", "ColumnsJson"]
+}

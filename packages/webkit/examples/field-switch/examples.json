@@ -1,0 +1,26 @@
+{
+  "component": "field-switch",
+  "title": "Components/Primitives/Inputs/FieldSwitch",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default switch with a label and description, toggled off.",
+      "file": "default.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Unchecked and checked switches side by side.",
+      "file": "states.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "When `required` is `true`, the label shows the Required indicator and the switch receives `aria-required=\"true\"`.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state; the helper badge appears alongside the label when `helperText` is set.",
+      "file": "disabled.vue"
+    }
+  ]
+}

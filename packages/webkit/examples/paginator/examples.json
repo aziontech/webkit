@@ -1,0 +1,21 @@
+{
+  "component": "paginator",
+  "title": "Components/Primitives/Data/Paginator",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The compound composition form: the full paginator assembled by hand from the dot-notation sub-components — page-info text (`Paginator.Info`), Previous / numbers / overflow / Next (`Paginator.Button`), and a rows-per-page selector (`Paginator.PageSize`).",
+      "file": "default.vue"
+    },
+    {
+      "name": "Buttons",
+      "summary": "`Paginator.Button` kinds (previous / next / number / more) and states: default, selected (current page), and disabled. The buttons are butted into one segmented strip — the frame, border and end radii come from the `Paginator` root, so a consumer composes the buttons and nothing else.",
+      "file": "buttons.vue"
+    },
+    {
+      "name": "DataDriven",
+      "summary": "Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Paginator renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize`.",
+      "file": "data-driven.vue"
+    }
+  ]
+}

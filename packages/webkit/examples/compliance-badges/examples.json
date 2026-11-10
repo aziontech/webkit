@@ -1,0 +1,25 @@
+{
+  "component": "compliance-badges",
+  "title": "Components/Marketing/Sections/ComplianceBadges",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the marketing site places it: the certifications headline and lead in the media split, five certification badges in a frame grid, and a closing \"See more\" cell linking to the compliance page. Edit the props in the Controls panel — a band with no title renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The five certifications the solution pages list, SOC 2 and 3, PCI DSS, LGPD, GDPR and CCPA, plus a See more cell in the sixth slot.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Social Proof/ComplianceBadges",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

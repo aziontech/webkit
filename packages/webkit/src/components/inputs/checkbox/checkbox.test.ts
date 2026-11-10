@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/checkbox/Checkbox.stories'
+import Default from '../../../../examples/checkbox/default.vue'
+import Disabled from '../../../../examples/checkbox/disabled.vue'
+import Indeterminate from '../../../../examples/checkbox/indeterminate.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Checkbox from './checkbox.vue'
-
-const { Default, Indeterminate, Disabled } = composeStories(stories)
 
 describe('Checkbox', () => {
   describe('data-testid', () => {
@@ -244,19 +243,19 @@ describe('Checkbox', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       expect(getByTestId('input-checkbox')).toBeTruthy()
     })
 
     it('renders the Indeterminate story with a mixed input', () => {
-      const { getByTestId } = render(Indeterminate())
+      const { getByTestId } = render(Indeterminate)
       expect(getByTestId('input-checkbox__input').getAttribute('aria-checked')).toBe('mixed')
     })
 
     it('renders the Disabled story with disabled inputs', () => {
-      const { getAllByTestId } = render(Disabled())
+      const { getAllByTestId } = render(Disabled)
       const inputs = getAllByTestId('input-checkbox__input') as HTMLInputElement[]
       expect(inputs.length).toBeGreaterThan(0)
       inputs.forEach((input) => expect(input.disabled).toBe(true))

@@ -1,8 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-card/DocCard.stories'
+import Default from '../../../../examples/doc-card/default.vue'
+import Variants from '../../../../examples/doc-card/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCard from './doc-card.vue'
 
@@ -11,8 +11,6 @@ import DocCard from './doc-card.vue'
 // visual gate. What is real without CSS is the part that decides the card's semantics: which
 // ROOT ELEMENT it renders (anchor vs block, driven by `href`), the link attributes, the
 // external-destination affordance, and the testid contract.
-
-const { Default, Variants } = composeStories(stories)
 
 describe('DocCard', () => {
   describe('rendering & testid', () => {
@@ -95,12 +93,12 @@ describe('DocCard', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default render', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across the anatomy variants', async () => {
-      const { container } = render(Variants())
+      const { container } = render(Variants)
       await expectNoA11yViolations(container)
     })
   })

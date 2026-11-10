@@ -1,13 +1,16 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/input-group/InputGroup.stories'
+import BothAddons from '../../../../examples/input-group/both-addons.vue'
+import Default from '../../../../examples/input-group/default.vue'
+import Disabled from '../../../../examples/input-group/disabled.vue'
+import Invalid from '../../../../examples/input-group/invalid.vue'
+import Required from '../../../../examples/input-group/required.vue'
+import Sizes from '../../../../examples/input-group/sizes.vue'
+import WithButton from '../../../../examples/input-group/with-button.vue'
+import WithSelect from '../../../../examples/input-group/with-select.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import InputGroup, { InputGroupAddon } from './index'
-
-const { Default, Sizes, BothAddons, WithButton, WithSelect, Invalid, Required, Disabled } =
-  composeStories(stories)
 
 // The middle input is a consumer-provided raw <input>; aria-label gives it an
 // accessible name so composed trees are axe-clean (the group does not name it).
@@ -228,7 +231,7 @@ describe('InputGroup', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story with the middle input inside the group', () => {
       const { getByTestId, getByPlaceholderText } = render(Default)
 

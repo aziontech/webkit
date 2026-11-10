@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/radio-button/RadioButton.stories'
+import Default from '../../../../examples/radio-button/default.vue'
+import Disabled from '../../../../examples/radio-button/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import RadioButton from './radio-button.vue'
-
-const { Default, Disabled } = composeStories(stories)
 
 describe('RadioButton', () => {
   it('renders the root span, the native radio input and the default testid', () => {
@@ -172,13 +170,13 @@ describe('RadioButton', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { container } = render(Default())
+    const { container } = render(Default)
 
     await expectNoA11yViolations(container)
   })
 
   it('renders the Disabled story fixture cleanly', async () => {
-    const { container } = render(Disabled())
+    const { container } = render(Disabled)
 
     await expectNoA11yViolations(container)
   })

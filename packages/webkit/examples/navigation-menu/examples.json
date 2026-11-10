@@ -1,0 +1,11 @@
+{
+  "component": "navigation-menu",
+  "title": "Components/Primitives/Navigation/NavigationMenu",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A full navigation header composed from the menu primitives. Hover or focus the \"Soluções\" and \"Produtos\" triggers to open their panels in the shared portal viewport; \"Preços\" and \"Contato\" are plain link triggers. Controls drive the hover delays, orientation, and accessible label.",
+      "file": "default.vue"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "component": "item",
+  "title": "Components/Primitives/Content/Item",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default surface with title, description, and a trailing action.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Outline",
+      "summary": "Outlined variant with a visible border.",
+      "file": "outline.vue"
+    },
+    {
+      "name": "Muted",
+      "summary": "Muted variant for secondary list rows.",
+      "file": "muted.vue"
+    },
+    {
+      "name": "Small",
+      "summary": "Compact density with reduced padding and gap.",
+      "file": "small.vue"
+    },
+    {
+      "name": "WithIconMedia",
+      "summary": "ItemMedia with kind icon frames a leading icon before title and description.",
+      "file": "with-icon-media.vue"
+    },
+    {
+      "name": "WithAvatar",
+      "summary": "Default ItemMedia slot fits Avatar for profile-style rows.",
+      "file": "with-avatar.vue"
+    },
+    {
+      "name": "WithImageMedia",
+      "summary": "ItemMedia with kind image crops a thumbnail; a second ItemContent column can show metadata.",
+      "file": "with-image-media.vue"
+    },
+    {
+      "name": "WithAsChild",
+      "summary": "With asChild, layout classes merge onto the anchor, which becomes the single focusable element of the row and draws the focus-visible ring. Tab to a row to see it.",
+      "file": "with-as-child.vue"
+    },
+    {
+      "name": "WithGroup",
+      "summary": "ItemGroup is the off-card list: it stacks rows with a gap between them (no dividers) and forces its items inline (no per-item surface/padding) to avoid a box-in-box effect.",
+      "file": "with-group.vue"
+    },
+    {
+      "name": "WithList",
+      "summary": "ItemList is the in-card list: placed inside a CardBox with padded=false, rows are separated by full-width dividers and sit flush to the card edges.",
+      "file": "with-list.vue"
+    },
+    {
+      "name": "WithListAsChild",
+      "summary": "asChild rows inside an ItemList: each whole row is an anchor (data-kind forced to default by the list), separated by full-width dividers, with row-level hover and a focus-visible ring on Tab.",
+      "file": "with-list-as-child.vue"
+    },
+    {
+      "name": "Inline",
+      "summary": "kind=\"inline\" removes the outer padding so items sit flush; placed in a gapped ItemGroup directly on the page (no card, no dividers).",
+      "file": "inline.vue"
+    }
+  ]
+}

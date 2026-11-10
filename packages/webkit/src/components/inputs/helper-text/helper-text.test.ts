@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/helper-text/HelperText.stories'
+import Default from '../../../../examples/helper-text/default.vue'
+import Types from '../../../../examples/helper-text/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import HelperText from './helper-text.vue'
-
-const { Default, Types } = composeStories(stories)
 
 const KINDS = ['helper', 'invalid', 'required', 'disabled'] as const
 

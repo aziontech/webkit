@@ -1,0 +1,43 @@
+{
+  "id": "platform/creation/create-hub",
+  "name": "CreateHub",
+  "title": "Templates/Platform/Creation/CreateHub",
+  "surface": "product",
+  "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead also offers to pick a file or a folder, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a dashed EmptyState with Continue with GitHub until an account is connected, then an account Select with an Add GitHub Account option, a search that also takes a repository URL, and a flush list of repositories with an Import button each, shown as skeleton rows while a scope loads. On the right, Start from Template: a Filter button over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column cards with the vendor beside the title. Dragging a folder onto the page shows the drop target plotted in ProjectIntake. Built from `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Link`, `Select`, `InputText`, `CardBox`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "create hub",
+    "creation center",
+    "new project",
+    "start a project",
+    "import from github",
+    "import repository",
+    "start from template",
+    "template gallery",
+    "create from git",
+    "central de criação",
+    "novo projeto",
+    "importar repositório",
+    "começar de um template"
+  ],
+  "skills": ["webkit-create-surface", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "create-hub.vue"
+  },
+  "variants": [
+    {
+      "name": "Connected",
+      "summary": "GitHub connected: jane-doe is the selected scope and its seven repositories are listed, most recently pushed first.",
+      "file": "variants/connected.vue"
+    },
+    {
+      "name": "LoadingRepositories",
+      "summary": "A scope just picked: six skeleton rows stand in for the repositories while they load.",
+      "file": "variants/loading-repositories.vue"
+    }
+  ]
+}

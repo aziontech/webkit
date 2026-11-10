@@ -1,0 +1,54 @@
+{
+  "id": "platform/states/page-wires",
+  "name": "PageWires",
+  "title": "Templates/Platform/States/PageWires",
+  "surface": "product",
+  "summary": "The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home. Each one is the real page’s grid drawn with Skeleton bands inside the same CardBox frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, CardBox and Item.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "page skeleton",
+    "loading skeleton",
+    "skeleton screen",
+    "page loading state",
+    "wireframe loading",
+    "session expired",
+    "carregando",
+    "esqueleto de carregamento",
+    "tela de carregamento"
+  ],
+  "skills": ["webkit-ui-states"],
+  "primary": {
+    "name": "Overview",
+    "file": "page-wires.vue"
+  },
+  "variants": [
+    {
+      "name": "Onboarding",
+      "summary": "The first-access Home wire: the headline and prompt bands over three door cards, each holding its illustration stage, three text lines and an action.",
+      "file": "variants/onboarding.vue"
+    },
+    {
+      "name": "Session",
+      "summary": "The whole app shell as a wire while a session expires over a list page: header bar, navigation rail with its grouped items, the list controls row and a table card with header, eight rows and pagination.",
+      "file": "variants/session.vue"
+    },
+    {
+      "name": "SessionDetail",
+      "summary": "The same wire over a detail page: a strip of tab bands under the header, then a heading and two banded cards of field rows in the data column.",
+      "file": "variants/session-detail.vue"
+    },
+    {
+      "name": "SessionForm",
+      "summary": "The same wire over a create page: the heading and two banded cards of field rows in the create column, with the save bar held at the foot.",
+      "file": "variants/session-form.vue"
+    },
+    {
+      "name": "SessionHome",
+      "summary": "The same wire over Home: the Overview wire centred in the data column.",
+      "file": "variants/session-home.vue"
+    }
+  ]
+}

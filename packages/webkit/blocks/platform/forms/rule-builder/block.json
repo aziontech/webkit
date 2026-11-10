@@ -1,0 +1,35 @@
+{
+  "id": "platform/forms/rule-builder",
+  "name": "RuleBuilder",
+  "title": "Templates/Platform/Forms/RuleBuilder",
+  "surface": "product",
+  "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are groups of variable, operator and argument rows, the variable picked from a suggestion list, added with And or Or and read as If / Or across groups; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Groups, conditions and behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FieldText`, `InputText`, `HelperText`, `Select`, `ScrollArea`, `FieldRadioBlock`, `CardBox`, `Divider`, `Item`, `Switch`, `Hint`, `IconButton`, `Tooltip` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "rules engine",
+    "rule form",
+    "add rule",
+    "criteria and behaviors",
+    "if then rules",
+    "conditional rules",
+    "rule builder",
+    "motor de regras",
+    "criar regra",
+    "regras condicionais"
+  ],
+  "skills": ["webkit-form", "webkit-errors", "webkit-create-surface"],
+  "primary": {
+    "name": "Default",
+    "file": "rule-builder.vue"
+  },
+  "variants": [
+    {
+      "name": "Composed",
+      "summary": "Editing the seeded Docs rewrite rule: the drawer titled Edit Rule, the phase locked with its note, one condition on the URI, and two behaviors that rewrite the path and set the Static Assets cache policy.",
+      "file": "variants/composed.vue"
+    }
+  ]
+}

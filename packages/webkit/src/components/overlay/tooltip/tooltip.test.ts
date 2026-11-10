@@ -1,13 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/tooltip/Tooltip.stories'
+import Default from '../../../../examples/tooltip/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tooltip from './tooltip.vue'
-
-const { Default } = composeStories(stories)
 
 // The tooltip panel is Teleported to <body> (escapes the render container), so
 // it must be queried from document.body — not the utils container. A frame or
@@ -321,7 +318,7 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
 
   describe('Storybook Default story renders and opens', () => {
     it('composes the Default trigger and opens on focus', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       await settle()
 
       const trigger = getByTestId('overlay-tooltip')

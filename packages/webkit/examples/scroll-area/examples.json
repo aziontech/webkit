@@ -1,0 +1,21 @@
+{
+  "component": "scroll-area",
+  "title": "Components/Primitives/Layout/ScrollArea",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Vertical scroll region sized via `class`, with a themed thin scrollbar.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Orientations",
+      "summary": "The `orientation` prop drives the scroll axis: `vertical`, `horizontal`, and `both` shown side by side.",
+      "file": "orientations.vue"
+    },
+    {
+      "name": "Fade",
+      "summary": "With `fade`, only the edges that still have content fade out, and each fade grows with the distance left to scroll. The border sits on a wrapper so the fade never eats the frame.",
+      "file": "fade.vue"
+    }
+  ]
+}

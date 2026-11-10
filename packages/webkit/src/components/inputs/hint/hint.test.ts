@@ -1,13 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/hint/Hint.stories'
+import Default from '../../../../examples/hint/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Hint from './hint.vue'
-
-const { Default } = composeStories(stories)
 
 const TEXT = 'Values are encrypted at rest and never displayed again after saving.'
 

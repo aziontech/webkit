@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/divider/Divider.stories'
+import Default from '../../../../examples/divider/default.vue'
+import Orientations from '../../../../examples/divider/orientations.vue'
+import WithLabel from '../../../../examples/divider/with-label.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Divider from './divider.vue'
-
-const { Default, WithLabel, Orientations } = composeStories(stories)
 
 const TESTID = 'layout-divider'
 
@@ -100,7 +99,7 @@ describe('Divider', () => {
 
   describe('stories', () => {
     it('renders the Default story fixture', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       const root = getByTestId(TESTID)
 
       expect(root).toHaveAttribute('role', 'separator')
@@ -108,7 +107,7 @@ describe('Divider', () => {
     })
 
     it('renders the WithLabel story with its labelled separator', () => {
-      const { getByTestId } = render(WithLabel())
+      const { getByTestId } = render(WithLabel)
       const root = getByTestId(TESTID)
 
       expect(root).toHaveAttribute('data-orientation', 'horizontal')
@@ -117,7 +116,7 @@ describe('Divider', () => {
     })
 
     it('renders the Orientations story with one horizontal and one vertical divider', () => {
-      const { getAllByTestId } = render(Orientations())
+      const { getAllByTestId } = render(Orientations)
       const [horizontal, vertical] = getAllByTestId(TESTID)
 
       expect(horizontal).toHaveAttribute('data-orientation', 'horizontal')

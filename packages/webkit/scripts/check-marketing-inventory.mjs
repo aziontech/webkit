@@ -1,14 +1,4 @@
 #!/usr/bin/env node
-/**
- * The marketing site and the docs site depend on WebKit exports and patterns that no console
- * screen uses, so a cleanup can drop one without any product test noticing. This check keeps a
- * frozen inventory of everything on those two surfaces: an item may only leave the catalog when
- * the inventory records where it went (`renamed`) or why it is gone and what replaces it
- * (`removed`). Those two maps are the work list for migrating the site to a new major.
- *
- *   node scripts/check-marketing-inventory.mjs           check (CI)
- *   node scripts/check-marketing-inventory.mjs --update  add new marketing/docs items
- */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -17,7 +7,6 @@ const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export const INVENTORY_PATH = resolve(PKG, 'scripts/marketing-inventory.json')
 const CATALOG_PATH = resolve(PKG, 'catalog.json')
 
-/** Patterns that only the marketing or docs site renders. */
 const SITE_PATTERN = /^(headers\/(site|docs)-header|shells\/(website|documentation)|marketing\/)/
 
 export function currentItems(catalog) {

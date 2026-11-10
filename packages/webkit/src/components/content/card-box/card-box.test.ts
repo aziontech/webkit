@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/card-box/CardBox.stories'
+import Default from '../../../../examples/card-box/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CardBox from './card-box.vue'
-
-const { Default } = composeStories(stories)
 
 const TESTID = 'content-card-box'
 

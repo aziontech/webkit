@@ -1,0 +1,31 @@
+{
+  "component": "avatar",
+  "title": "Components/Primitives/Content/Avatar",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default circle avatar with initials.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Both shape variants side by side: circle and square at medium size.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All three size presets (24 / 32 / 48 px) with initials.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Fallbacks",
+      "summary": "Content precedence: photo when `src` is set, initials from `label` when there is no image, and the fallback icon when neither is provided.",
+      "file": "fallbacks.vue"
+    },
+    {
+      "name": "VariantGrid",
+      "summary": "Full matrix of shapes and sizes across the three content modes (initials, icon, image).",
+      "file": "variant-grid.vue"
+    }
+  ]
+}

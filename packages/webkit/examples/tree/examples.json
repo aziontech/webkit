@@ -1,0 +1,31 @@
+{
+  "component": "tree",
+  "title": "Components/Primitives/Data/Tree",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A bucket-like file tree three levels deep, with glyphs and size descriptions. Two folders are seeded in `v-model:expanded`; the chevron and ArrowRight / ArrowLeft fold the rest.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Selectable",
+      "summary": "With `selectable`, activating a node writes its id to `v-model:selected`, marks the row selected and sets `aria-selected`. The bound id is shown under the tree.",
+      "file": "selectable.vue"
+    },
+    {
+      "name": "CustomItem",
+      "summary": "The `item` slot replaces the label region of every row, here adding a status `Tag`; the `actions` slot adds an end-aligned `IconButton` per row. The chevron, indentation and row states stay owned by the tree.",
+      "file": "custom-item.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While `loading`, the tree renders Skeleton rows in its place and sets `aria-busy` on the root.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "With an empty `items` array the tree shows the default `EmptyState`, titled by `emptyTitle` with `emptyDescription`. Pass the `empty` slot to replace it.",
+      "file": "empty.vue"
+    }
+  ]
+}

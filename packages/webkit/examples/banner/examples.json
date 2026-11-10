@@ -1,0 +1,16 @@
+{
+  "component": "banner",
+  "title": "Components/Marketing/Primitives/Banner",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as a page uses it mid-scroll: the `eyebrow` names the programme, the `h2` carries the announcement, and one primary action sits under it in the `actions` slot. The `description` fills the raised trailing column with the single piece of context the announcement needs. From `md` up the two columns sit side by side, two-thirds to one; below it they stack announcement first and the action stretches full width.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithAside",
+      "summary": "The same band with the trailing column filled through the `aside` slot instead of the `description` prop. The slot replaces the prop, so it is the only way to put more than a sentence there — here a rollout note carrying an inline link. The column renders as one flow of copy, so slot content stays phrasing-level: text, emphasis and anchors, never a block of its own.",
+      "file": "with-aside.vue"
+    }
+  ]
+}

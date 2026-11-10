@@ -1,14 +1,15 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-phone-number/FieldPhoneNumber.stories'
+import Countries from '../../../../examples/field-phone-number/countries.vue'
+import Default from '../../../../examples/field-phone-number/default.vue'
+import Disabled from '../../../../examples/field-phone-number/disabled.vue'
+import Invalid from '../../../../examples/field-phone-number/invalid.vue'
+import Readonly from '../../../../examples/field-phone-number/readonly.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { defaultCountries } from './countries'
 import FieldPhoneNumber, { type PhoneNumber } from './field-phone-number.vue'
-
-const { Default, Countries, Invalid, Disabled, Readonly } = composeStories(stories)
 
 /** The dial-code dropdown Teleports to document.body — query it from there. */
 const getContent = () =>
@@ -646,7 +647,7 @@ describe('FieldPhoneNumber', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story with label, dial-code trigger and masked input', () => {
       const { getByTestId, getByRole } = render(Default)
 

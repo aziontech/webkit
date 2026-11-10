@@ -1,0 +1,21 @@
+{
+  "component": "box-grid-selection",
+  "title": "Components/Primitives/Inputs/BoxGridSelection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Basic three-option grid with icons and descriptions.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "All options are non-interactive with disabled tokens applied.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "WithTag",
+      "summary": "Plan selection with Tag components in the tag slot.",
+      "file": "with-tag.vue"
+    }
+  ]
+}

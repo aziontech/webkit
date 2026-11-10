@@ -1,0 +1,31 @@
+{
+  "component": "field-input-group",
+  "title": "Components/Primitives/Inputs/FieldInputGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Label + internal input + helper text, no side slots filled.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithSlots",
+      "summary": "`#left` and `#right` slots forwarded to the underlying `InputGroup`.",
+      "file": "with-slots.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state — helper switches to `kind=\"invalid\"` (danger tokens) and the InputGroup border turns danger.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — helper falls back to \"This field is locked.\" with the lock icon (`kind=\"disabled\"`), the InputGroup surface goes muted, and cursor becomes `not-allowed`.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Icons",
+      "summary": "PrimeIcons flanking the internal input inside `InputGroup`'s side slots. Same vocabulary as `FieldText`'s Icons story.",
+      "file": "icons.vue"
+    }
+  ]
+}

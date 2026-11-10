@@ -80,7 +80,7 @@ These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do
 
 Inside `packages/webkit/src/components/webkit/`, **never** set:
 
-- `font-family` / `font-proto-mono` / `font-sora`
+- `font-family` / `font-proto-mono` / `font-rubik`
 - `line-height` / `leading-*` (except `leading-none` on icons aligned to `text-[length:inherit]`)
 - `letter-spacing` / `tracking-*`
 - Raw `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
@@ -553,7 +553,7 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
 
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
-- **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
+- **Typography:** `font-family`, `font-proto-mono`, `font-rubik`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
 - **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.

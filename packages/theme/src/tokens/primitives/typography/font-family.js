@@ -1,5 +1,5 @@
 export const fontFamily = {
-  sans: 'Sora',
+  sans: 'Rubik',
   code: 'Roboto Mono',
   display: 'Proto Mono'
 }

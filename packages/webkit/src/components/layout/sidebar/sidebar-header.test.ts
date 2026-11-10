@@ -1,8 +1,7 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
+import Default from '../../../../examples/sidebar/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { SidebarInjectionKey } from './injection-key'
 import SidebarHeader from './sidebar-header.vue'
@@ -11,7 +10,6 @@ import SidebarHeader from './sidebar-header.vue'
 // No story render function mounts <SidebarHeader> directly (the #header slot uses
 // InputText), so composeStories is used only to prove the fixture loads and the
 // Sidebar root renders — SidebarHeader itself is tested directly below.
-const { Default } = composeStories(stories)
 
 describe('SidebarHeader', () => {
   describe('rendering (structure grounded in the template)', () => {
@@ -101,7 +99,7 @@ describe('SidebarHeader', () => {
     })
   })
 
-  describe('composeStories (the Sidebar fixture loads and renders its root)', () => {
+  describe('documented example (the Sidebar fixture loads and renders its root)', () => {
     it('Default story renders the Sidebar root region', () => {
       // The Default story mounts <Sidebar> with its default testId ("layout-sidebar");
       // no <SidebarHeader> is composed in this story, so only the Sidebar root is asserted.

@@ -1,14 +1,12 @@
-import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/product-widget/ProductWidget.stories'
+import Default from '../../../../examples/product-widget/default.vue'
+import Types from '../../../../examples/product-widget/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ProductWidget, { type ProductWidgetName } from './product-widget.vue'
 import { productWidgets } from './registry'
-
-const { Default, Types } = composeStories(stories)
 
 const TESTID = 'content-product-widget'
 const FRAME_TESTID = 'content-shell-mockup'
@@ -49,7 +47,7 @@ describe('ProductWidget', () => {
   })
 
   it('renders the default story under the fallback testid and draws its widget', async () => {
-    const view = render(Default())
+    const view = render(Default)
     const root = view.getByTestId(TESTID)
 
     expect(root.getAttribute('data-name')).toBe('workloads-list')
@@ -81,7 +79,7 @@ describe('ProductWidget', () => {
   })
 
   it('renders both plates in the Types story', async () => {
-    const view = render(Types())
+    const view = render(Types)
 
     await expect
       .poll(() =>
@@ -197,7 +195,7 @@ describe('ProductWidget', () => {
   })
 
   it('has no axe violations', async () => {
-    const view = render(Default())
+    const view = render(Default)
     await frameOf(view)
 
     await expectNoA11yViolations(view.container)

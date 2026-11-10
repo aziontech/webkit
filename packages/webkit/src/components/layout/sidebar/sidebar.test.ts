@@ -1,13 +1,11 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
+import Default from '../../../../examples/sidebar/default.vue'
+import Resizable from '../../../../examples/sidebar/resizable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Sidebar from './sidebar.vue'
-
-const { Default, Resizable } = composeStories(stories)
 
 describe('Sidebar', () => {
   describe('rendering (structure grounded in the template)', () => {
@@ -144,7 +142,7 @@ describe('Sidebar', () => {
     })
   })
 
-  describe('composeStories (the story fixtures run in-test)', () => {
+  describe('documented example (the story fixtures run in-test)', () => {
     it('Default story renders the console rail: header, nav and footer regions', () => {
       const { getByTestId } = render(Default)
       expect(getByTestId('layout-sidebar').tagName).toBe('ASIDE')

@@ -1,0 +1,31 @@
+{
+  "component": "hero-with-opening",
+  "title": "Components/Marketing/Sections/HeroWithOpening",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Firewall opening: a long headline that widens its column, both actions, and one row of three arguments under the hero floor. Edit the props in the Controls panel — a band with no items drops the grid, and one with no title renders nothing.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "SixArguments",
+      "summary": "Six arguments in two rows of three, for a page that argues on breadth. The headline is short, so it keeps the narrow column and breaks early.",
+      "file": "site-six-arguments.vue",
+      "json": "site-six-arguments.json"
+    },
+    {
+      "name": "ThreeArguments",
+      "summary": "Three arguments in one row, for a page that argues on a few strong claims. The headline is long, so its column widens and it breaks into two lines instead of three.",
+      "file": "site-three-arguments.vue",
+      "json": "site-three-arguments.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Heroes/HeroWithOpening",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["SixArguments", "SixArgumentsJson", "ThreeArguments", "ThreeArgumentsJson"]
+}

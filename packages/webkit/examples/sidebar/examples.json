@@ -1,0 +1,16 @@
+{
+  "component": "sidebar",
+  "title": "Components/Primitives/Layout/Sidebar",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The console rail, whole: a header whose search field opens a ⌘K palette, grouped navigation composed with `Menu`, and a footer carrying the account identity and its menu. The navigation scrolls inside the built-in `ScrollArea` while the header and footer stay put. `Menu` takes `role=\"presentation\"` because the sidebar is already the `<nav>` landmark — it drops its accessible name with the role, so the region has exactly one name. Expand \"Edge Functions\" for a level that opens in place behind the indent rail; activate \"Settings\" for a drill level that replaces the menu.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Resizable",
+      "summary": "The same console rail with the gesture on. Drag the trailing edge to size it between `--container-3xs` and `--container-sm`; keep pulling past the minimum and it drops out of the layout, keeping the width it had for when it comes back. The handle is a focusable separator that reports its position, so arrows nudge it and `ArrowLeft` past the boundary collapses — double-click does too. The collapse trigger sits at the bottom, trailing the account row so the two read as one footer. While collapsed the rail is `inert` and `aria-hidden` (it stays mounted so its width can animate), which is exactly why the way back is a sibling. Collapse it, then rest the pointer on the left edge: the rail **previews itself** back in to `--size-10` and the page morphs with it, with the grab bar and the expand button on top of the sliver. The zone grows to the sliver so it never slips out from under the pointer, and the sliver stays `inert` — it shows you the way back, the button takes it.",
+      "file": "resizable.vue"
+    }
+  ]
+}

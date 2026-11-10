@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/segmented-button/SegmentedButton.stories'
+import Default from '../../../../examples/segmented-button/default.vue'
+import WithDisabledOption from '../../../../examples/segmented-button/with-disabled-option.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SegmentedButton from './segmented-button.vue'
-
-const { Default, WithDisabledOption } = composeStories(stories)
 
 const OPTIONS = [
   { label: 'One', value: 'one' },
@@ -262,12 +260,12 @@ describe('SegmentedButton', () => {
   })
 
   it('renders the composed Default story', () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
     expect(getByTestId('actions-segmented-button').getAttribute('role')).toBe('radiogroup')
   })
 
   it('renders the composed WithDisabledOption story', () => {
-    const { getByTestId, queryAllByTestId } = render(WithDisabledOption())
+    const { getByTestId, queryAllByTestId } = render(WithDisabledOption)
     expect(getByTestId('actions-segmented-button')).toBeTruthy()
     expect(queryAllByTestId('actions-segmented-button__option-lock').length).toBe(1)
   })

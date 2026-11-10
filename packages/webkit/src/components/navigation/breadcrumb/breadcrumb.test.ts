@@ -1,16 +1,14 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/breadcrumb/Breadcrumb.stories'
+import Default from '../../../../examples/breadcrumb/default.vue'
+import Depths from '../../../../examples/breadcrumb/depths.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
 import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 import Breadcrumb from './index.js'
-
-const { Default, Depths } = composeStories(stories)
 
 const TESTID = 'navigation-breadcrumb'
 
@@ -386,7 +384,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
 
   describe('story fixtures', () => {
     it('composes the Default story into a nav trail', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
 
       expect(getByTestId(TESTID).getAttribute('aria-label')).toBe('Breadcrumb')
       expect(getByTestId(`${TESTID}__list`).tagName).toBe('OL')
@@ -416,7 +414,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     })
 
     it('composes the Depths story: single, two-level and full five-level trails', () => {
-      const { getAllByTestId } = render(Depths())
+      const { getAllByTestId } = render(Depths)
 
       // The story renders three Breadcrumb instances of increasing depth.
       const [single, two, full] = getAllByTestId(TESTID)

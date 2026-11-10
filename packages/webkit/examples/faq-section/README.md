@@ -1,0 +1,81 @@
+# FaqSection
+
+The frequently asked questions band near the end of a landing page. The heading sits on the left and the questions on the right, each answer closed until the reader opens it, one at a time.
+
+The band is the `FaqSection` component from `@aziontech/webkit/faq-section`; it composes `SectionModule` and `Faq`. Give it `anchor: 'faq'` so a page can link straight to it.
+
+## Stories
+
+### With link
+
+The Retail page questions. An answer can carry a link inside its sentence, like the frameworks list in the second question. Answers without a link render as plain text.
+
+Example: [`site-with-link.vue`](./site-with-link.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band's id for in-page links, `faq` by convention.
+- `title` is the heading in the left column.
+- `items` are the questions in display order, each with a `question` and an `answer`.
+- `answer` accepts markdown: `[label](href)` links, `**bold**` and `*italic*`, plus paragraphs and bullet lists (see Rich answers). Absolute `https://` links open in a new tab.
+- Use one FAQ section per page.
+
+Example:
+
+Site JSON: [`site-with-link.json`](./site-with-link.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Plain
+
+The Functions page questions, every answer plain text.
+
+Example: [`site-plain.vue`](./site-plain.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band's id for in-page links, `faq` by convention.
+- `title` is the heading in the left column.
+- `items` are the questions in display order, each with a `question` and an `answer`.
+
+Example:
+
+Site JSON: [`site-plain.json`](./site-plain.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Rich answers
+
+The GDPR page's first four questions, whose answers run longer than one sentence. The answer string carries the blocks as markdown, so the same `FaqSection` renders them with no slot.
+
+Example: [`site-rich-answers.vue`](./site-rich-answers.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor`, `title` and `items` work as in the stories above.
+- A blank line (`\n\n` in the JSON string) starts a new paragraph.
+- Lines that start with `- ` form a bullet list; keep the list in its own block, after a blank line.
+- Inline markdown works inside paragraphs and list items alike: `[label](href)` links, `**bold**` and `*italic*`. Absolute `https://` links open in a new tab.
+- An answer with a single paragraph renders exactly as before.
+
+Example:
+
+Site JSON: [`site-rich-answers.json`](./site-rich-answers.json)

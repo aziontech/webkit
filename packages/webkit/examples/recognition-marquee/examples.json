@@ -1,0 +1,25 @@
+{
+  "component": "recognition-marquee",
+  "title": "Components/Marketing/Sections/RecognitionMarquee",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the analyst-recognitions page places it: the eyebrow and headline above a framed strip of seven signed recognitions, each marked by its firm logo. Edit the props in the Controls panel; a band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The seven recognitions Home runs, at twelve seconds per card. Each firm logo has a reversed file for dark and a colour file for light; G2 uses one colour file on both.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Social Proof/RecognitionMarquee",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

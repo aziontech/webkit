@@ -1,14 +1,13 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/calendar/Calendar.stories'
+import Default from '../../../../examples/calendar/default.vue'
+import Open from '../../../../examples/calendar/open.vue'
+import Single from '../../../../examples/calendar/single.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Calendar from './calendar.vue'
-
-const { Default, Single, Open } = composeStories(stories)
 
 // A fixed anchor keeps every assertion deterministic — the visible month is
 // seeded from the committed value when the popover opens, so October 2026 is
@@ -752,7 +751,7 @@ describe('Calendar', () => {
   // ---- Story fixtures ------------------------------------------------------------------
 
   it('renders the Default story fixture cleanly', async () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
 
     expect(getByTestId('input-calendar__trigger').textContent).toContain('Select a Date Range')
 
@@ -761,7 +760,7 @@ describe('Calendar', () => {
   })
 
   it('renders the Single story fixture cleanly', async () => {
-    const { getByTestId } = render(Single())
+    const { getByTestId } = render(Single)
 
     await openCalendar(getByTestId)
     await expectNoA11yViolations(document.body)
@@ -773,7 +772,7 @@ describe('Calendar', () => {
   // asserted here so a fixture that silently stops opening fails a test rather than
   // quietly shooting an empty canvas.
   it('renders the Open story fixture with the popover already mounted and labelled', async () => {
-    render(Open())
+    render(Open)
 
     const popover = await waitFor(() => {
       const el = getPopover()

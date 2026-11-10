@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/input-text/InputText.stories'
+import Default from '../../../../examples/input-text/default.vue'
+import Disabled from '../../../../examples/input-text/disabled.vue'
+import Filled from '../../../../examples/input-text/filled.vue'
+import Invalid from '../../../../examples/input-text/invalid.vue'
+import Sizes from '../../../../examples/input-text/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import InputText from './input-text.vue'
-
-const { Default, Filled, Invalid, Disabled, Sizes } = composeStories(stories)
 
 describe('InputText', () => {
   describe('rendering & attributes', () => {
@@ -212,7 +213,7 @@ describe('InputText', () => {
     })
   })
 
-  describe('composeStories (the story fixtures run in-test)', () => {
+  describe('documented example (the story fixtures run in-test)', () => {
     it('Default story mounts an empty input', () => {
       const { getByTestId } = render(Default)
       expect((getByTestId('input-text') as HTMLInputElement).value).toBe('')

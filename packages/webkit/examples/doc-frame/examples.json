@@ -1,0 +1,26 @@
+{
+  "component": "doc-frame",
+  "title": "Components/Documentation/DocFrame",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A frame around composed markup, with a caption under it. The default slot is what an author reaches for when the thing being framed is not a file.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Media",
+      "summary": "One `src` covers both: a still renders as an image with its `alt`, and a source ending in a clip extension (`.mp4`, `.webm`, `.mov`, …) renders as a player, labelled from the same `alt`. A clip the reader chooses to play ships controls.",
+      "file": "media.vue"
+    },
+    {
+      "name": "Autoplay",
+      "summary": "A clip that plays on its own is decoration, so it must not seize the reader's speakers or take over an iOS viewport, and — with nobody there to replay it — it loops. `autoplay` therefore implies muted, inline and looping, and drops the controls. The frame applies the rule on both authoring paths: to the `autoplay` prop, and to a clip written by hand in the slot.",
+      "file": "autoplay.vue"
+    },
+    {
+      "name": "Prose",
+      "summary": "The hint precedes the frame and stays on the left edge of the text, because it is read in the flow of the sentence above it. The caption belongs to the picture, so it centers under it. The plain case is the string prop; a caption that carries a bold run, a link or a code chip fills the slot of the same name, and the prop stays as its fallback.",
+      "file": "prose.vue"
+    }
+  ]
+}

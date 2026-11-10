@@ -1,0 +1,16 @@
+<script setup>
+  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import { ref } from 'vue'
+
+  const value = ref('')
+</script>
+
+<template>
+  <FieldTextarea
+    v-model="value"
+    label="Message"
+    placeholder="Write your message"
+    helper-text="This field is required."
+    required
+  />
+</template>

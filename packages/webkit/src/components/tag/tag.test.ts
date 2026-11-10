@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../apps/storybook/src/stories/components/content/tag/Tag.stories'
+import Default from '../../../examples/tag/default.vue'
 import { expectNoA11yViolations } from '../../test/axe'
 import Tag from './tag.vue'
-
-const { Default } = composeStories(stories)
 
 const SEVERITIES = [
   'primary',
@@ -144,7 +141,7 @@ describe('Tag', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { getByTestId, container } = render(Default())
+    const { getByTestId, container } = render(Default)
 
     expect(getByTestId('content-tag')).toBeTruthy()
     await expectNoA11yViolations(container)

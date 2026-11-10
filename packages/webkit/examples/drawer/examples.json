@@ -1,0 +1,21 @@
+{
+  "component": "drawer",
+  "title": "Components/Primitives/Overlay/Drawer",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Right-side medium drawer with a trigger, overlay, and header/body/footer panel regions.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Small (384px), medium (672px), and large (1024px) max-width presets side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "ScrollContent",
+      "summary": "Long content in `PanelContent` scrolls inside `ScrollArea`. The header and footer stay in the panel flex layout at the top and bottom; only the body scrolls.",
+      "file": "scroll-content.vue"
+    }
+  ]
+}

@@ -1,14 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/split-button/SplitButton.stories'
+import Default from '../../../../examples/split-button/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { SplitButtonItem } from './split-button.vue'
 import SplitButton from './split-button.vue'
-
-const { Default } = composeStories(stories)
 
 /** Realistic deploy actions; the second row omits `value` (falls back to label),
  *  the third is disabled. */

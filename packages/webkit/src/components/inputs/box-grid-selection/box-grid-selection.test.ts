@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/box-grid-selection/BoxGridSelection.stories'
+import Default from '../../../../examples/box-grid-selection/default.vue'
+import Disabled from '../../../../examples/box-grid-selection/disabled.vue'
+import WithTag from '../../../../examples/box-grid-selection/with-tag.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import BoxGridSelection from './box-grid-selection.vue'
-
-const { Default, Disabled, WithTag } = composeStories(stories)
 
 const items = [
   { value: 'a', label: 'Alpha', icon: 'pi pi-check', description: 'First option' },
@@ -294,19 +293,19 @@ describe('BoxGridSelection', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { container } = render(Default())
+    const { container } = render(Default)
 
     await expectNoA11yViolations(container)
   })
 
   it('renders the Disabled story fixture cleanly', async () => {
-    const { container } = render(Disabled())
+    const { container } = render(Disabled)
 
     await expectNoA11yViolations(container)
   })
 
   it('renders the WithTag story fixture cleanly', async () => {
-    const { container } = render(WithTag())
+    const { container } = render(WithTag)
 
     await expectNoA11yViolations(container)
   })

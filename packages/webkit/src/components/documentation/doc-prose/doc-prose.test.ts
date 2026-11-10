@@ -1,16 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-prose/DocProse.stories'
+import ChromeBoundary from '../../../../examples/doc-prose/chrome-boundary.vue'
+import Default from '../../../../examples/doc-prose/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocProse from './doc-prose.vue'
 
 // Browser mode loads no Tailwind, so the typographic ladder and the chrome exclusions
 // (all CSS) are verified by the visual gate; asserted here: the container renders its
 // slot as-is, adds no semantics of its own, and forwards attributes.
-
-const { Default, ChromeBoundary } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium ("Document is not focused"), so
 // writeText is stubbed; under test is which chips hand a string over. The rejecting
@@ -157,12 +155,12 @@ describe('DocProse', () => {
 
   describe('accessibility', () => {
     it('has no violations over the full ladder', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations with a chrome subtree nested in prose', async () => {
-      const { container } = render(ChromeBoundary())
+      const { container } = render(ChromeBoundary)
       await expectNoA11yViolations(container)
     })
   })

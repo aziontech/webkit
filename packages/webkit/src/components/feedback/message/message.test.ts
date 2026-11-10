@@ -1,14 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/message/Message.stories'
+import Default from '../../../../examples/message/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Message from './message.vue'
-
-const { Default } = composeStories(stories)
 
 // @testing-library/vue mounts through @vue/test-utils, which stubs <Transition>
 // by default. The stub skips the JS transition lifecycle, so the component's
@@ -341,7 +338,7 @@ describe('Message', () => {
   )
 
   it('composes the Default story fixture', () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
 
     expect(getByTestId('feedback-message')).toBeTruthy()
     expect(getByTestId('feedback-message__content').textContent).toContain(

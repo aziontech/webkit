@@ -1,0 +1,61 @@
+{
+  "component": "table",
+  "title": "Components/Primitives/Data/Table",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A standard data-driven table: pass `:data` and `:columns` and the engine renders sortable headers, status `Tag`s, per-row action menus, and pagination. The outer card border is drawn via the `border` prop — the table is borderless by default (it usually sits inside a surface that already frames it), so set `border` to draw the `var(--border-default)` outline; the internal row dividers are unaffected either way.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Composition",
+      "summary": "The compound API: build the table by hand from `<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Cell>`. The result is an ordinary table — the same as the data-driven API — but you control every cell. Reach for it when a cell needs custom content; otherwise prefer `:data` + `:columns`.",
+      "file": "composition.vue"
+    },
+    {
+      "name": "WithCheckboxes",
+      "summary": "A leading selection column (`enable-row-selection`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:row-selection`; changes log to the Actions panel.",
+      "file": "with-checkboxes.vue"
+    },
+    {
+      "name": "CompactHeader",
+      "summary": "A denser header via `header-kind=\"compact\"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding, so the table opens straight onto that header row.",
+      "file": "compact-header.vue"
+    },
+    {
+      "name": "SelectedRow",
+      "summary": "A row in the selected state: the second row is pre-selected via `v-model:row-selection`, rendering the `var(--bg-selected)` surface and `aria-selected`. With `select-on-row-click`, clicking anywhere on an inert part of a row toggles its selection.",
+      "file": "selected-row.vue"
+    },
+    {
+      "name": "FixedLayoutWithColumnSizes",
+      "summary": "Every column declares an explicit pixel `width`, so the layout is fixed: columns keep their declared size instead of distributing to fill the surface, and the viewport scrolls horizontally if the widths sum past it.",
+      "file": "fixed-layout-with-column-sizes.vue"
+    },
+    {
+      "name": "ColumnWidthFloors",
+      "summary": "The two short-content columns declare a **`minWidth`** floor instead of a fixed `width`. The table measures each of them — its header (sort affordance included) and every rendered cell — and pins the column to whichever is larger, as one width shared by the header and every body cell. **Status** settles on its header, because the chips under it are shorter than the word; **Protocol** grows past the floor to fit `HTTP & HTTPS`. A fixed `width` is a bet in both directions: wide enough for the protocol wastes space on the status, tight enough for the status truncates the protocol. The measured width tracks the rendered page, so paging or sorting longer content into view can widen the column.",
+      "file": "column-width-floors.vue"
+    },
+    {
+      "name": "ResizableColumns",
+      "summary": "A simple table whose columns opt into drag-to-resize via per-column `resizable: true`. Drag a header divider: only that column resizes (the others freeze at their current width) and the table grows with horizontal scroll. A column can shrink only down to its own content width. Frozen and action columns ignore `resizable`.",
+      "file": "resizable-columns.vue"
+    },
+    {
+      "name": "StickyColumn",
+      "summary": "Extra columns (Protocol, Domains, Origins, Created) push the rows past the surface. The **Name** column is pinned to the start edge (`frozen: \"start\"`) and the **actions** menu to the end edge (`frozen: \"end\"`): both stay put while the middle columns scroll horizontally underneath, with a CSS-only edge fade dissolving the scrolling content under each pinned column.",
+      "file": "sticky-column.vue"
+    },
+    {
+      "name": "CompactHeaderWithStickyColumn",
+      "summary": "A compact header (`header-kind=\"compact\"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No paginator.",
+      "file": "compact-header-with-sticky-column.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "When `data` is empty, the table renders a default empty state in the `#empty` slot — an illustration, a title, and a short description. Override the `#empty` slot to supply your own copy and call-to-action (e.g. a Create button or a documentation link).",
+      "file": "empty.vue"
+    }
+  ]
+}

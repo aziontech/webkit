@@ -1,9 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/drawer/Drawer.stories'
+import Default from '../../../../examples/drawer/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Drawer from './drawer.vue'
 import DrawerClose from './drawer-close.vue'
@@ -13,8 +12,6 @@ import DrawerOverlay from './drawer-overlay.vue'
 import DrawerPortal from './drawer-portal.vue'
 import DrawerTitle from './drawer-title.vue'
 import DrawerTrigger from './drawer-trigger.vue'
-
-const { Default } = composeStories(stories)
 
 // The panel + backdrop are Teleported to <body> by DrawerPortal, so they escape
 // the render container. Query them from document.body, not the utils container.
@@ -380,7 +377,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
 
   describe('Storybook Default story composes and opens', () => {
     it('renders the composed Default and opens via its trigger', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       await settle()
 
       await fireEvent.click(getByTestId('overlay-drawer__trigger'))

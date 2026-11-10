@@ -1,0 +1,26 @@
+{
+  "component": "card-box",
+  "title": "Components/Primitives/Content/CardBox",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default card with a title header and body content in the `content` slot.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Header",
+      "summary": "An action rendered through the `header` slot stays visible, aligned to the end of the header.",
+      "file": "header.vue"
+    },
+    {
+      "name": "Footer",
+      "summary": "Filling the `footer` slot renders the footer bar with actions or metadata.",
+      "file": "footer.vue"
+    },
+    {
+      "name": "Flush",
+      "summary": "Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.",
+      "file": "flush.vue"
+    }
+  ]
+}

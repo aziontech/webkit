@@ -1,0 +1,16 @@
+{
+  "component": "helper-text",
+  "title": "Components/Primitives/Inputs/HelperText",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default helper variant with muted text color.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All kind variants side by side.",
+      "file": "types.vue"
+    }
+  ]
+}

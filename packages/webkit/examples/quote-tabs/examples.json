@@ -1,0 +1,16 @@
+{
+  "component": "quote-tabs",
+  "title": "Components/Marketing/Primitives/QuoteTabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Six clients, one quotation on screen at a time. Left alone the band moves to the next client every five seconds, with an orange hairline filling along the panel’s bottom edge; pointing at the band or reaching it with `Tab` holds the quotation. Click a card, or focus the wall and use the arrow keys — `Tab` reaches only the selected card, `ArrowRight` and `ArrowLeft` move and select, wrapping at either end, and `Home` / `End` jump to the first and last client. A card later in the wall brings its quotation in from the right and sends the old one out to the left; an earlier card reverses it. The selected card sits on `--bg-selected`. Fourbank passes a registry `mark` instead of a `logo`, so it is drawn in the theme’s one ink.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Fallback",
+      "summary": "Acme has neither a colour `logo` nor a registered `mark`, so its card and its panel write the client’s name in heading type where the logo would sit. That is what lets a page add a client before its artwork lands — the card keeps its size either way, and adding the logo later changes nothing else at the call site.",
+      "file": "fallback.vue"
+    }
+  ]
+}

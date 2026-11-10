@@ -1,0 +1,36 @@
+{
+  "component": "toast",
+  "title": "Components/Primitives/Feedback/Toast",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A title, a description, and an inline \"Undo\" action — raised with a single `toast()` call.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Each type (default, success, info, warning, error, loading) with its own icon, as a two-line toast (title + timestamp) matching the Figma. Loading spins.",
+      "file": "types.vue"
+    },
+    {
+      "name": "WithDescription",
+      "summary": "A two-line body — a title plus a supporting `description` line — raised with a single `toast()` call.",
+      "file": "with-description.vue"
+    },
+    {
+      "name": "WithAction",
+      "summary": "An inline \"Undo\" action — a label plus an `onClick` handler — raised with a single `toast()` call.",
+      "file": "with-action.vue"
+    },
+    {
+      "name": "Closable",
+      "summary": "An always-visible close control — the `closable` Toaster prop adds a dismiss control to every toast (a per-toast `closable` option overrides it). Off by default.",
+      "file": "closable.vue"
+    },
+    {
+      "name": "Positions",
+      "summary": "Anchor a toast to any of the six corners via the per-toast `position` option (`toast(msg, { position })`) — it overrides the Toaster default.",
+      "file": "positions.vue"
+    }
+  ]
+}

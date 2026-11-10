@@ -1,17 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/multi-select/MultiSelect.stories'
+import Default from '../../../../examples/multi-select/default.vue'
 import MultiSelect, {
   MultiSelectContent,
   MultiSelectGroup,
   MultiSelectOption,
   MultiSelectTrigger
 } from './index'
-
-const { Default } = composeStories(stories)
 
 // Content Teleports to body, escaping the render container — query it from
 // document.body and remove lingering listbox nodes between tests for isolation.
@@ -399,8 +396,8 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(getByTestId('multi-select-trigger').getAttribute('data-size')).toBe(size)
   })
 
-  it('renders the Default story (composeStories) through the compound tree', async () => {
-    const { getByTestId } = render(Default())
+  it('renders the Default example through the compound tree', async () => {
+    const { getByTestId } = render(Default)
     cleanupTeleported()
     const trigger = getByTestId('multi-select-trigger')
     expect(trigger.getAttribute('role')).toBe('combobox')

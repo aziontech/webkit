@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-checkbox/FieldCheckbox.stories'
+import Default from '../../../../examples/field-checkbox/default.vue'
+import Disabled from '../../../../examples/field-checkbox/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldCheckbox from './field-checkbox.vue'
-
-const { Default, Disabled } = composeStories(stories)
 
 const ROOT = 'input-field-checkbox'
 const CONTROL = `${ROOT}__control`
@@ -250,13 +248,13 @@ describe('FieldCheckbox', () => {
   })
 
   it('renders the Default story fixture cleanly', async () => {
-    const { container } = render(Default())
+    const { container } = render(Default)
 
     await expectNoA11yViolations(container)
   })
 
   it('renders the Disabled story fixture cleanly', async () => {
-    const { container } = render(Disabled())
+    const { container } = render(Disabled)
 
     await expectNoA11yViolations(container)
   })

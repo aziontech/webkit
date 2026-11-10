@@ -1,14 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-password/FieldPassword.stories'
+import CustomRequirements from '../../../../examples/field-password/custom-requirements.vue'
+import Default from '../../../../examples/field-password/default.vue'
+import Disabled from '../../../../examples/field-password/disabled.vue'
+import Invalid from '../../../../examples/field-password/invalid.vue'
+import Requirements from '../../../../examples/field-password/requirements.vue'
+import Toggle from '../../../../examples/field-password/toggle.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldPassword from './field-password.vue'
 import { DEFAULT_PASSWORD_REQUIREMENTS } from './password-requirements'
-
-const { Default, Invalid, Disabled, Toggle, Requirements, CustomRequirements } =
-  composeStories(stories)
 
 describe('FieldPassword', () => {
   it('renders a <div> root carrying the default data-testid', () => {
@@ -612,7 +613,7 @@ describe('FieldPassword', () => {
   })
 
   it('composes the Default story fixture', () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
 
     expect(getByTestId('input-field-password__label')).toHaveTextContent('Password')
     expect(getByTestId('input-field-password__input')).toHaveAttribute('type', 'password')
@@ -620,21 +621,21 @@ describe('FieldPassword', () => {
   })
 
   it('composes the Invalid story fixture', () => {
-    const { getByTestId } = render(Invalid())
+    const { getByTestId } = render(Invalid)
 
     expect(getByTestId('input-field-password')).toHaveAttribute('data-invalid')
     expect(getByTestId('input-field-password__input')).toHaveAttribute('aria-invalid', 'true')
   })
 
   it('composes the Disabled story fixture', () => {
-    const { getByTestId } = render(Disabled())
+    const { getByTestId } = render(Disabled)
 
     expect(getByTestId('input-field-password')).toHaveAttribute('data-disabled')
     expect(getByTestId('input-field-password__input')).toBeDisabled()
   })
 
   it('composes the Toggle story fixture (one field with toggle, one without)', () => {
-    const { getAllByTestId, getAllByRole } = render(Toggle())
+    const { getAllByTestId, getAllByRole } = render(Toggle)
 
     // Two FieldPassword instances render two inputs.
     expect(getAllByTestId('input-field-password__input')).toHaveLength(2)
@@ -643,7 +644,7 @@ describe('FieldPassword', () => {
   })
 
   it('composes the Requirements story fixture (both fields on the built-in set)', () => {
-    const { getAllByTestId } = render(Requirements())
+    const { getAllByTestId } = render(Requirements)
 
     // Two fields, each with the five built-in chips and no array in sight.
     const chips = getAllByTestId('input-field-password__requirements-chip')
@@ -656,7 +657,7 @@ describe('FieldPassword', () => {
   })
 
   it('composes the CustomRequirements story fixture (built-ins minus one, plus a local rule)', () => {
-    const { getAllByTestId, getByRole } = render(CustomRequirements())
+    const { getAllByTestId, getByRole } = render(CustomRequirements)
 
     const labels = getAllByTestId('input-field-password__requirements-chip').map((chip) =>
       chip.textContent?.trim()

@@ -1,0 +1,16 @@
+{
+  "component": "embed",
+  "title": "Components/Marketing/Primitives/Embed",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One frame at the default `video` ratio. The source is a placeholder document inlined as a `data:` URI rather than a live third-party URL: a real embed pulls in a document from another origin, which a docs build should not do on every page view. Change `ratio` in the Controls panel and the frame changes shape without the page shifting, because the ratio is reserved before the document loads. `title` has no default on purpose — an `iframe` without one is announced as an unnamed frame, and a screen-reader user meets that name before any content.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Ratios",
+      "summary": "Every `ratio` value, one frame under the other, around the same placeholder document. Each frame keeps its shape at any width — only the height follows. Pick the ratio the source already has: a `video` frame around a square form leaves bands of empty surface above and below it, and no ratio will crop a document that disagrees, it will just scroll inside the frame. Each frame states its own `title`, because every embedded document needs its own name.",
+      "file": "ratios.vue"
+    }
+  ]
+}

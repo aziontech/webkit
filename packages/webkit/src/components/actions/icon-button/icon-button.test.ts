@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/icon-button/IconButton.stories'
+import Default from '../../../../examples/icon-button/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import IconButton from './icon-button.vue'
-
-const { Default } = composeStories(stories)
 
 const KINDS = ['primary', 'secondary', 'outlined', 'transparent', 'danger'] as const
 const SIZES = ['small', 'medium', 'large'] as const

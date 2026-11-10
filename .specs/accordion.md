@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: ac888b312208ad68cee485461d8ad3bcb03a6b44ee093339714cdc54d1e3e59c
+checksum: 1ec0d99d67a290672027116026f9bdca47961ab8b3c5efef693129735d8af181
 created: 2026-06-26
 last_updated: 2026-11-10
 ---
@@ -190,7 +190,7 @@ Events below are emitted by the root `Accordion`.
 
 | Figma variable                                                                         | Temporary primitive                                                                              | Follow-up                                                                                                 |
 | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| `Heading/xss` · `Heading/xs` (Sora Regular, line-height 1.4) used for the header title | `.text-body-sm` · `.text-body-md` (line-height 1.5, same 14px / 16px sizes, same Regular weight) | `TODO: decide whether to surface text-heading-xs/xxs in DESIGN.md, or keep the body family for the title` |
+| `Heading/xss` · `Heading/xs` (Rubik Regular, line-height 1.4) used for the header title | `.text-body-sm` · `.text-body-md` (line-height 1.5, same 14px / 16px sizes, same Regular weight) | `TODO: decide whether to surface text-heading-xs/xxs in DESIGN.md, or keep the body family for the title` |
 | `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)       | `hover:bg-(--bg-hover)` on the trigger                                                           | `TODO: confirm the header hover treatment with design`                                                    |
 | `--border-width-default` (0.8px header / item divider)                                 | `border-b` (1px)                                                                                 | `TODO: tokenize the sub-pixel border width if it must match exactly`                                      |
 

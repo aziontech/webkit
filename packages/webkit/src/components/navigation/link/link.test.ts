@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/link/Link.stories'
+import Default from '../../../../examples/link/default.vue'
+import Disabled from '../../../../examples/link/disabled.vue'
+import Sizes from '../../../../examples/link/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Link from './link.vue'
-
-const { Default, Sizes, Disabled } = composeStories(stories)
 
 describe('Link', () => {
   it('renders as an anchor with the default testid and label', () => {

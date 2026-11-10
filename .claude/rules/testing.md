@@ -8,7 +8,7 @@ Every component ships a co-located `*.test.ts` that proves it **works**, exercis
 
 ## The rule
 
-> Every component under `packages/webkit/src/components/<category>/<name>/` ships one `<name>.test.ts` next to the `.vue`, **created with the component and kept current whenever its behavior changes** (reviewers hold that line; style-only changes need no test touch). It runs in **Vitest browser mode** (Playwright Chromium — never jsdom), reuses the component's Storybook story as the fixture via `composeStories`, asserts the functional surface below, and runs `axe-core` against the rendered tree. Composition sub-components are tested **through their root**; only the root gets a `.test.ts` (unless the spec promises behavior the root test cannot reach).
+> Every component under `packages/webkit/src/components/<category>/<name>/` ships one `<name>.test.ts` next to the `.vue`, **created with the component and kept current whenever its behavior changes** (reviewers hold that line; style-only changes need no test touch). It runs in **Vitest browser mode** (Playwright Chromium — never jsdom), renders the component's documented examples (`packages/webkit/examples/<name>/*.vue`, the same files the catalog and the docs use) as fixtures, asserts the functional surface below, and runs `axe-core` against the rendered tree. Composition sub-components are tested **through their root**; only the root gets a `.test.ts` (unless the spec promises behavior the root test cannot reach).
 
 ## Why browser mode, never jsdom
 
@@ -38,7 +38,7 @@ Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring t
 ## Conventions
 
 - **Location:** `packages/webkit/src/components/<category>/<name>/<name>.test.ts` (sibling of the `.vue` / `index.ts`).
-- **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@storybook/test` for realistic keyboard/pointer; `composeStories` from `@storybook/vue3`; `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
+- **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@storybook/test` for realistic keyboard/pointer; the example SFCs by relative import from `packages/webkit/examples/<name>/` (never from `apps/storybook`); `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
 - **Story import is a RELATIVE path**, never a `@stories` alias — `validate-references.mjs` cannot resolve a vite alias and will block the write. If a component has no story, test it directly with `render(Component, { props })`.
 - **Local runs** (when node_modules is symlinked into a worktree) set `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false CI=` so pnpm's deps check doesn't abort against symlinks.
 

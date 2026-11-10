@@ -1,12 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-select/FieldSelect.stories'
+import Default from '../../../../examples/field-select/default.vue'
+import Disabled from '../../../../examples/field-select/disabled.vue'
+import Invalid from '../../../../examples/field-select/invalid.vue'
+import Multiple from '../../../../examples/field-select/multiple.vue'
+import Required from '../../../../examples/field-select/required.vue'
+import Sizes from '../../../../examples/field-select/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldSelect from './field-select.vue'
-
-const { Default, Sizes, Required, Invalid, Disabled, Multiple } = composeStories(stories)
 
 const OPTIONS = [
   { value: 'opt-1', label: 'Option 1' },

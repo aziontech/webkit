@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/label/Label.stories'
+import Default from '../../../../examples/label/default.vue'
+import Hinted from '../../../../examples/label/hinted.vue'
+import Required from '../../../../examples/label/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Label from './label.vue'
-
-const { Default, Required, Hinted } = composeStories(stories)
 
 const HINT = 'Values are encrypted at rest and never displayed again after saving.'
 

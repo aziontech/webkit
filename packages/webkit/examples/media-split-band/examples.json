@@ -1,0 +1,25 @@
+{
+  "component": "media-split-band",
+  "title": "Components/Marketing/Sections/MediaSplitBand",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Careers values band: a large, centred copy cell with no actions beside the turning brand globe. Edit the props in the Controls panel — give it one action and the whole band becomes a link, two and it stays unlinked.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Values",
+      "summary": "",
+      "file": "site-values.vue",
+      "json": "site-values.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/MediaSplitBand",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Values", "ValuesJson"]
+}

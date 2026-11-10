@@ -1,13 +1,13 @@
 import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-text-switch/FieldTextSwitch.stories'
+import Default from '../../../../examples/field-text-switch/default.vue'
+import Disabled from '../../../../examples/field-text-switch/disabled.vue'
+import Invalid from '../../../../examples/field-text-switch/invalid.vue'
+import SwitchOff from '../../../../examples/field-text-switch/switch-off.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldTextSwitch from './field-text-switch.vue'
-
-const { Default, SwitchOff, Invalid, Disabled } = composeStories(stories)
 
 describe('FieldTextSwitch', () => {
   describe('data-testid', () => {
@@ -352,7 +352,7 @@ describe('FieldTextSwitch', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story with the switch on and the input editable', () => {
       const { getByTestId, getByRole } = render(Default)
 

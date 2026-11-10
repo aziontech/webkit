@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/item/Item.stories'
+import Default from '../../../../examples/item/default.vue'
+import Muted from '../../../../examples/item/muted.vue'
+import Outline from '../../../../examples/item/outline.vue'
+import Small from '../../../../examples/item/small.vue'
+import WithGroup from '../../../../examples/item/with-group.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Item from './index'
-
-const { Default, Outline, Muted, Small, WithGroup } = composeStories(stories)
 
 describe('Item (composition)', () => {
   describe('compound dot-notation resolves (index.ts Object.assign)', () => {
@@ -204,7 +205,7 @@ describe('Item (composition)', () => {
     })
   })
 
-  describe('composeStories (the real fixtures run in-test)', () => {
+  describe('documented example (the real fixtures run in-test)', () => {
     it('Default story renders a titled row with a trailing action through the sub-components', () => {
       const { getByTestId, getByText } = render(Default)
       expect(getByTestId('content-item').getAttribute('data-slot')).toBe('item')

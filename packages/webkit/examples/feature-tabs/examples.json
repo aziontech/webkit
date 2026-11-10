@@ -1,0 +1,25 @@
+{
+  "component": "feature-tabs",
+  "title": "Components/Marketing/Sections/FeatureTabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the Functions page places it: Trace, Logs and Request path, each shown by its illustration, with the link under the frame. Edit the props in the Controls panel — a band with no tabs renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The Observability band from Functions: three tabs, each shown by its illustration, with a link under the frame.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/FeatureTabs",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

@@ -1,0 +1,11 @@
+{
+  "component": "article-index-blog",
+  "title": "Components/Marketing/Sections/ArticleIndexBlog",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Blog list at rest. Pick a category or type in the search field to narrow it; when nothing matches, the list and its button are left out.",
+      "file": "default.vue"
+    }
+  ]
+}

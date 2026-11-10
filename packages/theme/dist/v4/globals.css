@@ -111,11 +111,25 @@
   font-display: swap;
 }
 
+/* Rubik (OFL), variable 300–900. fonts.azion.com serves apps/fonts/rubik/; the jsDelivr copy of
+   google/fonts is the fallback while a new upload propagates. */
 @font-face {
-  font-family: 'Sora';
-  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-Italic-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -571,7 +585,7 @@
   --shape-button: 6px;
   --shape-elements: 6px;
   --border-width-default: 0.8px;
-  --font-sans: Sora;
+  --font-sans: Rubik;
   --font-code: Roboto Mono;
   --font-display: Proto Mono;
   --text-xs: 0.75rem;
@@ -859,12 +873,12 @@
   --text-overline-xs-line-height: 1.375;
   --text-overline-xs-letter-spacing: 0.1rem;
   --text-overline-xs-text-transform: uppercase;
-  --text-button-lg-font-family: Sora;
+  --text-button-lg-font-family: Rubik;
   --text-button-lg-font-size: 0.875rem;
   --text-button-lg-font-weight: 400;
   --text-button-lg-line-height: 1.25;
   --text-button-lg-letter-spacing: 0;
-  --text-button-md-font-family: Sora;
+  --text-button-md-font-family: Rubik;
   --text-button-md-font-size: 0.75rem;
   --text-button-md-font-weight: 400;
   --text-button-md-line-height: 1.25;

@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-switch/FieldSwitch.stories'
+import Default from '../../../../examples/field-switch/default.vue'
+import Disabled from '../../../../examples/field-switch/disabled.vue'
+import States from '../../../../examples/field-switch/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FieldSwitch from './field-switch.vue'
-
-const { Default, States, Disabled } = composeStories(stories)
 
 describe('FieldSwitch', () => {
   describe('data-testid', () => {
@@ -259,22 +258,22 @@ describe('FieldSwitch', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
 
       expect(getByTestId('input-field-switch')).toBeTruthy()
       expect(getByTestId('input-field-switch__control').getAttribute('role')).toBe('switch')
     })
 
     it('renders the States story with two field switches', () => {
-      const { getAllByTestId } = render(States())
+      const { getAllByTestId } = render(States)
 
       expect(getAllByTestId('input-field-switch').length).toBe(2)
     })
 
     it('renders the Disabled story with a locked helper badge', () => {
-      const { getByTestId } = render(Disabled())
+      const { getByTestId } = render(Disabled)
 
       expect(getByTestId('input-field-switch').getAttribute('data-disabled')).toBe('true')
       expect(getByTestId('input-field-switch__helper')).toBeTruthy()

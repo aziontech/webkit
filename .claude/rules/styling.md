@@ -170,7 +170,7 @@ Three shapes:
 | Concern | Canonical | Notes |
 | --- | --- | --- |
 | **Whole-value var** | `prop-(--token)` | `bg-(--primary)`, `max-w-(--container-2xl)`, `focus-visible:ring-offset-(--bg-canvas)`. Variants compose (`data-[disabled]:bg-(--bg-disabled)`). |
-| **Typed value** | `prop-(type:--token)` | `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sora)`. |
+| **Typed value** | `prop-(type:--token)` | `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sans)`. |
 | **Numeric arbitrary** | `z-1` | The bare-number utility, not `z-[1]`. |
 
 **Two cases stay bracketed — the paren form emits _no CSS_ for them, silently:**

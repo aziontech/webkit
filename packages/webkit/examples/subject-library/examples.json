@@ -1,0 +1,25 @@
+{
+  "component": "subject-library",
+  "title": "Components/Marketing/Sections/SubjectLibrary",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The library as the Learning Center places it: four subject cards with their articles and the closing call to action across the last two cells. Edit the props in the Controls panel — remove `closing` and the grid ends on the last subject; a band with no subjects renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Listings/SubjectLibrary",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

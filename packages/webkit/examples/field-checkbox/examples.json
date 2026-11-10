@@ -1,0 +1,21 @@
+{
+  "component": "field-checkbox",
+  "title": "Components/Primitives/Inputs/FieldCheckbox",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default field with a checkbox control, label, and description.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — interaction is blocked and, when `helperText` is set, a lock helper badge appears below the description.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "When `required` is `true`, the Label shows the `*(Required)` indicator and the native input receives `required` + `aria-required=\"true\"`.",
+      "file": "required.vue"
+    }
+  ]
+}

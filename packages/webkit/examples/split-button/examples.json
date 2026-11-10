@@ -1,0 +1,36 @@
+{
+  "component": "split-button",
+  "title": "Components/Primitives/Actions/SplitButton",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Primary split button at large size with a three-action menu.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All kind variants side by side.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Loading state: the whole control takes the disabled status — a spinner replaces the primary icon, activation is blocked, the toggle is disabled, and the menu cannot open.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state: both segments are inert and the menu cannot open.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "UpdateLabelOnSelect",
+      "summary": "Opt-in: choosing a menu action swaps the primary button's label and icon to that action and marks the row selected. Open the menu and pick an action to see the primary segment update.",
+      "file": "update-label-on-select.vue"
+    }
+  ]
+}

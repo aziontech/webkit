@@ -1,0 +1,16 @@
+{
+  "component": "doc-tooltip",
+  "title": "Components/Documentation/DocTooltip",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Hover or Tab to the dotted term to open it. The panel is closed until the reader asks for it — a gloss never opens on its own.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "The two a11y contracts side by side. The first panel is a `role=\"tooltip\"` and its trigger takes `aria-describedby`; the second carries a link, so it is a `role=\"dialog\"` announced through `aria-expanded`, named by its headline, and enterable with Tab. Tab again from inside it and focus returns to the term.",
+      "file": "kinds.vue"
+    }
+  ]
+}

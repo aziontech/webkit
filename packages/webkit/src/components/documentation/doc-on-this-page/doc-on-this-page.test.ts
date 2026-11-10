@@ -1,8 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-on-this-page/DocOnThisPage.stories'
+import Default from '../../../../examples/doc-on-this-page/default.vue'
+import Nesting from '../../../../examples/doc-on-this-page/nesting.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocOnThisPage from './doc-on-this-page.vue'
 
@@ -10,8 +10,6 @@ import DocOnThisPage from './doc-on-this-page.vue'
 // deliberately unasserted: pinning live-SVG probe numbers would trap any curve refit
 // while proving nothing — both belong to the visual gate. Asserted here: entries,
 // list structure, aria-current, landmark-per-group, and event payload order.
-
-const { Default, Nesting } = composeStories(stories)
 
 const ITEMS = [
   { id: 'deploy', text: 'Deploy an application', depth: 2 },
@@ -145,12 +143,12 @@ describe('DocOnThisPage', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default rail', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations with a nested outline and two groups', async () => {
-      const { container } = render(Nesting())
+      const { container } = render(Nesting)
       await expectNoA11yViolations(container)
     })
   })

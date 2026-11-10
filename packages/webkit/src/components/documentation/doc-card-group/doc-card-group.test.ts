@@ -1,8 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-card-group/DocCardGroup.stories'
+import Columns from '../../../../examples/doc-card-group/columns.vue'
+import Default from '../../../../examples/doc-card-group/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCardGroup from './doc-card-group.vue'
 
@@ -11,8 +11,6 @@ import DocCardGroup from './doc-card-group.vue'
 // belong to the visual gate. What is real without CSS is what drives them: the data
 // attributes the grid switches its column count on, the children rendering through the
 // frame, and the testid contract.
-
-const { Default, Columns } = composeStories(stories)
 
 describe('DocCardGroup', () => {
   describe('rendering & testid', () => {
@@ -78,12 +76,12 @@ describe('DocCardGroup', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default render', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations on the three-column grid of cards', async () => {
-      const { container } = render(Columns())
+      const { container } = render(Columns)
       await expectNoA11yViolations(container)
     })
   })

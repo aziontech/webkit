@@ -621,7 +621,8 @@ function patternCard(id, p, score) {
     skills: p.skills || [],
     ...(p.steps ? { steps: p.steps } : {}),
     variants: (p.variants || []).map((v) => v.name),
-    story: p.story,
+    source: p.source,
+    surface: p.surface ?? 'product',
     ...(score != null ? { score } : {})
   }
 }
@@ -730,7 +731,8 @@ export function getPattern(catalog, id, { variant } = {}) {
     components: p.components || [],
     imports: p.imports || [],
     skills: p.skills || [],
-    story: p.story,
+    source: p.source,
+    surface: p.surface ?? 'product',
     variant: chosen ? chosen.name : p.primary,
     sfc: chosen ? chosen.sfc : p.sfc,
     variants: [
@@ -767,8 +769,6 @@ function sectionSuggestion(catalog, need) {
   return ranked
 }
 
-// Outside a marketing intent, product components rank before marketing and docs ones: a console
-// screen never reaches for a site band because its words matched better.
 function preferProductSurface(catalog, component) {
   if (!component?.best) return component
   const all = [component.best, ...(component.alternatives || [])]

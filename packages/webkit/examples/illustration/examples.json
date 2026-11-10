@@ -1,0 +1,31 @@
+{
+  "component": "illustration",
+  "title": "Components/Primitives/Content/Illustration",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A scene selected by name, decorative by default.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Assets",
+      "summary": "Every registered scene. These are the only values `name` accepts — a drawing that is not here has to be exported from Figma first.",
+      "file": "assets.vue"
+    },
+    {
+      "name": "Placeholder",
+      "summary": "A `name` that resolves to no scene — empty, or not in the registry — renders the placeholder frame instead of collapsing the layout, so a screen missing its artwork says so. An unregistered name also warns in development. The placeholder is always decorative: it draws no scene, so an `ariaLabel` written for the missing artwork is not announced.",
+      "file": "placeholder.vue"
+    },
+    {
+      "name": "Labeled",
+      "summary": "With an `ariaLabel` the scene is announced instead of skipped — for the rare case where the artwork carries meaning the surrounding copy does not.",
+      "file": "labeled.vue"
+    },
+    {
+      "name": "Files",
+      "summary": "Drawings that are not registered scenes ship as files. Import one by its final name from `@aziontech/webkit/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image.",
+      "file": "files.vue"
+    }
+  ]
+}

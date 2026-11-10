@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/brand/Brand.stories'
+import Default from '../../../../examples/brand/default.vue'
+import Sizes from '../../../../examples/brand/sizes.vue'
+import Types from '../../../../examples/brand/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Brand from './brand.vue'
-
-const { Default, Types, Sizes } = composeStories(stories)
 
 // Each kind maps to a distinct SVG lockup, identifiable by its viewBox.
 const KIND_VIEWBOX = {

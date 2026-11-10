@@ -1,0 +1,31 @@
+{
+  "component": "empty-state",
+  "title": "Components/Primitives/Feedback/EmptyState",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default empty state: the standardized featured-icon tile, title, description, and actions.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The size variants — small and medium — stacked.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Icon",
+      "summary": "The standardized featured-icon tile adornment, driven by the `icon` prop.",
+      "file": "icon.vue"
+    },
+    {
+      "name": "NoAdornment",
+      "summary": "No adornment: neither the `icon` prop nor the `icon` slot is provided, so the adornment container does not render.",
+      "file": "no-adornment.vue"
+    },
+    {
+      "name": "Bordered",
+      "summary": "Content wrapped in a bordered surface card (`bordered`).",
+      "file": "bordered.vue"
+    }
+  ]
+}

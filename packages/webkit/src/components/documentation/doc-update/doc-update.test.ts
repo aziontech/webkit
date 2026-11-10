@@ -1,15 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-update/DocUpdate.stories'
+import Changelog from '../../../../examples/doc-update/changelog.vue'
+import Default from '../../../../examples/doc-update/default.vue'
+import Releases from '../../../../examples/doc-update/releases.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocUpdate from './doc-update.vue'
 
 // Browser mode loads no Tailwind — sticky column/rule/fade belong to the visual gate;
 // asserted here: structure, id derivation, aria-labelledby wiring, chips, testids.
-
-const { Default, Changelog, Releases } = composeStories(stories)
 
 describe('DocUpdate', () => {
   describe('rendering & testid', () => {
@@ -150,7 +149,7 @@ describe('DocUpdate', () => {
     })
 
     it('gives two titled entries on one date distinct ids', () => {
-      const { getAllByTestId } = render(Releases())
+      const { getAllByTestId } = render(Releases)
       const ids = getAllByTestId('documentation-doc-update').map((entry) => entry.id)
       expect(ids).toEqual([
         'september-2-2026-terraform-provider',
@@ -180,17 +179,17 @@ describe('DocUpdate', () => {
     })
 
     it('has no violations on the default render', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across a changelog of entries', async () => {
-      const { container } = render(Changelog())
+      const { container } = render(Changelog)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across titled releases', async () => {
-      const { container } = render(Releases())
+      const { container } = render(Releases)
       await expectNoA11yViolations(container)
     })
   })

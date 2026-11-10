@@ -1,12 +1,12 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/skeleton/Skeleton.stories'
+import Default from '../../../../examples/skeleton/default.vue'
+import OnSurfaces from '../../../../examples/skeleton/on-surfaces.vue'
+import Static from '../../../../examples/skeleton/static.vue'
+import Types from '../../../../examples/skeleton/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Skeleton from './skeleton.vue'
-
-const { Default, Types, Static, OnSurfaces } = composeStories(stories)
 
 describe('Skeleton', () => {
   it('renders with the default data-testid and presentational a11y semantics', () => {
@@ -91,7 +91,7 @@ describe('Skeleton', () => {
   })
 
   it('renders the composed Default story', () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
     const el = getByTestId('feedback-skeleton')
 
     expect(el.getAttribute('data-kind')).toBe('shape')
@@ -99,7 +99,7 @@ describe('Skeleton', () => {
   })
 
   it('renders the composed Types story with both geometries', () => {
-    const { getAllByTestId } = render(Types())
+    const { getAllByTestId } = render(Types)
     const kinds = getAllByTestId('feedback-skeleton').map((el) => el.getAttribute('data-kind'))
 
     expect(kinds).toContain('shape')
@@ -107,7 +107,7 @@ describe('Skeleton', () => {
   })
 
   it('renders the composed Static story without the animated attribute', () => {
-    const { getByTestId } = render(Static())
+    const { getByTestId } = render(Static)
 
     expect(getByTestId('feedback-skeleton').hasAttribute('data-animated')).toBe(false)
   })
@@ -117,7 +117,7 @@ describe('Skeleton', () => {
   // both themes); here we only prove the fixture renders on all four surfaces and
   // stays a11y-clean, so a broken story fails a test rather than a screenshot diff.
   it('renders the composed OnSurfaces story on every surface layer', async () => {
-    const { getAllByTestId, container } = render(OnSurfaces())
+    const { getAllByTestId, container } = render(OnSurfaces)
 
     expect(getAllByTestId('feedback-skeleton')).toHaveLength(8)
     await expectNoA11yViolations(container)

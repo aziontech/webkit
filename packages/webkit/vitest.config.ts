@@ -1,9 +1,25 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+
 import vue from '@vitejs/plugin-vue'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
+const EXPORTS: Record<string, string> = JSON.parse(
+  readFileSync(new URL('./package.json', import.meta.url), 'utf8')
+).exports
+const selfExports = {
+  name: 'webkit-self-exports',
+  enforce: 'pre' as const,
+  resolveId(id: string) {
+    if (!id.startsWith('@aziontech/webkit/')) return null
+    const target = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    return target ? fileURLToPath(new URL(target, import.meta.url)) : null
+  }
+}
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [selfExports, vue({ template: { transformAssetUrls: { includeAbsolute: false } } })],
   define: {
     'process.env.NODE_ENV': JSON.stringify('test')
   },

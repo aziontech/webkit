@@ -1,0 +1,31 @@
+{
+  "component": "network-map",
+  "title": "Components/Primitives/Content/NetworkMap",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The whole world at medium density. The layer fills its nearest positioned ancestor, so the box it sits in is what gives it a size; `position` parks the map in the room `scale` leaves, and `offsetX` / `offsetY` shift it from there, past the box edge when large enough.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Regions",
+      "summary": "Every region, each lighting only its own PoPs over the same whole-world map. `asia` and `oceania` hold no PoPs, so they read as landmass alone.",
+      "file": "regions.vue"
+    },
+    {
+      "name": "Densities",
+      "summary": "Levels are cumulative: `low` lights 65 PoPs, `medium` 186 and `high` 275. `none` draws the landmass alone.",
+      "file": "densities.vue"
+    },
+    {
+      "name": "Fades",
+      "summary": "The layer masks itself so it meets copy without a hard edge. `--network-map-fade-start` is where the fade still holds full ink and `--network-map-fade-end` is where it reaches zero, both set from the consumer’s class.",
+      "file": "fades.vue"
+    },
+    {
+      "name": "Animated",
+      "summary": "The PoPs pulse in three staggered waves. The pulse stops under reduced motion, leaving the PoPs static.",
+      "file": "animated.vue"
+    }
+  ]
+}

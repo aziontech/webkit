@@ -1,13 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/accordion/Accordion.stories'
+import Default from '../../../../examples/accordion/default.vue'
+import Multiple from '../../../../examples/accordion/multiple.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Accordion, { AccordionContent, AccordionItem, AccordionTrigger } from './index'
-
-const { Default, Multiple } = composeStories(stories)
 
 /**
  * Realistic FAQ tree mirroring the Storybook Default: three items with real

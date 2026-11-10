@@ -1,16 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-tooltip/DocTooltip.stories'
+import Default from '../../../../examples/doc-tooltip/default.vue'
+import Kinds from '../../../../examples/doc-tooltip/kinds.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocTooltip from './doc-tooltip.vue'
 
 // Browser mode loads no Tailwind — underline/surface/animation belong to the visual
 // gate; asserted here: the tooltip-vs-dialog contracts, ARIA wiring, and focus hand-off.
-
-const { Default, Kinds } = composeStories(stories)
 
 // The panel escapes the render container, so it is queried from document.body.
 const settle = async () => {
@@ -230,12 +228,12 @@ describe('DocTooltip', () => {
 
   describe('accessibility', () => {
     it('has no violations with the gloss closed', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across both contracts', async () => {
-      const { container } = render(Kinds())
+      const { container } = render(Kinds)
       await expectNoA11yViolations(container)
     })
 

@@ -1,0 +1,16 @@
+{
+  "component": "doc-card",
+  "title": "Components/Documentation/DocCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A linked card: glyph, title, copy, and the call-to-action row it closes on.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "The axes that change the anatomy: with and without an overline, an external destination, and a card with no `href` at all — whose root element is a block rather than an anchor.",
+      "file": "variants.vue"
+    }
+  ]
+}

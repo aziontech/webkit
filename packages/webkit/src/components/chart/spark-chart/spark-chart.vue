@@ -156,8 +156,7 @@
       :role="ariaLabel ? 'img' : undefined"
       :aria-label="ariaLabel || undefined"
       :aria-hidden="ariaLabel ? undefined : 'true'"
-      style="--spark-bar-from: 1 0"
-      class="absolute inset-0 block size-full overflow-visible"
+      class="absolute inset-0 block size-full overflow-visible [--spark-bar-from:1_0]"
     >
       <template v-if="stroke">
         <defs v-if="kind === 'area'">

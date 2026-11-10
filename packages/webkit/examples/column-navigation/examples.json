@@ -1,0 +1,21 @@
+{
+  "component": "column-navigation",
+  "title": "Components/Marketing/Primitives/ColumnNavigation",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The four-column directory: one column per group, each headed by its overline over a rule, then its destinations. The rules between the columns are the grid's own 1px gaps, so four adjacent columns produce three hairlines instead of six. Below the small breakpoint the block folds to a single column, so each row keeps the full width on a phone.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "`columns` is the block's only variant axis — it declares no `kind` and no `size` — so the fan-out is what a composite `Types` story shows for any other component. Two, three and four tracks, the same rows in each: the columns share one rhythm and the grid keeps drawing one hairline per seam however many there are.",
+      "file": "columns.vue"
+    },
+    {
+      "name": "Rows",
+      "summary": "The row's two state deltas, neither of which shows on the default block. A row with no `description` is one line and keeps the column's rhythm. A row with no `href` is not a link: it renders, it reads, and it answers neither the pointer nor `Tab` — which is how a destination that does not exist yet is listed without pretending to be clickable.",
+      "file": "rows.vue"
+    }
+  ]
+}

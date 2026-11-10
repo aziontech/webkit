@@ -2,6 +2,7 @@ import '../src/styles/preview.css'
 import '@aziontech/theme'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
+import '../src/styles/blocks-sources.css'
 
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { GLOBALS_UPDATED } from '@storybook/core-events'
@@ -42,7 +43,7 @@ export const parameters = {
     theme: {
       base: 'dark',
       // Typography
-      fontBase: '"Sora", sans-serif',
+      fontBase: '"Rubik", sans-serif',
       fontCode: '"Roboto Mono", monospace',
       // Colors
       colorPrimary: '#F3652B',

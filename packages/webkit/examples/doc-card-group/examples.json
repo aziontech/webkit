@@ -1,0 +1,16 @@
+{
+  "component": "doc-card-group",
+  "title": "Components/Documentation/DocCardGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two linked cards on the default two-column grid. The frame belongs to the group; the hairline between the cells is the shared 1px gap, painted by the cells themselves.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "The `cols` axis at three: one column on a phone, two at the small breakpoint, three at the large one. The ring-per-cell rules stay correct at every width, and an incomplete last row is simply empty rather than a rule-coloured hole.",
+      "file": "columns.vue"
+    }
+  ]
+}

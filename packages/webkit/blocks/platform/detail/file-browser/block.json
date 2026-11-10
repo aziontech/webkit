@@ -1,0 +1,35 @@
+{
+  "id": "platform/detail/file-browser",
+  "name": "FileBrowser",
+  "title": "Templates/Platform/Detail/FileBrowser",
+  "surface": "product",
+  "summary": "The file browser a storage resource opens on: one flush `CardBox` holding a borderless `Table` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last Modified pairs the editor `Avatar` (named in a `Tooltip`) with the relative time; folders carry Open and files Download in their row menu, with Delete below. Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `CardBox`, `Table` with `Table.Search`, `IconButton`, `Tooltip`, `Popover`, `Switch`, `Breadcrumb`, `SplitButton`, `Avatar`, `Dropdown` and `EmptyState`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "file browser",
+    "file manager",
+    "storage browser",
+    "bucket browser",
+    "object storage",
+    "folders and files",
+    "upload files",
+    "navegador de arquivos",
+    "gerenciador de arquivos",
+    "arquivos do bucket"
+  ],
+  "skills": ["webkit-tables", "webkit-lists", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "file-browser.vue"
+  },
+  "variants": [
+    {
+      "name": "InsideAFolder",
+      "summary": "Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age.",
+      "file": "variants/inside-a-folder.vue"
+    }
+  ]
+}
