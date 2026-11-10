@@ -30,6 +30,7 @@ const ASSETS = [
   'azion-to-vercel',
   'build-applications',
   'build-databases-from-code',
+  'certificates',
   'combine-data-and-vector-search',
   'content-and-media-delivery',
   'content-and-media-delivery-globe',

@@ -14,6 +14,7 @@ export const illustrationAssets = {
   'azion-to-vercel': () => import('./azion-to-vercel.svg'),
   'build-applications': () => import('./build-applications.svg'),
   'build-databases-from-code': () => import('./build-databases-from-code.svg'),
+  certificates: () => import('./certificates.svg'),
   'combine-data-and-vector-search': () => import('./combine-data-and-vector-search.svg'),
   'content-and-media-delivery': () => import('./content-and-media-delivery.svg'),
   'content-and-media-delivery-globe': () => import('./content-and-media-delivery-globe.svg'),
