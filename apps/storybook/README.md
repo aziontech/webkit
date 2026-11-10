@@ -144,7 +144,7 @@ The Storybook sidebar is organized into **Foundations**, **Components** (by cate
 
 ### Templates
 
-Page-level examples composed only from published `@aziontech/webkit` components (no template component is shipped by the package): ChangePlanDrawer, DeleteDomainDialog, DeploySuccess, OnboardingForm, PageExample, PlanSuccess, PlatformShell, SignUpCard.
+Page-level examples composed only from published `@aziontech/webkit` components (no template component is shipped by the package): ChangePlanDrawer, DeleteDomainDialog, DeploySuccess, OnboardingForm, PageExample, PlatformShell, SignUpCard.
 
 ### Utils
 
