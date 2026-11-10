@@ -1,21 +1,35 @@
 ## @aziontech/webkit design system
 
-This project uses the Azion design system. Its guidance is organized in four layers — know which
-layer you're in, because only one of them is optional:
+This project uses the Azion design system. Any coding agent (Claude Code, Codex, Cursor, …) follows
+this block. Its guidance is organized in four layers — know which layer you're in, because only one of
+them is optional:
 
 1. **Invariants (always-on, below)** — the non-negotiables. Follow them in every UI change.
 2. **Enforcement (the machine — non-optional)** — ESLint blocks the mechanical invariants at lint/CI;
-   the `webkit` MCP grounds every component choice; the `webkit-ui-verifier` agent checks the rest at
-   runtime (axe, both themes, states). If lint or the verifier fails, the change is not done.
-3. **Skills (on-demand guidance)** — invoke `/webkit-*` skills for how to do a task well.
-4. **Reference (depth)** — `.claude/rules/webkit-*.md` carry the full standards behind the invariants.
+   the `webkit` MCP grounds every screen and component choice; `npx @aziontech/webkit doctor` and the
+   `webkit-ui-verify` skill check the rest (axe, both themes, states). If lint or the check fails, the
+   change is not done.
+3. **Skills (on-demand guidance)** — `node_modules/@aziontech/webkit/skills/<name>/SKILL.md`
+   (Claude Code also gets them as `/webkit-*` in `.claude/skills/`).
+4. **Reference (depth)** — `node_modules/@aziontech/webkit/rules/webkit-*.md` (also copied to
+   `.claude/rules/`) carry the full standards behind the invariants.
+
+### Start every screen from a pattern
+
+A whole screen — login, signup, settings, a list, a create flow, a detail page — is never built from
+scratch. Ask the `webkit` MCP: `search_patterns` with the screen in plain words, then `get_pattern`.
+Copy that SFC and change only the content (copy, data, handlers); keep the components, their order,
+the props and the classes. Use `suggest_component` / `get_component` only for pieces the pattern does
+not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
 
 ### Invariants — always follow
 
-- **Components first.** Reach for an `@aziontech/webkit` component before writing custom UI. Find one
-  via the `webkit` MCP (`suggest_component`) or `node_modules/@aziontech/webkit/catalog.json`.
-- **Flat imports.** `import Button from '@aziontech/webkit/button'` (PascalCase binding = the subpath).
-  Never category-prefixed, `/src/`, deep-internal, or a bare-package barrel.
+- **Patterns, then components.** Screens start from a pattern (above). Pieces reach for an
+  `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
+  (`suggest_component`) or `node_modules/@aziontech/webkit/catalog.json`.
+- **Flat imports.** `import Button from '@aziontech/webkit/button'` (PascalCase binding = the subpath);
+  page sections are `@aziontech/webkit/sections/<name>`. Never category-prefixed, `/src/`,
+  deep-internal, or a bare-package barrel.
 - **Tokens only.** Color, typography, shape, spacing come from `@aziontech/theme`
   (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`) — never hex, `rgb`, `hsl`, or Tailwind palette.
 - **Never restyle a webkit component.** No `class`/`:class`/`style` on its tag — compose inside its
@@ -46,9 +60,16 @@ label-has-for, no-autofocus). The rest — states, motion-reduce, contrast/behav
 themes, microcopy — is verified at runtime by `/webkit-ui-verify` (the `webkit-ui-verifier` agent
 runs axe + screenshots), and taste is a review concern.
 
+- **Page layout.** One container class per band (`.layout-column`, `-form`, `-focused`,
+  `.layout-form-create`, `-content`, `-site`) and two rhythm steps (`--layout-section-gap`,
+  `--layout-group-gap`) — never a hand-rolled `max-w-*` page cap (rule `webkit-page-layout`).
+- **Forms that browsers understand.** E-mail fields set `type="email"` and `autocomplete`
+  (`username` to sign in, `email` to sign up); passwords `current-password` / `new-password`; paste is
+  never blocked. Auth screens never toast: every outcome is one `Message` inside the card.
+
 ### Skills — invoke for how to build UI well
 
-Start with `/webkit-ui-craft` (the umbrella that routes the rest). Get structure and states right
+Start with `webkit-ui-craft` (the umbrella that routes the rest). Get structure and states right
 before any polish:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Message, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`
@@ -61,10 +82,11 @@ before any polish:
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/webkit-usage`.
 
-### Agents — delegate a whole task
+### Agents (Claude Code) — delegate a whole task
 
 `webkit-expert` (which component + how) · `webkit-adopter` (the init/adoption flow) · `webkit-reviewer`
 (review a diff for correct/performant usage) · `webkit-ui-verifier` (drive the screen: both themes,
 widths, console, axe, states) · `webkit-adoption-auditor` (coverage scorecard: custom → webkit).
 
-Full standards behind the invariants: `.claude/rules/webkit-*.md`.
+Full standards behind the invariants: `node_modules/@aziontech/webkit/rules/webkit-*.md` (Claude Code:
+`.claude/rules/webkit-*.md`).

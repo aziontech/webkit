@@ -5,7 +5,9 @@ import { tmpdir } from 'node:os'
 import { join, sep } from 'node:path'
 
 import {
+  agentsDir,
   bodyHash,
+  fragmentFile,
   classify,
   CLAUDE_TEMPLATES,
   FRAGMENT_END,
@@ -41,7 +43,7 @@ function walkMarkdownRelative(dir, base = dir) {
 test('every .md under the templates dir is in the bundle (nothing is silently dropped)', () => {
   const expected = []
   for (const sub of ['rules', 'skills', 'agents']) {
-    const abs = join(CLAUDE_TEMPLATES, sub)
+    const abs = sub === 'agents' ? agentsDir(CLAUDE_TEMPLATES) : join(CLAUDE_TEMPLATES, sub)
     for (const rel of walkMarkdownRelative(abs)) {
       expected.push(`${sub}/${rel}`)
     }
@@ -319,4 +321,14 @@ test('classify: unstamped-identical for a byte-identical copy made before sync e
 test('classify: unstamped-different for an unmarked copy that diverged from the template', () => {
   const template = 'body\n'
   assert.equal(classify(template, 'a different body\n'), 'unstamped-different')
+})
+
+test('the bundle is read from the repo-root layout: skills/, rules/, adapters/', () => {
+  assert.ok(agentsDir(CLAUDE_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
+  assert.ok(fragmentFile(CLAUDE_TEMPLATES).endsWith(join('adapters', 'AGENTS.fragment.md')))
+  const bundle = listBundle()
+  assert.ok(bundle.includes('rules/webkit-sections.md'))
+  assert.ok(bundle.includes('rules/webkit-page-layout.md'))
+  assert.ok(bundle.includes('agents/webkit-expert.md'))
+  assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 19)
 })

@@ -91,3 +91,9 @@ apps/storybook/.storybook/test-visual/__diff_output__/
 apps/storybook/.storybook/test-visual/__image_snapshots__/*
 !apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
 apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/
+
+# AI bundle copies made by packages/webkit's prepack (sources live in skills/, rules/, adapters/)
+packages/webkit/skills/
+packages/webkit/rules/
+packages/webkit/adapters/
+packages/webkit/cli-templates/

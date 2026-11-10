@@ -8,8 +8,8 @@ import { parseYamlFrontmatter } from './spec.mjs'
 const LOC = {
   skillInternal: /^\.claude\/skills\/([a-z][a-z0-9-]*)\/SKILL\.md$/,
   agentInternal: /^\.claude\/agents\/([a-z][a-z0-9-]*)\.md$/,
-  skillConsumer: /^packages\/webkit\/cli-templates\/claude\/skills\/([a-z][a-z0-9-]*)\/SKILL\.md$/,
-  agentConsumer: /^packages\/webkit\/cli-templates\/claude\/agents\/([a-z][a-z0-9-]*)\.md$/
+  skillConsumer: /^skills\/([a-z][a-z0-9-]*)\/SKILL\.md$/,
+  agentConsumer: /^adapters\/claude\/agents\/([a-z][a-z0-9-]*)\.md$/
 }
 
 // rel is POSIX-normalized. Returns null for anything that is not a governed doc
@@ -45,7 +45,7 @@ export const MESSAGES = {
   'scope-missing': 'frontmatter is missing the required `scope:` field (general|webkit).',
   'scope-invalid': 'frontmatter `scope` must be exactly "general" or "webkit".',
   'scope-mismatch':
-    'frontmatter `scope` disagrees with the file location (cli-templates ⇒ general; .claude ⇒ webkit).',
+    'frontmatter `scope` disagrees with the file location (skills/ and adapters/ ⇒ general; .claude ⇒ webkit).',
   'consumer-skill-prefix': 'a consumer skill `name` must start with "webkit-".',
   'consumer-skill-status': 'a consumer skill must declare `status:`.',
   'consumer-skill-last-updated': 'a consumer skill must declare `last_updated:`.',

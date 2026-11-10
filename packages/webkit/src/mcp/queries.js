@@ -770,7 +770,11 @@ export function suggestComponent(catalog, need) {
   const patterns = searchPatterns(catalog, q)
   const topPattern = patterns.matches?.[0]
   const screenIntent = SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
-  if (topPattern && (topPattern.score >= 60 || (screenIntent && topPattern.score >= 25))) {
+  const exactComponent = component.best && normalize(component.best.name) === nq
+  if (
+    topPattern &&
+    (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60 && !exactComponent)
+  ) {
     return {
       ok: true,
       available: true,

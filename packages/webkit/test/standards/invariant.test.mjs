@@ -25,7 +25,7 @@ const ruleIds = readdirSync(join(ROOT, '.claude/rules'))
   .map((f) => f.replace(/\.md$/, ''))
 
 // The consumer rule population that shipped skills reference in their enforced_by.
-const CONSUMER_RULES_DIR = 'packages/webkit/cli-templates/claude/rules'
+const CONSUMER_RULES_DIR = 'rules'
 const consumerRuleIds = readdirSync(join(ROOT, CONSUMER_RULES_DIR))
   .filter((f) => f.endsWith('.md') && f !== 'README.md')
   .map((f) => f.replace(/\.md$/, ''))
@@ -35,16 +35,16 @@ const dirNames = (rel) =>
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
 
-// Both skill populations: internal (.claude/skills) and consumer (cli-templates).
+// Both skill populations: internal (.claude/skills) and consumer (skills/ at the repo root).
 const SKILLS = [
   ...dirNames('.claude/skills').map((id) => ({
     id,
     path: join('.claude/skills', id, 'SKILL.md'),
     valid: new Set([...ruleIds, 'review'])
   })),
-  ...dirNames('packages/webkit/cli-templates/claude/skills').map((id) => ({
+  ...dirNames('skills').map((id) => ({
     id,
-    path: join('packages/webkit/cli-templates/claude/skills', id, 'SKILL.md'),
+    path: join('skills', id, 'SKILL.md'),
     valid: new Set([...consumerRuleIds, 'ui-verify', 'review'])
   }))
 ]

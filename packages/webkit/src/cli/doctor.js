@@ -252,7 +252,10 @@ export function planDoctor(projectDir) {
       ...orphans.map((e) => `orphan: .claude/${e.rel}`),
       ...(sync.fragment.state === 'current'
         ? []
-        : [`fragment: CLAUDE.md is ${sync.fragment.state}`])
+        : [`fragment: CLAUDE.md is ${sync.fragment.state}`]),
+      ...(sync.agentsFragment?.state === 'current' || !sync.agentsFragment
+        ? []
+        : [`fragment: AGENTS.md is ${sync.agentsFragment.state}`])
     ]
     add(
       'claude bundle',
@@ -268,7 +271,11 @@ export function planDoctor(projectDir) {
         .join('\n')}`
     )
   } else {
-    add('claude bundle', 'ok', 'every bundle file and the CLAUDE.md fragment are current')
+    add(
+      'claude bundle',
+      'ok',
+      'every bundle file and the AGENTS.md / CLAUDE.md fragment are current'
+    )
   }
 
   return checks

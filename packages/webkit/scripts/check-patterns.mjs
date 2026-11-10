@@ -10,10 +10,7 @@ const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const BASELINE_PATH = resolve(SCRIPT_DIR, 'patterns-lint-baseline.json')
-const SKILL_DIRS = [
-  resolve(REPO_ROOT, 'skills'),
-  resolve(REPO_ROOT, 'packages/webkit/cli-templates/claude/skills')
-]
+const SKILL_DIRS = [resolve(REPO_ROOT, 'skills')]
 
 export function skillExists(name, dirs = SKILL_DIRS) {
   return dirs.some((dir) => existsSync(join(dir, name, 'SKILL.md')))

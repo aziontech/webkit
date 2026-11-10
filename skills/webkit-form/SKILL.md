@@ -784,7 +784,28 @@ Rules:
 - **Related radios/checkboxes are their own group** — a set of radios is a `<fieldset>` whose
   `<legend>` is the question; the `field-radio-block` labels are the options.
 
-## Validation — required (amber) vs invalid (red), surfaced only on submit
+## Native input hints — autofill, keyboards, paste
+
+The browser, password managers and mobile keyboards read the `<input>`, so the hints must land
+there. `FieldText` forwards `type`, `autocomplete` and `spellcheck` to its `<input>`;
+`FieldPassword` takes `autocomplete`.
+
+| Field                               | `type`  | `autocomplete`     | `spellcheck` |
+| ----------------------------------- | ------- | ------------------ | ------------ |
+| Sign-in e-mail / username           | `email` | `username`         | `false`      |
+| Sign-up, contact or newsletter mail | `email` | `email`            | `false`      |
+| Current password                    | —       | `current-password` | —            |
+| New password (sign-up, reset)       | —       | `new-password`     | —            |
+| One-time code                       | `text`  | `one-time-code`    | `false`      |
+| Slug, ID, domain, token, code       | `text`  | `off`              | `false`      |
+| Search, filter (not a credential)   | `text`  | `off`              | —            |
+
+- Give every control a meaningful `name` next to `autocomplete`; autofill needs both.
+- **Never block paste** — not in passwords, not in one-time codes, not in confirmation fields.
+- Do not block keystrokes in a numeric field: accept the input and validate on submit.
+- Trim the value before validating: input methods and autofill add trailing spaces.
+- A field that is not a credential never uses a reserved name (`password`, `email`) that makes a
+  password manager offer itself.
 
 Validation runs **on submit, once** — not on every keystroke, not on blur. The **feedback is the
 field's own state plus an on-field `HelperText`** — there is **no separate error-summary block and no
@@ -796,6 +817,10 @@ field's own state plus an on-field `HelperText`** — there is **no separate err
 kind="required"`). It is a _prompt to fill_, not a rejection — never the red danger state.
 - **Filled-but-malformed** → the red `invalid` state (`:invalid` on the control, `HelperText
 kind="invalid"`). The value is present and wrong.
+
+On a failed submit, **move focus to the first field in error** so keyboard and screen-reader users
+land on it. Never pre-disable the submit button to stop an incomplete form: let it submit and show
+the feedback.
 
 Never set both on one field at once (amber border + red helper is the bug this rule prevents). When a
 field can fail both ways, emptiness is the discriminator. Store a real message so the `HelperText` has
@@ -1010,6 +1035,10 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       ItemGroup), bound to the error and cleared on edit. Required-but-empty uses the amber `required`
       state/`kind` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`kind`;
       never both on one field. No error-summary block, no `Message` callout for field validation.
+- [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
+      e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
+      error; submit is never pre-disabled.
+- [ ] Leaving the page with unsaved edits asks first (or the edits survive the navigation).
 - [ ] `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
       (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per `/webkit-ui-states`
       Pattern 1); request errors toast, field errors stay inline.

@@ -4,8 +4,39 @@ import { dirname, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const TEMPLATES = join(__dirname, '../../cli-templates')
-export const CLAUDE_TEMPLATES = join(TEMPLATES, 'claude')
+const PACKAGE_ROOT = join(__dirname, '../..')
+const REPO_ROOT = join(PACKAGE_ROOT, '../..')
+const LEGACY_TEMPLATES = join(PACKAGE_ROOT, 'cli-templates/claude')
+
+function resolveTemplatesRoot() {
+  for (const candidate of [PACKAGE_ROOT, REPO_ROOT]) {
+    if (existsSync(join(candidate, 'skills')) && existsSync(join(candidate, 'rules'))) {
+      return candidate
+    }
+  }
+  return LEGACY_TEMPLATES
+}
+
+export const AI_TEMPLATES = resolveTemplatesRoot()
+export const CLAUDE_TEMPLATES = AI_TEMPLATES
+
+export function agentsDir(templatesDir = AI_TEMPLATES) {
+  const adapter = join(templatesDir, 'adapters/claude/agents')
+  return existsSync(adapter) ? adapter : join(templatesDir, 'agents')
+}
+
+export function fragmentFile(templatesDir = AI_TEMPLATES) {
+  for (const rel of ['adapters/AGENTS.fragment.md', 'AGENTS.fragment.md', 'CLAUDE.fragment.md']) {
+    const abs = join(templatesDir, rel)
+    if (existsSync(abs)) return abs
+  }
+  return join(templatesDir, 'adapters/AGENTS.fragment.md')
+}
+
+export function templateFile(templatesDir, rel) {
+  if (rel.startsWith('agents/')) return join(agentsDir(templatesDir), rel.slice('agents/'.length))
+  return join(templatesDir, rel)
+}
 
 function resolveWebkitVersion() {
   try {
@@ -41,11 +72,11 @@ function skillFiles(dir) {
     .map((e) => `${e.name}/SKILL.md`)
 }
 
-export function listBundle(templatesDir = CLAUDE_TEMPLATES) {
+export function listBundle(templatesDir = AI_TEMPLATES) {
   const rels = [
     ...flatMarkdown(join(templatesDir, 'rules')).map((name) => `rules/${name}`),
     ...skillFiles(join(templatesDir, 'skills')).map((rel) => `skills/${rel}`),
-    ...flatMarkdown(join(templatesDir, 'agents')).map((name) => `agents/${name}`)
+    ...flatMarkdown(agentsDir(templatesDir)).map((name) => `agents/${name}`)
   ]
   return rels.map(toPosix).sort()
 }

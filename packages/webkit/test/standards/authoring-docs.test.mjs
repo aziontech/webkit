@@ -26,11 +26,13 @@ test('docFileKind resolves each population and skips non-governed paths', () => 
     scope: 'webkit',
     unit: 'scaffolder'
   })
-  assert.deepEqual(
-    docFileKind('packages/webkit/cli-templates/claude/skills/webkit-usage/SKILL.md'),
-    { kind: 'skill', variant: 'consumer', scope: 'general', unit: 'webkit-usage' }
-  )
-  assert.deepEqual(docFileKind('packages/webkit/cli-templates/claude/agents/webkit-expert.md'), {
+  assert.deepEqual(docFileKind('skills/webkit-usage/SKILL.md'), {
+    kind: 'skill',
+    variant: 'consumer',
+    scope: 'general',
+    unit: 'webkit-usage'
+  })
+  assert.deepEqual(docFileKind('adapters/claude/agents/webkit-expert.md'), {
     kind: 'agent',
     variant: 'consumer',
     scope: 'general',
@@ -60,7 +62,7 @@ test('a conforming internal skill passes clean', () => {
 })
 
 test('a conforming consumer skill (webkit- prefix + status + last_updated) passes clean', () => {
-  const rel = 'packages/webkit/cli-templates/claude/skills/webkit-good/SKILL.md'
+  const rel = 'skills/webkit-good/SKILL.md'
   const content = [
     '---',
     'name: webkit-good',
@@ -91,7 +93,7 @@ test('a conforming agent (name + description + scope only) passes clean', () => 
 })
 
 test('a bad consumer skill is flagged on every axis', () => {
-  const rel = 'packages/webkit/cli-templates/claude/skills/bad-fixture/SKILL.md'
+  const rel = 'skills/bad-fixture/SKILL.md'
   const content = [
     '---',
     'name: not-the-folder-name',
@@ -151,7 +153,7 @@ test('enforced_by is required on skills and exempt on agents', () => {
 })
 
 test('scope-mismatch fires when scope disagrees with the file location', () => {
-  const rel = 'packages/webkit/cli-templates/claude/agents/webkit-x.md'
+  const rel = 'adapters/claude/agents/webkit-x.md'
   const content = [
     '---',
     'name: webkit-x',

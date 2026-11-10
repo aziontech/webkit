@@ -295,7 +295,7 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring-docs' },
       { surface: 'ci', by: 'check-authoring-docs' }
     ],
-    note: 'Skills (.claude/skills + cli-templates/claude/skills) and agents (.claude/agents + cli-templates/claude/agents) carry conforming frontmatter (name==folder/filename, non-empty description, scope matching location; consumer skills webkit-* + status + last_updated) and no file-as-example refs. validate-authoring-docs blocks a new/edited doc write-time (exit 2); check-authoring-docs is the CI ratchet over all four populations; both share _lib/authoring-docs-checks.mjs. scope=webkit: the standard about how the authoring/adoption bundle is shaped is DS-internal (like storybook-source), even though the consumer skills it validates ship out.'
+    note: 'Skills (.claude/skills + skills/) and agents (.claude/agents + adapters/claude/agents) carry conforming frontmatter (name==folder/filename, non-empty description, scope matching location; consumer skills webkit-* + status + last_updated) and no file-as-example refs. validate-authoring-docs blocks a new/edited doc write-time (exit 2); check-authoring-docs is the CI ratchet over all four populations; both share _lib/authoring-docs-checks.mjs. scope=webkit: the standard about how the authoring/adoption bundle is shaped is DS-internal (like storybook-source), even though the consumer skills it validates ship out.'
   }
 ]
 

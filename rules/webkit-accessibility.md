@@ -28,6 +28,14 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
   composable (e.g. VueUse), not a hand-written trap.
 - Pair every motion-bearing class with **`motion-reduce:`**
   (`motion-reduce:transition-none` / `motion-reduce:animate-none`).
+- Keep hit targets at **24px or more** (44px on touch layouts), even when the visible glyph is
+  smaller.
+- Announce async results politely: inline validation and status updates go to an
+  `aria-live="polite"` region (the webkit `Toast` and `Message` already do this).
+- Give in-page link targets a scroll offset (`scroll-mt-(--spacing-xxl)`) so a sticky header never
+  covers the heading the link jumps to.
+- Wrap brand names, product names and code tokens in `translate="no"` so browser translation does
+  not rewrite them.
 
 ## Do not
 
@@ -39,6 +47,8 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Never open an overlay without trapping focus and restoring it to the trigger on close.
 - Never ship a motion class without its `motion-reduce:` fallback.
 - Never name the accessible-name prop `aria-label` — use `ariaLabel`.
+- Never disable browser zoom (`user-scalable=no`, `maximum-scale=1`).
+- Never rely on color alone for a status: pair it with a label or an icon with a name.
 
 ## Correct
 

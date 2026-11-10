@@ -43,7 +43,13 @@ const pack = (pkgDir) => {
 }
 const themeTgz = pack(join(ROOT, 'packages/theme'))
 const iconsTgz = pack(join(ROOT, 'packages/icons'))
-const webkitTgz = pack(join(ROOT, 'packages/webkit'))
+run('node', ['scripts/copy-ai-bundle.mjs'], join(ROOT, 'packages/webkit'))
+let webkitTgz
+try {
+  webkitTgz = pack(join(ROOT, 'packages/webkit'))
+} finally {
+  run('node', ['scripts/copy-ai-bundle.mjs', '--clean'], join(ROOT, 'packages/webkit'))
+}
 
 const app = join(work, 'app')
 mkdirSync(join(app, 'src'), { recursive: true })

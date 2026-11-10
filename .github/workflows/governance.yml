@@ -37,6 +37,9 @@ jobs:
               - 'pnpm-workspace.yaml'
             toolkit:
               - '.specs/**'
+              - 'skills/**'
+              - 'rules/**'
+              - 'adapters/**'
               - '.claude/hooks/**'
               - '.claude/rules/**'
               - '.claude/skills/**'
@@ -260,6 +263,9 @@ jobs:
 
       - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
         run: pnpm --filter @aziontech/webkit run patterns:check --warn-intents
+
+      - name: Cited names (G2) — skills, rules and patterns only cite exports that exist
+        run: pnpm --filter @aziontech/webkit run cited-names
 
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit

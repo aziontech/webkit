@@ -352,8 +352,9 @@ husky pre-commit, and a `.claude/` guidance bundle. Idempotent; `--dry-run` prev
 6. **`.claude/` bundle** — the `general`-scope rules rewritten for consumers
    (`webkit-tokens`, `webkit-props`, `webkit-emits`, `webkit-styling`,
    `webkit-prefer-over-custom`, …), a `webkit-usage` skill, and reviewer/expert/adopter
-   agents ([`cli-templates/claude/`](../cli-templates/claude/)).
-7. **`CLAUDE.md` fragment** — appended once behind a marker.
+   agents (sources at the repo root: [`skills/`](../../../skills/), [`rules/`](../../../rules/),
+   [`adapters/claude/agents/`](../../../adapters/claude/agents/); the package ships them through `prepack`).
+7. **`AGENTS.md` / `CLAUDE.md` fragment** ([`adapters/AGENTS.fragment.md`](../../../adapters/AGENTS.fragment.md)) — the same block, fenced in both files.
 8. **Theme wiring advice** — suggests the theme import at your entry file, never edits it.
 
 Flags: `--dry-run` (plan only) · `--strict` (default preset — everything `error`) ·
@@ -525,7 +526,7 @@ practices**, adoptable by any project (with or without webkit components).
 | Token discipline engine    | `src/eslint-plugin/token-checks.js`                  | pack engine (token source configurable)   |
 | ESLint preset              | `@aziontech/webkit/eslint-plugin` (standards subset) | the pack's eslint plugin                  |
 | Stylelint config           | `@aziontech/webkit/stylelint-config`                 | the pack's stylelint config               |
-| AI guidance bundle         | `cli-templates/claude/`                              | the pack's `init` bundle                  |
+| AI guidance bundle         | `skills/`, `rules/`, `adapters/` (repo root)         | the pack's `init` bundle                  |
 | Registry + invariant       | `standards.mjs` + `invariant.test.mjs`               | the pack's registry; webkit re-imports it |
 
 **What stays in webkit**: the 11 `webkit`-scope standards, the spec pipeline

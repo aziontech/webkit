@@ -155,7 +155,7 @@ The same rule applies to each sub-component. Each renders its own root with its 
 
 ## Token values: the canonical `prop-(--token)` syntax
 
-A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, scaffolder output and `cli-templates` copy now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
+A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, scaffolder output and consumer skill or rule (`skills/`, `rules/`) now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
 
 ```html
 <!-- ✅ canonical — paren shorthand -->

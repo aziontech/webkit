@@ -2,7 +2,7 @@
 name: webkit-ui-craft
 description: Umbrella entry for building product UI on @aziontech/webkit with taste and PRO UX. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
 status: active
-last_updated: 2026-09-21
+last_updated: 2026-11-10
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-tokens, webkit-accessibility, ui-verify]
 ---
@@ -16,6 +16,15 @@ system intended: technical, minimal, polished, PRO-UX-first. This is the **map**
 skills — it carries the shared principles and routes each task to the skill that owns the detail. It
 is for **consuming** apps (composing screens from shipped components and tokens), not for authoring
 webkit primitives.
+
+## Start here: a screen begins from a pattern
+
+Before any phase below, find out whether the screen already exists as a webkit pattern. Ask the
+`webkit` MCP: `search_patterns` with the screen in plain words ("login", "account settings",
+"delete confirmation"), then `get_pattern` with the best id. Copy that SFC and change only the
+content; the routing below then reviews what you built. Only when no pattern fits, compose the screen
+from components (`suggest_component`, `get_component`). A marketing band is a page section, not a
+pattern (rule `webkit-sections`).
 
 ## How to use
 
@@ -96,6 +105,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 
 | Phase      | Goal                                                                                                                                      | Skill                       |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| Start      | The whole screen from its pattern: `search_patterns` → `get_pattern`, change only the content                                             | `webkit` MCP                |
 | Mechanics  | Import path, tokens, tree-shaking                                                                                                         | `/webkit-usage`             |
 | Structure  | Right component + Nielsen heuristics; the 3 states must exist                                                                             | `/webkit-ux-heuristics`     |
 | Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts                                                                | `/webkit-ui-states`         |

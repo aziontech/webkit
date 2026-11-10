@@ -39,7 +39,7 @@ hand-rolled, nothing hardcoded.
   flat import path, ask the webkit MCP `suggest_component`, or read
   `node_modules/@aziontech/webkit/catalog.json` (`imports`) — every key is a real subpath (e.g.
   `@aziontech/webkit/button`, `@aziontech/webkit/input-text`, `@aziontech/webkit/dialog`,
-  `@aziontech/webkit/dropdown-menu`).
+  `@aziontech/webkit/dropdown`).
 - **NEVER** hand-roll a `<button>`, input, modal, tooltip, dropdown, tabs, **or divider** that webkit
   ships — this includes a separator. A horizontal/vertical rule is **`@aziontech/webkit/divider`**
   (`<Divider />` / `<Divider orientation="vertical" />`), **never** a hand-rolled `<hr>` or a
