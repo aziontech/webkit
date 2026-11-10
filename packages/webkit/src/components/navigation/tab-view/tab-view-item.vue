@@ -152,6 +152,7 @@
     :id="tabId"
     :class="itemClasses"
     :data-testid="testId"
+    :data-kind="context?.kind.value ?? 'default'"
     :data-state="isSelected ? 'active' : 'inactive'"
     :data-disabled="isDisabled ? '' : undefined"
     :aria-selected="isSelected"

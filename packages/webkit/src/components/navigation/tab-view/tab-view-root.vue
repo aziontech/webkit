@@ -5,6 +5,7 @@
   import {
     type TabViewContext,
     TabViewInjectionKey,
+    type TabViewKind,
     type TabViewTabRegistration,
     type TabViewValue
   } from './injection-key'
@@ -15,7 +16,11 @@
     inheritAttrs: false
   })
 
+  export type { TabViewKind }
+
   interface Props {
+    /** Visual variant: a filled pill under the active tab, or a high-contrast underline bar on a hairline baseline. */
+    kind?: TabViewKind
     /** Controlled active tab (`v-model:value`). */
     value?: TabViewValue | null
     /** Initial active tab when uncontrolled. */
@@ -23,6 +28,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'default',
     value: undefined,
     defaultValue: null
   })
@@ -169,6 +175,7 @@
   const context: TabViewContext = {
     testId: testId.value,
     baseId,
+    kind: computed(() => props.kind),
     value: activeValue,
     slideDirection,
     setValue,
@@ -198,6 +205,7 @@
     :data-testid="testId"
     data-tab-view-root=""
     data-orientation="horizontal"
+    :data-kind="kind"
   >
     <slot />
   </div>

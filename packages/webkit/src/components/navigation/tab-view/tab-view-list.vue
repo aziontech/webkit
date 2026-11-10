@@ -51,7 +51,7 @@
 
   const listClasses = computed(() =>
     cn(
-      'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden data-[kind=underline]:pb-(--spacing-xxs) data-[kind=underline]:shadow-[inset_0_calc(-1*var(--border-width-default))_0_var(--border-default)]',
       attrs.class as string | undefined
     )
   )
@@ -61,8 +61,11 @@
     'rounded-(--shape-button) bg-(--secondary-mask)',
     'border-(length:--border-width-default) border-(--border-muted)',
     'shadow-(--shadow-xs)',
+    'data-[kind=underline]:rounded-none data-[kind=underline]:border-0 data-[kind=underline]:bg-(--border-strong) data-[kind=underline]:shadow-none',
     'motion-reduce:transition-none'
   ]
+
+  const UNDERLINE_THICKNESS = 2
 
   const syncIndicator = () => {
     const listEl = listRef.value
@@ -85,9 +88,16 @@
     const tabRect = tabEl.getBoundingClientRect()
 
     indicatorWidth.value = tabRect.width
-    indicatorHeight.value = tabRect.height
     indicatorOffsetX.value = tabRect.left - listRect.left + listEl.scrollLeft
-    indicatorOffsetY.value = tabRect.top - listRect.top + listEl.scrollTop
+
+    if (context.kind.value === 'underline') {
+      indicatorHeight.value = UNDERLINE_THICKNESS
+      indicatorOffsetY.value = listEl.clientHeight - UNDERLINE_THICKNESS + listEl.scrollTop
+    } else {
+      indicatorHeight.value = tabRect.height
+      indicatorOffsetY.value = tabRect.top - listRect.top + listEl.scrollTop
+    }
+
     indicatorVisible.value = true
   }
 
@@ -100,6 +110,17 @@
 
   let resizeObserver: ResizeObserver | null = null
 
+  const observeTabs = () => {
+    context.tabs.value.forEach((tab) => {
+      if (tab.el.value) resizeObserver?.observe(tab.el.value)
+    })
+  }
+
+  const onTabsChange = () => {
+    observeTabs()
+    scheduleIndicatorSync()
+  }
+
   onMounted(() => {
     scheduleIndicatorSync()
     listRef.value?.addEventListener('scroll', updateScrollAffordance, { passive: true })
@@ -110,6 +131,7 @@
         updateScrollAffordance()
       })
       resizeObserver.observe(listRef.value)
+      observeTabs()
     }
   })
 
@@ -120,7 +142,8 @@
   })
 
   watch(indicatorTarget, scheduleIndicatorSync)
-  watch(() => context.tabs.value, scheduleIndicatorSync, { deep: true })
+  watch(context.kind, scheduleIndicatorSync)
+  watch(() => context.tabs.value, onTabsChange, { deep: true })
 </script>
 
 <template>
@@ -130,6 +153,7 @@
       role="tablist"
       :class="listClasses"
       :data-testid="testId"
+      :data-kind="context.kind.value"
       :data-fade-start="canScrollStart || null"
       :data-fade-end="canScrollEnd || null"
       @keydown="context.onListKeydown"
@@ -139,6 +163,7 @@
         :class="indicatorClasses"
         :style="[indicatorTransitionStyle, indicatorTransformStyle]"
         :data-testid="`${testId}__indicator`"
+        :data-kind="context.kind.value"
         aria-hidden="true"
       />
       <slot />

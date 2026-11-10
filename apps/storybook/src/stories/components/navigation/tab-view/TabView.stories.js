@@ -52,6 +52,17 @@ const meta = {
     }
   },
   argTypes: {
+    kind: {
+      control: 'select',
+      options: ['default', 'underline'],
+      description:
+        'Visual variant: a filled pill under the active tab, or a high-contrast underline bar on a hairline baseline.',
+      table: {
+        category: 'props',
+        type: { summary: "'default' | 'underline'" },
+        defaultValue: { summary: "'default'" }
+      }
+    },
     value: {
       control: 'text',
       description: 'Controlled active tab (`v-model:value`).',
@@ -82,6 +93,7 @@ const meta = {
     }
   },
   args: {
+    kind: 'default',
     defaultValue: 'tab-1'
   }
 }
@@ -90,6 +102,7 @@ export default meta
 
 const DEFAULT_TEMPLATE = `
   <TabView.Root
+    :kind="args.kind"
     :value="value"
     class="w-full max-w-[40rem]"
     @update:value="onUpdate"
@@ -184,6 +197,53 @@ export const Default = {
         code: toSfc(
           [IMPORT, "import { ref } from 'vue'", '', "const active = ref('tab-1')"],
           DEFAULT_SOURCE
+        )
+      }
+    }
+  }
+}
+
+const UNDERLINE_TEMPLATE = `<TabView.Root v-model:value="active" kind="underline" class="w-full max-w-[40rem]">
+  <TabView.List>
+    <TabView.Item value="overview" label="Overview" />
+    <TabView.Item value="versions" label="Versions" />
+    <TabView.Item value="build" label="Build" />
+    <TabView.Item value="deployments" label="Deployments" />
+  </TabView.List>
+  <TabView.Content class="mt-(--spacing-4)">
+    <TabView.Panel value="overview">
+      <p class="text-body-sm text-(--text-default)">Overview of the application.</p>
+    </TabView.Panel>
+    <TabView.Panel value="versions">
+      <p class="text-body-sm text-(--text-default)">Every published version.</p>
+    </TabView.Panel>
+    <TabView.Panel value="build">
+      <p class="text-body-sm text-(--text-default)">Build settings and logs.</p>
+    </TabView.Panel>
+    <TabView.Panel value="deployments">
+      <p class="text-body-sm text-(--text-default)">Deployments across environments.</p>
+    </TabView.Panel>
+  </TabView.Content>
+</TabView.Root>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof TabView.Root>} */
+export const Underline = {
+  render: () => ({
+    components,
+    setup: () => ({ active: ref('build') }),
+    template: UNDERLINE_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'With `kind="underline"` the active tab is marked by a bar in `--border-strong` (black in light, white in dark) instead of the filled pill, on a hairline baseline that spans the list. Use it for page-level section tabs that need to stand apart from the surface beneath them. The bar slides between tabs with the same motion as the pill.'
+      },
+      source: {
+        code: toSfc(
+          [IMPORT, "import { ref } from 'vue'", '', "const active = ref('build')"],
+          UNDERLINE_TEMPLATE
         )
       }
     }
