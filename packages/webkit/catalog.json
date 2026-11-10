@@ -6632,17 +6632,17 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Shows loading state and disables activation."
+          "doc": "Pulses the dot while the status is still in progress."
         },
         {
           "name": "label",
           "type": "string",
           "default": "'Status'",
           "required": "false",
-          "doc": "Visible label text."
+          "doc": "Visible label text naming the status, in sentence case."
         }
       ],
-      "purpose": "Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`."
+      "purpose": "Shows the status of a resource as a small colored dot next to a short label: a deployment that is ready, building, or failed, or a service that is online or degraded. While the status is still in progress, the dot itself pulses. It is a read-only indicator, not a control."
     },
     "toast": {
       "import": "@aziontech/webkit/toast",
@@ -7321,6 +7321,20 @@
           "doc": "Native `maxlength` — maximum number of characters allowed."
         },
         {
+          "name": "autocomplete",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Native `autocomplete` hint (`email`, `username`, `off`, …). When empty, the attribute is omitted."
+        },
+        {
+          "name": "spellcheck",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Native `spellcheck`. When unset, the attribute is omitted and the browser default applies; pass `false` for slugs, IDs and domains."
+        },
+        {
           "name": "size",
           "type": "'small' | 'medium' | 'large'",
           "default": "'medium'",
@@ -7391,7 +7405,8 @@
       ],
       "bestPractices": [
         "Prefer the `field-*` wrapper when you need a label, helper text, or validation message.",
-        "Set an appropriate `type`/`inputmode` for the content (email, url, …)."
+        "Set an appropriate `type`/`inputmode` for the content (email, url, …).",
+        "Set `autocomplete` so the browser can offer saved values, and `:spellcheck=\"false\"` for slugs, IDs, and domains."
       ]
     },
     "input-group": {
@@ -7773,6 +7788,27 @@
           "default": "''",
           "required": "false",
           "doc": "Placeholder forwarded to the `InputText`."
+        },
+        {
+          "name": "type",
+          "type": "'text' | 'email' | 'number'",
+          "default": "'text'",
+          "required": "false",
+          "doc": "Native input type forwarded to the `InputText`."
+        },
+        {
+          "name": "autocomplete",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Native `autocomplete` hint forwarded to the `InputText`. When empty, the attribute is omitted."
+        },
+        {
+          "name": "spellcheck",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Native `spellcheck` forwarded to the `InputText`. When unset, the attribute is omitted and the browser default applies."
         },
         {
           "name": "helperText",
@@ -13275,7 +13311,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS)."
+      "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS)."
     },
     "menu": {
       "import": "@aziontech/webkit/menu",
@@ -13550,6 +13586,29 @@
       "category": "navigation",
       "structure": "composition",
       "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "TabViewKind` (`'default' | 'underline'`)",
+          "default": "'default'",
+          "required": "false",
+          "doc": "Visual variant. `default` slides a filled pill (mask + hairline + `--shadow-xs`) under the active tab. `underline` draws a `--border-strong` bar under the active tab, on a `--border-default` hairline baseline spanning the list, for the higher-contrast look of page-level section tabs. Set once on the root; the list and every item read it from context."
+        },
+        {
+          "name": "value",
+          "type": "TabViewValue | null",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Controlled active tab (`v-model:value`)."
+        },
+        {
+          "name": "defaultValue",
+          "type": "TabViewValue | null",
+          "default": "null",
+          "required": "false",
+          "doc": "Initial active tab when uncontrolled."
+        }
+      ],
       "events": [
         {
           "name": "update:value",
