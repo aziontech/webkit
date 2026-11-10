@@ -229,12 +229,29 @@ Fresh sessions with two agents (Claude Code and Codex or Cursor) build a fixed l
 screens from intent-only prompts; score component choice, block reuse, lint, `doctor`, a11y,
 RTL and mobile rendering against v5.11.0. Then run it on every release.
 
-## Stage 13 — Console Kit audit
+## Stage 13 — Console Kit and design sample audit (future: not started)
 
-Clone `aziontech/azion-console-kit` (and check `aziontech/azion-new-console`) and list every
-component and screen that WebKit does not cover yet — known candidates: the new Events interface,
-Rules Engine, AI Chat. For each: what it is, where it is used, the WebKit equivalent if any, and
-whether it becomes a component, a block or stays product code. New items enter through stage 3.
+Not run yet; it starts only after stages 1 to 12. Two sources feed it, with a fixed precedence:
+
+1. **The design sample first.** `apps/webkit-sample` on the `design/sample` branch of this
+   repository (`console/components`, `console/pages`, `shared/ui`, `site/…`) holds the screens and
+   pieces the design team refined most recently: application, auth, billing, creation, deployment,
+   environment, firewall, form, function, home, list, marketplace, observability, onboarding, SQL
+   database, workload and more. When the sample and the console both have a version of something,
+   **the sample's design wins**.
+2. **Then the Console Kit.** `aziontech/azion-console-kit` (and `aziontech/azion-new-console`) for
+   whatever the sample does not have — known candidates: the new Events interface, Rules Engine,
+   AI Chat.
+
+For each item found: what it is, where it is used, the WebKit equivalent if any, and whether it
+becomes a component, a block or stays product code. What is needed becomes WebKit components and
+blocks through stage 3 (for example the SQL database pieces).
+
+Once everything the sample holds lives in WebKit, the sample app's own structure can be removed —
+with compatibility guaranteed first: every page the sample renders (console, hub, docs, site
+preview) renders the same from WebKit components and blocks (visual diff), nothing on the marketing
+or docs surface leaves without a `marketing-inventory.json` record, and every doc that links into
+`apps/webkit-sample` (for example `.claude/docs/CONTAINERS.md`) points at the new home.
 
 ## Stage 14 — Migrate the marketing site to the new WebKit
 
