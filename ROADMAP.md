@@ -7,41 +7,41 @@ both on AI tooling (catalog, MCP, skills, rules, lint, `doctor`); the gaps are c
 
 Updated 2026-11-10. The work is split in two milestones, each numbered in order. **Milestone 1**
 makes WebKit itself complete (one source of truth, v6 hygiene, languages, devices, performance,
-guidelines, collections, missing components) and ends with one full test pass. **Milestone 2**
+guidelines, collections) and ends with one full test pass. **Milestone 2**
 adds the distribution and the rest (patterns from the design sample, CLI, docs, demos, evaluation,
-site migration, audits) and ends by merging into `main`. The project is fully specified: no
+site migration, completing the component catalog) and ends by merging into `main`. The project is fully specified: no
 approval step sits between items.
 
 ## How the work runs
 
 - **Tests.** During the items only the fast checks run (lint, type-check, compiling every copyable
   SFC, catalog, toolkit tests: one to two minutes). The browser suite, visual, accessibility, RTL and
-  mobile checks run once, in M1.11, and are fixed there.
+  mobile checks run once, in M1.10, and are fixed there.
 - **Parallel agents.** M1.1 and M1.2 run first and alone, because they touch every file. Then
-  M1.4–M1.7 (one agent per area), M1.8, M1.9 and M1.10 (split by component) run in parallel
-  branches, and are integrated before M1.11. In Milestone 2, M2.1, M2.2–M2.4 and M2.5 run in
+  M1.4–M1.7 (one agent per area), M1.8 and M1.9 run in parallel branches, and are integrated before
+  M1.10. In M2.10 the missing components split by component, one agent each. In Milestone 2, M2.1, M2.2–M2.4 and M2.5 run in
   parallel; M2.6 waits for M2.4.
 
 ## Decisions already taken
 
-| Topic              | Decision                                                                                                                                      |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Naming             | shadcn/Radix vocabulary (`pagination`, `tabs`, `card`, `alert`, `radio-group`…), the names models know best.                                  |
-| Breaking changes   | One direct major (v6) with a migration guide and a codemod; no aliases.                                                                       |
-| Screens (blocks)   | One canonical block per screen; states are props or example data, not numbered copies.                                                        |
-| Repeated fragments | Promoted to exported components (page header, section header, setting row, save bar, confirm dialog).                                         |
-| Form fields        | One `Field` wrapper around any control replaces the `field-*` family.                                                                         |
-| Pattern guidelines | Cloudscape depth: purpose, when / when not, building blocks, do / don't, copy, accessibility.                                                 |
-| Collections        | `useCollection` for client and server data, filters in the URL, saved preferences.                                                            |
-| Charts             | Our own chart family (started: `Chart`, `BarList`, `DonutChart`, `SparkChart`, `StatTile`, `Tracker`).                                        |
-| Languages          | Built-in messages in en and pt-BR, right-to-left supported.                                                                                   |
-| Missing components | Ordered by Cloudscape's list. Generative-AI components are an item of their own (M2.5).                                                       |
-| Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                                                           |
-| CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                             |
-| Who builds         | AI agents, in parallel where possible (see above). AI evaluation of screens runs in M2.8.                                                     |
-| Who decides        | Nobody in this project: it is fully specified and merges into `main` at the end (M2.11). For components made after it, the M1.3 flow applies. |
-| Development area   | Material for developing WebKit lives in `.claude/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship.              |
-| Surfaces           | Every export is `product`, `marketing` or `docs`; nothing on the marketing or docs surface may disappear unrecorded.                          |
+| Topic              | Decision                                                                                                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Naming             | shadcn/Radix vocabulary (`pagination`, `tabs`, `card`, `alert`, `radio-group`…), the names models know best.                                                           |
+| Breaking changes   | One direct major (v6) with a migration guide and a codemod; no aliases.                                                                                                |
+| Screens (blocks)   | One canonical block per screen; states are props or example data, not numbered copies.                                                                                 |
+| Repeated fragments | Promoted to exported components (page header, section header, setting row, save bar, confirm dialog).                                                                  |
+| Form fields        | One `Field` wrapper around any control replaces the `field-*` family.                                                                                                  |
+| Pattern guidelines | Cloudscape depth: purpose, when / when not, building blocks, do / don't, copy, accessibility.                                                                          |
+| Collections        | `useCollection` for client and server data, filters in the URL, saved preferences.                                                                                     |
+| Charts             | Our own chart family (started: `Chart`, `BarList`, `DonutChart`, `SparkChart`, `StatTile`, `Tracker`).                                                                 |
+| Languages          | Built-in messages in en and pt-BR, right-to-left supported.                                                                                                            |
+| Missing components | Completed in M2.10 from three sources, in order: the design sample (its design wins), then the Console Kit, then Cloudscape's list. Generative-AI components are M2.5. |
+| Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                                                                                    |
+| CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                                                      |
+| Who builds         | AI agents, in parallel where possible (see above). AI evaluation of screens runs in M2.8.                                                                              |
+| Who decides        | Nobody in this project: it is fully specified and merges into `main` at the end (M2.11). For components made after it, the M1.3 flow applies.                          |
+| Development area   | Material for developing WebKit lives in `.claude/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship.                                       |
+| Surfaces           | Every export is `product`, `marketing` or `docs`; nothing on the marketing or docs surface may disappear unrecorded.                                                   |
 
 ## Done since the merge review
 
@@ -198,17 +198,9 @@ them against the SFC.
 states, filters in the URL, saved preferences) plus the components that depend on its API:
 property filter, collection preferences, cards collection. Table and the `table-view` block move to it.
 
-## M1.10 — Missing components, in Cloudscape order
+## M1.10 — Full test pass
 
-Still missing after the merge, among others: property filter and collection preferences (M1.9),
-app layout with tools / help / split panel / notifications regions, attribute editor and tag editor
-as components (today blocks), button group, file token group, tutorial panel and hotspot, board
-(configurable dashboard as a component), error boundary, and the remaining chart types (area,
-line, mixed, scatter) on top of the started family. Each one goes through M1.3.
-
-## M1.11 — Full test pass
-
-The only full run of the slow suites, after M1.1–M1.10 are integrated: the browser suite (5,400+
+The only full run of the slow suites, after M1.1–M1.9 are integrated: the browser suite (5,400+
 tests), the copyable-SFC test (every block and example mounts), visual tests, axe, RTL and locale
 snapshots, the five viewports, runtime budgets, and the browser matrix (last 2 Chrome, Edge,
 Firefox, Safari, iOS Safari, Android Chrome) with the public-API report. Every failure is fixed here.
@@ -282,23 +274,34 @@ Move the site to the new major with the smallest change possible: no re-implemen
 - Check: the site builds, its pages render the same in light, dark and mobile (visual diff against
   the current production), and `marketing:check` is green.
 
-## M2.10 — Design sample and Console Kit audit, accessibility end to end
+## M2.10 — Complete the component catalog: design sample, Console Kit, Cloudscape; accessibility end to end
 
-Not started. Two sources feed it, with a fixed precedence:
+One goal: every component and screen the products need lives in WebKit. Three sources, in this
+order, and the order decides every conflict:
 
-1. **The design sample first.** `apps/webkit-sample` on the `design/sample` branch of this
-   repository (`console/components`, `console/pages`, `shared/ui`, `site/…`) holds the screens and
-   pieces the design team refined most recently: application, auth, billing, creation, deployment,
-   environment, firewall, form, function, home, list, marketplace, observability, onboarding, SQL
-   database, workload and more. When the sample and the console both have a version of something,
-   **the sample's design wins**.
-2. **Then the Console Kit.** `aziontech/azion-console-kit` (and `aziontech/azion-new-console`) for
-   whatever the sample does not have — known candidates: the new Events interface, Rules Engine,
+1. **The design sample first — its design always wins.** `apps/webkit-sample` on the
+   `design/sample` branch of this repository (`console/components`, `console/pages`, `shared/ui`,
+   `site/…`) holds what the design team refined most recently: application, auth, billing,
+   creation, deployment, environment, firewall, form, function, home, list, marketplace,
+   observability, onboarding, SQL database, workload and more.
+   - **Prefer the sample over the console.** When the sample and the Console Kit both have a version
+     of something, take the sample's design, never the console's.
+   - **Bring in what the sample already has.** Anything the sample has and WebKit lacks becomes a
+     WebKit component or block taken from the sample (for example the SQL database pieces), not
+     redesigned from scratch.
+2. **Then the Console Kit — only for what the sample does not have.** `aziontech/azion-console-kit`
+   (and `aziontech/azion-new-console`); known candidates: the new Events interface, Rules Engine,
    AI Chat.
+3. **Then Cloudscape's list — only for what neither has.** Still missing after the merge, among
+   others: property filter and collection preferences (M1.9), app layout with tools / help / split
+   panel / notifications regions, attribute editor and tag editor as components (today blocks),
+   button group, file token group, tutorial panel and hotspot, board (configurable dashboard as a
+   component), error boundary, and the remaining chart types (area, line, mixed, scatter) on top of
+   the started family.
 
-For each item found: what it is, where it is used, the WebKit equivalent if any, and whether it
-becomes a component, a block or stays product code. What is needed becomes WebKit components and
-blocks through M1.3 (for example the SQL database pieces).
+For each item: what it is, where it is used, which source it comes from, the WebKit equivalent if
+any, and whether it becomes a component, a block or stays product code. Every new piece goes
+through the M1.3 flow, one agent per component.
 
 Once everything the sample holds lives in WebKit, the sample app's own structure can be removed —
 with compatibility guaranteed first: every page the sample renders (console, hub, docs, site
@@ -306,11 +309,11 @@ preview) renders the same from WebKit components and blocks (visual diff), nothi
 or docs surface leaves without a `marketing-inventory.json` record, and every doc that links into
 `apps/webkit-sample` (for example `.claude/docs/CONTAINERS.md`) points at the new home.
 
-**Accessibility, end to end.** Part of this audit: every accessibility item (WCAG 2.1 AA, keyboard
-maps, focus management in overlays, live-region announcements, reduced motion, forced colors,
-contrast in both themes) is implemented and proven by tests that run on every PR, not once. Start
-from the open PR that already fixes axe findings (#1169) and extend it until axe, keyboard and
-screen-reader checks cover every component, block and example.
+**Accessibility, end to end.** Every accessibility item (WCAG 2.1 AA, keyboard maps, focus
+management in overlays, live-region announcements, reduced motion, forced colors, contrast in both
+themes) is implemented and proven by tests that run on every PR, not once. Start from the open PR
+that already fixes axe findings (#1169) and extend it until axe, keyboard and screen-reader checks
+cover every component, block and example.
 
 ## M2.11 — Close the branch and merge into `main`
 
@@ -326,6 +329,9 @@ screen-reader checks cover every component, block and example.
 
 Visual baselines (0.3) are taken on the new model (Playwright over `examples/` and `blocks/`, M2.6),
 not on Storybook. Re-check every row against the code before running this item.
+
+Before the merge the full suites run again (as in M1.10), so everything Milestone 2 added — the
+M2.10 components above all — is covered.
 
 Exit: merged into `main` and released.
 
