@@ -22,7 +22,7 @@
     <template #actions="{ close }">
       <Button
         label="Keep editing"
-        kind="text"
+        kind="transparent"
         size="medium"
         @click="close"
       />

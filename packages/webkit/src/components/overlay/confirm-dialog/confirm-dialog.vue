@@ -126,7 +126,7 @@
               <Button
                 :data-testid="`${testId}__cancel`"
                 :label="cancelLabel"
-                kind="text"
+                kind="transparent"
                 size="medium"
                 @click="cancel"
               />
