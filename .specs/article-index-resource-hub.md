@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 6d4e57eb9b0b6db8ec46bd7d923c21efd5b9bf8ccd94c8e886052a29212821af
+checksum: d8378e44784cb405cc9e7c81d91140fff1236434ec70cbc7bb90d48a2f1a3c91
 ---
 # ArticleIndexResourceHub — Component Spec
 
@@ -37,7 +37,7 @@ Every resource of a hub as one ruled list, with a headline and one searchable dr
 
 ```vue
 <script setup>
-import ArticleIndexResourceHub from '@aziontech/webkit/sections/article-index-resource-hub'
+import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
 </script>
 
 <template>

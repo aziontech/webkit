@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import CompareSupportTiers from '@aziontech/webkit/sections/compare-support-tiers'
+import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/compare-support-tiers'
 
-const IMPORT = "import CompareSupportTiers from '@aziontech/webkit/sections/compare-support-tiers'"
+const IMPORT = "import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('CompareSupportTiers', section.props)

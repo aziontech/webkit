@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import StatsBand from '@aziontech/webkit/sections/stats-band'
+import StatsBand from '@aziontech/webkit/stats-band'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { PARTNERS_SECTION, REACH_SECTION } from './_sections/stats-band'
 
-const IMPORT = "import StatsBand from '@aziontech/webkit/sections/stats-band'"
+const IMPORT = "import StatsBand from '@aziontech/webkit/stats-band'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('StatsBand', section.props)

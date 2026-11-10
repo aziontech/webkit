@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: deadafff2a959fca53c4f630fafe3f8218ba914d4d0110605ba7bc5ced7d500f
+checksum: 9bc97f3f15893cf535aad5f44c996a20d413bd910c5211bc9ce54c30df948881
 ---
 
 # ComparisonTable — Component Spec
@@ -39,7 +39,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 ```vue
 <script setup>
-import ComparisonTable from '@aziontech/webkit/sections/comparison-table'
+import ComparisonTable from '@aziontech/webkit/comparison-table'
 </script>
 
 <template>

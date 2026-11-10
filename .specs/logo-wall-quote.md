@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 8c379282536bd5cd939ab94d152cf8a4e862d3596288869bb76617a9f56e3b05
+checksum: 933ea8ac37ff0c24ca12e5c6106f187cea243c803f87fd43fda353fc1bbb0a34
 ---
 # LogoWallQuote — Component Spec
 
@@ -36,7 +36,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 ```vue
 <script setup>
-import LogoWallQuote from '@aziontech/webkit/sections/logo-wall-quote'
+import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
 </script>
 
 <template>

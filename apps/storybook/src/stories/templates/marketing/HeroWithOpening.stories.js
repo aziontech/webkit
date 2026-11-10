@@ -1,11 +1,11 @@
-import HeroWithOpening from '@aziontech/webkit/sections/hero-with-opening'
+import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
 
 import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SIX_SECTION, THREE_SECTION } from './_sections/hero-with-opening'
 
-const IMPORT = "import HeroWithOpening from '@aziontech/webkit/sections/hero-with-opening'"
+const IMPORT = "import HeroWithOpening from '@aziontech/webkit/hero-with-opening'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('HeroWithOpening', section.props)

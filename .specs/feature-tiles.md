@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: dbaa0b02e288ddb94ae76da3d549433c92e022263b1d63295d7fb90da812bb86
+checksum: bd9aea4dd51c485abea0ff6b1e4b1027c1c239654402f7a8c3df305e5d748632
 ---
 # FeatureTiles — Component Spec
 
@@ -38,7 +38,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 ```vue
 <script setup>
-import FeatureTiles from '@aziontech/webkit/sections/feature-tiles'
+import FeatureTiles from '@aziontech/webkit/feature-tiles'
 </script>
 
 <template>

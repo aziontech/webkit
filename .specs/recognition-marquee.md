@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 90aa4fdcbada0263fa4ae09ada0844adf3127a15c70be7d44fe77757f054586a
+checksum: 716e6f39f0143afd33352362bdb58dcec110b9cf96415f168123449329cda20f
 ---
 # RecognitionMarquee — Component Spec
 
@@ -37,7 +37,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 
 ```vue
 <script setup>
-import RecognitionMarquee from '@aziontech/webkit/sections/recognition-marquee'
+import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 </script>
 
 <template>

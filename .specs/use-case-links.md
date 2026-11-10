@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: d47f1913941be2b3604e3ea4ea0a3354bdd9744223b46e6288276264779ef81e
+checksum: 2b81999848fb99815221f893d3d9497e3b64bd15f6acf49d2a3943afc64c0778
 ---
 # UseCaseLinks — Component Spec
 
@@ -39,7 +39,7 @@ The use-case directory band of a solution page: a left-aligned section title ove
 
 ```vue
 <script setup>
-import UseCaseLinks from '@aziontech/webkit/sections/use-case-links'
+import UseCaseLinks from '@aziontech/webkit/use-case-links'
 </script>
 
 <template>

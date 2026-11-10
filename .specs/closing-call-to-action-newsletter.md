@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: b02eec4cb0f4835e638923ccf26786d8c7aade90671686cec80760c3f53ce5db
+checksum: a8a81b4f9472e45f745839e37af45f9d15b8c7f4cec3a2ada3730b683bd49515
 ---
 # ClosingCallToActionNewsletter — Component Spec
 
@@ -38,7 +38,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ```vue
 <script setup>
-import ClosingCallToActionNewsletter from '@aziontech/webkit/sections/closing-call-to-action-newsletter'
+import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
 import { ref } from 'vue'
 
 const loading = ref(false)

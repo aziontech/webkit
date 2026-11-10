@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: ad54ed344d1fda41475af1670e9bb42c8a9b5b4ef6110cf22452922ec6ddacd9
+checksum: 4f5354c9f34ed8cd08d7d3aa8e1349a9b86b5f403976154c5ec8b754ffd3b8f4
 ---
 
 # CompareSupportTiers — Component Spec
@@ -38,7 +38,7 @@ The tier-by-tier comparison on the Support page: one column per support tier wit
 
 ```vue
 <script setup>
-import CompareSupportTiers from '@aziontech/webkit/sections/compare-support-tiers'
+import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
 </script>
 
 <template>

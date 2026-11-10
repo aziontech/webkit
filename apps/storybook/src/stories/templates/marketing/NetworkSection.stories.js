@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import NetworkSection from '@aziontech/webkit/sections/network-section'
+import NetworkSection from '@aziontech/webkit/network-section'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -9,7 +9,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { BENEFITS_SECTION, OUTCOMES_SECTION } from './_sections/network-section'
 
-const IMPORT = "import NetworkSection from '@aziontech/webkit/sections/network-section'"
+const IMPORT = "import NetworkSection from '@aziontech/webkit/network-section'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('NetworkSection', section.props)

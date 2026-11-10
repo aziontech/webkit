@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ListingBrowser from '@aziontech/webkit/sections/listing-browser'
+import ListingBrowser from '@aziontech/webkit/listing-browser'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/listing-browser'
 
-const IMPORT = "import ListingBrowser from '@aziontech/webkit/sections/listing-browser'"
+const IMPORT = "import ListingBrowser from '@aziontech/webkit/listing-browser'"
 
 const { body, script } = sectionMarkup('ListingBrowser', SITE_SECTION.props)
 

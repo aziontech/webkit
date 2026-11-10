@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ContactHub from '@aziontech/webkit/sections/contact-hub'
+import ContactHub from '@aziontech/webkit/contact-hub'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/contact-hub'
 
-const IMPORT = "import ContactHub from '@aziontech/webkit/sections/contact-hub'"
+const IMPORT = "import ContactHub from '@aziontech/webkit/contact-hub'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('ContactHub', section.props)

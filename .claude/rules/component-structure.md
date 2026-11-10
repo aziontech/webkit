@@ -18,7 +18,7 @@ A component named `<name>` in category `<category>` lives at `packages/webkit/sr
 ```
 
 - **One component per `.vue` file**, named in kebab; the file name is the canonical name (see [`naming.md`](./naming.md)).
-- **Category lives in the folder, never in the public import** (`@aziontech/webkit/<name>`, flat — see [`imports.md`](./imports.md)). The single exception is `sections/`, whose public path keeps the prefix (`@aziontech/webkit/sections/<name>`) because the name is the site's section `_id`.
+- **Category lives in the folder, never in the public import** (`@aziontech/webkit/<name>`, flat — see [`imports.md`](./imports.md)).
 - **Co-locate** what only this component uses (its composables, its `injection-key.ts`, its sub-components). Promote to [`src/composables/`](../../packages/webkit/src/composables/) only when a second component needs it.
 - **No per-component `package.json`** — exports are declared once in the root `packages/webkit/package.json#exports` (see [`compound-api.md`](./compound-api.md)).
 

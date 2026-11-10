@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import MediaSplitStack from '@aziontech/webkit/sections/media-split-stack'
+import MediaSplitStack from '@aziontech/webkit/media-split-stack'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -9,7 +9,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { ALTERNATING_SECTION, SOLUTIONS_SECTION } from './_sections/media-split-stack'
 
-const IMPORT = "import MediaSplitStack from '@aziontech/webkit/sections/media-split-stack'"
+const IMPORT = "import MediaSplitStack from '@aziontech/webkit/media-split-stack'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('MediaSplitStack', section.props)

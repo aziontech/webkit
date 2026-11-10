@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import FeatureTiles from '@aziontech/webkit/sections/feature-tiles'
+import FeatureTiles from '@aziontech/webkit/feature-tiles'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -9,7 +9,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { ARTWORK_SECTION, ILLUSTRATED_SECTION } from './_sections/feature-tiles'
 
-const IMPORT = "import FeatureTiles from '@aziontech/webkit/sections/feature-tiles'"
+const IMPORT = "import FeatureTiles from '@aziontech/webkit/feature-tiles'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('FeatureTiles', section.props)

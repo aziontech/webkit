@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 09e97d701b53f62fb20dd5700ac19c925a35d989e8c74f66d5a317b60e9a80cd
+checksum: 1df17475ca8849653891b16b4debef1af1d82df15cdb7536ccd94ce1eecc821b
 ---
 # StickyScrollCode — Component Spec
 
@@ -37,7 +37,7 @@ The developer-capabilities band of a product page: a large section title over a 
 
 ```vue
 <script setup>
-import StickyScrollCode from '@aziontech/webkit/sections/sticky-scroll-code'
+import StickyScrollCode from '@aziontech/webkit/sticky-scroll-code'
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "5.10.0",
+  "webkitVersion": "5.11.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -20034,11 +20034,11 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg"
     },
-    "sections/architecture-tabs": {
-      "import": "@aziontech/webkit/sections/architecture-tabs",
+    "architecture-tabs": {
+      "import": "@aziontech/webkit/architecture-tabs",
       "target": "./src/components/sections/architecture-tabs/architecture-tabs.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/architecture-tabs",
+      "treeShakeableImport": "@aziontech/webkit/architecture-tabs",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20116,11 +20116,11 @@
         }
       ]
     },
-    "sections/article-body": {
-      "import": "@aziontech/webkit/sections/article-body",
+    "article-body": {
+      "import": "@aziontech/webkit/article-body",
       "target": "./src/components/sections/article-body/article-body.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/article-body",
+      "treeShakeableImport": "@aziontech/webkit/article-body",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20205,11 +20205,11 @@
         }
       ]
     },
-    "sections/article-cards": {
-      "import": "@aziontech/webkit/sections/article-cards",
+    "article-cards": {
+      "import": "@aziontech/webkit/article-cards",
       "target": "./src/components/sections/article-cards/article-cards.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/article-cards",
+      "treeShakeableImport": "@aziontech/webkit/article-cards",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20279,11 +20279,11 @@
         }
       ]
     },
-    "sections/article-highlight": {
-      "import": "@aziontech/webkit/sections/article-highlight",
+    "article-highlight": {
+      "import": "@aziontech/webkit/article-highlight",
       "target": "./src/components/sections/article-highlight/article-highlight.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/article-highlight",
+      "treeShakeableImport": "@aziontech/webkit/article-highlight",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20340,11 +20340,11 @@
         }
       ]
     },
-    "sections/article-index-blog": {
-      "import": "@aziontech/webkit/sections/article-index-blog",
+    "article-index-blog": {
+      "import": "@aziontech/webkit/article-index-blog",
       "target": "./src/components/sections/article-index-blog/article-index-blog.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/article-index-blog",
+      "treeShakeableImport": "@aziontech/webkit/article-index-blog",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20436,11 +20436,11 @@
         }
       ]
     },
-    "sections/article-index-resource-hub": {
-      "import": "@aziontech/webkit/sections/article-index-resource-hub",
+    "article-index-resource-hub": {
+      "import": "@aziontech/webkit/article-index-resource-hub",
       "target": "./src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/article-index-resource-hub",
+      "treeShakeableImport": "@aziontech/webkit/article-index-resource-hub",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20518,11 +20518,11 @@
         }
       ]
     },
-    "sections/cli-terminal": {
-      "import": "@aziontech/webkit/sections/cli-terminal",
+    "cli-terminal": {
+      "import": "@aziontech/webkit/cli-terminal",
       "target": "./src/components/sections/cli-terminal/cli-terminal.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/cli-terminal",
+      "treeShakeableImport": "@aziontech/webkit/cli-terminal",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20593,11 +20593,11 @@
         }
       ]
     },
-    "sections/client-mosaic": {
-      "import": "@aziontech/webkit/sections/client-mosaic",
+    "client-mosaic": {
+      "import": "@aziontech/webkit/client-mosaic",
       "target": "./src/components/sections/client-mosaic/client-mosaic.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic",
+      "treeShakeableImport": "@aziontech/webkit/client-mosaic",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20654,11 +20654,11 @@
         }
       ]
     },
-    "sections/client-mosaic-columns": {
-      "import": "@aziontech/webkit/sections/client-mosaic-columns",
+    "client-mosaic-columns": {
+      "import": "@aziontech/webkit/client-mosaic-columns",
       "target": "./src/components/sections/client-mosaic-columns/client-mosaic-columns.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic-columns",
+      "treeShakeableImport": "@aziontech/webkit/client-mosaic-columns",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20707,11 +20707,11 @@
         }
       ]
     },
-    "sections/client-quotes": {
-      "import": "@aziontech/webkit/sections/client-quotes",
+    "client-quotes": {
+      "import": "@aziontech/webkit/client-quotes",
       "target": "./src/components/sections/client-quotes/client-quotes.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/client-quotes",
+      "treeShakeableImport": "@aziontech/webkit/client-quotes",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20760,11 +20760,11 @@
         }
       ]
     },
-    "sections/closing-call-to-action": {
-      "import": "@aziontech/webkit/sections/closing-call-to-action",
+    "closing-call-to-action": {
+      "import": "@aziontech/webkit/closing-call-to-action",
       "target": "./src/components/sections/closing-call-to-action/closing-call-to-action.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action",
+      "treeShakeableImport": "@aziontech/webkit/closing-call-to-action",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20855,11 +20855,11 @@
         }
       ]
     },
-    "sections/closing-call-to-action-agents": {
-      "import": "@aziontech/webkit/sections/closing-call-to-action-agents",
+    "closing-call-to-action-agents": {
+      "import": "@aziontech/webkit/closing-call-to-action-agents",
       "target": "./src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-agents",
+      "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-agents",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -20944,11 +20944,11 @@
         }
       ]
     },
-    "sections/closing-call-to-action-newsletter": {
-      "import": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
+    "closing-call-to-action-newsletter": {
+      "import": "@aziontech/webkit/closing-call-to-action-newsletter",
       "target": "./src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
+      "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-newsletter",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21051,11 +21051,11 @@
         }
       ]
     },
-    "sections/code-split": {
-      "import": "@aziontech/webkit/sections/code-split",
+    "code-split": {
+      "import": "@aziontech/webkit/code-split",
       "target": "./src/components/sections/code-split/code-split.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/code-split",
+      "treeShakeableImport": "@aziontech/webkit/code-split",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21127,11 +21127,11 @@
         }
       ]
     },
-    "sections/compare-plans": {
-      "import": "@aziontech/webkit/sections/compare-plans",
+    "compare-plans": {
+      "import": "@aziontech/webkit/compare-plans",
       "target": "./src/components/sections/compare-plans/compare-plans.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/compare-plans",
+      "treeShakeableImport": "@aziontech/webkit/compare-plans",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21217,11 +21217,11 @@
         "Give every row's `values` one entry per plan, in plan order."
       ]
     },
-    "sections/compare-support-tiers": {
-      "import": "@aziontech/webkit/sections/compare-support-tiers",
+    "compare-support-tiers": {
+      "import": "@aziontech/webkit/compare-support-tiers",
       "target": "./src/components/sections/compare-support-tiers/compare-support-tiers.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/compare-support-tiers",
+      "treeShakeableImport": "@aziontech/webkit/compare-support-tiers",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21306,11 +21306,11 @@
         }
       ]
     },
-    "sections/comparison-table": {
-      "import": "@aziontech/webkit/sections/comparison-table",
+    "comparison-table": {
+      "import": "@aziontech/webkit/comparison-table",
       "target": "./src/components/sections/comparison-table/comparison-table.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/comparison-table",
+      "treeShakeableImport": "@aziontech/webkit/comparison-table",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21403,11 +21403,11 @@
         }
       ]
     },
-    "sections/compliance-badges": {
-      "import": "@aziontech/webkit/sections/compliance-badges",
+    "compliance-badges": {
+      "import": "@aziontech/webkit/compliance-badges",
       "target": "./src/components/sections/compliance-badges/compliance-badges.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/compliance-badges",
+      "treeShakeableImport": "@aziontech/webkit/compliance-badges",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21476,11 +21476,11 @@
         }
       ]
     },
-    "sections/contact-hub": {
-      "import": "@aziontech/webkit/sections/contact-hub",
+    "contact-hub": {
+      "import": "@aziontech/webkit/contact-hub",
       "target": "./src/components/sections/contact-hub/contact-hub.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/contact-hub",
+      "treeShakeableImport": "@aziontech/webkit/contact-hub",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21524,11 +21524,11 @@
         }
       ]
     },
-    "sections/faq-section": {
-      "import": "@aziontech/webkit/sections/faq-section",
+    "faq-section": {
+      "import": "@aziontech/webkit/faq-section",
       "target": "./src/components/sections/faq-section/faq-section.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/faq-section",
+      "treeShakeableImport": "@aziontech/webkit/faq-section",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21580,11 +21580,11 @@
         }
       ]
     },
-    "sections/feature-scroll": {
-      "import": "@aziontech/webkit/sections/feature-scroll",
+    "feature-scroll": {
+      "import": "@aziontech/webkit/feature-scroll",
       "target": "./src/components/sections/feature-scroll/feature-scroll.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/feature-scroll",
+      "treeShakeableImport": "@aziontech/webkit/feature-scroll",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21642,11 +21642,11 @@
         }
       ]
     },
-    "sections/feature-tabs": {
-      "import": "@aziontech/webkit/sections/feature-tabs",
+    "feature-tabs": {
+      "import": "@aziontech/webkit/feature-tabs",
       "target": "./src/components/sections/feature-tabs/feature-tabs.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/feature-tabs",
+      "treeShakeableImport": "@aziontech/webkit/feature-tabs",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21710,11 +21710,11 @@
         }
       ]
     },
-    "sections/feature-tiles": {
-      "import": "@aziontech/webkit/sections/feature-tiles",
+    "feature-tiles": {
+      "import": "@aziontech/webkit/feature-tiles",
       "target": "./src/components/sections/feature-tiles/feature-tiles.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/feature-tiles",
+      "treeShakeableImport": "@aziontech/webkit/feature-tiles",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21791,11 +21791,11 @@
         }
       ]
     },
-    "sections/feature-widgets": {
-      "import": "@aziontech/webkit/sections/feature-widgets",
+    "feature-widgets": {
+      "import": "@aziontech/webkit/feature-widgets",
       "target": "./src/components/sections/feature-widgets/feature-widgets.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/feature-widgets",
+      "treeShakeableImport": "@aziontech/webkit/feature-widgets",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -21881,11 +21881,11 @@
         }
       ]
     },
-    "sections/hero-band": {
-      "import": "@aziontech/webkit/sections/hero-band",
+    "hero-band": {
+      "import": "@aziontech/webkit/hero-band",
       "target": "./src/components/sections/hero-band/hero-band.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/hero-band",
+      "treeShakeableImport": "@aziontech/webkit/hero-band",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22012,11 +22012,11 @@
         }
       ]
     },
-    "sections/hero-copy-on-top-art": {
-      "import": "@aziontech/webkit/sections/hero-copy-on-top-art",
+    "hero-copy-on-top-art": {
+      "import": "@aziontech/webkit/hero-copy-on-top-art",
       "target": "./src/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/hero-copy-on-top-art",
+      "treeShakeableImport": "@aziontech/webkit/hero-copy-on-top-art",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22094,11 +22094,11 @@
         }
       ]
     },
-    "sections/hero-form": {
-      "import": "@aziontech/webkit/sections/hero-form",
+    "hero-form": {
+      "import": "@aziontech/webkit/hero-form",
       "target": "./src/components/sections/hero-form/hero-form.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/hero-form",
+      "treeShakeableImport": "@aziontech/webkit/hero-form",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22243,11 +22243,11 @@
         }
       ]
     },
-    "sections/hero-with-opening": {
-      "import": "@aziontech/webkit/sections/hero-with-opening",
+    "hero-with-opening": {
+      "import": "@aziontech/webkit/hero-with-opening",
       "target": "./src/components/sections/hero-with-opening/hero-with-opening.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/hero-with-opening",
+      "treeShakeableImport": "@aziontech/webkit/hero-with-opening",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22319,11 +22319,11 @@
         }
       ]
     },
-    "sections/investor-marks": {
-      "import": "@aziontech/webkit/sections/investor-marks",
+    "investor-marks": {
+      "import": "@aziontech/webkit/investor-marks",
       "target": "./src/components/sections/investor-marks/investor-marks.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/investor-marks",
+      "treeShakeableImport": "@aziontech/webkit/investor-marks",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22378,11 +22378,11 @@
         }
       ]
     },
-    "sections/listing-browser": {
-      "import": "@aziontech/webkit/sections/listing-browser",
+    "listing-browser": {
+      "import": "@aziontech/webkit/listing-browser",
       "target": "./src/components/sections/listing-browser/listing-browser.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/listing-browser",
+      "treeShakeableImport": "@aziontech/webkit/listing-browser",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22486,11 +22486,11 @@
         }
       ]
     },
-    "sections/listing-table": {
-      "import": "@aziontech/webkit/sections/listing-table",
+    "listing-table": {
+      "import": "@aziontech/webkit/listing-table",
       "target": "./src/components/sections/listing-table/listing-table.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/listing-table",
+      "treeShakeableImport": "@aziontech/webkit/listing-table",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22555,11 +22555,11 @@
         }
       ]
     },
-    "sections/logo-wall-quote": {
-      "import": "@aziontech/webkit/sections/logo-wall-quote",
+    "logo-wall-quote": {
+      "import": "@aziontech/webkit/logo-wall-quote",
       "target": "./src/components/sections/logo-wall-quote/logo-wall-quote.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/logo-wall-quote",
+      "treeShakeableImport": "@aziontech/webkit/logo-wall-quote",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22629,11 +22629,11 @@
         }
       ]
     },
-    "sections/media-split-band": {
-      "import": "@aziontech/webkit/sections/media-split-band",
+    "media-split-band": {
+      "import": "@aziontech/webkit/media-split-band",
       "target": "./src/components/sections/media-split-band/media-split-band.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/media-split-band",
+      "treeShakeableImport": "@aziontech/webkit/media-split-band",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22733,11 +22733,11 @@
         }
       ]
     },
-    "sections/media-split-stack": {
-      "import": "@aziontech/webkit/sections/media-split-stack",
+    "media-split-stack": {
+      "import": "@aziontech/webkit/media-split-stack",
       "target": "./src/components/sections/media-split-stack/media-split-stack.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/media-split-stack",
+      "treeShakeableImport": "@aziontech/webkit/media-split-stack",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22799,11 +22799,11 @@
         }
       ]
     },
-    "sections/network-section": {
-      "import": "@aziontech/webkit/sections/network-section",
+    "network-section": {
+      "import": "@aziontech/webkit/network-section",
       "target": "./src/components/sections/network-section/network-section.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/network-section",
+      "treeShakeableImport": "@aziontech/webkit/network-section",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22887,11 +22887,11 @@
         }
       ]
     },
-    "sections/photo-marquee": {
-      "import": "@aziontech/webkit/sections/photo-marquee",
+    "photo-marquee": {
+      "import": "@aziontech/webkit/photo-marquee",
       "target": "./src/components/sections/photo-marquee/photo-marquee.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/photo-marquee",
+      "treeShakeableImport": "@aziontech/webkit/photo-marquee",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -22960,11 +22960,11 @@
         }
       ]
     },
-    "sections/platform-directory": {
-      "import": "@aziontech/webkit/sections/platform-directory",
+    "platform-directory": {
+      "import": "@aziontech/webkit/platform-directory",
       "target": "./src/components/sections/platform-directory/platform-directory.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/platform-directory",
+      "treeShakeableImport": "@aziontech/webkit/platform-directory",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23017,11 +23017,11 @@
         }
       ]
     },
-    "sections/pricing-plans": {
-      "import": "@aziontech/webkit/sections/pricing-plans",
+    "pricing-plans": {
+      "import": "@aziontech/webkit/pricing-plans",
       "target": "./src/components/sections/pricing-plans/pricing-plans.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/pricing-plans",
+      "treeShakeableImport": "@aziontech/webkit/pricing-plans",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23078,11 +23078,11 @@
         }
       ]
     },
-    "sections/recognition-marquee": {
-      "import": "@aziontech/webkit/sections/recognition-marquee",
+    "recognition-marquee": {
+      "import": "@aziontech/webkit/recognition-marquee",
       "target": "./src/components/sections/recognition-marquee/recognition-marquee.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/recognition-marquee",
+      "treeShakeableImport": "@aziontech/webkit/recognition-marquee",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23146,11 +23146,11 @@
         }
       ]
     },
-    "sections/resource-grid": {
-      "import": "@aziontech/webkit/sections/resource-grid",
+    "resource-grid": {
+      "import": "@aziontech/webkit/resource-grid",
       "target": "./src/components/sections/resource-grid/resource-grid.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/resource-grid",
+      "treeShakeableImport": "@aziontech/webkit/resource-grid",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23219,11 +23219,11 @@
         }
       ]
     },
-    "sections/site-footer": {
-      "import": "@aziontech/webkit/sections/site-footer",
+    "site-footer": {
+      "import": "@aziontech/webkit/site-footer",
       "target": "./src/components/sections/site-footer/site-footer.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/site-footer",
+      "treeShakeableImport": "@aziontech/webkit/site-footer",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23316,11 +23316,11 @@
         }
       ]
     },
-    "sections/site-nav": {
-      "import": "@aziontech/webkit/sections/site-nav",
+    "site-nav": {
+      "import": "@aziontech/webkit/site-nav",
       "target": "./src/components/sections/site-nav/site-nav.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/site-nav",
+      "treeShakeableImport": "@aziontech/webkit/site-nav",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23386,11 +23386,11 @@
         "Give every entry an `href`; an entry without one links to `#`."
       ]
     },
-    "sections/stats-band": {
-      "import": "@aziontech/webkit/sections/stats-band",
+    "stats-band": {
+      "import": "@aziontech/webkit/stats-band",
       "target": "./src/components/sections/stats-band/stats-band.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/stats-band",
+      "treeShakeableImport": "@aziontech/webkit/stats-band",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23426,11 +23426,11 @@
         }
       ]
     },
-    "sections/sticky-scroll-code": {
-      "import": "@aziontech/webkit/sections/sticky-scroll-code",
+    "sticky-scroll-code": {
+      "import": "@aziontech/webkit/sticky-scroll-code",
       "target": "./src/components/sections/sticky-scroll-code/sticky-scroll-code.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/sticky-scroll-code",
+      "treeShakeableImport": "@aziontech/webkit/sticky-scroll-code",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23487,11 +23487,11 @@
         }
       ]
     },
-    "sections/story-library": {
-      "import": "@aziontech/webkit/sections/story-library",
+    "story-library": {
+      "import": "@aziontech/webkit/story-library",
       "target": "./src/components/sections/story-library/story-library.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/story-library",
+      "treeShakeableImport": "@aziontech/webkit/story-library",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23588,11 +23588,11 @@
         }
       ]
     },
-    "sections/subject-library": {
-      "import": "@aziontech/webkit/sections/subject-library",
+    "subject-library": {
+      "import": "@aziontech/webkit/subject-library",
       "target": "./src/components/sections/subject-library/subject-library.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/subject-library",
+      "treeShakeableImport": "@aziontech/webkit/subject-library",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23645,11 +23645,11 @@
         }
       ]
     },
-    "sections/template-gallery": {
-      "import": "@aziontech/webkit/sections/template-gallery",
+    "template-gallery": {
+      "import": "@aziontech/webkit/template-gallery",
       "target": "./src/components/sections/template-gallery/template-gallery.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/template-gallery",
+      "treeShakeableImport": "@aziontech/webkit/template-gallery",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23751,11 +23751,11 @@
         }
       ]
     },
-    "sections/use-case-links": {
-      "import": "@aziontech/webkit/sections/use-case-links",
+    "use-case-links": {
+      "import": "@aziontech/webkit/use-case-links",
       "target": "./src/components/sections/use-case-links/use-case-links.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/use-case-links",
+      "treeShakeableImport": "@aziontech/webkit/use-case-links",
       "category": "sections",
       "structure": "monolithic",
       "props": [
@@ -23814,11 +23814,11 @@
         }
       ]
     },
-    "sections/use-cases": {
-      "import": "@aziontech/webkit/sections/use-cases",
+    "use-cases": {
+      "import": "@aziontech/webkit/use-cases",
       "target": "./src/components/sections/use-cases/use-cases.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/sections/use-cases",
+      "treeShakeableImport": "@aziontech/webkit/use-cases",
       "category": "sections",
       "structure": "monolithic",
       "props": [

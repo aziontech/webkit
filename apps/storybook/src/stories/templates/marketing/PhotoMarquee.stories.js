@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import PhotoMarquee from '@aziontech/webkit/sections/photo-marquee'
+import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/photo-marquee'
 
-const IMPORT = "import PhotoMarquee from '@aziontech/webkit/sections/photo-marquee'"
+const IMPORT = "import PhotoMarquee from '@aziontech/webkit/photo-marquee'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('PhotoMarquee', section.props)

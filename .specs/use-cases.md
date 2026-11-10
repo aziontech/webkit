@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 5233878f8f0cd99ee19b71ee8d4382860d5a9db5953707ac869a923498d8295a
+checksum: 6d7a25aa808839d90d5db877ff836454816eeac4fa6f8084e0bfa2ec61632536
 ---
 
 # UseCases — Component Spec
@@ -42,7 +42,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 
 ```vue
 <script setup>
-import UseCases from '@aziontech/webkit/sections/use-cases'
+import UseCases from '@aziontech/webkit/use-cases'
 </script>
 
 <template>

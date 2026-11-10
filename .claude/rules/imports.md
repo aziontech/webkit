@@ -35,21 +35,17 @@ When adding or migrating a component named `<name>` in category `<category>`:
 
 If the flat name is already taken by another component, that is a **naming** problem: rename the new component, do not fall back to a category-prefixed export. Emit `BLOCKED: export key "./<name>" already in use` and resolve the name before shipping.
 
-## Page sections — the one category with a prefixed public path
+## Marketing — primitives and page sections
 
-The `sections` category is the exception, by design. A page section (`use-cases`, `hero-band`, `site-footer`) is **page vocabulary**, not a building block: its name is the `_id` the marketing site writes in a page's `sections[]` JSON. Keeping the namespace explicit in the import is what lets `_id` and import path be the same string.
+The two marketing categories follow the flat rule like every other category; only their Storybook location is grouped under one `Marketing` node.
 
-| Concern | Page section (`sections`) | Every other category |
-|---|---|---|
-| `package.json#exports` key | `"./sections/<name>"` | `"./<name>"` |
-| Export value | `"./src/components/sections/<name>/<name>.vue"` | `"./src/components/<category>/<name>/<name>.vue"` |
-| Consumer / story / spec import | `@aziontech/webkit/sections/<name>` | `@aziontech/webkit/<name>` |
-| Import binding | PascalCase of the **last** segment (`UseCases`) | PascalCase of the name |
-| Story location + title | `stories/components/sections/<name>/<Pascal>.stories.js`, `Components/Sections/<Pascal>` | `stories/components/<category>/…`, `Components/<Category>/<Pascal>` |
+| Category | Source folder | Export / import | Story location + title |
+|---|---|---|---|
+| `marketing` (building blocks) | `src/components/marketing/<name>/` | `"./<name>"` · `@aziontech/webkit/<name>` | `stories/components/marketing/primitives/<name>/<Pascal>.stories.js`, `Components/Marketing/Primitives/<Pascal>` |
+| `sections` (page sections) | `src/components/sections/<name>/` | `"./<name>"` · `@aziontech/webkit/<name>` | `stories/components/marketing/sections/<name>/<Pascal>.stories.js`, `Components/Marketing/Sections/<Pascal>` |
 
-- The `<name>` is still a single kebab segment and still unique across every category (`.specs/<name>.md` is a flat folder): `sections/use-cases` and a future `content/use-cases` cannot coexist.
-- The prefix is `sections/` and nothing else. No other category gains a prefix by analogy; a second namespaced category needs its own amendment to this rule.
-- Nothing mechanical changes: `validate-references` only requires the key to exist in `#exports`, `validate-story-source` already derives the expected binding from the last segment of the subpath, and the consumer lint rules (`valid-import-path`, `no-deep-internal-import`) resolve the path through `catalog.json`, which lists it like any other export.
+- A page section's `<name>` is the `_id` the marketing site writes in a page's `sections[]` JSON, so the `_id` and the import subpath are the same string (see [`SECTIONS.md`](../docs/SECTIONS.md)).
+- The `<name>` is unique across every category (`.specs/<name>.md` is a flat folder): `sections/use-cases` and a future `content/use-cases` cannot coexist.
 
 ## Migration note
 
@@ -59,4 +55,4 @@ Components authored before this convention (or branched from an older layout) ma
 
 - `validate-references.mjs` already rejects imports of any `@aziontech/webkit/*` path absent from `packages/webkit/package.json#exports` — a category-prefixed import therefore fails once the export key is flat.
 - The [`storybook-write`](../skills/storybook-write/SKILL.md) skill emits flat imports, `Components/<Category>/<PascalName>` titles, and `stories/components/<category>/…` locations by default.
-- Keep the export list and the story tree consistent with this rule; a prefixed export key outside `sections/` (`"./feedback/skeleton"`) is a review-blocking deviation. `"./sections/<name>"` is the documented exception above, and the only one.
+- Keep the export list and the story tree consistent with this rule; a prefixed export key (`"./feedback/skeleton"`, `"./sections/use-cases"`) is a review-blocking deviation.

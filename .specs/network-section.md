@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 06ac13956b334d6b5f3908c4803e41224e4909b4d0810d0bc816545146a2de8c
+checksum: 348c56a4f46e50ce60df6e3e797f6f78aecc05052d7e5fefbe79f25713fb522d
 ---
 # NetworkSection — Component Spec
 
@@ -38,7 +38,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 
 ```vue
 <script setup>
-import NetworkSection from '@aziontech/webkit/sections/network-section'
+import NetworkSection from '@aziontech/webkit/network-section'
 </script>
 
 <template>

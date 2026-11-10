@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: d3e0e43453fffa805341647ff90146efaf79cdf3ccb81646e8e6ba96c96a44a4
+checksum: 742c389a954a6bbb4a6b7614defc6b8f741c6cbfa210b1b0e2090f61ad3c38e4
 ---
 # ClientMosaic — Component Spec
 
@@ -37,7 +37,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 
 ```vue
 <script setup>
-import ClientMosaic from '@aziontech/webkit/sections/client-mosaic'
+import ClientMosaic from '@aziontech/webkit/client-mosaic'
 </script>
 
 <template>

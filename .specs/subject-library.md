@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 8f95a43069ba73a3c4c0ee541e34a8ab5e00ff5cb906e47a3a1b665a540794a4
+checksum: ec14e1a7b5aa88da7646bfbce60403c173cbf83b2922cb6c7eb0c4a0722cefef
 ---
 
 # SubjectLibrary — Component Spec
@@ -41,7 +41,7 @@ A library of learning subjects in a divider grid: each subject is one framed car
 
 ```vue
 <script setup>
-import SubjectLibrary from '@aziontech/webkit/sections/subject-library'
+import SubjectLibrary from '@aziontech/webkit/subject-library'
 </script>
 
 <template>

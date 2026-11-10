@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 608b1b9b879862c527d0a134e08ae24d5269942742e3f8a13955212b70a436b0
+checksum: dfb7de08fcd55e0eadda95f8ac1db4b9f85dae1441e9a6d165c4093d0e5d5851
 ---
 
 # TemplateGallery — Component Spec
@@ -41,7 +41,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 
 ```vue
 <script setup>
-import TemplateGallery from '@aziontech/webkit/sections/template-gallery'
+import TemplateGallery from '@aziontech/webkit/template-gallery'
 </script>
 
 <template>

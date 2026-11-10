@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: ae6634b111e65d67133505362480d4d72dbc53cb6eeb85f366a050eddff9f4a2
+checksum: 9bda24203f42596e7292d4568df71eca35995949c4da0bde9a09996ff721202f
 ---
 
 # PlatformDirectory — Component Spec
@@ -41,7 +41,7 @@ A directory of Azion's products under a section title: one column per product gr
 
 ```vue
 <script setup>
-import PlatformDirectory from '@aziontech/webkit/sections/platform-directory'
+import PlatformDirectory from '@aziontech/webkit/platform-directory'
 </script>
 
 <template>

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 3c712fafb48bef0845d24970abd706aa3c76b318ad367961ab882c10e7f08451
+checksum: a14567a95a07a5dc0085bc6f887e651d6a3bf114c6678f330ab5cd1d318d70b2
 ---
 # FeatureWidgets — Component Spec
 
@@ -38,7 +38,7 @@ The "three ways to start" band of a product page: a centered section title with 
 
 ```vue
 <script setup>
-import FeatureWidgets from '@aziontech/webkit/sections/feature-widgets'
+import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 </script>
 
 <template>

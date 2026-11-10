@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 2f9b22fe0a26ba3b86d7547921a37adfeff79eee9d0cb6741334ab1bbf2c719d
+checksum: 1d0d3c43d8d8526cae45696f9fb195384d7612e205012defc7f06e70957a1b4c
 ---
 
 # ListingBrowser — Component Spec
@@ -43,7 +43,7 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
 
 ```vue
 <script setup>
-import ListingBrowser from '@aziontech/webkit/sections/listing-browser'
+import ListingBrowser from '@aziontech/webkit/listing-browser'
 </script>
 
 <template>

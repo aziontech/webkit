@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 479f5cbab356ced37757c21ee48943e69dc60452a79ea813313abef49bbb0166
+checksum: 3a908e0af4954672ca1e9e8fb4821f46feeefb264d262ffbf012f8c0b0740aba
 ---
 # FeatureTabs — Component Spec
 
@@ -37,7 +37,7 @@ The feature walkthrough band of a product page: a left-aligned section title ove
 
 ```vue
 <script setup>
-import FeatureTabs from '@aziontech/webkit/sections/feature-tabs'
+import FeatureTabs from '@aziontech/webkit/feature-tabs'
 </script>
 
 <template>

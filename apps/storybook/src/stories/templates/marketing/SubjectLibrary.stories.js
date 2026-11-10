@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import SubjectLibrary from '@aziontech/webkit/sections/subject-library'
+import SubjectLibrary from '@aziontech/webkit/subject-library'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/subject-library'
 
-const IMPORT = "import SubjectLibrary from '@aziontech/webkit/sections/subject-library'"
+const IMPORT = "import SubjectLibrary from '@aziontech/webkit/subject-library'"
 
 const { body, script } = sectionMarkup('SubjectLibrary', SITE_SECTION.props)
 

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 33c38dd6277b7821b62a43a8912e6374e8f712bfbdf387ebea8885ba2c28ec74
+checksum: f3890bc247bbdacb3ab299ea997d2564bb4f4390013321d6ae940cfbd001a131
 ---
 # ClientMosaicColumns — Component Spec
 
@@ -36,7 +36,7 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ```vue
 <script setup>
-import ClientMosaicColumns from '@aziontech/webkit/sections/client-mosaic-columns'
+import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 </script>
 
 <template>

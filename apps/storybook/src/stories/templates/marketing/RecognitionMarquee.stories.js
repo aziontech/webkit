@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import RecognitionMarquee from '@aziontech/webkit/sections/recognition-marquee'
+import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -9,7 +9,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/recognition-marquee'
 
-const IMPORT = "import RecognitionMarquee from '@aziontech/webkit/sections/recognition-marquee'"
+const IMPORT = "import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('RecognitionMarquee', section.props)

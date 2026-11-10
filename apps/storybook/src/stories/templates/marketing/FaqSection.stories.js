@@ -1,6 +1,6 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import FaqSection from '@aziontech/webkit/sections/faq-section'
+import FaqSection from '@aziontech/webkit/faq-section'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -8,7 +8,7 @@ import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { PLAIN_SECTION, RICH_ANSWERS_SECTION, WITH_LINK_SECTION } from './_sections/faq-section'
 
-const IMPORT = "import FaqSection from '@aziontech/webkit/sections/faq-section'"
+const IMPORT = "import FaqSection from '@aziontech/webkit/faq-section'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('FaqSection', section.props)

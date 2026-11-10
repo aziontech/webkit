@@ -1,7 +1,7 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ClientMosaic from '@aziontech/webkit/sections/client-mosaic'
-import ClientMosaicColumns from '@aziontech/webkit/sections/client-mosaic-columns'
+import ClientMosaic from '@aziontech/webkit/client-mosaic'
+import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
 import { sectionMarkup } from '../../_shared/section-source'
@@ -11,9 +11,9 @@ import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION as MOSAIC_SECTION } from './_sections/client-mosaic'
 import { SITE_SECTION as COLUMNS_SECTION } from './_sections/client-mosaic-columns'
 
-const MOSAIC_IMPORT = "import ClientMosaic from '@aziontech/webkit/sections/client-mosaic'"
+const MOSAIC_IMPORT = "import ClientMosaic from '@aziontech/webkit/client-mosaic'"
 const COLUMNS_IMPORT =
-  "import ClientMosaicColumns from '@aziontech/webkit/sections/client-mosaic-columns'"
+  "import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'"
 
 const source = (tag, importLine, section) => {
   const { body, script } = sectionMarkup(tag, section.props)

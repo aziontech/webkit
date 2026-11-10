@@ -4,6 +4,13 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.11.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.10.0...@aziontech/webkit@5.11.0) (2026-11-10)
+
+
+### Features
+
+* **webkit:** group marketing stories and publish page sections at flat paths ([#1160](https://github.com/aziontech/webkit/issues/1160)) ([6aae36f](https://github.com/aziontech/webkit/commit/6aae36f9c48ad9dbd251116656873b59a4049473))
+
 ## [5.10.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.9.0...@aziontech/webkit@5.10.0) (2026-11-09)
 
 

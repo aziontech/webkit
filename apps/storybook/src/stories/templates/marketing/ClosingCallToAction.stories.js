@@ -1,8 +1,8 @@
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import ClosingCallToAction from '@aziontech/webkit/sections/closing-call-to-action'
-import ClosingCallToActionAgents from '@aziontech/webkit/sections/closing-call-to-action-agents'
-import ClosingCallToActionNewsletter from '@aziontech/webkit/sections/closing-call-to-action-newsletter'
+import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
+import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
 
 import { COLUMN_IMPORTS, indent } from '../../_shared/markup'
 import { sectionMarkup, SUBMIT_STATE_BINDINGS, submitWiring } from '../../_shared/section-source'
@@ -12,13 +12,13 @@ import { PANEL_SECTION, PRIMARY_SECTION, SPLIT_SECTION } from './_sections/closi
 import { SITE_SECTION as AGENTS_SECTION } from './_sections/closing-call-to-action-agents'
 import { SITE_SECTION as NEWSLETTER_SECTION } from './_sections/closing-call-to-action-newsletter'
 
-const IMPORT = "import ClosingCallToAction from '@aziontech/webkit/sections/closing-call-to-action'"
+const IMPORT = "import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'"
 
 const AGENTS_IMPORT =
-  "import ClosingCallToActionAgents from '@aziontech/webkit/sections/closing-call-to-action-agents'"
+  "import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'"
 
 const NEWSLETTER_IMPORTS = [
-  "import ClosingCallToActionNewsletter from '@aziontech/webkit/sections/closing-call-to-action-newsletter'",
+  "import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'",
   "import { ref } from 'vue'"
 ]
 

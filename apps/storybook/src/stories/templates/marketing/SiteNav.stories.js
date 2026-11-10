@@ -1,11 +1,11 @@
-import SiteNav from '@aziontech/webkit/sections/site-nav'
+import SiteNav from '@aziontech/webkit/site-nav'
 
 import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 import { SITE_SECTION } from './_sections/site-nav'
 
-const IMPORT = "import SiteNav from '@aziontech/webkit/sections/site-nav'"
+const IMPORT = "import SiteNav from '@aziontech/webkit/site-nav'"
 
 const source = (section) => {
   const { body, script } = sectionMarkup('SiteNav', section.props)

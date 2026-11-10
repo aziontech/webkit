@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 5fa152c6a819968fd3399e16f0de0c5a84612fd7d49ec8b86874d2fe2233ee50
+checksum: 72d09f3a979c3fb39ce305e1d2df2b47c1355236572873161559929598d819c9
 ---
 # ComplianceBadges — Component Spec
 
@@ -35,7 +35,7 @@ The compliance band: a framed media split whose copy states the certifications a
 
 ```vue
 <script setup>
-import ComplianceBadges from '@aziontech/webkit/sections/compliance-badges'
+import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 </script>
 
 <template>
