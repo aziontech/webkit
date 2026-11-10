@@ -47,7 +47,7 @@
   >
     <template #iconLeft>
       <i
-        class="pi pi-search text-button-md"
+        class="pi pi-search"
         aria-hidden="true"
       />
     </template>
