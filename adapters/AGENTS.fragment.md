@@ -21,6 +21,9 @@ scratch. Ask the `webkit` MCP: `search_patterns` with the screen in plain words,
 Copy that SFC and change only the content (copy, data, handlers); keep the components, their order,
 the props and the classes. Use `suggest_component` / `get_component` only for pieces the pattern does
 not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
+Every export carries a `surface`: `product` (console and apps), `marketing` (the azion.com site) or
+`docs` (the documentation site). A console screen uses `product` only (`list_components` takes
+`surface`).
 
 ### Invariants — always follow
 

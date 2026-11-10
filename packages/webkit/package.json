@@ -36,6 +36,7 @@
     "test:gate": "node scripts/check-tests.mjs",
     "spec-status": "node scripts/check-spec-status.mjs",
     "patterns:check": "node scripts/check-patterns.mjs",
+    "marketing:check": "node scripts/check-marketing-inventory.mjs",
     "cited-names": "node scripts/check-cited-names.mjs",
     "smoke:consume": "node scripts/smoke-consume.mjs",
     "test": "vitest run",

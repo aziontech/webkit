@@ -57,6 +57,17 @@ test('listComponents can filter by category', () => {
   assert.ok(res.components.some((c) => c.name === 'button'))
 })
 
+test('every component carries a surface, and listComponents filters by it', () => {
+  const all = listComponents(catalog)
+  assert.ok(all.components.every((c) => ['product', 'marketing', 'docs'].includes(c.surface)))
+  const product = listComponents(catalog, { surface: 'product' })
+  assert.ok(product.components.some((c) => c.name === 'button'))
+  assert.ok(product.components.every((c) => c.surface === 'product'))
+  const marketing = listComponents(catalog, { surface: 'marketing' })
+  assert.ok(marketing.components.some((c) => c.name === 'architecture-tabs'))
+  assert.equal(getComponent(catalog, 'doc-callout').surface, 'docs')
+})
+
 test('listCategories returns a sorted, non-empty list', () => {
   const res = listCategories(catalog)
   assert.equal(res.ok, true)

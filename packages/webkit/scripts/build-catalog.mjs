@@ -8,6 +8,7 @@ import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { buildComponentExamples, buildPatterns, withStoryServer } from './lib/patterns.mjs'
+import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -334,6 +335,8 @@ async function build() {
       entry.category = categoryFromTarget(target)
     }
 
+    const surface = surfaceFromTarget(target)
+    if (surface) entry.surface = surface
     imports[subpath] = entry
   }
 
@@ -352,6 +355,7 @@ async function build() {
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
+    surfaces: SURFACES,
     imports,
     patterns
   }

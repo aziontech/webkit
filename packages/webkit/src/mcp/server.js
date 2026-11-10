@@ -80,15 +80,21 @@ async function main() {
       title: 'List webkit components',
       description:
         'List every renderable @aziontech/webkit component (compact cards: name, category, ' +
-        'structure, import, tree-shakeable import, PascalCase binding). Optionally filter by category.',
+        'surface, structure, import, tree-shakeable import, PascalCase binding). Optionally filter ' +
+        'by category or by surface: "product" (console and apps), "marketing" (the azion.com site: ' +
+        'sections, bands, brand assets) or "docs" (the documentation site).',
       inputSchema: {
         category: z
           .string()
           .optional()
-          .describe('Restrict to one category (e.g. "actions", "data", "inputs", "feedback").')
+          .describe('Restrict to one category (e.g. "actions", "data", "inputs", "feedback").'),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ category }) => json(listComponents(catalog, { category }))
+    async ({ category, surface }) => json(listComponents(catalog, { category, surface }))
   )
 
   tool(

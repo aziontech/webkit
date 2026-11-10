@@ -29,6 +29,7 @@ function componentCard(catalog, name) {
   return {
     name,
     category: e.category ?? null,
+    surface: e.surface ?? null,
     structure: e.structure ?? null,
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
@@ -36,12 +37,14 @@ function componentCard(catalog, name) {
   }
 }
 
-export function listComponents(catalog, { category } = {}) {
+export function listComponents(catalog, { category, surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const wanted = category ? String(category).toLowerCase() : null
+  const wantedSurface = surface ? String(surface).toLowerCase() : null
   const components = catalog.subpaths
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
     .filter((sub) => !wanted || (catalog.getEntry(sub)?.category || '').toLowerCase() === wanted)
+    .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => componentCard(catalog, sub))
     .sort((a, b) => a.name.localeCompare(b.name))
   return {
@@ -50,6 +53,7 @@ export function listComponents(catalog, { category } = {}) {
     version: catalog.version,
     count: components.length,
     ...(wanted ? { category: wanted } : {}),
+    ...(wantedSurface ? { surface: wantedSurface } : {}),
     components
   }
 }
@@ -133,6 +137,7 @@ export function getComponent(catalog, name) {
     binding: pascalCase(key),
     kind: e.kind,
     category: e.category ?? null,
+    surface: e.surface ?? null,
     structure: e.structure ?? null,
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
@@ -762,13 +767,25 @@ function sectionSuggestion(catalog, need) {
   return ranked
 }
 
+// Outside a marketing intent, product components rank before marketing and docs ones: a console
+// screen never reaches for a site band because its words matched better.
+function preferProductSurface(catalog, component) {
+  if (!component?.best) return component
+  const all = [component.best, ...(component.alternatives || [])]
+  const isProduct = (c) => (catalog.getEntry(c.name)?.surface ?? 'product') === 'product'
+  const ordered = [...all.filter(isProduct), ...all.filter((c) => !isProduct(c))]
+  return { ...component, best: ordered[0], alternatives: ordered.slice(1) }
+}
+
 export function suggestComponent(catalog, need) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
   const nq = normalize(q)
-  const component = componentSuggestion(catalog, q)
-
   const isMarketing = MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w)))
+  const component = isMarketing
+    ? componentSuggestion(catalog, q)
+    : preferProductSurface(catalog, componentSuggestion(catalog, q))
+
   if (isMarketing) {
     const sections = sectionSuggestion(catalog, q)
     if (sections.length) {
