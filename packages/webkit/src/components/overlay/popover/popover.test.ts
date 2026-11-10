@@ -5,6 +5,7 @@ import { defineComponent, nextTick } from 'vue'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/popover/Popover.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
+import Button from '../../actions/button/button.vue'
 import Popover, {
   PopoverClose,
   PopoverContent,
@@ -121,17 +122,78 @@ describe('Popover (compound / overlay)', () => {
     expect(panel()).toBeNull()
   })
 
-  it('wires the trigger as a passthrough span with aria-haspopup/expanded/controls', () => {
-    const { getByTestId } = render(host())
+  it('puts aria-haspopup/expanded/controls on the focusable control, not the wrapper span', async () => {
+    const { getByTestId, getByRole } = render(host())
 
     const trigger = getByTestId('overlay-popover__trigger')
+    const control = getByRole('button', { name: 'Show filters' })
+    await waitFor(() => expect(control.getAttribute('aria-haspopup')).toBe('dialog'))
+    expect(control.getAttribute('aria-expanded')).toBe('false')
+    expect(control.getAttribute('aria-controls')).toBeTruthy()
+
     expect(trigger.tagName).toBe('SPAN')
+    expect(trigger.hasAttribute('role')).toBe(false)
+    expect(trigger.hasAttribute('tabindex')).toBe(false)
+    expect(trigger.hasAttribute('aria-haspopup')).toBe(false)
+    expect(trigger.hasAttribute('aria-expanded')).toBe(false)
+    expect(trigger.hasAttribute('aria-controls')).toBe(false)
+    expect(trigger.getAttribute('data-state')).toBe('closed')
+    expect(trigger.textContent).toContain('Show filters')
+  })
+
+  it('aria-controls on the control points at the open panel id', async () => {
+    const { getByRole } = render(host())
+    const control = getByRole('button', { name: 'Show filters' })
+
+    await fireEvent.click(control)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    expect(control.getAttribute('aria-controls')).toBe((panel() as HTMLElement).id)
+  })
+
+  it('makes the wrapper itself the popup button when the slot has no focusable control', async () => {
+    const TextTrigger = defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent },
+      template: `
+        <Popover>
+          <PopoverTrigger>More details</PopoverTrigger>
+          <PopoverContent><p>Details</p></PopoverContent>
+        </Popover>
+      `
+    })
+    const { getByRole } = render(TextTrigger)
+
+    const trigger = await waitFor(() => getByRole('button', { name: 'More details' }))
+    expect(trigger.tagName).toBe('SPAN')
+    expect(trigger.getAttribute('tabindex')).toBe('0')
     expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
-    expect(trigger.getAttribute('aria-controls')).toBeTruthy()
-    expect(trigger.getAttribute('data-state')).toBe('closed')
-    // The scoped slot receives isOpen — closed label while closed.
-    expect(trigger.textContent).toContain('Show filters')
+
+    trigger.focus()
+    await fireEvent.keyDown(trigger, { key: 'Enter' })
+    await waitFor(() => expect(panel()).not.toBeNull())
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('announces the popup on a webkit Button used as the trigger', async () => {
+    const ButtonTrigger = defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent, Button },
+      template: `
+        <Popover>
+          <PopoverTrigger><Button kind="secondary" label="Filter" /></PopoverTrigger>
+          <PopoverContent><p>Filters</p></PopoverContent>
+        </Popover>
+      `
+    })
+    const { getByRole, container } = render(ButtonTrigger)
+
+    const control = getByRole('button', { name: 'Filter' })
+    await waitFor(() => expect(control.getAttribute('aria-haspopup')).toBe('dialog'))
+    expect(control.getAttribute('aria-expanded')).toBe('false')
+    await expectNoA11yViolations(container)
+
+    await fireEvent.click(control)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    expect(control.getAttribute('aria-expanded')).toBe('true')
   })
 
   // ---- Open via the trigger ---------------------------------------------------
@@ -157,13 +219,13 @@ describe('Popover (compound / overlay)', () => {
     // Root + trigger reflect the injected open state; scoped slot flips.
     expect(getByTestId('overlay-popover').getAttribute('data-state')).toBe('open')
     const trigger = getByTestId('overlay-popover__trigger')
-    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(getByRole('button', { name: 'Hide filters' }).getAttribute('aria-expanded')).toBe('true')
     expect(trigger.getAttribute('data-state')).toBe('open')
     expect(trigger.textContent).toContain('Hide filters')
   })
 
   it('a second trigger click closes the panel again', async () => {
-    const { getByTestId } = render(host())
+    const { getByTestId, getByRole } = render(host())
     const trigger = getByTestId('overlay-popover__trigger')
 
     await fireEvent.click(trigger)
@@ -171,7 +233,9 @@ describe('Popover (compound / overlay)', () => {
 
     await fireEvent.click(trigger)
     await waitFor(() => expect(panel()).toBeNull())
-    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(getByRole('button', { name: 'Show filters' }).getAttribute('aria-expanded')).toBe(
+      'false'
+    )
   })
 
   it('opens on Enter and Space keydown landing directly on the trigger wrapper', async () => {
@@ -373,7 +437,7 @@ describe('Popover (compound / overlay)', () => {
 
   // ---- Disabled suppression -----------------------------------------------------
   it('does NOT open when disabled, and mirrors data-disabled on root + trigger', async () => {
-    const { getByTestId } = render(host({ disabled: true }))
+    const { getByTestId, getByRole } = render(host({ disabled: true }))
 
     const root = getByTestId('overlay-popover')
     const trigger = getByTestId('overlay-popover__trigger')
@@ -383,7 +447,9 @@ describe('Popover (compound / overlay)', () => {
     await fireEvent.click(trigger)
     await Promise.resolve()
     expect(panel()).toBeNull()
-    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(getByRole('button', { name: 'Show filters' }).getAttribute('aria-expanded')).toBe(
+      'false'
+    )
   })
 
   // ---- Width + placement presets ------------------------------------------------
@@ -606,8 +672,9 @@ describe('Popover (compound / overlay)', () => {
     const { getByRole, getByTestId } = render(Default({ open: true }))
 
     await waitFor(() => expect(panel()).not.toBeNull())
-    expect(getByRole('button', { name: 'Open popover' })).toBeTruthy()
-    expect(getByTestId('overlay-popover__trigger').getAttribute('aria-expanded')).toBe('true')
+    const control = getByRole('button', { name: 'Open popover' })
+    expect(getByTestId('overlay-popover__trigger').contains(control)).toBe(true)
+    await waitFor(() => expect(control.getAttribute('aria-expanded')).toBe('true'))
 
     expect((byTestId('overlay-popover__title') as HTMLElement).textContent).toContain(
       'Popover title'
