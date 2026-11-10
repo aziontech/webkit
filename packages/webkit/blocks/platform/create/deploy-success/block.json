@@ -1,0 +1,35 @@
+{
+  "id": "platform/create/deploy-success",
+  "name": "DeploySuccess",
+  "title": "Templates/Platform/Create/DeploySuccess",
+  "surface": "product",
+  "summary": "The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `Tag`, `Button`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "deploy success",
+    "deployment successful",
+    "deployed",
+    "success page",
+    "deployment complete",
+    "next steps after deploy",
+    "wizard finish",
+    "deploy concluído",
+    "sucesso do deploy",
+    "aplicação publicada"
+  ],
+  "skills": ["webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "deploy-success.vue"
+  },
+  "variants": [
+    {
+      "name": "CliCreated",
+      "summary": "A resource made from the CLI that nothing serves yet: no deployment card, the resource as the only row, next steps that deploy it here (Recommended) or on a new service, and Get started with the CLI and GitHub Actions paths.",
+      "file": "variants/cli-created.vue"
+    }
+  ]
+}

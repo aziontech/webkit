@@ -160,6 +160,20 @@ that listened to its click had no effect before and can be removed.
 The card-brand plate in the account blocks is monochrome (theme tokens instead of a fixed hex). If
 you copied those blocks, copy them again or keep your version.
 
+### Block ids
+
+Product blocks are grouped by task: `platform/auth`, `platform/account/*`, `platform/create/*`,
+`platform/view/*`, `platform/detail/*`, `platform/edit/*`, `platform/delete/*`,
+`platform/settings/*`, `platform/states/*` and `platform/dashboard/*`. Blocks that did the same job
+are one block whose states are variants: the drawer forms are `platform/create/create-in-drawer`,
+the save strategies are `platform/settings/settings-form`, the two details pages are
+`platform/detail/details-page`, the labelled delete dialog is a variant of
+`platform/delete/delete-with-confirmation`, the server rejection is a variant of
+`platform/states/form-validation` and the sectioned Import from Git form is a variant of
+`platform/create/single-page-create`. Every old id, and every renamed state, is in
+[`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_pattern` still
+answers an old id with the new block and a `note`. Code you already copied does not change.
+
 ## 5. Unchanged
 
 Theme tokens, icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style

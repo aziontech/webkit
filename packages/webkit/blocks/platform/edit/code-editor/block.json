@@ -1,0 +1,54 @@
+{
+  "id": "platform/edit/code-editor",
+  "name": "CodeEditor",
+  "title": "Templates/Platform/Edit/CodeEditor",
+  "surface": "product",
+  "summary": "The code editor page placed in the platform shell: the Services breadcrumb, then the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a flush `Textarea` filling its pane, the place a product would embed a code editor. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "code editor",
+    "code editor page",
+    "function code editor",
+    "editor page",
+    "code and arguments editor",
+    "split editor",
+    "monaco editor",
+    "editor de código",
+    "página do editor",
+    "editar código",
+    "function editor",
+    "edge function",
+    "function detail",
+    "function arguments",
+    "json schema arguments",
+    "function settings",
+    "editor de função",
+    "argumentos da função",
+    "detalhe da função"
+  ],
+  "skills": ["webkit-layout", "webkit-navigation", "webkit-form"],
+  "primary": {
+    "name": "Code",
+    "file": "code-editor.vue"
+  },
+  "variants": [
+    {
+      "name": "Arguments",
+      "summary": "The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum.",
+      "file": "variants/arguments.vue"
+    },
+    {
+      "name": "NoArguments",
+      "summary": "The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.",
+      "file": "variants/no-arguments.vue"
+    },
+    {
+      "name": "Settings",
+      "summary": "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.",
+      "file": "variants/settings.vue"
+    }
+  ]
+}

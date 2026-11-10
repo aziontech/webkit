@@ -327,6 +327,55 @@ test('getPattern returns the SFC, components, skills and steps; variants by name
   assert.equal(getPattern(catalog, 'nope-nope').found, false)
 })
 
+test('getPattern resolves a v6 block id through catalog.patternAliases with a note', () => {
+  const moved = getPattern(catalog, 'platform/lists/table-view')
+  assert.equal(moved.found, true)
+  assert.equal(moved.id, 'platform/view/table-view')
+  assert.equal(moved.movedFrom, 'platform/lists/table-view')
+  assert.match(moved.note, /platform\/view\/table-view/)
+  assert.equal(
+    getPattern(catalog, 'platform/lists/table-view', { variant: 'Empty' }).variant,
+    'Empty'
+  )
+
+  const merged = getPattern(catalog, 'platform/forms/save-per-group')
+  assert.equal(merged.id, 'platform/settings/settings-form')
+  assert.equal(merged.variant, 'SavePerGroup')
+  assert.equal(
+    getPattern(catalog, 'platform/forms/save-per-group', { variant: 'SavingOneGroup' }).variant,
+    'SavingOneGroup'
+  )
+  assert.equal(
+    getPattern(catalog, 'platform/forms/sectioned-form', { variant: 'Submitted' }).variant,
+    'ImportFromGitSubmitted'
+  )
+  assert.equal(getPattern(catalog, 'platform/forms/save-all-groups').variant, 'SaveAll')
+  assert.equal(getPattern(catalog, 'details-page-with-tabs').id, 'platform/detail/details-page')
+  assert.equal(getPattern(catalog, 'platform/auth').note, undefined)
+
+  for (const [from, to] of Object.entries(catalog.patternAliases)) {
+    const [id, variant] = to.split('#')
+    const [oldId, oldVariant] = from.split('#')
+    const p = getPattern(catalog, oldId, oldVariant ? { variant: oldVariant } : {})
+    assert.equal(p.id, id, from)
+    if (variant) assert.equal(p.variant, variant, from)
+  }
+})
+
+test('searchPatterns lands each task on its v6 category block', () => {
+  for (const [q, id] of [
+    ['delete confirmation', 'platform/delete/delete-with-confirmation'],
+    ['create in drawer', 'platform/create/create-in-drawer'],
+    ['list page', 'platform/view/table-view'],
+    ['details page', 'platform/detail/details-page'],
+    ['resource settings', 'platform/edit/edit-resource'],
+    ['save per card', 'platform/settings/settings-form'],
+    ['account settings', 'platform/account/profile']
+  ]) {
+    assert.equal(searchPatterns(catalog, q).matches[0].id, id, q)
+  }
+})
+
 test('suggestComponent returns the pattern first for a screen and the section for a marketing band', () => {
   const screen = suggestComponent(catalog, 'login page')
   assert.equal(screen.recommendation, 'pattern')

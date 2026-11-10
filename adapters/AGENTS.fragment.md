@@ -19,7 +19,10 @@ them is optional:
 A whole screen — login, signup, settings, a list, a create flow, a detail page — is never built from
 scratch. Ask the `webkit` MCP: `search_patterns` with the screen in plain words, then `get_pattern`.
 Copy that SFC and change only the content (copy, data, handlers); keep the components, their order,
-the props and the classes. Use `suggest_component` / `get_component` only for pieces the pattern does
+the props and the classes. Pattern ids are grouped by task (`platform/create/…`, `platform/view/…`,
+`platform/detail/…`, `platform/edit/…`, `platform/delete/…`, `platform/settings/…`,
+`platform/states/…`, `platform/dashboard/…`, `platform/account/…`, `platform/auth`); each is one job
+whose states are its variants (pass `variant` to `get_pattern`). Use `suggest_component` / `get_component` only for pieces the pattern does
 not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
 Every export carries a `surface`: `product` (console and apps), `marketing` (the azion.com site) or
 `docs` (the documentation site). A console screen uses `product` only (`list_components` takes

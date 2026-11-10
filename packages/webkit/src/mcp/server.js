@@ -229,13 +229,16 @@ async function main() {
       description:
         'The whole pattern: a runnable SFC (script setup + template) with the webkit imports, the ' +
         'components it uses, the skills to follow, its steps and the other variants (states) of ' +
-        'the same screen. Copy the SFC and change only the content.',
+        'the same screen. Copy the SFC and change only the content. A pre-v6 id (e.g. ' +
+        '"platform/lists/table-view") resolves to its new block and carries a `note`.',
       inputSchema: {
-        id: z.string().describe('Pattern id from search_patterns, e.g. "platform/auth/sign-in".'),
+        id: z
+          .string()
+          .describe('Pattern id from search_patterns, e.g. "platform/view/table-view".'),
         variant: z
           .string()
           .optional()
-          .describe('A variant name from the pattern, e.g. "InvalidCredentials".')
+          .describe('A variant name from the pattern, e.g. "IncorrectCredentials".')
       }
     },
     async ({ id, variant }) => json(getPattern(catalog, id, { variant }))
