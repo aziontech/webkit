@@ -5,31 +5,43 @@ guidelines, runnable demos — and [shadcn/ui](https://ui.shadcn.com) (Vercel) f
 real source files in a registry, a CLI that copies screens, examples as files. WebKit already leads
 both on AI tooling (catalog, MCP, skills, rules, lint, `doctor`); the gaps are content and structure.
 
-Updated 2026-11-10, after the team merged the existing components and templates into
-`feat/webkit-ai-ready` (`f9562602`). Stages 1 to 14 run in order, each closing with its exit
-criteria; stage 0 (close the branch: CI green, baselines, overlapping PRs) runs **last**, because
-the Storybook-based checks it would fix are rebuilt on the new model along the way.
+Updated 2026-11-10. The work is split in two milestones, each numbered in order. **Milestone 1**
+makes WebKit itself complete (one source of truth, v6 hygiene, languages, devices, performance,
+guidelines, collections, missing components) and ends with one full test pass. **Milestone 2**
+adds the distribution and the rest (patterns from the design sample, CLI, docs, demos, evaluation,
+site migration, audits) and ends by merging into `main`. The project is fully specified: no
+approval step sits between items.
+
+## How the work runs
+
+- **Tests.** During the items only the fast checks run (lint, type-check, compiling every copyable
+  SFC, catalog, toolkit tests: one to two minutes). The browser suite, visual, accessibility, RTL and
+  mobile checks run once, in M1.11, and are fixed there.
+- **Parallel agents.** M1.1 and M1.2 run first and alone, because they touch every file. Then
+  M1.4–M1.7 (one agent per area), M1.8, M1.9 and M1.10 (split by component) run in parallel
+  branches, and are integrated before M1.11. In Milestone 2, M2.1, M2.2–M2.4 and M2.5 run in
+  parallel; M2.6 waits for M2.4.
 
 ## Decisions already taken
 
-| Topic              | Decision                                                                                                                         |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| Naming             | shadcn/Radix vocabulary (`pagination`, `tabs`, `card`, `alert`, `radio-group`…), the names models know best.                     |
-| Breaking changes   | One direct major (v6) with a migration guide and a codemod; no aliases.                                                          |
-| Screens (blocks)   | One canonical block per screen; states are props or example data, not numbered copies.                                           |
-| Repeated fragments | Promoted to exported components (page header, section header, setting row, save bar, confirm dialog).                            |
-| Form fields        | One `Field` wrapper around any control replaces the `field-*` family.                                                            |
-| Pattern guidelines | Cloudscape depth: purpose, when / when not, building blocks, do / don't, copy, accessibility.                                    |
-| Collections        | `useCollection` for client and server data, filters in the URL, saved preferences.                                               |
-| Charts             | Our own chart family (started: `Chart`, `BarList`, `DonutChart`, `SparkChart`, `StatTile`, `Tracker`).                           |
-| Languages          | Built-in messages in en and pt-BR, right-to-left supported.                                                                      |
-| Missing components | Ordered by Cloudscape's list. Generative-AI components are a stage of their own.                                                 |
-| Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                                              |
-| CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                |
-| Who builds         | AI agents, end to end, through the flow in stage 3. AI evaluation of screens runs at the end (stage 12).                         |
-| Who decides        | The head of design opens every request and approves every merge; agents do everything in between.                                |
-| Development area   | Material for developing WebKit lives in `.claude/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship. |
-| Surfaces           | Every export is `product`, `marketing` or `docs`; nothing on the marketing or docs surface may disappear unrecorded.             |
+| Topic              | Decision                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Naming             | shadcn/Radix vocabulary (`pagination`, `tabs`, `card`, `alert`, `radio-group`…), the names models know best.                                  |
+| Breaking changes   | One direct major (v6) with a migration guide and a codemod; no aliases.                                                                       |
+| Screens (blocks)   | One canonical block per screen; states are props or example data, not numbered copies.                                                        |
+| Repeated fragments | Promoted to exported components (page header, section header, setting row, save bar, confirm dialog).                                         |
+| Form fields        | One `Field` wrapper around any control replaces the `field-*` family.                                                                         |
+| Pattern guidelines | Cloudscape depth: purpose, when / when not, building blocks, do / don't, copy, accessibility.                                                 |
+| Collections        | `useCollection` for client and server data, filters in the URL, saved preferences.                                                            |
+| Charts             | Our own chart family (started: `Chart`, `BarList`, `DonutChart`, `SparkChart`, `StatTile`, `Tracker`).                                        |
+| Languages          | Built-in messages in en and pt-BR, right-to-left supported.                                                                                   |
+| Missing components | Ordered by Cloudscape's list. Generative-AI components are an item of their own (M2.5).                                                       |
+| Storybook          | Replaced by our own docs site that renders the real files and publishes `llms.txt`.                                                           |
+| CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                             |
+| Who builds         | AI agents, in parallel where possible (see above). AI evaluation of screens runs in M2.8.                                                     |
+| Who decides        | Nobody in this project: it is fully specified and merges into `main` at the end (M2.11). For components made after it, the M1.3 flow applies. |
+| Development area   | Material for developing WebKit lives in `.claude/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship.              |
+| Surfaces           | Every export is `product`, `marketing` or `docs`; nothing on the marketing or docs surface may disappear unrecorded.                          |
 
 ## Done since the merge review
 
@@ -48,36 +60,21 @@ baseline down from 39 patterns to 3.
 
 What the merge did not change, and where it is handled:
 
-| Finding                                                                                                                                                                                                                                                               | Stage |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| Patterns still live in Storybook: 119 template stories, 120 files build the SFC as text with `toSfc`, 0 real `.vue` blocks. `build-catalog.mjs` also boots the story server (`withStoryServer`) to extract component examples. Removing Storybook breaks both.        | 1     |
-| Fragments are still patterns: `page/page-header`, `page/section-header`, `page/page-tabs`, `page/settings-section`, `forms/setting-row`, `overlays/confirm-dialog`.                                                                                                   | 2     |
-| Overlaps: `confirm-dialog` × `delete-with-confirmation`; `form-in-drawer` × `create-in-drawer` × `nested-drawer` × `deploy-drawer` × `deployment-settings-drawer`; `save-per-card` × `save-per-group` × `save-all-groups`; `details-page` × `details-page-with-tabs`. | 2     |
-| Misplaced categories: `shell/` holds pages (`details-page-with-tabs`, `single-page-create`, `multipage-create`, `split-view`, `home-dashboard`) while `creation/` and `detail/` exist.                                                                                | 2     |
-| Two new `field-*` components (`field-time`, `field-file-upload`) extend the family the single `Field` replaces.                                                                                                                                                       | 2     |
-| Built-in English strings (e.g. `paginator` `aria-label="Previous page"`), no locale layer.                                                                                                                                                                            | 4     |
-| 162 physical direction utilities (`ml-`, `pr-`, `left-`, `text-right`…) against 79 logical ones; no `dir` handling.                                                                                                                                                   | 4     |
-| Components adapt to the viewport (`sm:`/`md:`/`lg:` ~440 uses) but only 4 files use container queries, so a component inside a drawer or split view lays out for the window, not its box.                                                                             | 4     |
-| `catalog.json` is now 7.5 MB (was 4.3 MB); the ESLint plugin and the MCP parse it whole.                                                                                                                                                                              | 5     |
+| Finding                                                                                                                                                                                                                                                               | Item |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| Patterns still live in Storybook: 119 template stories, 120 files build the SFC as text with `toSfc`, 0 real `.vue` blocks. `build-catalog.mjs` also boots the story server (`withStoryServer`) to extract component examples. Removing Storybook breaks both.        | M1.1 |
+| Fragments are still patterns: `page/page-header`, `page/section-header`, `page/page-tabs`, `page/settings-section`, `forms/setting-row`, `overlays/confirm-dialog`.                                                                                                   | M1.2 |
+| Overlaps: `confirm-dialog` × `delete-with-confirmation`; `form-in-drawer` × `create-in-drawer` × `nested-drawer` × `deploy-drawer` × `deployment-settings-drawer`; `save-per-card` × `save-per-group` × `save-all-groups`; `details-page` × `details-page-with-tabs`. | M1.2 |
+| Misplaced categories: `shell/` holds pages (`details-page-with-tabs`, `single-page-create`, `multipage-create`, `split-view`, `home-dashboard`) while `creation/` and `detail/` exist.                                                                                | M1.2 |
+| Two new `field-*` components (`field-time`, `field-file-upload`) extend the family the single `Field` replaces.                                                                                                                                                       | M1.2 |
+| Built-in English strings (e.g. `paginator` `aria-label="Previous page"`), no locale layer.                                                                                                                                                                            | M1.4 |
+| 162 physical direction utilities (`ml-`, `pr-`, `left-`, `text-right`…) against 79 logical ones; no `dir` handling.                                                                                                                                                   | M1.5 |
+| Components adapt to the viewport (`sm:`/`md:`/`lg:` ~440 uses) but only 4 files use container queries, so a component inside a drawer or split view lays out for the window, not its box.                                                                             | M1.6 |
+| `catalog.json` is now 7.5 MB (was 4.3 MB); the ESLint plugin and the MCP parse it whole.                                                                                                                                                                              | M1.7 |
 
-## Stage 0 — Close the branch (runs last, after stage 14)
+# Milestone 1 — WebKit complete
 
-| #   | Item                         | Detail                                                                                                                                                                                                                                                                                                                                                                             |
-| --- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0.0 | CI is red on `f9562602`      | Stylelint: `spark-chart.vue:159` (`custom-property-empty-line-before`). Toolkit: `test/mcp/queries.test.mjs:314` still expects `platform/auth/sign-in`, but the merge folded the three auth patterns into `platform/auth`. Because both fail, the Vitest browser shards and the Storybook visual tests were skipped, so the 15 new components have not run in a browser in CI yet. |
-| 0.1 | Overlap with per-ticket PRs  | #1162 (ENG-50004), #1163 (ENG-50006), #1164 (ENG-50005) and #1165 (ENG-50007) are still open for the same tickets. Close them in favor of this branch, or merge them first and rebase.                                                                                                                                                                                             |
-| 0.2 | Signed commits               | CONTRIBUTING asks for signed commits. Re-sign (`git rebase --exec 'git commit --amend --no-edit -S' origin/main`) or let the squash merge sign it.                                                                                                                                                                                                                                 |
-| 0.3 | Visual baselines             | New story ids and fictional names change the snapshots. Run `pnpm storybook:test:visual:update:baseline`.                                                                                                                                                                                                                                                                          |
-| 0.4 | Address autofill             | WebKit now hides fields without `autocomplete` from password managers. Account Settings address fields should set `postal-code`, `address-line1`, `address-line2`; check with the real 1Password extension.                                                                                                                                                                        |
-| 0.5 | Card-brand hex               | Three account patterns keep 5 `no-hardcoded-color` findings (card-brand plate). Swap for a token or asset, then `patterns:check --update`.                                                                                                                                                                                                                                         |
-| 0.6 | Hook tests failing on `main` | `node .claude/hooks/__tests__/run.mjs`: "legacy button is whitelisted" and "new component without spec blocks". Fix and run them in CI — stage 3 relies on these hooks.                                                                                                                                                                                                            |
-
-Visual baselines (0.3) are taken on the new model (Playwright over `examples/` and `blocks/`, stage
-10), not on Storybook. Re-check every row against the code before running this stage.
-
-Exit: PR merged to `main` and released.
-
-## Stage 1 — Source of truth out of Storybook
+## M1.1 — Source of truth out of Storybook
 
 The shadcn registry model: every screen and every example is a real file in the package, and every
 tool (catalog, MCP, docs, Storybook while it lives) reads those files.
@@ -106,10 +103,12 @@ packages/webkit/
 - Categories by task, as in Cloudscape: `auth`, `account`, `create`, `view`, `detail`, `edit`,
   `delete`, `dashboard`, `settings`, `shell`, `states`.
 
+Also here: the sans-serif becomes **Rubik** everywhere (theme tokens, `@font-face`, Storybook, `apps/fonts`); Sora is removed.
+
 Exit: on a throwaway branch, delete `apps/storybook`; `catalog:build`, the package tests and
 `get_pattern("platform/auth")` still pass and return the same SFC.
 
-## Stage 2 — Hygiene and the v6 major
+## M1.2 — Hygiene and the v6 major
 
 | #   | Item               | Detail                                                                                                                                                                                                                            |
 | --- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -125,9 +124,11 @@ Exit: on a throwaway branch, delete `apps/storybook`; `catalog:build`, the packa
 
 Exit: v6 released; the codemod migrates a copy of the console with zero manual edits.
 
-## Stage 3 — AI-only implementation flow
+## M1.3 — AI-only implementation flow
 
-Everything after this stage is built by agents. The flow makes a correct component the only path
+This project itself runs without approvals; this flow is how components are made **after** it.
+
+Everything built after this project goes through it. The flow makes a correct component the only path
 through CI. The **head of design** is the only human in it: they open the request and approve the
 merge.
 
@@ -153,85 +154,137 @@ merge.
    the merge and release-please do the rest. A rejection goes back to step 2 or 4 with their
    comments, never to a human fix.
 
-Also in this stage: the spec template gains `Internationalization`, `Right-to-left`, `Responsive`
+Also in this item: the spec template gains `Internationalization`, `Right-to-left`, `Responsive`
 and `Performance` sections; a block flow (`/webkit-new-block`) mirrors the component one; changes to
 existing components go through the same gates plus a changeset that feeds the codemod.
 
 Exit: one new component and one new block delivered by the flow with no human edits, opened and
 approved by the head of design.
 
-## Stage 4 — Cross-cutting quality
+## M1.4 — Languages
 
-Done before new components so nothing is retrofitted twice.
+`WebkitProvider` with `locale`; message catalogs for every built-in string (en, pt-BR; es next for LatAm); `Intl` for dates, numbers, currency, relative time and plurals; no built-in string outside a catalog (lint).
 
-| #   | Area          | Work                                                                                                                                                                                                                                                                                                                                                                                           |
-| --- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 4.1 | Languages     | `WebkitProvider` with `locale`; message catalogs for every built-in string (en, pt-BR; es next for LatAm); `Intl` for dates, numbers, currency, relative time and plurals; no built-in string outside a catalog (lint).                                                                                                                                                                        |
-| 4.2 | Right-to-left | `dir` on the provider; logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`) enforced by lint; mirrored icons list (arrows, chevrons) vs. non-mirrored (play, logos, code); `<bdi>`/`dir="auto"` around user data (domains, IDs, code) inside RTL text; Arabic-capable font stack and line heights in the theme; RTL visual tests.                                  |
-| 4.3 | Devices       | Breakpoint contract in the theme; container queries for components that live in drawers, split views and cards; mobile behaviors (table → stacked rows or cards, drawer and dialog as full-height sheets, sticky actions); touch targets ≥ 24 px (44 px on coarse pointers); `pointer: coarse` and `hover: none`; ultra-wide max widths; reflow at 320 px and 200% zoom (WCAG 1.4.10, 1.4.12). |
-| 4.4 | Accessibility | axe in every component test, keyboard maps per component, live-region announcements (sorting, filtering, uploads), `prefers-reduced-motion`, forced-colors mode, focus management in overlays.                                                                                                                                                                                                 |
-| 4.5 | Performance   | Keep size-limit per component; add runtime budgets in Playwright (Table 1k / 10k rows with virtualization, Chart with 10k points, Tree with 5k nodes, Select with 1k options) and interaction latency; lazy loading for heavy parts (code editor, charts); SSR and hydration with Nuxt (builds on #1171); catalog split into per-pattern files and lazy loading in the MCP and lint.           |
-| 4.6 | Code quality  | Browser support matrix (last 2 Chrome, Edge, Firefox, Safari, iOS Safari, Android Chrome) tested in CI; public API report diffed per PR; dependency policy (no new runtime dependency without an approved spec); type coverage kept at its current floor.                                                                                                                                      |
+Exit: every built-in string comes from a catalog in en and pt-BR (lint), and dates, numbers and plurals go through `Intl`.
 
-Exit: every component passes the new gates in en, pt-BR and an RTL locale at 360, 768, 1280, 1920
-and 2560 px.
+## M1.5 — Right-to-left
 
-## Stage 5 — Pattern guidelines
+`dir` on the provider; logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`) enforced by lint; mirrored icons list (arrows, chevrons) vs. non-mirrored (play, logos, code); `<bdi>`/`dir="auto"` around user data (domains, IDs, code) inside RTL text; Arabic-capable font stack and line heights in the theme; RTL visual tests.
+
+Exit: no physical direction utility left (lint); every component renders mirrored under `dir="rtl"`.
+
+## M1.6 — Devices
+
+Breakpoint contract in the theme; container queries for components that live in drawers, split views and cards; mobile behaviors (table → stacked rows or cards, drawer and dialog as full-height sheets, sticky actions); touch targets ≥ 24 px (44 px on coarse pointers); `pointer: coarse` and `hover: none`; ultra-wide max widths; reflow at 320 px and 200% zoom (WCAG 1.4.10, 1.4.12).
+
+Exit: components that live in panels use container queries; touch targets and reflow rules hold at 320, 768, 1280, 1920 and 2560 px.
+
+## M1.7 — Performance
+
+Keep size-limit per component; add runtime budgets in Playwright (Table 1k / 10k rows with virtualization, Chart with 10k points, Tree with 5k nodes, Select with 1k options) and interaction latency; lazy loading for heavy parts (code editor, charts); SSR and hydration with Nuxt (builds on #1171); catalog split into per-pattern files and lazy loading in the MCP and lint.
+
+Also: the catalog splits into per-pattern files loaded lazily by the MCP and the lint (it is 7.5 MB).
+
+## M1.8 — Pattern guidelines
 
 `guidelines.md` next to every block, Cloudscape depth: purpose, when to use / not, building blocks
 (A, B, C… matching the SFC), do / don't, copy for each element, accessibility, related blocks.
-`get_pattern` returns it with the SFC. Agents draft from the code; the stage-3 reviewer agent checks
+`get_pattern` returns it with the SFC. Agents draft from the code; the M1.3 reviewer agent checks
 them against the SFC.
 
-## Stage 6 — `useCollection` and collection components
+## M1.9 — `useCollection` and collection components
 
 `useCollection` (client and server modes, filter / sort / paginate / select, empty and no-match
 states, filters in the URL, saved preferences) plus the components that depend on its API:
 property filter, collection preferences, cards collection. Table and the `table-view` block move to it.
 
-## Stage 7 — Missing components, in Cloudscape order
+## M1.10 — Missing components, in Cloudscape order
 
-Still missing after the merge, among others: property filter and collection preferences (stage 6),
+Still missing after the merge, among others: property filter and collection preferences (M1.9),
 app layout with tools / help / split panel / notifications regions, attribute editor and tag editor
 as components (today blocks), button group, file token group, tutorial panel and hotspot, board
 (configurable dashboard as a component), error boundary, and the remaining chart types (area,
-line, mixed, scatter) on top of the started family. Each one goes through stage 3.
+line, mixed, scatter) on top of the started family. Each one goes through M1.3.
 
-## Stage 8 — CLI, docs site and `llms.txt`
+## M1.11 — Full test pass
 
-- CLI: `add <block>` (copies the block, resolves imports, suggests the route), `diff <block>`
-  (local copy vs. canonical), `search` / `view` (MCP queries in the terminal), `check` (`doctor` +
-  `report` as one CI gate).
-- Docs site that renders `examples/` and `blocks/` with the code beside, foundations included.
-- `llms.txt` plus one `.md` per component, block and foundation page, and `.json` APIs, generated
-  from the catalog — for agents without the MCP.
+The only full run of the slow suites, after M1.1–M1.10 are integrated: the browser suite (5,400+
+tests), the copyable-SFC test (every block and example mounts), visual tests, axe, RTL and locale
+snapshots, the five viewports, runtime budgets, and the browser matrix (last 2 Chrome, Edge,
+Firefox, Safari, iOS Safari, Android Chrome) with the public-API report. Every failure is fixed here.
 
-## Stage 9 — Generative-AI components
+Exit: all suites green on the integrated branch.
+
+# Milestone 2 — Distribution, migration and audits
+
+## M2.1 — Form errors and async actions as patterns, from the design sample
+
+Two screens of the design sample (`apps/webkit-sample`, branch `design/sample`) become WebKit
+blocks and the documented standard:
+
+- **Form errors** (`/forms/error-validation`): a server rejection scoped to a section shows one
+  danger `Message` above that section, saying what happened and that nothing else was lost, with
+  the recovery action on it (for example _Reload connectors_); the field it concerns turns invalid
+  with its own one-line reason under it. Becomes the form-error block and the rule in the
+  `webkit-errors` and `webkit-form` skills.
+- **Async actions** (`/forms/async-deployment`): a long action (build, deploy, any command that runs
+  on its own) starts, frees the user, and reports back wherever they are, both on success and on
+  failure; the page shows the status tag and the outcome `Message`. The toast that reports it
+  always carries two actions: **Edit** for the item it is about and **Redeploy** (never _View
+  deployments_). Becomes a block, a skill section (`webkit-ui-states`, `webkit-errors`) and the
+  catalog guidance for every build and deploy screen.
+
+## M2.2 — CLI
+
+`add <block>` (copies the block, resolves imports, suggests the route), `diff <block>` (local copy vs. canonical), `search` / `view` (MCP queries in the terminal), `check` (`doctor` + `report` as one CI gate).
+
+## M2.3 — `llms.txt` and Markdown pages
+
+`llms.txt` plus one `.md` per component, block and foundation page, and `.json` APIs, generated from the catalog — for agents without the MCP.
+
+## M2.4 — Docs site
+
+Our own docs site that renders `examples/` and `blocks/` with the code beside, foundations included. Replaces Storybook for people.
+
+## M2.5 — Generative-AI components
 
 Chat, prompt input, streaming response, thinking and loading states, citations, follow-up
 questions, user-authorized actions, artifact previews — with blocks and guidelines, benchmarked on
 Cloudscape's generative-AI section and shadcn's AI Elements.
 
-## Stage 10 — Demos and the end of Storybook
+## M2.6 — Demos and the end of Storybook
 
 `apps/demos`: routed Vue apps with mock data for full flows (list → create → detail → edit →
 delete, settings, onboarding), assembled with `webkit add`. Visual tests move to Playwright over
 `examples/`, `blocks/` and demos. Storybook is removed.
 
-## Stage 11 — Search quality
+Needs M2.4.
+
+## M2.7 — Search quality
 
 Tune pattern and component search (synonyms en / pt-BR, ranking) with a fixed query set and an
 expected-result table run in CI; today "onboarding" and "upgrade plan" rank the wrong block first.
 
-## Stage 12 — Final AI evaluation
+## M2.8 — Final AI evaluation
 
 Fresh sessions with two agents (Claude Code and Codex or Cursor) build a fixed list of console
 screens from intent-only prompts; score component choice, block reuse, lint, `doctor`, a11y,
 RTL and mobile rendering against v5.11.0. Then run it on every release.
 
-## Stage 13 — Console Kit and design sample audit (future: not started)
+## M2.9 — Migrate the marketing site to the new WebKit
 
-Not run yet; it starts only after stages 1 to 12. Two sources feed it, with a fixed precedence:
+Move the site to the new major with the smallest change possible: no re-implementation.
+
+- Run `npx @aziontech/webkit migrate v6` (M1.2 codemod) on the site and apply the
+  `renamed` map of `scripts/marketing-inventory.json`.
+- Every entry under `removed` that the site still uses becomes a row here (what, where it is used,
+  what replaces it) and is built through M1.3 before the site upgrades.
+- Check: the site builds, its pages render the same in light, dark and mobile (visual diff against
+  the current production), and `marketing:check` is green.
+
+## M2.10 — Design sample and Console Kit audit, accessibility end to end
+
+Not started. Two sources feed it, with a fixed precedence:
 
 1. **The design sample first.** `apps/webkit-sample` on the `design/sample` branch of this
    repository (`console/components`, `console/pages`, `shared/ui`, `site/…`) holds the screens and
@@ -245,7 +298,7 @@ Not run yet; it starts only after stages 1 to 12. Two sources feed it, with a fi
 
 For each item found: what it is, where it is used, the WebKit equivalent if any, and whether it
 becomes a component, a block or stays product code. What is needed becomes WebKit components and
-blocks through stage 3 (for example the SQL database pieces).
+blocks through M1.3 (for example the SQL database pieces).
 
 Once everything the sample holds lives in WebKit, the sample app's own structure can be removed —
 with compatibility guaranteed first: every page the sample renders (console, hub, docs, site
@@ -253,16 +306,28 @@ preview) renders the same from WebKit components and blocks (visual diff), nothi
 or docs surface leaves without a `marketing-inventory.json` record, and every doc that links into
 `apps/webkit-sample` (for example `.claude/docs/CONTAINERS.md`) points at the new home.
 
-## Stage 14 — Migrate the marketing site to the new WebKit
+**Accessibility, end to end.** Part of this audit: every accessibility item (WCAG 2.1 AA, keyboard
+maps, focus management in overlays, live-region announcements, reduced motion, forced colors,
+contrast in both themes) is implemented and proven by tests that run on every PR, not once. Start
+from the open PR that already fixes axe findings (#1169) and extend it until axe, keyboard and
+screen-reader checks cover every component, block and example.
 
-Move the site to the new major with the smallest change possible: no re-implementation.
+## M2.11 — Close the branch and merge into `main`
 
-- Run `npx @aziontech/webkit migrate v6` (stage 2 codemod) on the site and apply the
-  `renamed` map of `scripts/marketing-inventory.json`.
-- Every entry under `removed` that the site still uses becomes a row here (what, where it is used,
-  what replaces it) and is built through stage 3 before the site upgrades.
-- Check: the site builds, its pages render the same in light, dark and mobile (visual diff against
-  the current production), and `marketing:check` is green.
+| #   | Item                         | Detail                                                                                                                                                                                                                                                                                                                                                                             |
+| --- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0.0 | CI is red on `f9562602`      | Stylelint: `spark-chart.vue:159` (`custom-property-empty-line-before`). Toolkit: `test/mcp/queries.test.mjs:314` still expects `platform/auth/sign-in`, but the merge folded the three auth patterns into `platform/auth`. Because both fail, the Vitest browser shards and the Storybook visual tests were skipped, so the 15 new components have not run in a browser in CI yet. |
+| 0.1 | Overlap with per-ticket PRs  | #1162 (ENG-50004), #1163 (ENG-50006), #1164 (ENG-50005) and #1165 (ENG-50007) are still open for the same tickets. Close them in favor of this branch, or merge them first and rebase.                                                                                                                                                                                             |
+| 0.2 | Signed commits               | CONTRIBUTING asks for signed commits. Re-sign (`git rebase --exec 'git commit --amend --no-edit -S' origin/main`) or let the squash merge sign it.                                                                                                                                                                                                                                 |
+| 0.3 | Visual baselines             | New story ids and fictional names change the snapshots. Run `pnpm storybook:test:visual:update:baseline`.                                                                                                                                                                                                                                                                          |
+| 0.4 | Address autofill             | WebKit now hides fields without `autocomplete` from password managers. Account Settings address fields should set `postal-code`, `address-line1`, `address-line2`; check with the real 1Password extension.                                                                                                                                                                        |
+| 0.5 | Card-brand hex               | Three account patterns keep 5 `no-hardcoded-color` findings (card-brand plate). Swap for a token or asset, then `patterns:check --update`.                                                                                                                                                                                                                                         |
+| 0.6 | Hook tests failing on `main` | `node .claude/hooks/__tests__/run.mjs`: "legacy button is whitelisted" and "new component without spec blocks". Fix and run them in CI — M1.3 relies on these hooks.                                                                                                                                                                                                               |
+
+Visual baselines (0.3) are taken on the new model (Playwright over `examples/` and `blocks/`, M2.6),
+not on Storybook. Re-check every row against the code before running this item.
+
+Exit: merged into `main` and released.
 
 ## How to keep it current
 
