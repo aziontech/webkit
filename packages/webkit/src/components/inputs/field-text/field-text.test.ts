@@ -147,12 +147,45 @@ describe('FieldText', () => {
     expect(input.readOnly).toBe(true)
   })
 
+  it('renders a text input with no autocomplete or spellcheck when the props are unset', () => {
+    const { getByTestId } = render(FieldText, { props: { label: 'Email' } })
+    const input = getByTestId('input-field-text__input') as HTMLInputElement
+    expect(input.getAttribute('type')).toBe('text')
+    expect(input.hasAttribute('autocomplete')).toBe(false)
+    expect(input.hasAttribute('spellcheck')).toBe(false)
+  })
+
+  it('forwards type and autocomplete to the native input', () => {
+    const { getByTestId } = render(FieldText, {
+      props: { label: 'Email', type: 'email', autocomplete: 'email' }
+    })
+    const input = getByTestId('input-field-text__input') as HTMLInputElement
+    expect(input.getAttribute('type')).toBe('email')
+    expect(input.getAttribute('autocomplete')).toBe('email')
+  })
+
+  it('forwards spellcheck=false to the native input', () => {
+    const { getByTestId } = render(FieldText, { props: { label: 'Slug', spellcheck: false } })
+    const input = getByTestId('input-field-text__input') as HTMLInputElement
+    expect(input.getAttribute('spellcheck')).toBe('false')
+  })
+
+  it('keeps the new props off the root wrapper', () => {
+    const { getByTestId } = render(FieldText, {
+      props: { label: 'Email', type: 'email', autocomplete: 'email', spellcheck: false }
+    })
+    const root = getByTestId('input-field-text')
+    expect(root.hasAttribute('type')).toBe(false)
+    expect(root.hasAttribute('autocomplete')).toBe(false)
+    expect(root.hasAttribute('spellcheck')).toBe(false)
+  })
+
   it('renders the iconLeft and iconRight slot content', () => {
     const { getByTestId } = render(FieldText, {
       props: { label: 'Email' },
       slots: {
         iconLeft: '<i data-testid="left-icon" class="pi pi-globe" />',
-        iconRight: '<i data-testid="right-icon" class="pi pi-times" />'
+        iconRight: '<i data-testid="right-icon" class="pi pi-verified" />'
       }
     })
     expect(getByTestId('left-icon')).toBeTruthy()

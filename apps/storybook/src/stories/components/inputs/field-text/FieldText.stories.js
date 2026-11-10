@@ -48,6 +48,32 @@ const meta = {
       description: 'Placeholder forwarded to the `InputText`.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'number'],
+      description: 'Native input type forwarded to the `InputText`.',
+      table: {
+        category: 'props',
+        type: { summary: "'text' | 'email' | 'number'" },
+        defaultValue: { summary: "'text'" }
+      }
+    },
+    autocomplete: {
+      control: 'text',
+      description:
+        'Native `autocomplete` hint forwarded to the `InputText`. When empty, the attribute is omitted.',
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    spellcheck: {
+      control: 'boolean',
+      description:
+        'Native `spellcheck` forwarded to the `InputText`. When unset, the attribute is omitted and the browser default applies.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean | undefined' },
+        defaultValue: { summary: 'undefined' }
+      }
+    },
     helperText: {
       control: 'text',
       description:
@@ -298,7 +324,7 @@ const ICONS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
   </FieldText>
   <FieldText v-model="trailing" label="With trailing icon" placeholder="example.com">
     <template #iconRight>
-      <i class="pi pi-times" />
+      <i class="pi pi-verified" />
     </template>
   </FieldText>
   <FieldText v-model="both" label="With both icons" placeholder="example.com">
@@ -306,7 +332,7 @@ const ICONS_TEMPLATE = `<div class="flex flex-col gap-6 w-[320px]">
       <i class="pi pi-globe" />
     </template>
     <template #iconRight>
-      <i class="pi pi-times" />
+      <i class="pi pi-verified" />
     </template>
   </FieldText>
 </div>`

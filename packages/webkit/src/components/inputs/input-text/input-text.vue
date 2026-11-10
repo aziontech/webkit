@@ -18,6 +18,10 @@
     type?: InputTextType
     /** Native maxlength — maximum number of characters allowed. */
     maxLength?: number
+    /** Native autocomplete hint (email, username, off, …). When empty, the attribute is omitted. */
+    autocomplete?: string
+    /** Native spellcheck. When unset, the attribute is omitted and the browser default applies. */
+    spellcheck?: boolean
     /** Size token; affects height only. Heights: small=28px, medium=32px, large=40px. */
     size?: InputTextSize
     /** Disables interaction and applies disabled tokens. */
@@ -39,7 +43,9 @@
     required: false,
     invalid: false,
     type: 'text',
-    maxLength: undefined
+    maxLength: undefined,
+    autocomplete: '',
+    spellcheck: undefined
   })
 
   const emit = defineEmits<{
@@ -111,7 +117,7 @@
   >
     <span
       v-if="hasIconLeft"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted) text-label-sm"
       aria-hidden="true"
     >
       <slot name="iconLeft" />
@@ -123,6 +129,8 @@
       :value="modelValue"
       :placeholder="placeholder"
       :maxlength="maxLength"
+      :autocomplete="autocomplete || undefined"
+      :spellcheck="spellcheck"
       :disabled="disabled"
       :readonly="readonly"
       :required="required"
@@ -136,7 +144,7 @@
 
     <span
       v-if="hasIconRight"
-      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted) text-label-sm"
       aria-hidden="true"
     >
       <slot name="iconRight" />
