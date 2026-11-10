@@ -344,12 +344,12 @@ test('no MCP answer carries the spec status', () => {
 })
 
 test('getComponent carries the agent docs and story examples (D2)', () => {
-  const ft = getComponent(catalog, 'field-text')
+  const ft = getComponent(catalog, 'field')
   assert.ok(ft.purpose)
   assert.ok(ft.useWhen.length > 0)
   assert.ok(ft.avoidWhen.length > 0)
   assert.ok(ft.examples.length > 0)
-  assert.match(ft.examples[0].sfc, /@aziontech\/webkit\/field-text/)
+  assert.match(ft.examples[0].sfc, /@aziontech\/webkit\/field'/)
 })
 
 test('every exported component has purpose, when to use and when not to use', async () => {
@@ -362,7 +362,7 @@ test('every exported component has purpose, when to use and when not to use', as
 })
 
 test('getUsageExample prefers the real story example when there is one', () => {
-  const res = getUsageExample(catalog, 'field-text')
+  const res = getUsageExample(catalog, 'field')
   assert.match(res.source, /^story /)
   assert.match(res.sfc, /<template>/)
 })

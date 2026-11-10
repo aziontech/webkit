@@ -1,5 +1,6 @@
 import Button from '@aziontech/webkit/button'
-import FieldText from '@aziontech/webkit/field-text'
+import Field, { FieldLabel } from '@aziontech/webkit/field'
+import Input from '@aziontech/webkit/input'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -270,10 +271,24 @@ export const Disabled = {
   }
 }
 
-const FORM_IMPORTS = [IMPORT, "import FieldText from '@aziontech/webkit/field-text'"]
+const FORM_IMPORTS = [
+  IMPORT,
+  "import Field from '@aziontech/webkit/field'",
+  "import Input from '@aziontech/webkit/input'"
+]
 
 const FORM_SUBMIT_TEMPLATE = `<form class="flex w-80 flex-col gap-4" novalidate @submit.prevent>
-  <FieldText label="Workspace name" input-id="button-form-name" name="name" />
+  <Field>
+    <Field.Label
+      for="button-form-name"
+    >
+      Workspace name
+    </Field.Label>
+    <Input
+      name="name"
+      id="button-form-name"
+    />
+  </Field>
   <div class="flex gap-2">
     <Button type="reset" label="Clear" kind="outlined" size="medium" />
     <Button type="submit" label="Create" kind="primary" size="medium" />
@@ -282,7 +297,10 @@ const FORM_SUBMIT_TEMPLATE = `<form class="flex w-80 flex-col gap-4" novalidate 
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
 export const FormSubmit = {
-  render: () => ({ components: { Button, FieldText }, template: FORM_SUBMIT_TEMPLATE }),
+  render: () => ({
+    components: { Button, Field, 'Field.Label': FieldLabel, Input },
+    template: FORM_SUBMIT_TEMPLATE
+  }),
   parameters: {
     controls: { disable: true },
     docs: {

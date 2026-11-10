@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, toRef, useAttrs, useId } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
+  import { fieldContextKey } from '../field/injection-key'
   import { multiSelectContextKey, type MultiSelectSize } from './injection-key'
 
   defineOptions({
@@ -55,6 +57,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
+  provide(fieldContextKey, null)
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-multi-select'
   )
@@ -63,7 +79,7 @@
   const openState = computed(() => (props.open !== undefined ? props.open : uncontrolledOpen.value))
 
   const setOpen = (value: boolean) => {
-    if (props.disabled || props.readonly) return
+    if (isDisabled.value || props.readonly) return
     if (props.open === undefined) {
       uncontrolledOpen.value = value
     }
@@ -75,7 +91,7 @@
   const isSelected = (value: unknown): boolean => currentArray().indexOf(value) !== -1
 
   const toggleValue = (value: unknown) => {
-    if (props.disabled || props.readonly) return
+    if (isDisabled.value || props.readonly) return
     const next = [...currentArray()]
     const index = next.indexOf(value)
     if (index === -1) next.push(value)
@@ -101,10 +117,12 @@
     toggleValue,
     isSelected,
     size: computed(() => props.size),
-    disabled: computed(() => props.disabled),
+    disabled: isDisabled,
     readonly: computed(() => props.readonly),
-    invalid: computed(() => props.invalid),
-    required: computed(() => props.required),
+    invalid: isInvalid,
+    required: isRequired,
+    controlId,
+    describedBy,
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
     filled
@@ -117,10 +135,10 @@
     :data-testid="testId"
     :data-state="openState ? 'open' : 'closed'"
     :data-size="size"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :data-filled="filled || null"
     :class="attrs.class"
     class="relative inline-block w-full"

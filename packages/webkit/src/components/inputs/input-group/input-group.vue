@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
+
   defineOptions({ name: 'InputGroup', inheritAttrs: false })
 
   export type InputGroupSize = 'small' | 'medium' | 'large'
@@ -10,7 +12,7 @@
     size?: InputGroupSize
     /** Renders the error border and sets aria-invalid on the root. */
     invalid?: boolean
-    /** Renders the required (warning) border and sets aria-required on the root. */
+    /** Renders the required (warning) border; the required state itself belongs on the input. */
     required?: boolean
     /** Renders the disabled visual (muted fill, not-allowed cursor, no focus ring) and sets aria-disabled on the root. Does not propagate to child controls — each child is responsible for its own disabled attribute. */
     disabled?: boolean
@@ -29,6 +31,16 @@
 
   const attrs = useAttrs()
 
+  const {
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group')
 </script>
 
@@ -38,12 +50,11 @@
     role="group"
     :data-testid="testId"
     :data-size="props.size"
-    :data-invalid="props.invalid || null"
-    :data-required="props.required || null"
-    :data-disabled="props.disabled || null"
-    :aria-invalid="props.invalid ? 'true' : undefined"
-    :aria-required="props.required ? 'true' : undefined"
-    :aria-disabled="props.disabled ? 'true' : undefined"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
+    :data-disabled="isDisabled || null"
+    :aria-invalid="isInvalid ? 'true' : undefined"
+    :aria-disabled="isDisabled ? 'true' : undefined"
     class="relative inline-flex items-center w-full overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out motion-reduce:transition-none data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 [&:not(:focus-within):not([data-invalid]):not([data-required]):not([data-disabled])]:hover:border-(--border-strong) focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas) data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0 [&_*]:focus-visible:!ring-0 [&_*]:focus-visible:!ring-offset-0 [&_*]:focus-within:!ring-0 [&_*]:focus-within:!ring-offset-0 [&_input]:!outline-none [&_button:not([role=switch])]:!border-transparent [&_button:not([role=switch])]:!rounded-none [&_a]:!border-transparent [&_a]:!rounded-none [&_[role=combobox]]:!border-transparent [&_[role=combobox]]:!rounded-none [&_[data-mode]]:!w-auto [&>*:not(:last-child)]:!border-r [&>*:not(:last-child)]:!border-r-(color:--border-default) [&>*:first-child]:rounded-l-(--shape-elements) [&>*:not(:first-child)]:rounded-l-none [&>*:last-child]:rounded-r-(--shape-elements) [&>*:not(:last-child)]:rounded-r-none"
   >
     <slot />

@@ -11,7 +11,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
@@ -22,6 +22,7 @@
   import Menu from '@aziontech/webkit/menu'
   import Alert from '@aziontech/webkit/alert'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -1964,17 +1965,33 @@
                                                       aria-label="Mutual Authentication mode"
                                                       class="flex w-full flex-col gap-(--spacing-sm)"
                                                     >
-                                                      <FieldRadioBlock
+                                                      <Field.Label
                                                         v-for="option in mtlsModeOptions"
                                                         :key="option.value"
-                                                        v-model="form.mtls.mode"
-                                                        :value="option.value"
-                                                        name="mtls-mode"
-                                                        :input-id="`mtls-mode-${option.value}`"
-                                                        :label="option.label"
-                                                        :description="option.description"
-                                                        :disabled="saving"
-                                                      />
+                                                      >
+                                                        <Field
+                                                          orientation="horizontal"
+                                                          :disabled="saving"
+                                                        >
+                                                          <RadioButton
+                                                            v-model="form.mtls.mode"
+                                                            :value="option.value"
+                                                            name="mtls-mode"
+                                                            :input-id="`mtls-mode-${option.value}`"
+                                                          />
+                                                          <Field.Content>
+                                                            <Field.Title>{{
+                                                              option.label
+                                                            }}</Field.Title>
+                                                            <Field.Description
+                                                              v-if="option.description"
+                                                              >{{
+                                                                option.description
+                                                              }}</Field.Description
+                                                            >
+                                                          </Field.Content>
+                                                        </Field>
+                                                      </Field.Label>
                                                     </div>
                                                   </div>
                                                 </Item.Actions>

@@ -4,34 +4,31 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import Checkbox from '@aziontech/webkit/checkbox'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldCheckbox from '@aziontech/webkit/field-checkbox'
-  import FieldCheckboxBlock from '@aziontech/webkit/field-checkbox-block'
-  import FieldInputGroup from '@aziontech/webkit/field-input-group'
-  import FieldPassword from '@aziontech/webkit/field-password'
-  import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
-  import FieldRadio from '@aziontech/webkit/field-radio'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
-  import FieldSwitch from '@aziontech/webkit/field-switch'
-  import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldTextSwitch from '@aziontech/webkit/field-text-switch'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import InputGroup from '@aziontech/webkit/input-group'
   import Kbd from '@aziontech/webkit/kbd'
   import Label from '@aziontech/webkit/label'
   import Menu from '@aziontech/webkit/menu'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import PasswordInput from '@aziontech/webkit/password-input'
+  import PhoneInput from '@aziontech/webkit/phone-input'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Switch from '@aziontech/webkit/switch'
+  import Textarea from '@aziontech/webkit/textarea'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
@@ -929,90 +926,114 @@
                   </Select>
                 </div>
 
-                <FieldTextSwitch
-                  v-model="form.repoName"
-                  v-model:enabled="form.repoPrivate"
-                  input-id="tpl-repo-name"
-                  name="repoName"
-                  label="Private Repository Name"
-                  placeholder="my-repository"
+                <Field
                   :required="repoWarning"
                   :disabled="submitting"
-                />
+                >
+                  <Field.Label for="tpl-repo-name">Private Repository Name</Field.Label>
+                  <InputGroup>
+                    <InputGroup.Input
+                      id="tpl-repo-name"
+                      v-model="form.repoName"
+                      name="repoName"
+                      placeholder="my-repository"
+                      :disabled="!form.repoPrivate"
+                    />
+                    <InputGroup.Addon>
+                      <Switch
+                        v-model="form.repoPrivate"
+                        aria-label="Toggle Private Repository Name"
+                      />
+                    </InputGroup.Addon>
+                  </InputGroup>
+                </Field>
               </div>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
                 <h2 class="text-heading-xs text-(--text-default)">Template Settings</h2>
 
-                <FieldText
-                  v-model="form.accessToken"
-                  input-id="tpl-access-token"
-                  name="accessToken"
-                  label="Store Access Token"
-                  placeholder="Access Token"
-                  size="large"
+                <Field
                   :disabled="submitting"
                   :required="tokenWarning"
-                  :helper-text="
-                    tokenWarning
-                      ? 'This field is required.'
-                      : 'You can find this token in the API credentials of your store.'
-                  "
                 >
-                  <template #iconRight>
-                    <i
-                      class="pi pi-lock"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </FieldText>
+                  <Field.Label for="tpl-access-token">Store Access Token</Field.Label>
+                  <Input
+                    id="tpl-access-token"
+                    v-model="form.accessToken"
+                    name="accessToken"
+                    placeholder="Access Token"
+                    size="large"
+                  >
+                    <template #iconRight>
+                      <i
+                        class="pi pi-lock"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                  <Field.Description>
+                    {{
+                      tokenWarning
+                        ? 'This field is required.'
+                        : 'You can find this token in the API credentials of your store.'
+                    }}
+                  </Field.Description>
+                </Field>
 
-                <FieldText
-                  v-model="form.revalidationSecret"
-                  input-id="tpl-revalidation-secret"
-                  name="revalidationSecret"
-                  label="Store revalidation secret"
-                  placeholder="Revalidation secret"
-                  size="large"
-                  :disabled="submitting"
-                  helper-text="You can find this secret in the API credentials of your store."
-                >
-                  <template #iconRight>
-                    <i
-                      class="pi pi-lock"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </FieldText>
+                <Field :disabled="submitting">
+                  <Field.Label for="tpl-revalidation-secret">Store revalidation secret</Field.Label>
+                  <Input
+                    id="tpl-revalidation-secret"
+                    v-model="form.revalidationSecret"
+                    name="revalidationSecret"
+                    placeholder="Revalidation secret"
+                    size="large"
+                  >
+                    <template #iconRight>
+                      <i
+                        class="pi pi-lock"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                  <Field.Description>
+                    You can find this secret in the API credentials of your store.
+                  </Field.Description>
+                </Field>
 
-                <FieldText
-                  v-model="form.storeDomain"
-                  input-id="tpl-store-domain"
-                  name="storeDomain"
-                  label="Store Domain"
-                  placeholder="https://store.example.com"
-                  size="large"
+                <Field
                   :disabled="submitting"
                   :invalid="domainError"
-                  :helper-text="
-                    domainError
-                      ? 'Enter a valid URL, e.g. https://store.example.com.'
-                      : 'The public URL of your store.'
-                  "
                 >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-globe"
-                      aria-hidden="true"
-                    />
-                  </template>
-                  <template #iconRight>
-                    <i
-                      class="pi pi-lock"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </FieldText>
+                  <Field.Label for="tpl-store-domain">Store Domain</Field.Label>
+                  <Input
+                    id="tpl-store-domain"
+                    v-model="form.storeDomain"
+                    name="storeDomain"
+                    placeholder="https://store.example.com"
+                    size="large"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-globe"
+                        aria-hidden="true"
+                      />
+                    </template>
+                    <template #iconRight>
+                      <i
+                        class="pi pi-lock"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                  <Field.Description>
+                    {{
+                      domainError
+                        ? 'Enter a valid URL, e.g. https://store.example.com.'
+                        : 'The public URL of your store.'
+                    }}
+                  </Field.Description>
+                </Field>
               </section>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
@@ -1023,17 +1044,26 @@
                     <Label :required="deploymentTypeWarning">Deployment type</Label>
                   </legend>
                   <div class="flex flex-col gap-(--spacing-sm)">
-                    <FieldRadioBlock
+                    <Field.Label
                       v-for="option in deploymentTypes"
                       :key="option.value"
-                      v-model="form.deploymentType"
-                      :value="option.value"
-                      name="deploymentType"
-                      :input-id="`tpl-deploymentType-${option.value}`"
-                      :label="option.label"
-                      :description="option.description"
-                      :disabled="submitting"
-                    />
+                    >
+                      <Field
+                        orientation="horizontal"
+                        :disabled="submitting"
+                      >
+                        <RadioButton
+                          v-model="form.deploymentType"
+                          :value="option.value"
+                          name="deploymentType"
+                          :input-id="`tpl-deploymentType-${option.value}`"
+                        />
+                        <Field.Content>
+                          <Field.Title>{{ option.label }}</Field.Title>
+                          <Field.Description>{{ option.description }}</Field.Description>
+                        </Field.Content>
+                      </Field>
+                    </Field.Label>
                   </div>
                   <HelperText
                     v-if="deploymentTypeWarning"
@@ -1047,16 +1077,25 @@
                     <Label>Runtime</Label>
                   </legend>
                   <div class="flex flex-wrap gap-(--spacing-lg)">
-                    <FieldRadio
+                    <div
                       v-for="option in runtimes"
                       :key="option.value"
-                      v-model="form.runtime"
-                      :value="option.value"
-                      name="runtime"
-                      :input-id="`tpl-runtime-${option.value}`"
-                      :label="option.label"
-                      :disabled="submitting"
-                    />
+                    >
+                      <Field
+                        orientation="horizontal"
+                        :disabled="submitting"
+                      >
+                        <RadioButton
+                          v-model="form.runtime"
+                          :value="option.value"
+                          name="runtime"
+                          :input-id="`tpl-runtime-${option.value}`"
+                        />
+                        <Field.Label :for="`tpl-runtime-${option.value}`">{{
+                          option.label
+                        }}</Field.Label>
+                      </Field>
+                    </div>
                   </div>
                 </fieldset>
 
@@ -1087,133 +1126,216 @@
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
                 <h2 class="text-heading-xs text-(--text-default)">Build &amp; Runtime</h2>
 
-                <FieldInputGroup
-                  v-model="form.buildCommand"
-                  input-id="tpl-build-command"
-                  name="buildCommand"
-                  label="Build command"
-                  placeholder="npm run build"
+                <Field
                   :disabled="submitting"
                   :required="buildCommandWarning"
-                  :helper-text="
-                    buildCommandWarning
-                      ? 'This field is required.'
-                      : 'Run from the repository root during each deployment.'
-                  "
                 >
-                  <template #left>
-                    <span class="text-label-sm text-(--text-muted)">$</span>
-                  </template>
-                </FieldInputGroup>
+                  <Field.Label for="tpl-build-command">Build command</Field.Label>
+                  <InputGroup>
+                    <InputGroup.Addon>
+                      <span class="text-label-sm text-(--text-muted)">$</span>
+                    </InputGroup.Addon>
+                    <InputGroup.Input
+                      id="tpl-build-command"
+                      v-model="form.buildCommand"
+                      name="buildCommand"
+                      placeholder="npm run build"
+                    />
+                  </InputGroup>
+                  <Field.Description>
+                    {{
+                      buildCommandWarning
+                        ? 'This field is required.'
+                        : 'Run from the repository root during each deployment.'
+                    }}
+                  </Field.Description>
+                </Field>
 
-                <FieldPassword
-                  v-model="form.deployKey"
-                  input-id="tpl-deploy-key"
-                  name="deployKey"
-                  label="Deploy Key"
-                  placeholder="Paste your deploy key"
-                  autocomplete="new-password"
+                <Field
                   :disabled="submitting"
                   :required="deployKeyWarning"
                   :invalid="deployKeyError"
-                  :helper-text="
-                    deployKeyError
-                      ? 'The deploy key must be at least 8 characters.'
-                      : deployKeyWarning
-                        ? 'This field is required.'
-                        : 'Used to authenticate the build against your repository.'
-                  "
-                />
+                >
+                  <Field.Label for="tpl-deploy-key">Deploy Key</Field.Label>
+                  <PasswordInput
+                    id="tpl-deploy-key"
+                    v-model="form.deployKey"
+                    name="deployKey"
+                    placeholder="Paste your deploy key"
+                    autocomplete="new-password"
+                  />
+                  <Field.Description>
+                    {{
+                      deployKeyError
+                        ? 'The deploy key must be at least 8 characters.'
+                        : deployKeyWarning
+                          ? 'This field is required.'
+                          : 'Used to authenticate the build against your repository.'
+                    }}
+                  </Field.Description>
+                </Field>
 
-                <FieldTextarea
-                  v-model="form.buildNotes"
-                  input-id="tpl-build-notes"
-                  name="buildNotes"
-                  label="Build notes"
-                  placeholder="Anything the team should know about this deployment (optional)."
-                  :disabled="submitting"
-                  helper-text="Markdown is supported. Shown on the deployment summary."
-                />
+                <Field :disabled="submitting">
+                  <Field.Label for="tpl-build-notes">Build notes</Field.Label>
+                  <Textarea
+                    id="tpl-build-notes"
+                    v-model="form.buildNotes"
+                    name="buildNotes"
+                    placeholder="Anything the team should know about this deployment (optional)."
+                  />
+                  <Field.Description>
+                    Markdown is supported. Shown on the deployment summary.
+                  </Field.Description>
+                </Field>
               </section>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
                 <h2 class="text-heading-xs text-(--text-default)">Notifications &amp; Alerts</h2>
 
-                <FieldPhoneNumber
-                  v-model="form.alertPhone"
-                  input-id="tpl-alert-phone"
-                  name="alertPhone"
-                  label="On-call alert number"
+                <Field
                   :disabled="submitting"
                   :required="phoneWarning"
                   :invalid="phoneError"
-                  @update:phone="alertPhoneNumber = $event"
-                  :helper-text="
-                    phoneError
-                      ? 'Enter a valid phone number.'
-                      : phoneWarning
-                        ? 'This field is required.'
-                        : 'We call this number if a production deployment fails.'
-                  "
-                />
+                >
+                  <Field.Label for="tpl-alert-phone">On-call alert number</Field.Label>
+                  <PhoneInput
+                    id="tpl-alert-phone"
+                    v-model="form.alertPhone"
+                    name="alertPhone"
+                    @update:phone="alertPhoneNumber = $event"
+                  />
+                  <Field.Description>
+                    {{
+                      phoneError
+                        ? 'Enter a valid phone number.'
+                        : phoneWarning
+                          ? 'This field is required.'
+                          : 'We call this number if a production deployment fails.'
+                    }}
+                  </Field.Description>
+                </Field>
 
                 <div class="flex flex-col gap-(--spacing-sm)">
-                  <FieldSwitchBlock
-                    v-model="form.emailNotifications"
-                    label="Email notifications"
-                    description="Send a summary email to the team when a deployment finishes."
-                    :disabled="submitting"
-                  />
-                  <FieldSwitchBlock
-                    v-model="form.slackAlerts"
-                    label="Slack alerts"
-                    description="Post to your connected Slack channel on failures and rollbacks."
-                    :disabled="submitting"
-                  />
+                  <Field.Label>
+                    <Field
+                      orientation="horizontal"
+                      :disabled="submitting"
+                    >
+                      <Switch v-model="form.emailNotifications" />
+                      <Field.Content>
+                        <Field.Title>Email notifications</Field.Title>
+                        <Field.Description>
+                          Send a summary email to the team when a deployment finishes.
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
+                  <Field.Label>
+                    <Field
+                      orientation="horizontal"
+                      :disabled="submitting"
+                    >
+                      <Switch v-model="form.slackAlerts" />
+                      <Field.Content>
+                        <Field.Title>Slack alerts</Field.Title>
+                        <Field.Description>
+                          Post to your connected Slack channel on failures and rollbacks.
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
                 </div>
 
-                <FieldSwitch
-                  v-model="form.deployPreviews"
-                  label="Deploy previews"
-                  description="Build a preview URL for every pull request."
+                <Field
+                  orientation="horizontal"
                   :disabled="submitting"
-                />
+                >
+                  <Switch v-model="form.deployPreviews" />
+                  <Field.Content>
+                    <Field.Label>Deploy previews</Field.Label>
+                    <Field.Description
+                      >Build a preview URL for every pull request.</Field.Description
+                    >
+                  </Field.Content>
+                </Field>
               </section>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
                 <h2 class="text-heading-xs text-(--text-default)">Delivery features</h2>
 
                 <div class="flex flex-col gap-(--spacing-sm)">
-                  <FieldCheckboxBlock
-                    v-model="form.caching"
-                    label="Caching"
-                    description="Cache responses close to your users for faster global delivery."
-                    :disabled="submitting"
-                  />
-                  <FieldCheckboxBlock
-                    v-model="form.http3"
-                    label="HTTP/3"
-                    description="Serve traffic over HTTP/3 (QUIC) where the client supports it."
-                    :disabled="submitting"
-                  />
-                  <FieldCheckboxBlock
-                    v-model="form.requestFiltering"
-                    label="Request filtering"
-                    description="Screen incoming requests against a managed rule set."
-                    :disabled="submitting"
-                  />
+                  <Field.Label>
+                    <Field
+                      orientation="horizontal"
+                      :disabled="submitting"
+                    >
+                      <Checkbox
+                        v-model="form.caching"
+                        binary
+                      />
+                      <Field.Content>
+                        <Field.Title>Caching</Field.Title>
+                        <Field.Description>
+                          Cache responses close to your users for faster global delivery.
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
+                  <Field.Label>
+                    <Field
+                      orientation="horizontal"
+                      :disabled="submitting"
+                    >
+                      <Checkbox
+                        v-model="form.http3"
+                        binary
+                      />
+                      <Field.Content>
+                        <Field.Title>HTTP/3</Field.Title>
+                        <Field.Description>
+                          Serve traffic over HTTP/3 (QUIC) where the client supports it.
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
+                  <Field.Label>
+                    <Field
+                      orientation="horizontal"
+                      :disabled="submitting"
+                    >
+                      <Checkbox
+                        v-model="form.requestFiltering"
+                        binary
+                      />
+                      <Field.Content>
+                        <Field.Title>Request filtering</Field.Title>
+                        <Field.Description>
+                          Screen incoming requests against a managed rule set.
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
                 </div>
               </section>
 
               <div class="layout-section-start flex flex-col gap-(--spacing-xs)">
-                <FieldCheckbox
-                  v-model="form.acceptDeploy"
-                  input-id="tpl-accept-deploy"
-                  name="acceptDeploy"
-                  label="I understand this triggers an immediate production deployment."
+                <Field
+                  orientation="horizontal"
                   :required="acceptWarning"
                   :disabled="submitting"
-                />
+                >
+                  <Checkbox
+                    v-model="form.acceptDeploy"
+                    binary
+                    input-id="tpl-accept-deploy"
+                    name="acceptDeploy"
+                  />
+                  <Field.Content>
+                    <Field.Label for="tpl-accept-deploy">
+                      I understand this triggers an immediate production deployment.
+                    </Field.Label>
+                  </Field.Content>
+                </Field>
                 <HelperText
                   v-if="acceptWarning"
                   kind="required"

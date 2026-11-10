@@ -84,11 +84,15 @@ Every component is a flat, tree-shakeable import — `@aziontech/webkit/<name>`:
 ```vue
 <script setup>
 import Button from '@aziontech/webkit/button'
-import FieldText from '@aziontech/webkit/field-text'
+import Field from '@aziontech/webkit/field'
+import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
-  <FieldText name="email" label="Email" />
+  <Field>
+    <Field.Label>Email</Field.Label>
+    <Input name="email" type="email" autocomplete="email" />
+  </Field>
   <Button kind="primary" @click="submit">Create account</Button>
 </template>
 ```

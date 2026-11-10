@@ -1,10 +1,11 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
+  import Switch from '@aziontech/webkit/switch'
   import Avatar from '@aziontech/webkit/avatar'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
@@ -147,11 +148,20 @@
                           />
                         </div>
 
-                        <FieldSwitchBlock
-                          v-model="session"
-                          label="Schedule an onboarding session with an expert"
-                          description="A 30-minute call to create your first project. We'll email you to schedule it."
-                        />
+                        <Field.Label>
+                          <Field orientation="horizontal">
+                            <Switch v-model="session" />
+                            <Field.Content>
+                              <Field.Title
+                                >Schedule an onboarding session with an expert</Field.Title
+                              >
+                              <Field.Description
+                                >A 30-minute call to create your first project. We'll email you to
+                                schedule it.</Field.Description
+                              >
+                            </Field.Content>
+                          </Field>
+                        </Field.Label>
                       </div>
                     </div>
                   </fieldset>

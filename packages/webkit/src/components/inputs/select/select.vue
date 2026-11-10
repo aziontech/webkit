@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
+  import { fieldContextKey } from '../field/injection-key'
   import { selectContextKey, type SelectSize, type SelectValue } from './injection-key'
 
   defineOptions({
@@ -58,13 +60,27 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
+  provide(fieldContextKey, null)
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select')
 
   const uncontrolledOpen = ref(props.defaultOpen)
   const openState = computed(() => (props.open !== undefined ? props.open : uncontrolledOpen.value))
 
   const setOpen = (value: boolean) => {
-    if (props.disabled || props.readonly) return
+    if (isDisabled.value || props.readonly) return
     if (props.open === undefined) {
       uncontrolledOpen.value = value
     }
@@ -90,7 +106,7 @@
   }
 
   const toggleValue = (value: unknown) => {
-    if (props.disabled || props.readonly) return
+    if (isDisabled.value || props.readonly) return
     if (props.multiple) {
       const current = Array.isArray(props.modelValue) ? [...props.modelValue] : []
       const index = current.indexOf(value)
@@ -127,10 +143,12 @@
     isSelected,
     multiple: computed(() => props.multiple),
     size: computed(() => props.size),
-    disabled: computed(() => props.disabled),
+    disabled: isDisabled,
     readonly: computed(() => props.readonly),
-    invalid: computed(() => props.invalid),
-    required: computed(() => props.required),
+    invalid: isInvalid,
+    required: isRequired,
+    controlId,
+    describedBy,
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
     filled
@@ -144,10 +162,10 @@
     :data-state="openState ? 'open' : 'closed'"
     :data-mode="multiple ? 'multiple' : 'single'"
     :data-size="size"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :data-filled="filled || null"
     :class="attrs.class"
     class="relative inline-block w-full"

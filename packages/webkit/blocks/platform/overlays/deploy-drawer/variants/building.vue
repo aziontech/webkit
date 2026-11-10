@@ -9,7 +9,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -17,6 +17,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
@@ -685,13 +686,23 @@
                           :key="entry.name"
                           class="relative min-w-0"
                         >
-                          <FieldRadioBlock
-                            v-model="environment"
-                            name="service-deploy-environment"
-                            :value="entry.name"
-                            :label="entry.name"
-                            :description="entry.description"
-                          />
+                          <Field.Label>
+                            <Field orientation="horizontal">
+                              <RadioButton
+                                v-model="environment"
+                                name="service-deploy-environment"
+                                :value="entry.name"
+                              />
+                              <Field.Content>
+                                <Field.Title>
+                                  {{ entry.name }}
+                                </Field.Title>
+                                <Field.Description v-if="entry.description">
+                                  {{ entry.description }}
+                                </Field.Description>
+                              </Field.Content>
+                            </Field>
+                          </Field.Label>
                           <div
                             v-if="entry.tag"
                             class="pointer-events-none absolute right-(--spacing-sm) top-(--spacing-sm)"

@@ -1,8 +1,9 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldText from '@aziontech/webkit/field-text'
   import Alert from '@aziontech/webkit/alert'
   import { reactive, ref } from 'vue'
 
@@ -82,53 +83,69 @@
         <template v-else>
           <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
             <legend class="sr-only">Payment Method</legend>
-            <FieldText
-              v-model="cardForm.holder"
-              label="Cardholder's full name"
-              input-id="payment-holder"
-              name="cardholderName"
-              size="large"
-              placeholder="Jane A. Doe"
-              autocomplete="cc-name"
-            />
-            <FieldSelect
-              v-model="cardForm.country"
-              label="Country/Region"
-              :options="countryOptions"
-              input-id="payment-country"
-              size="large"
-            />
-            <FieldText
-              v-model="cardForm.number"
-              label="Credit card number"
-              input-id="payment-number"
-              name="cardNumber"
-              size="large"
-              placeholder="1234 5678 9012 3456"
-              autocomplete="cc-number"
-              inputmode="numeric"
-            />
+            <Field>
+              <Field.Label>Cardholder's full name</Field.Label>
+              <Input
+                v-model="cardForm.holder"
+                name="cardholderName"
+                size="large"
+                placeholder="Jane A. Doe"
+                autocomplete="cc-name"
+              />
+            </Field>
+            <Field>
+              <Field.Label>Country/Region</Field.Label>
+              <Select
+                v-model="cardForm.country"
+                size="large"
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in countryOptions"
+                    :key="String(option.value)"
+                    :value="option.value"
+                    :disabled="option.disabled"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </Field>
+            <Field>
+              <Field.Label>Credit card number</Field.Label>
+              <Input
+                v-model="cardForm.number"
+                name="cardNumber"
+                size="large"
+                placeholder="1234 5678 9012 3456"
+                autocomplete="cc-number"
+                inputmode="numeric"
+              />
+            </Field>
             <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-              <FieldText
-                v-model="cardForm.expiry"
-                label="Expiration Date (MM/YY)"
-                input-id="payment-expiry"
-                name="cardExpiry"
-                size="large"
-                placeholder="08 / 26"
-                autocomplete="cc-exp"
-                inputmode="numeric"
-              />
-              <FieldText
-                v-model="cardForm.code"
-                label="Security Code (CVC/CVV)"
-                input-id="payment-code"
-                name="cardSecurityCode"
-                size="large"
-                placeholder="999"
-                autocomplete="cc-csc"
-                inputmode="numeric"
-              />
+              <Field>
+                <Field.Label>Expiration Date (MM/YY)</Field.Label>
+                <Input
+                  v-model="cardForm.expiry"
+                  name="cardExpiry"
+                  size="large"
+                  placeholder="08 / 26"
+                  autocomplete="cc-exp"
+                  inputmode="numeric"
+                />
+              </Field>
+              <Field>
+                <Field.Label>Security Code (CVC/CVV)</Field.Label>
+                <Input
+                  v-model="cardForm.code"
+                  name="cardSecurityCode"
+                  size="large"
+                  placeholder="999"
+                  autocomplete="cc-csc"
+                  inputmode="numeric"
+                />
+              </Field>
             </div>
             <Alert
               severity="info"

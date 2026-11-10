@@ -122,7 +122,7 @@ Do NOT use Storybook's dynamic source (`source.transform` / `source.type: 'dynam
    })
    ```
 
-   **Shape — stateful / v-model components (Input, InputSelect, FieldText, Checkbox, RadioGroup, anything with `modelValue`):**
+   **Shape — stateful / v-model components (Input, InputSelect, PhoneInput, Checkbox, RadioGroup, anything with `modelValue`):**
 
    The story MUST hold local state and explicitly forward the update so the field actually reflects user typing/selection AND the `update:modelValue` action fires in the Actions panel. Binding `v-bind="args"` alone makes `modelValue` a one-way prop — the field appears frozen.
 

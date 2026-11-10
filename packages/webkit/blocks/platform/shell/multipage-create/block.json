@@ -3,7 +3,7 @@
   "name": "MultipageCreate",
   "title": "Templates/Platform/Shell/MultipageCreate",
   "surface": "product",
-  "summary": "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `FieldSwitchBlock`, `Item`, `FieldRadioBlock`, `Textarea`, `HelperText` and `Button`.",
+  "summary": "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -34,12 +34,12 @@
   "variants": [
     {
       "name": "ModuleOff",
-      "summary": "acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the FieldSwitchBlock that turns the module on with the list, and a note on what leaving it off means.",
+      "summary": "acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.",
       "file": "variants/module-off.vue"
     },
     {
       "name": "ListSettings",
-      "summary": "The last step of a list bound to acme-production: the Type as wide FieldRadioBlock rows and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail.",
+      "summary": "The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail.",
       "file": "variants/list-settings.vue"
     }
   ]

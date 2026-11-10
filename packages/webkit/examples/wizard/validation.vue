@@ -1,8 +1,9 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
   import Wizard from '@aziontech/webkit/wizard'
   import Alert from '@aziontech/webkit/alert'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldSelect from '@aziontech/webkit/field-select'
   import { ref } from 'vue'
 
   const step = ref(0)
@@ -47,28 +48,51 @@
           severity="danger"
           label="Enter a name to continue."
         />
-        <FieldText
-          v-model="name"
-          label="Name"
+        <Field
           required
           :invalid="nameMissing"
-        />
-        <FieldSelect
-          v-model="region"
-          label="Region"
-          :options="regions"
-        />
+        >
+          <Field.Label> Name </Field.Label>
+          <Input v-model="name" />
+        </Field>
+        <Field>
+          <Field.Label> Region </Field.Label>
+          <Select v-model="region">
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in regions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
       </div>
     </Wizard.Step>
     <Wizard.Step
       title="Configuration"
       description="Choose the environment it serves."
     >
-      <FieldSelect
-        v-model="environment"
-        label="Environment"
-        :options="environments"
-      />
+      <Field>
+        <Field.Label> Environment </Field.Label>
+        <Select v-model="environment">
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Option
+              v-for="option in environments"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Option>
+          </Select.Content>
+        </Select>
+      </Field>
     </Wizard.Step>
     <Wizard.Step
       title="Review"

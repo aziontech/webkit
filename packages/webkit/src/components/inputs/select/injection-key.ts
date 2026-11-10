@@ -24,6 +24,10 @@ export interface SelectContext {
   readonly: ComputedRef<boolean>
   invalid: ComputedRef<boolean>
   required: ComputedRef<boolean>
+  /** Id the enclosing Field assigns to the trigger. */
+  controlId: ComputedRef<string | undefined>
+  /** Description and error ids of the enclosing Field, for the trigger's aria-describedby. */
+  describedBy: ComputedRef<string | undefined>
   placeholder: ComputedRef<string | undefined>
   /** Formats the selected value(s) for the trigger label. */
   displayValue: ComputedRef<string>

@@ -20,6 +20,10 @@ export interface MultiSelectContext {
   readonly: ComputedRef<boolean>
   invalid: ComputedRef<boolean>
   required: ComputedRef<boolean>
+  /** Id the enclosing Field assigns to the trigger. */
+  controlId: ComputedRef<string | undefined>
+  /** Description and error ids of the enclosing Field, for the trigger's aria-describedby. */
+  describedBy: ComputedRef<string | undefined>
   placeholder: ComputedRef<string>
   /** Formats the selected values for the trigger label. */
   displayValue: ComputedRef<string>

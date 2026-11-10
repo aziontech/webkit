@@ -12,7 +12,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
@@ -22,6 +22,7 @@
   import Kbd from '@aziontech/webkit/kbd'
   import Link from '@aziontech/webkit/link'
   import Menu from '@aziontech/webkit/menu'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import ResizableHandle from '@aziontech/webkit/resizable-handle'
   import ResizablePane from '@aziontech/webkit/resizable-pane'
   import ResizableRoot from '@aziontech/webkit/resizable-root'
@@ -1940,20 +1941,38 @@ export async function handleRequest(request, args = {}) {
                                             class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
                                           >
                                             <legend class="sr-only">Execution environment</legend>
-                                            <FieldRadioBlock
-                                              v-model="form.executionEnvironment"
-                                              value="request"
-                                              :name="groupName"
-                                              label="On request"
-                                              description="Runs on each request the service handles, after routing."
-                                            />
-                                            <FieldRadioBlock
-                                              v-model="form.executionEnvironment"
-                                              value="gateway"
-                                              :name="groupName"
-                                              label="At the gateway"
-                                              description="Runs at the gateway, before routing, where a request can still be refused."
-                                            />
+                                            <Field.Label>
+                                              <Field orientation="horizontal">
+                                                <RadioButton
+                                                  v-model="form.executionEnvironment"
+                                                  value="request"
+                                                  :name="groupName"
+                                                />
+                                                <Field.Content>
+                                                  <Field.Title> On request </Field.Title>
+                                                  <Field.Description>
+                                                    Runs on each request the service handles, after
+                                                    routing.
+                                                  </Field.Description>
+                                                </Field.Content>
+                                              </Field>
+                                            </Field.Label>
+                                            <Field.Label>
+                                              <Field orientation="horizontal">
+                                                <RadioButton
+                                                  v-model="form.executionEnvironment"
+                                                  value="gateway"
+                                                  :name="groupName"
+                                                />
+                                                <Field.Content>
+                                                  <Field.Title> At the gateway </Field.Title>
+                                                  <Field.Description>
+                                                    Runs at the gateway, before routing, where a
+                                                    request can still be refused.
+                                                  </Field.Description>
+                                                </Field.Content>
+                                              </Field>
+                                            </Field.Label>
                                           </fieldset>
                                         </div>
                                       </Item.Actions>

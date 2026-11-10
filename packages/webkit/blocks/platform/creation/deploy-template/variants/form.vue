@@ -4,13 +4,14 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Label from '@aziontech/webkit/label'
+  import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -171,14 +172,26 @@
                 </div>
 
                 <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
-                  <FieldSelect
-                    input-id="scope"
-                    v-model="scope"
-                    label="Scope"
-                    size="large"
-                    :options="scopes"
-                    placeholder="Select a scope"
-                  />
+                  <Field>
+                    <Field.Label>Scope</Field.Label>
+                    <Select
+                      v-model="scope"
+                      size="large"
+                      placeholder="Select a scope"
+                    >
+                      <Select.Trigger />
+                      <Select.Content>
+                        <Select.Option
+                          v-for="option in scopes"
+                          :key="String(option.value)"
+                          :value="option.value"
+                          :disabled="option.disabled"
+                        >
+                          {{ option.label }}
+                        </Select.Option>
+                      </Select.Content>
+                    </Select>
+                  </Field>
 
                   <div class="flex flex-col gap-(--spacing-xs)">
                     <Label
@@ -212,16 +225,20 @@
 
                 <h3 class="text-heading-xxs text-(--text-default)">Template Settings</h3>
                 <div class="flex flex-col gap-(--spacing-lg)">
-                  <FieldText
+                  <Field
                     v-for="field in settings"
                     :key="field.name"
-                    :input-id="field.name"
-                    v-model="values[field.name]"
-                    :label="field.label"
-                    size="large"
-                    :placeholder="field.placeholder"
-                    :helper-text="field.description"
-                  />
+                  >
+                    <Field.Label>{{ field.label }}</Field.Label>
+                    <Input
+                      v-model="values[field.name]"
+                      size="large"
+                      :placeholder="field.placeholder"
+                    />
+                    <Field.Description v-if="field.description">{{
+                      field.description
+                    }}</Field.Description>
+                  </Field>
                 </div>
               </div>
             </template>

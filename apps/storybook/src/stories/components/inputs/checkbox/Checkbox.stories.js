@@ -26,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Control only — the square checkbox input with no label or description. Pair with an external label or use FieldCheckbox / FieldCheckboxBlock for built-in text.'
+          'Control only — the square checkbox input with no label or description. Pair with an external label or wrap it in a horizontal Field (or a Field.Label choice card) for built-in text.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -138,7 +138,7 @@ export const Default = {
   parameters: {
     docs: {
       description: {
-        story: 'Binary control only — associate copy via an external label or FieldCheckbox.'
+        story: 'Binary control only — associate copy via an external label or a horizontal Field.'
       },
       source: { code: toSfc(DEFAULT_SCRIPT, DEFAULT_MARKUP) }
     }

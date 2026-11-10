@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
   export type PasswordInputAutocomplete = 'current-password' | 'new-password' | 'off'
@@ -53,6 +54,20 @@
   }>()
 
   const attrs = useAttrs()
+
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
   const slots = useSlots()
 
   const visible = ref(false)
@@ -84,9 +99,9 @@
 
 <template>
   <span
-    :data-disabled="disabled || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-disabled="isDisabled || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :data-has-icon-left="hasIconLeft || null"
     :data-has-icon-right="hasIconRight || null"
     :data-toggleable="toggleable || null"
@@ -115,15 +130,17 @@
 
     <input
       :type="visible ? 'text' : 'password'"
+      :id="controlId"
+      :aria-describedby="describedBy"
       :value="modelValue"
       :placeholder="placeholder"
       :maxlength="maxLength"
       :autocomplete="autocomplete"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :readonly="readonly"
-      :required="required"
-      :aria-invalid="invalid || undefined"
-      :aria-required="required || undefined"
+      :required="isRequired"
+      :aria-invalid="isInvalid || undefined"
+      :aria-required="isRequired || undefined"
       :data-testid="testId"
       class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pr-0 pl-(--spacing-md) group-data-[has-icon-left]:pl-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
@@ -145,7 +162,7 @@
       :icon="toggleIcon"
       :ariaLabel="toggleLabel"
       :aria-pressed="visible"
-      :disabled="disabled"
+      :disabled="isDisabled"
       type="button"
       @click="toggleVisible"
     />

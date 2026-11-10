@@ -27,5 +27,22 @@
       "from": "SegmentedButton",
       "binding": "ToggleGroup"
     }
+  },
+  "removed": {
+    "field-text": "Field + FieldLabel + Input + FieldDescription",
+    "field-textarea": "Field + FieldLabel + Textarea + FieldDescription",
+    "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
+    "field-password": "Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)",
+    "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
+    "field-time": "Field + FieldLabel + Input + FieldDescription",
+    "field-file-upload": "Field + FieldLabel + FileDropzone + FieldDescription",
+    "field-input-group": "Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription",
+    "field-text-switch": "Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription",
+    "field-checkbox": "Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)",
+    "field-radio": "Field orientation=horizontal + RadioButton + FieldContent (FieldLabel + FieldDescription)",
+    "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
+    "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
+    "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
+    "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)"
   }
 }

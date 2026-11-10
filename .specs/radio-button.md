@@ -7,33 +7,32 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: a58e7cd9e9e3e4f585580c2aee40dc35426199481a4df0163da0d0798904946d
+checksum: 1ee1361a5f8f6abf5338d41e7345846e0725d9bbfa6ccacf462b5b391fdac721
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Radio Button — Component Spec
 
 ## Purpose
 
-Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Use `FieldRadio` or `FieldRadioBlock` for labeled layouts.
+Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Wrap it in a horizontal `Field`, or a `Field.Label` choice card, for labeled layouts.
 
 ## When to use
 
 - One choice from a small set of mutually exclusive options whose labels are laid out separately (a table row, a custom option row).
-- A custom radio layout that the `field-radio` and `field-radio-block` shapes do not cover.
+- A custom radio layout that the horizontal `Field` and the `Field.Label` choice card do not cover.
 
 ## When NOT to use
 
-- A radio option in a form that needs its own label, description, or helper text → use `field-radio`.
-- Options that need visual weight, such as plans or tiers → use `field-radio-block`, or `radio-cards` for a horizontal grid of cards.
+- A radio option in a form that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation="horizontal"` + `Field.Content`).
+- Options that need visual weight, such as plans or tiers → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`), or `radio-cards` for a horizontal grid of cards.
 - More than one option may be selected → use `checkbox`.
 - The options are many or loaded from data → use `select`.
 
 ## Related
 
-- `field-radio` — radio with label, description, and disabled helper; the default inside forms.
-- `field-radio-block` — card-style radio option with a selected border and background.
+- `field` — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
 - `radio-cards` — horizontal grid of selectable cards with its own model.
 - `checkbox` — the multi-pick counterpart.
 - `select` — single choice from a dropdown when the options do not fit inline.

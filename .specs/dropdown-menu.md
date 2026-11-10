@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 5e7970f9e8b808b8d3aa3842d81d544d2bf9ee2be5416dc40acbab377d60dfad
+checksum: 8f39e982a08e6e54bef294ef4af33ae83a9d6d457ec6e2c00a4c0a936d8e1ef1
 created: 2026-06-26
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # DropdownMenu — Component Spec
@@ -25,7 +25,7 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
 
 ## When NOT to use
 
-- Choosing a value that a form submits → use `select` (or `field-select` with a label).
+- Choosing a value that a form submits → use `select` (inside a `field` for a label).
 - A primary action joined to a menu of alternatives → use `split-button`.
 - A searchable palette of commands → use `command`.
 - Free-form or interactive content such as forms or filters → use `popover`.

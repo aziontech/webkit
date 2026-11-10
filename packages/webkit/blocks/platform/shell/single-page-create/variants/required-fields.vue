@@ -4,7 +4,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -12,6 +12,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Switch from '@aziontech/webkit/switch'
   import { computed, reactive, ref } from 'vue'
 
@@ -220,16 +221,27 @@
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                               <legend class="sr-only">Protocol Usage</legend>
-                              <FieldRadioBlock
+                              <Field.Label
                                 v-for="option in protocolUsageOptions"
                                 :key="option.value"
-                                v-model="form.protocolUsage"
-                                :value="option.value"
-                                name="protocolUsage"
-                                :input-id="`app-protocolUsage-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                              />
+                              >
+                                <Field orientation="horizontal">
+                                  <RadioButton
+                                    v-model="form.protocolUsage"
+                                    :value="option.value"
+                                    name="protocolUsage"
+                                    :input-id="`app-protocolUsage-${option.value}`"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>
+                                      {{ option.label }}
+                                    </Field.Title>
+                                    <Field.Description v-if="option.description">
+                                      {{ option.description }}
+                                    </Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
                             </fieldset>
                           </div>
                         </Item.Actions>
@@ -357,15 +369,24 @@
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                               <legend class="sr-only">Protocol Policy</legend>
-                              <FieldRadioBlock
+                              <Field.Label
                                 v-for="option in protocolPolicyOptions"
                                 :key="option.value"
-                                v-model="form.protocolPolicy"
-                                :value="option.value"
-                                name="protocolPolicy"
-                                :input-id="`app-protocolPolicy-${option.value}`"
-                                :label="option.label"
-                              />
+                              >
+                                <Field orientation="horizontal">
+                                  <RadioButton
+                                    v-model="form.protocolPolicy"
+                                    :value="option.value"
+                                    name="protocolPolicy"
+                                    :input-id="`app-protocolPolicy-${option.value}`"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>
+                                      {{ option.label }}
+                                    </Field.Title>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
                             </fieldset>
                           </div>
                         </Item.Actions>
@@ -459,16 +480,27 @@
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                               <legend class="sr-only">Browser Cache Settings</legend>
-                              <FieldRadioBlock
+                              <Field.Label
                                 v-for="option in browserCacheOptions"
                                 :key="option.value"
-                                v-model="form.browserCache"
-                                :value="option.value"
-                                name="browserCache"
-                                :input-id="`app-browserCache-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                              />
+                              >
+                                <Field orientation="horizontal">
+                                  <RadioButton
+                                    v-model="form.browserCache"
+                                    :value="option.value"
+                                    name="browserCache"
+                                    :input-id="`app-browserCache-${option.value}`"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>
+                                      {{ option.label }}
+                                    </Field.Title>
+                                    <Field.Description v-if="option.description">
+                                      {{ option.description }}
+                                    </Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
                             </fieldset>
                           </div>
                         </Item.Actions>
@@ -501,16 +533,27 @@
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                               <legend class="sr-only">Cache Settings</legend>
-                              <FieldRadioBlock
+                              <Field.Label
                                 v-for="option in cacheOptions"
                                 :key="option.value"
-                                v-model="form.cache"
-                                :value="option.value"
-                                name="cache"
-                                :input-id="`app-cache-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                              />
+                              >
+                                <Field orientation="horizontal">
+                                  <RadioButton
+                                    v-model="form.cache"
+                                    :value="option.value"
+                                    name="cache"
+                                    :input-id="`app-cache-${option.value}`"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>
+                                      {{ option.label }}
+                                    </Field.Title>
+                                    <Field.Description v-if="option.description">
+                                      {{ option.description }}
+                                    </Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
                             </fieldset>
                           </div>
                         </Item.Actions>

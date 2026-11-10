@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
 
   export type NumberInputSize = 'small' | 'medium' | 'large'
@@ -61,6 +62,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'number-input')
 
   const passthroughAttrs = computed(() => {
@@ -93,7 +108,7 @@
     emit('change', readValue(event))
   }
 
-  const canInteract = computed(() => !props.disabled && !props.readonly)
+  const canInteract = computed(() => !isDisabled.value && !props.readonly)
 
   const handleIncrement = () => {
     if (!canInteract.value) return
@@ -109,9 +124,9 @@
 <template>
   <span
     :data-size="size"
-    :data-disabled="disabled || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-disabled="isDisabled || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :class="[
       'relative inline-flex w-full items-center overflow-hidden',
       'rounded-(--shape-elements)',
@@ -135,16 +150,18 @@
 
     <input
       type="number"
+      :id="controlId"
+      :aria-describedby="describedBy"
       :value="modelValue"
       :placeholder="placeholder"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :readonly="readonly"
-      :required="required"
+      :required="isRequired"
       :min="min"
       :max="max"
       :step="step"
-      :aria-invalid="invalid || undefined"
-      :aria-required="required || undefined"
+      :aria-invalid="isInvalid || undefined"
+      :aria-required="isRequired || undefined"
       :data-testid="testId"
       v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
       class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -175,7 +192,7 @@
         type="button"
         tabindex="-1"
         aria-label="Increment"
-        :disabled="disabled || readonly"
+        :disabled="isDisabled || readonly"
         class="flex flex-1 items-center justify-center border-b border-(--border-default) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleIncrement"
       >
@@ -188,7 +205,7 @@
         type="button"
         tabindex="-1"
         aria-label="Decrement"
-        :disabled="disabled || readonly"
+        :disabled="isDisabled || readonly"
         class="flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleDecrement"
       >

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: 19f5e852821b365a407ece24c8af0b6f50a7cc06962fc0a74fd651abf24b26a3
+checksum: ab1d3843776833e5f916b33efe56abcf4bbb51f92ae85c481e126ccb1cf2ed59
 created: 2026-06-15
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # HelperText — Component Spec
@@ -25,14 +25,14 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 
 ## When NOT to use
 
-- A standard form field → use `field-text` or another `field-*` wrapper, which renders the helper and wires it to the input.
+- A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.
 - The field name or required marker above the input → use `label`.
 - Feedback about a whole form or page rather than one field → use `message`.
 
 ## Related
 
 - `label` — sits above the input; HelperText sits below it.
-- `field-text` — switches the helper `kind` from its own `invalid` and `disabled` props.
+- `field` — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
 - `message` — banner-level feedback with severity and an optional action.
 
 ## Best practices

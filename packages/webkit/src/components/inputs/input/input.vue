@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { passwordManagerHints } from '../../../utils/autofill'
 
   export type InputSize = 'small' | 'medium' | 'large'
@@ -70,6 +71,20 @@
 
   const inputRef = ref<globalThis.HTMLInputElement | null>(null)
 
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input')
 
   const passthroughAttrs = computed(() => {
@@ -96,7 +111,7 @@
   }
 
   const handleChromeMouseDown = (event: globalThis.MouseEvent) => {
-    if (props.disabled) return
+    if (isDisabled.value) return
     if (event.target === inputRef.value) return
     event.preventDefault()
     inputRef.value?.focus()
@@ -106,10 +121,10 @@
 <template>
   <span
     :data-size="size"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :data-has-icon-left="hasIconLeft || null"
     :data-has-icon-right="hasIconRight || null"
     :class="[
@@ -149,14 +164,16 @@
       :maxlength="maxLength"
       :autocomplete="autocomplete"
       :spellcheck="spellcheck"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :readonly="readonly"
-      :required="required"
-      :aria-invalid="invalid || undefined"
-      :aria-required="required || undefined"
+      :required="isRequired"
+      :aria-invalid="isInvalid || undefined"
+      :aria-required="isRequired || undefined"
       :data-testid="testId"
       class="relative z-(--z-input-field) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
       v-bind="{ ...autofillHints, ...passthroughAttrs }"
+      :id="controlId"
+      :aria-describedby="describedBy"
       @input="handleInput"
     />
 

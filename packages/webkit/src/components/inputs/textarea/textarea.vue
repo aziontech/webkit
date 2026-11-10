@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
+
   defineOptions({
     name: 'Textarea',
     inheritAttrs: false
@@ -41,6 +43,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
   const isFilled = computed(() => props.modelValue.length > 0)
 
@@ -60,19 +76,21 @@
 <template>
   <textarea
     v-bind="passthroughAttrs"
+    :id="controlId"
+    :aria-describedby="describedBy"
     style="width: 100%"
     :value="modelValue"
     :placeholder="placeholder"
-    :disabled="disabled"
+    :disabled="isDisabled"
     :readonly="readonly"
-    :required="required"
-    :aria-invalid="invalid || undefined"
-    :aria-required="required || undefined"
-    :aria-disabled="disabled || undefined"
+    :required="isRequired"
+    :aria-invalid="isInvalid || undefined"
+    :aria-required="isRequired || undefined"
+    :aria-disabled="isDisabled || undefined"
     :data-testid="testId"
-    :data-disabled="disabled || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-disabled="isDisabled || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :data-readonly="readonly || null"
     :data-filled="isFilled || null"
     :data-resize="resizable"

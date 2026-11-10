@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b84a87a1ce6e9a8742ab533b2a755d98c46ed59f4c1ee94bf786767de87feae1
+checksum: ab8989e311d6498b2eb8497f5978e5df0e46993a061ecc324b86cc12b524771c
 created: 2026-05-23
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Box Grid Selection — Component Spec
@@ -23,17 +23,15 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 ## When NOT to use
 
-- You place each card-style radio by hand, or the choice must submit through a native form `name` → use `field-radio-block`.
-- The options don't need card weight and read fine as inline rows → use `field-radio`.
-- There are more options than fit in a row or two, or the choice sits in a compact form → use `field-select`.
-- More than one option can be picked → use `field-checkbox-block`.
+- You place each card-style radio by hand, or the choice must submit through a native form `name` → use `field` choice cards (`Field.Label` wrapping a horizontal `Field` with a `radio-button`).
+- The options don't need card weight and read fine as inline rows → use horizontal `field`s with a `radio-button`.
+- There are more options than fit in a row or two, or the choice sits in a compact form → use `select` inside a `field`.
+- More than one option can be picked → use `field` choice cards with a `checkbox`.
 
 ## Related
 
-- `field-radio-block` — a single card-style radio with label, description and a disabled helper badge; compose several by hand with a shared `name`.
-- `field-radio` — inline labelled radio row for lighter choices.
-- `field-select` — dropdown for long option lists.
-- `field-checkbox-block` — card-style option for multiple selection.
+- `field` — a `Field.Label` choice card is a single card-style radio (or checkbox) with title and description; compose several by hand with a shared `name`, or use a horizontal `Field` for an inline labelled row.
+- `select` — dropdown for long option lists.
 - `onboarding-form` — uses this component for its usage-intent question.
 
 ## Best practices

@@ -7,16 +7,17 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import FieldRadio from '@aziontech/webkit/field-radio'
-  import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
-  import FieldText from '@aziontech/webkit/field-text'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import RadioButton from '@aziontech/webkit/radio-button'
+  import Switch from '@aziontech/webkit/switch'
+  import Textarea from '@aziontech/webkit/textarea'
   import { reactive, ref, watch } from 'vue'
 
   const bindingPolicies = [
@@ -154,36 +155,55 @@
                       class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
                     >
                       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                        <FieldText
-                          input-id="deployment-settings-name"
-                          v-model="form.name"
-                          label="Name"
-                          size="large"
-                          placeholder="production-hardened"
+                        <Field
                           :disabled="submitting"
                           :required="Boolean(errors.name)"
-                          :helper-text="
-                            errors.name ||
-                            'How this strategy reads in the Deployment Settings field.'
-                          "
-                          @update:model-value="errors.name = ''"
-                        />
+                        >
+                          <Field.Label for="deployment-settings-name"> Name </Field.Label>
+                          <Input
+                            v-model="form.name"
+                            size="large"
+                            placeholder="production-hardened"
+                            @update:model-value="errors.name = ''"
+                            id="deployment-settings-name"
+                          />
+                          <Field.Description>
+                            {{
+                              errors.name ||
+                              'How this strategy reads in the Deployment Settings field.'
+                            }}
+                          </Field.Description>
+                        </Field>
 
-                        <FieldTextarea
-                          input-id="deployment-settings-description"
-                          v-model="form.description"
-                          label="Description"
-                          placeholder="Storefront traffic for production"
-                          :disabled="submitting"
-                          helper-text="Optional. Used for internal identification."
-                        />
+                        <Field :disabled="submitting">
+                          <Field.Label for="deployment-settings-description">
+                            Description
+                          </Field.Label>
+                          <Textarea
+                            v-model="form.description"
+                            placeholder="Storefront traffic for production"
+                            id="deployment-settings-description"
+                          />
+                          <Field.Description>
+                            Optional. Used for internal identification.
+                          </Field.Description>
+                        </Field>
 
-                        <FieldSwitchBlock
-                          v-model="form.active"
-                          label="Active"
-                          description="When disabled, the strategy stays in the list but no deployment can apply it."
-                          :disabled="submitting"
-                        />
+                        <Field.Label>
+                          <Field
+                            orientation="horizontal"
+                            :disabled="submitting"
+                          >
+                            <Switch v-model="form.active" />
+                            <Field.Content>
+                              <Field.Title> Active </Field.Title>
+                              <Field.Description>
+                                When disabled, the strategy stays in the list but no deployment can
+                                apply it.
+                              </Field.Description>
+                            </Field.Content>
+                          </Field>
+                        </Field.Label>
                       </div>
                     </div>
                   </div>
@@ -233,17 +253,27 @@
                             </Label>
                           </legend>
                           <div class="flex flex-col gap-(--spacing-sm)">
-                            <FieldRadio
+                            <Field
                               v-for="policy in bindingPolicies"
                               :key="policy.value"
-                              v-model="form.bindingPolicy"
-                              :value="policy.value"
-                              name="binding-policy"
-                              :input-id="`deployment-settings-binding-${policy.value}`"
-                              :label="policy.label"
-                              :description="policy.description"
+                              orientation="horizontal"
                               :disabled="submitting"
-                            />
+                            >
+                              <RadioButton
+                                v-model="form.bindingPolicy"
+                                :value="policy.value"
+                                name="binding-policy"
+                                :input-id="`deployment-settings-binding-${policy.value}`"
+                              />
+                              <Field.Content>
+                                <Field.Label :for="`deployment-settings-binding-${policy.value}`">
+                                  {{ policy.label }}
+                                </Field.Label>
+                                <Field.Description v-if="policy.description">
+                                  {{ policy.description }}
+                                </Field.Description>
+                              </Field.Content>
+                            </Field>
                           </div>
                         </fieldset>
 
@@ -259,27 +289,47 @@
                             </Label>
                           </legend>
                           <div class="flex flex-col gap-(--spacing-sm)">
-                            <FieldRadio
+                            <Field
                               v-for="policy in deploymentPolicies"
                               :key="policy.value"
-                              v-model="form.deploymentPolicy"
-                              :value="policy.value"
-                              name="version-policy"
-                              :input-id="`deployment-settings-version-${policy.value}`"
-                              :label="policy.label"
-                              :description="policy.description"
+                              orientation="horizontal"
                               :disabled="submitting"
-                            />
+                            >
+                              <RadioButton
+                                v-model="form.deploymentPolicy"
+                                :value="policy.value"
+                                name="version-policy"
+                                :input-id="`deployment-settings-version-${policy.value}`"
+                              />
+                              <Field.Content>
+                                <Field.Label :for="`deployment-settings-version-${policy.value}`">
+                                  {{ policy.label }}
+                                </Field.Label>
+                                <Field.Description v-if="policy.description">
+                                  {{ policy.description }}
+                                </Field.Description>
+                              </Field.Content>
+                            </Field>
                           </div>
                           <HelperText label="Cannot be changed after the deployment is created." />
                         </fieldset>
 
-                        <FieldSwitchBlock
-                          v-model="form.shared"
-                          label="Share across services"
-                          description="Let more than one service publish with this configuration, so a single deploy reaches every environment bound to it. Turn it off to keep the setting to one service."
-                          :disabled="submitting"
-                        />
+                        <Field.Label>
+                          <Field
+                            orientation="horizontal"
+                            :disabled="submitting"
+                          >
+                            <Switch v-model="form.shared" />
+                            <Field.Content>
+                              <Field.Title> Share across services </Field.Title>
+                              <Field.Description>
+                                Let more than one service publish with this configuration, so a
+                                single deploy reaches every environment bound to it. Turn it off to
+                                keep the setting to one service.
+                              </Field.Description>
+                            </Field.Content>
+                          </Field>
+                        </Field.Label>
                       </div>
                     </div>
                   </div>

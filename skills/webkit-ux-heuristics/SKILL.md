@@ -1,8 +1,8 @@
 ---
 name: webkit-ux-heuristics
-description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field*/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing pi-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
+description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing pi-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
-last_updated: 2026-10-28
+last_updated: 2026-11-10
 scope: general
 # prettier-ignore
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, ui-verify, review]
@@ -47,7 +47,7 @@ component for the moment; don't re-derive the principle.
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | Loading (content vs. inline)      | `@aziontech/webkit/skeleton` for content shape; the control's own loading / `@aziontech/webkit/spinner` for inline busy | a bare full-page spinner for content that has a shape |
 | Destructive / irreversible action | `@aziontech/webkit/dialog` (confirm)                                                                                    | a silent immediate action                             |
-| Field validation error            | `@aziontech/webkit/field-*` + `@aziontech/webkit/alert` **next to the field**                                           | a global toast for a field error                      |
+| Field validation error            | `@aziontech/webkit/field` + `@aziontech/webkit/alert` **next to the field**                                             | a global toast for a field error                      |
 | Page / section status             | `@aziontech/webkit/alert`, `@aziontech/webkit/status-indicator`                                                         | inventing a banner                                    |
 | Empty state                       | `@aziontech/webkit/button` for the one next action + a one-line reason it's empty                                       | a dead-end "no results" string                        |
 | Contextual actions / menu         | `@aziontech/webkit/dropdown-menu`                                                                                       | a hand-rolled popover                                 |
@@ -56,7 +56,7 @@ component for the moment; don't re-derive the principle.
 | Field label                       | `@aziontech/webkit/label`                                                                                               | placeholder-as-label                                  |
 | Link to an external resource      | `@aziontech/webkit/link` with `target="_blank"` (trailing `pi-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
 | More items than the space holds   | first item + `+N` `@aziontech/webkit/tag` opening a `@aziontech/webkit/popover` with search and Load more — rule 2      | a wrapped inline list, or every item rendered at once |
-| Picking from more than 7 options  | `@aziontech/webkit/field-select` with `searchable`, or an `input` search on top of the overlay list — rule 3            | a long list the user has to scroll to scan            |
+| Picking from more than 7 options  | `@aziontech/webkit/select` with an `Input` in `Select.Content`'s `#search` slot, or one above the overlay list — rule 3 | a long list the user has to scroll to scan            |
 
 Overlays (`dialog`, `drawer`, `dropdown-menu`, `panel`) must trap focus and restore it on close — use
 the **shipped focus-trap composable** (discover its exact import via the MCP / catalog); don't rebuild
@@ -172,14 +172,12 @@ kind; a second hand-made copy is the one that ships without search.
 
 ### 3. More than 7 options turns search on
 
-Seven is the most a person scans at a glance. Any list the user **picks from** — a `FieldSelect`, a
+Seven is the most a person scans at a glance. Any list the user **picks from** — a `Select`, a
 filter's value step, an overflow popover, an account or workspace switcher, a menu of resources —
 shows a search box **when it holds more than 7 options**, and **hides it at 7 or fewer**, where a
 search box is only noise.
 
-- `FieldSelect`: bind `:searchable="options.length > 7"`. The search applies to the `options` prop,
-  not to slotted options.
-- Compound `Select`: put the `Input` in `Select.Content`'s `#search` slot behind the same
+- `Select`: put the `Input` in `Select.Content`'s `#search` slot behind the same
   `v-if`, and filter the `Select.Option` list by it.
 - An inline picker in a create flow: the `Input` sits above the rows, inside the band.
 - An overlay list you compose (Popover, DropdownMenu content): an `Input` with a leading
@@ -204,7 +202,7 @@ one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
 - Same action → same component, in the same place, with the same label, everywhere. Never two
   components for one job.
 - Destructive / irreversible → `dialog` confirm; never a silent immediate action.
-- Field errors sit next to the field (`field-*` + `message`); never a global toast for a field-level
+- Field errors sit next to the field (`Field` + `message`); never a global toast for a field-level
   error.
 - Overlays trap and restore focus via the shipped focus-trap composable; never hand-roll focus/escape.
 - Labels are literal; use `label`, never placeholder-as-label; never block paste.

@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: df98717471d99b5128d81cee30d5a73a27db7a4602b3d3a84af5fa305422e9a4
+checksum: e6d85b41c99b22002d54e0b4f24ea8a3aacdd56f32837fb76ec10d8501dbc58e
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # Input Text — Component Spec
@@ -31,7 +31,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 
 - `textarea` — multi-line free text.
 - `number-input` — numeric input with stepper semantics.
-- `field-text` — input wrapped with label/help/error.
+- `field` — wraps this input with label, description and error; the input reads its id, `aria-describedby` and state from it.
 
 ## Best practices
 

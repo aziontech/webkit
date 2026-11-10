@@ -3,13 +3,14 @@
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import FieldSelect from '@aziontech/webkit/field-select'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
+  import SeverityTag from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -451,42 +452,91 @@
         aria-label="Filters"
         class="grid grid-cols-1 items-start gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-5"
       >
-        <FieldSelect
-          v-model="timeRange"
-          input-id="activity-time-range"
-          label="Time range"
-          size="medium"
-          :options="timeRanges"
-        />
-        <FieldSelect
-          v-model="actor"
-          input-id="activity-actor"
-          label="Actor"
-          size="medium"
-          :options="actorOptions"
-        />
-        <FieldSelect
-          v-model="outcome"
-          input-id="activity-outcome"
-          label="Outcome"
-          size="medium"
-          :options="outcomeOptions"
-        />
-        <FieldSelect
-          v-model="category"
-          input-id="activity-category"
-          label="Category"
-          size="medium"
-          :options="categoryOptions"
-        />
-        <FieldText
-          v-model="destination"
-          input-id="activity-destination"
-          label="Destination"
-          placeholder="api.example.com"
-          helper-text="Exact host."
-          size="medium"
-        />
+        <Field>
+          <Field.Label>Time range</Field.Label>
+          <Select
+            v-model="timeRange"
+            size="medium"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in timeRanges"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
+        <Field>
+          <Field.Label>Actor</Field.Label>
+          <Select
+            v-model="actor"
+            size="medium"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in actorOptions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
+        <Field>
+          <Field.Label>Outcome</Field.Label>
+          <Select
+            v-model="outcome"
+            size="medium"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in outcomeOptions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
+        <Field>
+          <Field.Label>Category</Field.Label>
+          <Select
+            v-model="category"
+            size="medium"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Option
+                v-for="option in categoryOptions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </Field>
+        <Field>
+          <Field.Label>Destination</Field.Label>
+          <Input
+            v-model="destination"
+            placeholder="api.example.com"
+            size="medium"
+          />
+          <Field.Description>Exact host.</Field.Description>
+        </Field>
       </section>
 
       <section aria-label="Outcomes">

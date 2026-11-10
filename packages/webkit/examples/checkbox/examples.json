@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Binary control only — associate copy via an external label or FieldCheckbox.",
+      "summary": "Binary control only — associate copy via an external label or a horizontal `Field`.",
       "file": "default.vue"
     },
     {

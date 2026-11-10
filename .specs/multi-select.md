@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 8a5067772944f8da49b6ed355d3ecf86178873ce7c5a0108a5f607d96a48e272
+checksum: c142f99728c3da96f2068686050d7176311ff1556aced137efcf7a0dbbe5813e
 created: 2026-06-25
-last_updated: 2026-11-09
+last_updated: 2026-11-10
 ---
 
 # MultiSelect — Component Spec
@@ -29,14 +29,14 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 ## When NOT to use
 
 - Only one value may be chosen → use `select`.
-- A labelled form field with helper/error text → use `field-select` with `multiple`.
-- A handful of options that fit on screen → use `field-checkbox` for each.
+- A labelled form field with helper/error text → put it (or `select` with `multiple`) inside a `field`.
+- A handful of options that fit on screen → use a horizontal `field` with a `checkbox` for each.
 - The user builds a subset and needs the chosen and remaining items side by side → use `pick-list`.
 
 ## Related
 
 - `select` — single-choice counterpart; also accepts `multiple`.
-- `field-select` — labelled wrapper whose `multiple` prop covers multi-pick in forms.
+- `field` — wraps this control with its label, description and error; it hands the trigger its id and state.
 - `pick-list` — dual-list transfer for building larger subsets.
 - `checkbox` — the indicator every option row renders.
 

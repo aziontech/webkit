@@ -4,7 +4,9 @@
   import Button from '../../actions/button/button.vue'
   import Overline from '../../content/overline/overline.vue'
   import Alert from '../../feedback/alert/alert.vue'
-  import FieldText from '../../inputs/field-text/field-text.vue'
+  import Field from '../../inputs/field/field.vue'
+  import FieldDescription from '../../inputs/field/field-description/field-description.vue'
+  import Input from '../../inputs/input/input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
@@ -161,19 +163,24 @@
                 @submit.prevent="subscribe"
               >
                 <div class="min-w-0 flex-1">
-                  <FieldText
-                    v-model="email"
-                    :input-id="inputId"
-                    name="email"
-                    size="large"
-                    type="email"
-                    autocomplete="email"
-                    :placeholder="form.placeholder"
+                  <Field
                     :invalid="Boolean(invalidMessage)"
-                    :helper-text="invalidMessage"
                     :disabled="loading"
-                    @update:model-value="clearError"
-                  />
+                  >
+                    <Input
+                      v-model="email"
+                      name="email"
+                      size="large"
+                      type="email"
+                      autocomplete="email"
+                      :placeholder="form.placeholder"
+                      @update:model-value="clearError"
+                      :id="inputId"
+                    />
+                    <FieldDescription v-if="invalidMessage">
+                      {{ invalidMessage }}
+                    </FieldDescription>
+                  </Field>
                 </div>
                 <div>
                   <Button

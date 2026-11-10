@@ -1,6 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import FieldText from '@aziontech/webkit/field-text'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
@@ -9,11 +10,13 @@
     novalidate
     @submit.prevent
   >
-    <FieldText
-      label="Workspace name"
-      input-id="button-form-name"
-      name="name"
-    />
+    <Field>
+      <Field.Label for="button-form-name"> Workspace name </Field.Label>
+      <Input
+        name="name"
+        id="button-form-name"
+      />
+    </Field>
     <div class="flex gap-2">
       <Button
         type="reset"

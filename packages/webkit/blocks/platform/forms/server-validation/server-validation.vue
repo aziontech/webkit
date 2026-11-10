@@ -1,18 +1,19 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
-  import NumberInput from '@aziontech/webkit/number-input'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Alert from '@aziontech/webkit/alert'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import NumberInput from '@aziontech/webkit/number-input'
+  import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
@@ -324,17 +325,26 @@
                           <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                             <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                               <legend class="sr-only">Protocol Usage</legend>
-                              <FieldRadioBlock
+                              <Field.Label
                                 v-for="option in protocolUsageOptions"
                                 :key="option.value"
-                                v-model="form.protocolUsage"
-                                :value="option.value"
-                                name="protocolUsage"
-                                :input-id="`ev-protocolUsage-${option.value}`"
-                                :label="option.label"
-                                :description="option.description"
-                                :disabled="submitting"
-                              />
+                              >
+                                <Field
+                                  orientation="horizontal"
+                                  :disabled="submitting"
+                                >
+                                  <RadioButton
+                                    v-model="form.protocolUsage"
+                                    :value="option.value"
+                                    name="protocolUsage"
+                                    :input-id="`ev-protocolUsage-${option.value}`"
+                                  />
+                                  <Field.Content>
+                                    <Field.Title>{{ option.label }}</Field.Title>
+                                    <Field.Description>{{ option.description }}</Field.Description>
+                                  </Field.Content>
+                                </Field>
+                              </Field.Label>
                             </fieldset>
                           </div>
                         </Item.Actions>

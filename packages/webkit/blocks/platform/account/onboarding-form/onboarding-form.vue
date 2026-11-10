@@ -1,10 +1,11 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
   import Avatar from '@aziontech/webkit/avatar'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import FieldText from '@aziontech/webkit/field-text'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
@@ -198,36 +199,36 @@
 
                     <div class="animate-fade-in motion-reduce:animate-none">
                       <div class="flex flex-col gap-(--spacing-lg)">
-                        <FieldText
-                          v-model="fullName"
-                          label="Your full name"
-                          input-id="onboarding-full-name"
-                          name="fullName"
-                          size="large"
-                          placeholder="Jane Doe"
-                          autocomplete="name"
-                          :required="submitted && !fullName.trim()"
-                          :helper-text="
+                        <Field :required="submitted && !fullName.trim()">
+                          <Field.Label>Your full name</Field.Label>
+                          <Input
+                            v-model="fullName"
+                            name="fullName"
+                            size="large"
+                            placeholder="Jane Doe"
+                            autocomplete="name"
+                          />
+                          <Field.Description>{{
                             submitted && !fullName.trim()
                               ? 'This field is required.'
                               : 'How the app will greet you.'
-                          "
-                        />
+                          }}</Field.Description>
+                        </Field>
 
-                        <FieldText
-                          v-model="organizationName"
-                          label="Organization name"
-                          input-id="onboarding-org-name"
-                          name="organizationName"
-                          size="large"
-                          placeholder="Acme Inc."
-                          :required="submitted && !organizationName.trim()"
-                          :helper-text="
+                        <Field :required="submitted && !organizationName.trim()">
+                          <Field.Label>Organization name</Field.Label>
+                          <Input
+                            v-model="organizationName"
+                            name="organizationName"
+                            size="large"
+                            placeholder="Acme Inc."
+                          />
+                          <Field.Description>{{
                             submitted && !organizationName.trim()
                               ? 'This field is required.'
                               : 'Usually your company. Everyone you invite will see it.'
-                          "
-                        />
+                          }}</Field.Description>
+                        </Field>
 
                         <div class="flex flex-col gap-(--spacing-xs)">
                           <Label>Organization mark</Label>

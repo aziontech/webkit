@@ -1,10 +1,15 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
-  import FieldRadioBlock from '../../../inputs/field-radio-block/field-radio-block.vue'
+  import Field from '../../../inputs/field/field.vue'
+  import FieldContent from '../../../inputs/field/field-content/field-content.vue'
+  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
+  import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
+  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -172,15 +177,26 @@
 
       <ShellMockupPart :order="1">
         <div class="flex flex-col gap-(--spacing-sm)">
-          <FieldRadioBlock
+          <FieldLabel
             v-for="type in TYPES"
             :key="type.value"
-            model-value="ip_cidr"
-            name="network-list-type"
-            :value="type.value"
-            :label="type.label"
-            :description="type.description"
-          />
+          >
+            <Field orientation="horizontal">
+              <RadioButton
+                model-value="ip_cidr"
+                name="network-list-type"
+                :value="type.value"
+              />
+              <FieldContent>
+                <FieldTitle>
+                  {{ type.label }}
+                </FieldTitle>
+                <FieldDescription v-if="type.description">
+                  {{ type.description }}
+                </FieldDescription>
+              </FieldContent>
+            </Field>
+          </FieldLabel>
         </div>
       </ShellMockupPart>
 

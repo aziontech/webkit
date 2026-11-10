@@ -69,9 +69,7 @@ describe('ClosingCallToActionNewsletter', () => {
 
     expect(input.getAttribute('type')).toBe('email')
     expect(input.getAttribute('autocomplete')).toBe('email')
-    const wrapper = input.closest(
-      '[data-testid$="field-text"], [data-testid*="field-text"]:not(input)'
-    )
+    const wrapper = input.closest('[data-slot="field"]')
     expect(wrapper?.hasAttribute('type') ?? false).toBe(false)
     expect(wrapper?.hasAttribute('autocomplete') ?? false).toBe(false)
   })

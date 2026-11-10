@@ -11,7 +11,6 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FieldTextarea from '@aziontech/webkit/field-textarea'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
