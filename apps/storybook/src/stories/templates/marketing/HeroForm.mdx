@@ -8,7 +8,7 @@ import * as HeroFormStories from './HeroForm.stories'
 
 The opening band of a lead-capture page, where the form is the reason for the page. The hero copy sits on one side and the form on the other, above the fold. The Contact page opens this way.
 
-Built from `Hero`, `Hero.Title`, the `Field*` controls and `Button`. Validation, submit and the toast are left to the page.
+The band is the `HeroForm` component from `@aziontech/webkit/sections/hero-form`; it composes `Hero`, `Hero.Title`, `Topic`, the `Field*` controls, `Button` and `Message`. The fields are data, so the Contact and Under attack pages are the same block with different `fields`. The block validates the fields itself and never sends them: a valid submit fires `submit` with the values, and the page posts them and sets the outcome back.
 
 <p
   style={{
@@ -34,16 +34,47 @@ The Contact page. Four benefits sit under the description, each an icon, a title
 Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
-- `body` is the text under the headline. It accepts inline markdown, such as a phone link.
-- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
-- `fields` sets the label and placeholder of each form field. Optional fields take `required`.
-- `roleOptions` lists the choices of the role field, and `defaultCountry` picks the starting phone country.
-- `submitLabel` is the send button, and `messages` holds the required, invalid email, success and error texts.
-- `endpoint` is the form service URL. `pageName` and `hiddenFields` go with each submission.
+- `eyebrow` is the overline above the headline, and `description` the sentence under it.
+- `items` are the highlights under the description, each an `icon`, a `title` and a `description`. The list shows only when it has items.
+- `fields` are the form fields in order. Each takes a `name`, the key its value is sent under, a `kind` (`text`, `email`, `select`, `phone` or `textarea`) and a `label`, plus an optional `placeholder`, `required`, and `half` to share the row with the next half field. A `select` lists its choices in `options`; a `phone` starts on the `country` code, `US` by default, and its value is sent with the dial code.
+- `formAriaLabel` names the field group for assistive tech, and `submitLabel` is the send button.
+- `messages` holds the texts the block shows: `missing` under an empty required field, `invalidEmail` under a malformed email, `success` in place of the form once it is sent, and `error` under the form when it is not.
 - `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `submission` sits beside `props`, not inside it, and is never bound to the block: it is where the site sends the form. `endpoint` is the form service URL, and `pageName` and `hiddenFields` go with each submission.
+- The block emits `submit` with the event and the values by field `name`, and never posts them. The site posts them to `submission.endpoint` with the hidden fields and the page name, sets `loading` while it waits, then `submitted` on success or `error` on failure. `loading`, `submitted` and `error` are not in the JSON; the site owns them.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={HeroFormStories.ContactSplitJson} dark />
+  <Source
+    of={HeroFormStories.ContactSplitJson}
+    dark
+  />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Under attack
+
+The Under attack page, for a team in the middle of an attack. The same block with other `fields`: no role and no message, a website instead, and highlights that carry the attack figures.
+
+<Canvas of={HeroFormStories.UnderAttack} />
+
+##### Use it on the site
+
+The entry takes the same `props` as the Contact page; only the copy, the `items` and the `fields` change. Give it its own `submission` for the incident form.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={HeroFormStories.UnderAttackJson}
+    dark
+  />
 </div>

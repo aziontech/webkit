@@ -10,7 +10,7 @@ A claim beside the code that makes it true: copy on one side, a code sample on t
 
 The code sits in a wrapper with its own radius, so the wrapper casts the shadow. The tabs are declared in the script, so the code stays verbatim.
 
-Built from `SectionModule`, a `framed` `MediaSplit` and `CodeBlock`, with buttons on the copy side.
+The band is the `CodeSplit` component from `@aziontech/webkit/sections/code-split`; it composes `SectionModule`, a `framed` `MediaSplit`, `CodeBlock` and `Button`. The three bands below are the same component with different props, so all three use `_id: 'code-split'`.
 
 <p
   style={{
@@ -33,17 +33,20 @@ From the Functions page: a two-tab code sample on the pixelate texture, cut off 
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `title` and `description` are the copy beside the code.
 - `codeTabs` are the files, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`. A tab without `code` is skipped.
 - `copyAriaLabel` names the copy button for screen readers.
-- `primaryAction` and `secondaryAction` are the two buttons. A button without a label or link is dropped.
+- `primaryAction` and `secondaryAction` are the two buttons, each a `label` and an `href`; `trailing` closes the label on a chevron, `icon` draws a leading glyph and `target` opens the link elsewhere. Leave either out to drop it.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={CodeSplitStories.DefaultJson} dark />
+  <Source
+    of={CodeSplitStories.DefaultJson}
+    dark
+  />
 </div>
 
 <hr
@@ -62,16 +65,20 @@ From the Application Accelerator page: the same band as Functions with one large
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `title` and `description` are the copy on the start side.
 - `codeTabs` are the files; one tab draws a filename bar instead of tabs.
-- `action` is the button. Without a label or link it is dropped.
+- `copyAriaLabel` names the copy button for screen readers.
+- `primaryAction` is the button, a `label`, an `href` and `trailing`.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={CodeSplitStories.AcceleratorJson} dark />
+  <Source
+    of={CodeSplitStories.AcceleratorJson}
+    dark
+  />
 </div>
 
 <hr
@@ -84,22 +91,24 @@ Example:
 
 ### Agents
 
-From the AI Gateway page: the Accelerator band with one tab per coding agent. Each tab opens that agent's own file and carries the agent's mark beside its name, through the `tab-icon` slot of `CodeBlock`.
+From the AI Gateway page: the Accelerator band with one tab per coding agent. Each tab opens that agent's own file and carries the agent's mark beside its name, set by the tab's `icon`.
 
 <Canvas of={CodeSplitStories.Agents} />
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` is `agents`.
 - `title` and `description` are the copy beside the code.
-- `agents` are the tabs, each a code file with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`, plus a `mark` naming the agent's logo.
+- `codeTabs` are the tabs, each a code file with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`, plus an `icon` naming the agent's mark.
 - `copyAriaLabel` names the copy button for screen readers.
-- `actions` are the buttons under the copy.
+- `primaryAction` is the button under the copy.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={CodeSplitStories.AgentsJson} dark />
+  <Source
+    of={CodeSplitStories.AgentsJson}
+    dark
+  />
 </div>

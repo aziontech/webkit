@@ -10,7 +10,7 @@ A looping row of photos under a section title, for showing places and people, li
 
 The loop pauses on hover and keyboard focus. Under reduced motion it stops, and the row scrolls by hand. Screen readers hear each photo once: the copy that closes the loop is hidden from them.
 
-Built from `SectionModule`, `SectionTitle` and `FrameBox`, with the `animate-brand-marquee` utility.
+The band is the `PhotoMarquee` component from `@aziontech/webkit/sections/photo-marquee`; it composes `SectionModule`, `SectionTitle` and `FrameBox`, with the `animate-brand-marquee` utility.
 
 <p
   style={{
@@ -33,15 +33,18 @@ The six office photos Careers runs, at ten seconds per photo.
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `photos[].src` is a path in the site's `public/` folder.
 - `width` and `height` set the photo's proportions.
-- `duration` is how many seconds one full pass takes.
-- A photo without `src` is skipped, and the band renders nothing when no photo is left.
+- `duration` is how many seconds one full pass takes; left at `0`, each photo adds ten seconds.
+- `title`, `description` and `descriptionWidth` fill the horizontal section title; `ariaLabel` names the scrolling region.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={PhotoMarqueeStories.DefaultJson} dark />
+  <Source
+    of={PhotoMarqueeStories.DefaultJson}
+    dark
+  />
 </div>

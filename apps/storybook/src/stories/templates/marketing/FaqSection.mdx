@@ -8,7 +8,7 @@ import * as FaqSectionStories from './FaqSection.stories'
 
 The frequently asked questions band near the end of a landing page. The heading sits on the left and the questions on the right, each answer closed until the reader opens it, one at a time.
 
-The section has the `faq` id, so a page can link straight to it. Built from `SectionModule` and `Faq`.
+The band is the `FaqSection` component from `@aziontech/webkit/sections/faq-section`; it composes `SectionModule` and `Faq`. Give it `anchor: 'faq'` so a page can link straight to it.
 
 <p
   style={{
@@ -33,15 +33,19 @@ The Retail page questions. An answer can carry a link inside its sentence, like 
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
+- `anchor` is the band's id for in-page links, `faq` by convention.
 - `title` is the heading in the left column.
 - `items` are the questions in display order, each with a `question` and an `answer`.
-- `answer` accepts inline markdown, such as bold, italic and links.
+- `answer` accepts markdown: `[label](href)` links, `**bold**` and `*italic*`, plus paragraphs and bullet lists (see Rich answers). Absolute `https://` links open in a new tab.
 - Use one FAQ section per page.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={FaqSectionStories.WithLinkJson} dark />
+  <Source
+    of={FaqSectionStories.WithLinkJson}
+    dark
+  />
 </div>
 
 <hr
@@ -62,13 +66,17 @@ The Functions page questions, every answer plain text.
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
+- `anchor` is the band's id for in-page links, `faq` by convention.
 - `title` is the heading in the left column.
 - `items` are the questions in display order, each with a `question` and an `answer`.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={FaqSectionStories.PlainJson} dark />
+  <Source
+    of={FaqSectionStories.PlainJson}
+    dark
+  />
 </div>
 
 <hr
@@ -81,8 +89,25 @@ Example:
 
 ### Rich answers
 
-The GDPR page's first four questions, whose answers run longer than one sentence. Each item carries a `body` of paragraphs and bullet lists, and each block a run of text and link segments, so a link can sit anywhere in a sentence. External links open in a new tab.
+The GDPR page's first four questions, whose answers run longer than one sentence. The answer string carries the blocks as markdown, so the same `FaqSection` renders them with no slot.
 
 <Canvas of={FaqSectionStories.RichAnswers} />
 
-This variation has no site block yet, so it has no page-JSON entry.
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor`, `title` and `items` work as in the stories above.
+- A blank line (`\n\n` in the JSON string) starts a new paragraph.
+- Lines that start with `- ` form a bullet list; keep the list in its own block, after a blank line.
+- Inline markdown works inside paragraphs and list items alike: `[label](href)` links, `**bold**` and `*italic*`. Absolute `https://` links open in a new tab.
+- An answer with a single paragraph renders exactly as before.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={FaqSectionStories.RichAnswersJson}
+    dark
+  />
+</div>

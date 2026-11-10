@@ -1,109 +1,23 @@
-import CardGrid from '@aziontech/webkit/card-grid'
-import FrameBox from '@aziontech/webkit/frame-box'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
-import SectionModule from '@aziontech/webkit/section-module'
-import SectionTitle from '@aziontech/webkit/section-title'
-import Topic from '@aziontech/webkit/topic'
+import UseCaseLinks from '@aziontech/webkit/sections/use-case-links'
 
-import { editable } from '../../_shared/editable-content'
-import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
+import { SITE_SECTION } from './_sections/use-case-links'
 
-const TOPICS_IMPORTS = [
-  "import CardGrid from '@aziontech/webkit/card-grid'",
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
-  "import SectionTitle from '@aziontech/webkit/section-title'",
-  "import Topic from '@aziontech/webkit/topic'"
-]
+const IMPORT = "import UseCaseLinks from '@aziontech/webkit/sections/use-case-links'"
 
-const components = {
-  CardGrid,
-  FrameBox,
-  SectionContainer,
-  SectionGap,
-  SectionModule,
-  SectionTitle,
-  Topic
+const source = (section) => {
+  const { body, script } = sectionMarkup('UseCaseLinks', section.props)
+  return toSfc([...COLUMN_IMPORTS, IMPORT, '', ...script], inColumn(body))
 }
-
-const USE_CASES = [
-  {
-    icon: 'ai ai-azion-api',
-    title: 'Accelerate REST and GraphQL APIs',
-    description:
-      'Cache API responses with query string and cookie-based segmentation for faster client applications.',
-    href: '/'
-  },
-  {
-    icon: 'pi pi-shopping-cart',
-    title: 'Optimize product catalogs',
-    description: 'Segment listings by category, region, and user preferences with cache key rules.',
-    href: '/'
-  },
-  {
-    icon: 'ai ai-layers',
-    title: 'Personalize multi-tenant apps',
-    description: 'Serve tenant-specific content with cookie-based cache variation rules.',
-    href: '/docs'
-  },
-  {
-    icon: 'ai ai-live-ingest',
-    title: 'Stream content faster',
-    description: 'Cache playlists and user preferences while serving browsing content efficiently.',
-    href: '/docs'
-  },
-  {
-    icon: 'pi pi-bolt',
-    title: 'Reduce API latency',
-    description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',
-    href: '/docs'
-  },
-  {
-    icon: 'pi pi-user',
-    title: 'Deliver personalized experiences',
-    description:
-      'Cache user-specific content with session-based cookie variation for tailored delivery.',
-    href: '/docs'
-  }
-]
-
-const TOPICS_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
-  <template #header>
-    <SectionTitle
-      kind="left"
-      eyebrow="Use Cases"
-      title="What teams use Application Accelerator for"
-      description="Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose."
-    />
-  </template>
-
-  <FrameBox flush borders="y" marks="bottom">
-    <CardGrid kind="divider" :columns="3">
-${each(
-  USE_CASES,
-  (useCase) => `<div class="relative flex bg-(--bg-canvas)">
-  <Topic
-    icon="${useCase.icon}"
-    title="${useCase.title}"
-    description="${useCase.description}"
-    href="${useCase.href}"
-    :heading-level="3"
-    class="w-full p-(--spacing-xl)"
-  />
-</div>`,
-  3
-)}
-    </CardGrid>
-  </FrameBox>
-</SectionModule>`)
 
 const meta = {
   title: 'Templates/Marketing/Use Cases/UseCaseLinks',
-  excludeStories: ['SITE_SECTION'],
+  component: UseCaseLinks,
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
@@ -115,44 +29,25 @@ const meta = {
 
 export default meta
 
+const Template = (args) => ({
+  components: { SectionContainer, SectionGap, UseCaseLinks },
+  setup() {
+    return { args }
+  },
+  template: inColumn('<UseCaseLinks v-bind="args" />')
+})
+
 export const Topics = {
-  ...editable(() => ({ components, template: TOPICS_TEMPLATE })),
+  render: Template,
+  args: SITE_SECTION.props,
   parameters: {
     docs: {
-      source: { code: toSfc(TOPICS_IMPORTS, TOPICS_TEMPLATE) }
+      description: {
+        story:
+          'Six linked cells from the Application Accelerator page. Each cell shows an arrow on its headline because it has a link.'
+      },
+      source: { code: source(SITE_SECTION) }
     }
-  }
-}
-
-export const SITE_SECTION = {
-  _id: 'use-case-links',
-  props: {
-    eyebrow: 'Use Cases',
-    title: 'What teams use Application Accelerator for',
-    description:
-      'Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose.',
-    items: [
-      {
-        icon: 'pi pi-code',
-        title: 'Accelerate REST and GraphQL APIs',
-        description:
-          'Cache API responses with query string and cookie-based segmentation for faster client applications.',
-        href: 'https://www.azion.com/en/solutions/api-gateway/'
-      },
-      {
-        icon: 'pi pi-shopping-cart',
-        title: 'Optimize product catalogs',
-        description:
-          'Segment listings by category, region, and user preferences with cache key rules.',
-        href: 'https://www.azion.com/en/solutions/application-acceleration/'
-      },
-      {
-        icon: 'pi pi-bolt',
-        title: 'Reduce API latency',
-        description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',
-        href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/'
-      }
-    ]
   }
 }
 

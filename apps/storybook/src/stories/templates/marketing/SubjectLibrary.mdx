@@ -10,7 +10,7 @@ A library of subjects in a divider grid. Each subject is one card with its name,
 
 A call to action closes the grid and spans its last two cells, so the grid has no empty cell at any breakpoint. The Learning Center renders it.
 
-Built from `SectionModule`, `FrameBox`, `CardGrid`, `CallToAction` and `Button`.
+The band is the `SubjectLibrary` component from `@aziontech/webkit/sections/subject-library`; it composes `SectionModule`, `FrameBox`, `CardGrid`, `CallToAction` and `Button`.
 
 <p
   style={{
@@ -33,11 +33,11 @@ The first four Learning Center subjects with their articles, and the closing cal
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `anchor` gives the band an id for in-page links.
-- `subjects[]` are the cards, each a `slug` (the card's id), a `title`, a `description` and its `articles` as `label` and `href` links.
-- `closing` is the call to action across the last two cells: `eyebrow`, `title`, `titleMuted`, `description` and its `actions`. Leave it out and the grid ends on the last subject.
+- `subjects[]` are the cards, each a `slug` (the card's id), a `title`, a `description` and its `articles` as `label` and `href` links. A subject without a title or a linked article is skipped.
+- `closing` is the call to action across the last two cells: `eyebrow`, `title`, `titleMuted`, `description`, a `primaryAction` and a `secondaryAction`, each a `label`, an `href` and `trailing` for the chevron. Leave it out and the grid ends on the last subject.
 
 Example:
 
