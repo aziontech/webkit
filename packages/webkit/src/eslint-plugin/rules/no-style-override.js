@@ -1,7 +1,16 @@
 import { loadCatalog } from '../catalog.js'
+import { disallowedLayoutClasses, LAYOUT_CLASS_FAMILIES } from '../layout-classes.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
 
 const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
+
+function literalClassString(attr, bound) {
+  if (!bound) return typeof attr.value?.value === 'string' ? attr.value.value : null
+  const expression = attr.value?.expression
+  return expression?.type === 'Literal' && typeof expression.value === 'string'
+    ? expression.value
+    : null
+}
 
 function styleAttr(attr) {
   if (!attr || attr.type !== 'VAttribute') return null
@@ -34,7 +43,7 @@ export default {
     ],
     messages: {
       override:
-        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides design-system styles. Compose inside its slots, or use a component built to be personalized (style_seam)."
+        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides design-system styles. Compose inside its slots, or use a component built to be personalized (style_seam). Only layout classes ({{families}}) may be set on it."
     }
   },
   create(context) {
@@ -84,11 +93,15 @@ export default {
           const hit = styleAttr(attr)
           if (!hit) continue
           if (hit.attr === 'style' && !checkStyle) continue
+          if (hit.attr === 'class') {
+            const literal = literalClassString(attr, hit.bound)
+            if (literal !== null && disallowedLayoutClasses(literal).length === 0) continue
+          }
           const written = hit.bound ? `:${hit.attr}` : hit.attr
           context.report({
             node: attr,
             messageId: 'override',
-            data: { written, tag: rawName }
+            data: { written, tag: rawName, families: LAYOUT_CLASS_FAMILIES.join(', ') }
           })
         }
       }

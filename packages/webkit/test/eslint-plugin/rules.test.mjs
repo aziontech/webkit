@@ -363,9 +363,62 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`,
         filename: 'e.vue',
         options: [{ checkStyle: false }]
+      },
+      // layout-only classes are on the allowlist (all four families)
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full" /></template>`,
+        filename: 'l1.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="shrink-0" /></template>`,
+        filename: 'l2.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="self-start" /></template>`,
+        filename: 'l3.vue'
+      },
+      // arbitrary values: max-w-(--container-sm) is still max-w-*
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full max-w-(--container-sm)" /></template>`,
+        filename: 'l4.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="max-w-[28rem] self-center shrink-0" /></template>`,
+        filename: 'l5.vue'
+      },
+      // a string literal in :class is analysed like a static class
+      {
+        code: `${imp('Button', 'button')}<template><Button :class="'w-full shrink-0'" /></template>`,
+        filename: 'l6.vue'
       }
     ],
     invalid: [
+      // one class outside the allowlist rejects the whole attribute
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full p-8" /></template>`,
+        filename: 'n1.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-1/2" /></template>`,
+        filename: 'n2.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="shrink" /></template>`,
+        filename: 'n3.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button :class="'w-full bg-red-500'" /></template>`,
+        filename: 'n4.vue',
+        errors: [{ messageId: 'override' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="md:w-full" /></template>`,
+        filename: 'n5.vue',
+        errors: [{ messageId: 'override' }]
+      },
       {
         code: `${imp('Button', 'button')}<template><Button class="p-8">x</Button></template>`,
         filename: 'f.vue',

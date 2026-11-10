@@ -1,3 +1,5 @@
+import { LAYOUT_CLASS_ALLOWLIST } from '../eslint-plugin/layout-classes.js'
+
 const NOT_AVAILABLE = {
   ok: false,
   available: false,
@@ -105,6 +107,7 @@ export function listTokens(catalog, { category } = {}) {
       { name: 'animations', count: (tokens.animations || []).length }
     ],
     typography: tokens.typography,
+    layoutClasses: LAYOUT_CLASS_ALLOWLIST.map(({ family, pattern }) => ({ family, pattern })),
     vocabulary: catalog.vocabulary || null,
     hint: 'Call list_tokens with a category (e.g. "primary", "bg", "text", "spacing", "radius", "shadow", "animations") for that group — "animations" returns each animate-* class with its timing and when to use it.'
   }
