@@ -30,7 +30,6 @@ function componentCard(catalog, name) {
     name,
     category: e.category ?? null,
     structure: e.structure ?? null,
-    status: e.status ?? null,
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
     binding: pascalCase(name)
@@ -135,7 +134,6 @@ export function getComponent(catalog, name) {
     kind: e.kind,
     category: e.category ?? null,
     structure: e.structure ?? null,
-    status: e.status ?? null,
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
     compoundRoot: e.compoundRoot ?? false,
@@ -294,7 +292,7 @@ export function searchComponents(catalog, query) {
   return { ok: true, available: true, query: q, count: ranked.length, matches: ranked }
 }
 
-export function suggestComponent(catalog, need) {
+function componentSuggestion(catalog, need) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
   const search = searchComponents(catalog, q)
@@ -476,4 +474,315 @@ export function validateUsage(catalog, { import: importPath, classes, component 
   }
 
   return { ok: problems.length === 0, available: true, problems }
+}
+
+const SYNONYM_GROUPS = [
+  [
+    'login',
+    'log in',
+    'sign in',
+    'signin',
+    'entrar',
+    'acessar',
+    'acessar conta',
+    'auth',
+    'authentication',
+    'autenticação',
+    'logar'
+  ],
+  [
+    'signup',
+    'sign up',
+    'register',
+    'registration',
+    'create account',
+    'cadastro',
+    'cadastrar',
+    'criar conta',
+    'registrar'
+  ],
+  [
+    'reset password',
+    'forgot password',
+    'esqueci a senha',
+    'redefinir senha',
+    'recover password',
+    'recuperar senha'
+  ],
+  [
+    'verify email',
+    'check inbox',
+    'confirm email',
+    'verificar e-mail',
+    'confirmar e-mail',
+    'email verification'
+  ],
+  ['settings', 'preferences', 'configuration', 'configurações', 'configuracoes', 'ajustes'],
+  ['account settings', 'account', 'profile', 'conta', 'perfil'],
+  ['list', 'listing', 'index', 'table', 'lista', 'listagem', 'tabela'],
+  ['create', 'new', 'add', 'criar', 'novo', 'nova', 'adicionar', 'creation'],
+  ['delete', 'remove', 'destroy', 'excluir', 'apagar', 'remover'],
+  ['onboarding', 'first access', 'welcome', 'get started', 'primeiro acesso', 'boas-vindas'],
+  ['billing', 'payment', 'invoice', 'plan', 'pagamento', 'cobrança', 'fatura', 'plano'],
+  ['users', 'members', 'team', 'usuários', 'membros', 'time', 'equipe'],
+  ['editor', 'code', 'function', 'código', 'função'],
+  ['metrics', 'dashboard', 'observability', 'analytics', 'métricas', 'painel'],
+  ['header', 'top bar', 'navbar', 'cabeçalho'],
+  ['shell', 'layout', 'frame', 'app shell', 'estrutura']
+]
+
+const SCREEN_WORDS = [
+  'page',
+  'screen',
+  'tela',
+  'página',
+  'pagina',
+  'view',
+  'flow',
+  'fluxo',
+  'form',
+  'formulário'
+]
+
+const MARKETING_WORDS = [
+  'landing',
+  'marketing',
+  'site',
+  'hero',
+  'pricing',
+  'testimonial',
+  'testimonials',
+  'newsletter',
+  'faq',
+  'footer',
+  'banner',
+  'band',
+  'section',
+  'cta',
+  'call to action',
+  'case study',
+  'blog',
+  'careers'
+]
+
+function normalize(text) {
+  return String(text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[-_/]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function hasPhrase(haystack, phrase) {
+  const h = ` ${haystack} `
+  return h.includes(` ${phrase} `)
+}
+
+function expandQuery(query) {
+  const q = normalize(query)
+  const phrases = new Set([q])
+  for (const group of SYNONYM_GROUPS) {
+    const normalized = group.map(normalize)
+    if (normalized.some((term) => hasPhrase(q, term))) normalized.forEach((t) => phrases.add(t))
+  }
+  return { q, phrases: [...phrases].filter(Boolean) }
+}
+
+function patternCard(id, p, score) {
+  return {
+    id,
+    name: p.name,
+    summary: p.summary,
+    intents: p.intents || [],
+    components: p.components || [],
+    skills: p.skills || [],
+    ...(p.steps ? { steps: p.steps } : {}),
+    variants: (p.variants || []).map((v) => v.name),
+    story: p.story,
+    ...(score != null ? { score } : {})
+  }
+}
+
+function scorePattern(id, p, { q, phrases }) {
+  const intents = (p.intents || []).map(normalize)
+  const nameText = normalize(`${id} ${p.name}`)
+  const components = normalize((p.components || []).join(' '))
+  const summary = normalize(p.summary)
+  const words = q.split(' ').filter((w) => w.length >= 3)
+  let score = 0
+  for (const phrase of phrases) {
+    const weight = phrase === q ? 1 : 0.8
+    if (intents.includes(phrase)) score += 100 * weight
+    else if (
+      intents.some((i) => hasPhrase(i, phrase) || (phrase.length >= 4 && hasPhrase(phrase, i)))
+    )
+      score += 60 * weight
+    if (hasPhrase(nameText, phrase)) score += 40 * weight
+  }
+  for (const w of words) {
+    if (intents.some((i) => hasPhrase(i, w))) score += 12
+    if (hasPhrase(nameText, w)) score += 10
+    if (hasPhrase(components, w)) score += 4
+    if (hasPhrase(summary, w)) score += 2
+  }
+  return Math.round(score)
+}
+
+export function searchPatterns(catalog, query) {
+  if (!catalog.available) return NOT_AVAILABLE
+  const entries = Object.entries(catalog.patterns || {})
+  const raw = String(query || '').trim()
+  if (!raw) {
+    return {
+      ok: true,
+      available: true,
+      query: raw,
+      count: entries.length,
+      matches: entries.map(([id, p]) => patternCard(id, p))
+    }
+  }
+  const expanded = expandQuery(raw)
+  const matches = entries
+    .map(([id, p]) => ({ id, p, score: scorePattern(id, p, expanded) }))
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id))
+    .slice(0, 5)
+    .map((r) => patternCard(r.id, r.p, r.score))
+  return {
+    ok: true,
+    available: true,
+    query: raw,
+    count: matches.length,
+    matches,
+    hint: matches.length
+      ? 'Call get_pattern with the best id, copy its SFC and change only the content (copy, data, handlers). Keep the components, their order and the classes.'
+      : 'No pattern matches. Build from components: suggest_component, then get_component.'
+  }
+}
+
+export function getPattern(catalog, id, { variant } = {}) {
+  if (!catalog.available) return NOT_AVAILABLE
+  const patterns = catalog.patterns || {}
+  const key = String(id || '').trim()
+  let resolved = patterns[key] ? key : null
+  if (!resolved) {
+    const n = normalize(key)
+    resolved =
+      Object.keys(patterns).find((pid) => normalize(pid.split('/').pop()) === n) ||
+      Object.keys(patterns).find((pid) => normalize(patterns[pid].name) === n) ||
+      null
+  }
+  if (!resolved) {
+    const search = searchPatterns(catalog, key)
+    return {
+      ok: false,
+      available: true,
+      found: false,
+      id: key,
+      suggestions: (search.matches || []).slice(0, 3).map((m) => m.id),
+      message: `No pattern "${key}". Use search_patterns to find one by intent.`
+    }
+  }
+  const p = patterns[resolved]
+  const chosen = variant ? (p.variants || []).find((v) => v.name === variant) : null
+  if (variant && !chosen) {
+    return {
+      ok: false,
+      available: true,
+      found: false,
+      id: resolved,
+      variants: [p.primary, ...(p.variants || []).map((v) => v.name)],
+      message: `Pattern "${resolved}" has no variant "${variant}".`
+    }
+  }
+  return {
+    ok: true,
+    available: true,
+    found: true,
+    id: resolved,
+    name: p.name,
+    summary: p.summary,
+    intents: p.intents || [],
+    ...(p.steps ? { steps: p.steps } : {}),
+    components: p.components || [],
+    imports: p.imports || [],
+    skills: p.skills || [],
+    story: p.story,
+    variant: chosen ? chosen.name : p.primary,
+    sfc: chosen ? chosen.sfc : p.sfc,
+    variants: [
+      { name: p.primary, summary: 'primary' },
+      ...(p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
+    ],
+    howToUse:
+      'Copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes). Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills.'
+  }
+}
+
+function sectionSuggestion(catalog, need) {
+  const q = normalize(need)
+  const words = q.split(' ').filter((w) => w.length >= 3 && !SCREEN_WORDS.includes(w))
+  const ranked = catalog.subpaths
+    .filter((sub) => sub.startsWith('sections/') && catalog.getEntry(sub)?.kind === 'component')
+    .map((sub) => {
+      const e = catalog.getEntry(sub)
+      const name = normalize(sub.replace(/^sections\//, ''))
+      const prose = normalize([e.purpose || '', ...(e.useWhen || [])].join(' '))
+      let score = 0
+      for (const w of words) {
+        if (hasPhrase(name, w)) score += 20
+        else if (name.includes(w)) score += 10
+        if (hasPhrase(prose, w)) score += 3
+      }
+      return { sub, score }
+    })
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
+  return ranked
+}
+
+export function suggestComponent(catalog, need) {
+  if (!catalog.available) return NOT_AVAILABLE
+  const q = String(need || '')
+  const nq = normalize(q)
+  const component = componentSuggestion(catalog, q)
+
+  const isMarketing = MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w)))
+  if (isMarketing) {
+    const sections = sectionSuggestion(catalog, q)
+    if (sections.length) {
+      const [best, ...rest] = sections
+      return {
+        ...component,
+        recommendation: 'section',
+        best: { ...componentCard(catalog, best.sub), score: best.score },
+        alternatives: rest
+          .slice(0, 3)
+          .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score })),
+        found: true,
+        hint: 'A marketing band is a page section: import it from its sections/ subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+      }
+    }
+  }
+
+  const patterns = searchPatterns(catalog, q)
+  const topPattern = patterns.matches?.[0]
+  const screenIntent = SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
+  if (topPattern && (topPattern.score >= 60 || (screenIntent && topPattern.score >= 25))) {
+    return {
+      ok: true,
+      available: true,
+      need: q,
+      found: true,
+      recommendation: 'pattern',
+      pattern: topPattern,
+      patternAlternatives: patterns.matches.slice(1, 3),
+      hint: `This is a screen: start from the pattern. Call get_pattern("${topPattern.id}") and copy its SFC; use the components below only for pieces the pattern does not cover.`,
+      best: component.best,
+      alternatives: component.alternatives
+    }
+  }
+  return { ...component, recommendation: 'component' }
 }

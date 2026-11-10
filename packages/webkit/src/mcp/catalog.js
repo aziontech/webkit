@@ -75,6 +75,7 @@ function build(json) {
     vocabulary: json.vocabulary || null,
     subpaths,
     imports,
+    patterns: json.patterns || {},
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
     nearestPublishedPrefix(sub) {
@@ -112,6 +113,7 @@ function empty() {
     tokens: { cssVars: [], typography: [], groups: {} },
     subpaths: [],
     imports: {},
+    patterns: {},
     has: () => false,
     getEntry: () => null,
     nearestPublishedPrefix: () => null,

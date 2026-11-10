@@ -1940,7 +1940,6 @@
       "treeShakeableImport": "@aziontech/webkit/button",
       "category": "actions",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -2043,7 +2042,6 @@
       "treeShakeableImport": "@aziontech/webkit/button-highlight",
       "category": "actions",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "label",
@@ -2111,7 +2109,6 @@
       "treeShakeableImport": "@aziontech/webkit/mini-button",
       "category": "actions",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -2179,7 +2176,6 @@
       "treeShakeableImport": "@aziontech/webkit/copy-button",
       "category": "actions",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "value",
@@ -2247,7 +2243,6 @@
       "treeShakeableImport": "@aziontech/webkit/icon-button",
       "category": "actions",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "icon",
@@ -2336,7 +2331,6 @@
       "treeShakeableImport": "@aziontech/webkit/split-button",
       "category": "actions",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "label",
@@ -2416,7 +2410,6 @@
       "treeShakeableImport": "@aziontech/webkit/tag",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -2486,7 +2479,6 @@
       "treeShakeableImport": "@aziontech/webkit/avatar",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "src",
@@ -2540,7 +2532,6 @@
       "treeShakeableImport": "@aziontech/webkit/badge",
       "category": "content",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "label",
@@ -2596,7 +2587,6 @@
       "treeShakeableImport": "@aziontech/webkit/brand",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -2622,7 +2612,6 @@
       "treeShakeableImport": "@aziontech/webkit/browser-frame",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "address",
@@ -2736,7 +2725,6 @@
       ],
       "category": "content",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "type",
@@ -2805,7 +2793,6 @@
       "treeShakeableImport": "@aziontech/webkit/accordion-root",
       "category": "content",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "type",
@@ -2894,7 +2881,6 @@
       "treeShakeableImport": "@aziontech/webkit/card-box",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -2942,7 +2928,6 @@
       "treeShakeableImport": "@aziontech/webkit/card-pricing",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "planTitle",
@@ -3071,7 +3056,6 @@
       "treeShakeableImport": "@aziontech/webkit/section-title",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "title",
@@ -3191,7 +3175,6 @@
       ],
       "category": "content",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -3232,7 +3215,6 @@
       "treeShakeableImport": "@aziontech/webkit/item-root",
       "category": "content",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -3342,7 +3324,6 @@
       "treeShakeableImport": "@aziontech/webkit/currency",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "value",
@@ -3382,7 +3363,6 @@
       "treeShakeableImport": "@aziontech/webkit/illustration",
       "category": "content",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "name",
@@ -3433,7 +3413,6 @@
       "treeShakeableImport": "@aziontech/webkit/product-widget",
       "category": "content",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "name",
@@ -3542,7 +3521,6 @@
       ],
       "category": "content",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -3696,7 +3674,6 @@
       "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
       "category": "content",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -3856,7 +3833,6 @@
       "treeShakeableImport": "@aziontech/webkit/kbd",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "meta",
@@ -3927,7 +3903,6 @@
       "treeShakeableImport": "@aziontech/webkit/network-map",
       "category": "content",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "region",
@@ -4031,7 +4006,6 @@
       ],
       "category": "code",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "lines",
@@ -4127,7 +4101,6 @@
       "treeShakeableImport": "@aziontech/webkit/code-block",
       "category": "code",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "tabs",
@@ -4232,7 +4205,6 @@
       ],
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "maxHeight",
@@ -4533,7 +4505,6 @@
       "treeShakeableImport": "@aziontech/webkit/table-root",
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "maxHeight",
@@ -4943,7 +4914,6 @@
       ],
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "page",
@@ -5027,7 +4997,6 @@
       "treeShakeableImport": "@aziontech/webkit/paginator-root",
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "page",
@@ -5137,7 +5106,6 @@
       ],
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "align",
@@ -5164,7 +5132,6 @@
       "treeShakeableImport": "@aziontech/webkit/flow-root",
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "align",
@@ -5217,7 +5184,6 @@
       ],
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "modelValue",
@@ -5282,7 +5248,6 @@
       "treeShakeableImport": "@aziontech/webkit/pick-list-root",
       "category": "data",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "modelValue",
@@ -5367,7 +5332,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-callout",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -5418,7 +5382,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-card",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -5509,7 +5472,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-card-group",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "cols",
@@ -5560,7 +5522,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-frame",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "caption",
@@ -5644,7 +5605,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-item",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -5717,7 +5677,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-on-this-page",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -5783,7 +5742,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-page-header",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -5878,7 +5836,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-pagination",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "previous",
@@ -5942,7 +5899,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-prompt",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -6010,7 +5966,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-prose",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "slots": [
         {
           "name": "default",
@@ -6045,7 +6000,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-step",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -6087,7 +6041,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-steps",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "slots": [
         {
           "name": "default",
@@ -6122,7 +6075,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-tooltip",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "tip",
@@ -6209,7 +6161,6 @@
       "treeShakeableImport": "@aziontech/webkit/doc-update",
       "category": "documentation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -6283,7 +6234,6 @@
       "treeShakeableImport": "@aziontech/webkit/message",
       "category": "feedback",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "severity",
@@ -6368,7 +6318,6 @@
       "treeShakeableImport": "@aziontech/webkit/empty-state",
       "category": "feedback",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "title",
@@ -6427,7 +6376,6 @@
       "treeShakeableImport": "@aziontech/webkit/status-indicator",
       "category": "feedback",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "severity",
@@ -6468,7 +6416,6 @@
       ],
       "category": "feedback",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "position",
@@ -6524,7 +6471,6 @@
       "treeShakeableImport": "@aziontech/webkit/toast-root",
       "category": "feedback",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "position",
@@ -6614,7 +6560,6 @@
       "treeShakeableImport": "@aziontech/webkit/skeleton",
       "category": "feedback",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -6654,7 +6599,6 @@
       "treeShakeableImport": "@aziontech/webkit/progress-bar",
       "category": "feedback",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "value",
@@ -6706,7 +6650,6 @@
       ],
       "category": "inputs",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "modelValue",
@@ -6896,7 +6839,6 @@
       "treeShakeableImport": "@aziontech/webkit/calendar-root",
       "category": "inputs",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "modelValue",
@@ -7099,7 +7041,6 @@
       "treeShakeableImport": "@aziontech/webkit/input-text",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "modelValue",
@@ -7228,7 +7169,6 @@
       ],
       "category": "inputs",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "size",
@@ -7276,7 +7216,6 @@
       "treeShakeableImport": "@aziontech/webkit/input-group-root",
       "category": "inputs",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "size",
@@ -7330,7 +7269,6 @@
       "treeShakeableImport": "@aziontech/webkit/input-number",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -7457,7 +7395,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-select",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "options",
@@ -7574,7 +7511,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-text",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -7703,7 +7639,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-input-group",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -7804,7 +7739,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-text-switch",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -7905,7 +7839,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-phone-number",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "countries",
@@ -8015,7 +7948,6 @@
       "treeShakeableImport": "@aziontech/webkit/helper-text",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -8048,7 +7980,6 @@
       "treeShakeableImport": "@aziontech/webkit/hint",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "text",
@@ -8095,7 +8026,6 @@
       "treeShakeableImport": "@aziontech/webkit/label",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -8135,7 +8065,6 @@
       "treeShakeableImport": "@aziontech/webkit/input-password",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8229,7 +8158,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-password",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "modelValue",
@@ -8371,7 +8299,6 @@
       "treeShakeableImport": "@aziontech/webkit/box-grid-selection",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8423,7 +8350,6 @@
       "treeShakeableImport": "@aziontech/webkit/chip",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "label",
@@ -8523,7 +8449,6 @@
       "treeShakeableImport": "@aziontech/webkit/checkbox",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8605,7 +8530,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-checkbox",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8687,7 +8611,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-checkbox-block",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8769,7 +8692,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-radio",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8844,7 +8766,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-radio-block",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8919,7 +8840,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-switch",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -8973,7 +8893,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-switch-block",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9027,7 +8946,6 @@
       "treeShakeableImport": "@aziontech/webkit/radio-button",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9081,7 +8999,6 @@
       "treeShakeableImport": "@aziontech/webkit/switch",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9128,7 +9045,6 @@
       "treeShakeableImport": "@aziontech/webkit/theme-switcher",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "value",
@@ -9168,7 +9084,6 @@
       "treeShakeableImport": "@aziontech/webkit/textarea",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9250,7 +9165,6 @@
       "treeShakeableImport": "@aziontech/webkit/field-textarea",
       "category": "inputs",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9352,7 +9266,6 @@
       ],
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -9422,7 +9335,6 @@
       "treeShakeableImport": "@aziontech/webkit/dropdown-root",
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -9519,7 +9431,6 @@
       ],
       "category": "inputs",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9621,7 +9532,6 @@
       "treeShakeableImport": "@aziontech/webkit/multi-select-root",
       "category": "inputs",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9757,7 +9667,6 @@
       ],
       "category": "inputs",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -9866,7 +9775,6 @@
       "treeShakeableImport": "@aziontech/webkit/select-root",
       "category": "inputs",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "modelValue",
@@ -10002,7 +9910,6 @@
       "treeShakeableImport": "@aziontech/webkit/divider",
       "category": "layout",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "orientation",
@@ -10040,7 +9947,6 @@
       ],
       "category": "layout",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "ariaLabel",
@@ -10133,7 +10039,6 @@
       "treeShakeableImport": "@aziontech/webkit/footer-root",
       "category": "layout",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "ariaLabel",
@@ -10239,7 +10144,6 @@
       "treeShakeableImport": "@aziontech/webkit/frame-box",
       "category": "layout",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "borders",
@@ -10309,7 +10213,6 @@
       "treeShakeableImport": "@aziontech/webkit/section-gap",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "size",
@@ -10365,7 +10268,6 @@
       ],
       "category": "layout",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "orientation",
@@ -10423,7 +10325,6 @@
       "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
       "category": "layout",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "orientation",
@@ -10494,7 +10395,6 @@
       "treeShakeableImport": "@aziontech/webkit/scroll-area",
       "category": "layout",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "orientation",
@@ -10537,7 +10437,6 @@
       "subcomponents": [],
       "category": "layout",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -10586,7 +10485,6 @@
       ],
       "category": "layout",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -10704,7 +10602,6 @@
       "treeShakeableImport": "@aziontech/webkit/band-stack",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "sticky",
@@ -10762,7 +10659,6 @@
       "treeShakeableImport": "@aziontech/webkit/logo-wall",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -10851,7 +10747,6 @@
       "treeShakeableImport": "@aziontech/webkit/media-split",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -11053,7 +10948,6 @@
       "treeShakeableImport": "@aziontech/webkit/ticker",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -11144,7 +11038,6 @@
       ],
       "category": "marketing",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -11218,7 +11111,6 @@
       "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
       "category": "marketing",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -11298,7 +11190,6 @@
       "treeShakeableImport": "@aziontech/webkit/call-to-action",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -11418,7 +11309,6 @@
       "treeShakeableImport": "@aziontech/webkit/diagram",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "name",
@@ -11476,7 +11366,6 @@
       "treeShakeableImport": "@aziontech/webkit/big-numbers",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -11533,7 +11422,6 @@
       ],
       "category": "marketing",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -11592,7 +11480,6 @@
       "treeShakeableImport": "@aziontech/webkit/carousel-root",
       "category": "marketing",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -11671,7 +11558,6 @@
       "treeShakeableImport": "@aziontech/webkit/banner",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -11743,7 +11629,6 @@
       ],
       "category": "marketing",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -11934,7 +11819,6 @@
       "treeShakeableImport": "@aziontech/webkit/hero-root",
       "category": "marketing",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -12124,7 +12008,6 @@
       "treeShakeableImport": "@aziontech/webkit/sticky-stack",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -12217,7 +12100,6 @@
       "treeShakeableImport": "@aziontech/webkit/quote-carousel",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "items",
@@ -12272,7 +12154,6 @@
       "treeShakeableImport": "@aziontech/webkit/quote",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "text",
@@ -12384,7 +12265,6 @@
       "treeShakeableImport": "@aziontech/webkit/media-tabs",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "items",
@@ -12504,7 +12384,6 @@
       "treeShakeableImport": "@aziontech/webkit/embed",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "src",
@@ -12559,7 +12438,6 @@
       "treeShakeableImport": "@aziontech/webkit/faq",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -12622,7 +12500,6 @@
       "treeShakeableImport": "@aziontech/webkit/content-columns",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -12698,7 +12575,6 @@
       ],
       "category": "marketing",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -12767,7 +12643,6 @@
       "treeShakeableImport": "@aziontech/webkit/column-navigation-root",
       "category": "marketing",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -12854,7 +12729,6 @@
       ],
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -12888,7 +12762,6 @@
       "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
       "category": "navigation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -12949,7 +12822,6 @@
       "treeShakeableImport": "@aziontech/webkit/link",
       "category": "navigation",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "label",
@@ -13026,7 +12898,6 @@
       ],
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "groups",
@@ -13132,7 +13003,6 @@
       "treeShakeableImport": "@aziontech/webkit/menu-root",
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "groups",
@@ -13282,7 +13152,6 @@
       "subcomponents": [],
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "events": [
         {
           "name": "update:value",
@@ -13309,7 +13178,6 @@
       "subcomponents": [],
       "category": "navigation",
       "structure": "composition",
-      "status": "implemented",
       "events": [
         {
           "name": "update:value",
@@ -13338,7 +13206,6 @@
       "treeShakeableImport": "@aziontech/webkit/tooltip",
       "category": "overlay",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "text",
@@ -13425,7 +13292,6 @@
       ],
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -13504,7 +13370,6 @@
       "treeShakeableImport": "@aziontech/webkit/command-menu-root",
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -13634,7 +13499,6 @@
       ],
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -13763,7 +13627,6 @@
       ],
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -13895,7 +13758,6 @@
       ],
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "size",
@@ -13952,7 +13814,6 @@
       ],
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -14021,7 +13882,6 @@
       "treeShakeableImport": "@aziontech/webkit/popover-root",
       "category": "overlay",
       "structure": "composition",
-      "status": "implemented",
       "props": [
         {
           "name": "open",
@@ -14138,7 +13998,6 @@
       "treeShakeableImport": "@aziontech/webkit/spinner",
       "category": "utils",
       "structure": "monolithic",
-      "status": "implemented",
       "purpose": "Shared visual utility used by other components. Migrated from the existing implementation at `packages/webkit/src/components/webkit/utils/spinner/`."
     },
     "svg/error-403": {
@@ -16350,7 +16209,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/architecture-tabs",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -16426,7 +16284,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/article-body",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -16509,7 +16366,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/article-cards",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -16572,7 +16428,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/article-highlight",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -16627,7 +16482,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/article-index-blog",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -16717,7 +16571,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/article-index-resource-hub",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -16793,7 +16646,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/cli-terminal",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -16862,7 +16714,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -16917,7 +16768,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/client-mosaic-columns",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -16964,7 +16814,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/client-quotes",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "ariaLabel",
@@ -17011,7 +16860,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -17095,7 +16943,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-agents",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -17178,7 +17025,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/closing-call-to-action-newsletter",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "form",
@@ -17269,7 +17115,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/code-split",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -17339,7 +17184,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/compare-plans",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -17430,7 +17274,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/compare-support-tiers",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -17513,7 +17356,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/comparison-table",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -17604,7 +17446,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/compliance-badges",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -17671,7 +17512,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/contact-hub",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "lanes",
@@ -17713,7 +17553,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/faq-section",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -17763,7 +17602,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/feature-scroll",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -17819,7 +17657,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/feature-tabs",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -17881,7 +17718,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/feature-tiles",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -17951,7 +17787,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/feature-widgets",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -18035,7 +17870,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/hero-band",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -18155,7 +17989,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/hero-copy-on-top-art",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -18231,7 +18064,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/hero-form",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "messages",
@@ -18364,7 +18196,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/hero-with-opening",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -18434,7 +18265,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/investor-marks",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -18487,7 +18317,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/listing-browser",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -18589,7 +18418,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/listing-table",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -18652,7 +18480,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/logo-wall-quote",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -18720,7 +18547,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/media-split-band",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -18818,7 +18644,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/media-split-stack",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -18873,7 +18698,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/network-section",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -18950,7 +18774,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/photo-marquee",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -19017,7 +18840,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/platform-directory",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "title",
@@ -19068,7 +18890,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/pricing-plans",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -19123,7 +18944,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/recognition-marquee",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -19185,7 +19005,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/resource-grid",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -19247,7 +19066,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/site-footer",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -19338,7 +19156,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/site-nav",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "home",
@@ -19409,7 +19226,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/stats-band",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -19443,7 +19259,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/sticky-scroll-code",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -19498,7 +19313,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/story-library",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -19588,7 +19402,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/subject-library",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "anchor",
@@ -19639,7 +19452,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/template-gallery",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -19739,7 +19551,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/use-case-links",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -19796,7 +19607,6 @@
       "treeShakeableImport": "@aziontech/webkit/sections/use-cases",
       "category": "sections",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "eyebrow",
@@ -19920,7 +19730,6 @@
       ],
       "category": "marketing",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -20005,7 +19814,6 @@
       "treeShakeableImport": "@aziontech/webkit/card-grid-root",
       "category": "marketing",
       "structure": "composition",
-      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -20096,7 +19904,6 @@
       "treeShakeableImport": "@aziontech/webkit/texture-material",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -20153,7 +19960,6 @@
       "treeShakeableImport": "@aziontech/webkit/topic",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "title",
@@ -20232,7 +20038,6 @@
       "treeShakeableImport": "@aziontech/webkit/section-module",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "title",
@@ -20326,7 +20131,6 @@
       "treeShakeableImport": "@aziontech/webkit/section-container",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "maxWidth",
@@ -20389,7 +20193,6 @@
       "treeShakeableImport": "@aziontech/webkit/media-tile",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
       "props": [
         {
           "name": "kind",
@@ -20500,7 +20303,6 @@
       "treeShakeableImport": "@aziontech/webkit/quote-tabs",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
       "props": [
         {
           "name": "items",

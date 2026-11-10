@@ -8,11 +8,13 @@ import {
   getBestPractices,
   getComponent,
   getImport,
+  getPattern,
   getUsageExample,
   listCategories,
   listComponents,
   listTokens,
   searchComponents,
+  searchPatterns,
   suggestComponent,
   validateUsage
 } from './queries.js'
@@ -53,7 +55,16 @@ async function main() {
 
   const catalog = loadCatalog(process.cwd())
 
-  const server = new McpServer({ name: '@aziontech/webkit-mcp', version: serverVersion() })
+  const server = new McpServer(
+    { name: '@aziontech/webkit-mcp', version: serverVersion() },
+    {
+      instructions:
+        'Azion webkit design system. For a whole screen (login, signup, settings, list, create, ' +
+        'detail), call search_patterns, then get_pattern, and start from that SFC — never build ' +
+        'the screen from scratch. For a single piece, use suggest_component and get_component. ' +
+        'For a marketing band, suggest_component returns the page section to import.'
+    }
+  )
 
   const tool = (name, config, handler) => {
     if (typeof server.registerTool === 'function') {
@@ -176,7 +187,9 @@ async function main() {
       title: 'Suggest a webkit component for a need',
       description:
         'Given a plain-language need, suggest the single best-fitting component (plus runners-up) so ' +
-        'the AI uses a real webkit component instead of reinventing one or reaching for PrimeVue.',
+        'the AI uses a real webkit component instead of reinventing one or reaching for PrimeVue. ' +
+        'When the need is a whole screen it returns the pattern first (recommendation "pattern"); ' +
+        'for a marketing band it returns the page section (recommendation "section").',
       inputSchema: {
         need: z
           .string()
@@ -184,6 +197,41 @@ async function main() {
       }
     },
     async ({ need }) => json(suggestComponent(catalog, need))
+  )
+
+  tool(
+    'search_patterns',
+    {
+      title: 'Search webkit screen patterns',
+      description:
+        'Find the reviewed screen pattern for an intent ("login", "sign up", "account settings", ' +
+        '"delete dialog", "tela de login"). Patterns are whole screens generated from the webkit ' +
+        'stories: start every screen from one. Returns ranked ids with their intents, components, ' +
+        'skills and steps. An empty query lists every pattern.',
+      inputSchema: {
+        query: z.string().describe('The screen you need, in plain words, e.g. "login page".')
+      }
+    },
+    async ({ query }) => json(searchPatterns(catalog, query))
+  )
+
+  tool(
+    'get_pattern',
+    {
+      title: 'Get a webkit screen pattern',
+      description:
+        'The whole pattern: a runnable SFC (script setup + template) with the webkit imports, the ' +
+        'components it uses, the skills to follow, its steps and the other variants (states) of ' +
+        'the same screen. Copy the SFC and change only the content.',
+      inputSchema: {
+        id: z.string().describe('Pattern id from search_patterns, e.g. "platform/auth/sign-in".'),
+        variant: z
+          .string()
+          .optional()
+          .describe('A variant name from the pattern, e.g. "InvalidCredentials".')
+      }
+    },
+    async ({ id, variant }) => json(getPattern(catalog, id, { variant }))
   )
 
   tool(

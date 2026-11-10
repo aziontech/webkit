@@ -18,7 +18,9 @@ const {
   suggestComponent,
   getUsageExample,
   validateUsage,
-  pascalCase
+  pascalCase,
+  searchPatterns,
+  getPattern
 } = await import('../../src/mcp/queries.js')
 
 _resetCatalogCache()
@@ -276,4 +278,48 @@ test('validateUsage with a component flags classes outside the layout utilities'
   assert.equal(bad.ok, false)
   const problem = bad.problems.find((p) => p.kind === 'style-override')
   assert.deepEqual(problem.classes, ['mt-4'])
+})
+
+test('searchPatterns ranks platform/auth/sign-in first for login intents in EN and PT', () => {
+  for (const q of ['login', 'sign in', 'entrar', 'tela de login', 'forgot password']) {
+    const res = searchPatterns(catalog, q)
+    assert.equal(res.matches[0].id, 'platform/auth/sign-in', q)
+  }
+  assert.equal(searchPatterns(catalog, 'criar conta').matches[0].id, 'platform/auth/sign-up')
+})
+
+test('searchPatterns with an empty query lists every pattern', () => {
+  const res = searchPatterns(catalog, '')
+  assert.equal(res.count, Object.keys(catalog.patterns).length)
+})
+
+test('getPattern returns the SFC, components, skills and steps; variants by name', () => {
+  const p = getPattern(catalog, 'platform/auth/sign-in')
+  assert.equal(p.found, true)
+  assert.match(p.sfc, /<script setup>/)
+  assert.match(p.sfc, /autocomplete="username"/)
+  assert.ok(p.components.includes('FieldText'))
+  assert.deepEqual(p.steps, ['email', 'password', 'reset', 'sent', 'new-password'])
+  assert.ok(p.skills.includes('webkit-errors'))
+  const v = getPattern(catalog, 'platform/auth/sign-in', { variant: 'InvalidCredentials' })
+  assert.equal(v.variant, 'InvalidCredentials')
+  assert.match(v.sfc, /The email or password is incorrect/)
+  assert.equal(getPattern(catalog, 'sign-in').id, 'platform/auth/sign-in')
+  assert.equal(getPattern(catalog, 'nope-nope').found, false)
+})
+
+test('suggestComponent returns the pattern first for a screen and the section for a marketing band', () => {
+  const screen = suggestComponent(catalog, 'login page')
+  assert.equal(screen.recommendation, 'pattern')
+  assert.equal(screen.pattern.id, 'platform/auth/sign-in')
+  const band = suggestComponent(catalog, 'pricing page')
+  assert.equal(band.recommendation, 'section')
+  assert.equal(band.best.name, 'sections/pricing-plans')
+  assert.equal(suggestComponent(catalog, 'button').recommendation, 'component')
+})
+
+test('no MCP answer carries the spec status', () => {
+  assert.equal('status' in getComponent(catalog, 'button'), false)
+  assert.ok(listComponents(catalog).components.every((c) => !('status' in c)))
+  assert.ok(Object.values(catalog.imports).every((e) => !('status' in e)))
 })

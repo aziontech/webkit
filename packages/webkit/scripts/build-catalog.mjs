@@ -310,7 +310,6 @@ async function build() {
     if (spec) {
       entry.category = spec.category ?? categoryFromTarget(target)
       entry.structure = spec.structure
-      entry.status = spec.status
       if (spec.props.length) entry.props = spec.props
       if (spec.events.length) entry.events = spec.events
       if (spec.slots.length) entry.slots = spec.slots

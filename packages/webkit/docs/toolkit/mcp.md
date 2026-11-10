@@ -27,16 +27,18 @@ Requires Node ≥ 22. `@modelcontextprotocol/sdk` and `zod` are runtime dependen
 
 | Tool                 | Answer                                                                                                                                                                  |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_patterns`    | Whole-screen patterns ranked by intent ("login", "account settings", "tela de login"). Start every screen here.                                                         |
+| `get_pattern`        | One pattern: the runnable SFC, its components, skills, steps and variants (other states of the screen).                                                                 |
 | `list_components`    | Every renderable component (compact cards), optionally filtered by category.                                                                                            |
 | `list_categories`    | The distinct categories in the installed catalog.                                                                                                                       |
 | `list_tokens`        | The positive token inventory (what to use instead of hardcoding): the token group index + typography classes, or a group's CSS custom properties when given a category. |
-| `get_component`      | Full API for one component: props, events, slots, sub-components, structure.                                                                                            |
+| `get_component`      | Full API for one component: props, events, slots, sub-components, structure, purpose, when to use, examples and the classes allowed on its tag.                         |
 | `get_import`         | The tree-shakeable import to prefer, plus the compound (dot-notation) alternative when one exists.                                                                      |
 | `search_components`  | Components matching a substring.                                                                                                                                        |
-| `suggest_component`  | The best component for a free-text need, with alternatives.                                                                                                             |
+| `suggest_component`  | The best fit for a free-text need: the pattern first for a screen, the page section for a marketing band, else the component, with alternatives.                        |
 | `get_usage_example`  | A runnable `<script setup>` SFC using the tree-shakeable import and real props.                                                                                         |
 | `get_best_practices` | The usage guidance for a component (or the general do/avoid list): composition patterns, token rules, pitfalls.                                                         |
-| `validate_usage`     | Checks an import path (published? not internal?) and a class string (any token-rule violations?).                                                                       |
+| `validate_usage`     | Checks an import path (published? not internal?) and a class string (token rules; with `component`, only layout utilities on its tag).                                  |
 
 ## How it fits the adoption toolkit
 
