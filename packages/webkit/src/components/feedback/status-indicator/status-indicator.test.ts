@@ -60,25 +60,29 @@ describe('StatusIndicator', () => {
     expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Online')
   })
 
-  it('renders the dot hidden from a11y and not loading by default', () => {
-    const { getByTestId } = render(StatusIndicator, { props: { loading: false } })
+  it('renders the dot (hidden from a11y) and no spinner when not loading', () => {
+    const { getByTestId, queryByTestId } = render(StatusIndicator, { props: { loading: false } })
 
     const dot = getByTestId('feedback-status-indicator__dot')
+    expect(dot).toBeTruthy()
     expect(dot.getAttribute('aria-hidden')).toBe('true')
-    expect(dot.hasAttribute('data-loading')).toBe(false)
+    expect(queryByTestId('feedback-status-indicator__spinner')).toBeNull()
   })
 
-  it('keeps the dot, marks it loading and sets aria-busy without changing the label', () => {
+  it('swaps the dot for a spinner, sets aria-busy and appends an ellipsis to the label when loading', () => {
     const { getByTestId, queryByTestId } = render(StatusIndicator, {
-      props: { loading: true, label: 'Building' }
+      props: { loading: true, label: 'Deploying' }
     })
 
     const root = getByTestId('feedback-status-indicator')
+    // aria-busy is true and data-loading is present when loading.
     expect(root.getAttribute('aria-busy')).toBe('true')
     expect(root.hasAttribute('data-loading')).toBe(true)
-    expect(getByTestId('feedback-status-indicator__dot').hasAttribute('data-loading')).toBe(true)
-    expect(queryByTestId('feedback-status-indicator__spinner')).toBeNull()
-    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Building')
+    // Spinner replaces the dot.
+    expect(getByTestId('feedback-status-indicator__spinner')).toBeTruthy()
+    expect(queryByTestId('feedback-status-indicator__dot')).toBeNull()
+    // Label appends the ellipsis in loading state.
+    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Deploying...')
   })
 
   it('merges a consumer-supplied class onto the root', () => {
@@ -90,7 +94,7 @@ describe('StatusIndicator', () => {
   })
 
   it.each([...STATUSES])('has no a11y violations for status "%s"', async (status) => {
-    const { container } = render(StatusIndicator, { props: { severity: status, label: 'Status' } })
+    const { container } = render(StatusIndicator, { props: { status, label: 'Status' } })
 
     await expectNoA11yViolations(container)
   })
@@ -117,11 +121,11 @@ describe('StatusIndicator', () => {
     expect(getAllByTestId('feedback-status-indicator').length).toBe(STATUSES.length)
   })
 
-  it('renders the Loading story fixture with a loading dot and busy state', async () => {
+  it('renders the Loading story fixture with a spinner and busy state', async () => {
     const { getByTestId, container } = render(Loading())
 
     expect(getByTestId('feedback-status-indicator').getAttribute('aria-busy')).toBe('true')
-    expect(getByTestId('feedback-status-indicator__dot').hasAttribute('data-loading')).toBe(true)
+    expect(getByTestId('feedback-status-indicator__spinner')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
 })

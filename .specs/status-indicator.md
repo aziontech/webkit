@@ -3,16 +3,16 @@ name: status-indicator
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: c13cdfbed86ed930c41d4f3fef3865368b9ef3f35fa47f809bcc78941393fb0d
+spec_version: 1
+checksum: 4ab2ac82b585199d71ca5890a5b70e84a68aaed136cd35dd62eb9d34d691e5aa
 created: 2026-05-22
-last_updated: 2026-11-10
+last_updated: 2026-07-28
 ---
 # Status Indicator — Component Spec
 
 ## Purpose
 
-Shows the status of a resource as a small colored dot next to a short label: a deployment that is ready, building, or failed, or a service that is online or degraded. While the status is still in progress, the dot itself pulses. It is a read-only indicator, not a control.
+Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`.
 
 ## Usage
 
@@ -22,8 +22,7 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <StatusIndicator severity="success" label="Ready" />
-  <StatusIndicator severity="warning" label="Building" loading />
+  <StatusIndicator severity="success" label="Status" />
 </template>
 ```
 
@@ -32,8 +31,8 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false | Severity token driving the status dot color. |
-| `loading` | `boolean` | `false` | false | Pulses the dot while the status is still in progress. |
-| `label` | `string` | `'Status'` | false | Visible label text naming the status, in sentence case. |
+| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
+| `label` | `string` | `'Status'` | false | Visible label text. |
 
 ## Events
 
@@ -45,29 +44,21 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 
 ## States
 
-- Visual states: `default`, `loading`
-- `data-severity` mirrors the `severity` prop on the root and the dot.
-- `data-loading` mirrors the `loading` prop; the dot pulses and the root sets `aria-busy="true"`.
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| `loading` (status in progress) | `animate-pulse` on the dot | primitive (2s · cubic-bezier, infinite) | `motion-reduce:animate-none` (static dot) |
+_none_
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography | .text-label-md |
+| typography | .text-body-sm |
 | text | `var(--text-default)` |
-| gap (dot to label) | `var(--spacing-xs)` |
-| dot fill · success | `var(--success-contrast)` |
-| dot fill · info | `var(--info-contrast)` |
-| dot fill · neutral | `var(--text-muted)` |
-| dot fill · warning | `var(--warning-contrast)` |
-| dot fill · alt | `var(--primary)` |
-| dot fill · danger | `var(--danger-contrast)` |
+| spacing | `var(--spacing-3)` |
+| shape | `var(--shape-elements)` |
+| ring | `var(--ring-color)` |
 
 ## Theme gaps
 
@@ -77,12 +68,12 @@ import StatusIndicator from '@aziontech/webkit/status-indicator'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Non-interactive: not focusable, no keyboard map, no focus ring.
-- Root is `role="status"`, so a change of label is announced politely; `aria-busy="true"` while `loading`.
-- The dot is `aria-hidden="true"`; the visible label carries the meaning, so color is never the only cue.
-- Label text names the state on its own (`Ready`, `Building`, `Error`); do not prefix it with `Status:`.
-- Contrast ≥4.5:1 for the label, ≥3:1 for the dot against the canvas.
-- `motion-reduce:animate-none` on the pulsing dot.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
+- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- Touch target ≥40×40 px where the control is interactive.
 
 ## Stories (Storybook)
 

@@ -25,7 +25,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Shows the status of a resource as a small colored dot next to a short label. While the status is still in progress, the dot pulses.'
+          'Communicates status, alerts, or progress to the user. Renders a colored status dot next to a label; while loading, a spinner replaces the dot and the label appends an ellipsis.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -34,7 +34,7 @@ const meta = {
     severity: {
       control: 'select',
       options: ['success', 'info', 'neutral', 'warning', 'alt', 'danger'],
-      description: 'Severity token driving the status dot color.',
+      description: 'Status variant; drives the dot color.',
       table: {
         category: 'props',
         type: { summary: "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'" },
@@ -43,7 +43,7 @@ const meta = {
     },
     label: {
       control: 'text',
-      description: 'Visible label text naming the status, in sentence case.',
+      description: 'Visible label text.',
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -52,7 +52,7 @@ const meta = {
     },
     loading: {
       control: 'boolean',
-      description: 'Pulses the dot while the status is still in progress.',
+      description: 'Shows loading state and disables activation.',
       table: {
         category: 'props',
         type: { summary: 'boolean' },
@@ -90,13 +90,13 @@ export const Default = {
   }
 }
 
-const STATUS_TEMPLATE = `<div class="flex flex-col items-start gap-(--spacing-lg)">
-  <StatusIndicator severity="success" label="Ready" />
-  <StatusIndicator severity="info" label="Queued" />
-  <StatusIndicator severity="neutral" label="Canceled" />
-  <StatusIndicator severity="warning" label="Building" />
-  <StatusIndicator severity="alt" label="Promoted" />
-  <StatusIndicator severity="danger" label="Error" />
+const STATUS_TEMPLATE = `<div class="flex flex-wrap items-center gap-(--spacing-3)">
+  <StatusIndicator severity="success" label="Status" />
+  <StatusIndicator severity="info" label="Status" />
+  <StatusIndicator severity="neutral" label="Status" />
+  <StatusIndicator severity="warning" label="Status" />
+  <StatusIndicator severity="alt" label="Status" />
+  <StatusIndicator severity="danger" label="Status" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
@@ -105,26 +105,26 @@ export const Status = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Every severity, each with a label that names its state.' },
+      description: { story: 'All status variants side by side.' },
       source: { code: toSfc(IMPORT, STATUS_TEMPLATE) }
     }
   }
 }
 
-const LOADING_MARKUP = '<StatusIndicator severity="warning" label="Building" loading />'
+const LOADING_MARKUP = '<StatusIndicator severity="success" label="Status" loading />'
 
 /** @type {import('@storybook/vue3').StoryObj<typeof StatusIndicator>} */
 export const Loading = {
   args: {
-    severity: 'warning',
-    label: 'Building',
+    severity: 'success',
+    label: 'Status',
     loading: true
   },
   render: Template,
   parameters: {
     docs: {
       description: {
-        story: 'In progress: the dot pulses until the status settles. No separate spinner.'
+        story: 'Loading state: spinner replaces the dot and the label appends an ellipsis.'
       },
       source: { code: toSfc(IMPORT, LOADING_MARKUP) }
     }
