@@ -3,6 +3,7 @@
 import { applyPlan } from './apply.js'
 import { runCanary } from './canary.js'
 import { planDoctor } from './doctor.js'
+import { planMigrate, SUPPORTED_VERSIONS } from './migrate.js'
 import { planInit } from './plan.js'
 import { FAIL_MODES, FORMATS, runReport } from './report.js'
 import { planSync } from './sync.js'
@@ -15,6 +16,7 @@ Usage:
   npx @aziontech/webkit report [options] [patterns...]
   npx @aziontech/webkit canary
   npx @aziontech/webkit sync [options]
+  npx @aziontech/webkit migrate v6 [--dry-run]
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
@@ -23,6 +25,8 @@ Commands:
   canary          Prove the design-system lint rules still reach this project.
   sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
                    this webkit version's templates.
+  migrate v6      Rewrite this project for the v6 major: renamed imports and components,
+                   renamed props and values; lists removed components to replace by hand.
 
 Options (init):
   --dry-run       Print the plan without writing anything.
@@ -48,7 +52,7 @@ Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
 `
 
-const COMMANDS = new Set(['init', 'doctor', 'report', 'canary', 'sync'])
+const COMMANDS = new Set(['init', 'doctor', 'report', 'canary', 'sync', 'migrate'])
 const KNOWN_FLAGS = new Set([
   '--dry-run',
   '--strict',
@@ -283,6 +287,31 @@ function printPlan(plan) {
   }
 }
 
+function runMigrate(projectDir, target, { dryRun }) {
+  const version = Number(String(target || '').replace(/^v/i, ''))
+  if (!SUPPORTED_VERSIONS.includes(version)) {
+    process.stderr.write(
+      `Usage: npx @aziontech/webkit migrate v6 [--dry-run] (supported: ${SUPPORTED_VERSIONS.map((v) => `v${v}`).join(', ')})\n`
+    )
+    return 1
+  }
+  const results = planMigrate(projectDir, { version, dryRun })
+  let changed = 0
+  let manual = 0
+  for (const { file, changes, warnings } of results) {
+    if (changes.length) changed += 1
+    if (warnings.length) manual += 1
+    process.stdout.write(`${file}\n`)
+    for (const c of changes)
+      process.stdout.write(`  ${dryRun ? 'would change' : 'changed'}: ${c}\n`)
+    for (const w of warnings) process.stdout.write(`  MANUAL: ${w}\n`)
+  }
+  process.stdout.write(
+    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change. See MIGRATION-v6.md.\n`
+  )
+  return 0
+}
+
 async function run(argv) {
   const parsed = parseArgs(argv)
   const { command, dryRun, recommended, help, unknown } = parsed
@@ -338,6 +367,10 @@ async function run(argv) {
     const result = runCanary(projectDir)
     for (const line of result.lines) process.stdout.write(`${line}\n`)
     return result.exitCode
+  }
+
+  if (command === 'migrate') {
+    return runMigrate(projectDir, parsed.patterns[0], { dryRun })
   }
 
   if (command === 'sync') {
