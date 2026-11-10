@@ -173,6 +173,8 @@ const AXIS_BY_PREFIX = {
 
 const isCodeSintax = (key) => key.startsWith('code-sintax-');
 const isIllustration = (key) => key.startsWith('illustration-');
+const isChart = (key) => key.startsWith('chart-');
+const isSeverity = (key) => key.startsWith('severity-');
 
 const emitSemanticColorUtilities = () => {
   const { light } = compileThemeVars();
@@ -181,7 +183,7 @@ const emitSemanticColorUtilities = () => {
   const emitted = new Set(Object.keys(textsData));
 
   for (const key of keys) {
-    if (isCodeSintax(key) || isIllustration(key)) continue;
+    if (isCodeSintax(key) || isIllustration(key) || isChart(key) || isSeverity(key)) continue;
     const prefixEntry = Object.entries(AXIS_BY_PREFIX).find(([prefix]) =>
       key.startsWith(prefix),
     );

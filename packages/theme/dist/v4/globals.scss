@@ -1059,6 +1059,40 @@
   --illustration-warning-surface: #FAD76B;
   --illustration-info: #003066;
   --illustration-info-surface: #99C9FF;
+  --chart-series-1: #D94A03;
+  --chart-series-3: #16833F;
+  --chart-series-4: #E51A1A;
+  --chart-series-6: #947105;
+  --chart-series-other: #808080;
+  --chart-grid: #ECECEC;
+  --chart-axis: #D1D1D1;
+  --chart-label: #535353;
+  --chart-crosshair: #535353;
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-text: #141414;
+  --chart-tooltip-muted: #535353;
+  --chart-tooltip-border: #D1D1D1;
+  --chart-status-success: #0A2916;
+  --chart-status-warning: #312602;
+  --chart-status-danger: #5B0B0B;
+  --chart-status-info: #003066;
+  --chart-series-2: #005FCC;
+  --chart-series-5: #625BD5;
+  --chart-sequential-1: #CCE4FF;
+  --chart-sequential-2: #99C9FF;
+  --chart-sequential-3: #66ADFF;
+  --chart-sequential-4: #3392FF;
+  --chart-sequential-5: #0072F5;
+  --chart-sequential-6: #005FCC;
+  --chart-sequential-7: #004799;
+  --chart-diverging-negative: #B71515;
+  --chart-diverging-neutral: #ECECEC;
+  --chart-diverging-positive: #005FCC;
+  --severity-critical: #B71515;
+  --severity-high: #D94A03;
+  --severity-medium: #947105;
+  --severity-low: #005FCC;
+  --severity-info: #808080;
 }
 
 [data-theme=dark], .dark, .azion.azion-dark {
@@ -1157,6 +1191,40 @@
   --illustration-warning-surface: #312602;
   --illustration-info: #66ADFF;
   --illustration-info-surface: #001833;
+  --chart-series-1: #D94A03;
+  --chart-series-3: #16833F;
+  --chart-series-4: #E51A1A;
+  --chart-series-6: #947105;
+  --chart-series-other: #808080;
+  --chart-grid: #242424;
+  --chart-axis: #2B2B2B;
+  --chart-label: #999999;
+  --chart-crosshair: #999999;
+  --chart-tooltip-bg: #141414;
+  --chart-tooltip-text: #FAFAFA;
+  --chart-tooltip-muted: #999999;
+  --chart-tooltip-border: #2B2B2B;
+  --chart-status-success: #52E086;
+  --chart-status-warning: #F7BD08;
+  --chart-status-danger: #F3A5A5;
+  --chart-status-info: #66ADFF;
+  --chart-series-2: #0072F5;
+  --chart-series-5: #756FE5;
+  --chart-sequential-1: #001833;
+  --chart-sequential-2: #003066;
+  --chart-sequential-3: #004799;
+  --chart-sequential-4: #005FCC;
+  --chart-sequential-5: #0072F5;
+  --chart-sequential-6: #3392FF;
+  --chart-sequential-7: #66ADFF;
+  --chart-diverging-negative: #E74B4B;
+  --chart-diverging-neutral: #2B2B2B;
+  --chart-diverging-positive: #3392FF;
+  --severity-critical: #E74B4B;
+  --severity-high: #FF8E4D;
+  --severity-medium: #F7BD08;
+  --severity-low: #3392FF;
+  --severity-info: #999999;
 }
 
 @property --illustration-rim-angle {
