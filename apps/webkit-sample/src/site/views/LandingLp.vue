@@ -32,7 +32,10 @@
       :lang="page.lang"
       class="contents"
     >
-      <SitePage :sections="page.sections" />
+      <SitePage
+        :sections="page.sections"
+        :opening-gap="false"
+      />
     </div>
   </SiteLayout>
 </template>

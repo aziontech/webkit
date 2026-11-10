@@ -1,4 +1,5 @@
 import type { LandingPage } from '.'
+import { learnGrid } from './_shared/learn-grid.js'
 import { PT_BR_FORM_MESSAGES, SIGNUP } from './_shared/pt-br-forms'
 
 const FORM_TITLE = 'Preencha as informações para acessar o conteúdo'
@@ -16,7 +17,6 @@ export default {
       paragraphs: [
         'Neste whitepaper, descubra como unificar proteção, observabilidade e segurança programável para detectar ameaças mais cedo, responder com rapidez e reduzir a complexidade operacional da segurança de APIs.'
       ],
-      formTitle: FORM_TITLE,
       formLabel: FORM_TITLE,
       fields: ['phone', 'role'],
       country: 'BR',
@@ -33,11 +33,8 @@ export default {
       messages: PT_BR_FORM_MESSAGES,
       carouselMarks: []
     },
-    {
-      section: 'CapabilityGrid',
-      title: 'O que você encontrará neste ebook',
-      columns: 4,
-      items: [
+    learnGrid(
+      [
         {
           title: 'O que você vai aprender',
           description:
@@ -58,8 +55,9 @@ export default {
           description:
             'Sua equipe passa a aplicar controles distribuídos e responder a ameaças antes que o tráfego alcance a infraestrutura de origem.'
         }
-      ]
-    },
+      ],
+      { title: 'O que você encontrará neste ebook' }
+    ),
     {
       section: 'ClosingCallToAction',
       kind: 'panel',

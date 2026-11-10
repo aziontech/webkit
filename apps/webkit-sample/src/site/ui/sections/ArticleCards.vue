@@ -35,6 +35,8 @@
     description?: string
     /** Overline under the deck: date and read time. */
     meta: string
+    /** Label of the link at the card's foot; empty renders none. */
+    actionLabel?: string
     /** Cover image URL; a card without one draws its client mark instead, and without either no media. */
     image?: string
     /** Client mark drawn in the media slot when there is no image. */
@@ -48,8 +50,8 @@
     anchor?: string
     /** Overline above the headline. */
     eyebrow?: string
-    /** Headline over the cards. */
-    title: string
+    /** Headline over the cards; omit it, and the eyebrow, for a bare grid. */
+    title?: string
     /** The cards, three to a row. */
     items: ArticleCard[]
     /** Accessible name of the grid. */
@@ -60,6 +62,7 @@
     kind: 'left',
     anchor: '',
     eyebrow: '',
+    title: '',
     ariaLabel: ''
   })
 
@@ -72,7 +75,10 @@
     :divided="false"
     :padded="false"
   >
-    <template #header>
+    <template
+      v-if="title || eyebrow"
+      #header
+    >
       <SectionTitle
         :kind="kind"
         :eyebrow="eyebrow"
@@ -128,7 +134,10 @@
               />
             </span>
             <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">
-              <h3 class="m-0 text-balance text-heading-sm text-(--text-default)">
+              <h3
+                v-if="item.title"
+                class="m-0 text-balance text-heading-sm text-(--text-default)"
+              >
                 {{ item.title }}
               </h3>
               <p
@@ -140,6 +149,16 @@
               <p class="m-0 mt-auto pt-(--spacing-sm) text-overline-sm text-(--text-muted)">
                 {{ item.meta }}
               </p>
+              <span
+                v-if="item.actionLabel"
+                class="inline-flex items-center gap-(--spacing-xs) text-overline-sm text-(--text-default)"
+              >
+                {{ item.actionLabel }}
+                <i
+                  class="pi pi-arrow-right text-(--primary) transition-[translate] duration-fast-02 ease-productive-entrance group-hover/post:translate-x-1 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </span>
             </span>
           </component>
         </CardGridCell>

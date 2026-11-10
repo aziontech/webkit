@@ -29,6 +29,20 @@
   /** A paragraph beside the form, plain or opening on a bold lead. */
   export type HeroFormParagraph = string | { lead: string; text: string }
 
+  export interface HeroFormHighlight extends SiteTopic {
+    /** Body lines under the heading, each on its own line, in place of the description. */
+    lines?: string[]
+  }
+
+  export interface HeroFormQuestion {
+    /** Submitted field name. */
+    name: string
+    /** The question, as the field's label. */
+    label: string
+    /** Answers in a multi-line box instead of a single line. */
+    multiline?: boolean
+  }
+
   export interface HeroFormOption {
     /** Submitted value. */
     value: string
@@ -107,8 +121,10 @@
     fields?: HeroFormField[]
     /** Rendered fields submitted without a value; the rest are required. */
     optional?: HeroFormOptionalField[]
+    /** Required free-text questions asked after the standard fields. */
+    questions?: HeroFormQuestion[]
     /** Benefits stacked under the copy, beside the form. */
-    highlights?: SiteTopic[]
+    highlights?: HeroFormHighlight[]
     /** Client marks the floor strip runs; without marks the band has no strip. */
     carouselMarks?: string[]
     /** Overline above the client strip. */
@@ -140,6 +156,7 @@
     actions: () => [],
     fields: () => ['role', 'phone', 'message'],
     optional: () => [],
+    questions: () => [],
     highlights: () => [],
     carouselMarks: () => CLIENT_STRIP,
     carouselLabel: CLIENT_STRIP_LABEL,
@@ -210,6 +227,9 @@
     message: ''
   })
 
+  const answers = reactive<Record<string, string>>({})
+  const answerErrors = reactive<Record<string, string>>({})
+
   const submitting = ref(false)
 
   const copy = computed(() => ({ ...DEFAULT_LABELS, ...(props.labels ?? {}) }))
@@ -217,7 +237,9 @@
   const legend = computed(() => props.formLabel || props.title)
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
   const fieldSet = computed(() => (props.kind === 'incident' ? INCIDENT_FIELDS : props.fields))
-  const optionalSet = computed(() => (props.kind === 'incident' ? INCIDENT_OPTIONAL : props.optional))
+  const optionalSet = computed(() =>
+    props.kind === 'incident' ? INCIDENT_OPTIONAL : props.optional
+  )
   const shows = (field: HeroFormField) => !props.contactOnly && fieldSet.value.includes(field)
   const requires = (field: HeroFormOptionalField) => !optionalSet.value.includes(field)
   const hasHighlights = computed(() => props.highlights.length > 0)
@@ -244,7 +266,10 @@
             : ''
     errors.message =
       form.message.trim() || !shows('message') || !requires('message') ? '' : required
-    return Object.values(errors).every((message) => !message)
+    for (const question of props.questions) {
+      answerErrors[question.name] = answers[question.name]?.trim() ? '' : required
+    }
+    return [...Object.values(errors), ...Object.values(answerErrors)].every((message) => !message)
   }
 
   const submit = async () => {
@@ -265,6 +290,7 @@
         mobilephone: '',
         message: ''
       })
+      for (const question of props.questions) answers[question.name] = ''
     } catch (error) {
       toast.error(notice.value.error, {
         description: error instanceof Error ? error.message : notice.value.errorDescription,
@@ -345,11 +371,26 @@
             :icon="item.icon ?? ''"
             :title="item.title"
             :description="item.description"
-          />
+          >
+            <template
+              v-if="item.lines?.length"
+              #default
+            >
+              <span
+                v-for="line in item.lines"
+                :key="line"
+                class="block"
+              >
+                {{ line }}
+              </span>
+            </template>
+          </Topic>
         </li>
       </ul>
 
-      <div class="min-w-0 lg:group-data-[highlights]:col-start-2 lg:group-data-[highlights]:row-span-2 lg:group-data-[highlights]:row-start-1">
+      <div
+        class="min-w-0 lg:group-data-[highlights]:col-start-2 lg:group-data-[highlights]:row-span-2 lg:group-data-[highlights]:row-start-1"
+      >
         <h2
           v-if="formTitle"
           class="m-0 mb-(--spacing-lg) text-balance text-heading-lg text-(--text-default)"
@@ -484,6 +525,35 @@
               :helper-text="errors.message"
               @update:model-value="errors.message = ''"
             />
+
+            <template
+              v-for="question in questions"
+              :key="question.name"
+            >
+              <FieldTextarea
+                v-if="question.multiline"
+                v-model="answers[question.name]"
+                :label="question.label"
+                :input-id="`${uid}-${question.name}`"
+                :name="question.name"
+                :disabled="submitting"
+                :required="!!answerErrors[question.name]"
+                :helper-text="answerErrors[question.name]"
+                @update:model-value="answerErrors[question.name] = ''"
+              />
+              <FieldText
+                v-else
+                v-model="answers[question.name]"
+                :label="question.label"
+                :input-id="`${uid}-${question.name}`"
+                :name="question.name"
+                size="large"
+                :disabled="submitting"
+                :required="!!answerErrors[question.name]"
+                :helper-text="answerErrors[question.name]"
+                @update:model-value="answerErrors[question.name] = ''"
+              />
+            </template>
           </fieldset>
 
           <div class="flex flex-col">

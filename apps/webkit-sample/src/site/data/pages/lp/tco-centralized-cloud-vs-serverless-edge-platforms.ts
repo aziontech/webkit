@@ -1,4 +1,5 @@
 import type { LandingPage } from '.'
+import { learnGrid } from './_shared/learn-grid.js'
 
 export default {
   lang: 'en',
@@ -25,31 +26,28 @@ export default {
         { value: '68', suffix: '%', label: 'lower deployment effort' }
       ]
     },
-    {
-      section: 'CapabilityGrid',
-      items: [
-        {
-          title: "What you'll learn",
-          description:
-            'Understand how serverless edge platforms reduce infrastructure, development, and operational costs, and where those savings come from across a typical application lifecycle.'
-        },
-        {
-          title: 'Who this is for',
-          description:
-            'CTOs, infrastructure architects, SREs, and platform leaders optimizing cloud efficiency.'
-        },
-        {
-          title: 'Why this matters',
-          description:
-            'Serverless edge platforms shift costs from provisioned capacity to actual usage.'
-        },
-        {
-          title: 'What changes',
-          description:
-            'Resolve more requests closer to users and reduce dependency on centralized infrastructure. The result is lower egress, fewer moving parts to maintain, and more predictable spend as you scale.'
-        }
-      ]
-    },
+    learnGrid([
+      {
+        title: "What you'll learn",
+        description:
+          'Understand how serverless edge platforms reduce infrastructure, development, and operational costs, and where those savings come from across a typical application lifecycle.'
+      },
+      {
+        title: 'Who this is for',
+        description:
+          'CTOs, infrastructure architects, SREs, and platform leaders optimizing cloud efficiency.'
+      },
+      {
+        title: 'Why this matters',
+        description:
+          'Serverless edge platforms shift costs from provisioned capacity to actual usage.'
+      },
+      {
+        title: 'What changes',
+        description:
+          'Resolve more requests closer to users and reduce dependency on centralized infrastructure. The result is lower egress, fewer moving parts to maintain, and more predictable spend as you scale.'
+      }
+    ]),
     {
       section: 'ClosingCallToAction',
       kind: 'split',

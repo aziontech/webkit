@@ -1,6 +1,5 @@
 import { gatedForm } from './gated-form.js'
-
-const LEARN_ICONS = ['pi pi-book', 'pi pi-bullseye', 'pi pi-sparkles', 'pi pi-user']
+import { learnGrid } from './learn-grid.js'
 
 const LEARN_TITLES = [
   'O que você vai aprender',
@@ -20,16 +19,10 @@ export function downloadCasePage({ title, description, bandTitle, learn }) {
       description,
       ...gatedForm(FORM_TITLE)
     },
-    {
-      section: 'CapabilityGrid',
-      title: bandTitle,
-      columns: 4,
-      items: learn.map((text, index) => ({
-        icon: LEARN_ICONS[index],
-        title: LEARN_TITLES[index],
-        description: text
-      }))
-    },
+    learnGrid(
+      learn.map((text, index) => ({ title: LEARN_TITLES[index], description: text })),
+      { title: bandTitle }
+    ),
     { section: 'ClosingCallToAction', kind: 'frame' }
   ]
 }

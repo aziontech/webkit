@@ -27,13 +27,19 @@ const SPECIALIST_LABELS = {
 }
 
 /** The "talk to a specialist" form the pt-BR product landing pages open on. */
-export const specialistForm = (formTitle: string) => ({
-  formTitle,
-  formLabel: formTitle,
+export const specialistForm = (formLabel: string) => ({
+  formLabel,
   roles: EMPLOYEE_COUNTS,
   country: 'BR',
   labels: SPECIALIST_LABELS,
   messages: PT_BR_FORM_MESSAGES
+})
+
+export const pageSpecialistForm = (formLabel: string) => ({
+  ...specialistForm(formLabel),
+  optional: ['phone'],
+  carouselMarks: [],
+  carouselLabel: ''
 })
 
 export const SIGNUP = 'https://console.azion.com/signup/'

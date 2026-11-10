@@ -1,23 +1,9 @@
-import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
-import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
-import g2 from '@aziontech/webkit/assets/g2-symbol-color.svg'
-import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
-import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
-import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
-import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
-
-import type { LandingPage } from '.'
+import { ANALYST_FIRMS as FIRMS } from './_shared/analyst-firms.js'
+import { campaignPage } from './_shared/campaign-page'
+import { caseCard } from './_shared/case-card.js'
 import { specialistForm } from './_shared/pt-br-forms'
 
 const BLOG = 'https://www.azion.com/pt-br/blog/'
-const CASES = 'https://www.azion.com/pt-br/casos-de-sucesso/'
-
-const FIRMS = {
-  g2: { name: 'G2', logo: g2, logoLight: g2 },
-  gigaom: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
-  gartner: { name: 'Gartner', logo: gartnerReversed, logoLight: gartner },
-  frost: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost }
-}
 
 const article = (label: string, slug: string) => ({
   label,
@@ -81,68 +67,58 @@ const COMPARISON_ROWS = [
   }
 ]
 
-export default {
+export default campaignPage({
   lang: 'pt-BR',
   source: 'https://www.azion.com/pt-br/lp/reduza-custos-cloud/',
-  sections: [
-    {
-      section: 'HeroForm',
-      eyebrow: 'Otimização de aplicações web',
-      title: 'Reduza custos da sua aplicação web — não apenas da cloud',
-      description:
-        'Corte até 80% dos custos de cloud, tráfego e cache ao otimizar como sua aplicação consome infraestrutura. A Azion é indicada para empresas que já operam aplicações web, APIs ou plataformas digitais e precisam reduzir custos sem sacrificar performance ou segurança.',
-      ...specialistForm('Faça da Redução de Custos o seu diferencial competitivo'),
-      carouselMarks: []
-    },
-    {
-      section: 'CapabilityGrid',
-      eyebrow: 'NoOps',
-      title: 'Otimize sua aplicação sem trocar seu stack',
-      description:
-        'A Azion opera na frente da sua aplicação, sem exigir migração total de cloud ou reescrita de código. Funciona com AWS, Google Cloud, Azure e ambientes híbridos, sem impor mudanças de linguagem ou framework, com integração simples via API, CLI ou interface gráfica.',
-      items: [
-        {
-          icon: 'pi pi-check',
-          title: 'Liberdade para desenvolvedores',
-          description: 'Use o ecossistema de desenvolvimento de sua escolha.'
-        },
-        { icon: 'pi pi-check', title: 'Templates e bibliotecas pré-construídos', description: '' },
-        {
-          icon: 'pi pi-check',
-          title: 'Programabilidade total',
-          description:
-            'Permite testes com dados reais, fácil integração de novas ideias e controle total via API, CLI ou UI.'
-        }
-      ]
-    },
-    {
-      section: 'ArticleCards',
-      title: 'Nossos clientes economizam no mínimo 30% ao migrar para Azion',
-      items: [
-        {
-          key: 'pernambucanas',
-          title:
-            'Pernambucanas reduziu o volume de dados transferidos em média 70% por mês, economizando nos seus custos',
-          meta: 'Varejo'
-        },
-        {
-          key: 'unicesumar',
-          href: `${CASES}unicesumar/`,
-          external: true,
-          title:
-            'UniCesumar usa a Azion para inovar, reduzir custos e melhorar a experiência dos alunos com a plataforma de ensino a distância em 70%',
-          meta: 'Educação'
-        },
-        {
-          key: 'digimais',
-          href: `${CASES}digimais/`,
-          external: true,
-          title:
-            'Digimais aprimora segurança bancária digital com o Azion Edge Firewall, protegendo contra ataques DDoS, zero trust e SQL injection.',
-          meta: 'Finança'
-        }
-      ]
-    },
+  hero: {
+    eyebrow: 'Otimização de aplicações web',
+    title: 'Reduza custos da sua aplicação web — não apenas da cloud',
+    description:
+      'Corte até 80% dos custos de cloud, tráfego e cache ao otimizar como sua aplicação consome infraestrutura. A Azion é indicada para empresas que já operam aplicações web, APIs ou plataformas digitais e precisam reduzir custos sem sacrificar performance ou segurança.',
+    ...specialistForm('Faça da Redução de Custos o seu diferencial competitivo')
+  },
+  capabilities: {
+    eyebrow: 'NoOps',
+    title: 'Otimize sua aplicação sem trocar seu stack',
+    description:
+      'A Azion opera na frente da sua aplicação, sem exigir migração total de cloud ou reescrita de código. Funciona com AWS, Google Cloud, Azure e ambientes híbridos, sem impor mudanças de linguagem ou framework, com integração simples via API, CLI ou interface gráfica.',
+    items: [
+      {
+        icon: 'pi pi-check',
+        title: 'Liberdade para desenvolvedores',
+        description: 'Use o ecossistema de desenvolvimento de sua escolha.'
+      },
+      { icon: 'pi pi-check', title: 'Templates e bibliotecas pré-construídos', description: '' },
+      {
+        icon: 'pi pi-check',
+        title: 'Programabilidade total',
+        description:
+          'Permite testes com dados reais, fácil integração de novas ideias e controle total via API, CLI ou UI.'
+      }
+    ]
+  },
+  cases: {
+    title: 'Nossos clientes economizam no mínimo 30% ao migrar para Azion',
+    items: [
+      caseCard('case-pernambucanas-performance', {
+        title:
+          'Pernambucanas reduziu o volume de dados transferidos em média 70% por mês, economizando nos seus custos',
+        meta: 'Varejo',
+        linked: false
+      }),
+      caseCard('case-unicesumar', {
+        title:
+          'UniCesumar usa a Azion para inovar, reduzir custos e melhorar a experiência dos alunos com a plataforma de ensino a distância em 70%',
+        meta: 'Educação'
+      }),
+      caseCard('case-digimais', {
+        title:
+          'Digimais aprimora segurança bancária digital com o Azion Edge Firewall, protegendo contra ataques DDoS, zero trust e SQL injection.',
+        meta: 'Finança'
+      })
+    ]
+  },
+  extra: [
     {
       section: 'ComparePlans',
       plans: VENDORS,
@@ -151,79 +127,48 @@ export default {
       caption: 'Comparativo Técnico',
       columnLabel: 'Comparátivo Técnico',
       pickerLabel: 'Fornecedor comparado'
-    },
-    {
-      section: 'RecognitionMarquee',
-      eyebrow: 'RECONHECIMENTO DE MERCADO',
-      title: 'O que os analistas dizem sobre a Azion',
-      ariaLabel: 'Reconhecimentos de analistas',
-      items: [
-        {
-          tag: 'Reconhecimento',
-          text: 'A Azion foi nomeada Líder em CDN e Alto Desempenho em 6 categorias de segurança no G2 Winter 2026 Reports.',
-          name: 'G2 Winter 2026 Reports',
-          jobTitle: '',
-          firm: FIRMS.g2,
-          action: article('Leia o artigo', 'azion-lider-g2-winter-reports-2026')
-        },
-        {
-          tag: 'Reconhecimento',
-          text: 'A Azion foi nomeada Líder e identificada como a única plataforma construída especificamente para Edge Computing cujas capacidades atendem todos os critérios-chave descritos no relatório.',
-          name: 'Radar GigaOms para Plataformas de Edge.',
-          jobTitle: '',
-          firm: FIRMS.gigaom,
-          action: article(
-            'Ler artigo',
-            'azion-reconhecida-lider-de-mercado-fast-mover-relatorio-gigaom'
-          )
-        },
-        {
-          tag: 'Reconhecimento',
-          text: 'Clientes da Gartner afirmam que a Azion se destaca por oferecer uma abordagem consultiva para orquestração e ambientes de aplicação de Edge Computing.',
-          name: 'Panorama Competitivo da Gartner para CDN e Serviços de Edge Computing.',
-          jobTitle: '',
-          firm: FIRMS.gartner,
-          action: article('Ler artigo', 'azion-celebra-conquistas-2023')
-        },
-        {
-          tag: 'Reconhecimento',
-          text: 'A plataforma de Edge Computing da Azion é destacada por aumentar a agilidade dos negócios, capacitando desenvolvedores a construir e escalar suas aplicações.',
-          name: 'Prêmio de Melhores Práticas da Frost & Sullivan, Norte.',
-          jobTitle: '',
-          firm: FIRMS.frost,
-          action: article('Ler artigo', 'azion-premio-frost-sullivan')
-        }
-      ]
-    },
-    {
-      section: 'CapabilityGrid',
-      title: 'Confiança construída com as certificações mais rigorosas do mercado',
-      description:
-        'A Azion adere a rigorosos padrões de segurança, disponibilidade e privacidade para que os clientes possam adotar nossos serviços com confiança.',
-      actions: [
-        {
-          label: 'Ver todas certificações',
-          href: '/site/compliance',
-          kind: 'outlined',
-          trailing: true
-        }
-      ],
-      items: [
-        {
-          title: 'PCI DSS 4.0',
-          description: 'Certificação PCI DSS 4.0 obtida em seu ano de lançamento, 2023'
-        },
-        {
-          title: 'SOC 2 Type II',
-          description:
-            'Segurança e disponibilidade para o processamento de dados próximo aos usuários finais em toda a rede da Azion'
-        },
-        {
-          title: 'SOC 3',
-          description: 'O relatório SOC 3 certifica publicamente nossa segurança corporativa'
-        }
-      ]
-    },
-    { section: 'ClosingCallToAction', kind: 'frame' }
-  ]
-} satisfies LandingPage
+    }
+  ],
+  analysts: {
+    eyebrow: 'RECONHECIMENTO DE MERCADO',
+    title: 'O que os analistas dizem sobre a Azion',
+    ariaLabel: 'Reconhecimentos de analistas',
+    items: [
+      {
+        tag: 'Reconhecimento',
+        text: 'A Azion foi nomeada Líder em CDN e Alto Desempenho em 6 categorias de segurança no G2 Winter 2026 Reports.',
+        name: 'G2 Winter 2026 Reports',
+        jobTitle: '',
+        firm: FIRMS.g2,
+        action: article('Leia o artigo', 'azion-lider-g2-winter-reports-2026')
+      },
+      {
+        tag: 'Reconhecimento',
+        text: 'A Azion foi nomeada Líder e identificada como a única plataforma construída especificamente para Edge Computing cujas capacidades atendem todos os critérios-chave descritos no relatório.',
+        name: 'Radar GigaOms para Plataformas de Edge.',
+        jobTitle: '',
+        firm: FIRMS.gigaom,
+        action: article(
+          'Ler artigo',
+          'azion-reconhecida-lider-de-mercado-fast-mover-relatorio-gigaom'
+        )
+      },
+      {
+        tag: 'Reconhecimento',
+        text: 'Clientes da Gartner afirmam que a Azion se destaca por oferecer uma abordagem consultiva para orquestração e ambientes de aplicação de Edge Computing.',
+        name: 'Panorama Competitivo da Gartner para CDN e Serviços de Edge Computing.',
+        jobTitle: '',
+        firm: FIRMS.gartner,
+        action: article('Ler artigo', 'azion-celebra-conquistas-2023')
+      },
+      {
+        tag: 'Reconhecimento',
+        text: 'A plataforma de Edge Computing da Azion é destacada por aumentar a agilidade dos negócios, capacitando desenvolvedores a construir e escalar suas aplicações.',
+        name: 'Prêmio de Melhores Práticas da Frost & Sullivan, Norte.',
+        jobTitle: '',
+        firm: FIRMS.frost,
+        action: article('Ler artigo', 'azion-premio-frost-sullivan')
+      }
+    ]
+  }
+})

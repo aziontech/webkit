@@ -265,6 +265,14 @@ export const siteRoutes = [
     props: true,
     beforeEnter: (to) => (hasLandingPage(String(to.params.slug)) ? true : '/site/home')
   },
+  {
+    path: '/site/lp/:slug/embed',
+    name: 'site-lp-embed',
+    component: LandingLp,
+    props: true,
+    meta: { embed: true },
+    beforeEnter: (to) => (hasLandingPage(String(to.params.slug)) ? true : '/site/home')
+  },
 
   // ══ The rest of the site ══════════════════════════════════════════════════════════
   // The pricing page in the same shell: the three tiers, the full feature matrix, and the

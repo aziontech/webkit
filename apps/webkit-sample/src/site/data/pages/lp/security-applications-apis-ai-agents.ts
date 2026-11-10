@@ -1,4 +1,5 @@
 import type { LandingPage } from '.'
+import { learnGrid } from './_shared/learn-grid.js'
 
 export default {
   lang: 'en',
@@ -16,31 +17,28 @@ export default {
       carouselMarks: [],
       labels: { email: 'Work email', submit: 'Download the ebook' }
     },
-    {
-      section: 'CapabilityGrid',
-      items: [
-        {
-          title: "What you'll learn",
-          description:
-            'How to incorporate protection into deployment and apply reusable policies to AI-built applications, agent endpoints, and APIs using WAF, rate limiting, and controls against automated abuse.'
-        },
-        {
-          title: 'Who it’s for',
-          description:
-            'CISOs, security architects, DevSecOps teams, platform engineers, and teams responsible for deploying applications and AI agents to production.'
-        },
-        {
-          title: 'Why it matters',
-          description:
-            'AI accelerates delivery, but protection doesn’t always keep pace. Beyond reviewing code, teams need to control traffic after deployment.'
-        },
-        {
-          title: 'What changes',
-          description:
-            'New applications go live with protection policies in place. Security teams maintain governance, while engineering teams automate the application of controls.'
-        }
-      ]
-    },
+    learnGrid([
+      {
+        title: "What you'll learn",
+        description:
+          'How to incorporate protection into deployment and apply reusable policies to AI-built applications, agent endpoints, and APIs using WAF, rate limiting, and controls against automated abuse.'
+      },
+      {
+        title: 'Who it’s for',
+        description:
+          'CISOs, security architects, DevSecOps teams, platform engineers, and teams responsible for deploying applications and AI agents to production.'
+      },
+      {
+        title: 'Why it matters',
+        description:
+          'AI accelerates delivery, but protection doesn’t always keep pace. Beyond reviewing code, teams need to control traffic after deployment.'
+      },
+      {
+        title: 'What changes',
+        description:
+          'New applications go live with protection policies in place. Security teams maintain governance, while engineering teams automate the application of controls.'
+      }
+    ]),
     {
       section: 'ClosingCallToAction',
       kind: 'split',

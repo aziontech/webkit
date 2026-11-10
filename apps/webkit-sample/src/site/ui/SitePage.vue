@@ -22,9 +22,13 @@
   interface Props {
     /** The page, top to bottom: an opening hero, then the column's sections. */
     sections: PageSection[]
+    /** Draws the hatched gap between the opening hero and the first section. */
+    openingGap?: boolean
   }
 
-  const props = defineProps<Props>()
+  const props = withDefaults(defineProps<Props>(), {
+    openingGap: true
+  })
 
   const VIEW_OPTIONS = [
     { label: 'Design', value: 'design' },
@@ -73,7 +77,11 @@
         return {
           ...resolved,
           props: stacked ? { ...resolved.props, hatch: false } : resolved.props,
-          gap: entry.gap !== false && !(entry.section === 'ClosingCallToAction' && entry.kind === 'frame'),
+          gap:
+            entry.gap === true ||
+            ((index > 0 || props.openingGap) &&
+              entry.gap !== false &&
+              !(entry.section === 'ClosingCallToAction' && entry.kind === 'frame')),
           gapSize: entry.gap === 'small' ? ('small' as const) : ('medium' as const)
         }
       })

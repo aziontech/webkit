@@ -1,9 +1,8 @@
 import { PT_BR_FORM_MESSAGES } from './pt-br-forms'
 
 /** The pt-BR form that gates content behind a name and an e-mail. */
-export const gatedForm = (formTitle) => ({
-  formTitle,
-  formLabel: formTitle,
+export const gatedForm = (formLabel) => ({
+  formLabel,
   contactOnly: true,
   carouselMarks: [],
   country: 'BR',

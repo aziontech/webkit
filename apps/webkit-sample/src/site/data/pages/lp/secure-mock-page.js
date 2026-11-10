@@ -1,98 +1,108 @@
-import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
 import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
 import pciDssBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
 import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
-import { AREZZO, AXUR, CONTABILIZEI, CREFISA } from '../../clients.js'
+import { GPA_SECURITY_EN } from './_shared/lead-quotes'
+import { productFormPage } from './_shared/product-form'
 
-const registered = (name) => CLIENTS.find((client) => client.name === name) ?? { name }
+const DOCS = 'https://www.azion.com/en/documentation/'
 
-const wallItem = (client) => ({ alt: client.name, src: client.logo ?? '', client })
-
-export default {
+export default productFormPage({
   lang: 'en',
   source: 'https://www.azion.com/en/lp/secure-mock-page/',
-  sections: [
-    {
-      section: 'Heroes',
-      kind: 'centered-carousel',
-      titleLength: 'long',
-      title: 'Protect applications on a globally distributed platform',
-      description:
-        'A unified security platform that blocks bots and DDoS attacks that protects your application without compromising performance.',
-      actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
-      carouselMarks: CLIENT_STRIP,
-      carouselLabel: ''
-    },
-    {
-      section: 'MediaSplitBand',
-      title: 'Detect threads before they reach your application',
-      illustration: 'request-inspection',
-      actions: [
-        { label: 'Start Free', href: '/signup' },
-        { label: 'Talk to a Specialist', href: '/site/contact' }
-      ]
-    },
+  hero: {
+    eyebrow: 'Secure',
+    title: 'Protect applications on a globally distributed platform',
+    description:
+      'One security platform that blocks bots and DDoS attacks without slowing down your application.',
+    actions: [{ label: 'Start free', href: '/signup', kind: 'secondary' }],
+    formLabel: 'Talk to a specialist',
+    labels: { submit: 'Talk to a specialist' },
+    highlights: [
+      {
+        icon: 'pi pi-bolt',
+        title: 'DDoS mitigation in under 3 seconds',
+        description:
+          'Automatic detection and mitigation across layers 3, 4, 6, and 7, with no manual intervention.'
+      },
+      {
+        icon: 'pi pi-check-circle',
+        title: '100% availability SLA',
+        description: 'Your application keeps serving legitimate users while an attack is mitigated.'
+      },
+      {
+        icon: 'pi pi-chart-bar',
+        title: 'Unlimited protection bandwidth',
+        description:
+          "Volumetric attacks are absorbed on Azion's distributed infrastructure, not at your origin."
+      }
+    ],
+    carouselMarks: CLIENT_STRIP,
+    carouselLabel: 'Companies that run on Azion'
+  },
+  overview: [
     {
       section: 'CapabilityGrid',
+      gap: false,
       items: [
         {
           icon: 'pi pi-sparkles',
           title: 'AI Native Security',
-          description: 'Auto detect bots and attacks before they hit your Application'
+          description: 'Auto detect bots and attacks before they hit your application.'
         },
         {
           icon: 'pi pi-globe',
           title: 'Global Coverage',
-          description: 'Protect and distribute your traffic among 100+ locations'
+          description: 'Protect and distribute your traffic across 100+ data centers.'
         },
         {
           icon: 'pi pi-verified',
           title: 'Enterprise Compliance',
-          description: 'Nativelly certified for SOC 2 Type 3 / SOC 3, PCI and others.'
+          description: 'Natively certified for SOC 2 Type 2 / SOC 3, PCI, and others.'
         }
       ]
-    },
-    {
-      section: 'MediaSplitStack',
-      kind: 'alternating',
-      eyebrow: 'Safe by default',
-      title: 'The Security Platform for Modern Applications',
-      bands: [
-        {
-          title: 'DDoS Protection',
-          description:
-            'Adaptive DDoS mitigation. Native DNS protection against DDoS, spoofing, poisoning, and hijacking.',
-          illustration: 'dns-protection'
-        },
-        {
-          title: 'Firewall',
-          description:
-            'Managed WAF. Enterprise-grade defense against zero-day threats and emerging vulnerabilities with a Shared Threat Intelligence',
-          illustration: 'enable-owasp-protection-with-customizable-rules'
-        },
-        {
-          title: 'Bot Management',
-          description:
-            'Use AI to protect you from Bad Bots. Classify bots with AI intelligence. Block scrapers, credential stuffers, DDoS automatically. Control your traffic',
-          illustration: 'detect-and-classify'
-        },
-        {
-          title: 'Network Protection',
-          description:
-            'Protect before they hit your application. Restrict origin access to trusted traffic and reduce direct exposure.',
-          illustration: 'network-lists-rules-engine'
-        },
-        {
-          title: 'Certificates',
-          description:
-            'Simplify Certificate Management. Bring Your Own Certificate or automatically issue a new free certificate.',
-          illustration: 'stay-in-control'
-        }
-      ]
-    },
+    }
+  ],
+  features: {
+    eyebrow: 'Safe by default',
+    title: 'The Security Platform for Modern Applications',
+    bands: [
+      {
+        title: 'DDoS Protection',
+        description:
+          'Adaptive DDoS mitigation. Native DNS protection against DDoS, spoofing, poisoning, and hijacking.',
+        illustration: 'dns-protection'
+      },
+      {
+        title: 'Firewall',
+        description:
+          'Managed WAF. Enterprise-grade defense against zero-day threats and emerging vulnerabilities with a Shared Threat Intelligence',
+        illustration: 'enable-owasp-protection-with-customizable-rules'
+      },
+      {
+        title: 'Bot Management',
+        description:
+          'Use AI to protect you from Bad Bots. Classify bots with AI intelligence. Block scrapers, credential stuffers, DDoS automatically. Control your traffic',
+        illustration: 'detect-and-classify'
+      },
+      {
+        title: 'Network Protection',
+        description:
+          'Protect before they hit your application. Restrict origin access to trusted traffic and reduce direct exposure.',
+        illustration: 'network-lists-rules-engine'
+      },
+      {
+        title: 'Certificates',
+        description:
+          'Simplify Certificate Management. Bring Your Own Certificate or automatically issue a new free certificate.',
+        illustration: 'certificates'
+      }
+    ]
+  },
+  leadQuote: GPA_SECURITY_EN,
+  proof: [
     {
       section: 'ComplianceBadges',
       eyebrow: "We've got you covered",
@@ -106,31 +116,6 @@ export default {
         { label: 'LGPD', badge: lgpdBadge, alt: 'LGPD badge' }
       ],
       more: null
-    },
-    {
-      section: 'LogoWallQuote',
-      eyebrow: 'Trusted by Enteprises',
-      title: 'Battle tested on the biggest Banks and E-commerces',
-      ariaLabel: 'Banks and e-commerce companies running on Azion',
-      items: [
-        wallItem(registered('NZN')),
-        wallItem(AXUR),
-        wallItem(registered('Radware')),
-        wallItem(AREZZO),
-        wallItem(CONTABILIZEI),
-        wallItem(registered('Magalu')),
-        wallItem(registered('Fourbank')),
-        wallItem(CREFISA),
-        wallItem(registered('Netshoes')),
-        wallItem(registered('Dafiti')),
-        wallItem(registered('Global Fashion Group'))
-      ],
-      quote: {
-        text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers.',
-        name: 'Allan Monteiro',
-        jobTitle: 'CISO & Head of Technology',
-        client: registered('GPA')
-      }
     },
     {
       section: 'PlatformDirectory',
@@ -248,64 +233,98 @@ export default {
           ]
         }
       ]
-    },
-    {
-      section: 'FaqSection',
-      title: 'Frequently Asked Questions',
-      items: [
-        {
-          value: 'firewall',
-          question: 'What does Azion Firewall protect against?',
-          answer:
-            'Azion Firewall helps protect applications and APIs against common web attacks such as SQL injection, XSS, CSRF, remote file inclusion, and protocol abuse. It combines managed WAF protections with custom rules and rate limiting to reduce risk before traffic reaches your infrastructure.'
-        },
-        {
-          value: 'network-shield',
-          question: 'How does Network Shield protect my origin?',
-          answer:
-            'Network Shield helps keep your origin private and harder to reach directly from the public internet. You can restrict access with Signed URLs, IP allowlisting, private backbone connectivity, and origin monitoring to reduce exposure and improve resilience.'
-        },
-        {
-          value: 'firewall-vs-network-shield',
-          question: 'What is the difference between Firewall and Network Shield?',
-          answer:
-            "Firewall is Azion's unified security resource for protecting workloads on its globally distributed infrastructure. It combines modules such as Web Application Firewall, Bot Manager, Network Shield, and Functions. Network Shield is one of those modules, focused on programmable network-layer policies to control who can access your applications, and from where."
-        },
-        {
-          value: 'custom-logic',
-          question: 'Can I create custom security logic?',
-          answer:
-            'Yes. You can build custom protections with Firewall Rules Engine and Functions using request attributes such as headers, cookies, query strings, URI, IP, ASN, and geolocation. That allows you to block, rate limit, return custom responses, or execute JavaScript across the distributed network.'
-        },
-        {
-          value: 'api-gateway',
-          question: 'How does API Gateway improve API security?',
-          answer:
-            'API Gateway creates a centralized entry point for API traffic, making it easier to enforce authentication, routing, rate limiting, and request controls consistently. It helps security teams and developers apply policies in one place while improving visibility across services.'
-        },
-        {
-          value: 'ai-threat-detection',
-          question: 'How does AI threat detection and takedown work?',
-          answer:
-            'Azion can use AI models to analyze digital assets, detect phishing, abuse, and malicious content, and automate classification and response workflows. This helps security teams identify threats faster and coordinate takedown actions across distributed environments.'
-        },
-        {
-          value: 'certifications',
-          question: 'What certifications does Azion provide?',
-          answer:
-            'Azion provides certifications such as SOC 2 Type 2 and PCI DSS to support customers with security, governance, and compliance requirements. These attestations help demonstrate operational controls for protecting applications, APIs, and digital assets.'
-        }
-      ]
-    },
-    {
-      section: 'ClosingCallToAction',
-      kind: 'split',
-      eyebrow: 'Secure',
-      title: 'Protected by default.',
-      titleMuted: 'Always on.',
-      description: 'Get stronger protection, less attack exposure, and less operational overhead.',
-      actions: [{ label: 'Start free', href: '/signup', kind: 'secondary' }],
-      aside: { label: 'Talk to a specialist', href: '/site/contact' }
     }
-  ]
-}
+  ],
+  useCases: {
+    title: 'Use cases',
+    description:
+      'Stop DDoS attacks and malicious traffic before they reach your origin, with automated mitigation across Azion’s distributed infrastructure. Teams use Azion DDoS protection to:',
+    action: {
+      label: 'Docs',
+      href: `${DOCS}products/secure/firewall/ddos-protection/`,
+      trailing: true,
+      external: true
+    },
+    items: [
+      {
+        icon: 'pi pi-shopping-cart',
+        title: 'Keep e-commerce online during peak sales',
+        description:
+          'Detect and mitigate volumetric attacks in under 3 seconds, with unlimited protection bandwidth, while legitimate traffic keeps reaching the store.'
+      },
+      {
+        icon: 'pi pi-building-columns',
+        title: 'Protect financial applications',
+        description:
+          'Protect banking applications across layers 3, 4, 6, and 7, and meet compliance requirements with certifications such as SOC 2 Type 2 and PCI DSS.'
+      },
+      {
+        icon: 'pi pi-server',
+        title: 'Keep origins off the public internet',
+        description:
+          'Use Network Shield to restrict origin access with Signed URLs and IP allowlisting, reducing direct exposure to attacks.'
+      },
+      {
+        icon: 'pi pi-sitemap',
+        title: 'Protect public APIs from abuse',
+        description:
+          'Route API traffic through API Gateway and enforce authentication, rate limiting, and custom rules to contain abuse and bots.'
+      }
+    ]
+  },
+  faq: {
+    title: 'Frequently Asked Questions',
+    items: [
+      {
+        value: 'firewall',
+        question: 'What does Azion Firewall protect against?',
+        answer:
+          'Azion Firewall helps protect applications and APIs against common web attacks such as SQL injection, XSS, CSRF, remote file inclusion, and protocol abuse. It combines managed WAF protections with custom rules and rate limiting to reduce risk before traffic reaches your infrastructure.'
+      },
+      {
+        value: 'network-shield',
+        question: 'How does Network Shield protect my origin?',
+        answer:
+          'Network Shield helps keep your origin private and harder to reach directly from the public internet. You can restrict access with Signed URLs, IP allowlisting, private backbone connectivity, and origin monitoring to reduce exposure and improve resilience.'
+      },
+      {
+        value: 'firewall-vs-network-shield',
+        question: 'What is the difference between Firewall and Network Shield?',
+        answer:
+          "Firewall is Azion's unified security resource for protecting workloads on its globally distributed infrastructure. It combines modules such as Web Application Firewall, Bot Manager, Network Shield, and Functions. Network Shield is one of those modules, focused on programmable network-layer policies to control who can access your applications, and from where."
+      },
+      {
+        value: 'custom-logic',
+        question: 'Can I create custom security logic?',
+        answer:
+          'Yes. You can build custom protections with Firewall Rules Engine and Functions using request attributes such as headers, cookies, query strings, URI, IP, ASN, and geolocation. That allows you to block, rate limit, return custom responses, or execute JavaScript across the distributed network.'
+      },
+      {
+        value: 'api-gateway',
+        question: 'How does API Gateway improve API security?',
+        answer:
+          'API Gateway creates a centralized entry point for API traffic, making it easier to enforce authentication, routing, rate limiting, and request controls consistently. It helps security teams and developers apply policies in one place while improving visibility across services.'
+      },
+      {
+        value: 'ai-threat-detection',
+        question: 'How does AI threat detection and takedown work?',
+        answer:
+          'Azion can use AI models to analyze digital assets, detect phishing, abuse, and malicious content, and automate classification and response workflows. This helps security teams identify threats faster and coordinate takedown actions across distributed environments.'
+      },
+      {
+        value: 'certifications',
+        question: 'What certifications does Azion provide?',
+        answer:
+          'Azion provides certifications such as SOC 2 Type 2 and PCI DSS to support customers with security, governance, and compliance requirements. These attestations help demonstrate operational controls for protecting applications, APIs, and digital assets.'
+      }
+    ]
+  },
+  closing: {
+    title: 'Protected by default. Always on.',
+    description: 'Get stronger protection, less attack exposure, and less operational overhead.',
+    actions: [
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+    ]
+  }
+})

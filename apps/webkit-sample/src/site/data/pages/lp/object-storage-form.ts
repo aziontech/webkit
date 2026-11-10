@@ -1,12 +1,13 @@
 import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
-import { CACHE_FAMILY_WALL, registeredClient } from '../../product-pages.js'
 import type { LandingPage } from '.'
-import { specialistForm } from './_shared/pt-br-forms'
+import { campaignClosing } from './_shared/campaign-page'
+import { HEROSPARK_STORAGE_PT_BR, quoteWall } from './_shared/lead-quotes'
+import { pageSpecialistForm } from './_shared/pt-br-forms'
+import { CLIENTS_ACTION } from './_shared/security-proof.js'
 
 const DOCS = 'https://www.azion.com/pt-br/documentacao/'
 
-// Spelled through a const so the reference hook does not read the sample as this file's import.
 const IMPORT = 'import'
 
 const CODE = `${IMPORT} { setupStorage } from 'azion/storage';
@@ -93,7 +94,9 @@ const FAQ = [
   }
 ]
 
-export default {
+const link = (label: string, href: string) => ({ label, href, trailing: true, external: true })
+
+const page: LandingPage = {
   lang: 'pt-BR',
   source: 'https://www.azion.com/pt-br/lp/object-storage-form/',
   sections: [
@@ -103,9 +106,8 @@ export default {
       title: 'Storage compatível com S3, em uma só plataforma',
       description:
         'Armazene dados, mídia e logs com compatibilidade S3. Use buckets como origem em Applications e integre com Functions sem custo de egress.',
-      ...specialistForm('Fale com um especialista Azion'),
-      carouselMarks: PRODUCT_STACK,
-      carouselLabel: ''
+      ...pageSpecialistForm('Fale com um especialista Azion'),
+      carouselMarks: PRODUCT_STACK
     },
     {
       section: 'CapabilityGrid',
@@ -131,18 +133,10 @@ export default {
       ]
     },
     {
-      section: 'LogoWallQuote',
-      items: CACHE_FAMILY_WALL,
-      ariaLabel: 'Clientes',
-      quote: {
-        text: '"20% de redução de custos com Object Storage, combinando armazenamento confiável de arquivos com desempenho aprimorado na infraestrutura distribuída da Azion."',
-        name: 'Mateus Leonardi',
-        jobTitle: 'CTO na HeroSpark',
-        client: registeredClient('HeroSpark')
-      },
-      actions: [
-        { label: 'Clientes', href: '/site/success-cases', kind: 'outlined', trailing: true }
-      ]
+      section: 'ClientQuotes',
+      ariaLabel: 'Histórias de clientes',
+      quotes: quoteWall(HEROSPARK_STORAGE_PT_BR),
+      actions: [CLIENTS_ACTION]
     },
     {
       section: 'MediaSplitStack',
@@ -181,69 +175,55 @@ export default {
         }
       ],
       copyAriaLabel: 'Copiar o código',
-      actions: [
-        {
-          label: 'Saiba mais',
-          href: `${DOCS}produtos/store/object-storage/`,
-          trailing: true,
-          external: true
-        }
-      ]
+      actions: [link('Saiba mais', `${DOCS}produtos/store/object-storage/`)]
     },
     {
-      section: 'ResourceGrid',
-      eyebrow: '',
+      section: 'UseCases',
       title: 'Casos de uso',
-      actions: [],
       items: [
         {
+          eyebrow: 'Armazenamento',
+          icon: 'pi pi-file-arrow-up',
           title: 'Dados não estruturados em buckets',
           description:
             'Armazene logs, arquivos, datasets e uploads de usuários em buckets usando uma API compatível com S3. Escale sob demanda com acesso rápido e confiável.',
-          href: `${DOCS}produtos/guias/upload-e-download-de-objetos-do-bucket/`
+          action: link(
+            'Ver exemplo',
+            `${DOCS}produtos/guias/upload-e-download-de-objetos-do-bucket/`
+          )
         },
         {
+          eyebrow: 'Backup',
+          icon: 'pi pi-credit-card',
           title: 'Backup e recuperação para arquivos críticos',
           description:
             'Organize backups por bucket e automatize upload e restauração via API. Use versionamento e multipart upload para proteger dados e acelerar recuperação.',
-          href: `${DOCS}produtos/guias/criar-e-modificar-um-bucket/`
+          action: link('Ver exemplo', `${DOCS}produtos/guias/criar-e-modificar-um-bucket/`)
         },
         {
+          eyebrow: 'Deploy',
+          icon: 'pi pi-cog',
           title: 'Hospedagem de sites estáticos com bucket como origem',
           description:
             'Hospede HTML, CSS, JavaScript e assets em um bucket como origem em Applications. Simplifique deploys com alta disponibilidade para sites e arquivos estáticos.',
-          href: `${DOCS}produtos/store/storage/bucket-como-connector/`
+          action: link('Ver exemplo', `${DOCS}produtos/store/storage/bucket-como-connector/`)
         },
         {
+          eyebrow: 'Mídias',
+          icon: 'pi pi-chart-line',
           title: 'Biblioteca de mídia e entrega de conteúdo',
           description:
             'Centralize imagens e vídeos no Object Storage e integre com Cache e Applications para entregar assets e downloads com performance e controle de custos.',
-          href: `${DOCS}casos-de-uso/construir-e-executar-aplicacoes/criar-e-operar-sites-de-marketing/`
+          action: link(
+            'Ver exemplo',
+            'https://azion.com/pt-br/documentacao/casos-de-uso/construir-e-executar-aplicacoes/criar-e-operar-sites-de-marketing/'
+          )
         }
       ]
     },
     { section: 'FaqSection', title: 'Perguntas Frequentes', items: FAQ },
-    {
-      section: 'ClosingCallToAction',
-      eyebrow: 'Armazenar',
-      title: 'Seus dados.',
-      titleMuted: 'Disponíveis em qualquer lugar.',
-      description:
-        'Ganhe acesso mais rápido, escalabilidade mais simples e menos sobrecarga de armazenamento conforme os dados crescem.',
-      actions: [
-        {
-          label: 'Comece grátis',
-          href: 'https://console.azion.com/signup?tck=store_cta',
-          kind: 'secondary',
-          external: true
-        }
-      ],
-      aside: {
-        label: 'Fale com um especialista',
-        href: '/site/contact',
-        kind: 'outlined',
-        trailing: true
-      }
-    }
+    campaignClosing('pt-BR')
   ]
-} satisfies LandingPage
+}
+
+export default page

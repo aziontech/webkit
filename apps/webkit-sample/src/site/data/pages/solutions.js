@@ -3,7 +3,6 @@ import { BANKS_AND_RETAIL_WALL } from '../proof-wall.js'
 import { BUILD_CTA, quotesLedBy } from '../solutions.js'
 
 const ZOOP = BANKS_AND_RETAIL_WALL.find((item) => item.alt === 'Zoop')
-const [ZOOP_QUOTE] = quotesLedBy('zoop')
 
 const SOLUTION_GUARANTEES = [
   {
@@ -201,17 +200,10 @@ export const SOLUTIONS_PAGE = [
     tiles: SOLUTION_INDUSTRIES
   },
   {
-    section: 'LogoWallQuote',
+    section: 'ClientQuotes',
     eyebrow: 'Customer stories',
     title: 'Proven at banks and e-commerce companies',
-    items: BANKS_AND_RETAIL_WALL,
-    ariaLabel: 'Banks and e-commerce companies running on Azion',
-    quote: {
-      text: `"${ZOOP_QUOTE.text}"`,
-      name: ZOOP_QUOTE.name,
-      jobTitle: ZOOP_QUOTE.jobTitle,
-      client: ZOOP.client
-    },
+    quotes: quotesLedBy('zoop'),
     actions: [
       {
         label: 'Read the case study',

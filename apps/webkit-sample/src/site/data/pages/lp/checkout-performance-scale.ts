@@ -1,4 +1,5 @@
 import type { LandingPage } from '.'
+import { learnGrid } from './_shared/learn-grid.js'
 
 export default {
   lang: 'en',
@@ -17,31 +18,28 @@ export default {
       country: 'BR',
       labels: { email: 'Work email', submit: 'Download' }
     },
-    {
-      section: 'CapabilityGrid',
-      items: [
-        {
-          title: "What you'll learn",
-          description:
-            "How to maintain checkout performance under high demand without losing consistency. Includes selective caching, distributed execution, and traffic control. You'll also see how to identify the bottlenecks that quietly erode conversion before they turn into visible incidents."
-        },
-        {
-          title: 'Who this is for',
-          description:
-            'Technical leaders, platform teams, SREs, and backend engineers responsible for performance and conversion in high-traffic applications.'
-        },
-        {
-          title: 'Why this matters',
-          description:
-            'Checkout issues are rarely visible failures, they are silent degradations that impact conversion and revenue without triggering alerts.'
-        },
-        {
-          title: 'Where to start',
-          description:
-            'Map critical dependencies, reduce backend load with caching and distributed execution, implement traffic control, and monitor p95/p99. Start with the highest-impact paths and expand coverage as you measure results in production.'
-        }
-      ]
-    },
+    learnGrid([
+      {
+        title: "What you'll learn",
+        description:
+          "How to maintain checkout performance under high demand without losing consistency. Includes selective caching, distributed execution, and traffic control. You'll also see how to identify the bottlenecks that quietly erode conversion before they turn into visible incidents."
+      },
+      {
+        title: 'Who this is for',
+        description:
+          'Technical leaders, platform teams, SREs, and backend engineers responsible for performance and conversion in high-traffic applications.'
+      },
+      {
+        title: 'Why this matters',
+        description:
+          'Checkout issues are rarely visible failures, they are silent degradations that impact conversion and revenue without triggering alerts.'
+      },
+      {
+        title: 'Where to start',
+        description:
+          'Map critical dependencies, reduce backend load with caching and distributed execution, implement traffic control, and monitor p95/p99. Start with the highest-impact paths and expand coverage as you measure results in production.'
+      }
+    ]),
     {
       section: 'ClosingCallToAction',
       kind: 'split',

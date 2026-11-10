@@ -162,6 +162,20 @@ export const SECURITY_CLIENT_STRIP = [
   'gpa'
 ]
 
+export const CAMPAIGN_CLIENT_STRIP = [
+  'global-fashion-group',
+  'herospark',
+  'itau',
+  'renner',
+  'madeiramadeira',
+  'magalu',
+  'nzn',
+  'netshoes',
+  'caixa',
+  'agibank',
+  'gpa'
+]
+
 export const BUILD_CLIENT_STRIP = [
   'nzn',
   'axur',

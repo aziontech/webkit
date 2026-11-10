@@ -402,7 +402,6 @@ export const WEBSITE_BUNDLE_PAGE = [
   pick(CONTACT_PAGE, 'HeroForm'),
 
   pick(FUNCTIONS_PAGE, 'ClientQuotes'),
-  pick(SOLUTIONS_PAGE, 'LogoWallQuote'),
   pick(HOME_PAGE, 'RecognitionMarquee'),
   pick(HOME_PAGE, 'ClientMosaic'),
   pick(FINANCIAL_SERVICES_PAGE, 'ComplianceBadges'),

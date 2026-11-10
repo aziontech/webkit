@@ -1,18 +1,10 @@
-import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
-import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-import pciDssBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
 import { CLIENT_STRIP_RADWARE } from '@shared/ui/brand/strips.js'
 
-import { AREZZO, AXUR, CONTABILIZEI, CREFISA } from '../../clients.js'
+import { campaignPage } from './_shared/campaign-page'
+import { GPA_ENTERPRISE_PT_BR, quoteWall } from './_shared/lead-quotes'
 import { specialistForm } from './_shared/pt-br-forms'
 
 const EXPERT = 'Fale com um especialista'
-
-const registered = (name) => CLIENTS.find((client) => client.name === name)
-
-const mark = (client) => ({ alt: client.name, src: client.logo, client })
 
 const calendar = (event) => ({
   label: 'Save na sua agenda',
@@ -175,20 +167,37 @@ const FAQ = [
   }
 ].map((item, index) => ({ value: `q${index + 1}`, ...item }))
 
-export default {
+export default campaignPage({
   lang: 'pt-BR',
   source: 'https://www.azion.com/pt-br/lp/mind-the-sec-2026/',
-  sections: [
-    {
-      section: 'HeroForm',
-      eyebrow: 'Eventos',
-      title: 'Azion no Mind The Sec 2026',
-      description:
-        'Aplicações de Agentic AI já estão em produção, muitas sem proteção adequada. Agentes acessam dados sensíveis e ferramentas capazes de executar ações via MCP, decidindo e agindo de forma autônoma. Se a entrega acelerou, a defesa precisa acelerar no mesmo ritmo.',
-      ...specialistForm(EXPERT),
-      carouselMarks: CLIENT_STRIP_RADWARE,
-      carouselLabel: ''
-    },
+  hero: {
+    eyebrow: 'Eventos',
+    title: 'Azion no Mind The Sec 2026',
+    description:
+      'Aplicações de Agentic AI já estão em produção, muitas sem proteção adequada. Agentes acessam dados sensíveis e ferramentas capazes de executar ações via MCP, decidindo e agindo de forma autônoma. Se a entrega acelerou, a defesa precisa acelerar no mesmo ritmo.',
+    ...specialistForm(EXPERT),
+    carouselMarks: CLIENT_STRIP_RADWARE
+  },
+  capabilities: {
+    items: [
+      {
+        icon: 'pi pi-cog',
+        title: 'Segurança AI Native',
+        description: 'Detecte bots e ataques automaticamente antes de atingirem sua aplicação'
+      },
+      {
+        icon: 'pi pi-globe',
+        title: 'Cobertura global',
+        description: 'Proteja e distribua seu tráfego em mais de 100 localizações'
+      },
+      {
+        icon: 'pi pi-bolt',
+        title: 'Conformidade enterprise',
+        description: 'Certificada nativamente para SOC 2 Type 2 / SOC 3, PCI e outras.'
+      }
+    ]
+  },
+  extra: [
     {
       section: 'MediaSplitStack',
       kind: 'alternating',
@@ -228,89 +237,26 @@ export default {
       ]
     },
     {
-      section: 'CapabilityGrid',
-      gap: false,
-      items: [
-        {
-          icon: 'pi pi-cog',
-          title: 'Segurança AI Native',
-          description: 'Detecte bots e ataques automaticamente antes de atingirem sua aplicação'
-        },
-        {
-          icon: 'pi pi-globe',
-          title: 'Cobertura global',
-          description: 'Proteja e distribua seu tráfego em mais de 100 localizações'
-        },
-        {
-          icon: 'pi pi-bolt',
-          title: 'Conformidade enterprise',
-          description: 'Certificada nativamente para SOC 2 Type 2 / SOC 3, PCI e outras.'
-        }
-      ]
-    },
-    {
       section: 'MediaSplitStack',
       eyebrow: 'Seguro por padrão',
       title: 'A plataforma de segurança para aplicações modernas',
       bands: []
     },
     {
-      section: 'ComplianceBadges',
-      eyebrow: 'A gente cobre isso para você',
-      title: 'Conforme suas necessidades atuais e futuras',
-      description: '',
-      ariaLabel: 'Certificações de conformidade',
-      more: null,
-      certifications: [
-        { label: 'SOC 2 Type 2', badge: socBadge, alt: 'Selo AICPA SOC 2 Type 2' },
-        { label: 'SOC 3', badge: socBadge, alt: 'Selo AICPA SOC 3' },
-        { label: 'PCI DSS', badge: pciDssBadge, alt: 'Selo PCI DSS' },
-        { label: 'GDPR', badge: gdprBadge, alt: 'GDPR' },
-        { label: 'LGPD', badge: lgpdBadge, alt: 'Selo LGPD' }
-      ]
-    },
-    {
-      section: 'LogoWallQuote',
+      section: 'ClientQuotes',
       eyebrow: 'Confiada por enterprises',
       title: 'Testada em campo nos maiores bancos e E-commerces',
-      ariaLabel: 'Bancos e e-commerces que usam a Azion',
-      items: [
-        mark(registered('NZN')),
-        mark(AXUR),
-        mark(registered('Radware')),
-        mark(AREZZO),
-        mark(CONTABILIZEI),
-        mark(registered('Magalu')),
-        mark(registered('Fourbank')),
-        mark(CREFISA),
-        mark(registered('Netshoes')),
-        mark(registered('Dafiti')),
-        mark(registered('Global Fashion Group'))
-      ],
-      quote: {
-        text: '"A Azion nos protegeu de ciberataques sofisticados e nos possibilitou modernizar nossa infraestrutura, reduzir custos e disponibilizar as melhores experiências de compra a milhões de clientes em toda a América Latina."',
-        name: 'Allan Monteiro',
-        jobTitle: 'CISO & Head of Technology',
-        client: registered('GPA')
-      },
-      actions: [{ label: 'Clientes', href: '/site/success-cases', kind: 'text', trailing: true }]
+      ariaLabel: 'Histórias de clientes',
+      quotes: quoteWall(GPA_ENTERPRISE_PT_BR),
+      actions: [
+        { label: 'Clientes', href: '/site/success-cases', kind: 'secondary', trailing: true }
+      ]
     },
     {
       section: 'PlatformDirectory',
       title: 'Todos os primitives de segurança que você precisa',
       groups: PRIMITIVES
-    },
-    { section: 'FaqSection', title: 'Perguntas frequentes', items: FAQ },
-    {
-      section: 'ClosingCallToAction',
-      kind: 'split',
-      eyebrow: 'Proteger',
-      title: 'Proteção nativa.',
-      titleMuted: 'Sempre ativa.',
-      description:
-        'Ganhe proteção mais forte, menos exposição a ataques e menos sobrecarga operacional.',
-      actions: [{ label: 'Comece grátis', href: '/signup', kind: 'secondary' }],
-      aside: { label: EXPERT, href: '/site/contact' }
     }
-  ]
-}
+  ],
+  faq: { title: 'Perguntas frequentes', items: FAQ }
+})

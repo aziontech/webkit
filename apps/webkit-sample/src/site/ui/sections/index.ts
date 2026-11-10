@@ -28,7 +28,6 @@ import HeroWithOpening from './HeroWithOpening.vue'
 import InvestorMarks from './InvestorMarks.vue'
 import ListingBrowser from './ListingBrowser.vue'
 import ListingTable from './ListingTable.vue'
-import LogoWallQuote from './LogoWallQuote.vue'
 import MediaSplitBand from './MediaSplitBand.vue'
 import MediaSplitStack from './MediaSplitStack.vue'
 import NetworkSection from './NetworkSection.vue'
@@ -76,7 +75,6 @@ export const SECTIONS: Record<string, Component> = {
   InvestorMarks,
   ListingBrowser,
   ListingTable,
-  LogoWallQuote,
   MediaSplitBand,
   MediaSplitStack,
   NetworkSection,

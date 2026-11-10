@@ -11,6 +11,13 @@
 
   defineOptions({ name: 'UseCases' })
 
+  export interface UseCasesItem extends SiteTopic {
+    /** Overline above the use case's heading. */
+    eyebrow?: string
+    /** Link at the foot of the use case. */
+    action?: SiteAction | null
+  }
+
   interface Props {
     /** Overline of the title cell. */
     eyebrow?: string
@@ -21,7 +28,7 @@
     /** Link pinned to the foot of the title cell. */
     action?: SiteAction | null
     /** Four use cases, two to a row beside the title cell. */
-    items: SiteTopic[]
+    items: UseCasesItem[]
   }
 
   withDefaults(defineProps<Props>(), {
@@ -77,12 +84,20 @@
           :key="item.title"
           kind="canvas"
         >
-          <Topic
-            :heading-level="3"
-            :icon="item.icon ?? ''"
-            :title="item.title"
-            :description="item.description"
-          />
+          <div class="flex h-full flex-col items-start gap-(--spacing-md)">
+            <Overline v-if="item.eyebrow">{{ item.eyebrow }}</Overline>
+            <Topic
+              :heading-level="3"
+              :icon="item.icon ?? ''"
+              :title="item.title"
+              :description="item.description"
+            />
+            <SectionAction
+              v-if="item.action"
+              :action="{ kind: 'text', size: 'small', trailing: true, ...item.action }"
+              class="mt-auto"
+            />
+          </div>
         </CardGridCell>
       </CardGrid>
     </FrameBox>

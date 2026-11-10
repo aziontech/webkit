@@ -2,6 +2,7 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import QuoteTabs, { type QuoteTabsItem } from '@aziontech/webkit/quote-tabs'
   import SectionModule from '@aziontech/webkit/section-module'
+  import SectionTitle from '@aziontech/webkit/section-title'
 
   import SectionAction from './SectionAction.vue'
   import type { SiteAction } from './types'
@@ -9,6 +10,10 @@
   defineOptions({ name: 'ClientQuotes' })
 
   interface Props {
+    /** Overline above the band title. */
+    eyebrow?: string
+    /** Band title over the client cards; omit for a bare wall. */
+    title?: string
     /** The client cards in wall order, the page's own quotation first. */
     quotes: QuoteTabsItem[]
     /** Accessible name for the wall of client cards. */
@@ -20,6 +25,8 @@
   }
 
   withDefaults(defineProps<Props>(), {
+    eyebrow: '',
+    title: '',
     ariaLabel: 'Client stories',
     actions: () => [
       {
@@ -39,6 +46,16 @@
     :divided="false"
     :padded="false"
   >
+    <template
+      v-if="title"
+      #header
+    >
+      <SectionTitle
+        :eyebrow="eyebrow"
+        :title="title"
+      />
+    </template>
+
     <FrameBox
       flush
       borders="y"

@@ -1,11 +1,5 @@
-import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
-import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
-import g2 from '@aziontech/webkit/assets/g2-symbol-color.svg'
-import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
-import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
-import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
-import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
-
+import { ANALYST_FIRMS } from './_shared/analyst-firms.js'
+import { campaignClosing } from './_shared/campaign-page'
 import { gatedForm } from './_shared/gated-form.js'
 
 const FORM_TITLE = 'Preencha as informações abaixo para uma conversa exclusiva'
@@ -27,10 +21,12 @@ export default {
       title: 'Sessão técnica gratuita para reduzir custos e performance nas suas aplicações web',
       description:
         'Converse com especialistas da Azion para analisar, em detalhes, como sua aplicação web consome infraestrutura hoje e identificar ajustes que diminuem custos e aumentam velocidade.',
-      ...gatedForm(FORM_TITLE)
+      ...gatedForm(FORM_TITLE),
+      carouselLabel: ''
     },
     {
       section: 'CapabilityGrid',
+      eyebrow: 'Para quem',
       title: 'Essa sessão é para empresas que:',
       columns: 4,
       items: [
@@ -53,6 +49,7 @@ export default {
     },
     {
       section: 'CapabilityGrid',
+      eyebrow: 'Na sessão',
       title: 'O que vamos fazer juntos?',
       description: STACKS_NOTE,
       items: [
@@ -90,6 +87,7 @@ export default {
     },
     {
       section: 'CapabilityGrid',
+      eyebrow: 'Entregáveis',
       title: 'O que você leva da sessão?',
       description: STACKS_NOTE,
       items: [
@@ -112,6 +110,7 @@ export default {
     },
     {
       section: 'CapabilityGrid',
+      eyebrow: 'Agenda',
       title: 'Como funciona a agenda dessa sessão?',
       items: [
         { icon: 'ai ai-azion', title: 'Você preenche o formulário com acima', description: '' },
@@ -137,14 +136,14 @@ export default {
           text: 'A Azion recebeu 7 nomeações distintas, conquistando a posição de Leader no relatório de CDN e High Performer em seis categorias de segurança e infraestrutura',
           name: 'G2 Winter 2026 Reports',
           jobTitle: '',
-          firm: { name: 'G2', logo: g2, logoLight: g2 },
+          firm: ANALYST_FIRMS.g2,
           action: article('Leia o artigo', 'azion-lider-g2-winter-reports-2026')
         },
         {
           text: 'A Azion foi nomeada Líder e identificada como a única plataforma cujas capacidades atendem todos os critérios-chave descritos no relatório',
           name: 'Radar GigaOms para Plataformas de Edge',
           jobTitle: '',
-          firm: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
+          firm: ANALYST_FIRMS.gigaom,
           action: article(
             'Ler artigo',
             'azion-reconhecida-lider-de-mercado-fast-mover-relatorio-gigaom'
@@ -154,25 +153,26 @@ export default {
           text: 'Clientes da Gartner afirmam que a Azion se destaca por oferecer uma abordagem consultiva para orquestração e ambientes de aplicação de Edge Computing',
           name: 'Panorama Competitivo da Gartner para CDN e Serviços de Infraestrutura Distribuída',
           jobTitle: '',
-          firm: { name: 'Gartner', logo: gartnerReversed, logoLight: gartner },
+          firm: ANALYST_FIRMS.gartner,
           action: article('Ler artigo', 'azion-celebra-conquistas-2023')
         },
         {
           text: 'A plataforma da Azion é destacada por aumentar a agilidade dos negócios, capacitando desenvolvedores a construir e escalar suas aplicações',
           name: 'Prêmio de Melhores Práticas da Frost & Sullivan, Norte',
           jobTitle: '',
-          firm: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost },
+          firm: ANALYST_FIRMS.frost,
           action: article('Ler artigo', 'azion-premio-frost-sullivan')
         }
       ]
     },
     {
-      section: 'ClosingCallToAction',
-      kind: 'panel',
+      section: 'MediaSplitBand',
       eyebrow: 'Muito Importante',
       title: 'O que a Azion NÃO é?',
       description:
-        'Não vendemos cloud. Trabalhamos junto à sua infraestrutura existente, na borda, para tornar tudo mais eficiente e barato.'
-    }
+        'Não vendemos cloud. Trabalhamos junto à sua infraestrutura existente, na borda, para tornar tudo mais eficiente e barato.',
+      illustration: 'read-at-the-edge'
+    },
+    campaignClosing('pt-BR')
   ]
 }

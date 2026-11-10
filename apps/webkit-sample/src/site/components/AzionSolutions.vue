@@ -29,16 +29,15 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
-  import LogoWall from '@aziontech/webkit/logo-wall'
-  import Quote from '@aziontech/webkit/quote'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { RouterLink, useRouter } from 'vue-router'
 
   import { BANKS_AND_RETAIL_WALL } from '../data/proof-wall.js'
+  import { quotesLedBy } from '../data/solutions.js'
+  import ClientQuotes from '../ui/sections/ClientQuotes.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -387,65 +386,20 @@
 
     <SectionGap hatch />
 
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <template #header>
-        <SectionTitle
-          eyebrow="Trusted by Industry Leaders"
-          title="Battle-Tested by the World's Largest Banks and E-commerce Companies"
-        />
-      </template>
-
-      <FrameBox
-        flush
-        borders="y"
-        marks="all"
-      >
-        <LogoWall
-          kind="rectangle"
-          aria-label="Banks and e-commerce companies running on Azion"
-          :items="BANKS_AND_RETAIL_WALL"
-        >
-          <template #mark="{ item }">
-            <ClientMark
-              :client="item.client"
-              :colored="item.colored"
-              mark="h-5 w-auto max-w-full object-contain sm:max-w-24"
-            />
-          </template>
-          <template #aside>
-            <Quote
-              kind="signed"
-              text='"Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results."'
-              name="Ismael Aguilar"
-              job-title="Information Security Manager at Zoop"
-            >
-              <template #mark>
-                <ClientMark
-                  :client="ZOOP.client"
-                  colored
-                  mark="h-8 w-auto max-w-40 object-contain"
-                />
-              </template>
-              <template #actions>
-                <Button
-                  label="View success story"
-                  kind="secondary"
-                  size="large"
-                  :href="ZOOP.href"
-                  target="_blank"
-                  icon="pi pi-chevron-right"
-                  icon-position="trailing"
-                  animated
-                />
-              </template>
-            </Quote>
-          </template>
-        </LogoWall>
-      </FrameBox>
-    </SectionModule>
+    <ClientQuotes
+      eyebrow="Trusted by Industry Leaders"
+      title="Battle-Tested by the World's Largest Banks and E-commerce Companies"
+      :quotes="quotesLedBy('zoop')"
+      :actions="[
+        {
+          label: 'View success story',
+          href: ZOOP.href,
+          kind: 'secondary',
+          trailing: true,
+          external: true
+        }
+      ]"
+    />
 
     <SectionGap hatch />
 
