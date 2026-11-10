@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 91e02344ced4319f14cc42fc2e3d20d42fc5e83959dd774d967de8d91c73e2a5
+checksum: efc9f8c6d2d19d600354fced9a37b9eee6001d4ba898b32e5a925987436f8a64
 created: 2026-05-22
-last_updated: 2026-07-16
+last_updated: 2026-11-10
 ---
 # Tag — Component Spec
 
@@ -83,10 +83,15 @@ _none_
 |---|---|
 | typography (medium) | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px) |
 | typography (small) | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px) |
-| spacing (medium) | `var(--spacing-xs)` horizontal padding and icon gap |
-| spacing (small) | `var(--spacing-xxs)` horizontal padding and icon gap |
+| spacing (medium) | `var(--spacing-sm)` horizontal padding; `var(--spacing-xxs)` icon gap; leading icon `size-3.5` pulled in by `var(--spacing-xxs)` |
+| spacing (small) | `var(--spacing-xs)` horizontal padding; `var(--spacing-xxs)` icon gap; leading icon `size-3` pulled in by `-ml-0.5` |
 | shape (all severities) | `var(--shape-elements)` |
+| surface (primary) | `var(--primary)` / `var(--primary-contrast)` — WCAG AA (6.71:1) |
+| surface (accent) | `var(--accent)` / `var(--accent-contrast)` — WCAG AA (4.73:1) |
+| surface (success, info, warning, danger) | `var(--<severity>)` / `var(--<severity>-contrast)` |
+| surface (secondary) | `var(--bg-canvas)` / `var(--text-default)` + `var(--border-default)` |
 | surface (contrast) | `var(--bg-contrast)` / `var(--text-contrast)` |
+| contrast | every severity's label reaches WCAG AAA (7:1) in both themes, except `primary` and `accent` (AA, brand fills) |
 | shape (pill) | `rounded-full` |
 | ring | `var(--ring-color)` |
 
