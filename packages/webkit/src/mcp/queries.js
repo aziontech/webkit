@@ -672,15 +672,19 @@ function scorePattern(id, p, { q, phrases }) {
   const summary = normalize(p.summary)
   const words = q.split(' ').filter((w) => w.length >= 3)
   let score = 0
+  let synonym = 0
   for (const phrase of phrases) {
-    const weight = phrase === q ? 1 : 0.8
-    if (intents.includes(phrase)) score += 100 * weight
+    let s = 0
+    if (intents.includes(phrase)) s += 100
     else if (
       intents.some((i) => hasPhrase(i, phrase) || (phrase.length >= 4 && hasPhrase(phrase, i)))
     )
-      score += 60 * weight
-    if (hasPhrase(nameText, phrase)) score += 40 * weight
+      s += 60
+    if (hasPhrase(nameText, phrase)) s += 40
+    if (phrase === q) score += s
+    else synonym = Math.max(synonym, s * 0.8)
   }
+  score += synonym
   for (const w of words) {
     if (intents.some((i) => hasPhrase(i, w))) score += 12
     if (hasPhrase(nameText, w)) score += 10
@@ -722,6 +726,25 @@ export function searchPatterns(catalog, query) {
   }
 }
 
+function movedPattern(catalog, key, variant) {
+  const aliases = catalog.patternAliases || {}
+  const n = normalize(key)
+  const from = aliases[key]
+    ? key
+    : Object.keys(aliases).find(
+        (old) => !old.includes('#') && normalize(old.split('/').pop()) === n
+      )
+  if (!from) return null
+  const renamed = variant ? aliases[`${from}#${variant}`] : null
+  const [id, state] = (renamed || aliases[from]).split('#')
+  return { from, id, variant: renamed ? state : variant || state || null }
+}
+
+function movedNote(moved, p) {
+  const state = moved.variant && moved.variant !== p.primary ? `, state "${moved.variant}"` : ''
+  return `Pattern "${moved.from}" was renamed in WebKit v6: it is now "${moved.id}"${state}. Use the new id.`
+}
+
 export function getPattern(catalog, id, { variant } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const patterns = catalog.patterns || {}
@@ -733,6 +756,11 @@ export function getPattern(catalog, id, { variant } = {}) {
       Object.keys(patterns).find((pid) => normalize(pid.split('/').pop()) === n) ||
       Object.keys(patterns).find((pid) => normalize(patterns[pid].name) === n) ||
       null
+  }
+  const moved = resolved ? null : movedPattern(catalog, key, variant)
+  if (moved && patterns[moved.id]) {
+    resolved = moved.id
+    variant = moved.variant || undefined
   }
   if (!resolved) {
     const search = searchPatterns(catalog, key)
@@ -746,8 +774,9 @@ export function getPattern(catalog, id, { variant } = {}) {
     }
   }
   const p = patterns[resolved]
-  const chosen = variant ? (p.variants || []).find((v) => v.name === variant) : null
-  if (variant && !chosen) {
+  const isPrimary = variant === p.primary
+  const chosen = variant && !isPrimary ? (p.variants || []).find((v) => v.name === variant) : null
+  if (variant && !isPrimary && !chosen) {
     return {
       ok: false,
       available: true,
@@ -771,6 +800,7 @@ export function getPattern(catalog, id, { variant } = {}) {
     skills: p.skills || [],
     source: p.source,
     surface: p.surface ?? 'product',
+    ...(moved ? { movedFrom: moved.from, note: movedNote(moved, p) } : {}),
     variant: chosen ? chosen.name : p.primary,
     sfc: chosen ? chosen.sfc : p.sfc,
     variants: [

@@ -20,7 +20,9 @@ Pick the path by what you are about to do.
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
 2. A whole screen (login, signup, settings, a list, a create flow): start from a pattern.
    `search_patterns`, then `get_pattern`. Copy the SFC and change only the content. Do not build the
-   screen from scratch.
+   screen from scratch. Patterns are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
+   one per job with its states as variants; an id from before v6 still resolves, with a `note`
+   naming the new one.
 3. A single piece: `suggest_component`, then `get_component`.
 4. Follow the `webkit-usage` skill, which points to the skill for each case.
 5. Before you hand it over: `npx @aziontech/webkit doctor` and the `webkit-ui-verify` skill.

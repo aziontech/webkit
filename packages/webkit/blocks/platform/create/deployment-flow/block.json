@@ -1,0 +1,48 @@
+{
+  "id": "platform/create/deployment-flow",
+  "name": "DeploymentFlow",
+  "title": "Templates/Platform/Create/DeploymentFlow",
+  "surface": "product",
+  "summary": "The deploy flow card a create flow streams while it deploys: a Card titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete ToggleGroup once it has failed, opening on a cloning splash and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush Progress. A create flow that provisions rather than deploys titles it Provisioning, with a Creating status and a Provisioning splash; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from Card, StatusIndicator, ToggleGroup, Accordion, LogView, Spinner, Tag and Progress.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "deployment progress",
+    "build logs",
+    "deploy logs",
+    "creation progress",
+    "deployment status",
+    "build pipeline",
+    "deploy failed",
+    "progresso do deploy",
+    "logs de build",
+    "status da implantação",
+    "deploy flow",
+    "streaming deploy logs",
+    "fluxo de deploy"
+  ],
+  "skills": ["webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Initial",
+    "file": "deployment-flow.vue"
+  },
+  "variants": [
+    {
+      "name": "Running",
+      "summary": "Mid-stream: two steps checked with their times, Install dependencies spinning and open on the lines printed so far, the step count in the Logs row and the progress bar on the bottom edge.",
+      "file": "variants/running.vue"
+    },
+    {
+      "name": "Finished",
+      "summary": "The last line has printed: every step checked and collapsed, a Completed Tag in the Logs row and the progress bar retired, a beat before the flow hands over to its success screen.",
+      "file": "variants/finished.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The routing rules were rejected: that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the header swaps the status for the Phased or Complete switch.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

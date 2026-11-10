@@ -22,6 +22,7 @@ const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
+const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
 const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
@@ -344,6 +345,7 @@ async function build() {
   }
 
   const patterns = readBlocks(PKG_ROOT)
+  const patternAliases = readPatternAliases(patterns)
   const examples = readExamples(PKG_ROOT, subpathSet)
   for (const [subpath, list] of Object.entries(examples)) {
     if (imports[subpath]) imports[subpath].examples = list
@@ -359,8 +361,24 @@ async function build() {
     surfaces: SURFACES,
     aliases: buildAliases(subpaths, retiredNames(JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')))),
     imports,
-    patterns
+    patterns,
+    patternAliases
   }
+}
+
+function readPatternAliases(patterns) {
+  const aliases = existsSync(V6_BLOCKS) ? JSON.parse(readFileSync(V6_BLOCKS, 'utf-8')) : {}
+  const broken = []
+  for (const [from, to] of Object.entries(aliases)) {
+    const [id, variant] = to.split('#')
+    const p = patterns[id]
+    if (patterns[from.split('#')[0]]) broken.push(`${from}: old id still names a block`)
+    else if (!p) broken.push(`${from} -> ${to}: no block "${id}"`)
+    else if (variant && variant !== p.primary && !p.variants.some((v) => v.name === variant))
+      broken.push(`${from} -> ${to}: block "${id}" has no variant "${variant}"`)
+  }
+  if (broken.length) throw new Error(`src/cli/migrations/v6-blocks.json:\n  ${broken.join('\n  ')}`)
+  return Object.fromEntries(Object.entries(aliases).sort(([a], [b]) => a.localeCompare(b)))
 }
 
 function buildTokens() {

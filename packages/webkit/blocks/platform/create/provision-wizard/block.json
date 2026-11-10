@@ -1,0 +1,41 @@
+{
+  "id": "platform/create/provision-wizard",
+  "name": "ProvisionWizard",
+  "title": "Templates/Platform/Create/ProvisionWizard",
+  "surface": "product",
+  "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Label`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `Hint` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "provision wizard",
+    "create service wizard",
+    "two-step wizard",
+    "stepper form",
+    "bind domain and deployment",
+    "create and deploy",
+    "multi-step create",
+    "assistente de criação",
+    "assistente em etapas",
+    "criar serviço"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "steps": ["project", "domain-and-deployment"],
+  "primary": {
+    "name": "Project",
+    "file": "provision-wizard.vue"
+  },
+  "variants": [
+    {
+      "name": "NewProject",
+      "summary": "New project: the Name field replaces the list and the project is configured in place, with the Cache Settings switches and the Add an origin switch, each opening its own fields.",
+      "file": "variants/new-project.vue"
+    },
+    {
+      "name": "DomainAndDeployment",
+      "summary": "The second step with web-app bound: the read-back row with Change, the Domain card on a free platform domain previewing https://my-first-app.example.com, Environment and certificate, the Deployment card creating one, the collapsed Advanced section, and Back plus Create and deploy.",
+      "file": "variants/domain-and-deployment.vue"
+    }
+  ]
+}

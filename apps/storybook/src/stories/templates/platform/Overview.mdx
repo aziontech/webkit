@@ -23,7 +23,7 @@ block of a screen already composed from those primitives, with neutral copy (res
 `resource-01`, `example.com`) standing in for yours.
 
 Templates are named after the pattern they show, not after a product: a **Table view**, a
-**Details page with tabs**, a **Multipage create**, a **Delete with confirmation**. Swap the nouns and
+**Details page**, a **Multipage create**, a **Delete with confirmation**. Swap the nouns and
 the data for your own resource and the pattern holds. Every "Show code" panel is a single SFC that
 imports only `@aziontech/webkit` components, so it runs as pasted.
 
@@ -34,20 +34,13 @@ A screen is one shell, one header, then the blocks of its kind.
 1. The **app layout** frames every signed-in screen: a full-height navigation rail and a content zone whose header carries the breadcrumb, the global Create and the account. Each page type (table view, details, settings, code editor, query editor, create) has its own frame inside it.
 2. A **page header** names the screen and holds its primary action. Under a second-level tab bar each tab heads itself.
 3. A **table view** stacks the property filter row, the applied filters and the table card. An **edit resource** page stacks settings sections and mounts the unsaved-changes bar once something is edited. Stacked fields anywhere are the `Field` components, never a hand-made label and control. A **create** flow leaves the app layout for the focused creation header.
-4. **States** (first use, loading wires, drop zones) stand in for a block until there is data. **Overlays** confirm, delete and deploy inside a resource.
+4. **States** (first use, loading wires, drop zones) stand in for a block until there is data. Each task has its group below: **view**, **create**, **detail**, **edit**, **delete**, **settings**, **states**, **dashboard**, **auth** and **account**.
 
 ## Shell
 
-Every page type as its frame: the chrome around it and the regions the page fills.
+Every page type sits in a frame: the chrome around it and the regions the page fills. The frames are the shells; the pages below are grouped by the task they serve.
 
 - [Console shell](?path=/docs/templates-shells-console--documentation) — the signed-in frame: the resizable, collapsible navigation rail, the content header with breadcrumb and Create, and the list and detail layouts inside it.
-- [HomeDashboard](?path=/docs/templates-platform-shell-homedashboard--documentation) — the home page in the shell, populated (greeting, usage band, resource panels) and empty (the onboarding prompt and starter doors).
-- [SinglePageCreate](?path=/docs/templates-platform-shell-singlepagecreate--documentation) — create in one screen: the creation header, the form column and the floating Cancel and Create bar, or for a long create its item groups over a full-bleed sticky footer, with the required state after submit.
-- [MultipageCreate](?path=/docs/templates-platform-shell-multipagecreate--documentation) — create one step at a time: the step rail, each step's settings, Back and Next.
-- [DetailsPageWithTabs](?path=/docs/templates-platform-shell-detailspagewithtabs--documentation) — a resource's detail page under its tab bar: overviews, versions, build, and a deployment with its logs.
-- [SplitView](?path=/docs/templates-platform-shell-splitview--documentation) — an events explorer: controls and chips, the fields panel, the volume chart, the events table and the detail a row opens beside it.
-- [CodeEditor](?path=/docs/templates-platform-shell-codeeditor--documentation) — a code resource page: the editor toolbar, one editor pane, or the editor and the arguments split by a resizable panel, and its Settings tab.
-- [QueryEditor](?path=/docs/templates-platform-shell-queryeditor--documentation) — a data resource page: a resizable side panel beside the query editor and its results or templates, or beside the table browser and a table schema, and the empty database.
 
 ## Page
 
@@ -61,82 +54,79 @@ The fragments every screen repeats are components, not templates. Compose them:
 - [SaveBar](?path=/docs/components-primitives-layout-savebar--documentation) — the bar that commits a settings page or a create form: floating while dirty, docked, or the plain form footer.
 - [ConfirmDialog](?path=/docs/components-primitives-overlay-confirmdialog--documentation) — the plain confirmation, the run-again confirmation, and the unsaved-changes guards (discard, or save or discard).
 
-## Lists
+## View
 
-- [TableView](?path=/docs/templates-platform-lists-tableview--documentation) — the whole list page, header to table, with its filtered and empty states.
-- [TablePropertyFilter](?path=/docs/templates-platform-lists-tablepropertyfilter--documentation) — the controls row: Filter with its count, search, refresh, export and columns, and the applied chips under it.
-- [TableCard](?path=/docs/templates-platform-lists-tablecard--documentation) — the card-wrapped table with the name, id, link, status, last-modified and row-actions cell recipes, and its empty card.
-- [HistoryTable](?path=/docs/templates-platform-lists-historytable--documentation) — a release history: version, status with duration, project, environment, and the redeploy and promote actions.
-- [CardView](?path=/docs/templates-platform-lists-cardview--documentation) — a catalog of cards: templates, and integrations with their featured cards and filter.
+- [TableView](?path=/docs/templates-platform-view-tableview--documentation) — the whole list page, header to table, with its filtered and empty states.
+- [SplitView](?path=/docs/templates-platform-view-splitview--documentation) — an events explorer: controls and chips, the fields panel, the volume chart, the events table and the detail a row opens beside it.
+- [QueryEditor](?path=/docs/templates-platform-view-queryeditor--documentation) — a data resource page: a resizable side panel beside the query editor and its results or templates, or beside the table browser and a table schema, and the empty database.
+- [FileBrowser](?path=/docs/templates-platform-view-filebrowser--documentation) — a file store: folder breadcrumb, add files, and the files table.
 
-## Forms
-
-- [EditResource](?path=/docs/templates-platform-forms-editresource--documentation) — the settings tab of a resource: small header, sections of rows, and the unsaved-changes bar once something is edited, through its saving state.
-- [CreateInDrawer](?path=/docs/templates-platform-forms-createindrawer--documentation) — the create form in a drawer, the one every add or edit drawer inside a resource follows: a domain, an environment, a record.
-- [AttributeEditor](?path=/docs/templates-platform-forms-attributeeditor--documentation) — key and value rows: the list page and its create drawer, with secrets, the JSON view and the scope band.
-- [RuleBuilder](?path=/docs/templates-platform-forms-rulebuilder--documentation) — the richest form: a rule's criteria and behaviors, built row by row in a drawer.
-- [SectionedForm](?path=/docs/templates-platform-forms-sectionedform--documentation) — fields separated into sections, every Field type in one form, ending in an inline Deploy.
-- [SaveAllGroups](?path=/docs/templates-platform-forms-saveallgroups--documentation) — item groups saved together by one sticky footer.
-- [SavePerGroup](?path=/docs/templates-platform-forms-savepergroup--documentation) — item groups that each save from their own card footer.
-- [SavePerCard](?path=/docs/templates-platform-forms-savepercard--documentation) — settings cards that each carry their own Save.
-- [FormInDrawer](?path=/docs/templates-platform-forms-formindrawer--documentation) — a list page whose create drawer groups its fields into sections.
-- [NestedDrawer](?path=/docs/templates-platform-forms-nesteddrawer--documentation) — a drawer that opens a second drawer to create what its select needs, then selects it.
-- [FormInModal](?path=/docs/templates-platform-forms-forminmodal--documentation) — a short, blocking form in a modal: the type-the-name delete confirmation.
-- [FormValidation](?path=/docs/templates-platform-forms-formvalidation--documentation) — every state a submit can land in, one story per state.
-- [ServerValidation](?path=/docs/templates-platform-forms-servervalidation--documentation) — a server-side rejection on save, reloaded in place until the form is valid again.
-- [AsyncSubmit](?path=/docs/templates-platform-forms-asyncsubmit--documentation) — a long-running submit after the form: idle, running, failed and succeeded, with its logs.
-
-## Overlays
-
-- [DeleteWithConfirmation](?path=/docs/templates-platform-overlays-deletewithconfirmation--documentation) — the destructive confirmation that asks for the resource name.
-- [DeployDrawer](?path=/docs/templates-platform-overlays-deploydrawer--documentation) — deploy from a drawer: what to ship, its version and the resources it brings, then the build.
-- [DeploymentSettingsDrawer](?path=/docs/templates-platform-overlays-deploymentsettingsdrawer--documentation) — create a deployment setting: its strategy and the services that share it.
-
-## Creation
+## Create
 
 - [CreationHeader](?path=/docs/templates-headers-creationheader--documentation) — the focused-flow header: back, product mark, breadcrumb, account.
-- [CreateHub](?path=/docs/templates-platform-creation-createhub--documentation) — where a project starts: import from a repository or start from a template.
-- [ProvisionWizard](?path=/docs/templates-platform-creation-provisionwizard--documentation) — a two-step wizard: bind a project, then domain, environment, certificate and deployment.
-- [SourceWizard](?path=/docs/templates-platform-creation-sourcewizard--documentation) — create from a source: where it runs, then how it starts.
-- [ResourcePicker](?path=/docs/templates-platform-creation-resourcepicker--documentation) — choose an existing related resource or name a new one.
-- [DeploymentFlow](?path=/docs/templates-platform-creation-deploymentflow--documentation) — the deploy flow a create ends in: the provisioning steps with the build logs under them, through success or failure.
-- [DeployTemplate](?path=/docs/templates-platform-creation-deploytemplate--documentation) — deploy a template: connect Git, then the template's deploy form.
-- [DeploySuccess](?path=/docs/templates-platform-creation-deploysuccess--documentation) — the terminal screen after a deploy: the live deployment card, the resources created or bound, next steps.
+- [SinglePageCreate](?path=/docs/templates-platform-create-singlepagecreate--documentation) — create in one screen: the creation header, the form column and the floating Cancel and Create bar, a long create's item groups over a full-bleed sticky footer, the required state after submit, and the Import from Git form whose sections of fields end in an inline Deploy.
+- [MultipageCreate](?path=/docs/templates-platform-create-multipagecreate--documentation) — create one step at a time: the step rail, each step's settings, Back and Next.
+- [CreateInDrawer](?path=/docs/templates-platform-create-createindrawer--documentation) — the create form in a drawer, the one every add or edit drawer inside a resource follows: a domain, an environment, a record, a deployment setting, a create drawer of item groups opened from a list, and the nested drawer that creates what a select needs and selects it back.
+- [CreateHub](?path=/docs/templates-platform-create-createhub--documentation) — where a project starts: import from a repository or start from a template.
+- [ProvisionWizard](?path=/docs/templates-platform-create-provisionwizard--documentation) — a two-step wizard: bind a project, then domain, environment, certificate and deployment.
+- [SourceWizard](?path=/docs/templates-platform-create-sourcewizard--documentation) — create from a source: where it runs, then how it starts.
+- [ResourcePicker](?path=/docs/templates-platform-create-resourcepicker--documentation) — choose an existing related resource or name a new one.
+- [DeployDrawer](?path=/docs/templates-platform-create-deploydrawer--documentation) — deploy from a drawer: what to ship, its version and the resources it brings, then the build.
+- [DeploymentFlow](?path=/docs/templates-platform-create-deploymentflow--documentation) — the deploy flow a create ends in: the provisioning steps with the build logs under them, through success or failure.
+- [DeployTemplate](?path=/docs/templates-platform-create-deploytemplate--documentation) — deploy a template: connect Git, then the template's deploy form.
+- [DeploySuccess](?path=/docs/templates-platform-create-deploysuccess--documentation) — the terminal screen after a deploy: the live deployment card, the resources created or bound, next steps.
+
+## Detail
+
+- [DetailsPage](?path=/docs/templates-platform-detail-detailspage--documentation) — a resource's detail page under its tab bar: overviews, versions, build, a deployment with its logs, and the summary card on its own for a resource, a service and a policy.
+- [VersionDetail](?path=/docs/templates-platform-detail-versiondetail--documentation) — one version of a resource: its tabs, settings, the Save and Deploy bar, and the version history pane.
+- [DeploymentLogs](?path=/docs/templates-platform-detail-deploymentlogs--documentation) — the deploy logs on their own: steps, log views and controls.
+- [GetStarted](?path=/docs/templates-platform-detail-getstarted--documentation) — the CLI and CI steps to ship to a fresh resource.
+- [AttachedResources](?path=/docs/templates-platform-detail-attachedresources--documentation) — the attached-resources table inside a resource with its Add action.
+- [RecordTable](?path=/docs/templates-platform-detail-recordtable--documentation) — a zone: its main settings with nameservers and DNSSEC, and its records table.
+- [ProductionChecklist](?path=/docs/templates-platform-detail-productionchecklist--documentation) — the readiness checklist card and its drawer.
+
+## Edit
+
+- [EditResource](?path=/docs/templates-platform-edit-editresource--documentation) — the settings tab of a resource: small header, sections of rows, and the unsaved-changes bar once something is edited, through its saving state.
+- [AttributeEditor](?path=/docs/templates-platform-edit-attributeeditor--documentation) — key and value rows: the list page and its create drawer, with secrets, the JSON view and the scope band.
+- [RuleBuilder](?path=/docs/templates-platform-edit-rulebuilder--documentation) — the richest form: a rule's criteria and behaviors, built row by row in a drawer.
+- [CodeEditor](?path=/docs/templates-platform-edit-codeeditor--documentation) — a code resource page: the editor toolbar, one editor pane, or the editor and the arguments split by a resizable panel, and its Settings tab.
+
+## Delete
+
+- [DeleteWithConfirmation](?path=/docs/templates-platform-delete-deletewithconfirmation--documentation) — the destructive confirmation that asks for the resource name, as a copy chip over a bare input or as a labelled field in a dialog.
+
+## Settings
+
+- [SettingsForm](?path=/docs/templates-platform-settings-settingsform--documentation) — a settings form and its save strategy: item groups saved together by one sticky footer (the default), groups that each save from their own card footer, and cards that each carry their own Save.
 
 ## States
 
 - [FirstUse](?path=/docs/templates-platform-states-firstuse--documentation) — a list's empty state before the first resource, with its ways to create and the promo cards.
 - [PageWires](?path=/docs/templates-platform-states-pagewires--documentation) — the skeleton wires a screen shows while it loads.
 - [ProjectIntake](?path=/docs/templates-platform-states-projectintake--documentation) — the drop zone over a screen and the initializing state of a project upload.
+- [FormValidation](?path=/docs/templates-platform-states-formvalidation--documentation) — every state a submit can land in, one story per state, and a server-side rejection on save reloaded in place until the form is valid again.
+- [AsyncSubmit](?path=/docs/templates-platform-states-asyncsubmit--documentation) — a long-running submit after the form: idle, running, failed and succeeded, with its logs.
 
-## Detail
-
-- [DetailsPage](?path=/docs/templates-platform-detail-detailspage--documentation) — the summary card that opens a resource's overview: subject, facts, state.
-- [VersionDetail](?path=/docs/templates-platform-detail-versiondetail--documentation) — one version of a resource: its tabs, settings, the Save and Deploy bar, and the version history pane.
-- [DeploymentLogs](?path=/docs/templates-platform-detail-deploymentlogs--documentation) — the deploy logs on their own: steps, log views and controls.
-- [GetStarted](?path=/docs/templates-platform-detail-getstarted--documentation) — the CLI and CI steps to ship to a fresh resource.
-- [AttachedResources](?path=/docs/templates-platform-detail-attachedresources--documentation) — the attached-resources table inside a resource with its Add action.
-- [FileBrowser](?path=/docs/templates-platform-detail-filebrowser--documentation) — a file store: folder breadcrumb, add files, and the files table.
-- [RecordTable](?path=/docs/templates-platform-detail-recordtable--documentation) — a zone: its main settings with nameservers and DNSSEC, and its records table.
-- [ProductionChecklist](?path=/docs/templates-platform-detail-productionchecklist--documentation) — the readiness checklist card and its drawer.
-
-## Dashboards
+## Dashboard
 
 Dashboard patterns built from the [chart components](?path=/docs/components-chart-overview--documentation), named after the job each one does.
 
-- [AnalyticsDashboard](?path=/docs/templates-platform-dashboards-analyticsdashboard--documentation) — KPI tiles, charts and tables that all read the same period, with crosshairs synced across cards.
-- [DataDashboard](?path=/docs/templates-platform-dashboards-datadashboard--documentation) — tiles with sparklines and period-over-period deltas, then the breakdowns behind them.
-- [ServiceMonitoringDashboard](?path=/docs/templates-platform-dashboards-servicemonitoringdashboard--documentation) — status tiles, latency and error rate by window, and an alert rail.
-- [SecurityDashboard](?path=/docs/templates-platform-dashboards-securitydashboard--documentation) — blocked and allowed over time, category and origin breakdowns, top sources and what needs attention.
-- [ExecutiveSummaryDashboard](?path=/docs/templates-platform-dashboards-executivesummarydashboard--documentation) — a scorecard, goal bars against their targets, a trend grid of small multiples and a commentary column.
-- [FunnelCohortDashboard](?path=/docs/templates-platform-dashboards-funnelcohortdashboard--documentation) — conversion tiles, the funnel with its drop-off between stages, and cohort retention.
-- [CompositionDashboard](?path=/docs/templates-platform-dashboards-compositiondashboard--documentation) — how a total breaks into parts: total tiles, a stacked area over time, the current split and a ranked contributors table.
-- [ProjectStatusDashboard](?path=/docs/templates-platform-dashboards-projectstatusdashboard--documentation) — completion, a dated milestone timeline, owners, the at-risk list and a burndown.
-- [AlertsDashboard](?path=/docs/templates-platform-dashboards-alertsdashboard--documentation) — open alerts by severity: summary tiles, alerts per day stacked by severity level, the split by type, the entities with the highest risk and the open alerts with their SeverityTag.
-- [HealthScoreDashboard](?path=/docs/templates-platform-dashboards-healthscoredashboard--documentation) — an overall score out of 100 with its band and trend, scores per application and location, hourly band strips and the open incidents.
-- [ScanResultsDashboard](?path=/docs/templates-platform-dashboards-scanresultsdashboard--documentation) — items sent for analysis: summary tiles, the verdict split, where items came from, held and early-delivered items, and the filterable submissions table.
-- [ActivityOutcomesDashboard](?path=/docs/templates-platform-dashboards-activityoutcomesdashboard--documentation) — outcome tiles, outcomes over time as stacked bars, breakdowns by actor, category and destination, and the request log with outcome and severity.
-- [ConfigurableDashboard](?path=/docs/templates-platform-dashboards-configurabledashboard--documentation) — the reader arranges the cards: Edit layout turns on drag and resize on every card, with keyboard moves and Reset layout.
+- [HomeDashboard](?path=/docs/templates-platform-dashboard-homedashboard--documentation) — the home page in the shell, populated (greeting, usage band, resource panels) and empty (the onboarding prompt and starter doors).
+- [AnalyticsDashboard](?path=/docs/templates-platform-dashboard-analyticsdashboard--documentation) — KPI tiles, charts and tables that all read the same period, with crosshairs synced across cards.
+- [DataDashboard](?path=/docs/templates-platform-dashboard-datadashboard--documentation) — tiles with sparklines and period-over-period deltas, then the breakdowns behind them.
+- [ServiceMonitoringDashboard](?path=/docs/templates-platform-dashboard-servicemonitoringdashboard--documentation) — status tiles, latency and error rate by window, and an alert rail.
+- [SecurityDashboard](?path=/docs/templates-platform-dashboard-securitydashboard--documentation) — blocked and allowed over time, category and origin breakdowns, top sources and what needs attention.
+- [ExecutiveSummaryDashboard](?path=/docs/templates-platform-dashboard-executivesummarydashboard--documentation) — a scorecard, goal bars against their targets, a trend grid of small multiples and a commentary column.
+- [FunnelCohortDashboard](?path=/docs/templates-platform-dashboard-funnelcohortdashboard--documentation) — conversion tiles, the funnel with its drop-off between stages, and cohort retention.
+- [CompositionDashboard](?path=/docs/templates-platform-dashboard-compositiondashboard--documentation) — how a total breaks into parts: total tiles, a stacked area over time, the current split and a ranked contributors table.
+- [ProjectStatusDashboard](?path=/docs/templates-platform-dashboard-projectstatusdashboard--documentation) — completion, a dated milestone timeline, owners, the at-risk list and a burndown.
+- [AlertsDashboard](?path=/docs/templates-platform-dashboard-alertsdashboard--documentation) — open alerts by severity: summary tiles, alerts per day stacked by severity level, the split by type, the entities with the highest risk and the open alerts with their SeverityTag.
+- [HealthScoreDashboard](?path=/docs/templates-platform-dashboard-healthscoredashboard--documentation) — an overall score out of 100 with its band and trend, scores per application and location, hourly band strips and the open incidents.
+- [ScanResultsDashboard](?path=/docs/templates-platform-dashboard-scanresultsdashboard--documentation) — items sent for analysis: summary tiles, the verdict split, where items came from, held and early-delivered items, and the filterable submissions table.
+- [ActivityOutcomesDashboard](?path=/docs/templates-platform-dashboard-activityoutcomesdashboard--documentation) — outcome tiles, outcomes over time as stacked bars, breakdowns by actor, category and destination, and the request log with outcome and severity.
+- [ConfigurableDashboard](?path=/docs/templates-platform-dashboard-configurabledashboard--documentation) — the reader arranges the cards: Edit layout turns on drag and resize on every card, with keyboard moves and Reset layout.
 
 ## Auth
 

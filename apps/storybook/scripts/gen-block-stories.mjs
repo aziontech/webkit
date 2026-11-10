@@ -60,10 +60,19 @@ export function storyFile(block, importBase) {
     ''
   )
   states.forEach((s, i) => {
+    const own = s.preview || {}
+    const layout =
+      own.layout && own.layout !== (preview.layout || 'fullscreen')
+        ? `layout: ${js(own.layout)}, `
+        : ''
+    const bg =
+      own.background && own.background !== preview.background
+        ? `backgrounds: { default: ${js(own.background)} }, `
+        : ''
     lines.push(
       `export const ${s.name} = {`,
       `  render: () => ({ components: { Block: State${i} }, template: '<Block />' }),`,
-      `  parameters: { docs: { description: { story: ${js(s.summary || '')} }, source: { code: source${i} } } }`,
+      `  parameters: { ${layout}${bg}docs: { description: { story: ${js(s.summary || '')} }, source: { code: source${i} } } }`,
       '}',
       ''
     )

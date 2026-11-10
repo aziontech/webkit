@@ -77,6 +77,7 @@ function build(json) {
     subpaths,
     imports,
     patterns: json.patterns || {},
+    patternAliases: json.patternAliases || {},
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
     nearestPublishedPrefix(sub) {
@@ -116,6 +117,7 @@ function empty() {
     subpaths: [],
     imports: {},
     patterns: {},
+    patternAliases: {},
     has: () => false,
     getEntry: () => null,
     nearestPublishedPrefix: () => null,
