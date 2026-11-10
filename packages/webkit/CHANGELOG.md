@@ -4,6 +4,23 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.10.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.9.0...@aziontech/webkit@5.10.0) (2026-11-09)
+
+
+### Features
+
+* **webkit:** [ENG-49882] add hero, nav and footer page sections ([#1147](https://github.com/aziontech/webkit/issues/1147)) ([d4b69cb](https://github.com/aziontech/webkit/commit/d4b69cb73985315cebcc263fd0f8a6c67dee3c60))
+* **webkit:** [ENG-49883] add feature and solution page sections ([#1148](https://github.com/aziontech/webkit/issues/1148)) ([3cfdc67](https://github.com/aziontech/webkit/commit/3cfdc67d1952671d9953587a1207e16b6fef8ce6))
+* **webkit:** [ENG-49884] add social-proof page sections ([#1149](https://github.com/aziontech/webkit/issues/1149)) ([3a8cb30](https://github.com/aziontech/webkit/commit/3a8cb30efdbddfbe51b67b1d64f64c8544d4196a))
+* **webkit:** [ENG-49885] add comparison and pricing page sections ([#1150](https://github.com/aziontech/webkit/issues/1150)) ([dab8d07](https://github.com/aziontech/webkit/commit/dab8d070772dc515ade47104d5d07fc5b1295fb5))
+* **webkit:** [ENG-49886] add article and content page sections ([#1151](https://github.com/aziontech/webkit/issues/1151)) ([a85ff2a](https://github.com/aziontech/webkit/commit/a85ff2ab79b945cd7b4c73b33c6d193ed3f5e57f))
+* **webkit:** [ENG-49887] add listing, directory and closing page sections ([#1152](https://github.com/aziontech/webkit/issues/1152)) ([a28aadc](https://github.com/aziontech/webkit/commit/a28aadc2589f49cc180862358b3e8d7b2e91e7c4))
+
+
+### Documentation
+
+* **webkit:** [ENG-49880] page-section convention and in-page anchor vocabulary ([#1145](https://github.com/aziontech/webkit/issues/1145)) ([544d8e7](https://github.com/aziontech/webkit/commit/544d8e7c8f95dc291d85c26f3c85482796d16052))
+
 ## [5.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.8.0...@aziontech/webkit@5.9.0) (2026-11-04)
 
 

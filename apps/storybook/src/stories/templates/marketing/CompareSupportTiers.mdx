@@ -10,7 +10,7 @@ The tier-by-tier comparison on the Support page: one column per support tier, on
 
 It is the support counterpart of ComparePlans. It shares the same real `table` with one `tbody` per band, the same three kinds of cell (a tick, an em dash, or the stated allowance, with `sr-only` text on the two glyphs), the same sticky header at `top-14` with an accent bar on the recommended tier, and the same narrow layout that folds to one tier picked with a `Select`. Where it differs: the first column is headed `Support`, each tier states who it is for under its name, and each band closes on its own link to the matching section of the pricing documentation.
 
-Built from `SectionModule`, `Select`, `Button`, `Overline` and `Link`.
+The band is the `CompareSupportTiers` component from `@aziontech/webkit/sections/compare-support-tiers`; it composes `SectionModule`, `Select`, `Button`, `Overline` and `Link`, and keeps the tier picked on small screens as local state.
 
 <p
   style={{
@@ -35,10 +35,11 @@ Developer, Business, Enterprise and Mission-Critical across the Support band (se
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `tiers[]` are the columns in order, each an `id`, a `name`, a `description` of who it is for, `highlighted` for the recommended tier, and its `action` (`label`, `kind`, `href`).
-- `sections[]` are the bands, each an `eyebrow`, a `title`, the `link` that closes it, and its `rows`. A row is a `label` with one value per tier: `true` is a tick, `—` is an em dash, any other text is the allowance; `group: true` sets a row as a group heading.
-- `caption` is the table's screen-reader caption, `columnLabel` heads the first column, and `pickerLabel` names the tier picker below `lg`.
-- Every prop is optional; without them the block shows the Support page's tiers.
+- `tiers[]` are the columns in order, each an `id`, a `name`, a `description` of who it is for, `highlighted` for the recommended tier, and its `action` (`label`, `href`). The highlighted tier gets the secondary button, the others an outlined one. A tier without a name is dropped.
+- `sections[]` are the bands, each an `eyebrow`, a `title`, the `action` link (`label`, `href`) that closes it, and its `rows`. A row is a `label` with one value per tier: `true` (or `✓`) is a tick, `—` is an em dash, any other text is the allowance; `group: true` sets a row as a group heading.
+- `caption` is the table's screen-reader caption, `columnLabel` heads the first column, and `pickerAriaLabel` names the tier picker below `lg`. `includedLabel` and `excludedLabel` are what screen readers hear on a tick and a dash.
+- `anchor` sets the band's `id`, so a page can link to `#tiers`.
+- Every prop is optional; without `tiers` the block renders nothing.
 
 Example:
 

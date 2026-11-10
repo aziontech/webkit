@@ -10,7 +10,7 @@ A directory of Azion's products, in four columns under a section title. Each col
 
 Home shows it right under the hero. The solution, product and Pricing pages repeat it.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox` and `ColumnNavigation`.
+The band is the `PlatformDirectory` component from `@aziontech/webkit/sections/platform-directory`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `ColumnNavigation`.
 
 <p
   style={{
@@ -33,14 +33,17 @@ The Home band: a title over fifteen Azion products, framed with corner marks. Pr
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `title` heads the section, and `ariaLabel` names the directory for screen readers.
 - `groups` sets the columns: a `title` and its `items`.
-- Each item takes an `icon` class, a `title`, a `description` and an `href`. An item without a title or a link is skipped.
+- Each item takes an `icon` class, a `title`, a `description` and an `href`. An item without a title or a link is skipped, and so is a group left with no items.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={PlatformDirectoryStories.PrimitivesJson} dark />
+  <Source
+    of={PlatformDirectoryStories.PrimitivesJson}
+    dark
+  />
 </div>

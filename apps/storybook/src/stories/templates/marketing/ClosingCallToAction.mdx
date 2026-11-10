@@ -10,7 +10,7 @@ The last ask at the end of a landing page, after a hatched gap. A closing frame 
 
 Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on each closing frame. The primary form is `CallToAction` in its `primary` register, with a `TextureMaterial` in its `background` slot.
+The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/sections/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/sections/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is its own component too, `ClosingCallToActionAgents` from `@aziontech/webkit/sections/closing-call-to-action-agents`, since it carries an audience switch and a typed line; it composes `CallToAction` in its `primary` register with `SegmentedButton`, `InputGroup`, `CopyButton` and `Button`.
 
 <p
   style={{
@@ -27,7 +27,7 @@ Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `B
 
 ### Split
 
-The solution pages close. `Start for free` sits under the headline and `Talk to a specialist` in the side cell, then a tall closing frame. The module carries `id="contact"`, so the page contact links scroll to it.
+The solution pages close. `Start for free` sits under the headline and `Talk to a specialist` in the side cell, then a tall closing frame. The band carries the `contact` anchor, so the page contact links scroll to it.
 
 <Canvas of={ClosingCallToActionStories.Split} />
 
@@ -35,15 +35,19 @@ The solution pages close. `Start for free` sits under the headline and `Talk to 
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
+- `kind` is `split`; `anchor` is the band's id for in-page links, `contact` by convention.
 - `eyebrow` is a short overline, such as Build.
 - `title` is the first line of the headline, and `titleMuted` the second line, in muted ink.
 - `description` is the sentence in the side cell.
-- `primaryAction` is the button under the headline, and `asideAction` the button in the side cell. Each takes a `label` and an `href`.
+- `primaryAction` is the white button under the headline, and `secondaryAction` the outlined button in the side cell. Each takes a `label`, an `href` and `trailing` for the chevron.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={ClosingCallToActionStories.SplitJson} dark />
+  <Source
+    of={ClosingCallToActionStories.SplitJson}
+    dark
+  />
 </div>
 
 <hr
@@ -64,13 +68,49 @@ The Careers close. A panel with one action to the job listing, then a short clos
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `title` is the headline of the panel, and `description` the sentence under it.
-- `action` is the panel button, with a `label` and an `href`.
+- `kind` is `panel`.
+- `title` is the headline of the panel, and `description` the sentence under it. `eyebrow` is drawn above the headline; `titleMuted` is not drawn.
+- `primaryAction` is the panel button, with a `label`, an `href` and `trailing` for the chevron. A `secondaryAction` sits beside it as an outlined button.
 
 Example:
 
 <div className="sb-site-json">
-  <Source of={ClosingCallToActionStories.PanelJson} dark />
+  <Source
+    of={ClosingCallToActionStories.PanelJson}
+    dark
+  />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Newsletter
+
+The Blog and Resource Hub close. The headline sits large on the lead side and the ask labels the email field, over a strip lit by the pixelated primary wave, then the tall closing frame. An empty field and a malformed address each show their message under the field. The block never sends: a valid address fires `submit`, and the page posts it and sets the outcome back.
+
+<Canvas of={ClosingCallToActionStories.Newsletter} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band's id for in-page links, `contact` by convention.
+- `eyebrow` is the overline, `description` the large headline on the lead side, and `title` the ask that labels the email field and names the band.
+- `form` is the copy of the form: the field `placeholder`, the `submitLabel`, the `successMessage` that replaces the form once the address is sent, the `errorMessage` shown under the form when it is not, and the `requiredMessage` and `invalidMessage` shown under the field.
+- The block emits `submit` with the event and `{ email }` on a valid address and never posts it. The site posts the address to its newsletter service, sets `loading` while it waits, then `submitted` on success or `error` on failure. `loading`, `submitted` and `error` are not in the JSON; the site owns them.
+
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ClosingCallToActionStories.NewsletterJson}
+    dark
+  />
 </div>
 
 <hr
@@ -83,32 +123,26 @@ Example:
 
 ### Primary
 
-The loud close. One centred ask on the canvas, under a pixelated `TextureMaterial` whose two waves keep travelling across it. The closing frame follows.
+The loud close. One centred ask on the canvas, under a pixelated `TextureMaterial` whose two waves keep travelling across it. The closing frame follows. The waves stop under reduced motion.
 
 <Canvas of={ClosingCallToActionStories.Primary} />
 
-##### Use it in the sample
+##### Use it on the site
 
-The band keeps the canvas ground and moves the pixelate's resting pools out of frame and runs its waves at triple gain and double pace; the copy takes its ordinary ink. The waves stop under reduced motion.
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-Add this entry to the page data. `section` picks the band and the rest fill it:
-
-- `kind` is `primary`.
+- `kind` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention.
 - `title` is the headline and `description` the sentence under it. `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
-- `actions` are the buttons under the copy. The first is the white `secondary` pill; give the second `kind: 'outlined'`.
+- `primaryAction` is the white button and `secondaryAction` the outlined one beside it. Each takes a `label`, an `href` and `trailing` for the chevron.
 
-```js
-{
-  section: 'ClosingCallToAction',
-  kind: 'primary',
-  title: 'Build, run, and protect applications everywhere.',
-  description: 'Get faster launches, lower latency, and less infrastructure overhead from day one.',
-  actions: [
-    { label: 'Start for free', href: '/signup' },
-    { label: 'Docs', href: '/docs', kind: 'outlined', trailing: true }
-  ]
-}
-```
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ClosingCallToActionStories.PrimaryJson}
+    dark
+  />
+</div>
 
 <hr
   style={{
@@ -120,46 +154,27 @@ Add this entry to the page data. `section` picks the band and the rest fill it:
 
 ### Agents
 
-The close for a reader who may be a person or an agent. It is the `primary` register, so it shares its canvas ground and the pixelated wave rising from the top corners. One centred ask, with a small `SegmentedButton` under the title that switches the way in: For humans installs the CLI, For agents hands over a prompt that connects the Azion MCP server, which works in any client. Each way carries a copyable line and one action, then the closing frame follows.
+The close for a reader who may be a person or an agent. It is the `primary` register, so it shares its canvas ground and the pixelated wave. One centred ask, with a small `SegmentedButton` under the title that switches the way in: For humans offers the sign-up and a specialist, For agents hands over a prompt that connects the Azion MCP server, which works in any client. Each way carries an optional copyable line and its actions, then the closing frame follows.
 
 <Canvas of={ClosingCallToActionStories.Agents} />
 
-##### Use it in the sample
+##### Use it on the site
 
-The anatomy follows a developer-tool hero: the title, a small switch, one compact row of copyable line and action, then two lines that are the same for every audience, so the band keeps its height when the tab changes. The typed word has auto width, so the centred line grows and shrinks with the cursor; it never wraps, so the height holds. The line is a fixed-size `CopyButton` pill, 32px high, the same in both ways, and what it copies is exactly what it shows. The swapped panel sits in a polite live region and fades in, with no motion under reduced motion.
+The title, a small switch, one compact row of copyable line and actions, then two lines that are the same for every audience, so the band keeps its height when the switch changes. The swapped row sits in a polite live region and fades in, with no motion under reduced motion.
 
-Add this entry to the page data. `section` picks the band and the rest fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `agents`.
-- `title` is the headline. `eyebrow` is not drawn, as in `primary`.
+- `anchor` is the band's id for in-page links, `contact` by convention.
+- `title` is the headline.
 - `typedLead` and `typedWords` make the first line under the row. The lead stays put, and the words are typed, held, erased and typed again, in order, behind a blinking cursor. Screen readers get the whole sentence at once, and reduced motion shows every word at once with no cursor. `description` is the line under it.
-- `audiences` are the ways in, each a `value` and a `label` for the switch. The first one opens. `command` is a shell line to copy, drawn with a `$`; `prompt` is a line for the visitor's agent, drawn without it. `actions` are the buttons beside it.
-- `audiencesLabel` names the switch for assistive tech.
+- `audiences` are the ways in, each a `value` and a `label` for the switch; the first one opens. `copy` is an optional line to copy: `text` is what the field shows and the button copies, `label` names the copy button. `actions` are the buttons beside it, each a `label`, an `href`, a `kind` (`secondary` for the white pill, `outlined` by default) and `trailing` for the chevron.
+- `audiencesAriaLabel` names the switch and `lineAriaLabel` the copyable field for assistive tech.
 
-```js
-{
-  section: 'ClosingCallToAction',
-  kind: 'agents',
-  title: 'Built by you, or your agents.',
-  typedLead: 'Drive one platform from the',
-  typedWords: ['Console', 'CLI', 'MCP server'],
-  description: 'A person and an agent ship the same way.',
-  audiencesLabel: 'Audience',
-  audiences: [
-    {
-      value: 'humans',
-      label: 'For humans',
-      actions: [
-        { label: 'Start for free', href: '/signup', kind: 'secondary' },
-        { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
-      ]
-    },
-    {
-      value: 'agents',
-      label: 'For agents',
-      prompt: 'Connect Azion MCP: https://mcp.azion.com',
-      actions: [{ label: 'Read the agent docs', href: '/site/docs/agent-setup', kind: 'outlined', size: 'medium', trailing: true }]
-    }
-  ]
-}
-```
+Example:
+
+<div className="sb-site-json">
+  <Source
+    of={ClosingCallToActionStories.AgentsJson}
+    dark
+  />
+</div>
