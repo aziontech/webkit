@@ -1,0 +1,74 @@
+@import 'tailwindcss/utilities' source(none);
+@reference "@aziontech/theme";
+@source '../';
+@source '../../../../packages/webkit/blocks';
+@source '../../../../packages/webkit/examples';
+@source '../../../../packages/webkit/catalog.json';
+
+html,
+body {
+  min-height: 100%;
+  background: var(--bg-canvas);
+  color: var(--text-default);
+}
+
+.azion {
+  font-family: Rubik, ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizelegibility;
+}
+
+.docs-code .shiki {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  font-family: 'Roboto Mono', ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  background: transparent !important;
+  direction: ltr;
+  text-align: start;
+}
+
+.docs-code .shiki span {
+  color: var(--shiki-light);
+}
+
+.azion-dark .docs-code .shiki span {
+  color: var(--shiki-dark);
+}
+
+.docs-html :is(table) {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.docs-html :is(th, td) {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 1px solid var(--border-default);
+  text-align: start;
+  vertical-align: top;
+}
+
+.docs-html pre.shiki {
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface) !important;
+  direction: ltr;
+}
+
+.docs-html pre.shiki span {
+  color: var(--shiki-light);
+}
+
+.azion-dark .docs-html pre.shiki span {
+  color: var(--shiki-dark);
+}
+
+.docs-frame {
+  resize: horizontal;
+  overflow: hidden;
+  max-width: 100%;
+  min-width: 320px;
+}
