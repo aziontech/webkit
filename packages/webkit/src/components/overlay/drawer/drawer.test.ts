@@ -31,7 +31,7 @@ const panel = () => byTestId('overlay-drawer__panel')
 const backdrop = () => byTestId('overlay-drawer__backdrop')
 
 /**
- * A realistic composed tree wired like the Storybook Default: Root > Trigger
+ * A realistic composed tree wired like the Default example: Root > Trigger
  * (button-like) + Portal > Overlay + Content (Title / Description / Close).
  * Slots take plain strings so the assertions stay grounded in the drawer
  * sub-components under test (DrawerContent still wraps its internal Panel).
@@ -379,7 +379,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
-  describe('Storybook Default story composes and opens', () => {
+  describe('Default fixture composes and opens', () => {
     it('renders the composed Default and opens via its trigger', async () => {
       const { getByTestId } = render(Default)
       await settle()

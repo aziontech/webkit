@@ -6,7 +6,7 @@ Every article is a ruled row: its cover on the left; on the right its overline, 
 
 The list is the `ArticleIndexBlog` component from `@aziontech/webkit/article-index-blog`; it composes `SectionModule`, `FrameBox`, `ToggleGroup`, `Input`, `Avatar` and `Button`. The selection and the search are local state. The Resource Hub list is `ArticleIndexResourceHub` (`@aziontech/webkit/article-index-resource-hub`).
 
-## Stories
+## Examples
 
 ### All Articles
 

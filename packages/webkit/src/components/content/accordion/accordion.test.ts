@@ -8,7 +8,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Accordion, { AccordionContent, AccordionItem, AccordionTrigger } from './index'
 
 /**
- * Realistic FAQ tree mirroring the Storybook Default: three items with real
+ * Realistic FAQ tree mirroring the Default example: three items with real
  * headings and body copy. The optional disabled middle item exercises the
  * roving-focus skip and the suppression paths.
  */

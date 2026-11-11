@@ -105,7 +105,8 @@ function resolveNodeModule(specifier) {
     'packages/webkit/node_modules',
     'packages/theme/node_modules',
     'packages/icons/node_modules',
-    'apps/storybook/node_modules',
+    'apps/docs/node_modules',
+    'apps/demos/node_modules',
     'apps/icons-gallery/node_modules'
   ]
   return dirs.some((d) => existsSync(join(ROOT, d, pkgName)))

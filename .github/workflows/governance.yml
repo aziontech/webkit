@@ -36,12 +36,14 @@ jobs:
               - 'pnpm-workspace.yaml'
             tests:
               - 'packages/webkit/**'
-              - 'apps/storybook/**'
             visual:
               - 'packages/webkit/**'
               - 'packages/theme/**'
               - 'packages/icons/**'
-              - 'apps/storybook/**'
+              - 'apps/docs/**'
+              - 'apps/demos/**'
+              - 'apps/visual/**'
+              - 'pnpm-lock.yaml'
             canary:
               - 'packages/webkit/**'
               - 'lint-canaries/**'
@@ -198,11 +200,12 @@ jobs:
         run: pnpm run size
         working-directory: packages/webkit
 
-  storybook:
-    name: Storybook Build
+  site:
+    name: Docs site and demos build
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.visual == 'true'
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -218,11 +221,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm storybook:build
+      - name: Build the docs site (every route prerendered)
+        run: pnpm docs:build
 
-      - name: Verify Storybook output
-        run: test -d apps/storybook/dist && echo "Storybook built successfully"
+      - name: Build the demos
+        run: pnpm demos:build
+
+      - name: Upload the built sites for the visual shards
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sites
+          path: |
+            apps/docs/dist/
+            apps/demos/dist/
+          retention-days: 3
 
   # Runs on every PR (no path filter): these gates are the machine half of the AI flow
   # (.claude/commands/webkit-new.md) and finish in under a minute. Locally:
@@ -275,11 +287,9 @@ jobs:
       - name: Public API changes have a codemod entry (removed or renamed export, pattern, prop or value)
         run: pnpm --filter @aziontech/webkit run migrations:check
 
-      - name: Hook tests (spec, story, authoring and reference hooks)
+      - name: Hook tests (spec, authoring and reference hooks)
         run: pnpm --filter @aziontech/webkit run hooks:test
 
-      - name: Block and site stories are generated from blocks/ and examples/ (no stale file)
-        run: node apps/storybook/scripts/gen-block-stories.mjs --check
 
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
@@ -360,11 +370,14 @@ jobs:
         working-directory: packages/webkit
 
   visual:
-    name: Storybook visual tests (shard ${{ matrix.shard }}/4)
+    name: Visual tests, styled (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
+    needs: [changes, security, lint-canary, lint, types, build, site, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      options: --ipc=host
     strategy:
       fail-fast: false
       matrix:
@@ -384,31 +397,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Download the built sites
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
-        working-directory: apps/storybook
-
-      - name: Build Storybook
-        run: pnpm run storybook:build
+          name: sites
+          path: apps
 
       - name: Run visual tests (shard ${{ matrix.shard }}/4)
-        run: pnpm --filter storybook run test:visual:ci
-        env:
-          VISUAL_SHARD: ${{ matrix.shard }}/4
+        run: pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4
 
-      - name: Upload diff output on failure
+      - name: Upload the report on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: visual-diff-output-shard-${{ matrix.shard }}
-          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          name: visual-report-shard-${{ matrix.shard }}
+          path: |
+            apps/visual/playwright-report/
+            apps/visual/test-results/
           retention-days: 7
           if-no-files-found: ignore
 
@@ -416,7 +421,7 @@ jobs:
     name: Governance Gate
     runs-on: ubuntu-latest
     needs:
-      [changes, security, lint-canary, lint, types, build, storybook, toolkit, smoke, tests, visual]
+      [changes, security, lint-canary, lint, types, build, site, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -428,7 +433,7 @@ jobs:
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
-            [storybook]="${{ needs.storybook.result }}"
+            [site]="${{ needs.site.result }}"
             [toolkit]="${{ needs.toolkit.result }}"
             [smoke]="${{ needs.smoke.result }}"
             [tests]="${{ needs.tests.result }}"

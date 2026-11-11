@@ -16,10 +16,6 @@ import {
   STRING_MESSAGES
 } from './lib/built-in-strings.mjs'
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
-import {
-  checks as storyChecks,
-  STORY_RE
-} from '../../../.claude/hooks/_lib/story-source-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']
@@ -31,7 +27,6 @@ const SRC = join(ROOT, 'packages/webkit/src')
 const PACKAGES = join(ROOT, 'packages')
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.turbo', 'coverage'])
 const PROSE_COMMENT = CONTENT_CHECKS.find((c) => c.id === 'prose-comment')
-const STORIES = join(ROOT, 'apps/storybook/src')
 const BASELINE = join(SCRIPT_DIR, 'authoring-baseline.json')
 const WIP_PREFIX = 'packages/webkit/src/components/wip/'
 
@@ -105,16 +100,6 @@ function currentViolations() {
     const n = PROSE_COMMENT.count(readFileSync(abs, 'utf-8'), rel)
     for (let i = 0; i < n; i++) keys.push(`${rel}::prose-comment`)
   }
-  for (const abs of walk(STORIES)) {
-    const rel = relative(ROOT, abs).split('\\').join('/')
-    if (!STORY_RE.test(rel)) continue
-    const content = readFileSync(abs, 'utf-8')
-    for (const v of storyChecks(content, rel)) {
-      const key = `${rel}::story:${v.id}`
-      keys.push(key)
-      DETAILS.set(key, v.message)
-    }
-  }
   return keys.sort()
 }
 
@@ -171,8 +156,8 @@ if (introduced.length) {
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
       console.error(`    [spec] ${id.slice(5)}`)
-    } else if (id.startsWith('story:') || id.startsWith('direction:')) {
-      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(6)}`)
+    } else if (id.startsWith('direction:')) {
+      console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(10)}`)
     } else {
       console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
     }

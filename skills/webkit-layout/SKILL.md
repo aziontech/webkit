@@ -395,7 +395,7 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 - `/webkit-create-surface` — where a create lives, and the commit bar that must align with its form.
 - `/webkit-navigation` — the app shell, and who owns the boundary on a padded page.
 - `/webkit-baseline-ui` — tokens, typography hierarchy, the spacing scale these derive from.
-- **Foundations → Layout** in Storybook — the live catalog of every measure and utility.
+- **Foundations → Layout and devices** on the docs site (`pnpm docs:dev`) — every measure and utility.
 - `semantic/layouts` in `@aziontech/theme` — the tokens and utilities themselves, with the reasoning
   for each decision recorded beside it.
 

@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: ab1d3843776833e5f916b33efe56abcf4bbb51f92ae85c481e126ccb1cf2ed59
+checksum: 0494bc2d3bd0df14aa90458e2866bb6ffa5f7c03454e31691305fe8a4cbcab03
 created: 2026-06-15
 last_updated: 2026-11-10
 ---
@@ -105,11 +105,11 @@ _none_
 - Root is a `<p>` element so the text is part of the document flow; consumers wire the input with `aria-describedby="<helper-id>"` to expose the helper text to assistive tech.
 - Keyboard map: not focusable (descriptive text); the lock icon for `kind="disabled"` is decorative and marked `aria-hidden="true"`.
 - ARIA: when `kind="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
-- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified by Storybook a11y addon).
+- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified with the theme by the styled visual suite).
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
 - Touch target: text is non-interactive; not subject to the 40×40 px rule.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Types — composite story rendering every `kind` label side-by-side.
@@ -127,10 +127,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

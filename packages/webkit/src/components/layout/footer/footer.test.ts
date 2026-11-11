@@ -305,7 +305,7 @@ describe('Footer', () => {
 
   // This env loads no theme CSS and runs no Tailwind (see src/test/setup.ts), so
   // axe here checks semantics only — landmarks, names, ARIA relationships. The
-  // footer's contrast lives in Storybook + visual regression, not in this suite.
+  // footer's contrast lives in the styled visual suite, not in this suite.
   describe('a11y (axe against the composed tree — semantics, not contrast)', () => {
     it('a fully composed footer has no violations', async () => {
       const { container } = renderComposed()

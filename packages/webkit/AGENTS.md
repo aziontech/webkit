@@ -38,14 +38,14 @@ Component creation under `components/**` is **always** driven by the pipeline at
 pnpm webkit:lint
 pnpm webkit:type-check
 pnpm webkit:type-coverage
-pnpm storybook:build
+pnpm --filter @aziontech/webkit test:ssr
 ```
 
 Type coverage threshold: **95%**.
 
 ## 5) Dependency status (gotchas for the pipeline)
 
-- **`@storybook/test`** — installed in `apps/storybook/package.json`. New stories may use `userEvent`/`expect`/`within` in a `play` function when the spec explicitly lists an Accessibility/play story.
+- **`@testing-library/user-event`** — installed in `packages/webkit` for the browser tests (`import userEvent from '@testing-library/user-event'`); `vitest/browser` also exports a `userEvent`.
 - **`@figma/code-connect`** — installed; config at [`figma.config.json`](./figma.config.json). Authoring `.figma.ts` works locally; publishing requires `FIGMA_ACCESS_TOKEN`.
 - **`cn` helper** — installed (`clsx` + `tailwind-merge`) at [`src/utils/cn.js`](./src/utils/cn.js), exported as `@aziontech/webkit/utils/cn`. Use it inside `:class` when the consumer must be able to override internal token choices.
 - **`asChild` Slot helper** — **pending**. No helper exists yet. Do not import a phantom path — `validate-references.mjs` will block.

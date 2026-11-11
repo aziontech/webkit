@@ -78,6 +78,11 @@
       "file": "reorderable-rows.vue"
     },
     {
+      "name": "ReorderableFrozen",
+      "summary": "A reorderable table with a frozen first column and row selection: the grip and the selection checkbox stay pinned at the start edge, side by side, while the other columns scroll under them.",
+      "file": "reorderable-frozen.vue"
+    },
+    {
       "name": "Refresh",
       "summary": "The refresh pattern: `Table.RefreshButton` with `loading` spins while the current rows stay on screen, an `Updated` line beside it uses `Table.CellTime` (relative, absolute on the tooltip, re-rendered every minute), and auto-refresh is off by default, runs every 30 seconds when turned on and skips a tick while the tab is hidden.",
       "file": "refresh.vue"

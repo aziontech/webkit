@@ -32,14 +32,16 @@ Pick the path by what you are about to do.
    lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 
 Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `.claude/`,
-`.specs/` or `apps/storybook/` to build screens; they belong to the people who maintain WebKit.
+`.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
 
 ### I am creating or changing WebKit (contribute)
 
 1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-create`.
-3. Every story in `apps/storybook/src/stories/templates/` (except `marketing/`) is the source of a
-   pattern. Changed a story? Run `pnpm --filter @aziontech/webkit catalog:build`.
+3. Every block in `packages/webkit/blocks/` is a pattern and every folder in
+   `packages/webkit/examples/` documents a component. Changed one? Run
+   `pnpm --filter @aziontech/webkit catalog:build`; the docs page and the styled visual test follow
+   from the files.
 4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Building with WebKit (consume)
@@ -120,10 +122,10 @@ Once the project is wired, import components by path:
 
 ### Live previews
 
-- **Component playground** — <https://webkit.azion.app/> — Storybook deployment. Source of truth for every component's API, props, and visual states. Start here to explore the design system.
+- **Docs site** — `apps/docs` (`pnpm docs:dev`) — every component's API and examples beside their source, every block in every state, the foundations. It replaces the Storybook that <https://webkit.azion.app/> served; publishing it there is pending (ROADMAP M2.10).
 - **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the Azion + Prime icon sets used by `@aziontech/icons`.
 
-Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
+Run them locally with `pnpm docs:dev`, `pnpm demos:dev` and `pnpm icons:gallery:serve`.
 
 ## Changing WebKit (contribute)
 
@@ -134,7 +136,7 @@ The path for people and agents who maintain the design system itself.
 - `@aziontech/webkit`: Vue component library and UI building blocks.
 - `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
 - `@aziontech/icons`: Azion + Prime icon fonts as CSS/woff2 assets.
-- Storybook app for documentation and visual validation.
+- Docs site (`apps/docs`), demos (`apps/demos`) and the styled visual suite (`apps/visual`).
 - Icons Gallery app for icon exploration and QA.
 
 ### Workspace structure
@@ -142,7 +144,9 @@ The path for people and agents who maintain the design system itself.
 ```text
 webkit/
 ├── apps/
-│   ├── storybook/      # Component docs and development playground
+│   ├── docs/           # Docs site: components, blocks, foundations (vite-ssg)
+│   ├── demos/          # Routed flows assembled from blocks with `webkit add`
+│   ├── visual/         # Playwright visual suite with the real theme CSS
 │   └── icons-gallery/  # Interactive icon browser
 ├── packages/
 │   ├── webkit/         # Reusable Vue components
@@ -176,7 +180,9 @@ If you are new (human or AI), open these in order — together they describe the
 
 | App                                   | Description                                                                             | CI                                                                                                                                                                                                                         |
 | ------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [storybook](./apps/storybook)         | Storybook documentation for `@aziontech/webkit`. Live: <https://webkit.azion.app/>      | [![App Storybook](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-storybook.yml?query=branch%3Amain)             |
+| [docs](./apps/docs)                   | Docs site for `@aziontech/webkit`: components, blocks and foundations from the files.   | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                      |
+| [demos](./apps/demos)                 | Routed console flows on mock data, assembled from blocks with `webkit add`.             | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                      |
+| [visual](./apps/visual)               | Styled visual regression (Playwright) over examples, blocks and demos.                  | [![Visual baselines](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml/badge.svg)](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml)                                    |
 | [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
 
 ### Getting started (contributors)
@@ -200,27 +206,21 @@ pnpm install
 
 Always install from the repository root: it links the workspace packages to each other and installs the Husky hooks (`commit-msg` and `pre-commit`) that guard every commit.
 
-#### Run the Storybook
+#### Run the docs site and the demos
 
-The Storybook in [`apps/storybook`](./apps/storybook) is the development playground: every component ships its stories there, with controls for every prop and a copy-paste-ready "Show code" snippet.
-
-```bash
-pnpm storybook:dev
-```
-
-This builds `@aziontech/icons` first (the stories need the icon font), then starts the dev server at <http://localhost:6006>. To skip the icons build on later runs, start it from the app directly:
+The docs site in [`apps/docs`](./apps/docs) is the development playground: every component page
+renders its examples (`packages/webkit/examples/<name>/`) live beside the exact source file, every
+block page shows each state in a resizable frame, and the foundations pages read the theme.
 
 ```bash
-pnpm --filter storybook dev
+pnpm docs:dev      # http://localhost:5173
+pnpm demos:dev     # the routed demos (apps/demos)
 ```
 
-Stories live under `apps/storybook/src/stories/` — `foundations/` (tokens), `components/<category>/` (one folder per component), `templates/` (page-level compositions) and `utils/`. Every story must keep its "Show code" panel a runnable SFC; check the whole tree with:
-
-```bash
-pnpm storybook:validate-docs
-```
-
-A static build (`pnpm storybook:build`) lands in `apps/storybook/dist`; preview it with `pnpm storybook:preview` at <http://localhost:6007>. The full guide — stack, project structure, writing stories, visual tests — is in the [Storybook app README](./apps/storybook/README.md).
+A static build (`pnpm docs:build`, every route prerendered) lands in `apps/docs/dist`; preview it
+with `pnpm docs:preview`. How pages are generated and how to deploy is in the
+[docs site README](./apps/docs/README.md); the demos are described in
+[`apps/demos/README.md`](./apps/demos/README.md).
 
 #### Run the tests
 
@@ -231,21 +231,24 @@ pnpm --filter @aziontech/webkit exec playwright install chromium
 pnpm webkit:test
 ```
 
-Pixels are covered by a separate layer: `@storybook/test-runner` visits every story in the built Storybook and compares a screenshot against the committed baselines.
+Pixels are covered by a separate layer, with the real theme CSS: `apps/visual` (Playwright) serves the built docs site and demos and compares screenshots of the examples, blocks and demo routes, in light and dark at 390 and 1280 px, against the committed baselines.
 
 ```bash
-pnpm storybook:test:visual
+pnpm docs:build && pnpm demos:build
+pnpm visual:test
 ```
 
-Baselines are per-platform and only the Linux ones are committed, so never commit snapshots generated on macOS. The full testing contract — coverage, opting a story out, regenerating baselines — is in [CONTRIBUTING.md](./CONTRIBUTING.md#testing).
+Baselines come only from the `mcr.microsoft.com/playwright:v1.62.0-noble` image (the CI job runs in it), so never commit screenshots taken outside it. The full testing contract — coverage, the matrix, regenerating baselines — is in [CONTRIBUTING.md](./CONTRIBUTING.md#testing).
 
 #### Most used commands
 
 ```bash
-# Storybook
-pnpm storybook:dev          # Dev server (builds icons first)
-pnpm storybook:build        # Static build
-pnpm storybook:preview      # Preview the static build
+# Docs site and demos
+pnpm docs:dev               # Docs dev server
+pnpm docs:build             # Static build, every route prerendered
+pnpm docs:preview           # Preview the static build
+pnpm demos:dev              # Demos dev server
+pnpm demos:build            # Demos static build
 
 # Icons
 pnpm icons:build            # Generate icon artifacts
@@ -257,7 +260,7 @@ pnpm webkit:test            # Unit suite (headless Chromium)
 pnpm webkit:test:watch      # Unit suite in watch mode
 pnpm webkit:test:ui         # Vitest UI (headed browser)
 pnpm webkit:test:coverage   # v8 coverage report
-pnpm storybook:test:visual  # Visual regression against the baselines
+pnpm visual:test            # Styled visual regression against the baselines
 
 # Webkit quality gates
 pnpm webkit:lint            # ESLint (max-warnings 0)
@@ -277,7 +280,7 @@ pnpm governance             # Lint + type-check + format + audit
 
 ### Development flow
 
-New components follow a **spec-driven pipeline**: spec → scaffold → verify. The spec at `.specs/<name>.md` is the contract; the `.vue`, story, and exports are generated from it.
+New components follow a **spec-driven pipeline**: spec → scaffold → verify. The spec at `.specs/<name>.md` is the contract; the `.vue`, examples, and exports are generated from it.
 
 1. Draft the spec with `/spec-create <name>`, then flip `status: draft` → `approved`.
 2. Scaffold with `/component-create <name>`.
@@ -289,13 +292,14 @@ Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CON
 
 ### Claude Code commands for contributors
 
-The slash commands above (`/spec-create`, `/component-create`, `/component-verify`) are [Claude Code](https://claude.com/claude-code) commands defined in [`.claude/commands/`](./.claude/commands/), which orchestrate lower-level skills in [`.claude/skills/`](./.claude/skills/) (spec-validate, component-scaffold, storybook-write, echo-report, etc.).
+The slash commands above (`/spec-create`, `/component-create`, `/component-verify`) are [Claude Code](https://claude.com/claude-code) commands defined in [`.claude/commands/`](./.claude/commands/), which orchestrate lower-level skills in [`.claude/skills/`](./.claude/skills/) (spec-validate, component-scaffold, code-connect-write, echo-report, etc.).
 
 If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with repo access), read the corresponding `.md` file under `.claude/commands/<name>.md` and follow the steps manually — each command is a documented procedure, not a black box. The constraints in [`.claude/rules/`](./.claude/rules/) apply regardless of which tool runs them; treat that directory as load-bearing context for any contribution.
 
 ## Related docs
 
-- [Storybook app guide](./apps/storybook/README.md)
+- [Docs site guide](./apps/docs/README.md)
+- [Demos guide](./apps/demos/README.md)
 - [Theme package guide](./packages/theme/README.md)
 - [Icons package guide](./packages/icons/README.md)
 - [Webkit package guide](./packages/webkit/README.md)

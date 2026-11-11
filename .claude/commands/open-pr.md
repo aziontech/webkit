@@ -61,7 +61,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
   - <1–3 bullets: what changed and why>
 
   ## How to test
-  1. <numbered, concrete steps to verify THIS PR: the command to run (`pnpm storybook:dev`, `pnpm webkit:test`, …), where to look (story / page / component), and the expected result>
+  1. <numbered, concrete steps to verify THIS PR: the command to run (`pnpm docs:dev`, `pnpm demos:dev`, `pnpm webkit:test`, `pnpm visual:test`, …), where to look (docs page / demo route / component), and the expected result>
 
   ## Notes
   - <breaking change (what + migration), new dependency, related issue — `None` when there is nothing>

@@ -461,10 +461,10 @@ export function getUsageExample(catalog, name, { fromStory = true } = {}) {
       found: true,
       name: comp.name,
       binding: comp.binding,
-      source: `story ${example.name}`,
+      source: `example ${example.name}`,
       sfc: example.sfc,
       otherExamples: comp.examples.slice(1).map((ex) => ex.name),
-      note: 'Taken from the component story (the same SFC as Storybook "Show code"). get_component returns every example.'
+      note: 'Taken from the component examples (the same SFC the docs site shows). get_component returns every example.'
     }
   }
 

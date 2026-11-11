@@ -343,6 +343,29 @@ Measured with `scripts/check-size.mjs` on the merged branch (gzip, `vue` externa
 - **MultiSelect labels** (options register their label, the content renders them once hidden): `multi-select` 20.75 → 21.07 KB.
 - **New and extended components** (first budgets were estimates): `prompt-input` 5.5 → 11.45 KB (menus, references; most of it is `Chip` for the reference chips: follow-up row to load the chips lazily), `feedback-reason-dialog` 15 → 31.64 KB (`Dialog`, `Field`, `RadioButton`, `Textarea`, `Button`, shared with the page in practice), `conversation-history` 4.5 → 4.96 KB, `response-branches` 2.4 → 4 KB, `payment-brand` 4.05 → 4.84 KB (four more marks), `qr-code` 3.6 → 4.39 KB (encoder with the 40-version tables).
 
+## M2.5 — styled geometry fixes (2026-11-11)
+
+The styled visual suite showed that `Table`'s frozen-edge fades covered the first letters of the
+next column even with nothing scrolled, and that the drag outline and drop line stopped at the
+frozen columns. `Table` now measures whether content scrolls under each frozen edge (one
+`ResizeObserver` on the viewport plus the scroll handler) and draws the drag outline and drop
+line on a row pseudo-element above the frozen cells. Measured after merging `rowReorderable`.
+
+| Entry      | Budget before | Measured now | New budget | Note                                    |
+| ---------- | ------------- | ------------ | ---------- | --------------------------------------- |
+| table-root | 52.15         | 52.16        | 52.35      | Raised: scroll-aware frozen-edge fades. |
+
+## Merge of M2.5 into the integrated line (2026-11-11)
+
+Both lines grew `Table`: the integrated line added `rowSelectable` and M2.5 the scroll-aware
+frozen-edge fades and the row pseudo-element drop line. `table-root` stays inside 52.35 KB
+(52.25 KB measured); the two sections that carry the whole `Table` cross their budgets.
+
+| Entry           | Budget before | Measured now | New budget | Note                                          |
+| --------------- | ------------- | ------------ | ---------- | --------------------------------------------- |
+| listing-browser | 67.2          | 67.29        | 67.5       | Raised: carries `Table` (both lines' growth). |
+| listing-table   | 58.3          | 58.37        | 58.6       | Raised: carries `Table` (both lines' growth). |
+
 ### M2.10 row 47 — PromptInput reference chips are lazy
 
 `PromptInputReferences` (the `References` list of removable `Chip`s) is a `defineAsyncComponent` chunk that downloads the first time a reference exists. `prompt-input` now counts its initial chunk only (`entryOnly`, 2 async chunks excluded): 11.45 → 5.80 KB measured, budget 11.45 → 6 KB. The shortcut menu listbox stays in the entry: the text area drives it synchronously (`aria-controls`, `aria-activedescendant`, the polite count), and its markup is a few hundred bytes.

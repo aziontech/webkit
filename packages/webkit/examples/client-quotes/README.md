@@ -6,7 +6,7 @@ Each solution page leads the row with the client closest to its audience. All ei
 
 The band is the `ClientQuotes` component from `@aziontech/webkit/client-quotes`; it composes `SectionModule`, `FrameBox`, `QuoteTabs` and `Button`.
 
-## Stories
+## Examples
 
 ### Default
 

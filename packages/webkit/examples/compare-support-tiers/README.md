@@ -6,7 +6,7 @@ It is the support counterpart of ComparePlans. It shares the same real `table` w
 
 The band is the `CompareSupportTiers` component from `@aziontech/webkit/compare-support-tiers`; it composes `SectionModule`, `Select`, `Button`, `Overline` and `Link`, and keeps the tier picked on small screens as local state.
 
-## Stories
+## Examples
 
 ### Tier Matrix
 

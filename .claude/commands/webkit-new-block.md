@@ -35,7 +35,8 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
 
 The catalog (`catalog:build`), the MCP (`get_pattern` returns `guidelines.md` with the SFC),
 `patterns:check` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
-generated Storybook stories (`apps/storybook/scripts/gen-block-stories.mjs`) and the browser test
+docs site (`apps/docs`, one page per block and one frame per state), the styled visual suite
+(`apps/visual`, the primary state; every state for `platform/ai`) and the browser test
 that mounts every SFC (`src/test/copyable-sfcs.test.ts`) all read these files.
 
 ## Step 1 — Read the request
@@ -79,8 +80,8 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    imports only `@aziontech/webkit/*` subpaths and `@aziontech/icons`, follows
    `.claude/skills/ui-craft` "Start here", and stands alone (copy one file and it runs).
 2. `pnpm --filter @aziontech/webkit catalog:build` and
-   `node apps/storybook/scripts/gen-block-stories.mjs` (commit `catalog.json`, `catalog/` and the
-   generated stories).
+   commit `catalog.json` and `catalog/`. The docs page and the visual test follow from the files;
+   baselines for a new block come from the `Visual baselines` workflow (`/regen-baselines`).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
    `node packages/webkit/scripts/check-patterns.mjs` pass (the latter fails when `guidelines.md`
    is missing, a section is missing or empty, a building block names a component the primary SFC

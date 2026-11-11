@@ -6,7 +6,7 @@ The grid starts at the hero floor with no hatched gap between them, so the argum
 
 The band is the `HeroWithOpening` component from `@aziontech/webkit/hero-with-opening`; it composes `Hero`, `Hero.Title`, `Button`, `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid`, `Topic` and `SectionGap`.
 
-## Stories
+## Examples
 
 ### Six arguments
 

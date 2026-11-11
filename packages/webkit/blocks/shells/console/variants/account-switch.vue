@@ -751,7 +751,7 @@
                   v-if="compact"
                   href="/home"
                   aria-label="Azion home"
-                  class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                  class="flex h-6 w-fit shrink-0 items-center @max-sm:hidden rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                 >
                   <Brand
                     kind="default"
@@ -776,9 +776,11 @@
                       size="small"
                       kind="square"
                     />
-                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">{{
-                      currentAccount.name
-                    }}</span>
+                    <span
+                      v-if="!compact"
+                      class="min-w-0 truncate text-label-sm text-(--text-default)"
+                      >{{ currentAccount.name }}</span
+                    >
                     <i
                       class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted)"
                       aria-hidden="true"
@@ -897,7 +899,7 @@
         <main class="layout-column flex min-h-full flex-col">
           <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
             <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <header class="flex items-center gap-(--layout-group-gap)">
+              <header class="flex flex-wrap items-center gap-(--layout-group-gap)">
                 <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
                   <Button
                     label="Filter"
@@ -922,7 +924,7 @@
                     </Input>
                   </div>
                 </div>
-                <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
                   <Tooltip
                     text="Refresh"
                     class="shrink-0"

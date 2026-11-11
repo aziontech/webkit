@@ -6,7 +6,7 @@ Each category opens with a heading row. Each cell is a circle icon with a `Toolt
 
 The capability column takes 56% of the width on phones, 36% from `sm` and 40% from `lg`, and the two platform columns share the rest. Logos are 12px tall on phones and 24px from `sm`. The band is the `ComparisonTable` component from `@aziontech/webkit/comparison-table`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Brand` for the Azion column, `Popover` with `IconButton` for the definitions, and `Tooltip` on the support icons. Both comparisons below are the same component with different props, so both use `_id: 'comparison-table'`.
 
-## Stories
+## Examples
 
 ### Azion vs Cloudflare
 

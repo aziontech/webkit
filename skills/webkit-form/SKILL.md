@@ -326,7 +326,7 @@ Canonical pattern:
   import { computed, ref } from 'vue'
 
   const open = ref(false)
-  const phrase = 'webkit-storybook-dev'
+  const phrase = 'webkit-docs-dev'
   const confirmation = ref('')
   const canDelete = computed(() => confirmation.value.trim() === phrase)
 

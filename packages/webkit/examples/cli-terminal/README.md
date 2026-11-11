@@ -6,7 +6,7 @@ The session sits in a `CodeBlock` that runs off the frame's bottom rule, its lin
 
 The band is the `CliTerminal` component from `@aziontech/webkit/cli-terminal`; it composes `SectionModule`, `SectionTitle`, `Button`, `FrameBox`, `TextureMaterial` and `CodeBlock`.
 
-## Stories
+## Examples
 
 ### Terminal
 

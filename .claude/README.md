@@ -14,7 +14,6 @@ standard code. This is the entry-point map; each area links to its own index.
 │   ├── validate-spec-compliance.mjs  # .vue must match its spec 1:1 (PostToolUse)
 │   ├── validate-tokens.mjs           # tokens only; no hex/palette/raw typography
 │   ├── validate-references.mjs       # no phantom imports / forbidden deps
-│   ├── validate-story-source.mjs     # runnable "Show code"
 │   ├── enforce-spec-exists.mjs       # no .vue without an approved spec
 │   ├── enforce-component-create.mjs  # authoring only via the pipeline
 │   └── _lib/              # shared, single-source engines

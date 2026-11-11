@@ -90,6 +90,11 @@ export async function preloadComponent(name: string) {
   )
 }
 
+export async function preloadExample(dir: string, example: string) {
+  const file = `${example}.vue`
+  await remember(keys.example(dir, file), exampleComponents[`${EXAMPLES}${dir}/${file}`])
+}
+
 export async function preloadBlock(id: string, withCode = true) {
   const block = findBlock(id)
   if (!block) return

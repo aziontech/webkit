@@ -3,7 +3,7 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 38a9292780a4443b21b744d1c1cb4ec8875106a2a29d9ccaea11caff9753ff77
+checksum: c1478c684b50f585f62f7f08a3ce4387b8d562a238a3bd7d72055ac11846cf1f
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-10
@@ -119,7 +119,7 @@ _none_
 - ARIA: `role="tablist"` and `role="tab"` come from `tabs`.
 - Contrast ≥4.5:1, owned by `tabs`.
 
-## Stories (Storybook)
+## Examples
 
 - Default — the detail-page strip.
 - WithActions — the strip with a Tag and Deploy; justified because the actions region is the part `tabs` does not have.
@@ -137,9 +137,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

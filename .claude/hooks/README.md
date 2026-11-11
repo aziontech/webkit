@@ -4,7 +4,7 @@
 
 The hooks fail open on unexpected errors (invalid JSON input, missing files, etc.) — they never silently break the workflow.
 
-Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs` and `_lib/story-source-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 
 ## Hooks
 
@@ -47,14 +47,6 @@ Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construct
 - A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/i18n/messages/*.ts` ([`webkit-strings`](../../rules/webkit-strings.md)); blocks when the count grows
 
 Engine: [`_lib/authoring-checks.mjs`](./_lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run. The string check is [`_lib/built-in-strings.mjs`](./_lib/built-in-strings.mjs) → [`packages/webkit/scripts/lib/built-in-strings.mjs`](../../packages/webkit/scripts/lib/built-in-strings.mjs), shared with `scripts/check-authoring.mjs`.
-
-### [`validate-story-source.mjs`](./validate-story-source.mjs)
-
-Blocks `Write`/`Edit`/`MultiEdit` on any `*.stories.*` file whose **resulting content** violates the [storybook-source](../rules/storybook-source.md) contract — the Docs "Show code" must be a single runnable PascalCase SFC. **Strict**: the whole stories tree is on the canonical pattern, so every check applies to the full result of the write (no "newly-introduced-only" grandfathering). 13 checks: `docs-not-literal`, `handrolled-transform`, `dynamic-source`, `nested-template`, `lowercase-tag` (native HTML tags exempt), `import-binding-mismatch`, `argtypes-regex`, `legacy-csf2-assignment`, `figma-reference`, `args-destructure`, `missing-helper`, `missing-source-code`, `missing-sourcestate` (foundations pages exempt from the helper/`toSfc` requirement).
-
-Also runs standalone: `node .claude/hooks/validate-story-source.mjs --all` audits the entire stories tree and exits non-zero on any violation.
-
-Engine: [`_lib/story-source-checks.mjs`](./_lib/story-source-checks.mjs) — shared with the CI ratchet.
 
 ### [`enforce-component-create.mjs`](./enforce-component-create.mjs)
 

@@ -11,7 +11,7 @@ enforced_by: [no-invention, props, emits, slots]
 
 ## Purpose
 
-After scaffolding + storybook + code-connect have written files, this skill re-reads them from disk, re-parses `defineProps` / `defineEmits` / `defineSlots` / story exports / `.figma.ts` mappings, and produces a diff against the spec. If `validate-spec-compliance.mjs` (the PostToolUse hook) and this skill **disagree** on any artifact, the run is marked degraded and a human is asked to review.
+After scaffolding + examples + code-connect have written files, this skill re-reads them from disk, re-parses `defineProps` / `defineEmits` / `defineSlots` / example files / `.figma.ts` mappings, and produces a diff against the spec. If `validate-spec-compliance.mjs` (the PostToolUse hook) and this skill **disagree** on any artifact, the run is marked degraded and a human is asked to review.
 
 Two parsers agreeing is the precision boost.
 
@@ -27,21 +27,21 @@ Two parsers agreeing is the precision boost.
 
 ## Workflow
 
-1. **Re-read** every `<name>.vue`, every sub-component `.vue`, the `<Name>.stories.js`, and (if present) `<name>.figma.ts`.
+1. **Re-read** every `<name>.vue`, every sub-component `.vue`, the `examples/<name>/examples.json` with its `.vue` files, and (if present) `<name>.figma.ts`.
 2. **Independent parsing.** Do **not** call into `_lib/spec.mjs`. Parse with a hand-rolled regex/AST pass:
    - `defineProps<{...}>()` block → list of `{ name, type, optional, default }`.
    - `defineEmits<{ name: [args] }>()` → list of `{ name, payload }`.
    - `defineSlots<{ name(...): unknown }>()` → list of `{ name }`.
    - `defineOptions({ name: '...' })` → component name.
    - `provide(<Key>InjectionKey, ...)` / `inject(<Key>InjectionKey)` → composition marker.
-   - Story file: `export const <Name>` names + their `args`.
+   - Examples: the `examples[]` names in `examples.json` and the props each `.vue` passes.
    - `.figma.ts`: `figma.connect(<Component>, '...', { props: {...} })` keys.
 3. **Diff against spec.**
    - Props in `.vue` ≠ spec.Props → block.
    - Events in `.vue` ≠ spec.Events → block.
    - Slots in `.vue` ≠ spec.Slots → block.
    - Sub-components: every `<name>-<part>.vue` matches spec.Sub-components.
-   - Story exports ≠ spec.Stories → block.
+   - Example names ≠ spec.Examples → block.
    - `.figma.ts` enum keys ≠ spec.Props values → block.
 4. **Animations cross-check.** The spec's `## Motion & Animations` section lists the expected `animate-*` / `transition-*` classes per state. Grep the `.vue` files:
    - Every animation class in the spec must appear at least once in the `.vue`.

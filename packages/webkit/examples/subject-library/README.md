@@ -6,7 +6,7 @@ A call to action closes the grid and spans its last two cells, so the grid has n
 
 The band is the `SubjectLibrary` component from `@aziontech/webkit/subject-library`; it composes `SectionModule`, `FrameBox`, `CardGrid`, `CallToAction` and `Button`.
 
-## Stories
+## Examples
 
 ### Default
 

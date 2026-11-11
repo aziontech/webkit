@@ -4,7 +4,6 @@ node_modules
 *.d.ts
 *.d.ts.map
 coverage
-storybook-static
 catalog.json
 scripts/api-snapshot.json
 /catalog/

@@ -9,22 +9,16 @@ export const THEME = join(REPO, 'packages/theme')
 export const CATALOG = join(WEBKIT, 'catalog.json')
 export const SPECS = join(REPO, '.specs')
 export const LLMS = join(WEBKIT, 'llms')
-export const STATIC_ASSETS = join(REPO, 'apps/storybook/static')
-export const SITE_ASSETS = join(REPO, 'apps/storybook/src/stories/_shared/site-assets.js')
+export const SITE_ASSETS = join(WEBKIT, 'src/assets/site-assets.json')
 
 export function siteAssets(): Record<string, string> {
   if (!existsSync(SITE_ASSETS)) return {}
-  const source = readFileSync(SITE_ASSETS, 'utf8')
+  const table = JSON.parse(readFileSync(SITE_ASSETS, 'utf8')) as Record<string, string>
   const exportsMap = JSON.parse(readFileSync(join(WEBKIT, 'package.json'), 'utf8'))
     .exports as Record<string, string>
-  const imports = new Map(
-    [...source.matchAll(/^import (\w+) from '@aziontech\/webkit\/(assets\/[^']+)'/gm)].map(
-      ([, name, path]) => [name, exportsMap[`./${path}`]]
-    )
-  )
   const out: Record<string, string> = {}
-  for (const [, url, name] of source.matchAll(/^\s+'(\/[^']+)':\s+(\w+),?$/gm)) {
-    const file = imports.get(name)
+  for (const [url, specifier] of Object.entries(table)) {
+    const file = exportsMap[specifier.replace('@aziontech/webkit/', './')]
     if (file && existsSync(join(WEBKIT, file))) out[url] = join(WEBKIT, file)
   }
   return out

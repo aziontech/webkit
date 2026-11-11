@@ -30,6 +30,12 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('./pages/FramePage.vue'),
     meta: { bare: true }
   },
+  {
+    path: '/example',
+    name: 'example-frame',
+    component: () => import('./pages/ExampleFrame.vue'),
+    meta: { bare: true }
+  },
   { path: '/404', name: 'not-found', component: () => import('./pages/NotFound.vue') },
   { path: '/:path(.*)*', component: () => import('./pages/NotFound.vue') }
 ]

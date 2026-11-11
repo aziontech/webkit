@@ -6,7 +6,7 @@ The tiles sit on a hairline frame grid with no padding, so the artwork runs to t
 
 The band is the `FeatureTiles` component from `@aziontech/webkit/feature-tiles`; it composes `SectionModule`, `FrameBox`, `CardGrid` and `MediaTile`, with `SectionTitle` for the heading and `Illustration` where the picture is a registered illustration. `kind` picks the layout: `artwork` (four columns, marks on every corner) or `illustrated` (three columns, marks on the bottom rule).
 
-## Stories
+## Examples
 
 ### Artwork
 

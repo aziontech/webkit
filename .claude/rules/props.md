@@ -53,7 +53,7 @@ Every variant axis (`kind`, `size`, `severity`) is a **named type exported** fro
 
 ## JSDoc
 
-Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the Storybook prop table and the consumer's editor hover. Keep it a plain sentence — **no angle brackets in the comment** (they break the SFC compiler on Storybook's second parse — see [`styling.md`](./styling.md) § "no HTML-like tags in `<script>` comments").
+Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the docs site's prop table (`catalog.json`) and the consumer's editor hover. Keep it a plain sentence — **no angle brackets in the comment** (see [`styling.md`](./styling.md) § "no HTML-like tags in `<script>` comments").
 
 ## Hard prohibitions
 
