@@ -44,8 +44,18 @@ const LIVE_TRANSITION = { stubs: { transition: false } }
 
 const INTERVAL = 5000
 
+// The out-in swap is over once one quote layer is left and it carries no
+// transition class; a fixed wait raced the transition on a loaded machine.
 function settle(): Promise<void> {
-  return new Promise((resolve) => globalThis.setTimeout(resolve, 400))
+  return vi.waitFor(
+    () => {
+      const layers = document.querySelectorAll(`[data-testid="${TESTID}__quote"]`)
+      expect(layers).toHaveLength(1)
+      expect(layers[0]!.getAttribute('aria-hidden')).toBeNull()
+      expect(layers[0]!.className).not.toContain('transition-')
+    },
+    { timeout: 5000 }
+  )
 }
 
 function tabsOf(container: Element): globalThis.HTMLButtonElement[] {
