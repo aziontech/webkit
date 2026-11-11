@@ -10,7 +10,7 @@
 
 ## Asked as
 
-change plan; plan selection; pricing plans drawer; choose plan; switch plan; monthly or yearly plans; compare plans; mudar plano; trocar plano; escolher plano; upgrade to pro; upgrade plan; plan upgrade; checkout; checkout drawer; upgrade drawer; purchase plan; fazer upgrade; assinar plano; finalizar compra
+change plan; plan selection; pricing plans drawer; choose plan; switch plan; monthly or yearly plans; compare plans; mudar plano; trocar plano; escolher plano; upgrade to pro; upgrade plan; plan upgrade; checkout; checkout drawer; upgrade drawer; purchase plan; fazer upgrade; assinar plano; finalizar compra; upgrade checkout; accept terms; checkout de upgrade
 
 The drawer the Billing page opens from its Subscription Plan card. The user wants to compare tiers and move the account to one without leaving Billing: a Monthly or Yearly switch over the Free, Pro and Enterprise pricing cards, each with its features and one action. Continue with Pro stacks the Upgrade to Pro drawer on top (what is included, the charge, the payment method and the billing address, then Upgrade); Contact sales closes the drawer.
 
@@ -151,6 +151,7 @@ The plate before the card on file in the Payment method section, named after the
 ## States
 
 - Default: the plan drawer open on an account that is on Free, Yearly selected. In the upgrade drawer, a new card ending in 0002 is declined and one ending in 0119 makes the payment service fail, so both failure paths can be walked.
+- Checkout: the Upgrade to Pro drawer open on its own, as the checkout step: the charge card adds Due today and a note that taxes come from the billing address and the plan renews on the upgrade day; under the address a required `Checkbox` accepts the Terms of Service and the Privacy Policy (each a `Link` in a new tab). Upgrade without it shows `Accept the Terms of Service and the Privacy Policy to upgrade.` on the field and focuses the checkbox; the card and service failures work as in the primary.
 
 ## Related
 
@@ -161,6 +162,7 @@ The plate before the card on file in the Payment method section, named after the
 ## Variants
 
 - `Default` — primary (the code below)
+- `Checkout` — The Upgrade to Pro drawer opened at checkout: the charge with Due today and the renewal and tax note, the payment method, the billing address, and a required terms Checkbox with Terms of Service and Privacy Policy links; Upgrade without it marks the checkbox invalid and focuses it.
 
 Each variant is the same screen in another state: `get_pattern("platform/account/change-plan-drawer", { variant })`, or the file under `blocks/platform/account/change-plan-drawer/variants/`.
 

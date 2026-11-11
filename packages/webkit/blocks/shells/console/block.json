@@ -27,7 +27,14 @@
     "notifications drawer",
     "notification center",
     "central de notificações",
-    "painel de notificações"
+    "painel de notificações",
+    "switch account",
+    "account switcher",
+    "organization switcher",
+    "change organization",
+    "trocar conta",
+    "trocar organização",
+    "selecionar conta"
   ],
   "skills": ["webkit-navigation", "webkit-layout"],
   "primary": {
@@ -44,6 +51,11 @@
       "name": "Notifications",
       "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.",
       "file": "variants/notifications.vue"
+    },
+    {
+      "name": "AccountSwitch",
+      "summary": "The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
+      "file": "variants/account-switch.vue"
     }
   ]
 }
