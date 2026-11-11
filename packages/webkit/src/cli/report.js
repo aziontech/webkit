@@ -14,6 +14,7 @@ export const RULE_PURPOSE = {
   'no-whole-icon-set-import': 'pulls the whole icon set instead of one icon',
   'no-hardcoded-color': 'hardcoded colour, palette class or raw text size',
   'no-hardcoded-motion': 'literal duration/easing, or motion with no reduced-motion escape',
+  'no-physical-direction': 'physical left/right utility that does not mirror under RTL',
   'prefer-tree-shakeable-root': 'compound entry imported where the root would do',
   'no-deprecated-component': 'component marked deprecated in the catalog',
   'prefer-webkit-component': 'foreign UI library where a webkit component exists',

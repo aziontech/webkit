@@ -63,7 +63,7 @@
   const enterFromClass = computed(() =>
     wasRestored.value && !ctx.enterOnMount.value
       ? ''
-      : 'motion-safe:translate-x-full! motion-safe:opacity-0'
+      : 'motion-safe:translate-x-full! rtl:motion-safe:-translate-x-full! motion-safe:opacity-0'
   )
 
   const motion = computed(() => {
@@ -92,6 +92,8 @@
     'data-[state=closed]:absolute data-[state=closed]:inset-x-0 data-[state=closed]:top-0 ' +
     'data-[state=closed]:-translate-x-full ' +
     'data-[state=closed]:data-[motion=pop]:translate-x-full ' +
+    'rtl:data-[state=closed]:translate-x-full ' +
+    'rtl:data-[state=closed]:data-[motion=pop]:-translate-x-full ' +
     'data-[state=closed]:opacity-0 ' +
     'data-[state=closed]:motion-reduce:hidden ' +
     'motion-reduce:transition-none motion-reduce:transform-none'

@@ -93,7 +93,7 @@
         >
           <div
             :style="{ animationDuration: `${loopDuration}s` }"
-            class="flex w-max animate-brand-marquee group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
+            class="flex w-max animate-brand-marquee rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0 group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
           >
             <ul
               v-for="copy in 2"

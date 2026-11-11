@@ -28,7 +28,7 @@ export const getTabViewIndicatorTransitionStyle = (): { transition: string } => 
 }
 
 export const tabViewEnterOffsetClasses = {
-  right: 'translate-x-(--spacing-md)',
-  left: '-translate-x-(--spacing-md)',
+  right: 'translate-x-(--spacing-md) rtl:-translate-x-(--spacing-md)',
+  left: '-translate-x-(--spacing-md) rtl:translate-x-(--spacing-md)',
   none: 'translate-x-0'
 } as const

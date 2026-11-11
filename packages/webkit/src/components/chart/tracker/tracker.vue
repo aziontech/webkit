@@ -2,6 +2,7 @@
   import { useElementSize } from '@vueuse/core'
   import { computed, ref, useAttrs, watch } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { categoryLayout, type ChartStatus, colorToken } from '../_lib'
 
@@ -33,6 +34,7 @@
   })
 
   const attrs = useAttrs()
+  const dir = useDirection()
   const stripRef = ref<globalThis.HTMLDivElement | null>(null)
   const { width: stripWidth } = useElementSize(stripRef)
 
@@ -63,7 +65,8 @@
   const readout = computed(() => {
     const index = shownIndex.value
     if (index === null || count.value === 0) return null
-    const center = categoryLayout(count.value, 0, stripWidth.value, true).position(index)
+    const logical = categoryLayout(count.value, 0, stripWidth.value, true).position(index)
+    const center = dir.value === 'rtl' ? stripWidth.value - logical : logical
     return {
       label: props.items[index]?.label ?? '',
       translate: `clamp(0rem, calc(${center}px - 50%), calc(${stripWidth.value}px - 100%)) 0`
@@ -91,10 +94,9 @@
     const last = count.value - 1
     if (last < 0) return
     const current = activeIndex.value
-    if (event.key === 'ArrowRight')
-      setActiveIndex(current === null ? 0 : Math.min(last, current + 1))
-    else if (event.key === 'ArrowLeft')
-      setActiveIndex(current === null ? last : Math.max(0, current - 1))
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key === 'ArrowRight') setActiveIndex(current === null ? 0 : Math.min(last, current + 1))
+    else if (key === 'ArrowLeft') setActiveIndex(current === null ? last : Math.max(0, current - 1))
     else if (event.key === 'Home') setActiveIndex(0)
     else if (event.key === 'End') setActiveIndex(last)
     else if (event.key === 'Escape') setActiveIndex(null)
@@ -107,7 +109,9 @@
     if (!strip || !count.value) return
     const rect = strip.getBoundingClientRect()
     setActiveIndex(
-      categoryLayout(count.value, 0, rect.width, true).indexAt(event.clientX - rect.left)
+      categoryLayout(count.value, 0, rect.width, true).indexAt(
+        dir.value === 'rtl' ? rect.right - event.clientX : event.clientX - rect.left
+      )
     )
   }
 
@@ -142,8 +146,8 @@
         :data-visible="activeIndex !== null || null"
         :data-moving="moving || null"
         aria-hidden="true"
-        :style="{ translate: readout.translate }"
-        class="pointer-events-none absolute bottom-full start-0 mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[visible]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
+        :style="{ left: 0, translate: readout.translate }"
+        class="pointer-events-none absolute bottom-full mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[visible]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
       >
         {{ readout.label }}
       </div>

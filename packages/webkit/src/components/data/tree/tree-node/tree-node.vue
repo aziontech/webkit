@@ -85,7 +85,7 @@
         >
           <i
             :data-state="state"
-            class="pi pi-angle-right leading-none transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-90"
+            class="pi pi-angle-right leading-none transition-[rotate] duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-90 rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
           />
         </button>
       </span>

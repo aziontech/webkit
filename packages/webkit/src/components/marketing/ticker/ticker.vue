@@ -174,7 +174,7 @@
         ref="track"
         :style="{ animationDuration: `${passDuration}s` }"
         :data-loading="!ready || null"
-        class="flex w-max animate-brand-marquee data-[loading]:invisible data-[loading]:[animation-play-state:paused] group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
+        class="flex w-max animate-brand-marquee rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0 data-[loading]:invisible data-[loading]:[animation-play-state:paused] group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
       >
         <ul
           v-for="copy in copies"

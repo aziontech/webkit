@@ -36,7 +36,7 @@
     @click="context.scrollNext()"
   >
     <i
-      class="pi pi-chevron-right"
+      class="pi pi-chevron-right rtl:-scale-x-100"
       aria-hidden="true"
     />
   </button>

@@ -396,7 +396,7 @@
               >
                 <i
                   v-if="index > 0"
-                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                  class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <li

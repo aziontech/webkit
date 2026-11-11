@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
   import { useChartCardContext } from '../composables/use-chart-card-context'
   import type { ChartCardMoveDirection } from '../injection-key'
 
@@ -17,6 +18,7 @@
 
   const attrs = useAttrs()
   const ctx = useChartCardContext()
+  const dir = useDirection()
 
   const DIRECTIONS: Record<string, ChartCardMoveDirection> = {
     ArrowUp: 'up',
@@ -30,7 +32,7 @@
   )
 
   function onKeydown(event: globalThis.KeyboardEvent) {
-    const direction = DIRECTIONS[event.key]
+    const direction = DIRECTIONS[logicalArrowKey(event.key, dir.value)]
     if (!direction) return
     event.preventDefault()
     ctx.move(event, direction)

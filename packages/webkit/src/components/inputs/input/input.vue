@@ -170,6 +170,7 @@
       :aria-invalid="isInvalid || undefined"
       :aria-required="isRequired || undefined"
       :data-testid="testId"
+      dir="auto"
       class="relative z-(--z-input-field) h-full w-full min-w-0 self-stretch border-0 bg-transparent p-0 outline-none text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default"
       v-bind="{ ...autofillHints, ...passthroughAttrs }"
       :id="controlId"

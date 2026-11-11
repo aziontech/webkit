@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
   import { selectableBlockCardClasses } from '../presets/interactive-states'
 
@@ -41,6 +42,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-radio-cards')
 
@@ -97,7 +99,7 @@
     const lastIndex = props.items.length - 1
     let nextIndex = index
 
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowRight':
       case 'ArrowDown':
         event.preventDefault()

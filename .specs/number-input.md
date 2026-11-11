@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 653e50c7b8dd80709801858228adadfbccf93d1da9d44428418b18215ea715d8
+checksum: f436085d4bb19c1b25760798ae059f6abe6a3a0942e2142c93a6bc68ffb4d6e5
 created: 2026-06-22
-last_updated: 2026-06-22
+last_updated: 2026-11-11
 ---
 
 # Input Number — Component Spec
@@ -129,6 +129,7 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses the input; `ArrowUp`/`ArrowDown` increment/decrement by `step`; `Home`/`End` jump to `min`/`max` when defined; `Enter` commits and emits `change`.
+- Direction: the `<input>` renders `dir="auto"` (digits resolve to left-to-right inside right-to-left UI); a `dir` attribute overrides it.
 - ARIA: `role="spinbutton"` on the input (native `<input type="number">` provides this); `aria-valuenow`, `aria-valuemin`, `aria-valuemax` mirror the props; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; spinner buttons have `aria-label` ("Increment" / "Decrement") and `tabindex="-1"` so keyboard users use arrow keys.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated state changes.

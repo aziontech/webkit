@@ -87,6 +87,7 @@
           >
             <span
               :data-testid="`${ctx.testId}__line-time`"
+              dir="ltr"
               class="relative z-1 shrink-0 text-(--text-muted)"
             >
               {{ line.time }}
@@ -95,6 +96,7 @@
             <span
               v-if="line.type !== 'folder'"
               :data-testid="`${ctx.testId}__line-message`"
+              dir="auto"
               class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[type=success]:gap-(--spacing-xs) data-[type=warning]:text-(--warning-contrast) max-sm:whitespace-nowrap"
               :data-type="line.type"
             >
@@ -179,6 +181,7 @@
             <template v-else>
               <span
                 :data-testid="`${ctx.testId}__line-message`"
+                dir="auto"
                 class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xl) text-(--text-default) max-sm:whitespace-nowrap"
               >
                 <span class="w-16 shrink-0 whitespace-nowrap">

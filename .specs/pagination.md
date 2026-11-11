@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: c26d983b2c69770925f85e753429516de1c07d3cfe513d0bee99bcf20ebedfad
+checksum: 52a95d6988e5cb0d8088beac8cfcf311da14f6800c67cb880f87146b12f1c96b
 created: 2026-06-16
-last_updated: 2026-11-09
+last_updated: 2026-11-11
 ---
 
 # Pagination — Component Spec
@@ -209,7 +209,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every pagination button.
-- Keyboard map: `Tab` moves across buttons and the rows-per-page selector; `Enter`/`Space` activates a button; disabled buttons and the overflow ellipsis are skipped.
+- Keyboard map: `Tab` moves across buttons and the rows-per-page selector; `Enter`/`Space` activates a button; disabled buttons and the overflow ellipsis are skipped. In data-driven mode, `ArrowRight`/`ArrowLeft` inside the button group go to the next/previous page, swapped under `dir="rtl"` (`useDirection`).
 - ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs and the overflow ellipsis are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.

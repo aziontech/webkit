@@ -132,7 +132,7 @@
                 {{ primaryAction.label }}
                 <i
                   aria-hidden="true"
-                  class="pi pi-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 motion-reduce:transition-none"
+                  class="pi pi-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
                 />
               </a>
             </CardGridCell>

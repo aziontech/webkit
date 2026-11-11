@@ -854,9 +854,11 @@
                             class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                             @click.stop
                           >
-                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                              value
-                            }}</span>
+                            <span
+                              dir="ltr"
+                              class="truncate underline-offset-2 group-hover/link:underline"
+                              >{{ value }}</span
+                            >
                             <span class="sr-only">(opens in a new tab)</span>
                             <i
                               class="pi pi-external-link shrink-0 text-body-xs leading-none"

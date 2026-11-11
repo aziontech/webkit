@@ -75,6 +75,7 @@
 
 <template>
   <textarea
+    dir="auto"
     v-bind="passthroughAttrs"
     :id="controlId"
     :aria-describedby="describedBy"

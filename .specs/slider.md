@@ -3,10 +3,10 @@ name: slider
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 5caa64ef06adc2c240430cdbbcd894676e44b38de4b3156582607b41d4e58eae
+checksum: db1134d2cc1bd98b7d0f322db036dbf211c80c5a59c8d1865290268387688157
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Slider — Component Spec
@@ -156,7 +156,7 @@ The fill and the thumb position are not animated: they track the pointer every f
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the ring is drawn on the thumb, not the 40 px input box — `focus-visible:outline-none` on the input plus `focus-visible:[&::-webkit-slider-thumb]:ring-2 focus-visible:[&::-webkit-slider-thumb]:ring-(--ring-color) focus-visible:[&::-webkit-slider-thumb]:ring-offset-2 focus-visible:[&::-webkit-slider-thumb]:ring-offset-(--bg-canvas)` and the same set for `[&::-moz-range-thumb]`.
-- Keyboard map (native): `Tab` focuses; `ArrowRight`/`ArrowUp` +`step`; `ArrowLeft`/`ArrowDown` −`step`; `PageUp`/`PageDown` move by a larger browser-defined increment; `Home` → `min`; `End` → `max`. When `readonly`, `Tab` still focuses and every value key is inert. When `disabled`, the control is skipped by `Tab`.
+- Keyboard map (native): `Tab` focuses; `ArrowRight`/`ArrowUp` +`step`; `ArrowLeft`/`ArrowDown` −`step`; `PageUp`/`PageDown` move by a larger browser-defined increment; `Home` → `min`; `End` → `max`. Under `dir="rtl"` the track runs right to left, so `ArrowLeft` adds `step` and `ArrowRight` subtracts it (handled by the component through `useDirection`, so every browser agrees). When `readonly`, `Tab` still focuses and every value key is inert. When `disabled`, the control is skipped by `Tab`.
 - ARIA: the native `<input type="range">` provides `role="slider"` and the implicit `aria-valuemin` / `aria-valuemax` / `aria-valuenow` from `min` / `max` / the value. `aria-label` comes from `ariaLabel` (omitted when empty, so an associated `Label` wins). `aria-valuetext="{value}{unit}"` is set only when `unit` is non-empty. `aria-readonly="true"` when `readonly`; `aria-invalid="true"` when `invalid`. The ticks and reference-label row is `aria-hidden="true"`.
 - Contrast: thumb border and fill against the track ≥3:1 (non-text UI), reference labels ≥4.5:1, including the disabled state per the disabled tokens.
 - `motion-reduce:transition-none` on every transitioned pseudo-element class.

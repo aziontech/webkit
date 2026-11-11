@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 29923df879c0b5ce82ff682616ea0cf482aaec28ef039fd65df340b86a3eb3b7
+checksum: beda1ed3cb1e89794d298f34ba213a9f4c128c2c0eaba7b75599e14efdfa1630
 created: 2026-06-16
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 ---
 
 # Input Password — Component Spec
@@ -141,6 +141,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots and the visibility toggle.
 - Keyboard map: `Tab` focuses the input, then the visibility toggle button (when `toggleable=true`); `Enter` / `Space` on the toggle flips visibility; standard text-editing keys apply to the input.
+- Direction: the `<input>` renders `dir="auto"` so a value typed in another script keeps its own direction inside right-to-left UI; a `dir` attribute overrides it.
 - ARIA: the visibility toggle is a `<button type="button">` with `aria-pressed` reflecting the current visible state and an `aria-label` that switches between "Show password" and "Hide password"; `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; decorative icon slots and the eye glyph are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.

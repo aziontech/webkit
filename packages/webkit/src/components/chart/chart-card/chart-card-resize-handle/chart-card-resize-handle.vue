@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
   import { useChartCardContext } from '../composables/use-chart-card-context'
 
   defineOptions({ name: 'ChartCardResizeHandle', inheritAttrs: false })
@@ -17,6 +18,7 @@
   const attrs = useAttrs()
   const ctx = useChartCardContext()
   const handleRef = ref<globalThis.HTMLElement | null>(null)
+  const dir = useDirection(handleRef)
 
   const HEIGHT_STEP = 24
 
@@ -67,7 +69,7 @@
 
   function onPointerMove(event: globalThis.PointerEvent) {
     if (!origin || event.pointerId !== origin.pointerId) return
-    const dx = event.clientX - origin.x
+    const dx = (event.clientX - origin.x) * (dir.value === 'rtl' ? -1 : 1)
     const dy = event.clientY - origin.y
     if (origin.columnWidth > 0) ctx.setSpan(origin.span + Math.round(dx / origin.columnWidth))
     ctx.setHeight(origin.height + dy)
@@ -89,8 +91,9 @@
       return
     }
     const current = () => ctx.height.value ?? ctx.measure().height
-    if (event.key === 'ArrowRight') ctx.setSpan(ctx.span.value + 1)
-    else if (event.key === 'ArrowLeft') ctx.setSpan(ctx.span.value - 1)
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key === 'ArrowRight') ctx.setSpan(ctx.span.value + 1)
+    else if (key === 'ArrowLeft') ctx.setSpan(ctx.span.value - 1)
     else if (event.key === 'ArrowDown') ctx.setHeight(current() + HEIGHT_STEP)
     else if (event.key === 'ArrowUp') ctx.setHeight(current() - HEIGHT_STEP)
     else if (event.key === 'Home') ctx.setSpan(ctx.minSpan.value)

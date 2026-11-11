@@ -74,7 +74,7 @@
         <i
           v-if="isLink"
           aria-hidden="true"
-          class="pi pi-arrow-up-right ms-(--spacing-xxs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          class="pi pi-arrow-up-right ms-(--spacing-xxs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
         />
       </component>
     </div>

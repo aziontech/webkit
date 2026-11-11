@@ -4,6 +4,7 @@ import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
+import noPhysicalDirection from './rules/no-physical-direction.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import preferDefineModel from './rules/prefer-define-model.js'
@@ -18,6 +19,7 @@ const rules = {
   'no-whole-icon-set-import': noWholeIconSetImport,
   'no-hardcoded-color': noHardcodedColor,
   'no-hardcoded-motion': noHardcodedMotion,
+  'no-physical-direction': noPhysicalDirection,
   'prefer-tree-shakeable-root': preferTreeShakeableRoot,
   'no-deprecated-component': noDeprecatedComponent,
   'prefer-webkit-component': preferWebkitComponent,
@@ -62,6 +64,7 @@ const RECOMMENDED = {
   'no-deprecated-component': 'error',
   'no-hardcoded-color': 'error',
   'no-hardcoded-motion': 'error',
+  'no-physical-direction': 'error',
   'prefer-tree-shakeable-root': 'error',
   'no-whole-icon-set-import': 'error',
   'prefer-webkit-component': 'error',
@@ -86,4 +89,5 @@ plugin.configs = {
 
 export default plugin
 export { rules }
+export { logicalClass, physicalDirectionClasses } from './direction-classes.js'
 export { isLayoutClass, LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from './layout-classes.js'

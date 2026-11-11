@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
   import {
     getTabViewPanelTransitionStyle,
     type TabsSlideDirection
@@ -270,8 +271,10 @@
     focusActiveCell()
   }
 
+  const dir = useDirection()
+
   const onDayKeydown = (event: globalThis.KeyboardEvent, day: CalendarDay) => {
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowLeft':
         event.preventDefault()
         moveFocus(day.time, -1)
@@ -329,7 +332,7 @@
           @click="goToPreviousMonth"
         >
           <i
-            class="pi pi-chevron-left text-[length:inherit] leading-none"
+            class="pi pi-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
             aria-hidden="true"
           />
         </button>
@@ -342,7 +345,7 @@
           @click="goToNextMonth"
         >
           <i
-            class="pi pi-chevron-right text-[length:inherit] leading-none"
+            class="pi pi-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
             aria-hidden="true"
           />
         </button>

@@ -30,7 +30,7 @@
   >
     <slot>
       <i
-        class="pi pi-chevron-right size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
+        class="pi pi-chevron-right size-[0.875rem]! shrink-0 rtl:-scale-x-100 text-[0.875rem]! leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />

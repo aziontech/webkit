@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { useDirection } from '../../../../composables/use-direction'
   import { ResizableInjectionKey, type ResizablePaneApi } from '../injection-key'
 
   defineOptions({ name: 'ResizableHandle', inheritAttrs: false })
@@ -36,6 +37,7 @@
 
   const handleRef = ref<globalThis.HTMLElement | null>(null)
   const resizing = ref(false)
+  const dir = useDirection(handleRef)
 
   const target = (): { pane: ResizablePaneApi; sign: 1 | -1 } | null => {
     const el = handleRef.value
@@ -79,7 +81,8 @@
     globalThis.document.body.style.cursor = horizontal ? 'col-resize' : 'row-resize'
 
     const onMove = (moveEvent: globalThis.PointerEvent) => {
-      const delta = (horizontal ? moveEvent.clientX : moveEvent.clientY) - origin
+      const physical = (horizontal ? moveEvent.clientX : moveEvent.clientY) - origin
+      const delta = horizontal && dir.value === 'rtl' ? -physical : physical
       hit.pane.setBasis(start + delta * hit.sign)
     }
 
@@ -141,8 +144,8 @@
     :data-disabled="disabled || null"
     class="relative z-10 shrink-0 bg-(--border-default) outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) data-[orientation=horizontal]:w-(--spacing-xxs) data-[orientation=horizontal]:cursor-col-resize data-[orientation=horizontal]:before:inset-y-0 data-[orientation=horizontal]:before:-inset-x-2 data-[orientation=vertical]:h-(--spacing-xxs) data-[orientation=vertical]:cursor-row-resize data-[orientation=vertical]:before:inset-x-0 data-[orientation=vertical]:before:-inset-y-2 data-[resizing]:bg-(--accent) data-[disabled]:pointer-events-none data-[disabled]:cursor-default data-[disabled]:opacity-40 motion-reduce:transition-none"
     @pointerdown="startResize"
-    @keydown.left.prevent="orientation === 'horizontal' && nudge(-1)"
-    @keydown.right.prevent="orientation === 'horizontal' && nudge(1)"
+    @keydown.left.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? 1 : -1)"
+    @keydown.right.prevent="orientation === 'horizontal' && nudge(dir === 'rtl' ? -1 : 1)"
     @keydown.up.prevent="orientation === 'vertical' && nudge(-1)"
     @keydown.down.prevent="orientation === 'vertical' && nudge(1)"
     @keydown.home.prevent="toExtreme('min')"

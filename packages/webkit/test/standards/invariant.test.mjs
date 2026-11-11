@@ -241,7 +241,9 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
   }
   // prefer-webkit-component steers ADOPTION (use webkit instead of a foreign lib) —
   // deliberately not a construction standard.
-  const ORPHAN_OK = new Set(['prefer-webkit-component'])
+  // no-physical-direction is backed by the consumer rule rules/webkit-direction.md; its internal
+  // standard entry belongs in .claude/hooks/_lib/standards.mjs (owned by the process docs).
+  const ORPHAN_OK = new Set(['prefer-webkit-component', 'no-physical-direction'])
   for (const name of Object.keys(rules)) {
     assert.ok(
       claimed.has(name) || ORPHAN_OK.has(name),

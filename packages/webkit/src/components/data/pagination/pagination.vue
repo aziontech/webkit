@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { PaginationInjectionKey } from './injection-key'
   import PaginationButton from './pagination-button/pagination-button.vue'
   import PaginationInfo from './pagination-info/pagination-info.vue'
@@ -49,6 +50,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-pagination'
@@ -121,6 +123,14 @@
   const onPrevious = () => goToPage(currentPage.value - 1)
   const onNext = () => goToPage(currentPage.value + 1)
 
+  const onControlsKeydown = (event: globalThis.KeyboardEvent) => {
+    if (!dataDriven.value) return
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key !== 'ArrowLeft' && key !== 'ArrowRight') return
+    event.preventDefault()
+    goToPage(currentPage.value + (key === 'ArrowRight' ? 1 : -1))
+  }
+
   const onItemClick = (item: PageItem) => {
     if (item.type === 'page') goToPage(item.value)
   }
@@ -150,6 +160,7 @@
     <div class="flex flex-auto flex-wrap items-center justify-end gap-(--spacing-xs)">
       <div
         class="inline-flex items-center rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default)"
+        @keydown="onControlsKeydown"
       >
         <template v-if="dataDriven">
           <PaginationButton
