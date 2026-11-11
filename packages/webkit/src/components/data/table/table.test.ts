@@ -1,11 +1,12 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, h, ref } from 'vue'
 
 import Composition from '../../../../examples/table/composition.vue'
 import Default from '../../../../examples/table/default.vue'
 import Empty from '../../../../examples/table/empty.vue'
 import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
+import { useCollection } from '../../../composables/use-collection'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
@@ -625,6 +626,138 @@ describe('Table (composition + data-driven)', () => {
       const { getByTestId } = render(Composition)
 
       expect(getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+    })
+  })
+  describe('select-all above stacked rows', () => {
+    it('shows a labelled select-all that selects the page', async () => {
+      const host = document.createElement('div')
+      host.style.width = '320px'
+      document.body.appendChild(host)
+      const view = render(Table, {
+        props: { columns, data: rows, enableRowSelection: true },
+        container: host
+      })
+      const bar = await waitFor(() => view.getByTestId('data-table__stacked-select-all'))
+      const box = within(bar).getByLabelText('Select all rows')
+      expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
+      await fireEvent.click(box)
+      const emitted = view.emitted('update:rowSelection') as Record<string, boolean>[][]
+      expect(emitted.at(-1)?.[0]).toEqual({ '1': true, '2': true, '3': true })
+    })
+
+    it('keeps the select-all in the header of the grid', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Table, {
+        props: { columns, data: rows, enableRowSelection: true },
+        container: host
+      })
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+      expect(view.queryByTestId('data-table__stacked-select-all')).toBeNull()
+      expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
+    })
+  })
+
+  describe('density, wrapped lines and stripes', () => {
+    it('reflects the preferences on the root and the rows', () => {
+      const { getByTestId, getAllByRole } = render(Table, {
+        props: { columns, data: rows, density: 'compact', wrapLines: true, striped: true }
+      })
+      const root = getByTestId('data-table')
+      expect(root.getAttribute('data-density')).toBe('compact')
+      expect(root.hasAttribute('data-wrap')).toBe(true)
+      const bodyRows = getAllByRole('row').slice(1)
+      expect(bodyRows[1]?.className).toContain('[--table-row-bg:var(--bg-surface-raised)]')
+      expect(bodyRows[0]?.className).not.toContain('[--table-row-bg:var(--bg-surface-raised)]')
+    })
+  })
+
+  describe('virtual rows', () => {
+    const many = Array.from({ length: 10000 }, (_, i) => ({
+      id: String(i),
+      name: `row-${i}`,
+      status: i % 2 ? 'Active' : 'Inactive'
+    }))
+
+    it('mounts 10k rows fast and renders only the rows in view', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const started = performance.now()
+      const view = render(Table, {
+        props: { columns, data: many, virtual: true, maxHeight: '480px' },
+        container: host
+      })
+      const elapsed = performance.now() - started
+      expect(elapsed).toBeLessThan(1000)
+      const rendered = view.getAllByRole('row').length - 1
+      expect(rendered).toBeGreaterThan(5)
+      expect(rendered).toBeLessThan(60)
+      expect(view.getByTestId('data-table').getAttribute('aria-rowcount')).toBe('10001')
+
+      const viewport = view.getByTestId('data-table__viewport')
+      viewport.style.maxHeight = '480px'
+      viewport.style.overflow = 'auto'
+      viewport.scrollTop = 48 * 5000
+      viewport.dispatchEvent(new Event('scroll'))
+      await waitFor(() => expect(view.getByText('row-5000')).toBeTruthy())
+      const row = view.getByText('row-5000').closest('[role="row"]') as HTMLElement
+      expect(Number(row.getAttribute('aria-rowindex'))).toBe(5002)
+      expect(view.getAllByRole('row').length).toBeLessThan(60)
+    })
+  })
+
+  describe('with useCollection', () => {
+    const Harness = (mode: 'client' | 'server') =>
+      defineComponent({
+        setup() {
+          const data = Array.from({ length: 30 }, (_, i) => ({
+            id: String(i + 1),
+            name: `item-${String(i + 1).padStart(2, '0')}`,
+            status: i % 2 ? 'Active' : 'Inactive'
+          }))
+          const collection = useCollection({
+            ...(mode === 'client'
+              ? { items: data }
+              : {
+                  fetch: async ({
+                    page,
+                    pageSize,
+                    sort
+                  }: {
+                    page: number
+                    pageSize: number
+                    sort: { id: string; desc: boolean }[]
+                  }) => {
+                    const sorted = sort[0]?.desc ? [...data].reverse() : data
+                    return {
+                      items: sorted.slice((page - 1) * pageSize, page * pageSize),
+                      total: data.length
+                    }
+                  }
+                }),
+            columns: [
+              { accessorKey: 'name', header: 'Name', enableSorting: true },
+              { accessorKey: 'status', header: 'Status' }
+            ],
+            pagination: { pageSize: 10 },
+            selection: {}
+          })
+          return () => h(Table, { ...collection.tableProps.value, 'data-testid': 'coll' })
+        }
+      })
+
+    it.each(['client', 'server'] as const)('pages and sorts in %s mode', async (mode) => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Harness(mode), { container: host })
+      await waitFor(() => expect(view.getByText('item-01')).toBeTruthy())
+      expect(view.getAllByRole('row')).toHaveLength(11)
+      await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
+      await waitFor(() => expect(view.getByText('item-11')).toBeTruthy())
+      expect(view.queryByText('item-01')).toBeNull()
     })
   })
 })

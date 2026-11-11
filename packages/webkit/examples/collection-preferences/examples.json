@@ -1,0 +1,16 @@
+{
+  "component": "collection-preferences",
+  "title": "Components/Primitives/Data/CollectionPreferences",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The cog button opens a dialog with page size, the columns (show, hide and move up or down; a locked column always shows), wrap lines, striped rows and density. Nothing changes until Confirm; Cancel, Esc and the close button discard the draft.",
+      "file": "default.vue"
+    },
+    {
+      "name": "InADrawer",
+      "summary": "`container=\"drawer\"` opens the panel from the side, `sections` keeps only the columns and the density, and the `trigger` slot replaces the cog with a labelled button.",
+      "file": "in-a-drawer.vue"
+    }
+  ]
+}

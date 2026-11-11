@@ -1,8 +1,8 @@
 ---
 name: webkit-lists
-description: The list page — the one shape every resource index takes on @aziontech/webkit, and the filter system that narrows it. Fixes the page skeleton (shell → page heading carrying the create action → controls row → filter bar → card-wrapped Table), the split between search and filters (search runs through the table's own global filter; filters pre-narrow the data outside it), and the filter model itself — a field catalog the page declares plus a flat `{ fieldId: values[] }` applied state where fields intersect and the values inside one field union. Ships the chip-bar composition (one Popover walking fields then values, one chip per field, dimmed until it narrows something) so filtering looks and behaves the same on every index in the product, instead of one Select per column on one page and an operator builder on the next. Use when building or reviewing any resource index, list, or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
+description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `Cards`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or Cards), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-08-24
+last_updated: 2026-11-11
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -13,14 +13,15 @@ enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling
 
 A product's list pages are the screens people spend the most time on and the ones that drift the fastest.
 Each one is built by whoever needed it, so one index puts a row of Selects above the table, the next hides
-the same job behind a badged funnel button, a third uses an operator builder with a `contains` dropdown
-nobody changes from the default — and none of them agree on where the search field goes or how much air
-sits between the controls and the rows they narrow.
+the same job behind a badged funnel button, a third filters in the page and pages in the table so a filter
+lands on an empty page 4 — and none of them keep the filter when the link is shared or remember the page
+size someone picked yesterday.
 
-They are all the same page. This skill fixes that page: **one skeleton**, **one filter model**, and **one
-rule for which columns become filters**. `/webkit-tables` owns what happens inside the `Table` — the
-column model, the toolbar, the cell recipes. This skill owns everything around it: the page's structure,
-the controls row, the filter bar, and the state that connects them.
+They are all the same page, and they all hold the same state. This skill fixes that page: **one
+skeleton**, **one collection model** (`useCollection`), and **one rule for which columns become filter
+properties**. `/webkit-tables` owns what happens inside the `Table` — the column model and the cell
+recipes. This skill owns everything around it: the page's structure, the controls row, and the state
+that connects them.
 
 Find the components named here through the `webkit` MCP (`suggest_component` / `get_component`) or
 `node_modules/@aziontech/webkit/catalog.json`.
@@ -47,9 +48,29 @@ in) · `/webkit-ui-states` (the empty and loading states a filtered list must re
 
 ## 1. The list page, one shape
 
-A heading, then three nested bands, and nothing else:
+A heading, then one band holding the controls and the rows they narrow, and nothing else. The state of
+the band is one `useCollection` call:
 
 ```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Table from '@aziontech/webkit/table'
+  import { useCollection } from '@aziontech/webkit/use-collection'
+
+  const { tableProps, propertyFilterProps, preferencesProps, status, clearFilters } = useCollection({
+    items: applications, // client mode; server mode passes `fetch` instead
+    columns,
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: { storageKey: 'applications-table' },
+    url: true
+  })
+</script>
+
 <template>
   <AppShell
     active="applications"
@@ -57,9 +78,7 @@ A heading, then three nested bands, and nothing else:
   >
     <main class="layout-column flex min-h-full flex-col">
       <!-- THE PAGE HEADING. At first level this is the only place the module's name
-           appears: the shell renders the breadcrumb from the SECOND crumb up, so the
-           single crumb above is passed and not drawn. The create action lives HERE,
-           and it is the page's one `large` control. -->
+           appears. The create action lives HERE, and it is the page's one `large` control. -->
       <PageHeader
         size="medium"
         title="Applications"
@@ -75,51 +94,35 @@ A heading, then three nested bands, and nothing else:
         </template>
       </PageHeader>
 
-      <!-- the band below the heading; `layout-section-start` opens it at the boundary
-           step, and zeroes itself when the heading is absent (empty account) -->
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-        <!-- ONE band: the controls, the filters, and the rows they narrow -->
+        <!-- ONE band: the controls and the rows they narrow -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- NARROWING ONLY, and all of it `medium`. The page's own action is in the
-               heading above; `#actions` here is for an action on the LISTING (a bulk
-               operation over the rows a filter selected), and is omitted when there is
-               none. -->
-          <ControlsHeader>
-            <Input
-              v-model="search"
-              size="medium"
-              placeholder="Search applications..."
-              aria-label="Search applications"
-              class="min-w-36 grow basis-(--container-2xs)"
-            >
-              <template #iconLeft
-                ><i
-                  class="pi pi-search"
-                  aria-hidden="true"
-              /></template>
-            </Input>
-          </ControlsHeader>
-
-          <FilterBar
-            v-model="filters"
-            :fields="filterFields"
-          />
+          <header class="flex items-start gap-(--layout-group-gap)">
+            <div class="flex min-w-0 grow">
+              <PropertyFilter
+                v-bind="propertyFilterProps"
+                placeholder="Filter applications"
+                aria-label="Filter applications"
+              />
+            </div>
+            <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+              <!-- Refresh · Download CSV · then the preferences, always last -->
+              <CollectionPreferences v-bind="preferencesProps" />
+            </div>
+          </header>
 
           <section class="flex min-h-0 flex-col">
             <Card :padded="false">
               <template #content>
                 <Table
-                  v-model:pagination="pagination"
-                  v-model:globalFilter="search"
-                  :data="visibleRows"
-                  :columns="columns"
-                  row-key="id"
-                  enable-sorting
-                  paginated
-                  :page-size="8"
+                  v-bind="tableProps"
                   :bordered="false"
                   @row-click="open"
-                />
+                >
+                  <template #empty>
+                    <!-- status === 'no-match' here; 'empty' renders the first-use state instead -->
+                  </template>
+                </Table>
               </template>
             </Card>
           </section>
@@ -131,260 +134,181 @@ A heading, then three nested bands, and nothing else:
 ```
 
 **A first-level module index opens with a `PageHeader` (`@aziontech/webkit/page-header`), and the module's
-create action lives in it.**
-The crumb does not name the page any more: the shell draws the breadcrumb only from the **second** crumb
-up (`/webkit-navigation`), because at first level a lone crumb repeated the word the highlighted nav row
-was already showing. So the heading is the only place the module's name appears in the content — a page
-without one is named nowhere but the rail. Title, one line of what the module is, `size="medium"`, and the
-create button in `#actions`.
+create action lives in it.** The shell draws the breadcrumb only from the **second** crumb up
+(`/webkit-navigation`), so the heading is the only place the module's name appears in the content. Title,
+one line of what the module is, `size="medium"`, and the create button in `#actions`.
 
 **The size ladder is what makes the two rows read as two rows.** The heading's action is the page's only
-`large` (40px) control; **everything** on the controls row is `medium` (32px) — search, the filter anchor,
-any listing action beside them. That difference IS the hierarchy: what the page is _for_ reads first, what
-_narrows_ the list reads second. At 40px both rows competed and the create button stopped being the
-biggest thing on screen. Promote or demote a row **whole**: one 32px control beside a 40px one leaves a
-4px break top and bottom.
+`large` (40px) control; **everything** on the controls row is `medium` (32px) — the property filter, the
+icon buttons beside it. What the page is _for_ reads first, what _narrows_ the list reads second.
 
-**Where each action goes.** The page's create action is the heading's; `ControlsHeader #actions` is for an
-action on the **listing** — a bulk operation over the rows a filter selected — and renders nothing when
-there is none. Never move the create button onto the controls row: its place would then depend on how the
-list is filtered, or on whether the list has rows at all.
+**Where each action goes.** The page's create action is the heading's. An action on the **listing** — a
+bulk operation over the selected rows — sits in the controls row beside the preferences. Never move the
+create button onto the controls row. The label reads `Create <object>` for a list the sidebar routes to,
+`Add <Product Module>` for a list that is a tab inside a resource (`/webkit-microcopy`).
 
-**The label is not a per-page choice.** A list the sidebar routes to reads `Create <object>`, the object
-lowercase because it is an instance and not the module (`Create application`, `Create network list`); a
-list that is a **tab inside a resource** reads `Add <Product Module>` in that module's exact
-capitalization (`Add Cache Settings`). Never a bare noun, never `New` — see `/webkit-microcopy`.
-
-**Two states keep the heading out of the way.** An empty account leads with its first-use screen instead
-(`v-if="!accountEmpty"`), whose hero already names the module; and `layout-section-start` zeroes its own
-step when it lands first, so the band below needs no change when the heading is absent.
-
-(A _second_-level list — a tab inside a resource — carries a `size="small"` heading: there the crumb
-_does_ name the resource, so the heading only labels the list inside it.)
-
-**The controls, the filter bar and the table are ONE band**, joined by the group step
-(`--layout-group-gap`), not the section step. They are not three things stacked on a page; they are one
-thing — a set of rows and the two controls that narrow it. Pushing the search a full section step away
-from the table it filters is the single most common version of this page done wrong.
+**The controls and the table are ONE band**, joined by the group step (`--layout-group-gap`), not the
+section step. Pushing the filter a full section step away from the rows it narrows is the single most
+common version of this page done wrong.
 
 **The card is unpadded and the table is unbordered** (`:padded="false"` + `:bordered="false"`), so the card
-frames the table edge to edge. A padded card inside a bordered table gives you two nested rectangles with
-a stripe of dead space between them.
+frames the table edge to edge.
 
-**Empty and loading are the table's, not the page's.** Pass `:loading` and let the `Table` render its
-skeleton; render the empty state through `EmptyState` — see `/webkit-ui-states`. A filtered-to-nothing
-list needs a _different_ sentence from a genuinely empty account ("No applications match these filters"
-vs "Create your first application"), and only the page knows which it is.
+The canonical blocks are `platform/view/table-view` (rows) and `platform/view/card-view` (cards): copy
+one of them before writing a list from scratch.
 
 ---
 
-## 2. Search and filters narrow different things
+## 2. `useCollection` is the default for every list
 
-They are not two flavours of the same control, and they do not live in the same place.
+A list is a set of items plus five pieces of state — filter, sort, page, selection, preferences — and
+every page that keeps them in loose refs gets one of them wrong (a filter that leaves you on page 4, a
+selection that forgets the other pages, a sort the URL does not carry). `useCollection` holds all five
+and returns props for every component that shows them:
 
-|         | Search                                               | Filters                                           |
-| ------- | ---------------------------------------------------- | ------------------------------------------------- |
-| Answers | "where is the one I already know the name of"        | "show me the subset that shares a property"       |
-| Runs    | inside the table, `v-model:globalFilter`             | outside it, over `:data` before the table sees it |
-| Covers  | the free-text columns (name, id, repository, domain) | the enumerable ones (status, type, author, date)  |
-| Lives   | in the controls row, growing to fill it              | in its own row below                              |
+| Return               | Bind on                 | Carries                                                                  |
+| -------------------- | ----------------------- | ------------------------------------------------------------------------ |
+| `tableProps`         | `Table`                 | one page of rows, ordered/visible columns, sorting, pagination, selection, density, wrap, stripes |
+| `paginationProps`    | `Pagination`            | page, total, page size and its options                                   |
+| `propertyFilterProps`| `PropertyFilter`        | the query, the properties, the match count                               |
+| `filterProps`        | `Input`                 | free text only (`v-model`), for a list too small for properties          |
+| `preferencesProps`   | `CollectionPreferences` | the saved preferences, the columns, the page sizes                       |
+| `cardsProps`         | `Cards`                 | one page of items, the selection mode and keys                           |
 
-```js
-const visibleRows = computed(() => applyFilters(allRows.value, filterFields, filters.value))
-// → :data="visibleRows"   v-model:globalFilter="search"
-```
+Plus `status`, `totalCount`, `selectedCount`, `selectedItems`, `allMatchingSelected`, and the actions
+(`setQuery`, `clearFilters`, `setPage`, `selectPage`, `selectAllMatching`, `clearSelection`, `refresh`, …).
 
-**Filters narrow `:data` from outside the table** for two reasons. First, a field is often not a column at
-all — "Author" is a tooltip on the Last Modified avatar, not its own column, and a filter on it could
-never come from the table's own column state. Second, the table's applied-filter band only exists once a
-filter exists, so the affordance that _starts_ filtering has nowhere to live inside the table.
+**Client mode** — pass `items` (an array, ref or getter). Filtering, sorting and paging run in memory.
 
-**The filter bar is its own row, and it wraps.** It grows every time a filter is applied — a chip gains a
-value half, and on a narrow viewport the row becomes two rows. Sitting it inside the controls row makes
-the search field jump width as filters come and go. It never scrolls horizontally: a filter you cannot
-see is a filter you will not remove.
-
----
-
-## 3. The field catalog — the columns decide the fields
-
-The page declares what it can be narrowed by. Only the page knows which of its columns are enumerable and
-how a row answers for each one, so the catalog is page data, not a component prop schema:
+**Server mode** — pass `fetch` instead. It receives `{ filteringText, filter, sort, page, pageSize,
+signal }` and resolves `{ items, total }`; the composable tracks `loading` and `error`, debounces the
+text (`filtering.debounce`, 300 ms), aborts the previous request through `signal` when a newer one
+starts, and ignores a late answer. The page passes the query straight to its API.
 
 ```js
-const filterFields = [
-  {
-    id: 'author', // key in the applied state
-    label: 'Author', // chip prefix and menu row
-    kind: 'options', // many values, or exactly one
-    options: authorOptions, // [{ value, label, avatar?, icon? }]
-    match: (row, values) => values.includes(row.author)
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    kind: 'options',
-    options: [
-      { value: 'Active', label: 'Active' },
-      { value: 'Inactive', label: 'Inactive' }
-    ],
-    match: (row, values) => values.includes(row.status)
-  },
-  {
-    id: 'modified',
-    label: 'Last Modified',
-    kind: 'range', // one window at a time
-    options: DATE_PRESETS, // 24h · 7d · 30d · 3m · Custom…
-    formatValue: formatDateRange, // for a value not in `options`
-    match: (row, values) => matchDate(row.modifiedAt, values)
-  }
-]
-```
-
-**Which columns become fields:**
-
-- **Enumerable column → one field.** Status, type, environment, runtime, author, team. If you can list its
-  values, it is a field.
-- **Date column → relative periods, plus `Custom…`.** People arrive asking "what changed this week", not
-  "what changed between the 3rd and the 9th". Ship the periods as the values and put the month grid behind
-  a `Custom…` row, so the common ask is one click and the rare one costs the extra step it is worth. The
-  periods are open-ended (`end: null`) — each means _since_, and pinning the end to `now` silently drops a
-  row that lands while the panel is open.
-- **Free-text column → nothing.** Name, id, repository, domain are covered by the search field. One field
-  per text column gives you six chips nobody opens.
-- **A column with two values that are never both interesting → nothing.** A field that is always set to
-  the same value is a control with one option.
-
-**`kind` says how many values a field holds, not how it looks.** `options` accumulates — three authors is
-still one filter on Author. `range` replaces — two date windows at once contradict each other, so picking
-a second swaps it and picking the same one again clears it. The bar reads `kind` to decide whether picking
-a value keeps the panel open or returns to the field list.
-
-**Order the options the way the domain does, not alphabetically,** when the domain has an order:
-Production · Staging · Development reads as a promotion path; Development · Production · Staging reads as
-a sorted list of unrelated words.
-
----
-
-## 4. The applied state — one flat object
-
-```js
-const filters = ref({}) // { status: ['Active'], modified: ['7d'] }
-```
-
-Keyed by field id, each holding the **array** of picked values. A missing or empty entry is not a filter.
-That one rule is what the whole bar reads from:
-
-| Question                          | Answer                                                     |
-| --------------------------------- | ---------------------------------------------------------- |
-| Is this field narrowing anything? | its entry is non-empty                                     |
-| How many filters are applied?     | the count of non-empty entries — never the count of values |
-| What does the chip show?          | the first pick's label, plus `+N` for the rest             |
-| Which chips are dimmed?           | the ones whose entry is empty                              |
-
-**Fields intersect; the values inside a field union.** Author _and_ Status, but author A _or_ author B.
-Every list filter implies this arrangement and almost none of them state it, so state it once in one
-helper instead of re-deriving it per page:
-
-```js
-export const applyFilters = (rows, fields, state) =>
-  rows.filter((row) =>
-    fields.every((field) => {
-      const values = state[field.id]
-      if (!values?.length) return true
-      return field.match(row, values)
-    })
-  )
-```
-
-**Count fields, not values.** Three authors is one filter on Author; reading "3" suggests three columns are
-cut when only one is.
-
-**The chip's value half names something concrete.** "Author Bruno Germano +2" beats "3 selected": they are
-the same width, and the second tells you nothing — you have to open the panel to learn a single one of the
-three, which is the exact cost the whole pattern exists to remove.
-
----
-
-## 5. Compose the bar from webkit primitives
-
-There is no `@aziontech/webkit/filter-bar`. The bar is a small component you own, built from `Popover` and
-`Chip`, because the field catalog and its `match` functions are your data — a package component would have
-to take them as props anyway, and then you would own the same file with more indirection.
-
-**Anatomy:**
-
-```
-[⚙ Add Filter ▾]  [Author · Bruno Germano +2 ×]  [Status]  [Last Modified]
- dashed chip,      filled chip, removable          outlined chips —
- opens the panel                                   available, not applied
-```
-
-- **One anchor, not one popover per chip.** A single `Popover` whose panel walks two levels: the field list,
-  then that field's values. Clicking any chip opens the panel _onto that field_. One anchor means one focus
-  contract and one dismiss contract, instead of N popovers competing to be open.
-- **The trigger is a `Chip kind="dashed"`** — the dashed border is the "add one" affordance, and it sits in
-  the same row as the chips it creates. A `Chip` with `clickable` works as a `Popover.Trigger` child from
-  the keyboard: `Enter`/`Space` dispatch a real click.
-- **Applied chips are `kind="filled"` + `removable`; idle chips are `kind="outlined"`.** Every field gets a
-  chip, always, in catalog order — the bar shows what the page _can_ be narrowed by, not only what it is.
-- **Never reorder the chips.** Moving an applied chip to the front re-inserts its DOM node, which discards
-  any transition that was about to run on it, and moves the target out from under the pointer that just
-  clicked it.
-- **The remove `×` clears the field, and the chip stays.** `Chip` emits `remove` and does not unmount
-  itself — presence is yours. Here the chip must survive its own removal: it goes from filled back to
-  outlined, because the field is still available.
-- **One search field serves both levels.** Typing narrows the field list at level one and the value list at
-  level two.
-- **Keyboard: `↑`/`↓` walk the rows of the _current_ level only.** Scope the query to the level's own
-  container, or a level sliding out will steal focus.
-- **Restore focus to the chip that opened the panel**, not to the bar.
-
-**Accessibility:** value rows carry `role="menuitemcheckbox"` when the field accumulates and
-`role="menuitemradio"` when it replaces. The trigger's accessible name carries the applied count out loud
-("Add filter, 2 applied") — a count badge that is only a coloured dot is invisible to a screen reader.
-
----
-
-## 6. Rewind pagination when the filters change
-
-Filtering `:data` from outside the table does **not** trip the table's own auto-reset, because from its
-point of view the data simply changed. Filter down from page 4 and you land on an empty page 4.
-
-```js
-watch(filters, () => {
-  pagination.value = { ...pagination.value, pageIndex: 0 }
+const { tableProps } = useCollection({
+  fetch: ({ filter, sort, page, pageSize, signal }) =>
+    api.listApplications({ filter, sort, page, pageSize }, { signal }),
+  columns,
+  propertyFiltering: { properties },
+  pagination: { pageSize: 25 },
+  selection: {}
 })
 ```
 
-Rewind on anything that re-narrows the set from outside: the filters, and a tenancy/scope switch.
+The table stays a renderer: `tableProps` sets `manualSorting`, `manualFiltering` and `manualPagination`,
+so it never filters or slices the page it is given. Never also pass `:data` + `paginated` +
+`v-model:globalFilter` by hand beside it.
 
-**Fold the four repeated pieces into one helper** rather than re-typing them per page — the applied-state
-ref, `applyFilters`, the pagination ref, and this watcher. Every index page then declares its catalog and
-its columns and nothing else.
+---
+
+## 3. The property filter — the columns decide the properties
+
+One `PropertyFilter` replaces the search field and every per-column Select. Typing suggests a property,
+then an operator, then a value; each choice is a removable token (`Status = Active`); text typed without
+a property is a free-text token that searches every text field. The page declares the properties:
+
+```js
+const properties = [
+  { key: 'name', label: 'Name' },
+  {
+    key: 'status',
+    label: 'Status',
+    options: [{ value: 'Active' }, { value: 'Inactive' }]
+  },
+  { key: 'owner', label: 'Author', options: owners.map((value) => ({ value })) },
+  { key: 'requests', label: 'Requests', type: 'number' }
+]
+```
+
+**Which columns become properties:**
+
+- **Enumerable column → a property with `options`.** Status, type, environment, runtime, author. Options
+  are suggested and printed by label in the token.
+- **Number or date column → a property with `type: 'number'` / `'date'`**, which offers `>`, `<`, `>=`,
+  `<=` as well as `=` and `!=`.
+- **Free-text column → a plain property** (name, domain) — the free-text token covers it too, so keep
+  only the ones people name ("Name contains api").
+- **A column with two values that are never both interesting → nothing.**
+- A property does not have to be a column: "Author" can be the avatar on the Last Modified cell.
+
+**Order the options the way the domain does**, not alphabetically, when the domain has an order
+(Production · Staging · Development).
+
+Tokens combine with **Match all** (and) by default; **Match any** (or) appears with two tokens or more.
+Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced after each change.
+
+---
+
+## 4. Empty is not no-match
+
+`status` is `loading`, `error`, `empty` (the source has no items), `no-match` (filters hide every item) or
+`ready`. They need different screens, and only the composable knows which one it is:
+
+- **`empty`** — the account has none: the first-use state. Keep the heading and the controls, and show a
+  flush `Card` with a medium `EmptyState` and the create action instead of the table.
+- **`no-match`** — the filters hide everything: the table's `#empty` slot with an `EmptyState` that says
+  so ("No applications match these filters") and a **Clear filters** button bound to `clearFilters`.
+- **`error`** — an `Alert` above the table with a retry bound to `refresh` (`/webkit-ui-states`).
+
+---
+
+## 5. Filters in the URL, preferences saved
+
+- **`url: true`** keeps the text (`q`), the tokens (`filter`, `op`), the sort (`sort=-requests,name`),
+  the page (`page`) and the page size (`size`) in the query string through `history.replaceState`, and
+  reads them back on load and on back/forward. Other query keys are left alone. Two lists on one page
+  pass `url: { prefix: 'domains.' }`. With Vue Router, pass `url: { adapter: routerAdapter(useRouter()) }`
+  (`routerAdapter` from `@aziontech/webkit/use-collection`), which also works during server rendering.
+- **`preferences: { storageKey }`** saves the page size, the visible columns and their order, wrapped
+  lines, striped rows and density in `localStorage` under that key, read after mount so server and
+  client render the same first page. `defaults.columns` hides columns until someone shows them.
+- `CollectionPreferences` edits a draft and confirms it; it is the only place those settings change.
+  Lock the column that names the row (`hideable: false` on the column → `locked` in the panel).
+
+---
+
+## 6. Selection across pages
+
+`selection: {}` (multi) or `selection: { mode: 'single' }`. Selection is a set of keys (`trackBy`, `id` by
+default), so it survives paging, sorting and filtering (a filter drops the keys it hides unless
+`keepSelection: true`).
+
+- The table's header checkbox (and the visible **Select all rows** above stacked rows) selects the
+  **current page**.
+- After the page is selected, offer **Select all N items** bound to `selectAllMatching()`: in client mode
+  it selects every match; in server mode it sets `allMatchingSelected`, counts `totalCount` minus the
+  rows unticked since, and the bulk action sends the query instead of a list of keys.
+- The bulk action's label counts the selection (`Delete (3)`) and is disabled at zero.
+
+---
+
+## 7. Cards — the same collection, as cards
+
+When items are recognised by a few fields or a picture rather than compared column by column, render
+`Cards` (`@aziontech/webkit/cards`) with `cardsProps` and a `Pagination` with `paginationProps`. The same
+`useCollection` call drives it; the preferences panel then offers `sections: ['page-size', 'columns']`,
+the "columns" being the fields each card shows. Name each card in the `header` slot with a link to the
+item. Four cards a row in a wide container, one in a narrow one — the grid uses container queries.
 
 ---
 
 ## Hard rules
 
-- The controls row, the filter bar and the table are **one band** at the group step — never a section step
-  between the search and the rows it filters.
-- A first-level module index **opens with a `PageHeader`** (`size="medium"`) carrying the module's
-  create action — the breadcrumb starts at the second level, so nothing else names the page.
+- **Every list runs on `useCollection`.** No loose `ref`s for filter, sort, page or selection, no
+  `computed` that filters rows outside the table, no `watch` that rewinds the page — the composable does
+  all three.
+- The controls row and the table are **one band** at the group step — never a section step between the
+  filter and the rows it narrows.
+- A first-level module index **opens with a `PageHeader`** (`size="medium"`) carrying the create action.
 - **The heading's action is the page's only `large` control; the whole controls row is `medium`.**
 - `Card :padded="false"` + `Table :bordered="false"` — never a padded card around a bordered table.
-- **Search runs inside the table** (`v-model:globalFilter`); **filters narrow `:data` outside it**. Never
-  route a membership filter through an operator builder — `is one of` on every row is a control with one
-  option.
-- **No row of Selects** above the table, and no badged funnel button hiding them. One chip row, one anchor.
-- The filter bar **wraps; it never scrolls horizontally**.
-- The applied state is `{ fieldId: values[] }` — flat, arrays, empty means absent. Not a list of
-  `{ field, operator, value }` conditions.
-- **Count fields, not values.**
-- Chips render in **catalog order, always** — applied chips are never floated to the front.
-- **Rewind `pageIndex` to 0** whenever the filters or the scope change.
-- A free-text column does **not** get a field; the search field covers it.
-- Every field needs a `match` — the catalog is what narrows the rows, not a parallel `if` chain in the page.
+- **One `PropertyFilter`** narrows the list — no row of Selects, no separate search field beside it, no
+  badged funnel button.
+- `CollectionPreferences` is the **last** control of the row.
+- **`empty` and `no-match` render different states**, and `no-match` always offers Clear filters.
+- A list whose state matters after a reload or a shared link sets **`url: true`**; a list with
+  preferences sets a **`storageKey`** unique to that list.
 
 ## Review output
 
@@ -397,43 +321,42 @@ Per gap:
   fix:    gap-(--layout-group-gap) — keep the section step for the gap ABOVE the band
 
 ✗ WorkloadsIndex.vue:71
-  quoted: <Select v-model="statusFilter" :options="statusOptions" />
-  rule:   filtering is one chip row behind one anchor, not one Select per column
-  fix:    declare status in the field catalog and render the shared filter bar
+  quoted: const visibleRows = computed(() => rows.value.filter((r) => r.status === status.value))
+  rule:   every list runs on useCollection; filtering outside it loses the page rewind, the URL
+          and the no-match state
+  fix:    useCollection({ items: rows, propertyFiltering: { properties } }) and bind
+          propertyFilterProps on a PropertyFilter, tableProps on the Table
 
 ✗ ConnectorsList.vue:22
-  quoted: <ControlsHeader> … <template #actions><Button label="New Connector" size="large" /></template>
-  rule:   the create action is the PAGE's, so it belongs to the heading — the controls row
-          narrows the list and runs entirely at `medium`
-  fix:    add the size="medium" PageHeader (the crumb no longer names the page) and move the
-          button into its #actions as `Create connector`, large
+  quoted: <EmptyState title="Create your first connector" /> in the #empty slot
+  rule:   a filtered-to-nothing list is no-match, not empty
+  fix:    branch on status: 'empty' → first-use state; 'no-match' → "No connectors match
+          these filters" with Clear filters bound to clearFilters
 ```
 
 Close with `List sound` or `N gaps — fix before polish`.
 
 ## References
 
-- `/webkit-tables` — the `Table`, the column model, the toolbar and the cell recipes inside the card.
+- `/webkit-tables` — the `Table`, the column model and the cell recipes inside the card.
 - `/webkit-navigation` — the shell the page sits in and how its nav row is activated.
-- `/webkit-ui-states` — the loading skeleton, and the two different empty states (no rows vs no matches).
-- `/webkit-microcopy` — field labels, the empty-state sentence, the search placeholder.
-- Components used here, all resolvable through the MCP or the catalog: `Table`, `Card`, `Popover`,
-  `Chip`, `Input`, `Button`, `EmptyState`, `Avatar`, `Tooltip`.
+- `/webkit-ui-states` — the loading skeleton, the error alert, and the empty vs no-match states.
+- `/webkit-microcopy` — property labels, the empty-state sentences, the filter placeholder.
+- Blocks: `platform/view/table-view` (rows) and `platform/view/card-view` (cards).
+- Resolvable through the MCP or the catalog: `useCollection`, `PropertyFilter`, `CollectionPreferences`,
+  `Table`, `Cards`, `Pagination`, `Card`, `EmptyState`, `Button`.
 
 ## Definition of Done
 
-- [ ] Page is shell → column → heading → section → one band holding controls, filters and the card.
+- [ ] Page is shell → column → heading → section → one band holding the controls and the card.
 - [ ] First-level index carries a `size="medium"` `PageHeader` with the create action in `#actions`.
 - [ ] Heading action `large`; every control on the controls row `medium`.
-- [ ] Search is in the controls row and bound to the table's global filter; filters narrow `:data`.
-- [ ] A field catalog exists, with a `match` per field and `kind` chosen deliberately.
-- [ ] Every enumerable column is a field; no free-text column is.
-- [ ] The date field offers relative periods plus `Custom…`, and its periods are open-ended.
-- [ ] Applied state is `{ fieldId: values[] }`; the applied count counts fields.
-- [ ] One anchor, chips in catalog order, applied chips filled and removable, idle chips outlined.
-- [ ] The `×` clears the field and the chip remains, dimmed.
-- [ ] Value rows carry `menuitemcheckbox` / `menuitemradio`; the trigger's name says the applied count.
-- [ ] `↑`/`↓` are scoped to the current level; focus returns to the chip that opened the panel.
-- [ ] `pageIndex` rewinds to 0 on any filter or scope change.
-- [ ] Filtered-to-nothing renders a different empty state from a genuinely empty account.
+- [ ] One `useCollection` call holds filter, sort, page, selection and preferences; `tableProps` /
+      `cardsProps`, `propertyFilterProps` and `preferencesProps` are bound with `v-bind`.
+- [ ] Server lists pass `fetch` and forward `signal` to the request.
+- [ ] Every enumerable column is a property with `options`; ordered columns carry `type`.
+- [ ] `empty` and `no-match` render different states; `no-match` offers Clear filters.
+- [ ] `url: true` (or a router adapter) on any list someone will share or reload.
+- [ ] `preferences.storageKey` unique to the list; the naming column is locked.
+- [ ] Bulk actions count the selection; "Select all N items" uses `selectAllMatching`.
 - [ ] Verified in both themes with `/webkit-ui-verify`.

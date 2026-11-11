@@ -1,0 +1,16 @@
+{
+  "component": "cards",
+  "title": "Components/Primitives/Data/Cards",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A collection shown as cards: the `header` slot names each card and the default slot lays out its fields. Four columns in a wide container, then three, two and one as it narrows (container queries, not the viewport).",
+      "file": "default.vue"
+    },
+    {
+      "name": "Selectable",
+      "summary": "Bound to `useCollection` with multi selection: each card gets a checkbox named by its header, a visible Select all items sits above the cards, and the selection survives paging (the same item and selection model as Table).",
+      "file": "selectable.vue"
+    }
+  ]
+}
