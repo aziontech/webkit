@@ -87,3 +87,41 @@ Scope: `AppLayout`, `Board` (`Board.Item`) and the `platform/dashboard/configura
 - Finding: the variant failed the consumer lint: classes on `<AppLayout>`, `<GlobalHeader>` and `<Badge>`. Fixed: moved to wrapper elements.
 - Finding: building blocks named components the primary does not import, which the pattern check rejects. Fixed: described in the Notifications state instead.
 - The bell is a pressed toggle that names the unread count; the Badge is hidden from assistive technology; unread items carry a hidden "Unread:" prefix, not colour alone; deploy notifications offer Edit and Redeploy (async-submit rule), never View deployments.
+
+## WP observability
+
+Scope: `DateRangePicker`, `PropertyFilter` query mode (`mode="query"`), `Trace`, the `platform/view/split-view` variants Query, Sessions and EventDocument (the field sidebar and saved queries live inside them), `analytics-dashboard#Metrics`, `code-editor#TestRun` and `edit-resource#DataStream`. Source order: the design sample (`apps/webkit-sample/src/console/pages/observe/*`, `components/observability/*`, `shared/ui/trace/*`) first, then Console Kit Events v2 for the query bar, time range, sessions and field sidebar, then Cloudscape for the date range picker and the property filter. A mechanical pass over every new SFC, block variant and example found no raw colours, palette classes, physical direction utilities or raw sizes, no product URLs in block data, and every transition carries a `motion-reduce` escape.
+
+### DateRangePicker
+
+- Relative and absolute in one panel, committed only on Apply; Cancel and Escape drop the draft and return focus to the trigger. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so a saved range reads correctly in every zone; the trigger prints the offset (`UTC−03:00`) beside an absolute range. No defect.
+- Finding: `modelValue` and `timeZone` were a hand-written prop and emit pair, which the authoring ratchet blocks. Fixed: both are `defineModel`s (controlled and uncontrolled), the spec moved them to a v-model table and the stepping test now follows the uncontrolled value.
+- Previous and Next move the window by its own length and never past now; a relative range steps into an absolute one, as Cloudscape and the Console Kit do. No defect.
+
+### PropertyFilter query mode
+
+- Additive: tokens mode is unchanged and stays the default. Query mode is a `combobox` over one string with suggestions for the word at the caret, an invalid state that sets `aria-invalid` and points `aria-describedby` at a polite message, and `submit` with the flat token list or `null` when AND and OR mix (the field says so instead of guessing). A product grammar replaces the built-in one through `validate` and `suggest`. No defect.
+- The query text keeps `dir="auto"`, so a Latin query stays left-to-right in a right-to-left page. No defect.
+
+### Trace
+
+- A named `treegrid` with roving focus and the tree keyboard map; each row names span, service, start, duration and outcome; a failed span carries an icon and a Failed tag, never colour alone. Selecting a row opens a details region under the waterfall, and Close returns focus to the row. No defect.
+
+### split-view variants
+
+- Query: `DateRangePicker` replaces the Period field and `PropertyFilter` query mode replaces both the Filter popover and the search field; the guidelines forbid offering both surfaces at once. The fields panel adds or removes `field = value` clauses, so the panel and the query never disagree. Saved and Recent queries are two popovers beside the bar. No defect.
+- Sessions: investigation tabs keep their own filters, search and period, cap at five with a status line, and rename inline (F2, double click or the actions menu; Enter keeps, Escape restores). Finding: a close button inside each tab would nest a button in the `tab` (the current `Tabs` `closable`), an axe `nested-interactive` failure. Decision: close lives in the actions menu and on Delete for the focused tab; the per-tab close control is an M2.10 row.
+- Harness: the three variants do not carry the primary's `nested-interactive` finding. They do inherit its `aria-required-children`, raised on the `TableRoot` root and on its paginated footer (a `rowgroup` whose child is not a `row`), the same entry every table block has in `a11y-known.json`. It is recorded for the three variants with that rule only; WP a11y removes it when it fixes `TableRoot` (M2.10 row 4).
+- EventDocument: Search in this event narrows and highlights fields with a `role="status"` count; Filter by and Exclude are `aria-pressed` toggles named with field and value, and an exclusion shows as an `is not` chip with the other filters. No defect.
+
+### analytics-dashboard#Metrics
+
+- Product is a page-level `PageTabs` choice and the period one `Select` that drives every tile and card and survives a product change. Rate and percentile cards turn legend totals off, since a sum of them means nothing. Built on the existing `Chart` (area, line, stacked bar) and `ChartCard`; no new chart type was needed. No defect.
+
+### code-editor#TestRun
+
+- The run pane sits under the editor in a vertical `ResizableRoot` and collapses past its minimum. Status, run ID with Copy, request and outcome, run details in skeletons while running, the `Trace` with `v-model:selected`, and the logs on the same clock. After the merge the code and schema documents are `CodeEditor`s, like the primary. No defect.
+
+### edit-resource#DataStream
+
+- The choice that decides other fields comes first; destination fields follow the connector, and credentials cannot be read back. A preset template is read-only in a `CodeBlock` with Copy; a custom data set is now a `CodeEditor` (`language="json"`). An endpoint that does not answer the test record follows the form-error rule: one danger `Alert` above Destination with Send test record, the URL invalid with its reason and focused, every other change kept. Settings saves are not deploys, so the async-submit toast does not apply. No defect.

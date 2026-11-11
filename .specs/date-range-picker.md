@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 1fa6f2c8e67c406d8b6dfad9ce44b2633a10a7b8ec927c2c58bfe9ca090c44a4
+checksum: 0c66671bee02edaf9eea61e96d5cd7a721b96fc66ce51d1f94c9e00a44af08cb
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -65,31 +65,33 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 
 ## Props
 
-| Prop                | Type                                              | Default                          | Required | JSDoc                                                                                                              |
-| ------------------- | ------------------------------------------------- | -------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
-| `modelValue`        | `DateRangeValue \| null`                          | `null`                           | false    | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Supports v-model. |
-| `relativeOptions`   | `RelativeOption[]`                                | 5m, 15m, 1h, 6h, 24h, 7d, 30d    | false    | Quick ranges listed on the Relative tab.                                                                           |
-| `timeZone`          | `string`                                          | `''`                             | false    | IANA time zone the absolute range is typed and shown in. Empty uses the local zone. Supports v-model:timeZone.     |
-| `timeZones`         | `string[]`                                        | `[]`                             | false    | Zones offered by the selector. Empty falls back to the zones `Intl` supports.                                      |
-| `showTimeZone`      | `boolean`                                         | `true`                           | false    | Shows the time zone selector in the panel.                                                                         |
-| `showStep`          | `boolean`                                         | `false`                          | false    | Shows Previous and Next buttons that move the range back or forward by its own length.                             |
-| `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                      | false    | Which kinds of range the panel offers.                                                                             |
-| `min`               | `Date`                                            | undefined                        | false    | Earliest instant an absolute range may start at.                                                                   |
-| `max`               | `Date`                                            | undefined                        | false    | Latest instant an absolute range may end at.                                                                       |
-| `now`               | `Date`                                            | undefined                        | false    | Reference clock for relative ranges and stepping. Unset reads the real clock.                                      |
-| `placeholder`       | `string`                                          | `''`                             | false    | Trigger text with no range. Empty uses the locale catalog.                                                         |
-| `ariaLabel`         | `string`                                          | `''`                             | false    | Accessible name of the trigger. Empty uses the locale catalog.                                                     |
-| `disabled`          | `boolean`                                         | `false`                          | false    | Disables the trigger and the step buttons.                                                                         |
-| `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                       | false    | Size token of the trigger and the panel controls.                                                                  |
+| Prop                | Type                                              | Default                       | Required | JSDoc                                                                                  |
+| ------------------- | ------------------------------------------------- | ----------------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `relativeOptions`   | `RelativeOption[]`                                | 5m, 15m, 1h, 6h, 24h, 7d, 30d | false    | Quick ranges listed on the Relative tab.                                               |
+| `timeZones`         | `string[]`                                        | `[]`                          | false    | Zones offered by the selector. Empty falls back to the zones `Intl` supports.          |
+| `showTimeZone`      | `boolean`                                         | `true`                        | false    | Shows the time zone selector in the panel.                                             |
+| `showStep`          | `boolean`                                         | `false`                       | false    | Shows Previous and Next buttons that move the range back or forward by its own length. |
+| `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                   | false    | Which kinds of range the panel offers.                                                 |
+| `min`               | `Date`                                            | undefined                     | false    | Earliest instant an absolute range may start at.                                       |
+| `max`               | `Date`                                            | undefined                     | false    | Latest instant an absolute range may end at.                                           |
+| `now`               | `Date`                                            | undefined                     | false    | Reference clock for relative ranges and stepping. Unset reads the real clock.          |
+| `placeholder`       | `string`                                          | `''`                          | false    | Trigger text with no range. Empty uses the locale catalog.                             |
+| `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the locale catalog.                         |
+| `disabled`          | `boolean`                                         | `false`                       | false    | Disables the trigger and the step buttons.                                             |
+| `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                      |
 
 Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`; `DateRangeValue = { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string } | { type: 'absolute'; start: string; end: string }`; `RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string }` (an empty `label` prints `Last {count} {unit}` from the catalog).
 
+## v-model
+
+| Model              | Type                     | Default | Emits               | Notes                                                                                                                                                                                |
+| ------------------ | ------------------------ | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model`          | `DateRangeValue \| null` | `null`  | `update:modelValue` | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range). |
+| `v-model:timeZone` | `string`                 | `''`    | `update:timeZone`   | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                |
+
 ## Events
 
-| Event               | Payload                  | Notes                                                                                     |
-| ------------------- | ------------------------ | ----------------------------------------------------------------------------------------- |
-| `update:modelValue` | `DateRangeValue \| null` | Apply with a valid draft, or Previous / Next (always an absolute range).                  |
-| `update:timeZone`   | `string`                 | Apply after the zone changed in the panel.                                                |
+None beyond the v-model updates above.
 
 ## Slots
 
@@ -110,23 +112,23 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 ## Motion & Animations
 
-| Trigger         | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
-| --------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| panel open      | `animate-popup-scale-in`                  | semantic (150ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| panel close     | `animate-popup-scale-out`                 | semantic (110ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| chevron         | `transition-transform duration-150 ease-out` | inline (matches `calendar`)                    | `motion-reduce:transition-none` |
-| hover / options | `transition-colors duration-150 ease-out` | inline (matches `calendar`)                       | `motion-reduce:transition-none` |
+| Trigger         | Animation / Transition                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| --------------- | -------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| panel open      | `animate-popup-scale-in`                     | semantic (150ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
+| panel close     | `animate-popup-scale-out`                    | semantic (110ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
+| chevron         | `transition-transform duration-150 ease-out` | inline (matches `calendar`)                       | `motion-reduce:transition-none` |
+| hover / options | `transition-colors duration-150 ease-out`    | inline (matches `calendar`)                       | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region           | Token (DESIGN.md)                                   |
-| ---------------- | --------------------------------------------------- |
-| trigger surface  | `var(--bg-surface)`, `var(--border-default)`, hover `var(--border-strong)` |
-| panel surface    | `var(--bg-surface-raised)`, `var(--shadow-sm)`, `var(--shape-card)` |
-| selected option  | `var(--bg-selected)`; hover `var(--bg-hover)`       |
-| muted text       | `var(--text-muted)`                                 |
-| error message    | `var(--danger-contrast)`                            |
-| gaps             | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-sm)` |
+| Region          | Token (DESIGN.md)                                                          |
+| --------------- | -------------------------------------------------------------------------- |
+| trigger surface | `var(--bg-surface)`, `var(--border-default)`, hover `var(--border-strong)` |
+| panel surface   | `var(--bg-surface-raised)`, `var(--shadow-sm)`, `var(--shape-card)`        |
+| selected option | `var(--bg-selected)`; hover `var(--bg-hover)`                              |
+| muted text      | `var(--text-muted)`                                                        |
+| error message   | `var(--danger-contrast)`                                                   |
+| gaps            | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-sm)`             |
 
 ## Theme gaps
 
@@ -144,24 +146,24 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 ## Internationalization
 
-| Key                                       | English source                                    | Override prop |
-| ----------------------------------------- | ------------------------------------------------- | ------------- |
-| `dateRangePicker.label`                   | Time range                                        | `ariaLabel`   |
-| `dateRangePicker.placeholder`             | Select a time range                               | `placeholder` |
-| `dateRangePicker.dialog`                  | Choose a time range                               | —             |
-| `dateRangePicker.rangeType`               | Range type                                        | —             |
-| `dateRangePicker.relative` / `absolute`   | Relative range / Absolute range                   | —             |
-| `dateRangePicker.quickRanges`             | Quick ranges                                      | —             |
-| `dateRangePicker.custom`                  | Custom range                                      | —             |
-| `dateRangePicker.amount` / `unit`         | Duration / Unit                                   | —             |
-| `dateRangePicker.second` … `year`         | Last second / Last {count} seconds … (plural)     | `RelativeOption.label` |
-| `dateRangePicker.unitSecond` … `unitYear` | Seconds … Years                                   | —             |
-| `dateRangePicker.apply` / `cancel`        | Apply / Cancel                                    | —             |
-| `dateRangePicker.previous` / `next`       | Previous range / Next range                       | —             |
-| `dateRangePicker.incomplete`              | Choose a start and an end.                        | —             |
-| `dateRangePicker.order`                   | The end must be after the start.                  | —             |
-| `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.          | —             |
-| `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.              | —             |
+| Key                                       | English source                                | Override prop          |
+| ----------------------------------------- | --------------------------------------------- | ---------------------- |
+| `dateRangePicker.label`                   | Time range                                    | `ariaLabel`            |
+| `dateRangePicker.placeholder`             | Select a time range                           | `placeholder`          |
+| `dateRangePicker.dialog`                  | Choose a time range                           | —                      |
+| `dateRangePicker.rangeType`               | Range type                                    | —                      |
+| `dateRangePicker.relative` / `absolute`   | Relative range / Absolute range               | —                      |
+| `dateRangePicker.quickRanges`             | Quick ranges                                  | —                      |
+| `dateRangePicker.custom`                  | Custom range                                  | —                      |
+| `dateRangePicker.amount` / `unit`         | Duration / Unit                               | —                      |
+| `dateRangePicker.second` … `year`         | Last second / Last {count} seconds … (plural) | `RelativeOption.label` |
+| `dateRangePicker.unitSecond` … `unitYear` | Seconds … Years                               | —                      |
+| `dateRangePicker.apply` / `cancel`        | Apply / Cancel                                | —                      |
+| `dateRangePicker.previous` / `next`       | Previous range / Next range                   | —                      |
+| `dateRangePicker.incomplete`              | Choose a start and an end.                    | —                      |
+| `dateRangePicker.order`                   | The end must be after the start.              | —                      |
+| `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.      | —                      |
+| `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.          | —                      |
 
 - Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `calendar` keys.
 

@@ -266,8 +266,8 @@ describe('DateRangePicker', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Next range' }))
     expect(lastValue(view.emitted())).toEqual({
       type: 'absolute',
-      start: '2026-11-10T14:00:00.000Z',
-      end: '2026-11-10T15:00:00.000Z'
+      start: '2026-11-10T13:00:00.000Z',
+      end: '2026-11-10T14:00:00.000Z'
     })
     await view.rerender({
       modelValue: {

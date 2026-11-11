@@ -34,25 +34,11 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "DateRangeValue | null",
-   "default": "null",
-   "required": "false",
-   "doc": "The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Supports v-model."
-  },
-  {
    "name": "relativeOptions",
    "type": "RelativeOption[]",
    "default": "5m, 15m, 1h, 6h, 24h, 7d, 30d",
    "required": "false",
    "doc": "Quick ranges listed on the Relative tab."
-  },
-  {
-   "name": "timeZone",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "IANA time zone the absolute range is typed and shown in. Empty uses the local zone. Supports v-model:timeZone."
   },
   {
    "name": "timeZones",
@@ -132,18 +118,7 @@
    "doc": "Size token of the trigger and the panel controls."
   }
  ],
- "events": [
-  {
-   "name": "update:modelValue",
-   "payload": "DateRangeValue | null",
-   "notes": "Apply with a valid draft, or Previous / Next (always an absolute range)."
-  },
-  {
-   "name": "update:timeZone",
-   "payload": "string",
-   "notes": "Apply after the zone changed in the panel."
-  }
- ],
+ "events": [],
  "slots": [],
  "styleSeam": false,
  "examples": [

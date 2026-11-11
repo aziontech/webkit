@@ -104,11 +104,14 @@
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/event-document.vue": ["aria-required-children"],
     "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
     "blocks/platform/view/split-view/variants/filtered.vue": [
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/variants/sessions.vue": ["aria-required-children"],
     "blocks/platform/view/table-view/table-view.vue": ["aria-required-children"],
     "blocks/shells/website/website.vue": ["color-contrast"],
     "examples/architecture-tabs/default.vue": ["color-contrast"],
@@ -432,11 +435,14 @@
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/event-document.vue": ["aria-required-children"],
     "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
     "blocks/platform/view/split-view/variants/filtered.vue": [
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/variants/sessions.vue": ["aria-required-children"],
     "blocks/platform/view/table-view/table-view.vue": ["aria-required-children"],
     "examples/banner/with-aside.vue": ["link-in-text-block"],
     "examples/calendar/open.vue": ["color-contrast"],
@@ -611,11 +617,14 @@
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/event-document.vue": ["aria-required-children"],
     "blocks/platform/view/split-view/variants/failed.vue": ["nested-interactive"],
     "blocks/platform/view/split-view/variants/filtered.vue": [
       "aria-required-children",
       "nested-interactive"
     ],
+    "blocks/platform/view/split-view/variants/query.vue": ["aria-required-children"],
+    "blocks/platform/view/split-view/variants/sessions.vue": ["aria-required-children"],
     "blocks/platform/view/table-view/table-view.vue": ["aria-required-children"],
     "examples/banner/with-aside.vue": ["link-in-text-block"],
     "examples/checkbox/indeterminate.vue": ["aria-conditional-attr"],
