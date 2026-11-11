@@ -50,12 +50,12 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-right' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
 
-- **WebkitProvider (languages)**: mount it once at the app root with the user's locale. Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the `en`, `pt-BR` or `es` catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). With no provider every component falls back to English. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. It is the one binding that does not repeat its path: `import WebkitProvider from '@aziontech/webkit/provider'`, so it never clashes with an app's own `Provider`.
+- **WebkitProvider (languages)**: mount it once at the app root with the user's locale. Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the `en`, `pt-BR` or `es` catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). With no provider every component falls back to English. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
 
 ```vue
 <!-- App.vue -->
 <script setup>
-  import WebkitProvider from '@aziontech/webkit/provider'
+  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 </script>
 
 <template>
@@ -70,7 +70,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 ## Must Have
 
 - ✅ Flat import: `import Button from '@aziontech/webkit/button'`.
-- ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/mini-button` -> `MiniButton` (the one exception: `@aziontech/webkit/provider` -> `WebkitProvider`).
+- ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/mini-button` -> `MiniButton`.
 - ✅ One `WebkitProvider` at the app root with the user's locale.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
 - ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).

@@ -1,6 +1,6 @@
 <script setup>
   import Pagination from '@aziontech/webkit/pagination'
-  import WebkitProvider from '@aziontech/webkit/provider'
+  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 </script>
 
 <template>

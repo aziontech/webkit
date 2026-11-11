@@ -2,7 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Pagination from '@aziontech/webkit/pagination'
-  import WebkitProvider from '@aziontech/webkit/provider'
+  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
   const page = ref(1)

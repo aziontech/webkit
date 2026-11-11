@@ -9,7 +9,7 @@
   import { BUILT_IN_CATALOGS } from '../../../i18n/catalogs'
 
   defineOptions({
-    name: 'Provider',
+    name: 'WebkitProvider',
     inheritAttrs: false
   })
 
@@ -42,7 +42,9 @@
     catalogs: BUILT_IN_CATALOGS
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'utils-provider')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'utils-webkit-provider'
+  )
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 {
-  "component": "provider",
+  "component": "webkit-provider",
   "title": "Components/Primitives/Utils/WebkitProvider",
   "examples": [
     {

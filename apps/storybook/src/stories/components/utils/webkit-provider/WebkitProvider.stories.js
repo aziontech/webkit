@@ -1,4 +1,4 @@
-import Provider from '@aziontech/webkit/provider'
+import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
 import Example0 from '../../../../../../../packages/webkit/examples/provider/default.vue'
 import source0 from '../../../../../../../packages/webkit/examples/provider/default.vue?raw'

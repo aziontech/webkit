@@ -55,10 +55,8 @@
   >
     <select
       :value="modelValue"
-      aria-label="Rows per page"
       class="h-7 w-full cursor-pointer appearance-none pointer-coarse:h-11 rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       :aria-label="t('pagination.pageSize')"
-      class="h-7 w-full cursor-pointer appearance-none rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       @change="handleChange"
     >
       <option

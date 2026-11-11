@@ -20056,11 +20056,11 @@
         }
       ]
     },
-    "provider": {
-      "import": "@aziontech/webkit/provider",
-      "target": "./src/components/utils/provider/provider.vue",
+    "webkit-provider": {
+      "import": "@aziontech/webkit/webkit-provider",
+      "target": "./src/components/utils/webkit-provider/webkit-provider.vue",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/provider",
+      "treeShakeableImport": "@aziontech/webkit/webkit-provider",
       "category": "utils",
       "structure": "monolithic",
       "props": [
@@ -20120,17 +20120,17 @@
         {
           "name": "Default",
           "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.",
-          "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/provider'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const open = ref(false)\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    class=\"flex flex-col gap-(--spacing-md)\"\n  >\n    <Pagination\n      v-model:page=\"page\"\n      :total=\"120\"\n    />\n    <ConfirmDialog\n      v-model:open=\"open\"\n      title=\"Remover domínio\"\n      description=\"shop.example.com deixa de responder por este recurso.\"\n      @confirm=\"open = false\"\n    >\n      <template #trigger>\n        <Button\n          label=\"Remover domínio\"\n          kind=\"outlined\"\n          size=\"medium\"\n        />\n      </template>\n    </ConfirmDialog>\n  </WebkitProvider>\n</template>"
+          "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const open = ref(false)\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    class=\"flex flex-col gap-(--spacing-md)\"\n  >\n    <Pagination\n      v-model:page=\"page\"\n      :total=\"120\"\n    />\n    <ConfirmDialog\n      v-model:open=\"open\"\n      title=\"Remover domínio\"\n      description=\"shop.example.com deixa de responder por este recurso.\"\n      @confirm=\"open = false\"\n    >\n      <template #trigger>\n        <Button\n          label=\"Remover domínio\"\n          kind=\"outlined\"\n          size=\"medium\"\n        />\n      </template>\n    </ConfirmDialog>\n  </WebkitProvider>\n</template>"
         },
         {
           "name": "CustomMessages",
           "summary": "`messages` replaces one built-in string for the whole subtree; the rest of the catalog stays.",
-          "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/provider'\n\n  const messages = {\n    pagination: { info: '{start}–{end} de {total} domínios' }\n  }\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :messages=\"messages\"\n  >\n    <Pagination :total=\"48\" />\n  </WebkitProvider>\n</template>"
+          "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n\n  const messages = {\n    pagination: { info: '{start}–{end} de {total} domínios' }\n  }\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :messages=\"messages\"\n  >\n    <Pagination :total=\"48\" />\n  </WebkitProvider>\n</template>"
         },
         {
           "name": "RightToLeft",
           "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
-          "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/provider'\n</script>\n\n<template>\n  <WebkitProvider locale=\"ar\">\n    <Pagination :total=\"48\" />\n  </WebkitProvider>\n</template>"
+          "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n</script>\n\n<template>\n  <WebkitProvider locale=\"ar\">\n    <Pagination :total=\"48\" />\n  </WebkitProvider>\n</template>"
         }
       ]
     },

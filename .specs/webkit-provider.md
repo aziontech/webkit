@@ -1,9 +1,9 @@
 ---
-name: provider
+name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: abfc7da7f467c7b0a6f1246ebebf674f9dbc7105bc238a61f93afc03a55a1422
+checksum: a2ed9c1e442b875730565d579c312d5cb81e7828d181c1d08ec5f8d0c4bed578
 spec_version: 1
 created: 2026-11-11
 last_updated: 2026-11-11
@@ -44,7 +44,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 ```vue
 <script setup>
-  import WebkitProvider from '@aziontech/webkit/provider'
+  import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import Pagination from '@aziontech/webkit/pagination'
 </script>
 

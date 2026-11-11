@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import { directionalIconClass } from '../../../utils/directional-icons'
   import { useLocale } from '../../../composables/use-locale'
   import * as en from '../../../i18n/messages/en'
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import DropdownMenu from '../../navigation/dropdown-menu'
   import Button from '../button/button.vue'
   import IconButton from '../icon-button/icon-button.vue'

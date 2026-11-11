@@ -245,12 +245,12 @@ split view or a card these change:
 
 ### Languages
 
-v6 adds `WebkitProvider` (`@aziontech/webkit/provider`). Mount it once at the app root with the
+v6 adds `WebkitProvider` (`@aziontech/webkit/webkit-provider`). Mount it once at the app root with the
 user's locale:
 
 ```vue
 <script setup>
-  import WebkitProvider from '@aziontech/webkit/provider'
+  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup>
   import Pagination from '@aziontech/webkit/pagination'
-  import WebkitProvider from '@aziontech/webkit/provider'
+  import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const messages = {
     pagination: { info: '{start}–{end} de {total} domínios' }

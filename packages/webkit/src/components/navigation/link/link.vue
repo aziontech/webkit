@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { directionalIconClass } from '../../../utils/directional-icons'
   import { useLocale } from '../../../composables/use-locale'
   import * as en from '../../../i18n/messages/en'
+  import { directionalIconClass } from '../../../utils/directional-icons'
 
   export type LinkSize = 'small' | 'medium' | 'large'
   export type LinkTarget = '_self' | '_blank'

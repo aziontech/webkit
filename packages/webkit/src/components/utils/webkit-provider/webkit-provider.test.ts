@@ -33,28 +33,28 @@ describe('WebkitProvider', () => {
   describe('root element', () => {
     it('renders a wrapper carrying lang, dir and the default testid', () => {
       const { getByTestId } = render(withProvider({ locale: 'pt-BR' }, () => h('span', 'x')))
-      const root = getByTestId('utils-provider')
+      const root = getByTestId('utils-webkit-provider')
       expect(root.getAttribute('lang')).toBe('pt-BR')
       expect(root.getAttribute('dir')).toBe('ltr')
     })
 
     it('defaults to English, left to right', () => {
       const { getByTestId } = render(WebkitProvider)
-      expect(getByTestId('utils-provider').getAttribute('lang')).toBe('en')
-      expect(getByTestId('utils-provider').getAttribute('dir')).toBe('ltr')
+      expect(getByTestId('utils-webkit-provider').getAttribute('lang')).toBe('en')
+      expect(getByTestId('utils-webkit-provider').getAttribute('dir')).toBe('ltr')
     })
 
     it('derives dir="rtl" from an Arabic, Hebrew, Persian or Urdu locale', () => {
       for (const locale of ['ar', 'he-IL', 'fa', 'ur-PK']) {
         const { getAllByTestId, unmount } = render(withProvider({ locale }, () => h('span')))
-        expect(getAllByTestId('utils-provider')[0]?.getAttribute('dir')).toBe('rtl')
+        expect(getAllByTestId('utils-webkit-provider')[0]?.getAttribute('dir')).toBe('rtl')
         unmount()
       }
     })
 
     it('an explicit dir wins over the locale', () => {
       const { getByTestId } = render(withProvider({ locale: 'ar', dir: 'ltr' }, () => h('span')))
-      expect(getByTestId('utils-provider').getAttribute('dir')).toBe('ltr')
+      expect(getByTestId('utils-webkit-provider').getAttribute('dir')).toBe('ltr')
     })
 
     it('forwards consumer attributes to the wrapper', () => {
@@ -213,7 +213,7 @@ describe('WebkitProvider', () => {
 
     it('RightToLeft turns the subtree right to left', () => {
       const { getByTestId } = render(RightToLeft)
-      expect(getByTestId('utils-provider').getAttribute('dir')).toBe('rtl')
+      expect(getByTestId('utils-webkit-provider').getAttribute('dir')).toBe('rtl')
     })
   })
 })
