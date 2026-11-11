@@ -23,7 +23,7 @@
 
   const name = computed(() => {
     const value = route.params.name
-    return Array.isArray(value) ? value.join('/') : String(value ?? '')
+    return (Array.isArray(value) ? value.join('/') : String(value ?? '')).replace(/\/+$/, '')
   })
   const item = computed(() => index.components.find((entry) => entry.name === name.value))
   const doc = computed(() => cached<ComponentDoc>(keys.component(name.value)))

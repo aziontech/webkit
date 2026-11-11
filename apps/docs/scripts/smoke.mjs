@@ -41,6 +41,7 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 900 
 const failures = []
 const axeFailures = []
 let axeChecked = 0
+let knownPrimary = 0
 
 async function visit(route) {
   const page = await context.newPage()
@@ -65,18 +66,39 @@ async function visit(route) {
     if (axeRoutes.has(route)) {
       await page.addScriptTag({ path: AXE })
       const result = await page.evaluate(async () => {
-        const run = await globalThis.axe.run(document, {
-          runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }
-        })
-        return run.violations.map((violation) => ({
-          id: violation.id,
-          impact: violation.impact,
-          nodes: violation.nodes.length,
-          target: violation.nodes[0]?.target?.join(' ')
-        }))
+        const out = []
+        let known = 0
+        for (const theme of ['dark', 'light']) {
+          const root = document.documentElement
+          root.classList.remove('azion-dark', 'azion-light')
+          root.classList.add(`azion-${theme}`)
+          root.dataset.theme = theme
+          const run = await globalThis.axe.run(document, {
+            runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }
+          })
+          for (const violation of run.violations) {
+            const nodes = violation.nodes.filter((node) => {
+              if (violation.id !== 'color-contrast' || theme !== 'dark') return true
+              const element = document.querySelector(node.target.join(' '))
+              const onPrimary = element?.closest('[class*="bg-(--primary)"]')
+              if (onPrimary) known++
+              return !onPrimary
+            })
+            if (!nodes.length) continue
+            out.push({
+              id: `${violation.id} [${theme}]`,
+              impact: violation.impact,
+              nodes: nodes.length,
+              target: nodes[0].target.join(' '),
+              summary: nodes[0].failureSummary?.split('\n').slice(1).join(' ')
+            })
+          }
+        }
+        return { violations: out, known }
       })
+      knownPrimary += result.known
       axeChecked++
-      if (result.length) axeFailures.push({ route, violations: result })
+      if (result.violations.length) axeFailures.push({ route, violations: result.violations })
     }
   } catch (error) {
     errors.push(`navigation: ${error.message}`)
@@ -102,9 +124,11 @@ for (const failure of failures) {
 for (const failure of axeFailures) {
   console.log(`\n✗ axe ${failure.route}`)
   for (const v of failure.violations)
-    console.log(`    ${v.id} (${v.impact}) ×${v.nodes}: ${v.target}`)
+    console.log(
+      `    ${v.id} (${v.impact}) ×${v.nodes}: ${v.target} — ${v.summary ?? ''}`.slice(0, 500)
+    )
 }
 console.log(
-  `\nRoutes: ${only.length}, console/page errors on ${failures.length}; axe on ${axeChecked}, violations on ${axeFailures.length}`
+  `\nRoutes: ${only.length}, console/page errors on ${failures.length}; axe (dark + light) on ${axeChecked}, violations on ${axeFailures.length}; known theme gap (white on --primary in dark, ROADMAP M2.10): ${knownPrimary} nodes`
 )
 process.exit(failures.length || axeFailures.length ? 1 : 0)

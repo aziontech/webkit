@@ -9,7 +9,7 @@
 
   const id = computed(() => {
     const value = route.params.id
-    return Array.isArray(value) ? value.join('/') : String(value ?? '')
+    return (Array.isArray(value) ? value.join('/') : String(value ?? '')).replace(/\/+$/, '')
   })
   const block = computed(() => findBlock(id.value))
   const state = computed(() =>

@@ -21,14 +21,16 @@
     v-if="kind === 'locale' || kind === 'direction'"
     class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
   >
-    <ToggleGroup key="toggle-group-1"
+    <ToggleGroup
+      key="toggle-group-1"
       v-if="kind === 'locale'"
       v-model="locale"
       :options="LOCALES"
       aria-label="Demo language"
       size="small"
     />
-    <ToggleGroup key="toggle-group-2"
+    <ToggleGroup
+      key="toggle-group-2"
       v-else
       v-model="dir"
       :options="[

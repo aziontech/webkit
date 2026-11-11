@@ -57,7 +57,8 @@
       </section>
     </template>
 
-    <TokenList key="token-list-1"
+    <TokenList
+      key="token-list-1"
       v-else-if="kind === 'spacing'"
       :tokens="tokens.spacing"
       sample="bar"
@@ -70,7 +71,8 @@
       />
     </template>
 
-    <TokenList key="token-list-2"
+    <TokenList
+      key="token-list-2"
       v-else-if="kind === 'shadows'"
       :tokens="tokens.shadows"
       sample="shadow"

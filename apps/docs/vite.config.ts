@@ -55,10 +55,9 @@ export default defineConfig({
     concurrency: 2,
     beastiesOptions: false,
     onPageRendered: (_route, html, appCtx) => {
-      const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } })
-        .ssrContext
+      const ssr = (appCtx.app as { ssrContext?: { teleports?: Record<string, string> } }).ssrContext
       const body = ssr?.teleports?.body
-      return body ? html.replace('</body>', `${body}</body>`) : html
+      return body ? html.replace(/<body([^>]*)>\s*/, (open) => `${open.trimEnd()}${body}`) : html
     },
     includedRoutes: () => {
       const only = process.env.DOCS_ROUTES?.split(',').filter(Boolean)

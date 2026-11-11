@@ -117,7 +117,7 @@ export async function preloadMarkdown(path: string) {
 export async function preloadRoute(route: RouteLocationNormalized) {
   const param = (name: string) => {
     const value = route.params[name]
-    return Array.isArray(value) ? value.join('/') : (value ?? '')
+    return (Array.isArray(value) ? value.join('/') : (value ?? '')).replace(/\/+$/, '')
   }
   if (route.name === 'component') await preloadComponent(param('name'))
   else if (route.name === 'block') await preloadBlock(param('id'))
