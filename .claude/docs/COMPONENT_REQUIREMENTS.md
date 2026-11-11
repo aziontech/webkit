@@ -1,13 +1,13 @@
 # Component Development Requirements for @aziontech/webkit
 
-This document outlines the requirements and best practices for building components in the webkit package. Use this guide when creating new components or modifying existing ones.
+This document outlines the requirements and best practices for building components in the webkit package (v6). Use it when creating new components or changing existing ones. The binding, hook-enforced versions of these rules live in [`.claude/rules/`](../rules/README.md); where this document and a rule disagree, the rule wins.
 
 ## Table of Contents
 
-- [Component Categories](#component-categories)
+- [Names (v6)](#names-v6)
 - [Directory Structure](#directory-structure)
 - [Component Implementation Requirements](#component-implementation-requirements)
-- [Package.json Requirements](#packagejson-requirements)
+- [Package Configuration](#package-configuration)
 - [TypeScript Declarations](#typescript-declarations)
 - [Testing Requirements](#testing-requirements)
 - [Export Configuration](#export-configuration)
@@ -16,82 +16,68 @@ This document outlines the requirements and best practices for building componen
 
 ---
 
-## Component Categories
+## Names (v6)
 
-### Core Components (`src/core/`)
+v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code, docs or stories; `npx @aziontech/webkit migrate v6` rewrites them in consumer code ([`src/cli/migrations/v6.json`](../../packages/webkit/src/cli/migrations/v6.json)).
 
-Core components are low-level, reusable building blocks used across applications.
+| Retired (v5)                                            | v6                                                                       |
+| ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `paginator` / `Paginator`                               | `pagination` / `Pagination`                                              |
+| `tab-view` / `TabView`                                  | `tabs` / `Tabs`                                                          |
+| `card-box` / `CardBox`                                  | `card` / `Card`                                                          |
+| `message` / `Message`                                   | `alert` / `Alert`                                                        |
+| `divider` / `Divider`                                   | `separator` / `Separator`                                                |
+| `progress-bar` / `ProgressBar`                          | `progress` / `Progress`                                                  |
+| `command-menu` / `CommandMenu`                          | `command` / `Command`                                                    |
+| `dropdown` / `Dropdown`                                 | `dropdown-menu` / `DropdownMenu`                                         |
+| `input-text` / `InputText`                              | `input` / `Input`                                                        |
+| `input-number` / `InputNumber`                          | `number-input` / `NumberInput`                                           |
+| `input-password` / `InputPassword`                      | `password-input` / `PasswordInput`                                       |
+| `box-grid-selection` / `BoxGridSelection`               | `radio-cards` / `RadioCards`                                             |
+| `resizable-panel` / `ResizablePanel`                    | `resizable` / `Resizable`                                                |
+| `segmented-button` / `SegmentedButton`                  | `toggle-group` / `ToggleGroup`                                           |
+| every `field-*` wrapper (`FieldText`, `FieldSelect`, …) | one `Field` around the plain control (see [Form fields](#4-form-fields)) |
 
-**Characteristics:**
+Exported types follow the component: `SeverityTagSeverity` (not `SeverityTagLevel`), `DocCardGroupMobileColumns` (not `DocCardGroupMobileCols`), `ToggleGroupOption`, `AlertSeverity`, `TabsValue`, … (the `types` map of `v6.json`).
 
-- Located in `src/core/form/` for form-related components or `src/core/<category>/` for others
-- Highly reusable and generic
-- Minimal business logic
-- Focus on presentation and interaction patterns
-- Examples: `field-text`, `field-dropdown`, `label`, `selector-block`
+Prop vocabulary ([`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)):
 
-**When to use:**
+- the primary value is `modelValue`, bound with `v-model` — never `v-model:value`;
+- a frame is `bordered`, never `border`; a copy affordance is `copyable`, never `showCopy`;
+- self-advancing media is `autoplay` / `autoplayInterval`; a column count below `md` is `mobileColumns`;
+- `Button` kinds are `primary`, `secondary`, `outlined`, `transparent` and `danger` (`kind="transparent"`, never `kind="text"`); `Item` uses `kind="outlined"`;
+- severities are `info`, `success`, `warning` and `danger` (`severity="danger"`, never `error`); `SeverityTag` takes `severity`, not `level`.
 
-- Building form inputs, buttons, labels
-- Creating reusable UI primitives
-- Components that will be composed into larger components
-
-### Regular Components (`src/components/`)
-
-Regular components are higher-level, more complex components that may include business logic.
-
-**Characteristics:**
-
-- Located in `src/components/<component-name>/`
-- May include API calls, complex state management
-- Often composed of multiple core components
-- May have specific business requirements
-- Examples: `azion-system-status`, `client-testimonials-block`
-
-**When to use:**
-
-- Complex UI features (status indicators, dashboards, etc.)
-- Components with business logic or API integration
-- Domain-specific functionality
+Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
 
 ---
 
 ## Directory Structure
 
-### Core Component Structure
+Every component lives in one folder under its category:
 
 ```
-src/core/<category>/<component-name>/
-├── <component-name>.vue          # Main component file
-├── <component-name>.vue.d.ts     # Generated TypeScript declarations
-└── <component-name>.vue.d.ts.map # Generated source map
+packages/webkit/src/components/<category>/<name>/
+├── <name>.vue        # root component (or <name>-root.vue for a compound root)
+├── index.ts          # compound components: attaches the parts (Tabs.List, Field.Label, …)
+├── <part>/<part>.vue # compound parts, or <name>-<part>.vue next to the root
+├── injection-key.ts  # compound context, when the parts share state
+└── <name>.test.ts    # browser test (rules/testing.md)
 ```
 
-**Example:**
-
-```
-src/core/form/field-text/
-├── field-text.vue
-├── field-text.vue.d.ts
-└── field-text.vue.d.ts.map
-```
-
-### Regular Component Structure
-
-```
-src/components/<component-name>/
-├── <component-name>.vue          # Main component file
-├── <component-name>.vue.d.ts     # Generated TypeScript declarations
-└── <component-name>.vue.d.ts.map # Generated source map
-```
+Categories: `actions`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils`. The spec is `.specs/<name>.md`, the story is `apps/storybook/src/stories/components/<category>/<name>/`, and runnable examples are `packages/webkit/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
 
 **Example:**
 
 ```
-src/components/azion-system-status/
-├── azion-system-status.vue
-├── azion-system-status.vue.d.ts
-└── azion-system-status.vue.d.ts.map
+packages/webkit/src/components/inputs/field/
+├── field.vue
+├── index.ts
+├── field-label/field-label.vue
+├── field-description/field-description.vue
+├── field-error/field-error.vue
+├── injection-key.ts
+└── field.test.ts
 ```
 
 ---
@@ -102,18 +88,16 @@ src/components/azion-system-status/
 
 All components MUST follow this structure:
 
-1. `<script setup>` tag first
+1. `<script setup lang="ts">` tag first
 2. `<template>` tag second
 
 **CRITICAL:** Always place `<script setup>` BEFORE `<template>` in Vue Single File Components.
-Never use `<template>` before `<script setup>`.
 
 **✅ CORRECT:**
 
 ```vue
-<script setup>
-  import { ref, computed, onMounted } from 'vue'
-  // ... imports and logic
+<script setup lang="ts">
+  import { computed } from 'vue'
 </script>
 
 <template>
@@ -128,49 +112,42 @@ Never use `<template>` before `<script setup>`.
   <!-- Component template -->
 </template>
 
-<script setup>
-  import { ref, computed, onMounted } from 'vue'
-  // ... imports and logic
+<script setup lang="ts">
+  import { computed } from 'vue'
 </script>
 ```
 
 ### 2. Props Definition
 
-Define props with `defineProps()` with proper TypeScript types and defaults:
+Props are typed with `defineProps<Props>()` and `withDefaults`, each with a one-line JSDoc ([`rules/props.md`](../rules/props.md)). The primary value is a `defineModel` (`v-model`, [`rules/v-model.md`](../rules/v-model.md)):
 
 ```vue
-<script setup>
-  const props = defineProps({
-    name: {
-      type: String,
-      required: true
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    description: {
-      type: String,
-      default: ''
-    }
+<script setup lang="ts">
+  export type ExampleSize = 'small' | 'medium' | 'large'
+
+  interface Props {
+    /** Visible label text. */
+    label?: string
+    /** Size token; affects height, padding and typography. */
+    size?: ExampleSize
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    label: '',
+    size: 'medium',
+    disabled: false
   })
+
+  const model = defineModel<string>({ default: '' })
 </script>
 ```
-
-#### Webkit layer (`src/components/webkit/`)
 
 Webkit components merge consumer classes from fallthrough attributes, not from a `class` prop:
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
   defineOptions({
@@ -190,107 +167,88 @@ Webkit components merge consumer classes from fallthrough attributes, not from a
 
 ### 3. Events Definition
 
-Define events with `defineEmits()`:
+Define typed events with `defineEmits` ([`rules/emits.md`](../rules/emits.md), [`rules/event-payloads.md`](../rules/event-payloads.md)):
 
 ```vue
-<script setup>
-  const emit = defineEmits(['blur', 'input', 'change'])
+<script setup lang="ts">
+  const emit = defineEmits<{
+    change: [value: string]
+    blur: [event: FocusEvent]
+  }>()
 </script>
 ```
 
-### 4. Form Components (Core Only)
+### 4. Form fields
 
-For form components in `src/core/form/`, MUST integrate with VeeValidate:
+There are no `field-*` wrappers in v6. A labelled control is `Field` around the plain control, the shadcn/ui anatomy; the control picks up its id, `aria-describedby`, `aria-invalid` and `disabled` from the `Field`. Validation libraries (VeeValidate, …) stay in the app: pass their error to `Field` `invalid` and `Field.Error`.
 
 ```vue
-<script setup>
-  import { useField } from 'vee-validate'
-  import { toRef } from 'vue'
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
 
-  const props = defineProps({
-    name: {
-      type: String,
-      required: true
-    }
-  })
-
-  const name = toRef(props, 'name')
-
-  const {
-    value: inputValue,
-    errorMessage: veeValidateErrorMessage,
-    handleBlur,
-    handleChange
-  } = useField(name, undefined, {
-    initialValue: props.value
-  })
+  const name = ref('')
 </script>
+
+<template>
+  <Field required>
+    <Field.Label>Name</Field.Label>
+    <Input v-model="name" />
+    <Field.Description>Shown on invoices.</Field.Description>
+  </Field>
+</template>
 ```
+
+`Field` carries `orientation` (`vertical`, `horizontal`, `responsive`), `invalid`, `disabled` and `required`. A checkbox, radio or switch row is `Field orientation="horizontal"` with the control and a `Field.Content` (`Field.Label` + `Field.Description`); a group of them is `Field.Set` with a `Field.Legend`.
 
 ### 5. Data-testid Attributes (Required)
 
-All interactive elements MUST have `data-testid` attributes for testing:
+The root reads `data-testid` from its attributes and falls back to `<category>-<name>` of the v6 name (`actions-button`, `feedback-alert`, `layout-separator`); parts derive BEM-style ids from it ([`rules/testid.md`](../rules/testid.md)):
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
   const attrs = useAttrs()
 
-  const customTestId = computed(() => {
-    const id = attrs['data-testid'] || 'component-name'
-
-    return {
-      label: `${id}__label`,
-      input: `${id}__input`,
-      description: `${id}__description`,
-      error: `${id}__error-message`
-    }
-  })
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-alert')
 </script>
 
 <template>
-  <input :data-testid="customTestId.input" />
+  <div :data-testid="testId">
+    <p :data-testid="`${testId}__title`" />
+  </div>
 </template>
 ```
 
 ### 6. Component File Naming
 
-- Use kebab-case for component names: `field-text.vue`, `azion-system-status.vue`
-- Directory name MUST match component filename
+- Use kebab-case English names that match the export: `password-input.vue`, `toggle-group.vue` ([`rules/naming.md`](../rules/naming.md))
+- Directory name MUST match the component filename; `defineOptions.name` is its PascalCase (`PasswordInput`)
 
 ### 7. Template Structure
 
-Organize template logically:
+Organize the template logically and compose existing components instead of re-drawing them:
 
 ```vue
 <template>
-  <div class="component-wrapper">
-    <Label
-      v-if="props.label"
-      :label="props.label"
+  <section :data-testid="testId">
+    <SectionHeader
+      title="Domains"
+      description="Where this application answers."
     />
-    <!-- Main component content -->
-    <Input v-model="inputValue" />
-
-    <!-- Error message -->
-    <small
-      v-if="errorMessage"
-      class="p-error"
-    >
-      {{ errorMessage }}
-    </small>
-
-    <!-- Description -->
-    <small
-      v-if="description"
-      class="text-color-secondary"
-    >
-      <slot name="description">
-        {{ description }}
-      </slot>
-    </small>
-  </div>
+    <Field>
+      <Field.Label>Domain</Field.Label>
+      <Input v-model="domain" />
+      <Field.Error v-if="error">{{ error }}</Field.Error>
+    </Field>
+    <Separator />
+    <Button
+      kind="transparent"
+      label="Cancel"
+    />
+  </section>
 </template>
 ```
 
@@ -298,7 +256,7 @@ Organize template logically:
 
 ## Package Configuration
 
-Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/webkit/package.json#exports`](../package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
+Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/webkit/package.json#exports`](../../packages/webkit/package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
 
 ---
 
@@ -308,26 +266,15 @@ TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. The
 
 **DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
 
+Exported type names start with the component's v6 binding (`ToggleGroupSize`, `AlertSeverity`) and use the v6 prop name (`DocCardGroupMobileColumns`). Renaming one is a breaking change: add it to the `types` map of `src/cli/migrations/v6.json` so `migrate` rewrites consumer imports.
+
 ---
 
 ## Testing Requirements
 
 ### Test IDs
 
-All components MUST support `data-testid` prop for testing:
-
-```vue
-<script setup>
-  const attrs = useAttrs()
-
-  const customTestId = computed(() => {
-    const id = attrs['data-testid'] || 'component-name'
-    return {
-      // ... test id variants
-    }
-  })
-</script>
-```
+All components MUST support `data-testid` for testing (see [Data-testid Attributes](#5-data-testid-attributes-required)).
 
 ### Testable Elements
 
@@ -339,44 +286,36 @@ Ensure these elements have test IDs:
 - Description text
 - Buttons/Actions
 
+Every component has its browser test next to it ([`rules/testing.md`](../rules/testing.md)); the `test-gate` gate fails without it.
+
 ---
 
 ## Export Configuration
 
-After creating a component, you MUST add it to the main package.json exports:
+After creating a component, add it to the package exports:
 
 ### Location: `/packages/webkit/package.json`
 
-Add to the `exports` field:
-
 ```json
 {
   "exports": {
-    // ... existing exports
-    "./<component-name>": "./src/<category>/<component-name>/<component-name>.vue"
+    "./<name>": "./src/components/<category>/<name>/<name>.vue"
   }
 }
 ```
 
-**For Core Components:**
+**Compound component:**
 
 ```json
 {
   "exports": {
-    "./field-new-input": "./src/core/form/field-new-input/field-new-input.vue"
+    "./field": "./src/components/inputs/field/index.ts",
+    "./field-label": "./src/components/inputs/field/field-label/field-label.vue"
   }
 }
 ```
 
-**For Regular Components:**
-
-```json
-{
-  "exports": {
-    "./new-feature": "./src/components/new-feature/new-feature.vue"
-  }
-}
-```
+Removing or renaming an export, a prop or a prop value of an existing component is a breaking change: add the matching entry to `src/cli/migrations/` (`v6.json`, `v6-props.json`, `v6-blocks.json`). The `migrations` gate (`node scripts/check-migrations.mjs`) compares the public API of `catalog.json` with `scripts/api-snapshot.json` and fails without it.
 
 ---
 
@@ -390,29 +329,13 @@ Some components may require Vue Router for navigation or routing features.
 - Components that render links/routes
 - Components that need route awareness (active state, params)
 
-### Installation
-
-If your component needs Vue Router:
-
-1. **Check if already installed:**
-
-   ```bash
-   grep "vue-router" packages/webkit/package.json
-   ```
-
-2. **If not installed, add it:**
-   ```bash
-   npm install vue-router@4
-   ```
-
 ### Usage in Components
 
 ```vue
-<script setup>
-  import { useRouter, useRoute } from 'vue-router'
+<script setup lang="ts">
+  import { useRouter } from 'vue-router'
 
   const router = useRouter()
-  const route = useRoute()
 
   const navigate = () => {
     router.push('/path')
@@ -435,7 +358,7 @@ If your component needs Vue Router:
 2. **Handle cases where router is not available:**
 
    ```vue
-   <script setup>
+   <script setup lang="ts">
      import { getCurrentInstance } from 'vue'
 
      const instance = getCurrentInstance()
@@ -443,7 +366,7 @@ If your component needs Vue Router:
    </script>
    ```
 
-3. **Document router dependency** in component comments
+3. **Document the router dependency** in the spec
 
 4. **Add vue-router to peerDependencies** (if strictly required):
    ```json
@@ -463,13 +386,13 @@ If your component needs Vue Router:
 - ✅ **DO:** Create focused, single-responsibility components
 - ✅ **DO:** Use composition over inheritance
 - ✅ **DO:** Provide sensible defaults
-- ❌ **DON'T:** Add unnecessary business logic to core components
+- ❌ **DON'T:** Add business logic to components; it belongs to the app or a block
 - ❌ **DON'T:** Create deeply nested component hierarchies
 
 ### 2. Props and Events
 
-- ✅ **DO:** Validate prop types
-- ✅ **DO:** Provide default values for optional props
+- ✅ **DO:** Type every prop and give optional props a default
+- ✅ **DO:** Use the shared vocabulary (`modelValue`, `bordered`, `copyable`, `autoplay`, `kind`, `severity`, `size`)
 - ✅ **DO:** Use descriptive event names
 - ❌ **DON'T:** Use overly generic prop names
 - ❌ **DON'T:** Mutate props directly
@@ -478,7 +401,7 @@ If your component needs Vue Router:
 
 - ✅ **DO:** Use the webkit token + `data-*` styling conventions
 - ✅ **DO:** Support custom classes via `attrs.class` (`useAttrs()` with `inheritAttrs: false`; do not declare `class` as a prop)
-- ✅ **DO:** Use Tailwind CSS utility classes
+- ✅ **DO:** Use Tailwind CSS utility classes with logical directions (`ms-`, `pe-`, `start-`, `text-end`)
 - ❌ **DON'T:** Hardcode colors or spacing
 - ❌ **DON'T:** Use inline styles
 
@@ -499,227 +422,95 @@ If your component needs Vue Router:
 
 ### 6. Error Handling
 
-- ✅ **DO:** Handle API errors gracefully
 - ✅ **DO:** Show user-friendly error messages
-- ✅ **DO:** Log errors to console in development
+- ✅ **DO:** Take every user-facing string from a prop or the message catalog (`useLocale()`)
 - ❌ **DON'T:** Let errors crash the component
 - ❌ **DON'T:** Expose internal errors to users
 
 ### 7. Documentation
 
-- ✅ **DO:** Add JSDoc comments for complex logic
-- ✅ **DO:** Document component props and events
-- ✅ **DO:** Provide usage examples
-- ❌ **DON'T:** Over-comment obvious code
-- ❌ **DON'T:** Leave outdated comments
+- ✅ **DO:** Document every public prop with a one-line JSDoc
+- ✅ **DO:** Provide runnable examples in `examples/<export>/`
+- ❌ **DON'T:** Write prose comments in implementation code ([`rules/comments.md`](../rules/comments.md))
 
 ---
 
 ## Component Creation Checklist
 
-When creating a new component, ensure you've completed all requirements:
-
-### Core Components
-
-- [ ] Create directory: `src/core/<category>/<component-name>/`
-- [ ] Create Vue component: `<component-name>.vue`
-- [ ] Use `<script setup>` syntax
-- [ ] Define props with types and defaults
-- [ ] Define events with `defineEmits()`
-- [ ] Integrate VeeValidate (for form components)
-- [ ] Add `data-testid` attributes
-- [ ] Add export to main `package.json`
-- [ ] Test component in consuming application
-
-### Regular Components
-
-- [ ] Create directory: `src/components/<component-name>/`
-- [ ] Create Vue component: `<component-name>.vue`
-- [ ] Use `<script setup>` syntax
-- [ ] Define props with types and defaults
-- [ ] Define events with `defineEmits()`
-- [ ] Add `data-testid` attributes
-- [ ] Add export to main `package.json`
-- [ ] Test component in consuming application
+- [ ] Spec approved: `.specs/<name>.md`
+- [ ] Create directory: `src/components/<category>/<name>/`
+- [ ] Create Vue component: `<name>.vue` with `<script setup lang="ts">`
+- [ ] Type props (with JSDoc) and events; primary value through `defineModel`
+- [ ] Add the `data-testid` fallback `<category>-<name>`
+- [ ] Add the export to `package.json`
+- [ ] Add the browser test `<name>.test.ts`
+- [ ] Add the story and `examples/<name>/`
+- [ ] Rebuild the catalog: `node scripts/build-catalog.mjs`
 
 ### Vue Router Components (Additional)
 
 - [ ] Import and use Vue Router composables
 - [ ] Handle router unavailability gracefully
 - [ ] Add vue-router to peerDependencies (if required)
-- [ ] Document router dependency
 - [ ] Test with and without router context
 
 ---
 
 ## Examples
 
-### Example: Simple Core Form Component
+### Example: Form screen with `Field`
 
 ```vue
-<script setup>
-  import { computed, ref, toRef, useAttrs } from 'vue'
-  import { useField } from 'vee-validate'
-  import Input from '@aziontech/webkit/input'
-  import Label from '../label/label.vue'
-
-  const emit = defineEmits(['blur', 'input'])
-  const props = defineProps({
-    name: {
-      type: String,
-      required: true
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
-  })
-
-  const inputRef = ref(null)
-  const name = toRef(props, 'name')
-  const attrs = useAttrs()
-
-  const customTestId = computed(() => {
-    const id = attrs['data-testid'] || 'field-simple'
-
-    return {
-      label: `${id}__label`,
-      input: `${id}__input`,
-      error: `${id}__error-message`
-    }
-  })
-
-  const {
-    value: inputValue,
-    errorMessage,
-    handleBlur,
-    handleChange
-  } = useField(name, undefined, {
-    initialValue: props.value
-  })
-
-  defineExpose({ inputRef })
-</script>
-
-<template>
-  <div>
-    <Label
-      v-if="props.label"
-      :for="props.name"
-      :data-testid="customTestId.label"
-      :label="props.label"
-    />
-    <Input
-      v-model="inputValue"
-      ref="inputRef"
-      :data-testid="customTestId.input"
-      :id="name"
-      :name="name"
-      :disabled="disabled"
-      :placeholder="props.placeholder"
-      :class="{ 'p-invalid': errorMessage }"
-      @input="handleChange"
-      @blur="handleBlur"
-    />
-    <small
-      v-if="errorMessage"
-      class="p-error"
-      :data-testid="customTestId.error"
-    >
-      {{ errorMessage }}
-    </small>
-  </div>
-</template>
-```
-
-### Example: Regular Component with API Integration
-
-```vue
-<script setup>
-  import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+  import { ref } from 'vue'
   import Button from '@aziontech/webkit/button'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import Switch from '@aziontech/webkit/switch'
 
-  const props = defineProps({
-    apiUrl: {
-      type: String,
-      required: true
-    }
-  })
-
-  const emit = defineEmits(['data-loaded', 'error'])
-
-  const loading = ref(false)
-  const data = ref(null)
-  const error = ref(null)
-
-  async function fetchData() {
-    loading.value = true
-    error.value = null
-
-    try {
-      const response = await fetch(props.apiUrl)
-      const result = await response.json()
-      data.value = result
-      emit('data-loaded', result)
-    } catch (err) {
-      error.value = err.message
-      emit('error', err)
-      console.error(err)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  onMounted(() => {
-    fetchData()
-  })
+  const name = ref('')
+  const active = ref(true)
+  const error = ref('')
 </script>
 
 <template>
-  <div class="data-component">
-    <div v-if="loading">Loading...</div>
-    <div
-      v-else-if="error"
-      class="p-error"
-    >
-      Error: {{ error }}
-    </div>
-    <div v-else-if="data">
-      {{ data }}
-    </div>
-    <Button
-      @click="fetchData"
-      label="Refresh"
-    />
-  </div>
+  <PageHeader
+    title="Edit application"
+    description="Changes apply to every domain."
+  />
+  <Field
+    required
+    :invalid="Boolean(error)"
+  >
+    <Field.Label>Name</Field.Label>
+    <Input v-model="name" />
+    <Field.Error>{{ error }}</Field.Error>
+  </Field>
+  <Field orientation="horizontal">
+    <Switch v-model="active" />
+    <Field.Content>
+      <Field.Label>Active</Field.Label>
+      <Field.Description>Inactive applications answer 503.</Field.Description>
+    </Field.Content>
+  </Field>
+  <Button label="Save" />
 </template>
 ```
 
 ### Example: Component with Vue Router
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import { useRouter } from 'vue-router'
   import Button from '@aziontech/webkit/button'
 
-  const props = defineProps({
-    to: {
-      type: String,
-      required: true
-    },
-    label: {
-      type: String,
-      required: true
-    }
-  })
+  const props = defineProps<{
+    /** Route to open. */
+    to: string
+    /** Visible label text. */
+    label: string
+  }>()
 
   const router = useRouter()
 
@@ -730,9 +521,9 @@ When creating a new component, ensure you've completed all requirements:
 
 <template>
   <Button
+    kind="outlined"
     :label="label"
     @click="navigate"
-    outlined
   />
 </template>
 ```
@@ -753,8 +544,9 @@ When creating a new component, ensure you've completed all requirements:
 
 **Solution:**
 
-1. Verify component exists in correct directory
-2. Check `package.json` export in main package.json
+1. Check the v6 name: a retired name (`paginator`, `input-text`, `field-text`, …) is not exported any more
+2. Verify the component exists in its category folder
+3. Check the `package.json` export
 
 ### Vue Router Not Available
 
@@ -763,13 +555,12 @@ When creating a new component, ensure you've completed all requirements:
 **Solution:**
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import { getCurrentInstance } from 'vue'
 
   const instance = getCurrentInstance()
   const router = instance?.appContext.config.globalProperties.$router
 
-  // Provide fallback behavior
   const handleClick = () => {
     if (router) {
       router.push('/path')
@@ -785,16 +576,17 @@ When creating a new component, ensure you've completed all requirements:
 ## Additional Resources
 
 - [Vue 3 Composition API](https://vuejs.org/api/composition-api-setup.html)
-- [VeeValidate Documentation](https://vee-validate.logaretm.com/v4/)
 - [Vue Router Documentation](https://router.vuejs.org/)
+- [shadcn/ui Field](https://ui.shadcn.com/docs/components/field)
+- [`MIGRATION-v6.md`](../../packages/webkit/MIGRATION-v6.md)
 
 ---
 
 ## Webkit Layer Pattern (in-depth)
 
-This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/webkit/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../src/components/webkit/actions/button/button.vue), [icon-button.vue](../src/components/webkit/actions/icon-button/icon-button.vue), [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue).
+This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/webkit/src/components/actions/button/button.vue), [icon-button.vue](../../packages/webkit/src/components/actions/icon-button/icon-button.vue), [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue).
 
-> **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
+> **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../../packages/webkit/package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
 
 ### 1. Source of truth: `DESIGN.md`
 
@@ -906,7 +698,7 @@ This unlocks state-driven styling without computed class strings:
 
 ### 2.7. `cn` helper (tailwind-merge)
 
-> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../package.json). The helper lives at [`src/utils/cn.ts`](../src/utils/cn.ts) and is exported as `@aziontech/webkit/utils/cn`.
+> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../../packages/webkit/package.json). The helper lives at [`src/utils/cn.js`](../../packages/webkit/src/utils/cn.js) and is exported as `@aziontech/webkit/utils/cn`.
 
 The naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
 
@@ -949,7 +741,7 @@ Naming pattern: `<ComponentName><PropName>` — `ButtonKind`, `ButtonSize`, `Dia
 When the component justifies Composition Pattern, ship the **complete anatomy** — each meaningful part is its own public sub-component. Reference anatomies:
 
 - **Dialog:** `Dialog` (root) + `DialogTrigger` (as-child) + `DialogPortal` (teleport) + `DialogOverlay` (backdrop) + `DialogContent` (panel) + `DialogTitle` + `DialogDescription` + `DialogClose` (as-child).
-- **Tabs:** `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`.
+- **Tabs:** `Tabs` + `Tabs.List` + `Tabs.Item` + `Tabs.Panel`.
 - **Accordion:** `Accordion` + `AccordionItem` + `AccordionTrigger` + `AccordionContent`.
 - **DropdownMenu:** `DropdownMenu` + `DropdownMenuTrigger` + `DropdownMenuContent` + `DropdownMenuItem` + `DropdownMenuSeparator` + `DropdownMenuLabel`.
 - **Card:** `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`.
@@ -959,7 +751,7 @@ When the component justifies Composition Pattern, ship the **complete anatomy** 
 One folder per sub-component, file name preserves the full prefix, and the shared `injection-key.ts` lives at the root of the component (sibling of the root `.vue`).
 
 ```
-packages/webkit/src/components/webkit/overlay/dialog/
+packages/webkit/src/components/overlay/dialog/
 ├── dialog.vue
 ├── injection-key.ts
 ├── dialog-trigger/
@@ -983,22 +775,22 @@ packages/webkit/src/components/webkit/overlay/dialog/
 Conventions:
 
 - **Folder per sub-component, file keeps the full prefix** (`dialog-trigger/dialog-trigger.vue`, never `dialog-trigger/index.vue`). Reasons: (a) unambiguous error traces — stack frames show `dialog-trigger.vue`, not 27 different `index.vue` lines; (b) easier grep by file name; (c) editor breadcrumbs stay legible.
-- **Public export path stays flat.** `packages/webkit/package.json#exports` keeps `./overlay/dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/webkit/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
+- **Public export path stays flat.** `packages/webkit/package.json#exports` keeps `./dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
 - **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
 - **`as-child`** enabled on `Trigger` and `Close` variants.
 - **`data-state`** exposed on Root + Content for state-driven styling.
-- Each public sub-component receives an entry in `package.json#exports` (`./overlay/dialog`, `./overlay/dialog-trigger`, …). The Storybook story for the root component covers the composition anatomy through the spec's `## Usage` block (which renders the full tree) — there is no separate `WithComposition` story by default.
+- Each public sub-component receives an entry in `package.json#exports` (`./dialog`, `./dialog-trigger`, …). The Storybook story for the root component covers the composition anatomy through the spec's `## Usage` block (which renders the full tree) — there is no separate `WithComposition` story by default.
 
 ### 3. Composition Pattern — só quando faz sentido
 
-- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
-- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `Tabs.List` + `Tabs.Item` + `Tabs.Panel`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
+- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
 - **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
 
 ### 3.1. `data-testid` hierárquico (BEM-style)
 
-Convention established by [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue):
+Convention established by [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue):
 
 - **Root:** fallback derived from the component name — `const testId = computed(() => attrs['data-testid'] ?? '<category>-<name>')`. Examples: `'action-button'`, `'content-card-pricing'`, `'overlay-dialog'`.
 - **Children:** `${testId}__<part>` with **two underscores**. Common parts: `__header`, `__title`, `__description`, `__content`, `__footer`, `__actions`, `__action`, `__close`, `__loading`, `__icon`, `__panel`, `__backdrop`, `__error-message`.
@@ -1007,7 +799,7 @@ Convention established by [card-pricing.vue](../src/components/webkit/content/ca
 
 ### 4. Class structure (sharedClasses/kindClasses/sizeClasses/disabledClasses/rootClasses)
 
-For interactive components with variants (button-like), follow [button.vue](../src/components/webkit/actions/button/button.vue) with typed maps:
+For interactive components with variants (button-like), follow [button.vue](../../packages/webkit/src/components/actions/button/button.vue) with typed maps:
 
 - `sharedClasses` (array) with base layout, transitions, focus-visible, pseudo-element setup.
 - `kindClasses: Record<Kind, string>` mapping each variant to its token combination.
@@ -1015,7 +807,7 @@ For interactive components with variants (button-like), follow [button.vue](../s
 - `disabledClasses` (string) overriding interactive state.
 - `rootClasses` computed merges all of the above with `attrs.class`.
 
-For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [card-pricing.vue](../src/components/webkit/content/card-pricing/card-pricing.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
+For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
 
 ### 5. Estados via pseudo-elements `before:`
 
@@ -1027,11 +819,11 @@ before:opacity-0 before:transition-opacity before:content-['']
 hover:before:opacity-100 active:before:opacity-100
 ```
 
-And `kindClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../src/components/webkit/actions/button/button.vue#L65-L69).
+And `kindClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../../packages/webkit/src/components/actions/button/button.vue#L65-L69).
 
 ### 6. Polimorfismo `<a>` / `<button>`
 
-When the component is interactive and accepts `href`, derive `isAnchor` and render `<a>` or `<button>`. Always set `rel="noopener noreferrer"` when `target="_blank"`. Example: [button.vue:111-161](../src/components/webkit/actions/button/button.vue#L111-L161).
+When the component is interactive and accepts `href`, derive `isAnchor` and render `<a>` or `<button>`. Always set `rel="noopener noreferrer"` when `target="_blank"`. Example: [button.vue:111-161](../../packages/webkit/src/components/actions/button/button.vue#L111-L161).
 
 ### 7. Capturando tokens do Figma
 
@@ -1041,8 +833,8 @@ Before creating or updating a component, invoke the `/component-create` skill wh
 
 Reusable utilities never live inline:
 
-- **Logic:** composables in [packages/webkit/src/composables/](../src/composables/) (`use-toast`, `use-dialog`).
-- **Utility sub-components:** [packages/webkit/src/components/webkit/utils/](../src/components/webkit/utils/) (`spinner`, reused in button and icon-button).
+- **Logic:** composables in [packages/webkit/src/composables/](../../packages/webkit/src/composables/) (`use-controllable`, `use-locale`, `use-direction`).
+- **Utility sub-components:** [packages/webkit/src/components/utils/](../../packages/webkit/src/components/utils/) (`spinner`, reused in button and icon-button).
 - **Global CSS / animations:** `packages/theme/src/`.
 
 Sweep these locations before implementing. Create a new utility only when nothing existing fits, and always in a shared location.
@@ -1075,7 +867,7 @@ Every token used must work in both modes of `@aziontech/theme`. The Storybook st
 
 ### 12. Figma Code Connect
 
-> **Status: available today.** `@figma/code-connect` is installed in [`packages/webkit/package.json`](../package.json) and the project config lives at [`packages/webkit/figma.config.json`](../figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
+> **Status: available today.** `@figma/code-connect` is installed in [`packages/webkit/package.json`](../../packages/webkit/package.json) and the project config lives at [`packages/webkit/figma.config.json`](../../packages/webkit/figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
 
 For every new component, generate `<name>.figma.ts` next to the `.vue` mapping Figma variants (`kind`, `size`, `state`) → Vue props, Figma slots → Vue children, and the code snippet shown in the Dev Mode inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
 
@@ -1201,7 +993,7 @@ export const Types = {
         <Component kind="primary" label="Button" />
         <Component kind="secondary" label="Button" />
         <Component kind="outlined" label="Button" />
-        <Component kind="text" label="Button" />
+        <Component kind="transparent" label="Button" />
       </div>
     `
   }),

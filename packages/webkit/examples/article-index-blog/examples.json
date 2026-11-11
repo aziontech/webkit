@@ -7,5 +7,19 @@
       "summary": "The Blog list at rest. Pick a category or type in the search field to narrow it; when nothing matches, the list and its button are left out.",
       "file": "default.vue"
     }
-  ]
+  ],
+  "site": [
+    {
+      "name": "AllArticles",
+      "summary": "The Blog page's list at rest: All articles selected and no search, rows in the byline layout, and the load-more button.",
+      "file": "site-all-articles.vue",
+      "json": "site-all-articles.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Listings/ArticleIndexBlog",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["AllArticles", "AllArticlesJson"]
 }

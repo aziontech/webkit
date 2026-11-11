@@ -16,7 +16,7 @@ Usage:
   npx @aziontech/webkit report [options] [patterns...]
   npx @aziontech/webkit canary
   npx @aziontech/webkit sync [options]
-  npx @aziontech/webkit migrate v6 [--dry-run]
+  npx @aziontech/webkit migrate v6 [--dry-run] [--from <major>]
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
@@ -27,6 +27,8 @@ Commands:
                    this webkit version's templates.
   migrate v6      Rewrite this project for the v6 major: renamed imports and components,
                    renamed props and values; lists removed components to replace by hand.
+                   --from <major> sets the version the project is on (read from
+                   package.json, or detected from v3-only imports, when omitted).
 
 Options (init):
   --dry-run       Print the plan without writing anything.
@@ -67,7 +69,7 @@ const KNOWN_FLAGS = new Set([
   '-h',
   '--help'
 ])
-const VALUE_FLAGS = new Set(['--format', '--fail-on'])
+const VALUE_FLAGS = new Set(['--format', '--fail-on', '--from'])
 
 function parseArgs(argv) {
   const args = argv.slice(2)
@@ -101,6 +103,7 @@ function parseArgs(argv) {
     help: flags.has('-h') || flags.has('--help'),
     format: values['--format'],
     failOn: values['--fail-on'],
+    from: values['--from'],
     patterns: positionals,
     check: flags.has('--check'),
     force: flags.has('--force'),
@@ -287,7 +290,7 @@ function printPlan(plan) {
   }
 }
 
-function runMigrate(projectDir, target, { dryRun }) {
+function runMigrate(projectDir, target, { dryRun, from }) {
   const version = Number(String(target || '').replace(/^v/i, ''))
   if (!SUPPORTED_VERSIONS.includes(version)) {
     process.stderr.write(
@@ -295,7 +298,12 @@ function runMigrate(projectDir, target, { dryRun }) {
     )
     return 1
   }
-  const results = planMigrate(projectDir, { version, dryRun })
+  const fromMajor = from == null ? null : Number(String(from).replace(/^v/i, ''))
+  if (fromMajor != null && !Number.isInteger(fromMajor)) {
+    process.stderr.write(`--from takes a major version, such as 3 or v5 (got ${from})\n`)
+    return 1
+  }
+  const results = planMigrate(projectDir, { version, dryRun, fromMajor })
   let changed = 0
   let manual = 0
   for (const { file, changes, warnings } of results) {
@@ -370,7 +378,7 @@ async function run(argv) {
   }
 
   if (command === 'migrate') {
-    return runMigrate(projectDir, parsed.patterns[0], { dryRun })
+    return runMigrate(projectDir, parsed.patterns[0], { dryRun, from: parsed.from })
   }
 
   if (command === 'sync') {

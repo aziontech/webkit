@@ -2,7 +2,7 @@
 name: storybook-write
 description: Write a minimal `.stories.js` for a webkit component using the canonical Button.stories.js shape. Stories are Default + one composite story per multi-option axis (Types / Sizes / Icons / …) + one story per mutually-exclusive state (Loading / Disabled / Filled / Invalid) — never one-story-per-variant. Give `parameters.docs.description.component` a short prose lead from `## Purpose`, keep `parameters.docs` a plain object literal, and give every story an explicit `source.code: toSfc(IMPORT, TEMPLATE)` (from `apps/storybook/src/stories/_shared/story-source.js`) so the Docs "Show code" panel is always a single runnable PascalCase SFC. See `.claude/rules/storybook-source.md`.
 status: active
-last_updated: 2026-06-24
+last_updated: 2026-11-11
 scope: webkit
 enforced_by: [storybook-source, naming]
 ---
@@ -228,7 +228,8 @@ Do NOT use Storybook's dynamic source (`source.transform` / `source.type: 'dynam
      <Component kind="primary" label="Button" />
      <Component kind="secondary" label="Button" />
      <Component kind="outlined" label="Button" />
-     <Component kind="text" label="Button" />
+     <Component kind="transparent" label="Button" />
+     <Component kind="danger" label="Button" />
    </div>`
 
    export const Types = {
@@ -282,6 +283,7 @@ Do NOT use Storybook's dynamic source (`source.transform` / `source.type: 'dynam
 ## Rules
 
 - **No HEX / Tailwind palette / raw typography** in story templates (some stories embed markup for slots).
+- **v6 names and vocabulary in every template and `IMPORT` line.** Import the v6 export (`pagination`, `tabs`, `card`, `alert`, `separator`, `progress`, `command`, `dropdown-menu`, `input`, `number-input`, `password-input`, `radio-cards`, `resizable`, `toggle-group`; the retired names are in `packages/webkit/src/cli/migrations/v6.json`). A labelled control is `Field` around the plain control (`<Field><Field.Label>…</Field.Label><Input v-model="value" /><Field.Description>…</Field.Description></Field>`), never a `field-*` wrapper. Bind the primary value with `v-model` (never `v-model:value`); write `kind="transparent"` (never `kind="text"`), `severity="danger"` (never `error`), `bordered`, `copyable`, `autoplay`, `mobileColumns`. A page heading, section heading, resource tab strip, settings band or row, save bar or confirm dialog in a story is `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar` or `ConfirmDialog`, not hand-built markup.
 - **No Figma references.** Do NOT add `parameters.design`, `parameters.figma`, links to Figma frames in `docs.description.component` / `docs.description.story`, or imports from `@storybook/addon-designs` / `storybook-addon-designs`. The Figma link is owned by `<name>.figma.ts` (Code Connect), not the story. Full rationale: [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md).
 - **`docs.description.component` is a short prose lead from `## Purpose`** — one or two sentences. Do NOT embed the spec's `## Usage` block (or any static code snippet) in the description; the runnable usage comes from the "Show code" panel. No marketing copy, no design history, no Figma URLs.
 - **Surface usage via an explicit `source.code`, not a pasted snippet.** Keep `parameters.docs` a plain object literal (meta-level `description.component` + `canvas.sourceState: 'shown'`); give **every** story `docs.source.code: toSfc(IMPORT, TEMPLATE)` from the same `const` it renders. **Never use `docs.source.transform` / `source.type: 'dynamic'`, never set `docs` to a function call, and never emit a lowercase/kebab tag** — the snippet must be a single runnable SFC whose tags match the PascalCase import. Enforced by `validate-story-source.mjs`; full rule in [`.claude/rules/storybook-source.md`](../../rules/storybook-source.md). Never paste the `## Usage` code into `description.component`, `description.story`, JSDoc, or a comment.

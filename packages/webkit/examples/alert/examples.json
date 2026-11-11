@@ -1,5 +1,5 @@
 {
-  "component": "message",
+  "component": "alert",
   "title": "Components/Primitives/Feedback/Alert",
   "examples": [
     {

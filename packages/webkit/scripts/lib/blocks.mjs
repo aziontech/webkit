@@ -75,10 +75,11 @@ export function readExamples(pkgRoot, knownSubpaths) {
   const out = {}
   if (!existsSync(root)) return out
   for (const sub of readdirSync(root).sort()) {
-    if (!knownSubpaths.has(sub)) continue
     const manifestPath = join(root, sub, 'examples.json')
     if (!existsSync(manifestPath)) continue
     const manifest = JSON.parse(readText(manifestPath))
+    const id = manifest.component || sub
+    if (!knownSubpaths.has(id)) continue
     const list = (manifest.examples || [])
       .map((e) => ({
         name: e.name,
@@ -87,7 +88,7 @@ export function readExamples(pkgRoot, knownSubpaths) {
       }))
       .filter((e) => e.sfc && e.sfc.length <= EXAMPLE_MAX_CHARS)
       .slice(0, EXAMPLES_PER_COMPONENT)
-    if (list.length) out[sub] = list
+    if (list.length) out[id] = list
   }
   return out
 }

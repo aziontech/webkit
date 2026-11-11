@@ -1,5 +1,5 @@
 {
-  "component": "divider",
+  "component": "separator",
   "title": "Components/Primitives/Layout/Separator",
   "examples": [
     {
