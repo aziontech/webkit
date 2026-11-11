@@ -75,6 +75,7 @@ export default campaignPage({
   extra: [
     {
       section: 'CapabilityGrid',
+      eyebrow: 'Benefícios',
       title: 'Benefícios Exclusivos para Clientes de Retail',
       items: [
         {
@@ -96,7 +97,8 @@ export default campaignPage({
       ]
     },
     {
-      section: 'ProcessScroll',
+      section: 'ProcessSteps',
+      eyebrow: 'Passo a passo',
       title: 'Como Funciona?',
       ariaLabel: 'Etapas do programa',
       steps: [
@@ -118,6 +120,7 @@ export default campaignPage({
     },
     {
       section: 'CapabilityGrid',
+      eyebrow: 'Vantagens',
       title: 'Por que Escolher a Azion?',
       columns: 4,
       items: [

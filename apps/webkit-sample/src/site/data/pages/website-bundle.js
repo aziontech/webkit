@@ -3,6 +3,7 @@ import { markRaw } from 'vue'
 
 import { productWidget } from '../../ui/product-widget'
 import { BLOG_FEATURED } from '../blog.js'
+import { CAREERS_PROCESS } from '../careers-home.js'
 import { cliBand } from '../cli-band.js'
 import { PLATFORM_ARCHITECTURE_BAND } from '../product-architectures.js'
 import {
@@ -412,7 +413,15 @@ export const WEBSITE_BUNDLE_PAGE = [
 
   HOME_SOLUTIONS_BAND,
   pick(CAREERS_HOME_PAGE, 'PhotoMarquee'),
-  pick(CAREERS_HOME_PAGE, 'StickyCarousel'),
+  {
+    section: 'ProcessSteps',
+    eyebrow: CAREERS_PROCESS.eyebrow,
+    title: CAREERS_PROCESS.title,
+    titleKind: 'centered',
+    description: CAREERS_PROCESS.description,
+    steps: CAREERS_PROCESS.steps,
+    ariaLabel: 'Hiring process stages'
+  },
   pick(HOME_PAGE, 'FeatureTiles'),
   {
     section: 'FeatureScroll',

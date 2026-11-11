@@ -34,7 +34,7 @@ import NetworkSection from './NetworkSection.vue'
 import PhotoMarquee from './PhotoMarquee.vue'
 import PlatformDirectory from './PlatformDirectory.vue'
 import PricingPlans from './PricingPlans.vue'
-import ProcessScroll from './ProcessScroll.vue'
+import ProcessSteps from './ProcessSteps.vue'
 import QuoteBand from './QuoteBand.vue'
 import RecognitionMarquee from './RecognitionMarquee.vue'
 import ResourceGrid from './ResourceGrid.vue'
@@ -81,7 +81,7 @@ export const SECTIONS: Record<string, Component> = {
   PhotoMarquee,
   PlatformDirectory,
   PricingPlans,
-  ProcessScroll,
+  ProcessSteps,
   QuoteBand,
   RecognitionMarquee,
   ResourceGrid,

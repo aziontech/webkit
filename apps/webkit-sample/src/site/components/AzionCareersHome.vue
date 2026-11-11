@@ -24,7 +24,7 @@
   } from '../data/careers-home.js'
   import { COMPANY_CLOSING } from '../data/product-pages.js'
   import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
-  import ProcessScroll from '../ui/sections/ProcessScroll.vue'
+  import ProcessSteps from '../ui/sections/ProcessSteps.vue'
   import SpinningGlobe from '../ui/SpinningGlobe.vue'
 
   const router = useRouter()
@@ -170,7 +170,7 @@
 
     <SectionGap hatch />
 
-    <ProcessScroll
+    <ProcessSteps
       :title="CAREERS_PROCESS.title"
       :description="CAREERS_PROCESS.description"
       :steps="CAREERS_PROCESS.steps"

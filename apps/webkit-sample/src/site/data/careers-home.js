@@ -19,6 +19,7 @@ export const CAREERS_VISION = {
 }
 
 export const CAREERS_PROCESS = {
+  eyebrow: 'How we hire',
   title: 'Hiring process',
   description: 'Every role goes through the same five stages, from the first request to the offer.',
   steps: [
