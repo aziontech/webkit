@@ -111,13 +111,17 @@ Dims the page behind the open drawer.
 
 Holds the `Sidebar`, labelled `aria-label="Navigation"`; choosing an item closes it.
 
+### X. Run toast — `Toast` (required)
+
+One `Toaster` (the default export of `@aziontech/webkit/toast`) mounted with the page, `position="bottom-right"`, raised through `toast` with one id per run so each state replaces the last. Its default slot renders each entry as `Toast.Item` with `Toast.Title` and `Toast.Description`, and gives every outcome toast two `Toast.Action`s, **Edit** and **Redeploy**, beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.
+
 ## Do
 
 - Keep the run, its timer and its outcome outside the page component (a small module-scope store), so leaving the page never cancels it or loses the result.
 - Show progress as a `loading` toast (no duration, not closable) that follows the user through the app while the run lasts.
 - Report the end wherever the user is, on success and on failure. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
 - Give both toasts the same two actions: **Edit** for the item that was deployed, and **Redeploy**.
-- On the page that started the run, show the outcome inline as well: a danger `Alert` with the reason and Redeploy over the stopped logs, or a success `Alert` naming the new address with Open service.
+- On the page that started the run, show the outcome inline as well, with the same two actions as the toast: a danger `Alert` with the reason, **Edit** and **Redeploy** over the stopped logs, or a success `Alert` naming the new address with **Edit**, **Redeploy** and **Open service**.
 - Disable Deploy and the controls that would change the run while it is in progress, with Deploy in `loading`.
 
 ## Don't
@@ -127,9 +131,6 @@ Holds the `Sidebar`, labelled `aria-label="Navigation"`; choosing an item closes
 - Don't point the toast at a list of runs ("View deployments"); it carries **Edit** and **Redeploy**.
 - Don't block the page with a modal or overlay while the run is in progress; the whole point is that the user can leave.
 - Don't claim an outcome before the server confirms it; the heading reads `Deploying` until it does.
-- Known gap: the toast is not plotted in this block. The SFC mounts no `Toaster` and its run state lives in the page component, so the progress, failure and success toasts are described here but not shown.
-- Known gap: the Failed variant's `Alert` carries `Redeploy` and `View deployments`; the pattern is `Edit` and `Redeploy`. The Succeeded variant's `Alert` carries only `Open service`.
-- Known gap: the simulation copy (`Simulation — how this deploy ends`, `leave the page — the toast follows you`) uses em dashes, against `skills/webkit-microcopy`.
 
 ## Copy
 
@@ -138,9 +139,10 @@ Holds the `Sidebar`, labelled `aria-label="Navigation"`; choosing an item closes
 - **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about 25 seconds.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`
 - **Failure toast:** what failed and why, then the ways out: `web-app wasn't deployed.` / `The routing rules were refused.` Actions: `Edit`, `Redeploy`.
-- **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.net.` Actions: `Edit`, `Redeploy`.
-- **Failure Alert:** the reason the server gave, as a full sentence, with `Redeploy`.
-- **Success Alert:** names the address and the attempts: `web-app is live at web-app.example.net. It took 1 attempt.`, with `Open service`.
+- **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.com.` Actions: `Edit`, `Redeploy`.
+- **Failure Alert:** the reason the server gave, as full sentences, with `Edit` and `Redeploy`.
+- **Success Alert:** names the address and the attempts: `web-app is live at web-app.example.com. It took 1 attempt.`, with `Edit`, `Redeploy` and `Open service`.
+- **Simulation panel:** a colon, never a dash: `Simulation: how this deploy ends`.
 - **Actions:** `Deploy`, `Redeploy` (never "Retry deploy" or "Try again"), `Edit`, `Open service`.
 
 ## Accessibility
@@ -155,9 +157,9 @@ Holds the `Sidebar`, labelled `aria-label="Navigation"`; choosing an item closes
 ## States
 
 - Idle: nothing running; the heading reads Idle and the `EmptyState` offers Deploy.
-- Running: mid-run; the heading reads Deploying, the simulation controls are disabled, Deploy shows `loading` and the logs card streams under the Building status.
-- Failed: the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Redeploy and View deployments, and the logs stay open on the failed step.
-- Succeeded: the run is live; the heading reads Deployed and the success `Alert` names the new address with Open service; the logs card is gone.
+- Running: mid-run; the heading reads Deploying, the simulation controls are disabled, Deploy shows `loading`, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
+- Failed: the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs stay open on the failed step.
+- Succeeded: the run is live; the heading reads Deployed, the success `Alert` names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
 
 ## Related
 

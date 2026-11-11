@@ -65,7 +65,7 @@ A footer fixed under the scrolling region, on the page's own measure, with an op
 
 - **Title and breadcrumb:** the create label, verb first with the entity's capitalization, e.g. "Create Domain". Identical to the button that opened the page.
 - **Description:** one sentence on what the resource is, e.g. "A domain holds the DNS records that answer authoritatively for a hostname."
-- **Section titles:** the domain, not the widget, e.g. "General", "Target", "Delivery Settings", "Advanced".
+- **Section titles:** the domain, not the widget, e.g. "General", "Target", "Delivery settings", "Advanced".
 - **Row descriptions:** a full sentence with a period, saying what the value does, e.g. "Identifies the domain in this list. It is not the hostname."
 - **Submit:** one verb, e.g. "Save", "Purge", "Deploy". Cancel is always exactly "Cancel".
 - **Required message:** "This field is required."
@@ -83,8 +83,8 @@ A footer fixed under the scrolling region, on the page's own measure, with an op
 
 ## States
 
-- Default: the Create Domain page at rest; General holds Name and Domain Name, Advanced is collapsed, the bar shows Import, Cancel and Save.
-- CreatePurge: a Target band of radio choice cards for Layer and Purge Type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
+- Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Import, Cancel and Save.
+- CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create in five groups of rows over a full-bleed sticky `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
 - ImportFromGit: the same job inside the platform shell with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.

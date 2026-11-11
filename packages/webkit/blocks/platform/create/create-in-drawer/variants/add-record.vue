@@ -25,25 +25,25 @@
   const recordTypes = [
     {
       value: 'A',
-      label: 'A - IPv4 Address',
+      label: 'A - IPv4 address',
       placeholder: '192.0.2.1',
       valueHelper: 'Accepts an IPv4 address.'
     },
     {
       value: 'AAAA',
-      label: 'AAAA - IPv6 Address',
+      label: 'AAAA - IPv6 address',
       placeholder: '2001:db8::1',
       valueHelper: 'Accepts an IPv6 address.'
     },
     {
       value: 'CNAME',
-      label: 'CNAME - Canonical Name',
+      label: 'CNAME - Canonical name',
       placeholder: 'example.com',
       valueHelper: 'Accepts a single hostname.'
     },
     {
       value: 'MX',
-      label: 'MX - Mail Exchange',
+      label: 'MX - Mail exchange',
       placeholder: '10 mail.example.com',
       valueHelper: 'Accepts a priority and a mail server, e.g. 10 mail.example.com.'
     },
@@ -218,7 +218,7 @@
 
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
                     <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Label for="record-ttl">TTL (seconds)</Label>
+                      <Label for="record-ttl">TTL in seconds</Label>
                     </div>
                     <NumberInput
                       id="record-ttl"
@@ -323,7 +323,8 @@
                     <HelperText
                       id="record-weight-helper"
                       kind="helper"
-                      >Relative weight (0–255) for this record within the weighted set.</HelperText
+                      >Relative weight for this record within the weighted set, from 0 to
+                      255.</HelperText
                     >
                   </div>
                 </div>
@@ -335,7 +336,7 @@
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
               <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
               <Button
-                label="Save"
+                label="Add Record"
                 kind="primary"
                 size="medium"
                 :loading="submitting"

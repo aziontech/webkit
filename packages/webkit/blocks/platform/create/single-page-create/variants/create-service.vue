@@ -18,19 +18,19 @@
   import Switch from '@aziontech/webkit/switch'
   import { computed, reactive, ref } from 'vue'
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'In Page create' }]
+  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'In-page create' }]
 
   const protocolUsageOptions = [
     {
       value: 'http',
       label: 'HTTP support',
-      description: 'Use only the HTTP protocol. Choose from the available HTTP ports.'
+      description: 'Use only the HTTP protocol. Select from the available HTTP ports.'
     },
     {
       value: 'https',
       label: 'HTTP and HTTPS support',
       description:
-        'Use both HTTP and HTTPS protocols. Choose from the available HTTP and HTTPS ports.'
+        'Use both HTTP and HTTPS protocols. Select from the available HTTP and HTTPS ports.'
     },
     {
       value: 'http3',
@@ -40,12 +40,12 @@
     }
   ]
   const httpPortOptions = [
-    { label: '80 (Default)', value: '80' },
+    { label: '80, default', value: '80' },
     { label: '8080', value: '8080' },
     { label: '8008', value: '8008' }
   ]
   const httpsPortOptions = [
-    { label: '443 (Default)', value: '443' },
+    { label: '443, default', value: '443' },
     { label: '8443', value: '8443' }
   ]
   const protocolPolicyOptions = [
@@ -157,7 +157,7 @@
             class="mx-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
-            <legend class="sr-only">Create service</legend>
+            <legend class="sr-only">Create Service</legend>
 
             <section class="flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
@@ -196,15 +196,15 @@
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                Delivery Settings
+                Delivery settings
               </p>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <SettingRow title="Protocol Usage">
+                    <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Protocol Usage</legend>
+                          <legend class="sr-only">Protocol usage</legend>
                           <Field.Label
                             v-for="option in protocolUsageOptions"
                             :key="option.value"
@@ -276,7 +276,7 @@
                           v-model="form.httpsPorts"
                           size="large"
                           class="w-full"
-                          placeholder="443 (Default)"
+                          placeholder="443"
                           :disabled="!httpsEnabled"
                           :display-value="portsLabel(httpsPortOptions)"
                         >
@@ -304,7 +304,7 @@
                 <template #content>
                   <Item.List>
                     <SettingRow
-                      title="Origin Type"
+                      title="Origin type"
                       description="The origin type is pre-defined and can't be customized."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
@@ -312,18 +312,18 @@
                           model-value="Single Origin"
                           size="large"
                           class="w-full"
-                          aria-label="Origin Type"
+                          aria-label="Origin type"
                           readonly
                         />
                       </div>
                     </SettingRow>
                     <SettingRow
-                      title="Protocol Policy"
+                      title="Protocol policy"
                       description="Select the protocol used between the cache servers and the origin."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Protocol Policy</legend>
+                          <legend class="sr-only">Protocol policy</legend>
                           <Field.Label
                             v-for="option in protocolPolicyOptions"
                             :key="option.value"
@@ -403,15 +403,15 @@
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                Cache Expiration Policies
+                Cache expiration policies
               </p>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <SettingRow title="Browser Cache Settings">
+                    <SettingRow title="Browser cache settings">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Browser Cache Settings</legend>
+                          <legend class="sr-only">Browser cache settings</legend>
                           <Field.Label
                             v-for="option in browserCacheOptions"
                             :key="option.value"
@@ -436,7 +436,10 @@
                         </fieldset>
                       </div>
                     </SettingRow>
-                    <SettingRow title="Maximum TTL (seconds)">
+                    <SettingRow
+                      title="Maximum TTL"
+                      description="In seconds."
+                    >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <NumberInput
                           v-model="form.browserMaxTtl"
@@ -476,8 +479,8 @@
                       </div>
                     </SettingRow>
                     <SettingRow
-                      title="Maximum TTL (seconds)"
-                      description="Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds."
+                      title="Maximum TTL"
+                      description="In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <NumberInput
@@ -495,7 +498,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug Rules</p>
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug rules</p>
               <Card :padded="false">
                 <template #content>
                   <Item.List>

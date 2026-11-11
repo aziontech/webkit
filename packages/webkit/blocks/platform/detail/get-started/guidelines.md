@@ -50,7 +50,7 @@ One `CodeBlock` per step with `:show-line-numbers="false"` and a `copy-aria-labe
 ## Copy
 
 - **Section title:** "Get started".
-- **Description:** one sentence that names the choice, then the docs link, e.g. "Two ways to build and deploy this resource. Pick one and follow the steps, or read the CLI docs."
+- **Description:** one sentence that names the choice, then the docs link, e.g. "Two ways to build and deploy this resource. Select one and follow the steps, or read the CLI docs."
 - **Path options:** the tool names as their makers write them, e.g. "CLI", "GitHub Actions".
 - **Step titles:** verb first, sentence case, no period, e.g. "Install the CLI", "Link your project", "Push to deploy".
 - **Step descriptions:** one or two sentences that say what the step does and why, e.g. "Authenticate, then link the local project to this resource so every deploy lands on it."

@@ -35,7 +35,7 @@
   const zone = { name: 'main-zone', domain: 'example.com' }
 
   const tabs = [
-    { value: 'main-settings', label: 'Main Settings' },
+    { value: 'main-settings', label: 'Main settings' },
     { value: 'records', label: 'Records' }
   ]
 
@@ -54,7 +54,7 @@
       description: 'Specifies the algorithm used to generate the DNSSEC key.'
     },
     {
-      label: 'Digest Type',
+      label: 'Digest type',
       value: '2 (SHA-256)',
       description: 'Indicates the hash function used for the DNSSEC digest.'
     },
@@ -396,14 +396,14 @@
                         </SettingRow>
 
                         <SettingRow
-                          title="Domain Name"
+                          title="Domain name"
                           description="Provide the domain name you want to host. Example: example.com."
                         >
                           <Input
                             v-model="settings.domain"
                             size="large"
                             class="w-full"
-                            aria-label="Domain Name"
+                            aria-label="Domain name"
                             autocomplete="off"
                             :required="!!errors.domain"
                             :aria-describedby="errors.domain ? domainMessageId : undefined"
@@ -476,7 +476,7 @@
                       <ItemList>
                         <SettingRow
                           title="Enable DNSSEC"
-                          description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the Key Tag and Digest values in your domain provider to complete the setup."
+                          description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
                           kind="compact"
                         >
                           <Switch
@@ -698,7 +698,7 @@
                                     mode="range"
                                     size="medium"
                                     :show-fields="false"
-                                    placeholder="Pick a range"
+                                    placeholder="Select a range"
                                     class="w-full"
                                     @update:model-value="commitCustom"
                                   />
@@ -712,8 +712,8 @@
                                       class="w-full"
                                       :placeholder="
                                         activeField
-                                          ? 'Filter ' + activeField.label.toLowerCase() + '…'
-                                          : 'Filter by…'
+                                          ? 'Search ' + activeField.label.toLowerCase()
+                                          : 'Search fields'
                                       "
                                       :aria-label="
                                         activeField

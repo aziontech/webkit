@@ -35,13 +35,13 @@
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'lastModified', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
   const filterFields = [
     { id: 'lastEditor', label: 'Author' },
     { id: 'type', label: 'Type' },
-    { id: 'modified', label: 'Last Modified' }
+    { id: 'modified', label: 'Last modified' }
   ]
   const seed = [
     {
@@ -459,6 +459,7 @@
     submitting.value = false
   })
 
+  const formEl = ref(null)
   const submit = async () => {
     if (submitting.value) return
     if (view.value === 'JSON') {
@@ -467,7 +468,15 @@
       await nextTick()
     }
     submitted.value = true
-    if (!isValid.value || scopes.some(scopeMissing)) return
+    if (!isValid.value || scopes.some(scopeMissing)) {
+      await nextTick()
+      formEl.value
+        ?.querySelector(
+          ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
+        )
+        ?.focus()
+      return
+    }
     submitting.value = true
     await new Promise((resolve) => setTimeout(resolve, 900))
     const scope = scopePayload()
@@ -502,8 +511,8 @@
           <Button
             label="Create Variable"
             icon="pi pi-plus"
-            kind="outlined"
-            size="medium"
+            kind="primary"
+            size="large"
             @click="drawerOpen = true"
           />
         </template>
@@ -543,7 +552,7 @@
                               v-model="filterQuery"
                               size="medium"
                               class="w-full"
-                              placeholder="Filter by…"
+                              placeholder="Search fields"
                               aria-label="Search filter fields"
                             >
                               <template #iconLeft>
@@ -859,6 +868,7 @@
         <DrawerOverlay />
         <DrawerContent>
           <form
+            ref="formEl"
             class="flex min-h-0 flex-1 flex-col"
             aria-label="Create Variable"
             novalidate

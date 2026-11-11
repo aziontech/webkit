@@ -320,6 +320,7 @@
     submitting.value = false
   })
 
+  const formEl = ref(null)
   const submit = async () => {
     if (submitting.value) return
     if (view.value === 'JSON') {
@@ -328,7 +329,15 @@
       await nextTick()
     }
     submitted.value = true
-    if (!isValid.value || scopes.some(scopeMissing)) return
+    if (!isValid.value || scopes.some(scopeMissing)) {
+      await nextTick()
+      formEl.value
+        ?.querySelector(
+          ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
+        )
+        ?.focus()
+      return
+    }
     submitting.value = true
     await new Promise((resolve) => setTimeout(resolve, 900))
     const scope = scopePayload()
@@ -355,8 +364,8 @@
         <Button
           label="Create Variable"
           icon="pi pi-plus"
-          kind="outlined"
-          size="medium"
+          kind="primary"
+          size="large"
           class="w-full"
         />
       </div>
@@ -365,6 +374,7 @@
       <DrawerOverlay />
       <DrawerContent>
         <form
+          ref="formEl"
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Create Variable"
           novalidate

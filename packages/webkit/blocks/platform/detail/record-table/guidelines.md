@@ -19,11 +19,11 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per tab, Main Settings first and Records second. Each tab panel scrolls on its own under the bar. See `skills/webkit-navigation`.
+A full-bleed `PageTabs` with one `Tabs.Item` per tab, Main settings first and Records second. Each tab panel scrolls on its own under the bar. See `skills/webkit-navigation`.
 
 ### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingRow`, `Input`, `HelperText` (required)
 
-Main Settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `HelperText` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `HelperText` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
@@ -75,12 +75,12 @@ An outlined small ellipsis `IconButton` named Row actions opens a menu placed `b
 - Don't put a primary or large Create button in the Records heading; it is `Add Record`, outlined.
 - Don't validate on first render or on blur; the form is quiet until Save.
 - Don't make nameservers or digests editable text the user could change by accident.
-- Don't save Main Settings from a button inside each section; one save bar covers the whole form.
+- Don't save Main settings from a button inside each section; one save bar covers the whole form.
 - Don't let the records table scroll the page sideways.
 
 ## Copy
 
-- **Tabs:** short nouns, e.g. "Main Settings", "Records".
+- **Tabs:** short nouns, e.g. "Main settings", "Records".
 - **Section titles:** a noun or a short instruction, e.g. "General", "Configure your nameserver".
 - **Row descriptions:** one sentence that ends with a period, e.g. "Give a unique and descriptive name to identify your zone."
 - **Required error:** "This field is required."
@@ -100,13 +100,13 @@ An outlined small ellipsis `IconButton` named Row actions opens a menu placed `b
 
 ## States
 
-- MainSettings: the Main Settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
+- MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
 
 ## Related
 
 - `platform/view/table-view` — the index this page is opened from, and the source of the controls row recipe.
-- `platform/edit/edit-resource` — the settings form and save bar pattern used by Main Settings.
+- `platform/edit/edit-resource` — the settings form and save bar pattern used by Main settings.
 - `platform/detail/attached-resources` — a short related list inside a settings section.
 - `platform/delete/delete-with-confirmation` — the dialog behind the row menu's Delete.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.

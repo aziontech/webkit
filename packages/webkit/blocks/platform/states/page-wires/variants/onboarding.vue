@@ -4,7 +4,17 @@
 </script>
 
 <template>
-  <main class="layout-column layout-boundary relative flex min-h-full flex-col">
+  <main
+    aria-busy="true"
+    class="layout-column layout-boundary relative flex min-h-full flex-col"
+  >
+    <p
+      role="status"
+      aria-live="polite"
+      class="sr-only"
+    >
+      Loading Home.
+    </p>
     <div
       class="flex min-h-full flex-col justify-center gap-(--layout-section-gap) py-(--spacing-xl)"
       aria-hidden="true"

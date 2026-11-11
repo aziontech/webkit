@@ -89,7 +89,7 @@
         {
           slug: 'preact-starter',
           title: 'Preact Starter',
-          description: 'Deploy a Preact app — the React API in a fraction of the bundle.',
+          description: 'Deploy a Preact app: the React API in a fraction of the bundle.',
           icon: 'ai ai-preact',
           markClass: ''
         },
@@ -104,7 +104,7 @@
     },
     {
       id: 'starters',
-      label: 'Starter Templates',
+      label: 'Starter templates',
       kind: 'list',
       items: [
         {
@@ -223,7 +223,7 @@
     },
     {
       id: 'frameworks',
-      label: 'All Frameworks',
+      label: 'All frameworks',
       kind: 'list',
       items: [
         {
@@ -237,7 +237,7 @@
         {
           slug: 'nitro-starter',
           title: 'Nitro Starter',
-          description: 'Deploy a Nitro server build — the engine behind Nuxt, on its own.',
+          description: 'Deploy a Nitro server build, the engine behind Nuxt, on its own.',
           vendor: '',
           icon: 'pi pi-server',
           markClass: ''
@@ -277,7 +277,7 @@
         {
           slug: 'hugo-starter',
           title: 'Hugo Starter',
-          description: 'Publish a Hugo site — thousands of pages built in seconds.',
+          description: 'Deploy a Hugo site with thousands of pages built in seconds.',
           vendor: '',
           icon: 'ai ai-hugo',
           markClass: ''
@@ -325,7 +325,7 @@
         {
           slug: 'javascript-starter',
           title: 'JavaScript Starter',
-          description: 'Run plain JavaScript — no framework, just a handler.',
+          description: 'Run plain JavaScript with no framework, only a handler.',
           vendor: '',
           icon: 'ai-cor ai-js',
           markClass: ''
@@ -446,7 +446,7 @@
           >
             <template #description>
               Start from a repository or use a framework template. You can also drag and drop your
-              project, or choose a
+              project, or select a
               <button
                 type="button"
                 class="text-link cursor-pointer"
@@ -486,7 +486,7 @@
                         <EmptyState
                           size="medium"
                           title="Connect your repository"
-                          description="Choose a Git provider to connect your repository and start the deployment process."
+                          description="Select a Git provider to connect your repository and start the deployment process."
                           class="w-full"
                         >
                           <template #icon>
@@ -568,7 +568,7 @@
                             value="__add-account__"
                             icon="pi pi-plus-circle"
                           >
-                            Add GitHub Account
+                            Add GitHub account
                           </Select.Option>
                         </Select.Content>
                       </Select>
@@ -578,8 +578,8 @@
                       <Input
                         v-model="search"
                         size="large"
-                        placeholder="Search project or enter a Git Repository URL"
-                        aria-label="Search project or enter a Git Repository URL"
+                        placeholder="Search projects or enter a Git repository URL"
+                        aria-label="Search projects or enter a Git repository URL"
                         class="w-full"
                       >
                         <template #iconLeft>
@@ -696,7 +696,7 @@
                   class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)"
                 >
                   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    Start from Template
+                    Start from template
                   </p>
 
                   <div class="flex shrink-0 items-center">
@@ -714,7 +714,7 @@
                 <div class="flex lg:min-h-0 lg:flex-1">
                   <ScrollArea
                     fade
-                    aria-label="Start from Template results"
+                    aria-label="Start from template results"
                     class="w-full"
                   >
                     <div class="pb-(--spacing-xxs) pe-(--spacing-xxs)">

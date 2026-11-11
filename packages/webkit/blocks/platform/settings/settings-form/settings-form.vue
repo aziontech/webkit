@@ -27,7 +27,7 @@
   import Switch from '@aziontech/webkit/switch'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const navGroups = [
     {
@@ -172,7 +172,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -187,11 +187,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -232,15 +232,15 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'ItemGroup settings' }]
+  const breadcrumb = [{ label: 'Account settings', href: '/account' }, { label: 'Profile' }]
 
-  const activeId = ref('forms')
+  const activeId = ref('')
   const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
@@ -296,12 +296,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -337,13 +337,14 @@
   ]
   const labelOf = (list) => (value) => list.find((option) => option.value === value)?.label ?? ''
 
-  const form = reactive({
+  const saved = ref({
     fullName: 'Alex Morgan',
     email: 'name@example.com',
     timezone: 'america-sao_paulo',
     language: 'en',
     productUpdates: true
   })
+  const form = reactive({ ...saved.value })
   const submitted = ref(false)
   const submitting = ref(false)
 
@@ -355,11 +356,21 @@
   const submit = () => {
     if (submitting.value) return
     submitted.value = true
-    if (!isValid.value) return
+    if (!isValid.value) {
+      nextTick(() => document.getElementById(nameEmpty.value ? 'full-name' : 'email')?.focus())
+      return
+    }
     submitting.value = true
     setTimeout(() => {
+      saved.value = { ...form }
+      submitted.value = false
       submitting.value = false
     }, 900)
+  }
+
+  const cancel = () => {
+    Object.assign(form, saved.value)
+    submitted.value = false
   }
 </script>
 
@@ -532,7 +543,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -543,7 +554,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -569,7 +580,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -783,7 +794,7 @@
           <div class="layout-column-form layout-boundary flex flex-1 flex-col">
             <PageHeader
               title="Profile"
-              description="Define and manage personal account preferences and profile config. Topic sections of Item rows, each titled by a section heading, saved as a single unit."
+              description="Define and manage personal account preferences."
               size="small"
               title-id="profile-title"
             />
@@ -800,17 +811,18 @@
                   <template #content>
                     <Item.List>
                       <SettingRow
-                        title="Full Name"
+                        title="Full name"
                         description="The name shown across your account."
                       >
                         <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                           <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <Input
+                              id="full-name"
                               v-model="form.fullName"
                               size="large"
                               :disabled="submitting"
                               class="w-full"
-                              aria-label="Full Name"
+                              aria-label="Full name"
                               :required="submitted && nameEmpty"
                               :aria-describedby="
                                 submitted && nameEmpty ? 'full-name-error' : undefined
@@ -832,6 +844,7 @@
                         <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                           <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <Input
+                              id="email"
                               v-model="form.email"
                               type="email"
                               size="large"
@@ -961,6 +974,7 @@
                 kind="outlined"
                 size="medium"
                 :disabled="submitting"
+                @click="cancel"
               />
               <Button
                 label="Save"
@@ -1046,7 +1060,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1057,7 +1071,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1083,7 +1097,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

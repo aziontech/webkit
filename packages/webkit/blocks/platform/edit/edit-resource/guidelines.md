@@ -13,7 +13,7 @@ The settings page of one existing resource. The user comes here to change how th
 - Creating the resource for the first time: use `platform/create/single-page-create`, which shares this field list.
 - Account or organization settings outside one resource: use `platform/settings/settings-form`.
 - A resource whose content is code or a document: use `platform/edit/code-editor`.
-- Deleting the resource: the Danger Zone action opens `platform/delete/delete-with-confirmation`.
+- Deleting the resource: the Danger zone action opens `platform/delete/delete-with-confirmation`.
 - A short list of attached records inside a section: use `platform/detail/attached-resources` as that section's body.
 
 ## Building blocks
@@ -30,9 +30,9 @@ A full-bleed `PageTabs` with one `Tabs.Item` per tab, Settings last. A first-lev
 
 A small `PageHeader` titled Settings with one sentence about what these settings cover. It sits at the top of the form column, inside the scrolling region.
 
-### D. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch` (required)
+### D. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `HelperText`, `Switch` (required)
 
-One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsSection` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingRow`s. Text values are large `Input`s; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger Zone last. See `skills/webkit-form`.
+One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsSection` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `HelperText` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
 
 ### E. Locked settings — `Tooltip`, `Switch` (optional)
 
@@ -48,7 +48,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Disable the whole fieldset while saving, not each field separately.
 - Give every section a short hint that says what it controls, and an anchor so a link can land on it.
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
-- Put destructive actions in a Danger Zone section at the end, never in the save bar.
+- Put destructive actions in a Danger zone section at the end, never in the save bar.
 - Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
 
 ## Don't
@@ -79,8 +79,8 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 ## States
 
 - ProjectSettings: a project's Settings tab with General, Modules and Subscription modules; the save bar is hidden until an edit.
-- DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced Settings and the Danger Zone.
-- PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug Rules and Status.
+- DeployableSettings: a deployable resource's Settings tab with General, Domains, collapsed Advanced settings and the Danger zone, whose Delete resource opens the type-to-confirm `ConfirmDialog` of `platform/delete/delete-with-confirmation`.
+- PolicySettings: a security policy's Settings tab with General, Modules with one locked on, Debug rules and Status.
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
@@ -90,6 +90,6 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - `shells/console` — the platform shell around this page.
 - `platform/create/single-page-create` — the create page that shares this field list.
 - `platform/detail/attached-resources` — the Domains section body in DeployableSettings.
-- `platform/delete/delete-with-confirmation` — the dialog behind the Danger Zone action.
+- `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
 - `platform/settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.

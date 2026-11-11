@@ -151,7 +151,7 @@
               >
                 <p class="flex items-baseline gap-(--spacing-xxs)">
                   <span class="text-heading-lg tabular-nums text-(--text-default)">
-                    {{ overall.score === null ? '–' : formatScore(overall.score) }}
+                    {{ overall.score === null ? '—' : formatScore(overall.score) }}
                   </span>
                   <span class="text-body-sm text-(--text-muted)">/ 100</span>
                 </p>
@@ -171,7 +171,7 @@
                 :format-value="formatScore"
                 :height="200"
                 :empty-title="'No samples in ' + phrase"
-                empty-description="Scores appear once devices report their first samples. Choose a longer period."
+                empty-description="Scores appear once devices report their first samples. Select a longer period."
                 :loading="loading"
               >
                 <Chart.Grid />
@@ -289,7 +289,7 @@
               size="small"
               icon="pi pi-chart-bar"
               :title="'No samples in ' + phrase"
-              description="Each application gets a row once its first sample arrives. Choose a longer period."
+              description="Each application gets a row once its first sample arrives. Select a longer period."
             />
           </ChartCard.Content>
         </ChartCard>
@@ -301,6 +301,7 @@
       >
         <template #content>
           <Item.List
+            key="item.list-1"
             v-if="loading"
             aria-busy="true"
           >
@@ -331,7 +332,10 @@
               </Item.Content>
             </Item>
           </Item.List>
-          <Item.List v-else-if="incidents.length">
+          <Item.List
+            key="item.list-2"
+            v-else-if="incidents.length"
+          >
             <Item
               v-for="incident in incidents"
               :key="incident.id"

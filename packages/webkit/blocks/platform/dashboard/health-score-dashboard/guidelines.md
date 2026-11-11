@@ -67,7 +67,7 @@ One strip per application, one block per hour colored by band, with an `aria-lab
 ### J. Empty regions — `EmptyState` (required)
 
 Every region names the period and what fills it: `No samples in the last 24 hours` /
-`Scores appear once devices report their first samples. Choose a longer period.`
+`Scores appear once devices report their first samples. Select a longer period.`
 
 ### K. Open incidents — `Card` (required)
 

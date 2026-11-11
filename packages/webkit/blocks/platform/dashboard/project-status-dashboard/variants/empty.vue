@@ -9,6 +9,7 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -38,15 +39,15 @@
   const sprints = [
     {
       value: 'sprint-6',
-      label: 'Sprint 6 · Oct 27 – Nov 7'
+      label: 'Sprint 6 · Oct 27 to Nov 7'
     },
     {
       value: 'sprint-5',
-      label: 'Sprint 5 · Oct 13 – Oct 24'
+      label: 'Sprint 5 · Oct 13 to Oct 24'
     },
     {
       value: 'sprint-4',
-      label: 'Sprint 4 · Sep 29 – Oct 10'
+      label: 'Sprint 4 · Sep 29 to Oct 10'
     }
   ]
 
@@ -165,55 +166,54 @@
 
 <template>
   <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-w-0 flex-col gap-(--spacing-lg)">
-      <header class="flex min-w-0 flex-col gap-(--spacing-md)">
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-          <h1 class="text-balance text-heading-sm text-(--text-default)">Project status</h1>
-          <p class="text-pretty text-body-sm text-(--text-muted)">
-            Progress, milestones and risks for the selected project and sprint.
-          </p>
-        </div>
-        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
-          <div class="w-full sm:w-fit sm:min-w-48">
-            <Select
-              v-model="project"
-              size="medium"
-              class="w-full"
-              :display-value="labelOf(projects)"
-            >
-              <Select.Trigger aria-label="Project" />
-              <Select.Content>
-                <Select.Option
-                  v-for="option in projects"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Option>
-              </Select.Content>
-            </Select>
+    <main class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <PageHeader
+        title="Project status"
+        description="Progress, milestones and risks for the selected project and sprint."
+      >
+        <template #actions>
+          <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-sm)">
+            <div class="w-full sm:w-fit sm:min-w-48">
+              <Select
+                v-model="project"
+                size="medium"
+                class="w-full"
+                :display-value="labelOf(projects)"
+              >
+                <Select.Trigger aria-label="Project" />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in projects"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </div>
+            <div class="w-full sm:w-fit sm:min-w-64">
+              <Select
+                v-model="sprint"
+                size="medium"
+                class="w-full"
+                :display-value="labelOf(sprints)"
+              >
+                <Select.Trigger aria-label="Sprint" />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in sprints"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </div>
           </div>
-          <div class="w-full sm:w-fit sm:min-w-64">
-            <Select
-              v-model="sprint"
-              size="medium"
-              class="w-full"
-              :display-value="labelOf(sprints)"
-            >
-              <Select.Trigger aria-label="Sprint" />
-              <Select.Content>
-                <Select.Option
-                  v-for="option in sprints"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Option>
-              </Select.Content>
-            </Select>
-          </div>
-        </div>
-      </header>
+        </template>
+      </PageHeader>
 
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
         <li

@@ -23,13 +23,18 @@ model.
 
 ## Building blocks
 
-### A. Edit layout, Done and Reset layout — `Button` (required)
+### A. Page heading — `PageHeader` (required)
+
+Title `Traffic overview` and one sentence on what the page shows, over the rest of the page in the standard
+`layout-column`.
+
+### B. Edit layout, Done and Reset layout — `Button` (required)
 
 `Edit layout` (outlined) turns editing on and becomes `Done` (primary) with `aria-pressed` reflecting
 the mode. `Reset layout` (transparent) appears only once the layout differs from the default. While
 editing, one line of help sits beside the buttons: how to drag, resize and use the keyboard.
 
-### B. Cards — `ChartCard` (required)
+### C. Cards — `ChartCard` (required)
 
 Each card binds `v-model:span` and `v-model:height`, snaps to whole columns between 3 and 12 and to a
 height between 280 and 720 pixels, and turns on `draggable` and `resizable` only while editing. In edit
@@ -37,25 +42,25 @@ mode the header shows `ChartCard.DragHandle` and the card shows `ChartCard.Resiz
 `aria-label` naming the card (`Move Requests over time`, `Resize Requests over time`). The header
 keeps only the title and its hint; no menus or toggles compete with the handles.
 
-### C. Card definitions — `Hint` (required)
+### D. Card definitions — `Hint` (required)
 
 One sentence beside each title that defines the metric.
 
-### D. Span while editing — `Tag` (required in edit mode)
+### E. Span while editing — `Tag` (required in edit mode)
 
 Shows the card's span (`6/12`) in the header controls while editing, so a resize has a visible result
 without counting grid lines.
 
-### E. Split cards — `DonutChart` (optional)
+### F. Split cards — `DonutChart` (optional)
 
 A share of a whole (for example requests by region). Renders its own loading and empty state inside
 the card.
 
-### F. Ranked cards — `BarList` (optional)
+### G. Ranked cards — `BarList` (optional)
 
 A ranked list sorted descending (top sources). Renders its own loading and empty state.
 
-### G. Time series cards — `Chart` (optional)
+### H. Time series cards — `Chart` (optional)
 
 Bars, area or line over time. All time series share one `active-index`, so hovering a moment moves the
 crosshair on every card. A legend with totals appears only when a card has more than one series.
@@ -79,6 +84,7 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## Copy
 
+- **Title:** `Traffic overview`. **Description:** `Requests, regions, errors and response time for the period, in the layout you set.`
 - **Mode button:** `Edit layout`, then `Done`. Never `Save`; changes apply as they happen.
 - **Reset:** `Reset layout`.
 - **Help line:** two short sentences on how, no layout positions. `Drag a card by its handle to move it, or by its corner to resize it. Focus a handle to use the arrow keys.`

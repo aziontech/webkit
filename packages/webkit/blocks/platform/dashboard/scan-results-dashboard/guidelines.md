@@ -83,7 +83,7 @@ size and dates in tabular figures.
 ### N. Empty regions — `EmptyState` (required)
 
 `No verdict yet` / `Verdicts appear once the first item finishes its analysis.` in the donut,
-`No item yet` in sources, and `No matching items` / `Change the search or the filters.` in the table.
+`No items yet` in sources, and `No matching items` / `Change the search or the filters.` in the table.
 
 ### O. Verdict — `Tag` (required)
 

@@ -23,19 +23,19 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 ### B. Panel header — `PanelHeader`, `DrawerTitle`, `DrawerClose` (required)
 
-`DrawerTitle` reads Deploy, or Build and Deployment while a version is being built first. `DrawerClose` on the right; no Cancel anywhere.
+`DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. `DrawerClose` on the right; no Cancel anywhere.
 
 ### C. Sections — `PanelContent`, `SettingsSection` (required)
 
-`PanelContent` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects Impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
+`PanelContent` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `Popover`, `Input`, `Avatar`, `Button` (required)
 
-`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change Version, an outlined small `Button`, opens a `Popover` with a search `Input`, the versions with an Active `Tag` and the author `Avatar`, and a transparent Load more `Button`. Disable Change Version when there is nothing to change to.
+`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `Popover` with a search `Input`, the versions with an Active `Tag` and the author `Avatar`, and a transparent Load more `Button`. Disable Change version when there is nothing to change to.
 
 ### E. Dependencies — `Accordion`, `Item`, `Tag`, `Popover` (required)
 
-A small `Accordion` below the resource rows, collapsed, listing the modules and integrations the service references, each with its own version and Change Version popover. Dependencies go out with the deploy, so they are shown even when the user does not change them.
+A small `Accordion` below the resource rows, collapsed, listing the modules and integrations the service references, each with its own version and Change version popover. Dependencies go out with the deploy, so they are shown even when the user does not change them.
 
 ### F. Project — `ToggleGroup`, `Item`, `Tag`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
 
@@ -54,22 +54,22 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Show every resource and dependency with the version that will go out, even when the user changes nothing.
 - Preselect the last used project and environment, and say so with a tag.
 - List every project a shared Deployment Setting reaches before the user deploys, not after.
-- When no version is pinned, open as Build and Deployment with a Building row, keep the other sections faded and `inert`, and disable Deploy until the build lands.
+- When no version is pinned, open as Build and deployment with a Building row, keep the other sections faded and `inert`, and disable Deploy until the build lands.
 - On a project, warn with an `Alert` above the environments when its Deployment Settings also publish elsewhere.
 
 ## Don't
 
 - Don't deploy from a dialog, or ask for confirmation after Deploy; the drawer is the review.
 - Don't hide dependencies or impacted projects behind a second step.
-- Don't let Change Version list hundreds of versions at once; search plus Load more.
+- Don't let Change version list hundreds of versions at once; search plus Load more.
 - Don't add a second commit such as Save as draft; one Deploy.
 - Don't print the shared-settings warning on each impacted row; it belongs once, above them.
 
 ## Copy
 
-- **Trigger, title, commit:** "Deploy" on all three; "Build and Deployment" as the title only while a build runs first.
+- **Trigger, title, commit:** "Deploy" on all three; "Build and deployment" as the title only while a build runs first.
 - **Section hints:** one sentence on what the section decides, e.g. "The project whose domains serve the service."
-- **Version control:** "Change Version"; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
+- **Version control:** "Change version"; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
 - **Project modes:** "Use existing" and "Create new".
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
 - **Tags:** one or two words, e.g. "Ready", "Active", "Last used", "Selected", "New".
@@ -87,8 +87,8 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 ## States
 
-- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects Impacted.
-- Building: no pinned version; titled Build and Deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
+- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects impacted.
+- Building: no pinned version; titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
 - ServiceProjectFirst: the project-first flow; Resources, the Project card with the last used project and a Change popover, then every environment.
 - Project: deploying a project; its service and storage in Resources, Production and Preview, and a warning about other projects that share its storefront settings.
 

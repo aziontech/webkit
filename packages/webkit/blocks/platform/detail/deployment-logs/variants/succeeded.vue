@@ -9,7 +9,7 @@
   const steps = [
     {
       key: 'token',
-      title: 'Access Token',
+      title: 'Access token',
       description: 'Deploy token created and added to the CLI',
       status: 'done',
       duration: '3s',
@@ -42,7 +42,7 @@
     },
     {
       key: 'clone',
-      title: 'Clone Template',
+      title: 'Clone template',
       description: 'Template cloned into the GitHub scope',
       status: 'done',
       duration: '4s',
@@ -251,6 +251,14 @@
 
   const logView = ref('phased')
   const openStep = ref('deploy')
+
+  const stepStatusLabels = {
+    done: 'Done',
+    failed: 'Failed',
+    skipped: 'Skipped',
+    running: 'Running',
+    pending: 'Not started'
+  }
 </script>
 
 <template>
@@ -258,7 +266,7 @@
     <div
       class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment Logs</p>
+      <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</p>
       <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <Tag
           label="Completed"
@@ -307,6 +315,7 @@
                 class="size-3.5 rounded-full border border-dashed border-(--border-default)"
               />
             </span>
+            <span class="sr-only">{{ stepStatusLabels[step.status] }}</span>
             <span
               :data-state="step.status"
               class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"

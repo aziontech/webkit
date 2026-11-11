@@ -21,7 +21,7 @@ The profile page of a signed-in account, and the layout every account settings p
 
 ### B. Section — `SettingsSection` (required)
 
-One per group (General, Company information, Address information, Login Settings, Source control, Appearance, Danger Zone), each with a `hint` and an `anchor`.
+One per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor`.
 
 ### C. Section body — `Card` (required)
 
@@ -63,6 +63,14 @@ Row actions (`Manage`, `Connect` with an external-link icon), the `danger` Delet
 
 Rises with a motion-reduced transition once the form differs from the saved copy, and stays while saving: `You have unsaved changes.` with Discard and Save.
 
+### M. Field message — `HelperText` (conditional)
+
+Under Account name and Billing emails after Save: `required` when empty, `invalid` when an address is malformed, linked with `aria-describedby`. Save stops and focus moves to the first field in error.
+
+### N. Toasts — `Toaster` (required)
+
+Mounted once with the page. A save no field owns that fails is `toast.error` with Retry and keeps the changes; a successful save toasts `Profile saved.`
+
 ## Do
 
 - Disable the whole fieldset while saving and release it when the request ends, on success and on failure.
@@ -80,8 +88,11 @@ Rises with a motion-reduced transition once the form differs from the saved copy
 - **Section hints:** one sentence on what the group affects: `The company that owns the account, as it appears on every invoice.`
 - **Row titles:** sentence case nouns, product names capitalized: `Billing emails`, `GitHub`.
 - **Save bar:** `You have unsaved changes.` with `Discard` and `Save`.
-- **Destructive row:** one verb for the title and the button: `Delete personal account` with `Delete account`.
-- **Save failure:** unscoped failures go to `toast.error` with Retry: `Could not save the profile. Check your connection and try again.`
+- **Destructive row:** one verb for the title and the button: `Delete personal account` with `Delete account`. Never `Remove` for a permanent delete.
+- **Optional fields:** the description says it: `Optional. Apartment, suite or floor.`
+- **Field errors:** `This field is required.`, `Enter valid email addresses, separated by semicolons.`
+- **Save failure:** unscoped failures go to `toast.error` with Retry: `The profile wasn't saved.`, described by `The request didn't reach the server. Your changes are kept.`
+- **Save success:** `Profile saved.`
 
 ## Accessibility
 
@@ -91,12 +102,10 @@ Rises with a motion-reduced transition once the form differs from the saved copy
 
 ## States
 
-- Default: the profile filled from the account, save bar hidden until a saved field changes.
+- Default: the profile filled from the account, save bar hidden until a saved field changes. Saving with Account name set to `Offline` walks the failure toast; an empty Account name or a malformed billing address walks the field errors.
 
 ## Related
 
 - `platform/settings/settings-form` — the same rows for a resource's settings.
 - `platform/delete/delete-with-confirmation` — the Delete account confirmation.
 - `shells/console` — the shell this page renders in.
-
-Known gap: the SFC has no save failure path, mixes `Remove personal account` with `Delete account`, writes `Github` and `Gitlab`, and uses title case in some row titles (`Account Name`, `Login Settings`), against `skills/webkit-microcopy`.

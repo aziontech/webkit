@@ -30,13 +30,13 @@ A small outlined `IconButton` with the maximize icon at the header's end, `aria-
 
 ### D. Gate rows — `Item` (required)
 
-One small `Item` per gate, rendered as a full-width button: the gate's icon, its title and, at the end, a check when done. A done row takes the primary mask fill and a primary icon. Each row carries a screen-reader status, "Done" or "Not started".
+One small `Item` per gate, rendered as a full-width button: the gate's icon, its title and, at the end, a check when done. A done row takes the primary mask fill and a primary icon. Each row carries a screen-reader status, "Done" or "Not started", and opens the drawer like the expand button.
 
 ## Do
 
 - Order the gates by how much they matter for production; domain first.
 - Count done gates in the tag and keep the count in step with the rows.
-- In the drawer, give each open gate one outlined action named for what it adds, and replace it with a `Tag` naming what it now serves once done.
+- In the drawer, give each open gate one outlined action named for what it adds, and replace it once done with a Done `Tag` and a muted sentence naming what it now serves.
 - Collapse the card when every gate is done; keep the title, the success tag and the expand button.
 
 ## Don't
@@ -53,7 +53,8 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 - **Gate titles:** verb first, sentence case, no period, e.g. "Add a custom domain", "Enable a security policy".
 - **Gate descriptions (drawer):** one or two sentences on what the gate gives the service, e.g. "Answer 4xx and 5xx with your own page instead of the default response."
 - **Gate actions (drawer):** `Add <Module>` or a verb and noun, three words or fewer, e.g. "Add Domain", "Attach Policy", "Add Error Page".
-- **Done note:** what the gate now serves, ending with a period, e.g. "Serving shop.example.com."
+- **Done note:** a muted sentence beside the Done tag naming what the gate now serves, ending with a period, e.g. "Serving shop.example.com."; the tag itself reads "Done".
+- **Drawer description:** one plain sentence on where the service stands, e.g. "This service is live on a generated hostname. These steps take it to production."
 - Follow `skills/webkit-microcopy`: no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -68,7 +69,7 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 - Card: some gates done; the card lists every gate with the count in its tag.
 - Complete: every gate done; the tag reads Ready for production and the rows are gone.
-- DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or done tag, over a Done footer.
+- DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 
 ## Related
 

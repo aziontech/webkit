@@ -21,7 +21,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
-  import { reactive, ref } from 'vue'
+  import { nextTick, reactive, ref } from 'vue'
 
   const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'Error validation' }]
 
@@ -34,13 +34,13 @@
     {
       value: 'http',
       label: 'HTTP support',
-      description: 'Use only the HTTP protocol. Choose from the available HTTP ports.'
+      description: 'Use only the HTTP protocol. Select from the available HTTP ports.'
     },
     {
       value: 'https',
       label: 'HTTP and HTTPS support',
       description:
-        'Use both HTTP and HTTPS protocols. Choose from the available HTTP and HTTPS ports.'
+        'Use both HTTP and HTTPS protocols. Select from the available HTTP and HTTPS ports.'
     },
     {
       value: 'http3',
@@ -50,7 +50,7 @@
     }
   ]
   const httpPortOptions = [
-    { label: '80 (Default)', value: '80' },
+    { label: '80 (default)', value: '80' },
     { label: '8080', value: '8080' },
     { label: '8008', value: '8008' }
   ]
@@ -82,7 +82,7 @@
     hostHeader: ''
   })
   const originError = ref(
-    'Origin "web-origin-prod" no longer exists — another user deleted it while you were filling in this form, so the service wasn\'t created. Nothing else was lost: reload the origin list and select another one.'
+    'Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn\'t created. Nothing else was lost: reload the origin list and select another one.'
   )
   const submitting = ref(false)
   const reloadingOrigins = ref(true)
@@ -137,10 +137,10 @@
   }
 
   const validate = () => {
-    errors.name = form.name.trim() ? '' : 'This field is required.'
+    errors.name = form.name.trim() ? '' : 'Name is required.'
     errors.httpPorts = form.httpPorts.length ? '' : 'Select at least one HTTP port.'
-    errors.originId = form.originId ? '' : 'This field is required.'
-    errors.hostHeader = form.hostHeader.trim() ? '' : 'This field is required.'
+    errors.originId = form.originId ? '' : 'Select an origin.'
+    errors.hostHeader = form.hostHeader.trim() ? '' : 'Host header is required.'
     return !errors.name && !errors.httpPorts && !errors.originId && !errors.hostHeader
   }
 
@@ -149,9 +149,19 @@
     originError.value = ''
     if (!validate()) return
     if (!serverOrigins.value.includes(form.originId)) {
-      originError.value = `Origin "${originLabel(form.originId)}" no longer exists — another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.`
+      originError.value = `Origin "${originLabel(form.originId)}" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.`
       errors.originId = 'This origin no longer exists.'
+      focusOrigin()
     }
+  }
+
+  const focusOrigin = async () => {
+    await nextTick()
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document
+      .getElementById('ev-origin-heading')
+      ?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+    document.getElementById('ev-origin')?.focus({ preventScroll: true })
   }
 </script>
 
@@ -207,7 +217,7 @@
             class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
           >
             <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <p class="m-0 text-overline-sm text-(--text-muted)">Simulation — the other user</p>
+              <p class="m-0 text-overline-sm text-(--text-muted)">Simulation: the other user</p>
               <Tag
                 :label="
                   deletedByOtherUser
@@ -220,9 +230,9 @@
             </div>
             <p class="m-0 text-body-sm text-(--text-muted)">
               You are User 1: the service below is filled in and already linked to an origin, four
-              sections down. Have User 2 delete that origin through the API — nothing will tell you,
-              your copy of the list just goes stale. Then press Save, and watch the form take you to
-              the one section that needs you.
+              sections down. Have User 2 delete that origin through the API. Nothing will tell you,
+              your copy of the list goes stale. Then press Save, and watch the form take you to the
+              one section that needs you.
             </p>
             <div class="flex flex-wrap items-center gap-(--spacing-sm)">
               <Button
@@ -286,11 +296,11 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="Delivery Settings" />
+              <SectionHeader title="Delivery settings" />
               <Card :padded="false">
                 <template #content>
                   <Item.List>
-                    <SettingRow title="Protocol Usage">
+                    <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                           <legend class="sr-only">Protocol Usage</legend>
@@ -426,6 +436,7 @@
                   <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
                     <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
                       <h2
+                        id="ev-origin-heading"
                         class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
                       >
                         Origin
@@ -434,15 +445,15 @@
                   </div>
                 </div>
                 <div
-                  class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-150 ease-out has-[>div>div>*]:grid-rows-[1fr] motion-reduce:transition-none"
+                  class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance has-[>div>div>*]:grid-rows-[1fr] motion-reduce:transition-none"
                 >
                   <div class="min-w-0 overflow-hidden">
                     <div class="pt-(--spacing-sm)">
                       <Transition
-                        enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+                        enter-active-class="transition duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
                         enter-from-class="translate-y-2 opacity-0"
                         enter-to-class="translate-y-0 opacity-100"
-                        leave-active-class="transition duration-100 ease-in motion-reduce:transition-none"
+                        leave-active-class="transition duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                         leave-from-class="translate-y-0 opacity-100"
                         leave-to-class="-translate-y-2 opacity-0"
                       >
@@ -480,7 +491,7 @@
                             v-if="reloadingOrigins"
                             kind="shape"
                             width="100%"
-                            height="40px"
+                            height="var(--size-10)"
                             aria-label="Loading origins"
                           />
                           <template v-else>
@@ -558,8 +569,8 @@
                 <template #content>
                   <Item.List>
                     <SettingRow
-                      title="Browser Maximum TTL (seconds)"
-                      description="How long browsers may keep a cached response."
+                      title="Browser maximum TTL"
+                      description="How long browsers may keep a cached response, in seconds."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <NumberInput
@@ -573,8 +584,8 @@
                       </div>
                     </SettingRow>
                     <SettingRow
-                      title="Cache Maximum TTL (seconds)"
-                      description="How long the cache may keep a response. A secondary cache requires a TTL of at least 3 seconds."
+                      title="Cache maximum TTL"
+                      description="How long the cache may keep a response, in seconds. A secondary cache requires a TTL of at least 3 seconds."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <NumberInput
@@ -593,7 +604,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <SectionHeader title="Debug Rules" />
+              <SectionHeader title="Debug rules" />
               <Card :padded="false">
                 <template #content>
                   <Item.List>

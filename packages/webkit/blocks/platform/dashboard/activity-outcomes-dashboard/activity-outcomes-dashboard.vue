@@ -737,7 +737,7 @@
             <BarList
               :items="actors"
               :format-value="formatCount"
-              empty-title="No request in this time range"
+              empty-title="No requests in this time range"
               :loading="loading"
               aria-label="Requests by actor"
             />
@@ -756,7 +756,7 @@
               :items="categories"
               :format-value="formatCount"
               :color="2"
-              empty-title="No request in this time range"
+              empty-title="No requests in this time range"
               :loading="loading"
               aria-label="Requests by category"
             />
@@ -775,7 +775,7 @@
               :items="destinations"
               :format-value="formatCount"
               :color="3"
-              empty-title="No request in this time range"
+              empty-title="No requests in this time range"
               :loading="loading"
               aria-label="Requests by destination"
             />

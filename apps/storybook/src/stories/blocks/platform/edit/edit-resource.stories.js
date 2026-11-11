@@ -19,7 +19,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `Section` bands in the form column, each a heading with an anchor-link button and a `Hint` glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `Table`, `Tag`, `Tooltip`, `Alert`, `HelperText`, `Hint` and `Button`." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `Table`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`." } },
     webkit: {"block":"platform/edit/edit-resource","intents":["settings page","resource settings","settings tab","application settings","workload settings","firewall settings","edit settings","página de configurações","configurações do recurso","aba de configurações","save bar","unsaved changes bar","sticky save bar","discard and save","commit bar","barra de salvar","alterações não salvas","salvar alterações","edit resource","editar recurso"],"skills":["webkit-form","webkit-errors","webkit-layout","webkit-ux-heuristics"],"primary":"ProjectSettings"}
   }
 }
@@ -31,12 +31,12 @@ export const ProjectSettings = {
 
 export const DeployableSettings = {
   render: () => ({ components: { Block: State1 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced Settings band holding Deployment Settings, Protocol Settings and Mutual Authentication, and the Danger Zone. The bar sits under the page here, outside the tab’s own scroll region." }, source: { code: source1 } } }
+  parameters: { docs: { description: { story: "A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region." }, source: { code: source1 } } }
 }
 
 export const PolicySettings = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug Rules and Status." }, source: { code: source2 } } }
+  parameters: { docs: { description: { story: "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status." }, source: { code: source2 } } }
 }
 
 export const ResourceSettings = {
@@ -46,7 +46,7 @@ export const ResourceSettings = {
 
 export const UnsavedChanges = {
   render: () => ({ components: { Block: State4 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The policy Settings tab after Debug Rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves." }, source: { code: source4 } } }
+  parameters: { docs: { description: { story: "The policy Settings tab after Debug rules was switched on: the bar is up; Discard restores the record and the bar leaves, Save holds its loading state and then leaves." }, source: { code: source4 } } }
 }
 
 export const Saving = {

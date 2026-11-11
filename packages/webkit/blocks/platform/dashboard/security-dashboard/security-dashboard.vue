@@ -9,10 +9,11 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
@@ -225,417 +226,423 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-    <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
-      <li class="flex min-w-0 flex-col">
-        <StatTile
-          label="Requests blocked"
-          :value="requestsBlocked"
-          :format-value="formatCount"
-          :delta="requestsBlockedDelta"
-          delta-label="vs previous 24 hours"
-          inverse
-          :trend="requestsBlockedTrend"
-        >
-          <template #aside>
-            <Hint
-              text="Requests a security rule identified as attacks and blocked before they reached a service."
-            />
-          </template>
-        </StatTile>
-      </li>
-      <li class="flex min-w-0 flex-col">
-        <StatTile
-          label="Requests inspected"
-          :value="requestsInspected"
-          :format-value="formatCount"
-          :delta="requestsInspectedDelta"
-          delta-label="vs previous 24 hours"
-          :trend="requestsInspectedTrend"
-        >
-          <template #aside>
-            <Hint text="Requests checked against security rules across every service." />
-          </template>
-        </StatTile>
-      </li>
-      <li class="flex min-w-0 flex-col">
-        <StatTile
-          label="Block rate"
-          :value="blockRate"
-          :format-value="formatPercent"
-          :delta="blockRateDelta"
-          delta-label="vs previous 24 hours"
-          inverse
-          :trend="blockRateTrend"
-        >
-          <template #aside>
-            <Hint text="Share of inspected requests blocked as attacks." />
-          </template>
-        </StatTile>
-      </li>
-    </ul>
-    <div
-      class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
-    >
-      <ChartCard :span="8">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Matched requests over time</ChartCard.Title>
-            <Hint text="Requests that matched a rule: blocked, or logged and allowed through." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
-              />
-              <Tag
-                label="+19.01%"
-                severity="danger"
-                icon="pi pi-arrow-up-right"
-                size="small"
-              />
-              <ToggleGroup
-                v-model="form"
-                :options="forms"
-                size="small"
-                aria-label="Chart form for Matched requests over time"
-              />
-            </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Matched requests over time"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="transparent"
-                  size="small"
-                  aria-label="More options for Matched requests over time"
-                />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <Chart
-            v-model:active-index="activeIndex"
-            :series="matchedRequests"
-            :labels="labels"
+  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
+    <main class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <PageHeader
+        title="Security"
+        description="Requests your rules blocked and inspected, and the settings that need a decision."
+      />
+      <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
+        <li class="flex min-w-0 flex-col">
+          <StatTile
+            label="Requests blocked"
+            :value="requestsBlocked"
             :format-value="formatCount"
-            empty-title="No data available"
-            empty-description="Nothing was recorded in this period."
+            :delta="requestsBlockedDelta"
+            delta-label="vs previous 24 hours"
+            inverse
+            :trend="requestsBlockedTrend"
           >
-            <Chart.Grid />
-            <Chart.Axis kind="y" />
-            <Chart.Axis kind="x" />
-            <Chart.Bar
-              v-if="form === 'bar'"
-              stacked
-            />
-            <Chart.Line v-else />
-            <Chart.Crosshair />
-            <Chart.Tooltip />
-            <Chart.Legend totals />
-          </Chart>
-        </ChartCard.Content>
-      </ChartCard>
-      <ChartCard :span="4">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Needs attention</ChartCard.Title>
-            <Hint text="Settings and traffic on your services that ask for a decision." />
-          </span>
-          <ChartCard.Controls>
-            <Tag
-              :label="`${attention.length} open`"
-              severity="secondary"
-              size="small"
-            />
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <Item.List>
-            <Item
-              v-for="entry in attention"
-              :key="entry.id"
-              role="listitem"
-              kind="inline"
-              size="small"
-            >
-              <Item.Media>
-                <i
-                  :class="entry.icon"
-                  class="text-body-sm leading-none text-(--text-muted)"
-                  aria-hidden="true"
-                />
-              </Item.Media>
-              <Item.Content>
-                <Item.Title>{{ entry.title }}</Item.Title>
-                <Item.Description>{{ entry.description }}</Item.Description>
-                <span class="flex flex-wrap items-center gap-(--spacing-xs)">
-                  <Tag
-                    :label="entry.tag"
-                    :severity="entry.severity"
-                    size="small"
-                  />
-                  <Link
-                    :label="entry.action.label"
-                    :href="entry.action.href"
-                    size="small"
-                    :show-icon="false"
-                  />
-                </span>
-              </Item.Content>
-            </Item>
-          </Item.List>
-        </ChartCard.Content>
-      </ChartCard>
-      <ChartCard :span="6">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
-            <Hint
-              text="Blocked requests, broken down by the attack category of the rule they matched."
-            />
-          </span>
-          <ChartCard.Controls>
-            <span
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
+            <template #aside>
+              <Hint
+                text="Requests a security rule identified as attacks and blocked before they reached a service."
               />
-              <Tag
-                label="-0.03%"
-                severity="success"
-                icon="pi pi-arrow-down-left"
-                size="small"
-              />
-            </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Blocked requests by attack category"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="transparent"
-                  size="small"
-                  aria-label="More options for Blocked requests by attack category"
-                />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <BarList
-            :items="categories"
+            </template>
+          </StatTile>
+        </li>
+        <li class="flex min-w-0 flex-col">
+          <StatTile
+            label="Requests inspected"
+            :value="requestsInspected"
             :format-value="formatCount"
-            empty-title="No data available"
-            aria-label="Blocked requests by attack category"
-          />
-        </ChartCard.Content>
-      </ChartCard>
-      <ChartCard :span="6">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Blocked requests by country</ChartCard.Title>
-            <Hint text="Blocked requests, broken down by the country they came from." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
-              />
-              <Tag
-                label="+9.33%"
-                severity="danger"
-                icon="pi pi-arrow-up-right"
-                size="small"
-              />
+            :delta="requestsInspectedDelta"
+            delta-label="vs previous 24 hours"
+            :trend="requestsInspectedTrend"
+          >
+            <template #aside>
+              <Hint text="Requests checked against security rules across every service." />
+            </template>
+          </StatTile>
+        </li>
+        <li class="flex min-w-0 flex-col">
+          <StatTile
+            label="Block rate"
+            :value="blockRate"
+            :format-value="formatPercent"
+            :delta="blockRateDelta"
+            delta-label="vs previous 24 hours"
+            inverse
+            :trend="blockRateTrend"
+          >
+            <template #aside>
+              <Hint text="Share of inspected requests blocked as attacks." />
+            </template>
+          </StatTile>
+        </li>
+      </ul>
+      <div
+        class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
+      >
+        <ChartCard :span="8">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Matched requests over time</ChartCard.Title>
+              <Hint text="Requests that matched a rule: blocked, or logged and allowed through." />
             </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Blocked requests by country"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
+            <ChartCard.Controls>
+              <span
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+                <Tag
+                  label="+19.01%"
+                  severity="danger"
+                  icon="pi pi-arrow-up-right"
+                  size="small"
+                />
+                <ToggleGroup
+                  v-model="form"
+                  :options="forms"
+                  size="small"
+                  aria-label="Chart form for Matched requests over time"
+                />
+              </span>
+              <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-ellipsis-h"
+                  icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="More options for Blocked requests by country"
+                  aria-label="Expand Matched requests over time"
                 />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <BarList
-            :items="countries"
-            :format-value="formatCount"
-            empty-title="No data available"
-            aria-label="Blocked requests by country"
-          />
-        </ChartCard.Content>
-      </ChartCard>
-      <ChartCard :span="12">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
-            <Hint text="The addresses blocked most often, with their network and main attack." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              data-wide
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Matched requests over time"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <Chart
+              v-model:active-index="activeIndex"
+              :series="matchedRequests"
+              :labels="labels"
+              :format-value="formatCount"
+              empty-title="No matched requests in this period"
+              empty-description="Nothing was recorded in this period."
             >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar
+                v-if="form === 'bar'"
+                stacked
+              />
+              <Chart.Line v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend totals />
+            </Chart>
+          </ChartCard.Content>
+        </ChartCard>
+        <ChartCard :span="4">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Needs attention</ChartCard.Title>
+              <Hint text="Settings and traffic on your services that ask for a decision." />
+            </span>
+            <ChartCard.Controls>
               <Tag
-                label="Sum"
+                :label="`${attention.length} open`"
                 severity="secondary"
                 size="small"
-                icon="pi pi-calculator"
               />
-              <Tag
-                label="-6.79%"
-                severity="success"
-                icon="pi pi-arrow-down-left"
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <Item.List>
+              <Item
+                v-for="entry in attention"
+                :key="entry.id"
+                role="listitem"
+                kind="inline"
                 size="small"
-              />
-            </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Top source IPs by blocked requests"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="transparent"
-                  size="small"
-                  aria-label="More options for Top source IPs by blocked requests"
-                />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-            <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-              <div class="min-w-36 grow basis-(--container-3xs)">
-                <Input
-                  v-model="search"
-                  size="medium"
-                  placeholder="Search addresses, networks or attacks"
-                  aria-label="Search addresses, networks or attacks"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
+              >
+                <Item.Media>
+                  <i
+                    :class="entry.icon"
+                    class="text-body-sm leading-none text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ entry.title }}</Item.Title>
+                  <Item.Description>{{ entry.description }}</Item.Description>
+                  <span class="flex flex-wrap items-center gap-(--spacing-xs)">
+                    <Tag
+                      :label="entry.tag"
+                      :severity="entry.severity"
+                      size="small"
                     />
-                  </template>
-                </Input>
-              </div>
-            </div>
-            <TableRoot
-              v-model:global-filter="search"
-              :data="ipRows"
-              :columns="ipColumns"
-              row-key="id"
-              enable-sorting
-              paginated
-              :page-size="5"
-              :rows-per-page-options="[5, 10, 25]"
-              header-kind="compact"
-              bordered
-            >
-              <template #empty>
-                <EmptyState
+                    <Link
+                      :label="entry.action.label"
+                      :href="entry.action.href"
+                      size="small"
+                      :show-icon="false"
+                    />
+                  </span>
+                </Item.Content>
+              </Item>
+            </Item.List>
+          </ChartCard.Content>
+        </ChartCard>
+        <ChartCard :span="6">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
+              <Hint
+                text="Blocked requests, broken down by the attack category of the rule they matched."
+              />
+            </span>
+            <ChartCard.Controls>
+              <span
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
                   size="small"
-                  icon="pi pi-search"
-                  title="No matching rows"
-                  description="Change the search."
+                  icon="pi pi-calculator"
                 />
-              </template>
-              <template #cell-requests="{ row }">
-                <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-              </template>
-            </TableRoot>
-          </div>
-        </ChartCard.Content>
-      </ChartCard>
-    </div>
+                <Tag
+                  label="-0.03%"
+                  severity="success"
+                  icon="pi pi-arrow-down-left"
+                  size="small"
+                />
+              </span>
+              <Tooltip text="Expand">
+                <IconButton
+                  icon="pi pi-window-maximize"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Expand Blocked requests by attack category"
+                />
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Blocked requests by attack category"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <BarList
+              :items="categories"
+              :format-value="formatCount"
+              empty-title="No blocked requests in this period"
+              aria-label="Blocked requests by attack category"
+            />
+          </ChartCard.Content>
+        </ChartCard>
+        <ChartCard :span="6">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Blocked requests by country</ChartCard.Title>
+              <Hint text="Blocked requests, broken down by the country they came from." />
+            </span>
+            <ChartCard.Controls>
+              <span
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+                <Tag
+                  label="+9.33%"
+                  severity="danger"
+                  icon="pi pi-arrow-up-right"
+                  size="small"
+                />
+              </span>
+              <Tooltip text="Expand">
+                <IconButton
+                  icon="pi pi-window-maximize"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Expand Blocked requests by country"
+                />
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Blocked requests by country"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <BarList
+              :items="countries"
+              :format-value="formatCount"
+              empty-title="No blocked requests in this period"
+              aria-label="Blocked requests by country"
+            />
+          </ChartCard.Content>
+        </ChartCard>
+        <ChartCard :span="12">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
+              <Hint text="The addresses blocked most often, with their network and main attack." />
+            </span>
+            <ChartCard.Controls>
+              <span
+                data-wide
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+                <Tag
+                  label="-6.79%"
+                  severity="success"
+                  icon="pi pi-arrow-down-left"
+                  size="small"
+                />
+              </span>
+              <Tooltip text="Expand">
+                <IconButton
+                  icon="pi pi-window-maximize"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Expand Top source IPs by blocked requests"
+                />
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Top source IPs by blocked requests"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                <div class="min-w-36 grow basis-(--container-3xs)">
+                  <Input
+                    v-model="search"
+                    size="medium"
+                    placeholder="Search addresses, networks or attacks"
+                    aria-label="Search addresses, networks or attacks"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </div>
+              </div>
+              <TableRoot
+                v-model:global-filter="search"
+                :data="ipRows"
+                :columns="ipColumns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="5"
+                :rows-per-page-options="[5, 10, 25]"
+                header-kind="compact"
+                bordered
+              >
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-search"
+                    title="No matching rows"
+                    description="Change the search."
+                  />
+                </template>
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </ChartCard.Content>
+        </ChartCard>
+      </div>
+    </main>
   </div>
 </template>

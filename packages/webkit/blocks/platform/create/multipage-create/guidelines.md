@@ -30,9 +30,9 @@ A `Stepper` in an aside on the left, `v-model` bound to the current step and lab
 
 `PageHeader size="small"` titled with the step's name and described with the step's sentence. The Where it runs step has no `PageHeader`; it carries its own centred heading instead.
 
-### D. Where it runs — `Input`, `Tag`, `Button` (required)
+### D. Where it runs — `Input`, `Item`, `Tag`, `Button` (required)
 
-A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a native `button` with `aria-pressed` and `data-selected`; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
+A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `Item` rendered `as-child` on a native `button` with `aria-pressed` and `data-selected`; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
@@ -77,7 +77,7 @@ A bar fixed under the form: transparent Cancel on the left; outlined Back (hidde
 - **Title, breadcrumb and last submit:** the create label with the entity's capitalization, e.g. "Create Access List".
 - **Step titles:** short nouns, e.g. "Where it runs", "General", "List settings".
 - **Step descriptions:** one sentence with a period, e.g. "Select the policy whose rules match it. It needs IP filtering on."
-- **Chooser:** instruction with "Select", e.g. "Select a policy to continue"; the search placeholder and `aria-label` name what is searched, e.g. "Find policy".
+- **Chooser:** instruction with "Select", e.g. "Select a policy to continue"; the search placeholder and `aria-label` name what is searched, e.g. "Search policies".
 - **Module tag:** the missing module and its state, e.g. "IP filtering off".
 - **Module alert:** the consequence in one sentence, e.g. "acme-staging has IP filtering off, so no rule reads this list until the module is on."
 - **Escape routes:** verb first, e.g. "Create a policy", "Continue without a policy".

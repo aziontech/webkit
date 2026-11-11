@@ -36,14 +36,14 @@ One `SettingRow` per setting, with a `title` and a one-sentence `description`. T
 
 ### E. Save — `SaveBar`, `Button` (required)
 
-SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Cancel and the primary Save, both medium. While saving, the `fieldset` and Cancel are disabled and Save takes `:loading`. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
+SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Cancel and the primary Save, both medium. While saving, the `fieldset` and Cancel are disabled and Save takes `:loading`. Cancel puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
 
 ## Do
 
 - Pick the save strategy from how the page is partitioned: one logical unit gets one save.
 - Disable only the fieldset being saved; the other groups or cards stay editable.
 - Drive Save's `:loading` and the fieldset's `disabled` from one `submitting` flag.
-- Validate on submit only, and show the error at the field it belongs to.
+- Validate on submit only, show the error at the field it belongs to, and move focus to the first field in error.
 - Keep every control in a row at the same size, and every row title in sentence case.
 - Explain a card's effect in an info `Alert` at the top of the card, before its fields.
 
@@ -58,6 +58,8 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 ## Copy
 
 - **Page title:** the page's name, e.g. "Profile"; description: one sentence with a period, e.g. "Define and manage personal account preferences."
+- **Breadcrumb:** the parent, then the page title exactly, e.g. "Account settings" › "Profile".
+- **Choices:** sentence case and no parentheses, e.g. "Team default", "Standard protection".
 - **Section heading:** a short topic noun, e.g. "General", "Notifications".
 - **Row title:** names the setting in one to three words, e.g. "Timezone"; description: one sentence with a period, e.g. "Times across the app are shown in this zone."
 - **Save:** exactly "Save" for the footer and every group or card; Cancel is exactly "Cancel".
@@ -79,7 +81,7 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 - Saving: the whole fieldset and Cancel are disabled and Save shows its loading state.
 - SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
 - SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
-- SavePerCard: Project Settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
+- SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
 - SavingOneCard: Preview Toolbar is saving with its selects disabled while Deployment Protection stays editable.
 
 ## Related

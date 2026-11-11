@@ -10,7 +10,7 @@
   const steps = [
     {
       key: 'token',
-      title: 'Access Token',
+      title: 'Access token',
       description: 'Deploy token created and added to the CLI',
       status: 'done',
       duration: '3s',
@@ -43,7 +43,7 @@
     },
     {
       key: 'clone',
-      title: 'Clone Template',
+      title: 'Clone template',
       description: 'Template cloned into the GitHub scope',
       status: 'done',
       duration: '4s',
@@ -189,7 +189,7 @@
     },
     {
       key: 'rules',
-      title: 'Routing Rules',
+      title: 'Routing rules',
       description: 'Request rules and cache policies applied',
       status: 'done',
       duration: '4s',

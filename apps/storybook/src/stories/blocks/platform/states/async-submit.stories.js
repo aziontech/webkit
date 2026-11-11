@@ -15,7 +15,7 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Redeploy and View deployments over the stopped logs when it fails, and a success `Alert` with Open service once it is live. In a full app the run lives outside the page, so progress and the outcome also ride a toast wherever the user is; the toast is not plotted here. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`)." } },
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toast` region is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`)." } },
     webkit: {"block":"platform/states/async-submit","intents":["async submit","long running action","background job status","deploy in progress","async deploy result","operation status","envio assíncrono","ação demorada","status da operação"],"skills":["webkit-errors","webkit-ui-states","webkit-form"],"primary":"Idle"}
   }
 }
@@ -27,15 +27,15 @@ export const Idle = {
 
 export const Running = {
   render: () => ({ components: { Block: State1 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "Mid-run: the heading reads Deploying, the simulation controls are disabled while Deploy shows its loading state, and the logs card streams under the Building status." }, source: { code: source1 } } }
+  parameters: { docs: { description: { story: "Mid-run: the progress toast reads Deploying web-app…, the heading reads Deploying, the simulation controls are disabled while Deploy shows its loading state, and the logs card streams under the Building status." }, source: { code: source1 } } }
 }
 
 export const Failed = {
   render: () => ({ components: { Block: State2 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Redeploy and View deployments, and the logs card stays open on the failed step with the Phased or Complete switch." }, source: { code: source2 } } }
+  parameters: { docs: { description: { story: "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs card stays open on the failed step with the Phased or Complete switch." }, source: { code: source2 } } }
 }
 
 export const Succeeded = {
   render: () => ({ components: { Block: State3 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The run is live: the heading reads Deployed and the success Alert names the new address with Open service; the logs card is gone." }, source: { code: source3 } } }
+  parameters: { docs: { description: { story: "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone." }, source: { code: source3 } } }
 }

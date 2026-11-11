@@ -293,7 +293,7 @@
                         >
                           Create Project
                         </h1>
-                        <p class="text-body-sm text-(--text-muted)">Choose a service to continue</p>
+                        <p class="text-body-sm text-(--text-muted)">Select a service to continue</p>
                       </header>
 
                       <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
@@ -301,8 +301,8 @@
                           v-model="query"
                           size="large"
                           class="w-full"
-                          placeholder="Find service…"
-                          aria-label="Find service"
+                          placeholder="Search services"
+                          aria-label="Search services"
                           autocomplete="off"
                           @keydown.enter.prevent="onSearchEnter"
                         />
@@ -344,36 +344,43 @@
                           v-else
                           class="flex flex-col"
                         >
-                          <button
+                          <Item
                             v-for="option in visible"
                             :key="option.value"
-                            type="button"
-                            :aria-pressed="service === option.value"
-                            :data-selected="service === option.value || null"
-                            class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none data-selected:bg-(--bg-selected) motion-reduce:transition-none"
-                            @click="choose(option)"
+                            as-child
+                            size="small"
                           >
-                            <i
-                              class="pi pi-server shrink-0 text-body-md leading-none text-(--text-muted)"
-                              aria-hidden="true"
-                            />
-                            <span
-                              class="min-w-0 flex-1 truncate text-body-md text-(--text-default)"
+                            <button
+                              type="button"
+                              class="w-full text-start data-[selected]:bg-(--bg-selected)"
+                              :aria-pressed="service === option.value"
+                              :data-selected="service === option.value || null"
+                              @click="choose(option)"
                             >
-                              {{ option.label }}
-                            </span>
-                            <i
-                              v-if="service === option.value"
-                              class="pi pi-check shrink-0 text-body-sm leading-none text-(--text-default)"
-                              aria-hidden="true"
-                            />
-                          </button>
+                              <Item.Media>
+                                <i
+                                  class="pi pi-server text-body-md leading-none text-(--text-muted)"
+                                  aria-hidden="true"
+                                />
+                              </Item.Media>
+                              <Item.Content>
+                                <Item.Title>{{ option.label }}</Item.Title>
+                              </Item.Content>
+                              <Item.Actions>
+                                <i
+                                  v-if="service === option.value"
+                                  class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                                  aria-hidden="true"
+                                />
+                              </Item.Actions>
+                            </button>
+                          </Item>
 
                           <p
                             v-if="hidden"
                             class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
                           >
-                            {{ hidden }} more — type to narrow.
+                            {{ hidden }} more. Type to narrow the list.
                           </p>
                           <p
                             v-else-if="!matches.length"
@@ -382,21 +389,26 @@
                             No service matches “{{ query.trim() }}”.
                           </p>
 
-                          <button
-                            type="button"
-                            class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none motion-reduce:transition-none"
-                            @click="startCreating"
+                          <Item
+                            as-child
+                            size="small"
                           >
-                            <i
-                              class="pi pi-plus shrink-0 text-body-sm leading-none text-(--text-muted)"
-                              aria-hidden="true"
-                            />
-                            <span
-                              class="min-w-0 flex-1 truncate text-body-md text-(--text-default)"
+                            <button
+                              type="button"
+                              class="w-full text-start"
+                              @click="startCreating"
                             >
-                              Create Service
-                            </span>
-                          </button>
+                              <Item.Media>
+                                <i
+                                  class="pi pi-plus text-body-sm leading-none text-(--text-muted)"
+                                  aria-hidden="true"
+                                />
+                              </Item.Media>
+                              <Item.Content>
+                                <Item.Title>Create Service</Item.Title>
+                              </Item.Content>
+                            </button>
+                          </Item>
                         </div>
                       </div>
 

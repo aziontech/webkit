@@ -59,7 +59,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 - One `main` landmark under the header; the step title is an `h2` and the settings group an `h3`.
 - The back `IconButton`, the brand link and the account button each have an `aria-label`.
-- The repository name has a visible `Label` tied to its input; the privacy switch has its own `aria-label` that states the current visibility.
+- The repository name has a visible `Label` tied to its input; the privacy switch is labelled Public repository and announces its on or off state.
 - Settings use `Field` labels and descriptions, so each input announces its name and constraint.
 - A disabled Deploy is explained by the required markers on the fields, not by the button alone.
 - The page enter animation stops under reduced motion.

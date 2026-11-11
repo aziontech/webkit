@@ -10,7 +10,7 @@
   const steps = [
     {
       key: 'token',
-      title: 'Access Token',
+      title: 'Access token',
       description: 'Deploy token created and added to the CLI',
       status: 'done',
       duration: '3s',
@@ -43,7 +43,7 @@
     },
     {
       key: 'clone',
-      title: 'Clone Template',
+      title: 'Clone template',
       description: 'Template cloned into the GitHub scope',
       status: 'done',
       duration: '4s',
@@ -189,7 +189,7 @@
     },
     {
       key: 'rules',
-      title: 'Routing Rules',
+      title: 'Routing rules',
       description: 'Request rules and cache policies applied',
       status: 'failed',
       duration: '4s',
@@ -266,7 +266,7 @@
           <p class="shrink-0 text-heading-xxs text-(--text-default)">Logs</p>
           <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
             <Tag
-              label="Failed on Routing Rules"
+              label="Failed on routing rules"
               severity="danger"
             />
           </div>
@@ -349,7 +349,7 @@
                 <LogViewContent>
                   <template #empty>
                     <template v-if="step.status === 'skipped'">
-                      Never ran — the deployment stopped at Routing Rules.
+                      Never ran. The deployment stopped at routing rules.
                     </template>
                     <template v-else>No log lines yet.</template>
                   </template>

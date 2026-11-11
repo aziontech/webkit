@@ -23,63 +23,68 @@ dashboards: KPI row first, a 12-column grid of `ChartCard`s below, one shared ca
 
 ## Building blocks
 
-### A. KPI row — `StatTile` (required)
+### A. Page heading — `PageHeader` (required)
+
+Title `Analytics` and one sentence on what the page shows, over the rest of the page in the standard
+`layout-column`.
+
+### B. KPI row — `StatTile` (required)
 
 Four tiles: `Requests`, `Data transferred`, `Success rate`, `Status 5xx`. Each shows the period total,
 a sparkline and the change against the previous period. `Status 5xx` passes `inverse`, because a rise
 is a regression.
 
-### B. Metric definitions — `Hint` (required)
+### C. Metric definitions — `Hint` (required)
 
 Each tile and card title carries a `Hint` with a one-sentence definition
 (`Share of requests that ended in a 2xx or 3xx status.`).
 
-### C. Cards — `ChartCard` (required)
+### D. Cards — `ChartCard` (required)
 
 Every chart and the table sit in a `ChartCard` on the 12-column grid. `Requests over time` spans the
 grid; `Status codes` and `Requests by country` share a row; `Top hosts` closes it. Every card carries
 the same header: title with `Hint`, tags, form toggle where it applies, Expand, and the more-options
 menu.
 
-### D. Aggregation and variation — `Tag` (required)
+### E. Aggregation and variation — `Tag` (required)
 
 `Sum` names the aggregation; a second tag states the change for the period (`+10.03%`). Tags state
 facts; they are not buttons.
 
-### E. Line or Bar — `ToggleGroup` (optional)
+### F. Line or Bar — `ToggleGroup` (optional)
 
 Switches a time series between Line and Bar. Only on time series, never on a ranked bar chart. Its
 `aria-label` names the card (`Chart form for Requests over time`).
 
-### F. Control labels — `Tooltip` (required)
+### G. Control labels — `Tooltip` (required)
 
 Names each icon-only control on hover and focus (`Expand`, `More options`).
 
-### G. Expand — `IconButton` (optional)
+### H. Expand — `IconButton` (optional)
 
 Opens the card at full size. Icon-only, with an `aria-label` that names the card
 (`Expand Requests over time`).
 
-### H. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu` (optional)
 
 `Copy query` and `Export CSV`. Secondary actions go here so the header stays one line.
 
-### I. Charts — `Chart` (required)
+### J. Charts — `Chart` (required)
 
 `Requests over time` as an area, `Status codes` as a multi-series line (2xx, 3xx, 4xx, 5xx), and
 `Requests by country` as labeled horizontal bars. The series take the categorical role in declaration
 order; reserve the status role for a series whose color means a state.
 
-### J. Table search — `Input` (optional)
+### K. Table search — `Input` (optional)
 
 Searches `Top hosts` (`Search hosts or services`). It filters this table only, so it sits inside the
 card, not in the page header.
 
-### K. Top hosts — `TableRoot` (required)
+### L. Top hosts — `TableRoot` (required)
 
 A searchable, paginated table of hosts with tabular figures, right-aligned numbers.
 
-### L. Empty regions — `EmptyState` (required)
+### M. Empty regions — `EmptyState` (required)
 
 Each card keeps its box with its own empty state: `No traffic yet` /
 `Metrics appear here once a service serves requests.` for charts, and `No matching rows` /
@@ -101,6 +106,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 
 ## Copy
 
+- **Title:** `Analytics`. **Description:** `Requests, data transferred and errors your services handled in the period.`
 - **Card titles:** noun phrase, sentence case. `Requests over time`, `Status codes`, `Top hosts`.
 - **Tile labels:** the metric name only. `Data transferred`, never `Data transferred (GB)`; the unit belongs to the value.
 - **Hint:** one sentence ending with a period. `Requests that ended in a server error. A rise is a regression.`

@@ -22,7 +22,7 @@
       domain: 'web-app-7f3a.example.net',
       environment: 'Production',
       policy: 'Single',
-      certificate: 'Managed (free)',
+      certificate: 'Managed',
       generated: true
     },
     {
@@ -30,7 +30,7 @@
       domain: 'shop.example.com',
       environment: 'Production',
       policy: 'Single',
-      certificate: 'Managed (free)',
+      certificate: 'Managed',
       generated: false
     },
     {

@@ -19,7 +19,7 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 ### A. Dialog and trigger — `ConfirmDialog`, `Button` (required)
 
-`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button kind="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind. The body goes in the default slot and the buttons in the `#actions` slot.
+`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button kind="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot and the buttons in the `#actions` slot.
 
 ### B. Consequence — `Alert` (required)
 
@@ -27,7 +27,7 @@ A `severity="warning"` `Alert` first in the body states that the action cannot b
 
 ### C. Name chip — `Tooltip` (required)
 
-The prompt "To confirm, type … in the box below:" shows the resource name as a click-to-copy chip inside a `Tooltip` reading Copy to clipboard. Clicking copies the name and reveals Copied with a check icon for two seconds. The chip truncates a long name instead of wrapping the dialog wider.
+The prompt "Type … to confirm." shows the resource name as a click-to-copy chip inside a `Tooltip` reading Copy to clipboard. Clicking copies the name and reveals Copied with a check icon for two seconds. The chip truncates a long name instead of wrapping the dialog wider.
 
 ### D. Typed confirmation — `Input` (required)
 
@@ -35,12 +35,12 @@ A full-width `Input` with `autocomplete="off"`, labelled by the prompt paragraph
 
 ### E. Actions — `Button` (required)
 
-In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `kind="danger"` Delete, `:disabled` until the typed name matches. Both are medium. In the LabelledField variant the same pair sits in `PanelFooter`, stacked full width on a phone, and Delete takes `:loading` while the request runs.
+In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `kind="danger"` Delete resource, the title repeated, `:disabled` until the typed name matches. Both are medium. In the LabelledField variant the same pair sits in `PanelFooter`, stacked full width on a phone, and Delete takes `:loading` while the request runs.
 
 ## Do
 
 - Name the resource kind in the title and the resource itself in the chip, so the user knows exactly what goes.
-- Keep Delete disabled until the trimmed value equals the name; that is the prevention, not a toast after the fact.
+- Keep the confirm button disabled until the trimmed value equals the name; that is the prevention, not a toast after the fact.
 - Reset the typed value each time the dialog opens.
 - Let the user copy the name from the chip; never block paste in the input.
 - Put the consequence in the `Alert` and the sentence below it, before the input that asks for the decision.
@@ -56,12 +56,12 @@ In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `
 
 ## Copy
 
-- **Title:** Delete plus the resource kind, with the entity's capitalization, e.g. "Delete Workload".
+- **Title:** Delete plus the resource kind, in sentence case, e.g. "Delete workload"; the visible trigger and the confirm button repeat it.
 - **Trigger:** verb and object, e.g. "Delete resource" on a visible button; "Delete" in a row menu.
 - **Alert:** one fact, e.g. "Once confirmed, this action can't be reversed."
 - **Consequence:** one sentence naming what goes with it, e.g. "The selected bucket will be deleted, along with all its files."
-- **Prompt:** "To confirm, type" before the name chip and "in the box below:" after it.
-- **Confirm:** exactly "Delete", the verb the title repeats; never "OK", "Confirm" or "Yes".
+- **Prompt:** "Type" before the name chip and "to confirm." after it; never a position such as "in the box below".
+- **Confirm:** the title's verb and object, e.g. "Delete resource"; never "OK", "Confirm" or "Yes".
 - **Cancel:** exactly "Cancel".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
@@ -76,8 +76,8 @@ In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `
 
 ## States
 
-- Default: the danger trigger is visible; opening it shows the warning, the name chip and the empty input with Delete disabled.
-- LabelledField: an outlined `Item` row on a settings page opens a medium `Dialog` asking for the name through a labelled `Field`, with Delete disabled until it matches.
+- Default: the danger trigger is visible; opening it shows the warning, the name chip and the empty input with Delete resource disabled.
+- LabelledField: an outlined `Item` row on a settings page opens a medium `Dialog` asking for the name through a labelled `Field`, with Delete resource disabled until it matches.
 
 ## Related
 

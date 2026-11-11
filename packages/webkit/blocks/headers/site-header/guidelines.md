@@ -45,7 +45,7 @@ Contact (`transparent`, from `xl` only), Login (`secondary`) and Start for free 
 ## Copy
 
 - **Navigation:** nouns, sentence case: `Solutions`, `Pricing`.
-- **Actions:** short verbs: `Contact`, `Login`, `Start for free`. Keep the same capitalization on every page and in the hero (the hero in `shells/website` currently reads `Start for Free`).
+- **Actions:** short verbs: `Contact`, `Login`, `Start for free`. Keep the same capitalization on every page and in the hero.
 
 ## Accessibility
 

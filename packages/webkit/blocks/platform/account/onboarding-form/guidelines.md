@@ -89,7 +89,7 @@ Under the picker: `Generated from the organization's name. Select its color.`
 
 - Organization: step 1 of 3, name fields and the organization mark.
 - Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed.
-- Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization.
+- Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization, which locks the step while the request runs and answers in one `Alert` in the card: `Organization created.`, or, when the request fails (offline), `The organization wasn't created. Check your connection, then retry. Your answers are kept.` with Retry.
 
 ## Related
 

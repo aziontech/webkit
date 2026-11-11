@@ -9,6 +9,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Label from '@aziontech/webkit/label'
   import Select from '@aziontech/webkit/select'
@@ -17,7 +18,7 @@
   import { computed, reactive, ref } from 'vue'
 
   const breadcrumb = [
-    { label: 'Start from a Template' },
+    { label: 'Start from a template' },
     { label: 'Nuxt E-commerce', current: true }
   ]
 
@@ -30,8 +31,8 @@
   const settings = [
     {
       name: 'storeAccessToken',
-      label: 'Store Access Token',
-      placeholder: 'Access Token',
+      label: 'Store access token',
+      placeholder: 'Access token',
       description: 'You can find this token in the API credentials of your store.',
       required: true
     },
@@ -44,7 +45,7 @@
     },
     {
       name: 'storeDomain',
-      label: 'Store Domain',
+      label: 'Store domain',
       placeholder: 'https://shop.example.com',
       description: 'The domain your store answers on',
       required: false
@@ -132,7 +133,7 @@
             </div>
 
             <div class="flex w-full flex-col gap-(--spacing-xxs)">
-              <span class="truncate text-body-xxs text-(--text-muted)">Cloning from Github</span>
+              <span class="truncate text-body-xxs text-(--text-muted)">Cloning from GitHub</span>
               <div class="flex items-center gap-(--spacing-md)">
                 <span
                   class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
@@ -195,27 +196,23 @@
 
                   <div class="flex flex-col gap-(--spacing-xs)">
                     <Label
-                      :label="isPublic ? 'Public Repository Name' : 'Private Repository Name'"
+                      :label="isPublic ? 'Public repository name' : 'Private repository name'"
                       required
                       for="repoName"
                     />
                     <InputGroupRoot size="large">
-                      <input
+                      <InputGroupInput
                         id="repoName"
                         v-model="repoName"
                         placeholder="my-repository"
-                        class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+                        required
                       />
                       <InputGroupAddon>
-                        <Tooltip text="Toggle repository visibility (public or private)">
+                        <Tooltip text="Repository visibility">
                           <Switch
                             v-model="isPublic"
                             kind="privacy"
-                            :aria-label="
-                              isPublic
-                                ? 'Repository is public — toggle to make it private'
-                                : 'Repository is private — toggle to make it public'
-                            "
+                            aria-label="Public repository"
                           />
                         </Tooltip>
                       </InputGroupAddon>
@@ -223,7 +220,7 @@
                   </div>
                 </div>
 
-                <h3 class="text-heading-xxs text-(--text-default)">Template Settings</h3>
+                <h3 class="text-heading-xxs text-(--text-default)">Template settings</h3>
                 <div class="flex flex-col gap-(--spacing-lg)">
                   <Field
                     v-for="field in settings"
@@ -255,7 +252,7 @@
           </Card>
 
           <Button
-            label="Browse Templates"
+            label="Browse templates"
             kind="outlined"
             size="medium"
           />

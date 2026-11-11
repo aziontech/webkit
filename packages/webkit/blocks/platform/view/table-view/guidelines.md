@@ -22,7 +22,7 @@ The first-level index of one resource type, in rows. The user lands here from th
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined Documentation button, which opens the docs in a new tab, and the `Create <Object>` button, both medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears; the breadcrumb starts at the second level.
+`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at `size="large"`, the page's only large control, as `skills/webkit-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears; the breadcrumb starts at the second level.
 
 ### B. Property filter — `PropertyFilter` (required)
 
@@ -46,15 +46,19 @@ The name cell pairs the resource glyph with a truncated, underline-on-hover name
 
 ### G. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `IconButton`, `Tooltip` (required)
 
-An ellipsis `IconButton` named Row actions opens a menu placed `bottom-end`: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group.
+An ellipsis `IconButton` named Row actions opens a menu placed `bottom-end`: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 
-### H. No matching resources — `EmptyState`, `Button` (required)
+### H. Delete confirmation — `ConfirmDialog`, `Alert`, `Input` (required)
+
+The `platform/delete/delete-with-confirmation` dialog, opened from the row menu without a trigger of its own: a medium `ConfirmDialog` titled `Delete resource`, a warning `Alert` (`Once confirmed, this action can't be reversed.`), one sentence of consequence, and an `Input` labelled by `Type <name> to confirm.` The danger `Delete resource` enables only when the typed text matches the row's name; confirming removes the row. The typed text resets each time the dialog opens.
+
+### I. No matching resources — `EmptyState`, `Button` (required)
 
 When `status` is `no-match`, the table's `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching resources", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading, the filter tokens and the table header stay, so the user can see and undo what hid the rows.
 
-### I. Empty listing — `Card`, `EmptyState`, `Button` (required)
+### J. Empty listing — `Card`, `EmptyState`, `Button` (required)
 
-When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Docs on one row.
+When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Documentation on one row.
 
 ## Do
 
@@ -65,7 +69,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - Keep `CollectionPreferences` the last control of the row and every control on it medium.
 - Branch on `status`: `empty` swaps the table for the empty listing, `no-match` fills the table's `#empty` slot with Clear filters.
 - Give every icon-only control a `Tooltip` and an `aria-label` with the same words.
-- Put Delete last in the row menu, in its own group.
+- Put Delete last in the row menu, in its own group, and always behind the confirmation dialog.
 
 ## Don't
 
@@ -96,6 +100,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - The `PropertyFilter` has an `aria-label` that matches its placeholder; each token's remove button names the token, and the match count is announced after each change.
 - Every icon-only button has an `aria-label`; decorative icons carry `aria-hidden="true"`.
 - Focus order follows reading order: heading actions, filter, Refresh, Download CSV, Preferences, table, pagination.
+- The delete dialog traps focus, is named by its title and labels its input by the prompt.
 - The preferences dialog traps focus, is named by its title and returns focus to its trigger when it closes.
 - Sorting is announced by the table header; the row menu is reachable by keyboard and closes back to its trigger.
 - Links that open a new tab add "(opens in a new tab)" in visually hidden text; the domain popover announces its count and its loading in a `status` region.
@@ -103,7 +108,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 ## States
 
 - Default: resources exist; the table shows them with the property filter, refresh, export, preferences, sorting and pagination wired, and filtering to nothing shows No matching resources with Clear filters.
-- Empty: every resource was deleted on an account that is not new; `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Docs replaces the table.
+- Empty: every resource was deleted on an account that is not new; `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
 
 ## Related
 

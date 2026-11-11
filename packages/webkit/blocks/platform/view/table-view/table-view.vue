@@ -1,8 +1,10 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
@@ -22,7 +24,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
-  import { ref } from 'vue'
+  import { computed, ref, useId } from 'vue'
 
   const avatars = {
     'Robson Junior': 'https://ca.slack-edge.com/TDVATDGUU-UDW2MSZAP-81cad567c9a1-512',
@@ -89,6 +91,8 @@
     resource(10, 'Isaque Böck', 162, '5 months ago')
   ]
 
+  const items = ref(rows)
+
   const {
     tableProps,
     propertyFilterProps,
@@ -98,7 +102,7 @@
     clearFilters,
     loading: fetching
   } = useCollection({
-    items: rows,
+    items,
     columns,
     filtering: { fields: ['name', 'id', 'domain', 'owner', 'status'] },
     propertyFiltering: { properties },
@@ -176,6 +180,27 @@
       domainLoading.value = { ...domainLoading.value, [row.id]: false }
     }, 420)
   }
+
+  const pending = ref(null)
+  const deleteOpen = ref(false)
+  const confirmation = ref('')
+  const confirmLabelId = useId()
+  const canDelete = computed(
+    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.name
+  )
+
+  const onRowAction = (value, row) => {
+    if (value !== 'delete') return
+    pending.value = row
+    confirmation.value = ''
+    deleteOpen.value = true
+  }
+
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    items.value = items.value.filter((item) => item.id !== pending.value.id)
+    deleteOpen.value = false
+  }
 </script>
 
 <template>
@@ -197,8 +222,8 @@
           <Button
             label="Create Resource"
             icon="pi pi-plus"
-            kind="outlined"
-            size="medium"
+            kind="primary"
+            size="large"
           />
         </template>
       </PageHeader>
@@ -266,7 +291,7 @@
                         size="small"
                       />
                       <Button
-                        label="Docs"
+                        label="Documentation"
                         icon="pi pi-book"
                         kind="outlined"
                         size="small"
@@ -474,8 +499,11 @@
                       <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
                     </div>
                   </template>
-                  <template #cell-actions>
-                    <DropdownMenuRoot placement="bottom-end">
+                  <template #cell-actions="{ row }">
+                    <DropdownMenuRoot
+                      placement="bottom-end"
+                      @select="(event, value) => onRowAction(value, row)"
+                    >
                       <DropdownMenuTrigger>
                         <Tooltip text="Row actions">
                           <IconButton
@@ -556,5 +584,48 @@
         </section>
       </section>
     </main>
+    <ConfirmDialog
+      v-model:open="deleteOpen"
+      title="Delete resource"
+      size="medium"
+    >
+      <div class="flex flex-col gap-(--spacing-md)">
+        <Alert
+          severity="warning"
+          label="Once confirmed, this action can't be reversed."
+        />
+        <p class="m-0 text-body-sm text-(--text-muted)">
+          The selected resource will be deleted, along with its domains and settings.
+        </p>
+        <p
+          :id="confirmLabelId"
+          class="m-0 text-body-sm text-(--text-default)"
+        >
+          Type <code class="text-label-code-sm">{{ pending?.name }}</code> to confirm.
+        </p>
+        <Input
+          v-model="confirmation"
+          :aria-labelledby="confirmLabelId"
+          autocomplete="off"
+          class="w-full"
+          @keydown.enter="confirmDelete"
+        />
+      </div>
+      <template #actions="{ close }">
+        <Button
+          label="Cancel"
+          kind="outlined"
+          size="medium"
+          @click="close"
+        />
+        <Button
+          label="Delete resource"
+          kind="danger"
+          size="medium"
+          :disabled="!canDelete"
+          @click="confirmDelete"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>

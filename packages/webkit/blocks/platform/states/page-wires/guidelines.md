@@ -34,7 +34,7 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 
 - Draw the exact grid of the page that is coming: same columns, gaps and breakpoints.
 - Use the real layout utilities (`layout-column`, `layout-boundary`, `--layout-section-gap`), not fixed sizes.
-- Hide the bands from assistive technology and announce the wait once: `role="status"`, `aria-live="polite"`, `aria-busy="true"`, with a short screen-reader text on the session wires.
+- Hide the bands from assistive technology and announce the wait once: `role="status"`, `aria-live="polite"`, `aria-busy="true"`, with a short screen-reader text on every wire.
 - Size the session wire to the measured header and rail in the app, so the frame does not move when it appears.
 - Fade the session wire in with `motion-reduce:animate-none`.
 
@@ -45,13 +45,12 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 - Don't animate each band independently; a shimmer comes from `Skeleton`.
 - Don't mix real content and bands in one card; the card swaps in whole.
 - Don't let the wire collapse to a few lines on wide screens; it holds the page's full footprint.
-- Known gap: the Overview and Onboarding wires mark their body `aria-hidden="true"` but have no `role="status"` region, so a screen reader hears nothing while they show; the Session wires do announce.
 
 ## Copy
 
 - **Bands:** no visible text. The wire has nothing to read.
 - **Screen-reader status (session):** states what is happening, as a sentence: `Session expired. Signing you out.`
-- **Screen-reader status (page):** names what is loading: `Loading the overview.`
+- **Screen-reader status (page):** names what is loading: `Loading the overview.` on the Overview wire, `Loading Home.` on the Onboarding wire.
 
 ## Accessibility
 

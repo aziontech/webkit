@@ -13,6 +13,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SettingRow from '@aziontech/webkit/setting-row'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, watch } from 'vue'
@@ -34,7 +35,7 @@
   const types = [
     {
       value: 'cachekey',
-      label: 'Cache Key',
+      label: 'Cache key',
       noun: 'cache key',
       description: 'The exact keys objects were cached under, including any @@ variations.',
       placeholder: 'www.example.com/images/image.jpg@@cookie_name=value',
@@ -90,9 +91,9 @@
     const at = entries.value.length > 1 ? 'Line ' + (index + 1) : 'The argument'
     if (/^https?:\/\//i.test(line)) return at + ' starts with a protocol. Remove it.'
     if (form.type === 'wildcard' && !line.includes('*'))
-      return at + ' has no asterisk. Choose URL to purge an exact address.'
+      return at + ' has no asterisk. Select URL to purge an exact address.'
     if (form.type === 'url' && line.includes('*'))
-      return at + ' contains an asterisk. Choose Wildcard to purge a pattern.'
+      return at + ' contains an asterisk. Select Wildcard to purge a pattern.'
     return ''
   }
 
@@ -209,12 +210,12 @@
                         </fieldset>
                       </SettingRow>
                       <SettingRow
-                        title="Purge Type"
+                        title="Purge type"
                         description="How the arguments below identify the objects."
                         kind="stacked"
                       >
                         <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                          <legend class="sr-only">Purge Type</legend>
+                          <legend class="sr-only">Purge type</legend>
                           <Field.Label
                             v-for="option in types"
                             :key="option.value"
@@ -306,28 +307,22 @@
           </div>
         </div>
 
-        <footer
-          class="flex min-h-14 shrink-0 flex-col border-t border-(--border-default) bg-(--bg-surface)"
-        >
-          <div
-            class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
-          >
-            <div class="ms-auto flex shrink-0 items-center gap-(--spacing-sm)">
-              <Button
-                type="button"
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-              />
-              <Button
-                label="Purge"
-                kind="primary"
-                size="medium"
-                type="submit"
-              />
-            </div>
-          </div>
-        </footer>
+        <SaveBar kind="plain">
+          <template #actions>
+            <Button
+              type="button"
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+            />
+            <Button
+              label="Purge"
+              kind="primary"
+              size="medium"
+              type="submit"
+            />
+          </template>
+        </SaveBar>
       </form>
     </main>
   </div>

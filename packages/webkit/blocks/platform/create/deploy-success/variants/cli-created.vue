@@ -104,7 +104,7 @@ platform sync`
     {
       title: 'Store your personal token',
       description:
-        'Create a personal token in Account Settings and keep it as the repository secret the workflow authenticates with.',
+        'Create a personal token in Account settings and keep it as the repository secret the workflow authenticates with.',
       tabs: [
         {
           label: 'Secret',
@@ -269,8 +269,8 @@ jobs:
             <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
               <SectionHeader title="Get started">
                 <template #description>
-                  Two ways to build and deploy this resource. Pick one and follow the steps, or read
-                  the
+                  Two ways to build and deploy this resource. Select one and follow the steps, or
+                  read the
                   <a
                     href="https://example.com/docs/cli"
                     target="_blank"

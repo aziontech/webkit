@@ -22,7 +22,8 @@
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, watch } from 'vue'
+  import Toast, { toast } from '@aziontech/webkit/toast'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const navGroups = [
     {
@@ -167,7 +168,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -182,11 +183,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -227,8 +228,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -291,12 +292,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -340,7 +341,7 @@
     record: { service: { domain: 'web-app.example.com' } },
     error: {
       detail:
-        'The template built, its assets were uploaded and the service was created — but a rule with the same behavior is already bound to this domain, so the routing rules were refused. Nothing was published, so a redeploy starts from the same commit.'
+        'The template built, its assets were uploaded and the service was created, but a rule with the same behavior is already bound to this domain, so the routing rules were refused. Nothing was published, so a redeploy starts from the same commit.'
     }
   }
 
@@ -350,6 +351,22 @@
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
     return { label: 'Idle', severity: 'secondary' }
   })
+
+  const RUN_TOAST = 'async-submit-run'
+
+  const edit = () => toast.dismiss(RUN_TOAST)
+
+  const redeploy = () => toast.loading(`Deploying ${run.name}…`, { id: RUN_TOAST })
+
+  onMounted(() =>
+    toast.success(`${run.name} is live.`, {
+      id: RUN_TOAST,
+      description: `It is available at ${run.record.service.domain}.`,
+      closable: true
+    })
+  )
+
+  onBeforeUnmount(() => toast.dismiss(RUN_TOAST))
 </script>
 
 <template>
@@ -521,7 +538,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -532,7 +549,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -558,7 +575,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -786,7 +803,7 @@
           >
             <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
               <p class="m-0 text-overline-sm text-(--text-muted)">
-                Simulation — how this deploy ends
+                Simulation: how this deploy ends
               </p>
               <Tag
                 :label="`${REPO.scope}/${REPO.name}`"
@@ -796,8 +813,8 @@
             </div>
             <p class="m-0 text-body-sm text-(--text-muted)">
               The ending is held in the URL (<code class="text-label-code-sm">?outcome=</code>), so
-              a run is linkable and survives a reload. Pick one, press Deploy, and leave the page —
-              the toast follows you and settles wherever you are.
+              a run is linkable and survives a reload. Select one, press Deploy, and leave the page.
+              The toast follows you and settles wherever you are.
             </p>
             <div class="flex flex-wrap items-center gap-(--spacing-sm)">
               <ToggleGroup
@@ -831,11 +848,26 @@
               :label="`${run.name} is live at ${run.record?.service.domain}. It took ${run.attempt} attempt${run.attempt > 1 ? 's' : ''}.`"
             >
               <template #action>
-                <Button
-                  label="Open service"
-                  kind="secondary"
-                  size="medium"
-                />
+                <div class="flex items-center gap-(--spacing-xs)">
+                  <Button
+                    label="Edit"
+                    kind="transparent"
+                    size="medium"
+                    @click="edit"
+                  />
+                  <Button
+                    label="Redeploy"
+                    kind="transparent"
+                    size="medium"
+                    icon="pi pi-refresh"
+                    @click="redeploy"
+                  />
+                  <Button
+                    label="Open service"
+                    kind="secondary"
+                    size="medium"
+                  />
+                </div>
               </template>
             </Alert>
           </div>
@@ -914,7 +946,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -925,7 +957,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -951,7 +983,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i
@@ -1032,5 +1064,28 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
+
+    <Toast position="bottom-right">
+      <template #default="{ toast: entry, dismiss }">
+        <Toast.Item :type="entry.type">
+          <Toast.Title>{{ entry.message }}</Toast.Title>
+          <Toast.Description v-if="entry.description">{{ entry.description }}</Toast.Description>
+          <template
+            v-if="entry.type !== 'loading'"
+            #trailing
+          >
+            <Toast.Action
+              label="Edit"
+              @click="edit"
+            />
+            <Toast.Action
+              label="Redeploy"
+              @click="redeploy"
+            />
+            <Toast.Close @click="dismiss" />
+          </template>
+        </Toast.Item>
+      </template>
+    </Toast>
   </div>
 </template>

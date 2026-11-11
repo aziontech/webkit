@@ -39,7 +39,7 @@ The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the ta
 
 ### F. Version bar — `Tag`, `SplitButton`, `Button` (required)
 
-A bar pinned to the bottom of the settings pane, aligned with the column above it. It names the state with a `Tag` and one sentence. On a draft it holds a primary medium `SplitButton` that saves and deploys, with Save and Build and Save in its menu. On a built version it reads Viewing a Deployed version with a Read Only tag and offers New Version and Redeploy.
+A bar pinned to the bottom of the settings pane, aligned with the column above it. It names the state with a `Tag` and one sentence. On a draft it holds a primary medium `SplitButton` that saves and deploys, with Save and build and Save in its menu. On a built version it reads Viewing a deployed version with a Read-only tag and offers Add Version and Redeploy.
 
 ### G. Version history — `IconButton`, `Tag`, `Field`, `Textarea`, `Button`, `Avatar` (optional)
 
@@ -55,7 +55,7 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 
 ## Don't
 
-- Don't let a built version look editable; disable the fieldset and say Read Only.
+- Don't let a built version look editable; disable the fieldset and say Read-only.
 - Don't put Save or Deploy in the tab row or the page header.
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
@@ -63,11 +63,11 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 
 ## Copy
 
-- **Version state tags:** one word, e.g. "Draft", "Deployed", "Ready", "Editable", "Read Only".
-- **Version bar:** one sentence on what the user can do, e.g. "This version is open for editing. Deploy it when ready." or "Viewing a Deployed version".
-- **Save actions:** verb first, three words or fewer, e.g. "Save and Deploy", "Save and Build", "Save".
-- **Built version actions:** "New Version", "Redeploy".
-- **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Create new Version".
+- **Version state tags:** one word, e.g. "Draft", "Deployed", "Ready", "Editable", "Read-only".
+- **Version bar:** one sentence on what the user can do, e.g. "This version is open for editing. Deploy it when ready." or "Viewing a deployed version".
+- **Save actions:** verb first, three words or fewer, e.g. "Save and deploy", "Save and build", "Save".
+- **Built version actions:** "Add Version", "Redeploy".
+- **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Add Version".
 - **Setting rows:** a noun title and one sentence with a period, e.g. "Active" with "When disabled, the resource stops serving traffic."
 - **History:** "Current version", an empty changes line, e.g. "No changes yet. Each change you save shows up here.", description placeholder "What changed in this version?".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
@@ -83,8 +83,8 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 
 ## States
 
-- Draft: the editable draft on its Settings tab, with the Editable tag and the Save and Deploy split button in the version bar.
-- Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering New Version and Redeploy.
+- Draft: the editable draft on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
+- Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
 
 ## Related
@@ -92,5 +92,5 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 - `platform/detail/details-page` — its Versions tab lists the versions that open here.
 - `platform/edit/rule-builder` — the content of the Rules tab.
 - `platform/create/deploy-drawer` — deploying a version outside this page.
-- `platform/states/async-submit` — how the version bar locks while Save and Deploy runs.
+- `platform/states/async-submit` — how the version bar locks while Save and deploy runs.
 - `SettingRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.

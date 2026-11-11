@@ -171,7 +171,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -186,11 +186,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -231,8 +231,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -295,12 +295,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -373,7 +373,7 @@
     {
       key: 'upload',
       title: 'Upload',
-      description: 'Static assets uploaded to Storage',
+      description: 'Static assets uploaded to storage',
       status: 'done',
       duration: '7.8s',
       lines: [
@@ -548,14 +548,14 @@
           id: '3',
           time: '14:03:03',
           type: 'warning',
-          message: '[ERROR] [manifest] Deploy aborted — nothing was published.'
+          message: '[ERROR] [manifest] Deploy aborted. Nothing was published.'
         }
       ]
     },
     {
       key: 'service',
       title: 'Service',
-      description: 'Never ran — the deployment stopped at Rules',
+      description: 'Never ran. The deployment stopped at Rules',
       status: 'skipped',
       duration: '',
       tag: { label: 'Skipped', severity: 'secondary' },
@@ -563,8 +563,8 @@
     },
     {
       key: 'purge',
-      title: 'Cache Purge',
-      description: 'Never ran — the deployment stopped at Rules',
+      title: 'Cache purge',
+      description: 'Never ran. The deployment stopped at Rules',
       status: 'skipped',
       duration: '',
       tag: { label: 'Skipped', severity: 'secondary' },
@@ -573,7 +573,7 @@
     {
       key: 'finish',
       title: 'Live',
-      description: 'Never ran — the deployment stopped at Rules',
+      description: 'Never ran. The deployment stopped at Rules',
       status: 'skipped',
       duration: '',
       tag: { label: 'Skipped', severity: 'secondary' },
@@ -590,6 +590,14 @@
 
   const logView = ref('phased')
   const openStep = ref('rules')
+
+  const stepStatusLabels = {
+    done: 'Done',
+    failed: 'Failed',
+    skipped: 'Skipped',
+    running: 'Running',
+    pending: 'Not started'
+  }
 </script>
 
 <template>
@@ -761,7 +769,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -772,7 +780,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -798,7 +806,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -1011,7 +1019,7 @@
               <Alert
                 severity="danger"
                 size="small"
-                label="A rule with the same behavior is already bound to this service, so the manifest was refused. Nothing was published — the service keeps serving its previous deployment."
+                label="A rule with the same behavior is already bound to this service, so the manifest was refused. Nothing was published, and the service keeps serving its previous deployment."
               >
                 <template #action>
                   <Button
@@ -1026,7 +1034,7 @@
 
             <Card :padded="false">
               <template #header>
-                <p class="text-heading-xs text-(--text-default)">Deployment Details</p>
+                <p class="text-heading-xs text-(--text-default)">Deployment details</p>
 
                 <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                   <Tooltip text="Available once the deployment is live">
@@ -1177,7 +1185,7 @@
                     </Tooltip>
                   </div>
                   <div class="flex flex-col gap-(--spacing-xxs)">
-                    <span class="text-label-sm text-(--text-muted)">Triggered By</span>
+                    <span class="text-label-sm text-(--text-muted)">Triggered by</span>
                     <div class="flex min-w-0 items-center">
                       <Tooltip text="Console (UI)">
                         <Tag
@@ -1275,7 +1283,7 @@
                           class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                         >
                           <div class="pointer-events-auto">
-                            <Tooltip text="Open Default in Build & Deployment settings">
+                            <Tooltip text="Open Default in Build and deployment settings">
                               <a
                                 href="/account/build-deployment"
                                 class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -1367,7 +1375,7 @@
             >
               <template #header>
                 <p class="min-w-0 truncate text-heading-xs text-(--text-default)">
-                  Deployment Logs
+                  Deployment logs
                 </p>
 
                 <div class="flex shrink-0 items-center gap-(--spacing-sm)">
@@ -1420,6 +1428,7 @@
                               class="size-3.5 rounded-full border border-dashed border-(--border-default)"
                             />
                           </span>
+                          <span class="sr-only">{{ stepStatusLabels[step.status] }}</span>
                           <span
                             :data-state="step.status"
                             class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
@@ -1464,7 +1473,7 @@
                           <LogViewContent>
                             <template #empty>
                               <template v-if="step.status === 'skipped'">
-                                Never ran — the deployment stopped at Rules.
+                                Never ran. The deployment stopped at Rules.
                               </template>
                               <template v-else>No log lines yet.</template>
                             </template>
@@ -1563,7 +1572,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1574,7 +1583,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1600,7 +1609,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i

@@ -8,8 +8,12 @@
 
 <template>
   <div
+    role="status"
+    aria-live="polite"
+    aria-busy="true"
     class="layout-column layout-boundary relative flex min-h-full flex-col justify-center xl:h-full xl:min-h-0 xl:justify-start"
   >
+    <span class="sr-only">Loading the overview.</span>
     <div
       class="flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
       aria-hidden="true"

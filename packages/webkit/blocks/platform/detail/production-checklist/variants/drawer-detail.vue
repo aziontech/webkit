@@ -94,6 +94,7 @@
           <button
             type="button"
             :data-done="step.done || null"
+            @click="open = true"
             class="w-full rounded-none text-start transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
           >
             <Item.Media>
@@ -144,8 +145,7 @@
               />
             </div>
             <p class="text-body-sm text-(--text-muted)">
-              The create put this service live on a generated hostname. These are the gates between
-              that and production.
+              This service is live on a generated hostname. These steps take it to production.
             </p>
           </div>
           <DrawerClose />
@@ -181,13 +181,22 @@
               </Item.Content>
 
               <Item.Footer>
-                <Tag
+                <div
                   v-if="step.done"
-                  icon="pi pi-check"
-                  :label="step.doneNote || 'Done'"
-                  severity="secondary"
-                  size="medium"
-                />
+                  class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+                >
+                  <Tag
+                    icon="pi pi-check"
+                    label="Done"
+                    severity="secondary"
+                    size="medium"
+                  />
+                  <span
+                    v-if="step.doneNote"
+                    class="min-w-0 text-body-sm text-(--text-muted)"
+                    >{{ step.doneNote }}</span
+                  >
+                </div>
                 <Button
                   v-else
                   :label="step.actionLabel || step.title"

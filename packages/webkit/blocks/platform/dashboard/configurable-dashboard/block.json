@@ -3,9 +3,9 @@
   "name": "ConfigurableDashboard",
   "title": "Templates/Platform/Dashboard/ConfigurableDashboard",
   "surface": "product",
-  "summary": "A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `ChartCard` (with `DragHandle` and `ResizeHandle`), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.",
+  "summary": "A configurable dashboard: the reader arranges the cards. An Edit layout Button turns on the ChartCard drag handle and resize corner on every card of a 12-column grid; a card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. The page owns the layout, an array of id, span and height bound with v-model:span and v-model:height, and the order, which it changes on drop or on the arrow keys of a focused drag handle, then puts focus back on the moved handle and announces the move in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `ChartCard` (with its drag handle and resize corner), `Chart`, `DonutChart`, `BarList`, `Hint`, `Tag` and `Button`.",
   "preview": {
-    "layout": "padded",
+    "layout": "fullscreen",
     "background": "dark"
   },
   "intents": [

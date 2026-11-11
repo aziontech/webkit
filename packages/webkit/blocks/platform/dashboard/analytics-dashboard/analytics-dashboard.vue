@@ -6,10 +6,11 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
@@ -248,373 +249,381 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-    <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
-      <li
-        v-for="figure in figures"
-        :key="figure.id"
-        class="flex min-w-0 flex-col"
-      >
-        <StatTile
-          :label="figure.label"
-          :value="figure.value"
-          :format-value="formatters[figure.format]"
-          :delta="figure.delta"
-          :delta-label="comparison"
-          :inverse="figure.inverse"
-          :trend="figure.trend"
-          :loading="loading"
+  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
+    <main class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+      <PageHeader
+        title="Analytics"
+        description="Requests, data transferred and errors your services handled in the period."
+      />
+      <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
+        <li
+          v-for="figure in figures"
+          :key="figure.id"
+          class="flex min-w-0 flex-col"
         >
-          <template #aside>
-            <Hint :text="figure.description" />
-          </template>
-        </StatTile>
-      </li>
-    </ul>
-
-    <div
-      class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
-    >
-      <ChartCard :span="12">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Requests over time</ChartCard.Title>
-            <Hint text="Sum of requests served by every service, per interval." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              data-wide
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
-              />
-              <Tag
-                v-if="variations.requests"
-                :label="variations.requests.label"
-                :severity="variations.requests.severity"
-                :icon="variations.requests.icon"
-                size="small"
-              />
-              <ToggleGroup
-                v-model="requestsForm"
-                :options="forms"
-                size="small"
-                aria-label="Chart form for Requests over time"
-              />
-            </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Requests over time"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="transparent"
-                  size="small"
-                  aria-label="More options for Requests over time"
-                />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <Chart
-            v-model:active-index="activeIndex"
-            :series="requests"
-            :labels="labels"
-            :format-value="formatters.count"
-            empty-title="No traffic yet"
-            empty-description="Metrics appear here once a service serves requests."
+          <StatTile
+            :label="figure.label"
+            :value="figure.value"
+            :format-value="formatters[figure.format]"
+            :delta="figure.delta"
+            :delta-label="comparison"
+            :inverse="figure.inverse"
+            :trend="figure.trend"
             :loading="loading"
           >
-            <Chart.Grid />
-            <Chart.Axis kind="y" />
-            <Chart.Axis kind="x" />
-            <Chart.Bar v-if="requestsForm === 'bar'" />
-            <Chart.Area v-else />
-            <Chart.Crosshair />
-            <Chart.Tooltip />
-            <Chart.Legend totals />
-          </Chart>
-        </ChartCard.Content>
-      </ChartCard>
+            <template #aside>
+              <Hint :text="figure.description" />
+            </template>
+          </StatTile>
+        </li>
+      </ul>
 
-      <ChartCard :span="6">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Status codes</ChartCard.Title>
-            <Hint text="Sum of requests per status class. Switch to Bar to stack the classes." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
-              />
-              <Tag
-                v-if="variations.statusCodes"
-                :label="variations.statusCodes.label"
-                :severity="variations.statusCodes.severity"
-                :icon="variations.statusCodes.icon"
-                size="small"
-              />
-              <ToggleGroup
-                v-model="statusForm"
-                :options="forms"
-                size="small"
-                aria-label="Chart form for Status codes"
-              />
+      <div
+        class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
+      >
+        <ChartCard :span="12">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Requests over time</ChartCard.Title>
+              <Hint text="Sum of requests served by every service, per interval." />
             </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Status codes"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
+            <ChartCard.Controls>
+              <span
+                data-wide
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+                <Tag
+                  v-if="variations.requests"
+                  :label="variations.requests.label"
+                  :severity="variations.requests.severity"
+                  :icon="variations.requests.icon"
+                  size="small"
+                />
+                <ToggleGroup
+                  v-model="requestsForm"
+                  :options="forms"
+                  size="small"
+                  aria-label="Chart form for Requests over time"
+                />
+              </span>
+              <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-ellipsis-h"
+                  icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="More options for Status codes"
+                  aria-label="Expand Requests over time"
                 />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <Chart
-            v-model:active-index="activeIndex"
-            :series="statusCodes"
-            :labels="labels"
-            :format-value="formatters.count"
-            empty-title="No traffic yet"
-            empty-description="Metrics appear here once a service serves requests."
-            :loading="loading"
-          >
-            <Chart.Grid />
-            <Chart.Axis kind="y" />
-            <Chart.Axis kind="x" />
-            <Chart.Bar
-              v-if="statusForm === 'bar'"
-              stacked
-            />
-            <Chart.Line v-else />
-            <Chart.Crosshair />
-            <Chart.Tooltip />
-            <Chart.Legend totals />
-          </Chart>
-        </ChartCard.Content>
-      </ChartCard>
-
-      <ChartCard :span="6">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Requests by country</ChartCard.Title>
-            <Hint text="Sum of requests per country of origin, top countries first." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
-              />
-            </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Requests by country"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="transparent"
-                  size="small"
-                  aria-label="More options for Requests by country"
-                />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <Chart
-            :series="countryRequests"
-            :labels="countries"
-            orientation="horizontal"
-            :format-value="formatters.count"
-            :height="240"
-            empty-title="No traffic yet"
-            empty-description="Metrics appear here once a service serves requests."
-            :loading="loading"
-          >
-            <Chart.Grid />
-            <Chart.Axis kind="y" />
-            <Chart.Axis kind="x" />
-            <Chart.Bar labeled />
-            <Chart.Tooltip />
-          </Chart>
-        </ChartCard.Content>
-      </ChartCard>
-
-      <ChartCard :span="12">
-        <ChartCard.Header>
-          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-            <ChartCard.Title>Top hosts</ChartCard.Title>
-            <Hint text="Hosts that served the most requests in the period, with their service." />
-          </span>
-          <ChartCard.Controls>
-            <span
-              data-wide
-              class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
-            >
-              <Tag
-                label="Sum"
-                severity="secondary"
-                size="small"
-                icon="pi pi-calculator"
-              />
-            </span>
-            <Tooltip text="Expand">
-              <IconButton
-                icon="pi pi-window-maximize"
-                kind="transparent"
-                size="small"
-                aria-label="Expand Top hosts"
-              />
-            </Tooltip>
-            <DropdownMenu placement="bottom-end">
-              <DropdownMenu.Trigger>
-                <IconButton
-                  icon="pi pi-ellipsis-h"
-                  kind="transparent"
-                  size="small"
-                  aria-label="More options for Top hosts"
-                />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="query"
-                  label="Copy query"
-                />
-                <DropdownMenu.Option
-                  value="export"
-                  label="Export CSV"
-                />
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </ChartCard.Controls>
-        </ChartCard.Header>
-        <ChartCard.Content>
-          <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-            <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-              <div class="min-w-36 grow basis-(--container-3xs)">
-                <Input
-                  v-model="search"
-                  size="medium"
-                  placeholder="Search hosts or services"
-                  aria-label="Search hosts or services"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Input>
-              </div>
-            </div>
-
-            <TableRoot
-              v-model:global-filter="search"
-              :data="hosts"
-              :columns="hostColumns"
-              row-key="id"
-              enable-sorting
-              paginated
-              :page-size="5"
-              :rows-per-page-options="[5, 10, 25]"
-              header-kind="compact"
-              bordered
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Requests over time"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <Chart
+              v-model:active-index="activeIndex"
+              :series="requests"
+              :labels="labels"
+              :format-value="formatters.count"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
               :loading="loading"
             >
-              <template #empty>
-                <EmptyState
-                  v-if="!hosts.length"
-                  size="small"
-                  icon="pi pi-chart-line"
-                  title="No traffic yet"
-                  description="Metrics appear here once a service serves requests."
-                />
-                <EmptyState
-                  v-else
-                  size="small"
-                  icon="pi pi-search"
-                  title="No matching rows"
-                  description="Change the search."
-                />
-              </template>
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar v-if="requestsForm === 'bar'" />
+              <Chart.Area v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend totals />
+            </Chart>
+          </ChartCard.Content>
+        </ChartCard>
 
-              <template #cell-requests="{ row }">
-                <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
-              </template>
-            </TableRoot>
-          </div>
-        </ChartCard.Content>
-      </ChartCard>
-    </div>
+        <ChartCard :span="6">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Status codes</ChartCard.Title>
+              <Hint text="Sum of requests per status class. Switch to Bar to stack the classes." />
+            </span>
+            <ChartCard.Controls>
+              <span
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+                <Tag
+                  v-if="variations.statusCodes"
+                  :label="variations.statusCodes.label"
+                  :severity="variations.statusCodes.severity"
+                  :icon="variations.statusCodes.icon"
+                  size="small"
+                />
+                <ToggleGroup
+                  v-model="statusForm"
+                  :options="forms"
+                  size="small"
+                  aria-label="Chart form for Status codes"
+                />
+              </span>
+              <Tooltip text="Expand">
+                <IconButton
+                  icon="pi pi-window-maximize"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Expand Status codes"
+                />
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Status codes"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <Chart
+              v-model:active-index="activeIndex"
+              :series="statusCodes"
+              :labels="labels"
+              :format-value="formatters.count"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :loading="loading"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar
+                v-if="statusForm === 'bar'"
+                stacked
+              />
+              <Chart.Line v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend totals />
+            </Chart>
+          </ChartCard.Content>
+        </ChartCard>
+
+        <ChartCard :span="6">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Requests by country</ChartCard.Title>
+              <Hint text="Sum of requests per country of origin, top countries first." />
+            </span>
+            <ChartCard.Controls>
+              <span
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+              </span>
+              <Tooltip text="Expand">
+                <IconButton
+                  icon="pi pi-window-maximize"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Expand Requests by country"
+                />
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Requests by country"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <Chart
+              :series="countryRequests"
+              :labels="countries"
+              orientation="horizontal"
+              :format-value="formatters.count"
+              :height="240"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :loading="loading"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar labeled />
+              <Chart.Tooltip />
+            </Chart>
+          </ChartCard.Content>
+        </ChartCard>
+
+        <ChartCard :span="12">
+          <ChartCard.Header>
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <ChartCard.Title>Top hosts</ChartCard.Title>
+              <Hint text="Hosts that served the most requests in the period, with their service." />
+            </span>
+            <ChartCard.Controls>
+              <span
+                data-wide
+                class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
+              >
+                <Tag
+                  label="Sum"
+                  severity="secondary"
+                  size="small"
+                  icon="pi pi-calculator"
+                />
+              </span>
+              <Tooltip text="Expand">
+                <IconButton
+                  icon="pi pi-window-maximize"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Expand Top hosts"
+                />
+              </Tooltip>
+              <DropdownMenu placement="bottom-end">
+                <DropdownMenu.Trigger>
+                  <IconButton
+                    icon="pi pi-ellipsis-h"
+                    kind="transparent"
+                    size="small"
+                    aria-label="More options for Top hosts"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
+                    value="query"
+                    label="Copy query"
+                  />
+                  <DropdownMenu.Option
+                    value="export"
+                    label="Export CSV"
+                  />
+                </DropdownMenu.Group>
+              </DropdownMenu>
+            </ChartCard.Controls>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                <div class="min-w-36 grow basis-(--container-3xs)">
+                  <Input
+                    v-model="search"
+                    size="medium"
+                    placeholder="Search hosts or services"
+                    aria-label="Search hosts or services"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </div>
+              </div>
+
+              <TableRoot
+                v-model:global-filter="search"
+                :data="hosts"
+                :columns="hostColumns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="5"
+                :rows-per-page-options="[5, 10, 25]"
+                header-kind="compact"
+                bordered
+                :loading="loading"
+              >
+                <template #empty>
+                  <EmptyState
+                    key="empty-state-1"
+                    v-if="!hosts.length"
+                    size="small"
+                    icon="pi pi-chart-line"
+                    title="No traffic yet"
+                    description="Metrics appear here once a service serves requests."
+                  />
+                  <EmptyState
+                    key="empty-state-2"
+                    v-else
+                    size="small"
+                    icon="pi pi-search"
+                    title="No matching rows"
+                    description="Change the search."
+                  />
+                </template>
+
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </ChartCard.Content>
+        </ChartCard>
+      </div>
+    </main>
   </div>
 </template>

@@ -322,20 +322,20 @@
       <DrawerContent>
         <form
           class="flex min-h-0 flex-1 flex-col"
-          aria-label="Build and Deployment"
+          aria-label="Build and deployment"
           novalidate
           @submit.prevent="open = false"
         >
           <PanelHeader class="w-full">
             <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Build and Deployment</DrawerTitle>
+              <DrawerTitle>Build and deployment</DrawerTitle>
             </div>
             <DrawerClose />
           </PanelHeader>
 
           <PanelContent>
             <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
-              <legend class="sr-only">Build and Deployment</legend>
+              <legend class="sr-only">Build and deployment</legend>
               <SettingsSection
                 title="Resources"
                 hint="The service version this deployment publishes, and the version of every module and integration it references."
@@ -636,7 +636,7 @@
               <SettingsSection
                 inert
                 data-pending="true"
-                title="Projects Impacted"
+                title="Projects impacted"
                 hint="This environment publishes with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-md)">

@@ -10,7 +10,7 @@
   import Link from '@aziontech/webkit/link'
 
   const breadcrumb = [
-    { label: 'Start from a Template' },
+    { label: 'Start from a template' },
     { label: 'Nuxt E-commerce', current: true }
   ]
 </script>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="flex w-full flex-col gap-(--spacing-xxs)">
-              <span class="truncate text-body-xxs text-(--text-muted)">Cloning from Github</span>
+              <span class="truncate text-body-xxs text-(--text-muted)">Cloning from GitHub</span>
               <div class="flex items-center gap-(--spacing-md)">
                 <span
                   class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
@@ -168,7 +168,7 @@
           </Card>
 
           <Button
-            label="Browse Templates"
+            label="Browse templates"
             kind="outlined"
             size="medium"
           />

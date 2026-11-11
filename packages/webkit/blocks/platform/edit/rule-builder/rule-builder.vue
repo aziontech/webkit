@@ -24,7 +24,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   const open = ref(false)
   const editing = false
@@ -33,12 +33,12 @@
   const PHASES = [
     {
       value: 'request',
-      label: 'Request Phase',
+      label: 'Request phase',
       description: 'Configure the requests the service receives.'
     },
     {
       value: 'response',
-      label: 'Response Phase',
+      label: 'Response phase',
       description: 'Configure the responses sent back to clients.'
     }
   ]
@@ -538,9 +538,20 @@
     form.criteria.every((group) => group.conditions.every((c) => c.variable.trim())) &&
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
+  const formEl = ref(null)
   const submit = () => {
     submitted.value = true
-    if (submitting.value || !isValid()) return
+    if (submitting.value) return
+    if (!isValid()) {
+      nextTick(() =>
+        formEl.value
+          ?.querySelector(
+            ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
+          )
+          ?.focus()
+      )
+      return
+    }
     submitting.value = true
     setTimeout(() => {
       submitting.value = false
@@ -570,6 +581,7 @@
       <DrawerOverlay />
       <DrawerContent>
         <form
+          ref="formEl"
           class="flex min-h-0 flex-1 flex-col"
           aria-label="Add Rule"
           novalidate
@@ -824,7 +836,7 @@
                                                   v-if="!variableMatches(cond).length"
                                                   class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
                                                 >
-                                                  No variable matches — type the one you need.
+                                                  No variable matches. Type the one you need.
                                                 </p>
                                               </div>
                                             </ScrollArea>

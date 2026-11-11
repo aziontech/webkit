@@ -20,71 +20,76 @@ Needs attention is what makes it more than a report: every entry ends in one act
 
 ## Building blocks
 
-### A. KPI row — `StatTile` (required)
+### A. Page heading — `PageHeader` (required)
+
+Title `Security` and one sentence on what the page shows, over the rest of the page in the standard
+`layout-column`.
+
+### B. KPI row — `StatTile` (required)
 
 `Requests blocked`, `Requests inspected`, `Block rate`, each with a sparkline and the change
 `vs previous 24 hours`. `Requests blocked` and `Block rate` pass `inverse`: more blocking means more
 attacks.
 
-### B. Definitions — `Hint` (required)
+### C. Definitions — `Hint` (required)
 
 One sentence on every tile and card title.
 
-### C. Cards — `ChartCard` (required)
+### D. Cards — `ChartCard` (required)
 
 `Matched requests over time` and `Needs attention` share a row; `Blocked requests by attack category`
 and `Blocked requests by country` share the next; `Top source IPs by blocked requests` closes it.
 
-### D. Tags — `Tag` (required)
+### E. Tags — `Tag` (required)
 
 `Sum` and the signed change in each chart header, the open count on Needs attention, and the kind of
 each attention entry (`Log only`, `Spike`, `No rules`) with its severity.
 
-### E. Line or Bar — `ToggleGroup` (optional)
+### F. Line or Bar — `ToggleGroup` (optional)
 
 Only on `Matched requests over time`.
 
-### F. Control labels — `Tooltip` (required)
+### G. Control labels — `Tooltip` (required)
 
 Names Expand and More options.
 
-### G. Expand — `IconButton` (optional)
+### H. Expand — `IconButton` (optional)
 
 Its `aria-label` names the card (`Expand Matched requests over time`).
 
-### H. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu` (optional)
 
 `Copy query` and `Export CSV`.
 
-### I. Matched requests — `Chart` (required)
+### J. Matched requests — `Chart` (required)
 
 `Blocked` and `Logged` over time, in the danger and warning status colors, because each color means a
 state.
 
-### J. Needs attention — `Item` (required)
+### K. Needs attention — `Item` (required)
 
 One `Item` per entry: a title that states the problem, one sentence with the evidence, a severity
 `Tag` and one action.
 
-### K. Attention action — `Link` (required)
+### L. Attention action — `Link` (required)
 
 The one move per entry: `Review rules`, `Open security metrics`, `Attach a rule set`.
 
-### L. Breakdowns — `BarList` (required)
+### M. Breakdowns — `BarList` (required)
 
 Blocked requests by attack category and by country, largest first, each with an `aria-label`.
 
-### M. Search — `Input` (optional)
+### N. Search — `Input` (optional)
 
 `Search addresses, networks or attacks` for the source IP table.
 
-### N. Top source IPs — `TableRoot` (required)
+### O. Top source IPs — `TableRoot` (required)
 
 Searchable and paginated; addresses and counts in tabular figures.
 
-### O. Empty regions — `EmptyState` (required)
+### P. Empty regions — `EmptyState` (required)
 
-Each chart keeps its box (`No data available` / `Nothing was recorded in this period.`) and the table
+Each chart keeps its box (`No matched requests in this period` / `Nothing was recorded in this period.`, and `No blocked requests in this period` on the breakdowns) and the table
 says `No matching rows` / `Change the search.` When no rule set exists at all, the Empty variant
 replaces the whole grid with one bordered `EmptyState` and its `Add rule set` button.
 
@@ -103,6 +108,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 
 ## Copy
 
+- **Title:** `Security`. **Description:** `Requests your rules blocked and inspected, and the settings that need a decision.`
 - **Attention title:** the problem as a statement. `Service without a rule set`.
 - **Attention description:** one sentence of evidence with a figure. `SQL injection against the API rose 64% in the last hour.`
 - **Attention action:** verb first. `Review rules`, `Attach a rule set`.

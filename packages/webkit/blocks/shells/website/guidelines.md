@@ -86,7 +86,7 @@ In the footer's language slot, trigger labelled `Language`.
 ## Copy
 
 - **Hero title:** the outcome in sentence case, under ten words. **Eyebrow:** the product name: `Functions`.
-- **Hero actions:** match the header's wording and capitalization (`Start for free`, `Talk to a specialist`); the sample's hero reads `Start for Free`, which should follow the header.
+- **Hero actions:** match the header's wording and capitalization (`Start for free`, `Talk to a specialist`); the sample's hero reads `Start for free`, which should follow the header.
 - **Figures:** a number and a short noun phrase.
 
 ## Accessibility

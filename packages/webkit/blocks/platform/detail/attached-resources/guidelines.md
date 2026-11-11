@@ -1,6 +1,6 @@
 # Attached resources
 
-A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, remove or add one without leaving the settings page.
+A short list of the things one resource is attached to, shown in place inside its Settings tab. Here they are its domains: the user sees every address the resource answers on, which environment, deployment policy and certificate each one uses, and can edit, delete or add one without leaving the settings page.
 
 ## When to use
 
@@ -31,7 +31,7 @@ Every attribute cell is a `Tag` with `severity="secondary"`, `size="medium"` and
 
 ### D. Row actions — `DropdownMenuRoot`, `DropdownMenuTrigger`, `Tooltip`, `IconButton`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
-An outlined small ellipsis `IconButton`, named by a `Tooltip` and an `aria-label` that includes the record, opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or removed.
+An outlined small ellipsis `IconButton`, named by a `Tooltip` and an `aria-label` that includes the record, opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
 
 ### E. Footer — `Button` (required)
 
@@ -60,7 +60,7 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 - **Add action:** `Add <Module>` with the entity's capitalization, e.g. "Add Domain"; never "Create" inside a resource.
 - **Count:** a number and the noun, singular or plural, e.g. "1 domain", "3 domains".
 - **Row menu:** single verbs, e.g. "Edit", "Delete"; the trigger tooltip reads "Row actions".
-- **Tag values:** the value as the product names it, e.g. "Production", "Managed (free)".
+- **Tag values:** the value as the product names it, e.g. "Production", "Managed".
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility

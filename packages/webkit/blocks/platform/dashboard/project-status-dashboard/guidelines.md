@@ -19,75 +19,79 @@ row that picks the project and the sprint; every region reads that pair.
 
 ## Building blocks
 
-### A. Project and sprint — `Select` (required)
+### A. Page heading — `PageHeader` (required)
 
-Two selects labelled `Project` and `Sprint` under the page heading. The sprint label carries its dates
-(`Sprint 6 · Oct 27 – Nov 7` in the SFC).
+Title `Project status` and one sentence on what it shows. Actions hold the project and sprint selects.
 
-### B. Sprint tiles — `StatTile` (required)
+### B. Project and sprint — `Select` (required)
+
+Two selects labelled `Project` and `Sprint` in the page heading actions. The sprint label carries its
+dates (`Sprint 6 · Oct 27 to Nov 7` in the SFC).
+
+### C. Sprint tiles — `StatTile` (required)
 
 `Completion`, `Tasks done`, `Open tasks`, `Overdue`, each against the previous sprint. `Open tasks` and
 `Overdue` pass `inverse`.
 
-### C. Definitions — `Hint` (required)
+### D. Definitions — `Hint` (required)
 
 One sentence on every tile and card title.
 
-### D. Cards — `ChartCard` (required)
+### E. Cards — `ChartCard` (required)
 
 `Completion` and `Sprint burndown` share a row; `Milestones` and `At risk` share the next; `Owners`
 closes the grid. Every card has the same header: title with `Hint`, its tags, and a menu.
 
-### E. Card menu — `DropdownMenu` (optional)
+### F. Card menu — `DropdownMenu` (optional)
 
 `Copy link` and `Export CSV`.
 
-### F. Card menu trigger — `IconButton` (optional)
+### G. Card menu trigger — `IconButton` (optional)
 
 Icon-only, `aria-label="More options for Completion"` and so on.
 
-### G. Tasks by status — `DonutChart` (required)
+### H. Tasks by status — `DonutChart` (required)
 
 Done, in progress, not started and blocked; blocked takes the danger color because it means a state.
 The center shows the task count.
 
-### H. Add tasks — `Button` (required in the empty state)
+### I. Add tasks — `Button` (required in the empty state)
 
 The completion card's one setup action when the project has no tasks.
 
-### I. Card tags — `Tag` (required)
+### J. Card tags — `Tag` (required)
 
 How far behind the sprint runs on the burndown (`23 pts behind`), the open count on At risk, each
 at-risk reason (`Blocked`, `Overdue`, `Behind`), and overdue counts in the owners table as a danger tag.
 
-### J. Sprint burndown — `Chart` (required)
+### K. Sprint burndown — `Chart` (required)
 
 Two lines: `Actual` story points left against `Ideal`, the straight line to zero. The ideal line is the
 reference; keep it quieter than the actual.
 
-### K. Loading rows — `Skeleton` (required)
+### L. Loading rows — `Skeleton` (required)
 
 Holds milestone and at-risk rows while the sprint loads.
 
-### L. Milestones and at-risk rows — `Item` (required)
+### M. Milestones and at-risk rows — `Item` (required)
 
 The milestone timeline is an `Item` list with the date, title and status of each checkpoint (there is
 no timeline component). At risk lists each task with its reason and a `Tag`.
 
-### M. Milestone status — `StatusIndicator` (required)
+### N. Milestone status — `StatusIndicator` (required)
 
 `Done`, `At risk`, `Upcoming` in words beside each milestone.
 
-### N. Empty regions — `EmptyState` (required)
+### O. Empty regions — `EmptyState` (required)
 
 Every card says what will appear: `No tasks yet` / `Progress appears here once the project has tasks.`,
 `Nothing to burn down`, `No milestones yet`, `Nothing at risk`, `No owners yet`.
 
-### O. Owners — `TableRoot` (required)
+### P. Owners — `TableRoot` (required)
 
 Each owner with open and done counts and overdue as a danger `Tag`, in tabular figures.
 
-### P. Owner identity — `Avatar` (required)
+### Q. Owner identity — `Avatar` (required)
 
 The owner's initials beside the name.
 
@@ -103,13 +107,11 @@ The owner's initials beside the name.
 - Don't color the donut's categories with status hues except for the one that means a state (blocked).
 - Don't make the ideal line louder than the actual.
 - Don't hide an empty card; keep its box and say what fills it.
-- Known gap: the SFC writes the page heading as plain markup (`h1` and a paragraph) instead of `PageHeader`, which the other dashboards use.
 
 ## Copy
 
 - **Title:** `Project status`. **Description:** `Progress, milestones and risks for the selected project and sprint.`
 - **Sprint labels:** name, a middle dot, the date range written with `to`. `Sprint 5 · Oct 13 to Oct 24`.
-- Known gap: the SFC's sprint labels use an en dash for the range (`Oct 13 – Oct 24`), which `webkit-microcopy` bans.
 - **At-risk reason:** one sentence with a period, the cause and its effect. `Blocked by a library upgrade waiting on security review.`
 - **Behind tag:** amount plus unit. `23 pts behind`.
 - **Empty state:** `Nothing at risk` / `Tasks that are blocked, overdue or behind appear here.`

@@ -57,7 +57,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Don't add a second primary button to the tab row or the summary card.
 - Don't spread the facts across several cards; one summary card holds them in bands.
 - Don't hide the live address behind the actions menu; it is the card's primary link.
-- Don't render empty facts as blank space; show the action that fills them, e.g. Connect Git Repository under Source.
+- Don't render empty facts as blank space; show the action that fills them, e.g. Connect Git repository under Source.
 
 ## Copy
 
@@ -86,10 +86,10 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Resource: the summary card alone, in its resource shape.
 - Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
 - Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
-- ResourceVersions: the Versions tab, a small Versions heading with New Version over the controls row and the versions table.
+- ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
 - ServiceOverview: a service, with the environment picker in the breadcrumb, Deploy on the tab row, the production checklist and the deployment topology.
-- DeploymentDetail: a deployment that went live, the success banner, the Deployment Details card and the Deployment Logs card.
+- DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
 
 ## Related
@@ -97,7 +97,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `platform/view/table-view` — the list a row of which leads here.
 - `platform/detail/get-started` — the section that follows the summary for a resource made from the CLI.
 - `platform/detail/production-checklist` — the card on a service overview.
-- `platform/detail/deployment-logs` — the steps inside the Deployment Logs card.
+- `platform/detail/deployment-logs` — the steps inside the Deployment logs card.
 - `platform/detail/version-detail` — where a row of the Versions tab leads.
 - `platform/create/deploy-drawer` — the drawer the Deploy action opens.
 - `platform/edit/edit-resource` — the service Settings tab.

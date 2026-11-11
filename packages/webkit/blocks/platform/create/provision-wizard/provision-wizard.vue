@@ -188,8 +188,8 @@
     }
   ]
   const certificates = [
-    { value: 'lets_encrypt', label: 'Let’s Encrypt (issued and renewed automatically)' },
-    { value: 'shared_san', label: 'Shared (SAN)' },
+    { value: 'lets_encrypt', label: 'Let’s Encrypt' },
+    { value: 'shared_san', label: 'Shared SAN' },
     { value: 'own', label: 'A certificate you upload' }
   ]
   const tlsVersions = [
@@ -1365,7 +1365,7 @@
                             <template #content>
                               <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md) pb-0">
                                 <p class="text-body-sm text-(--text-muted)">
-                                  The deployment settings the first release is cut against — what it
+                                  The deployment settings the first release is cut against: what it
                                   binds, and how versions are promoted into it.
                                 </p>
 

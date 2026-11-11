@@ -346,7 +346,7 @@
             <BarList
               :items="sourceItems"
               :format-value="formatters.compact"
-              empty-title="No item yet"
+              empty-title="No items yet"
               :loading="loading"
               aria-label="Sources"
             />
@@ -565,7 +565,7 @@
               v-else
               size="small"
               icon="pi pi-file"
-              title="No item yet"
+              title="No items yet"
               description="Items sent for analysis inline or through the API appear here."
             />
           </ChartCard.Content>

@@ -58,7 +58,7 @@
                         class="text-link text-body-sm"
                         href="#"
                         @click.prevent
-                        >Resend Email</a
+                        >Resend email</a
                       >
                     </div>
 

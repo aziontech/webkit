@@ -177,7 +177,7 @@
                 { id: 'settings-general', label: 'General', path: '/account' },
                 {
                   id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
+                  label: 'Build and deployment',
                   path: '/account/build-deployment'
                 },
                 {
@@ -192,11 +192,11 @@
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
+                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
                 { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
               ]
             },
             {
@@ -237,8 +237,8 @@
   ]
 
   const accountCommands = [
-    { id: 'settings', label: 'Account Settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal Tokens', icon: 'pi pi-key' },
+    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
+    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
     { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
@@ -301,12 +301,12 @@
     { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
     {
       id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
+      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
       icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
     },
     {
       id: 'sidebar',
-      label: railCollapsed.value ? 'Expand Sidebar' : 'Collapse Sidebar',
+      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
       icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
     }
   ])
@@ -621,7 +621,7 @@
                 </template>
                 <DropdownMenu.Option
                   value="settings"
-                  label="Account Settings"
+                  label="Account settings"
                 >
                   <template #right>
                     <i
@@ -632,7 +632,7 @@
                 </DropdownMenu.Option>
                 <DropdownMenu.Option
                   value="personal-tokens"
-                  label="Personal Tokens"
+                  label="Personal tokens"
                 >
                   <template #right>
                     <i
@@ -658,7 +658,7 @@
               <DropdownMenu.Group>
                 <DropdownMenu.Option
                   value="home"
-                  label="Home Page"
+                  label="Home page"
                 >
                   <template #right>
                     <i
@@ -921,7 +921,7 @@
                   :required="repoWarning"
                   :disabled="submitting"
                 >
-                  <Field.Label for="tpl-repo-name">Private Repository Name</Field.Label>
+                  <Field.Label for="tpl-repo-name">Private repository name</Field.Label>
                   <InputGroup>
                     <InputGroup.Input
                       id="tpl-repo-name"
@@ -933,7 +933,7 @@
                     <InputGroup.Addon>
                       <Switch
                         v-model="form.repoPrivate"
-                        aria-label="Toggle Private Repository Name"
+                        aria-label="Toggle Private repository name"
                       />
                     </InputGroup.Addon>
                   </InputGroup>
@@ -941,18 +941,18 @@
               </div>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-                <h2 class="text-heading-xs text-(--text-default)">Template Settings</h2>
+                <h2 class="text-heading-xs text-(--text-default)">Template settings</h2>
 
                 <Field
                   :disabled="submitting"
                   :required="tokenWarning"
                 >
-                  <Field.Label for="tpl-access-token">Store Access Token</Field.Label>
+                  <Field.Label for="tpl-access-token">Store access token</Field.Label>
                   <Input
                     id="tpl-access-token"
                     v-model="form.accessToken"
                     name="accessToken"
-                    placeholder="Access Token"
+                    placeholder="Access token"
                     size="large"
                   >
                     <template #iconRight>
@@ -996,7 +996,7 @@
                   :disabled="submitting"
                   :invalid="domainError"
                 >
-                  <Field.Label for="tpl-store-domain">Store Domain</Field.Label>
+                  <Field.Label for="tpl-store-domain">Store domain</Field.Label>
                   <Input
                     id="tpl-store-domain"
                     v-model="form.storeDomain"
@@ -1115,7 +1115,7 @@
               </section>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-                <h2 class="text-heading-xs text-(--text-default)">Build &amp; Runtime</h2>
+                <h2 class="text-heading-xs text-(--text-default)">Build and runtime</h2>
 
                 <Field
                   :disabled="submitting"
@@ -1147,7 +1147,7 @@
                   :required="deployKeyWarning"
                   :invalid="deployKeyError"
                 >
-                  <Field.Label for="tpl-deploy-key">Deploy Key</Field.Label>
+                  <Field.Label for="tpl-deploy-key">Deploy key</Field.Label>
                   <PasswordInput
                     id="tpl-deploy-key"
                     v-model="form.deployKey"
@@ -1172,7 +1172,7 @@
                     id="tpl-build-notes"
                     v-model="form.buildNotes"
                     name="buildNotes"
-                    placeholder="Anything the team should know about this deployment (optional)."
+                    placeholder="Anything the team should know about this deployment."
                   />
                   <Field.Description>
                     Markdown is supported. Shown on the deployment summary.
@@ -1181,7 +1181,7 @@
               </section>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-                <h2 class="text-heading-xs text-(--text-default)">Notifications &amp; Alerts</h2>
+                <h2 class="text-heading-xs text-(--text-default)">Notifications and alerts</h2>
 
                 <Field
                   :disabled="submitting"
@@ -1420,7 +1420,7 @@
                     </template>
                     <DropdownMenu.Option
                       value="settings"
-                      label="Account Settings"
+                      label="Account settings"
                     >
                       <template #right>
                         <i
@@ -1431,7 +1431,7 @@
                     </DropdownMenu.Option>
                     <DropdownMenu.Option
                       value="personal-tokens"
-                      label="Personal Tokens"
+                      label="Personal tokens"
                     >
                       <template #right>
                         <i
@@ -1457,7 +1457,7 @@
                   <DropdownMenu.Group>
                     <DropdownMenu.Option
                       value="home"
-                      label="Home Page"
+                      label="Home page"
                     >
                       <template #right>
                         <i
