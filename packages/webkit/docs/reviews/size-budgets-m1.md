@@ -134,3 +134,16 @@ Two entries changed and seven new entries were set for M2.9 WP app-layout. `Char
 ### M2 merge (app-layout): webkit-provider → 14.4 KB
 
 Temporary, as above; closed by the opt-in locale entries (M2.10).
+
+## M2.9 WP charts-2
+
+The new chart parts are separate entries, so only a consumer that places them pays for them. The root grew with what every chart needs once it has a brush or a non-Latin reader: the linear label scale, the RTL mirror with logical arrow keys, series focus and the range state with its two announcements. The `MapChart` country geometry is a lazy chunk and is not counted in the entry.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                                                              |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------------------------------- |
+| chart           | 19.5          | within budget   | 21.54        | 21.75      | Raised: the index re-exports `Chart.Scatter` and `Chart.Brush`, and the root grew (below).        |
+| chart-root      | 13.4          | within budget   | 14.97        | 15.1       | Raised: linear label scale, RTL mirror and keys, series focus, brush range and its announcements. |
+| chart-axis      | 1.75          | within budget   | 1.81         | 1.9        | Raised: ticks on the linear scale and the mirrored axis side under RTL.                           |
+| gauge-chart     | new           | –               | 10.37        | 10.5       | New: the dial, threshold bands, sizes and the chart family state surface.                         |
+| map-chart       | new           | –               | 16.79        | 16.9       | New: the map, bubbles, keyboard walk, tooltip and table twin; country shapes load lazily.         |
+| webkit-provider | 14.4          | within budget   | 14.45        | 14.55      | Raised: the `gaugeChart` and `mapChart` groups and two `chart` keys in the catalogs.              |

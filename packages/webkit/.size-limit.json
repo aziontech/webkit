@@ -624,12 +624,12 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "19.5 KB"
+    "limit": "21.75 KB"
   },
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "13.4 KB"
+    "limit": "15.1 KB"
   },
   {
     "name": "chart-line",
@@ -649,7 +649,7 @@
   {
     "name": "chart-axis",
     "path": "src/components/chart/chart/chart-axis/chart-axis.vue",
-    "limit": "1.75 KB"
+    "limit": "1.9 KB"
   },
   {
     "name": "chart-grid",
@@ -684,12 +684,12 @@
   {
     "name": "gauge-chart",
     "path": "src/components/chart/gauge-chart/gauge-chart.vue",
-    "limit": "10 KB"
+    "limit": "10.5 KB"
   },
   {
     "name": "map-chart",
     "path": "src/components/chart/map-chart/map-chart.vue",
-    "limit": "16 KB",
+    "limit": "16.9 KB",
     "entryOnly": true
   },
   {
@@ -955,7 +955,7 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "14.4 KB"
+    "limit": "14.55 KB"
   },
   {
     "name": "phone-input",
