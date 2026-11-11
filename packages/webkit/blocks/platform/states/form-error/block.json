@@ -1,0 +1,51 @@
+{
+  "id": "platform/states/form-error",
+  "name": "FormError",
+  "title": "Templates/Platform/States/FormError",
+  "surface": "product",
+  "summary": "The form-error pattern from the design sample (`/forms/error-validation`): a server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. A dashed simulation panel above the form plays the other user. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "form error",
+    "server validation",
+    "server-side error",
+    "rejected save",
+    "field scoped error",
+    "section error",
+    "stale reference",
+    "linked resource deleted",
+    "api error on save",
+    "reload options",
+    "erro de formulário",
+    "validação no servidor",
+    "erro da api",
+    "salvamento rejeitado",
+    "error de formulario",
+    "validación en el servidor"
+  ],
+  "skills": ["webkit-errors", "webkit-form", "webkit-ui-states"],
+  "primary": {
+    "name": "InSync",
+    "file": "form-error.vue"
+  },
+  "variants": [
+    {
+      "name": "Rejected",
+      "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.",
+      "file": "variants/rejected.vue"
+    },
+    {
+      "name": "Reloading",
+      "summary": "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back.",
+      "file": "variants/reloading.vue"
+    },
+    {
+      "name": "Reloaded",
+      "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue.",
+      "file": "variants/reloaded.vue"
+    }
+  ]
+}

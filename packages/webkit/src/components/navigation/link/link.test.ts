@@ -25,7 +25,12 @@ describe('Link', () => {
     expect(getByTestId('custom-link').tagName).toBe('A')
     expect(getByTestId('custom-link__content')).toBeTruthy()
     expect(getByTestId('custom-link__label').textContent?.trim()).toBe('Docs')
-    expect(getByTestId('custom-link__ghost')).toBeTruthy()
+  })
+
+  it('underlines the label on hover and focus instead of painting a surface', () => {
+    const { getByTestId, queryByTestId } = render(Link, { props: { label: 'Docs' } })
+    expect(queryByTestId('navigation-link__ghost')).toBeNull()
+    expect(getByTestId('navigation-link__label').className).toContain('group-hover:underline')
   })
 
   it('applies href and defaults target to _self with no rel', () => {

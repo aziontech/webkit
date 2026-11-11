@@ -295,17 +295,17 @@ createApp(App).use(router).use(ToastPlugin).mount('#app')
 
   const submitting = ref(false)
 
-  const runDeploy = async () => {
+  const saveSettings = async () => {
     if (submitting.value) return
     submitting.value = true
     try {
-      await deploy()
-      toast.success('Deployment started.')
+      await save()
+      toast.success('Settings saved.')
     } catch (error) {
       // Say what failed and how to recover — never just "Error".
-      toast.error('Deployment failed.', {
+      toast.error("Settings weren't saved.", {
         description: error?.message ?? 'Check your connection and try again.',
-        action: { label: 'Retry', onClick: () => runDeploy() }
+        action: { label: 'Retry', onClick: () => saveSettings() }
       })
     } finally {
       submitting.value = false // release the lock from the section above on failure too
@@ -318,10 +318,10 @@ Prefer `toast.promise` when the whole lifecycle maps to one request — it raise
 settles it to success/error in place:
 
 ```js
-toast.promise(deploy(), {
-  loading: 'Deploying…',
-  success: 'Deployment started.',
-  error: (e) => `Deployment failed: ${e?.message ?? 'unknown error'}`
+toast.promise(exportReport(), {
+  loading: 'Exporting the report…',
+  success: 'Report exported.',
+  error: (e) => `The report wasn't exported. ${e?.message ?? 'Try again.'}`
 })
 ```
 
@@ -354,6 +354,30 @@ field** (→ a `Alert` in that field's own section + the field's `invalid` state
 failure that arrives **after** the user left the screen — is the one that _must_ be a toast, and a
 permanent, closable one. The full table lives in **`/webkit-errors`**.
 
+## Async actions — the run that outlives its screen (`platform/states/async-submit`)
+
+The design sample's `/forms/async-deployment` screen is the standard for every build, deploy,
+redeploy, import or provisioning screen: an action that runs on its own for tens of seconds starts,
+frees the user, and reports back wherever they are, on success and on failure.
+
+- **The run lives outside the page** (a module-scope store with its timer and toast id). Leaving the
+  page never cancels it or loses its outcome.
+- **On the page that started it:** the run status as a `Tag` in the page heading (`Idle` `secondary`,
+  `Deploying` `info`, `Failed` `danger`, `Deployed` `success`); an `EmptyState` while idle; the logs
+  while it runs; when it ends, the outcome `Alert`: danger with the reason over the stopped logs, or
+  success naming where it is live. The trigger is `loading` and the controls that would change the run
+  are disabled while it runs; the rest of the page and the app stay usable.
+- **Wherever the user is:** one toast per run, raised with one `id` so each state replaces the last.
+  Progress is `toast.loading('Deploying web-app…', { id, description: 'acme/web-app. It keeps running
+if you leave.' })`, not closable, no action. The failure is `toast.error` with `duration: 0` and
+  `closable: true`; the success is `toast.success`, closable, default duration.
+- **Both outcome toasts carry exactly two actions, Edit and Redeploy:**
+  `actions: [{ label: 'Edit', onClick: openItem }, { label: 'Redeploy', onClick: redeploy }]`.
+  **Edit** opens the item the run is about; **Redeploy** starts the run again from the same source and
+  turns the toast back into progress. Never _View deployments_, never a link to a list of runs. The
+  outcome `Alert` on the page carries the same two (plus, on success, the link to the live item).
+- **Never block** the page with a modal or overlay while the run is in progress.
+
 ## Hard rules
 
 - Every fetch/filter/submit/paginate view renders loading **and** empty **and** error — not just the
@@ -368,6 +392,8 @@ permanent, closable one. The full table lives in **`/webkit-errors`**.
 - Hand-rolled "Nothing here" strings or bespoke spinners are forbidden when `EmptyState` / `Skeleton`
   / `Spinner` exist — resolve them via the MCP/catalog.
 - Field validation is inline (`Field` + `message`), never in this matrix and never a toast.
+- A build or deploy run reports through one toast per run, on success and failure, and its outcome
+  toasts carry **Edit** and **Redeploy**, never _View deployments_ (`platform/states/async-submit`).
 
 ## Review output
 

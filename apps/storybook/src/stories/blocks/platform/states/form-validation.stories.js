@@ -14,14 +14,6 @@ import State5 from '../../../../../../../packages/webkit/blocks/platform/states/
 import source5 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/saved.vue?raw'
 import State6 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/loading.vue'
 import source6 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/loading.vue?raw'
-import State7 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/in-sync.vue'
-import source7 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/in-sync.vue?raw'
-import State8 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/rejected.vue'
-import source8 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/rejected.vue?raw'
-import State9 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/reloading.vue'
-import source9 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/reloading.vue?raw'
-import State10 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/reloaded.vue'
-import source10 from '../../../../../../../packages/webkit/blocks/platform/states/form-validation/variants/reloaded.vue?raw'
 
 export default {
   title: "Templates/Platform/States/FormValidation",
@@ -29,8 +21,8 @@ export default {
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
-    docs: { canvas: { sourceState: 'shown' }, description: { component: "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save scrolls to the Origin section and lands as a danger `Alert` under its heading with Reload origins, the Origin select takes the invalid state and the focus, and a dashed simulation panel plays the other user; never a toast, never a validation summary." } },
-    webkit: {"block":"platform/states/form-validation","intents":["form validation","validation errors","submit states","required fields","server error on submit","conflict error","saved state","validação de formulário","erros de validação","campos obrigatórios","server validation","server-side error","rejected save","field scoped error","stale reference","api error on save","reload options","validação no servidor","erro da api","salvamento rejeitado"],"skills":["webkit-form","webkit-errors","webkit-ui-states"],"primary":"Default"}
+    docs: { canvas: { sourceState: 'shown' }, description: { component: "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. A rejection the server scopes to one section of a long form (a linked resource deleted while the form is open) is the FormError template (Templates/Platform/States/FormError)." } },
+    webkit: {"block":"platform/states/form-validation","intents":["form validation","validation errors","submit states","required fields","server error on submit","conflict error","saved state","validação de formulário","erros de validação","campos obrigatórios"],"skills":["webkit-form","webkit-errors","webkit-ui-states"],"primary":"Default"}
   }
 }
 
@@ -67,24 +59,4 @@ export const Saved = {
 export const Loading = {
   render: () => ({ components: { Block: State6 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "The form while its data loads, such as the environments it offers or the record an edit form opens with. Skeleton rows hold the layout, and Create stays disabled until the fields arrive." }, source: { code: source6 } } }
-}
-
-export const InSync = {
-  render: () => ({ components: { Block: State7 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "Where a rejected save renders: a Create Service page whose linked origin is deleted by another user while the form is open. The API rejects the save with a field-scoped error, so it lands as a danger `Alert` under the Origin section heading, the section that owns the broken reference, carrying Reload origins, while the Origin select takes the invalid state. Never a toast, never a validation summary. A dashed simulation panel above the form plays the other user. Same page anatomy as the in-page create form (Templates/Platform/Create/SinglePageCreate): the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer, here raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`." }, source: { code: source7 } } }
-}
-
-export const Rejected = {
-  render: () => ({ components: { Block: State8 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists." }, source: { code: source8 } } }
-}
-
-export const Reloading = {
-  render: () => ({ components: { Block: State9 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back." }, source: { code: source9 } } }
-}
-
-export const Reloaded = {
-  render: () => ({ components: { Block: State10 }, template: '<Block />' }),
-  parameters: { docs: { description: { story: "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue." }, source: { code: source10 } } }
 }

@@ -41,7 +41,7 @@
   "platform/forms/sectioned-form": "platform/create/single-page-create#ImportFromGit",
   "platform/forms/sectioned-form#Default": "platform/create/single-page-create#ImportFromGit",
   "platform/forms/sectioned-form#Submitted": "platform/create/single-page-create#ImportFromGitSubmitted",
-  "platform/forms/server-validation": "platform/states/form-validation#InSync",
+  "platform/forms/server-validation": "platform/states/form-error",
   "platform/lists/table-view": "platform/view/table-view",
   "platform/overlays/delete-with-confirmation": "platform/delete/delete-with-confirmation",
   "platform/overlays/deploy-drawer": "platform/create/deploy-drawer",

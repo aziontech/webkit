@@ -1,6 +1,6 @@
 # Link
 
-> Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).
+> Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).
 
 - Import: `import Link from '@aziontech/webkit/link'`
 - Category: navigation · Surface: product · Structure: monolithic
@@ -51,7 +51,8 @@
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`
+- `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
 
 ## Accessibility

@@ -510,7 +510,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "64.65 KB"
+    "limit": "64.75 KB"
   },
   {
     "name": "platform-directory",
@@ -579,7 +579,7 @@
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "55.85 KB"
+    "limit": "56 KB"
   },
   {
     "name": "site-footer",

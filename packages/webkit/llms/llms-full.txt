@@ -7761,7 +7761,7 @@ The code of every state is in [blocks/platform/settings/settings-form.md](blocks
 
 # AsyncSubmit (`platform/states/async-submit`)
 
-> The async counterpart of the server rejection in the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).
+> The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).
 
 - Surface: product
 - Source: `blocks/platform/states/async-submit/async-submit.vue` in `@aziontech/webkit`
@@ -7773,7 +7773,7 @@ The code of every state is in [blocks/platform/settings/settings-form.md](blocks
 
 async submit; long running action; background job status; deploy in progress; async deploy result; operation status; envio assíncrono; ação demorada; status da operação
 
-A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
+The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
 
 ## When to use
 
@@ -7896,6 +7896,8 @@ One `Toaster` (named export of `@aziontech/webkit/toast`, beside `toast`) mounte
 - Give both toasts the same two actions through `toast()`'s `actions` option: **Edit** for the item that was deployed, and **Redeploy**. Don't rebuild the toast body in the `Toaster` slot to get two actions.
 - On the page that started the run, show the outcome inline as well, with the same two actions as the toast: a danger `Alert` with the reason, **Edit** and **Redeploy** over the stopped logs, or a success `Alert` naming the new address with **Edit**, **Redeploy** and **Open service**.
 - Disable Deploy and the controls that would change the run while it is in progress, with Deploy in `loading`.
+- Use one toast id per run, so the progress toast turns into the outcome toast in place, and a Redeploy turns it back into progress.
+- Apply this to every build and deploy screen (deploy drawers, deployment flows, redeploys from a list, imports): the run lives outside the page, the page shows the status `Tag` and the outcome `Alert`, and the toast reports wherever the user is.
 
 ## Don't
 
@@ -7910,7 +7912,7 @@ One `Toaster` (named export of `@aziontech/webkit/toast`, beside `toast`) mounte
 - **Page heading:** names the action, sentence case: `Async deployment`. Lead: what the run does and that the user may leave: `A deploy runs for half a minute and asks nothing of you while it does.`
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
 - **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about 25 seconds.`
-- **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`
+- **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
 - **Failure toast:** what failed and why, then the ways out: `web-app wasn't deployed.` / `The routing rules were refused.` Actions: `Edit`, `Redeploy`.
 - **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.com.` Actions: `Edit`, `Redeploy`.
 - **Failure Alert:** the reason the server gave, as full sentences, with `Edit` and `Redeploy`.
@@ -8078,35 +8080,220 @@ The code of every state is in [blocks/platform/states/first-use.md](blocks/platf
 
 ---
 
+<!-- blocks/platform/states/form-error.md -->
+
+# FormError (`platform/states/form-error`)
+
+> The form-error pattern from the design sample (`/forms/error-validation`): a server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. A dashed simulation panel above the form plays the other user. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`.
+
+- Surface: product
+- Source: `blocks/platform/states/form-error/form-error.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/states/form-error")`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md)
+- Skills: `webkit-errors`, `webkit-form`, `webkit-ui-states`
+
+## Asked as
+
+form error; server validation; server-side error; rejected save; field scoped error; section error; stale reference; linked resource deleted; api error on save; reload options; erro de formulário; validação no servidor; erro da api; salvamento rejeitado; error de formulario; validación en el servidor
+
+The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.
+
+## When to use
+
+- A long, sectioned create or edit form whose save can be rejected because of one section: a linked resource deleted or changed by someone else, a value the server refuses for that section only.
+- As the reference for where a field-scoped or section-scoped server error renders, and how the user recovers without retyping anything.
+
+## When not to use
+
+- The submit states of a short form (required, invalid, in flight, a conflict on a one-section form, an unscoped failure, success): use `platform/states/form-validation`.
+- A long-running action that reports back later (build, deploy): use `platform/states/async-submit`.
+- A failure no field or section owns (network, timeout, 500): an error toast with Retry, as in `platform/states/form-validation` ServerError.
+- Signed-out screens: use `platform/auth`, where every outcome lands in one card `Alert`.
+
+## Building blocks
+
+### A. Creation header — `GlobalHeader` (required)
+
+The full-width header of a creation page: back, brand and location on the start side, the account on the end side. Same frame as `headers/creation-header`.
+
+### B. Back — `IconButton` (required)
+
+`pi-chevron-left`, `kind="outlined"`, with `aria-label="Back to Forms"`.
+
+### C. Product mark — `Brand` (required)
+
+Inside a link to Home.
+
+### D. Location — `Breadcrumb` (required)
+
+Where the form sits, ending in the page.
+
+### E. Account — `Avatar` (required)
+
+The signed-in user, inside a labelled button.
+
+### F. Simulation — `Tag` (simulation only)
+
+In the dashed `aside` labelled `Scenario simulation`: `Server in sync` (`success`) or `Deleted server-side: web-origin-prod` (`danger`). The panel is a story device that plays the other user; a real page has no such control.
+
+### G. Actions — `Button` (required)
+
+Simulation controls (`User 2 deletes the linked origin`, `Reset scenario`), the recovery action on the section `Alert` (`Reload origins`, `kind="secondary"`, `loading` while it runs), and the footer's `Cancel` and `Save`.
+
+### H. Section heading — `SectionHeader` (required)
+
+Over every group. The Origin heading carries an id so the save can scroll it into view; the section `Alert` opens right under it.
+
+### I. Group surface — `Card` (required)
+
+`:padded="false"` around each section's rows.
+
+### J. Rows — `Item` (required)
+
+`Item.List` inside each `Card`, one row per setting.
+
+### K. Setting row — `SettingRow` (required)
+
+Title and description on the start side, the control on the end side.
+
+### L. Text values — `Input` (required)
+
+Name and Host header, each with an `aria-label` and its error wired by `aria-describedby`.
+
+### M. Ports — `MultiSelect` (required)
+
+HTTP ports, with `MultiSelect.Trigger` carrying the id the error points at.
+
+### N. Linked resource — `Select` (required)
+
+The Origin. It takes `invalid` when the server says the chosen origin no longer exists, and `required` once the list is reloaded without it.
+
+### O. Choice cards — `Field` (required)
+
+Protocol usage, a `fieldset` of `Field`s each wrapping a `RadioButton` with a label and a description.
+
+### P. Choice — `RadioButton` (required)
+
+One per protocol option.
+
+### Q. Toggles — `Switch` (required)
+
+The feature rows.
+
+### R. Numbers — `NumberInput` (required)
+
+The cache TTLs, `min="0"`.
+
+### S. Field reason — `HelperText` (required)
+
+Under the control, one line: `kind="invalid"` for a value the server refused (`This origin no longer exists.`), `kind="required"` for an empty one (`Select an origin to continue.`).
+
+### T. Section notice — `Alert` (rejection only)
+
+One danger `Alert` under the section heading that owns the error, with the recovery action in its `action` slot. It opens with an expand transition (`motion-reduce:transition-none`) and closes once the user recovers or changes the value.
+
+### U. Loading — `Skeleton` (reloading only)
+
+Stands in for the Origin select while the list reloads, with an accessible name (`Loading origins`).
+
+### V. Footer — `SaveBar` (required)
+
+Sticky at the end of the page, raised with `z-10`: `Cancel` and `Save`. Save shows `loading` while the request is in flight and is disabled while the list reloads.
+
+## Do
+
+- Put a section-scoped server rejection in a danger `Alert` under that section's heading, and set the field it names to `invalid` with its own one-line reason. Both surfaces, never one.
+- Say in the `Alert`, as separate sentences, what happened, why, that nothing else was lost, and what to do: `Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.`
+- Put the recovery on the `Alert` itself (`Reload origins`), not in the footer and not in a toast.
+- Scroll the section into view and move focus to the field, after the lock is released; an instant scroll when `prefers-reduced-motion` is set.
+- Keep every entry. Only the field the server refused changes, and only after the user recovers.
+- While the recovery runs, show its `loading`, replace the field by a `Skeleton` and disable Save.
+- After the recovery, close the `Alert`, clear the stale value and flag the field `required` with what to do next.
+
+## Don't
+
+- Don't toast a rejection a section or field owns: the toast leaves, and it points nowhere.
+- Don't show a validation summary at the top of the page.
+- Don't clear the form or send the user back to the start.
+- Don't use the amber `required` state for a value the server refused; the value is there, so it is `invalid`.
+- Don't auto-dismiss the `Alert`; it stays until the user recovers.
+- Don't open more than one `Alert` for one rejection.
+
+## Copy
+
+- **Section Alert:** the fact, the cause, what was not lost, what to do: `Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.`
+- **Recovery action:** verb plus the thing reloaded: `Reload origins`.
+- **Field reason (refused):** `This origin no longer exists.`
+- **Field reason (after reload):** `Select an origin to continue.`
+- **Required messages:** `Name is required.`, `Host header is required.`, `Select an origin.`, `Select at least one HTTP port.`
+- **Simulation panel:** a colon, never a dash: `Simulation: the other user`.
+- **Actions:** `Cancel`, `Save`, `Reload origins`.
+
+## Accessibility
+
+- The `<form>` has an accessible name and `novalidate`; while the request is in flight the fields sit in a disabled `fieldset`.
+- The `Alert` sits in reading order before the fields it governs; its action is a real button reachable by keyboard.
+- Focus moves to the refused field after the save, with `preventScroll` so the scroll to the section heading is the only movement.
+- The field's reason is wired to the control with `aria-describedby`.
+- The `Skeleton` has an accessible name while the list reloads.
+- The `Alert`'s expand and the page entrance honour `prefers-reduced-motion`.
+
+## States
+
+- InSync: the form filled in and linked to an origin that still exists; the simulation panel reads Server in sync.
+- Rejected: User 2 deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
+- Reloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
+- Reloaded: the list is back without the deleted origin; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
+
+## Related
+
+- `platform/states/form-validation` — the submit states of a short form, including a conflict on a one-section form and an unscoped failure.
+- `platform/states/async-submit` — the long-running counterpart, where the outcome reports back wherever the user is.
+- `platform/create/single-page-create` — the sectioned create page this one is built on.
+- `skills/webkit-errors` — where every error renders, row by row.
+
+## Variants
+
+- `InSync` — primary (the code below)
+- `Rejected` — User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
+- `Reloading` — Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back.
+- `Reloaded` — The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue.
+
+Each variant is the same screen in another state: `get_pattern("platform/states/form-error", { variant })`, or the file under `blocks/platform/states/form-error/variants/`.
+
+The code of every state is in [blocks/platform/states/form-error.md](blocks/platform/states/form-error.md) and `blocks/platform/states/form-error/form-error.vue`.
+
+---
+
 <!-- blocks/platform/states/form-validation.md -->
 
 # FormValidation (`platform/states/form-validation`)
 
-> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. The InSync, Rejected, Reloading and Reloaded variants show where a field-scoped server rejection renders: a Create Service page whose linked origin is deleted by another user while the form is open, so the save scrolls to the Origin section and lands as a danger `Alert` under its heading with Reload origins, the Origin select takes the invalid state and the focus, and a dashed simulation panel plays the other user; never a toast, never a validation summary.
+> A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. A rejection the server scopes to one section of a long form (a linked resource deleted while the form is open) is the FormError template (Templates/Platform/States/FormError).
 
 - Surface: product
 - Source: `blocks/platform/states/form-validation/form-validation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/form-validation")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
 
-form validation; validation errors; submit states; required fields; server error on submit; conflict error; saved state; validação de formulário; erros de validação; campos obrigatórios; server validation; server-side error; rejected save; field scoped error; stale reference; api error on save; reload options; validação no servidor; erro da api; salvamento rejeitado
+form validation; validation errors; submit states; required fields; server error on submit; conflict error; saved state; validação de formulário; erros de validação; campos obrigatórios
 
-Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading, and then a long Create Service page where another user deletes the linked origin while the form is open, the case where a server rejection is scoped to one section.
+Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.
 
 ## When to use
 
 - As the reference for the submit states of any create or edit form: what happens on Create with gaps, while the request is in flight, and on each kind of answer.
 - A short create form with a handful of fields and no sections (a variable, a key, a token).
-- A long sectioned form whose save can be rejected because a linked resource changed under the user (the InSync to Reloaded variants).
 
 ## When not to use
 
 - A sectioned create page with many settings and a sticky save bar: build it from `platform/create/single-page-create` and apply these states to it.
 - A create that runs for tens of seconds and can be left (build, deploy, import): use `platform/states/async-submit`.
 - Settings of an existing object saved section by section: use `platform/settings/settings-form`.
+- A long sectioned form whose save is rejected because of one section (a linked resource deleted under the user): use `platform/states/form-error`.
 - Signed-out screens: use `platform/auth`, where nothing toasts.
 - A create launched from a list without leaving it: use `platform/create/create-in-drawer`.
 
@@ -8146,7 +8333,7 @@ One `Toaster` mounted with the form, `position="bottom-right"`. It shows the res
 
 ### I. Section notice — `Alert` (conflict and rejection only)
 
-A server rejection a field owns lands in two places, never in a toast: a danger `Alert` at the top of the section that owns the field (on this one-section form, above the fields; on the long form, under the Origin heading with **Reload origins**), and the field's `invalid` state with its reason. The `Alert` says what happened, that nothing typed was lost and what to do; it closes once the user changes the value or recovers.
+A server rejection a field owns lands in two places, never in a toast: a danger `Alert` at the top of the section that owns the field (on this one-section form, above the fields; on a long form, under the section heading, as in `platform/states/form-error`), and the field's `invalid` state with its reason. The `Alert` says what happened, that nothing typed was lost and what to do; it closes once the user changes the value or recovers.
 
 ## Do
 
@@ -8155,9 +8342,7 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 - Lock the whole scope while the request is in flight: Create shows `loading`, every field and Cancel are disabled, `aria-busy` is on the form. Release it on success and failure alike.
 - Keep every entry after a failed or rejected save, and say so in the copy.
 - Clear the form after a success, so the next entry starts clean, and name the new object in the toast.
-- On a long form, put a section-scoped server rejection in a danger `Alert` under that section's heading, carrying the recovery action (`Reload origins`), and set the field it names to `invalid` with its reason (`This origin no longer exists.`). Both surfaces, never one.
 - On the one-section form, a key already in use raises the danger `Alert` above the fields as well as the `invalid` Key, and focus moves to Key.
-- On a long form, scroll the rejected section into view and focus the field, honouring `prefers-reduced-motion` (an instant scroll when it is set).
 
 ## Don't
 
@@ -8165,7 +8350,7 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 - Don't toast a rejection a field owns (a key already in use, a deleted origin). The toast dismisses itself and points nowhere.
 - Don't use the amber `required` prompt for a value the server rejected; the value is present, so it is `invalid`.
 - Don't disable Create to signal missing values; let submit run and show the messages.
-- Don't auto-dismiss an `Alert` that names a required action; it stays until the user recovers (the Reloaded state closes it).
+- Don't auto-dismiss an `Alert` that names a required action; it stays until the user recovers (see the Reloaded state of `platform/states/form-error`).
 
 ## Copy
 
@@ -8175,12 +8360,8 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 - **Required message:** names the field: `Key is required.`; for a select, the action: `Select an environment.`
 - **Invalid message:** what is wrong and the rule: `Use uppercase letters, digits and underscores, starting with a letter.`
 - **Conflict message:** the fact, on the field: `A variable named API_TOKEN already exists.` The section `Alert` adds what happened and what to do: `A variable named API_TOKEN already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`
-- **Long form required messages:** name the field: `Name is required.`, `Host header is required.`, `Select an origin.`
-- **Long form labels:** sentence case, the unit in the description: `Browser maximum TTL` with `How long browsers may keep a cached response, in seconds.`
-- **Simulation panel:** a colon, never a dash: `Simulation: the other user`.
 - **Error toast:** what did not happen, then what was kept: title `The variable wasn't created.`, description `The request didn't reach the server. Your entries are kept.`, action `Retry`.
 - **Success toast:** past tense, names the object and where it applies: `API_TOKEN was created.` / `It is available in Production.`
-- **Section rejection Alert:** what happened, why, what was not lost and what to do, as separate sentences: `Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.` Action: `Reload origins`.
 - **Actions:** `Cancel`, `Create`, `Retry`.
 
 ## Accessibility
@@ -8201,15 +8382,12 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 - Conflict: the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
 - Saved: the save went through; a success toast names the variable and where it is available, and the form is cleared.
 - Loading: the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
-- InSync: the long Create Service form while the linked origin still exists, with the dashed panel that plays the other user.
-- Rejected: the origin was deleted and Save pressed; the page scrolls to the Origin section, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
-- Reloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
-- Reloaded: the list is back without the deleted origin; the `Alert` closes and the select is cleared and flagged `required` with Select an origin to continue.
 
 ## Related
 
+- `platform/states/form-error` — a server rejection scoped to one section of a long form: the section `Alert` with its recovery action, and the field's own reason.
 - `platform/states/async-submit` — the long-running counterpart: the outcome reports back wherever the user is.
-- `platform/create/single-page-create` — the sectioned create page the InSync to Reloaded variants are built on.
+- `platform/create/single-page-create` — the sectioned create page these states apply to.
 - `platform/auth` — the signed-out version, where every outcome lands in one card `Alert` and nothing toasts.
 - `platform/settings/settings-form` — the same field states on an existing object.
 - `Field` — the label, description and state triad every field here uses.
@@ -8223,10 +8401,6 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 - `Conflict` — The server rejected a value one field owns: the key is already in use. A danger Alert above the fields says so and that the entries are kept, Key takes the invalid state with its reason and the focus, and nothing toasts.
 - `Saved` — The save went through. A success Toast names the new variable and where it is available, and the form is cleared for the next entry.
 - `Loading` — The form while its data loads, such as the environments it offers or the record an edit form opens with. Skeleton rows hold the layout, and Create stays disabled until the fields arrive.
-- `InSync` — Where a rejected save renders: a Create Service page whose linked origin is deleted by another user while the form is open. The API rejects the save with a field-scoped error, so it lands as a danger `Alert` under the Origin section heading, the section that owns the broken reference, carrying Reload origins, while the Origin select takes the invalid state. Never a toast, never a validation summary. A dashed simulation panel above the form plays the other user. Same page anatomy as the in-page create form (Templates/Platform/Create/SinglePageCreate): the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer, here raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`.
-- `Rejected` — User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
-- `Reloading` — Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back.
-- `Reloaded` — The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue.
 
 Each variant is the same screen in another state: `get_pattern("platform/states/form-validation", { variant })`, or the file under `blocks/platform/states/form-validation/variants/`.
 
@@ -12687,7 +12861,7 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 - Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `asChild`, where the merged focusable child (e.g. an anchor) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`) and hover/active feedback.
 - Keyboard map: slotted links and buttons supply Tab order; use `asChild` to merge layout onto a single focusable child when the whole row is a link.
-- ARIA: `ItemGroup` uses `role="list"`; consumers may set `role="listitem"` on Item when inside a list; `ItemSeparator` uses `role="separator"`.
+- ARIA: `ItemGroup` and `ItemList` use `role="list"` and tell their direct Items, through context, that they are list members; the consumer wires nothing. A member Item renders `role="listitem"` on its root. A member Item with `asChild` renders a `role="listitem"` wrapper (`data-slot="item-listitem"`) around the merged child, so a link row stays a link. An Item outside a list, or nested inside another Item, gets no list role. `ItemSeparator` uses `role="separator"`, and `role="none"` when it sits directly inside a list, where a separator is not an allowed child.
 - Contrast ≥4.5:1 for title and description text.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on slotted actions (owned by children).
@@ -24892,7 +25066,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 # Link
 
-> Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).
+> Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).
 
 - Import: `import Link from '@aziontech/webkit/link'`
 - Category: navigation · Surface: product · Structure: monolithic
@@ -24943,7 +25117,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`
+- `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
 
 ## Accessibility

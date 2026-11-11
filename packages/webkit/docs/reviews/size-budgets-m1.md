@@ -66,3 +66,10 @@ Two entries changed for M1.10 row 51. `TriggerHost` now looks through a `Tooltip
 | --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------------------------------ |
 | doc-page-header | 26.3          | 26.21           | 26.40        | 26.5       | Raised: its overflow menu's `DropdownMenu.Trigger` carries the larger `TriggerHost`. |
 | confirm-dialog  | 23.6          | 23.48           | 23.71        | 23.8       | Raised: it ships `Dialog.Trigger`, which carries the larger `TriggerHost`.           |
+
+Two entries changed for M2.9 phase 1 (the PR #1169 port). `Item.List` now tells its rows they are list members, so each row renders `role="listitem"`, and an `asChild` row gets a `listitem` wrapper. This fixes axe's `aria-required-children` on every `Item.List`. Both sections render their rows through `Item.List`.
+
+| Entry           | Budget before | Measured before | Measured now | New budget | Note                                                         |
+| --------------- | ------------- | --------------- | ------------ | ---------- | ------------------------------------------------------------ |
+| listing-browser | 64.65         | within budget   | 64.69        | 64.75      | Raised: `Item` list-member context and the listitem wrapper. |
+| listing-table   | 55.85         | within budget   | 55.92        | 56         | Raised: same `Item` change.                                  |
