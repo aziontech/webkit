@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right. */
-  export type SaveBarKind = 'floating' | 'docked' | 'plain'
+  /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it. */
+  export type SaveBarKind = 'floating' | 'docked' | 'plain' | 'fade'
 
   defineOptions({
     name: 'SaveBar',
@@ -37,7 +37,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
-    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface)"
+    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface) data-[kind=fade]:bg-linear-to-b data-[kind=fade]:from-transparent data-[kind=fade]:to-(--bg-canvas)"
   >
     <div
       class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:@xl/save-bar:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:@xl/save-bar:h-14"
@@ -64,6 +64,32 @@
         <div
           :data-testid="`${testId}__actions`"
           class="flex items-center gap-(--spacing-sm) @max-md/save-bar:flex-col-reverse @max-md/save-bar:items-stretch @max-md/save-bar:gap-(--spacing-xs)"
+        >
+          <slot name="actions" />
+        </div>
+      </div>
+      <div
+        v-else-if="kind === 'fade'"
+        class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) pt-(--spacing-xl) pb-(--spacing-lg)"
+      >
+        <div
+          v-if="$slots['leading'] || $slots['default']"
+          :data-testid="`${testId}__message`"
+          class="me-auto flex min-w-0 items-center gap-(--spacing-xs)"
+        >
+          <slot name="leading">
+            <i
+              class="pi pi-info-circle shrink-0 text-body-sm text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <p class="min-w-0 text-body-sm text-(--text-default)">
+              <slot />
+            </p>
+          </slot>
+        </div>
+        <div
+          :data-testid="`${testId}__actions`"
+          class="flex items-center gap-(--spacing-sm)"
         >
           <slot name="actions" />
         </div>

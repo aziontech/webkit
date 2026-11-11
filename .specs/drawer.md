@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: cdd3355f3f01aaf9f39db2871c175122cdc76f6da7a0d18d729991603963e765
+checksum: 9f083d55574c6b71c82f44daf0d73ee85f796abee449eb4a95e7486ba86ffb21
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -105,7 +105,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 - `drawer-overlay.vue` — Public sub-component `drawer-overlay`.
 - `drawer-portal.vue` — Public sub-component `drawer-portal`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
-- `drawer-trigger.vue` — Public sub-component `drawer-trigger`.
+- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), the ARIA and `id` are merged into that node at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in a `Tooltip` or another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element, the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`.
 
 ## Props
 

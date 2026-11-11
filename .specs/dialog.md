@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 355ea79180babf435e923e1f72ff467be91ffb3a7cea34438552f5004f36b7eb
+checksum: 1e4f745246c7a049145741b4a3b18c78c74636fa22dca70b300a7fc996583e79
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -94,7 +94,7 @@ const open = ref(false)
 - `dialog-overlay.vue` — Public sub-component `dialog-overlay`.
 - `dialog-portal.vue` — Public sub-component `dialog-portal`.
 - `dialog-title.vue` — Public sub-component `dialog-title`.
-- `dialog-trigger.vue` — Public sub-component `dialog-trigger`.
+- `dialog-trigger.vue` — Public sub-component `dialog-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the dialog on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), the ARIA and `id` are merged into that node at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in a `Tooltip` or another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element, the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`.
 
 ## Props
 

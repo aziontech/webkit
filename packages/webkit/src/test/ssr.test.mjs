@@ -111,3 +111,23 @@ describe('motion does not hide server-rendered content', () => {
     assert.ok(!panel[1].split(/\s+/).includes('opacity-0'), `active panel classes: ${panel[1]}`)
   })
 })
+
+describe('trigger ARIA is in the server HTML', () => {
+  for (const [example, popup] of [
+    ['examples/dropdown-menu/default.vue', 'menu'],
+    ['examples/popover/default.vue', 'dialog']
+  ]) {
+    test(`${example} renders aria-haspopup="${popup}" on the slotted button`, async () => {
+      const mod = await server.ssrLoadModule(join(PKG, example))
+      const html = await renderToString(createSSRApp(mod.default))
+      const trigger = html.match(/<span[^>]*data-testid="[^"]*__trigger"[^>]*>\s*(<button[^>]*>)/)
+      assert.ok(trigger, 'trigger wrapper with a button child not found')
+      const [wrapper, button] = [trigger[0].slice(0, trigger[0].indexOf('>') + 1), trigger[1]]
+      assert.doesNotMatch(wrapper, /aria-|role=|tabindex=/, wrapper)
+      assert.match(button, new RegExp(`aria-haspopup="${popup}"`), button)
+      assert.match(button, /aria-expanded="false"/, button)
+      assert.match(button, /aria-controls="[^"]+"/, button)
+      assert.match(button, /\sid="[^"]+"/, button)
+    })
+  }
+})

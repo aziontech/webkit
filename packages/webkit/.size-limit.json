@@ -2,7 +2,7 @@
   {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
-    "limit": "11.9 KB"
+    "limit": "12.1 KB"
   },
   {
     "name": "button",
@@ -138,7 +138,7 @@
   {
     "name": "doc-prompt",
     "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
-    "limit": "9.6 KB"
+    "limit": "9.85 KB"
   },
   {
     "name": "doc-tooltip",
@@ -153,7 +153,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
-    "limit": "25.75 KB"
+    "limit": "26.3 KB"
   },
   {
     "name": "doc-on-this-page",
@@ -869,7 +869,7 @@
   {
     "name": "section-header",
     "path": "src/components/layout/section-header/section-header.vue",
-    "limit": "7.9 KB"
+    "limit": "8.15 KB"
   },
   {
     "name": "settings-section",
@@ -894,7 +894,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "23 KB"
+    "limit": "23.6 KB"
   },
   {
     "name": "webkit-provider",

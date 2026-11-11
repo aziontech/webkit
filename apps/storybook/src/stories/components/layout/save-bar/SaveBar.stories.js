@@ -6,6 +6,8 @@ import Example1 from '../../../../../../../packages/webkit/examples/save-bar/doc
 import source1 from '../../../../../../../packages/webkit/examples/save-bar/docked.vue?raw'
 import Example2 from '../../../../../../../packages/webkit/examples/save-bar/plain.vue'
 import source2 from '../../../../../../../packages/webkit/examples/save-bar/plain.vue?raw'
+import Example3 from '../../../../../../../packages/webkit/examples/save-bar/fade.vue'
+import source3 from '../../../../../../../packages/webkit/examples/save-bar/fade.vue?raw'
 
 export default {
   title: 'Components/Primitives/Layout/SaveBar',
@@ -18,7 +20,7 @@ export default {
       canvas: { sourceState: 'shown' },
       description: {
         component:
-          'The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown.'
+          'The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next.'
       }
     }
   }
@@ -59,6 +61,19 @@ export const Plain = {
           'The footer that closes a form saved as one unit: Cancel and Save on the right of the form column, always shown.'
       },
       source: { code: source2 }
+    }
+  }
+}
+
+export const Fade = {
+  render: () => ({ components: { Example: Example3 }, template: '<Example />' }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The footer of a full-page wizard step: Back on the left and the step's primary action on the right, with no border; the step content fades into the canvas above it."
+      },
+      source: { code: source3 }
     }
   }
 }

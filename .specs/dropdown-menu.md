@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 0124bfbbdccce2351aaf26fe32cbb34e47cecb00659084a59ef51d01fb53c842
+checksum: 6e6292f4badad0ab8bd8aaff6bee3f33e236c8edf5fdeba9a0f9cbbad4699ec2
 created: 2026-06-26
 last_updated: 2026-11-11
 ---
@@ -109,7 +109,7 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Sub-components
 
-- `dropdown-menu-trigger/dropdown-menu-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `panelId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) that carries `data-testid`, `data-state` and `data-disabled` and listens for the bubbling `click` / `keydown`. After mount and on every update it forwards `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) onto the first focusable element in its slot (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), which also becomes the positioning anchor and the focus-return target. So an `IconButton`, a `Button`, or either wrapped in a `Tooltip` is the one tab stop and the one ARIA owner — no nested interactive control. When the slot holds no focusable element (plain text, an icon, an `Avatar`), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled).
+- `dropdown-menu-trigger/dropdown-menu-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `panelId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) that carries `data-testid`, `data-state` and `data-disabled` and listens for the bubbling `click` / `keydown`. It gives `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which also becomes the positioning anchor and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), the ARIA and `id` are merged into that node at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in a `Tooltip` or another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. So an `IconButton`, a `Button`, or either wrapped in a `Tooltip` is the one tab stop and the one ARIA owner — no nested interactive control. When the slot holds no focusable element (plain text, an icon, an `Avatar`), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled); for plain text and native elements this is in the server HTML too.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those props itself.

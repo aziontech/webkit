@@ -13,6 +13,7 @@
   import Label from '@aziontech/webkit/label'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioCards from '@aziontech/webkit/radio-cards'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -1666,36 +1667,32 @@
             </div>
           </div>
 
-          <footer
+          <SaveBar
             v-if="stepIndex > 0 || nextLabel"
-            class="shrink-0 bg-linear-to-b from-transparent to-(--bg-canvas) pb-(--spacing-lg) pt-(--spacing-xl)"
+            kind="fade"
           >
-            <div
-              class="layout-column-form layout-boundary-inline flex w-full items-center gap-(--spacing-md)"
+            <template
+              v-if="stepIndex > 0"
+              #leading
             >
               <Button
-                v-if="stepIndex > 0"
-                key="back"
                 type="button"
                 label="Back"
                 kind="outlined"
                 size="medium"
                 @click="goBack"
               />
-              <div
+            </template>
+            <template #actions>
+              <Button
                 v-if="nextLabel"
-                key="next"
-                class="ms-auto"
-              >
-                <Button
-                  :label="nextLabel"
-                  kind="primary"
-                  size="medium"
-                  type="submit"
-                />
-              </div>
-            </div>
-          </footer>
+                :label="nextLabel"
+                kind="primary"
+                size="medium"
+                type="submit"
+              />
+            </template>
+          </SaveBar>
         </form>
       </main>
     </div>
