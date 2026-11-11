@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import CustomCells from '../../../../examples/attribute-editor/custom-cells.vue'
 import Default from '../../../../examples/attribute-editor/default.vue'
@@ -119,10 +119,11 @@ describe('AttributeEditor', () => {
     )
   })
 
-  it('shows a cell error tied to its control', () => {
+  it('shows a cell error tied to its control', async () => {
     const view = render(
       Harness([{ key: '', value: '1' }], { errors: [{ key: 'Key is required.' }] })
     )
+    await nextTick()
     const input = view.getByLabelText('Key')
     expect(input.getAttribute('aria-invalid')).toBe('true')
     const described = (input.getAttribute('aria-describedby') ?? '')

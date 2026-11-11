@@ -284,7 +284,9 @@ describe('CodeEditor', () => {
   it('keeps the code left to right under dir="rtl"', async () => {
     const view = render(CodeEditor, {
       props: { modelValue: 'a', ariaLabel: 'Code' },
-      container: document.body.appendChild(Object.assign(document.createElement('div'), { dir: 'rtl' }))
+      container: document.body.appendChild(
+        Object.assign(document.createElement('div'), { dir: 'rtl' })
+      )
     })
     const scroller = textarea(view.container).closest('[dir="ltr"]')
     expect(scroller).not.toBeNull()

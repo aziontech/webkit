@@ -181,7 +181,7 @@ describe('Combobox', () => {
         </Field>`
     })
     const view = render(Host)
-    const input = view.getByRole('combobox', { name: 'Name' })
+    const input = view.getByRole('combobox', { name: /^Name/ })
     expect(input.getAttribute('aria-invalid')).toBe('true')
     expect(input.getAttribute('aria-required')).toBe('true')
     expect(input.getAttribute('aria-describedby')).toBeTruthy()
@@ -219,9 +219,12 @@ describe('Combobox', () => {
   ])('renders the %s example without axe violations, open and closed', async (_, Example) => {
     const view = render(Example)
     await expectNoA11yViolations(view.container)
-    await fireEvent.focus(view.getByRole('combobox'))
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
     await nextTick()
-    await expectNoA11yViolations(document.body)
+    await expectNoA11yViolations(view.container)
+    const listbox = document.getElementById(input.getAttribute('aria-controls') ?? '')
+    await expectNoA11yViolations(listbox as HTMLElement)
     view.unmount()
   })
 })

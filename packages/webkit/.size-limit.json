@@ -931,5 +931,15 @@
     "name": "attribute-editor",
     "path": "src/components/inputs/attribute-editor/attribute-editor.vue",
     "limit": "20 KB"
+  },
+  {
+    "name": "code-editor",
+    "path": "src/components/code/code-editor/code-editor.vue",
+    "limit": "9 KB"
+  },
+  {
+    "name": "button-group",
+    "path": "src/components/actions/button-group/button-group.vue",
+    "limit": "30 KB"
   }
 ]

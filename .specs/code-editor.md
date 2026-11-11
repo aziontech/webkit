@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: pending
+checksum: 5f4322778502fcfcec37f2b901ad1927b00585de268f598b295062f7484132fa
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -83,37 +83,37 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ## Props
 
-| Prop         | Type                                    | Default       | Required | JSDoc                                                                                                   |
-| ------------ | --------------------------------------- | ------------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `modelValue` | `string`                                | `''`          | false    | The code. Supports v-model.                                                                             |
-| `language`   | `string`                                | `'plaintext'` | false    | Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it. |
-| `loader`     | `() => Promise<CodeEditorMonaco>`       | `undefined`   | false    | Loads Monaco lazily; without it the plain editor is the editor.                                         |
-| `readonly`   | `boolean`                               | `false`       | false    | The code can be read, selected and copied but not changed.                                              |
-| `disabled`   | `boolean`                               | `false`       | false    | Locks the editor; it leaves the tab order.                                                              |
-| `invalid`    | `boolean`                               | `false`       | false    | Paints the danger border; also set by a surrounding `Field`.                                            |
-| `diff`       | `boolean`                               | `false`       | false    | Shows `original` beside the value as a side-by-side diff.                                               |
-| `original`   | `string`                                | `''`          | false    | The left side of the diff.                                                                              |
-| `markers`    | `CodeEditorMarker[]`                    | `[]`          | false    | Diagnostics shown on their lines and in the problems list.                                              |
-| `height`     | `string`                                | `'16rem'`     | false    | CSS height of the editing area.                                                                         |
-| `fill`       | `boolean`                               | `false`       | false    | Fills a flex column instead of using `height`.                                                          |
-| `lineNumbers`| `boolean`                               | `true`        | false    | Shows the line-number gutter.                                                                           |
-| `path`       | `string`                                | `''`          | false    | Model path for Monaco language services (`index.ts`, `args.json`).                                      |
-| `ariaLabel`  | `string`                                | `''`          | false    | Accessible name when no `Field` label names it. Empty uses the locale catalog.                          |
+| Prop          | Type                              | Default       | Required | JSDoc                                                                                                    |
+| ------------- | --------------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `modelValue`  | `string`                          | `''`          | false    | The code. Supports v-model.                                                                              |
+| `language`    | `string`                          | `'plaintext'` | false    | Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it. |
+| `loader`      | `() => Promise<CodeEditorMonaco>` | `undefined`   | false    | Loads Monaco lazily; without it the plain editor is the editor.                                          |
+| `readonly`    | `boolean`                         | `false`       | false    | The code can be read, selected and copied but not changed.                                               |
+| `disabled`    | `boolean`                         | `false`       | false    | Locks the editor; it leaves the tab order.                                                               |
+| `invalid`     | `boolean`                         | `false`       | false    | Paints the danger border; also set by a surrounding `Field`.                                             |
+| `diff`        | `boolean`                         | `false`       | false    | Shows `original` beside the value as a side-by-side diff.                                                |
+| `original`    | `string`                          | `''`          | false    | The left side of the diff.                                                                               |
+| `markers`     | `CodeEditorMarker[]`              | `[]`          | false    | Diagnostics shown on their lines and in the problems list.                                               |
+| `height`      | `string`                          | `'16rem'`     | false    | CSS height of the editing area.                                                                          |
+| `fill`        | `boolean`                         | `false`       | false    | Fills a flex column instead of using `height`.                                                           |
+| `lineNumbers` | `boolean`                         | `true`        | false    | Shows the line-number gutter.                                                                            |
+| `path`        | `string`                          | `''`          | false    | Model path for Monaco language services (`index.ts`, `args.json`).                                       |
+| `ariaLabel`   | `string`                          | `''`          | false    | Accessible name when no `Field` label names it. Empty uses the locale catalog.                           |
 
 Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'error' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
 
 ## Events
 
-| Event               | Payload   | Notes                                                                  |
-| ------------------- | --------- | ---------------------------------------------------------------------- |
-| `update:modelValue` | `string`  | Every edit, from the plain editor or from Monaco.                      |
-| `ready`             | `unknown` | Monaco mounted; the payload is the editor instance (for actions).      |
-| `load-error`        | `unknown` | The loader rejected; the plain editor stays.                           |
+| Event               | Payload   | Notes                                                             |
+| ------------------- | --------- | ----------------------------------------------------------------- |
+| `update:modelValue` | `string`  | Every edit, from the plain editor or from Monaco.                 |
+| `ready`             | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
+| `load-error`        | `unknown` | The loader rejected; the plain editor stays.                      |
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                               |
-| --------- | ----- | --------------------------------------------------------------------------------------------------- |
+| Slot      | Scope | Notes                                                                                   |
+| --------- | ----- | --------------------------------------------------------------------------------------- |
 | `toolbar` | —     | A bar above the editing area: a document switch, the file name, a Format or Run action. |
 
 ## States
@@ -132,18 +132,18 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Tokens
 
-| Region                     | Token (DESIGN.md)                                                          |
-| -------------------------- | -------------------------------------------------------------------------- |
-| frame surface / border     | `var(--bg-surface)` / `var(--border-default)`                              |
-| invalid border             | `var(--danger-border)`                                                     |
-| gutter                     | `var(--bg-canvas)`, `var(--code-sintax-line-number)`                       |
-| code typography            | `.text-body-code-sm`                                                       |
-| code text                  | `var(--code-sintax-identifier)`                                            |
-| Monaco syntax              | `--code-sintax-keyword`, `-string`, `-type`, `-function`, `-punctuation`, `-identifier`, `--text-muted` (comments) |
-| Monaco chrome              | `--bg-surface`, `--bg-surface-raised`, `--bg-hover`, `--bg-selected`, `--border-default`, `--text-default`, `--ring-color` |
-| marker colours             | `var(--danger-contrast)`, `var(--warning-contrast)`, `var(--info-contrast)` |
-| toolbar / problems bands   | `var(--bg-surface-raised)`, `var(--border-default)`, `.text-body-xs`, `.text-label-sm` |
-| shape / ring               | `var(--shape-elements)`, `var(--ring-color)`                               |
+| Region                   | Token (DESIGN.md)                                                                                                          |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| frame surface / border   | `var(--bg-surface)` / `var(--border-default)`                                                                              |
+| invalid border           | `var(--danger-border)`                                                                                                     |
+| gutter                   | `var(--bg-canvas)`, `var(--code-sintax-line-number)`                                                                       |
+| code typography          | `.text-body-code-sm`                                                                                                       |
+| code text                | `var(--code-sintax-identifier)`                                                                                            |
+| Monaco syntax            | `--code-sintax-keyword`, `-string`, `-type`, `-function`, `-punctuation`, `-identifier`, `--text-muted` (comments)         |
+| Monaco chrome            | `--bg-surface`, `--bg-surface-raised`, `--bg-hover`, `--bg-selected`, `--border-default`, `--text-default`, `--ring-color` |
+| marker colours           | `var(--danger-contrast)`, `var(--warning-contrast)`, `var(--info-contrast)`                                                |
+| toolbar / problems bands | `var(--bg-surface-raised)`, `var(--border-default)`, `.text-body-xs`, `.text-label-sm`                                     |
+| shape / ring             | `var(--shape-elements)`, `var(--ring-color)`                                                                               |
 
 ## Theme gaps
 
@@ -162,18 +162,18 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Internationalization
 
-| Key                      | English source                                             | Override prop |
-| ------------------------ | ---------------------------------------------------------- | ------------- |
-| `codeEditor.label`       | Code editor                                                | `ariaLabel`   |
-| `codeEditor.original`    | Original                                                   | —             |
-| `codeEditor.modified`    | Modified                                                   | —             |
-| `codeEditor.problems`    | Problems                                                   | —             |
-| `codeEditor.problemCount`| No problems / {count} problem / {count} problems (plural)  | —             |
-| `codeEditor.line`        | Line {line}                                                | —             |
-| `codeEditor.error` / `warning` / `info` | Error / Warning / Info                      | —             |
-| `codeEditor.loading`     | Loading the full editor…                                   | —             |
-| `codeEditor.loadFailed`  | The full editor could not load. You can keep editing here. | —             |
-| `codeEditor.tabHint`     | Press Escape, then Tab, to leave the editor.               | —             |
+| Key                                     | English source                                             | Override prop |
+| --------------------------------------- | ---------------------------------------------------------- | ------------- |
+| `codeEditor.label`                      | Code editor                                                | `ariaLabel`   |
+| `codeEditor.original`                   | Original                                                   | —             |
+| `codeEditor.modified`                   | Modified                                                   | —             |
+| `codeEditor.problems`                   | Problems                                                   | —             |
+| `codeEditor.problemCount`               | No problems / {count} problem / {count} problems (plural)  | —             |
+| `codeEditor.line`                       | Line {line}                                                | —             |
+| `codeEditor.error` / `warning` / `info` | Error / Warning / Info                                     | —             |
+| `codeEditor.loading`                    | Loading the full editor…                                   | —             |
+| `codeEditor.loadFailed`                 | The full editor could not load. You can keep editing here. | —             |
+| `codeEditor.tabHint`                    | Press Escape, then Tab, to leave the editor.               | —             |
 
 - Formatting: the problem count goes through the plural rules of the active locale.
 
@@ -193,7 +193,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Performance
 
-- Bundle budget: the component alone in `.size-limit.json` (Monaco is never bundled: the app's `loader` code-splits it).
+- Bundle budget: 9 KB gzip for `./code-editor` in `.size-limit.json` (measured 7.8 KB; Monaco is never bundled: the app's `loader` code-splits it).
 - Runtime budget: the plain editor re-renders the gutter per line count change only; tested to 5,000 lines.
 - Heavy parts: Monaco loads on mount, after the plain editor is interactive; the theme is rebuilt only when the theme attribute or the colour scheme changes.
 
@@ -212,7 +212,6 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - **Tab handling.** Two-space indentation in the plain editor; Monaco keeps its own setting.
 
 ## Constraints — DO NOT
-
 
 <!-- This block is injected VERBATIM into every sub-agent prompt.
      spec-validator rejects the spec if this block is missing or shorter than the template. -->

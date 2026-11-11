@@ -176,12 +176,10 @@
         ? t('codeEditor.warning')
         : t('codeEditor.info')
 
-  const problemCount = computed(() =>
-    t('codeEditor.problemCount', { count: props.markers.length })
-  )
+  const problemCount = computed(() => t('codeEditor.problemCount', { count: props.markers.length }))
 
-  const describedBy = computed(
-    () => [fieldDescribedBy.value, summaryId, isReadonly.value ? '' : hintId].filter(Boolean).join(' ')
+  const describedBy = computed(() =>
+    [fieldDescribedBy.value, summaryId, isReadonly.value ? '' : hintId].filter(Boolean).join(' ')
   )
 
   const plainLabel = computed(() => props.ariaLabel || (field ? undefined : t('codeEditor.label')))
@@ -426,7 +424,8 @@
       if (!host || !rootRef.value) throw new Error('missing host')
       applyTheme()
       const font = fontFromTokens(rootRef.value)
-      const uri = props.path && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${props.path}`) : undefined
+      const uri =
+        props.path && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${props.path}`) : undefined
       mainModel = api.editor.createModel(model.value, props.language, uri)
       const options = { ...editorOptions(), ...font, theme: CODE_EDITOR_THEME }
       if (props.diff) {
