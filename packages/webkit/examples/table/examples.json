@@ -71,6 +71,11 @@
       "name": "CellPresets",
       "summary": "The cell presets every list shares: `Table.CellLink` for a name that opens another screen (tooltip names the destination) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `Table.CellId` with a copy button, `Table.CellStatus` (one semantic chip per row), `Table.CellTags` showing as many tags as fit, `Table.CellTime` (avatar plus relative time, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row).",
       "file": "cell-presets.vue"
+    },
+    {
+      "name": "ReorderableRows",
+      "summary": "`reorderable` adds a leading grip to every row: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. The table emits `update:data` with the new order (bind `v-model:data`) and `reorder` with `{ from, to, row }`, announces each move in a polite status region, and locks the grips while a sort is applied.",
+      "file": "reorderable-rows.vue"
     }
   ]
 }
