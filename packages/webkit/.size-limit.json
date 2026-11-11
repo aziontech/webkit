@@ -31,6 +31,11 @@
     "limit": "20.35 KB"
   },
   {
+    "name": "date-range-picker",
+    "path": "src/components/inputs/date-range-picker/date-range-picker.vue",
+    "limit": "26 KB"
+  },
+  {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
     "limit": "50 KB"
@@ -926,5 +931,10 @@
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
     "limit": "22.75 KB"
+  },
+  {
+    "name": "trace",
+    "path": "src/components/code/trace/trace.vue",
+    "limit": "20 KB"
   }
 ]

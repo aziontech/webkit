@@ -42,6 +42,18 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
 
+### G. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
+
+When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `Field` choice cards around `RadioButton`) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `Field` choice cards around `RadioButton`; the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
+
+### H. Template editor — `SettingRow`, `HelperText` (optional)
+
+A setting whose value is a document (a JSON data set) gets a stacked row, under the `Select` that picks the template. A preset is read-only: its document shows in a `CodeBlock` with Copy, and the row says how to edit (choose Custom template). A custom document is a `Textarea` in a `font-code` wrapper, checked on Save (`Write the data set as a JSON object.`). This branch has no `CodeEditor` component yet; when it lands, the custom document moves to it, with the same row and the same error copy.
+
+### I. Section warnings and server errors — `SettingsSection`, `Button` (optional)
+
+A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the form-error rule (`platform/states/form-error`): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the async-submit toast with Edit and Redeploy does not apply here.
+
 ## Do
 
 - Show the save bar only while the form differs from the saved record.
@@ -50,6 +62,8 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
 - Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
+- Put the choice that decides other fields first, and show only the fields that choice needs.
+- Show a preset document read-only, with Copy, beside the way to make it editable.
 
 ## Don't
 
@@ -58,6 +72,8 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - Don't hide fields the user cannot change; lock them and say why.
 - Don't use `size="medium"` or larger for the Settings heading; the tab bar or breadcrumb already names the resource.
 - Don't add a Cancel button that leaves the page; Discard restores the record in place.
+- Don't report a rejected destination or credential in a toast; it belongs above the section it concerns.
+- Don't echo a saved secret back into its field.
 
 ## Copy
 
@@ -66,6 +82,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - **Row descriptions:** one sentence that says what the setting does, e.g. "When disabled, the project stops serving traffic."
 - **Save bar:** state what changed and when it applies, e.g. "Project settings changed." with the hint "Saving publishes them on the next deployment."; buttons "Discard" and "Save".
 - **Locked reason:** one sentence with the way out, e.g. "Contact sales to activate this module."
+- **Server error on a section:** what happened, then what was kept, e.g. "The endpoint did not answer the test record, so the stream was not saved. Your other changes are still here."; the field reason is one line, e.g. "The endpoint did not answer within 10 seconds."
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -75,6 +92,9 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - A disabled `Switch` keeps its `Tooltip`, so keyboard and pointer users can still read why it is locked.
 - External links open in a new tab with `rel="noopener noreferrer"` and an icon marked `aria-hidden="true"`.
 - The save bar enters after the form in reading order and its motion respects reduced motion.
+- An invalid field points at its `HelperText` through `aria-describedby`; on Save the first invalid field takes the focus.
+- A section `Alert` is announced by `Alert` itself; its recovery `Button` is a real button inside it.
+- The code `Textarea` and the read-only `CodeBlock` are named after their row (`Data set`, `Copy the data set as JSON`).
 
 ## States
 
@@ -84,6 +104,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-error rule.
 
 ## Related
 
@@ -93,3 +114,5 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
 - `platform/settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `platform/states/form-error` — the section-scoped server error DataStream follows.
+- `platform/dashboard/analytics-dashboard` (Metrics) — where the records a stream sends are counted.

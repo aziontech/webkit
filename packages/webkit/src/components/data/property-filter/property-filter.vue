@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import {
     type FilteringProperty,
@@ -17,7 +17,16 @@
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import Chip from '../../inputs/chip/chip.vue'
+  import HelperText from '../../inputs/helper-text/helper-text.vue'
   import Input from '../../inputs/input/input.vue'
+  import {
+    flatQuery,
+    parseQuery,
+    type PropertyFilterQuerySuggestion,
+    type PropertyFilterSubmit,
+    queryContext,
+    quoteValue
+  } from './query-language'
 
   export type {
     FilteringProperty,
@@ -25,10 +34,11 @@
     PropertyFilterQuery,
     PropertyFilterToken
   } from '../../../composables/use-collection/property-filter'
+  export type { PropertyFilterQuerySuggestion, PropertyFilterSubmit } from './query-language'
 
   type Suggestion = {
     id: string
-    group: 'properties' | 'operators' | 'values' | 'text'
+    group: 'properties' | 'operators' | 'values' | 'text' | 'fields' | 'connectives'
     label: string
     description: string
     apply: () => void
@@ -54,6 +64,14 @@
     freeText?: boolean
     /** Disables the field and the tokens. */
     disabled?: boolean
+    /** `tokens` turns each choice into a token; `query` edits one query string. */
+    mode?: 'tokens' | 'query'
+    /** The query string in query mode. Supports v-model:text. */
+    text?: string
+    /** Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. */
+    validate?: (text: string) => string
+    /** Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. */
+    suggest?: (text: string, caret: number) => PropertyFilterQuerySuggestion[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -63,15 +81,24 @@
     placeholder: '',
     ariaLabel: '',
     freeText: true,
-    disabled: false
+    disabled: false,
+    mode: 'tokens',
+    text: undefined,
+    validate: undefined,
+    suggest: undefined
   })
 
   const emit = defineEmits<{
     'update:query': [query: PropertyFilterQuery]
+    'update:text': [text: string]
+    submit: [payload: PropertyFilterSubmit]
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ propertyFilter: en.propertyFilter })
+  const { t } = useTranslate({
+    propertyFilter: en.propertyFilter,
+    propertyFilterQuery: en.propertyFilterQuery
+  })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-property-filter'
@@ -82,6 +109,7 @@
 
   const uid = useId()
   const listId = `${uid}-suggestions`
+  const errorId = `${uid}-error`
 
   const internal = ref<PropertyFilterQuery>(props.query ?? { tokens: [], operation: 'and' })
   watch(
@@ -98,7 +126,7 @@
     emit('update:query', next)
   }
 
-  const text = ref<string>('')
+  const draft = ref<string>('')
   const open = ref<boolean>(false)
   const active = ref<number>(-1)
   const fieldRef = ref<HTMLElement | null>(null)
@@ -131,17 +159,17 @@
 
   const addToken = (token: PropertyFilterToken): void => {
     commitQuery({ tokens: [...tokens.value, token], operation: operation.value })
-    text.value = ''
+    draft.value = ''
     active.value = -1
   }
 
-  const parsed = computed(() => parseFilterText(text.value, props.properties))
+  const parsed = computed(() => parseFilterText(draft.value, props.properties))
 
-  const suggestions = computed<Suggestion[]>(() => {
+  const tokenSuggestions = computed<Suggestion[]>(() => {
     const { property, operator, value } = parsed.value
     const out: Suggestion[] = []
     if (!property) {
-      const needle = text.value.trim().toLocaleLowerCase()
+      const needle = draft.value.trim().toLocaleLowerCase()
       props.properties
         .filter((p) => p.label.toLocaleLowerCase().includes(needle))
         .forEach((p) =>
@@ -151,7 +179,7 @@
             label: p.label,
             description: '',
             apply: () => {
-              text.value = `${p.label} `
+              draft.value = `${p.label} `
               active.value = -1
             }
           })
@@ -174,9 +202,9 @@
           out.push({
             id: 'text',
             group: 'text',
-            label: t('propertyFilter.useText', { text: text.value.trim() }),
+            label: t('propertyFilter.useText', { text: draft.value.trim() }),
             description: '',
-            apply: () => addToken({ operator: ':', value: text.value.trim() })
+            apply: () => addToken({ operator: ':', value: draft.value.trim() })
           })
         }
       }
@@ -192,7 +220,7 @@
             label: `${property.label} ${op}`,
             description: operatorLabel(op),
             apply: () => {
-              text.value = `${property.label} ${op} `
+              draft.value = `${property.label} ${op} `
               active.value = -1
             }
           })
@@ -223,6 +251,140 @@
     return out
   })
 
+  const isQuery = computed<boolean>(() => props.mode === 'query')
+  const queryText = ref<string>(props.text ?? '')
+  watch(
+    () => props.text,
+    (next) => {
+      if (next !== undefined) queryText.value = next
+    }
+  )
+  const caret = ref<number>(queryText.value.length)
+  const touched = ref<boolean>(false)
+
+  const setText = (value: string): void => {
+    queryText.value = value
+    emit('update:text', value)
+  }
+
+  const builtInParse = computed(() => parseQuery(queryText.value, props.properties, props.freeText))
+  const queryError = computed<string>(() => {
+    if (!queryText.value.trim()) return ''
+    if (props.validate) return props.validate(queryText.value)
+    const error = builtInParse.value.error
+    return error ? t(`propertyFilterQuery.${error.code}`, error.params) : ''
+  })
+  const showError = computed<boolean>(
+    () => isQuery.value && touched.value && Boolean(queryError.value)
+  )
+
+  const context = computed(() =>
+    queryContext(queryText.value, caret.value, props.properties, props.freeText)
+  )
+
+  const inputEl = (): HTMLInputElement | null | undefined => fieldRef.value?.querySelector('input')
+
+  const insertAtCaret = (insert: string): void => {
+    const { from, to } = context.value
+    const after = queryText.value.slice(to)
+    const spacer = /^\s/.test(after) ? '' : ' '
+    const position = from + insert.length + 1
+    setText(`${queryText.value.slice(0, from)}${insert}${spacer}${after}`)
+    caret.value = position
+    active.value = -1
+    open.value = true
+    void nextTick(() => inputEl()?.setSelectionRange(position, position))
+  }
+
+  const querySuggestions = computed<Suggestion[]>(() => {
+    if (props.suggest) {
+      return props.suggest(queryText.value, caret.value).map((item, index) => ({
+        id: `q-${index}-${item.insert}`,
+        group: 'text',
+        label: item.label,
+        description: item.description ?? '',
+        apply: () => insertAtCaret(item.insert)
+      }))
+    }
+    const { role, property, word } = context.value
+    const needle = word.toLocaleLowerCase()
+    if (role === 'field') {
+      return props.properties
+        .filter(
+          (p) =>
+            p.key.toLocaleLowerCase().includes(needle) ||
+            p.label.toLocaleLowerCase().includes(needle)
+        )
+        .map((p) => ({
+          id: `f-${p.key}`,
+          group: 'fields',
+          label: p.key,
+          description: p.label,
+          apply: () => insertAtCaret(p.key)
+        }))
+    }
+    if (role === 'operator') {
+      if (!property) return []
+      return operatorsOf(property)
+        .filter((op) => op.startsWith(word))
+        .map((op) => ({
+          id: `o-${op}`,
+          group: 'operators',
+          label: op,
+          description: operatorLabel(op),
+          apply: () => insertAtCaret(op)
+        }))
+    }
+    if (role === 'value') {
+      return (property?.options ?? [])
+        .filter(
+          (o) =>
+            o.value.toLocaleLowerCase().includes(needle) ||
+            (o.label ?? '').toLocaleLowerCase().includes(needle)
+        )
+        .map((o) => ({
+          id: `v-${o.value}`,
+          group: 'values',
+          label: quoteValue(o.value),
+          description: o.label && o.label !== o.value ? o.label : '',
+          apply: () => insertAtCaret(quoteValue(o.value))
+        }))
+    }
+    return (['AND', 'OR'] as const)
+      .filter((c) => c.toLocaleLowerCase().startsWith(needle))
+      .map((c) => ({
+        id: `c-${c}`,
+        group: 'connectives',
+        label: c,
+        description: c === 'AND' ? t('propertyFilterQuery.all') : t('propertyFilterQuery.any'),
+        apply: () => insertAtCaret(c)
+      }))
+  })
+
+  const suggestions = computed<Suggestion[]>(() =>
+    isQuery.value ? querySuggestions.value : tokenSuggestions.value
+  )
+
+  const syncCaret = (event: Event): void => {
+    const target = event.target as HTMLInputElement | null
+    if (isQuery.value && typeof target?.selectionStart === 'number') {
+      caret.value = target.selectionStart
+    }
+  }
+
+  const submitQuery = (): void => {
+    touched.value = true
+    if (queryError.value) return
+    open.value = false
+    active.value = -1
+    emit('submit', {
+      text: queryText.value,
+      query: queryText.value.trim()
+        ? flatQuery(builtInParse.value)
+        : { tokens: [], operation: operation.value }
+    })
+  }
+
   const expanded = computed<boolean>(
     () => open.value && !props.disabled && suggestions.value.length > 0
   )
@@ -245,7 +407,7 @@
       addToken({ propertyKey: property.key, operator, value })
       return
     }
-    const typed = text.value.trim()
+    const typed = draft.value.trim()
     if (!property && typed && props.freeText) addToken({ operator: ':', value: typed })
   }
 
@@ -265,6 +427,7 @@
       const picked =
         expanded.value && active.value >= 0 ? suggestions.value[active.value] : undefined
       if (picked) picked.apply()
+      else if (isQuery.value) submitQuery()
       else commitTyped()
       return
     }
@@ -273,19 +436,25 @@
         event.preventDefault()
         open.value = false
         active.value = -1
-      } else if (text.value) {
+      } else if (isQuery.value && queryText.value) {
         event.preventDefault()
-        text.value = ''
+        setText('')
+        touched.value = false
+      } else if (!isQuery.value && draft.value) {
+        event.preventDefault()
+        draft.value = ''
       }
       return
     }
-    if (event.key === 'Backspace' && !text.value && tokens.value.length) {
+    if (isQuery.value) return
+    if (event.key === 'Backspace' && !draft.value && tokens.value.length) {
       removeToken(tokens.value.length - 1)
     }
   }
 
   const onInput = (value: string): void => {
-    text.value = value
+    if (isQuery.value) setText(value)
+    else draft.value = value
     open.value = true
     active.value = -1
   }
@@ -304,7 +473,7 @@
 
   const clearAll = (): void => {
     commitQuery({ tokens: [], operation: operation.value })
-    text.value = ''
+    draft.value = ''
   }
 
   const operationOptions = computed(() => [
@@ -320,7 +489,13 @@
   const groupLabel = (group: Suggestion['group']): string => {
     if (group === 'properties') return t('propertyFilter.properties')
     if (group === 'values') return t('propertyFilter.values')
+    if (group === 'fields') return t('propertyFilterQuery.fields')
     return ''
+  }
+
+  const onBlur = (): void => {
+    open.value = false
+    if (isQuery.value && queryText.value.trim()) touched.value = true
   }
 
   const portalLocale = usePortalLocale()
@@ -335,10 +510,11 @@
   >
     <div
       ref="fieldRef"
-      class="w-full min-w-0"
+      :data-mode="mode"
+      class="w-full min-w-0 [&[data-mode=query]_input]:text-label-code-sm"
     >
       <Input
-        :model-value="text"
+        :model-value="isQuery ? queryText : draft"
         role="combobox"
         aria-autocomplete="list"
         autocomplete="off"
@@ -346,15 +522,25 @@
         :aria-expanded="expanded"
         :aria-controls="listId"
         :aria-activedescendant="activeId"
-        :aria-label="ariaLabel || t('propertyFilter.label')"
-        :placeholder="placeholder || t('propertyFilter.placeholder')"
+        :aria-label="
+          ariaLabel || (isQuery ? t('propertyFilterQuery.label') : t('propertyFilter.label'))
+        "
+        :aria-describedby="showError ? errorId : undefined"
+        :placeholder="
+          placeholder ||
+          (isQuery ? t('propertyFilterQuery.placeholder') : t('propertyFilter.placeholder'))
+        "
         :disabled="disabled"
+        :invalid="showError"
         :data-testid="`${testId}__input`"
         size="medium"
         @update:model-value="onInput"
         @keydown="onKeydown"
+        @input="syncCaret"
+        @keyup="syncCaret"
+        @click="syncCaret"
         @focus="open = true"
-        @blur="open = false"
+        @blur="onBlur"
       >
         <template #iconLeft>
           <i
@@ -413,7 +599,31 @@
       </Transition>
     </Teleport>
     <div
-      v-if="tokens.length"
+      v-if="isQuery"
+      class="flex min-w-0 flex-wrap items-start gap-(--spacing-xs)"
+    >
+      <div
+        aria-live="polite"
+        class="min-w-0 flex-1"
+      >
+        <HelperText
+          v-if="showError"
+          :id="errorId"
+          :label="queryError"
+          :data-testid="`${testId}__error`"
+          kind="invalid"
+        />
+      </div>
+      <span
+        v-if="totalCount !== undefined"
+        role="status"
+        :data-testid="`${testId}__count`"
+        class="ms-auto text-label-sm text-(--text-muted) tabular-nums"
+        >{{ t('propertyFilter.matches', { count: totalCount }) }}</span
+      >
+    </div>
+    <div
+      v-if="!isQuery && tokens.length"
       role="group"
       :aria-label="t('propertyFilter.tokens')"
       :data-testid="`${testId}__tokens`"

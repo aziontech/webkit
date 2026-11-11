@@ -1,0 +1,84 @@
+{
+ "name": "trace",
+ "binding": "Trace",
+ "import": "@aziontech/webkit/trace",
+ "treeShakeableImport": "@aziontech/webkit/trace",
+ "category": "code",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything.",
+ "setup": null,
+ "useWhen": [
+  "The test run of a function or the detail of one invocation, to show where the time went.",
+  "A request that crossed several services, each with its own span, where the order and the overlap matter.",
+  "Next to the run's logs (`log-view`), on the same clock."
+ ],
+ "avoidWhen": [
+  "A list of log lines with levels → use `log-view`.",
+  "Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.",
+  "Status history of a service over days → use `tracker`.",
+  "A hierarchy without time → use `tree`."
+ ],
+ "related": [
+  "log-view` — the run's log lines, shown under the trace on the same clock.",
+  "tree` — the same expand and collapse model without the time axis.",
+  "bar-list` — ranked durations without nesting.",
+  "key-value-pairs` — the facts of the run above the trace."
+ ],
+ "bestPractices": [
+  "Pass `start` and `duration` in milliseconds from the start of the run; the axis spans the latest end.",
+  "Link children with `parentId`; a span whose parent is missing becomes a root, so a partial trace still renders.",
+  "Set `status: 'error'` and a one-line `message` on the span that failed, and on its parents if the failure bubbled up.",
+  "Bind `v-model:selected` when another view (a request path, a log line) selects the same span.",
+  "Name the waterfall after the run (`aria-label=\"Trace of inv_7f21\"`)."
+ ],
+ "props": [
+  {
+   "name": "spans",
+   "type": "TraceSpan[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds."
+  },
+  {
+   "name": "selected",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the span whose details show under the waterfall. Supports v-model:selected."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the waterfall. Empty uses the locale catalog."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:selected",
+   "payload": "string",
+   "notes": "A row was selected, selected again (empty: deselected), or Close used."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Trace from '@aziontech/webkit/trace'\n  import { ref } from 'vue'\n\n  const spans = [\n    { id: 'root', name: 'image-resizer', service: 'Function', start: 0, duration: 412 },\n    {\n      id: 'parse',\n      parentId: 'root',\n      name: 'parse-request',\n      service: 'Compute',\n      start: 4,\n      duration: 12\n    },\n    {\n      id: 'origin',\n      parentId: 'root',\n      name: 'fetch-origin',\n      service: 'Network',\n      start: 16,\n      duration: 186\n    },\n    {\n      id: 'dns',\n      parentId: 'origin',\n      name: 'dns-lookup',\n      service: 'Network',\n      start: 16,\n      duration: 14\n    },\n    {\n      id: 'tls',\n      parentId: 'origin',\n      name: 'tls-handshake',\n      service: 'Security',\n      start: 30,\n      duration: 31\n    },\n    {\n      id: 'response',\n      parentId: 'origin',\n      name: 'origin-response',\n      service: 'Network',\n      start: 61,\n      duration: 141\n    },\n    {\n      id: 'decode',\n      parentId: 'root',\n      name: 'decode',\n      service: 'Compute',\n      start: 202,\n      duration: 54\n    },\n    {\n      id: 'encode',\n      parentId: 'root',\n      name: 'encode',\n      service: 'Compute',\n      start: 256,\n      duration: 92\n    },\n    {\n      id: 'cache',\n      parentId: 'root',\n      name: 'put-cache',\n      service: 'Storage',\n      start: 348,\n      duration: 38\n    }\n  ]\n\n  const selected = ref('')\n</script>\n\n<template>\n  <Trace\n    v-model:selected=\"selected\"\n    :spans=\"spans\"\n    aria-label=\"Trace of the test run\"\n  />\n</template>"
+  },
+  {
+   "name": "WithError",
+   "sfc": "<script setup>\n  import Trace from '@aziontech/webkit/trace'\n  import { ref } from 'vue'\n\n  const spans = [\n    {\n      id: 'root',\n      name: 'image-resizer',\n      service: 'Function',\n      start: 0,\n      duration: 1240,\n      status: 'error',\n      message: 'The run failed because the origin did not answer.'\n    },\n    {\n      id: 'parse',\n      parentId: 'root',\n      name: 'parse-request',\n      service: 'Compute',\n      start: 4,\n      duration: 11\n    },\n    {\n      id: 'origin',\n      parentId: 'root',\n      name: 'fetch-origin',\n      service: 'Network',\n      start: 15,\n      duration: 1201,\n      status: 'error',\n      message: 'No response within the 1 s read budget.'\n    },\n    {\n      id: 'dns',\n      parentId: 'origin',\n      name: 'dns-lookup',\n      service: 'Network',\n      start: 15,\n      duration: 12\n    },\n    {\n      id: 'tls',\n      parentId: 'origin',\n      name: 'tls-handshake',\n      service: 'Security',\n      start: 27,\n      duration: 34\n    },\n    {\n      id: 'response',\n      parentId: 'origin',\n      name: 'origin-response',\n      service: 'Network',\n      start: 61,\n      duration: 1155,\n      status: 'error',\n      message: 'Read timed out after 1,000 ms.'\n    }\n  ]\n\n  const selected = ref('response')\n</script>\n\n<template>\n  <Trace\n    v-model:selected=\"selected\"\n    :spans=\"spans\"\n    aria-label=\"Trace of the failed run\"\n  />\n</template>"
+  },
+  {
+   "name": "Selected",
+   "sfc": "<script setup>\n  import Trace from '@aziontech/webkit/trace'\n  import { ref } from 'vue'\n\n  const spans = [\n    { id: 'root', name: 'checkout-handler', service: 'Function', start: 0, duration: 268 },\n    {\n      id: 'session',\n      parentId: 'root',\n      name: 'read-session',\n      service: 'Storage',\n      start: 6,\n      duration: 22,\n      attributes: { 'kv.namespace': 'sessions', 'kv.hit': 'true' }\n    },\n    {\n      id: 'price',\n      parentId: 'root',\n      name: 'price-cart',\n      service: 'Compute',\n      start: 30,\n      duration: 64\n    },\n    {\n      id: 'payments',\n      parentId: 'root',\n      name: 'call-payments',\n      service: 'Network',\n      start: 96,\n      duration: 158,\n      attributes: {\n        'http.method': 'POST',\n        'http.url': 'https://payments.example.com/v2/charges',\n        'http.status_code': 201,\n        'net.peer.region': 'sa-east'\n      }\n    }\n  ]\n\n  const selected = ref('payments')\n</script>\n\n<template>\n  <Trace\n    v-model:selected=\"selected\"\n    :spans=\"spans\"\n    aria-label=\"Trace of the checkout run\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/trace.md"
+}

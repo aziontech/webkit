@@ -12,6 +12,8 @@ import State4 from '../../../../../../../packages/webkit/blocks/platform/edit/ed
 import source4 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/unsaved-changes.vue?raw'
 import State5 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/saving.vue'
 import source5 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/saving.vue?raw'
+import State6 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/data-stream.vue'
+import source6 from '../../../../../../../packages/webkit/blocks/platform/edit/edit-resource/variants/data-stream.vue?raw'
 
 export default {
   title: "Templates/Platform/Edit/EditResource",
@@ -20,7 +22,7 @@ export default {
     layout: "fullscreen",
     backgrounds: { default: "dark" },
     docs: { canvas: { sourceState: 'shown' }, description: { component: "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `HelperText` and `Button`." } },
-    webkit: {"block":"platform/edit/edit-resource","intents":["settings page","resource settings","settings tab","application settings","workload settings","firewall settings","edit settings","página de configurações","configurações do recurso","aba de configurações","save bar","unsaved changes bar","sticky save bar","discard and save","commit bar","barra de salvar","alterações não salvas","salvar alterações","edit resource","editar recurso"],"skills":["webkit-form","webkit-errors","webkit-layout","webkit-ux-heuristics"],"primary":"ProjectSettings"}
+    webkit: {"block":"platform/edit/edit-resource","intents":["settings page","resource settings","settings tab","application settings","workload settings","firewall settings","edit settings","página de configurações","configurações do recurso","aba de configurações","save bar","unsaved changes bar","sticky save bar","discard and save","commit bar","barra de salvar","alterações não salvas","salvar alterações","edit resource","editar recurso","data stream","data stream settings","log streaming","stream destination","sampling","log template","configurações do data stream","envio de logs","streaming de logs"],"skills":["webkit-form","webkit-errors","webkit-layout","webkit-ux-heuristics"],"primary":"ProjectSettings"}
   }
 }
 
@@ -52,4 +54,9 @@ export const UnsavedChanges = {
 export const Saving = {
   render: () => ({ components: { Block: State5 }, template: '<Block />' }),
   parameters: { docs: { description: { story: "While the save request is in flight: Save shows its loading state and Discard is disabled." }, source: { code: source5 } } }
+}
+
+export const DataStream = {
+  render: () => ({ components: { Block: State6 }, template: '<Block />' }),
+  parameters: { docs: { description: { story: "The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a code Textarea and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays." }, source: { code: source6 } } }
 }

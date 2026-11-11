@@ -28,7 +28,16 @@
     "alterações não salvas",
     "salvar alterações",
     "edit resource",
-    "editar recurso"
+    "editar recurso",
+    "data stream",
+    "data stream settings",
+    "log streaming",
+    "stream destination",
+    "sampling",
+    "log template",
+    "configurações do data stream",
+    "envio de logs",
+    "streaming de logs"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
   "primary": {
@@ -60,6 +69,11 @@
       "name": "Saving",
       "summary": "While the save request is in flight: Save shows its loading state and Discard is disabled.",
       "file": "variants/saving.vue"
+    },
+    {
+      "name": "DataStream",
+      "summary": "The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a code Textarea and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays.",
+      "file": "variants/data-stream.vue"
     }
   ]
 }
