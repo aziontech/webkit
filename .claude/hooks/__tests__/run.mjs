@@ -22,7 +22,9 @@ import {
   extractAnimationClasses,
   hasMotionReduceEscape,
   resolveSpecForComponentPath,
-  isLegacyComponent
+  isLegacyComponent,
+  templateSectionErrors,
+  TEMPLATE_2_SECTIONS
 } from '../_lib/spec.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -156,6 +158,32 @@ group('lib: body parsing', () => {
     assertTrue(defaultCellIsStringUndefined('`undefined`') === false, 'unquoted undefined is legitimate')
     assertTrue(defaultCellIsStringUndefined("`''`") === false, 'empty string is legitimate')
     assertTrue(defaultCellIsStringUndefined("`'medium'`") === false, 'real string default is legitimate')
+  })
+})
+
+group('lib: template 2 sections', () => {
+  const filled = TEMPLATE_2_SECTIONS.map((h) => `## ${h}\n\n- Filled in.\n`).join('\n')
+  test('a template-1 spec created before the cutoff is exempt', () => {
+    assertEqual(templateSectionErrors({ created: '2026-05-22' }, '## Purpose\n\nx\n'), [])
+  })
+  test('a spec created after the cutoff must declare template 2', () => {
+    const errs = templateSectionErrors({ created: '2030-01-01' }, filled)
+    assertTrue(errs.some((e) => e.startsWith('template:')), 'should require template: 2')
+  })
+  test('a template-2 spec with every section filled passes', () => {
+    assertEqual(templateSectionErrors({ template: 2, created: '2030-01-01' }, filled), [])
+  })
+  test('a template-2 spec missing or leaving a section as a placeholder fails', () => {
+    const tpl = getSection(parseSpecFile(resolve(ROOT, '.specs/_template.md')).body, 'Performance')
+    const body = filled.replace('## Performance\n\n- Filled in.', `## Performance\n\n${tpl}`)
+    const errs = templateSectionErrors({ template: 2 }, body.replace(/## Responsive[\s\S]*?(?=## )/, ''))
+    assertTrue(errs.some((e) => e.includes('Responsive') && e.includes('missing')), 'flags missing section')
+    assertTrue(errs.some((e) => e.includes('Performance') && e.includes('placeholder')), 'flags placeholder')
+  })
+  test('the template itself declares template 2 and carries every section', () => {
+    const { frontmatter, body } = parseSpecFile(resolve(ROOT, '.specs/_template.md'))
+    assertEqual(frontmatter.template, 2)
+    for (const h of TEMPLATE_2_SECTIONS) assertTrue(getSection(body, h) !== null, `template has ## ${h}`)
   })
 })
 

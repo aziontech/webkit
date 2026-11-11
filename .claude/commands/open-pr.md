@@ -54,7 +54,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 - `git push -u origin <branch>`.
 - If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
 - **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, with the ticket tag after the colon only when an issue exists (`<type>(<scope>): [<ISSUE>] <subject>`), and put `!` in the title for a breaking change.
-- **Body — fixed structure.** Exactly these three sections, in this order, nothing else (the same skeleton as [`PULL_REQUEST_TEMPLATE.md`](../../.github/PULL_REQUEST_TEMPLATE.md)):
+- **Body — fixed structure.** These three sections, in this order (the same skeleton as [`pull_request_template.md`](../../.github/pull_request_template.md)). A component or block PR from the AI flow (`/webkit-new`, `/webkit-new-block`) also fills the template's AI-flow sections (request and spec, gates, `ui-craft` review, usage check, screenshots):
 
   ```md
   ## Summary
@@ -67,7 +67,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
   - <breaking change (what + migration), new dependency, related issue — `None` when there is nothing>
   ```
 
-  Keep it terse: Summary never restates the diff (max 3 bullets); "How to test" is the minimum end-to-end path a reviewer can follow, each step with its expected result; no intro prose. No Figma links, no attribution footer.
+  Keep the three sections terse: Summary never restates the diff (max 3 bullets); "How to test" is the minimum end-to-end path a reviewer can follow, each step with its expected result; no intro prose. No Figma links, no attribution footer.
 - Report the PR URL.
 
 ## Rules

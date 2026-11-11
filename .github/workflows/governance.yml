@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
-      toolkit: ${{ steps.filter.outputs.toolkit }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
       canary: ${{ steps.filter.outputs.canary }}
@@ -35,17 +34,6 @@ jobs:
               - 'packages/webkit/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-            toolkit:
-              - '.specs/**'
-              - 'skills/**'
-              - 'rules/**'
-              - 'adapters/**'
-              - '.claude/hooks/**'
-              - '.claude/rules/**'
-              - '.claude/skills/**'
-              - '.claude/agents/**'
-              - 'apps/storybook/**'
-              - 'packages/webkit/**'
             tests:
               - 'packages/webkit/**'
               - 'apps/storybook/**'
@@ -233,10 +221,12 @@ jobs:
       - name: Verify Storybook output
         run: test -d apps/storybook/dist && echo "Storybook built successfully"
 
+  # Runs on every PR (no path filter): these gates are the machine half of the AI flow
+  # (.claude/commands/webkit-new.md) and finish in under a minute. Locally:
+  # pnpm --filter @aziontech/webkit run gates
   toolkit:
     name: Adoption Toolkit (tests + catalog drift)
     needs: changes
-    if: needs.changes.outputs.toolkit == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
@@ -261,6 +251,9 @@ jobs:
       - name: No spec in status draft (.specs/_template.md excepted)
         run: pnpm --filter @aziontech/webkit run spec-status
 
+      - name: Spec template — specs on template 2 fill Internationalization, Right-to-left, Responsive and Performance
+        run: pnpm --filter @aziontech/webkit run spec-template:check
+
       - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
         run: pnpm --filter @aziontech/webkit run patterns:check
 
@@ -269,6 +262,12 @@ jobs:
 
       - name: Naming (2.7) — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
         run: pnpm --filter @aziontech/webkit run naming:check
+
+      - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
+        run: pnpm --filter @aziontech/webkit run marketing:check
+
+      - name: Block and site stories are generated from blocks/ and examples/ (no stale file)
+        run: node apps/storybook/scripts/gen-block-stories.mjs --check
 
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit

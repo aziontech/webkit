@@ -1,0 +1,72 @@
+name: New component
+description: Request a new WebKit component. An agent builds it through /webkit-new from this issue.
+title: 'component: <name>'
+labels: ['new-component', 'ai-flow']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is the input of `/webkit-new <issue number>` (`.claude/commands/webkit-new.md`).
+        An agent researches the benchmarks, writes the spec, has it reviewed by a second agent,
+        builds the component, runs the gates, the `ui-craft` review and the usage check, and opens
+        the PR. Write what the component is for; do not design its API here.
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      description: kebab-case, in the shadcn/Radix vocabulary when one exists (e.g. `date-picker`, `combobox`). The spec reviewer may rename it.
+      placeholder: date-picker
+    validations:
+      required: true
+  - type: textarea
+    id: intent
+    attributes:
+      label: Intent
+      description: What the user does with it and the job it solves, in 2 to 5 sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: benchmarks
+    attributes:
+      label: Benchmark links
+      description: The Cloudscape page as Markdown (`https://cloudscape.design/components/<x>/index.html.md`) and the shadcn page (`https://ui.shadcn.com/docs/components/<x>`). Add others if they matter.
+      placeholder: |
+        - https://cloudscape.design/components/date-picker/index.html.md
+        - https://ui.shadcn.com/docs/components/date-picker
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: Where it is used
+      description: The console screens, sites or docs pages that need it, with links or screenshots.
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - product
+        - marketing
+        - docs
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable behaviour the PR must show (states, keyboard, data sizes, mobile). One per line.
+      placeholder: |
+        - Picks a single date or a range
+        - Keyboard: arrows move the day, PageUp/PageDown the month
+        - Works in a drawer at 320 px
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Figma link, constraints, components it should reuse or replace.
+    validations:
+      required: false

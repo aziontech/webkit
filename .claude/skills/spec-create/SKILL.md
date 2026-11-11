@@ -2,7 +2,7 @@
 name: spec-create
 description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with DESIGN.md and Figma, and the initial `status: draft` write. Never writes component code.
 status: active
-last_updated: 2026-07-23
+last_updated: 2026-11-11
 scope: webkit
 enforced_by: [no-invention, props, styling]
 ---
@@ -32,7 +32,7 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
 1. **Argument parsing & name resolution.** Parse the flags. A passed `<name>` must be kebab-case (reject otherwise) and always **wins** (explicit override). If `<name>` is absent: in **Mode B** reject (no frame to derive from); in **Mode A** defer — the name is resolved from the frame in **Name resolution** below, *before* any file path is computed. Only once the name is known: reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file) and ask for a different name.
 2. **Category.** Use the taxonomy in `.specs/_template.md` frontmatter. State the inferred/received category and **ask the user to confirm** (mandatory in Mode B — never assume).
 3. **Structure decision.** Call `structure-decide` with the regions/answers. Default to `monolithic` when in doubt.
-4. **Write the spec.** Copy `.specs/_template.md` to `.specs/<name>.md`, fill every section, frontmatter `status: draft`, `created`/`last_updated` = today, no `checksum`.
+4. **Write the spec.** Copy `.specs/_template.md` to `.specs/<name>.md`, fill every section, frontmatter `status: draft`, `template: 2`, `created`/`last_updated` = today, no `checksum`. Template 2 adds four required sections — `## Internationalization` (every built-in string as a message key with its English source and override prop; `Intl` for dates, numbers, plurals), `## Right-to-left` (logical utilities, mirrored icons, arrow keys, `<bdi>` around user data), `## Responsive` (container queries, narrow-container behaviour, touch targets, 320 px reflow) and `## Performance` (gzip budget, runtime budget, lazy parts). No template placeholder line may survive (`spec-template:check` and `enforce-spec-exists` reject it). Every spec created on or after 2026-11-12 must be on template 2; never add `template: 2` to an older spec without filling the four sections.
 5. **Echo.** Print the path. Tell the user to review it, then run `/component-create <name>` (which calls `spec-validator`) or set `status: approved` and re-run.
 
 ## Mode A — Figma-driven (`--figma <url>`)
@@ -48,7 +48,7 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
 
 There is no ground truth, so **ask for everything and infer nothing.**
 
-- **Always ask, one at a time,** in this order — never skip, never pre-fill: Purpose (1–3 sentences) → Props → Events → Slots → Sub-components (only if `structure: composition`) → States → Motion & Animations → Accessibility (focus trap? keyboard map? aria?) → Storybook stories.
+- **Always ask, one at a time,** in this order — never skip, never pre-fill: Purpose (1–3 sentences) → Props → Events → Slots → Sub-components (only if `structure: composition`) → States → Motion & Animations → Accessibility (focus trap? keyboard map? aria?) → Internationalization → Right-to-left → Responsive → Performance → Storybook stories. Under `/webkit-new` there is no human to ask: the request issue and the step-2 research notes are the answers, and a question they cannot answer is `BLOCKED:`.
   - **Props:** name, type literal/primitive, default, required, JSDoc one-liner. Repeat until the user says done. Default rule: an optional renderable string defaults to `''`, not `undefined`; reserve unquoted `undefined` for props where absence ≠ empty (`open`, `modelValue`, `src`); never record the quoted string `'undefined'`. See the Props rules comment in `.specs/_template.md`.
 - **Tokens are mapped, never invented.** For every visual choice, map to a DESIGN.md token and **confirm it with the user**. A value with no token is a Theme gap the user must acknowledge — do not substitute a raw value.
 - **No silent `TBD`.** If the user leaves a mandatory section unanswered, emit `BLOCKED: <section> unanswered` and write nothing. The manual path never produces a half-spec.
@@ -74,6 +74,7 @@ There is no ground truth, so **ask for everything and infer nothing.**
 
 - [ ] `.specs/<name>.md` exists.
 - [ ] Frontmatter passes `_schema.json`.
-- [ ] Every body section is present (some may be `TBD`).
+- [ ] Every body section is present (some may be `TBD`, never the four template-2 sections).
+- [ ] Frontmatter has `template: 2`; `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance` are filled.
 - [ ] The Constraints — DO NOT block is copied verbatim from the template.
 - [ ] The user has been told the next step (`/component-create <name>`).

@@ -66,6 +66,7 @@ PreToolUse hook on `Write` of any `packages/webkit/src/components/<category>/<na
 - `.specs/<name>.md` is missing.
 - The spec's `status` is not `approved` or `implemented` (drafts cannot drive code generation; locked specs require a `spec_version` bump).
 - The body sha256 does not match the frontmatter `checksum` (tamper detection).
+- The spec is on `template: 2` (or was created on or after 2026-11-12) and one of `## Internationalization`, `## Right-to-left`, `## Responsive`, `## Performance` is missing, empty, `TBD` or still a template placeholder (`templateSectionErrors` in [`_lib/spec.mjs`](./_lib/spec.mjs); the CI twin is `pnpm --filter @aziontech/webkit run spec-template:check`).
 
 Bypassed for components on the legacy whitelist ([`_lib/legacy-components.json`](./_lib/legacy-components.json)).
 

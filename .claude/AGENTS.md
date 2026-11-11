@@ -132,7 +132,18 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 
 The legacy monolithic skill `skills/component-create.md` has been **removed**. New components follow a spec-first pipeline with isolated sub-agents per phase.
 
-**Two-step entry point:**
+**Entry point — the AI flow (M1.3).** A new component or block starts from a GitHub issue
+(`.github/ISSUE_TEMPLATE/new-component.yml`, `new-block.yml`) and is built end to end by
+[`/webkit-new`](commands/webkit-new.md) or [`/webkit-new-block`](commands/webkit-new-block.md):
+read the issue → research benchmarks and reuse → `spec-create` (draft, `template: 2`) →
+`spec-reviewer` (second agent, fixed checklist) → `spec-validate` (approved + checksum) →
+`/component-create` (component, test, examples, story) → machine gates
+(`pnpm --filter @aziontech/webkit run gates`, the same commands as the `toolkit` CI job) →
+`ui-craft` review → usage check (`packages/webkit/scripts/usage-check.mjs`) → PR from
+`.github/pull_request_template.md`. Any failure stops the run. The two commands below are the
+building blocks it calls.
+
+**Two-step entry point (building blocks):**
 
 ```text
 /spec-create <name> [--category <category>] [--figma <url>]
@@ -147,9 +158,9 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 | Per-component contract                     | [`.specs/<name>.md`](.specs/) (one file per component, reviewed BEFORE code)                                                                                                                                                                |
 | Frontmatter schema                         | [`.specs/_schema.json`](.specs/_schema.json)                                                                                                                                                                                                |
 | Spec template                              | [`.specs/_template.md`](.specs/_template.md)                                                                                                                                                                                                |
-| Slash commands                             | [`.claude/commands/`](.claude/commands/) (`spec-create`, `component-create`, `component-verify`)                                                                                                                                            |
+| Slash commands                             | [`.claude/commands/`](.claude/commands/) (`webkit-new`, `webkit-new-block`, `spec-create`, `component-create`, `component-verify`)                                                                                                         |
 | Focused skills (one per phase)             | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `storybook-write`, `code-connect-write`, `validate-component`, `echo-report` |
-| Isolated sub-agent prompts                 | [`.claude/agents/`](.claude/agents/) — one per skill, no chat history, no cross-talk                                                                                                                                                        |
+| Isolated sub-agent prompts                 | [`.claude/agents/`](.claude/agents/) — one per skill, plus `spec-reviewer` (second-agent spec review); no chat history, no cross-talk                                                                                                     |
 | Immutable rules (injected verbatim)        | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies`                                                                                                                                                            |
 | Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline)                                                                               |
 | Run logs (audit trail)                     | [`.claude/logs/<run-id>.jsonl`](.claude/logs/)                                                                                                                                                                                              |
@@ -239,7 +250,7 @@ Five hooks in [`.claude/hooks/`](.claude/hooks/) act as physical guard rails on 
 
 ### 12.2) New — spec-driven enforcement
 
-- **[`.claude/hooks/enforce-spec-exists.mjs`](.claude/hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/_lib/legacy-components.json`) bypass this hook.
+- **[`.claude/hooks/enforce-spec-exists.mjs`](.claude/hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, misses a template-2 section (`Internationalization`, `Right-to-left`, `Responsive`, `Performance` — required with `template: 2` and on every spec created on or after 2026-11-12), or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/_lib/legacy-components.json`) bypass this hook.
 - **[`.claude/hooks/validate-spec-compliance.mjs`](.claude/hooks/validate-spec-compliance.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — re-reads the just-written `.vue`, parses `defineProps`/`defineEmits`/`defineSlots`/`defineOptions.name`/animation classes, and diffs them against `.specs/<name>.md`. Blocks on any divergence: missing prop, extra event, slot not in spec, animation class outside the Motion & Animations table, missing `motion-reduce:*` escape.
 
 Shared parser library: [`.claude/hooks/_lib/spec.mjs`](.claude/hooks/_lib/spec.mjs). Legacy whitelist: [`.claude/hooks/_lib/legacy-components.json`](.claude/hooks/_lib/legacy-components.json).

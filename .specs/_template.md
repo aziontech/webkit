@@ -4,6 +4,7 @@ category: <actions|code|content|data|documentation|feedback|inputs|layout|market
 structure: <monolithic|composition>
 status: draft
 spec_version: 1
+template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
@@ -257,6 +258,46 @@ export default Object.assign(Root, { Part: RootPart })
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states
 - Touch target ≥40×40 px (or justified deviation)
+
+## Internationalization
+
+<!-- Required on template 2 (every spec created by spec-create from 2026-11-12 on).
+     List every built-in string the component renders or announces (visible text, aria-label,
+     aria-live text, placeholder, title) as a message key, its English source and the
+     prop that overrides it. Dates, numbers, currency, relative time and plurals go through
+     `Intl` with the locale from `WebkitProvider`. Write "No built-in strings" when that is true. -->
+
+| Key | English source | Override prop |
+|---|---|---|
+| `<name>.<part>` | `<English text>` | `<prop or —>` |
+
+- Formatting: `<Intl API used, or "none">`
+
+## Right-to-left
+
+<!-- Required on template 2. How the component renders under `dir="rtl"`. -->
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`); `<any exception and why>`
+- Icons: `<mirrored icons (arrows, chevrons) / non-mirrored icons (play, logos, code)>`
+- Keyboard: `<which arrow key moves where under rtl (ArrowLeft = next in rtl, ...)>`
+- User data: `<bdi> / dir="auto" around <domains, IDs, code, or "none">`
+
+## Responsive
+
+<!-- Required on template 2. Behaviour from 320 px to 2560 px and in narrow containers. -->
+
+- Container queries: `<@container breakpoints the component reacts to, or "none: fixed size">`
+- Narrow (≤ 640 px or a narrow container): `<what changes: stacking, sheet, truncation, ...>`
+- Touch: targets ≥ 24 px (44 px on `pointer: coarse`); `<hover-only affordances and their touch alternative>`
+- Reflow: no horizontal scroll at 320 px and 200 % zoom (WCAG 1.4.10, 1.4.12); `<exceptions such as data tables>`
+
+## Performance
+
+<!-- Required on template 2. The budgets CI and review hold the component to. -->
+
+- Bundle budget: `<gzip kB for the tree-shakeable entry in .size-limit.json>`
+- Runtime budget: `<interaction or render budget, e.g. "1k options open in < 100 ms", or "none: static">`
+- Heavy parts: `<lazy-loaded parts (editor, charts), virtualization, or "none">`
 
 ## Stories (Storybook)
 

@@ -13,6 +13,7 @@ import {
   isLegacyComponent,
   parseSpecFile,
   resolveSpecForComponentPath,
+  templateSectionErrors,
   validateFrontmatter
 } from './_lib/spec.mjs'
 
@@ -71,6 +72,14 @@ async function main() {
   const fmErrors = validateFrontmatter(frontmatter)
   if (fmErrors.length > 0) {
     fail([`Spec frontmatter invalid:`, ...fmErrors.map((e) => `  - ${e}`)])
+  }
+
+  const templateErrors = templateSectionErrors(frontmatter, body)
+  if (templateErrors.length > 0) {
+    fail([
+      `Spec does not follow the current template (.specs/_template.md):`,
+      ...templateErrors.map((e) => `  - ${e}`)
+    ])
   }
 
   if (!['approved', 'implemented'].includes(frontmatter.status)) {

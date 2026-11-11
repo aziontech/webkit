@@ -1,123 +1,42 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { tmpdir } from 'node:os'
 
+import {
+  buildWorkspace,
+  installConsumerApp,
+  packWorkspace,
+  runLogged as run,
+  writeConsumerApp
+} from './lib/consumer-app.mjs'
+
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '..', '..', '..')
 const KEEP = process.argv.includes('--keep')
-
-const run = (cmd, args, cwd, extraEnv = {}) => {
-  process.stdout.write(`\n$ ${cmd} ${args.join(' ')}  (cwd: ${cwd})\n`)
-  execFileSync(cmd, args, {
-    cwd,
-    stdio: 'inherit',
-    env: { ...process.env, CI: 'true', ...extraEnv }
-  })
-}
 
 const fail = (msg) => {
   console.error(`\n✖ smoke-consume: ${msg}`)
   process.exit(1)
 }
 
-run('pnpm', ['--filter', '@aziontech/theme', 'run', 'build:tokens'], ROOT)
-run('pnpm', ['--filter', '@aziontech/icons', 'run', 'build'], ROOT)
-run('pnpm', ['--filter', '@aziontech/webkit', 'run', 'catalog:build'], ROOT)
+buildWorkspace(ROOT)
 
 const work = mkdtempSync(join(tmpdir(), 'webkit-smoke-'))
-const packDir = join(work, 'tarballs')
-mkdirSync(packDir, { recursive: true })
-
-const pack = (pkgDir) => {
-  const out = execFileSync(
-    'pnpm',
-    ['pack', '--config.ignore-scripts=true', '--pack-destination', packDir],
-    { cwd: pkgDir, encoding: 'utf8' }
-  )
-  const tgz = out.trim().split('\n').pop().trim()
-  return tgz.startsWith('/') ? tgz : join(packDir, tgz.split('/').pop())
-}
-const themeTgz = pack(join(ROOT, 'packages/theme'))
-const iconsTgz = pack(join(ROOT, 'packages/icons'))
-run('node', ['scripts/copy-ai-bundle.mjs'], join(ROOT, 'packages/webkit'))
-let webkitTgz
-try {
-  webkitTgz = pack(join(ROOT, 'packages/webkit'))
-} finally {
-  run('node', ['scripts/copy-ai-bundle.mjs', '--clean'], join(ROOT, 'packages/webkit'))
-}
+const tarballs = packWorkspace(ROOT, join(work, 'tarballs'))
 
 const app = join(work, 'app')
-mkdirSync(join(app, 'src'), { recursive: true })
+writeConsumerApp(app, {
+  ...tarballs,
+  appVue: `<script setup lang="ts">\nimport Button from '@aziontech/webkit/button'\n</script>\n<template>\n  <Button kind="primary" size="large">Deploy</Button>\n</template>\n`
+})
 
-writeFileSync(
-  join(app, 'package.json'),
-  JSON.stringify(
-    {
-      name: 'webkit-smoke-app',
-      private: true,
-      type: 'module',
-      scripts: { build: 'vite build' },
-      dependencies: {
-        vue: '^3.5.0',
-        '@aziontech/webkit': `file:${webkitTgz}`,
-        '@aziontech/theme': `file:${themeTgz}`,
-        '@aziontech/icons': `file:${iconsTgz}`
-      },
-      devDependencies: { vite: '^6.0.0', '@vitejs/plugin-vue': '^5.0.0' }
-    },
-    null,
-    2
-  )
-)
-writeFileSync(
-  join(app, 'pnpm-workspace.yaml'),
-  [
-    'packages: []',
-    'overrides:',
-    `  '@aziontech/webkit': file:${webkitTgz}`,
-    `  '@aziontech/theme': file:${themeTgz}`,
-    `  '@aziontech/icons': file:${iconsTgz}`,
-    'allowBuilds:',
-    "  '@parcel/watcher': false",
-    "  '@swc/core': false",
-    '  es5-ext: false',
-    '  esbuild: false',
-    '  ttf2woff2: false',
-    '  unrs-resolver: false',
-    '  vue-demi: false',
-    ''
-  ].join('\n')
-)
-writeFileSync(join(app, '.npmrc'), '@aziontech:registry=https://registry.npmjs.org/\n')
-writeFileSync(
-  join(app, 'vite.config.mjs'),
-  `import { defineConfig } from 'vite'\nimport vue from '@vitejs/plugin-vue'\nexport default defineConfig({ plugins: [vue()] })\n`
-)
-writeFileSync(
-  join(app, 'index.html'),
-  `<!doctype html><html data-theme="dark"><head><meta charset="utf-8" /></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>\n`
-)
-writeFileSync(
-  join(app, 'src/App.vue'),
-  `<script setup lang="ts">\nimport Button from '@aziontech/webkit/button'\n</script>\n<template>\n  <Button kind="primary" size="large">Deploy</Button>\n</template>\n`
-)
-writeFileSync(
-  join(app, 'src/main.ts'),
-  `import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n`
-)
-
-const install = () =>
-  run('pnpm', ['install', '--no-frozen-lockfile', '--config.confirmModulesPurge=false'], app, {
-    PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false'
-  })
-install()
+installConsumerApp(app)
 run('node', [join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js'), 'init', '--yes'], app)
-install()
+installConsumerApp(app)
 
 const mainSrc = readFileSync(join(app, 'src/main.ts'), 'utf8')
 if (!mainSrc.includes('./webkit.css') || !mainSrc.includes('@aziontech/icons')) {

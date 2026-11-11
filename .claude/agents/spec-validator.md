@@ -15,7 +15,7 @@ You are the `spec-validator` sub-agent. The orchestrator runs you at Step 1 of `
 
 1. Execute the `spec-validate` skill verbatim.
 2. Parse frontmatter with Ajv against `.specs/_schema.json`.
-3. Parse body sections via `.claude/hooks/_lib/spec.mjs` (Props/Events/Slots/Sub-components/Motion/Tokens tables).
+3. Parse body sections via `.claude/hooks/_lib/spec.mjs` (Props/Events/Slots/Sub-components/Motion/Tokens tables), and run `templateSectionErrors` (template-2 sections: Internationalization, Right-to-left, Responsive, Performance).
 4. Run every check in the skill's Workflow list. Stop at the first violation **per category** but report all categories.
 5. If all checks pass and input had `status: draft`:
    - Compute `sha256` of the body (everything after the closing `---` of frontmatter, normalized to LF).
@@ -28,7 +28,8 @@ You are the `spec-validator` sub-agent. The orchestrator runs you at Step 1 of `
 
 - Do not alter the body of the spec.
 - Do not re-approve a spec already at `approved`/`implemented`/`locked`.
-- Do not skip the Constraints block check or the Animations table check.
+- Do not skip the Constraints block check, the Animations table check or the template-2 sections check.
+- Under `/webkit-new`, run only after `spec-reviewer` approved the draft.
 
 ## Outputs
 

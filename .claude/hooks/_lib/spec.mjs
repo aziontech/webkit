@@ -5,11 +5,16 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { COMPONENT_CATEGORIES } from '../component-categories.mjs'
 
 export const STRUCTURES = ['monolithic', 'composition']
 export const STATUSES = ['draft', 'approved', 'implemented', 'locked']
 export const KEBAB_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
+export const TEMPLATE_VERSIONS = [1, 2]
+export const CURRENT_TEMPLATE = 2
+export const TEMPLATE_2_SINCE = '2026-11-12'
+export const TEMPLATE_2_SECTIONS = ['Internationalization', 'Right-to-left', 'Responsive', 'Performance']
 
 // ---- Frontmatter ----
 
@@ -92,6 +97,9 @@ export function validateFrontmatter(fm) {
     if (fm.figma.node_id && !/^[0-9]+[:-][0-9]+$/.test(fm.figma.node_id)) {
       errors.push('figma.node_id: must match <num>:<num>')
     }
+  }
+  if (fm.template !== undefined && !TEMPLATE_VERSIONS.includes(fm.template)) {
+    errors.push(`template: must be one of ${TEMPLATE_VERSIONS.join('|')}`)
   }
   if (fm.setup !== undefined && (typeof fm.setup !== 'string' || !fm.setup.trim())) {
     errors.push('setup: must be a non-empty string when present')
@@ -206,6 +214,60 @@ export function defaultCellIsStringUndefined(cell) {
   if (!cell) return false
   const inner = String(cell).trim().replace(/^`|`$/g, '').trim()
   return /^'(undefined|null)'$/.test(inner)
+}
+
+// ---- Template versions ----
+
+export function templateVersion(fm) {
+  return Number.isInteger(fm?.template) ? fm.template : 1
+}
+
+const TEMPLATE_PATH = fileURLToPath(new URL('../../../.specs/_template.md', import.meta.url))
+
+function stripComments(text) {
+  return text.replace(/<!--[\s\S]*?-->/g, '').trim()
+}
+
+function templatePlaceholderLines(heading) {
+  if (!existsSync(TEMPLATE_PATH)) return new Set()
+  const section = getSection(readFileSync(TEMPLATE_PATH, 'utf-8'), heading) ?? ''
+  return new Set(
+    stripComments(section)
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l.includes('<') && !/^\|[-| ]+\|$/.test(l))
+  )
+}
+
+function isPlaceholderSection(heading, text) {
+  const content = stripComments(text)
+  if (!content) return true
+  if (/^(TBD|TODO)\.?$/i.test(content)) return true
+  const placeholders = templatePlaceholderLines(heading)
+  return content.split('\n').some((l) => placeholders.has(l.trim()))
+}
+
+/**
+ * Template-2 checks for one spec: a spec created on or after TEMPLATE_2_SINCE must declare
+ * `template: 2`, and a template-2 spec must fill every TEMPLATE_2_SECTIONS heading.
+ * Specs on template 1 created before the cutoff are exempt. Returns error strings.
+ */
+export function templateSectionErrors(fm, body) {
+  const errors = []
+  const version = templateVersion(fm)
+  if (version < CURRENT_TEMPLATE && typeof fm?.created === 'string' && fm.created >= TEMPLATE_2_SINCE) {
+    errors.push(
+      `template: a spec created on or after ${TEMPLATE_2_SINCE} must declare \`template: ${CURRENT_TEMPLATE}\``
+    )
+    return errors
+  }
+  if (version < 2) return errors
+  for (const heading of TEMPLATE_2_SECTIONS) {
+    const section = getSection(body, heading)
+    if (section === null) errors.push(`## ${heading}: section missing (required by template 2)`)
+    else if (isPlaceholderSection(heading, section)) errors.push(`## ${heading}: section is empty, TBD or still a placeholder`)
+  }
+  return errors
 }
 
 // ---- Checksum ----

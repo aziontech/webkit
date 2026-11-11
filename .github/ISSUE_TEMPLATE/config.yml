@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How a component or block is added (AI flow)
+    url: https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md#adding-a-component-or-block-ai-flow
+    about: Every new component and block is built by agents from one of the request forms below.
+  - name: Building an app with WebKit
+    url: https://github.com/aziontech/webkit/blob/main/packages/webkit/README.md
+    about: Questions about using @aziontech/webkit in a product go to the package README and the webkit-usage skill.

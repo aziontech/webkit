@@ -32,9 +32,78 @@ pnpm install
 pnpm storybook:dev
 ```
 
+## Adding a component or block (AI flow)
+
+Every component and block made from now on is built by agents through one flow, from a request to
+a pull request. The machine gates make a correct component the only path through CI; the head of
+design opens the request and approves the merge, and nobody edits the code by hand in between.
+
+1. **Request.** Open an issue from **New component** or **New block**
+   (`.github/ISSUE_TEMPLATE/`): intent, benchmark links (Cloudscape `index.html.md`, shadcn page),
+   where it is used, surface (product / marketing / docs), acceptance criteria.
+2. **Run the flow.** An agent runs `/webkit-new <issue>` (`.claude/commands/webkit-new.md`) or
+   `/webkit-new-block <issue>` (`.claude/commands/webkit-new-block.md`). Each step stops the run on
+   failure:
+
+   | Step | What happens                                                                                                                              | Owner                             |
+   | ---- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+   | 1    | Read the issue                                                                                                                            | orchestrator                      |
+   | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
+   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                              | `spec-author`                     |
+   | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                    | `spec-reviewer`, `spec-validator` |
+   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`), story — or `block.json` + `.vue` + `variants/`                     | `/component-create` sub-agents    |
+   | 6    | Machine gates (below)                                                                                                                     | orchestrator                      |
+   | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                             | orchestrator                      |
+   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `usage-check.mjs`                 |
+   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                      | `/open-pr`                        |
+
+3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
+   comments, never to a human fix.
+
+**Machine gates.** One local runner prints the table the PR pastes:
+
+```bash
+pnpm --filter @aziontech/webkit run gates            # all fast gates, in order, pass/fail table
+pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
+```
+
+It runs `catalog:check`, `naming:check`, `marketing:check`, `patterns:check`, `cited-names`,
+`spec-status` (no draft spec), `spec-template:check` (template-2 sections), `authoring`,
+`doc-standards`, `test:gate`, `gen-block-stories.mjs --check` and `test:toolkit`. The `toolkit`
+job of `.github/workflows/governance.yml` runs the same commands on **every** PR; the lint, type,
+size, Vitest browser (including `src/test/copyable-sfcs.test.ts`, which mounts every block and
+example) and visual jobs run when `packages/` or `apps/storybook/` change.
+
+**Spec template 2.** New specs carry `template: 2` and four more sections: `Internationalization`,
+`Right-to-left`, `Responsive` and `Performance`. `spec-template:check`, `spec-validate` and the
+`enforce-spec-exists` hook require them on template-2 specs and on every spec created on or after
+2026-11-12; the specs that predate it stay valid.
+
+**Usage check (opt-in, paid).** Step 8 proves an agent that knows nothing about the new piece
+finds it:
+
+```bash
+pnpm --filter @aziontech/webkit run usage-check -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
+pnpm --filter @aziontech/webkit run usage-check -- platform/auth "A sign-in screen for the console" --dry-run
+```
+
+It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
+`npx @aziontech/webkit init --yes`, points the app's `.mcp.json` at the packed MCP server, and runs
+`claude -p "<prompt>" --dangerously-skip-permissions --max-turns 40 --output-format json
+--mcp-config .mcp.json --strict-mcp-config` there. It passes when a generated `src/**/*.vue`
+imports the component (for a block: at least 80 % of the components its primary SFC imports) and
+`webkit doctor` passes. It needs the `claude` CLI and an API key and costs one agent session, so
+it is not in the PR pipeline: run it locally or through the **Usage check** workflow
+(`.github/workflows/usage-check.yml`, manual dispatch, `ANTHROPIC_API_KEY` secret). `--dry-run`
+only resolves the target and prints the plan.
+
+**Changing an existing component** uses the same flow from step 2 with its spec: bump
+`spec_version`, move it to `template: 2`, and add a codemod entry under
+`packages/webkit/src/cli/migrations/` for any breaking change.
+
 ## The spec-driven pipeline
 
-Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, story, and exports are derived from it.
+Every new component starts as a spec at `.specs/<name>.md`. The spec is the contract; the `.vue`, story, and exports are derived from it. These are the commands the AI flow above calls in steps 3 to 5.
 
 1. **Draft the spec** — `/spec-create <name>` writes `.specs/<name>.md` with `status: draft`. Review and flip to `status: approved`.
 2. **Scaffold** — `/component-create <name>` writes the `.vue`, the `packages/webkit/package.json#exports` entry, and a minimal `.stories.js`. It will refuse to add props, events, or slots that are not in the spec.
@@ -57,15 +126,15 @@ You only write the source. `catalog:build` and the package's `prepack` generate 
 (`catalog.json`, its `patterns`, the packaged `skills/` and `rules/`), and CI fails the PR when the
 source and the generated files disagree. Nobody rewrites the AI files by hand.
 
-| When you…                                                   | You write                                                                                    | Generated                                      | CI gate                                                 |
-| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------- |
-| Create or change a component or a section                   | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and the story    | `catalog.json` imports, with docs and examples | `catalog:check` (fails on a missing doc section), hooks |
-| Create or change a story in `templates/` (not `marketing/`) | The story, with `parameters.webkit.intents` and `skills` (and `steps` for a multi-step flow) | `catalog.json` `patterns`                      | `patterns:check` (G1)                                   |
-| Rename, deprecate or remove a component                     | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                      |
-| Create or change a skill or a rule                          | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests    |
-| Change a token                                              | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                       |
-| Open a new spec                                             | The spec in `status: draft`, only on your branch                                             | —                                              | `spec-status` (G3): no draft lands on `main`            |
-| Release a version                                           | Nothing                                                                                      | The release, by release-please                 | —                                                       |
+| When you…                                                   | You write                                                                                    | Generated                                      | CI gate                                                             |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
+| Create or change a component or a section                   | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and the story    | `catalog.json` imports, with docs and examples | `catalog:check` (fails on a missing doc section), hooks             |
+| Create or change a story in `templates/` (not `marketing/`) | The story, with `parameters.webkit.intents` and `skills` (and `steps` for a multi-step flow) | `catalog.json` `patterns`                      | `patterns:check` (G1)                                               |
+| Rename, deprecate or remove a component                     | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                                  |
+| Create or change a skill or a rule                          | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
+| Change a token                                              | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                                   |
+| Open a new spec                                             | The spec in `status: draft`, `template: 2`, only on your branch                              | —                                              | `spec-status` (G3): no draft lands on `main`; `spec-template:check` |
+| Release a version                                           | Nothing                                                                                      | The release, by release-please                 | —                                                                   |
 
 After any of these, run `pnpm --filter @aziontech/webkit catalog:build` and commit `catalog.json`.
 A pattern's SFC must pass the consumer lint; legacy findings are frozen in
